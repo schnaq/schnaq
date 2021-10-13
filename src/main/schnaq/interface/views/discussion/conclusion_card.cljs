@@ -111,13 +111,13 @@
         label ":check"
         checked? (statement-labels label)]
     (when not-a-starting-statement?
-      [:section.text-center
-       [:button.btn.btn-sm.btn-link.text-dark
+      [:section.w-100 #_{:style {:width "400px"}}
+       [:button.btn.btn-sm.btn-link.text-dark.pr-0
         {:on-click #(if checked?
                       (rf/dispatch [:statement.labels/remove statement label])
                       (rf/dispatch [:statement.labels/add statement label]))}
-        [labels/build-label (if checked? label ":unchecked")]
-        [:span.pl-2 (if checked? "Markierung aufheben" "Als Antwort markieren")]]])))
+        [:small.pr-2 (if checked? "Markierung aufheben" "Als Antwort markieren")]
+        [labels/build-label (if checked? label ":unchecked")]]])))
 
 (defn- show-active-labels
   "Shows all active labels."
@@ -151,14 +151,14 @@
         (when (:meta/new? statement)
           [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right
            (labels :discussion.badges/new)])
-        [:div.d-flex.justify-content-start.pt-2
-         [user/user-info statement 42 "w-100"]]
+        [:div.pt-2.d-flex
+         [:div.mr-auto [user/user-info statement 42 "w-100"]]
+         (when q-and-a? [:div.ml-auto [mark-as-answer-button statement]])]
         [:div.my-4]
         [:div.text-purple-dark
          [md/as-markdown (:statement/content statement)]]
         [statement-information-row statement]
-        (if q-and-a?
-          [mark-as-answer-button statement]
+        (when-not q-and-a?
           [show-active-labels statement])
         additional-content]]])))
 

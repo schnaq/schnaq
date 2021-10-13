@@ -14,16 +14,14 @@
   [statement avatar-size additional-classes]
   (let [locale @(rf/subscribe [:current-locale])
         user (:statement/author statement)
-        time (:statement/created-at statement)
-        authenticated? (:user.registered/keycloak-id user)
-        display-name (tools/truncate-to-n-chars (user-utils/display-name user) 15)
-        name-class (if authenticated? "text-purple-dark" "text-muted")]
-    [:div.d-flex.flex-row.flex-wrap.text-muted.w-100 {:class additional-classes}
+        created (:statement/created-at statement)
+        display-name (tools/truncate-to-n-chars (user-utils/display-name user) 15)]
+    [:div.d-flex {:class additional-classes}
      [common/avatar user avatar-size]
-     [:small.mx-2.my-auto {:class name-class} display-name]
-     (when time
-       [:small.font-weight-light.d-inline.my-auto.ml-auto
-        [util-time/timestamp-with-tooltip time locale]])]))
+     [:div.mx-2 [:span.text-sm {:class "text-purple-dark"} display-name]
+      (when created
+        [:div.small.font-weight-light.text-muted
+         [util-time/timestamp-with-tooltip created locale]])]]))
 
 (defn user-info-only
   "User info box displaying user's nickname and the avatar."
