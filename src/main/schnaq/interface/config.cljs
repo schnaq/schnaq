@@ -26,7 +26,7 @@
 
 (def pricing-business-tier
   "Price in euros, exclusively VAT."
-  6)
+  8)
 
 ;; -----------------------------------------------------------------------------
 ;; Keycloak
