@@ -122,4 +122,4 @@
     (language/init-language)
     (render)                                                ;; mount the application's ui into '<div id="app" />'
     (say-hello)
-    #_(updates/init-periodic-updates)))
+    (updates/init-periodic-updates)))
