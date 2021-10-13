@@ -162,14 +162,14 @@
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
         hubs @(rf/subscribe [:hubs/all])]
     [:section
-     (when hubs
-       [:div.panel-white.mx-0.mt-0.mb-md-4
-        [feed-hubs]])
-     [:div.panel-white.m-0
+     [:div.panel-white.mx-0.mt-0.mb-4
+      [create-feed-button :nav.schnaqs/create-schnaq :plus :routes.schnaq/create]
       (when-not (nil? edit-hash)
         [icon-and-label-feed-button :nav.schnaqs/last-added :arrow-left
-         :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])
-      [create-feed-button :nav.schnaqs/create-schnaq :plus :routes.schnaq/create]]]))
+         :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])]
+     (when hubs
+       [:div.panel-white.mb-4
+        [feed-hubs]])]))
 
 (defn- outline-info-button
   "Generic outline button."
