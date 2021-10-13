@@ -106,14 +106,14 @@
       [:<>
        [:img.header-standalone-icon
         {:src (img-path :icon-views-dark) :alt "graph icon"}]
-       [:p.small.m-0.text-nowrap.dropdown-toggle (labels :discussion.navbar/views)]
-       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
-        [standard-view-button]
-        [graph-button]
-        [summary-button]
-        [qanda-view-button]]]
+       [:p.small.m-0.text-nowrap.dropdown-toggle (labels :discussion.navbar/views)]]
       {:id dropdown-id :data-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}]]))
+       :aria-haspopup "true" :aria-expanded "false"}
+      [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
+       [standard-view-button]
+       [graph-button]
+       [summary-button]
+       [qanda-view-button]]]]))
 
 ;; -----------------------------------------------------------------------------
 

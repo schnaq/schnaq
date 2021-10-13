@@ -92,8 +92,9 @@
      [:div.row.m-0
       [:div.mx-auto
        (if authenticated? [common/avatar icon-size] [common/identicon username icon-size])]]
-     [role-indicator]
-     (toolbelt/truncate-to-n-chars username 15)]))
+     [:p.small.text-nowrap.dropdown-toggle
+      [role-indicator]
+      (toolbelt/truncate-to-n-chars username 15)]]))
 
 (defn user-handling-menu
   "Menu elements to change user name, to log in, ..."
@@ -101,21 +102,19 @@
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     [:div.dropdown
      [nav-component/separated-button
-      [:<>
-       [:p.small.text-nowrap.dropdown-toggle
-        [profile-picture-in-nav]]
-       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
-        (if authenticated?
-          [:<>
-           [:a.dropdown-item {:href (reitfe/href :routes.user.manage/account)}
-            (labels :user.profile/settings)]
-           [:a.dropdown-item {:href "#"                     ;; For the :active states and pointer to behave
-                              :on-click #(rf/dispatch [:keycloak/logout])}
-            (labels :user/logout)]]
-          [:<>
-           [user-submenu]
-           [:a.btn.dropdown-item {:href "#"
-                                  :on-click #(rf/dispatch [:keycloak/login])}
-            (labels :user/register)]])]]
+      [profile-picture-in-nav]
       {:class button-class :data-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}]]))
+       :aria-haspopup "true" :aria-expanded "false"}
+      [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
+       (if authenticated?
+         [:<>
+          [:a.dropdown-item {:href (reitfe/href :routes.user.manage/account)}
+           (labels :user.profile/settings)]
+          [:a.dropdown-item {:href "#"                      ;; For the :active states and pointer to behave
+                             :on-click #(rf/dispatch [:keycloak/logout])}
+           (labels :user/logout)]]
+         [:<>
+          [user-submenu]
+          [:a.btn.dropdown-item {:href "#"
+                                 :on-click #(rf/dispatch [:keycloak/login])}
+           (labels :user/register)]])]]]))

@@ -45,12 +45,16 @@
    (labels label)])
 
 (defn separated-button
-  "The default navbar-button."
-  ([content]
-   [separated-button content {}])
-  ([content attributes]
-   [:button.btn.btn-white.discussion-navbar-button
-    (merge
-      {:type "button"}
-      attributes)
-    content]))
+  "The default navbar-button. Dropdown-content must have according classes."
+  ([button-content]
+   [separated-button button-content {}])
+  ([button-content attributes]
+   [separated-button button-content attributes nil])
+  ([button-content attributes dropdown-content]
+   [:<>
+    [:button.btn.btn-white.discussion-navbar-button
+     (merge
+       {:type "button"}
+       attributes)
+     button-content]
+    dropdown-content]))
