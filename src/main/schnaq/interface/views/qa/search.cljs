@@ -3,6 +3,7 @@
             [goog.functions :as gfun]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -39,10 +40,16 @@
   []
   (let [search-results @(rf/subscribe [:schnaq.qa.search/results])]
     (when (seq search-results)
-      [:div.mt-5
-       [:div.col-12
-        [motion/move-in :top
-         [:h3.text-center (labels :qanda.search/similar-results)]]]
+      [:div.mt-3
+       [motion/move-in :top
+        [:h5.text-white.mx-3.mx-md-0 (labels :qanda.search/similar-results)]]
+       [motion/move-in :top
+        [:div.mx-3.mx-md-0
+         [:text-sm.text-white
+          (labels :qanda.search/similar-results-explanation-1)
+          [icon :arrow-up "m-auto"]
+          (labels :qanda.search/similar-results-explanation-2)]]]
+
        [:div.card-columns.card-columns-discussion
         (for [result search-results]
           (with-meta

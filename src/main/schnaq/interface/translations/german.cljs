@@ -664,7 +664,8 @@
    :discussion.button/text "Übersicht"
 
    ;; Q & A
-   :qanda/add-question "Gib deine Frage ein …"
+   :qanda/add-question-label "Stell deine Frage"
+   :qanda/add-question "Gib deine Frage hier ein …"
    :qanda.button/text "Q&A"
    :qanda.button/submit "Frage stellen"
    :qanda.state/read-only-warning "Dieser schnaq ist schreibgeschützt, du kannst aktuell keine Fragen stellen."
@@ -673,6 +674,8 @@
    :qanda.call-to-action/intro-2 "navigieren und den Code dort eingeben."
    :qanda.call-to-action/help "Alle Optionen zum Teilen deines schnaqs findest du oben rechts in der Navigationsleiste"
    :qanda.search/similar-results "Ähnliche Fragen"
+   :qanda.search/similar-results-explanation-1 "Bereits gestellte ähnliche Fragen erscheinen hier. Du kannst diese mit "
+   :qanda.search/similar-results-explanation-2 " für dich als Relevant markieren."
 
 
    :schnaqs/header "Übersicht deiner schnaqs"

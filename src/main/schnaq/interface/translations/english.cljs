@@ -659,7 +659,8 @@
    :discussion.button/text "Overview"
 
    ;; Q & A
-   :qanda/add-question "Type in your question"
+   :qanda/add-question-label "State your question"
+   :qanda/add-question "Type in your question here …"
    :qanda.button/text "Q&A"
    :qanda.button/submit "Ask question"
    :qanda.state/read-only-warning "This schnaq is read-only, you cannot ask any questions at the moment."
@@ -668,6 +669,8 @@
    :qanda.call-to-action/intro-2 "and entering the code there."
    :qanda.call-to-action/help "All options for sharing your schnaq can be found in the top right navigation bar"
    :qanda.search/similar-results "Similar Questions"
+   :qanda.search/similar-results-explanation-1 "Similar questions that have already been asked appear here. You can mark them as relevant for you with "
+   :qanda.search/similar-results-explanation-2 " ."
 
    ;; meetings overview
    :schnaqs/header "Overview of your schnaqs"

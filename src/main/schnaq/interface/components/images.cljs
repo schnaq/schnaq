@@ -72,7 +72,7 @@
      :schnaqqifant/stop "https://s3.disqtec.com/schnaq-schnaqqifanten/stop.png"
      :schnaqqifant/talk "https://s3.disqtec.com/schnaq-schnaqqifanten/talk.png"
      :schnaqqifant.300w/talk "https://s3.disqtec.com/schnaq-schnaqqifanten/talk300w.png"
-     :schnaqqifant/white "https://s3.disqtec.com/schnaq-common/logos/schnaqqifant_white.svg"
+     :schnaqqifant/white "https://s3.disqtec.com/schnaq-common/logos/schnaqqifant_white.png"
      :schnaqqifant/mail "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqi_newsletter.png"
      :stock/team "https://s3.disqtec.com/startpage/team.jpeg"
      :startpage.alternatives.e-learning/header "https://s3.disqtec.com/startpage/schuelerin_laptop_in_hand.png"

@@ -662,7 +662,8 @@
    :discussion.button/text "Przegląd"
 
    ;; Q & A
-   :qanda/add-question "Wpisz swoje pytanie"
+   :qanda/add-question-label "Zadaj pytanie"
+   :qanda/add-question "Wpisz tutaj swoje pytanie …"
    :qanda.button/text "Q&A"
    :qanda.button/submit "Zadaj pytanie"
    :qanda.state/read-only-warning "Ten schnaq jest tylko do odczytu, nie możesz zadawać żadnych pytań w tej chwili."
@@ -671,6 +672,8 @@
    :qanda.call-to-action/intro-2 "i wprowadź tam kod."
    :qanda.call-to-action/help "Wszystkie opcje udostępniania Twojego schnaqa można znaleźć w prawym górnym pasku nawigacji"
    :qanda.search/similar-results "Podobne pytania"
+   :qanda.search/similar-results-explanation-1 "Podobne pytania, które już zostały zadane, pojawiają się tutaj. Możesz oznaczyć je jako istotne dla Ciebie za pomocą "
+   :qanda.search/similar-results-explanation-2 " ."
 
    :schnaqs/header "Przegląd Twojego schnaqs"
    :schnaqs/subheader "Masz dostęp do tych schnaqs"

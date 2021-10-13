@@ -86,6 +86,13 @@
   padding: 1rem 1rem 1rem 0;
 }
 
+.qanda-input-content {
+  @extend .discussion-input-content;
+  min-height: 0;
+  padding: 0.5rem 0.5rem 0.5rem 0;
+
+}
+
 .primary-icon-button {
   background: transparent;
   border: 0;
