@@ -210,8 +210,7 @@
      [:div.schnaq-navbar.mb-4.bg-primary
       [:a.p-3.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
        [:img.d-inline-block.align-middle
-        {:src (img-path :logo-white) :alt "schnaq logo"
-         :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]]
+        {:src (img-path :logo-white) :alt "schnaq logo"}]]]
      [:div.mx-1.mx-md-5.px-md-5.d-flex.flex-grow-1.flex-column
       [:small.text-white (labels :discussion.navbar/title)]
       [:div.clickable-no-hover
