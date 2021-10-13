@@ -31,11 +31,11 @@
   [share-hash]
   [:db/id :ret (s/coll-of ::specs/statement)]
   (query
-    '[:find [(pull ?statements statement-pattern) ...]
-      :in $ ?share-hash statement-pattern
+    '[:find [(pull ?statements pattern) ...]
+      :in $ ?share-hash pattern
       :where [?discussion :discussion/share-hash ?share-hash]
       [?discussion :discussion/starting-statements ?statements]]
-    share-hash patterns/statement))
+    share-hash patterns/statement-with-labels-from-children))
 
 (defn transitive-child-rules
   "Returns a set of rules for finding transitive children entities of a given

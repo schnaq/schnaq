@@ -47,7 +47,8 @@
    (-> share-hash
        discussion-db/starting-statements
        (valid-statements-with-votes user-id)
-       processors/with-sub-discussion-info))
+       processors/with-sub-discussion-info
+       processors/with-answered?-info))
   ([share-hash user-id secret-statement-id]
    (add-creation-secret (starting-conclusions-with-processors share-hash user-id) secret-statement-id)))
 
