@@ -259,3 +259,24 @@
       (db/add-label statement-id ":check")
       (is (= [":check"] (:statement/labels (db/remove-label statement-id ":comment"))))
       (is (= [":check"] (:statement/labels (db/remove-label statement-id "anything-else")))))))
+
+(deftest search-similar-questions-test
+  (testing "Test whether the similar questions search works as intended."
+    (let [share-hash "cat-dog-hash"]
+      ;; Searching for "we" should give 3 first level statements. Permutating it should give nothing.
+      (is (= 3 (count (db/search-similar-questions share-hash "we"))))
+      (is (empty? (db/search-similar-questions share-hash "ew")))
+      ;; dog and dok should give similar results. Case should also not matter so DOG is the same
+      (is (= 2
+             (count (db/search-similar-questions share-hash "dog"))
+             (count (db/search-similar-questions share-hash "dok"))
+             (count (db/search-similar-questions share-hash "DOG"))
+             (count (db/search-similar-questions share-hash "DOK"))))
+      (is (empty? (db/search-similar-questions share-hash "dgo")))
+      ;; Five or more chars should allow for two errors. Should itself also matches would, which gives it one more hit,
+      ;; than the misspellt versions
+      (is (= 3 (count (db/search-similar-questions share-hash "should"))))
+      (is (= 2
+             (count (db/search-similar-questions share-hash "schoult"))
+             (count (db/search-similar-questions share-hash "shald"))))
+      (is (empty? (db/search-similar-questions share-hash "scholt"))))))
