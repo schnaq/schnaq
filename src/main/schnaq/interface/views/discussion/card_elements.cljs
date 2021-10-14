@@ -159,8 +159,12 @@
 (rf/reg-event-db
   :votes.local/reset
   (fn [db _]
-    (assoc db :votes {:up {}
-                      :down {}})))
+    (update db :votes
+            dissoc :up
+            dissoc :down)))
+
+
+;; -----------------------------------------------------------------------------
 
 (defn- sort-options
   "Displays the different sort options for card elements."
