@@ -170,15 +170,27 @@
   "Displays the different sort options for card elements."
   []
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
-    [:section.h-100
-     [:button.btn.btn-outline-primary.mr-2.button-discussion-options
+    [:section.p-2.button-discussion-options
+     [:button.btn.btn-outline-primary.m-1
       {:class (when (= sort-method :newest) "active")
        :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
       (labels :badges.sort/newest)]
-     [:button.btn.btn-outline-primary.button-discussion-options
+     [:button.btn.btn-outline-primary.m-1
       {:class (when (= sort-method :popular) "active")
        :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
       (labels :badges.sort/popular)]]))
+
+(defn- sorting-button
+  "Tooltip to select the desired sorting."
+  []
+  [tooltip/html
+   [sort-options]
+   [:button.btn.btn-outline-primary.button-discussion-options
+    (labels :badges/sort)]
+   {:hideOnClick :toggle}])
+
+
+;; -----------------------------------------------------------------------------
 
 (defn- current-topic-badges [schnaq statement is-topic?]
   (let [badges-start [badges/static-info-badges-discussion schnaq]
@@ -279,8 +291,8 @@
      [back-button]]
     [:div.m-1
      [search-bar]]
-    [:div.m-1.pr-2.border-right
-     [sort-options]]
+    [:div.m-1.pr-2
+     [sorting-button]]
     [:div.m-1
      [filters/filter-button]]
     [:div.d-flex.flex-row.ml-auto]]])
