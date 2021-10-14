@@ -16,6 +16,7 @@
             [schnaq.user :as user]
             [taoensso.timbre :as log])
   (:import (com.datomic.lucene.queryParser QueryParser)
+           (java.lang Character)
            (java.util UUID Date)))
 
 (def ^:private rules
@@ -435,10 +436,23 @@
             (cstring/lower-case string-1)
             (cstring/lower-case string-2))))
 
+(defn- alphanumeric?
+  "Checks whether some char is a Letter or a Digit."
+  [char-to-test]
+  (or
+    (Character/isLetter ^char char-to-test)
+    (Character/isDigit ^char char-to-test)))
+
 (defn tokenize-string
   "Tokenizes a string into single tokens for the purpose of searching."
   [content]
-  (remove cstring/blank? (cstring/split content #"\s")))
+  (->> (cstring/split content #"\s")
+       (remove cstring/blank?)
+       ;; Remove puncuation when generating token
+       (map #(cond
+               (not (alphanumeric? (first %))) (subs % 1)
+               (not (alphanumeric? (last %))) (subs % 0 (dec (count %)))
+               :else %))))
 
 (>defn- search-similar-with-n-levenshtein
   "Searches for similar content with a levenshtein distance of n."
