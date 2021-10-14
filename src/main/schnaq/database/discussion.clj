@@ -440,25 +440,39 @@
   [content]
   (remove cstring/blank? (cstring/split content #"\s")))
 
+(>defn- search-similar-with-n-levenshtein
+  "Searches for similar content with a levenshtein distance of n."
+  [share-hash search-tokens distance]
+  [:discussion/share-hash (s/coll-of ::specs/non-blank-string) int? :ret (s/coll-of ::specs/statement)]
+  (->>
+    (query '[:find [(pull ?statements statement-pattern) ...]
+             :in $ statement-pattern ?share-hash [?search-tokens ...] ?distance
+             :with ?tokenized-content
+             :where [?discussion :discussion/share-hash ?share-hash]
+             [?discussion :discussion/starting-statements ?statements]
+             [?statements :statement/content ?content]
+             [(schnaq.database.discussion/tokenize-string ?content) [?tokenized-content ...]]
+             [(schnaq.database.discussion/levenshtein-max? ?distance ?search-tokens ?tokenized-content)]]
+           patterns/qa-question share-hash search-tokens distance)
+    frequencies
+    toolbelt/pull-key-up))
+
 (>defn search-similar-questions
   "Search starting Conclusions (Questions in QA) and try to provide answers if there are any."
   [share-hash search-string]
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
-  (let [search-tokens (tokenize-string search-string)]
+  (let [search-tokens (tokenize-string search-string)
+        two-and-less-tokens (filter #(>= 2 (count %)) search-tokens)
+        three-four-tokens (filter #(or (= 3 (count %))
+                                       (= 4 (count %))) search-tokens)
+        five-and-more-tokens (filter #(< 4 (count %)) search-tokens)
+        results<=2 (search-similar-with-n-levenshtein share-hash two-and-less-tokens 0)
+        results=3or4 (search-similar-with-n-levenshtein share-hash three-four-tokens 1)
+        results>5 (search-similar-with-n-levenshtein share-hash five-and-more-tokens 2)]
     (->>
-      (query '[:find [(pull ?statements statement-pattern) ...]
-               :in $ statement-pattern ?share-hash [?search-tokens ...]
-               :with ?tokenized-content
-               :where [?discussion :discussion/share-hash ?share-hash]
-               [?discussion :discussion/starting-statements ?statements]
-               [?statements :statement/content ?content]
-               [(schnaq.database.discussion/tokenize-string ?content) [?tokenized-content ...]]
-               [(schnaq.database.discussion/levenshtein-max? 2 ?search-tokens ?tokenized-content)]]
-             patterns/qa-question share-hash search-tokens)
-      frequencies
+      (merge-with + results<=2 results=3or4 results>5)
       (sort-by val >)
-      (map first)
-      toolbelt/pull-key-up)))
+      (map first))))
 
 (def ^:private summary-pattern
   [:db/id
