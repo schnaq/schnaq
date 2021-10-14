@@ -967,6 +967,9 @@ Now we write down questions and discuss them and can still understand what we ha
    :filters.option.vote/bigger "more than"
    :filters.option.vote/equal "equal"
    :filters.option.vote/less "less than"
+   :filters.option.answered/all "All Statements"
+   :filters.option.answered/answered "Answered"
+   :filters.option.answered/unanswered "Unanswered"
    :filters.buttons/clear "Clear all filters"
    :filters.heading/active "Active Filters"
 

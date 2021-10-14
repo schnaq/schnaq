@@ -968,6 +968,9 @@
    :filters.option.vote/bigger "więcej niż"
    :filters.option.vote/equal "to samo"
    :filters.option.vote/less "mniej niż"
+   :filters.option.answered/all "Wszystkie wkłady"
+   :filters.option.answered/answered "Odpowiedź"
+   :filters.option.answered/unanswered "Bez odpowiedzi"
    :filters.buttons/clear "Wyczyść wszystkie filtry"
    :filters.heading/active "Filtry aktywne"
 

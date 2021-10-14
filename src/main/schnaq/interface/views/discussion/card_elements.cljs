@@ -294,7 +294,9 @@
     [:div.m-1.pr-2
      [sorting-button]]
     [:div.m-1
-     [filters/filter-button]]
+     (if @(rf/subscribe [:schnaq.mode/qanda?])
+       [filters/filter-answered-statements]
+       [filters/filter-button])]
     [:div.d-flex.flex-row.ml-auto]]])
 
 (defn discussion-view
