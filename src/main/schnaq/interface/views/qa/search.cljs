@@ -18,7 +18,8 @@
 (rf/reg-event-fx
   :schnaq.qa/search
   (fn [{:keys [db]} [_ search-term]]
-    (when-not (cstring/blank? search-term)
+    (if (cstring/blank? search-term)
+      {:db (assoc-in db [:schnaq :qa :search :results] [])}
       (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
         {:fx [(http/xhrio-request db :get "/schnaq/qa/search"
                                   [:schnaq.qa.search/success]
