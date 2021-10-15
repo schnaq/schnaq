@@ -31,7 +31,6 @@
 ;; -----------------------------------------------------------------------------
 ;; Keycloak
 
-(goog-define keycloak-ssl-required "external")
 (goog-define keycloak-realm "development")
 (goog-define keycloak-client "development")
 (goog-define keycloak-public-client true)

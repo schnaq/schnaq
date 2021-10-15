@@ -45,18 +45,6 @@
         next-line (str (string/join (repeat level "  ")) relation-symbol indented-label)]
     (str old-text spacing next-line)))
 
-(>defn- nodes-after
-  "Delivers all nodes which in the graph of the discussion come after `source-node`.
-  Returns nodes as a list of tuples with the type of the link leading to the node
-  being the first element.
-
-  E.g. [:statement.type/attack {:db/id …}]"
-  [source-node all-statements links]
-  [:db/id sequential? sequential? :ret sequential?]
-  (let [indexed-nodes (into {} (map #(vector (:id %) %) all-statements))]
-    (map #(vector (:type %) (get indexed-nodes (:from %)))
-         (filter #(= source-node (:to %)) links))))
-
 (>defn generate-argdown
   "Generates a textual representation of the discussion in an argdown-format."
   [share-hash]

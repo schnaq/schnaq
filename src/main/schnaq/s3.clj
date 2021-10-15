@@ -25,12 +25,6 @@
   [keyword? string? :ret string?]
   (format "%s/%s/%s" shared-config/s3-host (shared-config/s3-buckets bucket) file-name))
 
-(>defn relative-file-path
-  "Return relative path to file in bucket, without s3-host."
-  [bucket-name file-name]
-  [keyword? string? :ret string?]
-  (format "%s/%s" (shared-config/s3-buckets bucket-name) file-name))
-
 (defn upload-stream
   "Upload a data stream to a specified s3 bucket. Returns relative path to file in bucket."
   [bucket stream file-name {:keys [content-length content-type]}]
