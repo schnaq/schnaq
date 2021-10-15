@@ -18,7 +18,8 @@
 (rf/reg-event-fx
   :schnaq.qa/search
   (fn [{:keys [db]} [_ search-term]]
-    (when-not (cstring/blank? search-term)
+    (if (cstring/blank? search-term)
+      {:db (assoc-in db [:schnaq :qa :search :results] [])}
       (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
         {:fx [(http/xhrio-request db :get "/schnaq/qa/search"
                                   [:schnaq.qa.search/success]
@@ -34,6 +35,11 @@
   :schnaq.qa.search/results
   (fn [db _]
     (get-in db [:schnaq :qa :search :results] [])))
+
+(rf/reg-event-db
+  :schnaq.qa.search.results/reset
+  (fn [db _]
+    (assoc-in db [:schnaq :qa :search :results] [])))
 
 (defn results-list
   "A list of statement results that came out of search."

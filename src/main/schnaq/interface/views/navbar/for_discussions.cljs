@@ -172,8 +172,9 @@
   []
   (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])
         qa? @(rf/subscribe [:schnaq.mode/qanda?])
-        share-hash @(rf/subscribe [:schnaq/share-hash])]
-    (when qa?
+        share-hash @(rf/subscribe [:schnaq/share-hash])
+        current-route @(rf/subscribe [:navigation/current-route-name])]
+    (when (and qa? (= :routes.schnaq/qanda current-route))
       [:div.pl-2
        [navbar-components/separated-button
         [:<>

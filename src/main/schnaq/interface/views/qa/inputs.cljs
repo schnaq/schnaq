@@ -28,7 +28,7 @@
          :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
          :required true :data-dynamic-height true
          :placeholder (labels :qanda/add-question)
-         :on-key-down #(throttled-search %)}]]]
+         :on-key-up #(throttled-search %)}]]]
      [:button.btn.btn-lg.btn-secondary.w-100.shadow-sm.mt-3.rounded-1
       {:type "submit" :title (labels :qanda.button/submit)}
       [:div.d-inline-block
