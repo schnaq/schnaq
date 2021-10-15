@@ -14,12 +14,12 @@
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.labels :as statement-labels]
-            [schnaq.interface.views.discussion.logic :as discussion-logic]
-            [schnaq.interface.components.schnaq :as sc]))
+            [schnaq.interface.views.discussion.logic :as discussion-logic]))
 
 (defn- set-selected-option
   "Helper function to set the correct temp atom value for a selection."
