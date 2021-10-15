@@ -60,7 +60,7 @@
 
            :unused-vars
            {:extra-deps {clj-kondo/tools {:git/url "https://github.com/clj-kondo/clj-kondo"
-                                          :sha "1ed3b11025b7f3a582e6db099ba10a888fe0fc2c"
+                                          :sha "35207f8b92f5a813483505b21af856bce4623c43"
                                           :deps/root "analysis"}}
             :main-opts ["-m" "clj-kondo.tools.unused-vars"]}
 
