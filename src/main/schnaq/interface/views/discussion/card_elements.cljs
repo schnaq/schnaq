@@ -43,13 +43,12 @@
                             :else back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
     (when navigation-target
-      [:div.mr-1
-       [tooltip/text
-        (labels tooltip)
-        [:button.btn.btn-dark-highlight.button-discussion-options.w-100.p-3
-         {:on-click #(rf/dispatch navigation-target)}
-         [:div.d-flex
-          [icon :arrow-left "m-auto"]]]]])))
+      [tooltip/text
+       (labels tooltip)
+       [:button.btn.btn-dark-highlight.button-discussion-options.w-100.p-3
+        {:on-click #(rf/dispatch navigation-target)}
+        [:div.d-flex
+         [icon :arrow-left "m-auto"]]]])))
 
 
 (defn- discussion-start-button
@@ -166,19 +165,35 @@
 
 ;; -----------------------------------------------------------------------------
 
+#_(defn- sort-options
+    "Displays the different sort options for card elements."
+    []
+    (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
+      [:section.p-2.button-discussion-options
+       [:button.btn.btn-outline-primary.m-1
+        {:class (when (= sort-method :newest) "active")
+         :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
+        (labels :badges.sort/newest)]
+       [:button.btn.btn-outline-primary.m-1
+        {:class (when (= sort-method :popular) "active")
+         :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
+        (labels :badges.sort/popular)]]))
+
 (defn- sort-options
   "Displays the different sort options for card elements."
   []
-  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
-    [:section.p-2.button-discussion-options
-     [:button.btn.btn-outline-primary.m-1
-      {:class (when (= sort-method :newest) "active")
-       :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
-      (labels :badges.sort/newest)]
-     [:button.btn.btn-outline-primary.m-1
-      {:class (when (= sort-method :popular) "active")
-       :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
-      (labels :badges.sort/popular)]]))
+  [:<>
+   [:div.btn-group.btn-group-toggle.button-discussion-options {:data-toggle "buttons"}
+    [:label.btn.btn-outline-primary.active
+     [:input {:type "radio" :autoComplete "off" :defaultChecked true
+              :onClick #(rf/dispatch [:discussion.statements.sort/set :popular])}]
+     [icon :star]
+     [:div.small (labels :badges.sort/popular)]]
+    [:label.btn.btn-outline-primary
+     [:input {:type "radio" :autoComplete "off"
+              :onClick #(rf/dispatch [:discussion.statements.sort/set :newest])}]
+     [icon :hourglass/empty]
+     [:div.small (labels :badges.sort/newest)]]]])
 
 (defn- sorting-button
   "Tooltip to select the desired sorting."
@@ -292,7 +307,7 @@
     [:div.m-1
      [search-bar]]
     [:div.m-1.pr-2
-     [sorting-button]]
+     [sort-options]]
     [:div.m-1
      (if @(rf/subscribe [:schnaq.mode/qanda?])
        [filters/filter-answered-statements]
