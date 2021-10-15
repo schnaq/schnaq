@@ -15,7 +15,7 @@
       toolbelt/accept-edn-response-header
       api/app))
 
-(deftest add-feedback
+(deftest add-feedback-test
   (testing "Minimum feedback has no image and description."
     (let [feedback {:feedback/description "Some feedback"
                     :feedback/has-image? false}]

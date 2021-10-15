@@ -47,14 +47,6 @@
      (gstring/contains (str classes) "bg-dark-blue") [:div.wave-bottom-dark-blue]
      :else [:div.wave-bottom-light])])
 
-(defn img-bullet-subtext
-  "Create one icon in a grid"
-  [path-to-img heading subheading]
-  [:div.d-flex.flex-row.p-1
-   [:div [:img {:src path-to-img}]]
-   [:p.h4 heading]
-   [:p subheading]])
-
 
 ;; -----------------------------------------------------------------------------
 ;; Footer

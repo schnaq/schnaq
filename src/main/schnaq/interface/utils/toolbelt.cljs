@@ -39,13 +39,6 @@
    (run! #(oset! % [:value] default) fields)
    (reset-form-height! fields)))
 
-(defn desktop-mobile-switch
-  "Displays desktop view on medium+ devices and displays mobile view on small- devices"
-  [desktop-view mobile-view]
-  [:<>
-   [:div.d-none.d-md-block desktop-view]
-   [:div.d-md-none mobile-view]])
-
 (>defn truncate-to-n-words
   "Truncate string to n words."
   [text n-words]

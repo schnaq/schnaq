@@ -158,12 +158,6 @@
                :alt "schnaqqi speaking"
                :src (img-path image-key)}]])
 
-(defn schnaqqi-speech-bubble-white
-  "Create a speech bubble left of a white schnaqqi and let him speak to the audience."
-  [schnaqqi-size bubble-content]
-  [schnaqqi-speech-bubble-builder
-   schnaqqi-size bubble-content nil :schnaqqifant/white])
-
 (defn schnaqqi-speech-bubble-blue
   "Create a speech bubble left of a blue schnaqqi and let him speak to the audience."
   [schnaqqi-size bubble-content]

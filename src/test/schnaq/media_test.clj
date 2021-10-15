@@ -16,7 +16,7 @@
                                  :discussion/edit-hash "secret"
                                  :discussion/author (user-db/add-user-if-not-exists "Mike")}))
 
-(deftest test-cdn-restriction
+(deftest cdn-restriction-test
   (testing "Test image upload to s3"
     (let [share-hash "aaaa1-bbb2-ccc3"
           _schnaq (create-schnaq share-hash)
@@ -41,7 +41,7 @@
       (is (= bad-request-2 :error-img))
       (is (not (nil? (-> request-1 :db-after)))))))
 
-(deftest test-cdn-regex
+(deftest cdn-regex-test
   (testing "Test that only pixabay's cdn url is allowed"
     (let [valid-url? #'media/valid-url?
           allowed-url (valid-url?

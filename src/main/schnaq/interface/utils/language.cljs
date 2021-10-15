@@ -1,13 +1,9 @@
 (ns schnaq.interface.utils.language
   (:require [clojure.string :as str]
             [hodgepodge.core :refer [local-storage]]
-            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :as config]
             [schnaq.interface.utils.js-wrapper :as jq]))
-
-(defn locale []
-  (oget js/navigator :language))
 
 (defn default-language
   "Returns the keyword for the default browser language.
