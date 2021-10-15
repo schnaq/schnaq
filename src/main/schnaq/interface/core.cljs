@@ -54,7 +54,6 @@
             [schnaq.interface.views.discussion.history]
             [schnaq.interface.views.discussion.labels]
             [schnaq.interface.views.discussion.logic]
-            [schnaq.interface.views.discussion.search]
             [schnaq.interface.views.errors]
             [schnaq.interface.views.feed.filters]
             [schnaq.interface.views.feed.overview]

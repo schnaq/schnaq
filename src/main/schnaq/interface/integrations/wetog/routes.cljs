@@ -4,7 +4,6 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.discussion.dashboard :as dashboard]
-            [schnaq.interface.views.discussion.search :as discussion-search]
             [schnaq.interface.views.graph.view :as graph-view]
             [schnaq.interface.views.howto.how-to :as how-to]))
 
@@ -42,9 +41,6 @@
                             (rf/dispatch [:visited.statement-nums/to-localstorage])
                             (rf/dispatch [:visited.statement-ids/to-localstorage-and-merge-with-app-db])
                             (rf/dispatch [:statement.edit/reset-edits]))}]}]
-   ["search"
-    {:name :routes.search/schnaq
-     :view discussion-search/view}]
    ["graph"
     {:name :routes/graph-view
      :view graph-view/graph-view-entrypoint

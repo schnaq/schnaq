@@ -6,7 +6,9 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
@@ -262,6 +264,7 @@
 ;; TODO: ersetze karte links wenn eine Suche aktiv ist.
 ;; TODO: Zeige leere Liste an, wenn keine Ergebnisse gefunden wurden.
 ;; TODO: lösche suchanfrage, wenn der view verlassen wird.
+;; TODO: slide alte topic karte auch sick rein
 ;; TODO: Nutze geile fuzzy search auch für discussion view
 ;; TODO: Lösche unnötige search views
 (defn- search-clear-button
@@ -304,19 +307,55 @@
      [filters/filter-button]]
     [:div.d-flex.flex-row.ml-auto]]])
 
+(defn- search-info []
+  (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
+        search-results @(rf/subscribe [:schnaq.search.current/result])]
+    [motion/move-in :left
+     [:div.panel-white.mb-4
+      [:div.d-inline-block
+       [:h2 (labels :schnaq.search/heading)]
+       [:div.row.mx-0.mt-4.mb-3
+        [:img.dashboard-info-icon-sm {:src (img-path :icon-search)}]
+        [:div.text.display-6.my-auto.mx-3
+         search-string]]]
+      [:div.row.m-0
+       [:img.dashboard-info-icon-sm {:src (img-path :icon-posts)}]
+       (if (empty? search-results)
+         [:p.mx-3 (labels :schnaq.search/new-search-title)]
+         [:p.mx-3 (str (count search-results) " " (labels :schnaq.search/results))])]]]))
+
 (defn discussion-view
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
   [share-hash]
-  [:div.container-fluid
-   [:div.row
-    [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
-     [topic-view [topic-bubble-view]]
-     [:div.d-none.d-md-block [history-view]]]
-    [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
-     [action-view]
-     [cards/conclusion-cards-list share-hash]
-     [:div.d-md-none [history-view]]
-     [:div.mx-auto
-      {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
-      [show-how-to]]]]])
+  (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
+    [:div.container-fluid
+     [:div.row
+      [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
+       [topic-view
+        (if search-inactive?
+          [topic-bubble-view]
+          [search-info])]
+       [:div.d-none.d-md-block [history-view]]]
+      [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
+       [action-view]
+       [cards/conclusion-cards-list share-hash]
+       [:div.d-md-none [history-view]]
+       [:div.mx-auto
+        {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
+        [show-how-to]]]]]))
+
+(rf/reg-sub
+  :schnaq.search.current/search-string
+  (fn [db _]
+    (get-in db [:search :schnaq :current :search-string] "")))
+
+(rf/reg-event-db
+  :schnaq.search.current/clear-search-string
+  (fn [db _]
+    (assoc-in db [:search :schnaq :current :search-string] "")))
+
+(rf/reg-sub
+  :schnaq.search.current/result
+  (fn [db _]
+    (get-in db [:search :schnaq :current :result] [])))
