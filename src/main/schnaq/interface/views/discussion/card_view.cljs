@@ -10,7 +10,8 @@
   :discussion.statements/search
   (fn [{:keys [db]} [_ search-string dynamic?]]
     (if (str/blank? search-string)
-      {:db (assoc-in db [:search :schnaq :current :result] [])}
+      {:db (-> (assoc-in db [:search :schnaq :current :result] [])
+               (assoc-in [:search :schnaq :current :search-string] search-string))}
       (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
         {:db (assoc-in db [:search :schnaq :current :search-string] search-string)
          :fx [(http/xhrio-request db :get "/discussion/statements/search" [:discussion.statements.search/success]

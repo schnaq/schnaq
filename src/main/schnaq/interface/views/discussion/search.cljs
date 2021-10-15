@@ -14,6 +14,11 @@
   (fn [db _]
     (get-in db [:search :schnaq :current :search-string] "")))
 
+(rf/reg-event-db
+  :schnaq.search.current/clear-search-string
+  (fn [db _]
+    (assoc-in db [:search :schnaq :current :search-string] "")))
+
 (rf/reg-sub
   :schnaq.search.current/result
   (fn [db _]

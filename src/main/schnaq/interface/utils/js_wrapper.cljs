@@ -100,3 +100,8 @@
       (dataset/get data-key)))
 
 (def document-body js/document.body)
+
+(defn clear-input
+  "Clears an input field."
+  [id]
+  (set! (.-value (js/document.getElementById id)) ""))

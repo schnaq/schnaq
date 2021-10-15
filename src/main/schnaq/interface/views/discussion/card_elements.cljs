@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.card-elements
-  (:require [goog.functions :as gfun]
+  (:require [clojure.string :as cstring]
+            [goog.functions :as gfun]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -258,24 +259,37 @@
     #(rf/dispatch [:discussion.statements/search (oget % [:target :value]) true])
     500))
 
+;; TODO: ersetze karte links wenn eine Suche aktiv ist.
+;; TODO: Zeige leere Liste an, wenn keine Ergebnisse gefunden wurden.
+;; TODO: lösche suchanfrage, wenn der view verlassen wird.
+;; TODO: Nutze geile fuzzy search auch für discussion view
+;; TODO: Lösche unnötige search views
+(defn- search-clear-button
+  [clear-id]
+  (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
+        action-icon (if (cstring/blank? search-string) :search :times)]
+    [:div.input-group-append
+     [:button.btn.button-muted.h-100
+      {:on-click (fn [_e]
+                   (jq/clear-input clear-id)
+                   (rf/dispatch [:schnaq.search.current/clear-search-string]))}
+      [icon action-icon "m-auto"]]]))
+
 (defn search-bar
   "A search-bar to search inside a schnaq."
   []
-  [:form.mr-3.h-100
-   {:on-submit (fn [e]
-                 (jq/prevent-default e)
-                 (rf/dispatch [:discussion.statements/search (oget e [:target :elements "search-input" :value]) false]))}
-   [:div.input-group.search-bar.h-100.panel-white.p-0
-    [:input.form-control.my-auto.search-bar-input.h-100
-     {:type "text"
-      :aria-label "Search"
-      :placeholder (labels :schnaq.search/input)
-      :name "search-input"
-      :on-key-up #(throttled-in-schnaq-search %)}]
-    [:div.input-group-append
-     [:button.btn.button-muted.h-100
-      {:type "submit"}
-      [icon :search "m-auto"]]]]])
+  (let [search-input-id "search-bar"]
+    [:form.mr-3.h-100
+     {:on-submit #(jq/prevent-default %)}
+     [:div.input-group.search-bar.h-100.panel-white.p-0
+      [:input.form-control.my-auto.search-bar-input.h-100
+       {:id search-input-id
+        :type "text"
+        :aria-label "Search"
+        :placeholder (labels :schnaq.search/input)
+        :name "search-input"
+        :on-key-up #(throttled-in-schnaq-search %)}]
+      [search-clear-button search-input-id]]]))
 
 (defn action-view []
   [:div.d-inline-block.text-dark.w-100.mb-3

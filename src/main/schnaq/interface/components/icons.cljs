@@ -6,8 +6,8 @@
              [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faCalendarAlt faCamera faCheck faCircleNotch
               faCog faComment faComments faCookie faCopy faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
               faFileDownload faFlask faGhost faProjectDiagram faInfoCircle faQuestionCircle faLanguage faPaperPlane
-              faPlus faQuestion faRocket faSearch faShareAlt faShieldAlt faStar faTag faTerminal faTrashAlt faUsers
-              faUserLock faUserNinja faUserPlus]]
+              faPlus faQuestion faRocket faSearch faShareAlt faShieldAlt faStar faTag faTerminal faTimes faTrashAlt
+              faUsers faUserLock faUserNinja faUserPlus]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
 (def ^:private icons
@@ -50,6 +50,7 @@
    :star faStar
    :tag faTag
    :terminal faTerminal
+   :times faTimes
    :trash faTrashAlt
    :user/group faUsers
    :user/lock faUserLock
