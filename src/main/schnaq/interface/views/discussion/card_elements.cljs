@@ -165,44 +165,20 @@
 
 ;; -----------------------------------------------------------------------------
 
-#_(defn- sort-options
-    "Displays the different sort options for card elements."
-    []
-    (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
-      [:section.p-2.button-discussion-options
-       [:button.btn.btn-outline-primary.m-1
-        {:class (when (= sort-method :newest) "active")
-         :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
-        (labels :badges.sort/newest)]
-       [:button.btn.btn-outline-primary.m-1
-        {:class (when (= sort-method :popular) "active")
-         :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
-        (labels :badges.sort/popular)]]))
-
 (defn- sort-options
   "Displays the different sort options for card elements."
   []
-  [:<>
-   [:div.btn-group.btn-group-toggle.button-discussion-options {:data-toggle "buttons"}
-    [:label.btn.btn-outline-primary.active
-     [:input {:type "radio" :autoComplete "off" :defaultChecked true
-              :onClick #(rf/dispatch [:discussion.statements.sort/set :popular])}]
-     [icon :star]
-     [:div.small (labels :badges.sort/popular)]]
-    [:label.btn.btn-outline-primary
-     [:input {:type "radio" :autoComplete "off"
-              :onClick #(rf/dispatch [:discussion.statements.sort/set :newest])}]
-     [icon :hourglass/empty]
-     [:div.small (labels :badges.sort/newest)]]]])
-
-(defn- sorting-button
-  "Tooltip to select the desired sorting."
-  []
-  [tooltip/html
-   [sort-options]
-   [:button.btn.btn-outline-primary.button-discussion-options
-    (labels :badges/sort)]
-   {:hideOnClick :toggle}])
+  [:div.btn-group.btn-group-toggle.button-discussion-options {:data-toggle "buttons"}
+   [:label.btn.btn-outline-primary.active
+    [:input {:type "radio" :autoComplete "off" :defaultChecked true
+             :onClick #(rf/dispatch [:discussion.statements.sort/set :popular])}]
+    [icon :star]
+    [:div.small (labels :badges.sort/popular)]]
+   [:label.btn.btn-outline-primary
+    [:input {:type "radio" :autoComplete "off"
+             :onClick #(rf/dispatch [:discussion.statements.sort/set :newest])}]
+    [icon :hourglass/empty]
+    [:div.small (labels :badges.sort/newest)]]])
 
 
 ;; -----------------------------------------------------------------------------
