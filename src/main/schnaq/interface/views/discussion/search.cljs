@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.search
-  (:require [re-frame.core :as rf]
+  (:require [clojure.string :as cstring]
+            [re-frame.core :as rf]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
@@ -24,22 +25,25 @@
   (fn [db _]
     (get-in db [:search :schnaq :current :result] [])))
 
-(defn- search-info [results search-string empty-search?]
-  [motion/move-in :left
-   [:div.panel-white.mb-4
-    [:div.d-inline-block
-     [:h2 (labels :schnaq.search/heading)]
-     [:div.row.mx-0.mt-4.mb-3
-      [:img.dashboard-info-icon-sm {:src (img-path :icon-search)}]
-      [:div.text.display-6.my-auto.mx-3
-       (if empty-search?
-         (labels :schnaq.search/no-input)
-         search-string)]]]
-    [:div.row.m-0
-     [:img.dashboard-info-icon-sm {:src (img-path :icon-posts)}]
-     (if (or empty-search? (empty? results))
-       [:p.mx-3 (labels :schnaq.search/new-search-title)]
-       [:p.mx-3 (str (count results) " " (labels :schnaq.search/results))])]]])
+(defn search-info []
+  (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
+        empty-search? (cstring/blank? search-string)
+        search-results @(rf/subscribe [:schnaq.search.current/result])]
+    [motion/move-in :left
+     [:div.panel-white.mb-4
+      [:div.d-inline-block
+       [:h2 (labels :schnaq.search/heading)]
+       [:div.row.mx-0.mt-4.mb-3
+        [:img.dashboard-info-icon-sm {:src (img-path :icon-search)}]
+        [:div.text.display-6.my-auto.mx-3
+         (if empty-search?
+           (labels :schnaq.search/no-input)
+           search-string)]]]
+      [:div.row.m-0
+       [:img.dashboard-info-icon-sm {:src (img-path :icon-posts)}]
+       (if (or empty-search? (empty? search-results))
+         [:p.mx-3 (labels :schnaq.search/new-search-title)]
+         [:p.mx-3 (str (count search-results) " " (labels :schnaq.search/results))])]]]))
 
 (defn search-results [results]
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
@@ -65,7 +69,7 @@
      [:div.container-fluid
       [:div.row
        [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
-        [search-info results search-string empty-search?]]
+        [search-info]]
        [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
         [elements/action-view true]
         (when-not empty-search?
