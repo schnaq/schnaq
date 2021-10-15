@@ -1,6 +1,5 @@
 (ns schnaq.interface.core
-  (:require ["@fortawesome/fontawesome-free/js/all.js"]
-            ["bootstrap"]
+  (:require ["bootstrap"]
             ["jquery"]
             ["popper.js"]
             [day8.re-frame.http-fx]

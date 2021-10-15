@@ -97,7 +97,7 @@
      [:a.badge.mr-3
       {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
       [:button.btn.btn-sm.btn-dark
-       [icon :plus "text-white m-auto fa-xs"]]
+       [icon :plus "text-white m-auto" {:size "xs"}]]
       [:span.ml-2.text-dark (labels :statement/reply)]]
      [up-down-vote statement]
      [:div.ml-sm-0.ml-lg-auto

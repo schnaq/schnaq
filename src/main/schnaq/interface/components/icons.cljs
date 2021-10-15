@@ -1,58 +1,72 @@
-(ns schnaq.interface.components.icons)
+(ns schnaq.interface.components.icons
+  ;; For further information check: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react
+  ;; For two styles of the same icon see here: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react#faqs
+  (:require ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye]]
+            ["@fortawesome/free-solid-svg-icons" :refer
+             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faCalendarAlt faCamera faCheck faCircleNotch
+              faCog faComment faComments faCookie faCopy faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
+              faFileDownload faFlask faGhost faProjectDiagram faInfoCircle faQuestionCircle faLanguage faPaperPlane
+              faPlus faQuestion faRocket faSearch faShareAlt faShieldAlt faStar faTag faTerminal faTrashAlt faUsers
+              faUserLock faUserNinja faUserPlus]]
+            ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
+
+(def ^:private icons
+  {:arrow-down faArrowDown
+   :arrow-left faArrowLeft
+   :arrow-right faArrowRight
+   :arrow-up faArrowUp
+   :bell faBell
+   :calendar faCalendar
+   :calendar-alt faCalendarAlt
+   :camera faCamera
+   :check/normal faCheck
+   :circle-notch faCircleNotch
+   :cog faCog
+   :comment faComment
+   :comment/alt faCommentAlt
+   :comments faComments
+   :cookie/complete faCookie
+   :copy faCopy
+   :cross faTimes
+   :delete-icon faTimesCircle
+   :dots faEllipsisH
+   :dots-v faEllipsisV
+   :edit faEdit
+   :eye faEye
+   :file-download faFileDownload
+   :flask faFlask
+   :ghost faGhost
+   :graph faProjectDiagram
+   :info faInfoCircle
+   :info-question faQuestionCircle
+   :language faLanguage
+   :plane faPaperPlane
+   :plus faPlus
+   :question faQuestion
+   :rocket faRocket
+   :search faSearch
+   :share faShareAlt
+   :shield faShieldAlt
+   :star faStar
+   :tag faTag
+   :terminal faTerminal
+   :trash faTrashAlt
+   :user/group faUsers
+   :user/lock faUserLock
+   :user/ninja faUserNinja
+   :user/plus faUserPlus})
 
 (defn icon
-  "Returns a fontawesome icon component for a given identifier."
-  ([identifier] [icon identifier nil])
-  ([identifier classes]
-   (identifier
-     {:arrow-down [:i.fas.fa-arrow-down {:class classes}]
-      :arrow-left [:i.fa.fa-arrow-left {:class classes}]
-      :arrow-right [:i.fas.fa-arrow-right {:class classes}]
-      :arrow-up [:i.fas.fa-arrow-up {:class classes}]
-      :bell [:i.fas.fa-bell {:class classes}]
-      :calendar [:i.far.fa-calendar {:class classes}]
-      :calendar-alt [:i.fas.fa-calendar-alt {:class classes}]
-      :camera [:i.fas.fa-camera {:class classes}]
-      :check/normal [:i.fas.fa-check {:class classes}]
-      :circle-notch [:i.fas.fa-circle-notch {:class classes}]
-      :cog [:i.fas.fa-cog {:class classes}]
-      :comment [:i.fas.fa-comment {:class classes}]
-      :comment/alt [:i.far.fa-comment-alt {:class classes}]
-      :comments [:i.fas.fa-comments {:class classes}]
-      :cookie/complete [:i.fas.fa-cookie {:class classes}]
-      :copy [:i.far.fa-copy {:class classes}]
-      :cross [:i.fas.fa-times {:class classes}]
-      :delete-icon [:i.fas.fa-times-circle {:class classes}]
-      :dots [:i.fas.fa-ellipsis-h {:class classes}]
-      :dots-v [:i.fas.fa-ellipsis-v {:class classes}]
-      :edit [:i.fas.fa-edit {:class classes}]
-      :eye [:i.far.fa-eye {:class classes}]
-      :file-download [:i.fas.fa-file-download {:class classes}]
-      :flask [:i.fas.fa-flask {:class classes}]
-      :ghost [:i.fas.fa-ghost {:class classes}]
-      :graph [:i.fas.fa-project-diagram {:class classes}]
-      :info [:i.fas.fa-info-circle {:class classes}]
-      :info-question [:i.fas.fa-question-circle {:class classes}]
-      :language [:i.fas.fa-language {:class classes}]
-      :plane [:i.fas.fa-paper-plane {:class classes}]
-      :plus [:i.fas.fa-plus {:class classes}]
-      :question [:i.fas.fa-question {:class classes}]
-      :rocket [:i.fas.fa-rocket {:class classes}]
-      :search [:i.fas.fa-search {:class classes}]
-      :share [:i.fas.fa-share-alt {:class classes}]
-      :shield [:i.fas.fa-shield-alt {:class classes}]
-      :star [:i.fas.fa-star {:class classes}]
-      :tag [:i.fas.fa-tag {:class classes}]
-      :terminal [:i.fas.fa-terminal {:class classes}]
-      :trash [:i.fas.fa-trash-alt {:class classes}]
-      :user/group [:i.fas.fa-users {:class classes}]
-      :user/lock [:i.fas.fa-user-lock {:class classes}]
-      :user/ninja [:i.fas.fa-user-ninja {:class classes}]
-      :user/plus [:i.fas.fa-user-plus {:class classes}]})))
-
-(defn icon-lg
-  "A bigger version of the icon"
+  "The core icon building-block. Pass extra-attributes as a third parameter.
+  e.g. `{:size \"lg\"
+        :rotation 180}`"
   ([identifier]
-   [icon-lg identifier nil])
+   [icon identifier ""])
   ([identifier classes]
-   [icon identifier (if classes (str "fa-lg " classes) "fa-lg")]))
+   [icon identifier classes {}])
+  ([identifier classes extras]
+   [:> FontAwesomeIcon
+    (merge
+      {:icon (get icons identifier)
+       :className classes}
+      extras)]))
