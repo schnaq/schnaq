@@ -36,6 +36,11 @@
   (fn [db _]
     (get-in db [:schnaq :qa :search :results] [])))
 
+(rf/reg-event-db
+  :schnaq.qa.search.results/reset
+  (fn [db _]
+    (assoc-in db [:schnaq :qa :search :results] [])))
+
 (defn results-list
   "A list of statement results that came out of search."
   []

@@ -208,7 +208,8 @@
      ["/ask"
       {:name :routes.schnaq/qanda
        :view qanda/qanda-view
-       :link-text (labels :router/qanda)}]
+       :link-text (labels :router/qanda)
+       :controllers [{:stop #(rf/dispatch [:schnaq.qa.search.results/reset])}]}]
      ["/value"
       {:name :routes.schnaq/value
        :view value/schnaq-value-view
