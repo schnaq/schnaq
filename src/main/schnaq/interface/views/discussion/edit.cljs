@@ -27,12 +27,12 @@
      (when pro-con-enabled?
        [input/statement-type-choose-button statement-type change-statement-type])]
     [:div.d-flex.mb-3
-     [:button.btn.btn-outline-secondary
+     [:button.btn.btn-link
       {:on-click (fn [e]
                    (jq/prevent-default e)
                    (rf/dispatch [:statement.edit/deactivate-edit edit-id]))}
       (labels :statement.edit.button/cancel)]
-     [:button.btn.btn-outline-primary.ml-1 {:type "submit"} (labels :statement.edit.button/submit)]]]])
+     [:button.btn.btn-outline-dark.ml-1 {:type "submit"} (labels :statement.edit.button/submit)]]]])
 
 (defn edit-card-statement
   "Editable statement input."
