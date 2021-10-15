@@ -71,7 +71,7 @@
   "Check if a child exists, which has the label :check."
   [statement]
   [::specs/statement :ret boolean?]
-  (string? ((set (flatten (map :statement/labels (:statement/children statement)))) ":check")))
+  (string? ((set (flatten (map :statement/labels (:statement/answers statement)))) ":check")))
 
 (defn with-answered?-info
   "Mark a statement as answered if `answered?` is true."

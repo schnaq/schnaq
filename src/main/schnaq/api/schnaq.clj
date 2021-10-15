@@ -163,6 +163,7 @@
         user-id (user-db/user-id display-name (:sub identity))]
     (ok {:matching-statements (-> (discussion-db/search-similar-questions share-hash search-string)
                                   processors/with-sub-discussion-info
+                                  processors/with-answered?-info
                                   (discussion-api/valid-statements-with-votes user-id))})))
 
 ;; -----------------------------------------------------------------------------

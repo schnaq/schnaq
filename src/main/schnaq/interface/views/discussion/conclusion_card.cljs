@@ -131,29 +131,28 @@
 
 (>defn- card-highlighting
   "Add card-highlighting to a statement card."
-  [{:keys [meta/answered? statement/type]} route-name]
-  [::specs/statement keyword? :ret string?]
-  (let [starting? (= :routes.schnaq/start route-name)]
-    (if (and starting? answered?)
-      "highlight-card-answered"
-      (str "highlight-card-" (name (or type :neutral))))))
+  [{:keys [meta/answered? statement/type]}]
+  [::specs/statement :ret string?]
+  (str "highlight-card-" (if answered? "answered" (name (or type :neutral)))))
 
 (defn statement-card
+  "Display a full interactive statement. Takes `additional-content`, e.g. the
+  answer of a question."
   ([statement]
    [statement-card statement nil])
   ([statement additional-content]
-   (let [route-name @(rf/subscribe [:navigation/current-route-name])
-         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])]
+   (let [q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])]
      [:article.statement-card.my-2
       [:div.d-flex.flex-row
-       [:div {:class (card-highlighting statement route-name)}]
+       [:div {:class (card-highlighting statement)}]
        [:div.card-view.card-body.py-2
         (when (:meta/new? statement)
           [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right
            (labels :discussion.badges/new)])
         [:div.pt-2.d-flex
          [:div.mr-auto [user/user-info statement 42 "w-100"]]
-         (when q-and-a? [:div.ml-auto [mark-as-answer-button statement]])]
+         (when q-and-a?
+           [:div.ml-auto [mark-as-answer-button statement]])]
         [:div.my-4]
         [:div.text-purple-dark
          [md/as-markdown (:statement/content statement)]]
@@ -188,6 +187,7 @@
              [labels/build-label label]])])]]]))
 
 (defn answer-card
+  "Display the answer directly inside the statement itself."
   [statement]
   (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/answers statement))]
     [statement-card statement
@@ -204,7 +204,7 @@
   (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if currently-edited?
       [edit/edit-card-statement statement]
-      [statement-card statement])))
+      [answer-card statement])))
 
 (defn- sort-statements
   "Sort statements according to the filter method. If we are in q-and-a-mode,
