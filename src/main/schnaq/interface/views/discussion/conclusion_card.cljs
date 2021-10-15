@@ -141,8 +141,7 @@
   ([statement]
    [statement-card statement nil])
   ([statement additional-content]
-   (let [route-name @(rf/subscribe [:navigation/current-route-name])
-         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])]
+   (let [q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])]
      [:article.statement-card.my-2
       [:div.d-flex.flex-row
        [:div {:class (card-highlighting statement)}]
