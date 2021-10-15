@@ -31,12 +31,13 @@
   "Returns all starting-statements belonging to a discussion."
   [share-hash]
   [:db/id :ret (s/coll-of ::specs/statement)]
-  (query
-    '[:find [(pull ?statements pattern) ...]
-      :in $ ?share-hash pattern
-      :where [?discussion :discussion/share-hash ?share-hash]
-      [?discussion :discussion/starting-statements ?statements]]
-    share-hash patterns/statement-with-labels-from-children))
+  (toolbelt/pull-key-up
+    (query
+      '[:find [(pull ?statements pattern) ...]
+        :in $ ?share-hash pattern
+        :where [?discussion :discussion/share-hash ?share-hash]
+        [?discussion :discussion/starting-statements ?statements]]
+      share-hash patterns/statement-with-answers)))
 
 (defn transitive-child-rules
   "Returns a set of rules for finding transitive children entities of a given
@@ -467,7 +468,7 @@
              [?statements :statement/content ?content]
              [(schnaq.database.discussion/tokenize-string ?content) [?tokenized-content ...]]
              [(schnaq.database.discussion/levenshtein-max? ?distance ?search-tokens ?tokenized-content)]]
-           patterns/qa-question share-hash search-tokens distance)
+           patterns/statement-with-answers share-hash search-tokens distance)
     frequencies
     toolbelt/pull-key-up))
 

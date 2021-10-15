@@ -53,13 +53,10 @@
 (def statement-with-secret
   (conj statement :statement/creation-secret))
 
-(def qa-question
+(def statement-with-answers
   (conj statement
         {[:statement/_parent :as :statement/answers] statement}))
 
-(def statement-with-labels-from-children
-  (conj statement
-        {[:statement/_parent :as :statement/children] [:statement/labels]}))
 
 ;; -----------------------------------------------------------------------------
 
