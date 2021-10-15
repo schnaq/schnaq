@@ -153,7 +153,8 @@
            (labels :discussion.badges/new)])
         [:div.pt-2.d-flex
          [:div.mr-auto [user/user-info statement 42 "w-100"]]
-         (when q-and-a? [:div.ml-auto [mark-as-answer-button statement]])]
+         (when (and q-and-a? (not= :routes.schnaq/qanda route-name))
+           [:div.ml-auto [mark-as-answer-button statement]])]
         [:div.my-4]
         [:div.text-purple-dark
          [md/as-markdown (:statement/content statement)]]
@@ -188,6 +189,7 @@
              [labels/build-label label]])])]]]))
 
 (defn answer-card
+  "Display the answer directly inside the statement itself."
   [statement]
   (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/answers statement))]
     [statement-card statement
