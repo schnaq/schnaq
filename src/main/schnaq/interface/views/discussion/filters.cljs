@@ -14,6 +14,7 @@
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
@@ -142,6 +143,22 @@
      [:button.btn.btn-outline-primary-small.my-1
       {:on-click #(rf/dispatch [:filters/deactivate filter-data])} "x"]]))
 
+(defn filter-answered-statements
+  "Show buttons to toggle between answered / unanswered statements."
+  []
+  [sc/discussion-options-button-group
+   [{:on-click #(rf/dispatch [:filters/clear])
+     :icon-key :comments
+     :label-key :filters.option.answered/all}
+    {:on-click (fn [] (rf/dispatch [:filters/clear])
+                 (rf/dispatch [:filters.activate/answered? true]))
+     :icon-key :check/normal
+     :label-key :filters.option.answered/answered}
+    {:on-click (fn [] (rf/dispatch [:filters/clear])
+                 (rf/dispatch [:filters.activate/answered? false]))
+     :icon-key :info-question
+     :label-key :filters.option.answered/unanswered}]])
+
 (defn- active-filters
   "A menu showing the currently active filters."
   []
@@ -178,13 +195,19 @@
       (labels :badges.filters/button)]
      {:hideOnClick :toggle}]))
 
+
+;; -----------------------------------------------------------------------------
+
+(defn- register-new-filter [db new-filter]
+  (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))
+
 (rf/reg-event-db
   :filters.activate/labels
   (fn [db [_ criteria label]]
     (let [new-filter {:type :labels
                       :criteria (keyword criteria)
                       :label label}]
-      (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))))
+      (register-new-filter db new-filter))))
 
 (rf/reg-event-db
   :filters.activate/type
@@ -192,7 +215,7 @@
     (let [new-filter {:type :type
                       :criteria (keyword criteria)
                       :statement-type (keyword stype)}]
-      (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))))
+      (register-new-filter db new-filter))))
 
 (rf/reg-event-db
   :filters.activate/votes
@@ -200,7 +223,14 @@
     (let [new-filter {:type :votes
                       :criteria criteria
                       :votes-number (js/parseInt votes-number)}]
-      (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))))
+      (register-new-filter db new-filter))))
+
+(rf/reg-event-db
+  :filters.activate/answered?
+  (fn [db [_ toggle]]
+    (let [new-filter {:type :answered?
+                      :criteria toggle}]
+      (register-new-filter db new-filter))))
 
 (rf/reg-event-db
   :filters/deactivate
@@ -228,6 +258,7 @@
   "Returns the corresponding filter-fn for a data-representation of a filter."
   [{:keys [type criteria label statement-type votes-number]} local-votes]
   (case type
+    :answered? (fn [statements] ((if criteria filter remove) :meta/answered? statements))
     :labels
     (let [coll-fn (if (= criteria :includes) filter remove)]
       (fn [statements] (coll-fn #(contains? (set (:statement/labels %)) label) statements)))

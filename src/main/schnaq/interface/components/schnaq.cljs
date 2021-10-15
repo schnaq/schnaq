@@ -1,6 +1,7 @@
 (ns schnaq.interface.components.schnaq
   (:require [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.views.notifications :refer [notify!]]))
@@ -21,3 +22,20 @@
             options)
      (subs padded-access-code 0 (/ code-length 2)) [:span.pl-3]
      (subs padded-access-code (/ code-length 2))]))
+
+(defn discussion-options-button-group
+  "Build a button-group with for the discussion-view."
+  [[first-button & rest-buttons]]
+  (let [{:keys [on-click icon-key label-key]} first-button]
+    [:div.btn-group.btn-group-toggle.button-discussion-options {:data-toggle "buttons"}
+     [:label.btn.btn-outline-primary.active
+      [:input {:type "radio" :autoComplete "off" :defaultChecked true
+               :onClick on-click}]
+      [icon icon-key]
+      [:div.small (labels label-key)]]
+     (for [{:keys [on-click icon-key label-key]} rest-buttons]
+       [:label.btn.btn-outline-primary {:key (str "discussion-options-button-group-item-" label-key)}
+        [:input {:type "radio" :autoComplete "off"
+                 :onClick on-click}]
+        [icon icon-key]
+        [:div.small (labels label-key)]])]))

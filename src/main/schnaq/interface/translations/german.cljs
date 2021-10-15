@@ -955,6 +955,7 @@
    :admin.center.delete.private/label "Share-hash"
    :admin.center.delete.private/heading "Private schnaqs"
 
+   :badges/sort "Sortierung"
    :badges.sort/newest "Neueste"
    :badges.sort/popular "Beliebt"
    :badges.sort/alphabetical "Alphabetisch"
@@ -972,6 +973,9 @@
    :filters.option.vote/bigger "mehr als"
    :filters.option.vote/equal "gleich"
    :filters.option.vote/less "weniger als"
+   :filters.option.answered/all "Alle Beiträge"
+   :filters.option.answered/answered "Beantwortete"
+   :filters.option.answered/unanswered "Unbeantwortete"
    :filters.buttons/clear "Alle Filter löschen"
    :filters.heading/active "Aktive Filter"
 

@@ -5,6 +5,7 @@
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
@@ -43,13 +44,12 @@
                             :else back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
     (when navigation-target
-      [:div.mr-1
-       [tooltip/text
-        (labels tooltip)
-        [:button.btn.btn-dark-highlight.button-discussion-options.w-100.p-3
-         {:on-click #(rf/dispatch navigation-target)}
-         [:div.d-flex
-          [icon :arrow-left "m-auto"]]]]])))
+      [tooltip/text
+       (labels tooltip)
+       [:button.btn.btn-dark-highlight.button-discussion-options.w-100.p-3
+        {:on-click #(rf/dispatch navigation-target)}
+        [:div.d-flex
+         [icon :arrow-left "m-auto"]]]])))
 
 
 (defn- discussion-start-button
@@ -159,22 +159,26 @@
 (rf/reg-event-db
   :votes.local/reset
   (fn [db _]
-    (assoc db :votes {:up {}
-                      :down {}})))
+    (update db :votes
+            dissoc :up
+            dissoc :down)))
+
+
+;; -----------------------------------------------------------------------------
 
 (defn- sort-options
   "Displays the different sort options for card elements."
   []
-  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
-    [:section.h-100
-     [:button.btn.btn-outline-primary.mr-2.button-discussion-options
-      {:class (when (= sort-method :newest) "active")
-       :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
-      (labels :badges.sort/newest)]
-     [:button.btn.btn-outline-primary.button-discussion-options
-      {:class (when (= sort-method :popular) "active")
-       :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
-      (labels :badges.sort/popular)]]))
+  [sc/discussion-options-button-group
+   [{:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
+     :icon-key :star
+     :label-key :badges.sort/popular}
+    {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])
+     :icon-key :hourglass/empty
+     :label-key :badges.sort/newest}]])
+
+
+;; -----------------------------------------------------------------------------
 
 (defn- current-topic-badges [schnaq statement is-topic?]
   (let [badges-start [badges/static-info-badges-discussion schnaq]
@@ -275,10 +279,12 @@
      [back-button]]
     [:div.m-1
      [search-bar]]
-    [:div.m-1.pr-2.border-right
+    [:div.m-1.pr-2
      [sort-options]]
     [:div.m-1
-     [filters/filter-button]]
+     (if @(rf/subscribe [:schnaq.mode/qanda?])
+       [filters/filter-answered-statements]
+       [filters/filter-button])]
     [:div.d-flex.flex-row.ml-auto]]])
 
 (defn discussion-view

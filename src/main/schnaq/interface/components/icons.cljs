@@ -31,6 +31,7 @@
       :flask [:i.fas.fa-flask {:class classes}]
       :ghost [:i.fas.fa-ghost {:class classes}]
       :graph [:i.fas.fa-project-diagram {:class classes}]
+      :hourglass/empty [:i.far.fa-hourglass {:class classes}]
       :info [:i.fas.fa-info-circle {:class classes}]
       :info-question [:i.fas.fa-question-circle {:class classes}]
       :language [:i.fas.fa-language {:class classes}]
