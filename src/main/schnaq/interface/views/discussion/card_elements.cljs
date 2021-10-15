@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.card-elements
-  (:require [goog.string :as gstring]
+  (:require [goog.functions :as gfun]
+            [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
@@ -252,17 +253,25 @@
       [how-to-elements/quick-how-to-schnaq]
       [how-to-elements/quick-how-to-pro-con])))
 
+(def throttled-in-schnaq-search
+  (gfun/throttle
+    #(rf/dispatch [:discussion.statements/search (oget % [:target :value]) true])
+    500))
+
 (defn search-bar
   "A search-bar to search inside a schnaq."
   []
   [:form.mr-3.h-100
    {:on-submit (fn [e]
                  (jq/prevent-default e)
-                 (rf/dispatch [:discussion.statements/search (oget e [:target :elements "search-input" :value])]))}
+                 (rf/dispatch [:discussion.statements/search (oget e [:target :elements "search-input" :value]) false]))}
    [:div.input-group.search-bar.h-100.panel-white.p-0
     [:input.form-control.my-auto.search-bar-input.h-100
-     {:type "text" :aria-label "Search" :placeholder
-      (labels :schnaq.search/input) :name "search-input"}]
+     {:type "text"
+      :aria-label "Search"
+      :placeholder (labels :schnaq.search/input)
+      :name "search-input"
+      :on-key-up #(throttled-in-schnaq-search %)}]
     [:div.input-group-append
      [:button.btn.button-muted.h-100
       {:type "submit"}

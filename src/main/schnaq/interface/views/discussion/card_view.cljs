@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.card-view
-  (:require [re-frame.core :as rf]
+  (:require [clojure.string :as str]
+            [re-frame.core :as rf]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.card-elements :as elements]
@@ -7,14 +8,16 @@
 
 (rf/reg-event-fx
   :discussion.statements/search
-  (fn [{:keys [db]} [_ search-string]]
-    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-      {:db (assoc-in db [:search :schnaq :current :search-string] search-string)
-       :fx [(http/xhrio-request db :get "/discussion/statements/search" [:discussion.statements.search/success]
-                                {:share-hash share-hash
-                                 :search-string search-string
-                                 :display-name (tools/current-display-name db)})
-            [:dispatch [:navigation/navigate :routes.search/schnaq {:share-hash share-hash}]]]})))
+  (fn [{:keys [db]} [_ search-string dynamic?]]
+    (if (str/blank? search-string)
+      {:db (assoc-in db [:search :schnaq :current :result] [])}
+      (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+        {:db (assoc-in db [:search :schnaq :current :search-string] search-string)
+         :fx [(http/xhrio-request db :get "/discussion/statements/search" [:discussion.statements.search/success]
+                                  {:share-hash share-hash
+                                   :search-string search-string
+                                   :display-name (tools/current-display-name db)})
+              (when-not dynamic? [:dispatch [:navigation/navigate :routes.search/schnaq {:share-hash share-hash}]])]}))))
 
 (rf/reg-event-db
   :discussion.statements.search/success
@@ -26,6 +29,16 @@
   []
   (let [schnaq @(rf/subscribe [:schnaq/selected])]
     [elements/discussion-view (:discussion/share-hash schnaq)]))
+
+(rf/reg-sub
+  :discussion.statements/show
+  ;; The statements which should be shown in the discussion view right now.
+  :<- [:discussion.premises/current]
+  :<- [:schnaq.search.current/result]
+  (fn [[premises search-results] _]
+    (if-let [results (seq search-results)]
+      results
+      premises)))
 
 (rf/reg-sub
   :discussion.premises/current
