@@ -133,11 +133,11 @@
   "Add card-highlighting to a statement card."
   [{:keys [meta/answered? statement/type]}]
   [::specs/statement :ret string?]
-  (if answered?
-    "highlight-card-answered"
-    (str "highlight-card-" (name (or type :neutral)))))
+  (str "highlight-card-" (if answered? "answered" (name (or type :neutral)))))
 
 (defn statement-card
+  "Display a full interactive statement. Takes `additional-content`, e.g. the
+  answer of a question."
   ([statement]
    [statement-card statement nil])
   ([statement additional-content]
@@ -152,7 +152,7 @@
            (labels :discussion.badges/new)])
         [:div.pt-2.d-flex
          [:div.mr-auto [user/user-info statement 42 "w-100"]]
-         (when (and q-and-a? (not= :routes.schnaq/qanda route-name))
+         (when q-and-a?
            [:div.ml-auto [mark-as-answer-button statement]])]
         [:div.my-4]
         [:div.text-purple-dark
