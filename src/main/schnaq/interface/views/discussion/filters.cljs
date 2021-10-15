@@ -149,17 +149,20 @@
    [:label.btn.btn-outline-primary.active
     [:input {:type "radio" :autoComplete "off" :defaultChecked true
              :onClick #(rf/dispatch [:filters/clear])}]
-    (labels :filters.option.answered/all)]
+    [icon :comments]
+    [:div.small (labels :filters.option.answered/all)]]
    [:label.btn.btn-outline-primary
     [:input {:type "radio" :autoComplete "off"
              :onClick (fn [] (rf/dispatch [:filters/clear])
                         (rf/dispatch [:filters.activate/answered? true]))}]
-    (labels :filters.option.answered/answered)]
+    [icon :check/normal]
+    [:div.small (labels :filters.option.answered/answered)]]
    [:label.btn.btn-outline-primary
     [:input {:type "radio" :autoComplete "off"
              :onClick (fn [] (rf/dispatch [:filters/clear])
                         (rf/dispatch [:filters.activate/answered? false]))}]
-    (labels :filters.option.answered/unanswered)]])
+    [icon :info-question]
+    [:div.small (labels :filters.option.answered/unanswered)]]])
 
 (defn- active-filters
   "A menu showing the currently active filters."
