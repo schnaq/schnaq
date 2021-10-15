@@ -5,6 +5,7 @@
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
@@ -168,17 +169,13 @@
 (defn- sort-options
   "Displays the different sort options for card elements."
   []
-  [:div.btn-group.btn-group-toggle.button-discussion-options {:data-toggle "buttons"}
-   [:label.btn.btn-outline-primary.active
-    [:input {:type "radio" :autoComplete "off" :defaultChecked true
-             :onClick #(rf/dispatch [:discussion.statements.sort/set :popular])}]
-    [icon :star]
-    [:div.small (labels :badges.sort/popular)]]
-   [:label.btn.btn-outline-primary
-    [:input {:type "radio" :autoComplete "off"
-             :onClick #(rf/dispatch [:discussion.statements.sort/set :newest])}]
-    [icon :hourglass/empty]
-    [:div.small (labels :badges.sort/newest)]]])
+  [sc/discussion-options-button-group
+   [{:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
+     :icon-key :star
+     :label-key :badges.sort/popular}
+    {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])
+     :icon-key :hourglass/empty
+     :label-key :badges.sort/newest}]])
 
 
 ;; -----------------------------------------------------------------------------

@@ -18,7 +18,8 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.labels :as statement-labels]
-            [schnaq.interface.views.discussion.logic :as discussion-logic]))
+            [schnaq.interface.views.discussion.logic :as discussion-logic]
+            [schnaq.interface.components.schnaq :as sc]))
 
 (defn- set-selected-option
   "Helper function to set the correct temp atom value for a selection."
@@ -145,24 +146,18 @@
 (defn filter-answered-statements
   "Show buttons to toggle between answered / unanswered statements."
   []
-  [:div.btn-group.btn-group-toggle.button-discussion-options {:data-toggle "buttons"}
-   [:label.btn.btn-outline-primary.active
-    [:input {:type "radio" :autoComplete "off" :defaultChecked true
-             :onClick #(rf/dispatch [:filters/clear])}]
-    [icon :comments]
-    [:div.small (labels :filters.option.answered/all)]]
-   [:label.btn.btn-outline-primary
-    [:input {:type "radio" :autoComplete "off"
-             :onClick (fn [] (rf/dispatch [:filters/clear])
-                        (rf/dispatch [:filters.activate/answered? true]))}]
-    [icon :check/normal]
-    [:div.small (labels :filters.option.answered/answered)]]
-   [:label.btn.btn-outline-primary
-    [:input {:type "radio" :autoComplete "off"
-             :onClick (fn [] (rf/dispatch [:filters/clear])
-                        (rf/dispatch [:filters.activate/answered? false]))}]
-    [icon :info-question]
-    [:div.small (labels :filters.option.answered/unanswered)]]])
+  [sc/discussion-options-button-group
+   [{:on-click #(rf/dispatch [:filters/clear])
+     :icon-key :comments
+     :label-key :filters.option.answered/all}
+    {:on-click (fn [] (rf/dispatch [:filters/clear])
+                 (rf/dispatch [:filters.activate/answered? true]))
+     :icon-key :check/normal
+     :label-key :filters.option.answered/answered}
+    {:on-click (fn [] (rf/dispatch [:filters/clear])
+                 (rf/dispatch [:filters.activate/answered? false]))
+     :icon-key :info-question
+     :label-key :filters.option.answered/unanswered}]])
 
 (defn- active-filters
   "A menu showing the currently active filters."
