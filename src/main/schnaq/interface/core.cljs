@@ -96,6 +96,16 @@
   (reagent.dom/render [views/root]
                       (gdom/getElement (if shared-config/embedded? "schnaq-integration" "app"))))
 
+
+(defn ^:dev/after-load clear-cache-and-render!
+  []
+  ;; The `:dev/after-load` metadata causes this function to be called
+  ;; after shadow-cljs hot-reloads code. We force a UI update by clearing
+  ;; the re-frame subscription cache.
+  ;; This function is called implicitly by its annotation.
+  (rf/clear-subscription-cache!)
+  (render))
+
 (defn- say-hello
   "Add some logging to validate and verify the correct environment."
   []
