@@ -45,35 +45,35 @@
          [:p.mx-3 (labels :schnaq.search/new-search-title)]
          [:p.mx-3 (str (count search-results) " " (labels :schnaq.search/results))])]]]))
 
-(defn search-results [results]
-  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
-        local-votes (rf/subscribe [:local-votes])
-        key-fn (case sort-method
-                 :newest :statement/created-at
-                 :popular #(logic/calculate-votes % @local-votes))
-        sorted-results (sort-by key-fn > results)
-        active-filters @(rf/subscribe [:filters/active])
-        filtered-conclusions (filters/filter-statements sorted-results active-filters local-votes)]
-    [motion/move-in :right
-     (for [statement filtered-conclusions]
-       [:div.p-2.w-lg-50.d-inline-block
-        {:key (:db/id statement)}
-        [card/statement-card statement]])]))
+(defn search-results []
+  (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
+        empty-search? (cstring/blank? search-string)]
+    (when-not empty-search?
+      (let [search-results @(rf/subscribe [:schnaq.search.current/result])
+            sort-method @(rf/subscribe [:discussion.statements/sort-method])
+            local-votes (rf/subscribe [:local-votes])
+            key-fn (case sort-method
+                     :newest :statement/created-at
+                     :popular #(logic/calculate-votes % @local-votes))
+            sorted-results (sort-by key-fn > search-results)
+            active-filters @(rf/subscribe [:filters/active])
+            filtered-conclusions (filters/filter-statements sorted-results active-filters local-votes)]
+        [motion/move-in :right
+         (for [statement filtered-conclusions]
+           [:div.p-2.w-lg-50.d-inline-block
+            {:key (:db/id statement)}
+            [card/statement-card statement]])]))))
 
 (defn- search-view []
-  (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
-        results @(rf/subscribe [:schnaq.search.current/result])
-        empty-search? (= "" search-string)]
-    [pages/with-discussion-header
-     {:page/heading (labels :schnaq.search/title)}
-     [:div.container-fluid
-      [:div.row
-       [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
-        [search-info]]
-       [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
-        [elements/action-view true]
-        (when-not empty-search?
-          [search-results results])]]]]))
+  [pages/with-discussion-header
+   {:page/heading (labels :schnaq.search/title)}
+   [:div.container-fluid
+    [:div.row
+     [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
+      [search-info]]
+     [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
+      [elements/action-view true]
+      [search-results]]]]])
 
 (defn view
   "Search view"
