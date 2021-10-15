@@ -206,7 +206,7 @@
   (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if currently-edited?
       [edit/edit-card-statement statement]
-      [statement-card statement])))
+      [answer-card statement])))
 
 (defn- sort-statements
   "Sort statements according to the filter method. If we are in q-and-a-mode,
