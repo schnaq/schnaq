@@ -131,12 +131,11 @@
 
 (>defn- card-highlighting
   "Add card-highlighting to a statement card."
-  [{:keys [meta/answered? statement/type]} route-name]
-  [::specs/statement keyword? :ret string?]
-  (let [starting? (= :routes.schnaq/start route-name)]
-    (if (and starting? answered?)
-      "highlight-card-answered"
-      (str "highlight-card-" (name (or type :neutral))))))
+  [{:keys [meta/answered? statement/type]}]
+  [::specs/statement :ret string?]
+  (if answered?
+    "highlight-card-answered"
+    (str "highlight-card-" (name (or type :neutral)))))
 
 (defn statement-card
   ([statement]
@@ -146,7 +145,7 @@
          q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])]
      [:article.statement-card.my-2
       [:div.d-flex.flex-row
-       [:div {:class (card-highlighting statement route-name)}]
+       [:div {:class (card-highlighting statement)}]
        [:div.card-view.card-body.py-2
         (when (:meta/new? statement)
           [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right
