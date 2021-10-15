@@ -151,7 +151,7 @@
   (when-let [hubs @(rf/subscribe [:hubs/all])]
     [:section
      [:h6.text-purple-dark.pb-2.ml-4 (labels :hubs/heading)]
-     [:div
+     [:div.d-flex.flex-column
       (for [[keycloak-name hub] hubs]
         (with-meta [hub-feed-button hub] {:key keycloak-name}))
       [icon-and-label-feed-button :router/visited-schnaqs :eye :routes.schnaqs/personal]]]))
@@ -162,7 +162,7 @@
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
         hubs @(rf/subscribe [:hubs/all])]
     [:section
-     [:div.panel-white.mx-0.mt-0.mb-4
+     [:div.d-flex.flex-column.panel-white.mx-0.mt-0.mb-4
       [create-feed-button :nav.schnaqs/create-schnaq :plus :routes.schnaq/create]
       (when-not (nil? edit-hash)
         [icon-and-label-feed-button :nav.schnaqs/last-added :arrow-left
