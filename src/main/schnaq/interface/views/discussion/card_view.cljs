@@ -1,16 +1,15 @@
 (ns schnaq.interface.views.discussion.card-view
-  (:require [clojure.string :as str]
+  (:require [clojure.string :as cstring]
             [re-frame.core :as rf]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.card-elements :as elements]
-            [schnaq.interface.views.pages :as pages]
-            [clojure.string :as cstring]))
+            [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-event-fx
   :discussion.statements/search
   (fn [{:keys [db]} [_ search-string dynamic?]]
-    (if (str/blank? search-string)
+    (if (cstring/blank? search-string)
       {:db (-> (assoc-in db [:search :schnaq :current :result] [])
                (assoc-in [:search :schnaq :current :search-string] search-string))}
       (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
