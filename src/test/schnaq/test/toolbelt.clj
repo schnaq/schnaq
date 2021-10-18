@@ -7,7 +7,8 @@
             [ring.mock.request :as mock]
             [schnaq.auth.jwt :as sjwt]
             [schnaq.config :as config]
-            [schnaq.database.main :as database]))
+            [schnaq.database.main :as database]
+            [schnaq.test-data :as test-data]))
 
 
 ;; -----------------------------------------------------------------------------
@@ -78,7 +79,7 @@
      :preferred_username username
      :family_name "Fant"
      :email "schnaqqi@schnaq.com"
-     :sub "59456d4a-6950-47e8-88d8-a1a6a8de9276"}))
+     :sub (-> test-data/registered-users first :user.registered/keycloak-id)}))
 
 (def token-schnaqqifant-user
   (sjwt/create-signed-jwt (create-payload "schnaqqifant" false) config/testing-private-key))
