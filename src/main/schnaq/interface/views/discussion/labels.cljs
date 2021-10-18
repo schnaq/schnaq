@@ -18,7 +18,7 @@
           ":calendar-alt" ["badge-info" :calendar-alt]
           ":check" ["badge-success" :check/normal]
           ":ghost" ["badge-dark" :ghost]
-          ":question" ["badge-warning" :question]
+          ":question" ["badge-warning text-white" :question]
           ":times" ["badge-danger" :cross]
           ":unchecked" ["badge-light" :check/normal])
         extra-class (if set? (str badge-color " label-set") badge-color)]

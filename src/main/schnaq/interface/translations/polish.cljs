@@ -633,6 +633,7 @@
    :share-access-code/via "Przez kod dostępu"
    :share-access-code/title-1 "Odwiedź"
    :share-access-code/title-2 "i wprowadź następujący kod"
+   :share-qr-code/via "Poprzez kod QR"
 
    :sharing/tooltip "udział sznaq"
    :sharing.modal/title "Podziel się swoim schnaqiem"
