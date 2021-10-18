@@ -2,6 +2,7 @@
   (:require [clojure.test :refer [deftest is are testing use-fixtures]]
             [muuntaja.core :as m]
             [schnaq.api :as api]
+            [schnaq.api.schnaq :as schnaq-api]
             [schnaq.test.toolbelt :as toolbelt]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
@@ -51,19 +52,21 @@
         (is (= 200 (:status api-call)))
         (is (= 2 (count (:schnaqs (m/decode-response-body api-call)))))))))
 
-(defn- add-schnaq-request [payload]
+
+;; -----------------------------------------------------------------------------
+
+(defn- add-authenticated-schnaq-request [payload]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.schnaq/add))
        :body-params payload}
       toolbelt/add-csrf-header
-      toolbelt/accept-edn-response-header
       (toolbelt/mock-authorization-header toolbelt/token-schnaqqifant-user)
       api/app))
 
-(deftest add-schnaq-test
-  (testing "schnaq creation."
+(deftest add-schnaq-as-authenticated-user-test
+  (testing "schnaq creation. Takes an authenticated user and creates schnaqs."
     (let [minimal-request {:discussion-title "huhu"}]
       (are [status payload]
-        (= status (:status (add-schnaq-request payload)))
+        (= status (:status (add-authenticated-schnaq-request payload)))
         400 {}
         400 {:nickname "penguin"}
         400 {:razupaltuff "kangaroo"}
@@ -74,3 +77,32 @@
                                     :hub "works, because we don't provide error message"})
         201 (merge minimal-request {:ends-in-days 42})
         201 (merge minimal-request {:discussion-mode :discussion.mode/qanda})))))
+
+(deftest add-schnaq-as-anonymous-user-test
+  (testing "schnaq creation."
+    (let [minimal-request {:discussion-title "huhu" :nickname "kangaroo"}
+          add-schnaq #'schnaq-api/add-schnaq]
+      (are [status payload]
+        (= status (:status (add-schnaq {:parameters {:body payload}})))
+        400 {}
+        400 {:nickname "penguin"}
+        400 {:discussion-title "some title"}
+        400 {:razupaltuff "kangaroo"}
+        201 minimal-request
+        201 (merge minimal-request {:hub-exclusive? true})
+        201 (merge minimal-request {:hub-exclusive? false})
+        201 (merge minimal-request {:hub-exclusive? false
+                                    :hub "works, because we don't provide error message"})
+        201 (merge minimal-request {:ends-in-days 42})
+        201 (merge minimal-request {:discussion-mode :discussion.mode/qanda})))))
+
+(def ^:private add-schnaq-request-missing-jwt
+  "Looks like a normal request to create a schnaq, but the JWT header is missing."
+  (-> {:request-method :post :uri (:path (api/route-by-name :api.schnaq/add))
+       :body-params {:discussion-title "huhu"}}
+      toolbelt/add-csrf-header
+      api/app))
+
+(deftest add-schnaq-permission-test
+  (testing "Only authenticated users are allowed to create schnaqs."
+    (is (= 401 (:status add-schnaq-request-missing-jwt)))))
