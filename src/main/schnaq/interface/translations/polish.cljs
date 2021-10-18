@@ -183,6 +183,9 @@
    ;; Login Page
    :page.login/heading "Proszę się zalogować"
    :page.login/subheading "Musisz być zalogowany, aby uzyskać dostęp do następujących zasobów"
+   :page.login.alert/text-1 "Nie masz jeszcze konta? Utwórz darmowe konto tutaj, aby stworzyć swój pierwszy schnaq. Sprawdź"
+   :page.login.alert/button "ta strona"
+   :page.login.alert/text-2 "zobacz swoje korzyści jako zarejestrowany użytkownik"
 
    :page.beta/heading "Funkcja beta"
    :page.beta/subheading "Ta funkcja jest dostępna tylko dla beta testerów. Prosimy o zalogowanie się, jeśli należysz do grupy."

@@ -178,6 +178,9 @@
    ;; Login page
    :page.login/heading "Please Login"
    :page.login/subheading "You need to login to access this resource"
+   :page.login.alert/text-1 "Don't have an account yet? Create a free account here to create your first schnaq. Check out"
+   :page.login.alert/button "this page"
+   :page.login.alert/text-2 "to view your benefits as a registered:user."
 
    :page.beta/heading "Beta-Feature"
    :page.beta/subheading "This feature is currently only enabled for beta-testers. Please log in if you are one."
