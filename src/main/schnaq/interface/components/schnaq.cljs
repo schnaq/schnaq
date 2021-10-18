@@ -47,7 +47,7 @@
   [:> QRCode {:value link
               :fgColor (colors :positive/default)
               :bgColor (colors :white)
-              :logoImage (img-path :schnaqqifant/qr)
+              :logoImage (img-path :logo.square.schnaqqi/blue)
               :ecLevel "Q"
               :size 300
               :qrStyle "dots"
