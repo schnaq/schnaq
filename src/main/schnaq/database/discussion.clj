@@ -30,12 +30,13 @@
   "Returns all starting-statements belonging to a discussion."
   [share-hash]
   [:db/id :ret (s/coll-of ::specs/statement)]
-  (query
-    '[:find [(pull ?statements pattern) ...]
-      :in $ ?share-hash pattern
-      :where [?discussion :discussion/share-hash ?share-hash]
-      [?discussion :discussion/starting-statements ?statements]]
-    share-hash patterns/statement-with-labels-from-children))
+  (toolbelt/pull-key-up
+    (query
+      '[:find [(pull ?statements pattern) ...]
+        :in $ ?share-hash pattern
+        :where [?discussion :discussion/share-hash ?share-hash]
+        [?discussion :discussion/starting-statements ?statements]]
+      share-hash patterns/statement-with-answers)))
 
 (defn transitive-child-rules
   "Returns a set of rules for finding transitive children entities of a given
@@ -493,7 +494,7 @@
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
   (generic-statement-search share-hash search-string
                             '[[?discussion :discussion/starting-statements ?statements]]
-                            patterns/qa-question))
+                            patterns/statement-with-answers))
 
 (def ^:private summary-pattern
   [:db/id

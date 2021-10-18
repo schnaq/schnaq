@@ -51,9 +51,6 @@
        {:name "subscribe" :value (labels :startpage.newsletter/button) :type "submit" :readOnly true
         :class "btn btn-primary d-block mx-auto"}]]]]])
 
-(def wavy-top
-  [:svg {:xmlns "http://www.w3.org/2000/svg" :viewBox "0 0 1440 320"} [:path {:fill "#1292ee" :fill-opacity "1" :d "M0,96L48,96C96,96,192,96,288,85.3C384,75,480,53,576,69.3C672,85,768,139,864,154.7C960,171,1056,149,1152,154.7C1248,160,1344,192,1392,208L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"}]])
-
 (defn- early-adopters
   "Present early-adopters section to catch up interest."
   []

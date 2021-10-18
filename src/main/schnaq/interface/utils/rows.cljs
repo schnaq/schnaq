@@ -1,6 +1,5 @@
 (ns schnaq.interface.utils.rows
   (:require [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.components.videos :refer [video]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.common :as common]))
 
@@ -60,32 +59,6 @@
   [row-builder-text-left
    [build-text-box text-namespace]
    [:img.img-fluid {:src (img-path image-key)}]])
-
-(defn video-left
-  "Feature row where the video is located on the right side."
-  [video-key-webm video-key-mp4 text-namespace & [looping? video-class]]
-  (let [attributes {:auto-play true :muted true :plays-inline true}]
-    [row-builder-text-right
-     [:video.w-100.feature-animations
-      (cond-> attributes
-              looping? (assoc :loop looping?)
-              video-class (assoc :class video-class))
-      [:source {:src (video video-key-webm) :type "video/webm"}]
-      [:source {:src (video video-key-mp4) :type "video/mp4"}]]
-     [build-text-box text-namespace]]))
-
-(defn video-right
-  "Feature row where the video is located on the right side."
-  [video-key-webm video-key-mp4 text-namespace & [looping? video-class more]]
-  (let [attributes {:auto-play true :muted true :plays-inline true}]
-    [row-builder-text-left
-     [build-text-box text-namespace more]
-     [:video.w-100.feature-animations
-      (cond-> attributes
-              looping? (assoc :loop looping?)
-              video-class (assoc :class video-class))
-      [:source {:src (video video-key-webm) :type "video/webm"}]
-      [:source {:src (video video-key-mp4) :type "video/mp4"}]]]))
 
 (defn icon-right
   "Build a row with text on the left side and the icon on the right side."

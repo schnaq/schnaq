@@ -111,9 +111,3 @@
   [request]
   [map? :ret map?]
   (mock/header request "Accept" "application/edn"))
-
-(>defn mock-query-params
-  "Add query parameters to a mock request."
-  [request parameter value]
-  [map? vector? string? :ret map?]
-  (assoc-in request [:params parameter] value))

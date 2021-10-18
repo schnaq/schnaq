@@ -1,7 +1,7 @@
 (ns schnaq.interface.components.icons
   ;; For further information check: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react
   ;; For two styles of the same icon see here: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react#faqs
-  (:require ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye]]
+  (:require ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
              [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faCalendarAlt faCamera faCheck faCircleNotch
               faCog faComment faComments faCookie faCopy faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
@@ -37,6 +37,7 @@
    :flask faFlask
    :ghost faGhost
    :graph faProjectDiagram
+   :hourglass/empty faHourglass
    :info faInfoCircle
    :info-question faQuestionCircle
    :language faLanguage

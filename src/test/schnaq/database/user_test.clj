@@ -26,7 +26,7 @@
       (is (int? new-user))
       (is (= new-user (db/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
 
-(deftest change-user-name
+(deftest change-user-name-test
   (testing "Test update user name"
     (let [id "test-id-abcdefg"
           user-name "Tester"

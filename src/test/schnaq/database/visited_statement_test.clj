@@ -151,7 +151,7 @@
       (is (nil? (find-statement-in-list statement-2 new-statements)))
       (is (nil? (find-statement-in-list statement-3 new-statements))))))
 
-(deftest test-mark-all-as-read
+(deftest mark-all-as-read-test
   (testing "Test if mark-all-as-read causes an empty new-statement-ids-for-user result"
     (let [{:keys [_user _keycloak-id discussion-hash discussion-id all-statements]}
           (add-dead-parrot-sketch "John-Cleese")
