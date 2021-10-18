@@ -174,12 +174,12 @@
   "Displays the different sort options for card elements."
   []
   [sc/discussion-options-button-group
-   [{:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
-     :icon-key :star
-     :label-key :badges.sort/popular}
-    {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])
+   [{:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])
      :icon-key :hourglass/empty
-     :label-key :badges.sort/newest}]])
+     :label-key :badges.sort/newest}
+    {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
+     :icon-key :star
+     :label-key :badges.sort/popular}]])
 
 
 ;; -----------------------------------------------------------------------------
