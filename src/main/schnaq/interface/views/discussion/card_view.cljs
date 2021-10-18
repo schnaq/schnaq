@@ -4,7 +4,8 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.card-elements :as elements]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [clojure.string :as cstring]))
 
 (rf/reg-event-fx
   :discussion.statements/search
@@ -36,10 +37,11 @@
   ;; The statements which should be shown in the discussion view right now.
   :<- [:discussion.premises/current]
   :<- [:schnaq.search.current/result]
-  (fn [[premises search-results] _]
-    (if-let [results (seq search-results)]
-      results
-      premises)))
+  :<- [:schnaq.search.current/search-string]
+  (fn [[premises search-results search-string] _]
+    (if (cstring/blank? search-string)
+      premises
+      search-results)))
 
 (rf/reg-sub
   :discussion.premises/current

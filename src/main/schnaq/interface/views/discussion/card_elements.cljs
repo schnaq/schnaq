@@ -261,8 +261,6 @@
     #(rf/dispatch [:discussion.statements/search (oget % [:target :value]) true])
     500))
 
-;; TODO: ersetze karte links wenn eine Suche aktiv ist.
-;; TODO: Zeige leere Liste an, wenn keine Ergebnisse gefunden wurden.
 ;; TODO: lösche suchanfrage, wenn der view verlassen wird.
 ;; TODO: slide alte topic karte auch sick rein
 ;; TODO: Nutze geile fuzzy search auch für discussion view
@@ -325,8 +323,7 @@
          [:p.mx-3 (str (count search-results) " " (labels :schnaq.search/results))])]]]))
 
 (defn discussion-view
-  "Discussion View for desktop devices.
-  Displays a history on the left and a topic with conclusion in its center"
+  "Displays a history  and input field on the left and conclusions in its center"
   [share-hash]
   (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
     [:div.container-fluid
