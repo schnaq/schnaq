@@ -1,6 +1,5 @@
 (ns schnaq.interface.core
-  (:require ["@fortawesome/fontawesome-free/js/all.js"]
-            ["bootstrap"]
+  (:require ["bootstrap"]
             ["jquery"]
             ["popper.js"]
             [day8.re-frame.http-fx]
@@ -55,7 +54,6 @@
             [schnaq.interface.views.discussion.history]
             [schnaq.interface.views.discussion.labels]
             [schnaq.interface.views.discussion.logic]
-            [schnaq.interface.views.discussion.search]
             [schnaq.interface.views.errors]
             [schnaq.interface.views.feed.filters]
             [schnaq.interface.views.feed.overview]

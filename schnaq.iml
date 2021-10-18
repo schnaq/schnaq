@@ -198,7 +198,7 @@
     <orderEntry type="library" name="Deps: org.graalvm.truffle/truffle-api:21.1.0" level="project" />
     <orderEntry type="library" name="Deps: borkdude/dynaload:0.2.2" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.resteasy/resteasy-multipart-provider:3.9.3.Final" level="project" />
-    <orderEntry type="library" name="Deps: binaryage/devtools:1.0.3" level="project" />
+    <orderEntry type="library" name="Deps: binaryage/devtools:1.0.4" level="project" />
     <orderEntry type="library" name="Deps: net.cgrand/macrovich:0.2.1" level="project" />
     <orderEntry type="library" name="Deps: re-frame:1.2.0" level="project" />
     <orderEntry type="library" name="Deps: buddy:2.0.0" level="project" />

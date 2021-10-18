@@ -2,7 +2,7 @@
   (:require [ghostwheel.core :refer [>defn]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.icons :refer [icon-lg]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
@@ -78,7 +78,7 @@
   [modal-template
    (labels header-label)
    [:<>
-    [:p [icon-lg :shield "m-auto"] " " (labels shield-label)]
+    [:p [icon :shield "m-auto" {:size "lg"}] " " (labels shield-label)]
     [:p (labels :discussion.anonymous-edit.modal/persuade)]
     [:button.btn.btn-primary.mx-auto.d-block
      {:on-click #(rf/dispatch [:keycloak/login])}

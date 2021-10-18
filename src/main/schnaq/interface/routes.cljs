@@ -25,7 +25,6 @@
             [schnaq.interface.views.discussion.admin-center :as discussion-admin]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.discussion.dashboard :as dashboard]
-            [schnaq.interface.views.discussion.search :as discussion-search]
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
@@ -193,7 +192,8 @@
                       :start (fn []
                                (rf/dispatch [:discussion.history/clear])
                                (rf/dispatch [:updates.periodic/starting-conclusions true])
-                               (rf/dispatch [:discussion.query.conclusions/starting]))
+                               (rf/dispatch [:discussion.query.conclusions/starting])
+                               (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/starting-conclusions false])
                               (rf/dispatch [:statement.edit/reset-edits])
@@ -214,9 +214,6 @@
       {:name :routes.schnaq/value
        :view value/schnaq-value-view
        :link-text (labels :router/value)}]
-     ["/search"
-      {:name :routes.search/schnaq
-       :view discussion-search/view}]
      ["/dashboard"
       {:name :routes.schnaq/dashboard
        :view dashboard/view
@@ -249,7 +246,8 @@
        :view discussion-card-view/view
        :controllers [{:parameters {:path [:share-hash :statement-id]}
                       :start (fn []
-                               (rf/dispatch [:discussion.query.statement/by-id]))
+                               (rf/dispatch [:discussion.query.statement/by-id])
+                               (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
                               (rf/dispatch [:visited.statement-nums/to-localstorage])
                               (rf/dispatch [:visited.statement-ids/to-localstorage-and-merge-with-app-db])

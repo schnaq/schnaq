@@ -54,7 +54,7 @@
                                  (when on-close-fn (on-close-fn))
                                  (rf/dispatch [:notification/remove id]))}
       [:span {:aria-hidden "true"}
-       [icon :delete-icon "fa-xs m-auto"]]]]
+       [icon :delete-icon "m-auto" {:size "xs"}]]]]
     [:div.toast-body.scrollable-toast body]]])
 
 (>defn notify!

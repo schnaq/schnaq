@@ -97,7 +97,7 @@
      [:a.badge.mr-3
       {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
       [:button.btn.btn-sm.btn-dark
-       [icon :plus "text-white m-auto fa-xs"]]
+       [icon :plus "text-white m-auto" {:size "xs"}]]
       [:span.ml-2.text-dark (labels :statement/reply)]]
      [up-down-vote statement]
      [:div.ml-sm-0.ml-lg-auto
@@ -231,9 +231,9 @@
         user @(rf/subscribe [:user/current])
         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
         card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
-        current-premises @(rf/subscribe [:discussion.premises/current])]
-    (if (seq current-premises)
-      (let [sorted-conclusions (sort-statements q-and-a? user current-premises sort-method local-votes)
+        shown-premises @(rf/subscribe [:discussion.statements/show])]
+    (if (seq shown-premises)
+      (let [sorted-conclusions (sort-statements q-and-a? user shown-premises sort-method local-votes)
             filtered-conclusions (filters/filter-statements sorted-conclusions active-filters (rf/subscribe [:local-votes]))]
         [:div.card-columns.pb-3 {:class card-column-class}
          (for [statement filtered-conclusions]

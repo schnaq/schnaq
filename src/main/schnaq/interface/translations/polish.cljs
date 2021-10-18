@@ -1041,8 +1041,6 @@
 
    :schnaq.search/heading "Wyniki wyszukiwania"
    :schnaq.search/results "Wyniki"
-   :schnaq.search/no-input "Brak danych wejściowych"
-   :schnaq.search/title "Szukaj"
    :schnaq.search/input "Szukaj…"
    :schnaq.search/new-search-title "Brak wyników"
 

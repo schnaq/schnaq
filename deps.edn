@@ -1,6 +1,6 @@
 {:paths ["src/main" "src/test" "extra-configs"]
  ;; Do not delete extra-configs as log configutation is not correctly read without it
- :deps {binaryage/devtools {:mvn/version "1.0.3"}
+ :deps {binaryage/devtools {:mvn/version "1.0.4"}
         binaryage/oops {:mvn/version "0.7.1"}
         buddy/buddy {:mvn/version "2.0.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}
@@ -60,13 +60,13 @@
 
            :lint.unused-vars
            {:extra-deps {clj-kondo/tools {:git/url "https://github.com/clj-kondo/clj-kondo"
-                                          :sha "35207f8b92f5a813483505b21af856bce4623c43"
+                                          :sha "8a1150bf8a3ab95f4d21669930749b5b4511e943"
                                           :deps/root "analysis"}}
             :main-opts ["-m" "clj-kondo.tools.unused-vars"]}
 
            :lint.missing-docstrings
            {:extra-deps {clj-kondo/tools {:git/url "https://github.com/clj-kondo/clj-kondo"
-                                          :sha "35207f8b92f5a813483505b21af856bce4623c43"
+                                          :sha "8a1150bf8a3ab95f4d21669930749b5b4511e943"
                                           :deps/root "analysis"}}
             :main-opts ["-m" "clj-kondo.tools.missing-docstrings"]}
 

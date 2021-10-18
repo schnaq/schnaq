@@ -4,7 +4,7 @@
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage clear!]]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.components.icons :refer [icon-lg]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
@@ -35,13 +35,13 @@
 
 (defn- gdpr-row []
   [rows/icon-right
-   [icon-lg :shield "m-auto"]
+   [icon :shield "m-auto" {:size "lg"}]
    :privacy.made-in-germany])
 
 (defn- personal-data-row []
   [rows/icon-left
    [:<>
-    [icon-lg :user/lock "m-auto"]
+    [icon :user/lock "m-auto" {:size "lg"}]
     [:div [open-privacy-settings]]]
    :privacy.personal-data])
 
@@ -50,7 +50,7 @@
   []
   [rows/icon-right
    [:<>
-    [icon-lg :cookie/complete "m-auto"]
+    [icon :cookie/complete "m-auto" {:size "lg"}]
     [:div [:button.btn.btn-outline-primary
            {:on-click localstorage-explanation}
            (labels :privacy.localstorage/show-data)]]]
@@ -58,12 +58,12 @@
 
 (defn- data-processing-anonymous []
   [rows/icon-left
-   [icon-lg :user/ninja "m-auto"]
+   [icon :user/ninja "m-auto" {:size "lg"}]
    :privacy.data-processing.anonymous])
 
 (defn- data-processing-registered []
   [rows/icon-right
-   [icon-lg :user/plus "m-auto"]
+   [icon :user/plus "m-auto" {:size "lg"}]
    :privacy.data-processing.registered])
 
 (defn- link-to-privacy []
