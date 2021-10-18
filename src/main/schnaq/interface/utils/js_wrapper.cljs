@@ -104,4 +104,5 @@
 (defn clear-input
   "Clears an input field."
   [id]
-  (set! (.-value (js/document.getElementById id)) ""))
+  (when-let [element (js/document.getElementById id)]
+    (set! (.-value element) "")))

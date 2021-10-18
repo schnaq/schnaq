@@ -261,7 +261,6 @@
     #(rf/dispatch [:discussion.statements/search (oget % [:target :value]) true])
     500))
 
-;; TODO: lösche suchanfrage, wenn der view verlassen wird.
 ;; TODO: slide alte topic karte auch sick rein
 ;; TODO: Nutze geile fuzzy search auch für discussion view
 ;; TODO: Lösche unnötige search views
@@ -279,9 +278,12 @@
 (defn search-bar
   "A search-bar to search inside a schnaq."
   []
-  (let [search-input-id "search-bar"]
+  (let [search-input-id "search-bar"
+        route-name @(rf/subscribe [:navigation/current-route-name])
+        selected-statement-id (get-in @(rf/subscribe [:navigation/current-route]) [:path-params :statement-id])]
     [:form.mr-3.h-100
-     {:on-submit #(jq/prevent-default %)}
+     {:on-submit #(jq/prevent-default %)
+      :key (str route-name selected-statement-id)}
      [:div.input-group.search-bar.h-100.panel-white.p-0
       [:input.form-control.my-auto.search-bar-input.h-100
        {:id search-input-id
