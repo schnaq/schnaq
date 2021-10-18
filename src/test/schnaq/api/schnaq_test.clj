@@ -56,15 +56,15 @@
        :body-params payload}
       toolbelt/add-csrf-header
       toolbelt/accept-edn-response-header
+      (toolbelt/mock-authorization-header toolbelt/token-schnaqqifant-user)
       api/app))
 
 (deftest add-schnaq-test
   (testing "schnaq creation."
-    (let [minimal-request {:discussion-title "huhu" :nickname "penguin"}]
+    (let [minimal-request {:discussion-title "huhu"}]
       (are [status payload]
         (= status (:status (add-schnaq-request payload)))
         400 {}
-        400 {:discussion-title "huhu"}
         400 {:nickname "penguin"}
         400 {:razupaltuff "kangaroo"}
         201 minimal-request
