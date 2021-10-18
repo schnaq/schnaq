@@ -52,13 +52,14 @@
 (defn- share-qanda-modal
   "Modal showing sharing options."
   []
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
+        share-link (links/get-link-to-ask-interface share-hash)]
     [modal/modal-template
      (labels :sharing.modal/title)
      [:section
       [share-qanda-via-access-code]
-      [share-via-link (links/get-link-to-ask-interface share-hash)]
-      [share-via-qr (links/get-link-to-ask-interface share-hash)]
+      [share-via-link share-link]
+      [share-via-qr share-link]
       [:div.mx-auto.py-5.mt-3
        [common/schnaqqi-speech-bubble-blue
         "100px"
@@ -67,12 +68,13 @@
 (defn share-discussion-modal
   "Modal showing sharing options."
   []
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
+        share-link (links/get-share-link share-hash)]
     [modal/modal-template
      (labels :sharing.modal/title)
      [:section
-      [share-via-link (links/get-share-link share-hash)]
-      [share-via-qr (links/get-share-link share-hash)]
+      [share-via-link share-link]
+      [share-via-qr share-link]
       [:div.mx-auto.py-5.mt-3
        [common/schnaqqi-speech-bubble-blue
         "100px"
