@@ -86,9 +86,7 @@
     :statement/discussions ["discussion/cat-or-dog"]}
    {:db/id "statement/ancestry"
     :statement/author "user/rambo"
-    :statement/content
-    (str "cats ancestors are animals in wildlife, who are"
-         " hunting alone and not in groups")
+    :statement/content "cats ancestors are animals in wildlife, who are hunting alone and not in groups"
     :statement/created-at #inst "2020-01-01"
     :statement/version 1
     :statement/parent "statement/independent"
@@ -144,8 +142,7 @@
     :statement/discussions ["discussion/cat-or-dog"]}
    {:db/id "statement/fire-cats"
     :statement/author "user/rambo"
-    :statement/content (str "several cats of my friends are real"
-                            " assholes")
+    :statement/content "several cats of my friends are real assholes"
     :statement/created-at #inst "2020-01-01"
     :statement/version 1
     :statement/parent "statement/moody"
