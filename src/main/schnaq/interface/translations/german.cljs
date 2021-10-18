@@ -637,6 +637,7 @@
    :share-access-code/via "Per Code"
    :share-access-code/title-1 "Gehe auf"
    :share-access-code/title-2 "und gib folgenden Zugangscode ein:"
+   :share-qr-code/via "Per QR Code"
 
 
    :sharing/tooltip "schnaq teilen"

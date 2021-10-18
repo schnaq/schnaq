@@ -33,12 +33,12 @@
   "Generic modal template."
   [header body]
   [string? vector? :ret vector?]
-  [:div.modal-content.pt-3.px-4
-   [:div.modal-header.pb-5
-    [:h5.h2.modal-title header]
+  [:div.modal-content.px-4
+   [:div.modal-header
+    [:h5.modal-title header]
     [:button.close {:type "button" :data-dismiss "modal" :aria-label "Close" :on-click close-modal}
      [:span {:aria-hidden "true"}
-      "x"]]]
+      [icon :cross]]]]
    [:div.modal-body body]])
 
 

@@ -13,41 +13,53 @@
 (defn- share-qanda-via-access-code []
   (when @(rf/subscribe [:schnaq.selected/access-code])
     [:<>
-     [:div.d-flex.flex-row.mt-3.mb-5
+     [:hr.my-4]
+     [:div.d-flex.flex-row.my-3
       [:p (labels :share-access-code/via)]
       [:div.flex.flex-fill.text-center.pr-5
        [:p.mb-0 (labels :share-access-code/title-1) " " [:span.text-monospace "https://schnaq.app"]]
        [:p (labels :share-access-code/title-2)]
-       [:div.display-4 [sc/access-code]]]]
-     [:hr.my-4]]))
+       [:div.display-4.text-primary [sc/access-code]]]]]))
+
+(defn share-via-qr [link]
+  [:<>
+   [:hr.my-4]
+   [:div.d-flex.flex-row.my-3
+    [:p (labels :share-qr-code/via)]
+    [:div.flex.flex-fill.text-center.pr-5
+     [sc/qr-code link]]]
+   ])
 
 (defn- share-via-link [link]
-  [:div.d-flex.flex-row.mt-3
-   [:div.d-flex.mr-1.mr-lg-5.align-self-center (labels :share-link/via)]
-   [:div.flex.flex-fill.lg-md-5
-    [:div.input-group
-     [:input.form-control
+  [:<>
+   [:hr.my-4]
+   [:div.d-flex.flex-row.my-3.pb-3
+    [:div.d-flex.mr-1.mr-lg-5.align-self-center (labels :share-link/via)]
+    [:div.d-flex.flex-row.flex-grow-1
+     ;[:div.input-group]
+     [:input.form-control.border-0.text-gray
       {:value link
        :readOnly true}]
-     [:div.input-group-append
-      [:button.btn.btn-dark
-       {:on-click (fn []
-                    (clipboard/copy-to-clipboard! link)
-                    (notify! (labels :schnaq/link-copied-heading)
-                             (labels :schnaq/link-copied-success)
-                             :info
-                             false))}
-       (labels :share-link/copy)]]]]])
+     [:button.btn.btn-primary.w-50.ml-3
+      {:on-click (fn []
+                   (clipboard/copy-to-clipboard! link)
+                   (notify! (labels :schnaq/link-copied-heading)
+                            (labels :schnaq/link-copied-success)
+                            :info
+                            false))}
+      (labels :share-link/copy)]]]])
 
 (defn- share-qanda-modal
   "Modal showing sharing options."
   []
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
+        share-link (links/get-link-to-ask-interface share-hash)]
     [modal/modal-template
      (labels :sharing.modal/title)
      [:section
       [share-qanda-via-access-code]
-      [share-via-link (links/get-link-to-ask-interface share-hash)]
+      [share-via-link share-link]
+      [share-via-qr share-link]
       [:div.mx-auto.py-5.mt-3
        [common/schnaqqi-speech-bubble-blue
         "100px"
@@ -56,11 +68,13 @@
 (defn share-discussion-modal
   "Modal showing sharing options."
   []
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
+        share-link (links/get-share-link share-hash)]
     [modal/modal-template
      (labels :sharing.modal/title)
      [:section
-      [share-via-link (links/get-share-link share-hash)]
+      [share-via-link share-link]
+      [share-via-qr share-link]
       [:div.mx-auto.py-5.mt-3
        [common/schnaqqi-speech-bubble-blue
         "100px"

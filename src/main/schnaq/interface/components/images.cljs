@@ -29,6 +29,7 @@
      :icon-views-dark "https://s3.disqtec.com/schnaq-common/icons/views_dark.svg"
      :logo "https://s3.disqtec.com/schnaq-common/logos/schnaq.svg"
      :logo-white "https://s3.disqtec.com/schnaq-common/logos/schnaq_white.png"
+     :logo.square.schnaqqi/blue "https://s3.disqtec.com/schnaq-common/logos/schnaqqi-qr.png"
      :logos/bialon "https://s3.disqtec.com/schnaq-common/testimonials/bialon_logo.png"
      :logos/digihub "https://s3.disqtec.com/schnaq-common/logos/digihub_logo.png"
      :logos/doctronic "https://s3.disqtec.com/schnaq-common/testimonials/doctronic_logo.png"
