@@ -451,7 +451,6 @@
             [(schnaq.database.discussion/levenshtein-max? ?distance ?search-tokens ?tokenized-content)]]))
 
 (>defn- search-similar-with-n-levenshtein
-  ;; TODO search with one question mark throws error
   "Searches for similar content with a levenshtein distance of n.
   One of the bound params needs to be `?statements`.\n  `custom-part needs to be a quoted vector."
   [share-hash search-tokens distance custom-part pattern]
