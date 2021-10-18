@@ -484,7 +484,9 @@
   "Searches the content of statements in a discussion and returns the corresponding statements."
   [share-hash search-string]
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
-  (generic-statement-search share-hash search-string [] patterns/statement))
+  (generic-statement-search share-hash search-string
+                            '[[?statements :statement/discussions ?discussion]]
+                            patterns/statement))
 
 (>defn search-similar-questions
   "Search starting Conclusions (Questions in QA) and try to provide answers if there are any."
