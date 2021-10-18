@@ -192,7 +192,8 @@
                       :start (fn []
                                (rf/dispatch [:discussion.history/clear])
                                (rf/dispatch [:updates.periodic/starting-conclusions true])
-                               (rf/dispatch [:discussion.query.conclusions/starting]))
+                               (rf/dispatch [:discussion.query.conclusions/starting])
+                               (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/starting-conclusions false])
                               (rf/dispatch [:statement.edit/reset-edits])
@@ -245,7 +246,8 @@
        :view discussion-card-view/view
        :controllers [{:parameters {:path [:share-hash :statement-id]}
                       :start (fn []
-                               (rf/dispatch [:discussion.query.statement/by-id]))
+                               (rf/dispatch [:discussion.query.statement/by-id])
+                               (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
                               (rf/dispatch [:visited.statement-nums/to-localstorage])
                               (rf/dispatch [:visited.statement-ids/to-localstorage-and-merge-with-app-db])

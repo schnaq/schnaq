@@ -229,10 +229,11 @@
                  :statement/created-at created-at}
         is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         statement (if is-topic? content current-conclusion)]
-    [:div.p-2
-     [:div.d-flex.flex-wrap.mb-4
-      [user/user-info statement 42 nil]]
-     [title-and-input-element statement]]))
+    [motion/move-in :left
+     [:div.p-2
+      [:div.d-flex.flex-wrap.mb-4
+       [user/user-info statement 42 nil]]
+      [title-and-input-element statement]]]))
 
 (defn- topic-view [content]
   (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
@@ -261,7 +262,6 @@
     #(rf/dispatch [:discussion.statements/search (oget % [:target :value]) true])
     500))
 
-;; TODO: slide alte topic karte auch sick rein
 ;; TODO: Nutze geile fuzzy search auch für discussion view
 ;; TODO: Lösche unnötige search views
 (defn- search-clear-button
@@ -311,7 +311,7 @@
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
         search-results @(rf/subscribe [:schnaq.search.current/result])]
     [motion/move-in :left
-     [:div.panel-white.mb-4
+     [:div.my-4
       [:div.d-inline-block
        [:h2 (labels :schnaq.search/heading)]
        [:div.row.mx-0.mt-4.mb-3
