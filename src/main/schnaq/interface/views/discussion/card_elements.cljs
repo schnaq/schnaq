@@ -262,8 +262,6 @@
     #(rf/dispatch [:discussion.statements/search (oget % [:target :value]) true])
     500))
 
-;; TODO: Nutze geile fuzzy search auch für discussion view
-;; TODO: Lösche unnötige search views
 (defn- search-clear-button
   [clear-id]
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])

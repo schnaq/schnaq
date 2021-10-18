@@ -15,8 +15,7 @@
             [schnaq.toolbelt :as toolbelt]
             [schnaq.user :as user]
             [taoensso.timbre :as log])
-  (:import (com.datomic.lucene.queryParser QueryParser)
-           (java.lang Character)
+  (:import (java.lang Character)
            (java.util UUID Date)))
 
 (def ^:private rules
@@ -413,22 +412,6 @@
       @(transact
          (mapv #(vector :db/add % :statement/author author-id) (keys valid-secrets))))))
 
-(>defn search-statements
-  "Searches the content of statements in a discussion and returns the corresponding statements."
-  [share-hash search-string]
-  [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
-  (let [safe-search-string (QueryParser/escape search-string)]
-    (->>
-      (query '[:find (pull ?statements statement-pattern) ?score
-               :in $ statement-pattern ?share-hash ?search-string
-               :where [?discussion :discussion/share-hash ?share-hash]
-               [?statements :statement/discussions ?discussion]
-               [(fulltext $ :statement/content ?search-string) [[?statements _ _ ?score]]]]
-             patterns/statement share-hash safe-search-string)
-      toolbelt/pull-key-up
-      (sort-by second toolbelt/ascending)
-      (map first))))
-
 (defn levenshtein-max?
   "Levenshtein-Helper for datomic to have a maximum distance."
   [max string-1 string-2]
@@ -454,39 +437,62 @@
                (not (alphanumeric? (last %))) (subs % 0 (dec (count %)))
                :else %))))
 
+(defn- dynamic-search-query
+  "Builds the dynamic search query. One of the bound params needs to be `?statements`.
+  `custom-part needs to be a quoted vector."
+  [custom-part]
+  (concat '[:find [(pull ?statements statement-pattern) ...]
+            :in $ statement-pattern ?share-hash [?search-tokens ...] ?distance
+            :with ?tokenized-content
+            :where [?discussion :discussion/share-hash ?share-hash]]
+          custom-part
+          '[[?statements :statement/content ?content]
+            [(schnaq.database.discussion/tokenize-string ?content) [?tokenized-content ...]]
+            [(schnaq.database.discussion/levenshtein-max? ?distance ?search-tokens ?tokenized-content)]]))
+
 (>defn- search-similar-with-n-levenshtein
-  "Searches for similar content with a levenshtein distance of n."
-  [share-hash search-tokens distance]
-  [:discussion/share-hash (s/coll-of ::specs/non-blank-string) int? :ret (s/coll-of ::specs/statement)]
+  ;; TODO search with one question mark throws error
+  "Searches for similar content with a levenshtein distance of n.
+  One of the bound params needs to be `?statements`.\n  `custom-part needs to be a quoted vector."
+  [share-hash search-tokens distance custom-part pattern]
+  [:discussion/share-hash (s/coll-of ::specs/non-blank-string) int? (s/coll-of vector?) vector?
+   :ret (s/coll-of ::specs/statement)]
   (->>
-    (query '[:find [(pull ?statements statement-pattern) ...]
-             :in $ statement-pattern ?share-hash [?search-tokens ...] ?distance
-             :with ?tokenized-content
-             :where [?discussion :discussion/share-hash ?share-hash]
-             [?discussion :discussion/starting-statements ?statements]
-             [?statements :statement/content ?content]
-             [(schnaq.database.discussion/tokenize-string ?content) [?tokenized-content ...]]
-             [(schnaq.database.discussion/levenshtein-max? ?distance ?search-tokens ?tokenized-content)]]
-           patterns/qa-question share-hash search-tokens distance)
+    (query (dynamic-search-query custom-part)
+           pattern share-hash search-tokens distance)
     frequencies
     toolbelt/pull-key-up))
 
-(>defn search-similar-questions
-  "Search starting Conclusions (Questions in QA) and try to provide answers if there are any."
-  [share-hash search-string]
-  [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
+(>defn- generic-statement-search
+  "A generic search for statements. Provide which statements you want to search. (quoted vector)"
+  [share-hash search-string custom-part pattern]
+  [:discussion/share-hash ::specs/non-blank-string (s/coll-of vector?) vector? :ret (s/coll-of ::specs/statement)]
   (let [search-tokens (tokenize-string search-string)
         two-and-less-tokens (filter #(>= 2 (count %)) search-tokens)
         three-four-tokens (filter #(or (= 3 (count %))
                                        (= 4 (count %))) search-tokens)
         five-and-more-tokens (filter #(< 4 (count %)) search-tokens)
-        results<=2 (search-similar-with-n-levenshtein share-hash two-and-less-tokens 0)
-        results=3or4 (search-similar-with-n-levenshtein share-hash three-four-tokens 1)
-        results>5 (search-similar-with-n-levenshtein share-hash five-and-more-tokens 2)]
+        results<=2 (search-similar-with-n-levenshtein share-hash two-and-less-tokens 0 custom-part pattern)
+        results=3or4 (search-similar-with-n-levenshtein share-hash three-four-tokens 1 custom-part pattern)
+        results>5 (search-similar-with-n-levenshtein share-hash five-and-more-tokens 2 custom-part pattern)]
     (->>
       (merge-with + results<=2 results=3or4 results>5)
       (sort-by val >)
       (map first))))
+
+(>defn search-statements
+  "Searches the content of statements in a discussion and returns the corresponding statements."
+  [share-hash search-string]
+  [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
+  (generic-statement-search share-hash search-string [] patterns/statement))
+
+(>defn search-similar-questions
+  "Search starting Conclusions (Questions in QA) and try to provide answers if there are any."
+  [share-hash search-string]
+  [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
+  (generic-statement-search share-hash search-string
+                            '[[?discussion :discussion/starting-statements ?statements]]
+                            patterns/qa-question))
 
 (def ^:private summary-pattern
   [:db/id
