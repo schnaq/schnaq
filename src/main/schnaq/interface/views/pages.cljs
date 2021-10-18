@@ -3,7 +3,10 @@
   (:require [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.buttons :as buttons]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -34,6 +37,7 @@
   []
   [with-nav-and-header
    {:condition/needs-authentication? true
+    :page/vertical-header? true
     :page/heading (labels :page.login/heading)
     :page/subheading (labels :page.login/subheading)}
    (when @(rf/subscribe [:user/authenticated?])
@@ -44,11 +48,17 @@
   []
   [with-nav-and-header
    {:page/heading (labels :page.login/heading)
-    :page/subheading (labels :page.login/subheading)}
-   [:div.container.text-center.pt-5
-    [:button.btn.btn-lg.btn-secondary
+    :page/subheading (labels :page.login/subheading)
+    :page/vertical-header? true}
+   [:div.container.text-center.pt-3
+    [:div.alert.alert-primary {:role "alert"}
+     [icon :info "mr-1"]
+     (labels :page.login.alert/text-1)
+     [buttons/anchor (labels :page.login.alert/button) (rfe/href :routes/pricing) "btn-link"]
+     (labels :page.login.alert/text-2)]
+    [:button.btn.btn-lg.btn-secondary.mt-3
      {:on-click #(rf/dispatch [:keycloak/login])}
-     (labels :user/login)]]])
+     (labels :user/register)]]])
 
 (defn- beta-only
   "Default page indicating, that only beta users are allowed."
