@@ -60,13 +60,13 @@
 
            :lint.unused-vars
            {:extra-deps {clj-kondo/tools {:git/url "https://github.com/clj-kondo/clj-kondo"
-                                          :sha "35207f8b92f5a813483505b21af856bce4623c43"
+                                          :sha "8a1150bf8a3ab95f4d21669930749b5b4511e943"
                                           :deps/root "analysis"}}
             :main-opts ["-m" "clj-kondo.tools.unused-vars"]}
 
            :lint.missing-docstrings
            {:extra-deps {clj-kondo/tools {:git/url "https://github.com/clj-kondo/clj-kondo"
-                                          :sha "35207f8b92f5a813483505b21af856bce4623c43"
+                                          :sha "8a1150bf8a3ab95f4d21669930749b5b4511e943"
                                           :deps/root "analysis"}}
             :main-opts ["-m" "clj-kondo.tools.missing-docstrings"]}
 
