@@ -3,7 +3,7 @@
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [reitit.frontend.easy :as reititfe]
-            [schnaq.interface.components.icons :refer [icon icon-lg]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -54,9 +54,9 @@
   "Explain the check marks."
   []
   [:section.pl-4.pt-2
-   [:p.h6 [icon-lg :check/normal "text-primary pr-2"]
+   [:p.h6 [icon :check/normal "text-primary pr-2" {:size "lg"}]
     (labels :pricing.features/implemented)]
-   [:p.h6 [icon-lg :check/normal "text-muted pr-2"]
+   [:p.h6 [icon :check/normal "text-muted pr-2" {:size "lg"}]
     (labels :pricing.features/to-be-implemented)]])
 
 (defn- cta-button

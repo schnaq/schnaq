@@ -1040,8 +1040,6 @@ Now we write down questions and discuss them and can still understand what we ha
 
    :schnaq.search/heading "Search results"
    :schnaq.search/results "results"
-   :schnaq.search/no-input "No input"
-   :schnaq.search/title "Search"
    :schnaq.search/input "Search for…"
    :schnaq.search/new-search-title "No results"
 

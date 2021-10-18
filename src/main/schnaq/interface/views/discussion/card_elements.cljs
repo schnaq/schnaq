@@ -1,10 +1,14 @@
 (ns schnaq.interface.views.discussion.card-elements
-  (:require [goog.string :as gstring]
+  (:require [clojure.string :as cstring]
+            [goog.functions :as gfun]
+            [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -229,10 +233,11 @@
                  :statement/created-at created-at}
         is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         statement (if is-topic? content current-conclusion)]
-    [:div.p-2
-     [:div.d-flex.flex-wrap.mb-4
-      [user/user-info statement 42 nil]]
-     [title-and-input-element statement]]))
+    [motion/move-in :left
+     [:div.p-2
+      [:div.d-flex.flex-wrap.mb-4
+       [user/user-info statement 42 nil]]
+      [title-and-input-element statement]]]))
 
 (defn- topic-view [content]
   (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
@@ -256,21 +261,40 @@
       [how-to-elements/quick-how-to-schnaq]
       [how-to-elements/quick-how-to-pro-con])))
 
+(def throttled-in-schnaq-search
+  (gfun/throttle
+    #(rf/dispatch [:discussion.statements/search (oget % [:target :value]) true])
+    500))
+
+(defn- search-clear-button
+  [clear-id]
+  (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
+        action-icon (if (cstring/blank? search-string) :search :times)]
+    [:div.input-group-append
+     [:button.btn.button-muted.h-100
+      {:on-click (fn [_e]
+                   (jq/clear-input clear-id)
+                   (rf/dispatch [:schnaq.search.current/clear-search-string]))}
+      [icon action-icon "m-auto"]]]))
+
 (defn search-bar
   "A search-bar to search inside a schnaq."
   []
-  [:form.mr-3.h-100
-   {:on-submit (fn [e]
-                 (jq/prevent-default e)
-                 (rf/dispatch [:discussion.statements/search (oget e [:target :elements "search-input" :value])]))}
-   [:div.input-group.search-bar.h-100.panel-white.p-0
-    [:input.form-control.my-auto.search-bar-input.h-100
-     {:type "text" :aria-label "Search" :placeholder
-      (labels :schnaq.search/input) :name "search-input"}]
-    [:div.input-group-append
-     [:button.btn.button-muted.h-100
-      {:type "submit"}
-      [icon :search "m-auto"]]]]])
+  (let [search-input-id "search-bar"
+        route-name @(rf/subscribe [:navigation/current-route-name])
+        selected-statement-id (get-in @(rf/subscribe [:navigation/current-route]) [:path-params :statement-id])]
+    [:form.mr-3.h-100
+     {:on-submit #(jq/prevent-default %)
+      :key (str route-name selected-statement-id)}
+     [:div.input-group.search-bar.h-100.panel-white.p-0
+      [:input.form-control.my-auto.search-bar-input.h-100
+       {:id search-input-id
+        :type "text"
+        :aria-label "Search"
+        :placeholder (labels :schnaq.search/input)
+        :name "search-input"
+        :on-key-up #(throttled-in-schnaq-search %)}]
+      [search-clear-button search-input-id]]]))
 
 (defn action-view []
   [:div.d-inline-block.text-dark.w-100.mb-3
@@ -287,19 +311,54 @@
        [filters/filter-button])]
     [:div.d-flex.flex-row.ml-auto]]])
 
+(defn- search-info []
+  (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
+        search-results @(rf/subscribe [:schnaq.search.current/result])]
+    [motion/move-in :left
+     [:div.my-4
+      [:div.d-inline-block
+       [:h2 (labels :schnaq.search/heading)]
+       [:div.row.mx-0.mt-4.mb-3
+        [:img.dashboard-info-icon-sm {:src (img-path :icon-search)}]
+        [:div.text.display-6.my-auto.mx-3
+         search-string]]]
+      [:div.row.m-0
+       [:img.dashboard-info-icon-sm {:src (img-path :icon-posts)}]
+       (if (empty? search-results)
+         [:p.mx-3 (labels :schnaq.search/new-search-title)]
+         [:p.mx-3 (str (count search-results) " " (labels :schnaq.search/results))])]]]))
+
 (defn discussion-view
-  "Discussion View for desktop devices.
-  Displays a history on the left and a topic with conclusion in its center"
+  "Displays a history  and input field on the left and conclusions in its center"
   [share-hash]
-  [:div.container-fluid
-   [:div.row
-    [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
-     [topic-view [topic-bubble-view]]
-     [:div.d-none.d-md-block [history-view]]]
-    [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
-     [action-view]
-     [cards/conclusion-cards-list share-hash]
-     [:div.d-md-none [history-view]]
-     [:div.mx-auto
-      {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
-      [show-how-to]]]]])
+  (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
+    [:div.container-fluid
+     [:div.row
+      [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
+       [topic-view
+        (if search-inactive?
+          [topic-bubble-view]
+          [search-info])]
+       [:div.d-none.d-md-block [history-view]]]
+      [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
+       [action-view]
+       [cards/conclusion-cards-list share-hash]
+       [:div.d-md-none [history-view]]
+       [:div.mx-auto
+        {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
+        [show-how-to]]]]]))
+
+(rf/reg-sub
+  :schnaq.search.current/search-string
+  (fn [db _]
+    (get-in db [:search :schnaq :current :search-string] "")))
+
+(rf/reg-event-db
+  :schnaq.search.current/clear-search-string
+  (fn [db _]
+    (assoc-in db [:search :schnaq :current :search-string] "")))
+
+(rf/reg-sub
+  :schnaq.search.current/result
+  (fn [db _]
+    (get-in db [:search :schnaq :current :result] [])))

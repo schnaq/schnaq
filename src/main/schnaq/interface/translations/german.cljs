@@ -1047,8 +1047,6 @@
 
    :schnaq.search/heading "Suchergebnisse"
    :schnaq.search/results "Ergebnisse"
-   :schnaq.search/no-input "Keine Eingabe"
-   :schnaq.search/title "Suche"
    :schnaq.search/input "Suche nach…"
    :schnaq.search/new-search-title "Keine Ergebnisse"
 
