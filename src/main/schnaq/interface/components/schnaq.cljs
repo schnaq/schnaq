@@ -1,7 +1,10 @@
 (ns schnaq.interface.components.schnaq
-  (:require [re-frame.core :as rf]
+  (:require ["react-qrcode-logo" :refer [QRCode]]
+            [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.views.notifications :refer [notify!]]))
@@ -39,3 +42,13 @@
                  :onClick on-click}]
         [icon icon-key]
         [:div.small (labels label-key)]])]))
+
+(defn qr-code [link]
+  [:> QRCode {:value link
+              :fgColor (colors :positive/default)
+              :bgColor (colors :white)
+              :logoImage (img-path :schnaqqifant/qr)
+              :ecLevel "Q"
+              :size 300
+              :qrStyle "dots"
+              :eyeRadius 5}])

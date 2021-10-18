@@ -74,6 +74,7 @@
      :schnaqqifant.300w/talk "https://s3.disqtec.com/schnaq-schnaqqifanten/talk300w.png"
      :schnaqqifant/white "https://s3.disqtec.com/schnaq-common/logos/schnaqqifant_white.png"
      :schnaqqifant/mail "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqi_newsletter.png"
+     :schnaqqifant/qr "https://s3.disqtec.com/schnaq-common/logos/schnaqqi-qr.png"
      :stock/team "https://s3.disqtec.com/startpage/team.jpeg"
      :startpage.alternatives.e-learning/header "https://s3.disqtec.com/startpage/schuelerin_laptop_in_hand.png"
      :startpage.alternatives.e-learning/oma "https://s3.disqtec.com/startpage/old_woman_smartphone_with_schnaq.jpg"
