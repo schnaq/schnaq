@@ -19,6 +19,7 @@
             [schnaq.interface.components.navbar]
             [schnaq.interface.components.schnaq]
             [schnaq.interface.components.videos]
+            [schnaq.interface.components.wavy]
             [schnaq.interface.config :as config]
             [schnaq.interface.events]
             [schnaq.interface.integrations.wetog.events]

@@ -2,8 +2,10 @@
   "Defining the startpage of schnaq."
   (:require [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.wavy :as wavy]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.qa.inputs :as qanda]
             [schnaq.interface.views.startpage.call-to-actions :as cta]
             [schnaq.interface.views.startpage.features :as startpage-features]
             [schnaq.interface.views.startpage.testimonials :as testimonials]))
@@ -90,17 +92,14 @@
   "Handle some still open questions from the user."
   []
   [:section.pt-5
-   [:h4.text-center (labels :startpage.faq/title)]
-   [:p [:strong (labels :startpage.faq.data/question)] " "
-    (labels :startpage.faq.data/answer-1) " "
-    [:a {:href (reitfe/href :routes/privacy)} (labels :startpage.faq.data/link-name)]
-    (labels :startpage.faq.data/answer-2)]
-   [:p [:strong (labels :startpage.faq.integration/question)] " " (labels :startpage.faq.integration/answer) " "
-    [:a {:href "#newsletter"} (labels :startpage.faq.integration/link-name)]]
-   [:p [:strong (labels :startpage.faq.costs/question)] " " (labels :startpage.faq.costs/answer)]
-   [:p [:strong (labels :startpage.faq.start/question)] " " (labels :startpage.faq.start/answer) " "
-    [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.faq.start/link-name)]]
-   [:p [:strong (labels :startpage.faq.why/question)] " " (labels :startpage.faq.why/answer)]])
+   [wavy/top-and-bottom
+    [:div.bg-dark-blue
+     [:div.container
+      [:span.text-white.text-center
+       [:h2 "Häufig gestellte Fragen"]
+       [:p.lead "(so könnte dein Kurs aussehen)"]]
+      [qanda/question-field-and-search-results]]]
+    :dark-blue]])
 
 (defn- founders-note
   "A personal note from the founders, to the visitor of the page. Give a last personal touch."
@@ -127,10 +126,10 @@
     [:<>
      [:section.container
       [startpage-features/feature-rows]]
+     [faq]
      [testimonials/view]
      [:section.container
-      [mailchimp-form]
-      [faq]]
+      [mailchimp-form]]
      [early-adopters]
      [:section.container
       [founders-note]

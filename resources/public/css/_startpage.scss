@@ -72,20 +72,6 @@ $gradient-target: vars.$primary;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-dark-blue.svg');
 }
 
-.wavy-curve {
-  background-color: transparent;
-  fill: $header-color;
-  margin: -1rem 0;
-  max-height: 11rem;
-  opacity: $header-opacity;
-  width: 100%;
-}
-
-.wavy-curve-gradient {
-  @extend .wavy-curve;
-  fill: $gradient-target;
-}
-
 .feature-text-box {
   p,
   li,
