@@ -8,7 +8,7 @@
         wave-bottom-class (str "wave-bottom-" str-class)]
     [:<>
      [:div {:class wave-bottom-class}]
-     [:div {:class (str "bg-" str-class)} component]
+     [:div {:class (str "py-1 bg-" str-class)} component]
      [:div {:class wave-bottom-class
             :style {:transform "scale(-1)"
                     :margin-top "-1px"}}]]))
