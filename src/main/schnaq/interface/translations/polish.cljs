@@ -102,10 +102,12 @@
    :how-to/back-to-start "Powrót do schnaq"
 
    ;; Startpage
-   :startpage/heading "Mózg słonia dla Twojego biznesu"
-   :startpage/subheading "Gromadzenie wiedzy w sposób zrównoważony i bezpieczne zarządzanie nią"
+   :startpage/heading "Utwórz zamówienie"
+   :startpage/subheading "Stwórz porządek w interakcji z uczestnikami Twojego kursu"
+   :startpage/hook "Po prostu zbieraj pytania i udzielaj odpowiedzi w swoich kursach hybrydowych - dla większej przejrzystości i zrównoważonej wymiany"
    :startpage.social-proof/numbers [:span "schnaq pomógł poprowadzić ponad " [:b marketing-num-schnaqs]
                                     " dyskusji i Q&A, co przekłada się na " [:b marketing-num-statements] " przypadków wspólnej wiedzy."]
+   :schnaq.startpage.cta/button "Schnaqq bezpłatnie"
 
    :startpage.usage/lead "Do czego mogę używać schnaq?"
    :startpage.features/more-information "Więcej informacji"
@@ -910,8 +912,6 @@
    :pricing/headline "Abonamenty"
    :pricing.newsletter/lead "Bądź informowany natychmiast, gdy subskrypcja wejdzie w życie:"
    :pricing.newsletter/name "newsletter schnaq."
-
-   :schnaq.startpage.cta/button "Z kolegium schnaqqen"
 
    ;; Tooltips
    :tooltip/history-statement "Wracając do wkładu"

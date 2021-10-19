@@ -103,10 +103,12 @@
    :how-to/back-to-start "Zurück zu schnaq"
 
    ;; Startpage
-   :startpage/heading "Das Elefantenhirn für dein Unternehmen"
-   :startpage/subheading "Wissen nachhaltig sammeln und sicher managen."
+   :startpage/heading "Schafft Ordnung"
+   :startpage/subheading "Schaffe Ordnung in der Interaktion mit deinen Kursteilnehmer:innen"
+   :startpage/hook "Sammle einfach Fragen und liefere Antworten in deinen hybriden Kursen – für mehr Übersicht und nachhaltigen Austausch."
    :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
                                     " Diskussionen und Q&As geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
+   :schnaq.startpage.cta/button "Kostenfrei schnaqqen"
 
    :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
    :startpage.features/more-information "Mehr Informationen"
@@ -915,8 +917,6 @@
    :pricing/headline "Abonnements"
    :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht:"
    :pricing.newsletter/name "schnaq Newsletter."
-
-   :schnaq.startpage.cta/button "Mit Kolleg:innen schnaqqen"
 
    ;; Tooltips
    :tooltip/history-statement "Zurück zum Beitrag von"

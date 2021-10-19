@@ -103,10 +103,12 @@
    :how-to/back-to-start "Back to schnaq"
 
    ;; Startpage
-   :startpage/heading "The Elephant-Brain for your Company"
-   :startpage/subheading "Manage your knowledge safely and sustainably."
+   :startpage/heading "Create order"
+   :startpage/subheading "Create order in the interaction with your course participants"
+   :startpage/hook "Simply collect questions and provide answers in your hybrid courses - for more clarity and sustainable exchange"
    :startpage.social-proof/numbers [:span "schnaq helped lead over " [:b marketing-num-schnaqs]
                                     " discussions and Q&As which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
+   :schnaq.startpage.cta/button "Schnaqq free of charge"
 
    :startpage.usage/lead "What do I use schnaq for?"
 
@@ -907,8 +909,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing/headline "Subscriptions"
    :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live:"
    :pricing.newsletter/name "schnaq newsletter."
-
-   :schnaq.startpage.cta/button "Discuss with your coworkers"
 
    ;; tooltips
    :tooltip/history-statement "Back to statement made by"
