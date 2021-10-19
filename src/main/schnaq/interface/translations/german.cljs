@@ -113,21 +113,21 @@
    :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
    :startpage.features/more-information "Mehr Informationen"
 
-   :startpage.information.know-how/title "Wissenstransfer ohne Aufwand"
-   :startpage.information.know-how/body "Schnaq's Diskussionen und Q&A Funktionen helfen deinem Unternehmen, Kurs und Schulung blitzschnell Wissen auszutauschen. Nur wo Wissen fließt, kann Großartiges entstehen."
+   :startpage.information.know-how/title "Fragen sammeln leicht gemacht"
+   :startpage.information.know-how/body "Schnaq's Q&A Funktionen und strukturierte Diskussionen helfen deinem Kurs, Workshop oder Schulung blitzschnell Wissen auszutauschen und nachhaltig aufzubereiten. Nur wo Wissen fließt, kann Großartiges entstehen."
 
-   :startpage.information.positioning/title "Verstehe was diskutiert wird"
-   :startpage.information.positioning/body "Mit der automatisch generierten Mindmap und den K.I. Analysen, wird jede Diskussion übersichtlich und einfach zu verstehen."
+   :startpage.information.positioning/title "Verstehe was gefragt wird"
+   :startpage.information.positioning/body "Erkenne auf einen Blick die Probleme deines Kurses. Mit der automatisch generierten Mindmap und den K.I. Analysen, wird jede Fragerunde übersichtlich und einfach zu verstehen aufbereitet."
 
    :startpage.information.anywhere/title "Nutze schnaq überall zu jeder Zeit"
    :startpage.information.anywhere/body "Schnaq läuft als Web-App auf allen gängigen Betriebssystemen, Browsern und Geräten. Egal ob Smartphone, Tablet oder Computer."
 
-   :startpage.information.meetings/title "Nicht alles muss ein Meeting sein"
-   :startpage.information.meetings/body "Vergiss Meetings und Kaffeeküchentreffen nur um Fragen zu stellen. Mit intelligenten Q&A kannst du auch ohne Meetings und sogar online up-to-date bleiben!"
+   :startpage.information.meetings/title "Hybrides Fragenstellen"
+   :startpage.information.meetings/body "Erreiche durch schnaq auch die Menschen, die nicht vor Ort sein können. Alle können eingebunden und die Fragen anonym gestellt werden. Mit intelligentem Q&A kannst du sogar online up-to-date bleiben!"
 
    :startpage.feature-box/heading "Wie funktioniert schnaq?"
    :startpage.feature-box.know-how/title "Bereite dich vor"
-   :startpage.feature-box.know-how/body "Erstelle einen schnaq, wo Fragen gesammelt werde können. Du erhälst einen Zugangscode, QR-Code und einen Link, mit dem du alle Teilnehmer:innen einladen kannst."
+   :startpage.feature-box.know-how/body "Erstelle einen schnaq, wo Fragen gesammelt werde können. Du erhältst einen Zugangscode, QR-Code und einen Link, mit dem du alle Teilnehmer:innen einladen kannst."
    :startpage.feature-box.discussion/title "Binde den Kurs ein"
    :startpage.feature-box.discussion/body "Mit Smartphones, Tablets und Laptops können deine Zuhörer:innen dem schnaq beitreten und ihre Fragen stellen. Automatisch werden ihnen passende Fragen mit Antworten gezeigt, die inhaltlich ähnlich sind."
    :startpage.feature-box.learnings/title "Nachhaltigkeit"
@@ -135,8 +135,6 @@
 
    :startpage.early-adopter/title "Neugierig geworden?"
    :startpage.early-adopter/body "Sei einer der ersten die schnaq Hubs nutzen"
-   :startpage.early-adopter/or "oder"
-   :startpage.early-adopter/test "Teste neue Features"
 
    :startpage.newsletter/heading "Gehöre zu den Ersten, die von neuen Funktionen profitieren!"
    :startpage.newsletter/button "Exklusive Informationen anfordern!"

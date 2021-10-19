@@ -114,18 +114,17 @@
 
    :startpage.features/more-information "More information"
 
-   :startpage.information.know-how/title "Effortless knowledge transfer"
-   :startpage.information.know-how/body "Schnaq discussions and Q&As help your company, course and workshop transfer knowledge in a heartbeat. Excellence arises where knowledge flows freely."
+   :startpage.information.know-how/title "Collecting questions made easy"
+   :startpage.information.know-how/body "Schnaq's Q&A functions and structured discussions help your course, workshop or training to exchange knowledge at lightning speed and to prepare it in a sustainable way. Only where knowledge flows can great things be created."
 
-
-   :startpage.information.positioning/title "Understand what is being discussed"
-   :startpage.information.positioning/body "With the automatically generated mindmap and A.I. analyses, any discussion becomes clear and easy to understand."
+   :startpage.information.positioning/title "Understand what is being asked"
+   :startpage.information.positioning/body "Identify the problems of your course at a glance. With the automatically generated mindmap and A.I. analyses, each question round is clearly presented and easy to understand."
 
    :startpage.information.anywhere/title "Use schnaq anywhere at any time"
    :startpage.information.anywhere/body "Schnaq runs as a web app on all major operating systems, browsers and devices. Whether it's a smartphone, tablet or computer."
 
-   :startpage.information.meetings/title "Not everything has to be a meeting"
-   :startpage.information.meetings/body "Forget meetings and gatherings at the coffee machine just to ask questions. With smart Q&A, you can stay up-to-date without meetings and even online!"
+   :startpage.information.meetings/title "Hybrid questioning"
+   :startpage.information.meetings/body "Reach out through schnaq to people who can't be there. Everyone can be involved and questions can be asked anonymously. With smart Q&A, you can even stay up-to-date online!"
 
    :startpage.feature-box/heading "How does schnaq work?"
    :startpage.feature-box.know-how/title "Prepare yourself"
@@ -137,8 +136,6 @@
 
    :startpage.early-adopter/title "Gotten Curious?"
    :startpage.early-adopter/body "Be one of the first to use schnaq hubs"
-   :startpage.early-adopter/or "or"
-   :startpage.early-adopter/test "Test new schnaq features"
 
    :startpage.newsletter/heading "Be the first to know when you can profit from new features!"
    :startpage.newsletter/button "Give me exclusive previews!"

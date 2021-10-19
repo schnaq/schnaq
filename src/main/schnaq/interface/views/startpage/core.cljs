@@ -62,10 +62,6 @@
     [:div.container-lg.text-center
      [:p.h4 (labels :startpage.early-adopter/title)]
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
-     [:a.btn.button-secondary {:role "button"
-                               :href "mailto:info@schnaq.com"}
-      (labels :startpage.early-adopter/test)]
-     [:p.pt-4 (labels :startpage.early-adopter/or)]
      [:a.btn.button-secondary
       {:role "button"
        :href (reitfe/href :routes.schnaq/create)}

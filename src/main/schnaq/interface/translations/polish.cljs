@@ -112,17 +112,17 @@
    :startpage.usage/lead "Do czego mogę używać schnaq?"
    :startpage.features/more-information "Więcej informacji"
 
-   :startpage.information.know-how/title "Bezproblemowy transfer wiedzy"
-   :startpage.information.know-how/body "Dyskusje i Q&A Schnaq pomagają Twojej firmie, kursowi i warsztatowi przekazywać wiedzę w mgnieniu oka. Doskonałość powstaje tam, gdzie wiedza przepływa swobodnie."
+   :startpage.information.know-how/title "Zbieranie pytań stało się proste"
+   :startpage.information.know-how/body "Funkcje Q&A i ustrukturyzowane dyskusje Schnaqa pomogą Twojemu kursowi, warsztatowi lub szkoleniu błyskawicznie wymieniać wiedzę i przygotować ją w sposób zrównoważony. Tylko tam, gdzie płynie wiedza, mogą powstawać wielkie rzeczy."
 
-   :startpage.information.positioning/title "Zrozumieć, co jest przedmiotem dyskusji"
-   :startpage.information.positioning/body "Dzięki automatycznie generowanym mindmapom i analizom A.I. każda dyskusja staje się jasna i łatwa do zrozumienia."
+   :startpage.information.positioning/title "Zrozumieć, o co się pyta"
+   :startpage.information.positioning/body "Zidentyfikuj problemy swojego kursu na pierwszy rzut oka. Dzięki automatycznie generowanej mapie myśli i analizom A.I., każda runda pytań jest jasno przedstawiona i łatwa do zrozumienia."
 
    :startpage.information.anywhere/title "Używaj schnaq w dowolnym miejscu i czasie"
    :startpage.information.anywhere/body "Schnaq działa jako aplikacja webowa na wszystkich popularnych systemach operacyjnych, przeglądarkach i urządzeniach. Nieważne czy smartfon, tablet czy komputer."
 
-   :startpage.information.meetings/title "Nie wszystko musi być spotkaniem"
-   :startpage.information.meetings/body "Zapomnij o spotkaniach i spotkaniach w kawiarni tylko po to, aby zadawać pytania. Dzięki inteligentnym Q&A możesz być na bieżąco bez spotkań, a nawet online!"
+   :startpage.information.meetings/title "Hybrydowe przesłuchanie"
+   :startpage.information.meetings/body "Dotrzyj poprzez schnaq do ludzi, którzy nie mogą tam być. Każdy może być zaangażowany, a pytania mogą być zadawane anonimowo. Dzięki inteligentnemu Q&A możesz nawet być na bieżąco online!"
 
    :startpage.feature-box/heading "Jak działa schnaq?"
    :startpage.feature-box.know-how/title "Przygotuj się"
@@ -134,8 +134,6 @@
 
    :startpage.early-adopter/title "Teraz jesteś ciekaw?"
    :startpage.early-adopter/body "Bądź jedną z pierwszych osób korzystających z hubów schnaq"
-   :startpage.early-adopter/or "lub"
-   :startpage.early-adopter/test "Testowanie nowych funkcji"
 
    :startpage.newsletter/heading "Bądź jednym z pierwszych, którzy skorzystają z nowych funkcji!"
    :startpage.newsletter/button "Poproś o ekskluzywne informacje!"

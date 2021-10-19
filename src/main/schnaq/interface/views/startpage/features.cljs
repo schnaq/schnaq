@@ -73,7 +73,6 @@
   []
   [:<>
    [how-does-schnaq-work]
-   [:hr.mt-5.pb-5]
    [what-is-schnaq]
    [schnaq-promise]
    [use-it-anywhere]
