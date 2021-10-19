@@ -124,23 +124,13 @@
    :startpage.information.meetings/title "Nie wszystko musi być spotkaniem"
    :startpage.information.meetings/body "Zapomnij o spotkaniach i spotkaniach w kawiarni tylko po to, aby zadawać pytania. Dzięki inteligentnym Q&A możesz być na bieżąco bez spotkań, a nawet online!"
 
-   :startpage.feature-box.know-how/title "Bezpieczne know-how"
-   :startpage.feature-box.know-how/body
-   "Cyfryzacja i mobilne biura zmieniły sposób, w jaki się komunikujemy.
-   Jednak nawet w przypadku nowoczesnych procesów, wyzwaniem pozostaje łączenie wiedzy w ramach przedsiębiorstwa.
-   Dzięki naszemu produktowi oferujemy Państwu rozwiązanie do komunikacji w nowoczesny sposób oraz połączenie know-how wszystkich ekspertów."
-   :startpage.feature-box.discussion/title "Demokratyzacja dyskusji"
-   :startpage.feature-box.discussion/body
-   "Ludzie, którzy dużo mówią, nie muszą mieć racji.
-   I odwrotnie, najwięksi geniusze w swojej dziedzinie są czasami raczej introwertyczni i nie lubią rozmawiać przy innych ludziach.
-   Dzięki schnaq, kładziemy temu kres.
-   Eksperci mogą wnieść swoje know-how i wziąć udział w konstruktywnej dyskusji - nawet bez wielu słów."
-   :startpage.feature-box.learnings/title "Wykorzystanie zdobytych doświadczeń"
-   :startpage.feature-box.learnings/body
-   "Nowoczesne procesy mają pewien haczyk: dokumentację.
-   Często wnioski są generowane, ale potem kończą w najlepszym razie w protokołach, które są archiwizowane, ale nigdy więcej nie są otwierane.
-   Schnaq tworzy żywy system zarządzania wiedzą, który zaprasza Cię do pogłębiania wiedzy i odkrywania nowych ścieżek."
-   :startpage.feature-box/explore-schnaq "Odkryj schnaq"
+   :startpage.feature-box/heading "Jak działa schnaq?"
+   :startpage.feature-box.know-how/title "Przygotuj się"
+   :startpage.feature-box.know-how/body "Stwórz schnaq, gdzie mogą być zbierane pytania. Otrzymasz kod dostępu, kod QR oraz link, za pomocą którego będziesz mógł zaprosić wszystkich uczestników."
+   :startpage.feature-box.discussion/title "Dołącz do kursu"
+   :startpage.feature-box.discussion/body "Dzięki smartfonom, tabletom i laptopom Twoi widzowie mogą dołączyć do schnaq i zadawać pytania. Automatycznie wyświetlane są im dopasowane pytania z odpowiedziami, które są podobne w treści."
+   :startpage.feature-box.learnings/title "Zrównoważony rozwój"
+   :startpage.feature-box.learnings/body "Odpowiedzi na pytania są natychmiast dostępne w Twoim kursie i mogą być przeglądane w dowolnym momencie. Zawsze możesz dodać treść później lub użyć tej samej bazy pytań ponownie w kolejnym kursie."
 
    :startpage.early-adopter/title "Teraz jesteś ciekaw?"
    :startpage.early-adopter/body "Bądź jedną z pierwszych osób korzystających z hubów schnaq"

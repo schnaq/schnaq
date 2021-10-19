@@ -127,16 +127,13 @@
    :startpage.information.meetings/title "Not everything has to be a meeting"
    :startpage.information.meetings/body "Forget meetings and gatherings at the coffee machine just to ask questions. With smart Q&A, you can stay up-to-date without meetings and even online!"
 
-   :startpage.feature-box.know-how/title "Secure Know-How"
-   :startpage.feature-box.know-how/body
-   "Digitalisation and mobile offices have changed the way we communicate. But even in modern processes, the challenge of bundling knowledge within the company remains. With our product, we offer you the solution to communicate in a contemporary way and to bring together the know-how of all experts."
-
-   :startpage.feature-box.discussion/title "Democratise Discussions"
-   :startpage.feature-box.discussion/body "People who talk a lot don't have to be right. Conversely, the greatest geniuses in their field are sometimes rather introverted and don't like to talk in front of other people. With schnaq, we are putting an end to this. Experts can contribute their know-how and enter into constructive discussions - even without many words."
-
-   :startpage.feature-box.learnings/title "Use Learnings"
-   :startpage.feature-box.learnings/body "Modern processes have a catch: documentation. Often the learnings are generated, but then end up at best in protocols that are archived but never opened again. Schnaq creates a living knowledge management that invites you to rummage through learnings and explore new paths."
-   :startpage.feature-box/explore-schnaq "Explore schnaq"
+   :startpage.feature-box/heading "How does schnaq work?"
+   :startpage.feature-box.know-how/title "Prepare yourself"
+   :startpage.feature-box.know-how/body "Create a schnaq where questions can be collected. You will receive an access code, QR code and a link with which you can invite all participants."
+   :startpage.feature-box.discussion/title "Include the Course"
+   :startpage.feature-box.discussion/body "With smartphones, tablets and laptops, your audience can join the schnaq and ask their questions. They are automatically shown matching questions with answers that are similar in content."
+   :startpage.feature-box.learnings/title "Sustainability"
+   :startpage.feature-box.learnings/body "Answered questions are immediately available to your course and can be viewed at any time. You can always add content afterwards or use the same question base again in the next course."
 
    :startpage.early-adopter/title "Gotten Curious?"
    :startpage.early-adopter/body "Be one of the first to use schnaq hubs"

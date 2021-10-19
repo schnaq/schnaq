@@ -41,15 +41,16 @@
   "A Single feature box that can be put in a row. All inputs are keys."
   [title body]
   [:div.col-12.col-md-4
-   [:div.panel-white.mx-1.shadow.py-5.text-center
-    [:div.display-6.text-purple.mb-5 (labels title)]
+   [:div.panel-white.mx-1.shadow.py-4.text-center
+    [:div.display-6.text-purple.mb-3 (labels title)]
     [:p.text-justify (labels body)]]])
 
-(defn- feature-columns
+(defn- how-does-schnaq-work
   "Arguments for getting schnaq in three columns."
   []
   [:div.mt-lg-5
-   [:div.row.py-5
+   [:h3.h2.text-center (labels :startpage.feature-box/heading)]
+   [:div.row.py-3
     [feature-box
      :startpage.feature-box.know-how/title
      :startpage.feature-box.know-how/body]
@@ -66,8 +67,9 @@
   "Collection of feature rows."
   []
   [:<>
+   [how-does-schnaq-work]
+   [:hr.mt-5.pb-5]
    [what-is-schnaq]
    [schnaq-promise]
    [use-it-anywhere]
-   [less-meetings]
-   [feature-columns]])
+   [less-meetings]])
