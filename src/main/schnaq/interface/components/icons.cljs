@@ -3,10 +3,10 @@
   ;; For two styles of the same icon see here: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react#faqs
   (:require ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faCalendarAlt faCamera faCheck faCircleNotch
+             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faCalendarAlt faCamera faChalkboardTeacher faCheck faCircleNotch
               faCog faComment faComments faCookie faCopy faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
               faFileDownload faFlask faGhost faProjectDiagram faInfoCircle faQuestionCircle faLanguage faPaperPlane
-              faPlus faQuestion faRocket faSearch faShareAlt faShieldAlt faStar faTag faTerminal faTimes faTrashAlt
+              faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faStar faTag faTerminal faTimes faTrashAlt
               faUsers faUserLock faUserNinja faUserPlus]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
@@ -19,6 +19,7 @@
    :calendar faCalendar
    :calendar-alt faCalendarAlt
    :camera faCamera
+   :chalkboard-teacher faChalkboardTeacher
    :check/normal faCheck
    :circle-notch faCircleNotch
    :cog faCog
@@ -44,6 +45,7 @@
    :plane faPaperPlane
    :plus faPlus
    :question faQuestion
+   :qrcode faQrcode
    :rocket faRocket
    :search faSearch
    :share faShareAlt

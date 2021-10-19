@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.startpage.features
   (:require [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.startpage.preview-statements :as examples]))
@@ -39,10 +40,11 @@
 
 (defn- feature-box
   "A Single feature box that can be put in a row. All inputs are keys."
-  [title body]
+  [title body icon-key]
   [:div.col-12.col-md-4
    [:div.panel-white.mx-1.shadow.py-4.text-center
     [:div.display-6.text-purple.mb-3 (labels title)]
+    [icon icon-key "fa-3x py-2"]
     [:p.text-justify (labels body)]]])
 
 (defn- how-does-schnaq-work
@@ -53,13 +55,16 @@
    [:div.row.py-3
     [feature-box
      :startpage.feature-box.know-how/title
-     :startpage.feature-box.know-how/body]
+     :startpage.feature-box.know-how/body
+     :chalkboard-teacher]
     [feature-box
      :startpage.feature-box.discussion/title
-     :startpage.feature-box.discussion/body]
+     :startpage.feature-box.discussion/body
+     :qrcode]
     [feature-box
      :startpage.feature-box.learnings/title
-     :startpage.feature-box.learnings/body]]])
+     :startpage.feature-box.learnings/body
+     :user/group]]])
 
 ;; -----------------------------------------------------------------------------
 
