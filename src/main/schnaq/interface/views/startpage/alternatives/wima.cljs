@@ -2,6 +2,7 @@
   (:require [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.components.wavy :as wavy]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]
@@ -59,8 +60,8 @@
         [:h3.h1.text-purple.mb-3 "Für alle einfach zu bedienen"]
         [:p "Für schnaq braucht es keine technischen Kentnisse! Alle schaffen es schnaq zu bedienen. Kommen mal Fragen auf? Kontaktiere den Support jederzeit."]]]]
      [:section.overflow-hidden.py-3.my-5
-      [:div.wave-bottom-white]
-      [:div.bg-white
+      [wavy/top-and-bottom
+       :white
        [:div.container-lg.text-center.early-adopter-schnaqqifant-wrapper
         [:section.container.text-center
          (let [img-classes "rounded-circle social-proof-img-lg mr-5 mt-3"]
@@ -99,8 +100,7 @@
          [:p.small.text-muted "\"Schnaq ist Raketenwissenschaft im Backend und einfach wie ein Dreirad im Frontend.\" – Frank Stampa"]
          [:a.btn.btn-lg.btn-secondary.mt-4
           {:href "https://schnaq.outgrow.us/WiMa"}
-          "Umfrage starten"]]]]
-      [:div.wave-bottom-white-inverted]]
+          "Umfrage starten"]]]]]
      [:section.container.pt-3
       [startpage/supporters]]]]])
 

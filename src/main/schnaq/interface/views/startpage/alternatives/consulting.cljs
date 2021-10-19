@@ -3,6 +3,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.components.wavy :as wavy]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.core :as startpage]))
@@ -80,8 +81,8 @@
         [:h3.h1.text-purple.mb-3 "So einfach, selbst dein ältester Kunde schafft das!"]
         [:p "Jira zu kompliziert? Dokumente in der Cloud ablegen zu umständlich? Schnaq kann von allen bedient werden! Egal ob du Erfahrung mit Software hast, oder dich gerade erst damit anfreundest. Kommen mal Fragen auf? Kontaktiere den Support jederzeit."]]]]
      [:section.overflow-hidden.py-3.my-5
-      [:div.wave-bottom-white]
-      [:div.bg-white
+      [wavy/top-and-bottom
+       :white
        [:div.container-lg.text-center.early-adopter-schnaqqifant-wrapper
         [:section.container.text-center
          (let [img-classes "rounded-circle social-proof-img-lg mr-5 mt-3"]
@@ -120,8 +121,7 @@
          [:p.small.text-muted "\"In agilen Projekten ändern sich die Anforderungen häufiger, als dass sie bestehen bleiben. Wichtig ist es, das auch transparent festzuhalten.\" – Mike Birkhoff"]
          [:a.btn.btn-lg.btn-secondary.mt-4
           {:href cta-link}
-          (if cta-link "Umfrage starten" "Upgrade dein Requirements-Engineering mit nur einem Schritt")]]]]
-      [:div.wave-bottom-white-inverted]]
+          (if cta-link "Umfrage starten" "Upgrade dein Requirements-Engineering mit nur einem Schritt")]]]]]
      [:section.container.pt-3
       [startpage/supporters]]]]))
 

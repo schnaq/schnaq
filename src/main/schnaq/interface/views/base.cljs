@@ -8,26 +8,6 @@
             [schnaq.interface.utils.js-wrapper :as jw]
             [schnaq.interface.views.feedback.collect :as feedback]))
 
-(defn wavy-curve
-  "Define a wavy curve."
-  ([]
-   [wavy-curve "" false])
-  ([transformation]
-   [wavy-curve transformation false])
-  ([transformation gradient?]
-   (let [svg-class (if gradient? "wavy-curve-gradient" "wavy-curve")]
-     [:svg
-      {:class svg-class
-       :xmlSpace "preserve"
-       :overflow :auto
-       :viewBox "0 0 19 4"
-       :preserveAspectRatio :none
-       :style {:transform transformation
-               :-webkit-transform transformation}
-       :y "0px"
-       :x "0px"}
-      [:path {:d "M0 0 L 0 3 Q 3 3, 6 2 T 12 2 T 19 2 L 19 0"}]])))
-
 (defn header
   "Build a header with a curly bottom for a page. Heading, subheading and more will be included in the header."
   [{:page/keys [heading subheading classes more-for-heading vertical-header? wrapper-classes]}]

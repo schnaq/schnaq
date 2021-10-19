@@ -57,8 +57,8 @@
   "Present early-adopters section to catch up interest."
   []
   [:section.overflow-hidden.py-3.my-5
-   [:div.wave-bottom-white]
-   [:div.bg-white
+   [wavy/top-and-bottom
+    :white
     [:div.container-lg.text-center.early-adopter-schnaqqifant-wrapper
      [:p.h4 (labels :startpage.early-adopter/title)]
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
@@ -69,8 +69,7 @@
      [:a.btn.button-secondary
       {:role "button"
        :href (reitfe/href :routes.schnaq/create)}
-      (labels :schnaq.create.button/save)]]]
-   [:div.wave-bottom-white-inverted]])
+      (labels :schnaq.create.button/save)]]]])
 
 (defn supporters []
   [:section.pb-5.pt-3
@@ -93,13 +92,12 @@
   []
   [:section.pt-5
    [wavy/top-and-bottom
-    [:div.bg-dark-blue
-     [:div.container
-      [:span.text-white.text-center
-       [:h2 "Häufig gestellte Fragen"]
-       [:p.lead "(so könnte dein Kurs aussehen)"]]
-      [qanda/question-field-and-search-results]]]
-    :dark-blue]])
+    :dark-blue
+    [:div.container
+     [:span.text-white.text-center
+      [:h2 "Häufig gestellte Fragen"]
+      [:p.lead "(so könnte dein Kurs aussehen)"]]
+     [qanda/question-field-and-search-results]]]])
 
 (defn- founders-note
   "A personal note from the founders, to the visitor of the page. Give a last personal touch."

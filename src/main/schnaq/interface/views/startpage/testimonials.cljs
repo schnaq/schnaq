@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.startpage.testimonials
   (:require [goog.string :as gstring]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.wavy :as wavy]
             [schnaq.interface.translations :refer [labels]]))
 
 (defn- testimonial-card
@@ -137,11 +138,10 @@
   "Show all testimonials."
   []
   [:section.pb-5.pt-3
-   [:div.wave-bottom-white]
-   [:div.bg-white
+   [wavy/top-and-bottom
+    :white
     [:div.container
      [:h3.h1.pb-4.text-purple
       (labels :testimonials/heading)]
      [testimonial-companies]
-     [testimonial-carousel]]]
-   [:div.wave-bottom-white-inverted]])
+     [testimonial-carousel]]]])
