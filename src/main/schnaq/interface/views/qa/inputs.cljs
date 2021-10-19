@@ -12,6 +12,7 @@
   "Input where users can enter their questions for Q&A."
   []
   (let [input-id "qanda-input"
+        current-route @(rf/subscribe [:navigation/current-route-name])
         submit-fn (fn [e] (jq/prevent-default e)
                     (rf/dispatch [:discussion.add.statement/starting
                                   (oget e [:currentTarget :elements])])
@@ -24,7 +25,7 @@
       [:div.form-group.w-100.mb-0
        [:textarea.form-control.discussion-text-input-area.m-1
         {:name "statement-text" :wrap "soft" :rows 1 :id input-id
-         :auto-complete "off" :autoFocus true
+         :auto-complete "off" :autoFocus (= :routes.schnaq/qanda current-route)
          :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
          :required true :data-dynamic-height true
          :placeholder (labels :qanda/add-question)
