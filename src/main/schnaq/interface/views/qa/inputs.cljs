@@ -46,6 +46,14 @@
         [:h3 (labels :qanda.state/read-only-warning)]
         [text-input-for-qanda])]]))
 
+(defn question-field-and-search-results
+  "Combine input form and results list for uniform representation in ask-view
+  and in other usages, e.g. the startpage."
+  []
+  [:<>
+   [ask-question]
+   [search/results-list]])
+
 (defn qanda-content []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
     [pages/with-qanda-view-header
@@ -53,8 +61,7 @@
       :page/classes "base-wrapper layered-wave-background h-100 d-flex flex-column"}
      [:<>
       [:div.container.p-0.px-md-5
-       [ask-question]
-       [search/results-list]]
+       [question-field-and-search-results]]
       [:div.wave-bottom-dark-blue.d-flex.align-self-end.mt-auto]]]))
 
 (defn qanda-view
