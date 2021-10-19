@@ -59,7 +59,7 @@
   [:section.overflow-hidden.py-3.my-5
    [wavy/top-and-bottom
     :white
-    [:div.container-lg.text-center.early-adopter-schnaqqifant-wrapper
+    [:div.container-lg.text-center
      [:p.h4 (labels :startpage.early-adopter/title)]
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
      [:a.btn.button-secondary {:role "button"

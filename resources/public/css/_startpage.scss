@@ -57,11 +57,6 @@ $gradient-target: vars.$primary;
   width: 100%;
 }
 
-.wave-bottom-white-inverted {
-  @extend .wave-bottom-white;
-  transform: scale(-1);
-}
-
 .wave-bottom-light {
   @extend .wave-bottom-white;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-light.svg');
@@ -87,17 +82,6 @@ $gradient-target: vars.$primary;
   img {
     width: 100%;
   }
-}
-
-.early-adopter-schnaqqifant-wrapper {
-  position: relative;
-}
-
-.early-adopter-schnaqqifant {
-  bottom: 0;
-  position: absolute;
-  right: 0;
-  width: 100px;
 }
 
 .subscribe-to-mailinglist {

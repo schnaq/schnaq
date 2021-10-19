@@ -58,11 +58,11 @@
        [:img {:src (img-path :startpage.alternatives.e-learning/oma)}]
        [:article.feature-text-box
         [:h3.h1.text-purple.mb-3 "Für alle einfach zu bedienen"]
-        [:p "Für schnaq braucht es keine technischen Kentnisse! Alle schaffen es schnaq zu bedienen. Kommen mal Fragen auf? Kontaktiere den Support jederzeit."]]]]
+        [:p "Für schnaq braucht es keine technischen Kenntnisse! Alle schaffen es schnaq zu bedienen. Kommen mal Fragen auf? Kontaktiere den Support jederzeit."]]]]
      [:section.overflow-hidden.py-3.my-5
       [wavy/top-and-bottom
        :white
-       [:div.container-lg.text-center.early-adopter-schnaqqifant-wrapper
+       [:div.container-lg.text-center
         [:section.container.text-center
          (let [img-classes "rounded-circle social-proof-img-lg mr-5 mt-3"]
            [:div.mx-auto {:style {:max-width "900px"}}

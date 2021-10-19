@@ -65,7 +65,7 @@
     [:section.overflow-hidden.py-3.my-5
      [wavy/top-and-bottom
       :white
-      [:div.container-lg.text-center.early-adopter-schnaqqifant-wrapper
+      [:div.container-lg.text-center
        [:section.container.text-center
         (let [img-classes "rounded-circle social-proof-img-lg mr-5 mt-3"]
           [:div.mx-auto {:style {:max-width "900px"}}
