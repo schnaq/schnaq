@@ -264,7 +264,7 @@
     :statement/type :statement.type/attack
     :statement/discussions ["discussion/simple"]}])
 
-(def ^:private registered-users
+(def registered-users
   [{:db/id "user.registered/alex"
     :user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276",
     :user.registered/display-name "A. Schneider",

@@ -4,6 +4,7 @@
             [schnaq.api.discussion :as discussion-api]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.access-codes :as ac]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :as hub-db]
@@ -197,6 +198,7 @@
               :description (at/get-doc #'add-schnaq)
               :name :api.schnaq/add
               :parameters {:body ::dto/discussion-add-body}
+              :middleware [(when-not shared-config/embedded? :user/authenticated?)]
               :responses {201 {:body {:new-schnaq ::dto/discussion}}
                           400 at/response-error-body}}]
      ["/edit/title" {:put edit-schnaq-title!

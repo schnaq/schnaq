@@ -90,7 +90,8 @@
    {:page/heading (labels :schnaq.create/heading)
     :page/subheading (labels :schnaq.create/subheading)
     :page/title (labels :schnaq.create/title)
-    :page/classes "base-wrapper bg-white"}
+    :page/classes "base-wrapper bg-white"
+    :condition/needs-authentication? true}
    [:div.container
     [:div.py-3
      [:form
@@ -118,7 +119,8 @@
    {:page/heading (labels :schnaq.create/heading)
     :page/subheading (labels :schnaq.create.qanda/subheading)
     :page/title (labels :schnaq.create/title)
-    :page/classes "base-wrapper bg-white"}
+    :page/classes "base-wrapper bg-white"
+    :condition/needs-authentication? true}
    [:div.container
     [:div.py-3
      [:form

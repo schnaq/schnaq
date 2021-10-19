@@ -184,6 +184,9 @@
    ;; Login Page
    :page.login/heading "Bitte logg dich ein"
    :page.login/subheading "Um auf die folgende Ressource zugreifen zu können, musst du eingeloggt sein"
+   :page.login.alert/text-1 "Noch keinen Account? Erstelle dir hier einen kostenfreien Zugang, um deinen ersten schnaq zu erstellen. Sieh dir auf"
+   :page.login.alert/button "dieser Seite"
+   :page.login.alert/text-2 "deine Vorteile als registrierte:r Nutzer:in an."
 
    :page.beta/heading "Beta-Feature"
    :page.beta/subheading "Diese Funktion ist nur für Beta-Tester:innen freigeschaltet. Bitte logge dich ein, wenn du zu der Gruppe gehörst."

@@ -7,7 +7,8 @@
             [ring.mock.request :as mock]
             [schnaq.auth.jwt :as sjwt]
             [schnaq.config :as config]
-            [schnaq.database.main :as database]))
+            [schnaq.database.main :as database]
+            [schnaq.test-data :as test-data]))
 
 
 ;; -----------------------------------------------------------------------------
@@ -68,7 +69,6 @@
                    "offline_access",
                    "uma_authorization"]
         roles (if admin? (conj roles-raw "admin") roles-raw)]
-
     {:exp 5950068575100 :iat 1630069374 :auth_time 1630069374 :jti 1
      :aud "account" :type "Bearer"
      :realm_access {:roles roles}
@@ -79,7 +79,7 @@
      :preferred_username username
      :family_name "Fant"
      :email "schnaqqi@schnaq.com"
-     :sub 1}))
+     :sub (-> test-data/registered-users first :user.registered/keycloak-id)}))
 
 (def token-schnaqqifant-user
   (sjwt/create-signed-jwt (create-payload "schnaqqifant" false) config/testing-private-key))
