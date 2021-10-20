@@ -54,8 +54,7 @@
    [:<>
     [:button.btn.discussion-navbar-button
      (merge
-       {:type "button"
-        :class "btn-white"}
+       {:type "button"}
        attributes)
      button-content]
     dropdown-content]))
