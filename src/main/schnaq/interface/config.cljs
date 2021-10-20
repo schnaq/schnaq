@@ -69,8 +69,8 @@
 ;; and on production. Change these symbols to your dev environment accordingly.
 ;; Replaced by the CI when building the application for production.
 
-(goog-define example-share-hash "103f2147-d4dd-491b-8fd0-64aefd950413")
+(goog-define example-share-hash "6586e787-8704-4b4b-9221-5821d15626b5")
 (goog-define example-api-url "https://api.staging.schnaq.com")
-(goog-define example-statement-1 17592186048171)
-(goog-define example-statement-2 17592186048169)
-(goog-define example-statement-3 17592186048173)
+(goog-define example-statement-1 17592186049502)
+(goog-define example-statement-2 17592186049504)
+(goog-define example-statement-3 17592186049506)
