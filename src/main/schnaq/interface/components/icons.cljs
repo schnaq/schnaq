@@ -1,7 +1,8 @@
 (ns schnaq.interface.components.icons
   ;; For further information check: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react
   ;; For two styles of the same icon see here: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react#faqs
-  (:require ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faHourglass]]
+  (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub]]
+            ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
              [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faCalendarAlt faCamera faChalkboardTeacher faCheck faCircleNotch
               faCog faComment faComments faCookie faCopy faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
@@ -34,14 +35,18 @@
    :dots-v faEllipsisV
    :edit faEdit
    :eye faEye
+   :facebook faFacebook
    :file-download faFileDownload
    :flask faFlask
    :ghost faGhost
    :graph faProjectDiagram
+   :github faGithub
    :hourglass/empty faHourglass
    :info faInfoCircle
    :info-question faQuestionCircle
+   :instagram faInstagram
    :language faLanguage
+   :linkedin faLinkedin
    :plane faPaperPlane
    :plus faPlus
    :question faQuestion
@@ -55,6 +60,7 @@
    :terminal faTerminal
    :times faTimes
    :trash faTrashAlt
+   :twitter faTwitter
    :user/group faUsers
    :user/lock faUserLock
    :user/ninja faUserNinja

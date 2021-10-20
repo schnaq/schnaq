@@ -70,15 +70,15 @@
 (defn- social-media []
   [:section
    [:a.social-media-icon {:href "https://facebook.com/schnaq" :target :_blank}
-    [:i.fa-2x.fab.fa-facebook]]
+    [icon :facebook "" {:size "2x"}]]
    [:a.social-media-icon {:href "https://instagram.com/schnaqqi" :target :_blank}
-    [:i.fa-2x.fab.fa-instagram]]
+    [icon :instagram "" {:size "2x"}]]
    [:a.social-media-icon {:href "https://www.linkedin.com/company/schnaq" :target :_blank}
-    [:i.fa-2x.fab.fa-linkedin]]
+    [icon :linkedin "" {:size "2x"}]]
    [:a.social-media-icon {:href "https://twitter.com/getschnaq" :target :_blank}
-    [:i.fa-2x.fab.fa-twitter]]
+    [icon :twitter "" {:size "2x"}]]
    [:a.social-media-icon {:href "https://github.com/schnaq" :target :_blank}
-    [:i.fa-2x.fab.fa-github]]])
+    [icon :github "" {:size "2x"}]]])
 
 (defn- sponsors []
   [:section.sponsors
