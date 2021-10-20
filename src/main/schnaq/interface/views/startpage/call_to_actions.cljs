@@ -36,10 +36,10 @@
   "Displays a list of features with a call-to-action button to start a schnaq"
   []
   [:section.row.mt-3 {:key "HeaderExtras-Bullet-Points-and-Animation"}
-   [:div.col-lg-6.py-lg-4.pr-lg-5.my-auto
+   [:div.col-lg-6.col-xxxl-7.py-lg-4.pr-lg-5.my-auto
     [:h1 (labels :startpage/subheading)]
     [:p.lead (labels :startpage/hook)]
     [start-schnaq-button]
     [social-proof]]
-   [:div.col-lg-6.pb-lg-4
+   [:div.col-lg-6.col-xxxl-4.pb-lg-4
     [header-screenshot]]])
