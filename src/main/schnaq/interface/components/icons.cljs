@@ -1,12 +1,13 @@
 (ns schnaq.interface.components.icons
   ;; For further information check: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react
   ;; For two styles of the same icon see here: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react#faqs
-  (:require ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faHourglass]]
+  (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub]]
+            ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faCalendarAlt faCamera faCheck faCircleNotch
-              faCog faComment faComments faCookie faCopy faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
-              faFileDownload faFlask faGhost faProjectDiagram faInfoCircle faQuestionCircle faLanguage faPaperPlane
-              faPlus faQuestion faRocket faSearch faShareAlt faShieldAlt faStar faTag faTerminal faTimes faTrashAlt
+             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faCalendarAlt faCamera faChalkboardTeacher faCheck faCircleNotch
+              faCog faComment faComments faCookie faCopy faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
+              faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLocationArrow faPaperPlane
+              faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faTag faTerminal faTimes faTimesCircle faTrashAlt
               faUsers faUserLock faUserNinja faUserPlus]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
@@ -19,6 +20,7 @@
    :calendar faCalendar
    :calendar-alt faCalendarAlt
    :camera faCamera
+   :chalkboard-teacher faChalkboardTeacher
    :check/normal faCheck
    :circle-notch faCircleNotch
    :cog faCog
@@ -33,26 +35,39 @@
    :dots-v faEllipsisV
    :edit faEdit
    :eye faEye
+   :envelope faEnvelope
+   :envelope-open-text faEnvelopeOpenText
+   :facebook faFacebook
    :file-download faFileDownload
    :flask faFlask
+   :gem faGem
    :ghost faGhost
    :graph faProjectDiagram
+   :github faGithub
+   :handshake faHandshake
    :hourglass/empty faHourglass
    :info faInfoCircle
    :info-question faQuestionCircle
+   :instagram faInstagram
    :language faLanguage
+   :linkedin faLinkedin
+   :location-arrow faLocationArrow
    :plane faPaperPlane
    :plus faPlus
    :question faQuestion
+   :qrcode faQrcode
    :rocket faRocket
    :search faSearch
+   :sliders-h faSlidersH
    :share faShareAlt
    :shield faShieldAlt
    :star faStar
    :tag faTag
    :terminal faTerminal
    :times faTimes
+   :times-circle faTimesCircle
    :trash faTrashAlt
+   :twitter faTwitter
    :user/group faUsers
    :user/lock faUserLock
    :user/ninja faUserNinja

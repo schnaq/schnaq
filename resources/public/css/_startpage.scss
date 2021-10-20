@@ -21,7 +21,7 @@ $gradient-target: vars.$primary;
 
   @include media-breakpoint-up(xl) {
     h1 {
-      font-size: 4rem;
+      font-size: 3vw;
     }
   }
 
@@ -57,11 +57,6 @@ $gradient-target: vars.$primary;
   width: 100%;
 }
 
-.wave-bottom-white-inverted {
-  @extend .wave-bottom-white;
-  transform: scale(-1);
-}
-
 .wave-bottom-light {
   @extend .wave-bottom-white;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-light.svg');
@@ -70,20 +65,6 @@ $gradient-target: vars.$primary;
 .wave-bottom-dark-blue {
   @extend .wave-bottom-white;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-dark-blue.svg');
-}
-
-.wavy-curve {
-  background-color: transparent;
-  fill: $header-color;
-  margin: -1rem 0;
-  max-height: 11rem;
-  opacity: $header-opacity;
-  width: 100%;
-}
-
-.wavy-curve-gradient {
-  @extend .wavy-curve;
-  fill: $gradient-target;
 }
 
 .feature-text-box {
@@ -101,26 +82,6 @@ $gradient-target: vars.$primary;
   img {
     width: 100%;
   }
-}
-
-.early-adopter-schnaqqifant-wrapper {
-  position: relative;
-}
-
-.early-adopter-schnaqqifant {
-  bottom: 0;
-  position: absolute;
-  right: 0;
-  width: 100px;
-}
-
-.subscribe-to-mailinglist {
-  padding: 2rem 0 6rem;
-}
-
-.dot-background {
-  background-image: url('https://s3.disqtec.com/schnaq-common/background/blue_dot.svg');
-  background-size: 20px 20px;
 }
 
 .above-the-fold-screenshot {
@@ -142,42 +103,6 @@ $gradient-target: vars.$primary;
 .social-proof-img-lg {
   max-height: 60px;
   width: 60px;
-}
-
-.example-statement-1 {
-  @include media-breakpoint-up(md) {
-    position: relative;
-    right: -1rem;
-  }
-  @include media-breakpoint-up(lg) {
-    top: -3rem;
-  }
-}
-
-.example-statement-2 {
-  @include media-breakpoint-up(md) {
-    margin: 1rem 0;
-    position: relative;
-    right: 2rem;
-  }
-
-  @include media-breakpoint-up(lg) {
-    position: relative;
-    right: 6rem;
-  }
-}
-
-.example-statement-3 {
-  @include media-breakpoint-up(md) {
-    margin: 1rem 0;
-    position: relative;
-    right: -2rem;
-  }
-  @include media-breakpoint-up(lg) {
-    bottom: -3rem;
-    position: relative;
-    right: -6rem;
-  }
 }
 
 .example-dashboard-image {

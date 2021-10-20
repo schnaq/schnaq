@@ -58,29 +58,17 @@
   "Maximal allowed image size of profile picture in bytes."
   5000000)
 
-(def marketing-num-schnaqs 510)
-(def marketing-num-statements 3500)
+(def marketing-num-schnaqs 550)
+(def marketing-num-statements 3600)
 
 
 ;; -----------------------------------------------------------------------------
-;; Example schnaqs
+;; Example schnaqs and statements
+;;
+;; These samples default to the staging environment so that it works on staging
+;; and on production. Change these symbols to your dev environment accordingly.
+;; Replaced by the CI when building the application for production.
 
-(def example-share-hash
-  (if shared-config/production?
-    "b91e73b8-d800-4827-8d1b-c11a92840bd0"
-    "103f2147-d4dd-491b-8fd0-64aefd950413"))
-
-(def example-statement-1
-  (if shared-config/production?
-    17592186058260
-    17592186048171))
-
-(def example-statement-2
-  (if shared-config/production?
-    17592186058271
-    17592186048169))
-
-(def example-statement-3
-  (if shared-config/production?
-    17592186058241
-    17592186048173))
+(goog-define example-share-hash "6586e787-8704-4b4b-9221-5821d15626b5")
+(goog-define example-api-url "https://api.staging.schnaq.com")
+(goog-define example-statement 17592186049502)

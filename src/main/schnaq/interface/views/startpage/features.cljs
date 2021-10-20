@@ -1,14 +1,15 @@
 (ns schnaq.interface.views.startpage.features
-  (:require [schnaq.interface.components.images :refer [img-path]]
+  (:require [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.startpage.preview-statements :as examples]))
 
-(defn- what-is-schnaq
+(defn- example-question
   "Box describing what schnaq does and why"
   []
-  [:div.my-5
+  [:div.my-5.py-5
    [rows/row-builder-text-right-mobile-above
     [examples/display-example-statements]
     [rows/build-text-box :startpage.information.know-how]]])
@@ -31,7 +32,7 @@
      {:src (img-path :startpage.information/anywhere)}]
     [rows/build-text-box :startpage.information.anywhere]]])
 
-(defn- less-meetings []
+(defn- hybrid-questioning []
   [rows/row-builder-text-left
    [rows/build-text-box :startpage.information.meetings]
    [:img.shadow-lg.rounded-2
@@ -39,26 +40,31 @@
 
 (defn- feature-box
   "A Single feature box that can be put in a row. All inputs are keys."
-  [title body]
+  [title body icon-key]
   [:div.col-12.col-md-4
-   [:div.panel-white.mx-1.shadow.py-5.text-center
-    [:div.display-6.text-purple.mb-5 (labels title)]
+   [:div.panel-white.mx-1.shadow.py-4.text-center
+    [:div.display-6.text-purple.mb-3 (labels title)]
+    [icon icon-key "py-2" {:size "3x"}]
     [:p.text-justify (labels body)]]])
 
-(defn- feature-columns
+(defn- how-does-schnaq-work
   "Arguments for getting schnaq in three columns."
   []
   [:div.mt-lg-5
-   [:div.row.py-5
+   [:h3.h2.text-center (labels :startpage.feature-box/heading)]
+   [:div.row.py-3
     [feature-box
      :startpage.feature-box.know-how/title
-     :startpage.feature-box.know-how/body]
+     :startpage.feature-box.know-how/body
+     :chalkboard-teacher]
     [feature-box
      :startpage.feature-box.discussion/title
-     :startpage.feature-box.discussion/body]
+     :startpage.feature-box.discussion/body
+     :qrcode]
     [feature-box
      :startpage.feature-box.learnings/title
-     :startpage.feature-box.learnings/body]]])
+     :startpage.feature-box.learnings/body
+     :user/group]]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -66,8 +72,8 @@
   "Collection of feature rows."
   []
   [:<>
-   [what-is-schnaq]
-   [schnaq-promise]
+   [how-does-schnaq-work]
+   [example-question]
+   [hybrid-questioning]
    [use-it-anywhere]
-   [less-meetings]
-   [feature-columns]])
+   [schnaq-promise]])

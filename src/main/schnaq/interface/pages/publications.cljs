@@ -1,5 +1,6 @@
 (ns schnaq.interface.pages.publications
-  (:require [schnaq.interface.components.images :refer [img-path]]
+  (:require [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
@@ -82,7 +83,7 @@
 (defn- content [_request]
   [pages/with-nav-and-header
    {:page/heading (labels :publications/heading)
-    :page/subheading [:<> (labels :publications/subheading) " " [:i.fas.fa-flask]]
+    :page/subheading [:<> (labels :publications/subheading) " " [icon :flask]]
     :page/vertical-header? true}
    [:div.container
     [publication-primer]

@@ -1,40 +1,20 @@
 (ns schnaq.interface.views.startpage.preview-statements
   (:require [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.conclusion-card :as conclusion-card]))
 
-(def ^:private api-url-for-examples
-  "Sets staging API as default API if environment is staging or when
-  developing on a local machine."
-  (if shared-config/production?
-    shared-config/api-url
-    shared-config/default-staging-api-url))
-
-(defn- interactive-example-statements []
-  (let [statement-1 @(rf/subscribe [:example-statement/by-id config/example-statement-1])
-        statement-2 @(rf/subscribe [:example-statement/by-id config/example-statement-2])
-        statement-3 @(rf/subscribe [:example-statement/by-id config/example-statement-3])]
-    (when (and statement-1 statement-2 statement-3)
-      [:<>
-       [:div.example-statement-1.rounded-1.shadow-lg
-        [conclusion-card/statement-card statement-1]]
-       [:div.example-statement-2.rounded-1.shadow-lg
-        [conclusion-card/statement-card statement-2]]
-       [:div.example-statement-3.rounded-1.shadow-lg
-        [conclusion-card/statement-card statement-3]]])))
-
 (defn display-example-statements
   "Displays interactive example statements from the discussion specified in the config.
   When no statements are found displays a static image instead"
   []
-  (let [static-image? @(rf/subscribe [:example-statement/static-image-fallback?])]
-    (if static-image?
-      [:img.img-fluid {:src (img-path :startpage.example/statements)}]
-      [interactive-example-statements])))
+  (if @(rf/subscribe [:example-statement/static-image-fallback?])
+    [:img.img-fluid {:src (img-path :startpage.example/statements)}]
+    (when-let [statement-1 @(rf/subscribe [:example-statement/by-id config/example-statement])]
+      [:div.rounded-1.shadow-lg
+       [conclusion-card/answer-card statement-1]])))
 
 (rf/reg-sub
   :example-statement/by-id
@@ -73,11 +53,7 @@
   :load-example-statements
   (fn [{:keys [db]} _]
     (let [share-hash config/example-share-hash
-          id-1 config/example-statement-1
-          id-2 config/example-statement-2
-          id-3 config/example-statement-3]
+          api-url config/example-api-url]
       {:db (assoc-in db [:current-route :path-params :share-hash] share-hash)
-       :fx [[:dispatch [:schnaq/load-by-share-hash share-hash api-url-for-examples]]
-            [:dispatch [:discussion.query.example-statement/by-id share-hash id-1 api-url-for-examples]]
-            [:dispatch [:discussion.query.example-statement/by-id share-hash id-2 api-url-for-examples]]
-            [:dispatch [:discussion.query.example-statement/by-id share-hash id-3 api-url-for-examples]]]})))
+       :fx [[:dispatch [:schnaq/load-by-share-hash share-hash api-url]]
+            [:dispatch [:discussion.query.example-statement/by-id share-hash config/example-statement api-url]]]})))

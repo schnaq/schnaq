@@ -36,7 +36,7 @@
   "Download the current graph as a png file."
   [surrounding-div]
   [tooltip/tooltip-button "bottom" (labels :graph.download/as-png)
-   [icon :graph "m-auto"]
+   [icon :file-download "m-auto"]
    (fn []
      (let [canvas (.querySelector js/document (gstring/format "%s div canvas" surrounding-div))
            anchor (.createElement js/document "a")]

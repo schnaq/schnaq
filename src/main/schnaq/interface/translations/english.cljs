@@ -103,43 +103,39 @@
    :how-to/back-to-start "Back to schnaq"
 
    ;; Startpage
-   :startpage/heading "The Elephant-Brain for your Company"
-   :startpage/subheading "Manage your knowledge safely and sustainably."
+   :startpage/heading "Collecting questions made simple"
+   :startpage/subheading "Create order in the interaction with your course participants"
+   :startpage/hook "Simply collect questions and provide answers in your hybrid courses - for more clarity and sustainable exchange"
    :startpage.social-proof/numbers [:span "schnaq helped lead over " [:b marketing-num-schnaqs]
                                     " discussions and Q&As which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
+   :schnaq.startpage.cta/button "Schnaqq free of charge"
 
    :startpage.usage/lead "What do I use schnaq for?"
 
    :startpage.features/more-information "More information"
 
-   :startpage.information.know-how/title "Effortless knowledge transfer"
-   :startpage.information.know-how/body "Schnaq discussions and Q&As help your company, course and workshop transfer knowledge in a heartbeat. Excellence arises where knowledge flows freely."
+   :startpage.information.know-how/title "Collecting questions made easy"
+   :startpage.information.know-how/body "Schnaq's Q&A functions and structured discussions help your course, workshop or training to exchange knowledge at lightning speed and to prepare it in a sustainable way. Only where knowledge flows can great things be created."
 
-
-   :startpage.information.positioning/title "Understand what is being discussed"
-   :startpage.information.positioning/body "With the automatically generated mindmap and A.I. analyses, any discussion becomes clear and easy to understand."
+   :startpage.information.positioning/title "Understand what is being asked"
+   :startpage.information.positioning/body "Identify the problems of your course at a glance. With the automatically generated mindmap and A.I. analyses, each question round is clearly presented and easy to understand."
 
    :startpage.information.anywhere/title "Use schnaq anywhere at any time"
    :startpage.information.anywhere/body "Schnaq runs as a web app on all major operating systems, browsers and devices. Whether it's a smartphone, tablet or computer."
 
-   :startpage.information.meetings/title "Not everything has to be a meeting"
-   :startpage.information.meetings/body "Forget meetings and gatherings at the coffee machine just to ask questions. With smart Q&A, you can stay up-to-date without meetings and even online!"
+   :startpage.information.meetings/title "Hybrid questioning"
+   :startpage.information.meetings/body "Reach out through schnaq to people who can't be there. Everyone can be involved and questions can be asked anonymously. With smart Q&A, you can even stay up-to-date online!"
 
-   :startpage.feature-box.know-how/title "Secure Know-How"
-   :startpage.feature-box.know-how/body
-   "Digitalisation and mobile offices have changed the way we communicate. But even in modern processes, the challenge of bundling knowledge within the company remains. With our product, we offer you the solution to communicate in a contemporary way and to bring together the know-how of all experts."
-
-   :startpage.feature-box.discussion/title "Democratise Discussions"
-   :startpage.feature-box.discussion/body "People who talk a lot don't have to be right. Conversely, the greatest geniuses in their field are sometimes rather introverted and don't like to talk in front of other people. With schnaq, we are putting an end to this. Experts can contribute their know-how and enter into constructive discussions - even without many words."
-
-   :startpage.feature-box.learnings/title "Use Learnings"
-   :startpage.feature-box.learnings/body "Modern processes have a catch: documentation. Often the learnings are generated, but then end up at best in protocols that are archived but never opened again. Schnaq creates a living knowledge management that invites you to rummage through learnings and explore new paths."
-   :startpage.feature-box/explore-schnaq "Explore schnaq"
+   :startpage.feature-box/heading "How does schnaq work?"
+   :startpage.feature-box.know-how/title "Prepare yourself"
+   :startpage.feature-box.know-how/body "Create a schnaq where questions can be collected. You will receive an access code, QR code and a link with which you can invite all participants."
+   :startpage.feature-box.discussion/title "Include the Course"
+   :startpage.feature-box.discussion/body "With smartphones, tablets and laptops, your audience can join the schnaq and ask their questions. They are automatically shown matching questions with answers that are similar in content."
+   :startpage.feature-box.learnings/title "Share the Answers"
+   :startpage.feature-box.learnings/body "Answered questions are immediately available to your course and can be viewed at any time. You can always add content afterwards or use the same question base again in the next course."
 
    :startpage.early-adopter/title "Gotten Curious?"
    :startpage.early-adopter/body "Be one of the first to use schnaq hubs"
-   :startpage.early-adopter/or "or"
-   :startpage.early-adopter/test "Test new schnaq features"
 
    :startpage.newsletter/heading "Be the first to know when you can profit from new features!"
    :startpage.newsletter/button "Give me exclusive previews!"
@@ -907,8 +903,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing/headline "Subscriptions"
    :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live:"
    :pricing.newsletter/name "schnaq newsletter."
-
-   :schnaq.startpage.cta/button "Discuss with your coworkers"
 
    ;; tooltips
    :tooltip/history-statement "Back to statement made by"

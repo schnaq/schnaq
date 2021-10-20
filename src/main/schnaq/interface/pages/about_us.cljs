@@ -1,13 +1,15 @@
 (ns schnaq.interface.pages.about-us
-  (:require [goog.string :as gstring]
+  (:require [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.config :refer [marketing-num-schnaqs marketing-num-statements]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- value-card
-  [fa-icon title body]
+  [icon-key title body]
   [:div.card.p-3.mb-4.border-0
-   [:div.card-img-top.text-center [:i {:class (gstring/format "text-primary fas %s fa-3x fa-fw" fa-icon)}]]
+   [:div.card-img-top.text-center
+    [icon icon-key "text-primary" {:size "3x"}]]
    [:div.card-body
     [:h5.card-title.text-center (labels title)]
     [:p.card-text (labels body)]]])
@@ -40,27 +42,27 @@
    [:h4.text-center.text-muted.pb-5 (labels :about-us.value/subtitle)]
    [:div.row.justify-content-around
     [:div.col-lg-4
-     (value-card "fa-envelope-open-text" :about-us.honesty/title :about-us.honesty/body)]
+     [value-card :envelope-open-text :about-us.honesty/title :about-us.honesty/body]]
     [:div.col-lg-4
-     (value-card "fa-handshake" :about-us.collaborate/title :about-us.collaborate/body)]
+     [value-card :handshake :about-us.collaborate/title :about-us.collaborate/body]]
     [:div.col-lg-4
-     (value-card "fa-location-arrow" :about-us.action/title :about-us.action/body)]]
+     [value-card :location-arrow :about-us.action/title :about-us.action/body]]]
 
    [:div.row.justify-content-around
     [:div.col-lg-4
-     (value-card "fa-gem" :about-us.quality/title :about-us.quality/body)]
+     [value-card :gem :about-us.quality/title :about-us.quality/body]]
     [:div.col-lg-4
-     (value-card "fa-users" :about-us.diversity/title :about-us.diversity/body)]]])
+     [value-card :user/group :about-us.diversity/title :about-us.diversity/body]]]])
 
 
 (def ^:private schnaq-in-numbers
   [:section
    [:h2.text-center.pb-3 (labels :about-us.numbers/title)]
    [:div.row
-    [:div.col (number-cell "6+" (labels :about-us.numbers/research))]
-    [:div.col (number-cell "400+" (labels :about-us.numbers/users))]
-    [:div.col (number-cell "3.000+" (labels :about-us.numbers/statements))]
-    [:div.col (number-cell "12.000+" (labels :about-us.numbers/loc))]]])
+    [:div.col [number-cell "6+" (labels :about-us.numbers/research)]]
+    [:div.col [number-cell (str marketing-num-schnaqs "+") (labels :about-us.numbers/users)]]
+    [:div.col [number-cell (str marketing-num-statements "+") (labels :about-us.numbers/statements)]]
+    [:div.col [number-cell "12.000+" (labels :about-us.numbers/loc)]]]])
 
 (def ^:private team-focus
   [:section
