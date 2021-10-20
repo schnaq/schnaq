@@ -5,8 +5,8 @@
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
              [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faCalendarAlt faCamera faChalkboardTeacher faCheck faCircleNotch
-              faCog faComment faComments faCookie faCopy faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
-              faFileDownload faFlask faGhost faProjectDiagram faInfoCircle faQuestionCircle faLanguage faPaperPlane
+              faCog faComment faComments faCookie faCopy faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
+              faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLocationArrow faPaperPlane
               faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faStar faTag faTerminal faTimes faTrashAlt
               faUsers faUserLock faUserNinja faUserPlus]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
@@ -35,18 +35,22 @@
    :dots-v faEllipsisV
    :edit faEdit
    :eye faEye
+   :envelope-open-text faEnvelopeOpenText
    :facebook faFacebook
    :file-download faFileDownload
    :flask faFlask
+   :gem faGem
    :ghost faGhost
    :graph faProjectDiagram
    :github faGithub
+   :handshake faHandshake
    :hourglass/empty faHourglass
    :info faInfoCircle
    :info-question faQuestionCircle
    :instagram faInstagram
    :language faLanguage
    :linkedin faLinkedin
+   :location-arrow faLocationArrow
    :plane faPaperPlane
    :plus faPlus
    :question faQuestion
