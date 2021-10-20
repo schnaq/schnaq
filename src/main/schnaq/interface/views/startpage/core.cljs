@@ -91,8 +91,8 @@
     :dark-blue
     [:div.container
      [:span.text-white.text-center
-      [:h2 "Häufig gestellte Fragen"]
-      [:p.lead "(so könnte dein Kurs aussehen)"]]
+      [:h2 (labels :startpage.faq/title)]
+      [:p.lead (labels :startpage.faq/subtitle)]]
      [qanda/question-field-and-search-results]]]])
 
 (defn- founders-note

@@ -148,6 +148,7 @@
    :startpage.newsletter/privacy-policy-lead "More information about the handling of your personal data can be found in our"
 
    :startpage.faq/title "Frequently Asked Questions"
+   :startpage.faq/subtitle "(this is what your course could look like)"
    :startpage.faq.data/question "What happens with my data?"
    :startpage.faq.data/answer-1 "We only store data on german servers, to provide the best possible data protection. All details are explained
         in an understandable manner in our"
