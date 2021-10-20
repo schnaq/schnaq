@@ -1,12 +1,12 @@
 (ns schnaq.interface.views.startpage.features
-  (:require [schnaq.interface.components.images :refer [img-path]]
+  (:require [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
-            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.startpage.preview-statements :as examples]))
 
-(defn- what-is-schnaq
+(defn- example-question
   "Box describing what schnaq does and why"
   []
   [:div.my-5.py-5
@@ -32,7 +32,7 @@
      {:src (img-path :startpage.information/anywhere)}]
     [rows/build-text-box :startpage.information.anywhere]]])
 
-(defn- less-meetings []
+(defn- hybrid-questioning []
   [rows/row-builder-text-left
    [rows/build-text-box :startpage.information.meetings]
    [:img.shadow-lg.rounded-2
@@ -73,7 +73,7 @@
   []
   [:<>
    [how-does-schnaq-work]
-   [what-is-schnaq]
-   [schnaq-promise]
+   [example-question]
+   [hybrid-questioning]
    [use-it-anywhere]
-   [less-meetings]])
+   [schnaq-promise]])

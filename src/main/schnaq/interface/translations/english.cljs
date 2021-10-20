@@ -131,7 +131,7 @@
    :startpage.feature-box.know-how/body "Create a schnaq where questions can be collected. You will receive an access code, QR code and a link with which you can invite all participants."
    :startpage.feature-box.discussion/title "Include the Course"
    :startpage.feature-box.discussion/body "With smartphones, tablets and laptops, your audience can join the schnaq and ask their questions. They are automatically shown matching questions with answers that are similar in content."
-   :startpage.feature-box.learnings/title "Sustainability"
+   :startpage.feature-box.learnings/title "Share the Answers"
    :startpage.feature-box.learnings/body "Answered questions are immediately available to your course and can be viewed at any time. You can always add content afterwards or use the same question base again in the next course."
 
    :startpage.early-adopter/title "Gotten Curious?"

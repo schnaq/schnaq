@@ -130,7 +130,7 @@
    :startpage.feature-box.know-how/body "Erstelle einen schnaq, wo Fragen gesammelt werde können. Du erhältst einen Zugangscode, QR-Code und einen Link, mit dem du alle Teilnehmer:innen einladen kannst."
    :startpage.feature-box.discussion/title "Binde den Kurs ein"
    :startpage.feature-box.discussion/body "Mit Smartphones, Tablets und Laptops können deine Zuhörer:innen dem schnaq beitreten und ihre Fragen stellen. Automatisch werden ihnen passende Fragen mit Antworten gezeigt, die inhaltlich ähnlich sind."
-   :startpage.feature-box.learnings/title "Nachhaltigkeit"
+   :startpage.feature-box.learnings/title "Teile die Antworten"
    :startpage.feature-box.learnings/body "Beantwortete Fragen stehen deinem Kurs sofort zur Verfügung und können jederzeit eingesehen werden. Im Nachgang kannst du jederzeit noch Inhalte ergänzen oder die selbe Fragenbasis wieder im nächsten Kurs verwenden."
 
    :startpage.early-adopter/title "Neugierig geworden?"

@@ -71,6 +71,4 @@
 
 (goog-define example-share-hash "6586e787-8704-4b4b-9221-5821d15626b5")
 (goog-define example-api-url "https://api.staging.schnaq.com")
-(goog-define example-statement-1 17592186049502)
-(goog-define example-statement-2 17592186049504)
-(goog-define example-statement-3 17592186049506)
+(goog-define example-statement 17592186049502)
