@@ -103,7 +103,7 @@
    :how-to/back-to-start "Back to schnaq"
 
    ;; Startpage
-   :startpage/heading "Create order"
+   :startpage/heading "Collecting questions made simple"
    :startpage/subheading "Create order in the interaction with your course participants"
    :startpage/hook "Simply collect questions and provide answers in your hybrid courses - for more clarity and sustainable exchange"
    :startpage.social-proof/numbers [:span "schnaq helped lead over " [:b marketing-num-schnaqs]

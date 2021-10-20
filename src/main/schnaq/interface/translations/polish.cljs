@@ -102,7 +102,7 @@
    :how-to/back-to-start "Powrót do schnaq"
 
    ;; Startpage
-   :startpage/heading "Utwórz zamówienie"
+   :startpage/heading "Ułatwione zbieranie pytań"
    :startpage/subheading "Stwórz porządek w interakcji z uczestnikami Twojego kursu"
    :startpage/hook "Po prostu zbieraj pytania i udzielaj odpowiedzi w swoich kursach hybrydowych - dla większej przejrzystości i zrównoważonej wymiany"
    :startpage.social-proof/numbers [:span "schnaq pomógł poprowadzić ponad " [:b marketing-num-schnaqs]

@@ -103,7 +103,7 @@
    :how-to/back-to-start "Zurück zu schnaq"
 
    ;; Startpage
-   :startpage/heading "Schafft Ordnung"
+   :startpage/heading "Fragen sammeln leicht gemacht"
    :startpage/subheading "Schaffe Ordnung in der Interaktion mit deinen Kursteilnehmer:innen"
    :startpage/hook "Sammle einfach Fragen und liefere Antworten in deinen hybriden Kursen – für mehr Übersicht und nachhaltigen Austausch."
    :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
