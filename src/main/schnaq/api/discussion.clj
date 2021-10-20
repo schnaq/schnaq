@@ -89,8 +89,9 @@
         author-id (user-db/user-id display-name user-identity)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (valid-statements-with-votes
-            {:conclusion (first (-> [(db/fast-pull statement-id patterns/statement)]
+            {:conclusion (first (-> [(db/fast-pull statement-id patterns/statement-with-answers)]
                                     processors/with-sub-discussion-info
+                                    processors/with-answered?-info
                                     (processors/with-new-post-info share-hash user-identity)
                                     toolbelt/pull-key-up))
              :premises (-> (discussion-db/children-for-statement statement-id)

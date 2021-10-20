@@ -9,7 +9,7 @@
 (defn- what-is-schnaq
   "Box describing what schnaq does and why"
   []
-  [:div.my-5
+  [:div.my-5.py-5
    [rows/row-builder-text-right-mobile-above
     [examples/display-example-statements]
     [rows/build-text-box :startpage.information.know-how]]])
