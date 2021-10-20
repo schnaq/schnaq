@@ -51,7 +51,8 @@
 
            :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
                       :main-opts ["-m" "antq.core"
-                                  "--exclude=com.datomic/datomic-pro"]}
+                                  "--exclude=com.datomic/datomic-pro"
+                                  "--exclude=clj-kondo/tools"]}
 
            :clj-kondo
            {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
@@ -60,13 +61,13 @@
 
            :lint.unused-vars
            {:extra-deps {clj-kondo/tools {:git/url "https://github.com/clj-kondo/clj-kondo"
-                                          :sha "67b9d106bd4344f32e4de30c4beba56ebbcea30f"
+                                          :sha "b3c950e18a63b05918512569cf0cb281f91540ab"
                                           :deps/root "analysis"}}
             :main-opts ["-m" "clj-kondo.tools.unused-vars"]}
 
            :lint.missing-docstrings
            {:extra-deps {clj-kondo/tools {:git/url "https://github.com/clj-kondo/clj-kondo"
-                                          :sha "67b9d106bd4344f32e4de30c4beba56ebbcea30f"
+                                          :sha "b3c950e18a63b05918512569cf0cb281f91540ab"
                                           :deps/root "analysis"}}
             :main-opts ["-m" "clj-kondo.tools.missing-docstrings"]}
 
