@@ -3,6 +3,7 @@
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]))
 
 (defn- header-screenshot
@@ -10,7 +11,8 @@
   []
   [:section.above-the-fold-screenshot
    [:img.taskbar-background.mb-2 {:src (img-path :how-to/taskbar)}]
-   [:img.img-fluid {:src (img-path :startpage.example/discussion)}]])
+   [motion/zoom-image {:class "img-fluid"
+                       :src (img-path :startpage.screenshots/qanda)}]])
 
 (defn- start-schnaq-button
   "Tell user to create a schnaq now."
