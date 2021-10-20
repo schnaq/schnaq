@@ -119,13 +119,13 @@
     [:span.sr-only "Next"]]])
 
 (defn- company-logo [logo company-name]
-  [:div.d-flex.flex-row
-   [:img.testimonial-logo.card-img-top.p-4
+  [:article
+   [:img.testimonial-logo.p-4.w-100
     {:src (img-path logo)
      :alt (gstring/format "A company logo of %s" (labels company-name))}]])
 
 (defn- testimonial-companies []
-  [:div.d-flex.flex-row.mb-5
+  [:div.d-flex.flex-wrap.mb-5
    [company-logo :logos/doctronic :testimonials.doctronic/company]
    [company-logo :logos/franky :testimonials.franky/company]
    [company-logo :logos/metro :testimonials.metro/company]
