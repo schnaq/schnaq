@@ -112,6 +112,7 @@
   (log/info (gstring/format "Build Hash: %s" config/build-hash))
   (log/info (gstring/format "API: %s" shared-config/api-url))
   (log/info (gstring/format "Environment: %s" shared-config/environment))
+  (log/info (gstring/format "Example Data: %s from %s, statements [%d, %d, %d]" config/example-share-hash config/example-api-url config/example-statement-1 config/example-statement-2 config/example-statement-3))
   (log/info (gstring/format "[Keycloak] Realm: %s, Client: %s" config/keycloak-realm config/keycloak-client)))
 
 (defn init

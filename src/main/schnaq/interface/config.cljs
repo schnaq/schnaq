@@ -63,24 +63,14 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; Example schnaqs
+;; Example schnaqs and statements
+;;
+;; These samples default to the staging environment so that it works on staging
+;; and on production. Change these symbols to your dev environment accordingly.
+;; Replaced by the CI when building the application for production.
 
-(def example-share-hash
-  (if shared-config/production?
-    "b91e73b8-d800-4827-8d1b-c11a92840bd0"
-    "103f2147-d4dd-491b-8fd0-64aefd950413"))
-
-(def example-statement-1
-  (if shared-config/production?
-    17592186058260
-    17592186048171))
-
-(def example-statement-2
-  (if shared-config/production?
-    17592186058271
-    17592186048169))
-
-(def example-statement-3
-  (if shared-config/production?
-    17592186058241
-    17592186048173))
+(goog-define example-share-hash "103f2147-d4dd-491b-8fd0-64aefd950413")
+(goog-define example-api-url "https://api.staging.schnaq.com")
+(goog-define example-statement-1 17592186048171)
+(goog-define example-statement-2 17592186048169)
+(goog-define example-statement-3 17592186048173)
