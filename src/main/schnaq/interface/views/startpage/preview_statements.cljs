@@ -19,8 +19,7 @@
 (rf/reg-sub
   :example-statement/by-id
   (fn [db [_ id]]
-    (when (get-in db [:current-route :path-params :share-hash])
-      (get-in db [:preview-statements id]))))
+    (get-in db [:preview-statements id])))
 
 (rf/reg-sub
   :example-statement/static-image-fallback?
