@@ -106,11 +106,13 @@
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
   [statement]
-  (let [history-length (count @(rf/subscribe [:discussion-history]))
+  (let [current-route @(rf/subscribe [:navigation/current-route])
+        history-length (count @(rf/subscribe [:discussion-history]))
         statement-labels (set (:statement/labels statement))
         label ":check"
         checked? (statement-labels label)]
-    (when (= 1 history-length)                              ;; history-length == 1 => a reply to a question
+    (when (and (= 1 history-length)
+               (not= :routes/startpage current-route))                        ;; history-length == 1 => a reply to a question
       [:section.w-100
        [:button.btn.btn-sm.btn-link.text-dark.pr-0
         {:on-click #(if checked?

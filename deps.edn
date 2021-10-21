@@ -72,7 +72,8 @@
             :main-opts ["-m" "clj-kondo.tools.missing-docstrings"]}
 
            :frontend
-           {:main-opts ["-m" "shadow.cljs.devtools.cli"
+           {:extra-deps {binaryage/devtools {:mvn/version "1.0.4"}}
+            :main-opts ["-m" "shadow.cljs.devtools.cli"
                         "watch" ":app"]}
 
            :uberjar
