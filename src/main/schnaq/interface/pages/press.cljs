@@ -1,5 +1,6 @@
 (ns schnaq.interface.pages.press
   (:require [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
@@ -24,14 +25,14 @@
     [card :press-kit.materials/product :press-kit/product "https://s3.disqtec.com/schnaq-presskit/screenshots-schnaq.zip"]]])
 
 (defn- not-to-do-list []
-  (let [fa-icon [:span.fa-li.text-danger [:i.fas.fa-times-circle]]]
+  (let [circle-icon [icon :times-circle "text-danger mt-3" {:listItem true}]]
     [:<>
      [:h5.pt-4 (labels :press-kit.not-to-do/heading)]
-     [:ul.fa-ul.press-dont-list
-      [:li fa-icon (labels :press-kit.not-to-do/bullet-1)]
-      [:li fa-icon (labels :press-kit.not-to-do/bullet-2)]
-      [:li fa-icon (labels :press-kit.not-to-do/bullet-3)]
-      [:li fa-icon (labels :press-kit.not-to-do/bullet-4)]]]))
+     [:ul.fa-ul
+      [:li circle-icon (labels :press-kit.not-to-do/bullet-1)]
+      [:li circle-icon (labels :press-kit.not-to-do/bullet-2)]
+      [:li circle-icon (labels :press-kit.not-to-do/bullet-3)]
+      [:li circle-icon (labels :press-kit.not-to-do/bullet-4)]]]))
 
 (defn- more-information []
   [:<>

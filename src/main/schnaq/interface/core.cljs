@@ -19,6 +19,7 @@
             [schnaq.interface.components.navbar]
             [schnaq.interface.components.schnaq]
             [schnaq.interface.components.videos]
+            [schnaq.interface.components.wavy]
             [schnaq.interface.config :as config]
             [schnaq.interface.events]
             [schnaq.interface.integrations.wetog.events]
@@ -111,6 +112,7 @@
   (log/info (gstring/format "Build Hash: %s" config/build-hash))
   (log/info (gstring/format "API: %s" shared-config/api-url))
   (log/info (gstring/format "Environment: %s" shared-config/environment))
+  (log/info (gstring/format "Example Data: %s from %s, statements [%d]" config/example-share-hash config/example-api-url config/example-statement))
   (log/info (gstring/format "[Keycloak] Realm: %s, Client: %s" config/keycloak-realm config/keycloak-client)))
 
 (defn init

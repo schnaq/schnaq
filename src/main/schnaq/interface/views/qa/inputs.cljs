@@ -12,6 +12,7 @@
   "Input where users can enter their questions for Q&A."
   []
   (let [input-id "qanda-input"
+        current-route @(rf/subscribe [:navigation/current-route-name])
         submit-fn (fn [e] (jq/prevent-default e)
                     (rf/dispatch [:discussion.add.statement/starting
                                   (oget e [:currentTarget :elements])])
@@ -24,7 +25,7 @@
       [:div.form-group.w-100.mb-0
        [:textarea.form-control.discussion-text-input-area.m-1
         {:name "statement-text" :wrap "soft" :rows 1 :id input-id
-         :auto-complete "off" :autoFocus true
+         :auto-complete "off" :autoFocus (= :routes.schnaq/qanda current-route)
          :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
          :required true :data-dynamic-height true
          :placeholder (labels :qanda/add-question)
@@ -46,6 +47,14 @@
         [:h3 (labels :qanda.state/read-only-warning)]
         [text-input-for-qanda])]]))
 
+(defn question-field-and-search-results
+  "Combine input form and results list for uniform representation in ask-view
+  and in other usages, e.g. the startpage."
+  []
+  [:<>
+   [ask-question]
+   [search/results-list]])
+
 (defn qanda-content []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
     [pages/with-qanda-view-header
@@ -53,8 +62,7 @@
       :page/classes "base-wrapper layered-wave-background h-100 d-flex flex-column"}
      [:<>
       [:div.container.p-0.px-md-5
-       [ask-question]
-       [search/results-list]]
+       [question-field-and-search-results]]
       [:div.wave-bottom-dark-blue.d-flex.align-self-end.mt-auto]]]))
 
 (defn qanda-view

@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.startpage.testimonials
   (:require [goog.string :as gstring]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.wavy :as wavy]
             [schnaq.interface.translations :refer [labels]]))
 
 (defn- testimonial-card
@@ -118,13 +119,13 @@
     [:span.sr-only "Next"]]])
 
 (defn- company-logo [logo company-name]
-  [:div.d-flex.flex-row
-   [:img.testimonial-logo.card-img-top.p-4
+  [:article
+   [:img.testimonial-logo.p-4.w-100
     {:src (img-path logo)
      :alt (gstring/format "A company logo of %s" (labels company-name))}]])
 
 (defn- testimonial-companies []
-  [:div.d-flex.flex-row.mb-5
+  [:div.d-flex.flex-wrap.mb-5
    [company-logo :logos/doctronic :testimonials.doctronic/company]
    [company-logo :logos/franky :testimonials.franky/company]
    [company-logo :logos/metro :testimonials.metro/company]
@@ -137,11 +138,10 @@
   "Show all testimonials."
   []
   [:section.pb-5.pt-3
-   [:div.wave-bottom-white]
-   [:div.bg-white
+   [wavy/top-and-bottom
+    :white
     [:div.container
      [:h3.h1.pb-4.text-purple
       (labels :testimonials/heading)]
      [testimonial-companies]
-     [testimonial-carousel]]]
-   [:div.wave-bottom-white-inverted]])
+     [testimonial-carousel]]]])

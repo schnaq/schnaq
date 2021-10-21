@@ -2,6 +2,7 @@
   (:require [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.components.wavy :as wavy]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.core :as startpage]))
@@ -62,9 +63,9 @@
        [:h3.h1.text-purple.mb-3 "So easy, selbst der eine Rentner #1 Fan schafft das!"]
        [:p "Jeder aus deiner Community schafft es schnaq zu nutzen. Garantiert! Kommen mal Fragen auf? Kontaktiere den Support jederzeit."]]]]
     [:section.overflow-hidden.py-3.my-5
-     [:div.wave-bottom-white]
-     [:div.bg-white
-      [:div.container-lg.text-center.early-adopter-schnaqqifant-wrapper
+     [wavy/top-and-bottom
+      :white
+      [:div.container-lg.text-center
        [:section.container.text-center
         (let [img-classes "rounded-circle social-proof-img-lg mr-5 mt-3"]
           [:div.mx-auto {:style {:max-width "900px"}}
@@ -102,8 +103,7 @@
         [:p.small.text-muted "\"Ich hätte nicht gedacht, dass so viele Leute jeden Tag über meinen Podcast reden. Jetzt bekomme ich es auch mal mit.\" – Johann 'Quikz' Mollman"]
         [:a.btn.btn-lg.btn-secondary.mt-4
          {:href "https://schnaq.outgrow.us/creator"}
-         "Umfrage starten"]]]]
-     [:div.wave-bottom-white-inverted]]
+         "Umfrage starten"]]]]]
     [:section.container.pt-3
      [startpage/supporters]]]])
 

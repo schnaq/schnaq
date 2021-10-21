@@ -103,48 +103,38 @@
    :how-to/back-to-start "Zurück zu schnaq"
 
    ;; Startpage
-   :startpage/heading "Das Elefantenhirn für dein Unternehmen"
-   :startpage/subheading "Wissen nachhaltig sammeln und sicher managen."
+   :startpage/heading "Fragen sammeln leicht gemacht"
+   :startpage/subheading "Schaffe Ordnung in der Interaktion mit deinen Kursteilnehmer:innen"
+   :startpage/hook "Sammle einfach Fragen und liefere Antworten in deinen hybriden Kursen – für mehr Übersicht und nachhaltigen Austausch."
    :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
                                     " Diskussionen und Q&As geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
+   :schnaq.startpage.cta/button "Kostenfrei schnaqqen"
 
    :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
    :startpage.features/more-information "Mehr Informationen"
 
-   :startpage.information.know-how/title "Wissenstransfer ohne Aufwand"
-   :startpage.information.know-how/body "Schnaq's Diskussionen und Q&A Funktionen helfen deinem Unternehmen, Kurs und Schulung blitzschnell Wissen auszutauschen. Nur wo Wissen fließt, kann Großartiges entstehen."
+   :startpage.information.know-how/title "Fragen sammeln leicht gemacht"
+   :startpage.information.know-how/body "Schnaq's Q&A Funktionen und strukturierte Diskussionen helfen deinem Kurs, Workshop oder Schulung blitzschnell Wissen auszutauschen und nachhaltig aufzubereiten. Nur wo Wissen fließt, kann Großartiges entstehen."
 
-   :startpage.information.positioning/title "Verstehe was diskutiert wird"
-   :startpage.information.positioning/body "Mit der automatisch generierten Mindmap und den K.I. Analysen, wird jede Diskussion übersichtlich und einfach zu verstehen."
+   :startpage.information.positioning/title "Verstehe was gefragt wird"
+   :startpage.information.positioning/body "Erkenne auf einen Blick die Probleme deines Kurses. Mit der automatisch generierten Mindmap und den K.I. Analysen, wird jede Fragerunde übersichtlich und einfach zu verstehen aufbereitet."
 
    :startpage.information.anywhere/title "Nutze schnaq überall zu jeder Zeit"
    :startpage.information.anywhere/body "Schnaq läuft als Web-App auf allen gängigen Betriebssystemen, Browsern und Geräten. Egal ob Smartphone, Tablet oder Computer."
 
-   :startpage.information.meetings/title "Nicht alles muss ein Meeting sein"
-   :startpage.information.meetings/body "Vergiss Meetings und Kaffeeküchentreffen nur um Fragen zu stellen. Mit intelligenten Q&A kannst du auch ohne Meetings und sogar online up-to-date bleiben!"
+   :startpage.information.meetings/title "Hybrides Fragenstellen"
+   :startpage.information.meetings/body "Erreiche durch schnaq auch die Menschen, die nicht vor Ort sein können. Alle können eingebunden und die Fragen anonym gestellt werden. Mit intelligentem Q&A kannst du sogar online up-to-date bleiben!"
 
-   :startpage.feature-box.know-how/title "Know-how sichern"
-   :startpage.feature-box.know-how/body
-   "Digitalisierung und Mobile Office haben die Art, wie wir kommunizieren, verändert.
-    Doch auch in modernen Prozessen bleibt die Herausforderung, Wissen im Unternehmen zu bündeln.
-    Wir bieten dir mit unserem Produkt die Lösung, zeitgemäß zu kommunizieren und dabei das Know-how aller Experten zusammen zu bringen."
-   :startpage.feature-box.discussion/title "Diskussionen demokratisieren"
-   :startpage.feature-box.discussion/body
-   "Wer viel redet, muss nicht Recht haben.
-    Umgekehrt sind die größten Genies auf ihrem Gebiet manchmal eher introvertiert und reden ungern vor anderen Menschen.
-    Mit schnaq räumen wir mit diesem Missstand auf.
-    Expert:innen können ihr Know-how einbringen und in konstruktive Diskussionen einsteigen – auch ohne viele Worte."
-   :startpage.feature-box.learnings/title "Learnings nutzen"
-   :startpage.feature-box.learnings/body
-   "Moderne Prozesse haben einen Haken: die Dokumentation.
-    Oft werden die Learnings generiert, landen dann aber bestenfalls in Protokollen, die archiviert, aber nie wieder geöffnet werden.
-    Schnaq schafft ein lebendiges Wissensmanagement, das einlädt, in Learnings zu stöbern und neue Wege zu gehen."
-   :startpage.feature-box/explore-schnaq "Entdecke schnaq"
+   :startpage.feature-box/heading "Wie funktioniert schnaq?"
+   :startpage.feature-box.know-how/title "Bereite dich vor"
+   :startpage.feature-box.know-how/body "Erstelle einen schnaq, wo Fragen gesammelt werde können. Du erhältst einen Zugangscode, QR-Code und einen Link, mit dem du alle Teilnehmer:innen einladen kannst."
+   :startpage.feature-box.discussion/title "Binde den Kurs ein"
+   :startpage.feature-box.discussion/body "Mit Smartphones, Tablets und Laptops können deine Zuhörer:innen dem schnaq beitreten und ihre Fragen stellen. Automatisch werden ihnen passende Fragen mit Antworten gezeigt, die inhaltlich ähnlich sind."
+   :startpage.feature-box.learnings/title "Teile die Antworten"
+   :startpage.feature-box.learnings/body "Beantwortete Fragen stehen deinem Kurs sofort zur Verfügung und können jederzeit eingesehen werden. Im Nachgang kannst du jederzeit noch Inhalte ergänzen oder die selbe Fragenbasis wieder im nächsten Kurs verwenden."
 
    :startpage.early-adopter/title "Neugierig geworden?"
    :startpage.early-adopter/body "Sei einer der ersten die schnaq Hubs nutzen"
-   :startpage.early-adopter/or "oder"
-   :startpage.early-adopter/test "Teste neue Features"
 
    :startpage.newsletter/heading "Gehöre zu den Ersten, die von neuen Funktionen profitieren!"
    :startpage.newsletter/button "Exklusive Informationen anfordern!"
@@ -158,6 +148,7 @@
    :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, findest du in unserer"
 
    :startpage.faq/title "Häufig gestellte Fragen"
+   :startpage.faq/subtitle "(so könnte dein Kurs aussehen)"
    :startpage.faq.data/question "Was passiert mit meinen Daten?"
    :startpage.faq.data/answer-1 "Um einen möglichst sicheren Datenschutz zu gewährleisten, speichern
         wir alle Daten nur auf deutschen Servern. Wir haben alle Details einzeln und verständlich in unserer"
@@ -915,8 +906,6 @@
    :pricing/headline "Abonnements"
    :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht:"
    :pricing.newsletter/name "schnaq Newsletter."
-
-   :schnaq.startpage.cta/button "Mit Kolleg:innen schnaqqen"
 
    ;; Tooltips
    :tooltip/history-statement "Zurück zum Beitrag von"

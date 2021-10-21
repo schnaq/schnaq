@@ -3,6 +3,7 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.time :as util-time]
@@ -31,7 +32,7 @@
              [:td (:feedback/contact-name feedback)
               (when-not (string/blank? (:feedback/contact-mail feedback))
                 [:a {:href (gstring/format "mailto:%s" (:feedback/contact-mail feedback))}
-                 [:i.far.fa-envelope.pl-1]])]
+                 [icon :envelope "pl-1"]])]
              [:td (util-time/format-distance (:feedback/created-at feedback) locale)]
              [:td (:feedback/description feedback)]
              [:td.image
