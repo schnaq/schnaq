@@ -43,7 +43,7 @@
              "my.datomic.com" {:url "https://my.datomic.com/repo"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.902"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.937"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
                   :jvm-opts ["-Dghostwheel.enabled=true"]
@@ -72,7 +72,8 @@
             :main-opts ["-m" "clj-kondo.tools.missing-docstrings"]}
 
            :frontend
-           {:main-opts ["-m" "shadow.cljs.devtools.cli"
+           {:extra-deps {binaryage/devtools {:mvn/version "1.0.4"}}
+            :main-opts ["-m" "shadow.cljs.devtools.cli"
                         "watch" ":app"]}
 
            :uberjar
