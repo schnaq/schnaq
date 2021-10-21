@@ -238,9 +238,10 @@
   [:div.d-flex.align-items-center
    [um/user-handling-menu "btn-link text-dark"]])
 
-(defn- collapsable-nav-bar [brand-content background-class & nav-key-items]
+(defn- collapsable-nav-bar [brand-content navbar-bg-class li-bg-class & nav-key-items]
   (let [collapse-content-id "navbarSupportedContent"]
     [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
+     {:class navbar-bg-class}
      [:navbar-brand.p-0 {:href "#"} brand-content]
      [:button.navbar-toggler.ml-2
       {:type "button" :data-toggle "collapse"
@@ -248,17 +249,18 @@
        :aria-controls collapse-content-id :aria-expanded "false" :aria-label "Toggle navigation"}
       [:span.navbar-toggler-icon]]
      [:div.collapse.navbar-collapse {:id collapse-content-id}
-      [:ul.navbar-nav.rounded-1.ml-auto.d-flex.align-items-center.px-2
-       {:class background-class}
-       [:li.nav-item.ml-auto.d-lg-none [user-button]]
+      [:ul.navbar-nav.rounded-1.ml-auto.d-flex.px-2
+       {:class li-bg-class}
+       [:li.nav-item.d-lg-none [user-button]]
        (for [[nav-item key] nav-key-items]
-         [:li.nav-item.ml-auto.m-lg-0.pl-2 {:key (str "nav-item-" key)} nav-item])
+         [:li.nav-item.pl-2 {:key (str "nav-item-" key)} nav-item])
        [:li.nav-item.d-none.d-lg-block [user-button]]]]]))
 
 (defn header []
   [collapsable-nav-bar
    [title-and-infos]
-   "navbar-bg-white-sm-transparent"
+   "navbar-bg-transparent-sm-white "
+   "bg-white"
    [[progress-bar-hide-lg] "Progress-Bar"]
    [[share-modal] "Share-Modal"]
    [[navbar-download] "Navbar-Download"]
@@ -269,6 +271,7 @@
 (defn header-for-qanda-view []
   [collapsable-nav-bar
    [navbar-qanda-title]
+   "bg-transparent"
    "bg-transparent"
    [[language-toggle] "Language-Toggle"]
    [[statement-counter] "Statement-Counter"]])

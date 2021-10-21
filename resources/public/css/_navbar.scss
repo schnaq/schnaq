@@ -65,10 +65,10 @@ $height-of-components: 4.25rem;
   height: $height-of-components;
 }
 
-.navbar-bg-white-sm-transparent {
-  background: $white;
-  @include media-breakpoint-down(md) {
-    background: transparent;
+.navbar-bg-transparent-sm-white {
+  background: transparent;
+  @include media-breakpoint-down(sm) {
+    background: $white;
   }
 }
 
