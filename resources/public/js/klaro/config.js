@@ -220,12 +220,6 @@ var klaroConfig = {
       description: 'Für den Betrieb notwendige Einstellungen, wenn man sich bspw. einen Benutzer:innenaccount erstellt.',
       purposes: ['essential'],
       required: true,
-    },
-    {
-      name: 'facebook-pixel',
-      title: 'Facebook Pixel',
-      description: 'Cookie von Facebook, verwendet für zielgruppenorientierte Werbung und Anzeigenmessungen.',
-      purposes: ['analytics'],
-    },
+    }
   ],
 };
