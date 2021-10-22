@@ -64,6 +64,7 @@
     g.src = u + 'matomo.js';
     s.parentNode.insertBefore(g, s);
   })();
+
 </script>
 <noscript><p><img alt="" src="//analytics.schnaq.com/matomo.php?idsite=2&amp;rec=1" style="border:0;"/></p></noscript>
 
@@ -77,38 +78,6 @@
   s.parentNode.insertBefore(g, s);
 </script>
 <!-- End Matomo Tag Manager -->
-
-<!-- Facebook Pixel Code -->
-<script data-name="facebook-pixel" data-type="text/javascript" type="text/plain">
-  !function (f, b, e, v, n, t, s) {
-    if (f.fbq) return;
-    n = f.fbq = function () {
-      n.callMethod ?
-        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-    };
-    if (!f._fbq) f._fbq = n;
-    n.push = n;
-    n.loaded = !0;
-    n.version = '2.0';
-    n.queue = [];
-    t = b.createElement(e);
-    t.async = !0;
-    t.src = v;
-    s = b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t, s)
-  }(window, document, 'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '601900294299309');
-  fbq('track', 'PageView');
-  if (window.location.href.endsWith("danke")){
-    fbq('track', 'Lead');
-  }
-</script>
-<noscript>
-  <img height="1" src="https://www.facebook.com/tr?id=463419234718543&ev=PageView&noscript=1"
-       style="display:none" width="1"/>
-</noscript>
-<!-- End Facebook Pixel Code -->
 
 <script defer src="/js/klaro/config.js"></script>
 <script defer src="/node_modules/klaro/dist/klaro-no-css.js"></script>

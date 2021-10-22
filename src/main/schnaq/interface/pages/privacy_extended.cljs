@@ -32,12 +32,6 @@
 (defn- matomo []
   [privacy-entry :privacy.extended.matomo [privacy/open-privacy-settings]])
 
-(defn- facebook-pixel []
-  [privacy-entry :privacy.extended.facebook-pixel [privacy/open-privacy-settings]])
-
-(defn- facebook-pixel-addition []
-  [privacy-entry :privacy.extended.facebook-pixel-addition])
-
 (defn- rights-of-the-affected []
   [privacy-entry :privacy.extended.rights-of-the-affected])
 
@@ -64,8 +58,6 @@
     [cookies]
     [personal-data]
     [matomo]
-    [facebook-pixel]
-    [facebook-pixel-addition]
     [rights-of-the-affected]
     [right-to-complain]
     [hosting]]])
