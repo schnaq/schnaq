@@ -24,8 +24,7 @@
 (defn- copy-link-form
   "A form that displays the link the user can copy. Form is read-only."
   [create-link-fn id-extra]
-  (let [display-content (create-link-fn (-> @(rf/subscribe [:navigation/current-route])
-                                            :path-params :share-hash))
+  (let [display-content (create-link-fn @(rf/subscribe [:schnaq/share-hash]))
         meeting-link-id (str "meeting-link" id-extra)]
     [:div.pb-4
      [tooltip/text

@@ -92,10 +92,11 @@
      [:span (logic/get-down-votes statement votes)]]))
 
 (defn- statement-information-row [statement]
-  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [:div.d-flex.flex-wrap.align-items-center
      [:a.badge.mr-3
-      {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
+      {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
+                                                           :statement-id (:db/id statement)})}
       [:button.btn.btn-sm.btn-dark
        [icon :plus "text-white m-auto" {:size "xs"}]]
       [:span.ml-2.text-dark (labels :statement/reply)]]
@@ -112,7 +113,7 @@
         label ":check"
         checked? (statement-labels label)]
     (when (and (= 1 history-length)
-               (not= :routes/startpage current-route))                        ;; history-length == 1 => a reply to a question
+               (not= :routes/startpage current-route))      ;; history-length == 1 => a reply to a question
       [:section.w-100
        [:button.btn.btn-sm.btn-link.text-dark.pr-0
         {:on-click #(if checked?
@@ -166,7 +167,7 @@
 (defn reduced-answer
   "A reduced statement-card focusing on the statement."
   [statement]
-  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
         statement-labels (set (:statement/labels statement))]
     [:article.statement-card.my-1
      [:div.d-flex.flex-row
@@ -179,7 +180,8 @@
         [md/as-markdown (:statement/content statement)]]
        [:div.d-flex.flex-wrap.align-items-center
         [:a.mr-3
-         {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
+         {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
+                                                              :statement-id (:db/id statement)})}
          [:small.text-muted (labels :statement/reply)]]
         [up-down-vote statement]]
        (when (seq statement-labels)
