@@ -17,7 +17,7 @@
     {:fx [(when share-hash
             [:localstorage/assoc
              [:schnaqs/visited
-              (remove nil? (conj (:schnaqs/visited local-storage) share-hash))]])
+              (set (remove nil? (conj (:schnaqs/visited local-storage) share-hash)))]])
           [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-sub

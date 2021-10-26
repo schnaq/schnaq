@@ -44,7 +44,7 @@
     <orderEntry type="library" name="Deps: metosin/muuntaja:0.6.8" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-common:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.module/jackson-module-jaxb-annotations:2.10.4" level="project" />
-    <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.0.937" level="project" />
+    <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.60.945" level="project" />
     <orderEntry type="library" name="Deps: edn-query-language/eql:0.0.9" level="project" />
     <orderEntry type="library" name="Deps: io.undertow/undertow-core:2.2.4.Final" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.js/js:21.1.0" level="project" />
