@@ -167,7 +167,7 @@
   "Badges that display additional discussion info."
   [statement]
   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
-        path-parameters (:path-params @(rf/subscribe [:navigation/current-route]))
+        share-hash @(rf/subscribe [:schnaq/share-hash])
         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
         old-statement-num (get old-statements-nums-map (:db/id statement) 0)
         statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
@@ -176,7 +176,8 @@
                       (user/statement-author statement))]
     [:div.d-flex.flex-row.align-items-center
      [:a.badge.badge-pill.badge-transparent.badge-clickable.mr-2
-      {:href (rfe/href :routes.schnaq.select/statement (assoc path-parameters :statement-id (:db/id statement)))
+      {:href (rfe/href :routes.schnaq.select/statement {:share-hash share-hash
+                                                        :statement-id (:db/id statement)})
        :role :button}
       (if new?
         [icon :comments "m-auto secondary-color"]
