@@ -42,7 +42,7 @@
   []
   (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:div.mx-3
-     [:div.mx-md-5.px-md-5.py-md-3
+     [:div.mx-md-5.px-md-5.py-3
       (if read-only?
         [:h3 (labels :qanda.state/read-only-warning)]
         [text-input-for-qanda])]]))

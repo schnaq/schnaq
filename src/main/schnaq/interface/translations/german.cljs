@@ -291,6 +291,7 @@
    :discussion.navbar/views "Ansichten"
    :discussion.state/read-only-label "schreibgeschützt"
    :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
+   :discussion.navbar/settings "Einstellungen"
 
    ;; schnaq progress bar related stuff
    :discussion.progress/days-left "Noch %s Tage"

@@ -18,11 +18,14 @@ $height-of-components: 4.25rem;
 }
 
 .schnaq-navbar {
-  @extend .panel-white;
   @extend .schnaq-navbar-skeleton;
   background: vars.$white;
   overflow: visible;
   padding: 0;
+
+  @include media-breakpoint-down(sm) {
+    border-radius: 0;
+  }
 }
 
 .schnaq-navbar-dynamic-padding {

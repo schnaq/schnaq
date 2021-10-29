@@ -290,6 +290,7 @@
    :discussion.navbar/views "widok"
    :discussion.state/read-only-label "tylko do odczytu"
    :discussion.state/read-only-warning "Ta dyskusja jest tylko do odczytu, możesz tu tylko czytać, ale nie pisać."
+   :discussion.navbar/settings "Ustawienia"
 
    ;; schnaq progress bar related stuff
    :discussion.progress/days-left "Pozostało %s dni"
