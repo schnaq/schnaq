@@ -1,5 +1,4 @@
-{:paths ["src/main" "src/test" "extra-configs"]
- ;; Do not delete extra-configs as log configuration is not correctly read without it
+{:paths ["src/main" "src/test" "resources"]
  :deps {binaryage/devtools {:mvn/version "1.0.4"}
         binaryage/oops {:mvn/version "0.7.1"}
         buddy/buddy {:mvn/version "2.0.0"}
