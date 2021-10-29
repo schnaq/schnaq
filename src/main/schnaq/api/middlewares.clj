@@ -1,7 +1,9 @@
 (ns schnaq.api.middlewares
-  (:require [ring.util.http-response :refer [forbidden not-found]]
+  (:require [reitit.ring.middleware.exception :as exception]
+            [ring.util.http-response :refer [forbidden not-found]]
             [schnaq.api.toolbelt :as at]
-            [schnaq.validator :as validator]))
+            [schnaq.validator :as validator]
+            [taoensso.timbre :as log]))
 
 (defn- extract-parameter-from-request
   "Look up parameter in request and return its value."
@@ -54,3 +56,38 @@
                      :csrf/missing-header
                      "You are trying to access the route without the proper headers: \"x-schnaq-csrf\"")))
       (handler request))))
+
+
+;; -----------------------------------------------------------------------------
+;; Error handling
+
+;; type hierarchy
+(derive ::error ::exception)
+(derive ::failure ::exception)
+(derive ::horror ::exception)
+
+(defn- error-handler-with-stacktrace-printing
+  "Response to be returned to the client."
+  [message exception request]
+  {:status 500
+   :body {:message message
+          :data (ex-data exception)
+          :uri (:uri request)}})
+
+(def exception-printing-middleware
+  "Ring middleware to print stacktrace to stdout and return a valid response to
+  the client."
+  (exception/create-exception-middleware
+    (merge
+      exception/default-handlers
+      {;; ex-data with :type ::error
+       ::error (partial error-handler-with-stacktrace-printing "error")
+       ;; ex-data with ::exception or ::failure
+       ::exception (partial error-handler-with-stacktrace-printing "exception")
+       ;; override the default handler
+       ::exception/default (partial error-handler-with-stacktrace-printing "default")
+       ;; print stack-traces for all exceptions
+       ::exception/wrap (fn [handler e request]
+                          (log/error "ERROR" (pr-str (:uri request)))
+                          (.printStackTrace e)
+                          (handler e request))})))
