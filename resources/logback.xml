@@ -9,7 +9,5 @@
         <appender-ref ref="STDOUT"/>
     </root>
     <logger name="Keycloak.*" level="WARN"/>
-    <!--    <logger name="datomic.peer" level="WARN"/>-->
-    <!--    <logger name="datomic.process-monitor" level="WARN"/>-->
     <logger name="schnaq.*" level="INFO"/>
 </configuration>
