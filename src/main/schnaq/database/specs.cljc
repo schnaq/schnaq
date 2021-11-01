@@ -91,7 +91,7 @@
   (s/coll-of #{:discussion.state/open :discussion.state/closed
                :discussion.state/private :discussion.state/deleted
                :discussion.state/public :discussion.state/read-only
-               :discussion.state/disable-pro-con}
+               :discussion.state/disable-pro-con :discussion.state.qa/mark-as-moderators-only}
              :distinct true))
 (s/def :discussion/mode #{:discussion.mode/discussion :discussion.mode/qanda})
 (s/def :discussion/starting-statements (s/coll-of ::statement))
