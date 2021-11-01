@@ -302,13 +302,16 @@
        (labels :schnaq.admin.configurations.disable-pro-con/label)]]
      [:span (labels :schnaq.admin.configurations.disable-pro-con/explanation)]]))
 
-(defn- only-moderators-mark-setting []                      ;; todo only show when beta user
+(defn- only-moderators-mark-setting []
   (let [mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        checked (if mods-mark-only? "checked" "")]
+        checked (if mods-mark-only? "checked" "")
+        beta-tester? @(rf/subscribe [:user/beta-tester?])]
     [:div.text-left
+     {:class (if beta-tester? "" "text-muted")}
      [:div.mb-2
       [:input.big-checkbox
        {:type :checkbox
+        :disabled (not beta-tester?)
         :id :only-moderators-mark-checkbox
         :checked checked
         :on-change
@@ -358,7 +361,7 @@
 (rf/reg-event-fx
   :schnaq.admin.qa/mods-mark-only!
   (fn [{:keys [db]} [_ mods-mark-only?]]
-    {:fx [(http/xhrio-request db :put "/discussion/manage/mods-mark-only" ;; todo
+    {:fx [(http/xhrio-request db :put "/discussion/manage/mods-mark-only"
                               [:schnaq.admin.qa/mods-mark-only-success mods-mark-only?]
                               {:mods-mark-only? mods-mark-only?
                                :share-hash (get-in db [:schnaq :selected :discussion/share-hash])
@@ -385,7 +388,14 @@
    [:div.row
     [:div.col-12.pb-3 [enable-discussion-read-only]]
     [:div.col-12.pb-3 [disable-pro-con]]
-    [:div.col-12.pb-3 [only-moderators-mark-setting]]]])
+    (if @(rf/subscribe [:user/beta-tester?])
+      [:div.col-12.pb-3 [only-moderators-mark-setting]]
+      [:div.col-12.pb-3
+       [:hr]
+       [:p.h4 [icon :lock] " "
+        "Only beta-users are allowed to change this setting. Request access at hello@schnaq.com."] ;;todo
+       [:div.border.border-danger.p-1
+        [only-moderators-mark-setting]]])]])
 
 (defn- invite-participants-tabs
   "Share link and invite via mail in a tabbed view."
