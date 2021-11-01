@@ -319,9 +319,8 @@
           (js-wrap/prevent-default e)
           (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
       [:label.form-check-label.display-6.pl-1 {:for :only-moderators-mark-checkbox}
-       "Only Moderators mark answers"]]                     ;; todo labels
-     [:span "When checked, only moderators are allowed to mark an answer as the correct one.
-     Otherwise, everybody is able to do this."]]))
+       (labels :schnaq.admin.configurations.mods-mark-only/label)]]
+     [:span (labels :schnaq.admin.configurations.mods-mark-only/explanation)]]))
 
 (rf/reg-sub
   :schnaq.selected/pro-con?
@@ -392,11 +391,10 @@
       [:div.col-12.pb-3 [only-moderators-mark-setting]]
       [:div.col-12.pb-3
        [:hr]
-       [:p.h4 [icon :lock] " "
-        "Only beta-users are allowed to change this setting. Request access at hello@schnaq.com."] ;;todo
+       [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
        [:div.border.border-danger.p-1
         [only-moderators-mark-setting]]])]])
-;; todo actually check setting when using the labels
+
 (defn- invite-participants-tabs
   "Share link and invite via mail in a tabbed view."
   []
