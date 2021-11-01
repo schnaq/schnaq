@@ -304,16 +304,14 @@
 
 (defn- only-moderators-mark-setting []
   (let [mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        checked (if mods-mark-only? "checked" "")
         beta-tester? @(rf/subscribe [:user/beta-tester?])]
-    [:div.text-left
-     {:class (if beta-tester? "" "text-muted")}
+    [:div.text-left {:class (when-not beta-tester? "text-muted")}
      [:div.mb-2
       [:input.big-checkbox
        {:type :checkbox
         :disabled (not beta-tester?)
         :id :only-moderators-mark-checkbox
-        :checked checked
+        :checked mods-mark-only?
         :on-change
         (fn [e]
           (js-wrap/prevent-default e)
