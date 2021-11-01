@@ -76,7 +76,7 @@
       :alt "graph icon"}]
     [:p.small.m-0.text-nowrap (labels label)]]])
 
-(defn- graph-button
+(defn graph-button
   "Rounded square button to navigate to the graph view"
   []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
@@ -84,7 +84,7 @@
      :graph.button/text :icon-graph-dark
      (reitfe/href :routes/graph-view {:share-hash share-hash})]))
 
-(defn- summary-button
+(defn summary-button
   "Button to navigate to the summary view."
   []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
@@ -143,7 +143,7 @@
         days-left (jsw/number-trunc (/ (max 0 (- distance elapsed-ms)) 86400000))]
     [elapsed-percent days-left]))
 
-(defn- schnaq-progress-bar
+(defn schnaq-progress-bar
   "A progress bar indicating how far along a schnaq is."
   []
   (let [{:discussion/keys [end-time created-at]} @(rf/subscribe [:schnaq/selected])
@@ -207,8 +207,8 @@
         [:schnaq.qa.new-question/pulse?]
         [:schnaq.qa.new-question/pulse false]
         (:white colors)
-        (:secondary colors)
-        ]
+        (:secondary colors)]
+
        [:div.ml-2 number-of-questions]]
       {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])}]]))
 
