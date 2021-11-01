@@ -8,7 +8,6 @@
             [reitit.middleware :as middleware]
             [reitit.ring :as ring]
             [reitit.ring.coercion :as coercion]
-            [reitit.ring.middleware.exception :as exception]
             [reitit.ring.middleware.multipart :as multipart]
             [reitit.ring.middleware.muuntaja :as muuntaja]
             [reitit.ring.middleware.parameters :as parameters]
@@ -126,8 +125,8 @@
             :middleware [swagger/swagger-feature
                          parameters/parameters-middleware   ;; query-params & form-params
                          muuntaja/format-middleware
-                         exception/exception-middleware     ;; exception handling
-                         coercion/coerce-response-middleware ;; coercing response bodys
+                         middlewares/exception-printing-middleware
+                         coercion/coerce-response-middleware ;; coercing response bodies
                          coercion/coerce-request-middleware ;; coercing request parameters
                          multipart/multipart-middleware
                          auth-middlewares/replace-bearer-with-token
