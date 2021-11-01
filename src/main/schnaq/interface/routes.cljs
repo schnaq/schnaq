@@ -75,8 +75,7 @@
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)
-     :controllers [{:identity #(random-uuid)
-                    :start #(rf/dispatch [:load-example-statements])}]}]
+     :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
    ["alphazulu"
     {:name :routes/alphazulu
      :view az/view}]
@@ -186,7 +185,8 @@
                      :start (fn [{:keys [path]}]
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
                               (rf/dispatch [:schnaq/add-visited! (:share-hash path)])
-                              (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))}]}
+                              (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
+                     :stop #(rf/dispatch [:filters/clear])}]}
      [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []

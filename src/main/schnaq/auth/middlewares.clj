@@ -20,7 +20,6 @@
   (string? (some config/app-codes
                  #{(get-in request [:parameters :body :app-code])})))
 
-
 ;; -----------------------------------------------------------------------------
 
 (defn authenticated?-middleware

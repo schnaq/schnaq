@@ -50,13 +50,14 @@
 (>defn update-groups
   "Updates the user groups to be equal to the new input."
   [keycloak-id groups]
-  [:user.registered/keycloak-id :user.registered/groups :ret :user.registered/groups]
-  (let [empty-groups [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered/groups]
-        add-new-groups (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/groups %)
-                             groups)]
-    (transact [empty-groups])
-    (transact add-new-groups)
-    groups))
+  [:user.registered/keycloak-id (? :user.registered/groups) :ret (? :user.registered/groups)]
+  (when groups
+    (let [empty-groups [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered/groups]
+          add-new-groups (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/groups %)
+                               groups)]
+      (transact [empty-groups])
+      (transact add-new-groups)
+      groups)))
 
 (defn update-visited-schnaqs
   "Updates the user's visited schnaqs by adding the new ones. Input is a user-id and a collection of valid ids."

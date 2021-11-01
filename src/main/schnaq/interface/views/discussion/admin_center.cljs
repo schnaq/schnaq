@@ -24,8 +24,7 @@
 (defn- copy-link-form
   "A form that displays the link the user can copy. Form is read-only."
   [create-link-fn id-extra]
-  (let [display-content (create-link-fn (-> @(rf/subscribe [:navigation/current-route])
-                                            :path-params :share-hash))
+  (let [display-content (create-link-fn @(rf/subscribe [:schnaq/share-hash]))
         meeting-link-id (str "meeting-link" id-extra)]
     [:div.pb-4
      [tooltip/text
@@ -303,6 +302,24 @@
        (labels :schnaq.admin.configurations.disable-pro-con/label)]]
      [:span (labels :schnaq.admin.configurations.disable-pro-con/explanation)]]))
 
+(defn- only-moderators-mark-setting []
+  (let [mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
+        beta-tester? @(rf/subscribe [:user/beta-tester?])]
+    [:div.text-left {:class (when-not beta-tester? "text-muted")}
+     [:div.mb-2
+      [:input.big-checkbox
+       {:type :checkbox
+        :disabled (not beta-tester?)
+        :id :only-moderators-mark-checkbox
+        :checked mods-mark-only?
+        :on-change
+        (fn [e]
+          (js-wrap/prevent-default e)
+          (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
+      [:label.form-check-label.display-6.pl-1 {:for :only-moderators-mark-checkbox}
+       (labels :schnaq.admin.configurations.mods-mark-only/label)]]
+     [:span (labels :schnaq.admin.configurations.mods-mark-only/explanation)]]))
+
 (rf/reg-sub
   :schnaq.selected/pro-con?
   (fn [_ _]
@@ -331,6 +348,32 @@
       (update-in db [:schnaq :selected :discussion/states]
                  #(-> % set (disj :discussion.state/disable-pro-con) vec)))))
 
+(rf/reg-sub
+  :schnaq.selected.qa/mods-mark-only?
+  (fn [_ _]
+    (rf/subscribe [:schnaq/selected]))
+  (fn [selected-schnaq _ _]
+    (not (nil? (some #{:discussion.state.qa/mark-as-moderators-only} (:discussion/states selected-schnaq))))))
+
+(rf/reg-event-fx
+  :schnaq.admin.qa/mods-mark-only!
+  (fn [{:keys [db]} [_ mods-mark-only?]]
+    {:fx [(http/xhrio-request db :put "/discussion/manage/mods-mark-only"
+                              [:schnaq.admin.qa/mods-mark-only-success mods-mark-only?]
+                              {:mods-mark-only? mods-mark-only?
+                               :share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+                               :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])}
+                              [:ajax.error/as-notification])]}))
+
+(rf/reg-event-db
+  :schnaq.admin.qa/mods-mark-only-success
+  (fn [db [_ mods-mark-only?]]
+    (if mods-mark-only?
+      (update-in db [:schnaq :selected :discussion/states]
+                 #(distinct (conj % :discussion.state.qa/mark-as-moderators-only)))
+      (update-in db [:schnaq :selected :discussion/states]
+                 #(-> % set (disj :discussion.state.qa/mark-as-moderators-only) vec)))))
+
 (>defn- administrate-discussion
   "A form which allows removing single statements from the discussion."
   []
@@ -340,8 +383,15 @@
    [:div.text-left.my-5
     [:h4.mt-4 (labels :schnaq.admin.configurations/heading)]]
    [:div.row
-    [:div.col [enable-discussion-read-only]]
-    [:div.col [disable-pro-con]]]])
+    [:div.col-12.pb-3 [enable-discussion-read-only]]
+    [:div.col-12.pb-3 [disable-pro-con]]
+    (if @(rf/subscribe [:user/beta-tester?])
+      [:div.col-12.pb-3 [only-moderators-mark-setting]]
+      [:div.col-12.pb-3
+       [:hr]
+       [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
+       [:div.border.border-danger.p-1
+        [only-moderators-mark-setting]]])]])
 
 (defn- invite-participants-tabs
   "Share link and invite via mail in a tabbed view."

@@ -1,5 +1,4 @@
-{:paths ["src/main" "src/test" "extra-configs"]
- ;; Do not delete extra-configs as log configutation is not correctly read without it
+{:paths ["src/main" "src/test" "resources"]
  :deps {binaryage/devtools {:mvn/version "1.0.4"}
         binaryage/oops {:mvn/version "0.7.1"}
         buddy/buddy {:mvn/version "2.0.0"}
@@ -7,7 +6,7 @@
         clj-http/clj-http {:mvn/version "3.12.3"}
         clj-fuzzy/clj-fuzzy {:mvn/version "0.4.1"}
         com.cognitect.aws/api {:mvn/version "0.8.524"}
-        com.cognitect.aws/endpoints {:mvn/version "1.1.12.88"}
+        com.cognitect.aws/endpoints {:mvn/version "1.1.12.93"}
         com.cognitect.aws/s3 {:mvn/version "814.2.991.0"}
         com.datomic/datomic-pro {:mvn/version "1.0.6316"}
         com.draines/postal {:mvn/version "2.0.4"}
@@ -30,7 +29,7 @@
         org.clojure/core.async {:mvn/version "1.3.622"}
         org.clojure/data.json {:mvn/version "2.4.0"}
         org.clojure/test.check {:mvn/version "1.1.0"}
-        org.postgresql/postgresql {:mvn/version "42.3.0"}   ;; needed for prod transactor
+        org.postgresql/postgresql {:mvn/version "42.3.1"}   ;; needed for prod transactor
         re-frame/re-frame {:mvn/version "1.2.0"}
         reagent/reagent {:mvn/version "1.1.0"}
         ring-cors/ring-cors {:mvn/version "0.1.13"}
@@ -43,7 +42,7 @@
              "my.datomic.com" {:url "https://my.datomic.com/repo"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.937"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.60.945"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
                   :jvm-opts ["-Dghostwheel.enabled=true"]

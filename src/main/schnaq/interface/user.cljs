@@ -46,7 +46,7 @@
     (let [{:user.registered/keys [display-name first-name last-name email profile-picture visited-schnaqs]}
           registered-user
           current-route (get-in db [:current-route :data :name])
-          share-hash (get-in db [:current-route :path-params :share-hash])
+          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
           visited-hashes (map :discussion/share-hash visited-schnaqs)]
       {:db (-> db
                (assoc-in [:user :names :display] display-name)

@@ -238,6 +238,9 @@
    :schnaq.admin.configurations.read-only/explanation "Aktywuj, aby nie zezwalać na nowe posty. Istniejące posty są nadal widoczne i mogą być nadal analizowane. Opcja ta może być zmieniona w dowolnym momencie."
    :schnaq.admin.configurations.disable-pro-con/label "Za / przeciw Przycisk ukrycia"
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktywuj, aby przycisk \"za/ przeciw\" nie był już wyświetlany. Nowe wkłady są traktowane jako zgoda. Opcja ta może być zmieniona w dowolnym momencie."
+   :schnaq.admin.configurations.mods-mark-only/label "Tylko moderatorzy zaznaczają odpowiedzi"
+   :schnaq.admin.configurations.mods-mark-only/explanation "Gdy zaznaczone, tylko moderatorzy mogą zaznaczyć odpowiedź jako poprawną. W przeciwnym razie każdy jest w stanie to zrobić."
+   :schnaq.admin.configurations.mods-mark-only/beta "Tylko beta-użytkownicy mogą zmieniać to ustawienie. Poproś o dostęp na hello@schnaq.com."
 
    :schnaq.access-code.clipboard/header "Skopiowany kod dostępu"
    :schnaq.access-code.clipboard/body "Kod dostępu został skopiowany do schowka."
@@ -481,20 +484,6 @@
     [:p "Przetwarzanie zanonimizowanych danych użytkowników umożliwia nam analizę korzystania z naszej strony internetowej. Poprzez analizę uzyskanych danych jesteśmy w stanie opracować informacje na temat korzystania z poszczególnych elementów naszej strony internetowej. Pomaga nam to w ciągłym ulepszaniu naszych usług i ich przyjazności dla użytkownika. Dzięki anonimizacji adresu IP interes użytkownika w zakresie ochrony jego danych osobowych zostaje odpowiednio uwzględniony."]
     [:p "Nie są tworzone żadne profile, które dawałyby nam głębszy wgląd w zachowania użytkowników. Ocena jest wyłącznie anonimowa i zagregowana, tak aby nie można było wyciągać żadnych wniosków na temat poszczególnych osób."]
     [:p "Korzystanie z Matomo na naszej stronie internetowej opiera się na podstawie prawnej Art. 6 ust. 1 lit. f GDPR."]]
-   :privacy.extended.facebook-pixel/title "Facebook Pixel"
-   :privacy.extended.facebook-pixel/body
-   [:<>
-    [:p "Na naszej stronie internetowej używamy piksela Facebooka z Facebooka. Zaimplementowaliśmy kod na naszej stronie internetowej, aby to zrobić. Piksel Facebooka to wycinek kodu JavaScript, który ładuje zbiór funkcji umożliwiających Facebookowi śledzenie działań użytkownika, jeśli wszedł on na naszą stronę za pośrednictwem reklam Facebooka. Na przykład, gdy kupujesz produkt na naszej stronie internetowej, uruchamiany jest piksel Facebooka, który zapisuje Twoje działania na naszej stronie internetowej w jednym lub kilku plikach cookie. Te pliki cookie umożliwiają Facebookowi dopasowanie danych użytkownika (dane klienta, takie jak adres IP, identyfikator użytkownika) do danych konta na Facebooku. Następnie Facebook ponownie usuwa te dane. Zebrane dane są anonimowe i niewidoczne dla nas i mogą być wykorzystywane tylko w kontekście zamieszczania reklam. Jeśli jesteś użytkownikiem Facebooka i jesteś zalogowany, Twoja wizyta na naszej stronie jest automatycznie przypisywana do Twojego konta użytkownika na Facebooku."]
-    [:p "Chcemy pokazywać nasze usługi i produkty tylko tym osobom, które są nimi naprawdę zainteresowane. Za pomocą pikseli Facebooka nasze działania reklamowe mogą być lepiej dopasowane do Państwa życzeń i zainteresowań. W ten sposób użytkownicy Facebooka (o ile zezwolili na spersonalizowaną reklamę) widzą odpowiednie reklamy. Ponadto Facebook wykorzystuje zebrane dane do celów analitycznych i własnych reklam."]
-    [:p "O ile jesteś zalogowany na Facebooku, możesz samodzielnie zmienić swoje ustawienia dotyczące reklam pod adresem https://www.facebook.com/ads/preferences/?entry_product=ad_settings_screen."]
-    [:p "Pragniemy zwrócić uwagę, że zgodnie z opinią Europejskiego Trybunału Sprawiedliwości, nie istnieje obecnie odpowiedni poziom ochrony danych przekazywanych do USA. Przetwarzanie danych odbywa się zasadniczo przez Facebook Pixel. Może to spowodować, że dane nie będą przetwarzane i przechowywane w sposób anonimowy. Ponadto organy rządowe USA mogą mieć dostęp do indywidualnych danych. Może się również zdarzyć, że dane te zostaną powiązane z danymi z innych serwisów Facebooka, w których użytkownik posiada konto."]
-    [:p "Jeśli chcesz dowiedzieć się więcej o polityce prywatności Facebooka, zalecamy zapoznanie się z polityką prywatności firmy pod adresem https://www.facebook.com/policy.php."]
-    [:p [:small "Źródło: Stworzone za pomocą generatora prywatności z AdSimple"]]]
-   :privacy.extended.facebook-pixel-addition/title "Piksel Facebooka: Automatyczne, zaawansowane dopasowanie"
-   :privacy.extended.facebook-pixel-addition/body
-   [:<>
-    [:p "W ramach funkcji Piksela Facebooka włączyliśmy również automatyczne dopasowywanie zaawansowane. Ta funkcja piksela umożliwia nam wysyłanie do Facebooka haseł wiadomości e-mail, imienia i nazwiska, płci, miasta, stanu, kodu pocztowego i daty urodzenia lub numeru telefonu jako dodatkowych informacji, jeśli użytkownik udostępnił nam te dane. Dzięki tej aktywacji możemy jeszcze dokładniej dopasować kampanie reklamowe na Facebooku do osób, które są zainteresowane naszymi usługami lub produktami."]
-    [:small "Źródło: Stworzone za pomocą generatora prywatności z AdSimple"]]
    :privacy.extended.rights-of-the-affected/title "Prawa osób, których dane dotyczą"
    :privacy.extended.rights-of-the-affected/body
    [:<>

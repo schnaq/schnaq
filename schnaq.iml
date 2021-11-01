@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module cursive.leiningen.project.DepsProjectsManager.isLeinModule="true" cursive.leiningen.project.LeiningenProjectsManager.displayName="schnaq" type="JAVA_MODULE" version="4">
+  <component name="BuildSystem">
+    <option name="buildSystemId" value="CLOJURE_DEPS" />
+    <option name="displayName" value="schnaq" />
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/extra-configs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/resources" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -32,7 +36,7 @@
     <orderEntry type="library" name="Deps: org.apache.commons/commons-compress:1.8" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-devel:1.9.4" level="project" />
     <orderEntry type="library" name="Deps: javax.validation/validation-api:2.0.1.Final" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.88" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.93" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.3.4" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.4" level="project" />
@@ -44,7 +48,7 @@
     <orderEntry type="library" name="Deps: metosin/muuntaja:0.6.8" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-common:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.module/jackson-module-jaxb-annotations:2.10.4" level="project" />
-    <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.0.937" level="project" />
+    <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.60.945" level="project" />
     <orderEntry type="library" name="Deps: edn-query-language/eql:0.0.9" level="project" />
     <orderEntry type="library" name="Deps: io.undertow/undertow-core:2.2.4.Final" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.js/js:21.1.0" level="project" />
@@ -126,7 +130,7 @@
     <orderEntry type="library" name="Deps: spec-coerce:1.0.0-alpha6" level="project" />
     <orderEntry type="library" name="Deps: commons-io:2.10.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
-    <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.3.0" level="project" />
+    <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.3.1" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.namespace:0.3.1" level="project" />
     <orderEntry type="library" name="Deps: superstructor/re-highlight:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/tempura:1.2.1" level="project" />

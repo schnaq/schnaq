@@ -15,7 +15,7 @@
   :hub.schnaqs/add
   (fn [{:keys [db]} [_ form]]
     (let [schnaq-input (oget form :schnaq-add-input :value)
-          share-hash (or (-> (routes/parse-route schnaq-input) :path-params :share-hash)
+          share-hash (or @(rf/subscribe [:schnaq/share-hash])
                          schnaq-input)
           keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
       {:fx [(http/xhrio-request db :post (gstring/format "/hub/%s/add" keycloak-name)
@@ -137,6 +137,13 @@
     (rf/subscribe [:schnaq/selected]))
   (fn [selected-schnaq _ _]
     (:discussion/share-hash selected-schnaq)))
+
+(rf/reg-sub
+  :schnaq/edit-hash
+  (fn [_ _]
+    (rf/subscribe [:schnaq/selected]))
+  (fn [selected-schnaq _ _]
+    (:discussion/edit-hash selected-schnaq)))
 
 (rf/reg-sub
   :schnaq.selected/statement-number
