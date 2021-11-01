@@ -109,11 +109,14 @@
   [statement]
   (let [current-route @(rf/subscribe [:navigation/current-route])
         history-length (count @(rf/subscribe [:discussion-history]))
+        mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
         statement-labels (set (:statement/labels statement))
         label ":check"
         checked? (statement-labels label)]
     (when (and (= 1 history-length)
-               (not= :routes/startpage current-route))      ;; history-length == 1 => a reply to a question
+               (not= :routes/startpage current-route)       ;; history-length == 1 => a reply to a question
+               (or (not mods-mark-only?)
+                   (and mods-mark-only? @(rf/subscribe [:schnaq/edit-hash]))))
       [:section.w-100
        [:button.btn.btn-sm.btn-link.text-dark.pr-0
         {:on-click #(if checked?

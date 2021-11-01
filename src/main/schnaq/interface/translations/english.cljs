@@ -240,6 +240,9 @@
    :schnaq.admin.configurations.read-only/explanation "When checked, users can no longer add new posts to the discussion. Existing posts are still readable and can be analysed. You can change this option anytime."
    :schnaq.admin.configurations.disable-pro-con/label "Disable agree/disagree button"
    :schnaq.admin.configurations.disable-pro-con/explanation "When checked, users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
+   :schnaq.admin.configurations.mods-mark-only/label "Only Moderators mark answers"
+   :schnaq.admin.configurations.mods-mark-only/explanation "When checked, only moderators are allowed to mark an answer as the correct one. Otherwise, everybody is able to do this."
+   :schnaq.admin.configurations.mods-mark-only/beta "Only beta-users are allowed to change this setting. Request access at hello@schnaq.com."
 
    :schnaq.access-code.clipboard/header "Access code copied"
    :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."

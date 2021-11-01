@@ -239,6 +239,9 @@
    :schnaq.admin.configurations.read-only/explanation "Aktivieren, um keine neuen Beiträge zu erlauben. Bestehende Beiträge sind weiterhin sichtbar und können weiterhin analysiert werden. Diese Option kann jederzeit geändert werden."
    :schnaq.admin.configurations.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktivieren, um den  Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
+   :schnaq.admin.configurations.mods-mark-only/label "Nur Moderatoren markieren lassen"
+   :schnaq.admin.configurations.mods-mark-only/explanation "Wenn aktiviert, haben nur Moderatoren die Möglichkeit Antworten als korrekt zu markieren."
+   :schnaq.admin.configurations.mods-mark-only/beta "Nur Beta-Nutzer:innen können diese Einstellung verändern. Frage nach Zugang unter hello@schnaq.com."
 
    :schnaq.access-code.clipboard/header "Zugangscode kopiert"
    :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."
