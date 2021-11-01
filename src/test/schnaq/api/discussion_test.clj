@@ -19,6 +19,5 @@
                      (toolbelt/mock-authorization-header %))]
     (testing "Only request with valid role shall be accepted."
       @(discussion-db/mods-mark-only! share-hash true)
-      (println (slurp (-> "beta-tester" request api/app :body)))
       (is (= 200 (-> toolbelt/token-schnaqqifant-user request api/app :status)))
       (is (= 403 (-> toolbelt/token-wegi-no-beta-user request api/app :status))))))
