@@ -241,6 +241,13 @@
     (discussion-db/set-disable-pro-con share-hash disable-pro-con?)
     (ok {:share-hash share-hash})))
 
+(defn- mods-mark-only!
+  "Only allow moderators to mark correct answers."
+  [{:keys [parameters]}]
+  (let [{:keys [mods-mark-only? share-hash]} (:body parameters)]
+    (log/info "Setting \"mods-mark-only option\" to" mods-mark-only? "for schnaq:" share-hash)
+    (discussion-db/mods-mark-only! share-hash mods-mark-only?)
+    (ok {:share-hash share-hash})))
 
 ;; -----------------------------------------------------------------------------
 ;; Votes
@@ -334,6 +341,11 @@
                           :description (at/get-doc #'disable-pro-con!)
                           :name :api.discussion.manage/disable-pro-con
                           :parameters {:body {:disable-pro-con? boolean?}}}]
+     ["/mods-mark-only" {:put mods-mark-only!
+                         :description (at/get-doc #'mods-mark-only!)
+                         :name :api.discussion.manage/mods-mark-only
+                         :middleware [:user/beta-tester?]
+                         :parameters {:body {:mods-mark-only? boolean?}}}]
      ["/make-read-only" {:put make-discussion-read-only!
                          :description (at/get-doc #'make-discussion-read-only!)
                          :name :api.discussion.manage/make-read-only}]
