@@ -139,6 +139,13 @@
     (:discussion/share-hash selected-schnaq)))
 
 (rf/reg-sub
+  :schnaq/edit-hash
+  (fn [_ _]
+    (rf/subscribe [:schnaq/selected]))
+  (fn [selected-schnaq _ _]
+    (:discussion/edit-hash selected-schnaq)))
+
+(rf/reg-sub
   :schnaq.selected/statement-number
   (fn [_ _]
     (rf/subscribe [:schnaq/selected]))

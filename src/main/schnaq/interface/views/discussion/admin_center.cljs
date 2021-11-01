@@ -396,7 +396,7 @@
         "Only beta-users are allowed to change this setting. Request access at hello@schnaq.com."] ;;todo
        [:div.border.border-danger.p-1
         [only-moderators-mark-setting]]])]])
-
+;; todo actually check setting when using the labels
 (defn- invite-participants-tabs
   "Share link and invite via mail in a tabbed view."
   []
