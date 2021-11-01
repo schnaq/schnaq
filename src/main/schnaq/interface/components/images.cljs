@@ -27,6 +27,7 @@
      :icon-posts "https://s3.disqtec.com/schnaq-common/icons/dashboard/posts.svg"
      :icon-search "https://s3.disqtec.com/schnaq-common/icons/dashboard/search.svg"
      :icon-views-dark "https://s3.disqtec.com/schnaq-common/icons/views_dark.svg"
+     :icon-views-light "https://s3.disqtec.com/schnaq-common/icons/views_light.svg"
      :logo "https://s3.disqtec.com/schnaq-common/logos/schnaq.svg"
      :logo-white "https://s3.disqtec.com/schnaq-common/logos/schnaq_white.png"
      :logo.square.schnaqqi/blue "https://s3.disqtec.com/schnaq-common/logos/schnaqqi-qr.png"

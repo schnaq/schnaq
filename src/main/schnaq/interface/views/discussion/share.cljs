@@ -80,14 +80,14 @@
         "100px"
         (labels :sharing.modal/schnaqqi-help)]]]]))
 
-(defn- open-share-qanda
+(defn open-share-qanda
   "Open the share-schnaq dialog."
   []
   (rf/dispatch [:modal {:show? true
                         :large? true
                         :child [share-qanda-modal]}]))
 
-(defn- open-share-discussion
+(defn open-share-discussion
   "Open the share-schnaq dialog."
   []
   (rf/dispatch [:modal {:show? true

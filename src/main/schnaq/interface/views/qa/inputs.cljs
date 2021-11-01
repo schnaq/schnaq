@@ -42,7 +42,7 @@
   []
   (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:div.mx-3
-     [:div.mx-md-5.px-md-5.py-md-3
+     [:div.mx-md-5.px-md-5.py-3
       (if read-only?
         [:h3 (labels :qanda.state/read-only-warning)]
         [text-input-for-qanda])]]))
@@ -55,9 +55,9 @@
    [ask-question]
    [search/results-list]])
 
-(defn qanda-content []
+(defn- qanda-content []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
-    [pages/with-qanda-view-header
+    [pages/with-qanda-header
      {:page/heading (:discussion/title current-discussion)
       :page/classes "base-wrapper layered-wave-background h-100 d-flex flex-column"}
      [:<>

@@ -78,11 +78,11 @@
   Pulses once if the pulse-sub subscription returns true.
   Then dispatches the pulse-stop-event. Optional pulse color can be given."
   ([component pulse-sub pulse-stop-event]
-   [pulse-once component pulse-sub pulse-stop-event #"000"])
-  ([component pulse-sub pulse-stop-event pulse-color]
+   [pulse-once component pulse-sub pulse-stop-event #"000" #"000"])
+  ([component pulse-sub pulse-stop-event base-color pulse-color]
    [:> (.-div motion)
     {:variants {:pulse {:scale [1 2.5 1 1]
-                        :color ["#000" pulse-color "#000"]
+                        :color [base-color pulse-color base-color]
                         :transition {:delay 0.1
                                      :duration 2}}}
      :animate (if @(rf/subscribe pulse-sub) :pulse :nothing)

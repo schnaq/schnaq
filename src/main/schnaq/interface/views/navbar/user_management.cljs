@@ -90,7 +90,7 @@
         icon-size 32]
     [:<>
      [:div.row.m-0
-      [:div.mx-auto
+      [:div.mx-auto.rounded-2.overflow-hidden
        (if authenticated? [common/avatar icon-size] [common/identicon username icon-size])]]
      [:p.small.text-nowrap.dropdown-toggle
       [role-indicator]

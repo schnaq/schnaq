@@ -18,16 +18,29 @@ $height-of-components: 4.25rem;
 }
 
 .schnaq-navbar {
-  @extend .panel-white;
   @extend .schnaq-navbar-skeleton;
   background: vars.$white;
   overflow: visible;
   padding: 0;
+
+  @include media-breakpoint-down(sm) {
+    border-radius: 0;
+  }
+}
+
+.schnaq-navbar-dynamic-padding {
+  background: transparent;
+  overflow: visible;
+
+  @include media-breakpoint-down(sm) {
+    padding: 0;
+  }
 }
 
 .schnaq-logo-container {
   @include rounded.rounded-1;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/wave_background.svg');
+  background-position: right;
   background-repeat: no-repeat;
   background-size: cover;
   border-bottom-right-radius: 0;
@@ -38,10 +51,27 @@ $height-of-components: 4.25rem;
 
   @include media-breakpoint-down(sm) {
     border-radius: 0;
+    padding: 1rem 1rem 1rem 0.5rem;
   }
+}
+
+.schnaq-brand-logo {
+  min-width: 4rem;
+}
+
+.schnaq-navbar-title {
+  @extend .schnaq-navbar-skeleton;
 }
 
 .discussion-navbar-button {
   @include rounded.rounded-1;
   height: $height-of-components;
 }
+
+.navbar-bg-transparent-sm-white {
+  background: transparent;
+  @include media-breakpoint-down(sm) {
+    background: $white;
+  }
+}
+
