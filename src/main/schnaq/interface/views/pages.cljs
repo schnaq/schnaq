@@ -155,8 +155,8 @@
   [::page-options (s/+ vector?) :ret vector?]
   [with-header options body [discussion-navbar/header]])
 
-(>defn with-qanda-view-header
+(>defn with-qanda-header
   "Page layout with discussion header."
   [options body]
   [::page-options (s/+ vector?) :ret vector?]
-  [with-header options body [discussion-navbar/header-for-qanda-view]])
+  [with-header options body [discussion-navbar/qanda-header]])

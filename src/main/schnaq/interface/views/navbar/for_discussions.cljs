@@ -50,7 +50,7 @@
    [nav-elements/dropdown-views :icon-views-light "text-white"]
    [nav-elements/user-button "btn-outline-light btn-transparent"]])
 
-(defn header-for-qanda-view
+(defn qanda-header
   "Header for schnaq Q&A View"
   []
   (let [navbar-content-id "Qanda-Content"]
