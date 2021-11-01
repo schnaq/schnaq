@@ -291,10 +291,10 @@
 (defn mods-mark-only!
   "Allow either mods or everybody to mark correct answers."
   [share-hash mods-only?]
-  (let [enable-transaction [[:db/retract [:discussion/share-hash share-hash]
-                             :discussion/states :discussion.state.qa/mark-as-moderators-only]]
-        disable-transaction [[:db/add [:discussion/share-hash share-hash]
+  (let [disable-transaction [[:db/retract [:discussion/share-hash share-hash]
                               :discussion/states :discussion.state.qa/mark-as-moderators-only]]
+        enable-transaction [[:db/add [:discussion/share-hash share-hash]
+                             :discussion/states :discussion.state.qa/mark-as-moderators-only]]
         db-transaction (if mods-only? enable-transaction
                                       disable-transaction)]
     (main-db/transact db-transaction)))
