@@ -41,7 +41,7 @@
     (let [visited-hashes (get-in db [:schnaqs :visited-hashes])]
       (when-not (empty? visited-hashes)
         {:fx [(http/xhrio-request
-                db :get "/schnaqs/by-hashes"
+                db :post "/schnaqs/by-hashes"
                 [:schnaqs.visited/store-from-backend]
                 {:share-hashes visited-hashes
                  :display-name (tools/current-display-name db)})]}))))
