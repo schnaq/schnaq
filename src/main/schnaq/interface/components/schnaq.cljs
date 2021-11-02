@@ -43,12 +43,15 @@
         [icon icon-key]
         [:div.small (labels label-key)]])]))
 
-(defn qr-code [link]
-  [:> QRCode {:value link
-              :fgColor (colors :positive/default)
-              :bgColor (colors :white)
-              :logoImage (img-path :logo.square.schnaqqi/blue)
-              :ecLevel "Q"
-              :size 300
-              :qrStyle "dots"
-              :eyeRadius 5}])
+(defn qr-code
+  ([link]
+   [qr-code link 300])
+  ([link size]
+   [:> QRCode {:value link
+               :fgColor (colors :positive/default)
+               :bgColor (colors :white)
+               :logoImage (img-path :logo.square.schnaqqi/blue)
+               :ecLevel "Q"
+               :size size
+               :qrStyle "dots"
+               :eyeRadius 5}]))
