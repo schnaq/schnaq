@@ -27,8 +27,9 @@
 (defn- schnaqs-by-hashes-request [share-hashes]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.schnaqs/by-hashes))
        :headers {"accept" "application/edn"}
-       :query-params {:share-hashes share-hashes
-                      :display-name "Anonymous"}}
+       :body-params {:share-hashes share-hashes
+                     :display-name "Anonymous"}}
+      toolbelt/add-csrf-header
       api/app))
 
 (deftest schnaqs-by-hashes-test
