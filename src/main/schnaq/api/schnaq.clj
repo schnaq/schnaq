@@ -42,17 +42,17 @@
                      (processors/with-aggregated-votes user-id))})))
 
 (defn- schnaqs-by-hashes
-  "Bulk loading of discussions. May be used when users asks for all the schnaqs
+  "Bulk loading of discussions. May be used when users ask for all the schnaqs
   they have access to. If only one schnaq shall be loaded, ring packs it
   into a single string:
   `{:parameters {:query {:share-hashes \"57ce1947-e57f-4395-903e-e2866d2f305c\"}}}`
 
   If multiple share-hashes are sent to the backend, reitit wraps them into a
   collection:
-  `{:parameters {:query {:share-hashes [\"57ce1947-e57f-4395-903e-e2866d2f305c\"
-                                        \"b2645217-6d7f-4d00-85c1-b8928fad43f7\"]}}}"
+  `{:parameters {:body {:share-hashes [\"57ce1947-e57f-4395-903e-e2866d2f305c\"
+                                       \"b2645217-6d7f-4d00-85c1-b8928fad43f7\"]}}}`"
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hashes display-name]} (:query parameters)
+  (let [{:keys [share-hashes display-name]} (:body parameters)
         share-hashes-list (if (string? share-hashes) [share-hashes] share-hashes)
         user-id (user-db/user-id display-name (:sub identity))]
     (if share-hashes
@@ -230,13 +230,13 @@
                               404 at/response-error-body}}]]]
 
     ["/schnaqs/by-hashes"
-     {:get schnaqs-by-hashes
+     {:post schnaqs-by-hashes
       :name :api.schnaqs/by-hashes
       :description (at/get-doc #'schnaqs-by-hashes)
-      :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
-                                                                       :swagger/collectionFormat "multi"})
-                                               :share-hash :discussion/share-hash)
-                           :display-name ::specs/non-blank-string}}
+      :parameters {:body {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
+                                                                      :swagger/collectionFormat "multi"})
+                                              :share-hash :discussion/share-hash)
+                          :display-name ::specs/non-blank-string}}
       :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
                   404 at/response-error-body}}]
     ["/admin" {:swagger {:tags ["admin"]}
