@@ -57,14 +57,15 @@
       [:div {:class (str "highlight-card-" attitude)}]
       [:div.w-100
        (when-not shared-config/embedded?
-         [:div.d-flex.flex-row.justify-content-end.pr-lg-2
-          ;; hide 'new post from you' text on mobile
-          [:small.d-none.d-md-block.text-muted.mr-2.my-auto (labels :discussion.add.statement/new)]
-          [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
-                                           :display-name (get-in user [:names :display])} 32]])
-       [:div.form-group
+         [:div.d-none.d-md-block
+          [:div.d-flex.justify-content-end.pr-lg-2
+           ;; hide 'new post from you' text on mobile
+           [:small.text-muted.mr-2.my-auto (labels :discussion.add.statement/new)]
+           [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
+                                            :display-name (get-in user [:names :display])} 32]]])
+       [:div.form-group.mb-0
         [:textarea.form-control.discussion-text-input-area
-         {:name textarea-name :wrap "soft" :rows 2
+         {:name textarea-name :wrap "soft" :rows 1
           :auto-complete "off"
           :autoFocus true
           :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
@@ -72,16 +73,15 @@
           :required true
           :data-dynamic-height true
           :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]]]]
-     [:div.d-flex.flex-row.flex-wrap.justify-content-between.mt-1.justify-content-md-end.mt-md-0.w-100
+     [:div.d-flex.flex-row.flex-wrap.justify-content-between.w-100
       (when-not (or starting-route? pro-con-disabled?)
         [:div.input-group-prepend.mt-1
          [statement-type-choose-button [:form/statement-type] [:form/statement-type!]]])
-      [:div.input-group-append
-       [:button.btn.btn-dark-highlight.shadow-sm.ml-2.mt-1.py-2
-        {:type "submit" :title (labels :discussion/create-argument-action)}
-        [:div.d-flex.flex-row
-         [:div.d-none.d-md-block.mr-1 (labels :statement.edit.button/submit)]
-         [icon :plane "m-auto"]]]]]]))
+      [:button.btn.btn-dark-highlight.shadow-sm.mt-1.py-2.ml-auto
+       {:type "submit" :title (labels :discussion/create-argument-action)}
+       [:div.d-flex.flex-row
+        [:div.d-none.d-lg-block.mr-1 (labels :statement.edit.button/submit)]
+        [icon :plane "m-auto"]]]]]))
 
 (defn input-form
   "Form to collect the user's statements."
@@ -95,7 +95,7 @@
                                     (logic/submit-new-premise (oget e [:currentTarget :elements])))
         event-to-send (if (= :routes.schnaq/start current-route-name)
                         when-starting when-deeper-in-discussion)]
-    [:form.my-2
+    [:form.my-md-2
      {:on-submit #(event-to-send %)
       :on-key-down #(when (jq/ctrl-press % 13)
                       (event-to-send %))}
