@@ -24,23 +24,25 @@
 (defn share-via-qr [link]
   [:<>
    [:hr.my-4]
-   [:div.d-flex.flex-row.my-3
+   [:div.d-flex.flex-row.flex-wrap.my-3
     [:p (labels :share-qr-code/via)]
     [:div.flex.flex-fill.text-center.pr-5
-     [sc/qr-code link]]]
-   ])
+     [:div.d-md-none
+      [sc/qr-code link 200]]
+     [:div.d-none.d-md-block
+      [sc/qr-code link]]]]])
 
 (defn- share-via-link [link]
   [:<>
    [:hr.my-4]
-   [:div.d-flex.flex-row.my-3.pb-3
+   [:div.d-flex.flex-row.flex-wrap.flex-md-nowrap.my-3.pb-3.my-1
     [:div.d-flex.mr-1.mr-lg-5.align-self-center (labels :share-link/via)]
-    [:div.d-flex.flex-row.flex-grow-1
+    [:div.d-flex.flex-row.flex-grow-1.flex-wrap.flex-md-nowrap
      ;[:div.input-group]
-     [:input.form-control.border-0.text-gray
+     [:input.form-control.border-0.text-gray.my-1
       {:value link
        :readOnly true}]
-     [:button.btn.btn-primary.w-50.ml-3
+     [:button.btn.btn-primary.text-nowrap.ml-md-3.my-1
       {:on-click (fn []
                    (clipboard/copy-to-clipboard! link)
                    (notify! (labels :schnaq/link-copied-heading)
