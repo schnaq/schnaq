@@ -32,7 +32,7 @@
 (defn- back-button []
   [tooltip/text
    (labels :history.all-schnaqs/tooltip)
-   [:a.button.btn.btn-dark-highlight.p-3
+   [:a.button.btn.btn-dark.p-3
     {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaqs/personal])}
     [:div.d-flex
      [icon :arrow-left "m-auto"]]]])

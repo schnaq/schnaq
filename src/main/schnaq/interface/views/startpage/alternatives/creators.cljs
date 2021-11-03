@@ -38,7 +38,7 @@
     [:section.container.my-5
      [rows/row-builder-text-left
       [:article.feature-text-box
-       [:h3.h1.text-purple.mb-3 "Minimaler Aufwand, maximale Aktivierung"]
+       [:h3.h1.text-typography.mb-3 "Minimaler Aufwand, maximale Aktivierung"]
        [:p "Gib deiner Community mit wenigen Klicks ihren eigenen Space zum Diskutieren, oder frage sie direkt zu Dingen, die dich interessieren."]]
       [motion/zoom-image {:src "https://s3.disqtec.com/schnaq-common/startpage/screenshots/podcast_discussion.png"
                           :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
@@ -46,13 +46,13 @@
      [rows/row-builder-text-right
       [:img {:src (img-path :startpage.alternatives.e-learning/student-smartphone)}]
       [:article.feature-text-box
-       [:h3.h1.text-purple.mb-3 "Nimm deine Community auch unterwegs mit!"]
+       [:h3.h1.text-typography.mb-3 "Nimm deine Community auch unterwegs mit!"]
        [:p "Um schnaq zu benutzen, braucht es nur Internet.
        Kompatibel mit allen Smartphones, Tablets und Computern."]]]]
     [:section.container.mb-5
      [rows/row-builder-text-left
       [:article.feature-text-box
-       [:h3.h1.text-purple.mb-3 "Was passiert in deiner Community?"]
+       [:h3.h1.text-typography.mb-3 "Was passiert in deiner Community?"]
        [:p "Verschaffe dir einen schnellen Überblick über das Diskutierte. Vollziehe einfach nach worüber deine Community redet. Oder schaue dir die verschiedenen K.I. Auswertungen der Diskussion an."]]
       [motion/zoom-image {:src (img-path :startpage.example/dashboard)
                           :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
@@ -60,7 +60,7 @@
      [rows/row-builder-text-right
       [:img {:src (img-path :startpage.alternatives.e-learning/oma)}]
       [:article.feature-text-box
-       [:h3.h1.text-purple.mb-3 "So easy, selbst der eine Rentner #1 Fan schafft das!"]
+       [:h3.h1.text-typography.mb-3 "So easy, selbst der eine Rentner #1 Fan schafft das!"]
        [:p "Jeder aus deiner Community schafft es schnaq zu nutzen. Garantiert! Kommen mal Fragen auf? Kontaktiere den Support jederzeit."]]]]
     [:section.overflow-hidden.py-3.my-5
      [wavy/top-and-bottom

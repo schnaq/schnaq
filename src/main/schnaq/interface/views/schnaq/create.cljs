@@ -81,7 +81,7 @@
     [add-schnaq-to-hub]]])
 
 (defn- create-schnaq-button []
-  [:button.btn.btn-dark-highlight.p-3.rounded-1.ml-auto
+  [:button.btn.btn-dark.p-3.rounded-1.ml-auto
    (labels :schnaq.create.button/save)
    [icon :arrow-right "ml-2"]])
 

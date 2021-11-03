@@ -21,46 +21,64 @@ $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 $black: #000 !default;
 
-$blue: #1292ee !default;
-$blue-selected: #0181dd !default;
-$blue-light: #4cacf4 !default;
-$blue-light-selected: #3b9be3 !default;
-$blue-dark: #052740 !default;
-$light-background: #eff6ff;
-$indigo: #3f50e6 !default;
-$purple: #242b83 !default;
-$purple-dark: #001452 !default;
-$pink: #e83e8c !default;
-$red: #fb2b6a !default;
-$orange: #ff9e0d !default;
-$orange-selected: #ffc369 !default;
-$orange-pale: #ffc09e !default;
-$yellow: #ffa217 !default;
-$green: #6aedac !default;
-$teal: #20c997 !default;
-$cyan: #17a2b8 !default;
+// Base Color Palette
 
-$positive: $blue !default;
+$white-very-light-pink: #efefef !default;
+$light-base: #fffdfd !default;
+$light-disable: #f9f9f9 !default;
+$light-hover: #eaeaea !default;
+$light-background: #f6f8ff !default;
+$gray-base: #919ca4 !default;
+$gray-disbale: #acb8c2 !default;
+$gray-hover: #727c83 !default;
+$dark-base: #343a40 !default;
+$dark-disable: #7a7e83 !default;
+$dark-hover: #23272b !default;
+$blue-base: #1292ee !default;
+$blue-selected: #117fce !default;
+$blue-disable: #6ba6e6 !default;
+$blue-light: #43a9ea !default;
+$blue-light-selected: #3b9be3 !default;
+$orange-base: #ff9901 !default;
+$orange-disable: #c97800 !default;
+$orange-selected: #ffb03b !default;
+$red: #dc3545 !default;
+$green: #6aedac !default;
+
+// Text Colors
+$typography: #001452 !default;
+$text-dark: $gray-700 !default;
+$text-light: $white !default;
+
+// Tag Colors
+$tag-blue: #65b0e7 !default;
+$tag-purple: #727ee7 !default;
+$tag-yellow: #f9b756 !default;
+$tag-green: #6aedac !default;
+$tag-red: #f66490 !default;
+$tag-teal: #20c997 !default;
+$tag-cyan: #17a2b8 !default;
+
+// Main Colors
+$positive: $blue-base !default;
 $positive-selected: $blue-selected !default;
-$negative: $orange !default;
+$negative: $orange-base !default;
 $negative-selected: $orange-selected !default;
-$neutral: $gray-300 !default;
-$primary: $blue !default;
+$neutral: $light-hover !default;
+$primary: $blue-base !default;
 $primary-selected: $blue-selected !default;
 $primary-light: $blue-light !default;
 $primary-light-selected: $blue-light-selected !default;
-$dark-highlight: $gray-800 !default;
-$secondary: $orange !default;
+$secondary: $orange-base !default;
 $secondary-selected: $orange-selected !default;
-$secondary-pale: $orange-pale !default;
-$success: $green !default;
-$info: $cyan !default;
-$warning: $yellow !default;
+$secondary-pale: $orange-disable !default;
+$success: $tag-green !default;
+$info: $tag-cyan !default;
+$warning: $tag-yellow !default;
 $danger: $red !default;
-$light: $gray-100 !default;
-$dark: $gray-800 !default;
-$text-dark: $gray-700 !default;
-$text-light: $white !default;
+$light: $light-base !default;
+$dark: $dark-base !default;
+$dark-highlight: $dark-hover !default;
 
 $input-background: $gray-200 !default;
 

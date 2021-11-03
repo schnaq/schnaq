@@ -18,7 +18,7 @@
         display-name (tools/truncate-to-n-chars (user-utils/display-name user) 15)]
     [:div.d-flex {:class additional-classes}
      [common/avatar user avatar-size]
-     [:div.mx-2 [:span.text-sm.text-purple-dark display-name]
+     [:div.mx-2 [:span.text-sm.text-typography display-name]
       (when created
         [:div.small.font-weight-light.text-muted
          [util-time/timestamp-with-tooltip created locale]])]]))
@@ -28,7 +28,7 @@
   [user avatar-size]
   (let [authenticated? (:user.registered/keycloak-id user)
         display-name (user-utils/display-name user)
-        name-class (if authenticated? "text-purple-dark" "text-muted")]
+        name-class (if authenticated? "text-typography" "text-muted")]
     [:div.d-flex.flex-row.text-muted
      [:div.d-md-none
       [common/avatar user (* avatar-size 0.75)]]

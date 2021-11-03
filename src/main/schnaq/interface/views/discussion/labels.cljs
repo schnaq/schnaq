@@ -13,14 +13,14 @@
   [label set? hover?]
   (let [[badge-color icon-name]
         (case label
-          ":comment" ["badge-primary" :comment]
-          ":arrow-right" ["badge-purple" :arrow-right]
-          ":calendar-alt" ["badge-info" :calendar-alt]
-          ":check" ["badge-success" :check/normal]
-          ":ghost" ["badge-dark" :ghost]
-          ":question" ["badge-warning text-white" :question]
-          ":times" ["badge-danger" :cross]
-          ":unchecked" ["badge-light" :check/normal])
+          ":comment" ["tag-blue" :comment]
+          ":arrow-right" ["tag-purple" :arrow-right]
+          ":calendar-alt" ["tag-yellow" :calendar-alt]
+          ":check" ["tag-green" :check/normal]
+          ":ghost" ["tag-dark" :ghost]
+          ":question" ["tag-cyan" :question]
+          ":times" ["tag-red" :cross]
+          ":unchecked" ["tag-teal" :check/normal])
         extra-class (if set? (str badge-color " label-set") badge-color)]
     [:span.badge.badge-pill.px-4
      {:class (if hover? (str extra-class " label") extra-class)}

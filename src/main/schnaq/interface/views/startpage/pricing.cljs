@@ -144,7 +144,7 @@
 (defn- newsletter
   "A box displaying the different subscription tiers we offer."
   []
-  [:p.text-dark-blue.display-6.text-center.pt-2
+  [:p.text-typography.display-6.text-center.pt-2
    (labels :pricing.newsletter/lead)
    [:a.btn.btn-lg.btn-link
     {:href "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
@@ -177,23 +177,23 @@
   [:div.py-5
    [:h2.text-center.display-5.pb-5 (labels :pricing.faq/heading)]
    [:section
-    [:h3.text-center.font-weight-bold.text-dark-blue
+    [:h3.text-center.font-weight-bold.text-typography
      (labels :pricing.faq.terminate/heading)]
     [:p.lead.text-center.pb-3 (labels :pricing.faq.terminate/body)]]
    [:section
-    [:h3.text-center.pt-3.font-weight-bold.text-dark-blue
+    [:h3.text-center.pt-3.font-weight-bold.text-typography
      (labels :pricing.faq.extra-price/heading)]
     [:p.lead.text-center.pb-3 (labels :pricing.faq.extra-price/body)]]
    [:section
-    [:h3.text-center.pt-3.font-weight-bold.text-dark-blue
+    [:h3.text-center.pt-3.font-weight-bold.text-typography
      (labels :pricing.faq.trial-time/heading)]
     [:p.lead.text-center.pb-3 (labels :pricing.faq.trial-time/body)]]
    [:section
-    [:h3.text-center.font-weight-bold.text-dark-blue
+    [:h3.text-center.font-weight-bold.text-typography
      (labels :pricing.faq.longer-trial/heading)]
     [:p.lead.text-center.pb-3 (labels :pricing.faq.longer-trial/body)]]
    [:section
-    [:h3.text-center.pt-3.font-weight-bold.text-dark-blue
+    [:h3.text-center.pt-3.font-weight-bold.text-typography
      (labels :pricing.faq.privacy/heading)]
     [:p.lead.text-center.pb-3
      (labels :pricing.faq.privacy/body-1)

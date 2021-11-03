@@ -88,7 +88,7 @@
   []
   [:section.pt-5
    [wavy/top-and-bottom
-    :dark-blue
+    :primary
     [:div.container
      [:span.text-white.text-center
       [:h2 (labels :startpage.faq/title)]

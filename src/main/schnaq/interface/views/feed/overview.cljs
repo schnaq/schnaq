@@ -102,7 +102,7 @@
        [no-schnaqs-found]
        [:div.panel-white.rounded-1
         [:div.d-flex.flex-row.mb-4
-         [:h6.text-purple-dark.d-md-none.d-lg-block (labels :router/visited-schnaqs)]
+         [:h6.text-typography.d-md-none.d-lg-block (labels :router/visited-schnaqs)]
          [:div.ml-auto
           [sort-options]
           [filters/filter-button]]]
@@ -150,7 +150,7 @@
 (defn feed-hubs []
   (when-let [hubs @(rf/subscribe [:hubs/all])]
     [:section
-     [:h6.text-purple-dark.pb-2.ml-4 (labels :hubs/heading)]
+     [:h6.text-typography.pb-2.ml-4 (labels :hubs/heading)]
      [:div.d-flex.flex-column
       (for [[keycloak-name hub] hubs]
         (with-meta [hub-feed-button hub] {:key keycloak-name}))

@@ -67,6 +67,21 @@ $gradient-target: vars.$primary;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-dark-blue.svg');
 }
 
+.wave-bottom-primary {
+  @extend .wave-bottom-white;
+  background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-primary.svg');
+}
+
+.wave-bottom-typography {
+  @extend .wave-bottom-white;
+  background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-typography.svg');
+}
+
+.wave-bottom-dark {
+  @extend .wave-bottom-white;
+  background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-dark.svg');
+}
+
 .feature-text-box {
   p,
   li,

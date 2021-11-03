@@ -56,7 +56,7 @@
      [:section.container.my-5
       [rows/row-builder-text-left
        [:article.feature-text-box
-        [:h3.h1.text-purple.mb-3 "Minimaler Aufwand, maximale Aktivierung"]
+        [:h3.h1.text-typography.mb-3 "Minimaler Aufwand, maximale Aktivierung"]
         [:p "Schnaqs starten ist so einfach wie: Titel wählen und Link verteilen.
        Schnell, sicher und datenschutzkonform nach deutschem Recht."]]
        [motion/zoom-image {:src (img-path :startpage.example/discussion)
@@ -65,13 +65,13 @@
       [rows/row-builder-text-right
        [:img {:src (img-path :startpage.alternatives.e-learning/student-smartphone)}]
        [:article.feature-text-box
-        [:h3.h1.text-purple.mb-3 "Kein Notebook? Kein Problem!"]
+        [:h3.h1.text-typography.mb-3 "Kein Notebook? Kein Problem!"]
         [:p "Um schnaq zu benutzen, braucht es keine Installation. Alles läuft über das Web.
        Kompatibel mit allen Smartphones, Tablets und Computern."]]]]
      [:section.container.mb-5
       [rows/row-builder-text-left
        [:article.feature-text-box
-        [:h3.h1.text-purple.mb-3 "Verstehen wo es hakt"]
+        [:h3.h1.text-typography.mb-3 "Verstehen wo es hakt"]
         [:p "Verschaffe dir einen schnellen Überblick über das Diskutierte. Vollziehe einfach nach worüber deine Lernenden reden. Oder schaue dir die verschiedenen K.I. Auswertungen der Diskussion an."]]
        [motion/zoom-image {:src (img-path :startpage.example/dashboard)
                            :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
@@ -79,7 +79,7 @@
       [rows/row-builder-text-right
        [:img {:src (img-path :startpage.alternatives.e-learning/oma)}]
        [:article.feature-text-box
-        [:h3.h1.text-purple.mb-3 "So einfach, selbst ein Seniorenkurs nutzt es!"]
+        [:h3.h1.text-typography.mb-3 "So einfach, selbst ein Seniorenkurs nutzt es!"]
         [:p "Schnaq kann von allen bedient werden. Egal ob du Erfahrung mit Software hast, oder dich gerade erst damit anfreundest. Kommen mal Fragen auf? Kontaktiere den Support jederzeit."]]]]
      [:section.overflow-hidden.py-3.my-5
       [wavy/top-and-bottom

@@ -1,0 +1,45 @@
+@import 'variables';
+
+.tag {
+  color: $white;
+}
+
+.tag-blue {
+  @extend .tag;
+  background-color: $tag-blue;
+}
+
+.tag-purple {
+  @extend .tag;
+  background-color: $tag-purple;
+}
+
+.tag-yellow {
+  @extend .tag;
+  background-color: $tag-yellow;
+}
+
+.tag-green {
+  @extend .tag;
+  background-color: $tag-green;
+}
+
+.tag-red {
+  @extend .tag;
+  background-color: $tag-red;
+}
+
+.tag-teal {
+  @extend .tag;
+  background-color: $tag-teal;
+}
+
+.tag-cyan {
+  @extend .tag;
+  background-color: $tag-cyan;
+}
+
+.tag-dark {
+  @extend .tag;
+  background-color: $dark;
+}
