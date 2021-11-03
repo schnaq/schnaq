@@ -938,6 +938,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :admin.center.delete.private/label "Share-hash"
    :admin.center.delete.private/heading "Private schnaqs"
 
+   :badges.filters/label "Display"
    :badges/sort "Sorting"
    :badges.sort/newest "Newest"
    :badges.sort/popular "Popular"

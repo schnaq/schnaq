@@ -938,6 +938,7 @@
    :admin.center.delete.private/label "Share-hash"
    :admin.center.delete.private/heading "Private schnaqs"
 
+   :badges.filters/label "Anzeige"
    :badges/sort "Sortierung"
    :badges.sort/newest "Neueste"
    :badges.sort/popular "Beliebt"

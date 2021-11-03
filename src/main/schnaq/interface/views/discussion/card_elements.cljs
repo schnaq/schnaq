@@ -50,7 +50,7 @@
     (when navigation-target
       [tooltip/text
        (labels tooltip)
-       [:button.btn.btn-dark-highlight.button-discussion-options.w-100.p-3
+       [:button.btn.btn-dark-highlight.button-discussion-options.h-100.w-100.p-3
         {:on-click #(rf/dispatch navigation-target)}
         [:div.d-flex
          [icon :arrow-left "m-auto"]]]])))
@@ -173,13 +173,21 @@
 (defn- sort-options
   "Displays the different sort options for card elements."
   []
-  [sc/discussion-options-button-group
-   [{:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])
-     :icon-key :hourglass/empty
-     :label-key :badges.sort/newest}
-    {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
-     :icon-key :star
-     :label-key :badges.sort/popular}]])
+  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
+        button-title (case sort-method
+                       :newest (labels :badges.sort/newest)
+                       :popular (labels :badges.sort/popular)
+                       (labels :badges/sort))
+        dropdown-menu-id "dropdownSortButton"]
+    [:<>
+     [:small.text-muted (labels :badges/sort)]
+     [sc/discussion-options-dropdown
+      button-title
+      dropdown-menu-id
+      [{:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])
+        :label-key :badges.sort/newest}
+       {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
+        :label-key :badges.sort/popular}]]]))
 
 
 ;; -----------------------------------------------------------------------------
@@ -299,13 +307,13 @@
 (defn action-view []
   [:div.d-inline-block.text-dark.w-100.mb-3
    [:div.d-flex.flex-row.flex-wrap
-    [:div.mr-1.my-1
+    [:div.mr-1.ml-1.ml-md-0
      [back-button]]
-    [:div.m-1
+    [:div.mx-1
      [search-bar]]
-    [:div.m-1.pr-2
+    [:div.mx-1.pr-2
      [sort-options]]
-    [:div.m-1
+    [:div.mx-1.mt-auto
      (if @(rf/subscribe [:schnaq.mode/qanda?])
        [filters/filter-answered-statements]
        [filters/filter-button])]
