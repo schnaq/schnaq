@@ -847,9 +847,9 @@
    :pricing.features/upcoming ["K.I. Stimmungsanalyse" "Integrationen"]
    :pricing.units/per-month "/ Monat"
    :pricing.notes/with-vat "zzgl. MwSt."
-   :pricing.trial/call-to-action "30 Tage Business testen"
+   :pricing.trial/call-to-action "30 Tage den Pro Plan testen"
    :pricing.trial/description "Keine Kreditkarte nötig! Jederzeit kündbar."
-   :pricing.trial.temporary/deactivation "Verfügbar ab 01.11.2021"
+   :pricing.trial.temporary/deactivation "Verfügbar ab 22.11.2021"
    :pricing.features/heading "Schnaq-Abonnement Vorteile"
    :pricing.features.user-numbers/heading "Unbegrenzte Teilnehmer:innen"
    :pricing.features.user-numbers/content "Lass so viele Mitarbeiter:innen, wie du möchtest, kooperieren. *"

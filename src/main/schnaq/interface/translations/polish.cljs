@@ -842,9 +842,9 @@
    :pricing.features/upcoming ["Analiza nastrojów A.I." "Integracje"]
    :pricing.units/per-month "/ Miesiąc"
    :pricing.notes/with-vat "plus VAT."
-   :pricing.trial/call-to-action "Test Business przez 30 dni"
+   :pricing.trial/call-to-action "Test Pro przez 30 dni"
    :pricing.trial/description "Karta kredytowa nie jest konieczna! Możliwość odwołania w dowolnym momencie."
-   :pricing.trial.temporary/deactivation "Dostępne od 01.11.2021 r."
+   :pricing.trial.temporary/deactivation "Dostępne od 22.11.2021 r."
    :pricing.features/heading "Zalety subskrypcji Schnaq"
    :pricing.features.user-numbers/heading "Nieograniczona liczba uczestników"
    :pricing.features.user-numbers/content "Pozwól współpracować tylu pracownikom, ilu chcesz. *"
