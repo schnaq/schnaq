@@ -148,7 +148,7 @@
    :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, findest du in unserer"
 
    :startpage.faq/title "Häufig gestellte Fragen"
-   :startpage.faq/subtitle "(so könnte dein Kurs aussehen)"
+   :startpage.faq/subtitle "(so könnte es bei dir aussehen)"
    :startpage.faq.data/question "Was passiert mit meinen Daten?"
    :startpage.faq.data/answer-1 "Um einen möglichst sicheren Datenschutz zu gewährleisten, speichern
         wir alle Daten nur auf deutschen Servern. Wir haben alle Details einzeln und verständlich in unserer"

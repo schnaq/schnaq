@@ -147,7 +147,7 @@
    :startpage.newsletter/privacy-policy-lead "Więcej informacji na temat przetwarzania danych osobowych można znaleźć w naszym"
 
    :startpage.faq/title "Najczęściej zadawane pytania"
-   :startpage.faq/subtitle "(tak może wyglądać Twój kurs)"
+   :startpage.faq/subtitle "(Oto jak to może wyglądać dla Ciebie)"
    :startpage.faq.data/question "Co dzieje się z moimi danymi?"
    :startpage.faq.data/answer-1 "Aby zapewnić możliwie najbezpieczniejszą ochronę danych, przechowujemy wszystkie
    wszystkie dane przechowujemy wyłącznie na niemieckich serwerach. Wszystkie szczegóły indywidualnie i zrozumiale podsumowaliśmy w naszym"

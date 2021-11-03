@@ -19,7 +19,7 @@
                     (rf/dispatch [:schnaq.qa.new-question/pulse true]))]
     [:form {:on-submit #(submit-fn %)
             :on-key-down #(when (jq/ctrl-press % 13) (submit-fn %))}
-     [:label.h5.mb-3.text-white {:for input-id} (labels :qanda/add-question-label)]
+     [:label.h5.mb-3 {:for input-id} (labels :qanda/add-question-label)]
      [:div.d-flex.flex-row.qanda-input-content.rounded-1
       [:div {:class "highlight-card-neutral"}]
       [:div.form-group.w-100.mb-0
@@ -61,7 +61,7 @@
      {:page/heading (:discussion/title current-discussion)
       :page/classes "base-wrapper layered-wave-background h-100 d-flex flex-column"}
      [:<>
-      [:div.container.p-0.px-md-5
+      [:div.container.p-0.px-md-5.text-white
        [question-field-and-search-results]]
       [:div.wave-bottom-dark-blue.d-flex.align-self-end.mt-auto]]]))
 

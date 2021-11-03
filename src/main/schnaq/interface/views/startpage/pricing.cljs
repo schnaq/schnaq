@@ -7,7 +7,8 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.qa.inputs :as qanda]))
 
 (defn- label-builder
   "Extract vector from labels and drop the first element, which is always a
@@ -173,7 +174,7 @@
     [feature-card (labels :pricing.features.mindmap/heading) (labels :pricing.features.mindmap/content)]]
    [:p.text-sm.text-muted (labels :pricing.features/disclaimer)]])
 
-(defn- faq
+(defn- faq2
   "Question, which are asked often and alleviate fears of subscribing."
   []
   [:div.py-5
@@ -201,6 +202,15 @@
      (labels :pricing.faq.privacy/body-1)
      [:a {:href (reititfe/href :routes/privacy)} (labels :pricing.faq.privacy/body-2)]
      (labels :pricing.faq.privacy/body-3)]]])
+
+(defn- faq
+  "A taste of the most burning questions of the user answered by our live Q&A."
+  []
+  [:<>
+   [:span.text-center
+    [:h2 (labels :startpage.faq/title)]
+    [:p.lead (labels :startpage.faq/subtitle)]]
+   [qanda/question-field-and-search-results]])
 
 (defn- pricing-page
   "A full page depicting our pricing and related items."

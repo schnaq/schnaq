@@ -268,7 +268,8 @@
    ["pricing"
     {:name :routes/pricing
      :view pricing-view/pricing-view
-     :link-text (labels :router/pricing)}]
+     :link-text (labels :router/pricing)
+     :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
    ["privacy"
     [""
      {:name :routes/privacy
