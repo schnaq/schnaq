@@ -1,45 +1,20 @@
 @import 'variables';
 
-.tag {
-  color: $white;
-}
 
-.tag-blue {
-  @extend .tag;
-  background-color: $tag-blue;
-}
+$labels: (
+  'blue': $label-blue,
+  'purple': $label-purple,
+  'red': $label-red,
+  'teal': $label-teal,
+  'yellow': $yellow,
+  'green': $green,
+  'cyan': $cyan,
+  'dark': $dark
+);
 
-.tag-purple {
-  @extend .tag;
-  background-color: $tag-purple;
-}
-
-.tag-yellow {
-  @extend .tag;
-  background-color: $tag-yellow;
-}
-
-.tag-green {
-  @extend .tag;
-  background-color: $tag-green;
-}
-
-.tag-red {
-  @extend .tag;
-  background-color: $tag-red;
-}
-
-.tag-teal {
-  @extend .tag;
-  background-color: $tag-teal;
-}
-
-.tag-cyan {
-  @extend .tag;
-  background-color: $tag-cyan;
-}
-
-.tag-dark {
-  @extend .tag;
-  background-color: $dark;
+@each $name, $bg-color in $labels {
+  .label-#{$name} {
+    background-color: $bg-color;
+    color: $white;
+  }
 }

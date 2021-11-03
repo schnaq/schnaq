@@ -48,14 +48,15 @@ $cyan: #17a2b8 !default;
 // Text Colors
 $typography: $dark-purple !default;
 
-// Tag Colors
-$tag-blue: #65b0e7 !default;
-$tag-purple: #727ee7 !default;
-$tag-yellow: #f9b756 !default;
-$tag-green: #6aedac !default;
-$tag-red: #f66490 !default;
-$tag-teal: #20c997 !default;
-$tag-cyan: #17a2b8 !default;
+// Tag  specific Colors
+$label-blue: #65b0e7 !default;
+$label-purple: #727ee7 !default;
+$label-red: #f66490 !default;
+$label-teal: #20c997 !default;
+
+$yellow: #f9b756 !default;
+$green: #6aedac !default;
+$cyan: #17a2b8 !default;
 
 $positive: $wetog-green !default;
 $positive-selected: $teal !default;
@@ -66,7 +67,6 @@ $primary: $dark-purple !default;
 $primary-selected: $dark-purple-selected !default;
 $primary-light: $purple-light !default;
 $primary-light-selected: $purple-light-selected !default;
-$dark-highlight: $primary !default;
 $secondary: $wetog-green !default;
 $secondary-selected: $orange-selected !default;
 $secondary-pale: $orange-pale !default;
