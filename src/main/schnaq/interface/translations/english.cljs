@@ -822,13 +822,13 @@ Now we write down questions and discuss them and can still understand what we ha
 
    ;; Pricing Page
    :pricing.intro/heading "Starting soon!"
-   :pricing.intro/lead "You will soon be able to book your plan here. Would you like to be part of our beta and test the business plan exclusively and free of charge? Then please contact us!"
+   :pricing.intro/lead [:span "You will soon be able to book your plan here. Would you like to be part of our beta and test the business plan exclusively and free of charge? Then please contact us at " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
    :pricing.free-tier/title "Free"
    :pricing.free-tier/subtitle "Forever"
-   :pricing.free-tier/description "For small teams and private use. The Starter Plan is the perfect introduction to structured discussions!"
-   :pricing.free-tier/beta-notice "After the beta phase, the plan is still available for up to five users per team."
+   :pricing.free-tier/description "For efficient makers and small teams, that don't need a lot. Create discussions and Q&As with two clicks."
+   :pricing.free-tier/beta-notice "This plan stays free forever. Need more features? Upgrade easily with a few clicks."
    :pricing.free-tier/call-to-action "Start Free of Charge"
-   :pricing.free-tier/for-free "Permanently free of charge"
+   :pricing.free-tier/for-free "Free forever"
    :pricing.business-tier/title "Business"
    :pricing.business-tier/subtitle "Bring your team together"
    :pricing.business-tier/description "Let our A.I. support you and learn more about your discussions!"
@@ -840,7 +840,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.enterprise-tier/on-request "On Request"
    :pricing.features/implemented "Already implemented"
    :pricing.features/to-be-implemented "Soon available"
-   :pricing.features/starter ["Hosted in Germany" "Create Discussions" "Automatic Mindmap" "Shareable by Link" "Text and Image Export"]
+   :pricing.features/starter ["Hosted in Germany" "Unlimited schnaqs" "Unlimited participants" "Create Discussions" "Hold Q&As" "Automatic Mindmap" "Shareable by Link, QR Code and digit code" "Text and Image Export"]
    :pricing.features/business ["Analysis Dashboard" "A.I. Summaries" "Personal Space"]
    :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
    :pricing.features/upcoming ["A.I. Sentiment Analysis" "Speech-to-Text"]

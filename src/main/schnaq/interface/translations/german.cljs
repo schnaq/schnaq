@@ -823,11 +823,11 @@
 
    ;; Pricing Page
    :pricing.intro/heading "Bald geht es los!"
-   :pricing.intro/lead "Schon bald kannst du hier deinen Tarif buchen. Möchtest du Teil unserer Beta sein und schon jetzt exklusiv und kostenfrei den Business-Tarif testen? Dann kontaktiere uns gerne!"
+   :pricing.intro/lead [:span "Schon bald kannst du hier deinen Tarif buchen. Möchtest du Teil unserer Beta sein und schon jetzt exklusiv und kostenfrei den Business-Tarif testen? Dann kontaktiere uns gerne unter " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
    :pricing.free-tier/title "Frei"
    :pricing.free-tier/subtitle "für Immer"
-   :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der perfekte Einstieg in strukturierte Diskussionen!"
-   :pricing.free-tier/beta-notice "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu fünf Nutzer:innen pro Team"
+   :pricing.free-tier/description "Für effiziente Macher:innen und kleine Teams, die nicht viel brauchen. Erstelle Diskussionen und Q&As mit zwei Klicks."
+   :pricing.free-tier/beta-notice "Dieser Plan bleibt dauerhaft kostenfrei. Du brauchst mehr Funktionen? Upgrade jederzeit."
    :pricing.free-tier/call-to-action "Kostenfrei loslegen"
    :pricing.free-tier/for-free "Dauerhaft kostenfrei"
    :pricing.business-tier/title "Business"
@@ -841,7 +841,7 @@
    :pricing.enterprise-tier/on-request "Auf Anfrage"
    :pricing.features/implemented "Bereits implementiert"
    :pricing.features/to-be-implemented "Bald verfügbar"
-   :pricing.features/starter ["In Deutschland gehostet" "Diskussionen erstellen" "Automatische Mindmap" "Teilbar per Link" "Text- und Bild-Export"]
+   :pricing.features/starter ["In Deutschland gehostet" "Unendlich viele schnaqs" "Unendlich viele Teilnehmer:innen" "Diskussionen erstellen" "Fragen und Antworten Modus" "Automatische Mindmap" "Teilbar per Link, QR-Code und Zahlencode" "Text- und Bild-Export"]
    :pricing.features/business ["Analyse-Dashboard" "K.I. Zusammenfassungen" "Persönlicher Bereich"]
    :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling" "On-Premise"]
    :pricing.features/upcoming ["K.I. Stimmungsanalyse" "Sprache-zu-Text"]

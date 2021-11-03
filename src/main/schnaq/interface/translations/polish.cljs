@@ -818,11 +818,11 @@
 
    ;; Pricing Page
    :pricing.intro/heading "Wkrótce się zacznie!"
-   :pricing.intro/lead "Już wkrótce będziesz mógł zarezerwować swoją taryfę tutaj. Czy chcieliby Państwo wziąć udział w naszej wersji beta i przetestować taryfę biznesową na wyłączność i bezpłatnie? Proszę się z nami skontaktować!"
+   :pricing.intro/lead [:span "Już wkrótce będziesz mógł zarezerwować swoją taryfę tutaj. Czy chcieliby Państwo wziąć udział w naszej wersji beta i przetestować taryfę biznesową na wyłączność i bezpłatnie? Następnie prosimy o kontakt z nami pod adresem " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
    :pricing.free-tier/title "Darmowy"
    :pricing.free-tier/subtitle "na zawsze"
-   :pricing.free-tier/description "Dla małych zespołów i do użytku prywatnego. Plan startowy jest doskonałym wprowadzeniem do dyskusji strukturalnych!"
-   :pricing.free-tier/beta-notice "Po zakończeniu fazy beta, plan jest nadal dostępny dla maksymalnie pięciu użytkowników na zespół."
+   :pricing.free-tier/description "Dla sprawnych twórców i małych zespołów, które nie potrzebują wiele. Twórz dyskusje i Q&A za pomocą dwóch kliknięć."
+   :pricing.free-tier/beta-notice "Ten plan pozostaje darmowy na zawsze. Potrzebujesz więcej funkcji? Uaktualnić łatwo za pomocą kilku kliknięć."
    :pricing.free-tier/call-to-action "Rozpocznij bezpłatnie"
    :pricing.free-tier/for-free "Stale bezpłatnie"
    :pricing.business-tier/title "Business"
@@ -836,7 +836,7 @@
    :pricing.enterprise-tier/on-request "Na żądanie"
    :pricing.features/implemented "Już wdrożone"
    :pricing.features/to-be-implemented "Wkrótce dostępne"
-   :pricing.features/starter ["Hosting w Niemczech" "Tworzenie dyskusji" "Automatyczna Mindmap" "Udostępnianie przez link" "Eksport tekstu i obrazu"]
+   :pricing.features/starter ["Hosting w Niemczech" "Nieograniczona ilość sznapsów" "Nieograniczona ilość uczestników" "Tworzenie dyskusji" "Przeprowadzić Q&A" "Automatyczna Mindmap" "Możliwość udostępniania za pomocą linku, kodu QR i kodu cyfrowego" "Eksport tekstu i obrazu"]
    :pricing.features/business ["Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista"]
    :pricing.features/enterprise ["Osadzanie w istniejących systemach\" \"Logowanie SSO (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
    :pricing.features/upcoming ["Analiza nastrojów A.I." "Przekształcanie mowy na tekst"]
