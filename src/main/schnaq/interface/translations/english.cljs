@@ -864,32 +864,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.features.mindmap/content "All statements are automatically structured and shown in an interactive mindmap."
    :pricing.features/disclaimer "* Applies only to pro plan"
    :pricing.competitors/per-month-per-user " € per month per user"
-   :pricing.faq/heading "Frequently asked questions regarding schnaq subscriptions"
-   :pricing.faq.terminate/heading "Can I cancel anytime?"
-   :pricing.faq.terminate/body
-   [:<> [:span.text-primary "Yes! "] "You are able to cancel" [:span.text-primary " every month"] ",
-     if you are paying monthly. If you are paying yearly, you can cancel at the end of the subscription year."]
-   :pricing.faq.extra-price/heading "Do I need to pay extra for more seats?"
-   :pricing.faq.extra-price/body
-   [:<> [:span.text-primary "No, "] "you can add" [:span.text-primary " unlimited accounts "]
-    " to your organization. Every company, club,
-    educational institution, etc. only needs " [:span.text-primary "one subscription."]]
-   :pricing.faq.trial-time/heading "Is my trial-subscription automatically converted into a paid one?"
-   :pricing.faq.trial-time/body
-   [:<> [:span.text-primary "No, "] "when your trial ends, you can" [:span.text-primary " actively decide"]
-    ", whether you want to add payment data and continue using the business plan.
-    The " [:span.text-primary "starter plan stays free of charge"] ", after a possible trial."]
-   :pricing.faq.longer-trial/heading "Can I trial the business plan a little bit longer?"
-   :pricing.faq.longer-trial/body
-   [:<> [:span.text-primary "Sure! "] "Simply write us an " [:span.text-primary " Email"] " at "
-    [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
-   :pricing.faq.privacy/heading "Who can access my data?"
-   :pricing.faq.privacy/body-1
-   [:<> "Any Person who is added to your organization and to corresponding teams can see their data."
-    "From a technical standpoint the data is securely saved on"
-    [:span.text-primary " german Servers in a GDPR compliant"] " manner. See the "]
-   :pricing.faq.privacy/body-2 "Privacy notice page"
-   :pricing.faq.privacy/body-3 " for more information."
    :pricing/headline "Subscriptions"
    :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live:"
    :pricing.newsletter/name "schnaq newsletter."

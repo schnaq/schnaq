@@ -174,35 +174,6 @@
     [feature-card (labels :pricing.features.mindmap/heading) (labels :pricing.features.mindmap/content)]]
    [:p.text-sm.text-muted (labels :pricing.features/disclaimer)]])
 
-(defn- faq2
-  "Question, which are asked often and alleviate fears of subscribing."
-  []
-  [:div.py-5
-   [:h2.text-center.display-5.pb-5 (labels :pricing.faq/heading)]
-   [:section
-    [:h3.text-center.font-weight-bold.text-dark-blue
-     (labels :pricing.faq.terminate/heading)]
-    [:p.lead.text-center.pb-3 (labels :pricing.faq.terminate/body)]]
-   [:section
-    [:h3.text-center.pt-3.font-weight-bold.text-dark-blue
-     (labels :pricing.faq.extra-price/heading)]
-    [:p.lead.text-center.pb-3 (labels :pricing.faq.extra-price/body)]]
-   [:section
-    [:h3.text-center.pt-3.font-weight-bold.text-dark-blue
-     (labels :pricing.faq.trial-time/heading)]
-    [:p.lead.text-center.pb-3 (labels :pricing.faq.trial-time/body)]]
-   [:section
-    [:h3.text-center.font-weight-bold.text-dark-blue
-     (labels :pricing.faq.longer-trial/heading)]
-    [:p.lead.text-center.pb-3 (labels :pricing.faq.longer-trial/body)]]
-   [:section
-    [:h3.text-center.pt-3.font-weight-bold.text-dark-blue
-     (labels :pricing.faq.privacy/heading)]
-    [:p.lead.text-center.pb-3
-     (labels :pricing.faq.privacy/body-1)
-     [:a {:href (reititfe/href :routes/privacy)} (labels :pricing.faq.privacy/body-2)]
-     (labels :pricing.faq.privacy/body-3)]]])
-
 (defn- faq
   "A taste of the most burning questions of the user answered by our live Q&A."
   []

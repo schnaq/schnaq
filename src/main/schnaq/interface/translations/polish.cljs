@@ -860,33 +860,6 @@
    :pricing.features.mindmap/content "Wszystkie wkłady są automatycznie wyświetlane graficznie i interaktywnie."
    :pricing.features/disclaimer "* Obowiązuje tylko dla subskrypcji Pro"
    :pricing.competitors/per-month-per-user " € miesięcznie za użytkownika"
-   :pricing.faq/heading "Najczęściej zadawane pytania dotyczące subskrypcji schnaq"
-   :pricing.faq.terminate/heading "Czy mogę zrezygnować w dowolnym momencie?"
-   :pricing.faq.terminate/body
-   [:<> [:span.text-primary "Tak!"] " Możesz" [:span.text-primary " co miesiąc"] " anulować,
-     jeśli wybrałeś metodę płatności miesięcznej. W przypadku wyboru metody płatności rocznej
-     możesz zrezygnować na koniec roku subskrypcji."]
-   :pricing.faq.extra-price/heading "Czy muszę płacić dodatkowo za więcej osób?"
-   :pricing.faq.extra-price/body
-   [:<> [:span.text-primary "Nie, "] "możesz" [:span.text-primary " dowolna liczba osób "]
-    " do swojej organizacji. Każda firma, stowarzyszenie,
-    instytucja edukacyjna, itp. potrzebuje tylko " [:span.text-primary "jeden abonament."]]
-   :pricing.faq.trial-time/heading "Czy okres próbny przedłuża się automatycznie?"
-   :pricing.faq.trial-time/body
-   [:<> [:span.text-primary "Nie, "] "po zakończeniu okresu próbnego, można" [:span.text-primary " aktywnie zdecydować"]
-    " czy chcesz dodać dane dotyczące płatności i nadal korzystać z taryfy biznesowej.
-    The " [:span.text-primary "Starter Plan pozostaje bezpłatny na czas nieokreślony"] ", nawet po okresie próbnym."]
-   :pricing.faq.longer-trial/heading "Czy mogę dłużej testować taryfę Biznes?"
-   :pricing.faq.longer-trial/body
-   [:<> [:span.text-primary "Tak! "] "Po prostu napisz do nas " [:span.text-primary "E-mail"] " do "
-    [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
-   :pricing.faq.privacy/heading "Kto ma dostęp do moich danych?"
-   :pricing.faq.privacy/body-1
-   [:<> "Każda osoba, którą dodasz do swojej firmy, może potencjalnie uzyskać dostęp do przechowywanych danych.
-    Z technicznego punktu widzenia, dane są przechowywane całkowicie bezpiecznie na"
-    [:span.text-primary " Niemieckie serwery i zgodność z GDPR"] " zapisane. Na naszej "]
-   :pricing.faq.privacy/body-2 "Strona poświęcona bezpieczeństwu danych"
-   :pricing.faq.privacy/body-3 " znajdziesz więcej informacji"
    :pricing/headline "Abonamenty"
    :pricing.newsletter/lead "Bądź informowany natychmiast, gdy subskrypcja wejdzie w życie:"
    :pricing.newsletter/name "newsletter schnaq."

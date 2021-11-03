@@ -865,33 +865,6 @@
    :pricing.features.mindmap/content "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."
    :pricing.features/disclaimer "* Gilt nur für Pro-Abonnement"
    :pricing.competitors/per-month-per-user " € pro Monat pro Nutzer:in"
-   :pricing.faq/heading "Häufig gestellte Fragen zu schnaq Abos"
-   :pricing.faq.terminate/heading "Kann ich jederzeit kündigen?"
-   :pricing.faq.terminate/body
-   [:<> [:span.text-primary "Ja! "] " Du kannst" [:span.text-primary " jeden Monat"] " kündigen,
-     wenn du die monatliche Zahlweise gewählt hast. Wenn du die jährliche Zahlweise
-     wählst, kannst du zum Ablauf des Abonnementjahres kündigen."]
-   :pricing.faq.extra-price/heading "Muss ich für mehr Leute extra bezahlen?"
-   :pricing.faq.extra-price/body
-   [:<> [:span.text-primary "Nein, "] "du kannst" [:span.text-primary " beliebig viele Personen "]
-    " zu deiner Organisation hinzufügen. Jedes Unternehmen, Verein,
-    Bildungseinrichtung, usw. braucht " [:span.text-primary "nur ein Abonnement."]]
-   :pricing.faq.trial-time/heading "Verlängert sich der Testzeitraum automatisch?"
-   :pricing.faq.trial-time/body
-   [:<> [:span.text-primary "Nein, "] "wenn dein Testzeitraum endet, kannst du" [:span.text-primary " aktiv entscheiden"]
-    ", ob du Zahlungsdaten hinzufügen und weiter den Business-Tarif nutzen möchtest.
-    Der " [:span.text-primary "Starter Plan bleibt unbegrenzt kostenfrei"] ", auch nach dem Testzeitraum."]
-   :pricing.faq.longer-trial/heading "Kann ich den Business-Tarif länger testen?"
-   :pricing.faq.longer-trial/body
-   [:<> [:span.text-primary "Ja! "] "Schreibe uns einfach eine " [:span.text-primary " E-Mail"] " an "
-    [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
-   :pricing.faq.privacy/heading "Wer hat Zugriff auf meine Daten?"
-   :pricing.faq.privacy/body-1
-   [:<> "Jede Person, die du deinem Unternehmen hinzufügst, kann potenziell auf die hinterlegten Daten zugreifen."
-    "Technisch werden deine Daten vollständig sicher auf"
-    [:span.text-primary " deutschen Servern und DSGVO konform"] " abgespeichert. Auf unserer "]
-   :pricing.faq.privacy/body-2 "Seite zur Datensicherheit"
-   :pricing.faq.privacy/body-3 " findest du mehr Informationen"
    :pricing/headline "Abonnements"
    :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht:"
    :pricing.newsletter/name "schnaq Newsletter."
