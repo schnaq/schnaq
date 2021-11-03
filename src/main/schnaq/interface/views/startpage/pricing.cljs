@@ -147,7 +147,7 @@
 (defn- newsletter
   "A box displaying the different subscription tiers we offer."
   []
-  [:p.text-dark-blue.display-6.text-center.pt-4
+  [:p.text-typography.display-6.text-center.pt-4
    (labels :pricing.newsletter/lead)
    [:a.btn.btn-lg.btn-link
     {:href "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
