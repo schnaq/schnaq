@@ -824,8 +824,8 @@
    ;; Pricing Page
    :pricing.intro/heading "Bald geht es los!"
    :pricing.intro/lead "Schon bald kannst du hier deinen Tarif buchen. Möchtest du Teil unserer Beta sein und schon jetzt exklusiv und kostenfrei den Business-Tarif testen? Dann kontaktiere uns gerne!"
-   :pricing.free-tier/title "Starter"
-   :pricing.free-tier/subtitle "Individuell"
+   :pricing.free-tier/title "Frei"
+   :pricing.free-tier/subtitle "für Immer"
    :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der perfekte Einstieg in strukturierte Diskussionen!"
    :pricing.free-tier/beta-notice "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu fünf Nutzer:innen pro Team"
    :pricing.free-tier/call-to-action "Kostenfrei loslegen"

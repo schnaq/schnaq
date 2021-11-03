@@ -823,8 +823,8 @@ Now we write down questions and discuss them and can still understand what we ha
    ;; Pricing Page
    :pricing.intro/heading "Starting soon!"
    :pricing.intro/lead "You will soon be able to book your plan here. Would you like to be part of our beta and test the business plan exclusively and free of charge? Then please contact us!"
-   :pricing.free-tier/title "Starter"
-   :pricing.free-tier/subtitle "Individual"
+   :pricing.free-tier/title "Free"
+   :pricing.free-tier/subtitle "Forever"
    :pricing.free-tier/description "For small teams and private use. The Starter Plan is the perfect introduction to structured discussions!"
    :pricing.free-tier/beta-notice "After the beta phase, the plan is still available for up to five users per team."
    :pricing.free-tier/call-to-action "Start Free of Charge"

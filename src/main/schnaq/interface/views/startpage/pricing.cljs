@@ -67,15 +67,16 @@
 
 (defn- tier-card
   "Build a single tier card."
-  [title subtitle price description features upcoming-features cta-button options]
+  [title subtitle icon-name price description features upcoming-features cta-button options]
   (let [title-label (labels title)]
     [:article.card.shadow-sm.mb-2 options
+     [:div.card-body.card-price
+      [:h3.card-title.text-center title-label]
+      [:h6.card-subtitle.mb-3.text-muted.text-center (labels subtitle)]
+      [:p.card-text.text-center [icon icon-name "text-primary" {:size "4x"}]]
+      [:p.text-center price]
+      [:p.card-text.text-justify (labels description)]]
      [:div.card-body
-      [:div {:style {:height "17rem"}}
-       [:h3.card-title.text-center title-label]
-       [:h6.card-subtitle.mb-3.text-muted.text-center (labels subtitle)]
-       [:p.text-center price]
-       [:p.card-text.text-justify (labels description)]]
       [:ul.pricing-feature-list
        (for [[feature class] features]
          (with-meta
@@ -93,7 +94,7 @@
   "Display the free tier card."
   []
   [tier-card
-   :pricing.free-tier/title :pricing.free-tier/subtitle
+   :pricing.free-tier/title :pricing.free-tier/subtitle :rocket
    [price-tag 0]
    :pricing.free-tier/description
    (add-class-to-feature (concat (starter-features) [(labels :pricing.free-tier/for-free)]) "text-primary")
@@ -104,7 +105,7 @@
   "Display the business tier card."
   []
   [tier-card
-   :pricing.business-tier/title :pricing.business-tier/subtitle
+   :pricing.business-tier/title :pricing.business-tier/subtitle :rocket
    [price-tag config/pricing-business-tier true]
    :pricing.business-tier/description
    (add-class-to-feature (concat (starter-features) (business-features)) "text-primary")
@@ -116,7 +117,7 @@
   "Show the enterprise tier card."
   []
   [tier-card
-   :pricing.enterprise-tier/title :pricing.enterprise-tier/subtitle
+   :pricing.enterprise-tier/title :pricing.enterprise-tier/subtitle :rocket
    [:span.display-5 (labels :pricing.enterprise-tier/on-request)]
    :pricing.enterprise-tier/description
    (add-class-to-feature (concat (starter-features) (business-features) (enterprise-features)) "text-primary")
@@ -124,7 +125,7 @@
    [cta-button (labels :pricing.enterprise-tier/call-to-action) "btn-primary" "mailto:info@schnaq.com"]])
 
 (defn- tier-cards []
-  (let [classes "col-12 col-sm-6 col-lg-4"]
+  (let [classes "col-12 col-lg-4"]
     [:section.row
      [:div {:class classes}
       [free-tier-card]

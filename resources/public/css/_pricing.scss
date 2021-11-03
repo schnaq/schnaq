@@ -1,10 +1,5 @@
 @import 'variables';
 
-.tier-card {
-  border: 0;
-  border-radius: 0.5em;
-}
-
 .trial-box {
   background-color: $blue-dark;
   border-radius: 1.5rem;
@@ -36,5 +31,9 @@
   li {
     padding: 0.5rem;
   }
+}
+
+.card-price {
+  height: 22rem;
 }
 
