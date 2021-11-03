@@ -825,10 +825,10 @@
    :pricing.free-tier/beta-notice "Ten plan pozostaje darmowy na zawsze. Potrzebujesz więcej funkcji? Uaktualnić łatwo za pomocą kilku kliknięć."
    :pricing.free-tier/call-to-action "Rozpocznij bezpłatnie"
    :pricing.free-tier/for-free "Stale bezpłatnie"
-   :pricing.business-tier/title "Business"
-   :pricing.business-tier/subtitle "Zbierz swój zespół"
-   :pricing.business-tier/description "Pozwól, aby nasz A.I. wspierał Cię i dowiedział się więcej o Twoich dyskusjach!"
-   :pricing.business-tier/call-to-action "Przetestuj biznes teraz"
+   :pricing.pro-tier/title "Pro"
+   :pricing.pro-tier/subtitle "Uaktywnij swój potencjał"
+   :pricing.pro-tier/description "Uzyskaj pełną kontrolę nad dyskusjami i pytaniami oraz pełne zrozumienie swoich uczestników."
+   :pricing.pro-tier/call-to-action "Przetestuj biznes teraz"
    :pricing.enterprise-tier/title "Enterprise"
    :pricing.enterprise-tier/subtitle "Wielkie plany?"
    :pricing.enterprise-tier/description "Chcesz połączyć całą firmę, klub, instytucję lub nawet całą uczelnię? W takim razie trafiłeś we właściwe miejsce!"
@@ -837,11 +837,10 @@
    :pricing.features/implemented "Już wdrożone"
    :pricing.features/to-be-implemented "Wkrótce dostępne"
    :pricing.features/starter ["Hosting w Niemczech" "Nieograniczona ilość sznapsów" "Nieograniczona ilość uczestników" "Tworzenie dyskusji" "Przeprowadzić Q&A" "Automatyczna Mindmap" "Możliwość udostępniania za pomocą linku, kodu QR i kodu cyfrowego" "Eksport tekstu i obrazu"]
-   :pricing.features/business ["Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista"]
+   :pricing.features/business ["Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista" "Opcje moderacji"]
    :pricing.features/enterprise ["Osadzanie w istniejących systemach\" \"Logowanie SSO (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
-   :pricing.features/upcoming ["Analiza nastrojów A.I." "Przekształcanie mowy na tekst"]
+   :pricing.features/upcoming ["Analiza nastrojów A.I." "Integracje"]
    :pricing.units/per-month "/ Miesiąc"
-   :pricing.units/per-active-account "dla rachunku aktywów"
    :pricing.notes/with-vat "plus VAT."
    :pricing.trial/call-to-action "Test Business przez 30 dni"
    :pricing.trial/description "Karta kredytowa nie jest konieczna! Możliwość odwołania w dowolnym momencie."

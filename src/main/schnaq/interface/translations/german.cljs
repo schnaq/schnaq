@@ -830,10 +830,10 @@
    :pricing.free-tier/beta-notice "Dieser Plan bleibt dauerhaft kostenfrei. Du brauchst mehr Funktionen? Upgrade jederzeit."
    :pricing.free-tier/call-to-action "Kostenfrei loslegen"
    :pricing.free-tier/for-free "Dauerhaft kostenfrei"
-   :pricing.business-tier/title "Business"
-   :pricing.business-tier/subtitle "Bringe dein Team zusammen"
-   :pricing.business-tier/description "Lasse dich von unserer K.I. unterstützen und erfahre mehr zu deinen Diskussionen!"
-   :pricing.business-tier/call-to-action "Business schon jetzt testen"
+   :pricing.pro-tier/title "Pro"
+   :pricing.pro-tier/subtitle "Aktiviere dein Potential"
+   :pricing.pro-tier/description "Erlange die volle Kontrolle über deine schnaqs und verstehe deine Teilnehmer:innen zu 100 %."
+   :pricing.pro-tier/call-to-action "Business schon jetzt testen"
    :pricing.enterprise-tier/title "Enterprise"
    :pricing.enterprise-tier/subtitle "Großes vor?"
    :pricing.enterprise-tier/description "Möchtest du dein gesamtes Unternehmen, einen Verein, Institution, ganze Universitäten anbinden? Dann bist du hier richtig!"
@@ -842,11 +842,10 @@
    :pricing.features/implemented "Bereits implementiert"
    :pricing.features/to-be-implemented "Bald verfügbar"
    :pricing.features/starter ["In Deutschland gehostet" "Unendlich viele schnaqs" "Unendlich viele Teilnehmer:innen" "Diskussionen erstellen" "Fragen und Antworten Modus" "Automatische Mindmap" "Teilbar per Link, QR-Code und Zahlencode" "Text- und Bild-Export"]
-   :pricing.features/business ["Analyse-Dashboard" "K.I. Zusammenfassungen" "Persönlicher Bereich"]
+   :pricing.features/business ["Analyse-Dashboard" "K.I. Zusammenfassungen" "Persönlicher Bereich" "Moderationsoptionen"]
    :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling" "On-Premise"]
-   :pricing.features/upcoming ["K.I. Stimmungsanalyse" "Sprache-zu-Text"]
+   :pricing.features/upcoming ["K.I. Stimmungsanalyse" "Integrationen"]
    :pricing.units/per-month "/ Monat"
-   :pricing.units/per-active-account "pro aktivem Account"
    :pricing.notes/with-vat "zzgl. MwSt."
    :pricing.trial/call-to-action "30 Tage Business testen"
    :pricing.trial/description "Keine Kreditkarte nötig! Jederzeit kündbar."

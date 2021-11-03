@@ -829,10 +829,10 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.free-tier/beta-notice "This plan stays free forever. Need more features? Upgrade easily with a few clicks."
    :pricing.free-tier/call-to-action "Start Free of Charge"
    :pricing.free-tier/for-free "Free forever"
-   :pricing.business-tier/title "Business"
-   :pricing.business-tier/subtitle "Bring your team together"
-   :pricing.business-tier/description "Let our A.I. support you and learn more about your discussions!"
-   :pricing.business-tier/call-to-action "Test Business now"
+   :pricing.pro-tier/title "Pro"
+   :pricing.pro-tier/subtitle "Activate your potential"
+   :pricing.pro-tier/description "Gain full control over your discussions and Q&As and completley understand your participants."
+   :pricing.pro-tier/call-to-action "Test Business now"
    :pricing.enterprise-tier/title "Enterprise"
    :pricing.enterprise-tier/subtitle "Big plans?"
    :pricing.enterprise-tier/description "Do you want to connect your entire company, a club, institution or even a whole university? Then you've come to the right place!"
@@ -841,11 +841,10 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.features/implemented "Already implemented"
    :pricing.features/to-be-implemented "Soon available"
    :pricing.features/starter ["Hosted in Germany" "Unlimited schnaqs" "Unlimited participants" "Create Discussions" "Hold Q&As" "Automatic Mindmap" "Shareable by Link, QR Code and digit code" "Text and Image Export"]
-   :pricing.features/business ["Analysis Dashboard" "A.I. Summaries" "Personal Space"]
+   :pricing.features/business ["Analysis Dashboard" "A.I. Summaries" "Personal Spaces" "Moderation Options"]
    :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
-   :pricing.features/upcoming ["A.I. Sentiment Analysis" "Speech-to-Text"]
+   :pricing.features/upcoming ["A.I. Sentiment Analysis" "Integrations"]
    :pricing.units/per-month "/ month"
-   :pricing.units/per-active-account "per active account"
    :pricing.notes/with-vat "plus VAT"
    :pricing.trial/call-to-action "Test business 30 days free of charge"
    :pricing.trial/description "No credit card needed! Cancel anytime."

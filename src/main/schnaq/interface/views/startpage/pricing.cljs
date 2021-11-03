@@ -41,7 +41,8 @@
    [:span.display-4 price " €"]
    [:span (labels :pricing.units/per-month)]
    (when per-account?
-     [:<> [:br] [:span (gstring/format "%s. %s" (labels :pricing.units/per-active-account) (labels :pricing.notes/with-vat))]])])
+     [:<> [:br]
+      [:small.text-muted (labels :pricing.notes/with-vat)]])])
 
 (defn- intro
   "Welcome new users to the pricing page."
@@ -101,23 +102,23 @@
    nil
    [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (reititfe/href :routes.schnaq/create)]])
 
-(defn- business-tier-card
+(defn- pro-tier-card
   "Display the business tier card."
   []
   [tier-card
-   :pricing.business-tier/title :pricing.business-tier/subtitle :rocket
+   :pricing.pro-tier/title :pricing.pro-tier/subtitle :crown
    [price-tag config/pricing-business-tier true]
-   :pricing.business-tier/description
+   :pricing.pro-tier/description
    (add-class-to-feature (concat (starter-features) (business-features)) "text-primary")
    (coming-soon)
-   [cta-button (labels :pricing.business-tier/call-to-action) "btn-secondary" "mailto:info@schnaq.com"]
+   [cta-button (labels :pricing.pro-tier/call-to-action) "btn-secondary" "mailto:info@schnaq.com"]
    {:class "border-primary shadow-lg"}])
 
 (defn- enterprise-tier-card
   "Show the enterprise tier card."
   []
   [tier-card
-   :pricing.enterprise-tier/title :pricing.enterprise-tier/subtitle :rocket
+   :pricing.enterprise-tier/title :pricing.enterprise-tier/subtitle :building
    [:span.display-5 (labels :pricing.enterprise-tier/on-request)]
    :pricing.enterprise-tier/description
    (add-class-to-feature (concat (starter-features) (business-features) (enterprise-features)) "text-primary")
@@ -131,7 +132,7 @@
       [free-tier-card]
       [:p.p-2.text-muted (labels :pricing.free-tier/beta-notice)]
       [mark-explanation]]
-     [:div {:class classes} [business-tier-card]]
+     [:div {:class classes} [pro-tier-card]]
      [:div {:class classes} [enterprise-tier-card]]]))
 
 (defn- trial-box
