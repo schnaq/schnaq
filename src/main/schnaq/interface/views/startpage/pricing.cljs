@@ -7,7 +7,8 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.qa.inputs :as qanda]))
 
 (defn- label-builder
   "Extract vector from labels and drop the first element, which is always a
@@ -38,10 +39,11 @@
   "Unify the price-tag design."
   [price per-account?]
   [:<>
-   [:span.display-4 price " €"]
+   [:span.display-5 price " €"]
    [:span (labels :pricing.units/per-month)]
    (when per-account?
-     [:<> [:br] [:span (gstring/format "%s. %s" (labels :pricing.units/per-active-account) (labels :pricing.notes/with-vat))]])])
+     [:<> [:br]
+      [:small.text-muted (labels :pricing.notes/with-vat)]])])
 
 (defn- intro
   "Welcome new users to the pricing page."
@@ -62,20 +64,22 @@
 (defn- cta-button
   "Component to build the call-to-action button in a tier card."
   [label class fn]
-  [:div.text-center.pt-4
+  [:div.text-center.py-4
    [:a.btn {:class class :href fn} label]])
 
 (defn- tier-card
   "Build a single tier card."
-  [title subtitle price description features upcoming-features cta-button options]
+  [title subtitle icon-name price description features upcoming-features cta-button options]
   (let [title-label (labels title)]
     [:article.card.shadow-sm.mb-2 options
      [:div.card-body
-      [:div {:style {:height "17rem"}}
+      [:div.card-infos
        [:h3.card-title.text-center title-label]
        [:h6.card-subtitle.mb-3.text-muted.text-center (labels subtitle)]
+       [:p.card-text.text-center [icon icon-name "text-primary" {:size "4x"}]]
        [:p.text-center price]
        [:p.card-text.text-justify (labels description)]]
+      cta-button
       [:ul.pricing-feature-list
        (for [[feature class] features]
          (with-meta
@@ -86,37 +90,36 @@
          (with-meta
            [:li.list-group-item
             [icon :check/normal (str class " mr-2")] feature]
-           {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))]
-      cta-button]]))
+           {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))]]]))
 
 (defn- free-tier-card
   "Display the free tier card."
   []
   [tier-card
-   :pricing.free-tier/title :pricing.free-tier/subtitle
+   :pricing.free-tier/title :pricing.free-tier/subtitle :rocket
    [price-tag 0]
    :pricing.free-tier/description
    (add-class-to-feature (concat (starter-features) [(labels :pricing.free-tier/for-free)]) "text-primary")
    nil
    [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (reititfe/href :routes.schnaq/create)]])
 
-(defn- business-tier-card
-  "Display the business tier card."
+(defn- pro-tier-card
+  "Display the pro tier card."
   []
   [tier-card
-   :pricing.business-tier/title :pricing.business-tier/subtitle
+   :pricing.pro-tier/title :pricing.pro-tier/subtitle :crown
    [price-tag config/pricing-business-tier true]
-   :pricing.business-tier/description
+   :pricing.pro-tier/description
    (add-class-to-feature (concat (starter-features) (business-features)) "text-primary")
    (coming-soon)
-   [cta-button (labels :pricing.business-tier/call-to-action) "btn-secondary" "mailto:info@schnaq.com"]
+   [cta-button (labels :pricing.pro-tier/call-to-action) "btn-secondary" "mailto:info@schnaq.com"]
    {:class "border-primary shadow-lg"}])
 
 (defn- enterprise-tier-card
   "Show the enterprise tier card."
   []
   [tier-card
-   :pricing.enterprise-tier/title :pricing.enterprise-tier/subtitle
+   :pricing.enterprise-tier/title :pricing.enterprise-tier/subtitle :building
    [:span.display-5 (labels :pricing.enterprise-tier/on-request)]
    :pricing.enterprise-tier/description
    (add-class-to-feature (concat (starter-features) (business-features) (enterprise-features)) "text-primary")
@@ -124,13 +127,13 @@
    [cta-button (labels :pricing.enterprise-tier/call-to-action) "btn-primary" "mailto:info@schnaq.com"]])
 
 (defn- tier-cards []
-  (let [classes "col-12 col-sm-6 col-lg-4"]
+  (let [classes "col-12 col-lg-4"]
     [:section.row
      [:div {:class classes}
       [free-tier-card]
       [:p.p-2.text-muted (labels :pricing.free-tier/beta-notice)]
       [mark-explanation]]
-     [:div {:class classes} [business-tier-card]]
+     [:div {:class classes} [pro-tier-card]]
      [:div {:class classes} [enterprise-tier-card]]]))
 
 (defn- trial-box
@@ -144,7 +147,7 @@
 (defn- newsletter
   "A box displaying the different subscription tiers we offer."
   []
-  [:p.text-typography.display-6.text-center.pt-2
+  [:p.text-dark-blue.display-6.text-center.pt-4
    (labels :pricing.newsletter/lead)
    [:a.btn.btn-lg.btn-link
     {:href "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
@@ -172,33 +175,13 @@
    [:p.text-sm.text-muted (labels :pricing.features/disclaimer)]])
 
 (defn- faq
-  "Question, which are asked often and alleviate fears of subscribing."
+  "A taste of the most burning questions of the user answered by our live Q&A."
   []
-  [:div.py-5
-   [:h2.text-center.display-5.pb-5 (labels :pricing.faq/heading)]
-   [:section
-    [:h3.text-center.font-weight-bold.text-typography
-     (labels :pricing.faq.terminate/heading)]
-    [:p.lead.text-center.pb-3 (labels :pricing.faq.terminate/body)]]
-   [:section
-    [:h3.text-center.pt-3.font-weight-bold.text-typography
-     (labels :pricing.faq.extra-price/heading)]
-    [:p.lead.text-center.pb-3 (labels :pricing.faq.extra-price/body)]]
-   [:section
-    [:h3.text-center.pt-3.font-weight-bold.text-typography
-     (labels :pricing.faq.trial-time/heading)]
-    [:p.lead.text-center.pb-3 (labels :pricing.faq.trial-time/body)]]
-   [:section
-    [:h3.text-center.font-weight-bold.text-typography
-     (labels :pricing.faq.longer-trial/heading)]
-    [:p.lead.text-center.pb-3 (labels :pricing.faq.longer-trial/body)]]
-   [:section
-    [:h3.text-center.pt-3.font-weight-bold.text-typography
-     (labels :pricing.faq.privacy/heading)]
-    [:p.lead.text-center.pb-3
-     (labels :pricing.faq.privacy/body-1)
-     [:a {:href (reititfe/href :routes/privacy)} (labels :pricing.faq.privacy/body-2)]
-     (labels :pricing.faq.privacy/body-3)]]])
+  [:<>
+   [:span.text-center
+    [:h2 (labels :startpage.faq/title)]
+    [:p.lead (labels :startpage.faq/subtitle)]]
+   [qanda/question-field-and-search-results]])
 
 (defn- pricing-page
   "A full page depicting our pricing and related items."

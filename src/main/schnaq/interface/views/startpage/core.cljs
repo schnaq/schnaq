@@ -88,9 +88,9 @@
   []
   [:section.pt-5
    [wavy/top-and-bottom
-    :primary
-    [:div.container
-     [:span.text-white.text-center
+    :dark-blue
+    [:div.container.text-white
+     [:span.text-center
       [:h2 (labels :startpage.faq/title)]
       [:p.lead (labels :startpage.faq/subtitle)]]
      [qanda/question-field-and-search-results]]]])

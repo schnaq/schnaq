@@ -4,8 +4,8 @@
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub]]
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faCalendarAlt faCamera faChalkboardTeacher faCheck faCircleNotch
-              faCog faComment faComments faCookie faCopy faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
+             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faCheck faCircleNotch
+              faCog faComment faComments faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
               faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLocationArrow faLock
               faPaperPlane faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faTag faTerminal
               faTimes faTimesCircle faTrashAlt faUsers faUserLock faUserNinja faUserPlus]]
@@ -17,6 +17,7 @@
    :arrow-right faArrowRight
    :arrow-up faArrowUp
    :bell faBell
+   :building faBuilding
    :calendar faCalendar
    :calendar-alt faCalendarAlt
    :camera faCamera
@@ -30,6 +31,7 @@
    :cookie/complete faCookie
    :copy faCopy
    :cross faTimes
+   :crown faCrown
    :delete-icon faTimesCircle
    :dots faEllipsisH
    :dots-v faEllipsisV

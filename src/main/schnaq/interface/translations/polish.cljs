@@ -147,7 +147,7 @@
    :startpage.newsletter/privacy-policy-lead "Więcej informacji na temat przetwarzania danych osobowych można znaleźć w naszym"
 
    :startpage.faq/title "Najczęściej zadawane pytania"
-   :startpage.faq/subtitle "(tak może wyglądać Twój kurs)"
+   :startpage.faq/subtitle "(Oto jak to może wyglądać dla Ciebie)"
    :startpage.faq.data/question "Co dzieje się z moimi danymi?"
    :startpage.faq.data/answer-1 "Aby zapewnić możliwie najbezpieczniejszą ochronę danych, przechowujemy wszystkie
    wszystkie dane przechowujemy wyłącznie na niemieckich serwerach. Wszystkie szczegóły indywidualnie i zrozumiale podsumowaliśmy w naszym"
@@ -818,76 +818,48 @@
 
    ;; Pricing Page
    :pricing.intro/heading "Wkrótce się zacznie!"
-   :pricing.intro/lead "Już wkrótce będziesz mógł zarezerwować swoją taryfę tutaj. Czy chcieliby Państwo wziąć udział w naszej wersji beta i przetestować taryfę biznesową na wyłączność i bezpłatnie? Proszę się z nami skontaktować!"
-   :pricing.free-tier/title "Starter"
-   :pricing.free-tier/subtitle "Indywidualnie"
-   :pricing.free-tier/description "Dla małych zespołów i do użytku prywatnego. Plan startowy jest doskonałym wprowadzeniem do dyskusji strukturalnych!"
-   :pricing.free-tier/beta-notice "Po zakończeniu fazy beta, plan jest nadal dostępny dla maksymalnie pięciu użytkowników na zespół."
+   :pricing.intro/lead [:span "Już wkrótce będziesz mógł zarezerwować swoją taryfę tutaj. Czy chcieliby Państwo wziąć udział w naszej wersji beta i przetestować taryfę biznesową na wyłączność i bezpłatnie? Następnie prosimy o kontakt z nami pod adresem " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
+   :pricing.free-tier/title "Darmowy"
+   :pricing.free-tier/subtitle "na zawsze"
+   :pricing.free-tier/description "Dla sprawnych twórców i małych zespołów, które nie potrzebują wiele. Twórz dyskusje i Q&A za pomocą dwóch kliknięć."
+   :pricing.free-tier/beta-notice "Ten plan pozostaje darmowy na zawsze. Potrzebujesz więcej funkcji? Uaktualnić łatwo za pomocą kilku kliknięć."
    :pricing.free-tier/call-to-action "Rozpocznij bezpłatnie"
    :pricing.free-tier/for-free "Stale bezpłatnie"
-   :pricing.business-tier/title "Business"
-   :pricing.business-tier/subtitle "Zbierz swój zespół"
-   :pricing.business-tier/description "Pozwól, aby nasz A.I. wspierał Cię i dowiedział się więcej o Twoich dyskusjach!"
-   :pricing.business-tier/call-to-action "Przetestuj biznes teraz"
+   :pricing.pro-tier/title "Pro"
+   :pricing.pro-tier/subtitle "Uaktywnij swój potencjał"
+   :pricing.pro-tier/description "Uzyskaj pełną kontrolę nad dyskusjami i pytaniami oraz pełne zrozumienie swoich uczestników."
+   :pricing.pro-tier/call-to-action "Przetestuj biznes teraz"
    :pricing.enterprise-tier/title "Enterprise"
    :pricing.enterprise-tier/subtitle "Wielkie plany?"
-   :pricing.enterprise-tier/description "Chcesz połączyć całą firmę, klub, instytucję lub nawet całą uczelnię? W takim razie trafiłeś we właściwe miejsce!"
+   :pricing.enterprise-tier/description "Zoptymalizuj komunikację w swojej firmie. Specjalne życzenia i wymagania mogą być łatwo spełnione."
    :pricing.enterprise-tier/call-to-action "Wyślij zapytanie"
    :pricing.enterprise-tier/on-request "Na żądanie"
    :pricing.features/implemented "Już wdrożone"
    :pricing.features/to-be-implemented "Wkrótce dostępne"
-   :pricing.features/starter ["Hosting w Niemczech" "Tworzenie dyskusji" "Automatyczna Mindmap" "Udostępnianie przez link" "Eksport tekstu i obrazu"]
-   :pricing.features/business ["Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista"]
+   :pricing.features/starter ["Hosting w Niemczech" "Nieograniczona ilość sznapsów" "Nieograniczona ilość uczestników" "Tworzenie dyskusji" "Przeprowadzić Q&A" "Automatyczna Mindmap" "Możliwość udostępniania za pomocą linku, kodu QR i kodu cyfrowego" "Eksport tekstu i obrazu"]
+   :pricing.features/business ["Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista" "Opcje moderacji"]
    :pricing.features/enterprise ["Osadzanie w istniejących systemach\" \"Logowanie SSO (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
-   :pricing.features/upcoming ["Analiza nastrojów A.I." "Przekształcanie mowy na tekst"]
+   :pricing.features/upcoming ["Analiza nastrojów A.I." "Integracje"]
    :pricing.units/per-month "/ Miesiąc"
-   :pricing.units/per-active-account "dla rachunku aktywów"
    :pricing.notes/with-vat "plus VAT."
-   :pricing.trial/call-to-action "Test Business przez 30 dni"
+   :pricing.trial/call-to-action "Test Pro przez 30 dni"
    :pricing.trial/description "Karta kredytowa nie jest konieczna! Możliwość odwołania w dowolnym momencie."
-   :pricing.trial.temporary/deactivation "Dostępne od 01.11.2021 r."
+   :pricing.trial.temporary/deactivation "Dostępne od 22.11.2021 r."
    :pricing.features/heading "Zalety subskrypcji Schnaq"
    :pricing.features.user-numbers/heading "Nieograniczona liczba uczestników"
-   :pricing.features.user-numbers/content "Pozwól współpracować tylu pracownikom, ilu chcesz. *"
+   :pricing.features.user-numbers/content "Pozwól współpracować tylu pracownikom, ilu chcesz."
    :pricing.features.team-numbers/heading "Nieograniczone zespoły"
    :pricing.features.team-numbers/content "Liczba zespołów, które możesz utworzyć jest nieograniczona. *"
    :pricing.features.app-integration/heading "Integracja aplikacji"
-   :pricing.features.app-integration/content "Połącz schnaq łatwo z Twoim Slack, MS Teams, Confluence …"
+   :pricing.features.app-integration/content "Podłącz schnaq łatwo do innego oprogramowania, którego używasz."
    :pricing.features.analysis/heading "Analizy automatyczne"
-   :pricing.features.analysis/content "Wkłady są automatycznie analizowane i przygotowywane dla wszystkich uczestników.."
+   :pricing.features.analysis/content "Wkłady są automatycznie analizowane i przygotowywane dla wszystkich uczestników. *"
    :pricing.features.knowledge-db/heading "Baza danych wiedzy"
    :pricing.features.knowledge-db/content "Gromadzenie zdobytej wiedzy i pomysłów w jednym miejscu."
    :pricing.features.mindmap/heading "Interaktywna mapa myśli"
    :pricing.features.mindmap/content "Wszystkie wkłady są automatycznie wyświetlane graficznie i interaktywnie."
-   :pricing.features/disclaimer "* Obowiązuje tylko dla subskrypcji Business"
+   :pricing.features/disclaimer "* Obowiązuje tylko dla subskrypcji Pro"
    :pricing.competitors/per-month-per-user " € miesięcznie za użytkownika"
-   :pricing.faq/heading "Najczęściej zadawane pytania dotyczące subskrypcji schnaq"
-   :pricing.faq.terminate/heading "Czy mogę zrezygnować w dowolnym momencie?"
-   :pricing.faq.terminate/body
-   [:<> [:span.text-primary "Tak!"] " Możesz" [:span.text-primary " co miesiąc"] " anulować,
-     jeśli wybrałeś metodę płatności miesięcznej. W przypadku wyboru metody płatności rocznej
-     możesz zrezygnować na koniec roku subskrypcji."]
-   :pricing.faq.extra-price/heading "Czy muszę płacić dodatkowo za więcej osób?"
-   :pricing.faq.extra-price/body
-   [:<> [:span.text-primary "Nie, "] "możesz" [:span.text-primary " dowolna liczba osób "]
-    " do swojej organizacji. Każda firma, stowarzyszenie,
-    instytucja edukacyjna, itp. potrzebuje tylko " [:span.text-primary "jeden abonament."]]
-   :pricing.faq.trial-time/heading "Czy okres próbny przedłuża się automatycznie?"
-   :pricing.faq.trial-time/body
-   [:<> [:span.text-primary "Nie, "] "po zakończeniu okresu próbnego, można" [:span.text-primary " aktywnie zdecydować"]
-    " czy chcesz dodać dane dotyczące płatności i nadal korzystać z taryfy biznesowej.
-    The " [:span.text-primary "Starter Plan pozostaje bezpłatny na czas nieokreślony"] ", nawet po okresie próbnym."]
-   :pricing.faq.longer-trial/heading "Czy mogę dłużej testować taryfę Biznes?"
-   :pricing.faq.longer-trial/body
-   [:<> [:span.text-primary "Tak! "] "Po prostu napisz do nas " [:span.text-primary "E-mail"] " do "
-    [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
-   :pricing.faq.privacy/heading "Kto ma dostęp do moich danych?"
-   :pricing.faq.privacy/body-1
-   [:<> "Każda osoba, którą dodasz do swojej firmy, może potencjalnie uzyskać dostęp do przechowywanych danych.
-    Z technicznego punktu widzenia, dane są przechowywane całkowicie bezpiecznie na"
-    [:span.text-primary " Niemieckie serwery i zgodność z GDPR"] " zapisane. Na naszej "]
-   :pricing.faq.privacy/body-2 "Strona poświęcona bezpieczeństwu danych"
-   :pricing.faq.privacy/body-3 " znajdziesz więcej informacji"
    :pricing/headline "Abonamenty"
    :pricing.newsletter/lead "Bądź informowany natychmiast, gdy subskrypcja wejdzie w życie:"
    :pricing.newsletter/name "newsletter schnaq."

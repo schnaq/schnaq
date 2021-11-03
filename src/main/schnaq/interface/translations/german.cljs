@@ -148,7 +148,7 @@
    :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, findest du in unserer"
 
    :startpage.faq/title "Häufig gestellte Fragen"
-   :startpage.faq/subtitle "(so könnte dein Kurs aussehen)"
+   :startpage.faq/subtitle "(so könnte es bei dir aussehen)"
    :startpage.faq.data/question "Was passiert mit meinen Daten?"
    :startpage.faq.data/answer-1 "Um einen möglichst sicheren Datenschutz zu gewährleisten, speichern
         wir alle Daten nur auf deutschen Servern. Wir haben alle Details einzeln und verständlich in unserer"
@@ -823,76 +823,48 @@
 
    ;; Pricing Page
    :pricing.intro/heading "Bald geht es los!"
-   :pricing.intro/lead "Schon bald kannst du hier deinen Tarif buchen. Möchtest du Teil unserer Beta sein und schon jetzt exklusiv und kostenfrei den Business-Tarif testen? Dann kontaktiere uns gerne!"
-   :pricing.free-tier/title "Starter"
-   :pricing.free-tier/subtitle "Individuell"
-   :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der perfekte Einstieg in strukturierte Diskussionen!"
-   :pricing.free-tier/beta-notice "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu fünf Nutzer:innen pro Team"
+   :pricing.intro/lead [:span "Schon bald kannst du hier deinen Tarif buchen. Möchtest du Teil unserer Beta sein und schon jetzt exklusiv und kostenfrei den Business-Tarif testen? Dann kontaktiere uns gerne unter " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
+   :pricing.free-tier/title "Frei"
+   :pricing.free-tier/subtitle "für immer"
+   :pricing.free-tier/description "Für effiziente Macher:innen und kleine Teams, die nicht viel brauchen. Erstelle Diskussionen und Q&As mit zwei Klicks."
+   :pricing.free-tier/beta-notice "Dieser Plan bleibt dauerhaft kostenfrei. Du brauchst mehr Funktionen? Upgrade jederzeit."
    :pricing.free-tier/call-to-action "Kostenfrei loslegen"
    :pricing.free-tier/for-free "Dauerhaft kostenfrei"
-   :pricing.business-tier/title "Business"
-   :pricing.business-tier/subtitle "Bringe dein Team zusammen"
-   :pricing.business-tier/description "Lasse dich von unserer K.I. unterstützen und erfahre mehr zu deinen Diskussionen!"
-   :pricing.business-tier/call-to-action "Business schon jetzt testen"
+   :pricing.pro-tier/title "Pro"
+   :pricing.pro-tier/subtitle "Aktiviere dein Potenzial"
+   :pricing.pro-tier/description "Erlange die volle Kontrolle über deine schnaqs und verstehe deine Teilnehmer:innen zu 100 %."
+   :pricing.pro-tier/call-to-action "Pro schon jetzt testen"
    :pricing.enterprise-tier/title "Enterprise"
    :pricing.enterprise-tier/subtitle "Großes vor?"
-   :pricing.enterprise-tier/description "Möchtest du dein gesamtes Unternehmen, einen Verein, Institution, ganze Universitäten anbinden? Dann bist du hier richtig!"
+   :pricing.enterprise-tier/description "Optimiere die Kommunikation deines gesamten Unternehmens. Spezielle Wünsche und Anforderungen sind hier kein Problem."
    :pricing.enterprise-tier/call-to-action "Anfrage senden"
    :pricing.enterprise-tier/on-request "Auf Anfrage"
    :pricing.features/implemented "Bereits implementiert"
    :pricing.features/to-be-implemented "Bald verfügbar"
-   :pricing.features/starter ["In Deutschland gehostet" "Diskussionen erstellen" "Automatische Mindmap" "Teilbar per Link" "Text- und Bild-Export"]
-   :pricing.features/business ["Analyse-Dashboard" "K.I. Zusammenfassungen" "Persönlicher Bereich"]
+   :pricing.features/starter ["In Deutschland gehostet" "Unendlich viele schnaqs" "Unendlich viele Teilnehmer:innen" "Diskussionen erstellen" "Fragen und Antworten Modus" "Automatische Mindmap" "Teilbar per Link, QR-Code und Zahlencode" "Text- und Bild-Export"]
+   :pricing.features/business ["Analyse-Dashboard" "K.I. Zusammenfassungen" "Persönlicher Bereich" "Moderationsoptionen"]
    :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling" "On-Premise"]
-   :pricing.features/upcoming ["K.I. Stimmungsanalyse" "Sprache-zu-Text"]
+   :pricing.features/upcoming ["K.I. Stimmungsanalyse" "Integrationen"]
    :pricing.units/per-month "/ Monat"
-   :pricing.units/per-active-account "pro aktivem Account"
    :pricing.notes/with-vat "zzgl. MwSt."
-   :pricing.trial/call-to-action "30 Tage Business testen"
+   :pricing.trial/call-to-action "30 Tage den Pro Plan testen"
    :pricing.trial/description "Keine Kreditkarte nötig! Jederzeit kündbar."
-   :pricing.trial.temporary/deactivation "Verfügbar ab 01.11.2021"
+   :pricing.trial.temporary/deactivation "Verfügbar ab 22.11.2021"
    :pricing.features/heading "Schnaq-Abonnement Vorteile"
    :pricing.features.user-numbers/heading "Unbegrenzte Teilnehmer:innen"
-   :pricing.features.user-numbers/content "Lass so viele Mitarbeiter:innen, wie du möchtest, kooperieren. *"
+   :pricing.features.user-numbers/content "Lasse so viele Personen, wie du möchtest, kooperieren."
    :pricing.features.team-numbers/heading "Unbegrenzte Teams"
    :pricing.features.team-numbers/content "Die Anzahl der Teams, die du erstellen kannst, ist unlimitiert. *"
    :pricing.features.app-integration/heading "App-Integration"
-   :pricing.features.app-integration/content "Verknüpfe schnaq leicht mit deinem Slack, MS Teams, Confluence …"
+   :pricing.features.app-integration/content "Verknüpfe schnaq leicht mit anderer Software, die du nutzt."
    :pricing.features.analysis/heading "Automatische Analysen"
-   :pricing.features.analysis/content "Die Beiträge werden automatisch analysiert und für alle Teilnehmer:innen aufbereitet."
+   :pricing.features.analysis/content "Die Beiträge werden automatisch analysiert und für alle Teilnehmer:innen aufbereitet. *"
    :pricing.features.knowledge-db/heading "Wissensdatenbank"
    :pricing.features.knowledge-db/content "Sammle erarbeitetes Wissen und Ideen an einem Ort."
    :pricing.features.mindmap/heading "Interaktive Mindmap"
    :pricing.features.mindmap/content "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."
-   :pricing.features/disclaimer "* Gilt nur für Business-Abonnement"
+   :pricing.features/disclaimer "* Gilt nur für Pro-Abonnement"
    :pricing.competitors/per-month-per-user " € pro Monat pro Nutzer:in"
-   :pricing.faq/heading "Häufig gestellte Fragen zu schnaq Abos"
-   :pricing.faq.terminate/heading "Kann ich jederzeit kündigen?"
-   :pricing.faq.terminate/body
-   [:<> [:span.text-primary "Ja! "] " Du kannst" [:span.text-primary " jeden Monat"] " kündigen,
-     wenn du die monatliche Zahlweise gewählt hast. Wenn du die jährliche Zahlweise
-     wählst, kannst du zum Ablauf des Abonnementjahres kündigen."]
-   :pricing.faq.extra-price/heading "Muss ich für mehr Leute extra bezahlen?"
-   :pricing.faq.extra-price/body
-   [:<> [:span.text-primary "Nein, "] "du kannst" [:span.text-primary " beliebig viele Personen "]
-    " zu deiner Organisation hinzufügen. Jedes Unternehmen, Verein,
-    Bildungseinrichtung, usw. braucht " [:span.text-primary "nur ein Abonnement."]]
-   :pricing.faq.trial-time/heading "Verlängert sich der Testzeitraum automatisch?"
-   :pricing.faq.trial-time/body
-   [:<> [:span.text-primary "Nein, "] "wenn dein Testzeitraum endet, kannst du" [:span.text-primary " aktiv entscheiden"]
-    ", ob du Zahlungsdaten hinzufügen und weiter den Business-Tarif nutzen möchtest.
-    Der " [:span.text-primary "Starter Plan bleibt unbegrenzt kostenfrei"] ", auch nach dem Testzeitraum."]
-   :pricing.faq.longer-trial/heading "Kann ich den Business-Tarif länger testen?"
-   :pricing.faq.longer-trial/body
-   [:<> [:span.text-primary "Ja! "] "Schreibe uns einfach eine " [:span.text-primary " E-Mail"] " an "
-    [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
-   :pricing.faq.privacy/heading "Wer hat Zugriff auf meine Daten?"
-   :pricing.faq.privacy/body-1
-   [:<> "Jede Person, die du deinem Unternehmen hinzufügst, kann potenziell auf die hinterlegten Daten zugreifen."
-    "Technisch werden deine Daten vollständig sicher auf"
-    [:span.text-primary " deutschen Servern und DSGVO konform"] " abgespeichert. Auf unserer "]
-   :pricing.faq.privacy/body-2 "Seite zur Datensicherheit"
-   :pricing.faq.privacy/body-3 " findest du mehr Informationen"
    :pricing/headline "Abonnements"
    :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht:"
    :pricing.newsletter/name "schnaq Newsletter."
