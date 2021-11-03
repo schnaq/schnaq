@@ -104,7 +104,7 @@
 
    ;; Startpage
    :startpage/heading "Collecting questions made simple"
-   :startpage/subheading "Create order in the interaction with your course participants"
+   :startpage/subheading "Q&A made simple"
    :startpage/hook "Simply collect questions and provide answers in your hybrid courses - for more clarity and sustainable exchange"
    :startpage.social-proof/numbers [:span "schnaq helped lead over " [:b marketing-num-schnaqs]
                                     " discussions and Q&As which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
@@ -938,6 +938,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :admin.center.delete.private/label "Share-hash"
    :admin.center.delete.private/heading "Private schnaqs"
 
+   :badges.filters/label "Display"
    :badges/sort "Sorting"
    :badges.sort/newest "Newest"
    :badges.sort/popular "Popular"

@@ -146,18 +146,18 @@
 (defn filter-answered-statements
   "Show buttons to toggle between answered / unanswered statements."
   []
-  [sc/discussion-options-button-group
-   [{:on-click #(rf/dispatch [:filters/clear])
-     :icon-key :comments
-     :label-key :filters.option.answered/all}
-    {:on-click (fn [] (rf/dispatch [:filters/clear])
-                 (rf/dispatch [:filters.activate/answered? true]))
-     :icon-key :check/normal
-     :label-key :filters.option.answered/answered}
-    {:on-click (fn [] (rf/dispatch [:filters/clear])
-                 (rf/dispatch [:filters.activate/answered? false]))
-     :icon-key :info-question
-     :label-key :filters.option.answered/unanswered}]])
+  [:<>
+   [:small.text-muted (labels :badges.filters/label)]
+   [:div
+    [sc/discussion-options-button-group
+     [{:on-click #(rf/dispatch [:filters/clear])
+       :label-key :filters.option.answered/all}
+      {:on-click (fn [] (rf/dispatch [:filters/clear])
+                   (rf/dispatch [:filters.activate/answered? true]))
+       :label-key :filters.option.answered/answered}
+      {:on-click (fn [] (rf/dispatch [:filters/clear])
+                   (rf/dispatch [:filters.activate/answered? false]))
+       :label-key :filters.option.answered/unanswered}]]]])
 
 (defn- active-filters
   "A menu showing the currently active filters."
@@ -190,7 +190,7 @@
   (let [active-filters? @(rf/subscribe [:filters/active?])]
     [tooltip/html
      [default-menu]
-     [:button.btn.btn-outline-primary.button-discussion-options
+     [:button.btn.btn-sm.btn-outline-primary.button-discussion-options
       {:class (when active-filters? "btn-outline-secondary active")}
       (labels :badges.filters/button)]
      {:hideOnClick :toggle}]))

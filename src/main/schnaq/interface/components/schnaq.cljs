@@ -3,7 +3,6 @@
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.colors :refer [colors]]
-            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
@@ -29,19 +28,40 @@
 (defn discussion-options-button-group
   "Build a button-group with for the discussion-view."
   [[first-button & rest-buttons]]
-  (let [{:keys [on-click icon-key label-key]} first-button]
+  (let [{:keys [on-click label-key]} first-button]
     [:div.btn-group.btn-group-toggle.button-discussion-options {:data-toggle "buttons"}
-     [:label.btn.btn-outline-primary.active
+     [:label.btn.btn-sm.btn-outline-primary.active
       [:input {:type "radio" :autoComplete "off" :defaultChecked true
                :onClick on-click}]
-      [icon icon-key]
-      [:div.small (labels label-key)]]
-     (for [{:keys [on-click icon-key label-key]} rest-buttons]
-       [:label.btn.btn-outline-primary {:key (str "discussion-options-button-group-item-" label-key)}
+      [:small.d-md-none (labels label-key)]
+      [:div.d-none.d-md-block (labels label-key)]]
+     (for [{:keys [on-click label-key]} rest-buttons]
+       [:label.btn.btn-sm.btn-outline-primary {:key (str "discussion-options-button-group-item-" label-key)}
         [:input {:type "radio" :autoComplete "off"
                  :onClick on-click}]
-        [icon icon-key]
-        [:div.small (labels label-key)]])]))
+        [:small.d-md-none (labels label-key)]
+        [:div.d-none.d-md-block (labels label-key)]])]))
+
+(defn discussion-options-dropdown
+  "Build a dropdown menu for the discussion view"
+  [button-title dropdown-id [first-button & rest-buttons]]
+  (let [{:keys [on-click label-key]} first-button
+        dropdown-menu-id dropdown-id
+        button-title button-title]
+    [:div.dropdown
+     [:button.btn.btn-sm.btn-primary.dropdown-toggle
+      {:id dropdown-menu-id :type "button" :data-toggle "dropdown"
+       :aria-haspopup "true" :aria-expanded "false"}
+      button-title]
+     [:div.dropdown-menu {:aria-labelledby dropdown-menu-id}
+      [:button.dropdown-item
+       {:on-click on-click}
+       (labels label-key)]
+      (for [{:keys [on-click label-key]} rest-buttons]
+        [:button.dropdown-item
+         {:key (str "discussion-options-dropdown-item-" label-key)
+          :on-click on-click}
+         (labels label-key)])]]))
 
 (defn qr-code
   ([link]

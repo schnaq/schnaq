@@ -8,6 +8,7 @@
 
   @include media-breakpoint-down(sm) {
     border-radius: 0;
+    padding: 0.5rem;
   }
 }
 
@@ -84,6 +85,11 @@
   min-height: 8rem;
   outline: 0 none;
   padding: 1rem 1rem 1rem 0;
+
+  @include media-breakpoint-down(sm) {
+    min-height: 1rem;
+    padding: 0.2rem 0.2rem 0.2rem 0;
+  }
 }
 
 .qanda-input-content {

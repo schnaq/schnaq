@@ -103,7 +103,7 @@
 
    ;; Startpage
    :startpage/heading "Ułatwione zbieranie pytań"
-   :startpage/subheading "Stwórz porządek w interakcji z uczestnikami Twojego kursu"
+   :startpage/subheading "Q&A proste i dobre"
    :startpage/hook "Po prostu zbieraj pytania i udzielaj odpowiedzi w swoich kursach hybrydowych - dla większej przejrzystości i zrównoważonej wymiany"
    :startpage.social-proof/numbers [:span "schnaq pomógł poprowadzić ponad " [:b marketing-num-schnaqs]
                                     " dyskusji i Q&A, co przekłada się na " [:b marketing-num-statements] " przypadków wspólnej wiedzy."]
@@ -933,6 +933,7 @@
    :admin.center.delete.private/label "Share-hash"
    :admin.center.delete.private/heading "Prywatne schnaqs"
 
+   :badges.filters/label "Wyświetlacz"
    :badges/sort "Sortowanie"
    :badges.sort/newest "Najnowsze"
    :badges.sort/popular "Popularny"

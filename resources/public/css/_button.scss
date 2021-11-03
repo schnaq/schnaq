@@ -2,18 +2,17 @@
 @import 'variables';
 
 
-@mixin button-template($padding-top-bottom, $padding-left-right) {
+@mixin button-template {
   @extend .shadow-sm;
   border: 0;
   color: $white;
   font-weight: bold;
-  padding: $padding-top-bottom $padding-left-right;
 }
 
 // btns
 
 .btn-secondary {
-  @include button-template(0.5rem, 1rem);
+  @include button-template;
   color: $white;
 
   &:hover {
@@ -22,7 +21,7 @@
 }
 
 .btn-primary {
-  @include button-template(0.5rem, 1rem);
+  @include button-template;
   color: $white;
 }
 
@@ -46,9 +45,8 @@
 // Buttons
 
 .button-secondary {
-  @include button-template(1rem, 2rem);
+  @include button-template;
   background-color: $secondary;
-  font-size: 125%;
 
   &:hover {
     background-color: $secondary-selected;
@@ -72,9 +70,8 @@
 }
 
 .button-primary {
-  @include button-template(1rem, 2rem);
+  @include button-template;
   background-color: $primary;
-  font-size: 150%;
 
   &:hover {
     background-color: $primary-selected;
@@ -83,9 +80,6 @@
   }
 }
 
-.button-discussion-options {
-  @extend .h-100;
-}
 
 .font-150 {
   font-size: 150%;
