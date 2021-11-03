@@ -148,7 +148,7 @@
    :startpage.newsletter/privacy-policy-lead "More information about the handling of your personal data can be found in our"
 
    :startpage.faq/title "Frequently Asked Questions"
-   :startpage.faq/subtitle "(this is what your course could look like)"
+   :startpage.faq/subtitle "(this is what it could look like for you)"
    :startpage.faq.data/question "What happens with my data?"
    :startpage.faq.data/answer-1 "We only store data on german servers, to provide the best possible data protection. All details are explained
         in an understandable manner in our"
@@ -822,75 +822,48 @@ Now we write down questions and discuss them and can still understand what we ha
 
    ;; Pricing Page
    :pricing.intro/heading "Starting soon!"
-   :pricing.intro/lead "You will soon be able to book your plan here. Would you like to be part of our beta and test the business plan exclusively and free of charge? Then please contact us!"
-   :pricing.free-tier/title "Starter"
-   :pricing.free-tier/subtitle "Individual"
-   :pricing.free-tier/description "For small teams and private use. The Starter Plan is the perfect introduction to structured discussions!"
-   :pricing.free-tier/beta-notice "After the beta phase, the plan is still available for up to five users per team."
+   :pricing.intro/lead [:span "You will soon be able to book your plan here. Would you like to be part of our beta and test the business plan exclusively and free of charge? Then please contact us at " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
+   :pricing.free-tier/title "Free"
+   :pricing.free-tier/subtitle "Forever"
+   :pricing.free-tier/description "For efficient makers and small teams, that don't need a lot. Create discussions and Q&As with two clicks."
+   :pricing.free-tier/beta-notice "This plan stays free forever. Need more features? Upgrade easily with a few clicks."
    :pricing.free-tier/call-to-action "Start Free of Charge"
-   :pricing.free-tier/for-free "Permanently free of charge"
-   :pricing.business-tier/title "Business"
-   :pricing.business-tier/subtitle "Bring your team together"
-   :pricing.business-tier/description "Let our A.I. support you and learn more about your discussions!"
-   :pricing.business-tier/call-to-action "Test Business now"
+   :pricing.free-tier/for-free "Free forever"
+   :pricing.pro-tier/title "Pro"
+   :pricing.pro-tier/subtitle "Activate your potential"
+   :pricing.pro-tier/description "Gain full control over your discussions and Q&As and completley understand your participants."
+   :pricing.pro-tier/call-to-action "Test Business now"
    :pricing.enterprise-tier/title "Enterprise"
    :pricing.enterprise-tier/subtitle "Big plans?"
-   :pricing.enterprise-tier/description "Do you want to connect your entire company, a club, institution or even a whole university? Then you've come to the right place!"
+   :pricing.enterprise-tier/description "Optimize the communication of your company. Special wishes and requirements can be accomodated for easily."
    :pricing.enterprise-tier/call-to-action "Send Inquiry"
    :pricing.enterprise-tier/on-request "On Request"
    :pricing.features/implemented "Already implemented"
    :pricing.features/to-be-implemented "Soon available"
-   :pricing.features/starter ["Hosted in Germany" "Create Discussions" "Automatic Mindmap" "Shareable by Link" "Text and Image Export"]
-   :pricing.features/business ["Analysis Dashboard" "A.I. Summaries" "Personal Space"]
+   :pricing.features/starter ["Hosted in Germany" "Unlimited schnaqs" "Unlimited participants" "Create Discussions" "Hold Q&As" "Automatic Mindmap" "Shareable by Link, QR Code and digit code" "Text and Image Export"]
+   :pricing.features/business ["Analysis Dashboard" "A.I. Summaries" "Personal Spaces" "Moderation Options"]
    :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
-   :pricing.features/upcoming ["A.I. Sentiment Analysis" "Speech-to-Text"]
+   :pricing.features/upcoming ["A.I. Sentiment Analysis" "Integrations"]
    :pricing.units/per-month "/ month"
-   :pricing.units/per-active-account "per active account"
    :pricing.notes/with-vat "plus VAT"
-   :pricing.trial/call-to-action "Test business 30 days free of charge"
+   :pricing.trial/call-to-action "Test the pro plan 30 days free of charge"
    :pricing.trial/description "No credit card needed! Cancel anytime."
-   :pricing.trial.temporary/deactivation "Available from 01.11.2021"
+   :pricing.trial.temporary/deactivation "Available from 22.11.2021"
    :pricing.features/heading "Schnaq subscription advantages"
    :pricing.features.user-numbers/heading "Unlimited member accounts"
-   :pricing.features.user-numbers/content "Set no bounds for how many people can collaborate. *"
+   :pricing.features.user-numbers/content "Set no bounds for how many people can collaborate."
    :pricing.features.team-numbers/heading "Unlimited number of teams"
    :pricing.features.team-numbers/content "Create as many teams as are needed for your projects. *"
    :pricing.features.app-integration/heading "App integration"
-   :pricing.features.app-integration/content "Connect schnaq easily to your Slack, MS Teams, Confluence …"
+   :pricing.features.app-integration/content "Connect schnaq easily to other software you use."
    :pricing.features.analysis/heading "Automatic Analyses"
-   :pricing.features.analysis/content "All discussions are automatically analyzed and presented to the participants."
+   :pricing.features.analysis/content "All discussions are automatically analyzed and presented to the participants. *"
    :pricing.features.knowledge-db/heading "Knowledge Database"
    :pricing.features.knowledge-db/content "Collect all your knowledge in one spot."
    :pricing.features.mindmap/heading "Interactive mindmap"
    :pricing.features.mindmap/content "All statements are automatically structured and shown in an interactive mindmap."
-   :pricing.features/disclaimer "* Applies only to business plan"
+   :pricing.features/disclaimer "* Applies only to pro plan"
    :pricing.competitors/per-month-per-user " € per month per user"
-   :pricing.faq/heading "Frequently asked questions regarding schnaq subscriptions"
-   :pricing.faq.terminate/heading "Can I cancel anytime?"
-   :pricing.faq.terminate/body
-   [:<> [:span.text-primary "Yes! "] "You are able to cancel" [:span.text-primary " every month"] ",
-     if you are paying monthly. If you are paying yearly, you can cancel at the end of the subscription year."]
-   :pricing.faq.extra-price/heading "Do I need to pay extra for more seats?"
-   :pricing.faq.extra-price/body
-   [:<> [:span.text-primary "No, "] "you can add" [:span.text-primary " unlimited accounts "]
-    " to your organization. Every company, club,
-    educational institution, etc. only needs " [:span.text-primary "one subscription."]]
-   :pricing.faq.trial-time/heading "Is my trial-subscription automatically converted into a paid one?"
-   :pricing.faq.trial-time/body
-   [:<> [:span.text-primary "No, "] "when your trial ends, you can" [:span.text-primary " actively decide"]
-    ", whether you want to add payment data and continue using the business plan.
-    The " [:span.text-primary "starter plan stays free of charge"] ", after a possible trial."]
-   :pricing.faq.longer-trial/heading "Can I trial the business plan a little bit longer?"
-   :pricing.faq.longer-trial/body
-   [:<> [:span.text-primary "Sure! "] "Simply write us an " [:span.text-primary " Email"] " at "
-    [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
-   :pricing.faq.privacy/heading "Who can access my data?"
-   :pricing.faq.privacy/body-1
-   [:<> "Any Person who is added to your organization and to corresponding teams can see their data."
-    "From a technical standpoint the data is securely saved on"
-    [:span.text-primary " german Servers in a GDPR compliant"] " manner. See the "]
-   :pricing.faq.privacy/body-2 "Privacy notice page"
-   :pricing.faq.privacy/body-3 " for more information."
    :pricing/headline "Subscriptions"
    :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live:"
    :pricing.newsletter/name "schnaq newsletter."
