@@ -63,7 +63,7 @@
 (defn- cta-button
   "Component to build the call-to-action button in a tier card."
   [label class fn]
-  [:div.text-center.pt-4
+  [:div.text-center.py-4
    [:a.btn {:class class :href fn} label]])
 
 (defn- tier-card
@@ -71,13 +71,14 @@
   [title subtitle icon-name price description features upcoming-features cta-button options]
   (let [title-label (labels title)]
     [:article.card.shadow-sm.mb-2 options
-     [:div.card-body.card-price
-      [:h3.card-title.text-center title-label]
-      [:h6.card-subtitle.mb-3.text-muted.text-center (labels subtitle)]
-      [:p.card-text.text-center [icon icon-name "text-primary" {:size "4x"}]]
-      [:p.text-center price]
-      [:p.card-text.text-justify (labels description)]]
      [:div.card-body
+      [:div.card-infos
+       [:h3.card-title.text-center title-label]
+       [:h6.card-subtitle.mb-3.text-muted.text-center (labels subtitle)]
+       [:p.card-text.text-center [icon icon-name "text-primary" {:size "4x"}]]
+       [:p.text-center price]
+       [:p.card-text.text-justify (labels description)]]
+      cta-button
       [:ul.pricing-feature-list
        (for [[feature class] features]
          (with-meta
@@ -88,8 +89,7 @@
          (with-meta
            [:li.list-group-item
             [icon :check/normal (str class " mr-2")] feature]
-           {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))]
-      cta-button]]))
+           {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))]]]))
 
 (defn- free-tier-card
   "Display the free tier card."
@@ -103,7 +103,7 @@
    [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (reititfe/href :routes.schnaq/create)]])
 
 (defn- pro-tier-card
-  "Display the business tier card."
+  "Display the pro tier card."
   []
   [tier-card
    :pricing.pro-tier/title :pricing.pro-tier/subtitle :crown
