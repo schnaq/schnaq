@@ -34,6 +34,10 @@
 }
 
 .card-infos {
-  height: 21rem;
+  height: 20rem;
+
+  @include media-breakpoint-down(md) {
+    height: 18rem;
+  }
 }
 

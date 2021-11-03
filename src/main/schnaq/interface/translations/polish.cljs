@@ -831,7 +831,7 @@
    :pricing.pro-tier/call-to-action "Przetestuj biznes teraz"
    :pricing.enterprise-tier/title "Enterprise"
    :pricing.enterprise-tier/subtitle "Wielkie plany?"
-   :pricing.enterprise-tier/description "Chcesz połączyć całą firmę, klub, instytucję lub nawet całą uczelnię? W takim razie trafiłeś we właściwe miejsce!"
+   :pricing.enterprise-tier/description "Zoptymalizuj komunikację w swojej firmie. Specjalne życzenia i wymagania mogą być łatwo spełnione."
    :pricing.enterprise-tier/call-to-action "Wyślij zapytanie"
    :pricing.enterprise-tier/on-request "Na żądanie"
    :pricing.features/implemented "Już wdrożone"

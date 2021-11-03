@@ -836,7 +836,7 @@
    :pricing.pro-tier/call-to-action "Business schon jetzt testen"
    :pricing.enterprise-tier/title "Enterprise"
    :pricing.enterprise-tier/subtitle "Großes vor?"
-   :pricing.enterprise-tier/description "Möchtest du dein gesamtes Unternehmen, einen Verein, Institution, ganze Universitäten anbinden? Dann bist du hier richtig!"
+   :pricing.enterprise-tier/description "Optimiere die Kommunikation deines gesamten Unternehmens. Spezielle Wünsche und Anforderungen sind hier kein Problem."
    :pricing.enterprise-tier/call-to-action "Anfrage senden"
    :pricing.enterprise-tier/on-request "Auf Anfrage"
    :pricing.features/implemented "Bereits implementiert"

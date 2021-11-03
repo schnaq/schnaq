@@ -38,7 +38,7 @@
   "Unify the price-tag design."
   [price per-account?]
   [:<>
-   [:span.display-4 price " €"]
+   [:span.display-5 price " €"]
    [:span (labels :pricing.units/per-month)]
    (when per-account?
      [:<> [:br]

@@ -835,7 +835,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.pro-tier/call-to-action "Test Business now"
    :pricing.enterprise-tier/title "Enterprise"
    :pricing.enterprise-tier/subtitle "Big plans?"
-   :pricing.enterprise-tier/description "Do you want to connect your entire company, a club, institution or even a whole university? Then you've come to the right place!"
+   :pricing.enterprise-tier/description "Optimize the communication of your company. Special wishes and requirements can be accomodated for easily."
    :pricing.enterprise-tier/call-to-action "Send Inquiry"
    :pricing.enterprise-tier/on-request "On Request"
    :pricing.features/implemented "Already implemented"
