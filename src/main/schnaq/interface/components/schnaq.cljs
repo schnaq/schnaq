@@ -33,13 +33,13 @@
      [:label.btn.btn-sm.btn-outline-primary.active
       [:input {:type "radio" :autoComplete "off" :defaultChecked true
                :onClick on-click}]
-      [:small.ml-1.d-md-none (labels label-key)]
+      [:small.d-md-none (labels label-key)]
       [:div.d-none.d-md-block (labels label-key)]]
      (for [{:keys [on-click label-key]} rest-buttons]
        [:label.btn.btn-sm.btn-outline-primary {:key (str "discussion-options-button-group-item-" label-key)}
         [:input {:type "radio" :autoComplete "off"
                  :onClick on-click}]
-        [:small.ml-1.d-md-none (labels label-key)]
+        [:small.d-md-none (labels label-key)]
         [:div.d-none.d-md-block (labels label-key)]])]))
 
 (defn discussion-options-dropdown
