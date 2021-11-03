@@ -26,6 +26,7 @@ $white-very-light-pink: #efefef !default;
 $light-base: #fffdfd !default;
 $light-disable: #f9f9f9 !default;
 $light-hover: #eaeaea !default;
+$gray-neutal: #e8e8f1 !default;
 $light-background: #f6f8ff !default;
 $gray-base: #919ca4 !default;
 $gray-disbale: #acb8c2 !default;
@@ -59,19 +60,15 @@ $yellow: #f9b756 !default;
 $green: #6aedac !default;
 $cyan: #17a2b8 !default;
 
-// Main Colors
+// discussion Colors
 $positive: $blue-base !default;
-$positive-selected: $blue-selected !default;
 $negative: $orange-base !default;
-$negative-selected: $orange-selected !default;
-$neutral: $light-hover !default;
+$neutral: $gray-neutal !default;
+
+// Bootstrap overrides
 $primary: $blue-base !default;
-$primary-selected: $blue-selected !default;
 $primary-light: $blue-light !default;
-$primary-light-selected: $blue-light-selected !default;
 $secondary: $orange-base !default;
-$secondary-selected: $orange-selected !default;
-$secondary-pale: $orange-disable !default;
 $success: $green !default;
 $info: $cyan !default;
 $warning: $yellow !default;
