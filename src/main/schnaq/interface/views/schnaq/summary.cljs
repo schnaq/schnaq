@@ -54,7 +54,7 @@
                       :requested (str (labels :summary.user.requested/label) "…")
                       (labels :summary.user.not-requested/label))]
     [:section.d-block.text-center
-     [:button.btn.btn-dark-highlight.mb-2
+     [:button.btn.btn-dark.mb-2
       (if (some #{request-status} calculation-states)
         {:disabled true}
         {:on-click #(rf/dispatch [:schnaq.summary/request share-hash])})

@@ -3,9 +3,13 @@
 $a-tags: 'a, a:active, a:hover, a:visited';
 
 footer {
-  background-color: $blue-dark;
+  background-image: url('https://s3.schnaq.com/schnaq-common/background/layered_background_dark_footer.svg');
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
   color: $gray-100;
   min-height: 15vh;
+  overflow: hidden;
   padding: 2rem 0;
 
   .lead {

@@ -7,11 +7,8 @@
 // etc. available for use.
 $theme-colors: (
   'white': $white,
-  'dark-blue': $blue-dark,
-  'dark-highlight': $dark-highlight,
-  'purple': $purple,
-  'purple-dark' : $purple-dark,
-  'gray': $gray-600
+  'typography': $typography,
+  'gray': $gray-base,
 );
 
 $grid-breakpoints: (

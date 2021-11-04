@@ -14,10 +14,6 @@
 .btn-secondary {
   @include button-template;
   color: $white;
-
-  &:hover {
-    background-color: $secondary-selected;
-  }
 }
 
 .btn-primary {
@@ -49,7 +45,6 @@
   background-color: $secondary;
 
   &:hover {
-    background-color: $secondary-selected;
     box-shadow: $hover-shadow;
     color: $white;
   }
@@ -74,7 +69,6 @@
   background-color: $primary;
 
   &:hover {
-    background-color: $primary-selected;
     box-shadow: $hover-shadow;
     color: $white;
   }
@@ -94,7 +88,7 @@
 }
 
 .secondary-color {
-  color: $secondary-selected;
+  color: $secondary;
 }
 
 .schnaq-delete-button {

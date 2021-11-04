@@ -24,7 +24,9 @@
     more-for-heading]
    (cond
      (gstring/contains (str classes) "bg-white") [:div.wave-bottom-white]
-     (gstring/contains (str classes) "bg-dark-blue") [:div.wave-bottom-dark-blue]
+     (gstring/contains (str classes) "bg-primary") [:div.wave-bottom-primary]
+     (gstring/contains (str classes) "bg-typography") [:div.wave-bottom-typography]
+     (gstring/contains (str classes) "bg-dark") [:div.wave-bottom-dark]
      :else [:div.wave-bottom-light])])
 
 

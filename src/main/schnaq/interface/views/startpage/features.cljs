@@ -43,7 +43,7 @@
   [title body icon-key]
   [:div.col-12.col-md-4
    [:div.panel-white.mx-1.shadow.py-4.text-center
-    [:div.display-6.text-purple.mb-3 (labels title)]
+    [:div.display-6.text-typography.mb-3 (labels title)]
     [icon icon-key "py-2" {:size "3x"}]
     [:p.text-justify (labels body)]]])
 

@@ -1,7 +1,7 @@
 @import 'variables';
 
 .trial-box {
-  background-color: $blue-dark;
+  background-color: $dark;
   border-radius: 1.5rem;
   color: $white;
   display: inline-block;
@@ -9,7 +9,7 @@
   padding: 1em;
 
   &:hover {
-    background-color: lighten($blue-dark, 10%);
+    background-color: $dark-hover;
     box-shadow: $hover-shadow !important;
   }
 }

@@ -1,9 +1,8 @@
 @use 'variables' as vars;
 @use 'rounded' as rounded;
 
-$header-color: vars.$primary-selected;
+$header-color: vars.$primary;
 $header-opacity: 1;
-$gradient-target: vars.$primary;
 
 .masthead {
   background-color: $header-color;
@@ -65,6 +64,21 @@ $gradient-target: vars.$primary;
 .wave-bottom-dark-blue {
   @extend .wave-bottom-white;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-dark-blue.svg');
+}
+
+.wave-bottom-primary {
+  @extend .wave-bottom-white;
+  background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-primary.svg');
+}
+
+.wave-bottom-typography {
+  @extend .wave-bottom-white;
+  background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-typography.svg');
+}
+
+.wave-bottom-dark {
+  @extend .wave-bottom-white;
+  background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-dark.svg');
 }
 
 .feature-text-box {

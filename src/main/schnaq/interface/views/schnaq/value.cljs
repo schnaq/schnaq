@@ -28,7 +28,7 @@
 (defn- next-button []
   (let [{:discussion/keys [share-hash]} @(rf/subscribe [:schnaq/selected])]
     [:div.row.px-1.pb-5
-     [:a.btn.btn-dark-highlight.p-3.rounded-1.ml-auto.mb-5
+     [:a.btn.btn-dark.p-3.rounded-1.ml-auto.mb-5
       {:href (rfe/href :routes.schnaq/start {:share-hash share-hash})}
       (labels :schnaqs/continue-to-schnaq-button)
       [icon :arrow-right "ml-2"]]]))
@@ -45,7 +45,7 @@
     :page/title (labels :schnaq.create/title)
     :page/vertical-header? true
     :page/more-for-heading [value-content]
-    :page/classes "base-wrapper bg-dark-blue"}])
+    :page/classes "base-wrapper bg-typography"}])
 
 (defn schnaq-value-view
   "Displays a view with schnaq's most important features"

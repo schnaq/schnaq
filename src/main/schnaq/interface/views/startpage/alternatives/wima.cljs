@@ -35,7 +35,7 @@
      [:section.container.my-5
       [rows/row-builder-text-left
        [:article.feature-text-box
-        [:h3.h1.text-purple.mb-3 "Nie wieder Wissen suchen"]
+        [:h3.h1.text-typography.mb-3 "Nie wieder Wissen suchen"]
         [:p "Durch K.I. gestütztes Q&A und eine Wissensdatenbank können deine Mitarbeiter:innen immer effizient finden, was sie suchen."]]
        [motion/zoom-image {:src (img-path :startpage.example/statements)
                            :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
@@ -43,13 +43,13 @@
       [rows/row-builder-text-right
        [:img {:src (img-path :startpage.alternatives.e-learning/student-smartphone)}]
        [:article.feature-text-box
-        [:h3.h1.text-purple.mb-3 "Auch unterwegs bei Kunden nutzbar"]
+        [:h3.h1.text-typography.mb-3 "Auch unterwegs bei Kunden nutzbar"]
         [:p "Um schnaq zu benutzen, braucht es nur Internet.
        Kompatibel mit allen Smartphones, Tablets und Computern."]]]]
      [:section.container.mb-5
       [rows/row-builder-text-left
        [:article.feature-text-box
-        [:h3.h1.text-purple.mb-3 "Einfacher Überblick zu jeder Zeit"]
+        [:h3.h1.text-typography.mb-3 "Einfacher Überblick zu jeder Zeit"]
         [:p "Verschaffe dir einen schnellen Überblick über das Diskutierte. Vollziehe einfach nach worüber deine Kolleg:innen reden. Oder schaue dir die verschiedenen K.I. Auswertungen der Diskussion an."]]
        [motion/zoom-image {:src (img-path :startpage.example/dashboard)
                            :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
@@ -57,7 +57,7 @@
       [rows/row-builder-text-right
        [:img {:src (img-path :startpage.alternatives.e-learning/oma)}]
        [:article.feature-text-box
-        [:h3.h1.text-purple.mb-3 "Für alle einfach zu bedienen"]
+        [:h3.h1.text-typography.mb-3 "Für alle einfach zu bedienen"]
         [:p "Für schnaq braucht es keine technischen Kenntnisse! Alle schaffen es schnaq zu bedienen. Kommen mal Fragen auf? Kontaktiere den Support jederzeit."]]]]
      [:section.overflow-hidden.py-3.my-5
       [wavy/top-and-bottom

@@ -30,7 +30,7 @@
    [:div.mx-md-5
     [:div.d-flex.flex-row.d-md-none.align-items-center
      [um/user-handling-menu "btn-link"]]
-    [:h1.h3.font-weight-bold.my-auto.d-none.d-md-block.text-dark-highlight title]]])
+    [:h1.h3.font-weight-bold.my-auto.d-none.d-md-block.text-dark title]]])
 
 (defn navbar-user []
   [:div.d-flex.flex-row.schnaq-navbar-space.mb-0.mb-md-4.ml-auto.schnaq-navbar.align-items-center.flex-wrap.px-md-3

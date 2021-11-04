@@ -12,7 +12,7 @@
      [:img.w-50.rounded-50
       {:src (img-path avatar)
        :alt (gstring/format "A picture of %s" (labels avatar))}])
-   [:div.card-text.text-purple.my-3
+   [:div.card-text.text-typography.my-3
     [:div.small (labels reference-name)]
     [:div.small.mt-3 (labels company-name)]]
    [:div.card-body.p-0
@@ -141,7 +141,7 @@
    [wavy/top-and-bottom
     :white
     [:div.container
-     [:h3.h1.pb-4.text-purple
+     [:h3.h1.pb-4.text-typography
       (labels :testimonials/heading)]
      [testimonial-companies]
      [testimonial-carousel]]]])

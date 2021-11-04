@@ -50,7 +50,7 @@
     (when navigation-target
       [tooltip/text
        (labels tooltip)
-       [:button.btn.btn-dark-highlight.button-discussion-options.h-100.w-100.p-3
+       [:button.btn.btn-dark.button-discussion-options.h-100.w-100.p-3
         {:on-click #(rf/dispatch navigation-target)}
         [:div.d-flex
          [icon :arrow-left "m-auto"]]]])))

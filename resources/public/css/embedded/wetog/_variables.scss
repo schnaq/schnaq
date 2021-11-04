@@ -45,19 +45,24 @@ $wetog-green: #2cbaa0 !default;
 $teal: #20c997 !default;
 $cyan: #17a2b8 !default;
 
+// Text Colors
+$typography: $dark-purple !default;
+
+// Label  specific Colors
+$label-blue: #65b0e7 !default;
+$label-purple: #727ee7 !default;
+$label-red: #f66490 !default;
+$label-teal: #20c997 !default;
+
+// discussion Colors
 $positive: $wetog-green !default;
-$positive-selected: $teal !default;
 $negative: $wetog-red !default;
-$negative-selected: $red !default;
 $neutral: $dark-purple !default;
+
+// Bootstrap overrides
 $primary: $dark-purple !default;
-$primary-selected: $dark-purple-selected !default;
 $primary-light: $purple-light !default;
-$primary-light-selected: $purple-light-selected !default;
-$dark-highlight: $primary !default;
 $secondary: $wetog-green !default;
-$secondary-selected: $orange-selected !default;
-$secondary-pale: $orange-pale !default;
 $success: $green !default;
 $info: $cyan !default;
 $warning: $yellow !default;

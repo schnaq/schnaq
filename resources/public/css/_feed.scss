@@ -47,7 +47,7 @@
   color: $secondary;
 
   &:hover {
-    color: $secondary-selected;
+    color: rgba($secondary, 0.9);
   }
 
 }

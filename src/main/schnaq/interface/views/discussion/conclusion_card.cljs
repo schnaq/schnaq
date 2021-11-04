@@ -161,7 +161,7 @@
          (when q-and-a?
            [:div.ml-auto [mark-as-answer-button statement]])]
         [:div.my-4]
-        [:div.text-purple-dark
+        [:div.text-typography
          [md/as-markdown (:statement/content statement)]]
         [statement-information-row statement]
         (when-not q-and-a?
@@ -180,7 +180,7 @@
        [:div.d-flex.justify-content-start.pt-2
         [user/user-info statement 25 "w-100"]]
        [:div.my-3]
-       [:div.text-purple-dark
+       [:div.text-typography
         [md/as-markdown (:statement/content statement)]]
        [:div.d-flex.flex-wrap.align-items-center
         [:a.mr-3
