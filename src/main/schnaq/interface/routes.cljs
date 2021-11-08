@@ -1,6 +1,5 @@
 (ns schnaq.interface.routes
-  (:require [goog.object :as gobj]
-            [oops.core :refer [oset!]]
+  (:require [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [reitit.coercion.spec]
             [reitit.frontend :as reitit-front]
@@ -331,8 +330,6 @@
     {:use-fragment config/embedded?
      :ignore-anchor-click? (fn [router e el uri]
                              (and (rfh/ignore-anchor-click? router e el uri)
-                                  (not= "false" (gobj/get (.-dataset el) "reititHandleClick"))
-                                  ;; Ignore anchor-click when there is no fragment present e.g. schnaq.com/#newsletter
                                   (empty? (.-hash el))))}))
 
 (defn parse-route
