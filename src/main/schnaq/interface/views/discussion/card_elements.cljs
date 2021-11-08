@@ -291,7 +291,7 @@
   (let [search-input-id "search-bar"
         route-name @(rf/subscribe [:navigation/current-route-name])
         selected-statement-id (get-in @(rf/subscribe [:navigation/current-route]) [:path-params :statement-id])]
-    [:form.mr-3.h-100
+    [:form.h-100
      {:on-submit #(jq/prevent-default %)
       :key (str route-name selected-statement-id)}
      [:div.input-group.search-bar.h-100.panel-white.p-0
@@ -310,7 +310,7 @@
     [:div.d-flex.flex-grow-1.flex-lg-grow-0
      [:div.mr-1.ml-1.ml-md-0
       [back-button]]
-     [:div.mx-1.flex-grow-1.flex-lg-grow-0
+     [:div.ml-1.mr-1.mr-lg-3.flex-grow-1.flex-lg-grow-0
       [search-bar]]]
     [:div.d-flex
      [:div.mx-1.pr-2
