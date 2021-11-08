@@ -1,6 +1,5 @@
 {:paths ["src/main" "src/test" "resources"]
- :deps {binaryage/devtools {:mvn/version "1.0.4"}
-        binaryage/oops {:mvn/version "0.7.1"}
+ :deps {binaryage/oops {:mvn/version "0.7.1"}
         buddy/buddy {:mvn/version "2.0.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}
         clj-http/clj-http {:mvn/version "3.12.3"}
@@ -14,7 +13,6 @@
         com.taoensso/timbre {:mvn/version "5.1.2"}
         compojure/compojure {:mvn/version "1.6.2"}
         day8.re-frame/http-fx {:mvn/version "0.2.3"}
-        day8.re-frame/re-frame-10x {:mvn/version "1.2.0"}
         expound/expound {:mvn/version "0.8.10"}
         funcool/hodgepodge {:mvn/version "0.1.4"}
         gnl/ghostwheel {:mvn/version "0.3.9"}
@@ -25,17 +23,18 @@
         metosin/reitit {:mvn/version "0.5.15"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
         org.clojure/clojure {:mvn/version "1.10.3"}
-        org.clojure/clojurescript {:mvn/version "1.10.879"}
+        org.clojure/clojurescript {:mvn/version "1.10.891"}
         org.clojure/core.async {:mvn/version "1.3.622"}
         org.clojure/data.json {:mvn/version "2.4.0"}
         org.clojure/test.check {:mvn/version "1.1.0"}
-        org.postgresql/postgresql {:mvn/version "42.3.1"}   ;; needed for prod transactor
+        org.postgresql/postgresql {:mvn/version "42.3.1"
+                                   :doc "Necessary for our production transactor"}
         re-frame/re-frame {:mvn/version "1.2.0"}
         reagent/reagent {:mvn/version "1.1.0"}
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring/ring {:mvn/version "1.9.4"}
         ring/ring-mock {:mvn/version "0.4.0"}
-        thheller/shadow-cljs {:mvn/version "2.15.12"}}
+        thheller/shadow-cljs {:mvn/version "2.16.0"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}
@@ -43,8 +42,7 @@
 
  :aliases {:test {:extra-paths ["src/test"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.60.945"}
-                               lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
-                               day8.re-frame/test {:mvn/version "0.1.5"}}
+                               lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}}
                   :jvm-opts ["-Dghostwheel.enabled=true"]
                   :main-opts ["-m" "kaocha.runner"]}
 
@@ -71,7 +69,9 @@
             :main-opts ["-m" "clj-kondo.tools.missing-docstrings"]}
 
            :frontend
-           {:extra-deps {binaryage/devtools {:mvn/version "1.0.4"}}
+           {:extra-deps {binaryage/devtools {:mvn/version "1.0.4"}
+                         day8.re-frame/re-frame-10x {:mvn/version "1.2.0"}
+                         day8.re-frame/test {:mvn/version "0.1.5"}}
             :main-opts ["-m" "shadow.cljs.devtools.cli"
                         "watch" ":app"]}
 
