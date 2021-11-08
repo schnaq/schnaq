@@ -42,7 +42,8 @@
 
  :aliases {:test {:extra-paths ["src/test"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.60.945"}
-                               lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}}
+                               lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
+                               day8.re-frame/test {:mvn/version "0.1.5"}}
                   :jvm-opts ["-Dghostwheel.enabled=true"]
                   :main-opts ["-m" "kaocha.runner"]}
 
