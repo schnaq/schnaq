@@ -1,9 +1,11 @@
 (ns schnaq.interface.events
   (:require [goog.string :as gstring]
+            [goog.userAgent :as gagent]
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-frontend]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
@@ -32,9 +34,17 @@
         {:fx [[:dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash]]]}))))
 
 (rf/reg-event-fx
+  :re-frame-10x/hide-on-mobile
+  (fn [_ _]
+    (when (and (not shared-config/production?) gagent/MOBILE)
+      {:fx [[:localstorage/assoc
+             ['day8.re-frame-10x.show-panel false]]]})))
+
+(rf/reg-event-fx
   :initialize/schnaq
   (fn [_ _]
     {:fx [[:dispatch [:username/from-localstorage]]
+          [:dispatch [:re-frame-10x/hide-on-mobile]]
           [:dispatch [:how-to-visibility/from-localstorage-to-app-db]]
           [:dispatch [:keycloak/init]]
           [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]

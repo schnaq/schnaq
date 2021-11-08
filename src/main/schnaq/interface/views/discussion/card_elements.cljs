@@ -291,7 +291,7 @@
   (let [search-input-id "search-bar"
         route-name @(rf/subscribe [:navigation/current-route-name])
         selected-statement-id (get-in @(rf/subscribe [:navigation/current-route]) [:path-params :statement-id])]
-    [:form.mr-3.h-100
+    [:form.h-100
      {:on-submit #(jq/prevent-default %)
       :key (str route-name selected-statement-id)}
      [:div.input-group.search-bar.h-100.panel-white.p-0
@@ -307,16 +307,18 @@
 (defn action-view []
   [:div.d-inline-block.text-dark.w-100.mb-3
    [:div.d-flex.flex-row.flex-wrap
-    [:div.mr-1.ml-1.ml-md-0
-     [back-button]]
-    [:div.mx-1
-     [search-bar]]
-    [:div.mx-1.pr-2
-     [sort-options]]
-    [:div.mx-1.mt-auto
-     (if @(rf/subscribe [:schnaq.mode/qanda?])
-       [filters/filter-answered-statements]
-       [filters/filter-button])]
+    [:div.d-flex.flex-grow-1.flex-lg-grow-0
+     [:div.mr-1.ml-1.ml-md-0
+      [back-button]]
+     [:div.ml-1.mr-1.mr-lg-3.flex-grow-1.flex-lg-grow-0
+      [search-bar]]]
+    [:div.d-flex
+     [:div.mx-1.pr-2
+      [sort-options]]
+     [:div.mx-1.mt-auto
+      (if @(rf/subscribe [:schnaq.mode/qanda?])
+        [filters/filter-answered-statements]
+        [filters/filter-button])]]
     [:div.d-flex.flex-row.ml-auto]]])
 
 (defn- search-info []
@@ -342,7 +344,7 @@
   (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
     [:div.container-fluid
      [:div.row
-      [:div.col-md-6.col-lg-4.py-1.py-md-4.px-0.px-md-3
+      [:div.col-md-6.col-lg-4.py-md-4.px-0.px-md-3
        [topic-view
         (if search-inactive?
           [topic-bubble-view]
