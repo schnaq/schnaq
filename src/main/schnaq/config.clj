@@ -45,8 +45,8 @@
    :sender-host (or (System/getenv "EMAIL_HOST") "smtp.ionos.de")
    :sender-password (System/getenv "EMAIL_PASSWORD")})
 
-(def mail-template "https://s3.disqtec.com/email/template/mail-template.html")
-(def mail-content-button-right-template "https://s3.disqtec.com/email/template/content-left-button-right-template.html")
+(def mail-template "https://s3.schnaq.com/email/template/mail-template.html")
+(def mail-content-button-right-template "https://s3.schnaq.com/email/template/content-left-button-right-template.html")
 
 (def time-zone "Europe/Paris")
 
@@ -75,7 +75,7 @@
 
 (def testing-private-key
   (keys/str->private-key
-    (slurp "https://s3.disqtec.com/on-premise/testing/jwt.key")))
+    (slurp "https://s3.schnaq.com/on-premise/testing/jwt.key")))
 (def testing-public-key
   (keys/str->public-key
-    (slurp "https://s3.disqtec.com/on-premise/testing/jwt.key.pub")))
+    (slurp "https://s3.schnaq.com/on-premise/testing/jwt.key.pub")))

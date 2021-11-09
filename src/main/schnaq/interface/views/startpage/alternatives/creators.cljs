@@ -16,7 +16,7 @@
     [:div.row.pb-5
      [:div.col-md-6.col-12.col-lg-6.pt-sm-5.text-center
       [:img.img-fluid.rounded
-       {:src "https://s3.disqtec.com/schnaq-common/startpage/screenshots/splashpage_creator.jpeg"
+       {:src "https://s3.schnaq.com/schnaq-common/startpage/screenshots/splashpage_creator.jpeg"
         :alt "Ein Consultant nutzt schnaq auf einem Notebook"}]]
      [:div.col-md-6.col-12.align-self-center.text-center
       "Lasse deine Community miteinander und mit dir diskutieren"
@@ -40,7 +40,7 @@
       [:article.feature-text-box
        [:h3.h1.text-typography.mb-3 "Minimaler Aufwand, maximale Aktivierung"]
        [:p "Gib deiner Community mit wenigen Klicks ihren eigenen Space zum Diskutieren, oder frage sie direkt zu Dingen, die dich interessieren."]]
-      [motion/zoom-image {:src "https://s3.disqtec.com/schnaq-common/startpage/screenshots/podcast_discussion.png"
+      [motion/zoom-image {:src "https://s3.schnaq.com/schnaq-common/startpage/screenshots/podcast_discussion.png"
                           :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
     [:section.container.mb-5
      [rows/row-builder-text-right

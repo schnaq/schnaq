@@ -14,8 +14,8 @@
    :cljs (goog-define keycloak-host "https://auth.schnaq.com"))
 
 #?(:clj  (def s3-host
-           (or (System/getenv "S3_HOST") "https://s3.disqtec.com"))
-   :cljs (goog-define s3-host "https://s3.disqtec.com"))
+           (or (System/getenv "S3_HOST") "https://s3.schnaq.com"))
+   :cljs (goog-define s3-host "https://s3.schnaq.com"))
 
 #?(:clj  (def embedded?
            (or (System/getenv "EMBEDDED") false))

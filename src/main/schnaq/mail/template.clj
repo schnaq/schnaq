@@ -46,18 +46,18 @@
    {:type "text/plain; charset=utf-8" :content
     (email-templates :welcome/body)}
    {:type "text/html; charset=utf-8" :content
-    (slurp "https://s3.disqtec.com/welcome-mail/welcome_template.html")}])
+    (slurp "https://s3.schnaq.com/welcome-mail/welcome_template.html")}])
 
 (defn remote-work-lead-magnet
   "Template for remote work lead magnet."
   []
   (let [replace-fn #(cstring/replace %1 (first %2) (second %2))
         format-map {"$DOWNLOAD_LINK"
-                    (str "https://s3.disqtec.com/downloads/Datenschutzkonform_arbeiten_schnaq.com.pdf?key="
+                    (str "https://s3.schnaq.com/downloads/Datenschutzkonform_arbeiten_schnaq.com.pdf?key="
                          (.toString (UUID/randomUUID)))}]
     [:alternative
      {:type "text/plain; charset=utf-8" :content
       (reduce replace-fn (email-templates :lead-magnet/body) format-map)}
      {:type "text/html; charset=utf-8" :content
-      (reduce replace-fn (slurp "https://s3.disqtec.com/email/lead-magnet/dsgvo-check-mail.html") format-map)}]))
+      (reduce replace-fn (slurp "https://s3.schnaq.com/email/lead-magnet/dsgvo-check-mail.html") format-map)}]))
 

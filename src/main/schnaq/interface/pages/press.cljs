@@ -19,10 +19,10 @@
   [:section.py-5
    [:h3.text-center.pb-4 (labels :press-kit.materials/heading)]
    [:div.card-deck
-    [card :press-kit.materials/fact-sheet :press-kit/fact-sheet "https://s3.disqtec.com/schnaq-presskit/fact-sheet-schnaq.pdf"]
-    [card :press-kit.materials/logos :press-kit/logo "https://s3.disqtec.com/schnaq-presskit/logos-schnaq.zip"]
-    [card :press-kit.materials/team :press-kit/team "https://s3.disqtec.com/schnaq-presskit/images-schnaq.zip"]
-    [card :press-kit.materials/product :press-kit/product "https://s3.disqtec.com/schnaq-presskit/screenshots-schnaq.zip"]]])
+    [card :press-kit.materials/fact-sheet :press-kit/fact-sheet "https://s3.schnaq.com/schnaq-presskit/fact-sheet-schnaq.pdf"]
+    [card :press-kit.materials/logos :press-kit/logo "https://s3.schnaq.com/schnaq-presskit/logos-schnaq.zip"]
+    [card :press-kit.materials/team :press-kit/team "https://s3.schnaq.com/schnaq-presskit/images-schnaq.zip"]
+    [card :press-kit.materials/product :press-kit/product "https://s3.schnaq.com/schnaq-presskit/screenshots-schnaq.zip"]]])
 
 (defn- not-to-do-list []
   (let [circle-icon [icon :times-circle "text-danger mt-3" {:listItem true}]]

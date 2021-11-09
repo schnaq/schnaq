@@ -15,7 +15,7 @@
   (:import (java.util Base64 UUID)))
 
 (def ^:private trusted-cdn-url-regex
-  (re-pattern "https://cdn\\.pixabay\\.com/photo(.+)|https://s3\\.disqtec\\.com/(.+)"))
+  (re-pattern "https://cdn\\.pixabay\\.com/photo(.+)|https://s3\\.(disqtec|schnaq)\\.com/(.+)"))
 
 (def ^:private error-cdn "prohibited cdn")
 (def ^:private error-img "Setting image failed")
