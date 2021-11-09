@@ -49,7 +49,7 @@
         [:p.small.my-auto "von Software-Designer:innen für Software-Designer:innen!"]]]
       [:div.col-md-6.col-12.col-lg-6.pt-sm-5.text-center
        [:img.img-fluid
-        {:src "https://s3.disqtec.com/startpage/consulting-small.png"
+        {:src "https://s3.schnaq.com/startpage/consulting-small.png"
          :alt "Ein Consultant nutzt schnaq auf einem Notebook"}]]]}
     [:<>
      [:section.container.my-5

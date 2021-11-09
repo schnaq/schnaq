@@ -64,5 +64,5 @@
 
 (comment
 
-  (load-jwt-public-key "https://s3.disqtec.com/on-premise/wetog/wetog.key.pub")
+  (load-jwt-public-key "https://s3.schnaq.com/on-premise/wetog/wetog.key.pub")
   nil)
