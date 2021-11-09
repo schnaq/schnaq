@@ -61,11 +61,6 @@ $header-opacity: 1;
   background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-light.svg');
 }
 
-.wave-bottom-dark-blue {
-  @extend .wave-bottom-white;
-  background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-dark-blue.svg');
-}
-
 .wave-bottom-primary {
   @extend .wave-bottom-white;
   background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-primary.svg');

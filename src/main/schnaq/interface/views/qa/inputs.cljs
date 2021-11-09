@@ -63,7 +63,7 @@
      [:<>
       [:div.container.p-0.px-md-5.text-white
        [question-field-and-search-results]]
-      [:div.wave-bottom-dark-blue.d-flex.align-self-end.mt-auto]]]))
+      [:div.wave-bottom-typography.d-flex.align-self-end.mt-auto]]]))
 
 (defn qanda-view
   "A view that represents the first page of schnaq participation or creation."
