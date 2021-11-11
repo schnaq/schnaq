@@ -1,7 +1,6 @@
 @use 'rounded' as rounded;
 @import 'variables';
 
-
 @mixin button-template {
   @extend .shadow-sm;
   border: 0;
@@ -50,14 +49,6 @@
   }
 }
 
-.button-secondary-small {
-  /* stylelint-disable */
-  @extend .button-secondary;
-  /* stylelint-enable */
-  border-radius: 0.5rem;
-  padding: 0.25rem 0.5rem;
-}
-
 .btn-outline-primary-small {
   @extend .btn-outline-primary;
   border-radius: 0.3rem;
@@ -81,31 +72,6 @@
 
 .font-200 {
   font-size: 200%;
-}
-
-.primary-light-color {
-  color: $primary-light;
-}
-
-.secondary-color {
-  color: $secondary;
-}
-
-.schnaq-delete-button {
-  display: inline-block;
-  opacity: 0.9;
-  position: absolute;
-  right: 1.5rem;
-  top: 1.5rem;
-
-  &:hover {
-    opacity: 1;
-  }
-}
-
-.topic-card-button {
-  display: block;
-  min-width: 70%;
 }
 
 .btn-transparent {

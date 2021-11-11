@@ -1,22 +1,5 @@
 @import 'variables';
 
-.up-down-vote {
-  max-width: 4.5rem;
-  padding: 0.5rem 0;
-
-  @include media-breakpoint-down(sm) {
-    align-items: flex-end;
-    display: flex;
-    flex-direction: row;
-    margin-left: 52vw;
-    padding-top: 0;
-  }
-}
-
-.no-wrap {
-  white-space: nowrap;
-}
-
 .vote {
   border-radius: 0 2rem 2rem 0;
   box-shadow: $regular-shadow;

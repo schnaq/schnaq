@@ -1,24 +1,6 @@
 @use 'rounded' as rounded;
 @use 'variables' as vars;
 
-.icon-points-text {
-  font-size: 1.17em;
-}
-
-.icon-points-icon {
-  color: vars.$gray-100;
-  display: inline-block;
-  width: 1em !important;
-}
-
-.no-text-decoration {
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: none;
-  }
-}
-
 .text-social-proof {
   color: vars.$gray-100;
   font-size: 0.8em !important;
