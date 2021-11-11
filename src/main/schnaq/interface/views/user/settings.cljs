@@ -33,7 +33,7 @@
   [tooltip/text
    (labels :history.all-schnaqs/tooltip)
    [:a.button.btn.btn-dark.p-3
-    {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaqs/personal])}
+    {:href (rfe/href :routes.schnaqs/personal)}
     [:div.d-flex
      [icon :arrow-left "m-auto"]]]])
 
