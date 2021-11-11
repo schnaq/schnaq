@@ -63,28 +63,21 @@
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
   [schnaq delete-from-hub?]
-  (let [locale @(rf/subscribe [:current-locale])
-        share-hash (:discussion/share-hash schnaq)
-        title (:discussion/title schnaq)
-        created (:discussion/created-at schnaq)
-        url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
-    [:article.schnaq-entry.d-flex
-     [:div.d-flex.flex-row.flex-grow-1
-      {:on-click (fn []
-                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
-                                 {:share-hash share-hash}])
-                   (rf/dispatch [:schnaq/select-current schnaq]))}
-      [:img.schnaq-header-image {:src url}]
-      [:div.ml-3.w-100.py-2
-       [:div.schnaq-entry-title (toolbelt/truncate-to-n-chars title 40)]
-       [:div.d-flex.flex-row.mt-auto.pt-3
-        [user/user-info-only (:discussion/author schnaq) 24]
-        [badges/read-only-badge schnaq]
-        [:div [badges/static-info-badges schnaq]]
-        [:small.font-weight-light.d-inline.my-auto.ml-auto
-         [util-time/timestamp-with-tooltip created locale]]]]]
-     (when delete-from-hub?
-       [schnaq-options schnaq])]))
+  [:article.schnaq-entry.d-flex
+   [:a.d-flex.flex-row.flex-grow-1.text-reset.text-decoration-none
+    {:href (reitfe/href :routes.schnaq/start {:share-hash (:discussion/share-hash schnaq)})
+     :on-click #(rf/dispatch [:schnaq/select-current schnaq])}
+    [:img.schnaq-header-image {:src (header-image/check-for-header-img (:discussion/header-image-url schnaq))}]
+    [:div.ml-3.w-100.py-2
+     [:div.schnaq-entry-title (toolbelt/truncate-to-n-chars (:discussion/title schnaq) 40)]
+     [:div.d-flex.flex-row.mt-auto.pt-3
+      [user/user-info-only (:discussion/author schnaq) 24]
+      [badges/read-only-badge schnaq]
+      [:div [badges/static-info-badges schnaq]]
+      [:small.font-weight-light.d-inline.my-auto.ml-auto
+       [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]]
+   (when delete-from-hub?
+     [schnaq-options schnaq])])
 
 (defn schnaq-list-view
   "Shows a list of schnaqs."
