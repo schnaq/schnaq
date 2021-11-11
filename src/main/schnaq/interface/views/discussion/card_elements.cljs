@@ -38,12 +38,9 @@
   (let [history @(rf/subscribe [:discussion-history])
         has-history? (seq history)
         back-feed [:navigation/navigate :routes.schnaqs/personal]
-        current-route @(rf/subscribe [:navigation/current-route-name])
-        is-search-view? (= current-route :routes.search/schnaq)
-        steps-back (if is-search-view? 0 1)
-        back-history [:discussion.history/time-travel steps-back]
+        back-history [:discussion.history/time-travel 1]
         navigation-target (cond
-                            (or is-search-view? has-history?) back-history
+                            has-history? back-history
                             shared-config/embedded? nil
                             :else back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
@@ -271,7 +268,7 @@
 
 (def throttled-in-schnaq-search
   (gfun/throttle
-    #(rf/dispatch [:discussion.statements/search (oget % [:target :value]) true])
+    #(rf/dispatch [:discussion.statements/search (oget % [:target :value])])
     500))
 
 (defn- search-clear-button

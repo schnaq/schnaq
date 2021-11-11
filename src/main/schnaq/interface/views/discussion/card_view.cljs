@@ -8,7 +8,7 @@
 
 (rf/reg-event-fx
   :discussion.statements/search
-  (fn [{:keys [db]} [_ search-string dynamic?]]
+  (fn [{:keys [db]} [_ search-string]]
     (if (cstring/blank? search-string)
       {:db (-> (assoc-in db [:search :schnaq :current :result] [])
                (assoc-in [:search :schnaq :current :search-string] search-string))}
@@ -17,8 +17,7 @@
          :fx [(http/xhrio-request db :get "/discussion/statements/search" [:discussion.statements.search/success]
                                   {:share-hash share-hash
                                    :search-string search-string
-                                   :display-name (tools/current-display-name db)})
-              (when-not dynamic? [:dispatch [:navigation/navigate :routes.search/schnaq {:share-hash share-hash}]])]}))))
+                                   :display-name (tools/current-display-name db)})]}))))
 
 (rf/reg-event-db
   :discussion.statements.search/success
