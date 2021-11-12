@@ -1,24 +1,6 @@
 @import 'rounded';
 @import 'variables';
 
-.discussion-view-rounded {
-  @include rounded-4;
-  background: $white;
-  overflow: hidden;
-  padding: 0;
-
-  @include media-breakpoint-down(sm) {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-}
-
-.discussion-primary-background {
-  background: $primary;
-  color: $white;
-  padding: 1rem;
-}
-
 .discussion-text-input {
   background: transparent;
   border: 0;
@@ -37,21 +19,6 @@
 .discussion-text-input::placeholder {
   color: $white;
   opacity: 0.85;
-}
-
-.authors-list {
-  color: $gray-900;
-  list-style-type: circle;
-  padding-left: 1rem;
-}
-
-.discussion-base.container {
-  padding-bottom: 2rem;
-  padding-top: 1em;
-
-  @include media-breakpoint-down(sm) {
-    padding: 0.5rem 0 1rem;
-  }
 }
 
 .progress-schnaq {

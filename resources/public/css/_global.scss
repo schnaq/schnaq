@@ -14,10 +14,6 @@ html {
   min-height: 85vh;
 }
 
-.regular-cursor {
-  cursor: default;
-}
-
 .clickable,
 .clickable-no-hover {
   cursor: pointer;
@@ -30,18 +26,6 @@ html {
 .sm-pad-0 {
   @include media-breakpoint-down(sm) {
     padding: 0;
-  }
-}
-
-.mobile-container {
-  padding: 0 0.5rem;
-
-  @include media-breakpoint-up(md) {
-    padding: 0 2rem;
-  }
-
-  @include media-breakpoint-up(xl) {
-    padding: 0 4rem;
   }
 }
 
@@ -86,10 +70,6 @@ html {
 .obfuscate {
   direction: rtl;
   unicode-bidi: bidi-override;
-}
-
-.min-content {
-  width: min-content;
 }
 
 .font-color-primary {

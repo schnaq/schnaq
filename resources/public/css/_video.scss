@@ -7,21 +7,6 @@
   overflow: hidden;
 }
 
-.feature-animations {
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.video-background-primary {
-  background-color: vars.$primary;
-}
-
-.video-background-primary-with-shadow {
-  @extend .video-scalable;
-  @extend .shadow;
-  box-shadow: vars.$wide-shadow;
-}
-
 .video-scalable {
   height: auto !important;
   overflow: hidden;

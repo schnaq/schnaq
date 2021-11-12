@@ -108,7 +108,7 @@ var klaroConfig = {
       privacyPolicyUrl: '/de/privacy/extended',
       acceptSelected: 'Speichern',
       consentModal: {
-        title: "<img src='https://s3.disqtec.com/schnaq-common/logos/schnaqqifant.svg' width='75px'> Cookies",
+        title: "<img src='https://s3.schnaq.com/schnaq-common/logos/schnaqqifant.svg' width='75px'> Cookies",
         description: 'Wir verwenden Cookies :-) Einige sind für Statistiken, andere für essenzielle Funktionen der Anwendung.',
       },
       privacyPolicy: {
@@ -128,7 +128,7 @@ var klaroConfig = {
     },
     en: {
       consentModal: {
-        title: "<img src='https://s3.disqtec.com/schnaq-common/logos/schnaqqifant.svg' alt='schnaqqifant' width='75px'> Cookies",
+        title: "<img src='https://s3.schnaq.com/schnaq-common/logos/schnaqqifant.svg' alt='schnaqqifant' width='75px'> Cookies",
         description:
           'We use cookies :-) Some are for statistics, others for essential functions of the application.',
       },

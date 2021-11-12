@@ -180,7 +180,7 @@
                                                         :statement-id (:db/id statement)})
        :role :button}
       (if new?
-        [icon :comments "m-auto secondary-color"]
+        [icon :comments "m-auto text-secondary"]
         [icon :comments "m-auto"])
       " " statement-num]
      [authors-badge authors]

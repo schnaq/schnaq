@@ -17,28 +17,6 @@
   background: $input-background;
 }
 
-.animation-background {
-  @include rounded.rounded-3;
-  box-shadow: $wide-shadow;
-  overflow: hidden;
-
-  @include media-breakpoint-down(sm) {
-    border-radius: 0;
-  }
-}
-
-.card-view-type {
-  color: $gray-100;
-  margin-left: 0.1rem;
-  margin-right: 0.1rem;
-  padding-left: 0.1rem;
-  text-align: center;
-
-  @include media-breakpoint-down(sm) {
-    padding: 0.1rem;
-  }
-}
-
 .card-history {
   background: $white;
   border: 0;
@@ -99,18 +77,6 @@
 
 }
 
-.primary-icon-button {
-  background: transparent;
-  border: 0;
-  color: $primary;
-  outline: none;
-
-  &:focus {
-    border: 0;
-    outline: none;
-  }
-}
-
 .discussion-text-input-area {
   background: transparent;
   border: 0;
@@ -125,24 +91,6 @@
   &::placeholder {
     background: transparent;
     color: $gray-600;
-  }
-}
-
-.mobile-attitude-support {
-  @include media-breakpoint-down(sm) {
-    background: $primary;
-  }
-}
-
-.mobile-attitude-attack {
-  @include media-breakpoint-down(sm) {
-    background: $secondary;
-  }
-}
-
-.mobile-attitude-neutral {
-  @include media-breakpoint-down(sm) {
-    background: $gray-300;
   }
 }
 
