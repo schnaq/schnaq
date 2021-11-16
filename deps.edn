@@ -5,7 +5,7 @@
         clj-http/clj-http {:mvn/version "3.12.3"}
         clj-fuzzy/clj-fuzzy {:mvn/version "0.4.1"}
         com.cognitect.aws/api {:mvn/version "0.8.524"}
-        com.cognitect.aws/endpoints {:mvn/version "1.1.12.105"}
+        com.cognitect.aws/endpoints {:mvn/version "1.1.12.110"}
         com.cognitect.aws/s3 {:mvn/version "814.2.991.0"}
         com.datomic/datomic-pro {:mvn/version "1.0.6316"}
         com.draines/postal {:mvn/version "2.0.4"}
@@ -34,7 +34,7 @@
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring/ring {:mvn/version "1.9.4"}
         ring/ring-mock {:mvn/version "0.4.0"}
-        thheller/shadow-cljs {:mvn/version "2.16.3"}}
+        thheller/shadow-cljs {:mvn/version "2.16.4"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}

@@ -530,10 +530,9 @@
    :privacy.extended.responsible/body
    [:<>
     [:p
-     "schnaq (nicht gegründet)" [:br]
+     "schnaq GmbH i.Gr." [:br]
      "vertreten durch Christian Meter, Alexander Schneider und Michael Birkhoff" [:br]
      "Speditionsstraße 15A" [:br]
-     "STARTPLATZ" [:br]
      "40221 Düsseldorf" [:br]
      "Deutschland" [:br]
      (toolbelt/obfuscate-mail "info@schnaq.com")]
