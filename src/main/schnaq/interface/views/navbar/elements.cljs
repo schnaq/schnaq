@@ -43,12 +43,12 @@
     {:src (img-path :schnaqqifant/white) :alt "schnaq logo"
      :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]])
 
-(defn- navbar-title [additional-content]
+(defn navbar-title [title additional-content]
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.mr-2.bg-white
    [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
     [schnaq-logo]]
    [:div.mx-0.mx-md-4
-    [clickable-title]]
+    title]
    additional-content])
 
 (defn navbar-qanda-title []
@@ -243,6 +243,7 @@
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
     [navbar-title
+     [clickable-title]
      [:<>
       [additional-label-counter (labels :discussion.navbar/posts) statement-count]
       [additional-label-counter (labels :discussion.navbar/members) user-count]]]))

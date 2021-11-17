@@ -8,22 +8,6 @@
             [schnaq.interface.views.navbar.elements :as nav-elements]
             [schnaq.interface.views.schnaq.admin :as admin]))
 
-(defn- collapsable-nav-bar
-  [brand-content collapse-content-id navbar-bg-class top-right-content]
-  [:<>
-   [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
-    {:class navbar-bg-class}
-    [:navbar-brand.p-0 {:href "#"} brand-content]
-    [:button.navbar-toggler.mx-2 {:type "button" :data-toggle "collapse"
-                                  :data-target (str "#" collapse-content-id)
-                                  :aria-controls collapse-content-id
-                                  :aria-expanded "false"
-                                  :aria-label "Toggle navigation"}
-     [:span.navbar-toggler-icon]]
-    [:div.ml-auto.d-none.d-lg-block
-     top-right-content]]
-   [collapse-content/navbar-external-content collapse-content-id]])
-
 (defn- interaction-elements []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
    [nav-elements/progress-bar-hide-lg]
@@ -38,11 +22,12 @@
   "Header for schnaq view overview"
   []
   (let [navbar-content-id "Navbar-Content"]
-    [collapsable-nav-bar
+    [navbar-components/collapsable-nav-bar
      [nav-elements/title-and-infos]
      navbar-content-id
      "navbar-bg-transparent-sm-white"
-     [interaction-elements]]))
+     [interaction-elements]
+     [collapse-content/navbar-external-content navbar-content-id]]))
 
 (defn- qanda-interaction-elements []
   [:div.d-flex.align-items-center
@@ -54,11 +39,12 @@
   "Header for schnaq Q&A View"
   []
   (let [navbar-content-id "Qanda-Content"]
-    [collapsable-nav-bar
+    [navbar-components/collapsable-nav-bar
      [nav-elements/navbar-qanda-title]
      navbar-content-id
      "bg-transparent"
-     [qanda-interaction-elements]]))
+     [qanda-interaction-elements]
+     [collapse-content/navbar-external-content navbar-content-id]]))
 
 (defn embeddable-header []
   ;; The view breaks earlier, because the breakpoints heed the screen size, not the div size
