@@ -79,4 +79,4 @@
       [:li.nav-item.dropdown
        [navbar-components/language-dropdown]]]
      [um/admin-dropdown "btn-outline-secondary"]
-     [um/user-handling-menu "btn-outline-light btn-transparent"]]]])
+     [um/register-handling-menu "btn-outline-light btn-transparent"]]]])

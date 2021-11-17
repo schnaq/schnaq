@@ -118,3 +118,27 @@
           [:a.btn.dropdown-item {:href "#"
                                  :on-click #(rf/dispatch [:keycloak/login])}
            (labels :user/register)]])]]]))
+
+(defn register-button []
+  [:a.btn.btn-dark
+   {:href "#" :on-click #(rf/dispatch [:keycloak/login])}
+   (labels :nav/register)])
+
+(defn register-handling-menu
+  "Menu elements to change user name, to log in, ..."
+  [button-class]
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])]
+    (if authenticated?
+      [:div.dropdown
+       [nav-component/separated-button
+        [profile-picture-in-nav]
+        {:class button-class :data-toggle "dropdown"
+         :aria-haspopup "true" :aria-expanded "false"}
+        [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
+         [:a.dropdown-item {:href (reitfe/href :routes.user.manage/account)}
+          (labels :user.profile/settings)]
+         [:a.dropdown-item {:href "#"                       ;; For the :active states and pointer to behave
+                            :on-click #(rf/dispatch [:keycloak/logout])}
+          (labels :user/logout)]]]]
+      [nav-component/separated-button
+       [register-button]])))

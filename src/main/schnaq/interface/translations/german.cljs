@@ -12,6 +12,7 @@
    :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
    :nav/blog "Blog"
    :nav/admin "Admin"
+   :nav/register "Registrieren"
    :nav.buttons/language-toggle "Sprache ändern"
 
    ;; Alphazulu Page
@@ -663,7 +664,7 @@
    :qanda.button.mark/as-answer "Als Antwort markieren"
    :qanda.button.mark/as-unanswered "Markierung aufheben"
 
-   :schnaqs/header "Übersicht deiner schnaqs"
+   :schnaqs/header "Deine schnaqs"
    :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
    :schnaqs/author "Autor"
    :schnaqs/schnaq "schnaq"
