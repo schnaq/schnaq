@@ -310,11 +310,12 @@
      [:div.ml-1.mr-1.mr-lg-3.flex-grow-1.flex-lg-grow-0
       [search-bar]]]
     [:div.d-flex
-     [:div.mx-1.pr-2
+     [:div.mx-1.mx-md-1.pr-0.pr-md-2
       [sort-options]]
-     [:div.mx-1.mt-auto
+     [:div.mx-0.mx-md-1.mt-auto
       (if @(rf/subscribe [:schnaq.mode/qanda?])
-        [filters/filter-answered-statements]
+        (when (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+          [filters/filter-answered-statements])
         [filters/filter-button])]]
     [:div.d-flex.flex-row.ml-auto]]])
 
