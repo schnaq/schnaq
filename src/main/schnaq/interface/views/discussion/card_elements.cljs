@@ -314,7 +314,8 @@
       [sort-options]]
      [:div.mx-1.mt-auto
       (if @(rf/subscribe [:schnaq.mode/qanda?])
-        [filters/filter-answered-statements]
+        (when (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+          [filters/filter-answered-statements])
         [filters/filter-button])]]
     [:div.d-flex.flex-row.ml-auto]]])
 
