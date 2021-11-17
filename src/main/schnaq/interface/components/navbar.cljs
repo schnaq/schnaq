@@ -60,6 +60,7 @@
     dropdown-content]))
 
 (defn collapsable-nav-bar
+  "Collapsable navbar with split content header, collapsable-content-id must match id of collapsable-content."
   [brand-content collapse-content-id navbar-bg-class top-right-content collapsable-content]
   [:<>
    [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
