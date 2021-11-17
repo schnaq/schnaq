@@ -32,7 +32,7 @@
        [:a.link-unstyled
         {:href (reitfe/href :routes.schnaq/start {:share-hash share-hash})}
         [:h1.h5.d-none.d-md-block {:class title-class} (toolbelt/truncate-to-n-chars title 25)]
-        [:div.d-md-none {:class title-class} (toolbelt/truncate-to-n-chars title 25)]]]])))
+        [:div.d-md-none {:class title-class} (toolbelt/truncate-to-n-chars title 22)]]]])))
 
 (defn- schnaq-logo []
   [:<>
@@ -47,7 +47,7 @@
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.mr-2.bg-white
    [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
     [schnaq-logo]]
-   [:div.mx-4
+   [:div.mx-0.mx-md-4
     [clickable-title]]
    additional-content])
 

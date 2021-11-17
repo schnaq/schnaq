@@ -36,7 +36,7 @@
       [:small.d-md-none (labels label-key)]
       [:div.d-none.d-md-block (labels label-key)]]
      (for [{:keys [on-click label-key]} rest-buttons]
-       [:label.btn.btn-sm.btn-outline-primary {:key (str "discussion-options-button-group-item-" label-key)}
+       [:label.btn.btn-sm.btn-outline-primary.px-1.px-md-2 {:key (str "discussion-options-button-group-item-" label-key)}
         [:input {:type "radio" :autoComplete "off"
                  :onClick on-click}]
         [:small.d-md-none (labels label-key)]
