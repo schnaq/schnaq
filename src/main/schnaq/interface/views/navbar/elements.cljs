@@ -43,7 +43,9 @@
     {:src (img-path :schnaqqifant/white) :alt "schnaq logo"
      :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]])
 
-(defn navbar-title [title additional-content]
+(defn navbar-title
+  "Brand logo and title with dynamic resizing."
+  [title additional-content]
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.mr-2.bg-white
    [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
     [schnaq-logo]]
