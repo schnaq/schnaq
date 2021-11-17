@@ -123,7 +123,7 @@
            (labels :user/register)]])]]]))
 
 (defn- register-button []
-  [:a.btn.btn-dark
+  [:a.btn.btn-sm.btn-dark
    {:href "#" :on-click #(rf/dispatch [:keycloak/login])}
    (labels :nav/register)])
 

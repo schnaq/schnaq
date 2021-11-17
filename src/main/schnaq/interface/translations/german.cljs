@@ -12,7 +12,7 @@
    :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
    :nav/blog "Blog"
    :nav/admin "Admin"
-   :nav/register "Registrieren"
+   :nav/register "Kostenlos anmelden"
    :nav.buttons/language-toggle "Sprache ändern"
 
    ;; Alphazulu Page
