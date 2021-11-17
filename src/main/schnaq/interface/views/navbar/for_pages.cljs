@@ -44,7 +44,7 @@
     [um/admin-dropdown "btn-outline-secondary"]]
    [:div.mx-1.d-none.d-md-block
     [:div.d-flex.flex-row.align-items-center
-     [um/user-handling-menu "btn-link"]]]])
+     [um/register-handling-menu "btn-link"]]]])
 
 (defn navbar
   "Overview header for a discussion."
@@ -79,4 +79,4 @@
       [:li.nav-item.dropdown
        [navbar-components/language-dropdown]]]
      [um/admin-dropdown "btn-outline-secondary"]
-     [um/user-handling-menu "btn-outline-light btn-transparent"]]]])
+     [um/register-handling-menu "btn-outline-light btn-transparent"]]]])
