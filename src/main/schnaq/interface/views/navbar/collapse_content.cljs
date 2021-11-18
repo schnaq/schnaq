@@ -5,7 +5,8 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.discussion.share :as share-modal]
             [schnaq.interface.views.graph.settings :as graph-settings]
-            [schnaq.interface.views.navbar.elements :as nav-elements]))
+            [schnaq.interface.views.navbar.elements :as nav-elements]
+            [schnaq.interface.views.navbar.user-management :as um]))
 
 (defn- list-element-href-button-builder
   "Build buttons as list element hyperlinks."
@@ -120,4 +121,25 @@
     [user-and-progress-bar]
     [views]
     [settings]]])
+
+(defn- li-link-button
+       [label href]
+       [:a.list-group-item.list-group-item-action
+        {:href href}
+        (labels label)])
+
+(defn navbar-external-overview-content
+  "Collapsable content for schnaq overview"
+  [collapse-content-id]
+  [external-content collapse-content-id
+   [:<>
+    [:div.d-flex.align-items-center
+     [:div.ml-auto
+      [um/register-handling-menu "btn-link"]]]
+    [:ul.list-group.list-group-flush
+     [li-link-button :nav/blog "https://schnaq.com/blog/"]
+     [li-link-button :router/pricing (reitfe/href :routes/pricing)]
+     [li-link-button :router/privacy (reitfe/href :routes/privacy)]
+     [:li.list-group-item.dropdown [nav-elements/language-with-label-dropdown]]]]])
+
 

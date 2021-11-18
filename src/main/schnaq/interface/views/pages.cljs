@@ -133,9 +133,9 @@
    options
    [:section.container-fluid.p-3
     [:div.row
-     [:div.col-12.col-md-3.px-0.px-md-3 left]
-     [:div.col-12.col-md-6.px-0.px-md-3 middle]
-     [:div.col-12.col-md-3.px-0.px-md-3 right]]]])
+     [:div.col-12.col-lg-3.px-0.px-md-3 left]
+     [:div.col-12.col-lg-6.px-0.px-md-3 middle]
+     [:div.col-12.col-lg-3.px-0.px-md-3 right]]]])
 
 (>defn- with-header
   "Page layout with discussion header."

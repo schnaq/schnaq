@@ -95,7 +95,7 @@
        [no-schnaqs-found]
        [:div.panel-white.rounded-1
         [:div.d-flex.flex-row.mb-4
-         [:h6.text-typography.d-md-none.d-lg-block (labels :router/visited-schnaqs)]
+         [:h6.text-typography.d-none.d-md-block (labels :router/visited-schnaqs)]
          [:div.ml-auto
           [sort-options]
           [filters/filter-button]]]

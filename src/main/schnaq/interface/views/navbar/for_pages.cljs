@@ -3,6 +3,9 @@
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.navbar.collapse-content :as collapse-content]
+            [schnaq.interface.views.navbar.elements :as elements]
             [schnaq.interface.views.navbar.user-management :as um]))
 
 ;; -----------------------------------------------------------------------------
@@ -33,11 +36,11 @@
     [:h1.h3.font-weight-bold.my-auto.d-none.d-md-block.text-dark title]]])
 
 (defn navbar-user []
-  [:div.d-flex.flex-row.schnaq-navbar-space.mb-0.mb-md-4.ml-auto.schnaq-navbar.align-items-center.flex-wrap.px-md-3
+  [:div.d-flex.schnaq-navbar.align-items-center.px-3
    [:div.mx-1 [privacy-button]]
-   [:div.mx-1 [pricing-button]]
-   [:div.mx-1 [blog-link]]
-   [:div.mx-1
+   [:div.mr-1 [pricing-button]]
+   [:div.mr-1 [blog-link]]
+   [:div.mr-1
     [:div.dropdown.ml-auto
      [navbar-components/language-dropdown]]]
    [:div.mx-1
@@ -49,9 +52,15 @@
 (defn navbar
   "Overview header for a discussion."
   [title]
-  [:div.d-flex.flex-row.flex-wrap.p-md-3
-   [navbar-title title]
-   [navbar-user]])
+  (let [navbar-content-id "Overview-Content"
+        navbar-title (toolbelt/truncate-to-n-chars title 20)]
+    [navbar-components/collapsable-nav-bar
+     [elements/navbar-title
+      [:h1.h6.font-weight-bold.my-auto.text-dark navbar-title]]
+     navbar-content-id
+     "navbar-bg-transparent-sm-white"
+     [navbar-user]
+     [collapse-content/navbar-external-overview-content navbar-content-id]]))
 
 (defn navbar-transparent
   "Navbar definition for the default pages."

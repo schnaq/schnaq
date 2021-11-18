@@ -58,3 +58,20 @@
        attributes)
      button-content]
     dropdown-content]))
+
+(defn collapsable-nav-bar
+  "Collapsable navbar with split content header, collapsable-content-id must match id of collapsable-content."
+  [brand-content collapse-content-id navbar-bg-class top-right-content collapsable-content]
+  [:<>
+   [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
+    {:class navbar-bg-class}
+    [:navbar-brand.p-0 {:href "#"} brand-content]
+    [:button.navbar-toggler.mx-2 {:type "button" :data-toggle "collapse"
+                                  :data-target (str "#" collapse-content-id)
+                                  :aria-controls collapse-content-id
+                                  :aria-expanded "false"
+                                  :aria-label "Toggle navigation"}
+     [:span.navbar-toggler-icon]]
+    [:div.ml-auto.d-none.d-lg-block
+     top-right-content]]
+   collapsable-content])
