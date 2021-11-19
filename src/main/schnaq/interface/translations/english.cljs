@@ -455,8 +455,8 @@
       [:a {:href "https://en.wikipedia.org/wiki/Cross-site_request_forgery"}
        "here"]
       " be researched further."]
-     [:li "Login cookie (persistent cookie), which recognizes you as the:user:in you logged in with. After 14 days your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site. You can find our authentication server here: https://auth.schnaq.com"]
-     [:li "schnaq-analytics (persistent cookie) is set if you agree to the extended analysis of your anonymized user:inside behavior. All data is processed in a GDPR-compliant manner and without identifying you as a person. It helps us to identify and fix problems on schnaq more quickly."]]
+     [:li "Login cookie (persistent cookie), which recognizes you as the user you logged in with. After 14 days your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site. You can find our authentication server here: https://auth.schnaq.com"]
+     [:li "schnaq-analytics (persistent cookie) is set if you agree to the extended analysis of your anonymized user behavior. All data is processed in a GDPR-compliant manner and without identifying you as a person. It helps us to identify and fix problems on schnaq more quickly."]]
     [:p "All cookies we use generate random strings that are used to match corresponding strings on our server."]]
 
    :privacy.extended.personal-data/title "Personal data"
