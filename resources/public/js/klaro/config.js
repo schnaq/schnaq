@@ -220,6 +220,13 @@ var klaroConfig = {
       description: 'Für den Betrieb notwendige Einstellungen, wenn man sich bspw. einen Benutzer:innenaccount erstellt.',
       purposes: ['essential'],
       required: true,
+    },
+    {
+      name: 'hotjar',
+      title: 'HotJar: Nutzer:innenverhalten anzeigen',
+      description: 'Mit diesem Tool können wir feststellen, wie die Seite verwendet wird und können so schnell Probleme in unserem Design aufdecken 🤗',
+      purposes: ['analytics'],
+      required: false,
     }
   ],
 };
