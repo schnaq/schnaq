@@ -87,7 +87,7 @@ var klaroConfig = {
   // use the value given in the global "lang" variable. If that does
   // not exist, it will use the value given in the "lang" attribute of your
   // HTML tag. If that also doesn't exist, it will use 'en'.
-  //lang: 'en',
+  lang: 'pl',
 
   // You can overwrite existing translations and add translations for your
   // service descriptions and purposes. See `src/translations/` for a full
@@ -108,14 +108,11 @@ var klaroConfig = {
       privacyPolicyUrl: '/de/privacy/extended',
       acceptSelected: 'Speichern',
       consentModal: {
-        title: "<img src='https://s3.schnaq.com/schnaq-common/logos/schnaqqifant.svg' width='75px'> Cookies",
+        title: "<img src='https://s3.schnaq.com/schnaq-common/logos/schnaqqifant.svg' alt='schnaqqifant' width='75px'> Cookies",
         description: 'Wir verwenden Cookies :-) Einige sind für Statistiken, andere für essenzielle Funktionen der Anwendung.',
       },
       privacyPolicy: {
         text: 'Mehr Informationen: {privacyPolicy}'
-      },
-      matomo: {
-        description: 'Erfassen von anonymen Besucher:innenstatistiken',
       },
       purposes: {
         advertising: 'Anzeigen von Werbung',
@@ -135,9 +132,6 @@ var klaroConfig = {
       privacyPolicy: {
         text: 'More information: {privacyPolicy}'
       },
-      matomo: {
-        description: 'Collecting of anonymous visitor statistics',
-      },
       purposes: {
         advertising: 'Advertising',
         analytics: 'Analytics',
@@ -145,6 +139,25 @@ var klaroConfig = {
         livechat: 'Livechat',
         security: 'Security',
         styling: 'Styling',
+      },
+    },
+    pl: {
+      privacyPolicyUrl: '/pl/privacy/extended',
+      acceptSelected: 'Zapisz',
+      consentModal: {
+        title: "<img src='https://s3.schnaq.com/schnaq-common/logos/schnaqqifant.svg' width='75px' alt='schnaqqifant'> Cookies",
+        description: 'Używamy plików cookies :-) Niektóre dotyczą statystyk, inne podstawowych funkcji aplikacji.',
+      },
+      privacyPolicy: {
+        text: 'Więcej informacji: {privacyPolicy}'
+      },
+      purposes: {
+        advertising: 'Wyświetlacze reklamowe',
+        analytics: 'Analizy',
+        essential: 'Niezbędne',
+        livechat: 'Czat na żywo',
+        security: 'Bezpieczeństwo',
+        styling: 'Stylizacja',
       },
     },
   },
@@ -161,11 +174,20 @@ var klaroConfig = {
       // personal information.
       default: true,
 
-      // The title of you service as listed in the consent modal.
-      title: 'Matomo (analytics.schnaq.com, self-hosted)',
-
-      // The purpose(s) of this service. Will be listed on the consent notice.
-      // Do not forget to add translations for all purposes you list here.
+      translations: {
+        zz: {
+          title: 'Matomo (analytics.schnaq.com, self-hosted)'
+        },
+        en: {
+          description: 'Collect anonymous visitor statistics.'
+        },
+        de: {
+          description: 'Erfassen von anonymen Besucher:innenstatistiken.'
+        },
+        pl: {
+          description: 'Gromadzenie anonimowych statystyk odwiedzin.'
+        }
+      },
       purposes: ['essential'],
 
       // A list of regex expressions or strings giving the names of
@@ -216,15 +238,39 @@ var klaroConfig = {
     },
     {
       name: 'schnaq',
-      title: 'schnaq Funktionen',
-      description: 'Für den Betrieb notwendige Einstellungen, wenn man sich bspw. einen Benutzer:innenaccount erstellt.',
+      translations: {
+        zz: {
+          title: 'schnaq Essentials'
+        },
+        en: {
+          description: 'Settings required for operation, e.g. when creating a user account.'
+        },
+        de: {
+          description: 'Für den Betrieb notwendige Einstellungen, wenn man sich bspw. einen Benutzer:innenaccount erstellt.'
+        },
+        pl: {
+          description: 'Ustawienia wymagane do pracy, np. przy zakładaniu konta użytkownika.'
+        }
+      },
       purposes: ['essential'],
       required: true,
     },
     {
       name: 'hotjar',
-      title: 'HotJar: Nutzer:innenverhalten anzeigen',
-      description: 'Mit diesem Tool können wir feststellen, wie die Seite verwendet wird und können so schnell Probleme in unserem Design aufdecken 🤗',
+      translations: {
+        en: {
+          title: 'Hotjar: Show user behaviour',
+          description: 'With this tool, we can see how the page is being used and can quickly uncover problems in our design 🤗'
+        },
+        de: {
+          title: 'HotJar: Nutzer:innenverhalten anzeigen',
+          description: 'Mit diesem Tool können wir feststellen, wie die Seite verwendet wird und können so schnell Probleme in unserem Design aufdecken 🤗'
+        },
+        pl: {
+          title: 'Hotjar: Pokaż zachowanie użytkowników',
+          description: 'Dzięki temu narzędziu możemy zobaczyć, jak strona jest używana i szybko odkryć problemy w naszym projekcie 🤗'
+        }
+      },
       purposes: ['analytics'],
       required: false,
     }
