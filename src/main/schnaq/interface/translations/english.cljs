@@ -385,7 +385,7 @@
    ;; Privacy Page
    :privacy/heading "What happens to your data?"
    :privacy/subheading "We lead you through it step by step!"
-   :privacy/open-settings "Open Settings"
+   :privacy/open-settings "Configure Privacy Settings"
    :privacy.made-in-germany/lead "EU-regulation conformity"
    :privacy.made-in-germany/title "Data privacy is important to us!"
    :privacy.made-in-germany/body
@@ -455,7 +455,8 @@
       [:a {:href "https://en.wikipedia.org/wiki/Cross-site_request_forgery"}
        "here"]
       " be researched further."]
-     [:li "Login cookie (persistent cookie), which recognises you as the user you logged in with. After 14 days, your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site. You can find our authentication server here: https://auth.schnaq.com"]]
+     [:li "Login cookie (persistent cookie), which recognizes you as the:user:in you logged in with. After 14 days your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site. You can find our authentication server here: https://auth.schnaq.com"]
+     [:li "schnaq-analytics (persistent cookie) is set if you agree to the extended analysis of your anonymized user:inside behavior. All data is processed in a GDPR-compliant manner and without identifying you as a person. It helps us to identify and fix problems on schnaq more quickly."]]
     [:p "All cookies we use generate random strings that are used to match corresponding strings on our server."]]
 
    :privacy.extended.personal-data/title "Personal data"
@@ -488,7 +489,16 @@
     [:p "The processing of anonymized user data enables us to analyze the use of our website. By evaluating the data obtained, we are able to compile information about the use of the individual components of our website. This helps us to continuously improve our services and their user-friendliness. By anonymizing the IP address, the interest of the user in the protection of his personal data is sufficiently taken into account."]
     [:p "No profiles are created that would give us a deeper insight into the usage behavior of individual users. The evaluation is exclusively anonymized and aggregated so that no conclusion can be drawn about individual persons."]
     [:p "The use of Matomo on our homepage is based on the legal basis of Art. 6 para. 1 lit. f GDPR."]]
-   :privacy.extended.rights-of-the-affected/title "Rights of the data subjects"
+   :privacy.extended.hotjar/title "Understanding User's Behavior with Hotjar"
+   :privacy.extended.hotjar/body
+   [:<>
+    [:h4 "Description and scope of data processing"]
+    [:p "Purely optional and only with your consent, we use the Hotjar tool for deeper analysis and understanding of how our applications are used. This allows us to better understand and respond more quickly to problems in the design and structure of the site. Without such tools, we would have to guess and would not be able to quickly and easily fix the problem directly."]
+    [:p "We use Hotjar to better understand the needs of our users and optimize the offering and experience on this website. Using Hotjar's technology, we get a better understanding of our users' experiences (e.g., how much time users spend on which pages, which links they click, what they like and don't like, etc.), and this helps us tailor our offering to our users' feedback. Hotjar works with cookies and other technologies to collect data about our users' behavior and about their devices, in particular IP address of the device (collected and stored only in anonymized form during your website use), screen size, device type (Unique Device Identifiers), information about the browser used, location (country only), language preferred to view our website. Hotjar stores this information on our behalf in a pseudonymized user profile. Hotjar is contractually prohibited from selling the data collected on our behalf."]
+    [:p "All data is stored on servers in Ireland and does not leave the European Union."]
+    [:p "The use of Hotjar on our homepage is based on the legal basis of Art. 6 para. 1 lit. a GDPR and is only integrated after your explicit consent. You can object at any time."]
+    [:p "You can find more information in under the section 'about Hotjar' on the help pages of Hotjar."]]
+   :privacy.extended.rights-of-the-affected/title "Rights of the Data Subjects"
    :privacy.extended.rights-of-the-affected/body
    [:<>
     [:p "If personal data is processed by you, you are a data subject in the sense of the GDPR and you are entitled to the rights described below. Please address your request, preferably by e-mail, to the above-mentioned data controller."]
@@ -523,7 +533,7 @@
    [:<>
     [:p "Without prejudice to any other administrative or judicial remedy, you have the right to lodge a complaint with a supervisory authority, in particular in the Member State of your residence, if you consider that the processing of personal data concerning you infringes the GDPR.\nThe data protection supervisory authority responsible for the operator of this site is:"]
     [:p "The State Commissioner for Data Protection and Freedom of Information of North Rhine-Westphalia, Kavalleriestr. 2-4, 40102 Düsseldorf, Tel.: +49211/38424-0, e-mail: poststelle{at}ldi.nrw.de"]]
-   :privacy.extended.hosting/title "Hosting der Webseite"
+   :privacy.extended.hosting/title "Hosting our Services"
    :privacy.extended.hosting/body
    [:<>
     [:p "The schnaq website is hosted on servers of Hetzner Online GmbH in Germany. For further information, please refer to the websites of Hetzner Online GmbH."]
@@ -534,7 +544,7 @@
    [:<>
     [:p
      "schnaq GmbH i.Gr." [:br]
-     "represented by Christian Meter, Alexander Schneider and Michael Birkhoff" [:br]
+     "represented by Dr. Christian Meter, Dr. Alexander Schneider and Michael Birkhoff" [:br]
      "Speditionsstraße 15A" [:br]
      "40221 Düsseldorf" [:br]
      "Germany" [:br]

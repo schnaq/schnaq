@@ -384,7 +384,7 @@
    ;; Privacy Page
    :privacy/heading "Was geschieht mit deinen Daten?"
    :privacy/subheading "Wir erklären es dir gerne!"
-   :privacy/open-settings "Einstellungen prüfen"
+   :privacy/open-settings "Sicherheitseinstellungen prüfen"
    :privacy.made-in-germany/lead "EU-konformes Vorgehen"
    :privacy.made-in-germany/title "Datenschutz ist uns wichtig!"
    :privacy.made-in-germany/body
@@ -453,7 +453,8 @@
       [:a {:href "https://de.wikipedia.org/wiki/Cross-Site-Request-Forgery"}
        "hier"]
       " weiter recherchiert werden."]
-     [:li "Login-Cookie (persistenter Cookie), welcher Sie als den:die Benutzer:in wiedererkennt, mit dem Sie sich eingeloggt haben. Nach 14 Tagen läuft Ihr Cookie ab und wird gelöscht. Wenn Sie diesen Cookie löschen, müssen Sie sich beim nächsten Besuch der Seite erneut einloggen. Unseren Authentifizierungsserver finden Sie hier: https://auth.schnaq.com"]]
+     [:li "Login-Cookie (persistenter Cookie), welcher Sie als den:die Benutzer:in wiedererkennt, mit dem Sie sich eingeloggt haben. Nach 14 Tagen läuft Ihr Cookie ab und wird gelöscht. Wenn Sie diesen Cookie löschen, müssen Sie sich beim nächsten Besuch der Seite erneut einloggen. Unseren Authentifizierungsserver finden Sie hier: https://auth.schnaq.com"]
+     [:li "schnaq-Analytics (persistenter Cookie) wird gesetzt, wenn Sie der erweiterten Analyse Ihres anonymisierten Nutzer:innenverhaltens zustimmen. Alle Daten werden hierbei DSGVO-konform und ohne Rückschluss auf Sie als Person verarbeitet und dienen uns dazu Probleme auf schnaq schneller zu identifizieren und zu beheben."]]
     [:p "Alle von uns eingesetzten Cookies generieren zufällige Zeichenketten, die zum Abgleich mit korrespondierenden Zeichenketten auf unserem Server verwendet werden."]]
 
    :privacy.extended.personal-data/title "Persönliche Daten"
@@ -486,6 +487,15 @@
     [:p "Die Verarbeitung der anonymisierten Daten der Nutzer:innen ermöglicht uns eine Analyse der Nutzung unserer Webseite. Wir sind in durch die Auswertung der gewonnen Daten in der Lage, Informationen über die Nutzung der einzelnen Komponenten unserer Webseite zusammenzustellen. Dies hilft uns dabei unsere Dienste und deren Nutzer:innenfreundlichkeit stetig zu verbessern. Durch die Anonymisierung der IP-Adresse wird dem Interesse der:die Nutzer:in an deren Schutz personenbezogener Daten hinreichend Rechnung getragen."]
     [:p "Es werden keine Profile erstellt, die uns einen tieferen Einblick in das Nutzungsverhalten der einzelnen Nutzer:innen geben würden. Die Auswertung erfolgt ausschließlich anonymisiert und aggregiert, dass kein Schluss auf einzelne Personen zu ziehen ist."]
     [:p "Der Einsatz von Matomo auf unserer Homepage erfolgt auf Rechtsgrundlage des Art. 6 Abs. 1 lit. f DSGVO."]]
+   :privacy.extended.hotjar/title "Nutzer:innenverhalten verstehen mit Hotjar"
+   :privacy.extended.hotjar/body
+   [:<>
+    [:h4 "Beschreibung und Umfang der Datenverarbeitung"]
+    [:p "Rein optional und nur mit Ihrer Einstimmung nutzen wir das Tool Hotjar zur tieferen Analyse und zum Verständnis der Nutzung unserer Anwendungen. Damit können wir Probleme im Design und Aufbau der Seite besser verstehen und schneller reagieren. Ohne solche Tools müssten wir nur raten und könnten nicht schnell und einfach das Problem direkt beheben können."]
+    [:p "Wir nutzen Hotjar, um die Bedürfnisse unserer Nutzer besser zu verstehen und das Angebot und die Erfahrung auf dieser Webseite zu optimieren. Mithilfe der Technologie von Hotjar bekommen wir ein besseres Verständnis von den Erfahrungen unserer Nutzer (z.B. wie viel Zeit Nutzer auf welchen Seiten verbringen, welche Links sie anklicken, was sie mögen und was nicht etc.) und das hilft uns, unser Angebot am Feedback unserer Nutzer auszurichten. Hotjar arbeitet mit Cookies und anderen Technologien, um Daten über das Verhalten unserer Nutzer und über ihre Endgeräte zu erheben, insbesondere IP Adresse des Geräts (wird während Ihrer Website-Nutzung nur in anonymisierter Form erfasst und gespeichert), Bildschirmgröße, Gerätetyp (Unique Device Identifiers), Informationen über den verwendeten Browser, Standort (nur Land), zum Anzeigen unserer Webseite bevorzugte Sprache. Hotjar speichert diese Informationen in unserem Auftrag in einem pseudonymisierten Nutzerprofil. Hotjar ist es vertraglich verboten, die in unserem Auftrag erhobenen Daten zu verkaufen."]
+    [:p "Alle Daten werden auf Servern in Irland gespeichert und verlassen nicht die Europäische Union."]
+    [:p "Der Einsatz von Hotjar auf unserer Homepage erfolgt auf Rechtsgrundlage des Art. 6 Abs. 1 lit. a DSGVO und wird nur nach Ihrem explizitem Einverständnis eingebunden. Sie können jederzeit widersprechen."]
+    [:p "Weitere Informationen finden Sie in unter dem Abschnitt 'about Hotjar' auf den Hilfeseiten von Hotjar."]]
    :privacy.extended.rights-of-the-affected/title "Rechte der Betroffenen"
    :privacy.extended.rights-of-the-affected/body
    [:<>
