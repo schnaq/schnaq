@@ -84,10 +84,10 @@
   :change-document-lang
   (fn [lang-short]
     (let [locale-string (case lang-short
-                          :de "de-DE"
-                          :en "en-US"
-                          :pl "pl-PL"
-                          "de-DE")]
+                          :de "de"
+                          :en "en"
+                          :pl "pl"
+                          "de")]
       (.setAttribute (.-documentElement js/document) "lang" locale-string))))
 
 (rf/reg-event-fx

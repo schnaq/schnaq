@@ -5,7 +5,7 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.utils.js-wrapper :as jq]))
 
-(defn default-language
+(defn- default-language
   "Returns the keyword for the default browser language.
   If the default language is not supported by schnaq, english is chosen by default."
   []

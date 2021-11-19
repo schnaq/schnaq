@@ -32,6 +32,14 @@
 (defn- matomo []
   [privacy-entry :privacy.extended.matomo [privacy/open-privacy-settings]])
 
+(defn- hotjar []
+  [privacy-entry :privacy.extended.hotjar
+   [:<>
+    [:a.btn.btn-outline-primary.mr-3 {:href "https://help.hotjar.com/hc/en-us/categories/115001323967-About-Hotjar"
+                                      :target :_blank}
+     "Hotjar Help Page"]
+    [privacy/open-privacy-settings]]])
+
 (defn- rights-of-the-affected []
   [privacy-entry :privacy.extended.rights-of-the-affected])
 
@@ -58,6 +66,7 @@
     [cookies]
     [personal-data]
     [matomo]
+    [hotjar]
     [rights-of-the-affected]
     [right-to-complain]
     [hosting]]])
