@@ -3,7 +3,7 @@
 // script take, e.g. like this:
 // <script src="klaro.js" data-config="myConfigVariableName" />
 var klaroConfig = {
-  // With the 0.7.0 release we introduce a 'version' paramter that will make
+  // With the 0.7.0 release we introduce a 'version' parameter that will make
   // if easier for us to keep configuration files backwards-compatible in the future.
   version: 1,
 
@@ -87,7 +87,7 @@ var klaroConfig = {
   // use the value given in the global "lang" variable. If that does
   // not exist, it will use the value given in the "lang" attribute of your
   // HTML tag. If that also doesn't exist, it will use 'en'.
-  lang: 'pl',
+  // lang: 'en',
 
   // You can overwrite existing translations and add translations for your
   // service descriptions and purposes. See `src/translations/` for a full
