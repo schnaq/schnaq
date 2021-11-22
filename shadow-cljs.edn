@@ -1,5 +1,6 @@
 {:deps true
  :nrepl {:port 8777}
+ :dev-http {8700 "resources/public"}
  :js-options {:js-package-dirs ["resources/public/node_modules"]}
  :builds {:app {:target :browser
                 :modules {:base {:init-fn schnaq.interface.core/init}}
@@ -16,9 +17,7 @@
                                             schnaq.interface.config/keycloak-client #shadow/env "KEYCLOAK_CLIENT"
                                             schnaq.config.shared/s3-host #shadow/env "S3_HOST"
                                             schnaq.config.shared/embedded? #shadow/env "EMBEDDED"}}
-                :devtools {:http-root "resources/public"
-                           :http-port 8700
-                           :preloads [devtools.preload day8.re-frame-10x.preload]}}
+                :devtools {:preloads [devtools.preload day8.re-frame-10x.preload]}}
           :test-headless {:target :karma
                           :output-to "target/ci.js"
                           :ns-regexp "-test$"}
