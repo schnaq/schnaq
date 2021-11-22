@@ -42,7 +42,7 @@
   []
   (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:div.mx-3
-     [:div.mx-md-5.px-md-5.py-3
+     [:div.mx-md-5.px-md-5.py-3.text-white
       (if read-only?
         [:h3 (labels :qanda.state/read-only-warning)]
         [text-input-for-qanda])]]))
@@ -61,7 +61,7 @@
      {:page/heading (:discussion/title current-discussion)
       :page/classes "base-wrapper layered-wave-background h-100 d-flex flex-column"}
      [:<>
-      [:div.container.p-0.px-md-5.text-white
+      [:div.container.p-0.px-md-5
        [question-field-and-search-results]]
       [:div.wave-bottom-typography.d-flex.align-self-end.mt-auto]]]))
 
