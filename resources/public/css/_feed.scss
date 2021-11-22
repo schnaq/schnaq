@@ -31,7 +31,7 @@
 .feed-button {
   @include feed-button-base;
   box-shadow: none;
-  color: $text-dark;
+  color: $dark;
 }
 
 .feed-button-outlined {
