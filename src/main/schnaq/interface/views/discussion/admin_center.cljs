@@ -282,6 +282,24 @@
       [:button.btn.btn-outline-primary
        (labels :schnaq.admin.edit.link.form/submit-button)]])])
 
+(defn- configure-discussion-mode
+  "Configure discussion mode. Toggles between q&a and classical discussions."
+  []
+  (let [qanda? @(rf/subscribe [:schnaq.mode/qanda?])
+        dispatch (if-not qanda? :discussion.mode/qanda
+                                :discussion.mode/discussion)]
+    [:div.text-left
+     [:div.custom-control.custom-switch
+      [:input.big-checkbox.custom-control-input
+       {:type :checkbox
+        :id :toggle-discussion-mode
+        :checked qanda?
+        :on-change (fn [e] (js-wrap/prevent-default e)
+                     (rf/dispatch [:discussion.admin/discussion-mode dispatch]))}]
+      [:label.form-check-label.display-6.pl-1.custom-control-label {:for :toggle-discussion-mode}
+       (labels :schnaq.admin.configurations.discussion-mode/label)]]
+     [:p (labels :schnaq.admin.configurations.discussion-mode/explanation)]]))
+
 (defn- enable-discussion-read-only
   "A Checkbox that makes the current discussion read-only or writeable."
   []
