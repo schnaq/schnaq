@@ -146,6 +146,22 @@
                #(-> % set (disj :discussion.state/read-only) vec))))
 
 (rf/reg-event-fx
+  :discussion.admin/discussion-mode
+  (fn [{:keys [db]} [_ discussion-mode]]
+    (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
+      {:fx [(http/xhrio-request db :put "/discussion/manage/discussion-mode"
+                                [:discussion.admin/discussion-mode-success]
+                                {:share-hash share-hash
+                                 :edit-hash edit-hash
+                                 :discussion-mode discussion-mode}
+                                [:ajax.error/as-notification])]})))
+
+(rf/reg-event-db
+  :discussion.admin/discussion-mode-success
+  (fn [db [_ {:keys [discussion-mode]}]]
+    (assoc-in db [:schnaq :selected :discussion/mode] discussion-mode)))
+
+(rf/reg-event-fx
   ;; Deletion success from admin center
   :discussion.admin/delete-statements-success
   (fn [_ [_ form _return]]
