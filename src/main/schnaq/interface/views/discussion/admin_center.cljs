@@ -288,7 +288,7 @@
   (let [qanda? @(rf/subscribe [:schnaq.mode/qanda?])
         dispatch (if-not qanda? :discussion.mode/qanda
                                 :discussion.mode/discussion)]
-    [:div.text-left
+    [:<>
      [:div.custom-control.custom-switch
       [:input.big-checkbox.custom-control-input
        {:type :checkbox

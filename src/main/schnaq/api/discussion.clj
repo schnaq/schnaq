@@ -365,6 +365,7 @@
          :middleware [:discussion/valid-credentials?]}
      ["/disable-pro-con" {:put disable-pro-con!
                           :description (at/get-doc #'disable-pro-con!)
+                          :middleware [:user/beta-tester?]
                           :name :api.discussion.manage/disable-pro-con
                           :parameters {:body {:disable-pro-con? boolean?}}}]
      ["/mods-mark-only" {:put mods-mark-only!
@@ -374,9 +375,11 @@
                          :parameters {:body {:mods-mark-only? boolean?}}}]
      ["/make-read-only" {:put make-discussion-read-only!
                          :description (at/get-doc #'make-discussion-read-only!)
+                         :middleware [:user/beta-tester?]
                          :name :api.discussion.manage/make-read-only}]
      ["/make-writeable" {:put make-discussion-writeable!
                          :description (at/get-doc #'make-discussion-writeable!)
+                         :middleware [:user/beta-tester?]
                          :name :api.discussion.manage/make-writeable}]
      ["/discussion-mode" {:put configure-discussion-mode
                           :description (at/get-doc #'configure-discussion-mode)
