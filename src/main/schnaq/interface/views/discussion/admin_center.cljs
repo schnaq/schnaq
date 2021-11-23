@@ -146,6 +146,22 @@
                #(-> % set (disj :discussion.state/read-only) vec))))
 
 (rf/reg-event-fx
+  :discussion.admin/discussion-mode
+  (fn [{:keys [db]} [_ discussion-mode]]
+    (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
+      {:fx [(http/xhrio-request db :put "/discussion/manage/discussion-mode"
+                                [:discussion.admin/discussion-mode-success]
+                                {:share-hash share-hash
+                                 :edit-hash edit-hash
+                                 :discussion-mode discussion-mode}
+                                [:ajax.error/as-notification])]})))
+
+(rf/reg-event-db
+  :discussion.admin/discussion-mode-success
+  (fn [db [_ {:keys [discussion-mode]}]]
+    (assoc-in db [:schnaq :selected :discussion/mode] discussion-mode)))
+
+(rf/reg-event-fx
   ;; Deletion success from admin center
   :discussion.admin/delete-statements-success
   (fn [_ [_ form _return]]
@@ -266,59 +282,81 @@
       [:button.btn.btn-outline-primary
        (labels :schnaq.admin.edit.link.form/submit-button)]])])
 
+(defn- configure-discussion-mode
+  "Configure discussion mode. Toggles between q&a and classical discussions."
+  []
+  (let [qanda? @(rf/subscribe [:schnaq.mode/qanda?])
+        dispatch (if-not qanda? :discussion.mode/qanda
+                                :discussion.mode/discussion)]
+    [:<>
+     [:div.custom-control.custom-switch
+      [:input.big-checkbox.custom-control-input
+       {:type :checkbox
+        :id :toggle-discussion-mode
+        :checked qanda?
+        :on-change (fn [e] (js-wrap/prevent-default e)
+                     (rf/dispatch [:discussion.admin/discussion-mode dispatch]))}]
+      [:label.form-check-label.display-6.pl-1.custom-control-label {:for :toggle-discussion-mode}
+       (labels :schnaq.admin.configurations.discussion-mode/label)]]
+     [:p (labels :schnaq.admin.configurations.discussion-mode/explanation)]]))
+
 (defn- enable-discussion-read-only
   "A Checkbox that makes the current discussion read-only or writeable."
   []
   (let [schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         dispatch (if schnaq-read-only? :discussion.admin/make-writeable
                                        :discussion.admin/make-read-only)
-        checked (if schnaq-read-only? "checked" "")]
-    [:div.text-left
-     [:div.mb-2
-      [:input.big-checkbox
-       {:type :checkbox
-        :id :enable-read-only?
-        :checked checked
-        :on-change (fn [e] (js-wrap/prevent-default e)
-                     (rf/dispatch [dispatch]))}]
-      [:label.form-check-label.display-6.pl-1 {:for :enable-read-only?}
-       (labels :schnaq.admin.configurations.read-only/checkbox)]]
-     [:span (labels :schnaq.admin.configurations.read-only/explanation)]]))
+        beta-tester? @(rf/subscribe [:user/beta-tester?])]
+    [:div {:class (when-not beta-tester? "text-muted")}
+     [:input.big-checkbox
+      {:type :checkbox
+       :id :enable-read-only?
+       :disabled (not beta-tester?)
+       :checked schnaq-read-only?
+       :on-change (fn [e] (js-wrap/prevent-default e)
+                    (rf/dispatch [dispatch]))}]
+     [:label.form-check-label.display-6.pl-1 {:for :enable-read-only?}
+      (labels :schnaq.admin.configurations.read-only/checkbox)]
+     [:p (labels :schnaq.admin.configurations.read-only/explanation)]]))
 
 (defn- disable-pro-con []
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        checked (if pro-con-disabled? "checked" "")]
-    [:div.text-left
-     [:div.mb-2
-      [:input.big-checkbox
-       {:type :checkbox
-        :id :disable-pro-con-checkbox?
-        :checked checked
-        :on-change
-        (fn [e]
-          (js-wrap/prevent-default e)
-          (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
-      [:label.form-check-label.display-6.pl-1 {:for :disable-pro-con-checkbox?}
-       (labels :schnaq.admin.configurations.disable-pro-con/label)]]
-     [:span (labels :schnaq.admin.configurations.disable-pro-con/explanation)]]))
+        beta-tester? @(rf/subscribe [:user/beta-tester?])]
+    [:div {:class (when-not beta-tester? "text-muted")}
+     [:input.big-checkbox
+      {:type :checkbox
+       :id :disable-pro-con-checkbox?
+       :disabled (not beta-tester?)
+       :checked pro-con-disabled?
+       :on-change
+       (fn [e]
+         (js-wrap/prevent-default e)
+         (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
+     [:label.form-check-label.display-6.pl-1 {:for :disable-pro-con-checkbox?}
+      (labels :schnaq.admin.configurations.disable-pro-con/label)]
+     [:p (labels :schnaq.admin.configurations.disable-pro-con/explanation)]]))
 
 (defn- only-moderators-mark-setting []
   (let [mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        beta-tester? @(rf/subscribe [:user/beta-tester?])]
-    [:div.text-left {:class (when-not beta-tester? "text-muted")}
-     [:div.mb-2
-      [:input.big-checkbox
-       {:type :checkbox
-        :disabled (not beta-tester?)
-        :id :only-moderators-mark-checkbox
-        :checked mods-mark-only?
-        :on-change
-        (fn [e]
-          (js-wrap/prevent-default e)
-          (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
-      [:label.form-check-label.display-6.pl-1 {:for :only-moderators-mark-checkbox}
-       (labels :schnaq.admin.configurations.mods-mark-only/label)]]
-     [:span (labels :schnaq.admin.configurations.mods-mark-only/explanation)]]))
+        beta-tester? @(rf/subscribe [:user/beta-tester?])
+        qanda? @(rf/subscribe [:schnaq.mode/qanda?])]
+    (when qanda?
+      [:div {:class (when-not beta-tester? "text-muted")}
+       [:input.big-checkbox
+        {:type :checkbox
+         :disabled (not beta-tester?)
+         :id :only-moderators-mark-checkbox
+         :checked mods-mark-only?
+         :on-change
+         (fn [e]
+           (js-wrap/prevent-default e)
+           (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
+       [:label.form-check-label.display-6.pl-1 {:for :only-moderators-mark-checkbox}
+        (labels :schnaq.admin.configurations.mods-mark-only/label)]
+       [:p (labels :schnaq.admin.configurations.mods-mark-only/explanation)]])))
+
+
+;; -----------------------------------------------------------------------------
 
 (rf/reg-sub
   :schnaq.selected/pro-con?
@@ -374,44 +412,51 @@
       (update-in db [:schnaq :selected :discussion/states]
                  #(-> % set (disj :discussion.state.qa/mark-as-moderators-only) vec)))))
 
+
+;; -----------------------------------------------------------------------------
+
+(defn- discussion-settings
+  "List all possible discussion settings."
+  []
+  [:<>
+   [only-moderators-mark-setting]
+   [enable-discussion-read-only]
+   [disable-pro-con]])
+
 (>defn- administrate-discussion
   "A form which allows removing single statements from the discussion."
   []
   [:ret :re-frame/component]
   [:<>
    [header-image/image-url-input]
-   [:div.text-left.my-5
-    [:h4.mt-4 (labels :schnaq.admin.configurations/heading)]]
-   [:div.row
-    [:div.col-12.pb-3 [enable-discussion-read-only]]
-    [:div.col-12.pb-3 [disable-pro-con]]
-    (if @(rf/subscribe [:user/beta-tester?])
-      [:div.col-12.pb-3 [only-moderators-mark-setting]]
-      [:div.col-12.pb-3
-       [:hr]
-       [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
-       [:div.border.border-danger.p-1
-        [only-moderators-mark-setting]]])]])
+   [configure-discussion-mode]
+   (if @(rf/subscribe [:user/beta-tester?])
+     [discussion-settings]
+     [:div.pt-1
+      [:hr.pt-3]
+      [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
+      [:div.border.border-danger.p-3.mt-4
+       [discussion-settings]]])])
 
-(defn- invite-participants-tabs
+(defn- administrator-tabs
   "Share link and invite via mail in a tabbed view."
   []
   [common/tab-builder
    "invite-participants"
+   ;; Manage discussion settings
+   {:link (labels :schnaq.admin.edit/administrate)
+    :view [administrate-discussion]}
    ;; participants access via link
    {:link (labels :schnaq.admin.invite/via-link)
-    :view [:<>
+    :view [:div.text-center
            [educate-element]
            [copy-link-form links/get-share-link "share-hash"]]}
    ;; participants access via mail
    {:link (labels :schnaq.admin.invite/via-mail)
-    :view [invite-participants-form]}
+    :view [:div.text-center [invite-participants-form]]}
    ;; admin access via mail
    {:link (labels :schnaq.admin.edit.link/header)
-    :view [send-admin-center-link]}
-   ;; manage discussion / delete posts
-   {:link (labels :schnaq.admin.edit/administrate)
-    :view [administrate-discussion]}])
+    :view [:div.text-center [send-admin-center-link]]}])
 
 ;; -----------------------------------------------------------------------------
 
@@ -423,16 +468,17 @@
     [pages/with-discussion-header
      {:page/heading (labels :schnaq.admin/heading)
       :page/subheading (gstring/format (labels :schnaq.admin/subheading) title)}
-     [:div.container.px-3.px-md-5.py-3.text-center
-      [invite-participants-tabs]
-      [:div.pb-5.mt-3]
-      ;; stop image and hint to copy the link
-      [:div.single-image [:img {:src (img-path :schnaqqifant/stop)}]]
-      [:h4.mb-4 (labels :schnaqs/continue-with-schnaq-after-creation)]
-      [:a.btn.button-primary.btn-lg.center-block.mb-5
-       {:role "button"
-        :href (rfe/href :routes.schnaq/start {:share-hash share-hash})}
-       (labels :schnaqs/continue-to-schnaq-button)]]]))
+     [:div.container.px-3.px-md-5.py-3
+      [administrator-tabs]
+      [:div.text-center
+       [:div.pb-5.mt-3]
+       ;; stop image and hint to copy the link
+       [:div.single-image [:img {:src (img-path :schnaqqifant/stop)}]]
+       [:h4.mb-4 (labels :schnaqs/continue-with-schnaq-after-creation)]
+       [:a.btn.button-primary.btn-lg.center-block.mb-5
+        {:role "button"
+         :href (rfe/href :routes.schnaq/start {:share-hash share-hash})}
+        (labels :schnaqs/continue-to-schnaq-button)]]]]))
 
 (defn admin-center-view []
   [admin-center])
