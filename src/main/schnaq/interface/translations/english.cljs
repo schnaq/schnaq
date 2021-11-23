@@ -239,6 +239,8 @@
    :schnaq.admin.notifications/heading "Configuration"
    :schnaq.admin.configurations.read-only/checkbox "Set to read-only"
    :schnaq.admin.configurations.read-only/explanation "When checked, users can no longer add new posts to the discussion. Existing posts are still readable and can be analysed. You can change this option anytime."
+   :schnaq.admin.configurations.discussion-mode/label "Activate Q&A mode with knowledge cards"
+   :schnaq.admin.configurations.discussion-mode/explanation "Activate to switch to question and answer mode. Knowledge cards are then available where you can mark the correct answers to the questions."
    :schnaq.admin.configurations.disable-pro-con/label "Disable agree/disagree button"
    :schnaq.admin.configurations.disable-pro-con/explanation "When checked, users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
    :schnaq.admin.configurations.mods-mark-only/label "Only Moderators mark answers"
