@@ -412,44 +412,51 @@
       (update-in db [:schnaq :selected :discussion/states]
                  #(-> % set (disj :discussion.state.qa/mark-as-moderators-only) vec)))))
 
+
+;; -----------------------------------------------------------------------------
+
+(defn- discussion-settings
+  "List all possible discussion settings."
+  []
+  [:<>
+   [only-moderators-mark-setting]
+   [enable-discussion-read-only]
+   [disable-pro-con]])
+
 (>defn- administrate-discussion
   "A form which allows removing single statements from the discussion."
   []
   [:ret :re-frame/component]
   [:<>
    [header-image/image-url-input]
-   [:div.text-left.my-5
-    [:h4.mt-4 (labels :schnaq.admin.configurations/heading)]]
-   [:div.row
-    [:div.col-12.pb-3 [enable-discussion-read-only]]
-    [:div.col-12.pb-3 [disable-pro-con]]
-    (if @(rf/subscribe [:user/beta-tester?])
-      [:div.col-12.pb-3 [only-moderators-mark-setting]]
-      [:div.col-12.pb-3
-       [:hr]
-       [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
-       [:div.border.border-danger.p-1
-        [only-moderators-mark-setting]]])]])
+   [configure-discussion-mode]
+   (if @(rf/subscribe [:user/beta-tester?])
+     [discussion-settings]
+     [:div.pt-1
+      [:hr.pt-3]
+      [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
+      [:div.border.border-danger.p-3.mt-4
+       [discussion-settings]]])])
 
-(defn- invite-participants-tabs
+(defn- administrator-tabs
   "Share link and invite via mail in a tabbed view."
   []
   [common/tab-builder
    "invite-participants"
+   ;; Manage discussion settings
+   {:link (labels :schnaq.admin.edit/administrate)
+    :view [administrate-discussion]}
    ;; participants access via link
    {:link (labels :schnaq.admin.invite/via-link)
-    :view [:<>
+    :view [:div.text-center
            [educate-element]
            [copy-link-form links/get-share-link "share-hash"]]}
    ;; participants access via mail
    {:link (labels :schnaq.admin.invite/via-mail)
-    :view [invite-participants-form]}
+    :view [:div.text-center [invite-participants-form]]}
    ;; admin access via mail
    {:link (labels :schnaq.admin.edit.link/header)
-    :view [send-admin-center-link]}
-   ;; manage discussion / delete posts
-   {:link (labels :schnaq.admin.edit/administrate)
-    :view [administrate-discussion]}])
+    :view [:div.text-center [send-admin-center-link]]}])
 
 ;; -----------------------------------------------------------------------------
 
@@ -461,16 +468,17 @@
     [pages/with-discussion-header
      {:page/heading (labels :schnaq.admin/heading)
       :page/subheading (gstring/format (labels :schnaq.admin/subheading) title)}
-     [:div.container.px-3.px-md-5.py-3.text-center
-      [invite-participants-tabs]
-      [:div.pb-5.mt-3]
-      ;; stop image and hint to copy the link
-      [:div.single-image [:img {:src (img-path :schnaqqifant/stop)}]]
-      [:h4.mb-4 (labels :schnaqs/continue-with-schnaq-after-creation)]
-      [:a.btn.button-primary.btn-lg.center-block.mb-5
-       {:role "button"
-        :href (rfe/href :routes.schnaq/start {:share-hash share-hash})}
-       (labels :schnaqs/continue-to-schnaq-button)]]]))
+     [:div.container.px-3.px-md-5.py-3
+      [administrator-tabs]
+      [:div.text-center
+       [:div.pb-5.mt-3]
+       ;; stop image and hint to copy the link
+       [:div.single-image [:img {:src (img-path :schnaqqifant/stop)}]]
+       [:h4.mb-4 (labels :schnaqs/continue-with-schnaq-after-creation)]
+       [:a.btn.button-primary.btn-lg.center-block.mb-5
+        {:role "button"
+         :href (rfe/href :routes.schnaq/start {:share-hash share-hash})}
+        (labels :schnaqs/continue-to-schnaq-button)]]]]))
 
 (defn admin-center-view []
   [admin-center])
