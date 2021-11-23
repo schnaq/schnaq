@@ -288,53 +288,57 @@
   (let [schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         dispatch (if schnaq-read-only? :discussion.admin/make-writeable
                                        :discussion.admin/make-read-only)
-        checked (if schnaq-read-only? "checked" "")]
-    [:div.text-left
-     [:div.mb-2
-      [:input.big-checkbox
-       {:type :checkbox
-        :id :enable-read-only?
-        :checked checked
-        :on-change (fn [e] (js-wrap/prevent-default e)
-                     (rf/dispatch [dispatch]))}]
-      [:label.form-check-label.display-6.pl-1 {:for :enable-read-only?}
-       (labels :schnaq.admin.configurations.read-only/checkbox)]]
-     [:span (labels :schnaq.admin.configurations.read-only/explanation)]]))
+        beta-tester? @(rf/subscribe [:user/beta-tester?])]
+    [:div {:class (when-not beta-tester? "text-muted")}
+     [:input.big-checkbox
+      {:type :checkbox
+       :id :enable-read-only?
+       :disabled (not beta-tester?)
+       :checked schnaq-read-only?
+       :on-change (fn [e] (js-wrap/prevent-default e)
+                    (rf/dispatch [dispatch]))}]
+     [:label.form-check-label.display-6.pl-1 {:for :enable-read-only?}
+      (labels :schnaq.admin.configurations.read-only/checkbox)]
+     [:p (labels :schnaq.admin.configurations.read-only/explanation)]]))
 
 (defn- disable-pro-con []
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        checked (if pro-con-disabled? "checked" "")]
-    [:div.text-left
-     [:div.mb-2
-      [:input.big-checkbox
-       {:type :checkbox
-        :id :disable-pro-con-checkbox?
-        :checked checked
-        :on-change
-        (fn [e]
-          (js-wrap/prevent-default e)
-          (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
-      [:label.form-check-label.display-6.pl-1 {:for :disable-pro-con-checkbox?}
-       (labels :schnaq.admin.configurations.disable-pro-con/label)]]
-     [:span (labels :schnaq.admin.configurations.disable-pro-con/explanation)]]))
+        beta-tester? @(rf/subscribe [:user/beta-tester?])]
+    [:div {:class (when-not beta-tester? "text-muted")}
+     [:input.big-checkbox
+      {:type :checkbox
+       :id :disable-pro-con-checkbox?
+       :disabled (not beta-tester?)
+       :checked pro-con-disabled?
+       :on-change
+       (fn [e]
+         (js-wrap/prevent-default e)
+         (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
+     [:label.form-check-label.display-6.pl-1 {:for :disable-pro-con-checkbox?}
+      (labels :schnaq.admin.configurations.disable-pro-con/label)]
+     [:p (labels :schnaq.admin.configurations.disable-pro-con/explanation)]]))
 
 (defn- only-moderators-mark-setting []
   (let [mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        beta-tester? @(rf/subscribe [:user/beta-tester?])]
-    [:div.text-left {:class (when-not beta-tester? "text-muted")}
-     [:div.mb-2
-      [:input.big-checkbox
-       {:type :checkbox
-        :disabled (not beta-tester?)
-        :id :only-moderators-mark-checkbox
-        :checked mods-mark-only?
-        :on-change
-        (fn [e]
-          (js-wrap/prevent-default e)
-          (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
-      [:label.form-check-label.display-6.pl-1 {:for :only-moderators-mark-checkbox}
-       (labels :schnaq.admin.configurations.mods-mark-only/label)]]
-     [:span (labels :schnaq.admin.configurations.mods-mark-only/explanation)]]))
+        beta-tester? @(rf/subscribe [:user/beta-tester?])
+        qanda? @(rf/subscribe [:schnaq.mode/qanda?])]
+    (when qanda?
+      [:div {:class (when-not beta-tester? "text-muted")}
+       [:input.big-checkbox
+        {:type :checkbox
+         :disabled (not beta-tester?)
+         :id :only-moderators-mark-checkbox
+         :checked mods-mark-only?
+         :on-change
+         (fn [e]
+           (js-wrap/prevent-default e)
+           (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
+       [:label.form-check-label.display-6.pl-1 {:for :only-moderators-mark-checkbox}
+        (labels :schnaq.admin.configurations.mods-mark-only/label)]
+       [:p (labels :schnaq.admin.configurations.mods-mark-only/explanation)]])))
+
+
+;; -----------------------------------------------------------------------------
 
 (rf/reg-sub
   :schnaq.selected/pro-con?
