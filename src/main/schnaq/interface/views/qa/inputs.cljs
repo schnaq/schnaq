@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.qa.inputs
-  (:require [oops.core :refer [oget]]
+  (:require [ghostwheel.core :refer [>defn]]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
@@ -48,11 +49,12 @@
         [:h3 (labels :qanda.state/read-only-warning)]
         [text-input-for-qanda])]]))
 
-(defn question-field-and-search-results
+(>defn question-field-and-search-results
   "Combine input form and results list for uniform representation in ask-view
   and in other usages, e.g. the startpage.
-  Backgroundtyoe can either be :light or :dark"
+  Backgroundtype can either be :light or :dark"
   [background-type]
+  [:background/type :ret :re-frame/component]
   [:<>
    [ask-question background-type]
    [search/results-list background-type]])

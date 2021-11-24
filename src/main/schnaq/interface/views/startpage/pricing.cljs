@@ -177,7 +177,7 @@
 (defn- faq
   "A taste of the most burning questions of the user answered by our live Q&A."
   []
-  [:<>
+  [:div.pb-5
    [:span.text-center
     [:h2 (labels :startpage.faq/title)]
     [:p.lead (labels :startpage.faq/subtitle)]]

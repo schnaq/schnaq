@@ -1,5 +1,7 @@
 (ns schnaq.interface.views.qa.search
-  (:require [clojure.string :as cstring]
+  (:require [clojure.spec.alpha :as s]
+            [clojure.string :as cstring]
+            [ghostwheel.core :refer [>defn]]
             [goog.functions :as gfun]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -9,6 +11,8 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.conclusion-card :as card]))
+
+(s/def :background/type #{:dark :light})
 
 (def throttled-search
   (gfun/throttle
@@ -41,10 +45,11 @@
   (fn [db _]
     (assoc-in db [:schnaq :qa :search :results] [])))
 
-(defn results-list
+(>defn results-list
   "A list of statement results that came out of search.
   Background type can be either :dark or :light"
   [background-type]
+  [:background/type :ret :re-frame/component]
   (let [search-results @(rf/subscribe [:schnaq.qa.search/results])]
     (when (seq search-results)
       [:div.mt-3
