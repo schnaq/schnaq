@@ -43,8 +43,7 @@
   (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:div.mx-3
      [:div.mx-md-5.px-md-5.py-3
-      (when (= background-type :dark)
-        {:class "text-white"})
+      (when (= background-type :dark) {:class "text-white"})
       (if read-only?
         [:h3 (labels :qanda.state/read-only-warning)]
         [text-input-for-qanda])]]))
