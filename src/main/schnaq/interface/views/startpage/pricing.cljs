@@ -181,7 +181,7 @@
    [:span.text-center
     [:h2 (labels :startpage.faq/title)]
     [:p.lead (labels :startpage.faq/subtitle)]]
-   [qanda/question-field-and-search-results]])
+   [qanda/question-field-and-search-results :light]])
 
 (defn- pricing-page
   "A full page depicting our pricing and related items."

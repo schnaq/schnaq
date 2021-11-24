@@ -39,20 +39,23 @@
 
 (defn- ask-question
   "Either display input or read-only warning."
-  []
+  [background-type]
   (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:div.mx-3
-     [:div.mx-md-5.px-md-5.py-3.text-white
+     [:div.mx-md-5.px-md-5.py-3
+      (when (= background-type :dark)
+        {:class "text-white"})
       (if read-only?
         [:h3 (labels :qanda.state/read-only-warning)]
         [text-input-for-qanda])]]))
 
 (defn question-field-and-search-results
   "Combine input form and results list for uniform representation in ask-view
-  and in other usages, e.g. the startpage."
-  []
+  and in other usages, e.g. the startpage.
+  Backgroundtyoe can either be :light or :dark"
+  [background-type]
   [:<>
-   [ask-question]
+   [ask-question background-type]
    [search/results-list]])
 
 (defn- qanda-content []
@@ -62,7 +65,7 @@
       :page/classes "base-wrapper layered-wave-background h-100 d-flex flex-column"}
      [:<>
       [:div.container.p-0.px-md-5
-       [question-field-and-search-results]]
+       [question-field-and-search-results :dark]]
       [:div.wave-bottom-typography.d-flex.align-self-end.mt-auto]]]))
 
 (defn qanda-view
