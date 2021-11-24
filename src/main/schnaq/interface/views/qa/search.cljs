@@ -42,16 +42,20 @@
     (assoc-in db [:schnaq :qa :search :results] [])))
 
 (defn results-list
-  "A list of statement results that came out of search."
-  []
+  "A list of statement results that came out of search.
+  Background type can be either :dark or :light"
+  [background-type]
   (let [search-results @(rf/subscribe [:schnaq.qa.search/results])]
     (when (seq search-results)
       [:div.mt-3
        [motion/move-in :top
-        [:h5.text-white.mx-3.mx-md-0 (labels :qanda.search/similar-results)]]
+        [:h5.mx-3.mx-md-0
+         (when (= background-type :dark) {:class "text-white"})
+         (labels :qanda.search/similar-results)]]
        [motion/move-in :top
         [:div.mx-3.mx-md-0
-         [:text-sm.text-white
+         [:text-sm
+          (when (= background-type :dark) {:class "text-white"})
           (labels :qanda.search/similar-results-explanation-1)
           [icon :arrow-up "m-auto"]
           " "

@@ -56,7 +56,7 @@
   [background-type]
   [:<>
    [ask-question background-type]
-   [search/results-list]])
+   [search/results-list background-type]])
 
 (defn- qanda-content []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
