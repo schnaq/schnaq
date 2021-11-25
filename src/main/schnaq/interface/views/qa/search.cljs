@@ -12,7 +12,7 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.conclusion-card :as card]))
 
-(s/def :background/type #{:dark :light})
+(s/def :background/schema #{:dark :light})
 
 (def throttled-search
   (gfun/throttle
@@ -48,19 +48,20 @@
 (>defn results-list
   "A list of statement results that came out of search.
   Background type can be either :dark or :light"
-  [background-type]
-  [:background/type :ret :re-frame/component]
-  (let [search-results @(rf/subscribe [:schnaq.qa.search/results])]
+  [background-schema]
+  [:background/schema :ret :re-frame/component]
+  (let [search-results @(rf/subscribe [:schnaq.qa.search/results])
+        dark? (= :dark background-schema)]
     (when (seq search-results)
       [:div.mt-3
        [motion/move-in :top
         [:h5.mx-3.mx-md-0
-         (when (= background-type :dark) {:class "text-white"})
+         (when dark? {:class "text-white"})
          (labels :qanda.search/similar-results)]]
        [motion/move-in :top
         [:div.mx-3.mx-md-0
          [:text-sm
-          (when (= background-type :dark) {:class "text-white"})
+          (when dark? {:class "text-white"})
           (labels :qanda.search/similar-results-explanation-1)
           [icon :arrow-up "m-auto"]
           " "

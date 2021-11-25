@@ -40,12 +40,12 @@
 
 (>defn- ask-question
   "Either display input or read-only warning."
-  [background-type]
-  [:background/type :ret :re-frame/component]
+  [background-schema]
+  [:background/schema :ret :re-frame/component]
   (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:div.mx-3
      [:div.mx-md-5.px-md-5.py-3
-      (when (= background-type :dark) {:class "text-white"})
+      (when (= background-schema :dark) {:class "text-white"})
       (if read-only?
         [:h3 (labels :qanda.state/read-only-warning)]
         [text-input-for-qanda])]]))
@@ -54,11 +54,11 @@
   "Combine input form and results list for uniform representation in ask-view
   and in other usages, e.g. the startpage.
   Backgroundtype can either be :light or :dark"
-  [background-type]
-  [:background/type :ret :re-frame/component]
+  [background-schema]
+  [:background/schema :ret :re-frame/component]
   [:<>
-   [ask-question background-type]
-   [search/results-list background-type]])
+   [ask-question background-schema]
+   [search/results-list background-schema]])
 
 (defn- qanda-content []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
