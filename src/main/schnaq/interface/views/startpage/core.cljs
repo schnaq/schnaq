@@ -90,10 +90,10 @@
    [wavy/top-and-bottom
     :primary
     [:div.container
-     [:span.text-center
+     [:span.text-center.text-white
       [:h2 (labels :startpage.faq/title)]
       [:p.lead (labels :startpage.faq/subtitle)]]
-     [qanda/question-field-and-search-results]]]])
+     [qanda/question-field-and-search-results :dark]]]])
 
 (defn- founders-note
   "A personal note from the founders, to the visitor of the page. Give a last personal touch."
