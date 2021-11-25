@@ -109,11 +109,11 @@
            (rf/dispatch [:graph/store-object graph])
            (.on graph "doubleClick"
                 (fn [properties]
-                  (let [node-id (first (get (js->clj properties) "nodes"))]
-                    (if (= node-id share-hash)              ;; if true, the user clicked on the discussion title
+                  (when-let [clicked-node-id (first (get (js->clj properties) "nodes"))] ;; If `clicked-node-id` is nil, the user clicked in an empty space instead of a node
+                    (if (= clicked-node-id share-hash)      ;; if true, the user clicked on the discussion title
                       (rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])
                       (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
-                                    (assoc route-params :statement-id node-id)])))))))
+                                    (assoc route-params :statement-id clicked-node-id)])))))))
        :component-did-update
        (fn [this _argv]
          (let [[_ {:keys [nodes edges controversy-values]}] (reagent/argv this)
