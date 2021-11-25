@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.qa.inputs
-  (:require [ghostwheel.core :refer [>defn]]
+  (:require [ghostwheel.core :refer [>defn >defn-]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
@@ -38,9 +38,10 @@
         [:div.mr-3 (labels :qanda.button/submit)]
         [icon :plane "m-auto"]]]]]))
 
-(defn- ask-question
+(>defn- ask-question
   "Either display input or read-only warning."
   [background-type]
+  [:background/type :ret :re-frame/component]
   (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:div.mx-3
      [:div.mx-md-5.px-md-5.py-3
