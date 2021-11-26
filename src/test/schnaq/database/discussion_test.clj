@@ -263,7 +263,7 @@
 (deftest search-similar-questions-test
   (testing "Test whether the similar questions search works as intended."
     (let [share-hash "cat-dog-hash"]
-      ;; Searching for "we" should give 3 first level statements. Permutating it should give nothing.
+      ;; Searching for "we" should give 3 first level statements. Permutations should give nothing.
       (is (= 3 (count (db/search-similar-questions share-hash "we"))))
       (is (empty? (db/search-similar-questions share-hash "ew")))
       ;; dog and dok should give similar results. Case should also not matter so DOG is the same
@@ -274,9 +274,17 @@
              (count (db/search-similar-questions share-hash "DOK"))))
       (is (empty? (db/search-similar-questions share-hash "dgo")))
       ;; Five or more chars should allow for two errors. Should itself also matches would, which gives it one more hit,
-      ;; than the misspellt versions
+      ;; than the misspelled versions
       (is (= 3 (count (db/search-similar-questions share-hash "should"))))
       (is (= 2
              (count (db/search-similar-questions share-hash "schoult"))
              (count (db/search-similar-questions share-hash "shald"))))
       (is (empty? (db/search-similar-questions share-hash "scholt"))))))
+
+(deftest discussion-mode!-test
+  (testing "Changing discussion mode."
+    (let [share-hash "cat-dog-hash"]
+      (db/discussion-mode! share-hash :discussion.mode/qanda)
+      (is (= :discussion.mode/qanda (:discussion/mode (db/discussion-by-share-hash share-hash))))
+      (db/discussion-mode! share-hash :discussion.mode/discussion)
+      (is (= :discussion.mode/discussion (:discussion/mode (db/discussion-by-share-hash share-hash)))))))
