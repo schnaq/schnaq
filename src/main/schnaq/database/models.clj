@@ -224,6 +224,8 @@
     :db/doc "Define the mode of your discussion."}
    {:db/ident :discussion.mode/qanda
     :db/doc "Q&A mode."}
+   {:db/ident :discussion.mode/discussion
+    :db/doc "Discussion mode."}
 
    {:db/ident :discussion.access/code
     :db/valueType :db.type/long
