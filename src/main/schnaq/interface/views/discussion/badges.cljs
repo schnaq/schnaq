@@ -41,14 +41,14 @@
         confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
                                             (dispatch-fn)))
         admin-delete-fn #(confirmation-fn (fn [] (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
-        user-delete-fn (if anonymous-owner? #(rf/dispatch [:modal {:show? true :child [anonymous-delete-modal]}])
-                                            #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))))]
+        user-delete-fn (if anonymous-owner?
+                         #(rf/dispatch [:modal {:show? true :child [anonymous-delete-modal]}])
+                         #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))))]
     [:button.dropdown-item
      {:tabIndex 50
       :on-click (fn [e]
                   (js-wrap/stop-propagation e)
-                  (if edit-hash (admin-delete-fn)
-                                (user-delete-fn)))
+                  (if edit-hash (admin-delete-fn) (user-delete-fn)))
       :title (labels :discussion.badges/delete-statement)}
      [icon :trash "m-auto"] " " (labels :discussion.badges/delete-statement)]))
 
@@ -226,40 +226,39 @@
     (when read-only?
       [:span.badge.badge-pill.badge-secondary-outline (labels :discussion.state/read-only-label)])))
 
-
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
-  :statement/delete
-  (fn [{:keys [db]} [_ statement-id]]
-    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-      {:fx [(http/xhrio-request db :delete "/discussion/statement/delete"
-                                [:discussion.admin/delete-statement-success statement-id]
-                                {:statement-id statement-id
-                                 :share-hash share-hash}
-                                [:ajax.error/as-notification])]})))
+ :statement/delete
+ (fn [{:keys [db]} [_ statement-id]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :delete "/discussion/statement/delete"
+                               [:discussion.admin/delete-statement-success statement-id]
+                               {:statement-id statement-id
+                                :share-hash share-hash}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-sub
-  :visited/statement-nums
-  (fn [db [_]]
-    (get-in db [:visited :statement-nums])))
+ :visited/statement-nums
+ (fn [db [_]]
+   (get-in db [:visited :statement-nums])))
 
 (rf/reg-event-db
-  :visited.save-statement-nums/store-hashes-from-localstorage
-  (fn [db _]
-    (assoc-in db [:visited :statement-nums] (:discussion/statement-nums local-storage))))
+ :visited.save-statement-nums/store-hashes-from-localstorage
+ (fn [db _]
+   (assoc-in db [:visited :statement-nums] (:discussion/statement-nums local-storage))))
 
 (rf/reg-event-fx
-  :visited.statement-nums/to-localstorage
-  (fn [{:keys [db]} [_]]
-    (let [statements-nums-map (get-in db [:visited :statement-nums])
-          current-visited-nums (:discussion/statement-nums local-storage)
-          merged-visited-nums (merge current-visited-nums statements-nums-map)]
-      {:fx [[:localstorage/assoc [:discussion/statement-nums merged-visited-nums]]
-            [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]]})))
+ :visited.statement-nums/to-localstorage
+ (fn [{:keys [db]} [_]]
+   (let [statements-nums-map (get-in db [:visited :statement-nums])
+         current-visited-nums (:discussion/statement-nums local-storage)
+         merged-visited-nums (merge current-visited-nums statements-nums-map)]
+     {:fx [[:localstorage/assoc [:discussion/statement-nums merged-visited-nums]]
+           [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]]})))
 
 (rf/reg-event-db
-  :visited/set-visited-statements
-  (fn [db [_ statement]]
-    (assoc-in db [:visited :statement-nums (:db/id statement)]
-              (get-in statement [:meta/sub-discussion-info :sub-statements] 0))))
+ :visited/set-visited-statements
+ (fn [db [_ statement]]
+   (assoc-in db [:visited :statement-nums (:db/id statement)]
+             (get-in statement [:meta/sub-discussion-info :sub-statements] 0))))

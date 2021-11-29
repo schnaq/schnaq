@@ -56,7 +56,7 @@
       (if (empty? queue)
         ;; We're done here, give the finished text back
         text
-        ;; Otherwise either toss the :level-down-marker, or do the recursive algo
+        ;; Otherwise, either toss the :level-down-marker, or do the recursive algo
         (if (= :level-down-marker (first queue))
           (recur (rest queue) text (dec level))
           (let [current-statement (first queue)

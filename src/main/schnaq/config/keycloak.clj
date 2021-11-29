@@ -49,8 +49,8 @@
     (let [public-key (get-public-key)]
       (log/info "[Keycloak] Successfully loaded public key:" public-key)
       (keys/str->public-key
-        (format "-----BEGIN PUBLIC KEY-----\n%s\n-----END PUBLIC KEY-----"
-                public-key)))
+       (format "-----BEGIN PUBLIC KEY-----\n%s\n-----END PUBLIC KEY-----"
+               public-key)))
     (catch Exception _
       (log/error (format "[Keycloak] Keycloak server unreachable or realm does not exist. Your settings: server: %s, realm: %s"
                          server realm)))))

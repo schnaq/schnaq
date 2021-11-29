@@ -15,7 +15,6 @@
         (when @(rf/subscribe [subscription-key])
           (update-fn)))))
 
-
 ;; -----------------------------------------------------------------------------
 ;; Looping functions
 
@@ -28,7 +27,7 @@
   "Periodically request starting conclusions."
   []
   (loop-builder
-    :updates.periodic/starting-conclusions? update-starting-conclusions))
+   :updates.periodic/starting-conclusions? update-starting-conclusions))
 
 (defn- update-graph
   "Call events to update the graph."
@@ -51,26 +50,25 @@
   (loop-update-starting-conclusions!)
   (loop-update-graph!))
 
-
 ;; -----------------------------------------------------------------------------
 ;; Events
 
 (rf/reg-sub
-  :updates.periodic/starting-conclusions?
-  (fn [db _]
-    (get-in db [:updates/periodic :conclusions/starting?] false)))
+ :updates.periodic/starting-conclusions?
+ (fn [db _]
+   (get-in db [:updates/periodic :conclusions/starting?] false)))
 
 (rf/reg-event-db
-  :updates.periodic/starting-conclusions
-  (fn [db [_ trigger?]]
-    (assoc-in db [:updates/periodic :conclusions/starting?] trigger?)))
+ :updates.periodic/starting-conclusions
+ (fn [db [_ trigger?]]
+   (assoc-in db [:updates/periodic :conclusions/starting?] trigger?)))
 
 (rf/reg-sub
-  :updates.periodic/graph?
-  (fn [db _]
-    (get-in db [:updates/periodic :graph] false)))
+ :updates.periodic/graph?
+ (fn [db _]
+   (get-in db [:updates/periodic :graph] false)))
 
 (rf/reg-event-db
-  :updates.periodic/graph
-  (fn [db [_ trigger?]]
-    (assoc-in db [:updates/periodic :graph] trigger?)))
+ :updates.periodic/graph
+ (fn [db [_ trigger?]]
+   (assoc-in db [:updates/periodic :graph] trigger?)))

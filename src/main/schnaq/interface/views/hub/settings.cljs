@@ -38,14 +38,13 @@
                   :accept (string/join "," shared-config/allowed-mime-types)
                   :type "file"
                   :on-change (fn [event] (image/store-temporary-profile-picture
-                                           event [:hubs keycloak-name :logo-temporary]))
+                                          event [:hubs keycloak-name :logo-temporary]))
                   :hidden true}]])]]))
 
 (rf/reg-event-db
-  :hub.logo/reset
-  (fn [db [_ {:hub/keys [name]}]]
-    (update-in db [:hubs name] dissoc :logo-temporary)))
-
+ :hub.logo/reset
+ (fn [db [_ {:hub/keys [name]}]]
+   (update-in db [:hubs name] dissoc :logo-temporary)))
 
 (defn- settings-body []
   (let [{:hub/keys [name]} @(rf/subscribe [:hub/current])
@@ -104,85 +103,85 @@
   [settings-view])
 
 (rf/reg-event-fx
-  :hub.members/add
-  (fn [{:keys [db]} [_ new-member-mail]]
-    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-      {:fx [(http/xhrio-request
-              db :post
-              (gstring/format "/hub/%s/member/add" keycloak-name)
-              [:hub.members.add/success]
-              {:new-member-mail new-member-mail})]})))
+ :hub.members/add
+ (fn [{:keys [db]} [_ new-member-mail]]
+   (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+     {:fx [(http/xhrio-request
+            db :post
+            (gstring/format "/hub/%s/member/add" keycloak-name)
+            [:hub.members.add/success]
+            {:new-member-mail new-member-mail})]})))
 
 (rf/reg-event-fx
-  :hub.members.add/success
-  (fn [_ [_ {:keys [status]}]]
-    (let [[body-title body-text context]
-          (case status
-            :user-added [:hub.members.add.result.success/title
-                         :hub.members.add.result.success/body
-                         :success]
-            :user-not-registered [:hub.members.add.result.error/title
-                                  :hub.members.add.result.error/unregistered-user
-                                  :warning]
-            :error-adding-user [:hub.members.add.result.error/title
-                                :hub.members.add.result.error/generic-error
-                                :danger])]
-      {:fx [[:dispatch
-             [:notification/add
-              #:notification{:title (labels body-title)
-                             :body (labels body-text)
-                             :context context}]]]})))
+ :hub.members.add/success
+ (fn [_ [_ {:keys [status]}]]
+   (let [[body-title body-text context]
+         (case status
+           :user-added [:hub.members.add.result.success/title
+                        :hub.members.add.result.success/body
+                        :success]
+           :user-not-registered [:hub.members.add.result.error/title
+                                 :hub.members.add.result.error/unregistered-user
+                                 :warning]
+           :error-adding-user [:hub.members.add.result.error/title
+                               :hub.members.add.result.error/generic-error
+                               :danger])]
+     {:fx [[:dispatch
+            [:notification/add
+             #:notification{:title (labels body-title)
+                            :body (labels body-text)
+                            :context context}]]]})))
 
 (rf/reg-event-fx
-  :hub.name/update
-  (fn [{:keys [db]} [_ new-hub-name]]
-    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-      {:fx [(http/xhrio-request
-              db :put (gstring/format "/hub/%s/name" keycloak-name)
-              [:hub.name/update-success]
-              {:new-hub-name new-hub-name}
-              [:ajax.error/as-notification])]})))
+ :hub.name/update
+ (fn [{:keys [db]} [_ new-hub-name]]
+   (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+     {:fx [(http/xhrio-request
+            db :put (gstring/format "/hub/%s/name" keycloak-name)
+            [:hub.name/update-success]
+            {:new-hub-name new-hub-name}
+            [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
-  :hub.name/update-success
-  (fn [{:keys [db]} [_ {:keys [hub]}]]
-    {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
-     :fx [[:dispatch
-           [:notification/add
-            #:notification{:title (labels :hub.settings.name/updated-title)
-                           :body (labels :hub.settings.name/updated-body)
-                           :context :success}]]]}))
+ :hub.name/update-success
+ (fn [{:keys [db]} [_ {:keys [hub]}]]
+   {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
+    :fx [[:dispatch
+          [:notification/add
+           #:notification{:title (labels :hub.settings.name/updated-title)
+                          :body (labels :hub.settings.name/updated-body)
+                          :context :success}]]]}))
 
 (rf/reg-event-fx
-  :hub.logo/update
-  (fn [{:keys [db]}]
-    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-      (when-let [temporary-hub-logo-url (get-in db [:hubs keycloak-name :logo-temporary])]
-        {:fx [(http/xhrio-request db :put (gstring/format "/hub/%s/logo" keycloak-name)
-                                  [:hub.logo/update-success]
-                                  {:image temporary-hub-logo-url}
-                                  [:hub.logo/update-error])]}))))
+ :hub.logo/update
+ (fn [{:keys [db]}]
+   (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+     (when-let [temporary-hub-logo-url (get-in db [:hubs keycloak-name :logo-temporary])]
+       {:fx [(http/xhrio-request db :put (gstring/format "/hub/%s/logo" keycloak-name)
+                                 [:hub.logo/update-success]
+                                 {:image temporary-hub-logo-url}
+                                 [:hub.logo/update-error])]}))))
 
 (rf/reg-event-fx
-  :hub.logo/update-success
-  (fn [{:keys [db]} [_ {:keys [hub]}]]
-    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-      {:db (assoc-in db [:hubs keycloak-name :hub/logo] (:hub/logo hub))
-       :fx [[:dispatch [:notification/add
-                        #:notification{:title (labels :hub.settings.update-logo-title/success)
-                                       :body (labels :hub.settings.update-logo-body/success)
-                                       :context :success}]]]})))
+ :hub.logo/update-success
+ (fn [{:keys [db]} [_ {:keys [hub]}]]
+   (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+     {:db (assoc-in db [:hubs keycloak-name :hub/logo] (:hub/logo hub))
+      :fx [[:dispatch [:notification/add
+                       #:notification{:title (labels :hub.settings.update-logo-title/success)
+                                      :body (labels :hub.settings.update-logo-body/success)
+                                      :context :success}]]]})))
 
 (rf/reg-event-fx
-  :hub.logo/update-error
-  (fn [{:keys [db]} [_ {:keys [response]}]]
-    (let [mime-types (string/join ", " shared-config/allowed-mime-types)
-          error-message (case (:error response)
-                          :scaling (labels :user.settings.profile-picture.errors/scaling)
-                          :invalid-file-type (gstring/format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types)
-                          (labels :user.settings.profile-picture.errors/default))]
-      {:db (assoc-in db [:user :profile-picture :temporary] nil)
-       :fx [[:dispatch [:notification/add
-                        #:notification{:title (labels :user.settings.profile-picture-title/error)
-                                       :body error-message
-                                       :context :danger}]]]})))
+ :hub.logo/update-error
+ (fn [{:keys [db]} [_ {:keys [response]}]]
+   (let [mime-types (string/join ", " shared-config/allowed-mime-types)
+         error-message (case (:error response)
+                         :scaling (labels :user.settings.profile-picture.errors/scaling)
+                         :invalid-file-type (gstring/format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types)
+                         (labels :user.settings.profile-picture.errors/default))]
+     {:db (assoc-in db [:user :profile-picture :temporary] nil)
+      :fx [[:dispatch [:notification/add
+                       #:notification{:title (labels :user.settings.profile-picture-title/error)
+                                      :body error-message
+                                      :context :danger}]]]})))

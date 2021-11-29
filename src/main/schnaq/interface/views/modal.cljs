@@ -41,7 +41,6 @@
       [icon :cross]]]]
    [:div.modal-body body]])
 
-
 ;; -----------------------------------------------------------------------------
 ;; Enter Name Modal
 
@@ -87,10 +86,10 @@
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-sub
-  :modal
-  (fn [db] (:modal db)))
+ :modal
+ (fn [db] (:modal db)))
 
 (rf/reg-event-db
-  :modal
-  (fn [db [_ data]]
-    (assoc db :modal data)))
+ :modal
+ (fn [db [_ data]]
+   (assoc db :modal data)))

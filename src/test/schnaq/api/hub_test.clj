@@ -6,8 +6,8 @@
             [schnaq.test.toolbelt :as toolbelt]))
 
 (use-fixtures :each
-              toolbelt/init-test-delete-db-fixture
-              #(toolbelt/init-test-delete-db-fixture % hub-test-data/hub-test-data))
+  toolbelt/init-test-delete-db-fixture
+  #(toolbelt/init-test-delete-db-fixture % hub-test-data/hub-test-data))
 (use-fixtures :once toolbelt/clean-database-fixture)
 
 (deftest hub-by-keycloak-name-test

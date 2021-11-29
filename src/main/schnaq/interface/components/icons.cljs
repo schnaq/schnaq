@@ -87,6 +87,6 @@
   ([identifier classes extras]
    [:> FontAwesomeIcon
     (merge
-      {:icon (get icons identifier)
-       :className classes}
-      extras)]))
+     {:icon (get icons identifier)
+      :className classes}
+     extras)]))

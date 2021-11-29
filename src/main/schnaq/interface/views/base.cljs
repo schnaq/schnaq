@@ -29,7 +29,6 @@
      (gstring/contains (str classes) "bg-dark") [:div.wave-bottom-dark]
      :else [:div.wave-bottom-light])])
 
-
 ;; -----------------------------------------------------------------------------
 ;; Footer
 
@@ -96,7 +95,6 @@
     ". schnaq" [:sup "®"] " "
     (labels :footer.registered/is-registered)
     "."]])
-
 
 ;; -----------------------------------------------------------------------------
 

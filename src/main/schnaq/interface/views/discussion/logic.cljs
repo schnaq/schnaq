@@ -14,8 +14,8 @@
   (let [up-vote-change (get-in local-votes [:up (:db/id statement)] 0)
         down-vote-change (get-in local-votes [:down (:db/id statement)] 0)]
     (-
-      (+ (:statement/upvotes statement) up-vote-change)
-      (+ (:statement/downvotes statement) down-vote-change))))
+     (+ (:statement/upvotes statement) up-vote-change)
+     (+ (:statement/downvotes statement) down-vote-change))))
 
 (>defn get-up-votes
   "Calculates the up-votes without needing to reload."
@@ -32,63 +32,63 @@
     (+ (:statement/downvotes statement) down-vote-change)))
 
 (rf/reg-event-fx
-  :discussion.reaction.statement/send
-  (fn [{:keys [db]} [_ statement-type new-premise]]
-    (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
-          share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-      {:fx [(http/xhrio-request
-              db :post "/discussion/react-to/statement"
-              [:discussion.reaction.statement/added]
-              {:share-hash share-hash
-               :conclusion-id statement-id
-               :premise new-premise
-               :statement-type statement-type
-               :display-name (tools/current-display-name db)}
-              [:ajax.error/as-notification])]})))
+ :discussion.reaction.statement/send
+ (fn [{:keys [db]} [_ statement-type new-premise]]
+   (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
+         share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request
+            db :post "/discussion/react-to/statement"
+            [:discussion.reaction.statement/added]
+            {:share-hash share-hash
+             :conclusion-id statement-id
+             :premise new-premise
+             :statement-type statement-type
+             :display-name (tools/current-display-name db)}
+            [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
-  :discussion.reaction.statement/added
-  (fn [{:keys [db]} [_ response]]
-    (let [new-statement (:new-statement response)]
-      {:db (update-in db [:discussion :premises :current]
-                      conj new-statement)
-       :fx [[:dispatch [:notification/new-content]]
-            [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
+ :discussion.reaction.statement/added
+ (fn [{:keys [db]} [_ response]]
+   (let [new-statement (:new-statement response)]
+     {:db (update-in db [:discussion :premises :current]
+                     conj new-statement)
+      :fx [[:dispatch [:notification/new-content]]
+           [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
 
 (rf/reg-event-fx
-  :discussion.statements/add-creation-secret
-  (fn [{:keys [db]} [_ statement]]
-    (when (:statement/creation-secret statement)
-      (let [updated-secrets (assoc (get-in db [:discussion :statements :creation-secrets])
-                              (:db/id statement)
-                              (:statement/creation-secret statement))]
-        {:db (assoc-in db [:discussion :statements :creation-secrets] updated-secrets)
-         :fx [[:localstorage/assoc [:discussion/creation-secrets updated-secrets]]]}))))
+ :discussion.statements/add-creation-secret
+ (fn [{:keys [db]} [_ statement]]
+   (when (:statement/creation-secret statement)
+     (let [updated-secrets (assoc (get-in db [:discussion :statements :creation-secrets])
+                                  (:db/id statement)
+                                  (:statement/creation-secret statement))]
+       {:db (assoc-in db [:discussion :statements :creation-secrets] updated-secrets)
+        :fx [[:localstorage/assoc [:discussion/creation-secrets updated-secrets]]]}))))
 
 (rf/reg-event-db
-  :schnaq.discussion-secrets/load-from-localstorage
-  (fn [db _]
-    (-> db
-        (assoc-in [:discussion :statements :creation-secrets] (:discussion/creation-secrets local-storage))
-        (assoc-in [:discussion :schnaqs :creation-secrets] (:discussion.schnaqs/creation-secrets local-storage)))))
+ :schnaq.discussion-secrets/load-from-localstorage
+ (fn [db _]
+   (-> db
+       (assoc-in [:discussion :statements :creation-secrets] (:discussion/creation-secrets local-storage))
+       (assoc-in [:discussion :schnaqs :creation-secrets] (:discussion.schnaqs/creation-secrets local-storage)))))
 
 (rf/reg-sub
-  :schnaq.discussion.statements/creation-secrets
-  (fn [db _]
-    (get-in db [:discussion :statements :creation-secrets])))
+ :schnaq.discussion.statements/creation-secrets
+ (fn [db _]
+   (get-in db [:discussion :statements :creation-secrets])))
 
 (rf/reg-sub
-  :schnaq.discussion/creation-secrets
-  (fn [db _]
-    (get-in db [:discussion :schnaqs :creation-secrets])))
+ :schnaq.discussion/creation-secrets
+ (fn [db _]
+   (get-in db [:discussion :schnaqs :creation-secrets])))
 
 (rf/reg-event-fx
-  :notification/new-content
-  (fn [_ _]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :discussion.notification/new-content-title)
-                                     :body (labels :discussion.notification/new-content-body)
-                                     :context :success}]]]}))
+ :notification/new-content
+ (fn [_ _]
+   {:fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :discussion.notification/new-content-title)
+                                    :body (labels :discussion.notification/new-content-body)
+                                    :context :success}]]]}))
 
 (defn submit-new-premise
   "Submits a newly created child statement as an attack, support or neutral statement."
@@ -104,37 +104,37 @@
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
 (rf/reg-event-fx
-  :discussion.query.statement/by-id
-  (fn [{:keys [db]} _]
-    (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
-          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-          new-conclusion (first (filter #(= (:db/id %) statement-id) (get-in db [:discussion :premises :current])))]
-      ;; set new conclusion immediately if it's in db already, so loading times are reduced
-      (cond->
-        {:fx [(http/xhrio-request
-                db :get "/discussion/statement/info"
-                [:discussion.query.statement/by-id-success]
-                {:statement-id statement-id
-                 :share-hash share-hash
-                 :display-name (tools/current-display-name db)}
-                [:discussion.redirect/to-root share-hash])]}
-        new-conclusion (update :db #(assoc-in db [:discussion :conclusion :selected] new-conclusion)
-                               :fx conj [:discussion.history/push new-conclusion])))))
+ :discussion.query.statement/by-id
+ (fn [{:keys [db]} _]
+   (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
+         share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         new-conclusion (first (filter #(= (:db/id %) statement-id) (get-in db [:discussion :premises :current])))]
+     ;; set new conclusion immediately if it's in db already, so loading times are reduced
+     (cond->
+       {:fx [(http/xhrio-request
+              db :get "/discussion/statement/info"
+              [:discussion.query.statement/by-id-success]
+              {:statement-id statement-id
+               :share-hash share-hash
+               :display-name (tools/current-display-name db)}
+              [:discussion.redirect/to-root share-hash])]}
+       new-conclusion (update :db #(assoc-in db [:discussion :conclusion :selected] new-conclusion)
+                              :fx conj [:discussion.history/push new-conclusion])))))
 
 (rf/reg-event-fx
-  :discussion.redirect/to-root
-  (fn [_ [_ share-hash]]
-    {:fx [[:dispatch [:navigation/navigate :routes.schnaq/start
-                      {:share-hash share-hash}]]]}))
+ :discussion.redirect/to-root
+ (fn [_ [_ share-hash]]
+   {:fx [[:dispatch [:navigation/navigate :routes.schnaq/start
+                     {:share-hash share-hash}]]]}))
 
 (rf/reg-event-fx
-  :discussion.query.statement/by-id-success
-  (fn [{:keys [db]} [_ {:keys [conclusion premises history]}]]
-    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-      {:db (-> db
-               (assoc-in [:discussion :conclusion :selected] conclusion)
-               (assoc-in [:discussion :premises :current] premises)
-               (assoc-in [:history :full-context] (vec history)))
-       :fx [[:dispatch [:discussion.history/push conclusion]]
-            [:dispatch [:visited/set-visited-statements conclusion]]
-            [:dispatch [:notification/set-visited-statements share-hash conclusion premises]]]})))
+ :discussion.query.statement/by-id-success
+ (fn [{:keys [db]} [_ {:keys [conclusion premises history]}]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:db (-> db
+              (assoc-in [:discussion :conclusion :selected] conclusion)
+              (assoc-in [:discussion :premises :current] premises)
+              (assoc-in [:history :full-context] (vec history)))
+      :fx [[:dispatch [:discussion.history/push conclusion]]
+           [:dispatch [:visited/set-visited-statements conclusion]]
+           [:dispatch [:notification/set-visited-statements share-hash conclusion premises]]]})))

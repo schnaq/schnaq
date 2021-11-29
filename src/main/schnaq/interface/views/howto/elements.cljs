@@ -72,21 +72,21 @@
 ;; subs
 
 (rf/reg-event-fx
-  :how-to-visibility/to-localstorage
-  (fn [{:keys [db]} [_ how-to-id]]
-    (let [disabled-opts (conj (set (:how-to/disabled local-storage)) how-to-id)]
-      {:db (assoc-in db [:how-to :disabled] disabled-opts)
-       :fx [[:localstorage/assoc [:how-to/disabled disabled-opts]]]})))
+ :how-to-visibility/to-localstorage
+ (fn [{:keys [db]} [_ how-to-id]]
+   (let [disabled-opts (conj (set (:how-to/disabled local-storage)) how-to-id)]
+     {:db (assoc-in db [:how-to :disabled] disabled-opts)
+      :fx [[:localstorage/assoc [:how-to/disabled disabled-opts]]]})))
 
 (rf/reg-event-db
-  :how-to-visibility/from-localstorage-to-app-db
-  (fn [db _]
-    (assoc-in db [:how-to :disabled] (:how-to/disabled local-storage))))
+ :how-to-visibility/from-localstorage-to-app-db
+ (fn [db _]
+   (assoc-in db [:how-to :disabled] (:how-to/disabled local-storage))))
 
 (rf/reg-sub
-  :how-to-visibility/hidden-tags
-  (fn [db _]
-    (get-in db [:how-to :disabled])))
+ :how-to-visibility/hidden-tags
+ (fn [db _]
+   (get-in db [:how-to :disabled])))
 
 (defn quick-how-to-create []
   [quick-how-to

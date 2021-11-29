@@ -6,7 +6,6 @@
   (ok {:headers (:headers request)
        :identity (:identity request)}))
 
-
 ;; -----------------------------------------------------------------------------
 
 (def debug-routes

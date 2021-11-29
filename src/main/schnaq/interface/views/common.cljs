@@ -143,7 +143,6 @@
     (let [new-title (gstring/format "schnaq - %s" title)]
       (oset! js/document [:title] new-title))))
 
-
 ;; -----------------------------------------------------------------------------
 ;; schnaqqi speak
 
@@ -163,7 +162,6 @@
   [schnaqqi-size bubble-content]
   [schnaqqi-speech-bubble-builder
    schnaqqi-size bubble-content "speech-bubble-bordered" :schnaqqifant/three-d-left])
-
 
 ;; -----------------------------------------------------------------------------
 ;; Form-related

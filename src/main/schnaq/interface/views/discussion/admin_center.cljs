@@ -92,160 +92,160 @@
        (labels :schnaq.admin/send-invites-button-text)]]]))
 
 (rf/reg-event-fx
-  :discussion.admin/send-admin-center-link
-  (fn [{:keys [db]} [_ form]]
-    (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
-      {:fx [(http/xhrio-request db :post "/emails/send-admin-center-link" [:discussion.admin/send-email-success form]
-                                {:recipient (oget form ["admin-center-recipient" :value])
-                                 :share-hash share-hash
-                                 :edit-hash edit-hash
-                                 :admin-center (links/get-admin-link share-hash edit-hash)}
-                                [:ajax.error/as-notification])]})))
+ :discussion.admin/send-admin-center-link
+ (fn [{:keys [db]} [_ form]]
+   (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
+     {:fx [(http/xhrio-request db :post "/emails/send-admin-center-link" [:discussion.admin/send-email-success form]
+                               {:recipient (oget form ["admin-center-recipient" :value])
+                                :share-hash share-hash
+                                :edit-hash edit-hash
+                                :admin-center (links/get-admin-link share-hash edit-hash)}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
-  :discussion.admin/delete-statements
-  (fn [{:keys [db]} [_ form]]
-    (let [raw-statements (oget form ["statement-ids" :value])
-          statement-ids (map #(js/parseInt %) (string/split raw-statements #"\s+"))
-          {:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
-      {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
-                                [:discussion.admin/delete-statements-success form]
-                                {:statement-ids statement-ids
-                                 :share-hash share-hash
-                                 :edit-hash edit-hash}
-                                [:ajax.error/as-notification])]})))
+ :discussion.admin/delete-statements
+ (fn [{:keys [db]} [_ form]]
+   (let [raw-statements (oget form ["statement-ids" :value])
+         statement-ids (map #(js/parseInt %) (string/split raw-statements #"\s+"))
+         {:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
+     {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
+                               [:discussion.admin/delete-statements-success form]
+                               {:statement-ids statement-ids
+                                :share-hash share-hash
+                                :edit-hash edit-hash}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
-  :discussion.admin/make-read-only
-  (fn [{:keys [db]} _]
-    (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
-      {:fx [(http/xhrio-request db :put "/discussion/manage/make-read-only" [:discussion.admin/make-read-only-success]
-                                {:share-hash share-hash
-                                 :edit-hash edit-hash}
-                                [:ajax.error/as-notification])]})))
+ :discussion.admin/make-read-only
+ (fn [{:keys [db]} _]
+   (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
+     {:fx [(http/xhrio-request db :put "/discussion/manage/make-read-only" [:discussion.admin/make-read-only-success]
+                               {:share-hash share-hash
+                                :edit-hash edit-hash}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
-  :discussion.admin/make-read-only-success
-  (fn [db _]
-    (update-in db [:schnaq :selected :discussion/states]
-               #(distinct (conj % :discussion.state/read-only)))))
+ :discussion.admin/make-read-only-success
+ (fn [db _]
+   (update-in db [:schnaq :selected :discussion/states]
+              #(distinct (conj % :discussion.state/read-only)))))
 
 (rf/reg-event-fx
-  :discussion.admin/make-writeable
-  (fn [{:keys [db]} _]
-    (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
-      {:fx [(http/xhrio-request db :put "/discussion/manage/make-writeable" [:discussion.admin/make-writeable-success]
-                                {:share-hash share-hash
-                                 :edit-hash edit-hash}
-                                [:ajax.error/as-notification])]})))
+ :discussion.admin/make-writeable
+ (fn [{:keys [db]} _]
+   (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
+     {:fx [(http/xhrio-request db :put "/discussion/manage/make-writeable" [:discussion.admin/make-writeable-success]
+                               {:share-hash share-hash
+                                :edit-hash edit-hash}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
-  :discussion.admin/make-writeable-success
-  (fn [db _]
-    (update-in db [:schnaq :selected :discussion/states]
-               #(-> % set (disj :discussion.state/read-only) vec))))
+ :discussion.admin/make-writeable-success
+ (fn [db _]
+   (update-in db [:schnaq :selected :discussion/states]
+              #(-> % set (disj :discussion.state/read-only) vec))))
 
 (rf/reg-event-fx
-  :discussion.admin/discussion-mode
-  (fn [{:keys [db]} [_ discussion-mode]]
-    (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
-      {:fx [(http/xhrio-request db :put "/discussion/manage/discussion-mode"
-                                [:discussion.admin/discussion-mode-success]
-                                {:share-hash share-hash
-                                 :edit-hash edit-hash
-                                 :discussion-mode discussion-mode}
-                                [:ajax.error/as-notification])]})))
+ :discussion.admin/discussion-mode
+ (fn [{:keys [db]} [_ discussion-mode]]
+   (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
+     {:fx [(http/xhrio-request db :put "/discussion/manage/discussion-mode"
+                               [:discussion.admin/discussion-mode-success]
+                               {:share-hash share-hash
+                                :edit-hash edit-hash
+                                :discussion-mode discussion-mode}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
-  :discussion.admin/discussion-mode-success
-  (fn [db [_ {:keys [discussion-mode]}]]
-    (assoc-in db [:schnaq :selected :discussion/mode] discussion-mode)))
+ :discussion.admin/discussion-mode-success
+ (fn [db [_ {:keys [discussion-mode]}]]
+   (assoc-in db [:schnaq :selected :discussion/mode] discussion-mode)))
 
 (rf/reg-event-fx
-  ;; Deletion success from admin center
-  :discussion.admin/delete-statements-success
-  (fn [_ [_ form _return]]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :schnaq.admin.notifications/statements-deleted-title)
-                                     :body (labels :schnaq.admin.notifications/statements-deleted-lead)
-                                     :context :success}]]
-          [:form/clear form]]}))
+ ;; Deletion success from admin center
+ :discussion.admin/delete-statements-success
+ (fn [_ [_ form _return]]
+   {:fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :schnaq.admin.notifications/statements-deleted-title)
+                                    :body (labels :schnaq.admin.notifications/statements-deleted-lead)
+                                    :context :success}]]
+         [:form/clear form]]}))
 
 (rf/reg-event-fx
-  :discussion.delete/statement
-  (fn [{:keys [db]} [_ statement-id edit-hash]]
-    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-      {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
-                                [:discussion.admin/delete-statement-success statement-id]
-                                {:statement-ids [statement-id]
-                                 :share-hash share-hash
-                                 :edit-hash edit-hash}
-                                [:ajax.error/as-notification])]})))
+ :discussion.delete/statement
+ (fn [{:keys [db]} [_ statement-id edit-hash]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
+                               [:discussion.admin/delete-statement-success statement-id]
+                               {:statement-ids [statement-id]
+                                :share-hash share-hash
+                                :edit-hash edit-hash}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
-  ;; Success event of deletion live in discussion - not from admin panel
-  :discussion.admin/delete-statement-success
-  (fn [_ [_ statement-id return]]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :schnaq.admin.notifications/statements-deleted-title)
-                                     :body (labels :schnaq.admin.notifications/statements-deleted-lead)
-                                     :context :success}]]
-          [:dispatch [:discussion.delete/purge-stores statement-id return]]]}))
+ ;; Success event of deletion live in discussion - not from admin panel
+ :discussion.admin/delete-statement-success
+ (fn [_ [_ statement-id return]]
+   {:fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :schnaq.admin.notifications/statements-deleted-title)
+                                    :body (labels :schnaq.admin.notifications/statements-deleted-lead)
+                                    :context :success}]]
+         [:dispatch [:discussion.delete/purge-stores statement-id return]]]}))
 
 (rf/reg-event-db
-  ;; Delete a statement-id from conclusions-list, history and carousels
-  :discussion.delete/purge-stores
-  (fn [db [_ statement-id return-value]]
-    (let [mark-fn (fn [coll]
-                    (mapv #(if (= statement-id (:db/id %))
+ ;; Delete a statement-id from conclusions-list, history and carousels
+ :discussion.delete/purge-stores
+ (fn [db [_ statement-id return-value]]
+   (let [mark-fn (fn [coll]
+                   (mapv #(if (= statement-id (:db/id %))
+                            (assoc % :statement/content config/deleted-statement-text)
+                            %)
+                         coll))
+         delete-fn (fn [coll] (remove #(= statement-id (:db/id %)) coll))
+         mark-starting-fn #(if (= (:db/id %) statement-id)
                              (assoc % :statement/content config/deleted-statement-text)
                              %)
-                          coll))
-          delete-fn (fn [coll] (remove #(= statement-id (:db/id %)) coll))
-          mark-starting-fn #(if (= (:db/id %) statement-id)
-                              (assoc % :statement/content config/deleted-statement-text)
-                              %)
-          method (or (:method return-value) (first (:methods return-value)))]
-      (if (= :deleted method)
-        (-> db
-            (update-in [:discussion :conclusion :selected] mark-starting-fn)
-            (update-in [:discussion :premises :current] delete-fn))
-        (-> db
-            (update-in [:discussion :conclusion :selected] mark-starting-fn)
-            (update-in [:discussion :premises :current] mark-fn)
-            (update-in [:history :full-context] mark-fn))))))
+         method (or (:method return-value) (first (:methods return-value)))]
+     (if (= :deleted method)
+       (-> db
+           (update-in [:discussion :conclusion :selected] mark-starting-fn)
+           (update-in [:discussion :premises :current] delete-fn))
+       (-> db
+           (update-in [:discussion :conclusion :selected] mark-starting-fn)
+           (update-in [:discussion :premises :current] mark-fn)
+           (update-in [:history :full-context] mark-fn))))))
 
 (rf/reg-event-fx
-  :discussion.admin/send-email-invites
-  (fn [{:keys [db]} [_ form]]
-    (let [raw-emails (oget form ["participant-addresses" :value])
-          recipients (string/split raw-emails #"\s+")
-          {:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
-      {:fx [(http/xhrio-request db :post "/emails/send-invites" [:discussion.admin/send-email-success form]
-                                {:recipients recipients
-                                 :share-hash share-hash
-                                 :edit-hash edit-hash
-                                 :share-link (links/get-share-link share-hash)}
-                                [:ajax.error/as-notification])]})))
+ :discussion.admin/send-email-invites
+ (fn [{:keys [db]} [_ form]]
+   (let [raw-emails (oget form ["participant-addresses" :value])
+         recipients (string/split raw-emails #"\s+")
+         {:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
+     {:fx [(http/xhrio-request db :post "/emails/send-invites" [:discussion.admin/send-email-success form]
+                               {:recipients recipients
+                                :share-hash share-hash
+                                :edit-hash edit-hash
+                                :share-link (links/get-share-link share-hash)}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
-  :discussion.admin/send-email-success
-  (fn [_ [_ form {:keys [failed-sendings]}]]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :schnaq.admin.notifications/emails-successfully-sent-title)
-                                     :body (labels :schnaq.admin.notifications/emails-successfully-sent-body-text)
-                                     :context :success}]]
-          [:form/clear form]
-          (when (seq failed-sendings)
-            [:dispatch [:notification/add
-                        #:notification{:title (labels :schnaq.admin.notifications/sending-failed-title)
-                                       :body [:<>
-                                              (labels :schnaq.admin.notifications/sending-failed-lead)
-                                              [:ul
-                                               (for [failed-sending failed-sendings]
-                                                 [:li {:key failed-sending} failed-sending])]]
-                                       :context :warning
-                                       :stay-visible? true}]])]}))
+ :discussion.admin/send-email-success
+ (fn [_ [_ form {:keys [failed-sendings]}]]
+   {:fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :schnaq.admin.notifications/emails-successfully-sent-title)
+                                    :body (labels :schnaq.admin.notifications/emails-successfully-sent-body-text)
+                                    :context :success}]]
+         [:form/clear form]
+         (when (seq failed-sendings)
+           [:dispatch [:notification/add
+                       #:notification{:title (labels :schnaq.admin.notifications/sending-failed-title)
+                                      :body [:<>
+                                             (labels :schnaq.admin.notifications/sending-failed-lead)
+                                             [:ul
+                                              (for [failed-sending failed-sendings]
+                                                [:li {:key failed-sending} failed-sending])]]
+                                      :context :warning
+                                      :stay-visible? true}]])]}))
 
 (defn- send-admin-center-link
   "Send admin link via mail to the creator."
@@ -286,8 +286,9 @@
   "Configure discussion mode. Toggles between q&a and classical discussions."
   []
   (let [qanda? @(rf/subscribe [:schnaq.mode/qanda?])
-        dispatch (if-not qanda? :discussion.mode/qanda
-                                :discussion.mode/discussion)]
+        dispatch (if-not qanda?
+                   :discussion.mode/qanda
+                   :discussion.mode/discussion)]
     [:<>
      [:div.custom-control.custom-switch
       [:input.big-checkbox.custom-control-input
@@ -304,8 +305,9 @@
   "A Checkbox that makes the current discussion read-only or writeable."
   []
   (let [schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        dispatch (if schnaq-read-only? :discussion.admin/make-writeable
-                                       :discussion.admin/make-read-only)
+        dispatch (if schnaq-read-only?
+                   :discussion.admin/make-writeable
+                   :discussion.admin/make-read-only)
         beta-tester? @(rf/subscribe [:user/beta-tester?])]
     [:div {:class (when-not beta-tester? "text-muted")}
      [:input.big-checkbox
@@ -355,63 +357,61 @@
         (labels :schnaq.admin.configurations.mods-mark-only/label)]
        [:p (labels :schnaq.admin.configurations.mods-mark-only/explanation)]])))
 
-
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-sub
-  :schnaq.selected/pro-con?
-  (fn [_ _]
-    (rf/subscribe [:schnaq/selected]))
-  (fn [selected-schnaq _ _]
-    (not (nil? (some #{:discussion.state/disable-pro-con} (:discussion/states selected-schnaq))))))
+ :schnaq.selected/pro-con?
+ (fn [_ _]
+   (rf/subscribe [:schnaq/selected]))
+ (fn [selected-schnaq _ _]
+   (not (nil? (some #{:discussion.state/disable-pro-con} (:discussion/states selected-schnaq))))))
 
 (rf/reg-event-fx
-  :schnaq.admin/disable-pro-con
-  (fn [{:keys [db]} [_ disable-pro-con?]]
-    (let [current-route (:current-route db)
-          {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [(http/xhrio-request db :put "/discussion/manage/disable-pro-con"
-                                [:schnaq.admin/disable-pro-con-success disable-pro-con?]
-                                {:disable-pro-con? disable-pro-con?
-                                 :share-hash share-hash
-                                 :edit-hash edit-hash}
-                                [:ajax.error/as-notification])]})))
+ :schnaq.admin/disable-pro-con
+ (fn [{:keys [db]} [_ disable-pro-con?]]
+   (let [current-route (:current-route db)
+         {:keys [share-hash edit-hash]} (:path-params current-route)]
+     {:fx [(http/xhrio-request db :put "/discussion/manage/disable-pro-con"
+                               [:schnaq.admin/disable-pro-con-success disable-pro-con?]
+                               {:disable-pro-con? disable-pro-con?
+                                :share-hash share-hash
+                                :edit-hash edit-hash}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
-  :schnaq.admin/disable-pro-con-success
-  (fn [db [_ disable-pro-con?]]
-    (if disable-pro-con?
-      (update-in db [:schnaq :selected :discussion/states]
-                 #(distinct (conj % :discussion.state/disable-pro-con)))
-      (update-in db [:schnaq :selected :discussion/states]
-                 #(-> % set (disj :discussion.state/disable-pro-con) vec)))))
+ :schnaq.admin/disable-pro-con-success
+ (fn [db [_ disable-pro-con?]]
+   (if disable-pro-con?
+     (update-in db [:schnaq :selected :discussion/states]
+                #(distinct (conj % :discussion.state/disable-pro-con)))
+     (update-in db [:schnaq :selected :discussion/states]
+                #(-> % set (disj :discussion.state/disable-pro-con) vec)))))
 
 (rf/reg-sub
-  :schnaq.selected.qa/mods-mark-only?
-  (fn [_ _]
-    (rf/subscribe [:schnaq/selected]))
-  (fn [selected-schnaq _ _]
-    (not (nil? (some #{:discussion.state.qa/mark-as-moderators-only} (:discussion/states selected-schnaq))))))
+ :schnaq.selected.qa/mods-mark-only?
+ (fn [_ _]
+   (rf/subscribe [:schnaq/selected]))
+ (fn [selected-schnaq _ _]
+   (not (nil? (some #{:discussion.state.qa/mark-as-moderators-only} (:discussion/states selected-schnaq))))))
 
 (rf/reg-event-fx
-  :schnaq.admin.qa/mods-mark-only!
-  (fn [{:keys [db]} [_ mods-mark-only?]]
-    {:fx [(http/xhrio-request db :put "/discussion/manage/mods-mark-only"
-                              [:schnaq.admin.qa/mods-mark-only-success mods-mark-only?]
-                              {:mods-mark-only? mods-mark-only?
-                               :share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                               :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])}
-                              [:ajax.error/as-notification])]}))
+ :schnaq.admin.qa/mods-mark-only!
+ (fn [{:keys [db]} [_ mods-mark-only?]]
+   {:fx [(http/xhrio-request db :put "/discussion/manage/mods-mark-only"
+                             [:schnaq.admin.qa/mods-mark-only-success mods-mark-only?]
+                             {:mods-mark-only? mods-mark-only?
+                              :share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])}
+                             [:ajax.error/as-notification])]}))
 
 (rf/reg-event-db
-  :schnaq.admin.qa/mods-mark-only-success
-  (fn [db [_ mods-mark-only?]]
-    (if mods-mark-only?
-      (update-in db [:schnaq :selected :discussion/states]
-                 #(distinct (conj % :discussion.state.qa/mark-as-moderators-only)))
-      (update-in db [:schnaq :selected :discussion/states]
-                 #(-> % set (disj :discussion.state.qa/mark-as-moderators-only) vec)))))
-
+ :schnaq.admin.qa/mods-mark-only-success
+ (fn [db [_ mods-mark-only?]]
+   (if mods-mark-only?
+     (update-in db [:schnaq :selected :discussion/states]
+                #(distinct (conj % :discussion.state.qa/mark-as-moderators-only)))
+     (update-in db [:schnaq :selected :discussion/states]
+                #(-> % set (disj :discussion.state.qa/mark-as-moderators-only) vec)))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -486,20 +486,20 @@
 ;; #### Events ####
 
 (rf/reg-sub
-  :schnaqs/load-admin-access
-  (fn [db [_]]
-    (get-in db [:schnaqs :admin-access])))
+ :schnaqs/load-admin-access
+ (fn [db [_]]
+   (get-in db [:schnaqs :admin-access])))
 
 (rf/reg-event-fx
-  :schnaqs.save-admin-access/to-localstorage-and-db
-  (fn [{:keys [db]} [_ share-hash edit-hash]]
-    (let [admin-access-map (assoc (:schnaqs/admin-access local-storage) share-hash edit-hash)]
-      {:db (assoc-in db [:schnaqs :admin-access] admin-access-map)
-       :fx [[:localstorage/assoc [:schnaqs/admin-access admin-access-map]]
-            (when (= 1 (count admin-access-map))
-              [:dispatch [:celebrate/first-schnaq-created]])]})))
+ :schnaqs.save-admin-access/to-localstorage-and-db
+ (fn [{:keys [db]} [_ share-hash edit-hash]]
+   (let [admin-access-map (assoc (:schnaqs/admin-access local-storage) share-hash edit-hash)]
+     {:db (assoc-in db [:schnaqs :admin-access] admin-access-map)
+      :fx [[:localstorage/assoc [:schnaqs/admin-access admin-access-map]]
+           (when (= 1 (count admin-access-map))
+             [:dispatch [:celebrate/first-schnaq-created]])]})))
 
 (rf/reg-event-db
-  :schnaqs.save-admin-access/store-hashes-from-localstorage
-  (fn [db _]
-    (update-in db [:schnaqs :admin-access] merge (:schnaqs/admin-access local-storage))))
+ :schnaqs.save-admin-access/store-hashes-from-localstorage
+ (fn [db _]
+   (update-in db [:schnaqs :admin-access] merge (:schnaqs/admin-access local-storage))))

@@ -95,7 +95,6 @@
   (reagent.dom/render [views/root]
                       (gdom/getElement (if shared-config/embedded? "schnaq-integration" "app"))))
 
-
 (defn ^:dev/after-load clear-cache-and-render!
   []
   ;; The `:dev/after-load` metadata causes this function to be called

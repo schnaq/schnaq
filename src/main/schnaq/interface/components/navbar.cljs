@@ -15,9 +15,9 @@
      [:<>
       [:a#schnaq-language-dropdown.nav-link.dropdown-toggle
        (merge
-         {:href "#" :role "button" :data-toggle "dropdown"
-          :aria-haspopup "true" :aria-expanded "false"}
-         options)
+        {:href "#" :role "button" :data-toggle "dropdown"
+         :aria-haspopup "true" :aria-expanded "false"}
+        options)
        [icon :language]
        (when show-label?
          (str " " current-language))]
@@ -54,8 +54,8 @@
    [:<>
     [:button.btn.discussion-navbar-button
      (merge
-       {:type "button"}
-       attributes)
+      {:type "button"}
+      attributes)
      button-content]
     dropdown-content]))
 

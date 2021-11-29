@@ -94,47 +94,46 @@
 ;; subs
 
 (rf/reg-sub
-  :user.notification/mail-interval
-  (fn [db _]
-    (get-in db [:user :notification-mail-interval] :notification-mail-interval/daily)))
+ :user.notification/mail-interval
+ (fn [db _]
+   (get-in db [:user :notification-mail-interval] :notification-mail-interval/daily)))
 
 (rf/reg-event-fx
-  :user.notification/mail-interval!
-  (fn [{:keys [db]} [_ interval]]
-    {:fx [(http/xhrio-request db :put "/user/notification-mail-interval"
-                              [:user.notification/mail-interval-success]
-                              {:notification-mail-interval interval}
-                              [:ajax.error/as-notification])]}))
+ :user.notification/mail-interval!
+ (fn [{:keys [db]} [_ interval]]
+   {:fx [(http/xhrio-request db :put "/user/notification-mail-interval"
+                             [:user.notification/mail-interval-success]
+                             {:notification-mail-interval interval}
+                             [:ajax.error/as-notification])]}))
 
 (rf/reg-event-fx
-  :user.notification/mail-interval-success
-  (fn [{:keys [db]} [_ {:keys [updated-user]}]]
-    (let [interval (:user.registered/notification-mail-interval updated-user)]
-      {:db (assoc-in db [:user :notification-mail-interval] interval)})))
+ :user.notification/mail-interval-success
+ (fn [{:keys [db]} [_ {:keys [updated-user]}]]
+   (let [interval (:user.registered/notification-mail-interval updated-user)]
+     {:db (assoc-in db [:user :notification-mail-interval] interval)})))
 
 (rf/reg-event-fx
-  :user.notification/mark-all-as-read!
-  (fn [{:keys [db]} [_]]
-    {:db (assoc-in db [:user :settings :temporary :mark-all-as-read-in-progress?] true)
-     :fx [(http/xhrio-request db :put "/user/mark-all-as-read"
-                              [:user.notification/mark-all-as-read-success]
-                              {}
-                              [:ajax.error/as-notification])]}))
+ :user.notification/mark-all-as-read!
+ (fn [{:keys [db]} [_]]
+   {:db (assoc-in db [:user :settings :temporary :mark-all-as-read-in-progress?] true)
+    :fx [(http/xhrio-request db :put "/user/mark-all-as-read"
+                             [:user.notification/mark-all-as-read-success]
+                             {}
+                             [:ajax.error/as-notification])]}))
 
 (rf/reg-sub
-  :user.notification/mark-all-as-read-in-progress?
-  (fn [db _]
-    (get-in db [:user :settings :temporary :mark-all-as-read-in-progress?] false)))
+ :user.notification/mark-all-as-read-in-progress?
+ (fn [db _]
+   (get-in db [:user :settings :temporary :mark-all-as-read-in-progress?] false)))
 
 (rf/reg-sub
-  :user.notification/mark-all-as-read-finished?
-  (fn [db _]
-    (get-in db [:user :settings :temporary :mark-all-as-finished?] false)))
-
+ :user.notification/mark-all-as-read-finished?
+ (fn [db _]
+   (get-in db [:user :settings :temporary :mark-all-as-finished?] false)))
 
 (rf/reg-event-db
-  :user.notification/mark-all-as-read-success
-  (fn [db _]
-    (-> db
-        (assoc-in [:user :settings :temporary :mark-all-as-finished?] true)
-        (assoc-in [:user :settings :temporary :mark-all-as-read-in-progress?] false))))
+ :user.notification/mark-all-as-read-success
+ (fn [db _]
+   (-> db
+       (assoc-in [:user :settings :temporary :mark-all-as-finished?] true)
+       (assoc-in [:user :settings :temporary :mark-all-as-read-in-progress?] false))))

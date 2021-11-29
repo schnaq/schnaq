@@ -38,7 +38,7 @@
                   :accept (string/join "," shared-config/allowed-mime-types)
                   :type "file"
                   :on-change (fn [event] (image/store-temporary-profile-picture
-                                           event [:user :profile-picture :temporary]))
+                                          event [:user :profile-picture :temporary]))
                   :hidden true}]])]]))
 
 (defn- change-user-info []
@@ -79,57 +79,56 @@
    :user/edit-account
    [content]])
 
-
 ;; ----------------------------------------------------------------------------
 
 (rf/reg-event-fx
-  :user.name/update
-  (fn [{:keys [db]} [_ new-display-name]]
-    {:fx [(http/xhrio-request db :put "/user/name"
-                              [:user.name/update-success]
-                              {:display-name new-display-name}
-                              [:ajax.error/as-notification])]}))
+ :user.name/update
+ (fn [{:keys [db]} [_ new-display-name]]
+   {:fx [(http/xhrio-request db :put "/user/name"
+                             [:user.name/update-success]
+                             {:display-name new-display-name}
+                             [:ajax.error/as-notification])]}))
 
 (rf/reg-event-db
-  :user.name/update-success
-  (fn [db [_ {:keys [updated-user]}]]
-    (assoc-in db [:user :names :display]
-              (:user.registered/display-name updated-user))))
+ :user.name/update-success
+ (fn [db [_ {:keys [updated-user]}]]
+   (assoc-in db [:user :names :display]
+             (:user.registered/display-name updated-user))))
 
 (rf/reg-event-fx
-  :user.picture/update
-  (fn [{:keys [db]} _]
-    (when-let [new-profile-picture-url (get-in db [:user :profile-picture :temporary])]
-      {:fx [(http/xhrio-request db :put "/user/picture"
-                                [:user.profile-picture/update-success]
-                                {:image new-profile-picture-url}
-                                [:user.profile-picture/update-error])]})))
+ :user.picture/update
+ (fn [{:keys [db]} _]
+   (when-let [new-profile-picture-url (get-in db [:user :profile-picture :temporary])]
+     {:fx [(http/xhrio-request db :put "/user/picture"
+                               [:user.profile-picture/update-success]
+                               {:image new-profile-picture-url}
+                               [:user.profile-picture/update-error])]})))
 
 (rf/reg-event-db
-  :user.picture/reset
-  (fn [db _]
-    (update-in db [:user :profile-picture] dissoc :temporary)))
+ :user.picture/reset
+ (fn [db _]
+   (update-in db [:user :profile-picture] dissoc :temporary)))
 
 (rf/reg-event-fx
-  :user.profile-picture/update-success
-  (fn [{:keys [db]} [_ {:keys [updated-user]}]]
-    {:db (assoc-in db [:user :profile-picture :display]
-                   (:user.registered/profile-picture updated-user))
-     :fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :user.settings.profile-picture-title/success)
-                                     :body (labels :user.settings.profile-picture-body/success)
-                                     :context :success}]]]}))
+ :user.profile-picture/update-success
+ (fn [{:keys [db]} [_ {:keys [updated-user]}]]
+   {:db (assoc-in db [:user :profile-picture :display]
+                  (:user.registered/profile-picture updated-user))
+    :fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :user.settings.profile-picture-title/success)
+                                    :body (labels :user.settings.profile-picture-body/success)
+                                    :context :success}]]]}))
 
 (rf/reg-event-fx
-  :user.profile-picture/update-error
-  (fn [{:keys [db]} [_ {:keys [response]}]]
-    (let [mime-types (string/join ", " shared-config/allowed-mime-types)
-          error-message (case (:error response)
-                          :scaling (labels :user.settings.profile-picture.errors/scaling)
-                          :invalid-file-type (gstring/format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types)
-                          (labels :user.settings.profile-picture.errors/default))]
-      {:db (assoc-in db [:user :profile-picture :temporary] nil)
-       :fx [[:dispatch [:notification/add
-                        #:notification{:title (labels :user.settings.profile-picture-title/error)
-                                       :body error-message
-                                       :context :danger}]]]})))
+ :user.profile-picture/update-error
+ (fn [{:keys [db]} [_ {:keys [response]}]]
+   (let [mime-types (string/join ", " shared-config/allowed-mime-types)
+         error-message (case (:error response)
+                         :scaling (labels :user.settings.profile-picture.errors/scaling)
+                         :invalid-file-type (gstring/format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types)
+                         (labels :user.settings.profile-picture.errors/default))]
+     {:db (assoc-in db [:user :profile-picture :temporary] nil)
+      :fx [[:dispatch [:notification/add
+                       #:notification{:title (labels :user.settings.profile-picture-title/error)
+                                      :body error-message
+                                      :context :danger}]]]})))

@@ -19,10 +19,10 @@
   elements are normal."
   []
   (.then
-    (html2canvas (gdom/getElement "app")
-                 (clj->js {:letterRendering 1}))
-    (fn [e]
-      (reset! screenshot-url (.toDataURL e)))))
+   (html2canvas (gdom/getElement "app")
+                (clj->js {:letterRendering 1}))
+   (fn [e]
+     (reset! screenshot-url (.toDataURL e)))))
 
 (defn- form-input
   "Show a form in a modal, which is presented to the user."
@@ -102,24 +102,24 @@
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-sub
-  :feedbacks
-  (fn [db _] (:feedbacks db)))
+ :feedbacks
+ (fn [db _] (:feedbacks db)))
 
 (rf/reg-event-fx
-  :feedbacks/success
-  (fn [_ _]
-    {:fx [[:dispatch [:modal {:show? false :child nil}]]
-          [:dispatch [:notification/add
-                      #:notification{:title (labels :feedbacks.notification/title)
-                                     :body (labels :feedbacks.notification/body)
-                                     :context :success}]]]}))
+ :feedbacks/success
+ (fn [_ _]
+   {:fx [[:dispatch [:modal {:show? false :child nil}]]
+         [:dispatch [:notification/add
+                     #:notification{:title (labels :feedbacks.notification/title)
+                                    :body (labels :feedbacks.notification/body)
+                                    :context :success}]]]}))
 
 (rf/reg-event-fx
-  :feedback/new
-  (fn [{:keys [db]} [_ feedback screenshot form-elements]]
-    (when-not (string/blank? (:feedback/description feedback))
-      {:fx [(http/xhrio-request db :post "/feedback/add" [:feedbacks/success]
-                                (cond-> {:feedback feedback}
-                                        screenshot (assoc :screenshot screenshot))
-                                [:ajax.error/as-notification])
-            [:form/clear form-elements]]})))
+ :feedback/new
+ (fn [{:keys [db]} [_ feedback screenshot form-elements]]
+   (when-not (string/blank? (:feedback/description feedback))
+     {:fx [(http/xhrio-request db :post "/feedback/add" [:feedbacks/success]
+                               (cond-> {:feedback feedback}
+                                 screenshot (assoc :screenshot screenshot))
+                               [:ajax.error/as-notification])
+           [:form/clear form-elements]]})))

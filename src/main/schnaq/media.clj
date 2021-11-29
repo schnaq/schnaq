@@ -102,5 +102,5 @@
     (do
       (log/warn "Invalid file type received.")
       (bad-request (at/build-error-body
-                     :invalid-file-type
-                     (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types)))))))
+                    :invalid-file-type
+                    (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types)))))))

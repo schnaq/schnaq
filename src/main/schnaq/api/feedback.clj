@@ -21,10 +21,10 @@
   (let [[_header image] (string/split screenshot #",")
         #^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)]
     (s3/upload-stream
-      :feedbacks/screenshots
-      (io/input-stream decodedBytes)
-      (format "%s.png" file-name)
-      {:content-length (count decodedBytes)})))
+     :feedbacks/screenshots
+     (io/input-stream decodedBytes)
+     (format "%s.png" file-name)
+     {:content-length (count decodedBytes)})))
 
 (defn- add-feedback
   "Add new feedback from schnaq's frontend. If a screenshot is provided, it will
@@ -37,11 +37,11 @@
     (when screenshot
       (upload-screenshot! screenshot feedback-id))
     (emails/send-mail
-      "[FEEDBACK] Es wurde ein neues Feedback hinterlegt 🐳"
-      "[FEEDBACK]"
-      "Es wurde ein neues Feedback hinterlegt 🐳"
-      (format "Feedback kann hier angeschaut werden: https://schnaq.com/admin/feedbacks")
-      "info@schnaq.com")
+     "[FEEDBACK] Es wurde ein neues Feedback hinterlegt 🐳"
+     "[FEEDBACK]"
+     "Es wurde ein neues Feedback hinterlegt 🐳"
+     (format "Feedback kann hier angeschaut werden: https://schnaq.com/admin/feedbacks")
+     "info@schnaq.com")
     (log/info "Feedback created")
     (created "" {:feedback feedback})))
 
@@ -49,7 +49,6 @@
   "Returns all feedbacks from the db."
   [_]
   (ok {:feedbacks (db/all-feedbacks)}))
-
 
 ;; -----------------------------------------------------------------------------
 

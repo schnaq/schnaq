@@ -26,17 +26,17 @@
           bad-share "foo"
           check-and-upload-image #'media/check-and-upload-image
           bad-request-1 (check-and-upload-image
-                          bad-url
-                          key
-                          share-hash)
+                         bad-url
+                         key
+                         share-hash)
           bad-request-2 (check-and-upload-image
-                          url
-                          key
-                          bad-share)
+                         url
+                         key
+                         bad-share)
           request-1 (check-and-upload-image
-                      url
-                      key
-                      share-hash)]
+                     url
+                     key
+                     share-hash)]
       (is (= bad-request-1 :error-forbidden-cdn))
       (is (= bad-request-2 :error-img))
       (is (not (nil? (-> request-1 :db-after)))))))
@@ -45,13 +45,13 @@
   (testing "Test that only pixabay's cdn url is allowed"
     (let [valid-url? #'media/valid-url?
           allowed-url (valid-url?
-                        "https://cdn.pixabay.com/photo/2020/10/23/17/47/girl-5679419_960_720.jpg")
+                       "https://cdn.pixabay.com/photo/2020/10/23/17/47/girl-5679419_960_720.jpg")
           bad-url-1 (valid-url?
-                      "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png")
+                     "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png")
           bad-url-2 (valid-url?
-                      "https://www.hhu.de/typo3conf/ext/wiminno/Resources/Public/img/hhu_logo.png")
+                     "https://www.hhu.de/typo3conf/ext/wiminno/Resources/Public/img/hhu_logo.png")
           bad-url-3 (valid-url?
-                      "https://pixabay.com/foo.jpg")]
+                     "https://pixabay.com/foo.jpg")]
       (is allowed-url)
       (is (not bad-url-1))
       (is (not bad-url-2))

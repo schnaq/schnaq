@@ -84,16 +84,16 @@
 ;; #### Events ####
 
 (rf/reg-event-fx
-  :analytics/load-dashboard
-  (fn [_ _]
-    {:fx [[:dispatch [:analytics/load-discussions-num]]
-          [:dispatch [:analytics/load-usernames-num]]
-          [:dispatch [:analytics/load-registered-users-num]]
-          [:dispatch [:analytics/load-average-number-of-statements]]
-          [:dispatch [:analytics/load-statements-num]]
-          [:dispatch [:analytics/load-active-users]]
-          [:dispatch [:analytics/load-statement-length-stats]]
-          [:dispatch [:analytics/load-statements-type-stats]]]}))
+ :analytics/load-dashboard
+ (fn [_ _]
+   {:fx [[:dispatch [:analytics/load-discussions-num]]
+         [:dispatch [:analytics/load-usernames-num]]
+         [:dispatch [:analytics/load-registered-users-num]]
+         [:dispatch [:analytics/load-average-number-of-statements]]
+         [:dispatch [:analytics/load-statements-num]]
+         [:dispatch [:analytics/load-active-users]]
+         [:dispatch [:analytics/load-statement-length-stats]]
+         [:dispatch [:analytics/load-statements-type-stats]]]}))
 
 (>defn- fetch-statistics
   "Fetches something from an endpoint with an authentication header."
@@ -106,140 +106,140 @@
      {:fx [(http/xhrio-request db :get path [on-success-event] {:days-since days-since})]})))
 
 (rf/reg-event-fx
-  :analytics/load-all-with-time
-  (fn [{:keys [db]} [_ days]]
-    (fetch-statistics db "/admin/analytics" :analytics/all-stats-loaded days)))
+ :analytics/load-all-with-time
+ (fn [{:keys [db]} [_ days]]
+   (fetch-statistics db "/admin/analytics" :analytics/all-stats-loaded days)))
 
 (rf/reg-event-fx
-  :analytics/load-discussions-num
-  (fn [{:keys [db]} _]
-    (fetch-statistics db "/admin/analytics/discussions" :analytics/discussions-num-loaded)))
+ :analytics/load-discussions-num
+ (fn [{:keys [db]} _]
+   (fetch-statistics db "/admin/analytics/discussions" :analytics/discussions-num-loaded)))
 
 (rf/reg-event-fx
-  :analytics/load-usernames-num
-  (fn [{:keys [db]} _]
-    (fetch-statistics db "/admin/analytics/usernames" :analytics/usernames-num-loaded)))
+ :analytics/load-usernames-num
+ (fn [{:keys [db]} _]
+   (fetch-statistics db "/admin/analytics/usernames" :analytics/usernames-num-loaded)))
 
 (rf/reg-event-fx
-  :analytics/load-registered-users-num
-  (fn [{:keys [db]} _]
-    (fetch-statistics db "/admin/analytics/registered-users" :analytics/registered-users-num-loaded)))
+ :analytics/load-registered-users-num
+ (fn [{:keys [db]} _]
+   (fetch-statistics db "/admin/analytics/registered-users" :analytics/registered-users-num-loaded)))
 
 (rf/reg-event-fx
-  :analytics/load-average-number-of-statements
-  (fn [{:keys [db]} _]
-    (fetch-statistics db "/admin/analytics/statements-per-discussion" :analytics/statements-per-discussion-loaded)))
+ :analytics/load-average-number-of-statements
+ (fn [{:keys [db]} _]
+   (fetch-statistics db "/admin/analytics/statements-per-discussion" :analytics/statements-per-discussion-loaded)))
 
 (rf/reg-event-fx
-  :analytics/load-statements-num
-  (fn [{:keys [db]} _]
-    (fetch-statistics db "/admin/analytics/statements" :analytics/statements-num-loaded)))
+ :analytics/load-statements-num
+ (fn [{:keys [db]} _]
+   (fetch-statistics db "/admin/analytics/statements" :analytics/statements-num-loaded)))
 
 (rf/reg-event-fx
-  :analytics/load-active-users
-  (fn [{:keys [db]} _]
-    (fetch-statistics db "/admin/analytics/active-users" :analytics/active-users-num-loaded)))
+ :analytics/load-active-users
+ (fn [{:keys [db]} _]
+   (fetch-statistics db "/admin/analytics/active-users" :analytics/active-users-num-loaded)))
 
 (rf/reg-event-fx
-  :analytics/load-statement-length-stats
-  (fn [{:keys [db]} _]
-    (fetch-statistics db "/admin/analytics/statement-lengths" :analytics/statement-length-stats-loaded)))
+ :analytics/load-statement-length-stats
+ (fn [{:keys [db]} _]
+   (fetch-statistics db "/admin/analytics/statement-lengths" :analytics/statement-length-stats-loaded)))
 
 (rf/reg-event-fx
-  :analytics/load-statements-type-stats
-  (fn [{:keys [db]} _]
-    (fetch-statistics db "/admin/analytics/statement-types" :analytics/statement-type-stats-loaded)))
+ :analytics/load-statements-type-stats
+ (fn [{:keys [db]} _]
+   (fetch-statistics db "/admin/analytics/statement-types" :analytics/statement-type-stats-loaded)))
 
 (rf/reg-event-db
-  :analytics/discussions-num-loaded
-  (fn [db [_ {:keys [discussions-sum]}]]
-    (assoc-in db [:analytics :discussions-sum :overall] discussions-sum)))
+ :analytics/discussions-num-loaded
+ (fn [db [_ {:keys [discussions-sum]}]]
+   (assoc-in db [:analytics :discussions-sum :overall] discussions-sum)))
 
 (rf/reg-event-db
-  :analytics/usernames-num-loaded
-  (fn [db [_ {:keys [usernames-sum]}]]
-    (assoc-in db [:analytics :users-num :anonymous] usernames-sum)))
+ :analytics/usernames-num-loaded
+ (fn [db [_ {:keys [usernames-sum]}]]
+   (assoc-in db [:analytics :users-num :anonymous] usernames-sum)))
 
 (rf/reg-event-db
-  :analytics/registered-users-num-loaded
-  (fn [db [_ {:keys [registered-users-num]}]]
-    (assoc-in db [:analytics :users-num :registered] registered-users-num)))
+ :analytics/registered-users-num-loaded
+ (fn [db [_ {:keys [registered-users-num]}]]
+   (assoc-in db [:analytics :users-num :registered] registered-users-num)))
 
 (rf/reg-event-db
-  :analytics/statements-num-loaded
-  (fn [db [_ {:keys [statements-num]}]]
-    (assoc-in db [:analytics :statements :number :overall] statements-num)))
+ :analytics/statements-num-loaded
+ (fn [db [_ {:keys [statements-num]}]]
+   (assoc-in db [:analytics :statements :number :overall] statements-num)))
 
 (rf/reg-event-db
-  :analytics/active-users-num-loaded
-  (fn [db [_ {:keys [active-users-num]}]]
-    (assoc-in db [:analytics :active-users-num :overall] active-users-num)))
+ :analytics/active-users-num-loaded
+ (fn [db [_ {:keys [active-users-num]}]]
+   (assoc-in db [:analytics :active-users-num :overall] active-users-num)))
 
 (rf/reg-event-db
-  :analytics/statements-per-discussion-loaded
-  (fn [db [_ {:keys [average-statements]}]]
-    (assoc-in db [:analytics :statements :average-per-discussion] (gstring/format "%.2f" average-statements))))
+ :analytics/statements-per-discussion-loaded
+ (fn [db [_ {:keys [average-statements]}]]
+   (assoc-in db [:analytics :statements :average-per-discussion] (gstring/format "%.2f" average-statements))))
 
 (rf/reg-event-db
-  :analytics/statement-length-stats-loaded
-  (fn [db [_ {:keys [statement-length-stats]}]]
-    (assoc-in db [:analytics :statements :lengths] statement-length-stats)))
+ :analytics/statement-length-stats-loaded
+ (fn [db [_ {:keys [statement-length-stats]}]]
+   (assoc-in db [:analytics :statements :lengths] statement-length-stats)))
 
 (rf/reg-event-db
-  :analytics/statement-type-stats-loaded
-  (fn [db [_ {:keys [statement-type-stats]}]]
-    (assoc-in db [:analytics :statements :types] statement-type-stats)))
+ :analytics/statement-type-stats-loaded
+ (fn [db [_ {:keys [statement-type-stats]}]]
+   (assoc-in db [:analytics :statements :types] statement-type-stats)))
 
 (rf/reg-event-db
-  :analytics/all-stats-loaded
-  (fn [db [_ {:keys [statistics]}]]
-    (assoc db :analytics {:discussions-sum {:overall (:discussions-sum statistics)}
-                          :users-num {:anonymous (:usernames-sum statistics)
-                                      :registered (:registered-users-num statistics)}
-                          :statements {:number {:overall (:statements-num statistics)}
-                                       :lengths (:statement-length-stats statistics)
-                                       :average-per-discussion (:average-statements-num statistics)
-                                       :types (:statement-type-stats statistics)}
-                          :active-users-num {:overall (:active-users-num statistics)}})))
+ :analytics/all-stats-loaded
+ (fn [db [_ {:keys [statistics]}]]
+   (assoc db :analytics {:discussions-sum {:overall (:discussions-sum statistics)}
+                         :users-num {:anonymous (:usernames-sum statistics)
+                                     :registered (:registered-users-num statistics)}
+                         :statements {:number {:overall (:statements-num statistics)}
+                                      :lengths (:statement-length-stats statistics)
+                                      :average-per-discussion (:average-statements-num statistics)
+                                      :types (:statement-type-stats statistics)}
+                         :active-users-num {:overall (:active-users-num statistics)}})))
 
 ;; #### Subs ####
 
 (rf/reg-sub
-  :analytics/number-of-discussions-overall
-  (fn [db _]
-    (get-in db [:analytics :discussions-sum :overall])))
+ :analytics/number-of-discussions-overall
+ (fn [db _]
+   (get-in db [:analytics :discussions-sum :overall])))
 
 (rf/reg-sub
-  :analytics/number-of-usernames-anonymous
-  (fn [db _]
-    (get-in db [:analytics :users-num :anonymous])))
+ :analytics/number-of-usernames-anonymous
+ (fn [db _]
+   (get-in db [:analytics :users-num :anonymous])))
 
 (rf/reg-sub
-  :analytics/number-of-users-registered
-  (fn [db _]
-    (get-in db [:analytics :users-num :registered])))
+ :analytics/number-of-users-registered
+ (fn [db _]
+   (get-in db [:analytics :users-num :registered])))
 
 (rf/reg-sub
-  :analytics/number-of-average-statements
-  (fn [db _]
-    (get-in db [:analytics :statements :average-per-discussion])))
+ :analytics/number-of-average-statements
+ (fn [db _]
+   (get-in db [:analytics :statements :average-per-discussion])))
 
 (rf/reg-sub
-  :analytics/number-of-statements-overall
-  (fn [db _]
-    (get-in db [:analytics :statements :number :overall])))
+ :analytics/number-of-statements-overall
+ (fn [db _]
+   (get-in db [:analytics :statements :number :overall])))
 
 (rf/reg-sub
-  :analytics/number-of-active-users-overall
-  (fn [db _]
-    (get-in db [:analytics :active-users-num :overall])))
+ :analytics/number-of-active-users-overall
+ (fn [db _]
+   (get-in db [:analytics :active-users-num :overall])))
 
 (rf/reg-sub
-  :analytics/statement-lengths-stats
-  (fn [db _]
-    (get-in db [:analytics :statements :lengths])))
+ :analytics/statement-lengths-stats
+ (fn [db _]
+   (get-in db [:analytics :statements :lengths])))
 
 (rf/reg-sub
-  :analytics/statement-type-stats
-  (fn [db _]
-    (get-in db [:analytics :statements :types])))
+ :analytics/statement-type-stats
+ (fn [db _]
+   (get-in db [:analytics :statements :types])))

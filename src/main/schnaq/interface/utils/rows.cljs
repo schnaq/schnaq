@@ -43,7 +43,6 @@
    [:div.col-12.col-lg-6.my-auto left]
    [:div.col-12.col-lg-5.offset-lg-1.my-auto right]])
 
-
 ;; -----------------------------------------------------------------------------
 
 (defn image-left

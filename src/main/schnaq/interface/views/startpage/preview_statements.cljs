@@ -17,31 +17,31 @@
       [:img.img-fluid {:src (img-path :startpage.example/statements)}])))
 
 (rf/reg-sub
-  :preview-statement
-  (fn [db]
-    (:preview-statements db)))
+ :preview-statement
+ (fn [db]
+   (:preview-statements db)))
 
 (rf/reg-event-fx
-  :discussion.query/preview-statement
-  (fn [{:keys [db]} [_ share-hash statement-id api-url]]
-    {:fx [(http/xhrio-request
-            db :get "/discussion/statement/info"
-            [:preview-statements/success]
-            {:statement-id statement-id
-             :share-hash share-hash
-             :display-name (tools/current-display-name db)}
-            []
-            api-url)]}))
+ :discussion.query/preview-statement
+ (fn [{:keys [db]} [_ share-hash statement-id api-url]]
+   {:fx [(http/xhrio-request
+          db :get "/discussion/statement/info"
+          [:preview-statements/success]
+          {:statement-id statement-id
+           :share-hash share-hash
+           :display-name (tools/current-display-name db)}
+          []
+          api-url)]}))
 
 (rf/reg-event-fx
-  :preview-statements/success
-  (fn [{:keys [db]} [_ {:keys [conclusion]}]]
-    {:db (assoc db :preview-statements conclusion)}))
+ :preview-statements/success
+ (fn [{:keys [db]} [_ {:keys [conclusion]}]]
+   {:db (assoc db :preview-statements conclusion)}))
 
 (rf/reg-event-fx
-  :load-preview-statements
-  (fn [_ _]
-    (let [share-hash config/example-share-hash
-          api-url config/example-api-url]
-      {:fx [[:dispatch [:schnaq/load-by-share-hash share-hash api-url]]
-            [:dispatch [:discussion.query/preview-statement share-hash config/example-statement api-url]]]})))
+ :load-preview-statements
+ (fn [_ _]
+   (let [share-hash config/example-share-hash
+         api-url config/example-api-url]
+     {:fx [[:dispatch [:schnaq/load-by-share-hash share-hash api-url]]
+           [:dispatch [:discussion.query/preview-statement share-hash config/example-statement api-url]]]})))

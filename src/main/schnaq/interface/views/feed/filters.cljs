@@ -140,34 +140,34 @@
       :appendTo js-wrap/document-body}]))
 
 (rf/reg-event-db
-  :filters.discussion/activate
-  (fn [db [_ filter-type criteria extra]]
-    (let [new-filter {:type filter-type
-                      :criteria (keyword criteria)
-                      :extra extra}]
-      (update-in db [:feed :filters] #(cset/union #{new-filter} %)))))
+ :filters.discussion/activate
+ (fn [db [_ filter-type criteria extra]]
+   (let [new-filter {:type filter-type
+                     :criteria (keyword criteria)
+                     :extra extra}]
+     (update-in db [:feed :filters] #(cset/union #{new-filter} %)))))
 
 (rf/reg-sub
-  :filters.discussion/active
-  (fn [db _]
-    (get-in db [:feed :filters] #{})))
+ :filters.discussion/active
+ (fn [db _]
+   (get-in db [:feed :filters] #{})))
 
 (rf/reg-sub
-  :filters.discussion/active?
-  (fn [_]
-    (rf/subscribe [:filters.discussion/active]))
-  (fn [active-filters _]
-    (seq active-filters)))
+ :filters.discussion/active?
+ (fn [_]
+   (rf/subscribe [:filters.discussion/active]))
+ (fn [active-filters _]
+   (seq active-filters)))
 
 (rf/reg-event-db
-  :filters.discussion/clear
-  (fn [db _]
-    (assoc-in db [:feed :filters] #{})))
+ :filters.discussion/clear
+ (fn [db _]
+   (assoc-in db [:feed :filters] #{})))
 
 (rf/reg-event-db
-  :filters.discussion/deactivate
-  (fn [db [_ filter-data]]
-    (update-in db [:feed :filters] disj filter-data)))
+ :filters.discussion/deactivate
+ (fn [db [_ filter-data]]
+   (update-in db [:feed :filters] disj filter-data)))
 
 ;; Helpers to call from other ns'
 

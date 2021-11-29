@@ -1,0 +1,33 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <ClojureCodeStyleSettings>{
+  :cljs.core/as-&gt; :only-indent
+  :cljs.core/assoc 0
+  :cljs.core/cond-&gt; :only-indent
+  :cljs.core/cond-&gt;&gt; :only-indent
+  :cljs.core/defonce :only-indent
+  :cljs.core/with-meta :only-indent
+  :cljs.core.async/go :only-indent
+  :cljs.core.async/go-loop :only-indent
+  :cljs.core.match/match :only-indent
+  :cljs.spec.alpha/with-gen :only-indent
+  :clojure.core/as-&gt; :only-indent
+  :clojure.core/assoc 1000
+  :clojure.core/comment :only-indent
+  :clojure.core/cond-&gt; :only-indent
+  :clojure.core/cond-&gt;&gt; :only-indent
+  :clojure.core/defonce :only-indent
+  :clojure.core/future :only-indent
+  :clojure.core.async/thread :only-indent
+  :clojure.core.match/match :only-indent
+  :clojure.spec.alpha/fdef :only-indent
+  :clojure.spec.alpha/with-gen :only-indent
+  :clojure.test/are :only-indent
+  :cursive.formatting/align-maps false
+  :cursive.formatting/one-space-lists true
+  :devcards.core/defcard-rg :only-indent
+  :devcards.core/deftest :only-indent
+  :oops.core/oset! :only-indent
+}</ClojureCodeStyleSettings>
+  </code_scheme>
+</component>

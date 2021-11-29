@@ -59,7 +59,6 @@
           :statement-type-stats (analytics-db/statement-type-stats timestamp-since)
           :registered-users-num (analytics-db/number-or-registered-users)}})))
 
-
 ;; -----------------------------------------------------------------------------
 
 (def analytics-routes

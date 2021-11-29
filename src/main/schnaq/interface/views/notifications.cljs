@@ -64,11 +64,11 @@
   [:notification/title :notification/body :notification/context :notification/stay-visible?
    :ret nil?]
   (rf/dispatch
-    [:notification/add
-     #:notification{:title title
-                    :body body
-                    :stay-visible? stay-visible?
-                    :context context}]))
+   [:notification/add
+    #:notification{:title title
+                   :body body
+                   :stay-visible? stay-visible?
+                   :context context}]))
 
 (defn view
   "Presenting all notifications to the user."
@@ -81,7 +81,6 @@
       (for [notification notifications]
         [:div {:key (:notification/id notification)}
          [toast notification]])]]))
-
 
 ;; -----------------------------------------------------------------------------
 
@@ -98,39 +97,38 @@
           :opt [:notification/id :notification/stay-visible?
                 :notification/on-close-fn]))
 
-
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
-  :notification/add
-  (fn [{:keys [db]} [_ {:notification/keys [stay-visible? id] :as notification}]]
-    (let [notification-id (or id (str (random-uuid)))
-          notification' (assoc notification :notification/id notification-id)]
-      (cond-> {:db (update db :notifications conj notification')}
-              ;; Auto-hide notification if not specified otherwise
-              (not stay-visible?) (assoc :fx [[:notification/timed-remove notification-id]])))))
+ :notification/add
+ (fn [{:keys [db]} [_ {:notification/keys [stay-visible? id] :as notification}]]
+   (let [notification-id (or id (str (random-uuid)))
+         notification' (assoc notification :notification/id notification-id)]
+     (cond-> {:db (update db :notifications conj notification')}
+       ;; Auto-hide notification if not specified otherwise
+       (not stay-visible?) (assoc :fx [[:notification/timed-remove notification-id]])))))
 
 (rf/reg-fx
-  :notification/timed-remove
-  (fn [notification-id]
-    (js/setTimeout #(rf/dispatch [:notification/remove notification-id])
-                   display-time)))
+ :notification/timed-remove
+ (fn [notification-id]
+   (js/setTimeout #(rf/dispatch [:notification/remove notification-id])
+                  display-time)))
 
 (rf/reg-event-db
-  :notification/remove
-  (fn [db [_ notification-id]]
-    (when-let [notifications (:notifications db)]
-      (assoc db :notifications
-                (remove (fn [{:notification/keys [id]}]
-                          (= id notification-id))
-                        notifications)))))
+ :notification/remove
+ (fn [db [_ notification-id]]
+   (when-let [notifications (:notifications db)]
+     (assoc db :notifications
+            (remove (fn [{:notification/keys [id]}]
+                      (= id notification-id))
+                    notifications)))))
 
 (rf/reg-event-db
-  :notifications/reset
-  (fn [db [_]]
-    (assoc db :notifications [])))
+ :notifications/reset
+ (fn [db [_]]
+   (assoc db :notifications [])))
 
 (rf/reg-sub
-  :notifications/all
-  (fn [db]
-    (get db :notifications)))
+ :notifications/all
+ (fn [db]
+   (get db :notifications)))

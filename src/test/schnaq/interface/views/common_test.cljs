@@ -5,7 +5,7 @@
 (deftest add-namespace-to-keyword-test
   (testing "Prepend namespace to keyword."
     (are [result to-prepend to-keyword]
-      (= result (add-namespace-to-keyword to-prepend to-keyword))
+         (= result (add-namespace-to-keyword to-prepend to-keyword))
       :foo/bar :foo :bar
       :namespace/test "namespace" :test
       :namespace/test :namespace "test"

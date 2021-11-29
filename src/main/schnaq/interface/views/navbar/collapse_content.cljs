@@ -55,7 +55,6 @@
      :qanda.button/text :icon-qanda-dark
      :routes.schnaq/qanda share-hash]))
 
-
 (defn- li-button
   "List element standard button."
   [content on-click-fn]
@@ -123,10 +122,10 @@
     [settings]]])
 
 (defn- li-link-button
-       [label href]
-       [:a.list-group-item.list-group-item-action
-        {:href href}
-        (labels label)])
+  [label href]
+  [:a.list-group-item.list-group-item-action
+   {:href href}
+   (labels label)])
 
 (defn navbar-external-overview-content
   "Collapsable content for schnaq overview"

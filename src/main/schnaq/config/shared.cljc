@@ -29,11 +29,11 @@
   "Returns bucket names"
   [bucket-name]
   (get
-    {:hub/logo "schnaq-hub-logo"
-     :schnaq/header-images "schnaq-header-images"
-     :user/profile-pictures "schnaq-profile-pictures"
-     :feedbacks/screenshots "schnaq-feedback-screenshots"}
-    bucket-name))
+   {:hub/logo "schnaq-hub-logo"
+    :schnaq/header-images "schnaq-header-images"
+    :user/profile-pictures "schnaq-profile-pictures"
+    :feedbacks/screenshots "schnaq-feedback-screenshots"}
+   bucket-name))
 
 #?(:clj  (def environment (or (System/getenv "ENVIRONMENT") "development"))
    :cljs (goog-define environment "development"))
@@ -58,7 +58,6 @@
 (def allowed-labels
   "A set of allowed labels for statements. They correspond to fa symbols"
   #{":check" ":question" ":times" ":ghost" ":calendar-alt" ":arrow-right" ":comment"})
-
 
 ;; -----------------------------------------------------------------------------
 ;; Access Codes

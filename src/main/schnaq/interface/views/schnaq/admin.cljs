@@ -26,7 +26,7 @@
   [title [ok response]]
   (when ok
     (file-download/export-data
-      (gstring/format "# %s\n%s" title (:string-representation response)))))
+     (gstring/format "# %s\n%s" title (:string-representation response)))))
 
 (defn- show-error
   [& _not-needed]
@@ -48,13 +48,13 @@
   "Request a txt-export of the discussion."
   [share-hash title]
   (let [request-fn #(ajax/ajax-request
-                      {:method :get
-                       :uri (str shared-config/api-url "/export/argdown")
-                       :format (ajax/transit-request-format)
-                       :params {:share-hash share-hash}
-                       :response-format (ajax/transit-response-format)
-                       :handler (partial create-txt-download-handler title)
-                       :error-handler show-error})]
+                     {:method :get
+                      :uri (str shared-config/api-url "/export/argdown")
+                      :format (ajax/transit-request-format)
+                      :params {:share-hash share-hash}
+                      :response-format (ajax/transit-response-format)
+                      :handler (partial create-txt-download-handler title)
+                      :error-handler show-error})]
     (when share-hash
       [tooltip/tooltip-button "bottom" (labels :schnaq.export/as-text)
        [icon :file-download "m-auto"]

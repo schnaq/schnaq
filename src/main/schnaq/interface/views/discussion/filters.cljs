@@ -195,64 +195,63 @@
       (labels :badges.filters/button)]
      {:hideOnClick :toggle}]))
 
-
 ;; -----------------------------------------------------------------------------
 
 (defn- register-new-filter [db new-filter]
   (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))
 
 (rf/reg-event-db
-  :filters.activate/labels
-  (fn [db [_ criteria label]]
-    (let [new-filter {:type :labels
-                      :criteria (keyword criteria)
-                      :label label}]
-      (register-new-filter db new-filter))))
+ :filters.activate/labels
+ (fn [db [_ criteria label]]
+   (let [new-filter {:type :labels
+                     :criteria (keyword criteria)
+                     :label label}]
+     (register-new-filter db new-filter))))
 
 (rf/reg-event-db
-  :filters.activate/type
-  (fn [db [_ criteria stype]]
-    (let [new-filter {:type :type
-                      :criteria (keyword criteria)
-                      :statement-type (keyword stype)}]
-      (register-new-filter db new-filter))))
+ :filters.activate/type
+ (fn [db [_ criteria stype]]
+   (let [new-filter {:type :type
+                     :criteria (keyword criteria)
+                     :statement-type (keyword stype)}]
+     (register-new-filter db new-filter))))
 
 (rf/reg-event-db
-  :filters.activate/votes
-  (fn [db [_ criteria votes-number]]
-    (let [new-filter {:type :votes
-                      :criteria criteria
-                      :votes-number (js/parseInt votes-number)}]
-      (register-new-filter db new-filter))))
+ :filters.activate/votes
+ (fn [db [_ criteria votes-number]]
+   (let [new-filter {:type :votes
+                     :criteria criteria
+                     :votes-number (js/parseInt votes-number)}]
+     (register-new-filter db new-filter))))
 
 (rf/reg-event-db
-  :filters.activate/answered?
-  (fn [db [_ toggle]]
-    (let [new-filter {:type :answered?
-                      :criteria toggle}]
-      (register-new-filter db new-filter))))
+ :filters.activate/answered?
+ (fn [db [_ toggle]]
+   (let [new-filter {:type :answered?
+                     :criteria toggle}]
+     (register-new-filter db new-filter))))
 
 (rf/reg-event-db
-  :filters/deactivate
-  (fn [db [_ filter-data]]
-    (update-in db [:discussion :filters] disj filter-data)))
+ :filters/deactivate
+ (fn [db [_ filter-data]]
+   (update-in db [:discussion :filters] disj filter-data)))
 
 (rf/reg-event-db
-  :filters/clear
-  (fn [db _]
-    (assoc-in db [:discussion :filters] #{})))
+ :filters/clear
+ (fn [db _]
+   (assoc-in db [:discussion :filters] #{})))
 
 (rf/reg-sub
-  :filters/active
-  (fn [db _]
-    (get-in db [:discussion :filters] #{})))
+ :filters/active
+ (fn [db _]
+   (get-in db [:discussion :filters] #{})))
 
 (rf/reg-sub
-  :filters/active?
-  (fn [_]
-    (rf/subscribe [:filters/active]))
-  (fn [active-filters _]
-    (seq active-filters)))
+ :filters/active?
+ (fn [_]
+   (rf/subscribe [:filters/active]))
+ (fn [active-filters _]
+   (seq active-filters)))
 
 (defn- filter-to-fn
   "Returns the corresponding filter-fn for a data-representation of a filter."

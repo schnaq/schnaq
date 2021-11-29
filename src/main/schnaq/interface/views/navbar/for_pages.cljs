@@ -20,7 +20,6 @@
 (defn- privacy-button []
   [navbar-components/button :router/privacy (reitfe/href :routes/privacy)])
 
-
 ;; -----------------------------------------------------------------------------
 
 (defn navbar-title [title]

@@ -16,8 +16,8 @@
                  :region "eu-central-1"
                  :endpoint-override {:hostname hostname}
                  :credentials-provider (credentials/basic-credentials-provider
-                                         {:access-key-id access-key
-                                          :secret-access-key secret-key})})))
+                                        {:access-key-id access-key
+                                         :secret-access-key secret-key})})))
 
 (>defn absolute-file-url
   "Return absolute URL to bucket."

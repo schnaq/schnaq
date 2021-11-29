@@ -17,8 +17,8 @@
   (testing "Check if credentials are verified correctly."
     (let [credential-request (fn [share-hash edit-hash]
                                (schnaq-toolbelt/add-csrf-header
-                                 {:request-method :post :uri "/credentials/validate"
-                                  :body-params {:share-hash share-hash :edit-hash edit-hash}}))
+                                {:request-method :post :uri "/credentials/validate"
+                                 :body-params {:share-hash share-hash :edit-hash edit-hash}}))
           share-hash "simple-hash"
           edit-hash "simple-hash-secret"]
       (is (= 200 (-> (credential-request share-hash edit-hash) api/app :status)))
@@ -48,11 +48,11 @@
 (deftest api-cors-test
   (testing "CORS settings for main API."
     (are [origin expected]
-      (= expected (cors/allow-request?
-                    {:headers {"origin" origin}
-                     :request-method :get}
-                    {:access-control-allow-origin (conj api/allowed-origins (toolbelt/build-allowed-origin "schnaq.localhost"))
-                     :access-control-allow-methods api/allowed-http-verbs}))
+         (= expected (cors/allow-request?
+                      {:headers {"origin" origin}
+                       :request-method :get}
+                      {:access-control-allow-origin (conj api/allowed-origins (toolbelt/build-allowed-origin "schnaq.localhost"))
+                       :access-control-allow-methods api/allowed-http-verbs}))
       nil false
       "" false
       "http://schnaq.com" true

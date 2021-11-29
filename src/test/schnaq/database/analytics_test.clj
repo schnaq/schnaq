@@ -60,7 +60,7 @@
     (let [woggler-id (user-db/add-user-if-not-exists "wooooggler")]
       (is (= 3 (db/number-of-active-discussion-users)))
       (main-db/transact
-        [(discussion-db/add-starting-statement! "cat-dog-hash" woggler-id "Alles doof" false)]))
+       [(discussion-db/add-starting-statement! "cat-dog-hash" woggler-id "Alles doof" false)]))
     (is (= 4 (db/number-of-active-discussion-users)))))
 
 (deftest statement-length-stats-test

@@ -65,37 +65,37 @@
         [icon :tag]])]))
 
 (rf/reg-event-fx
-  :statement.labels/remove
-  (fn [{:keys [db]} [_ statement label]]
-    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-          updated-statement (update statement :statement/labels (fn [labels] (-> labels set (disj label))))]
-      {:db (update-in db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))
-       :fx [(http/xhrio-request db :put "/discussion/statement/label/remove"
-                                [:statement.labels.update/success]
-                                {:share-hash share-hash
-                                 :statement-id (:db/id statement)
-                                 :label label
-                                 :display-name (tools/current-display-name db)})]})))
+ :statement.labels/remove
+ (fn [{:keys [db]} [_ statement label]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         updated-statement (update statement :statement/labels (fn [labels] (-> labels set (disj label))))]
+     {:db (update-in db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))
+      :fx [(http/xhrio-request db :put "/discussion/statement/label/remove"
+                               [:statement.labels.update/success]
+                               {:share-hash share-hash
+                                :statement-id (:db/id statement)
+                                :label label
+                                :display-name (tools/current-display-name db)})]})))
 
 (rf/reg-event-db
-  :statement.labels.update/success
-  (fn [db [_ response]]
-    (let [updated-statement (:statement response)]
-      (-> db
-          (update-in [:discussion :premises :current] #(tools/update-statement-in-list % updated-statement))
-          (update-in [:discussion :conclusion :selected] #(if (= (:db/id %) (:db/id updated-statement))
-                                                            updated-statement
-                                                            %))))))
+ :statement.labels.update/success
+ (fn [db [_ response]]
+   (let [updated-statement (:statement response)]
+     (-> db
+         (update-in [:discussion :premises :current] #(tools/update-statement-in-list % updated-statement))
+         (update-in [:discussion :conclusion :selected] #(if (= (:db/id %) (:db/id updated-statement))
+                                                           updated-statement
+                                                           %))))))
 
 (rf/reg-event-fx
-  :statement.labels/add
-  (fn [{:keys [db]} [_ statement label]]
-    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-          updated-statement (update statement :statement/labels conj label)]
-      {:db (update-in db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))
-       :fx [(http/xhrio-request db :put "/discussion/statement/label/add"
-                                [:statement.labels.update/success]
-                                {:share-hash share-hash
-                                 :statement-id (:db/id statement)
-                                 :label label
-                                 :display-name (tools/current-display-name db)})]})))
+ :statement.labels/add
+ (fn [{:keys [db]} [_ statement label]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         updated-statement (update statement :statement/labels conj label)]
+     {:db (update-in db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))
+      :fx [(http/xhrio-request db :put "/discussion/statement/label/add"
+                               [:statement.labels.update/success]
+                               {:share-hash share-hash
+                                :statement-id (:db/id statement)
+                                :label label
+                                :display-name (tools/current-display-name db)})]})))

@@ -10,7 +10,7 @@ out/
 # Calva-related
 .lsp/
 .workspaces/
-.calva/
+.calva/output-window/
 
 .datomic/
 datomic/
@@ -37,7 +37,7 @@ local_jars/
 .idea/**/dictionaries
 .idea/**/shelf
 .idea/saveactions_settings.xml
-.idea/codeStyles
+!.idea/codeStyles
 
 ## Generated files
 .idea/**/contentModel.xml

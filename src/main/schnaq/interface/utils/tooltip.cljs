@@ -10,15 +10,15 @@
    [:> Tippy
     (apply dissoc
            (merge
-             {:animation "shift-away"
-              :arrow true
-              :content (reagent/as-element tooltip-content)
-              :interactive true
-              :offset [0 10]
-              :placement "bottom"
-              :theme "light"
-              :trigger "click"}
-             options)
+            {:animation "shift-away"
+             :arrow true
+             :content (reagent/as-element tooltip-content)
+             :interactive true
+             :offset [0 10]
+             :placement "bottom"
+             :theme "light"
+             :trigger "click"}
+            options)
            deactivated-options)
     wrapped-element]))
 
@@ -28,13 +28,13 @@
   [title content options]
   [:> Tippy
    (merge
-     {:animation "shift-away"
-      :arrow true
-      :offset [0 10]
-      :placement "bottom"
-      :theme "light"
-      :content title}
-     options)
+    {:animation "shift-away"
+     :arrow true
+     :offset [0 10]
+     :placement "bottom"
+     :theme "light"
+     :content title}
+    options)
    content])
 
 (defn tooltip-button

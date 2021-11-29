@@ -130,7 +130,6 @@
      [:div.mx-2.my-auto [icon icon-name "m-auto"]]
      button-class route route-params]))
 
-
 (defn hub-feed-button
   "Display a single hub."
   [{:hub/keys [keycloak-name name logo]}]
@@ -194,11 +193,11 @@
   [personal-discussions-view])
 
 (rf/reg-event-db
-  :feed.sort/set
-  (fn [db [_ method]]
-    (assoc-in db [:feed :sort] method)))
+ :feed.sort/set
+ (fn [db [_ method]]
+   (assoc-in db [:feed :sort] method)))
 
 (rf/reg-sub
-  :feed/sort
-  (fn [db _]
-    (get-in db [:feed :sort] :time)))
+ :feed/sort
+ (fn [db _]
+   (get-in db [:feed :sort] :time)))

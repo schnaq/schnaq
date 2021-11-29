@@ -19,11 +19,11 @@
         share-link (links/get-share-link share-hash)]
     (log/debug "Invite Emails for some discussion sent")
     (ok (merge
-          {:message "Emails sent successfully"}
-          (emails/send-mails
-            (format (email-templates :invitation/title) discussion-title)
-            (format (email-templates :invitation/body) discussion-title share-link)
-            recipients)))))
+         {:message "Emails sent successfully"}
+         (emails/send-mails
+          (format (email-templates :invitation/title) discussion-title)
+          (format (email-templates :invitation/body) discussion-title share-link)
+          recipients)))))
 
 (>defn- send-admin-center-link
   "Send URL to admin-center via mail to recipient."
@@ -34,12 +34,11 @@
         admin-center (links/get-admin-link share-hash edit-hash)]
     (log/debug "Send admin link for discussion " discussion-title " via E-Mail")
     (ok (merge
-          {:message "Emails sent successfully"}
-          (emails/send-mails
-            (format (email-templates :admin-center/title) discussion-title)
-            (format (email-templates :admin-center/body) discussion-title admin-center)
-            [recipient])))))
-
+         {:message "Emails sent successfully"}
+         (emails/send-mails
+          (format (email-templates :admin-center/title) discussion-title)
+          (format (email-templates :admin-center/body) discussion-title admin-center)
+          [recipient])))))
 
 ;; -----------------------------------------------------------------------------
 

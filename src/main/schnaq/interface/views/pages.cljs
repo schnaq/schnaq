@@ -29,7 +29,6 @@
           :opt [:page/subheading :page/title :page/more-for-heading :page/vertical-header?
                 :condition/needs-authentication? :condition/needs-administrator?]))
 
-
 ;; -----------------------------------------------------------------------------
 
 (defn login-page
@@ -83,7 +82,6 @@
       (and needs-beta-tester? (not beta-tester?)) [beta-only]
       :else page)))
 
-
 ;; -----------------------------------------------------------------------------
 ;; Page Segments
 
@@ -94,7 +92,6 @@
   [:div.panel-white.p-5.mb-3
    [:h1.text-muted.mb-5 heading]
    body])
-
 
 ;; -----------------------------------------------------------------------------
 ;; Complete page layouts

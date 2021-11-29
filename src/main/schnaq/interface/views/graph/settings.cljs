@@ -38,15 +38,14 @@
   "Configure the gravity of the nodes."
   []
   (rf/dispatch
-    [:notification/add
-     #:notification{:title (labels :graph.settings/title)
-                    :body [:<>
-                           [:p (labels :graph.settings/description)]
-                           [:hr] [gravity-slider]
-                           [:hr] [stabilize-graph]]
-                    :context :info
-                    :stay-visible? true}]))
-
+   [:notification/add
+    #:notification{:title (labels :graph.settings/title)
+                   :body [:<>
+                          [:p (labels :graph.settings/description)]
+                          [:hr] [gravity-slider]
+                          [:hr] [stabilize-graph]]
+                   :context :info
+                   :stay-visible? true}]))
 
 ;; -----------------------------------------------------------------------------
 

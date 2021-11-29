@@ -20,18 +20,18 @@
 
 (defn- localstorage-explanation []
   (notify!
-    (labels :privacy.localstorage.notification/title)
-    [:<>
-     [:p (labels :privacy.localstorage.notification/body)]
-     [:pre [:code
-            (with-out-str (pprint (ls/localstorage->map)))]]
-     [:button.btn.btn-sm.btn-outline-danger
-      {:on-click #(when (js/confirm (labels :privacy.localstorage.notification/confirmation))
-                    (clear! local-storage)
-                    (.reload js/location))}
-      (labels :privacy.localstorage.notification/delete-button)]]
-    :info
-    true))
+   (labels :privacy.localstorage.notification/title)
+   [:<>
+    [:p (labels :privacy.localstorage.notification/body)]
+    [:pre [:code
+           (with-out-str (pprint (ls/localstorage->map)))]]
+    [:button.btn.btn-sm.btn-outline-danger
+     {:on-click #(when (js/confirm (labels :privacy.localstorage.notification/confirmation))
+                   (clear! local-storage)
+                   (.reload js/location))}
+     (labels :privacy.localstorage.notification/delete-button)]]
+   :info
+   true))
 
 (defn- gdpr-row []
   [rows/icon-right
@@ -86,8 +86,6 @@
     [data-processing-anonymous]
     [data-processing-registered]
     [link-to-privacy]]])
-
-
 
 ;; -----------------------------------------------------------------------------
 

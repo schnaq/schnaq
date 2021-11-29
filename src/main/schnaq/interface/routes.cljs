@@ -306,12 +306,12 @@
 
 (def router
   (reitit-front/router
-    (if config/embedded?
-      wetog-routes/routes
-      routes)
-    ;; This disables automatic conflict checking. So: Please check your own
-    ;; routes that there are no conflicts.
-    {:conflicts nil}))
+   (if config/embedded?
+     wetog-routes/routes
+     routes)
+   ;; This disables automatic conflict checking. So: Please check your own
+   ;; routes that there are no conflicts.
+   {:conflicts nil}))
 
 (defn- on-navigate [new-match]
   (let [window-hash (.. js/window -location -hash)]
@@ -326,12 +326,12 @@
 
 (defn init-routes! []
   (reitit-front-easy/start!
-    router
-    on-navigate
-    {:use-fragment config/embedded?
-     :ignore-anchor-click? (fn [router e el uri]
-                             (and (rfh/ignore-anchor-click? router e el uri)
-                                  (empty? (.-hash el))))}))
+   router
+   on-navigate
+   {:use-fragment config/embedded?
+    :ignore-anchor-click? (fn [router e el uri]
+                            (and (rfh/ignore-anchor-click? router e el uri)
+                                 (empty? (.-hash el))))}))
 
 (defn parse-route
   "Parses a URL with the schnaq routes and returns the full match object."

@@ -52,7 +52,6 @@
         [:div.d-flex
          [icon :arrow-left "m-auto"]]]])))
 
-
 (defn- discussion-start-button
   "Discussion start button for history view"
   []
@@ -106,64 +105,63 @@
                     [tooltip/text tooltip-text history-content {:placement :right}])]]])]]))])))
 
 (rf/reg-event-fx
-  :discussion.add.statement/starting
-  (fn [{:keys [db]} [_ form]]
-    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-          statement-text (oget form [:statement-text :value])]
-      {:db (update-in db [:schnaq :selected :meta-info :all-statements] inc)
-       :fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
-                                [:discussion.add.statement/starting-success form]
-                                {:statement statement-text
-                                 :share-hash share-hash
-                                 :display-name (toolbelt/current-display-name db)}
-                                [:ajax.error/as-notification])]})))
+ :discussion.add.statement/starting
+ (fn [{:keys [db]} [_ form]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         statement-text (oget form [:statement-text :value])]
+     {:db (update-in db [:schnaq :selected :meta-info :all-statements] inc)
+      :fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
+                               [:discussion.add.statement/starting-success form]
+                               {:statement statement-text
+                                :share-hash share-hash
+                                :display-name (toolbelt/current-display-name db)}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
-  :discussion.add.statement/starting-success
-  (fn [{:keys [db]} [_ form new-starting-statements]]
-    (let [starting-conclusions (:starting-conclusions new-starting-statements)
-          statement-with-creation-secret (first (filter :statement/creation-secret
-                                                        starting-conclusions))]
-      {:fx [[:dispatch [:notification/add
-                        #:notification{:title (labels :discussion.notification/new-content-title)
-                                       :body (labels :discussion.notification/new-content-body)
-                                       :context :success}]]
-            [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
-            (when (and (= 1 (count starting-conclusions))
-                       (not shared-config/embedded?)
-                       (not= :discussion.mode/qanda (get-in db [:schnaq :selected :discussion/mode])))
-              [:dispatch [:celebrate/schnaq-filled]])
-            (when statement-with-creation-secret
-              [:dispatch [:discussion.statements/add-creation-secret statement-with-creation-secret]])
-            [:form/clear form]]})))
+ :discussion.add.statement/starting-success
+ (fn [{:keys [db]} [_ form new-starting-statements]]
+   (let [starting-conclusions (:starting-conclusions new-starting-statements)
+         statement-with-creation-secret (first (filter :statement/creation-secret
+                                                       starting-conclusions))]
+     {:fx [[:dispatch [:notification/add
+                       #:notification{:title (labels :discussion.notification/new-content-title)
+                                      :body (labels :discussion.notification/new-content-body)
+                                      :context :success}]]
+           [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
+           (when (and (= 1 (count starting-conclusions))
+                      (not shared-config/embedded?)
+                      (not= :discussion.mode/qanda (get-in db [:schnaq :selected :discussion/mode])))
+             [:dispatch [:celebrate/schnaq-filled]])
+           (when statement-with-creation-secret
+             [:dispatch [:discussion.statements/add-creation-secret statement-with-creation-secret]])
+           [:form/clear form]]})))
 
 (rf/reg-event-fx
-  :discussion.query.conclusions/starting
-  (fn [{:keys [db]} _]
-    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-      {:fx [(http/xhrio-request db :get "/discussion/conclusions/starting"
-                                [:discussion.query.conclusions/set-starting]
-                                {:share-hash share-hash
-                                 :display-name (toolbelt/current-display-name db)})]})))
+ :discussion.query.conclusions/starting
+ (fn [{:keys [db]} _]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :get "/discussion/conclusions/starting"
+                               [:discussion.query.conclusions/set-starting]
+                               {:share-hash share-hash
+                                :display-name (toolbelt/current-display-name db)})]})))
 
 (rf/reg-event-fx
-  :discussion.query.conclusions/set-starting
-  (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
-    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-          visited (map :db/id starting-conclusions)]
-      {:db (-> db
-               (assoc-in [:discussion :premises :current] starting-conclusions)
-               (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) visited))
-       ;; hier die seen setzen
-       :fx [[:dispatch [:votes.local/reset]]]})))
+ :discussion.query.conclusions/set-starting
+ (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         visited (map :db/id starting-conclusions)]
+     {:db (-> db
+              (assoc-in [:discussion :premises :current] starting-conclusions)
+              (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) visited))
+      ;; hier die seen setzen
+      :fx [[:dispatch [:votes.local/reset]]]})))
 
 (rf/reg-event-db
-  :votes.local/reset
-  (fn [db _]
-    (update db :votes
-            dissoc :up
-            dissoc :down)))
-
+ :votes.local/reset
+ (fn [db _]
+   (update db :votes
+           dissoc :up
+           dissoc :down)))
 
 ;; -----------------------------------------------------------------------------
 
@@ -185,7 +183,6 @@
         :label-key :badges.sort/newest}
        {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
         :label-key :badges.sort/popular}]]]))
-
 
 ;; -----------------------------------------------------------------------------
 
@@ -251,14 +248,14 @@
      [:div.discussion-light-background content]]))
 
 (rf/reg-event-db
-  :discussion.statements.sort/set
-  (fn [db [_ method]]
-    (assoc-in db [:discussion :statements :sort-method] method)))
+ :discussion.statements.sort/set
+ (fn [db [_ method]]
+   (assoc-in db [:discussion :statements :sort-method] method)))
 
 (rf/reg-sub
-  :discussion.statements/sort-method
-  (fn [db _]
-    (get-in db [:discussion :statements :sort-method] :newest)))
+ :discussion.statements/sort-method
+ (fn [db _]
+   (get-in db [:discussion :statements :sort-method] :newest)))
 
 (defn- show-how-to []
   (let [is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
@@ -268,8 +265,8 @@
 
 (def throttled-in-schnaq-search
   (gfun/throttle
-    #(rf/dispatch [:discussion.statements/search (oget % [:target :value])])
-    500))
+   #(rf/dispatch [:discussion.statements/search (oget % [:target :value])])
+   500))
 
 (defn- search-clear-button
   [clear-id]
@@ -357,16 +354,16 @@
         [show-how-to]]]]]))
 
 (rf/reg-sub
-  :schnaq.search.current/search-string
-  (fn [db _]
-    (get-in db [:search :schnaq :current :search-string] "")))
+ :schnaq.search.current/search-string
+ (fn [db _]
+   (get-in db [:search :schnaq :current :search-string] "")))
 
 (rf/reg-event-db
-  :schnaq.search.current/clear-search-string
-  (fn [db _]
-    (assoc-in db [:search :schnaq :current :search-string] "")))
+ :schnaq.search.current/clear-search-string
+ (fn [db _]
+   (assoc-in db [:search :schnaq :current :search-string] "")))
 
 (rf/reg-sub
-  :schnaq.search.current/result
-  (fn [db _]
-    (get-in db [:search :schnaq :current :result] [])))
+ :schnaq.search.current/result
+ (fn [db _]
+   (get-in db [:search :schnaq :current :result] [])))

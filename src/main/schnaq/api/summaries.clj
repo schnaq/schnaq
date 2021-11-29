@@ -23,9 +23,9 @@
   [route-name]
   [keyword? :ret string?]
   (str
-    shared-config/api-url
-    (:path
-      (r/match-by-name (r/router summary-routes) route-name))))
+   shared-config/api-url
+   (:path
+    (r/match-by-name (r/router summary-routes) route-name))))
 
 (defn- request-bart-summary
   "Request a bart summary at summy."
@@ -41,7 +41,6 @@
                                    :content (export/generate-fulltext share-hash)})
                   :as :json
                   :content-type :json})))
-
 
 ;; -----------------------------------------------------------------------------
 
@@ -70,12 +69,12 @@
       (let [title (-> summary :summary/discussion :discussion/title)
             share-hash (-> summary :summary/discussion :discussion/share-hash)]
         (emails/send-mail
-          (format "Deine schnaq-Zusammenfassung ist bereit 🥳 \"%s\"" (-> summary :summary/discussion :discussion/title))
-          "Deine Zusammenfassung ist bereit"
-          (str "Hallo " (-> summary :summary/requester :user.registered/display-name) ",")
-          (format "eine neue Zusammenfassung wurde für deinen schnaq \"%s\" erstellt und kann und kann unter folgendem Link abgerufen werden: %s"
-                  title (links/get-summary-link share-hash))
-          (-> summary :summary/requester :user.registered/email))))
+         (format "Deine schnaq-Zusammenfassung ist bereit 🥳 \"%s\"" (-> summary :summary/discussion :discussion/title))
+         "Deine Zusammenfassung ist bereit"
+         (str "Hallo " (-> summary :summary/requester :user.registered/display-name) ",")
+         (format "eine neue Zusammenfassung wurde für deinen schnaq \"%s\" erstellt und kann und kann unter folgendem Link abgerufen werden: %s"
+                 title (links/get-summary-link share-hash))
+         (-> summary :summary/requester :user.registered/email))))
     (ok {:new-summary summary})))
 
 (defn- all-summaries
@@ -93,14 +92,13 @@
                                       :new-summary-text summary-text}}})
     (ok {:status :ok})))
 
-
 ;; -----------------------------------------------------------------------------
 
 (def summary-routes
   [["/schnaq/summary" {:swagger {:tags ["summaries" "beta"]}
                        :middleware (cond->
-                                     [:discussion/valid-share-hash? :user/authenticated?]
-                                     (not shared-config/embedded?) (conj :user/beta-tester?))
+                                    [:discussion/valid-share-hash? :user/authenticated?]
+                                    (not shared-config/embedded?) (conj :user/beta-tester?))
                        :responses {401 at/response-error-body}}
     ["" {:get get-summary
          :description (at/get-doc #'get-summary)

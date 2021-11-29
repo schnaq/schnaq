@@ -16,34 +16,34 @@
 
 (def throttled-search
   (gfun/throttle
-    #(rf/dispatch [:schnaq.qa/search (oget % [:?target :value])])
-    500))
+   #(rf/dispatch [:schnaq.qa/search (oget % [:?target :value])])
+   500))
 
 (rf/reg-event-fx
-  :schnaq.qa/search
-  (fn [{:keys [db]} [_ search-term]]
-    (if (cstring/blank? search-term)
-      {:db (assoc-in db [:schnaq :qa :search :results] [])}
-      (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-        {:fx [(http/xhrio-request db :get "/schnaq/qa/search"
-                                  [:schnaq.qa.search/success]
-                                  {:share-hash share-hash
-                                   :search-string search-term
-                                   :display-name (tools/current-display-name db)})]}))))
+ :schnaq.qa/search
+ (fn [{:keys [db]} [_ search-term]]
+   (if (cstring/blank? search-term)
+     {:db (assoc-in db [:schnaq :qa :search :results] [])}
+     (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+       {:fx [(http/xhrio-request db :get "/schnaq/qa/search"
+                                 [:schnaq.qa.search/success]
+                                 {:share-hash share-hash
+                                  :search-string search-term
+                                  :display-name (tools/current-display-name db)})]}))))
 (rf/reg-event-db
-  :schnaq.qa.search/success
-  (fn [db [_ {:keys [matching-statements]}]]
-    (assoc-in db [:schnaq :qa :search :results] matching-statements)))
+ :schnaq.qa.search/success
+ (fn [db [_ {:keys [matching-statements]}]]
+   (assoc-in db [:schnaq :qa :search :results] matching-statements)))
 
 (rf/reg-sub
-  :schnaq.qa.search/results
-  (fn [db _]
-    (get-in db [:schnaq :qa :search :results] [])))
+ :schnaq.qa.search/results
+ (fn [db _]
+   (get-in db [:schnaq :qa :search :results] [])))
 
 (rf/reg-event-db
-  :schnaq.qa.search.results/reset
-  (fn [db _]
-    (assoc-in db [:schnaq :qa :search :results] [])))
+ :schnaq.qa.search.results/reset
+ (fn [db _]
+   (assoc-in db [:schnaq :qa :search :results] [])))
 
 (>defn results-list
   "A list of statement results that came out of search.

@@ -64,7 +64,6 @@
     [call-to-q&a]
     [call-to-discuss]))
 
-
 ;; -----------------------------------------------------------------------------
 
 (defn up-down-vote
@@ -253,82 +252,82 @@
       [call-to-action-content])))
 
 (rf/reg-event-fx
-  :discussion.select/conclusion
-  (fn [{:keys [db]} [_ conclusion]]
-    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-      {:db (assoc-in db [:discussion :conclusion :selected] conclusion)
-       :fx [(http/xhrio-request db :get "/discussion/statements/for-conclusion"
-                                [:discussion.premises/set-current]
-                                {:conclusion-id (:db/id conclusion)
-                                 :share-hash share-hash
-                                 :display-name (tools/current-display-name db)}
-                                [:ajax.error/as-notification])]})))
+ :discussion.select/conclusion
+ (fn [{:keys [db]} [_ conclusion]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:db (assoc-in db [:discussion :conclusion :selected] conclusion)
+      :fx [(http/xhrio-request db :get "/discussion/statements/for-conclusion"
+                               [:discussion.premises/set-current]
+                               {:conclusion-id (:db/id conclusion)
+                                :share-hash share-hash
+                                :display-name (tools/current-display-name db)}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
-  :discussion.statements/reload
-  (fn [{:keys [db]} _]
-    (let [path (get-in db [:current-route :data :name])]
-      (case path
-        :routes.schnaq.select/statement {:fx [[:dispatch [:discussion.query.statement/by-id]]]}
-        :routes.schnaq/start {:fx [[:dispatch [:discussion.query.conclusions/starting]]]}
-        {}))))
+ :discussion.statements/reload
+ (fn [{:keys [db]} _]
+   (let [path (get-in db [:current-route :data :name])]
+     (case path
+       :routes.schnaq.select/statement {:fx [[:dispatch [:discussion.query.statement/by-id]]]}
+       :routes.schnaq/start {:fx [[:dispatch [:discussion.query.conclusions/starting]]]}
+       {}))))
 
 (rf/reg-event-db
-  :discussion.premises/set-current
-  (fn [db [_ {:keys [premises]}]]
-    (assoc-in db [:discussion :premises :current] premises)))
+ :discussion.premises/set-current
+ (fn [db [_ {:keys [premises]}]]
+   (assoc-in db [:discussion :premises :current] premises)))
 
 (rf/reg-sub
-  :local-votes
-  (fn [db _]
-    (get db :votes)))
+ :local-votes
+ (fn [db _]
+   (get db :votes)))
 
 (rf/reg-event-fx
-  :discussion/toggle-upvote
-  (fn [{:keys [db]} [_ {:keys [db/id meta/upvoted?] :as statement}]]
-    {:db (-> db
-             (update-in [:votes :own :up id] #(not (if (nil? %) upvoted? %)))
-             (assoc-in [:votes :own :down id] false))
-     :fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
-                              {:statement-id id
-                               :nickname (tools/current-display-name db)
-                               :share-hash (-> db :schnaq :selected :discussion/share-hash)}
-                              [:ajax.error/as-notification])]}))
+ :discussion/toggle-upvote
+ (fn [{:keys [db]} [_ {:keys [db/id meta/upvoted?] :as statement}]]
+   {:db (-> db
+            (update-in [:votes :own :up id] #(not (if (nil? %) upvoted? %)))
+            (assoc-in [:votes :own :down id] false))
+    :fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
+                             {:statement-id id
+                              :nickname (tools/current-display-name db)
+                              :share-hash (-> db :schnaq :selected :discussion/share-hash)}
+                             [:ajax.error/as-notification])]}))
 
 (rf/reg-event-fx
-  :discussion/toggle-downvote
-  (fn [{:keys [db]} [_ {:keys [db/id meta/downvoted?] :as statement}]]
-    {:db (-> db
-             (assoc-in [:votes :own :up id] false)
-             (update-in [:votes :own :down id] #(not (if (nil? %) downvoted? %))))
-     :fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
-                              {:statement-id id
-                               :nickname (tools/current-display-name db)
-                               :share-hash (-> db :schnaq :selected :discussion/share-hash)}
-                              [:ajax.error/as-notification])]}))
+ :discussion/toggle-downvote
+ (fn [{:keys [db]} [_ {:keys [db/id meta/downvoted?] :as statement}]]
+   {:db (-> db
+            (assoc-in [:votes :own :up id] false)
+            (update-in [:votes :own :down id] #(not (if (nil? %) downvoted? %))))
+    :fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
+                             {:statement-id id
+                              :nickname (tools/current-display-name db)
+                              :share-hash (-> db :schnaq :selected :discussion/share-hash)}
+                             [:ajax.error/as-notification])]}))
 
 (rf/reg-event-db
-  :upvote-success
-  (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
-    (case operation
-      :added (update-in db [:votes :up id] inc)
-      :removed (update-in db [:votes :up id] dec)
-      :switched (-> db
-                    (update-in [:votes :up id] inc)
-                    (update-in [:votes :down id] dec)))))
+ :upvote-success
+ (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
+   (case operation
+     :added (update-in db [:votes :up id] inc)
+     :removed (update-in db [:votes :up id] dec)
+     :switched (-> db
+                   (update-in [:votes :up id] inc)
+                   (update-in [:votes :down id] dec)))))
 
 (rf/reg-event-db
-  :downvote-success
-  (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
-    (case operation
-      :added (update-in db [:votes :down id] inc)
-      :removed (update-in db [:votes :down id] dec)
-      :switched (-> db
-                    (update-in [:votes :down id] inc)
-                    (update-in [:votes :up id] dec)))))
+ :downvote-success
+ (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
+   (case operation
+     :added (update-in db [:votes :down id] inc)
+     :removed (update-in db [:votes :down id] dec)
+     :switched (-> db
+                   (update-in [:votes :down id] inc)
+                   (update-in [:votes :up id] dec)))))
 
 (rf/reg-sub
-  :votes/upvoted-or-downvoted
-  (fn [db [_ statement-id]]
-    [(get-in db [:votes :own :up statement-id])
-     (get-in db [:votes :own :down statement-id])]))
+ :votes/upvoted-or-downvoted
+ (fn [db [_ statement-id]]
+   [(get-in db [:votes :own :up statement-id])
+    (get-in db [:votes :own :down statement-id])]))

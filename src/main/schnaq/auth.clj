@@ -54,7 +54,6 @@
   [map? string? :ret boolean?]
   (some #(= group %) (:groups identity)))
 
-
 ;; -----------------------------------------------------------------------------
 
 (defn -main []

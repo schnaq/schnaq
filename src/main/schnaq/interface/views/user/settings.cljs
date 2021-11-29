@@ -56,5 +56,5 @@
     [feed-overview/sidebar-info-links]]])
 
 (rf/reg-event-db
-  :user.settings.temporary/reset
-  (fn [db _] (assoc-in db [:user :settings :temporary] nil)))
+ :user.settings.temporary/reset
+ (fn [db _] (assoc-in db [:user :settings :temporary] nil)))

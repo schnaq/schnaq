@@ -36,9 +36,9 @@
         keycloak-names (hub-db/create-hubs-if-not-existing keycloak-names)
         hubs (hub-db/hubs-by-keycloak-names keycloak-names)
         processed-hubs (map
-                         #(update % :hub/schnaqs
-                                  (fn [hub] (map processors/add-meta-info-to-schnaq hub)))
-                         hubs)]
+                        #(update % :hub/schnaqs
+                                 (fn [hub] (map processors/add-meta-info-to-schnaq hub)))
+                        hubs)]
     (ok {:hubs processed-hubs})))
 
 (defn- add-schnaq-to-hub
@@ -117,7 +117,6 @@
           (ok {:hub (hub-db/update-hub-logo-url keycloak-name image-url)})
           response))
       forbidden-missing-permission)))
-
 
 ;; -----------------------------------------------------------------------------
 

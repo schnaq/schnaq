@@ -8,8 +8,8 @@
   (:import (java.util UUID)))
 
 (use-fixtures :each
-              schnaq-toolbelt/init-test-delete-db-fixture
-              #(schnaq-toolbelt/init-test-delete-db-fixture % hub-test-data/hub-test-data))
+  schnaq-toolbelt/init-test-delete-db-fixture
+  #(schnaq-toolbelt/init-test-delete-db-fixture % hub-test-data/hub-test-data))
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (deftest add-discussions-to-hub-test
@@ -36,7 +36,7 @@
     (let [keycloak-names [(.toString (UUID/randomUUID)) (.toString (UUID/randomUUID))]
           _ (run! (partial hub/create-hub "hubby") keycloak-names)]
       (are [times coll]
-        (= times (count (hub/hubs-by-keycloak-names coll)))
+           (= times (count (hub/hubs-by-keycloak-names coll)))
         0 []
         0 ["razupaltuff"]
         2 keycloak-names))))

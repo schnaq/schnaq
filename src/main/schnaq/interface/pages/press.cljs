@@ -43,7 +43,6 @@
    [:a.btn.btn-primary.ml-3 {:href (reitfe/href :routes/publications)}
     (labels :footer.buttons/publications)]])
 
-
 ;; -----------------------------------------------------------------------------
 
 (defn- content []

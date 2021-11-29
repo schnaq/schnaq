@@ -54,7 +54,6 @@
       (ok {:status :ok})
       (bad-request (at/build-error-body :failed-subscription "Something went wrong. Check your Email-Address and try again.")))))
 
-
 ;; -----------------------------------------------------------------------------
 
 (def other-routes

@@ -90,16 +90,16 @@
         author-id (user-db/user-id display-name user-identity)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (valid-statements-with-votes
-            {:conclusion (first (-> [(db/fast-pull statement-id patterns/statement-with-answers)]
-                                    processors/with-sub-discussion-info
-                                    processors/with-answered?-info
-                                    (processors/with-new-post-info share-hash user-identity)
-                                    toolbelt/pull-key-up))
-             :premises (-> (discussion-db/children-for-statement statement-id)
-                           processors/with-sub-discussion-info
-                           (processors/with-new-post-info share-hash user-identity))
-             :history (discussion-db/history-for-statement statement-id)}
-            author-id))
+           {:conclusion (first (-> [(db/fast-pull statement-id patterns/statement-with-answers)]
+                                   processors/with-sub-discussion-info
+                                   processors/with-answered?-info
+                                   (processors/with-new-post-info share-hash user-identity)
+                                   toolbelt/pull-key-up))
+            :premises (-> (discussion-db/children-for-statement statement-id)
+                          processors/with-sub-discussion-info
+                          (processors/with-new-post-info share-hash user-identity))
+            :history (discussion-db/history-for-statement statement-id)}
+           author-id))
       at/not-found-hash-invalid)))
 
 (defn- update-seen-statements!
@@ -109,7 +109,7 @@
         user-identity (:sub identity)
         statement-ids seen-statement-ids]
     (user-db/create-visited-statements-for-discussion
-      user-identity share-hash statement-ids)
+     user-identity share-hash statement-ids)
     (ok {:share-hash share-hash
          :seen-statement-ids seen-statement-ids})))
 
@@ -136,14 +136,14 @@
                                               :statement/deleted?])
         author-id (user-db/user-id display-name user-identity)]
     (check-statement-author-and-state
-      user-identity statement-id share-hash statement
-      #(ok {:updated-statement (-> [(discussion-db/change-statement-text-and-type statement statement-type new-content)]
-                                   (processors/with-aggregated-votes author-id)
-                                   processors/with-sub-discussion-info
-                                   (processors/with-new-post-info share-hash (:sub identity))
-                                   first)})
-      #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not edit a closed / deleted discussion or statement."))
-      #(validator/deny-access at/invalid-rights-message))))
+     user-identity statement-id share-hash statement
+     #(ok {:updated-statement (-> [(discussion-db/change-statement-text-and-type statement statement-type new-content)]
+                                  (processors/with-aggregated-votes author-id)
+                                  processors/with-sub-discussion-info
+                                  (processors/with-new-post-info share-hash (:sub identity))
+                                  first)})
+     #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not edit a closed / deleted discussion or statement."))
+     #(validator/deny-access at/invalid-rights-message))))
 
 (defn- delete-statement!
   "Deletes a statement, when the user is the registered author."
@@ -154,11 +154,11 @@
                                               {:statement/author [:user.registered/keycloak-id]}
                                               :statement/deleted?])]
     (check-statement-author-and-state
-      user-identity statement-id share-hash statement
-      #(ok {:deleted-statement statement-id
-            :method (discussion-db/delete-statement! statement-id)})
-      #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not delete a closed / deleted discussion or statement."))
-      #(validator/deny-access at/invalid-rights-message))))
+     user-identity statement-id share-hash statement
+     #(ok {:deleted-statement statement-id
+           :method (discussion-db/delete-statement! statement-id)})
+     #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not delete a closed / deleted discussion or statement."))
+     #(validator/deny-access at/invalid-rights-message))))
 
 (defn- delete-statements!
   "Deletes the passed list of statements if the admin-rights are fitting.
@@ -198,8 +198,8 @@
           (created ""
                    {:new-statement
                     (valid-statements-with-votes
-                      (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id)
-                      user-id)}))
+                     (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id)
+                     user-id)}))
       (validator/deny-access at/invalid-rights-message))))
 
 (defn- graph-data-for-agenda
@@ -213,7 +213,6 @@
     (ok {:graph {:nodes (discussion/nodes-for-agenda statements share-hash)
                  :edges edges
                  :controversy-values controversy-vals}})))
-
 
 ;; -----------------------------------------------------------------------------
 ;; Discussion Options
@@ -259,7 +258,6 @@
     (ok {:discussion-mode discussion-mode
          :share-hash share-hash})))
 
-
 ;; -----------------------------------------------------------------------------
 ;; Votes
 
@@ -288,8 +286,8 @@
   provided, request must contain a valid authentication token."
   [{:keys [parameters identity]}]
   (toggle-vote-statement
-    (:body parameters) identity reaction-db/upvote-statement! reaction-db/remove-upvote!
-    reaction-db/did-user-upvote-statement reaction-db/did-user-downvote-statement))
+   (:body parameters) identity reaction-db/upvote-statement! reaction-db/remove-upvote!
+   reaction-db/did-user-upvote-statement reaction-db/did-user-downvote-statement))
 
 (defn- toggle-downvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement.
@@ -297,8 +295,8 @@
   provided, request must contain a valid authentication token."
   [{:keys [parameters identity]}]
   (toggle-vote-statement
-    (:body parameters) identity reaction-db/downvote-statement! reaction-db/remove-downvote!
-    reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement))
+   (:body parameters) identity reaction-db/downvote-statement! reaction-db/remove-downvote!
+   reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement))
 
 (defn- user-allowed-to-label?
   "Helper function checking, whether the user is allowed to use labels in the discussion."

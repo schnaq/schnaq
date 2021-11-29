@@ -31,7 +31,6 @@
         (handler request)
         (not-found (at/build-error-body :statement/invalid "Invalid parameters provided."))))))
 
-
 (defn valid-credentials?-middleware
   "Verify valid share-hash and edit-hash via middleware."
   [handler]
@@ -53,10 +52,9 @@
       (if (get-in request [:headers "x-schnaq-csrf"])
         (handler request)
         (forbidden (at/build-error-body
-                     :csrf/missing-header
-                     "You are trying to access the route without the proper headers: \"x-schnaq-csrf\"")))
+                    :csrf/missing-header
+                    "You are trying to access the route without the proper headers: \"x-schnaq-csrf\"")))
       (handler request))))
-
 
 ;; -----------------------------------------------------------------------------
 ;; Error handling
@@ -78,16 +76,16 @@
   "Ring middleware to print stacktrace to stdout and return a valid response to
   the client."
   (exception/create-exception-middleware
-    (merge
-      exception/default-handlers
-      {;; ex-data with :type ::error
-       ::error (partial error-handler-with-stacktrace-printing "error")
-       ;; ex-data with ::exception or ::failure
-       ::exception (partial error-handler-with-stacktrace-printing "exception")
-       ;; override the default handler
-       ::exception/default (partial error-handler-with-stacktrace-printing "default")
-       ;; print stack-traces for all exceptions
-       ::exception/wrap (fn [handler e request]
-                          (log/error "ERROR" (pr-str (:uri request)))
-                          (.printStackTrace e)
-                          (handler e request))})))
+   (merge
+    exception/default-handlers
+    {;; ex-data with :type ::error
+     ::error (partial error-handler-with-stacktrace-printing "error")
+     ;; ex-data with ::exception or ::failure
+     ::exception (partial error-handler-with-stacktrace-printing "exception")
+     ;; override the default handler
+     ::exception/default (partial error-handler-with-stacktrace-printing "default")
+     ;; print stack-traces for all exceptions
+     ::exception/wrap (fn [handler e request]
+                        (log/error "ERROR" (pr-str (:uri request)))
+                        (.printStackTrace e)
+                        (handler e request))})))
