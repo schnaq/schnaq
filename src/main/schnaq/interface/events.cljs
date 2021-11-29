@@ -187,8 +187,8 @@
  ;; Explicit api-url is optional
  (fn [{:keys [db]} [_ share-hash api-url]]
    (let [request (partial http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/select-current-from-backend]
-                          {:share-hash share-hash}
-                          :display-name (toolbelt/current-display-name db))]
+                          {:share-hash share-hash
+                           :display-name (toolbelt/current-display-name db)})]
      {:db (assoc-in db [:schnaq :selected :discussion/share-hash] share-hash)
       :fx [(if api-url
              (request [:ajax.error/to-console] api-url)
@@ -239,5 +239,5 @@
  :schnaq/load-by-hash-as-admin
  (fn [{:keys [db]} [_ share-hash edit-hash]]
    {:fx [(http/xhrio-request db :post "/schnaq/by-hash-as-admin" [:schnaq/save-as-last-added]
-                             {:share-hash share-hash}
-                             :edit-hash edit-hash)]}))
+                             {:share-hash share-hash
+                              :edit-hash edit-hash})]}))
