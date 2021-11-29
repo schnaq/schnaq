@@ -22,18 +22,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn navbar-title [title]
-  [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-0.mb-md-4
-   ;; schnaq logo
-   [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
-    [:img.d-inline-block.align-middle.mr-2
-     {:src (img-path :logo-white) :alt "schnaq logo"
-      :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
-   [:div.mx-md-5
-    [:div.d-flex.flex-row.d-md-none.align-items-center
-     [um/user-handling-menu "btn-link"]]
-    [:h1.h3.font-weight-bold.my-auto.d-none.d-md-block.text-dark title]]])
-
 (defn navbar-user []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
    [:div.mx-1 [privacy-button]]
