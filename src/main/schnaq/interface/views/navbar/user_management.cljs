@@ -100,7 +100,7 @@
   [:<>
    [:a.dropdown-item {:href (reitfe/href :routes.user.manage/account)}
     (labels :user.profile/settings)]
-   [:a.dropdown-item {:href "#"                      ;; For the :active states and pointer to behave
+   [:a.dropdown-item {:href "#"                             ;; For the :active states and pointer to behave
                       :on-click #(rf/dispatch [:keycloak/logout])}
     (labels :user/logout)]])
 

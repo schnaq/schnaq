@@ -24,7 +24,6 @@
    [:p [:a.btn.btn-link.pl-0 {:href (reitfe/href :routes/privacy-extended)}
         (labels :legal-note.privacy/body)]]])
 
-
 ;; ----------------------------------------------------------------------------
 
 (defn page [_request]

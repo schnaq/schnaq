@@ -121,7 +121,7 @@
                      {:on-submit (fn [e]
                                    (jq/prevent-default e)
                                    (rf/dispatch
-                                     [:summary.admin/send share-hash (str summary-id) (oget e [:currentTarget :elements])]))}
+                                    [:summary.admin/send share-hash (str summary-id) (oget e [:currentTarget :elements])]))}
                      [:textarea.form-control {:name (str summary-id) :rows 3 :defaultValue (:summary/text summary)}]
                      [:button.btn.btn-outline-primary.ml-1 {:type "submit"} (labels :summary.admin/submit)]]]]))]]]
        [loading/loading-placeholder]))])
@@ -165,110 +165,108 @@
     [:hr]
     [list-closed-summaries]]])
 
-
 ;; -----------------------------------------------------------------------------
 
 (defn admin-summaries-view []
   [admin-summaries])
 
-
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
-  :summary.admin/send
-  (fn [{:keys [db]} [_ share-hash html-selector form]]
-    {:fx [(http/xhrio-request db :put "/admin/summary/send"
-                              [:summary.admin.send/success form]
-                              {:new-summary-text (oget+ form [html-selector :value])
-                               :share-hash share-hash})]}))
+ :summary.admin/send
+ (fn [{:keys [db]} [_ share-hash html-selector form]]
+   {:fx [(http/xhrio-request db :put "/admin/summary/send"
+                             [:summary.admin.send/success form]
+                             {:new-summary-text (oget+ form [html-selector :value])
+                              :share-hash share-hash})]}))
 
 (rf/reg-event-fx
-  :summary.admin.send/success
-  (fn [{:keys [db]} [_ form response]]
-    (let [new-summary (:new-summary response)
-          updated-summaries (map #(if (= (:db/id new-summary) (:db/id %)) new-summary %)
-                                 (get-in db [:summaries :all]))]
-      {:db (assoc-in db [:summaries :all] updated-summaries)
-       :fx [[:form/clear form]]})))
+ :summary.admin.send/success
+ (fn [{:keys [db]} [_ form response]]
+   (let [new-summary (:new-summary response)
+         updated-summaries (map #(if (= (:db/id new-summary) (:db/id %)) new-summary %)
+                                (get-in db [:summaries :all]))]
+     {:db (assoc-in db [:summaries :all] updated-summaries)
+      :fx [[:form/clear form]]})))
 
 (rf/reg-event-fx
-  :schnaq.summary/request
-  (fn [{:keys [db]} [_ share-hash]]
-    {:db (assoc-in db [:schnaq :summary :status share-hash] :requested)
-     :fx [(http/xhrio-request db :post "/schnaq/summary/request" [:schnaq.summary.request/success share-hash]
-                              {:share-hash share-hash})]}))
+ :schnaq.summary/request
+ (fn [{:keys [db]} [_ share-hash]]
+   {:db (assoc-in db [:schnaq :summary :status share-hash] :requested)
+    :fx [(http/xhrio-request db :post "/schnaq/summary/request" [:schnaq.summary.request/success share-hash]
+                             {:share-hash share-hash})]}))
 
 (rf/reg-event-db
-  :schnaq.summary.request/success
-  (fn [db [_ share-hash result]]
-    (-> db
-        (assoc-in [:schnaq :summary :status share-hash] :request-succeeded)
-        (assoc-in [:schnaq :summary :result share-hash] (:summary result)))))
+ :schnaq.summary.request/success
+ (fn [db [_ share-hash result]]
+   (-> db
+       (assoc-in [:schnaq :summary :status share-hash] :request-succeeded)
+       (assoc-in [:schnaq :summary :result share-hash] (:summary result)))))
 
 (rf/reg-event-db
-  :schnaq.summary/abort
-  (fn [db [_ share-hash]]
-    (assoc-in db [:schnaq :summary :status share-hash] :abort)))
+ :schnaq.summary/abort
+ (fn [db [_ share-hash]]
+   (assoc-in db [:schnaq :summary :status share-hash] :abort)))
 
 (rf/reg-sub
-  :schnaq.summary/status
-  (fn [db [_ share-hash]]
-    (get-in db [:schnaq :summary :status share-hash])))
+ :schnaq.summary/status
+ (fn [db [_ share-hash]]
+   (get-in db [:schnaq :summary :status share-hash])))
 
 (rf/reg-sub
-  :schnaq/summary
-  (fn [db [_ share-hash]]
-    (get-in db [:schnaq :summary :result share-hash])))
+ :schnaq/summary
+ (fn [db [_ share-hash]]
+   (get-in db [:schnaq :summary :result share-hash])))
 
 (rf/reg-event-fx
-  :schnaq.summary/load
-  (fn [{:keys [db]} _]
-    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-      {:fx [(http/xhrio-request db :get "/schnaq/summary" [:schnaq.summary.load/success share-hash]
-                                {:share-hash share-hash})]})))
+ :schnaq.summary/load
+ (fn [{:keys [db]} _]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :get "/schnaq/summary" [:schnaq.summary.load/success share-hash]
+                               {:share-hash share-hash})]})))
 
 (rf/reg-event-db
-  :schnaq.summary.load/success
-  (fn [db [_ share-hash result]]
-    (let [{:summary/keys [created-at requested-at text] :as summary} (:summary result)]
-      (cond-> (assoc-in db [:schnaq :summary :result share-hash] summary)
-              (or (and requested-at (not text))             ;; Requested, but not finished
-                  (and created-at requested-at (> requested-at created-at))) ; Requested update
-              (assoc-in [:schnaq :summary :status share-hash] :request-succeeded)))))
+ :schnaq.summary.load/success
+ (fn [db [_ share-hash result]]
+   (let [{:summary/keys [created-at requested-at text] :as summary} (:summary result)]
+     (cond-> (assoc-in db [:schnaq :summary :result share-hash] summary)
+       (or (and requested-at (not text))                    ;; Requested, but not finished
+           (and created-at requested-at (> requested-at created-at))) ; Requested update
+       (assoc-in [:schnaq :summary :status share-hash] :request-succeeded)))))
 
 (rf/reg-event-fx
-  :summaries/load-all
-  (fn [{:keys [db]} _]
-    {:fx [(http/xhrio-request db :get "/admin/summaries" [:summaries.load-all/success])]}))
+ :summaries/load-all
+ (fn [{:keys [db]} _]
+   {:fx [(http/xhrio-request db :get "/admin/summaries" [:summaries.load-all/success])]}))
 
 (rf/reg-event-db
-  :summaries.load-all/success
-  (fn [db [_ result]]
-    (assoc-in db [:summaries :all] (:summaries result))))
+ :summaries.load-all/success
+ (fn [db [_ result]]
+   (assoc-in db [:summaries :all] (:summaries result))))
 
 (rf/reg-sub
-  :summaries/all
-  (fn [db _]
-    (get-in db [:summaries :all] [])))
+ :summaries/all
+ (fn [db _]
+   (get-in db [:summaries :all] [])))
 
 (rf/reg-sub
-  :summaries/open
-  (fn [_ _]
-    (rf/subscribe [:summaries/all]))
-  (fn [summaries _ _]
-    (sort-by
-      :summary/requested-at
-      (remove #(and (:summary/text %)                       ;; No summary provided yet
-                    (< (:summary/requested-at %) (:summary/created-at %))) ;; Update requested after last summary
-              summaries))))
+ :summaries/open
+ (fn [_ _]
+   (rf/subscribe [:summaries/all]))
+ (fn [summaries _ _]
+   (sort-by
+    :summary/requested-at
+    (remove #(and (:summary/text %)                         ;; No summary provided yet
+                  (< (:summary/requested-at %) (:summary/created-at %))) ;; Update requested after last summary
+            summaries))))
 
 (rf/reg-sub
-  :summaries/closed
-  (fn [_ _]
-    (rf/subscribe [:summaries/all]))
-  (fn [summaries _ _]
-    (sort-by
-      :summary/created-at
-      (filter #(and (:summary/text %)
-                    (< (:summary/requested-at %) (:summary/created-at %)))
-              summaries))))
+ :summaries/closed
+ (fn [_ _]
+   (rf/subscribe [:summaries/all]))
+ (fn [summaries _ _]
+   (sort-by
+    :summary/created-at
+    (filter #(and (:summary/text %)
+                  (< (:summary/requested-at %) (:summary/created-at %)))
+            summaries))))

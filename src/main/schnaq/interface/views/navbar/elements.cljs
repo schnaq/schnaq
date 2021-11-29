@@ -215,14 +215,14 @@
       {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])}]]))
 
 (rf/reg-event-db
-  :schnaq.qa.new-question/pulse
-  (fn [db [_ pulse]]
-    (assoc-in db [:schnaq :qa :new-question :pulse] pulse)))
+ :schnaq.qa.new-question/pulse
+ (fn [db [_ pulse]]
+   (assoc-in db [:schnaq :qa :new-question :pulse] pulse)))
 
 (rf/reg-sub
-  :schnaq.qa.new-question/pulse?
-  (fn [db _]
-    (get-in db [:schnaq :qa :new-question :pulse] false)))
+ :schnaq.qa.new-question/pulse?
+ (fn [db _]
+   (get-in db [:schnaq :qa :new-question :pulse] false)))
 
 (defn language-toggle
   "Language Toggle dropdown button"

@@ -47,11 +47,12 @@
         starting-route? (= :routes.schnaq/start current-route-name)
         user @(rf/subscribe [:user/current])
         statement-type @(rf/subscribe [:form/statement-type])
-        attitude (if starting-route? "neutral"
-                                     (case statement-type
-                                       :statement.type/support "support"
-                                       :statement.type/attack "attack"
-                                       :statement.type/neutral "neutral"))]
+        attitude (if starting-route?
+                   "neutral"
+                   (case statement-type
+                     :statement.type/support "support"
+                     :statement.type/attack "attack"
+                     :statement.type/neutral "neutral"))]
     [:<>
      [:div.d-flex.flex-row.discussion-input-content.rounded-1.mb-3
       [:div {:class (str "highlight-card-" attitude)}]
@@ -102,11 +103,11 @@
      [textarea-for-statements textarea-name]]))
 
 (rf/reg-event-db
-  :form/statement-type!
-  (fn [db [_ statement-type]]
-    (assoc-in db [:form :statement-type] statement-type)))
+ :form/statement-type!
+ (fn [db [_ statement-type]]
+   (assoc-in db [:form :statement-type] statement-type)))
 
 (rf/reg-sub
-  :form/statement-type
-  (fn [db]
-    (get-in db [:form :statement-type] :statement.type/neutral)))
+ :form/statement-type
+ (fn [db]
+   (get-in db [:form :statement-type] :statement.type/neutral)))

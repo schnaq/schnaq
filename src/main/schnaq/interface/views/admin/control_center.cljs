@@ -7,10 +7,10 @@
             [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-event-fx
-  :admin.schnaq/delete
-  (fn [{:keys [db]} [_ share-hash]]
-    {:fx [(http/xhrio-request db :delete "/admin/schnaq/delete" [:no-op]
-                              {:share-hash share-hash} [:ajax.error/as-notification])]}))
+ :admin.schnaq/delete
+ (fn [{:keys [db]} [_ share-hash]]
+   {:fx [(http/xhrio-request db :delete "/admin/schnaq/delete" [:no-op]
+                             {:share-hash share-hash} [:ajax.error/as-notification])]}))
 
 (defn- private-schnaq-deletion-form
   "Easily delete any schnaq."

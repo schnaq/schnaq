@@ -57,15 +57,14 @@
 (defn feedbacks-view []
   [overview])
 
-
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-db
-  :feedbacks/store
-  (fn [db [_ {:keys [feedbacks]}]] (assoc db :feedbacks feedbacks)))
+ :feedbacks/store
+ (fn [db [_ {:keys [feedbacks]}]] (assoc db :feedbacks feedbacks)))
 
 (rf/reg-event-fx
-  :feedbacks/fetch
-  (fn [{:keys [db]} _]
-    (when (get-in db [:user :authenticated?])
-      {:fx [(http/xhrio-request db :get "/admin/feedbacks" [:feedbacks/store])]})))
+ :feedbacks/fetch
+ (fn [{:keys [db]} _]
+   (when (get-in db [:user :authenticated?])
+     {:fx [(http/xhrio-request db :get "/admin/feedbacks" [:feedbacks/store])]})))

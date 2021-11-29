@@ -5,9 +5,9 @@
             [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-sub
-  :sub-params
-  (fn [db _]
-    (get-in db [:current-route :query-params :umfrage])))
+ :sub-params
+ (fn [db _]
+   (get-in db [:current-route :query-params :umfrage])))
 
 (defn- subscription-form
   []

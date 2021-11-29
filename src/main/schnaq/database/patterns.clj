@@ -33,7 +33,6 @@
   "When all data is necessary for a user, use this pattern."
   (concat public-user registered-private-user))
 
-
 ;; -----------------------------------------------------------------------------
 
 (def statement
@@ -56,7 +55,6 @@
 (def statement-with-answers
   (conj statement
         {[:statement/_parent :as :statement/answers] statement}))
-
 
 ;; -----------------------------------------------------------------------------
 

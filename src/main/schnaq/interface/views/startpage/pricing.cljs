@@ -32,7 +32,6 @@
   (for [feature feature-list]
     [feature class]))
 
-
 ;; -----------------------------------------------------------------------------
 
 (defn- price-tag
@@ -108,7 +107,7 @@
   []
   [tier-card
    :pricing.pro-tier/title :pricing.pro-tier/subtitle :crown
-   [price-tag config/pricing-business-tier true]
+   [price-tag config/pricing-pro-tier true]
    :pricing.pro-tier/description
    (add-class-to-feature (concat (starter-features) (business-features)) "text-primary")
    (coming-soon)

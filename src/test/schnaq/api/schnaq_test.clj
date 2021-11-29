@@ -53,7 +53,6 @@
         (is (= 200 (:status api-call)))
         (is (= 2 (count (:schnaqs (m/decode-response-body api-call)))))))))
 
-
 ;; -----------------------------------------------------------------------------
 
 (defn- add-authenticated-schnaq-request [payload]
@@ -67,7 +66,7 @@
   (testing "schnaq creation. Takes an authenticated user and creates schnaqs."
     (let [minimal-request {:discussion-title "huhu"}]
       (are [status payload]
-        (= status (:status (add-authenticated-schnaq-request payload)))
+           (= status (:status (add-authenticated-schnaq-request payload)))
         400 {}
         400 {:nickname "penguin"}
         400 {:razupaltuff "kangaroo"}
@@ -84,7 +83,7 @@
     (let [minimal-request {:discussion-title "huhu" :nickname "kangaroo"}
           add-schnaq #'schnaq-api/add-schnaq]
       (are [status payload]
-        (= status (:status (add-schnaq {:parameters {:body payload}})))
+           (= status (:status (add-schnaq {:parameters {:body payload}})))
         400 {}
         400 {:nickname "penguin"}
         400 {:discussion-title "some title"}

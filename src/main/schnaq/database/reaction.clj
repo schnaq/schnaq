@@ -47,10 +47,10 @@
   [statement-id user-id field-name]
   [number? :db/id keyword? :ret (? number?)]
   (query
-    '[:find ?statement .
-      :in $ ?statement ?user ?field-name
-      :where [?statement ?field-name ?user]]
-    statement-id user-id field-name))
+   '[:find ?statement .
+     :in $ ?statement ?user ?field-name
+     :where [?statement ?field-name ?user]]
+   statement-id user-id field-name))
 
 (>defn did-user-upvote-statement
   "Check whether a user already upvoted a statement."

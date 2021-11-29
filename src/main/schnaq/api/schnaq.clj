@@ -63,7 +63,6 @@
                 (discussion-db/valid-discussions-by-hashes share-hashes-list))})
       at/not-found-hash-invalid)))
 
-
 ;; -----------------------------------------------------------------------------
 
 (defn- bad-request-schnaq-creation
@@ -89,11 +88,11 @@
                                      :discussion/share-hash (.toString (UUID/randomUUID))
                                      :discussion/edit-hash (.toString (UUID/randomUUID))
                                      :discussion/author author}
-                                    keycloak-id (assoc :discussion/admins [author])
-                                    (and hub-exclusive? authorized-for-hub?)
-                                    (assoc :discussion/hub-origin [:hub/keycloak-name hub])
-                                    ends-in-days (assoc :discussion/end-time (toolbelt/now-plus-days-instant ends-in-days))
-                                    discussion-mode (assoc :discussion/mode discussion-mode))
+                              keycloak-id (assoc :discussion/admins [author])
+                              (and hub-exclusive? authorized-for-hub?)
+                              (assoc :discussion/hub-origin [:hub/keycloak-name hub])
+                              ends-in-days (assoc :discussion/end-time (toolbelt/now-plus-days-instant ends-in-days))
+                              discussion-mode (assoc :discussion/mode discussion-mode))
             new-discussion-id (discussion-db/new-discussion discussion-data)]
         (if new-discussion-id
           (do
@@ -104,7 +103,6 @@
             (log/info "Discussion created: " discussion-data)
             (created "" {:new-schnaq (links/add-links-to-discussion (discussion-db/secret-discussion-data new-discussion-id))}))
           (bad-request-schnaq-creation parameters))))))
-
 
 ;; -----------------------------------------------------------------------------
 
@@ -140,13 +138,13 @@
         discussion (discussion-db/discussion-by-share-hash share-hash)
         author-identity (-> discussion :discussion/author :user.registered/keycloak-id)]
     (check-edit-discussion-error
-      user-identity author-identity share-hash
-      (do (discussion-db/edit-title share-hash new-title)
-          (ok {:schnaq (discussion-db/discussion-by-share-hash share-hash)}))
-      (bad-request (at/build-error-body :discussion-not-the-author
-                                        "You can not edit the title of a deleted discussion."))
-      (forbidden (at/build-error-body :discussion-not-the-author
-                                      "You can not edit the title of someone else's discussion.")))))
+     user-identity author-identity share-hash
+     (do (discussion-db/edit-title share-hash new-title)
+         (ok {:schnaq (discussion-db/discussion-by-share-hash share-hash)}))
+     (bad-request (at/build-error-body :discussion-not-the-author
+                                       "You can not edit the title of a deleted discussion."))
+     (forbidden (at/build-error-body :discussion-not-the-author
+                                     "You can not edit the title of someone else's discussion.")))))
 
 (defn- add-visited-schnaq
   "Add schnaq id to visited schnaqs by share-hash"

@@ -9,7 +9,6 @@
             [schnaq.meta-info :as meta-info])
   (:import (clojure.lang IEditableCollection)))
 
-
 ;; -----------------------------------------------------------------------------
 ;; Processing schnaqs
 
@@ -22,7 +21,6 @@
         meta-info (meta-info/discussion-meta-info share-hash author)]
     (assoc schnaq :meta-info meta-info)))
 
-
 ;; -----------------------------------------------------------------------------
 ;; Processing statements
 
@@ -31,26 +29,26 @@
   [data user-id]
   [any? :db/id :ret any?]
   (walk/postwalk
-    #(if (and (instance? IEditableCollection %)
-              (or (contains? % :statement/downvotes) (contains? % :statement/upvotes)))
-       (let [upvotes (map :db/id (:statement/upvotes %))
-             downvotes (map :db/id (:statement/downvotes %))]
-         (assoc % :statement/upvotes (count upvotes)
-                  :statement/downvotes (count downvotes)
-                  :meta/upvoted? (contains? (set upvotes) user-id)
-                  :meta/downvoted? (contains? (set downvotes) user-id)))
-       %)
-    data))
+   #(if (and (instance? IEditableCollection %)
+             (or (contains? % :statement/downvotes) (contains? % :statement/upvotes)))
+      (let [upvotes (map :db/id (:statement/upvotes %))
+            downvotes (map :db/id (:statement/downvotes %))]
+        (assoc % :statement/upvotes (count upvotes)
+               :statement/downvotes (count downvotes)
+               :meta/upvoted? (contains? (set upvotes) user-id)
+               :meta/downvoted? (contains? (set downvotes) user-id)))
+      %)
+   data))
 
 (>defn hide-deleted-statement-content
   "For all statements, that have a deleted? flag, hide them."
   [data]
   [any? :ret any?]
   (walk/postwalk
-    #(if (and (instance? IEditableCollection %) (contains? % :statement/content) (:statement/deleted? %))
-       (assoc % :statement/content config/deleted-statement-text)
-       %)
-    data))
+   #(if (and (instance? IEditableCollection %) (contains? % :statement/content) (:statement/deleted? %))
+      (assoc % :statement/content config/deleted-statement-text)
+      %)
+   data))
 
 (defn with-new-post-info
   "Add sub-discussion-info whether a user has seen this post already."
@@ -58,13 +56,13 @@
   (if user-identity
     (let [known-statements (user-db/known-statement-ids user-identity share-hash)]
       (walk/postwalk
-        (fn [statement]
-          (if (and (s/valid? ::specs/statement statement)
-                   (not= user-identity
-                         (get-in statement [:statement/author :user.registered/keycloak-id])))
-            (assoc statement :meta/new? (not (contains? known-statements (:db/id statement))))
-            statement))
-        data))
+       (fn [statement]
+         (if (and (s/valid? ::specs/statement statement)
+                  (not= user-identity
+                        (get-in statement [:statement/author :user.registered/keycloak-id])))
+           (assoc statement :meta/new? (not (contains? known-statements (:db/id statement))))
+           statement))
+       data))
     data))
 
 (defn- answered?
@@ -77,23 +75,23 @@
   "Mark a statement as answered if `answered?` is true."
   [data]
   (walk/postwalk
-    (fn [statement]
-      (if (s/valid? ::specs/statement statement)
-        (if (answered? statement)
-          (assoc statement :meta/answered? true)
-          statement)
-        statement))
-    data))
+   (fn [statement]
+     (if (s/valid? ::specs/statement statement)
+       (if (answered? statement)
+         (assoc statement :meta/answered? true)
+         statement)
+       statement))
+   data))
 
 (defn with-sub-discussion-info
   "Add sub-discussion-info to valid statements, if necessary.
    Sub-Discussion-infos are number of sub-statements, authors, ..."
   [data]
   (walk/postwalk
-    (fn [statement]
-      (if (s/valid? ::specs/statement statement)
-        (if-let [sub-discussions (get (discussion-db/child-node-info [(:db/id statement)]) (:db/id statement))]
-          (assoc statement :meta/sub-discussion-info sub-discussions)
-          statement)
-        statement))
-    data))
+   (fn [statement]
+     (if (s/valid? ::specs/statement statement)
+       (if-let [sub-discussions (get (discussion-db/child-node-info [(:db/id statement)]) (:db/id statement))]
+         (assoc statement :meta/sub-discussion-info sub-discussions)
+         statement)
+       statement))
+   data))

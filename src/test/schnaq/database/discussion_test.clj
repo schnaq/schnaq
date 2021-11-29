@@ -10,8 +10,8 @@
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each
-              schnaq-toolbelt/init-test-delete-db-fixture
-              #(schnaq-toolbelt/init-test-delete-db-fixture % test-data/public-discussions))
+  schnaq-toolbelt/init-test-delete-db-fixture
+  #(schnaq-toolbelt/init-test-delete-db-fixture % test-data/public-discussions))
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (deftest delete-discussion-test
@@ -82,9 +82,9 @@
           simple-hash "simple-hash"
           graph-hash "graph-hash"]
       (are [result discussion] (= result (count (db/starting-statements discussion)))
-                               3 cat-dog-hash
-                               1 simple-hash
-                               2 graph-hash))))
+        3 cat-dog-hash
+        1 simple-hash
+        2 graph-hash))))
 
 (deftest new-discussion-test
   (let [minimal-discussion {:discussion/title "Whatevs"
@@ -94,8 +94,8 @@
     (testing "Whether a correct id is returned when valid discussions are transacted."
       (is (number? (db/new-discussion minimal-discussion)))
       (is (number? (db/new-discussion (assoc minimal-discussion
-                                        :discussion/description nil
-                                        :discussion/header-image-url "")))))
+                                             :discussion/description nil
+                                             :discussion/header-image-url "")))))
     (testing "Transacting something non-essential should return nil"
       (is (nil? (db/new-discussion (dissoc minimal-discussion :discussion/title)))))))
 
@@ -142,7 +142,7 @@
         _ (db/new-discussion new-public-discussion)]
     (testing "Valid discussions should be returned."
       (are [valid share-hashes]
-        (= valid (count (db/valid-discussions-by-hashes share-hashes)))
+           (= valid (count (db/valid-discussions-by-hashes share-hashes)))
         0 []
         0 ["razupaltuff"]
         1 ["public-share-hash"]

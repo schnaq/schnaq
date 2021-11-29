@@ -1,0 +1,37 @@
+{:remove-surrounding-whitespace? true
+ :remove-trailing-whitespace? true
+ :remove-consecutive-blank-lines? true
+ :insert-missing-whitespace? true
+ :align-associative? false
+ :indents                                                   ;; ^:replace
+ {>defn- [[:inner 0]]
+  >defn [[:inner 0]
+         [:block 0]]}
+ :test-code
+ (do
+   (concat
+    [2]
+    (map #(inc (* % 2))
+         (filter #(aget sieved %)
+                 (range 1 n))))
+   (>defn upper-case
+     [s]
+     [string? :ret string?]
+     (.toUpperCase s))
+   (>defn some-case
+     ([s]
+      [string? :ret string?]
+      (.toUpperCase s))
+     ([s t]
+      [string? any? :ret string?]
+      (.toUpperCase s)))
+   (with-out-str
+     (println "Hello, ")
+     (println "world!"))
+   (or nil 1
+       false)
+   (filter even?
+           (range 1 10)))}
+
+
+

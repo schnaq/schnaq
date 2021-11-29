@@ -23,7 +23,7 @@
   "Helper function to build unified not-found responses."
   [error-type error-message]
   (not-found
-    (build-error-body error-type error-message)))
+   (build-error-body error-type error-message)))
 
 (def invalid-rights-message "You to not have enough permissions to access this data.")
 (def invalid-share-hash-message "Invalid share-hash.")

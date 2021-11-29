@@ -13,9 +13,9 @@
   [:user/nickname :ret :db/id]
   (when (s/valid? :user/nickname nickname)
     (get-in
-      @(transact [{:db/id "temp-user"
-                   :user/nickname nickname}])
-      [:tempids "temp-user"])))
+     @(transact [{:db/id "temp-user"
+                  :user/nickname nickname}])
+     [:tempids "temp-user"])))
 
 (>defn user-by-nickname
   "Return the **schnaq** user-id by nickname. The nickname is not case-sensitive.
@@ -23,12 +23,12 @@
   [nickname]
   [:user/nickname :ret (? :db/id)]
   (query
-    '[:find ?user .
-      :in $ ?user-name
-      :where [?user :user/nickname ?original-nickname]
-      [(.toLowerCase ^String ?original-nickname) ?lower-name]
-      [(= ?lower-name ?user-name)]]
-    (.toLowerCase ^String nickname)))
+   '[:find ?user .
+     :in $ ?user-name
+     :where [?user :user/nickname ?original-nickname]
+     [(.toLowerCase ^String ?original-nickname) ?lower-name]
+     [(= ?lower-name ?user-name)]]
+   (.toLowerCase ^String nickname)))
 
 (defn user-id
   "Returns the user-id of the passed user. Takes a username and a keycloak-id that may be nil.
@@ -82,14 +82,14 @@
   [keycloak-id share-hash]
   [:user.registered/keycloak-id :discussion/share-hash :ret (s/coll-of :db/id)]
   (set
-    (query '[:find [?visited-statements ...]
-             :in $ ?keycloak-id ?discussion-hash
-             :where [?user :user.registered/keycloak-id ?keycloak-id]
-             [?seen-statement :seen-statements/user ?user]
-             [?seen-statement :seen-statements/visited-schnaq ?discussion]
-             [?discussion :discussion/share-hash ?discussion-hash]
-             [?seen-statement :seen-statements/visited-statements ?visited-statements]]
-           keycloak-id share-hash)))
+   (query '[:find [?visited-statements ...]
+            :in $ ?keycloak-id ?discussion-hash
+            :where [?user :user.registered/keycloak-id ?keycloak-id]
+            [?seen-statement :seen-statements/user ?user]
+            [?seen-statement :seen-statements/visited-schnaq ?discussion]
+            [?discussion :discussion/share-hash ?discussion-hash]
+            [?seen-statement :seen-statements/visited-statements ?visited-statements]]
+          keycloak-id share-hash)))
 
 (defn create-visited-statements-for-discussion [keycloak-id discussion-hash visited-statements]
   (let [queried-id (seen-statements-entity keycloak-id discussion-hash)
@@ -112,18 +112,18 @@
   (let [user-ref [:user.registered/keycloak-id id]
         transaction
         (cond-> []
-                (and given_name
-                     (not= given_name (:user.registered/first-name existing-user)))
-                (conj [:db/add user-ref :user.registered/first-name given_name])
-                (and family_name
-                     (not= family_name (:user.registered/last-name existing-user)))
-                (conj [:db/add user-ref :user.registered/last-name family_name])
-                (and email
-                     (not= email (:user.registered/email existing-user)))
-                (conj [:db/add user-ref :user.registered/email email])
-                (and avatar
-                     (not= avatar (:user.registered/profile-picture existing-user)))
-                (conj [:db/add user-ref :user.registered/profile-picture avatar]))]
+          (and given_name
+               (not= given_name (:user.registered/first-name existing-user)))
+          (conj [:db/add user-ref :user.registered/first-name given_name])
+          (and family_name
+               (not= family_name (:user.registered/last-name existing-user)))
+          (conj [:db/add user-ref :user.registered/last-name family_name])
+          (and email
+               (not= email (:user.registered/email existing-user)))
+          (conj [:db/add user-ref :user.registered/email email])
+          (and avatar
+               (not= avatar (:user.registered/profile-picture existing-user)))
+          (conj [:db/add user-ref :user.registered/profile-picture avatar]))]
     (when (seq transaction)
       (transact transaction))))
 
@@ -135,7 +135,7 @@
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [id (str sub)
         existing-user (toolbelt/pull-key-up
-                        (fast-pull [:user.registered/keycloak-id id] patterns/private-user))
+                       (fast-pull [:user.registered/keycloak-id id] patterns/private-user))
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
@@ -170,10 +170,10 @@
   ([keycloak-id field value pattern]
    [:user.registered/keycloak-id keyword? any? any? :ret ::specs/registered-user]
    (let [new-db (:db-after
-                  @(transact [[:db/add [:user.registered/keycloak-id keycloak-id]
-                               field value]]))]
+                 @(transact [[:db/add [:user.registered/keycloak-id keycloak-id]
+                              field value]]))]
      (toolbelt/pull-key-up
-       (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db)))))
+      (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db)))))
 
 (>defn update-display-name
   "Update the name of an existing user."
@@ -198,26 +198,26 @@
   [group-name]
   [::specs/non-blank-string :ret (s/coll-of ::specs/any-user)]
   (query
-    '[:find [(pull ?users public-user-pattern) ...]
-      :in $ ?group public-user-pattern
-      :where [?users :user.registered/groups ?group]]
-    group-name patterns/public-user))
+   '[:find [(pull ?users public-user-pattern) ...]
+     :in $ ?group public-user-pattern
+     :where [?users :user.registered/groups ?group]]
+   group-name patterns/public-user))
 
 (defn user-by-email
   "Returns the registered user by email."
   [user-email]
   (query
-    '[:find (pull ?user registered-user-public-pattern) .
-      :in $ ?email registered-user-public-pattern
-      :where [?user :user.registered/email ?email]]
-    user-email patterns/registered-user-public))
+   '[:find (pull ?user registered-user-public-pattern) .
+     :in $ ?email registered-user-public-pattern
+     :where [?user :user.registered/email ?email]]
+   user-email patterns/registered-user-public))
 
 (defn all-registered-users
   "Returns all registered users' keycloak ids"
   []
   (toolbelt/pull-key-up
-    (query
-      '[:find [(pull ?registered-user user-pattern) ...]
-        :in $ user-pattern
-        :where [?registered-user :user.registered/keycloak-id _]]
-      patterns/private-user)))
+   (query
+    '[:find [(pull ?registered-user user-pattern) ...]
+      :in $ user-pattern
+      :where [?registered-user :user.registered/keycloak-id _]]
+    patterns/private-user)))

@@ -11,7 +11,6 @@
             [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.user :as user]))
 
-
 (defn- dashboard-statement [statement]
   (let [chart-data (pie-chart/create-vote-chart-data statement)
         path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
@@ -34,7 +33,7 @@
      [:h3.mb-3 (labels :dashboard/top-posts)]
      (for [statement starting-conclusions]
        (with-meta [dashboard-statement statement]
-                  {:key (str "dashboard-statement-" (:db/id statement))}))]))
+         {:key (str "dashboard-statement-" (:db/id statement))}))]))
 
 (defn- beta-only-modal
   "Basic modal which is presented to users trying to access beta features."
@@ -123,7 +122,7 @@
      [:h3.mb-3 (labels :dashboard/top-posts)]
      (for [statement starting-conclusions]
        (with-meta [embedded-dashboard-statement statement]
-                  {:key (str "dashboard-statement-" (:db/id statement))}))]))
+         {:key (str "dashboard-statement-" (:db/id statement))}))]))
 
 (defn- embedded-dashboard-view []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]

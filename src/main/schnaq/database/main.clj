@@ -24,10 +24,10 @@
   "Converts all java.time.Instant instances from a data structure to a Date Instant"
   [data]
   (walk/postwalk
-    #(if (instance? Instant %)
-       (Date/from %)
-       %)
-    data))
+   #(if (instance? Instant %)
+      (Date/from %)
+      %)
+   data))
 
 (defn transact
   "Shorthand for transaction. Deref the result, if you need to further use it."
@@ -97,8 +97,8 @@
                            (.toString (UUID/randomUUID)))]
     (when (s/valid? spec clean-entity)
       (get-in
-        @(transact [(assoc clean-entity :db/id identifier)])
-        [:tempids identifier]))))
+       @(transact [(assoc clean-entity :db/id identifier)])
+       [:tempids identifier]))))
 
 ;; -----------------------------------------------------------------------------
 ;; Feedback functions
@@ -113,6 +113,6 @@
   "Return complete feedbacks from database, sorted by descending timestamp."
   []
   (->> (query
-         '[:find [(pull ?feedback [*]) ...]
-           :where [?feedback :feedback/description _ ?tx]])
+        '[:find [(pull ?feedback [*]) ...]
+          :where [?feedback :feedback/description _ ?tx]])
        (sort-by :feedback/created-at toolbelt/ascending)))

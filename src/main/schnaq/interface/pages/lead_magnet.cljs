@@ -9,19 +9,19 @@
             [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-event-fx
-  :lead-magnet/subscribe
-  (fn [{:keys [db]} [_ email]]
-    {:fx [(http/xhrio-request db :post "/lead-magnet/subscribe" [:lead-magnet.subscribe/success] {:email email})]}))
+ :lead-magnet/subscribe
+ (fn [{:keys [db]} [_ email]]
+   {:fx [(http/xhrio-request db :post "/lead-magnet/subscribe" [:lead-magnet.subscribe/success] {:email email})]}))
 
 (rf/reg-event-db
-  :lead-magnet.subscribe/success
-  (fn [db _]
-    (assoc-in db [:lead-magnet :requested?] true)))
+ :lead-magnet.subscribe/success
+ (fn [db _]
+   (assoc-in db [:lead-magnet :requested?] true)))
 
 (rf/reg-sub
-  :lead-magnet/requested?
-  (fn [db _]
-    (get-in db [:lead-magnet :requested?] false)))
+ :lead-magnet/requested?
+ (fn [db _]
+   (get-in db [:lead-magnet :requested?] false)))
 
 (defn- subscription-form
   []

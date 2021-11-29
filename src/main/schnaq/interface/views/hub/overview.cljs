@@ -83,100 +83,99 @@
   []
   [hub-index])
 
-
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
-  :hub/load
-  (fn [{:keys [db]} [_ keycloak-name]]
-    (when (auth/user-authenticated? db)
-      {:fx [(http/xhrio-request db :get (str "/hub/" keycloak-name) [:hub.load/success keycloak-name])]})))
+ :hub/load
+ (fn [{:keys [db]} [_ keycloak-name]]
+   (when (auth/user-authenticated? db)
+     {:fx [(http/xhrio-request db :get (str "/hub/" keycloak-name) [:hub.load/success keycloak-name])]})))
 
 (rf/reg-event-fx
-  :hubs.personal/load
-  (fn [{:keys [db]}]
-    (when (auth/user-authenticated? db)
-      {:fx [(http/xhrio-request db :get "/hubs/personal" [:hubs.load/success])]})))
+ :hubs.personal/load
+ (fn [{:keys [db]}]
+   (when (auth/user-authenticated? db)
+     {:fx [(http/xhrio-request db :get "/hubs/personal" [:hubs.load/success])]})))
 
 (rf/reg-event-db
-  :hubs.load/success
-  (fn [db [_ {:keys [hubs]}]]
-    (when-not (empty? hubs)
-      (let [formatted-hubs
-            (into {} (map #(vector (:hub/keycloak-name %) %) hubs))]
-        (assoc db :hubs formatted-hubs)))))
+ :hubs.load/success
+ (fn [db [_ {:keys [hubs]}]]
+   (when-not (empty? hubs)
+     (let [formatted-hubs
+           (into {} (map #(vector (:hub/keycloak-name %) %) hubs))]
+       (assoc db :hubs formatted-hubs)))))
 
 (rf/reg-event-db
-  :hub.load/success
-  (fn [db [_ keycloak-name response]]
-    (-> db
-        (assoc-in [:hubs keycloak-name] (:hub response))
-        ;; We do not reuse the :hubs namespace, because the query of all hubs overwrites it when a race condition hits.
-        (assoc-in [:hub-members keycloak-name] (:hub-members response)))))
+ :hub.load/success
+ (fn [db [_ keycloak-name response]]
+   (-> db
+       (assoc-in [:hubs keycloak-name] (:hub response))
+       ;; We do not reuse the :hubs namespace, because the query of all hubs overwrites it when a race condition hits.
+       (assoc-in [:hub-members keycloak-name] (:hub-members response)))))
 
 (rf/reg-sub
-  :hubs/schnaqs
-  (fn [db [_ keycloak-name]]
-    (get-in db [:hubs keycloak-name :hub/schnaqs] [])))
+ :hubs/schnaqs
+ (fn [db [_ keycloak-name]]
+   (get-in db [:hubs keycloak-name :hub/schnaqs] [])))
 
 (rf/reg-sub
-  :hubs/all
-  (fn [db] (:hubs db)))
+ :hubs/all
+ (fn [db] (:hubs db)))
 
 (rf/reg-sub
-  :hub/current
-  (fn [db]
-    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-      (get-in db [:hubs keycloak-name]))))
+ :hub/current
+ (fn [db]
+   (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+     (get-in db [:hubs keycloak-name]))))
 
 (rf/reg-sub
-  :hub.current/members
-  (fn [db _]
-    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-      (get-in db [:hub-members keycloak-name] []))))
+ :hub.current/members
+ (fn [db _]
+   (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+     (get-in db [:hub-members keycloak-name] []))))
 
 (rf/reg-event-fx
-  :hub.schnaqs/add-success
-  (fn [{:keys [db]} [_ form response]]
-    (let [hub (:hub response)]
-      {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
-       :fx [[:dispatch [:notification/add
-                        #:notification{:title (labels :hub.add.schnaq.success/title)
-                                       :body (labels :hub.add.schnaq.success/body)
-                                       :context :success}]]
-            [:form/clear form]]})))
+ :hub.schnaqs/add-success
+ (fn [{:keys [db]} [_ form response]]
+   (let [hub (:hub response)]
+     {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
+      :fx [[:dispatch [:notification/add
+                       #:notification{:title (labels :hub.add.schnaq.success/title)
+                                      :body (labels :hub.add.schnaq.success/body)
+                                      :context :success}]]
+           [:form/clear form]]})))
 
 (rf/reg-event-fx
-  :hub.schnaqs/add-failure
-  (fn [_ _]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :hub.add.schnaq.error/title)
-                                     :body (labels :hub.add.schnaq.error/body)
-                                     :context :danger}]]]}))
+ :hub.schnaqs/add-failure
+ (fn [_ _]
+   {:fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :hub.add.schnaq.error/title)
+                                    :body (labels :hub.add.schnaq.error/body)
+                                    :context :danger}]]]}))
 
 (rf/reg-event-fx
-  :hub.remove/schnaq
-  (fn [{:keys [db]} [_ share-hash]]
-    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-      {:fx [(http/xhrio-request db :delete (gstring/format "/hub/%s/remove" keycloak-name)
-                                [:hub.remove.schnaq/success]
-                                {:share-hash share-hash}
-                                [:hub.remove.schnaq/failure])]})))
+ :hub.remove/schnaq
+ (fn [{:keys [db]} [_ share-hash]]
+   (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+     {:fx [(http/xhrio-request db :delete (gstring/format "/hub/%s/remove" keycloak-name)
+                               [:hub.remove.schnaq/success]
+                               {:share-hash share-hash}
+                               [:hub.remove.schnaq/failure])]})))
 
 (rf/reg-event-fx
-  :hub.remove.schnaq/success
-  (fn [{:keys [db]} [_ response]]
-    (let [hub (:hub response)]
-      {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
-       :fx [[:dispatch [:notification/add
-                        #:notification{:title (labels :hub.remove.schnaq.success/title)
-                                       :body (labels :hub.remove.schnaq.success/body)
-                                       :context :success}]]]})))
+ :hub.remove.schnaq/success
+ (fn [{:keys [db]} [_ response]]
+   (let [hub (:hub response)]
+     {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
+      :fx [[:dispatch [:notification/add
+                       #:notification{:title (labels :hub.remove.schnaq.success/title)
+                                      :body (labels :hub.remove.schnaq.success/body)
+                                      :context :success}]]]})))
 
 (rf/reg-event-fx
-  :hub.remove.schnaq/failure
-  (fn [_ _]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :hub.remove.schnaq.error/title)
-                                     :body (labels :hub.remove.schnaq.error/body)
-                                     :context :danger}]]]}))
+ :hub.remove.schnaq/failure
+ (fn [_ _]
+   {:fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :hub.remove.schnaq.error/title)
+                                    :body (labels :hub.remove.schnaq.error/body)
+                                    :context :danger}]]]}))

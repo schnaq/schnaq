@@ -15,12 +15,12 @@
    [keyword? inst? :ret int?]
    (or
      (main-db/query
-       '[:find (count ?entities) .
-         :in $ ?since ?attribute
-         :where [?entities ?attribute _ ?tx]
-         [?tx :db/txInstant ?start-date]
-         [(< ?since ?start-date)]]
-       (Date/from since) attribute)
+      '[:find (count ?entities) .
+        :in $ ?since ?attribute
+        :where [?entities ?attribute _ ?tx]
+        [?tx :db/txInstant ?start-date]
+        [(< ?since ?start-date)]]
+      (Date/from since) attribute)
      0)))
 
 (>defn- number-of-entities-with-value-since
@@ -32,12 +32,12 @@
    [keyword? any? inst? :ret int?]
    (or
      (main-db/query
-       '[:find (count ?entities) .
-         :in $ ?since ?attribute ?value
-         :where [?entities ?attribute ?value ?tx]
-         [?tx :db/txInstant ?start-date]
-         [(< ?since ?start-date)]]
-       (Date/from since) attribute value)
+      '[:find (count ?entities) .
+        :in $ ?since ?attribute ?value
+        :where [?entities ?attribute ?value ?tx]
+        [?tx :db/txInstant ?start-date]
+        [(< ?since ?start-date)]]
+      (Date/from since) attribute value)
      0)))
 
 (>defn number-of-discussions
@@ -49,13 +49,13 @@
    [:statistics/since :ret :statistics/discussions-sum]
    (or
      (main-db/query
-       '[:find (count ?discussions) .
-         :in $ ?since
-         :where [?discussions :discussion/created-at ?timestamp]
-         (not-join [?discussions]
-                   [?discussions :discussion/states :discussion.state/deleted])
-         [(< ?since ?timestamp)]]
-       (Date/from since))
+      '[:find (count ?discussions) .
+        :in $ ?since
+        :where [?discussions :discussion/created-at ?timestamp]
+        (not-join [?discussions]
+                  [?discussions :discussion/states :discussion.state/deleted])
+        [(< ?since ?timestamp)]]
+      (Date/from since))
      0)))
 
 (>defn number-of-usernames
@@ -85,17 +85,17 @@
    [:statistics/since :ret :statistics/statements-num]
    (or
      (main-db/query
-       '[:find (count ?statements) .
-         :in $ ?since
-         :where
-         ;; Make sure the discussion is not deleted where the statements are from
-         (not [?discussions :discussion/states :discussion.state/deleted])
-         [?statements :statement/discussions ?discussions]
-         ;; Make sure statements are not deleted
-         (not [?statements :statement/deleted? true])
-         [?statements :statement/created-at ?timestamp]
-         [(< ?since ?timestamp)]]
-       (Date/from since))
+      '[:find (count ?statements) .
+        :in $ ?since
+        :where
+        ;; Make sure the discussion is not deleted where the statements are from
+        (not [?discussions :discussion/states :discussion.state/deleted])
+        [?statements :statement/discussions ?discussions]
+        ;; Make sure statements are not deleted
+        (not [?statements :statement/deleted? true])
+        [?statements :statement/created-at ?timestamp]
+        [(< ?since ?timestamp)]]
+      (Date/from since))
      0)))
 
 (>defn average-number-of-statements
@@ -119,12 +119,12 @@
   ([since]
    [:statistics/since :ret :statistics/active-users-num]
    (main-db/query
-     '[:find (count ?authors) .
-       :in $ ?since
-       :where [?statements :statement/author ?authors ?tx]
-       [?tx :db/txInstant ?start-date]
-       [(< ?since ?start-date)]]
-     (Date/from since))))
+    '[:find (count ?authors) .
+      :in $ ?since
+      :where [?statements :statement/author ?authors ?tx]
+      [?tx :db/txInstant ?start-date]
+      [(< ?since ?start-date)]]
+    (Date/from since))))
 
 (>defn statement-length-stats
   "Returns a map of stats about statement-length."
@@ -134,12 +134,12 @@
    [:statistics/since :ret :statistics/statement-length-stats]
    (let [sorted-contents (sort-by count
                                   (main-db/query
-                                    '[:find [?contents ...]
-                                      :in $ ?since
-                                      :where [?statement :statement/content ?contents]
-                                      [?statement :statement/created-at ?timestamp]
-                                      [(< ?since ?timestamp)]]
-                                    (Date/from since)))
+                                   '[:find [?contents ...]
+                                     :in $ ?since
+                                     :where [?statement :statement/content ?contents]
+                                     [?statement :statement/created-at ?timestamp]
+                                     [(< ?since ?timestamp)]]
+                                   (Date/from since)))
          content-count (count sorted-contents)
          max-length (count (last sorted-contents))
          min-length (count (first sorted-contents))

@@ -36,10 +36,10 @@
   ([coll key-name]
    [(? coll?) keyword? :ret (? coll?)]
    (walk/postwalk
-     #(if (and (= PersistentArrayMap (type %)) (contains? % key-name))
-        (key-name %)
-        %)
-     coll)))
+    #(if (and (= PersistentArrayMap (type %)) (contains? % key-name))
+       (key-name %)
+       %)
+    coll)))
 
 (>defn ascending
   "Comparator, can be used to sort collections in an ascending way."

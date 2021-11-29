@@ -46,5 +46,6 @@
   "Takes a discussion and adds a share-link to the structure."
   [{:discussion/keys [share-hash edit-hash] :as discussion}]
   [::specs/discussion :ret ::specs/discussion]
-  (assoc discussion :discussion/share-link (get-share-link share-hash)
-                    :discussion/admin-link (get-admin-link share-hash edit-hash)))
+  (assoc discussion
+         :discussion/share-link (get-share-link share-hash)
+         :discussion/admin-link (get-admin-link share-hash edit-hash)))

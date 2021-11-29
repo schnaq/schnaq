@@ -46,8 +46,8 @@
         (is (user-db/seen-statements-entity keycloak-user-id share-hash))
         ;; check if content is correct
         (let [queried-visited (:seen-statements/visited-statements
-                                (fast-pull (user-db/seen-statements-entity keycloak-user-id share-hash)
-                                           patterns/seen-statements))]
+                               (fast-pull (user-db/seen-statements-entity keycloak-user-id share-hash)
+                                          patterns/seen-statements))]
           (is (= (count statements) (count queried-visited)))
           (is (some #(= statement-1 (:db/id %)) queried-visited))
           (is (some #(= statement-2 (:db/id %)) queried-visited)))))))
@@ -161,8 +161,8 @@
           known-before (user-db/known-statement-ids keycloak-id discussion-hash)
           marked-as-read (discussion-db/mark-all-statements-as-read! keycloak-id)
           new-statements-after-mark-as-read (discussion-db/new-statement-ids-for-user
-                                              keycloak-id
-                                              discussion-hash)]
+                                             keycloak-id
+                                             discussion-hash)]
       (is (empty? known-before))
       (is (= (count all-statements) (count (get marked-as-read discussion-hash)))
           "Number of known statements should be the same as seen-statements from discussion")

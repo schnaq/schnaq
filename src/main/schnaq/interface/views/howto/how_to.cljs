@@ -32,7 +32,6 @@
    :how-to.schnaq/title
    :how-to.schnaq/body])
 
-
 (defn- admin []
   [elements/feature-row-video-right
    :how-to.admin/webm

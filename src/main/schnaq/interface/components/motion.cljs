@@ -21,10 +21,10 @@
          :on-click #(reset! open? false)}]
        [:> (.-img motion)
         (merge
-          {:on-click #(swap! open? not)
-           :layout true
-           :transition transition}
-          properties)]])))
+         {:on-click #(swap! open? not)
+          :layout true
+          :transition transition}
+         properties)]])))
 
 (defn fade-in-and-out
   "Add animation to component, which fades the component in and out. Takes

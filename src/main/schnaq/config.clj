@@ -22,8 +22,8 @@
 (def additional-cors
   "Define additional allowed origins for CORS. (ONLY USE ONES THAT ARE TRUSTED)"
   (str/split
-    (or (System/getenv "ADDITIONAL_CORS_ORIGINS") "")
-    #","))
+   (or (System/getenv "ADDITIONAL_CORS_ORIGINS") "")
+   #","))
 
 (def app-codes
   "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
@@ -54,7 +54,6 @@
   "Profile Picture height in pixels."
   200)
 
-
 ;; -----------------------------------------------------------------------------
 ;; S3 Configuration
 
@@ -69,13 +68,12 @@
                      :endpoint shared-config/s3-host
                      :client-config {:path-style-access-enabled true}})
 
-
 ;; -----------------------------------------------------------------------------
 ;; JWT
 
 (def testing-private-key
   (keys/str->private-key
-    (slurp "https://s3.schnaq.com/on-premise/testing/jwt.key")))
+   (slurp "https://s3.schnaq.com/on-premise/testing/jwt.key")))
 (def testing-public-key
   (keys/str->public-key
-    (slurp "https://s3.schnaq.com/on-premise/testing/jwt.key.pub")))
+   (slurp "https://s3.schnaq.com/on-premise/testing/jwt.key.pub")))

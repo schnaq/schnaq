@@ -54,7 +54,6 @@
     [:div.col-lg-4
      [value-card :user/group :about-us.diversity/title :about-us.diversity/body]]]])
 
-
 (def ^:private schnaq-in-numbers
   [:section
    [:h2.text-center.pb-3 (labels :about-us.numbers/title)]
@@ -74,7 +73,6 @@
      [person-card :team/christian "Dr. Christian Meter" (labels :about-us.team/christian)]]
     [:div.col
      [person-card :team/mike "Michael Birkhoff" (labels :about-us.team/mike)]]]])
-
 
 ;; ----------------------------------------------------------------------------
 

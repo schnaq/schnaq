@@ -77,7 +77,6 @@
      :publications.discuss/summary
      "Christian Meter, Tobias Krauthoff, Martin Mauve"]]])
 
-
 ;; ----------------------------------------------------------------------------
 
 (defn- content [_request]

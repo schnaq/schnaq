@@ -108,7 +108,6 @@
     [:div.flex-fill
      [:img.img-fluid.shadow.w-75 {:src (img-path :team/sitting-on-couches)}]]]])
 
-
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
   [:div.overflow-hidden

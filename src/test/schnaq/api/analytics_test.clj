@@ -22,7 +22,7 @@
 (deftest permission-test
   (testing "Analytics should only be accessible from logged in super users."
     (are [path]
-      (= 200 (response-status path token-n2o-admin))
+         (= 200 (response-status path token-n2o-admin))
       "/active-users"
       "/statements-per-discussion"
       "/active-users"
@@ -32,7 +32,7 @@
       "/usernames"))
   (testing "Wrongly logged in users have no permission."
     (are [path]
-      (= 403 (response-status path token-schnaqqifant-user))
+         (= 403 (response-status path token-schnaqqifant-user))
       "/active-users"
       "/statements-per-discussion"
       "/active-users"
@@ -42,7 +42,7 @@
       "/usernames"))
   (testing "Unauthenticated users also have no access."
     (are [path]
-      (= 401 (response-status path nil))
+         (= 401 (response-status path nil))
       "/active-users"
       "/statements-per-discussion"
       "/active-users"

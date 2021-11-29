@@ -37,34 +37,34 @@
 ;; events
 
 (rf/reg-event-fx
-  :schnaq.admin/set-header-image-url
-  (fn [{:keys [db]} [_ form]]
-    (let [current-route (:current-route db)
-          {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [(http/xhrio-request db :post "/discussion/header-image"
-                                [:schnaq.admin/set-header-image-url-success form]
-                                {:image-url (oget+ form [image-form-name :value])
-                                 :share-hash share-hash
-                                 :edit-hash edit-hash
-                                 :admin-center (links/get-admin-link share-hash edit-hash)}
-                                [:ajax.error/as-notification])]})))
+ :schnaq.admin/set-header-image-url
+ (fn [{:keys [db]} [_ form]]
+   (let [current-route (:current-route db)
+         {:keys [share-hash edit-hash]} (:path-params current-route)]
+     {:fx [(http/xhrio-request db :post "/discussion/header-image"
+                               [:schnaq.admin/set-header-image-url-success form]
+                               {:image-url (oget+ form [image-form-name :value])
+                                :share-hash share-hash
+                                :edit-hash edit-hash
+                                :admin-center (links/get-admin-link share-hash edit-hash)}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
-  :schnaq.admin/set-header-image-url-success
-  (fn [_ [_ form {:keys [error]}]]
-    {:fx
-     (if error
-       ;; when error occurred display a warning and do not clear form
-       [[:dispatch [:notification/add
-                    #:notification{:title (labels :schnaq.header-image.url/failed-setting-title)
-                                   :body [:<>
-                                          (labels :schnaq.header-image.url/failed-setting-body)
-                                          [:span error]]
-                                   :context :danger
-                                   :stay-visible? true}]]]
-       ;; when no error occurred clear form
-       [[:dispatch [:notification/add
-                    #:notification{:title (labels :schnaq.header-image.url/successful-set)
-                                   :body (labels :schnaq.header-image.url/successful-set-body)
-                                   :context :success}]]
-        [:form/clear form]])}))
+ :schnaq.admin/set-header-image-url-success
+ (fn [_ [_ form {:keys [error]}]]
+   {:fx
+    (if error
+      ;; when error occurred display a warning and do not clear form
+      [[:dispatch [:notification/add
+                   #:notification{:title (labels :schnaq.header-image.url/failed-setting-title)
+                                  :body [:<>
+                                         (labels :schnaq.header-image.url/failed-setting-body)
+                                         [:span error]]
+                                  :context :danger
+                                  :stay-visible? true}]]]
+      ;; when no error occurred clear form
+      [[:dispatch [:notification/add
+                   #:notification{:title (labels :schnaq.header-image.url/successful-set)
+                                  :body (labels :schnaq.header-image.url/successful-set-body)
+                                  :context :success}]]
+       [:form/clear form]])}))

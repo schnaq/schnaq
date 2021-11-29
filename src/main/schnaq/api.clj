@@ -38,7 +38,6 @@
             [taoensso.timbre :as log])
   (:gen-class))
 
-
 ;; -----------------------------------------------------------------------------
 ;; General
 
@@ -86,60 +85,60 @@
 
 (def router
   (ring/router
-    [analytics-routes
-     debug-routes
-     discussion-routes
-     email-routes
-     feedback-routes
-     hub-routes
-     other-routes
-     schnaq-routes
-     summary-routes
-     user-routes
+   [analytics-routes
+    debug-routes
+    discussion-routes
+    email-routes
+    feedback-routes
+    hub-routes
+    other-routes
+    schnaq-routes
+    summary-routes
+    user-routes
 
-     ["/swagger.json"
-      {:get {:no-doc true
-             :swagger {:info {:title "schnaq API"
-                              :basePath "/"
-                              :version "1.0.0"
-                              :description description}
-                       :securityDefinitions {:keycloak {:type "oauth2"
-                                                        :flow "implicit"
-                                                        :name "Authorization"
-                                                        :description "Use `swagger` as the client-id."
-                                                        :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}
-                                             :schnaq-csrf-header {:type "apiKey"
-                                                                  :in "header"
-                                                                  :name "X-Schnaq-CSRF"
-                                                                  :description "Use any value, the header needs to be set, that's it."
-                                                                  :example "Elephants like security"
-                                                                  :default "Phanty"}}
-                       :security [{:keycloak []
-                                   :schnaq-csrf-header []}]}
-             :handler (swagger/create-swagger-handler)}}]]
-    {:exception pretty/exception
-     :validate rrs/validate
-     ::rs/explain expound/expound-str
-     :data {:coercion reitit.coercion.spec/coercion
-            :muuntaja m/instance
-            :middleware [swagger/swagger-feature
-                         parameters/parameters-middleware   ;; query-params & form-params
-                         muuntaja/format-middleware
-                         middlewares/exception-printing-middleware
-                         coercion/coerce-response-middleware ;; coercing response bodies
-                         coercion/coerce-request-middleware ;; coercing request parameters
-                         multipart/multipart-middleware
-                         auth-middlewares/replace-bearer-with-token
-                         auth/wrap-jwt-authentication
-                         auth-middlewares/update-jwt-middleware
-                         middlewares/wrap-custom-schnaq-csrf-header]}
-     ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
-                            :user/admin? auth-middlewares/admin?-middleware
-                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
-                            :app/valid-code? auth-middlewares/valid-app-code?-middleware
-                            :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
-                            :discussion/valid-statement? middlewares/valid-statement?-middleware
-                            :discussion/valid-credentials? middlewares/valid-credentials?-middleware}}))
+    ["/swagger.json"
+     {:get {:no-doc true
+            :swagger {:info {:title "schnaq API"
+                             :basePath "/"
+                             :version "1.0.0"
+                             :description description}
+                      :securityDefinitions {:keycloak {:type "oauth2"
+                                                       :flow "implicit"
+                                                       :name "Authorization"
+                                                       :description "Use `swagger` as the client-id."
+                                                       :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}
+                                            :schnaq-csrf-header {:type "apiKey"
+                                                                 :in "header"
+                                                                 :name "X-Schnaq-CSRF"
+                                                                 :description "Use any value, the header needs to be set, that's it."
+                                                                 :example "Elephants like security"
+                                                                 :default "Phanty"}}
+                      :security [{:keycloak []
+                                  :schnaq-csrf-header []}]}
+            :handler (swagger/create-swagger-handler)}}]]
+   {:exception pretty/exception
+    :validate rrs/validate
+    ::rs/explain expound/expound-str
+    :data {:coercion reitit.coercion.spec/coercion
+           :muuntaja m/instance
+           :middleware [swagger/swagger-feature
+                        parameters/parameters-middleware    ;; query-params & form-params
+                        muuntaja/format-middleware
+                        middlewares/exception-printing-middleware
+                        coercion/coerce-response-middleware ;; coercing response bodies
+                        coercion/coerce-request-middleware  ;; coercing request parameters
+                        multipart/multipart-middleware
+                        auth-middlewares/replace-bearer-with-token
+                        auth/wrap-jwt-authentication
+                        auth-middlewares/update-jwt-middleware
+                        middlewares/wrap-custom-schnaq-csrf-header]}
+    ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
+                           :user/admin? auth-middlewares/admin?-middleware
+                           :user/beta-tester? auth-middlewares/beta-tester?-middleware
+                           :app/valid-code? auth-middlewares/valid-app-code?-middleware
+                           :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
+                           :discussion/valid-statement? middlewares/valid-statement?-middleware
+                           :discussion/valid-credentials? middlewares/valid-credentials?-middleware}}))
 
 (defn route-by-name
   "Return a route by its name."
@@ -148,14 +147,14 @@
 
 (def app
   (ring/ring-handler
-    router
-    (ring/routes
-      (swagger-ui/create-swagger-ui-handler
-        {:path "/"
-         :config {:validatorUrl nil
-                  :operationsSorter "alpha"}})
-      (ring/redirect-trailing-slash-handler {:method :strip})
-      (ring/create-default-handler))))
+   router
+   (ring/routes
+    (swagger-ui/create-swagger-ui-handler
+     {:path "/"
+      :config {:validatorUrl nil
+               :operationsSorter "alpha"}})
+    (ring/redirect-trailing-slash-handler {:method :strip})
+    (ring/create-default-handler))))
 
 (def allowed-origins
   "Calculate valid origins based on the environment configuration and the
@@ -177,10 +176,10 @@
     (schnaq-core/-main)
     (reset! current-server
             (server/run-server
-              (wrap-cors #'app
-                         :access-control-allow-origin origins
-                         :access-control-allow-methods allowed-http-verbs)
-              {:port shared-config/api-port}))
+             (wrap-cors #'app
+                        :access-control-allow-origin origins
+                        :access-control-allow-methods allowed-http-verbs)
+             {:port shared-config/api-port}))
     (log/info (format "Running web-server at %s" shared-config/api-url))
     (log/info (format "Allowed Origin: %s" origins))))
 

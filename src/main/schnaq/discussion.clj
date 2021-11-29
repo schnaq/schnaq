@@ -55,8 +55,8 @@
   [sequential? :discussion/share-hash :ret sequential?]
   (let [statements (discussion-db/all-statements share-hash)]
     (concat
-      (create-links statements)
-      (starting-links share-hash starting-statements))))
+     (create-links statements)
+     (starting-links share-hash starting-statements))))
 
 (>defn- update-controversy-map
   "Updates controversy-map with the contents from a single edge."
@@ -79,14 +79,14 @@
     (if (zero? negatives)
       0
       (float
-        (* 100
-           (/ negatives (+ negatives positives)))))))
+       (* 100
+          (/ negatives (+ negatives positives)))))))
 
 (>defn calculate-controversy
   "Calculates controversy values given a set of edges. Returns a hash-map of id -> controversy-value"
   [edges]
   [(s/coll-of map?) :ret map?]
   (reduce
-    #(assoc %1 (key %2) (single-controversy-val (val %2)))
-    {}
-    (reduce update-controversy-map {} edges)))
+   #(assoc %1 (key %2) (single-controversy-val (val %2)))
+   {}
+   (reduce update-controversy-map {} edges)))

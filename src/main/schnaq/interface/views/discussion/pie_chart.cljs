@@ -4,7 +4,6 @@
             [reagent.dom :as rdom]
             [schnaq.interface.components.colors :refer [colors]]))
 
-
 (defn create-vote-chart-data
   "Creates a list of voting data for an react-vis pie chart."
   [statement]
@@ -25,14 +24,14 @@
   [_data]
   (let [pie-chart (reagent/atom nil)]
     (reagent/create-class
-      {:display-name "chart-js-component"
-       :component-did-mount
-       (fn [comp]
-         (let [[_ chart-data] (reagent/argv comp)]
-           (reset! pie-chart (js/Chart. (rdom/dom-node comp) (clj->js chart-data)))))
-       :component-did-update
-       (fn [comp]
-         (let [[_ chart-data] (reagent/argv comp)]
-           (.destroy @pie-chart)
-           (reset! pie-chart (js/Chart. (rdom/dom-node comp) (clj->js chart-data)))))
-       :reagent-render (fn [_data] [:canvas {:style {:margin-top -10}}])})))
+     {:display-name "chart-js-component"
+      :component-did-mount
+      (fn [comp]
+        (let [[_ chart-data] (reagent/argv comp)]
+          (reset! pie-chart (js/Chart. (rdom/dom-node comp) (clj->js chart-data)))))
+      :component-did-update
+      (fn [comp]
+        (let [[_ chart-data] (reagent/argv comp)]
+          (.destroy @pie-chart)
+          (reset! pie-chart (js/Chart. (rdom/dom-node comp) (clj->js chart-data)))))
+      :reagent-render (fn [_data] [:canvas {:style {:margin-top -10}}])})))

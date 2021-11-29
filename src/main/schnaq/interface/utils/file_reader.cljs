@@ -27,12 +27,12 @@
     result))
 
 (re-frame/reg-fx
-  :readfile
-  (fn [{:keys [files on-success on-error]}]
-    (go (let [contents (->> (mapv readfile! files)
-                            (async/map vector)
-                            (async/<!))
-              errors (filter :error contents)]
-          (if (seq errors)
-            (re-frame/dispatch (conj on-error contents))
-            (re-frame/dispatch (conj on-success contents)))))))
+ :readfile
+ (fn [{:keys [files on-success on-error]}]
+   (go (let [contents (->> (mapv readfile! files)
+                           (async/map vector)
+                           (async/<!))
+             errors (filter :error contents)]
+         (if (seq errors)
+           (re-frame/dispatch (conj on-error contents))
+           (re-frame/dispatch (conj on-success contents)))))))

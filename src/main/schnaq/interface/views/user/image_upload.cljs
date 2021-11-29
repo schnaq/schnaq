@@ -14,27 +14,27 @@
       (rf/dispatch [:user.profile.picture/store file db-path]))))
 
 (rf/reg-event-fx
-  :user.profile.picture/store
-  (fn [_ [_ picture-file db-path]]
-    {:fx [[:readfile {:files [picture-file]
-                      :on-success [:picture-read-file-success db-path]
-                      :on-error [:ajax.error/to-console]}]]}))
+ :user.profile.picture/store
+ (fn [_ [_ picture-file db-path]]
+   {:fx [[:readfile {:files [picture-file]
+                     :on-success [:picture-read-file-success db-path]
+                     :on-error [:ajax.error/to-console]}]]}))
 
 (rf/reg-event-fx
-  :picture-read-file-success
-  (fn [{:keys [db]} [_ db-path files]]
-    (let [profile-picture (first files)
-          actual-size (:size profile-picture)
-          size-valid? (< actual-size config/max-allowed-profile-picture-size)]
-      (if size-valid?
-        {:db (assoc-in db db-path profile-picture)}
-        {:fx [[:dispatch
-               [:notification/add
-                #:notification{:title (labels :user.settings.profile-picture-title/error)
-                               :body (gstring/format (labels :user.settings.profile-picture-too-large/error)
-                                                     actual-size config/max-allowed-profile-picture-size)
-                               :context :danger}]]]}))))
+ :picture-read-file-success
+ (fn [{:keys [db]} [_ db-path files]]
+   (let [profile-picture (first files)
+         actual-size (:size profile-picture)
+         size-valid? (< actual-size config/max-allowed-profile-picture-size)]
+     (if size-valid?
+       {:db (assoc-in db db-path profile-picture)}
+       {:fx [[:dispatch
+              [:notification/add
+               #:notification{:title (labels :user.settings.profile-picture-title/error)
+                              :body (gstring/format (labels :user.settings.profile-picture-too-large/error)
+                                                    actual-size config/max-allowed-profile-picture-size)
+                              :context :danger}]]]}))))
 
 (rf/reg-sub
-  :user.profile.picture/temporary
-  (fn [db _] (get-in db [:user :profile-picture :temporary])))
+ :user.profile.picture/temporary
+ (fn [db _] (get-in db [:user :profile-picture :temporary])))

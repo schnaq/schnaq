@@ -26,54 +26,53 @@
   "Show a page that explains only beta users can access page"
   []
   (error-page-layout
-    (labels :error.beta/heading)
-    (labels :error.beta/body)))
+   (labels :error.beta/heading)
+   (labels :error.beta/body)))
 
 (defn forbidden-page
   "Show the forbidden page."
   []
   (error-page-layout
-    (labels :error.403/heading)
-    (labels :error.403/body)))
+   (labels :error.403/heading)
+   (labels :error.403/body)))
 
 (defn- true-404-page
   "The 404 page the user gets to see."
   []
   (error-page-layout
-    (labels :error.404/heading)
-    (labels :error.404/body)))
+   (labels :error.404/heading)
+   (labels :error.404/body)))
 
 (defn true-404-entrypoint
   "404 view wrapper for routes."
   []
   [true-404-page])
 
-
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
-  :ajax.error/as-notification
-  (fn [{:keys [db]} [_ failure]]
-    {:db (assoc db :error {:ajax failure})
-     :fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :errors/generic)
-                                     :body [:pre
-                                            [:code
-                                             (with-out-str (pprint failure))]]
-                                     :context :danger
-                                     :stay-visible? true
-                                     :on-close-fn #(rf/dispatch [:clear-error])}]]]}))
+ :ajax.error/as-notification
+ (fn [{:keys [db]} [_ failure]]
+   {:db (assoc db :error {:ajax failure})
+    :fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :errors/generic)
+                                    :body [:pre
+                                           [:code
+                                            (with-out-str (pprint failure))]]
+                                    :context :danger
+                                    :stay-visible? true
+                                    :on-close-fn #(rf/dispatch [:clear-error])}]]]}))
 
 (rf/reg-event-fx
-  :ajax.error/to-console
-  (fn [_ [_ failure]]
-    {:fx [[:console.log/error failure]]}))
+ :ajax.error/to-console
+ (fn [_ [_ failure]]
+   {:fx [[:console.log/error failure]]}))
 
 (rf/reg-fx
-  :console.log/error
-  (fn [error] (log/error error)))
+ :console.log/error
+ (fn [error] (log/error error)))
 
 (rf/reg-event-db
-  :clear-error
-  (fn [db _]
-    (dissoc db :error)))
+ :clear-error
+ (fn [db _]
+   (dissoc db :error)))

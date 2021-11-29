@@ -20,11 +20,14 @@
 
 (def place-holder-header-img "https://s3.schnaq.com/schnaq-header-images/header-placeholder.jpg")
 
+(def in-iframe?
+  "Check if schnaq is loaded in an iframe."
+  true)
 
 ;; -----------------------------------------------------------------------------
 ;; Pricing
 
-(def pricing-business-tier
+(def pricing-pro-tier
   "Price in euros, exclusively VAT."
   6.99)
 
@@ -33,7 +36,6 @@
 
 (goog-define keycloak-realm "development")
 (goog-define keycloak-client "development")
-(goog-define keycloak-public-client true)
 (def keycloak-profile-page
   (gstring/format "%s/auth/realms/%s/account/#/personal-info" shared-config/keycloak-host keycloak-realm))
 
@@ -43,14 +45,12 @@
    :realm keycloak-realm
    :clientId keycloak-client})
 
-
 ;; -----------------------------------------------------------------------------
 ;; Time settings
 
 (def time-settings
   {:pattern "HH:mm dd.MM.yyy"
    :timezone "Europe/Berlin"})
-
 
 ;; -----------------------------------------------------------------------------
 
@@ -60,7 +60,6 @@
 
 (def marketing-num-schnaqs 550)
 (def marketing-num-statements 3600)
-
 
 ;; -----------------------------------------------------------------------------
 ;; Example schnaqs and statements

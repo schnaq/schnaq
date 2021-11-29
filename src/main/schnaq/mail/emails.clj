@@ -77,15 +77,15 @@
   [recipient]
   [string? :ret any?]
   (send-mail-with-custom-body
-    (email-templates :welcome/title)
-    recipient
-    (template/welcome)))
+   (email-templates :welcome/title)
+   recipient
+   (template/welcome)))
 
 (>defn send-remote-work-lead-magnet
   "Sends the lead magnet pdf to a recipient. The mail template is stored in s3."
   [recipient]
   [string? :ret any?]
   (send-mail-with-custom-body
-    (email-templates :lead-magnet/title)
-    recipient
-    (template/remote-work-lead-magnet)))
+   (email-templates :lead-magnet/title)
+   recipient
+   (template/remote-work-lead-magnet)))

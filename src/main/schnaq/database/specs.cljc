@@ -55,7 +55,6 @@
 (s/def :meta/sub-discussion-info
   (s/keys :req-un [:meta/sub-statements :meta/authors]))
 
-
 ;; Access Codes
 (s/def :discussion.access/code
   (s/and nat-int?

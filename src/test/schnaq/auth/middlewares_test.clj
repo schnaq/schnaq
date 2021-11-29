@@ -10,17 +10,17 @@
 (def ^:private test-routes
   "Define own routes just for testing."
   (routes
-    (-> (GET "/test/admin/authentication" []
-          (fn [request] (ok (get-in request [:identity :preferred_username]))))
-        (wrap-routes auth-middlewares/admin?-middleware)
-        (wrap-routes auth-middlewares/authenticated?-middleware)
-        (wrap-routes auth-middlewares/update-jwt-middleware)
-        (wrap-routes auth/wrap-jwt-authentication))
-    (-> (GET "/test/user/authentication" []
-          (fn [request] (ok (get-in request [:identity :preferred_username]))))
-        (wrap-routes auth-middlewares/authenticated?-middleware)
-        (wrap-routes auth-middlewares/update-jwt-middleware)
-        (wrap-routes auth/wrap-jwt-authentication))))
+   (-> (GET "/test/admin/authentication" []
+         (fn [request] (ok (get-in request [:identity :preferred_username]))))
+       (wrap-routes auth-middlewares/admin?-middleware)
+       (wrap-routes auth-middlewares/authenticated?-middleware)
+       (wrap-routes auth-middlewares/update-jwt-middleware)
+       (wrap-routes auth/wrap-jwt-authentication))
+   (-> (GET "/test/user/authentication" []
+         (fn [request] (ok (get-in request [:identity :preferred_username]))))
+       (wrap-routes auth-middlewares/authenticated?-middleware)
+       (wrap-routes auth-middlewares/update-jwt-middleware)
+       (wrap-routes auth/wrap-jwt-authentication))))
 
 (deftest valid-jwt-in-header-test
   (let [path "/test/user/authentication"

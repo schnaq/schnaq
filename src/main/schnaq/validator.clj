@@ -51,8 +51,8 @@
   [share-hash keycloak-id]
   [:discussion/share-hash :user.registered/keycloak-id :ret boolean?]
   (let [admins (:discussion/admins
-                 (fast-pull [:discussion/share-hash share-hash]
-                            [{:discussion/admins [:user.registered/keycloak-id]}]))]
+                (fast-pull [:discussion/share-hash share-hash]
+                           [{:discussion/admins [:user.registered/keycloak-id]}]))]
     (not (nil? (some #(= keycloak-id (:user.registered/keycloak-id %)) admins)))))
 
 (defn deny-access

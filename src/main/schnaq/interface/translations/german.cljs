@@ -632,7 +632,6 @@
    :share-access-code/title-2 "und gib folgenden Zugangscode ein:"
    :share-qr-code/via "Per QR Code"
 
-
    :sharing/tooltip "schnaq teilen"
    :sharing.modal/title "Teile deinen schnaq"
    :sharing.modal/lead "Lade dein ganzes Team mit ein, um diesen schnaq mit Wissen zu befüllen"
