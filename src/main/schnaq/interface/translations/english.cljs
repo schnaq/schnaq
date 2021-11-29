@@ -860,7 +860,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.notes/with-vat "plus VAT"
    :pricing.trial/call-to-action "Test the pro plan 30 days free of charge"
    :pricing.trial/description "No credit card needed! Cancel anytime."
-   :pricing.trial.temporary/deactivation "Available from 22.11.2021"
+   :pricing.trial.temporary/deactivation "Available soon"
    :pricing.features/heading "Schnaq subscription advantages"
    :pricing.features.user-numbers/heading "Unlimited member accounts"
    :pricing.features.user-numbers/content "Set no bounds for how many people can collaborate."

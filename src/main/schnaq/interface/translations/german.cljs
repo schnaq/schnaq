@@ -860,7 +860,7 @@
    :pricing.notes/with-vat "zzgl. MwSt."
    :pricing.trial/call-to-action "30 Tage den Pro Plan testen"
    :pricing.trial/description "Keine Kreditkarte nötig! Jederzeit kündbar."
-   :pricing.trial.temporary/deactivation "Verfügbar ab 22.11.2021"
+   :pricing.trial.temporary/deactivation "Demnächst verfügbar"
    :pricing.features/heading "Schnaq-Abonnement Vorteile"
    :pricing.features.user-numbers/heading "Unbegrenzte Teilnehmer:innen"
    :pricing.features.user-numbers/content "Lasse so viele Personen, wie du möchtest, kooperieren."
