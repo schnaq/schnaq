@@ -179,15 +179,13 @@
                        :popular (labels :badges.sort/popular)
                        (labels :badges/sort))
         dropdown-menu-id "dropdownSortButton"]
-    [:<>
-     [:small.text-muted (labels :badges/sort)]
-     [sc/discussion-options-dropdown
-      button-title
-      dropdown-menu-id
-      [{:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])
-        :label-key :badges.sort/newest}
-       {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
-        :label-key :badges.sort/popular}]]]))
+    [sc/discussion-options-dropdown
+     button-title
+     dropdown-menu-id
+     [{:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])
+       :label-key :badges.sort/newest}
+      {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
+       :label-key :badges.sort/popular}]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -309,7 +307,7 @@
     [:div.d-flex
      [:div.mr-1.mx-lg-2.pr-0.pr-lg-2
       [sort-options]]
-     [:div.mt-auto
+     [:div.h-100
       (if @(rf/subscribe [:schnaq.mode/qanda?])
         (when (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
           [filters/filter-answered-statements])
