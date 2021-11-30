@@ -890,7 +890,9 @@ Now we write down questions and discuss them and can still understand what we ha
    :history.home/tooltip "Back to the discussion's beginning"
    :history.statement/user "Post from"
    :history.all-schnaqs/tooltip "Back to all schnaqs"
+   :history.all-schnaqs/label "all schnaqs"
    :history.back/tooltip "Back to previous post"
+   :history.back/label "previous post"
 
    ;; Route Link Texts
    :router/admin-center "Admin-Center"

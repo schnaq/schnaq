@@ -886,7 +886,9 @@
    :history.home/tooltip "Powrót do początku dyskusji"
    :history.statement/user "Wkład z"
    :history.all-schnaqs/tooltip "Powrót do przeglądu schnaqs"
+   :history.all-schnaqs/label "do przeglądu"
    :history.back/tooltip "Powrót do poprzedniego postu"
+   :history.back/label "poprzedni post"
 
    ;; Route Link Texts
    :router/admin-center "Centrum Administracyjne"

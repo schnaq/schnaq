@@ -4,15 +4,21 @@
   }
 }
 
-@media (min-width: 96em) {
+@media (min-width: 64em) {
   .card-columns-discussion {
     column-count: 2;
   }
 }
 
-@media (min-width: 144em) {
+@media (min-width: 96em) {
   .card-columns-discussion {
     column-count: 3;
+  }
+}
+
+@media (min-width: 144em) {
+  .card-columns-discussion {
+    column-count: 4;
   }
 }
 

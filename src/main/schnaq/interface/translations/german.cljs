@@ -890,7 +890,9 @@
    :history.home/tooltip "Zurück zum Diskussionsanfang"
    :history.statement/user "Beitrag von"
    :history.all-schnaqs/tooltip "Zurück zur Übersicht der schnaqs"
+   :history.all-schnaqs/label "zur Übersicht"
    :history.back/tooltip "Zurück zum vorherigen Beitrag"
+   :history.back/label "vorheriger Beitrag"
 
    ;; Route Link Texts
    :router/admin-center "Admin-Center"
