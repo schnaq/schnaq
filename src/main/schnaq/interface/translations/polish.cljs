@@ -248,7 +248,8 @@
    :schnaq.access-code.clipboard/header "Skopiowany kod dostępu"
    :schnaq.access-code.clipboard/body "Kod dostępu został skopiowany do schowka."
 
-   :statement/reply "Odpowiedzi"
+   :statement/reply "zapytaj"
+   :statement/ask "Odpowiedzi"
    :statement.edit.send.failure/title "Zmiana nie została zapisana"
    :statement.edit.send.failure/body "Zmiana nie mogła zostać wprowadzona. Proszę spróbować ponownie za chwilę."
    :statement.edit/label "Edytuj post"

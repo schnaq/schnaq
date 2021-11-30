@@ -251,6 +251,7 @@
    :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."
 
    :statement/reply "Reply"
+   :statement/ask "Ask"
    :statement.edit.send.failure/title "Edit could not be made"
    :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."
    :statement.edit/label "Edit statement"

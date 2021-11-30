@@ -207,18 +207,12 @@
 (defn- title-and-input-element
   "Element containing Title and textarea input"
   [statement]
-  (let [schnaq @(rf/subscribe [:schnaq/selected])
-        is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+  (let [is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        info-content [info-content-conclusion statement (:discussion/edit-hash statement)]
         input-style (if is-topic? "statement-text" "premise-text")
         statement-labels (set (:statement/labels statement))]
     [:<>
      [title-view statement is-topic?]
-     [:div.d-flex.flex-row.mt-4.mb-2
-      (when-not is-topic?
-        [:div.mr-auto info-content])
-      [current-topic-badges schnaq statement is-topic?]]
      (for [label statement-labels]
        [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
         [labels/build-label label]])
@@ -235,11 +229,16 @@
                  :statement/author author
                  :statement/created-at created-at}
         is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        statement (if is-topic? content current-conclusion)]
+        statement (if is-topic? content current-conclusion)
+        info-content [info-content-conclusion statement (:discussion/edit-hash statement)]]
     [motion/move-in :left
      [:div.p-2
       [:div.d-flex.flex-wrap.mb-4
-       [user/user-info statement 42 nil]]
+       [user/user-info statement 32 nil]
+       [:div.d-flex.flex-row.ml-auto
+        (when-not is-topic?
+          [:div.mr-auto info-content])
+        [current-topic-badges schnaq statement is-topic?]]]
       [title-and-input-element statement]]]))
 
 (defn- topic-view [content]
@@ -343,15 +342,15 @@
        [topic-view
         (if search-inactive?
           [topic-bubble-view]
-          [search-info])]
-       [:div.d-none.d-md-block [history-view]]]]
+          [search-info])]]]
      [:div
       [:div.d-md-none [action-view]]
       [cards/conclusion-cards-list share-hash]
       [:div.d-md-none [history-view]]
       [:div.mx-auto
        {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
-       [show-how-to]]]]))
+       [show-how-to]]]
+     [:div.d-none.d-md-block [history-view]]]))
 
 (rf/reg-sub
  :schnaq.search.current/search-string

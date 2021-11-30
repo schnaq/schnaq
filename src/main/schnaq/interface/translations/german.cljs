@@ -250,6 +250,7 @@
    :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."
 
    :statement/reply "Antworten"
+   :statement/ask "Fragen"
    :statement.edit.send.failure/title "Änderung nicht gespeichert"
    :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."
    :statement.edit/label "Beitrag bearbeiten"

@@ -1,12 +1,10 @@
 (ns schnaq.interface.views.discussion.input
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.logic :as logic]))
 
 (defn- statement-type-button
@@ -45,7 +43,6 @@
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         current-route-name @(rf/subscribe [:navigation/current-route-name])
         starting-route? (= :routes.schnaq/start current-route-name)
-        user @(rf/subscribe [:user/current])
         statement-type @(rf/subscribe [:form/statement-type])
         attitude (if starting-route?
                    "neutral"
@@ -57,13 +54,6 @@
      [:div.d-flex.flex-row.discussion-input-content.rounded-1.mb-3
       [:div {:class (str "highlight-card-" attitude)}]
       [:div.w-100
-       (when-not shared-config/embedded?
-         [:div.d-none.d-md-block
-          [:div.d-flex.justify-content-end.pr-lg-2
-           ;; hide 'new post from you' text on mobile
-           [:small.text-muted.mr-2.my-auto (labels :discussion.add.statement/new)]
-           [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
-                                            :display-name (get-in user [:names :display])} 32]]])
        [:div.form-group.mb-0
         [:textarea.form-control.discussion-text-input-area
          {:name textarea-name :wrap "soft" :rows 1
