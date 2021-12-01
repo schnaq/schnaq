@@ -23,7 +23,7 @@
         metosin/reitit {:mvn/version "0.5.15"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
         org.clojure/clojure {:mvn/version "1.10.3"}
-        org.clojure/clojurescript {:mvn/version "1.10.893"}
+        org.clojure/clojurescript {:mvn/version "1.10.896"}
         org.clojure/core.async {:mvn/version "1.5.640"}
         org.clojure/data.json {:mvn/version "2.4.0"}
         org.clojure/test.check {:mvn/version "1.1.0"}

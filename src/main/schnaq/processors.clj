@@ -83,15 +83,14 @@
        statement))
    data))
 
-(defn with-sub-discussion-info
-  "Add sub-discussion-info to valid statements, if necessary.
-   Sub-Discussion-infos are number of sub-statements, authors, ..."
+(defn with-sub-statement-count
+  "Add sub-statement-count to valid statements, if necessary."
   [data]
   (walk/postwalk
    (fn [statement]
      (if (s/valid? ::specs/statement statement)
-       (if-let [sub-discussions (get (discussion-db/child-node-info [(:db/id statement)]) (:db/id statement))]
-         (assoc statement :meta/sub-discussion-info sub-discussions)
+       (if-let [sub-discussions-num (get (discussion-db/sub-statement-count [(:db/id statement)]) (:db/id statement))]
+         (assoc statement :meta/sub-statement-count sub-discussions-num)
          statement)
        statement))
    data))

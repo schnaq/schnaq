@@ -57,25 +57,20 @@
                (list (sib-sym (dec i)) '?parent '?middlelink)
                (list (sib-sym (dec i)) '?middlelink '?child)]]))))
 
-(defn child-node-info
+(defn sub-statement-count
   "Takes a list of statement-ids and returns a map {id meta-info-map} for the statements."
   [statement-ids]
   (apply merge
-         (map #(hash-map (first %) {:sub-statements (second %)
-                                    :authors (last %)})
+         (map #(hash-map (first %) (second %))
               (query
-               '[:find ?statement-ids (count ?children) (distinct ?nickname)
+               '[:find ?statement-ids (count ?children)
                  :in $ % [?statement-ids ...]
                  :where
                  ;; We pick a transitive depth of 7 as a sweet-spot. The deeper the rule
                  ;; goes, the more complicated and slower the query gets. 10 is too slow
                  ;; for our purposes, but 5 is maybe not deep enough for the typical discussion
                  ;; 7 offers a good speed while being deep enough for most discussions.
-                 (transitive-child-7 ?statement-ids ?children)
-                 [?children :statement/author ?authors]
-                 (or
-                  [?authors :user/nickname ?nickname]
-                  [?authors :user.registered/display-name ?nickname])]
+                 (transitive-child-7 ?statement-ids ?children)]
                (transitive-child-rules 7) statement-ids))))
 
 (defn- pull-discussion

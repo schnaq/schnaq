@@ -147,7 +147,7 @@
         share-hash @(rf/subscribe [:schnaq/share-hash])
         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
         old-statement-num (get old-statements-nums-map (:db/id statement) 0)
-        statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
+        statement-num (:meta/sub-statement-count statement 0)
         new? (not (= old-statement-num statement-num))]
     [:div.d-flex.flex-row.align-items-center
      [:a.badge.badge-pill.badge-transparent.badge-clickable.mr-2
@@ -230,4 +230,4 @@
  :visited/set-visited-statements
  (fn [db [_ statement]]
    (assoc-in db [:visited :statement-nums (:db/id statement)]
-             (get-in statement [:meta/sub-discussion-info :sub-statements] 0))))
+             (:meta/sub-statement-count statement 0))))

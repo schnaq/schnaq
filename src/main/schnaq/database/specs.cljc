@@ -52,8 +52,7 @@
 (s/def :meta/upvoted? boolean?)
 (s/def :meta/downvoted? boolean?)
 (s/def :meta/authors (s/coll-of :user/nickname))
-(s/def :meta/sub-discussion-info
-  (s/keys :req-un [:meta/sub-statements :meta/authors]))
+(s/def :meta/sub-statement-count number?)
 
 ;; Access Codes
 (s/def :discussion.access/code
