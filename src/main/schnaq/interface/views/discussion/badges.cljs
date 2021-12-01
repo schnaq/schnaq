@@ -6,10 +6,8 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.labels :as statement-labels]
-            [schnaq.interface.views.modal :as modal]
-            [schnaq.user :as user]))
+            [schnaq.interface.views.modal :as modal]))
 
 (defn- anonymous-edit-modal
   "Show this modal to anonymous users trying to edit statements."
@@ -142,27 +140,6 @@
           [:dropdown-item
            [delete-dropdown-button statement current-edit-hash]])]])))
 
-(defn- author-list
-  "A list of author-names participating in a subdiscussion."
-  [authors]
-  [:<>
-   [:h5 (labels :discussion.badges/user-overview)]
-   [:hr]
-   [:ul.list-unstyled.text-left
-    (for [author (sort > (remove nil? authors))]
-      [:li {:key author} author])]])
-
-(defn- authors-badge
-  "A badge listing the people participating in the discussion."
-  [authors]
-  [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
-   [tooltip/html
-    [author-list authors]
-    [:div [icon :user/group "m-auto"] " " (count authors)]
-    {:animation "scale"
-     :trigger "click"
-     :appendTo js-wrap/document-body}]])
-
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
   [statement]
@@ -171,9 +148,7 @@
         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
         old-statement-num (get old-statements-nums-map (:db/id statement) 0)
         statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
-        new? (not (= old-statement-num statement-num))
-        authors (conj (-> statement :meta/sub-discussion-info :authors)
-                      (user/statement-author statement))]
+        new? (not (= old-statement-num statement-num))]
     [:div.d-flex.flex-row.align-items-center
      [:a.badge.badge-pill.badge-transparent.badge-clickable.mr-2
       {:href (rfe/href :routes.schnaq.select/statement {:share-hash share-hash
@@ -183,7 +158,6 @@
         [icon :comments "m-auto text-secondary"]
         [icon :comments "m-auto"])
       " " statement-num]
-     [authors-badge authors]
      (when-not q-and-a?
        [statement-labels/edit-labels-button statement])
      [edit-statement-dropdown-menu statement]]))
@@ -207,16 +181,11 @@
   "Badges that display schnaq info."
   [schnaq]
   (let [meta-info (:meta-info schnaq)
-        statement-count (:all-statements meta-info)
-        user-count (count (:authors meta-info))]
+        statement-count (:all-statements meta-info)]
     [:div.d-flex.flex-row.mb-0
      [:span.badge.badge-pill.badge-transparent.mr-2
       [icon :comments "m-auto"]
       " " statement-count]
-     [:span.badge.badge-pill.badge-transparent.mr-2
-      {:tabIndex 20
-       :title (labels :discussion.badges/user-overview)}
-      [icon :user/group "m-auto"] " " user-count]
      [edit-discussion-dropdown-menu schnaq]]))
 
 (defn read-only-badge

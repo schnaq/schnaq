@@ -248,7 +248,10 @@
    :schnaq.access-code.clipboard/header "Skopiowany kod dostępu"
    :schnaq.access-code.clipboard/body "Kod dostępu został skopiowany do schowka."
 
-   :statement/reply "Odpowiedzi"
+   :statement/reply "zapytaj"
+   :statement.reply/placeholder "Twoja odpowiedź"
+   :statement/ask "Odpowiedzi"
+   :statement.ask/placeholder "Twoje pytanie"
    :statement.edit.send.failure/title "Zmiana nie została zapisana"
    :statement.edit.send.failure/body "Zmiana nie mogła zostać wprowadzona. Proszę spróbować ponownie za chwilę."
    :statement.edit/label "Edytuj post"
@@ -639,7 +642,6 @@
 
    ;; Discussion Language
    :discussion/create-argument-action "Dodaj wkład"
-   :discussion/add-argument-conclusion-placeholder "Oto, co o tym myślę."
    :discussion/add-premise-supporting "Chciałabym poprzeć oświadczenie"
    :discussion/add-premise-against "Mam powód, by się temu sprzeciwić"
    :discussion/add-premise-neutral "Chciałabym coś dodać"
@@ -886,7 +888,9 @@
    :history.home/tooltip "Powrót do początku dyskusji"
    :history.statement/user "Wkład z"
    :history.all-schnaqs/tooltip "Powrót do przeglądu schnaqs"
+   :history.all-schnaqs/label "do przeglądu"
    :history.back/tooltip "Powrót do poprzedniego postu"
+   :history.back/label "poprzedni post"
 
    ;; Route Link Texts
    :router/admin-center "Centrum Administracyjne"

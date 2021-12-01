@@ -1,12 +1,10 @@
 (ns schnaq.interface.views.discussion.input
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.logic :as logic]))
 
 (defn- statement-type-button
@@ -45,8 +43,12 @@
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         current-route-name @(rf/subscribe [:navigation/current-route-name])
         starting-route? (= :routes.schnaq/start current-route-name)
-        user @(rf/subscribe [:user/current])
         statement-type @(rf/subscribe [:form/statement-type])
+        send-button-label (if starting-route? (labels :statement/ask)
+                                              (labels :statement/reply))
+        placeholder (if starting-route?
+                      (labels :statement.ask/placeholder)
+                      (labels :statement.reply/placeholder))
         attitude (if starting-route?
                    "neutral"
                    (case statement-type
@@ -54,35 +56,26 @@
                      :statement.type/attack "attack"
                      :statement.type/neutral "neutral"))]
     [:<>
-     [:div.d-flex.flex-row.discussion-input-content.rounded-1.mb-3
-      [:div {:class (str "highlight-card-" attitude)}]
-      [:div.w-100
-       (when-not shared-config/embedded?
-         [:div.d-none.d-md-block
-          [:div.d-flex.justify-content-end.pr-lg-2
-           ;; hide 'new post from you' text on mobile
-           [:small.text-muted.mr-2.my-auto (labels :discussion.add.statement/new)]
-           [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
-                                            :display-name (get-in user [:names :display])} 32]]])
-       [:div.form-group.mb-0
-        [:textarea.form-control.discussion-text-input-area
-         {:name textarea-name :wrap "soft" :rows 1
-          :auto-complete "off"
-          :autoFocus true
-          :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-          ;; first reset input then set height +1px in order to prevent scrolling
-          :required true
-          :data-dynamic-height true
-          :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]]]]
-     [:div.d-flex.flex-row.flex-wrap.justify-content-between.w-100
-      (when-not (or starting-route? pro-con-disabled?)
-        [:div.input-group-prepend.mt-1
-         [statement-type-choose-button [:form/statement-type] [:form/statement-type!]]])
-      [:button.btn.btn-dark.shadow-sm.mt-1.py-2.ml-auto
-       {:type "submit" :title (labels :discussion/create-argument-action)}
-       [:div.d-flex.flex-row
-        [:div.d-none.d-lg-block.mr-1 (labels :statement.edit.button/submit)]
-        [icon :plane "m-auto"]]]]]))
+     [:div.input-group
+      [:div {:class (str "highlight-card-reverse highlight-card-" attitude)}]
+      [:textarea.form-control.textarea-resize-none
+       {:name textarea-name :wrap "soft" :rows 1
+        :auto-complete "off"
+        :autoFocus true
+        :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
+        ;; first reset input then set height +1px in order to prevent scrolling
+        :required true
+        :data-dynamic-height true
+        :placeholder placeholder}]
+      [:div.input-group-append
+       [:button.btn.btn-outline-dark
+        {:type "submit" :title (labels :discussion/create-argument-action)}
+        [:div.d-flex.flex-row
+         [:div.d-none.d-lg-block.mr-1 send-button-label]
+         [icon :plane "m-auto"]]]]]
+     (when-not (or starting-route? pro-con-disabled?)
+       [:div.input-group-prepend.mt-3
+        [statement-type-choose-button [:form/statement-type] [:form/statement-type!]]])]))
 
 (defn input-form
   "Form to collect the user's statements."

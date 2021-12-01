@@ -1,18 +1,18 @@
-@media (min-width: 24em) {
-  .card-columns-discussion {
+.card-columns-discussion {
+  column-count: 1;
+  @include media-breakpoint-up(md) {
     column-count: 1;
   }
-}
-
-@media (min-width: 96em) {
-  .card-columns-discussion {
+  @include media-breakpoint-up(lg) {
     column-count: 2;
   }
-}
 
-@media (min-width: 144em) {
-  .card-columns-discussion {
+  @include media-breakpoint-up(xl) {
     column-count: 3;
+  }
+
+  @include media-breakpoint-up(hd) {
+    column-count: 4;
   }
 }
 

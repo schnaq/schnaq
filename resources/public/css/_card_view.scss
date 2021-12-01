@@ -60,12 +60,11 @@
   background: $gray-100;
   border-color: rgba($primary, 0.8);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba($primary, 0.6);
-  min-height: 8rem;
+  min-height: 1rem;
   outline: 0 none;
-  padding: 1rem 1rem 1rem 0;
+  padding: 1rem 0.5rem 0.5rem 0;
 
   @include media-breakpoint-down(sm) {
-    min-height: 1rem;
     padding: 0.2rem 0.2rem 0.2rem 0;
   }
 }
@@ -75,6 +74,10 @@
   min-height: 0;
   padding: 0.5rem 0.5rem 0.5rem 0;
 
+}
+
+.textarea-resize-none {
+  resize: none;
 }
 
 .discussion-text-input-area {
@@ -115,6 +118,12 @@
   @include media-breakpoint-down(sm) {
     margin-right: 1rem;
   }
+}
+
+.highlight-card-reverse {
+  @extend .highlight-card;
+  border-radius: 1rem 0 0 1rem;
+  margin: 0;
 }
 
 .highlight-card-neutral {

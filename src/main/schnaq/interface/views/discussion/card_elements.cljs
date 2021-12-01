@@ -39,18 +39,23 @@
         has-history? (seq history)
         back-feed [:navigation/navigate :routes.schnaqs/personal]
         back-history [:discussion.history/time-travel 1]
+        back-label (if has-history?
+                     (labels :history.back/label)
+                     (labels :history.all-schnaqs/label))
         navigation-target (cond
                             has-history? back-history
                             shared-config/embedded? nil
                             :else back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
     (when navigation-target
-      [tooltip/text
-       (labels tooltip)
-       [:button.btn.btn-dark.button-discussion-options.h-100.w-100.p-3
-        {:on-click #(rf/dispatch navigation-target)}
-        [:div.d-flex
-         [icon :arrow-left "m-auto"]]]])))
+      [:div.d-flex.flex-row.h-100
+       [tooltip/text
+        (labels tooltip)
+        [:button.btn.btn-dark.button-discussion-options.h-100.p-3
+         {:on-click #(rf/dispatch navigation-target)}
+         [:div.d-flex
+          [icon :arrow-left "m-auto"]]]]
+       [:small.my-auto.ml-2.d-none.d-xxl-block back-label]])))
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -174,15 +179,13 @@
                        :popular (labels :badges.sort/popular)
                        (labels :badges/sort))
         dropdown-menu-id "dropdownSortButton"]
-    [:<>
-     [:small.text-muted (labels :badges/sort)]
-     [sc/discussion-options-dropdown
-      button-title
-      dropdown-menu-id
-      [{:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])
-        :label-key :badges.sort/newest}
-       {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
-        :label-key :badges.sort/popular}]]]))
+    [sc/discussion-options-dropdown
+     button-title
+     dropdown-menu-id
+     [{:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])
+       :label-key :badges.sort/newest}
+      {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
+       :label-key :badges.sort/popular}]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -195,33 +198,25 @@
 (defn- title-view [statement is-topic?]
   (let [title [md/as-markdown (:statement/content statement)]
         edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
-    (if is-topic?
-      (if edit-active?
+    (if edit-active?
+      (if is-topic?
         [edit/edit-card-discussion statement]
-        [:h2.h6-md-down title])
-      (if edit-active?
-        [edit/edit-card-statement statement]
-        [:h2.h6 title]))))
+        [edit/edit-card-statement statement])
+      [:h2.h6 title])))
 
 (defn- title-and-input-element
   "Element containing Title and textarea input"
   [statement]
-  (let [schnaq @(rf/subscribe [:schnaq/selected])
-        is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+  (let [is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        info-content [info-content-conclusion statement (:discussion/edit-hash statement)]
         input-style (if is-topic? "statement-text" "premise-text")
         statement-labels (set (:statement/labels statement))]
     [:<>
      [title-view statement is-topic?]
-     [:div.d-flex.flex-row.mt-4.mb-2
-      (when-not is-topic?
-        [:div.mr-auto info-content])
-      [current-topic-badges schnaq statement is-topic?]]
      (for [label statement-labels]
        [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
         [labels/build-label label]])
-     [:div.line-divider.my-2.my-md-4]
+     [:div.line-divider.my-2.my-md-3]
      (if read-only?
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
        [input/input-form input-style])]))
@@ -234,11 +229,16 @@
                  :statement/author author
                  :statement/created-at created-at}
         is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        statement (if is-topic? content current-conclusion)]
+        statement (if is-topic? content current-conclusion)
+        info-content [info-content-conclusion statement (:discussion/edit-hash statement)]]
     [motion/move-in :left
      [:div.p-2
       [:div.d-flex.flex-wrap.mb-4
-       [user/user-info statement 42 nil]]
+       [user/user-info statement 32 nil]
+       [:div.d-flex.flex-row.ml-auto
+        (when-not is-topic?
+          [:div.mr-auto info-content])
+        [current-topic-badges schnaq statement is-topic?]]]
       [title-and-input-element statement]]]))
 
 (defn- topic-view [content]
@@ -299,22 +299,20 @@
       [search-clear-button search-input-id]]]))
 
 (defn action-view []
-  [:div.d-inline-block.text-dark.w-100.mb-3
+  [:div.d-inline-block.text-dark.w-100.mb-3.mx-1.mx-md-0
    [:div.d-flex.flex-row.flex-wrap
-    [:div.d-flex.flex-grow-1.flex-lg-grow-0
-     [:div.mr-1.ml-1.ml-md-0
-      [back-button]]
-     [:div.ml-1.mr-1.mr-lg-3.flex-grow-1.flex-lg-grow-0
-      [search-bar]]]
+    [:div.mr-1.mr-lg-2.mr-xxl-5.pr-lg-2
+     [back-button]]
     [:div.d-flex
-     [:div.mx-1.mx-md-1.pr-0.pr-md-2
+     [:div.mr-1.mx-lg-2.pr-0.pr-lg-2
       [sort-options]]
-     [:div.mx-0.mx-md-1.mt-auto
+     [:div.h-100
       (if @(rf/subscribe [:schnaq.mode/qanda?])
         (when (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
           [filters/filter-answered-statements])
         [filters/filter-button])]]
-    [:div.d-flex.flex-row.ml-auto]]])
+    [:div.ml-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
+     [search-bar]]]])
 
 (defn- search-info []
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
@@ -337,21 +335,21 @@
   "Displays a history  and input field on the left and conclusions in its center"
   [share-hash]
   (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
-    [:div.container-fluid
+    [:div.container-fluid.px-0.px-md-3
      [:div.row
-      [:div.col-md-6.col-lg-4.py-md-4.px-0.px-md-3
+      [:div.col-lg-12.col-xl-8.py-0.pt-md-3
+       [:div.d-none.d-md-block [action-view]]
        [topic-view
         (if search-inactive?
           [topic-bubble-view]
-          [search-info])]
-       [:div.d-none.d-md-block [history-view]]]
-      [:div.col-md-6.col-lg-8.py-md-4.px-0.px-md-3
-       [action-view]
-       [cards/conclusion-cards-list share-hash]
-       [:div.d-md-none [history-view]]
-       [:div.mx-auto
-        {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
-        [show-how-to]]]]]))
+          [search-info])]]]
+     [:div.d-md-none [action-view]]
+     [cards/conclusion-cards-list share-hash]
+     [:div.d-md-none [history-view]]
+     [:div.mx-auto
+      {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
+      [show-how-to]]
+     [:div.d-none.d-md-block [history-view]]]))
 
 (rf/reg-sub
  :schnaq.search.current/search-string

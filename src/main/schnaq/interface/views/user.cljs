@@ -18,9 +18,9 @@
         display-name (tools/truncate-to-n-chars (user-utils/display-name user) 15)]
     [:div.d-flex {:class additional-classes}
      [common/avatar user avatar-size]
-     [:div.mx-2 [:span.text-sm.text-typography display-name]
+     [:div.mx-2.d-inline.my-auto [:span.text-sm.text-typography display-name]
       (when created
-        [:div.small.font-weight-light.text-muted
+        [:div.small.font-weight-light.text-muted.d-inline.ml-3.my-auto
          [util-time/timestamp-with-tooltip created locale]])]]))
 
 (defn user-info-only

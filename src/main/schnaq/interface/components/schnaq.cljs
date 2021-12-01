@@ -29,18 +29,18 @@
   "Build a button-group with for the discussion-view."
   [[first-button & rest-buttons]]
   (let [{:keys [on-click label-key]} first-button]
-    [:div.btn-group.btn-group-toggle.button-discussion-options {:data-toggle "buttons"}
+    [:div.btn-group.btn-group-toggle.button-discussion-options.h-100 {:data-toggle "buttons"}
      [:label.btn.btn-sm.btn-outline-primary.active
       [:input {:type "radio" :autoComplete "off" :defaultChecked true
                :onClick on-click}]
       [:small.d-md-none (labels label-key)]
-      [:div.d-none.d-md-block (labels label-key)]]
+      [:div.d-none.d-md-block.mt-2 (labels label-key)]]
      (for [{:keys [on-click label-key]} rest-buttons]
        [:label.btn.btn-sm.btn-outline-primary.px-1.px-md-2 {:key (str "discussion-options-button-group-item-" label-key)}
         [:input {:type "radio" :autoComplete "off"
                  :onClick on-click}]
         [:small.d-md-none (labels label-key)]
-        [:div.d-none.d-md-block (labels label-key)]])]))
+        [:div.d-none.d-md-block.mt-2 (labels label-key)]])]))
 
 (defn discussion-options-dropdown
   "Build a dropdown menu for the discussion view"
@@ -48,8 +48,8 @@
   (let [{:keys [on-click label-key]} first-button
         dropdown-menu-id dropdown-id
         button-title button-title]
-    [:div.dropdown
-     [:button.btn.btn-sm.btn-primary.dropdown-toggle
+    [:div.dropdown.h-100
+     [:button.btn.btn-sm.btn-primary.dropdown-toggle.h-100
       {:id dropdown-menu-id :type "button" :data-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
       button-title]
