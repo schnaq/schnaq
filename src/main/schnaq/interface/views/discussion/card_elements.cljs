@@ -343,13 +343,12 @@
         (if search-inactive?
           [topic-bubble-view]
           [search-info])]]]
-     [:div
-      [:div.d-md-none [action-view]]
-      [cards/conclusion-cards-list share-hash]
-      [:div.d-md-none [history-view]]
-      [:div.mx-auto
-       {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
-       [show-how-to]]]
+     [:div.d-md-none [action-view]]
+     [cards/conclusion-cards-list share-hash]
+     [:div.d-md-none [history-view]]
+     [:div.mx-auto
+      {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
+      [show-how-to]]
      [:div.d-none.d-md-block [history-view]]]))
 
 (rf/reg-sub
