@@ -24,7 +24,7 @@
 (s/def ::statement
   (s/keys :req [:db/id :statement/content :statement/version :statement/created-at
                 :statement/author]
-          :opt [:meta/sub-discussion-info :statement/upvotes :statement/downvotes :statement/labels
+          :opt [:meta/sub-statement-count :statement/upvotes :statement/downvotes :statement/labels
                 :statement/type]))
 
 (def statement-type (st/spec :statement/type {:type :keyword}))

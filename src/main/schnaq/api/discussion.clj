@@ -48,7 +48,7 @@
    (-> share-hash
        discussion-db/starting-statements
        (valid-statements-with-votes user-id)
-       processors/with-sub-discussion-info
+       processors/with-sub-statement-count
        processors/with-answered?-info))
   ([share-hash user-id secret-statement-id]
    (add-creation-secret (starting-conclusions-with-processors share-hash user-id) secret-statement-id)))
@@ -70,7 +70,7 @@
         prepared-statements (-> conclusion-id
                                 discussion-db/children-for-statement
                                 (valid-statements-with-votes user-id)
-                                processors/with-sub-discussion-info)]
+                                processors/with-sub-statement-count)]
     (ok {:premises prepared-statements})))
 
 (defn- search-statements
@@ -79,7 +79,7 @@
   (let [{:keys [share-hash search-string display-name]} (:query parameters)
         user-id (user-db/user-id display-name (:sub identity))]
     (ok {:matching-statements (-> (discussion-db/search-statements share-hash search-string)
-                                  processors/with-sub-discussion-info
+                                  processors/with-sub-statement-count
                                   (valid-statements-with-votes user-id))})))
 
 (defn- get-statement-info
@@ -91,12 +91,12 @@
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (valid-statements-with-votes
            {:conclusion (first (-> [(db/fast-pull statement-id patterns/statement-with-answers)]
-                                   processors/with-sub-discussion-info
+                                   processors/with-sub-statement-count
                                    processors/with-answered?-info
                                    (processors/with-new-post-info share-hash user-identity)
                                    toolbelt/pull-key-up))
             :premises (-> (discussion-db/children-for-statement statement-id)
-                          processors/with-sub-discussion-info
+                          processors/with-sub-statement-count
                           (processors/with-new-post-info share-hash user-identity))
             :history (discussion-db/history-for-statement statement-id)}
            author-id))
@@ -139,7 +139,7 @@
      user-identity statement-id share-hash statement
      #(ok {:updated-statement (-> [(discussion-db/change-statement-text-and-type statement statement-type new-content)]
                                   (processors/with-aggregated-votes author-id)
-                                  processors/with-sub-discussion-info
+                                  processors/with-sub-statement-count
                                   (processors/with-new-post-info share-hash (:sub identity))
                                   first)})
      #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not edit a closed / deleted discussion or statement."))
@@ -319,7 +319,7 @@
     (if (user-allowed-to-label? identity share-hash)
       (ok {:statement (-> [(discussion-db/add-label statement-id label)]
                           (valid-statements-with-votes user-id)
-                          processors/with-sub-discussion-info
+                          processors/with-sub-statement-count
                           (processors/with-new-post-info share-hash keycloak-id)
                           first)})
       (forbidden (at/build-error-body :forbidden/user-not-beta "You are not allowed to edit labels")))))
@@ -334,7 +334,7 @@
     (if (user-allowed-to-label? identity share-hash)
       (ok {:statement (-> [(discussion-db/remove-label statement-id label)]
                           (valid-statements-with-votes user-id)
-                          processors/with-sub-discussion-info
+                          processors/with-sub-statement-count
                           (processors/with-new-post-info share-hash keycloak-id)
                           first)})
       (forbidden (at/build-error-body :forbidden/user-not-beta "You are not allowed to edit labels")))))
