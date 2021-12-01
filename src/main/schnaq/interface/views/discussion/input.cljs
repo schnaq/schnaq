@@ -48,8 +48,7 @@
                                               (labels :statement/reply))
         placeholder (if starting-route?
                       (labels :statement.ask/placeholder)
-                      (labels :statement.reply/placeholder)
-                      )
+                      (labels :statement.reply/placeholder))
         attitude (if starting-route?
                    "neutral"
                    (case statement-type
