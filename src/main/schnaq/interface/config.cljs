@@ -22,7 +22,7 @@
 
 (def in-iframe?
   "Check if schnaq is loaded in an iframe."
-  true)
+  false)
 
 ;; -----------------------------------------------------------------------------
 ;; Pricing
