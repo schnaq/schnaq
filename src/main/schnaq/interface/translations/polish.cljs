@@ -249,7 +249,9 @@
    :schnaq.access-code.clipboard/body "Kod dostępu został skopiowany do schowka."
 
    :statement/reply "zapytaj"
+   :statement.reply/placeholder "Twoja odpowiedź"
    :statement/ask "Odpowiedzi"
+   :statement.ask/placeholder "Twoje pytanie"
    :statement.edit.send.failure/title "Zmiana nie została zapisana"
    :statement.edit.send.failure/body "Zmiana nie mogła zostać wprowadzona. Proszę spróbować ponownie za chwilę."
    :statement.edit/label "Edytuj post"
@@ -640,7 +642,6 @@
 
    ;; Discussion Language
    :discussion/create-argument-action "Dodaj wkład"
-   :discussion/add-argument-conclusion-placeholder "Oto, co o tym myślę."
    :discussion/add-premise-supporting "Chciałabym poprzeć oświadczenie"
    :discussion/add-premise-against "Mam powód, by się temu sprzeciwić"
    :discussion/add-premise-neutral "Chciałabym coś dodać"

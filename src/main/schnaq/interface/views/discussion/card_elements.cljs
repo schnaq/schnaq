@@ -216,7 +216,7 @@
      (for [label statement-labels]
        [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
         [labels/build-label label]])
-     [:div.line-divider.my-2.my-md-4]
+     [:div.line-divider.my-2.my-md-3]
      (if read-only?
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
        [input/input-form input-style])]))
@@ -337,7 +337,7 @@
   (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
     [:div.container-fluid.px-0.px-md-3
      [:div.row
-      [:div.col-md-12.col-xl-8.py-0.pt-md-3
+      [:div.col-lg-12.col-xl-8.py-0.pt-md-3
        [:div.d-none.d-md-block [action-view]]
        [topic-view
         (if search-inactive?

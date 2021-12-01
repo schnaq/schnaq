@@ -251,7 +251,9 @@
    :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."
 
    :statement/reply "Reply"
+   :statement.reply/placeholder "Your answer"
    :statement/ask "Ask"
+   :statement.ask/placeholder "Your question"
    :statement.edit.send.failure/title "Edit could not be made"
    :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."
    :statement.edit/label "Edit statement"
@@ -643,7 +645,6 @@
 
    ;; Discussion Language
    :discussion/create-argument-action "Add Statement"
-   :discussion/add-argument-conclusion-placeholder "I think that…"
    :discussion/add-premise-supporting "I want to support the statement"
    :discussion/add-premise-against "I disagree…"
    :discussion/add-premise-neutral "I want to add something"

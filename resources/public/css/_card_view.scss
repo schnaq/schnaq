@@ -76,6 +76,10 @@
 
 }
 
+.textarea-resize-none {
+  resize: none;
+}
+
 .discussion-text-input-area {
   background: transparent;
   border: 0;
@@ -114,6 +118,12 @@
   @include media-breakpoint-down(sm) {
     margin-right: 1rem;
   }
+}
+
+.highlight-card-reverse {
+  @extend .highlight-card;
+  border-radius: 1rem 0 0 1rem;
+  margin: 0;
 }
 
 .highlight-card-neutral {

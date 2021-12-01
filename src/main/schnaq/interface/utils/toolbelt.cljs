@@ -11,7 +11,7 @@
   Used for textareas to grow with input."
   [element]
   (oset! element [:style :height] "0.5rem")
-  (oset! element [:style :height] (str (inc (oget element [:scrollHeight])) "px")))
+  (oset! element [:style :height] (str (+ 2 (oget element [:scrollHeight])) "px")))
 
 (defn- reset-form-height!
   "Reset all formfields with dynamicHeights.
