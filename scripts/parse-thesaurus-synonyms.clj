@@ -23,4 +23,4 @@
                                 (flatten (rest (remove #(> (count %) 1) synonym-list)))}))
                            cleaned-synonyms)
       without-empty-val (remove #(empty? (second (first %))) mapped-synonyms)]
-  (spit "synonyms_german.edn" (apply merge without-empty-val)))
+  (spit "../resources/synonyms/synonyms_german.edn" (apply merge without-empty-val)))
