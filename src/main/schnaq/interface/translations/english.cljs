@@ -716,6 +716,7 @@
    :analytics/active-users-num-title "Active users"
    :analytics/statement-lengths-title "Length of statements"
    :analytics/statement-types-title "Argument types"
+   :analytics/labels-stats "Label Usage"
    :analytics/fetch-data-button "Retrieving data…"
 
    ;; Supporters
