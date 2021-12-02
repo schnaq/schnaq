@@ -714,6 +714,7 @@
    :analytics/active-users-num-title "Aktywni użytkownicy (min. 1 wkład)"
    :analytics/statement-lengths-title "Długości wkładów"
    :analytics/statement-types-title "Typy argumentów"
+   :analytics/labels-stats "Użycie etykiet"
    :analytics/fetch-data-button "Pobierz dane"
 
    ;; Supporters
