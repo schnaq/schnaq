@@ -196,7 +196,8 @@
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/starting-conclusions false])
                               (rf/dispatch [:statement.edit/reset-edits])
-                              (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend]))}]
+                              (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
+                              (rf/dispatch [:toggle-replies/clear!]))}]
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]
@@ -252,7 +253,8 @@
                               (rf/dispatch [:visited.statement-nums/to-localstorage])
                               (rf/dispatch [:visited.statement-ids/to-localstorage-and-merge-with-app-db])
                               (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
-                              (rf/dispatch [:statement.edit/reset-edits]))}]}]
+                              (rf/dispatch [:statement.edit/reset-edits])
+                              (rf/dispatch [:toggle-replies/clear!]))}]}]
      ["/graph"
       {:name :routes/graph-view
        :view graph-view/graph-view-entrypoint

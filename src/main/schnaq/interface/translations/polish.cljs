@@ -675,6 +675,8 @@
    :qanda.search/similar-results-explanation-2 "."
    :qanda.button.mark/as-answer "Zaznacz jako odpowiedź"
    :qanda.button.mark/as-unanswered "Odznacz"
+   :qanda.button.show/replies "Pokaż stanowiska"
+   :qanda.button.hide/replies "Ukryj posty"
 
    :schnaqs/header "Twój schnaqs"
    :schnaqs/subheader "Masz dostęp do tych schnaqs"

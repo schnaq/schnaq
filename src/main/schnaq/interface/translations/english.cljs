@@ -678,6 +678,8 @@
    :qanda.search/similar-results-explanation-2 "."
    :qanda.button.mark/as-answer "Mark as answer"
    :qanda.button.mark/as-unanswered "Unmark as answer"
+   :qanda.button.show/replies "Show posts"
+   :qanda.button.hide/replies "Hide posts"
 
    ;; meetings overview
    :schnaqs/header "Your schnaqs"

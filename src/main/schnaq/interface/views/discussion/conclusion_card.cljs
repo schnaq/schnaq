@@ -151,21 +151,22 @@
      [:article.statement-card.my-2
       [:div.d-flex.flex-row
        [:div {:class (card-highlighting statement)}]
-       [:div.card-view.card-body.py-2
+       [:div.card-view.card-body.py-2.px-0
         (when (:meta/new? statement)
           [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right
            (labels :discussion.badges/new)])
-        [:div.pt-2.d-flex
-         [:div.mr-auto [user/user-info statement 42 "w-100"]]
+        [:div.pt-2.d-flex.px-3
+         [:div.mr-auto [user/user-info statement 32 "w-100"]]
          (when q-and-a?
            [:div.ml-auto [mark-as-answer-button statement]])]
         [:div.my-4]
-        [:div.text-typography
+        [:div.text-typography.px-3
          [md/as-markdown (:statement/content statement)]]
-        [statement-information-row statement]
-        (when-not q-and-a?
-          [show-active-labels statement])
-        additional-content]]])))
+        [:div.mx-1
+         [statement-information-row statement]
+         (when-not q-and-a?
+           [show-active-labels statement])
+         additional-content]]]])))
 
 (defn reduced-answer
   "A reduced statement-card focusing on the statement."
@@ -174,7 +175,7 @@
         statement-labels (set (:statement/labels statement))]
     [:article.statement-card.my-1
      [:div.d-flex.flex-row
-      [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
+      [:div {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
       [:div.card-view.card-body
        [:div.d-flex.justify-content-start.pt-2
         [user/user-info statement 25 "w-100"]]
@@ -193,17 +194,63 @@
             [:span.pr-1 {:key (str "show-label-answer" (:db/id statement) label)}
              [labels/build-label label]])])]]]))
 
+(defn- answers [statement]
+  (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/answers statement))]
+    (when (seq answers)
+      [:div.mt-2
+       (for [answer answers]
+         (with-meta
+           [reduced-answer answer]
+           {:key (str "answer-" (:db/id answer))}))])))
+
+(defn- replies [statement]
+  (let [statement-id (:db/id statement)
+        collapsed? @(rf/subscribe [:toggle-replies/is-collapsed? statement-id])
+        button-content (if collapsed? [:<> [icon :collapse-up "my-auto mr-2"]
+                                       (labels :qanda.button.show/replies)]
+                                      [:<> [icon :collapse-down "my-auto mr-2"]
+                                       (labels :qanda.button.hide/replies)])
+        collapsable-id (str "collapse-Replies-" statement-id)
+        replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/answers statement))]
+    (when (not-empty replies)
+      [:div
+       [:button.btn.btn-transparent.border-0
+        {:type "button" :data-toggle "collapse" :aria-expanded "false"
+         :data-target (str "#" collapsable-id)
+         :on-click #(rf/dispatch [:toggle-replies/is-collapsed! statement-id (not collapsed?)])
+         :aria-controls collapsable-id}
+        button-content]
+       [:div.collapse
+        {:id collapsable-id}
+        [:div
+         (for [reply replies]
+           (with-meta
+             [reduced-answer reply]
+             {:key (str "reply-" (:db/id reply))}))]]])))
+
+(rf/reg-event-db
+ :toggle-replies/is-collapsed!
+ (fn [db [_ statement-id collapsed?]]
+   (assoc-in db [:statements :toggled-replies statement-id] collapsed?)))
+
+(rf/reg-event-db
+ :toggle-replies/clear!
+ (fn [db _]
+   (assoc-in db [:statements :toggled-replies] {})))
+
+(rf/reg-sub
+ :toggle-replies/is-collapsed?
+ (fn [db [_ statement-id]]
+   (get-in db [:statements :toggled-replies statement-id] true)))
+
 (defn answer-card
   "Display the answer directly inside the statement itself."
   [statement]
-  (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/answers statement))]
-    [statement-card statement
-     (when (seq answers)
-       [:div.mt-2
-        (for [answer answers]
-          (with-meta
-            [reduced-answer answer]
-            {:key (str "answer-" (:db/id answer))}))])]))
+
+  [statement-card statement
+   [:<>
+    [answers statement]
+    [replies statement]]])
 
 (defn- statement-or-edit-wrapper
   "Either show the clickable statement, or its edit-view."
