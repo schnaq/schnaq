@@ -13,7 +13,7 @@
                                    (cstring/ends-with? % ")"))
                               synonym)))))
 
-(let [raw-synonyms (slurp "synonyms_german.txt")
+(let [raw-synonyms (slurp "https://s3.schnaq.com/synonyms/synonyms_german.txt")
       lines (remove #(cstring/starts-with? %1 "#")
                     (cstring/split raw-synonyms #"\n"))
       cleaned-synonyms (map clean-synonym-line lines)
@@ -23,4 +23,4 @@
                                 (flatten (rest (remove #(> (count %) 1) synonym-list)))}))
                            cleaned-synonyms)
       without-empty-val (remove #(empty? (second (first %))) mapped-synonyms)]
-  (spit "../resources/synonyms/synonyms_german.edn" (apply merge without-empty-val)))
+  (spit "synonyms_german.edn" (apply merge without-empty-val)))

@@ -9,7 +9,7 @@
   (when-not shared-config/production?
     (spec-test/instrument))
   (db/init!)
-  (->> (slurp "resources/synonyms/synonyms_german.edn")
+  (->> (slurp "https://s3.schnaq.com/synonyms/synonyms_german.edn")
        read-string
        (reset! toolbelt/synonyms-german)))
 
