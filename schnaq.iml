@@ -266,7 +266,7 @@
     <orderEntry type="library" name="Deps: org.jboss.xnio/xnio-api:3.8.0.Final" level="project" />
     <orderEntry type="library" name="Deps: buddy/buddy-sign:2.2.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.javascript/closure-compiler-unshaded:v20211006" level="project" />
-    <orderEntry type="library" name="Deps: org.clojure/test.check:1.1.0" level="project" />
+    <orderEntry type="library" name="Deps: org.clojure/test.check:1.1.1" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-frontend:0.5.15" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider:2.10.4" level="project" />
     <orderEntry type="library" name="Deps: com.sun.xml.fastinfoset/FastInfoset:1.2.15" level="project" />
