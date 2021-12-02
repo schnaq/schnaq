@@ -19,7 +19,7 @@
       cleaned-synonyms (map clean-synonym-line lines)
       mapped-synonyms (map (fn [synonym-list]
                              (when (= 1 (count (first synonym-list)))
-                               {(ffirst synonym-list)
+                               {(cstring/lower-case (ffirst synonym-list))
                                 (flatten (rest (remove #(> (count %) 1) synonym-list)))}))
                            cleaned-synonyms)
       without-empty-val (remove #(empty? (second (first %))) mapped-synonyms)]

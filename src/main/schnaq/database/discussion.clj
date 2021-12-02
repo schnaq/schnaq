@@ -451,15 +451,13 @@
                (not (alphanumeric? (first %))) (subs % 1)
                (not (alphanumeric? (last %))) (subs % 0 (dec (count %)))
                :else %))))
-(def synonyms-german
-  {"hund" ["fiffi" "wauwau"]})
 
 (defn- add-synonyms-to-list
   "Go through a list and add all synonyms that can be found in our dictionary.\n
   As of 2021/12 it works for german. We have no language detection."
   [tokens]
   (reduce
-   #(if-let [synonyms (get synonyms-german (cstring/lower-case %2))]
+   #(if-let [synonyms (get @toolbelt/synonyms-german (cstring/lower-case %2))]
       (concat %1 [%2] synonyms)
       (conj %1 %2))
    [] tokens))
