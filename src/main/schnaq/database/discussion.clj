@@ -451,6 +451,18 @@
                (not (alphanumeric? (first %))) (subs % 1)
                (not (alphanumeric? (last %))) (subs % 0 (dec (count %)))
                :else %))))
+(def synonyms-german
+  {"hund" ["fiffi" "wauwau"]})
+
+(defn- add-synonyms-to-list
+  "Go through a list and add all synonyms that can be found in our dictionary.\n
+  As of 2021/12 it works for german. We have no language detection."
+  [tokens]
+  (reduce
+   #(if-let [synonyms (get synonyms-german (cstring/lower-case %2))]
+      (concat %1 [%2] synonyms)
+      (conj %1 %2))
+   [] tokens))
 
 (defn- dynamic-search-query
   "Builds the dynamic search query. One of the bound params needs to be `?statements`.
@@ -467,15 +479,18 @@
 
 (>defn- search-similar-with-n-levenshtein
   "Searches for similar content with a levenshtein distance of n.
-  One of the bound params needs to be `?statements`.\n  `custom-part needs to be a quoted vector."
+  One of the bound params needs to be `?statements`.\n `custom-part needs to be a quoted vector."
   [share-hash search-tokens distance custom-part pattern]
   [:discussion/share-hash (s/coll-of ::specs/non-blank-string) int? (s/coll-of vector?) vector?
    :ret (s/coll-of ::specs/statement)]
-  (->>
-   (query (dynamic-search-query custom-part)
-          pattern share-hash search-tokens distance)
-   frequencies
-   toolbelt/pull-key-up))
+  (let [tokens-with-synonyms (add-synonyms-to-list search-tokens)]
+    ;; Für Synonyme wird ebenfalls eine Distanz berechnet. Wenn dabei zu viel Müll rauskommt, sollte
+    ;; das geändert werden.
+    (->>
+     (query (dynamic-search-query custom-part)
+            pattern share-hash tokens-with-synonyms distance)
+     frequencies
+     toolbelt/pull-key-up)))
 
 (>defn- generic-statement-search
   "A generic search for statements. Provide which statements you want to search. (quoted vector)"
