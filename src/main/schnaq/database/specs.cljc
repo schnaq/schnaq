@@ -204,12 +204,14 @@
   (s/keys :req-un [:statistics.statement.length/max :statistics.statement.length/min
                    :statistics.statement.length/average :statistics.statement.length/median]))
 (s/def :statistics/registered-users-num nat-int?)
+(s/def :statistics/labels-stats map?)
 
 (s/def ::statistics
   (s/keys :req-un [:statistics/discussions-sum :statistics/usernames-sum
                    :statistics/average-statements-num :statistics/statements-num
                    :statistics/active-users-num :statistics/statement-length-stats
-                   :statistics/statement-type-stats :statistics/registered-users-num]))
+                   :statistics/statement-type-stats :statistics/registered-users-num
+                   :statistics/labels-stats]))
 
 ;; App-Codes
 (s/def :app/code ::non-blank-string)

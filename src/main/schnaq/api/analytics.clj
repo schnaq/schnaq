@@ -45,6 +45,11 @@
   [_]
   (ok {:statement-type-stats (analytics-db/statement-type-stats)}))
 
+(defn- labels-stats
+  "Returns statistics about the statement length."
+  [_]
+  (ok {:labels-stats (analytics-db/labels-stats)}))
+
 (defn- all-stats
   "Returns all statistics at once."
   [{:keys [parameters]}]
@@ -57,7 +62,8 @@
           :active-users-num (analytics-db/number-of-active-discussion-users timestamp-since)
           :statement-length-stats (analytics-db/statement-length-stats timestamp-since)
           :statement-type-stats (analytics-db/statement-type-stats timestamp-since)
-          :registered-users-num (analytics-db/number-or-registered-users)}})))
+          :registered-users-num (analytics-db/number-or-registered-users)
+          :labels-stats (analytics-db/labels-stats timestamp-since)}})))
 
 ;; -----------------------------------------------------------------------------
 
@@ -76,4 +82,5 @@
    ["/statement-lengths" {:get statement-lengths-stats}]
    ["/statements" {:get number-of-statements}]
    ["/usernames" {:get number-of-usernames}]
-   ["/registered-users" {:get number-of-registered-users}]])
+   ["/registered-users" {:get number-of-registered-users}]
+   ["/labels" {:get labels-stats}]])
