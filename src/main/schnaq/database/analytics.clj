@@ -160,3 +160,18 @@
    {:supports (number-of-entities-with-value-since :statement/type :statement.type/support since)
     :attacks (number-of-entities-with-value-since :statement/type :statement.type/attack since)
     :neutrals (number-of-entities-with-value-since :statement/type :statement.type/neutral since)}))
+
+(>defn labels-stats
+  "Returns the number of attacks, supports and neutrals since a certain timestamp."
+  ([]
+   [:ret :statistics/statement-type-stats]
+   (labels-stats max-time-back))
+  ([since]
+   [:statistics/since :ret :statistics/statement-type-stats]
+   {:check (number-of-entities-with-value-since :statement/labels ":check" since)
+    :question (number-of-entities-with-value-since :statement/labels ":question" since)
+    :times (number-of-entities-with-value-since :statement/labels ":times" since)
+    :ghost (number-of-entities-with-value-since :statement/labels ":ghost" since)
+    :calendar-alt (number-of-entities-with-value-since :statement/labels ":calendar-alt" since)
+    :arrow-right (number-of-entities-with-value-since :statement/labels ":arrow-right" since)
+    :comment (number-of-entities-with-value-since :statement/labels ":comment" since)}))
