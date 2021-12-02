@@ -56,3 +56,5 @@
                   "^((https?://)?(.*\\.)?(%s\\.%s))($|/.*$)"
                   "^((https?://)?(.*\\.)?(%s))($|/.*$)")]
       (re-pattern (format regex domain-name tld)))))
+
+(def synonyms-german (atom {}))
