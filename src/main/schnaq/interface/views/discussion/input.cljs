@@ -39,25 +39,28 @@
 
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
-  [textarea-name placeholder send-button-label statement-type]
+  [textarea-name placeholder send-button-label statement-type sm?]
   (let [attitude (case statement-type
                    :statement.type/support "support"
                    :statement.type/attack "attack"
-                   :statement.type/neutral "neutral")]
+                   :statement.type/neutral "neutral")
+        additional-form-class (if sm? "form-control-sm" "")
+        additional-btn-class (if sm? "btn-sm" "")]
     [:div.input-group
      [:div {:class (str "highlight-card-reverse highlight-card-" attitude)}]
      [:textarea.form-control.textarea-resize-none
-      {:name textarea-name :wrap "soft" :rows 1
+      {:class additional-form-class
+       :name textarea-name :wrap "soft" :rows 1
        :auto-complete "off"
        :autoFocus true
        :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-       ;; first reset input then set height +1px in order to prevent scrolling
        :required true
        :data-dynamic-height true
        :placeholder placeholder}]
      [:div.input-group-append
       [:button.btn.btn-outline-dark
-       {:type "submit" :title (labels :discussion/create-argument-action)}
+       {:class additional-btn-class
+        :type "submit" :title (labels :discussion/create-argument-action)}
        [:div.d-flex.flex-row
         [:div.d-none.d-lg-block.mr-1 send-button-label]
         [icon :plane "m-auto"]]]]]))
@@ -125,7 +128,8 @@
       form-name
       placeholder
       send-button-label
-      statement-type]]))
+      statement-type
+      true]]))
 
 (rf/reg-event-db
  :form/statement-type!
