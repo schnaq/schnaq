@@ -678,8 +678,6 @@
    :qanda.button.mark/as-unanswered "Markierung aufheben"
    :qanda.button.show/replies "Beiträge anzeigen"
    :qanda.button.hide/replies "Beiträge verbergen"
-   :qanda.button.show/unanswered-replies "Es gibt bereits Beiträge, schau sie dir an!"
-   :qanda.button.show/answered-replies "Es gibt bereits Beiträge, schau sie dir an!"
 
    :schnaqs/header "Deine schnaqs"
    :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
