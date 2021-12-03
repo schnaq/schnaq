@@ -106,7 +106,7 @@
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
   [statement]
-  (let [current-route @(rf/subscribe [:navigation/current-route])
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])
         history-length (count @(rf/subscribe [:discussion-history]))
         mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
         statement-labels (set (:statement/labels statement))
@@ -114,7 +114,7 @@
         label ":check"
         checked? (statement-labels label)]
     (when (and (= 1 history-length)
-               (not= :routes/startpage current-route)       ;; history-length == 1 => a reply to a question
+               (= :routes.schnaq.select/statement current-route) ;; history-length == 1 => a reply to a question
                (or (not mods-mark-only?)
                    (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))
       [:section.w-100
