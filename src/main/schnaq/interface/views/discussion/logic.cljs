@@ -80,7 +80,7 @@
                          (if (= statement-id (:db/id statement))
                            (-> statement
                                (update :meta/sub-statement-count inc)
-                               (update :statement/answers #(conj % new-statement)))
+                               (update :statement/children #(conj % new-statement)))
                            statement))
          updated-statements (map add-answer-fn current-statements)]
      {:db (assoc-in db [:discussion :premises :current] updated-statements)

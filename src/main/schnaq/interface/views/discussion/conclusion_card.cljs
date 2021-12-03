@@ -190,7 +190,7 @@
              [labels/build-label label]])])]]]))
 
 (defn- answers [statement]
-  (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/answers statement))]
+  (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
     (when (seq answers)
       [:div.mt-2
        (for [answer answers]
@@ -206,7 +206,7 @@
                                       [:<> [icon :collapse-down "my-auto mr-2"]
                                        (labels :qanda.button.hide/replies)])
         collapsable-id (str "collapse-Replies-" statement-id)
-        replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/answers statement))]
+        replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))]
     (when (not-empty replies)
       [:div
        [:button.btn.btn-transparent.border-0
