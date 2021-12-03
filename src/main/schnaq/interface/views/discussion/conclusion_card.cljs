@@ -208,7 +208,13 @@
                                       [:<> [icon :collapse-down "my-auto mr-2"]
                                        (labels :qanda.button.hide/replies)])
         collapsable-id (str "collapse-Replies-" statement-id)
-        replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))]
+        replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
+        current-route @(rf/subscribe [:navigation/current-route-name])
+        mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
+        authenticated? @(rf/subscribe [:user/authenticated?])
+        with-answer? (and (= :routes.schnaq/start current-route)
+                          (or (not mods-mark-only?)
+                              (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
     (when (not-empty replies)
       [:<>
        [:button.btn.btn-transparent.border-0
@@ -221,7 +227,7 @@
         [:<>
          (for [reply replies]
            (with-meta
-             [reduced-statement reply nil]
+             [reduced-statement reply with-answer?]
              {:key (str "reply-" (:db/id reply))}))]]])))
 
 (rf/reg-event-db
