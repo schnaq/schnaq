@@ -674,7 +674,7 @@
    :qanda.search/similar-results "Ähnliche Fragen"
    :qanda.search/similar-results-explanation-1 "Bereits gestellte ähnliche Fragen erscheinen hier. Du kannst diese mit "
    :qanda.search/similar-results-explanation-2 "für dich als relevant markieren."
-   :qanda.button.mark/as-answer "Als Antwort markieren"
+   :qanda.button.mark/as-answer "Antwort markieren"
    :qanda.button.mark/as-unanswered "Markierung aufheben"
    :qanda.button.show/replies "Beiträge anzeigen"
    :qanda.button.hide/replies "Beiträge verbergen"

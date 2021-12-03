@@ -151,13 +151,14 @@
            (labels :discussion.badges/new)])
         [:div.pt-2.d-flex.px-3
          [:div.mr-auto [user/user-info statement 32 "w-100"]]
-         (when q-and-a?
-           [:div.ml-auto [mark-as-answer-button statement]])]
+         [:div.d-flex.flex-row.align-items-center.ml-auto
+          (when q-and-a? [mark-as-answer-button statement])
+          [badges/edit-statement-dropdown-menu statement]]]
         [:div.my-4]
         [:div.text-typography.px-3
-         [md/as-markdown (:statement/content statement)]]
-        [:div.mx-1
-         [statement-information-row statement]
+         [md/as-markdown (:statement/content statement)]
+         [statement-information-row statement]]
+        [:div.ml-1.mr-3
          [input/reply-in-statement-input-form statement]
          (when-not q-and-a?
            [show-active-labels statement])
