@@ -249,6 +249,7 @@
    :schnaq.access-code.clipboard/header "Zugangscode kopiert"
    :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."
 
+   :statement/discuss "Diskutieren"
    :statement/reply "Antworten"
    :statement.reply/placeholder "Deine Antwort"
    :statement/ask "Fragen"

@@ -248,6 +248,7 @@
    :schnaq.access-code.clipboard/header "Skopiowany kod dostępu"
    :schnaq.access-code.clipboard/body "Kod dostępu został skopiowany do schowka."
 
+   :statement/discuss "omówić"
    :statement/reply "zapytaj"
    :statement.reply/placeholder "Twoja odpowiedź"
    :statement/ask "Odpowiedzi"

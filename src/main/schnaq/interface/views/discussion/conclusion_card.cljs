@@ -182,7 +182,7 @@
         [:a.mr-3
          {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
                                                               :statement-id (:db/id statement)})}
-         [:small.text-muted (labels :statement/reply)]]
+         [:small.text-muted (labels :statement/discuss)]]
         [up-down-vote statement]]
        (when (seq statement-labels)
          [:div.mx-1

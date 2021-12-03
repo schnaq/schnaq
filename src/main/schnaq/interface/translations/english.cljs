@@ -250,6 +250,7 @@
    :schnaq.access-code.clipboard/header "Access code copied"
    :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."
 
+   :statement/discuss "Discuss"
    :statement/reply "Reply"
    :statement.reply/placeholder "Your answer"
    :statement/ask "Ask"
