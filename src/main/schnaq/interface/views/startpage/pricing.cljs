@@ -188,13 +188,15 @@
   [pages/with-nav-and-header
    {:page/heading (labels :pricing/headline)
     :page/vertical-header? true}
-   [:div.container
-    [intro]
-    [tier-cards]
-    [newsletter]
-    [trial-box]
-    [schnaq-features]
-    [faq]]])
+   [:<>
+    [:div.container
+     [intro]
+     [tier-cards]
+     [newsletter]
+     [trial-box]
+     [schnaq-features]]
+    [:div.container-fluid
+     [faq]]]])
 
 (defn pricing-view
   "The pricing view."

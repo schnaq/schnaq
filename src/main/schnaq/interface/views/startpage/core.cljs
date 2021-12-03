@@ -89,7 +89,7 @@
   [:section.pt-5
    [wavy/top-and-bottom
     :primary
-    [:div.container
+    [:div.container-fluid
      [:span.text-center.text-white
       [:h2 (labels :startpage.faq/title)]
       [:p.lead (labels :startpage.faq/subtitle)]]
