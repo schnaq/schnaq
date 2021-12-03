@@ -100,24 +100,16 @@
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
   [statement]
-  (let [current-route @(rf/subscribe [:navigation/current-route-name])
-        history-length (count @(rf/subscribe [:discussion-history]))
-        mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        statement-labels (set (:statement/labels statement))
-        authenticated? @(rf/subscribe [:user/authenticated?])
+  (let [statement-labels (set (:statement/labels statement))
         label ":check"
         checked? (statement-labels label)]
-    (when (and (= 1 history-length)
-               (= :routes.schnaq.select/statement current-route) ;; history-length == 1 => a reply to a question
-               (or (not mods-mark-only?)
-                   (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))
-      [:section.w-100
-       [:button.btn.btn-sm.btn-link.text-dark.pr-0
-        {:on-click #(if checked?
-                      (rf/dispatch [:statement.labels/remove statement label])
-                      (rf/dispatch [:statement.labels/add statement label]))}
-        [:small.pr-2 (if checked? (labels :qanda.button.mark/as-unanswered) (labels :qanda.button.mark/as-answer))]
-        [labels/build-label (if checked? label ":unchecked")]]])))
+    [:section.w-100
+     [:button.btn.btn-sm.btn-link.text-dark.pr-0
+      {:on-click #(if checked?
+                    (rf/dispatch [:statement.labels/remove statement label])
+                    (rf/dispatch [:statement.labels/add statement label]))}
+      [:small.pr-2 (if checked? (labels :qanda.button.mark/as-unanswered) (labels :qanda.button.mark/as-answer))]
+      [labels/build-label (if checked? label ":unchecked")]]]))
 
 (defn- show-active-labels
   "Shows all active labels."
@@ -141,7 +133,16 @@
   ([statement]
    [statement-card statement nil])
   ([statement additional-content]
-   (let [q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])]
+   (let [q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
+         current-route @(rf/subscribe [:navigation/current-route-name])
+         history-length (count @(rf/subscribe [:discussion-history]))
+         mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
+         authenticated? @(rf/subscribe [:user/authenticated?])
+         show-answer? (and q-and-a?
+                           (= 1 history-length)
+                           (= :routes.schnaq.select/statement current-route) ;; history-length == 1 => a reply to a question
+                           (or (not mods-mark-only?)
+                               (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
      [:article.statement-card.my-2
       [:div.d-flex.flex-row
        [:div {:class (card-highlighting statement)}]
@@ -152,7 +153,7 @@
         [:div.pt-2.d-flex.px-3
          [:div.mr-auto [user/user-info statement 32 "w-100"]]
          [:div.d-flex.flex-row.align-items-center.ml-auto
-          (when q-and-a? [mark-as-answer-button statement])
+          (when show-answer? [mark-as-answer-button statement])
           [badges/edit-statement-dropdown-menu statement]]]
         [:div.my-4]
         [:div.text-typography.px-3
@@ -164,17 +165,20 @@
            [show-active-labels statement])
          additional-content]]]])))
 
-(defn reduced-answer
+(defn reduced-statement
   "A reduced statement-card focusing on the statement."
-  [statement]
+  [statement with-answer?]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
-        statement-labels (set (:statement/labels statement))]
+        q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])]
     [:article.statement-card.my-1
      [:div.d-flex.flex-row
       [:div {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
       [:div.card-view.card-body
        [:div.d-flex.justify-content-start.pt-2
         [user/user-info statement 25 "w-100"]]
+       (when with-answer?
+         [:div.d-flex.flex-row.align-items-center.ml-auto
+          [mark-as-answer-button statement]])
        [:div.my-3]
        [:div.text-typography
         [md/as-markdown (:statement/content statement)]]
@@ -184,11 +188,8 @@
                                                               :statement-id (:db/id statement)})}
          [:small.text-muted (labels :statement/discuss)]]
         [up-down-vote statement]]
-       (when (seq statement-labels)
-         [:div.mx-1
-          (for [label statement-labels]
-            [:span.pr-1 {:key (str "show-label-answer" (:db/id statement) label)}
-             [labels/build-label label]])])]]]))
+       (when-not q-and-a?
+         [show-active-labels statement])]]]))
 
 (defn- answers [statement]
   (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
@@ -196,7 +197,7 @@
       [:div.mt-2
        (for [answer answers]
          (with-meta
-           [reduced-answer answer]
+           [reduced-statement answer :with-answer]
            {:key (str "answer-" (:db/id answer))}))])))
 
 (defn- replies [statement]
@@ -220,7 +221,7 @@
         [:<>
          (for [reply replies]
            (with-meta
-             [reduced-answer reply]
+             [reduced-statement reply nil]
              {:key (str "reply-" (:db/id reply))}))]]])))
 
 (rf/reg-event-db
