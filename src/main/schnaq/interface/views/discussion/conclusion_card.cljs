@@ -16,6 +16,7 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.filters :as filters]
+            [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]))
@@ -91,17 +92,10 @@
      [:span (logic/get-down-votes statement votes)]]))
 
 (defn- statement-information-row [statement]
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [:div.d-flex.flex-wrap.align-items-center
-     [:a.badge.mr-3
-      {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
-                                                           :statement-id (:db/id statement)})}
-      [:button.btn.btn-sm.btn-dark
-       [icon :plus "text-white m-auto" {:size "xs"}]]
-      [:span.ml-2.text-dark (labels :statement/reply)]]
-     [up-down-vote statement]
-     [:div.ml-sm-0.ml-lg-auto
-      [badges/extra-discussion-info-badges statement]]]))
+  [:div.d-flex.flex-wrap.align-items-center
+   [up-down-vote statement]
+   [:div.ml-sm-0.ml-lg-auto
+    [badges/extra-discussion-info-badges statement]]])
 
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
@@ -164,6 +158,7 @@
          [md/as-markdown (:statement/content statement)]]
         [:div.mx-1
          [statement-information-row statement]
+         [input/reply-in-statement-input-form statement]
          (when-not q-and-a?
            [show-active-labels statement])
          additional-content]]]])))
@@ -220,8 +215,7 @@
          :on-click #(rf/dispatch [:toggle-replies/is-collapsed! statement-id (not collapsed?)])
          :aria-controls collapsable-id}
         button-content]
-       [:div.collapse
-        {:id collapsable-id}
+       [:div.collapse {:id collapsable-id}
         [:div
          (for [reply replies]
            (with-meta
@@ -246,7 +240,6 @@
 (defn answer-card
   "Display the answer directly inside the statement itself."
   [statement]
-
   [statement-card statement
    [:<>
     [answers statement]
