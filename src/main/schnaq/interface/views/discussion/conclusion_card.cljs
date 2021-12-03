@@ -209,7 +209,7 @@
         collapsable-id (str "collapse-Replies-" statement-id)
         replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))]
     (when (not-empty replies)
-      [:div
+      [:<>
        [:button.btn.btn-transparent.border-0
         {:type "button" :data-toggle "collapse" :aria-expanded "false"
          :data-target (str "#" collapsable-id)
@@ -217,7 +217,7 @@
          :aria-controls collapsable-id}
         button-content]
        [:div.collapse {:id collapsable-id}
-        [:div
+        [:<>
          (for [reply replies]
            (with-meta
              [reduced-answer reply]
