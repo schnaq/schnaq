@@ -443,10 +443,10 @@
    :privacy.extended.logfiles/title "Provision of the website and creation of log files"
    :privacy.extended.logfiles/body
    [:<>
-    [:p "Each time our website is accessed, our system automatically collects data and information (browser type / version used, operating system, IP address, date and time of access, websites from which our website was accessed, websites accessed via our website) from the computer system of the accessing computer. The data is stored in the log files of our system. This data is not stored together with other personal data of the user. The legal basis for the temporary storage of the data and the log files is Art. 6 para. 1 lit. f GDPR."]
-    [:p "The temporary storage of the IP address by the system is necessary to enable delivery of the website to the user's computer. For this purpose, the IP address must remain stored for the duration of the session. The storage in log files is done to ensure the functionality of the website. In addition, we use the data to optimize the website and to ensure the security of our information technology systems. These purposes are also our legitimate interest in data processing according to Art. 6 para. 1 lit. f GDPR."]
-    [:p "The data is deleted as soon as it is no longer required to achieve the purpose for which it was collected. In the case of the collection of data for the provision of the website, this is the case when the respective session has ended. In the case of storage of data in log files, this is the case after seven days at the latest. Storage beyond this period is possible. In this case, the IP addresses of the users are deleted or anonymized."]
-    [:p "The collection of data for the provision of the website and the storage of the data in log files is mandatory for the operation of the website. Consequently, there is no possibility to object."]]
+    [:p "Each time our website is accessed, our system automatically collects connection data and information (browser type / version used, operating system, IP address, date and time of access, websites from which our website was accessed, websites accessed via our website) from the computer system of the accessing computer. This is quite normal behaviour of most browsers. The data is only kept in the server's memory for the duration of the use of schnaq. This data is not stored together with other personal data of the user. The legal basis for the temporary storage of the data is Art. 6 para. 1 lit. f GDPR."]
+    [:p "The temporary storage of the IP address by the system is necessary to enable delivery of the website to the user's computer. For this purpose, the IP address must remain stored for the duration of the session. The browser type and the version used are required in order to display the website optimally on different browsers. The data is used to optimise the website and to ensure the security of our information technology systems. These purposes are also our legitimate interest in data processing according to Art. 6 para. 1 lit. f GDPR."]
+    [:p "The data is automatically deleted as soon as it is no longer required to achieve the purpose for which it was collected. In the case of the collection of data for the provision of the website, this is the case when the respective session has ended. Every day, sometimes several times, the working memory with all connection data is deleted. Any storage beyond this does not take place."]
+    [:p "The collection of data for the provision of the website is absolutely necessary for the operation of the website. Consequently, there is no possibility to object."]]
    :privacy.extended.cookies/title "Cookies"
    :privacy.extended.cookies/body
    [:<>
@@ -456,12 +456,12 @@
     [:p "You can set your internet browser so that our cookies cannot be stored on your end device or so that cookies that have already been stored are deleted. If you do not accept cookies, this may lead to restrictions in the function of the Internet pages."]
     [:p "Specifically, we have these types of cookies:"]
     [:ul
-     [:li "CSRF token (session cookie), which secures the contact form against unobserved content submission. This is a random arrangement of characters, which is used only for sending the form. This cookie is deleted after you leave our website. This protection mechanism complies with common security standards and can, for example "
+     [:li "CSRF token (session cookie), which, e.g., secures the contact form against unobserved content submission. This is a random arrangement of characters, which is used only for sending the form. This cookie is deleted after you leave our website. This protection mechanism complies with common security standards and can, for example "
       [:a {:href "https://en.wikipedia.org/wiki/Cross-site_request_forgery"}
        "here"]
       " be researched further."]
-     [:li "Login cookie (persistent cookie), which recognizes you as the user you logged in with. After 14 days your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site. You can find our authentication server here: https://auth.schnaq.com"]
-     [:li "schnaq-analytics (persistent cookie) is set if you agree to the extended analysis of your anonymized user behavior. All data is processed in a GDPR-compliant manner and without identifying you as a person. It helps us to identify and fix problems on schnaq more quickly."]]
+     [:li "Login cookie (persistent cookie, auth.schnaq.com), which recognizes you as the user you logged in with. After 14 days your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site. You can find our authentication server here: https://auth.schnaq.com"]
+     [:li "schnaq-analytics (persistent cookie, schnaq.com) is set if you agree to the extended analysis of your anonymized user behavior. All data is processed in a GDPR-compliant manner and without identifying you as a person. It helps us to identify and fix problems on schnaq more quickly."]]
     [:p "All cookies we use generate random strings that are used to match corresponding strings on our server."]]
 
    :privacy.extended.personal-data/title "Personal data"
@@ -544,16 +544,17 @@
     [:p "The schnaq website is hosted on servers of Hetzner Online GmbH in Germany. For further information, please refer to the websites of Hetzner Online GmbH."]
     [:h4 "Conclusion of a commissioned data processing contract (AV contract)"]
     [:p "We have concluded an AV contract with Hetzner Online GmbH, which protects our customers and obliges Hetzner not to pass on the collected data to third parties."]]
-   :privacy.extended.responsible/title "Responsible Person"
+   :privacy.extended.responsible/title "Information according to § 5 German Telemedia Act (TMG)"
    :privacy.extended.responsible/body
    [:<>
     [:p
      "schnaq GmbH i.Gr." [:br]
-     "represented by Dr. Christian Meter, Dr. Alexander Schneider and Michael Birkhoff" [:br]
      "Speditionsstraße 15A" [:br]
      "40221 Düsseldorf" [:br]
      "Germany" [:br]
      (toolbelt/obfuscate-mail "info@schnaq.com")]
+    [:p "Represented by the management:" [:br]
+     "Dr Christian Meter, Dr Alexander Schneider and Michael Birkhoff"]
     [:p "Legally binding is the German version of this page."]]
 
    ;; About us
