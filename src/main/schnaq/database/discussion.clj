@@ -36,7 +36,7 @@
       :in $ ?share-hash pattern
       :where [?discussion :discussion/share-hash ?share-hash]
       [?discussion :discussion/starting-statements ?statements]]
-    share-hash patterns/statement-with-answers)))
+    share-hash patterns/statement-with-children)))
 
 (defn transitive-child-rules
   "Returns a set of rules for finding transitive children entities of a given
@@ -111,7 +111,7 @@
   (-> (query '[:find [(pull ?children statement-pattern) ...]
                :in $ ?parent statement-pattern
                :where [?children :statement/parent ?parent]]
-             parent-id patterns/statement)
+             parent-id patterns/statement-with-children)
       toolbelt/pull-key-up))
 
 (defn delete-statement!
@@ -521,7 +521,7 @@
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
   (generic-statement-search share-hash search-string
                             '[[?discussion :discussion/starting-statements ?statements]]
-                            patterns/statement-with-answers))
+                            patterns/statement-with-children))
 
 (def ^:private summary-pattern
   [:db/id

@@ -191,7 +191,7 @@
 
 (defn- current-topic-badges [schnaq statement is-topic?]
   (let [badges-start [badges/static-info-badges-discussion schnaq]
-        badges-conclusion [badges/extra-discussion-info-badges statement]
+        badges-conclusion [badges/extra-discussion-info-badges statement true]
         badges (if is-topic? badges-start badges-conclusion)]
     [:div.ml-auto badges]))
 
@@ -337,7 +337,7 @@
   (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
     [:div.container-fluid.px-0.px-md-3
      [:div.row
-      [:div.col-lg-12.col-xl-8.py-0.pt-md-3
+      [:div.col-md-12.col-xxl-8.py-0.pt-md-3
        [:div.d-none.d-md-block [action-view]]
        [topic-view
         (if search-inactive?

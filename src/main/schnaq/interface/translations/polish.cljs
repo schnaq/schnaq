@@ -248,6 +248,7 @@
    :schnaq.access-code.clipboard/header "Skopiowany kod dostępu"
    :schnaq.access-code.clipboard/body "Kod dostępu został skopiowany do schowka."
 
+   :statement/discuss "omówić"
    :statement/reply "zapytaj"
    :statement.reply/placeholder "Twoja odpowiedź"
    :statement/ask "Odpowiedzi"
@@ -675,6 +676,8 @@
    :qanda.search/similar-results-explanation-2 "."
    :qanda.button.mark/as-answer "Zaznacz jako odpowiedź"
    :qanda.button.mark/as-unanswered "Odznacz"
+   :qanda.button.show/replies "Pokaż stanowiska"
+   :qanda.button.hide/replies "Ukryj posty"
 
    :schnaqs/header "Twój schnaqs"
    :schnaqs/subheader "Masz dostęp do tych schnaqs"

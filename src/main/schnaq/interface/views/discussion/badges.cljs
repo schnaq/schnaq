@@ -116,7 +116,7 @@
           [:dropdown-item
            [edit-dropdown-button-discussion id share-hash]])]])))
 
-(defn- edit-statement-dropdown-menu [{:keys [db/id] :as statement}]
+(defn edit-statement-dropdown-menu [{:keys [db/id] :as statement}]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
         share-hash @(rf/subscribe [:schnaq/share-hash])
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
@@ -142,25 +142,29 @@
 
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
-  [statement]
-  (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
-        share-hash @(rf/subscribe [:schnaq/share-hash])
-        q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
-        old-statement-num (get old-statements-nums-map (:db/id statement) 0)
-        statement-num (:meta/sub-statement-count statement 0)
-        new? (not (= old-statement-num statement-num))]
-    [:div.d-flex.flex-row.align-items-center
-     [:a.badge.badge-pill.badge-transparent.badge-clickable.mr-2
-      {:href (rfe/href :routes.schnaq.select/statement {:share-hash share-hash
-                                                        :statement-id (:db/id statement)})
-       :role :button}
-      (if new?
-        [icon :comments "m-auto text-secondary"]
-        [icon :comments "m-auto"])
-      " " statement-num]
-     (when-not q-and-a?
-       [statement-labels/edit-labels-button statement])
-     [edit-statement-dropdown-menu statement]]))
+  ([statement]
+   (extra-discussion-info-badges statement false))
+  ([statement with-edit-dropdown?]
+   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
+         share-hash @(rf/subscribe [:schnaq/share-hash])
+         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
+         old-statement-num (get old-statements-nums-map (:db/id statement) 0)
+         statement-num (:meta/sub-statement-count statement 0)
+         new? (not (= old-statement-num statement-num))]
+     [:div.d-flex.flex-row.align-items-center
+      [:a.badge.badge-pill.badge-transparent.badge-clickable.ml-3
+       {:href (rfe/href :routes.schnaq.select/statement {:share-hash share-hash
+                                                         :statement-id (:db/id statement)})
+        :role :button}
+       (if new?
+         [icon :comments "m-auto text-secondary"]
+         [icon :comments "m-auto"])
+       " " statement-num]
+      (when-not q-and-a?
+        [statement-labels/edit-labels-button statement])
+      (when with-edit-dropdown?
+        [:div.ml-2
+         [edit-statement-dropdown-menu statement]])])))
 
 (defn static-info-badges
   "Badges that display schnaq info."
