@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.discussion.logic
   (:require [ghostwheel.core :refer [>defn]]
             [hodgepodge.core :refer [local-storage]]
-            [oops.core :refer [oget]]
+            [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -56,6 +56,38 @@
            [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
 
 (rf/reg-event-fx
+ :discussion.reply.statement/send
+ (fn [{:keys [db]} [_ statement statement-type new-premise]]
+   (let [statement-id (:db/id statement)
+         share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request
+            db :post "/discussion/react-to/statement"
+            [:discussion.reply.statement/added statement]
+            {:share-hash share-hash
+             :conclusion-id statement-id
+             :premise new-premise
+             :statement-type statement-type
+             :display-name (tools/current-display-name db)}
+            [:ajax.error/as-notification])]})))
+
+(rf/reg-event-fx
+ :discussion.reply.statement/added
+ (fn [{:keys [db]} [_ parent-statement response]]
+   (let [new-statement (:new-statement response)
+         statement-id (:db/id parent-statement)
+         current-statements (get-in db [:discussion :premises :current])
+         add-answer-fn (fn [statement]
+                         (if (= statement-id (:db/id statement))
+                           (-> statement
+                               (update :meta/sub-statement-count inc)
+                               (update :statement/children #(conj % new-statement)))
+                           statement))
+         updated-statements (map add-answer-fn current-statements)]
+     {:db (assoc-in db [:discussion :premises :current] updated-statements)
+      :fx [[:dispatch [:notification/new-content]]
+           [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
+
+(rf/reg-event-fx
  :discussion.statements/add-creation-secret
  (fn [{:keys [db]} [_ statement]]
    (when (:statement/creation-secret statement)
@@ -101,6 +133,16 @@
                          :neutral
                          form-statement-type)]
     (rf/dispatch [:discussion.reaction.statement/send statement-type new-text])
+    (rf/dispatch [:form/should-clear [new-text-element]])))
+
+(defn reply-to-statement
+  "Reply directly to a statement via a submitted form."
+  [statement-to-reply-to attitude form-name form]
+  (let [new-text-element (oget+ form [form-name])
+        new-text (oget new-text-element [:value])
+        pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
+        statement-type (if pro-con-disabled? :neutral attitude)]
+    (rf/dispatch [:discussion.reply.statement/send statement-to-reply-to statement-type new-text])
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
 (rf/reg-event-fx

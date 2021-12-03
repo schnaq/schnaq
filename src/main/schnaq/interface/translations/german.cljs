@@ -249,6 +249,7 @@
    :schnaq.access-code.clipboard/header "Zugangscode kopiert"
    :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."
 
+   :statement/discuss "Diskutieren"
    :statement/reply "Antworten"
    :statement.reply/placeholder "Deine Antwort"
    :statement/ask "Fragen"
@@ -674,8 +675,10 @@
    :qanda.search/similar-results "Ähnliche Fragen"
    :qanda.search/similar-results-explanation-1 "Bereits gestellte ähnliche Fragen erscheinen hier. Du kannst diese mit "
    :qanda.search/similar-results-explanation-2 "für dich als relevant markieren."
-   :qanda.button.mark/as-answer "Als Antwort markieren"
+   :qanda.button.mark/as-answer "Antwort markieren"
    :qanda.button.mark/as-unanswered "Markierung aufheben"
+   :qanda.button.show/replies "Beiträge anzeigen"
+   :qanda.button.hide/replies "Beiträge verbergen"
 
    :schnaqs/header "Deine schnaqs"
    :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"

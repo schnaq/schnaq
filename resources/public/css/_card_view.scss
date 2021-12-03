@@ -126,6 +126,13 @@
   margin: 0;
 }
 
+.highlight-card-reduced {
+  @extend .highlight-card;
+  border-radius: 1rem;
+  margin: 0;
+  min-width: 0.25rem;
+}
+
 .highlight-card-neutral {
   @extend .highlight-card;
   background: $neutral;

@@ -16,6 +16,7 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.filters :as filters]
+            [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]))
@@ -91,17 +92,10 @@
      [:span (logic/get-down-votes statement votes)]]))
 
 (defn- statement-information-row [statement]
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [:div.d-flex.flex-wrap.align-items-center
-     [:a.badge.mr-3
-      {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
-                                                           :statement-id (:db/id statement)})}
-      [:button.btn.btn-sm.btn-dark
-       [icon :plus "text-white m-auto" {:size "xs"}]]
-      [:span.ml-2.text-dark (labels :statement/reply)]]
-     [up-down-vote statement]
-     [:div.ml-sm-0.ml-lg-auto
-      [badges/extra-discussion-info-badges statement]]]))
+  [:div.d-flex.flex-wrap.align-items-center
+   [up-down-vote statement]
+   [:div.ml-sm-0.ml-lg-auto
+    [badges/extra-discussion-info-badges statement]]])
 
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
@@ -151,21 +145,24 @@
      [:article.statement-card.my-2
       [:div.d-flex.flex-row
        [:div {:class (card-highlighting statement)}]
-       [:div.card-view.card-body.py-2
+       [:div.card-view.card-body.py-2.px-0
         (when (:meta/new? statement)
           [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right
            (labels :discussion.badges/new)])
-        [:div.pt-2.d-flex
-         [:div.mr-auto [user/user-info statement 42 "w-100"]]
-         (when q-and-a?
-           [:div.ml-auto [mark-as-answer-button statement]])]
+        [:div.pt-2.d-flex.px-3
+         [:div.mr-auto [user/user-info statement 32 "w-100"]]
+         [:div.d-flex.flex-row.align-items-center.ml-auto
+          (when q-and-a? [mark-as-answer-button statement])
+          [badges/edit-statement-dropdown-menu statement]]]
         [:div.my-4]
-        [:div.text-typography
-         [md/as-markdown (:statement/content statement)]]
-        [statement-information-row statement]
-        (when-not q-and-a?
-          [show-active-labels statement])
-        additional-content]]])))
+        [:div.text-typography.px-3
+         [md/as-markdown (:statement/content statement)]
+         [statement-information-row statement]]
+        [:div.ml-1.mr-3
+         [input/reply-in-statement-input-form statement]
+         (when-not q-and-a?
+           [show-active-labels statement])
+         additional-content]]]])))
 
 (defn reduced-answer
   "A reduced statement-card focusing on the statement."
@@ -174,7 +171,7 @@
         statement-labels (set (:statement/labels statement))]
     [:article.statement-card.my-1
      [:div.d-flex.flex-row
-      [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
+      [:div {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
       [:div.card-view.card-body
        [:div.d-flex.justify-content-start.pt-2
         [user/user-info statement 25 "w-100"]]
@@ -185,7 +182,7 @@
         [:a.mr-3
          {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
                                                               :statement-id (:db/id statement)})}
-         [:small.text-muted (labels :statement/reply)]]
+         [:small.text-muted (labels :statement/discuss)]]
         [up-down-vote statement]]
        (when (seq statement-labels)
          [:div.mx-1
@@ -193,17 +190,61 @@
             [:span.pr-1 {:key (str "show-label-answer" (:db/id statement) label)}
              [labels/build-label label]])])]]]))
 
+(defn- answers [statement]
+  (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
+    (when (seq answers)
+      [:div.mt-2
+       (for [answer answers]
+         (with-meta
+           [reduced-answer answer]
+           {:key (str "answer-" (:db/id answer))}))])))
+
+(defn- replies [statement]
+  (let [statement-id (:db/id statement)
+        collapsed? @(rf/subscribe [:toggle-replies/is-collapsed? statement-id])
+        button-content (if collapsed? [:<> [icon :collapse-up "my-auto mr-2"]
+                                       (labels :qanda.button.show/replies)]
+                                      [:<> [icon :collapse-down "my-auto mr-2"]
+                                       (labels :qanda.button.hide/replies)])
+        collapsable-id (str "collapse-Replies-" statement-id)
+        replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))]
+    (when (not-empty replies)
+      [:<>
+       [:button.btn.btn-transparent.border-0
+        {:type "button" :data-toggle "collapse" :aria-expanded "false"
+         :data-target (str "#" collapsable-id)
+         :on-click #(rf/dispatch [:toggle-replies/is-collapsed! statement-id (not collapsed?)])
+         :aria-controls collapsable-id}
+        button-content]
+       [:div.collapse {:id collapsable-id}
+        [:<>
+         (for [reply replies]
+           (with-meta
+             [reduced-answer reply]
+             {:key (str "reply-" (:db/id reply))}))]]])))
+
+(rf/reg-event-db
+ :toggle-replies/is-collapsed!
+ (fn [db [_ statement-id collapsed?]]
+   (assoc-in db [:statements :toggled-replies statement-id] collapsed?)))
+
+(rf/reg-event-db
+ :toggle-replies/clear!
+ (fn [db _]
+   (assoc-in db [:statements :toggled-replies] {})))
+
+(rf/reg-sub
+ :toggle-replies/is-collapsed?
+ (fn [db [_ statement-id]]
+   (get-in db [:statements :toggled-replies statement-id] true)))
+
 (defn answer-card
   "Display the answer directly inside the statement itself."
   [statement]
-  (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/answers statement))]
-    [statement-card statement
-     (when (seq answers)
-       [:div.mt-2
-        (for [answer answers]
-          (with-meta
-            [reduced-answer answer]
-            {:key (str "answer-" (:db/id answer))}))])]))
+  [statement-card statement
+   [:<>
+    [answers statement]
+    [replies statement]]])
 
 (defn- statement-or-edit-wrapper
   "Either show the clickable statement, or its edit-view."

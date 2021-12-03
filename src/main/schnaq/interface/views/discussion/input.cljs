@@ -39,40 +39,50 @@
 
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
+  [textarea-name placeholder send-button-label statement-type sm?]
+  (let [attitude (case statement-type
+                   :statement.type/support "support"
+                   :statement.type/attack "attack"
+                   :statement.type/neutral "neutral")
+        additional-form-class (if sm? "form-control-sm" "")
+        additional-btn-class (if sm? "btn-sm" "")]
+    [:div.input-group
+     [:div {:class (str "highlight-card-reverse highlight-card-" attitude)}]
+     [:textarea.form-control.textarea-resize-none
+      {:class additional-form-class
+       :name textarea-name :wrap "soft" :rows 1
+       :auto-complete "off"
+       :autoFocus true
+       :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
+       :required true
+       :data-dynamic-height true
+       :placeholder placeholder}]
+     [:div.input-group-append
+      [:button.btn.btn-outline-dark
+       {:class additional-btn-class
+        :type "submit" :title (labels :discussion/create-argument-action)}
+       [:div.d-flex.flex-row
+        [:div.d-none.d-lg-block.mr-1 send-button-label]
+        [icon :plane "m-auto"]]]]]))
+
+(defn- topic-input-area
+  "Input form with an option to chose statement type."
   [textarea-name]
-  (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        current-route-name @(rf/subscribe [:navigation/current-route-name])
+  (let [current-route-name @(rf/subscribe [:navigation/current-route-name])
         starting-route? (= :routes.schnaq/start current-route-name)
-        statement-type @(rf/subscribe [:form/statement-type])
+        pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
+        statement-type (if starting-route? :statement.type/neutral
+                                           @(rf/subscribe [:form/statement-type]))
         send-button-label (if starting-route? (labels :statement/ask)
                                               (labels :statement/reply))
-        placeholder (if starting-route?
-                      (labels :statement.ask/placeholder)
-                      (labels :statement.reply/placeholder))
-        attitude (if starting-route?
-                   "neutral"
-                   (case statement-type
-                     :statement.type/support "support"
-                     :statement.type/attack "attack"
-                     :statement.type/neutral "neutral"))]
+        placeholder (if starting-route? (labels :statement.ask/placeholder)
+                                        (labels :statement.reply/placeholder))]
     [:<>
-     [:div.input-group
-      [:div {:class (str "highlight-card-reverse highlight-card-" attitude)}]
-      [:textarea.form-control.textarea-resize-none
-       {:name textarea-name :wrap "soft" :rows 1
-        :auto-complete "off"
-        :autoFocus true
-        :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-        ;; first reset input then set height +1px in order to prevent scrolling
-        :required true
-        :data-dynamic-height true
-        :placeholder placeholder}]
-      [:div.input-group-append
-       [:button.btn.btn-outline-dark
-        {:type "submit" :title (labels :discussion/create-argument-action)}
-        [:div.d-flex.flex-row
-         [:div.d-none.d-lg-block.mr-1 send-button-label]
-         [icon :plane "m-auto"]]]]]
+     [textarea-for-statements
+      textarea-name
+      placeholder
+      send-button-label
+      statement-type]
      (when-not (or starting-route? pro-con-disabled?)
        [:div.input-group-prepend.mt-3
         [statement-type-choose-button [:form/statement-type] [:form/statement-type!]]])]))
@@ -81,19 +91,45 @@
   "Form to collect the user's statements."
   [textarea-name]
   (let [current-route-name @(rf/subscribe [:navigation/current-route-name])
+        starting-route? (= :routes.schnaq/start current-route-name)
         when-starting (fn [e] (jq/prevent-default e)
                         (rf/dispatch [:discussion.add.statement/starting
                                       (oget e [:currentTarget :elements])]))
         when-deeper-in-discussion (fn [e]
                                     (jq/prevent-default e)
                                     (logic/submit-new-premise (oget e [:currentTarget :elements])))
-        event-to-send (if (= :routes.schnaq/start current-route-name)
+        event-to-send (if starting-route?
                         when-starting when-deeper-in-discussion)]
     [:form.my-md-2
      {:on-submit #(event-to-send %)
       :on-key-down #(when (jq/ctrl-press % 13)
                       (event-to-send %))}
-     [textarea-for-statements textarea-name]]))
+     [topic-input-area textarea-name]]))
+
+(defn reply-in-statement-input-form
+  "Input form inside a statement card. This form is used to directly reply to a statement inside its own card."
+  [statement]
+  (let [form-name (str "answer-to-statement-" (:db/id statement))
+        placeholder (labels :statement.reply/placeholder)
+        send-button-label (labels :statement/reply)
+        statement-type :statement.type/neutral
+        answer-to-statement-event (fn [e]
+                                    (jq/prevent-default e)
+                                    (logic/reply-to-statement
+                                     statement
+                                     statement-type
+                                     form-name
+                                     (oget e [:currentTarget :elements])))]
+    [:form.my-md-2
+     {:on-submit #(answer-to-statement-event %)
+      :on-key-down #(when (jq/ctrl-press % 13)
+                      (answer-to-statement-event %))}
+     [textarea-for-statements
+      form-name
+      placeholder
+      send-button-label
+      statement-type
+      true]]))
 
 (rf/reg-event-db
  :form/statement-type!

@@ -52,9 +52,9 @@
 (def statement-with-secret
   (conj statement :statement/creation-secret))
 
-(def statement-with-answers
+(def statement-with-children
   (conj statement
-        {[:statement/_parent :as :statement/answers] statement}))
+        {[:statement/_parent :as :statement/children] statement}))
 
 ;; -----------------------------------------------------------------------------
 
