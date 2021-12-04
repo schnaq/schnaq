@@ -57,8 +57,10 @@
   [background-schema]
   [:background/schema :ret :re-frame/component]
   [:<>
-   [ask-question background-schema]
-   [search/results-list background-schema]])
+   [:div.container.p-0.px-md-5
+    [ask-question background-schema]]
+   [:div.container-fluid.p-0.px-md-5
+    [search/results-list background-schema]]])
 
 (defn- qanda-content []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
@@ -66,8 +68,7 @@
      {:page/heading (:discussion/title current-discussion)
       :page/classes "base-wrapper layered-wave-background h-100 d-flex flex-column"}
      [:<>
-      [:div.container.p-0.px-md-5
-       [question-field-and-search-results :dark]]
+      [question-field-and-search-results :dark]
       [:div.wave-bottom-typography.d-flex.align-self-end.mt-auto]]]))
 
 (defn qanda-view
