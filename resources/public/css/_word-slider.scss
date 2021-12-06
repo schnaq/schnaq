@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .ms-header {
   &__title {
     flex: 1 1 100%;
@@ -40,7 +42,7 @@
 
   @for $index from 0 to length($steps)-1 {
     $next: $index+1;
-    $step: floor(100/(length($steps)-1));
+    $step: floor(math.div(100, length($steps)-1));
     $animation-step: floor($step*0.2);
 
     #{$step*$index}%,
