@@ -45,9 +45,10 @@
                    :statement.type/attack "attack"
                    :statement.type/neutral "neutral")
         additional-form-class (if sm? "form-control-sm" "")
-        additional-btn-class (if sm? "btn-sm" "")]
+        additional-btn-class (if sm? "btn-sm" "")
+        additional-highlight-class (if sm? "highlight-card-reduced " "")]
     [:div.input-group
-     [:div {:class (str "highlight-card-reverse highlight-card-" attitude)}]
+     [:div {:class (str additional-highlight-class "highlight-card-reverse highlight-card-" attitude)}]
      [:textarea.form-control.textarea-resize-none
       {:class additional-form-class
        :name textarea-name :wrap "soft" :rows 1

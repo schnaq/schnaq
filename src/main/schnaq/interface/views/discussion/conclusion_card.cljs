@@ -108,7 +108,8 @@
       {:on-click #(if checked?
                     (rf/dispatch [:statement.labels/remove statement label])
                     (rf/dispatch [:statement.labels/add statement label]))}
-      [:small.pr-2 (if checked? (labels :qanda.button.mark/as-unanswered) (labels :qanda.button.mark/as-answer))]
+      [:small.pr-2 (if checked? (labels :qanda.button.mark/as-unanswered)
+                                (labels :qanda.button.mark/as-answer))]
       [labels/build-label (if checked? label ":unchecked")]]]))
 
 (defn- show-active-labels
@@ -170,26 +171,27 @@
   [statement with-answer?]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])]
-    [:article.statement-card.my-1
-     [:div.d-flex.flex-row
-      [:div {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
-      [:div.card-view.card-body
-       [:div.d-flex.justify-content-start.pt-2
-        [user/user-info statement 25 "w-100"]]
-       (when with-answer?
-         [:div.d-flex.flex-row.align-items-center.ml-auto
-          [mark-as-answer-button statement]])
-       [:div.my-3]
-       [:div.text-typography
-        [md/as-markdown (:statement/content statement)]]
-       [:div.d-flex.flex-wrap.align-items-center
-        [:a.mr-3
-         {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
-                                                              :statement-id (:db/id statement)})}
-         [:small.text-muted (labels :statement/discuss)]]
-        [up-down-vote statement]]
-       (when-not q-and-a?
-         [show-active-labels statement])]]]))
+    [motion/fade-in-and-out
+     [:article.statement-card.mt-1.border
+      [:div.d-flex.flex-row
+       [:div.mr-2 {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
+       [:div.card-view.card-body.p-2
+        [:div.d-flex.justify-content-start.pt-2
+         [user/user-info statement 25 "w-100"]]
+        [:div.my-3]
+        [:div.text-typography
+         [md/as-markdown (:statement/content statement)]]
+        [:div.d-flex.flex-wrap.align-items-center
+         [:a.mr-3
+          {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
+                                                               :statement-id (:db/id statement)})}
+          [:small.text-dark (labels :statement/discuss)]]
+         [up-down-vote statement]
+         (when with-answer?
+           [:div.d-flex.flex-row.align-items-center.ml-auto
+            [mark-as-answer-button statement]])]
+        (when-not q-and-a?
+          [show-active-labels statement])]]]]))
 
 (defn- answers [statement]
   (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
