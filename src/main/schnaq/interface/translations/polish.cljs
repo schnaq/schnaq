@@ -441,10 +441,10 @@
    :privacy.extended.logfiles/title "Udostępnianie strony internetowej i tworzenie plików dziennika systemowego"
    :privacy.extended.logfiles/body
    [:<>
-    [:p "Przy każdym wejściu na naszą stronę internetową nasz system automatycznie pobiera dane i informacje (typ / wersja używanej przeglądarki, system operacyjny, adres IP, data i godzina dostępu, strony internetowe, z których uzyskano dostęp do naszej strony internetowej, strony internetowe, do których uzyskano dostęp za pośrednictwem naszej strony internetowej) z systemu komputerowego komputera uzyskującego dostęp. Dane te są zapisywane w plikach logów naszego systemu. Dane te nie są przechowywane razem z innymi danymi osobowymi użytkownika. Podstawą prawną dla tymczasowego przechowywania danych i plików dziennika jest art. 6 ust. 1 lit. f GDPR."]
-    [:p "Tymczasowe zapisanie adresu IP przez system jest konieczne, aby umożliwić dostarczenie strony internetowej do komputera użytkownika. W tym celu adres IP musi pozostać zapisany na czas trwania sesji. Zapisywanie w plikach dziennika odbywa się w celu zapewnienia funkcjonalności strony internetowej. Ponadto wykorzystujemy te dane do optymalizacji strony internetowej oraz do zapewnienia bezpieczeństwa naszych systemów informatycznych. Cele te stanowią również nasz uzasadniony interes w przetwarzaniu danych zgodnie z art. 6 ust. 1 lit. f GDPR."]
-    [:p "Dane są usuwane, gdy tylko nie są już potrzebne do osiągnięcia celu, dla którego zostały zebrane. W przypadku zbierania danych w celu udostępnienia strony internetowej, ma to miejsce po zakończeniu danej sesji. W przypadku przechowywania danych w plikach dziennika następuje to najpóźniej po siedmiu dniach. Możliwe jest przechowywanie po upływie tego okresu. W takim przypadku adresy IP użytkowników są usuwane lub anonimizowane."]
-    [:p "Gromadzenie danych w celu udostępnienia strony internetowej i zapisywanie danych w plikach dziennika jest absolutnie konieczne do funkcjonowania strony internetowej. W związku z tym nie ma możliwości wniesienia sprzeciwu."]]
+    [:p "Przy każdym wejściu na naszą stronę internetową nasz system automatycznie gromadzi dane i informacje dotyczące połączenia (typ / wersja używanej przeglądarki, system operacyjny, adres IP, data i godzina dostępu, strony internetowe, z których uzyskano dostęp do naszej strony internetowej, strony internetowe, do których uzyskano dostęp za pośrednictwem naszej strony internetowej) z systemu komputerowego komputera uzyskującego dostęp. Jest to całkiem normalne zachowanie większości przeglądarek. Dane są przechowywane w pamięci serwera tylko przez czas używania schnaq. Dane te nie są przechowywane razem z innymi danymi osobowymi użytkownika. Podstawą prawną dla tymczasowego przechowywania danych jest art. 6 ust. 1 lit. f GDPR."]
+    [:p "Tymczasowe zapisanie adresu IP przez system jest konieczne, aby umożliwić dostarczenie strony internetowej do komputera użytkownika. W tym celu adres IP musi pozostać zapisany na czas trwania sesji. Typ przeglądarki i jej wersja są wymagane w celu optymalnego wyświetlania strony na różnych przeglądarkach. Dane te są wykorzystywane do optymalizacji strony internetowej oraz do zapewnienia bezpieczeństwa naszych systemów informatycznych. Cele te stanowią również nasz uzasadniony interes w przetwarzaniu danych zgodnie z art. 6 ust. 1 lit. f GDPR."]
+    [:p "Dane są automatycznie usuwane, gdy tylko nie są już potrzebne do osiągnięcia celu, dla którego zostały zebrane. W przypadku zbierania danych w celu udostępnienia strony internetowej, ma to miejsce po zakończeniu danej sesji. Każdego dnia, czasami kilka razy, pamięć robocza z wszystkimi danymi połączeń jest usuwana. Magazynowanie wykraczające poza ten zakres nie ma miejsca."]
+    [:p "Gromadzenie danych w celu udostępnienia strony internetowej jest absolutnie konieczne dla funkcjonowania strony internetowej. W związku z tym nie ma możliwości wniesienia sprzeciwu."]]
    :privacy.extended.cookies/title "Cookies"
    :privacy.extended.cookies/body
    [:<>
@@ -458,8 +458,8 @@
       [:a {:href "https://de.wikipedia.org/wiki/Cross-Site-Request-Forgery"}
        "tutaj"]
       " należy prowadzić dalsze badania."]
-     [:li "Plik cookie logowania (trwały plik cookie), który rozpoznaje Cię jako:użytkownika:w, z którym się zalogowałeś. Po 14 dniach plik cookie wygasa i jest usuwany. Jeśli usuniesz ten plik cookie, będziesz musiał zalogować się ponownie przy następnej wizycie na stronie. Nasz serwer uwierzytelniający można znaleźć tutaj: https://auth.schnaq.com"]
-     [:li "schnaq-Analytics (trwały plik cookie) jest ustawiany, jeśli zgadzasz się na rozszerzoną analizę anonimowego zachowania użytkownika. Wszystkie dane są przetwarzane zgodnie z GDPR i bez identyfikacji Ciebie jako osoby i pomagają nam szybciej identyfikować i rozwiązywać problemy na schnaq."]]
+     [:li "Plik cookie logowania (trwały plik cookie, auth.schnaq.com), który rozpoznaje Cię jako:użytkownika:w, z którym się zalogowałeś. Po 14 dniach plik cookie wygasa i jest usuwany. Jeśli usuniesz ten plik cookie, będziesz musiał zalogować się ponownie przy następnej wizycie na stronie. Nasz serwer uwierzytelniający można znaleźć tutaj: https://auth.schnaq.com"]
+     [:li "schnaq-analytics (trwały plik cookie, schnaq.com) jest ustawiany, jeśli zgadzasz się na rozszerzoną analizę anonimowego zachowania użytkownika. Wszystkie dane są przetwarzane zgodnie z GDPR i bez identyfikacji Ciebie jako osoby i pomagają nam szybciej identyfikować i rozwiązywać problemy na schnaq."]]
     [:p "Wszystkie używane przez nas pliki cookie generują losowe ciągi znaków, które są używane do dopasowania odpowiadających im ciągów znaków na naszym serwerze."]]
 
    :privacy.extended.personal-data/title "Dane osobowe"
@@ -542,16 +542,17 @@
     [:p "Strona schnaq jest umieszczona na serwerach firmy Hetzner Online GmbH w Niemczech. Więcej informacji na ten temat można znaleźć na stronie internetowej Hetzner Online GmbH."]
     [:h4 "Zawarcie umowy dotyczącej przetwarzania danych na zlecenie (umowa AV)"]
     [:p "Zawarliśmy z firmą Hetzner Online GmbH umowę AV, która chroni naszych klientów i zobowiązuje firmę Hetzner do nieprzekazywania zgromadzonych danych osobom trzecim.."]]
-   :privacy.extended.responsible/title "Osoba odpowiedzialna"
+   :privacy.extended.responsible/title "Informacje zgodnie z § 5 niemieckiej ustawy o telemediach (TMG)"
    :privacy.extended.responsible/body
    [:<>
     [:p
      "schnaq GmbH i.Gr." [:br]
-     "reprezentowani przez Christian Meter, Alexander Schneider und Michael Birkhoff" [:br]
      "Speditionsstraße 15A" [:br]
      "40221 Düsseldorf" [:br]
      "Niemcy" [:br]
      (toolbelt/obfuscate-mail "info@schnaq.com")]
+    [:p "Reprezentowane przez zarząd:" [:br]
+     "Dr. Christian Meter, Dr. Alexander Schneider i Michael Birkhoff"]
     [:p "Prawnie wiążąca jest niemiecka wersja tej strony."]]
 
    ;; About us
