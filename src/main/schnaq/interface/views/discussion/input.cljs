@@ -40,14 +40,14 @@
 
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
-  [textarea-name placeholder send-button-label statement-type auto-focus? sm?]
+  [textarea-name placeholder send-button-label statement-type auto-focus? small?]
   (let [attitude (case statement-type
                    :statement.type/support "support"
                    :statement.type/attack "attack"
                    :statement.type/neutral "neutral")
-        additional-form-class (if sm? "form-control-sm" "")
-        additional-btn-class (if sm? "btn-sm" "")
-        additional-highlight-class (if sm? "highlight-card-reduced " "")]
+        additional-form-class (when small? "form-control-sm")
+        additional-btn-class (when small? "btn-sm")
+        additional-highlight-class (when small? "highlight-card-reduced ")]
     [:div.input-group
      [:div {:class (str additional-highlight-class "highlight-card-reverse highlight-card-" attitude)}]
      [:textarea.form-control.textarea-resize-none
