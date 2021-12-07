@@ -224,35 +224,3 @@
  :keycloak/object
  (fn [db]
    (get-in db [:user :keycloak])))
-
-(comment
-
-  (.isTokenExpired kc)
-  (.createLoginUrl kc)
-
-  (-> kc
-      (.loadUserProfile)
-      (.then
-       #(.log js/console %))
-      (.catch))
-
-  (let [kc (-> @re-frame.db/app-db
-               :user :keycloak)]
-    (.createLoginUrl kc))
-
-  (.-idTokenParsed kc)
-
-  (-> kc
-      (.updateToken 30000)
-      (.then
-       (fn [e]
-         (prn "then")
-         (.log js/console e)))
-      (.catch
-       (fn [e]
-         (prn "catch")
-         (.log js/console e)
-         (rf/dispatch [:modal {:show? true :child [request-login-modal]}])
-         (rf/dispatch [:keycloak/init]))))
-
-  nil)
