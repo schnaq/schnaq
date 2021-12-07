@@ -27,13 +27,13 @@
 (rf/reg-event-fx
  :keycloak/init
  (fn [{:keys [db]} [_ _]]
-   (let [^js keycloak (Keycloak (clj->js config/keycloak))]
+   (let [keycloak (Keycloak (clj->js config/keycloak))]
      {:db (assoc-in db [:user :keycloak] keycloak)
       :fx [[:keycloak/silent-check keycloak]]})))
 
 (rf/reg-fx
  :keycloak/silent-check
- (fn [^js keycloak]
+ (fn [keycloak]
    (-> keycloak
        (.init #js{:onLoad "check-sso"
                   :checkLoginIframe false
@@ -56,13 +56,13 @@
 (rf/reg-event-fx
  :keycloak/login
  (fn [{:keys [db]} [_ _]]
-   (let [^js keycloak (get-in db [:user :keycloak])]
+   (let [keycloak (get-in db [:user :keycloak])]
      (when keycloak
        {:fx [[:keycloak/login-request keycloak]]}))))
 
 (rf/reg-fx
  :keycloak/login-request
- (fn [^js keycloak]
+ (fn [keycloak]
    (-> keycloak
        (.login)
        (.then #(rf/dispatch [:keycloak/load-user-profile]))
@@ -75,7 +75,7 @@
 (rf/reg-event-fx
  :keycloak/load-user-profile
  (fn [{:keys [db]} _]
-   (let [^js keycloak (get-in db [:user :keycloak])]
+   (let [keycloak (get-in db [:user :keycloak])]
      (when (and keycloak (user-authenticated? db))
        {:fx [[:keycloak/load-user-profile-request keycloak]]}))))
 
@@ -86,7 +86,7 @@
 
 (rf/reg-fx
  :keycloak/load-user-profile-request
- (fn [^js keycloak]
+ (fn [keycloak]
    (-> keycloak
        (.loadUserProfile)
        (.then #(rf/dispatch [:keycloak/store-groups
@@ -108,13 +108,13 @@
 (rf/reg-event-fx
  :keycloak/logout
  (fn [{:keys [db]} [_ _]]
-   (let [^js keycloak (get-in db [:user :keycloak])]
+   (let [keycloak (get-in db [:user :keycloak])]
      (when keycloak
        {:fx [[:keycloak/logout-request keycloak]]}))))
 
 (rf/reg-fx
  :keycloak/logout-request
- (fn [^js keycloak]
+ (fn [keycloak]
    (-> keycloak
        (.logout)
        (.then #(rf/dispatch [:user/authenticated! false]))
@@ -129,14 +129,13 @@
 (rf/reg-event-fx
  :keycloak/check-token-validity
  (fn [{:keys [db]} [_ _]]
-   (let [^js keycloak (get-in db [:user :keycloak])
-         authenticated? (get-in db [:user :authenticated?])]
-     (when (and keycloak authenticated?)
+   (let [keycloak (get-in db [:user :keycloak])]
+     (when (and keycloak (user-authenticated? db))
        {:fx [[:keycloak/loop-token-validity-check keycloak]]}))))
 
 (rf/reg-fx
  :keycloak/loop-token-validity-check
- (fn [^js keycloak]
+ (fn [keycloak]
    (go (while true
          (<! (timeout 30000))
          (-> keycloak
@@ -176,7 +175,7 @@
  :keycloak.roles/extract
  (fn [db [_ _]]
    (when (user-authenticated? db)
-     (let [^js keycloak (get-in db [:user :keycloak])
+     (let [keycloak (get-in db [:user :keycloak])
            roles (:roles (js->clj (oget keycloak [:realmAccess])
                                   :keywordize-keys true))]
        (assoc-in db [:user :roles] roles)))))
@@ -189,7 +188,7 @@
   backend."
   [db]
   [map? :ret map?]
-  (let [^js keycloak (get-in db [:user :keycloak])
+  (let [keycloak (get-in db [:user :keycloak])
         external-jwt (get-in db [:user :jwt])]
     (cond
       (not (user-authenticated? db)) {}
