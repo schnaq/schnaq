@@ -180,8 +180,8 @@
    :page.login.alert/button "this page"
    :page.login.alert/text-2 "to view your benefits as a registered:user."
 
-   :auth.modal.request-login/title "Login has expired"
-   :auth.modal.request-login/lead "Your login has expired. This can happen if you have not been active for a long time. Please reload the page and log in again."
+   :auth.modal.request-login/title "Session expired"
+   :auth.modal.request-login/lead "Your session has expired. This can happen if you have not been active for a long time. Please reload the page and log in again"
    :auth.modal.request-login/button "Log in again"
    :auth.modal.request-login/info "If your login can be restored, clicking the button will only reload the page briefly."
 

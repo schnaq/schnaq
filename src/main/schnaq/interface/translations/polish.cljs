@@ -179,8 +179,8 @@
    :page.login.alert/button "ta strona"
    :page.login.alert/text-2 "zobacz swoje korzyści jako zarejestrowany użytkownik"
 
-   :auth.modal.request-login/title "Logowanie wygasło"
-   :auth.modal.request-login/lead "Twój login wygasł. Może się to zdarzyć, jeśli nie byłeś aktywny przez dłuższy czas. Proszę przeładować stronę i zalogować się ponownie."
+   :auth.modal.request-login/title "Sesja zakończona"
+   :auth.modal.request-login/lead "Twoja sesja wygasła. Może się to zdarzyć, jeśli nie byłeś aktywny przez dłuższy czas. Proszę przeładować stronę i zalogować się ponownie"
    :auth.modal.request-login/button "Zaloguj się ponownie"
    :auth.modal.request-login/info "Jeśli twój login może zostać przywrócony, kliknięcie przycisku spowoduje tylko krótkie przeładowanie strony."
 

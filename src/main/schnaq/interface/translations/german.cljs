@@ -180,8 +180,8 @@
    :page.login.alert/button "dieser Seite"
    :page.login.alert/text-2 "deine Vorteile als registrierte:r Nutzer:in an."
 
-   :auth.modal.request-login/title "Login abgelaufen"
-   :auth.modal.request-login/lead "Dein Login ist abgelaufen. Das kann schonmal passieren, wenn du längere Zeit nicht aktiv warst. Bitte lade die Seite neu und logge dich erneut ein"
+   :auth.modal.request-login/title "Sitzung abgelaufen"
+   :auth.modal.request-login/lead "Deine Sitzung ist abgelaufen. Das kann schonmal passieren, wenn du längere Zeit nicht aktiv warst. Bitte lade die Seite neu und logge dich erneut ein"
    :auth.modal.request-login/button "Erneut einloggen"
    :auth.modal.request-login/info "Wenn dein Login wiederhergestellt werden kann, wird beim Klick auf den Button nur die Seite kurz neu geladen."
 
