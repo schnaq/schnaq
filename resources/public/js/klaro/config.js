@@ -72,7 +72,7 @@ var klaroConfig = {
   acceptAll: true,
 
   // replace "decline" with cookie manager modal
-  hideDeclineAll: true,
+  hideDeclineAll: false,
 
   // hide "learnMore" link
   hideLearnMore: false,
@@ -106,7 +106,9 @@ var klaroConfig = {
     // bundled translations.
     de: {
       privacyPolicyUrl: '/de/privacy/extended',
-      acceptSelected: 'Speichern',
+      acceptAll: 'Akzeptiere alle Cookies',
+      acceptSelected: 'Auswahl speichern',
+      decline: 'Nur essenzielle Cookies',
       consentModal: {
         title: "<img src='https://s3.schnaq.com/schnaq-common/logos/schnaqqifant.svg' alt='schnaqqifant' width='75px'> Cookies",
         description: 'Wir verwenden Cookies :-) Einige sind für Statistiken, andere für essenzielle Funktionen der Anwendung.',
@@ -124,6 +126,9 @@ var klaroConfig = {
       },
     },
     en: {
+      acceptAll: 'Accept all cookies',
+      acceptSelected: 'Save selection',
+      decline: 'Only essential cookies',
       consentModal: {
         title: "<img src='https://s3.schnaq.com/schnaq-common/logos/schnaqqifant.svg' alt='schnaqqifant' width='75px'> Cookies",
         description:
@@ -142,6 +147,9 @@ var klaroConfig = {
       },
     },
     pl: {
+      acceptAll: 'Zaakceptuj wszystkie ciasteczka',
+      acceptSelected: 'Zapisz wybór',
+      decline: 'Tylko niezbędne ciasteczka',
       privacyPolicyUrl: '/pl/privacy/extended',
       acceptSelected: 'Zapisz',
       consentModal: {

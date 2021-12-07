@@ -8,12 +8,9 @@ $var-red1: vars.$red;
 
 @import '../node_modules/klaro/src/scss/klaro';
 
-.cm-btn-accept-all {
-  font-size: 1.05rem !important;
-}
-
-.cm-btn-accept {
-  @extend .disabled;
+.cm-btn-accept,
+.cm-btn-danger {
+  @extend .bg-primary;
   @extend .mt-2;
 }
 
@@ -22,7 +19,7 @@ $var-red1: vars.$red;
   @extend .flex-column-reverse;
 }
 
-.cm-btn-success {
+.cm-btn {
   @extend .mx-auto;
   @extend .w-75;
 }
