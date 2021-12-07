@@ -12,16 +12,18 @@
 (defn- anonymous-edit-modal
   "Show this modal to anonymous users trying to edit statements."
   []
-  (modal/anonymous-modal :discussion.anonymous-edit.modal/title
-                         :discussion.anonymous-edit.modal/explain
-                         :discussion.anonymous-edit.modal/cta))
+  [modal/anonymous-modal
+   :discussion.anonymous-edit.modal/title
+   :discussion.anonymous-edit.modal/explain
+   :discussion.anonymous-edit.modal/cta])
 
 (defn- anonymous-delete-modal
   "Show this modal to anonymous users trying to delete statements."
   []
-  (modal/anonymous-modal :discussion.anonymous-delete.modal/title
-                         :discussion.anonymous-delete.modal/explain
-                         :discussion.anonymous-delete.modal/cta))
+  [modal/anonymous-modal
+   :discussion.anonymous-delete.modal/title
+   :discussion.anonymous-delete.modal/explain
+   :discussion.anonymous-delete.modal/cta])
 
 (defn- deletable?
   "Checks if a statement can be deleted by the user."
