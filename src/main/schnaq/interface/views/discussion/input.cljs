@@ -55,7 +55,7 @@
        :name textarea-name :wrap "soft" :rows 1
        :auto-complete "off"
        :autoFocus autofocus?
-       :onInput #(toolbelt/height-to-scrollheight! (oget % :selected))
+       :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
        :required true
        :data-dynamic-height true
        :placeholder placeholder}]
@@ -73,12 +73,15 @@
   (let [current-route-name @(rf/subscribe [:navigation/current-route-name])
         starting-route? (= :routes.schnaq/start current-route-name)
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        statement-type (if starting-route? :statement.type/neutral
-                                           @(rf/subscribe [:form/statement-type :selected]))
-        send-button-label (if starting-route? (labels :statement/ask)
-                                              (labels :statement/reply))
-        placeholder (if starting-route? (labels :statement.ask/placeholder)
-                                        (labels :statement.reply/placeholder))]
+        statement-type (if starting-route?
+                         :statement.type/neutral
+                         @(rf/subscribe [:form/statement-type :selected]))
+        send-button-label (if starting-route?
+                            (labels :statement/ask)
+                            (labels :statement/reply))
+        placeholder (if starting-route?
+                      (labels :statement.ask/placeholder)
+                      (labels :statement.reply/placeholder))]
     [:<>
      [textarea-for-statements
       textarea-name
