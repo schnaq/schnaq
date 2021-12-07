@@ -55,7 +55,7 @@
        :name textarea-name :wrap "soft" :rows 1
        :auto-complete "off"
        :autoFocus auto-focus?
-       :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
+       :onInput #(toolbelt/height-to-scrollheight! (oget % :selected))
        :required true
        :data-dynamic-height true
        :placeholder placeholder}]
@@ -74,7 +74,7 @@
         starting-route? (= :routes.schnaq/start current-route-name)
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         statement-type (if starting-route? :statement.type/neutral
-                                           @(rf/subscribe [:form/statement-type :topic]))
+                                           @(rf/subscribe [:form/statement-type :selected]))
         send-button-label (if starting-route? (labels :statement/ask)
                                               (labels :statement/reply))
         placeholder (if starting-route? (labels :statement.ask/placeholder)
@@ -90,8 +90,8 @@
      (when-not (or starting-route? pro-con-disabled?)
        [:div.input-group-prepend.mt-3
         [statement-type-choose-button
-         [:form/statement-type :topic]
-         [:form/statement-type! :topic]]])]))
+         [:form/statement-type :selected]
+         [:form/statement-type! :selected]]])]))
 
 (defn input-form
   "Form to collect the user's statements."
@@ -144,13 +144,13 @@
        [:form/statement-type! statement-id] true]]]))
 
 (rf/reg-event-db
- ;; Assoc statement-type with statement-id as key. The current topic is assigned via :topic
+ ;; Assoc statement-type with statement-id as key. The current topic is assigned via :selected
  :form/statement-type!
  (fn [db [_ statement-id statement-type]]
    (assoc-in db [:form :statement-type statement-id] statement-type)))
 
 (rf/reg-sub
- ;; Get corresponding statement-type via statement-id. The current topic is accessed via :topic
+ ;; Get corresponding statement-type via statement-id. The current topic is accessed via :selected
  :form/statement-type
  (fn [db [_ statement-id]]
    (get-in db [:form :statement-type statement-id] :statement.type/neutral)))
