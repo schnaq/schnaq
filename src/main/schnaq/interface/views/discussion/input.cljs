@@ -40,7 +40,7 @@
 
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
-  [textarea-name placeholder send-button-label statement-type sm?]
+  [textarea-name placeholder send-button-label statement-type auto-focus? sm?]
   (let [attitude (case statement-type
                    :statement.type/support "support"
                    :statement.type/attack "attack"
@@ -54,7 +54,7 @@
       {:class additional-form-class
        :name textarea-name :wrap "soft" :rows 1
        :auto-complete "off"
-       :autoFocus true
+       :autoFocus auto-focus?
        :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
        :required true
        :data-dynamic-height true
@@ -84,7 +84,9 @@
       textarea-name
       placeholder
       send-button-label
-      statement-type]
+      statement-type
+      true
+      false]
      (when-not (or starting-route? pro-con-disabled?)
        [:div.input-group-prepend.mt-3
         [statement-type-choose-button
@@ -134,6 +136,7 @@
       placeholder
       send-button-label
       statement-type
+      false
       true]
      [:div.input-group-append.mt-1
       [statement-type-choose-button
