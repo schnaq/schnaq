@@ -26,6 +26,24 @@
   [db]
   (get-in db [:user :authenticated?] false))
 
+(defn- request-login-modal
+  "Show a modal requesting the user to login again. Can be used for 
+   error-handling, e.g. when a token expired and could not be refreshed"
+  []
+  (let [keycloak @(rf/subscribe [:keycloak/object])]
+    [modal/modal-template
+     (labels :auth.modal.request-login/title)
+     [:<>
+      [:p (labels :auth.modal.request-login/lead) " 👍"]
+      [:p.text-center
+       [:a.btn.btn-outline-secondary
+        {:href (.createLoginUrl keycloak)}
+        (labels :auth.modal.request-login/button)]]
+      [:p
+       [:small.text-muted
+        [icon :info "my-auto mr-1"]
+        (labels :auth.modal.request-login/info)]]]]))
+
 ;; -----------------------------------------------------------------------------
 ;; Init function of keycloak. Called in the beginning to check if the user was
 ;; logged in. Restores the last login state according to the settings in
@@ -73,8 +91,7 @@
    (-> keycloak
        (.login)
        (.then #(rf/dispatch [:keycloak/load-user-profile]))
-       (.catch #(error-to-console
-                 "Login not successful. Request could not be fulfilled.")))))
+       (.catch #(rf/dispatch [:modal {:show? true :child [request-login-modal]}])))))
 
 ;; -----------------------------------------------------------------------------
 ;; If login / init was successful, ask in keycloak for the user's information.
@@ -98,8 +115,7 @@
        (.loadUserProfile)
        (.then #(rf/dispatch [:keycloak/store-groups
                              (js->clj % :keywordize-keys true)]))
-       (.catch #(error-to-console
-                 "Could not load user profile from keycloak.")))))
+       (.catch #(rf/dispatch [:modal {:show? true :child [request-login-modal]}])))))
 
 (rf/reg-event-db
  :keycloak/store-groups
@@ -132,24 +148,6 @@
 ;; -----------------------------------------------------------------------------
 ;; Refresh access token (the one, which is sent to the backend and stored in
 ;; keycloak.token) when it is expired.
-
-(defn- request-login-modal
-  "Show a modal requesting the user to login again. Can be used for 
-   error-handling, e.g. when a token expired and could not be refreshed"
-  []
-  (let [keycloak @(rf/subscribe [:keycloak/object])]
-    [modal/modal-template
-     (labels :auth.modal.request-login/title)
-     [:<>
-      [:p (labels :auth.modal.request-login/lead) " 👍"]
-      [:p.text-center
-       [:a.btn.btn-outline-secondary
-        {:href (.createLoginUrl keycloak)}
-        (labels :auth.modal.request-login/button)]]
-      [:p
-       [:small.text-muted
-        [icon :info "my-auto mr-1"]
-        (labels :auth.modal.request-login/info)]]]]))
 
 (rf/reg-event-fx
  :keycloak/check-token-validity
@@ -227,3 +225,34 @@
  (fn [db]
    (get-in db [:user :keycloak])))
 
+(comment
+
+  (.isTokenExpired kc)
+  (.createLoginUrl kc)
+
+  (-> kc
+      (.loadUserProfile)
+      (.then
+       #(.log js/console %))
+      (.catch))
+
+  (let [kc (-> @re-frame.db/app-db
+               :user :keycloak)]
+    (.createLoginUrl kc))
+
+  (.-idTokenParsed kc)
+
+  (-> kc
+      (.updateToken 30000)
+      (.then
+       (fn [e]
+         (prn "then")
+         (.log js/console e)))
+      (.catch
+       (fn [e]
+         (prn "catch")
+         (.log js/console e)
+         (rf/dispatch [:modal {:show? true :child [request-login-modal]}])
+         (rf/dispatch [:keycloak/init]))))
+
+  nil)
