@@ -128,7 +128,7 @@
   (let [new-text-element (oget form [:premise-text])
         new-text (oget new-text-element [:value])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        form-statement-type @(rf/subscribe [:form/statement-type])
+        form-statement-type @(rf/subscribe [:form/statement-type :selected])
         statement-type (if pro-con-disabled?
                          :neutral
                          form-statement-type)]
@@ -136,7 +136,8 @@
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
 (defn reply-to-statement
-  "Reply directly to a statement via a submitted form."
+  "Reply directly to a statement via a submitted form.
+  Updates :statement/children and :meta/sub-statement-count afterwards in app-db."
   [statement-to-reply-to attitude form-name form]
   (let [new-text-element (oget+ form [form-name])
         new-text (oget new-text-element [:value])

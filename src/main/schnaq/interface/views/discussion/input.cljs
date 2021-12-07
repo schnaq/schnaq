@@ -13,7 +13,7 @@
   [statement-type label tooltip get-subscription set-event]
   (let [current-attitude @(rf/subscribe get-subscription)
         checked? (= statement-type current-attitude)]
-    [:label.btn.btn-outline-dark.shadow-sm.py-2
+    [:label.btn.btn-outline-dark.py-2
      (when checked? {:class "active"})
      [:input {:type "radio" :name "options" :autoComplete "off"
               :defaultChecked checked?
@@ -25,35 +25,37 @@
 (defn statement-type-choose-button
   "Button group to differentiate between the statement types. The button with a matching get-subscription will be checked.
   Clicking a button will dispatch the set-subscription with the button-type as parameter."
-  [get-subscription set-event]
-  [:div.btn-group.btn-group-toggle {:data-toggle "buttons"}
-   [statement-type-button :statement.type/support
-    :discussion.add.button/support :discussion/add-premise-against
-    get-subscription set-event]
-   [statement-type-button :statement.type/neutral
-    :discussion.add.button/neutral :discussion/add-premise-neutral
-    get-subscription set-event]
-   [statement-type-button :statement.type/attack
-    :discussion.add.button/attack :discussion/add-premise-supporting
-    get-subscription set-event]])
+  [get-subscription set-event sm?]
+  (let [additional-btn-class (if sm? "btn-group-sm" "")]
+    [:div.btn-group.btn-group-toggle {:class additional-btn-class :data-toggle "buttons"}
+     [statement-type-button :statement.type/support
+      :discussion.add.button/support :discussion/add-premise-against
+      get-subscription set-event]
+     [statement-type-button :statement.type/neutral
+      :discussion.add.button/neutral :discussion/add-premise-neutral
+      get-subscription set-event]
+     [statement-type-button :statement.type/attack
+      :discussion.add.button/attack :discussion/add-premise-supporting
+      get-subscription set-event]]))
 
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
-  [textarea-name placeholder send-button-label statement-type sm?]
+  [textarea-name placeholder send-button-label statement-type autofocus? small?]
   (let [attitude (case statement-type
                    :statement.type/support "support"
                    :statement.type/attack "attack"
                    :statement.type/neutral "neutral")
-        additional-form-class (if sm? "form-control-sm" "")
-        additional-btn-class (if sm? "btn-sm" "")]
+        additional-form-class (when small? "form-control-sm")
+        additional-btn-class (when small? "btn-sm")
+        additional-highlight-class (when small? "highlight-card-reduced ")]
     [:div.input-group
-     [:div {:class (str "highlight-card-reverse highlight-card-" attitude)}]
+     [:div {:class (str additional-highlight-class "highlight-card-reverse highlight-card-" attitude)}]
      [:textarea.form-control.textarea-resize-none
       {:class additional-form-class
        :name textarea-name :wrap "soft" :rows 1
        :auto-complete "off"
-       :autoFocus true
-       :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
+       :autoFocus autofocus?
+       :onInput #(toolbelt/height-to-scrollheight! (oget % :selected))
        :required true
        :data-dynamic-height true
        :placeholder placeholder}]
@@ -72,7 +74,7 @@
         starting-route? (= :routes.schnaq/start current-route-name)
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         statement-type (if starting-route? :statement.type/neutral
-                                           @(rf/subscribe [:form/statement-type]))
+                                           @(rf/subscribe [:form/statement-type :selected]))
         send-button-label (if starting-route? (labels :statement/ask)
                                               (labels :statement/reply))
         placeholder (if starting-route? (labels :statement.ask/placeholder)
@@ -82,10 +84,14 @@
       textarea-name
       placeholder
       send-button-label
-      statement-type]
+      statement-type
+      true
+      false]
      (when-not (or starting-route? pro-con-disabled?)
        [:div.input-group-prepend.mt-3
-        [statement-type-choose-button [:form/statement-type] [:form/statement-type!]]])]))
+        [statement-type-choose-button
+         [:form/statement-type :selected]
+         [:form/statement-type! :selected]]])]))
 
 (defn input-form
   "Form to collect the user's statements."
@@ -109,10 +115,11 @@
 (defn reply-in-statement-input-form
   "Input form inside a statement card. This form is used to directly reply to a statement inside its own card."
   [statement]
-  (let [form-name (str "answer-to-statement-" (:db/id statement))
+  (let [statement-id (:db/id statement)
+        form-name (str "answer-to-statement-" statement-id)
         placeholder (labels :statement.reply/placeholder)
         send-button-label (labels :statement/reply)
-        statement-type :statement.type/neutral
+        statement-type @(rf/subscribe [:form/statement-type statement-id])
         answer-to-statement-event (fn [e]
                                     (jq/prevent-default e)
                                     (logic/reply-to-statement
@@ -129,14 +136,21 @@
       placeholder
       send-button-label
       statement-type
-      true]]))
+      false
+      true]
+     [:div.input-group-append.mt-1
+      [statement-type-choose-button
+       [:form/statement-type statement-id]
+       [:form/statement-type! statement-id] true]]]))
 
 (rf/reg-event-db
+ ;; Assoc statement-type with statement-id as key. The current topic is assigned via :selected
  :form/statement-type!
- (fn [db [_ statement-type]]
-   (assoc-in db [:form :statement-type] statement-type)))
+ (fn [db [_ statement-id statement-type]]
+   (assoc-in db [:form :statement-type statement-id] statement-type)))
 
 (rf/reg-sub
+ ;; Get corresponding statement-type via statement-id. The current topic is accessed via :selected
  :form/statement-type
- (fn [db]
-   (get-in db [:form :statement-type] :statement.type/neutral)))
+ (fn [db [_ statement-id]]
+   (get-in db [:form :statement-type statement-id] :statement.type/neutral)))
