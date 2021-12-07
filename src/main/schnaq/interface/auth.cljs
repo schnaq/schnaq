@@ -6,8 +6,15 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.views.modal :as modal]
             [taoensso.timbre :as log]))
+
+(def ^:private refresh-token-time
+  "Seconds until the token should be refreshed."
+  30)
 
 (defn- error-to-console
   "Shorthand function to log to console."
@@ -126,6 +133,24 @@
 ;; Refresh access token (the one, which is sent to the backend and stored in
 ;; keycloak.token) when it is expired.
 
+(defn- request-login-modal
+  "Show a modal requesting the user to login again. Can be used for 
+   error-handling, e.g. when a token expired and could not be refreshed"
+  []
+  (let [keycloak @(rf/subscribe [:keycloak/object])]
+    [modal/modal-template
+     (labels :auth.modal.request-login/title)
+     [:<>
+      [:p (labels :auth.modal.request-login/lead) " 👍"]
+      [:p.text-center
+       [:a.btn.btn-outline-secondary
+        {:href (.createLoginUrl keycloak)}
+        (labels :auth.modal.request-login/button)]]
+      [:p
+       [:small.text-muted
+        [icon :info "my-auto mr-1"]
+        (labels :auth.modal.request-login/info)]]]]))
+
 (rf/reg-event-fx
  :keycloak/check-token-validity
  (fn [{:keys [db]} [_ _]]
@@ -137,15 +162,32 @@
  :keycloak/loop-token-validity-check
  (fn [keycloak]
    (go (while true
-         (<! (timeout 30000))
+         (<! (timeout (* 1000 refresh-token-time)))
          (-> keycloak
-             (.updateToken 30)
+             (.updateToken refresh-token-time)
              (.then
               #(when %
                  (log/trace "Access Token for user validation refreshed")))
              (.catch
-              #(log/error
-                "Error when updating the keycloak access token.")))))))
+              (fn [e]
+                (rf/dispatch [:modal {:show? true :child [request-login-modal]}])
+                (log/error "Error when updating the keycloak access token." e))))))))
+
+(defn- authorization-header [token]
+  {:Authorization (gstring/format "Token %s" token)})
+
+(>defn authentication-header
+  "Adds a map containing the token used for authenticating the user in the
+  backend."
+  [db]
+  [map? :ret map?]
+  (let [keycloak (get-in db [:user :keycloak])
+        external-jwt (get-in db [:user :jwt])]
+    (cond
+      (not (user-authenticated? db)) {}
+      keycloak (authorization-header (.-token keycloak))
+      external-jwt (authorization-header external-jwt)
+      :else {})))
 
 ;; -----------------------------------------------------------------------------
 
@@ -180,18 +222,8 @@
                                   :keywordize-keys true))]
        (assoc-in db [:user :roles] roles)))))
 
-(defn- authorization-header [token]
-  {:Authorization (gstring/format "Token %s" token)})
+(rf/reg-sub
+ :keycloak/object
+ (fn [db]
+   (get-in db [:user :keycloak])))
 
-(>defn authentication-header
-  "Adds a map containing the token used for authenticating the user in the
-  backend."
-  [db]
-  [map? :ret map?]
-  (let [keycloak (get-in db [:user :keycloak])
-        external-jwt (get-in db [:user :jwt])]
-    (cond
-      (not (user-authenticated? db)) {}
-      keycloak (authorization-header (.-token keycloak))
-      external-jwt (authorization-header external-jwt)
-      :else {})))
