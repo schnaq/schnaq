@@ -224,13 +224,13 @@
   [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id any? :ret associative?]
   @(transact
     [(cond-> {:db/id (str "new-child-" new-content)
-        :statement/author user-id
-        :statement/content new-content
-        :statement/version 1
-        :statement/created-at (Date.)
-        :statement/parent parent-id
-        :statement/discussions [discussion-id]
-        :statement/type statement-type}
+              :statement/author user-id
+              :statement/content new-content
+              :statement/version 1
+              :statement/created-at (Date.)
+              :statement/parent parent-id
+              :statement/discussions [discussion-id]
+              :statement/type statement-type}
        (not registered-user?) (assoc :statement/creation-secret (.toString (UUID/randomUUID))))]))
 
 (>defn react-to-statement!
@@ -292,7 +292,7 @@
                              :discussion/states :discussion.state.qa/mark-as-moderators-only]]
         db-transaction (if mods-only?
                          enable-transaction
-                                      disable-transaction)]
+                         disable-transaction)]
     (main-db/transact db-transaction)))
 
 (defn discussion-mode!
@@ -341,12 +341,6 @@
     (remove (fn [statement]
               (some #(= % (:db/id statement)) seen-statements))
             all-statements)))
-
-(>defn new-statement-ids-for-user
-  "Retrieve ids of new statements of a discussion for a user"
-  [keycloak-id discussion-hash]
-  [:user.registered/keycloak-id :discussion/share-hash :ret (s/coll-of :db/id)]
-  (map :db/id (new-statements-for-user keycloak-id discussion-hash)))
 
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
@@ -622,25 +616,37 @@
         :db-after
         (fast-pull statement-id patterns/statement))))
 
+;; -----------------------------------------------------------------------------
+
 (s/def ::share-hash-statement-id-mapping
   (s/map-of :discussion/share-hash (s/coll-of :db/id)))
 
+(>defn new-statement-ids-for-user
+  "Retrieve ids of new statements of a discussion for a user"
+  [keycloak-id discussion-hash]
+  [:user.registered/keycloak-id :discussion/share-hash :ret (s/coll-of :db/id)]
+  (map :db/id (new-statements-for-user keycloak-id discussion-hash)))
+
+(>defn- build-discussion-diff-list
   "Build a map of discussion hashes with new statements as values"
-  [user-keycloak-id discussion-hashes]
+  [keycloak-id discussion-hashes]
+  [:user.registered/keycloak-id (s/coll-of :discussion/share-hash) :ret ::share-hash-statement-id-mapping]
   (reduce conj
           (map (fn [discussion-hash]
                  {discussion-hash (new-statement-ids-for-user
-                                   user-keycloak-id discussion-hash)})
+                                   keycloak-id discussion-hash)})
                discussion-hashes)))
 
 (>defn new-statements-by-discussion-hash
-  "Get a list of all new statements for the discussions of the corresponding hashes"
+  "Returns a map containing tuples with the share-hash and a list of all new statements.
+   
+   Example: `{\"ad508972-5e33-4b9b-b446-d5a33c81ab8d\" (17592186047296 17592186047298 17592186047318 17592186047324 17592186047326)}`"
   [{:user.registered/keys [keycloak-id visited-schnaqs]}]
   [::specs/registered-user :ret ::share-hash-statement-id-mapping]
   (let [discussion-hashes (map :discussion/share-hash visited-schnaqs)]
-  (into {}
-        (filter
-         (fn [[_ statements]] (seq statements))
+    (into {}
+          (filter
+           (fn [[_ statements]] (seq statements))
            (build-discussion-diff-list keycloak-id discussion-hashes)))))
 
 (defn mark-all-statements-as-read!
@@ -649,6 +655,8 @@
         unread (new-statements-by-discussion-hash user)]
     (user-db/update-visited-statements keycloak-id unread)
     unread))
+
+;; -----------------------------------------------------------------------------
 
 (>defn- build-schnaq-secrets-map
   "Creates a secrets map for a collection of statements.
