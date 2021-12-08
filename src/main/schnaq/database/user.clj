@@ -212,9 +212,10 @@
      :where [?user :user.registered/email ?email]]
    user-email patterns/registered-user-public))
 
-(defn all-registered-users
-  "Returns all registered users' keycloak ids"
+(>defn all-registered-users
+  "Returns all registered users."
   []
+  [:ret (s/coll-of :registered-user)]
   (toolbelt/pull-key-up
    (query
     '[:find [(pull ?registered-user user-pattern) ...]
