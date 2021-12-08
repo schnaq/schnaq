@@ -1,6 +1,5 @@
 (ns schnaq.interface.translations.polish
-  (:require [schnaq.interface.config :refer [marketing-num-schnaqs marketing-num-statements]]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+  (:require [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (def labels
   {:error/export-failed "Eksport nie zadziałał, spróbuj ponownie później."
@@ -104,11 +103,10 @@
 
    ;; Startpage
    :startpage/heading "Ułatwione zbieranie pytań"
-   :startpage/subheading "Q&A proste i dobre"
-   :startpage/hook "Po prostu zbieraj pytania i udzielaj odpowiedzi w swoich kursach hybrydowych - dla większej przejrzystości i zrównoważonej wymiany"
-   :startpage.social-proof/numbers [:span "schnaq pomógł poprowadzić ponad " [:b marketing-num-schnaqs]
-                                    " dyskusji i Q&A, co przekłada się na " [:b marketing-num-statements] " przypadków wspólnej wiedzy."]
-   :schnaq.startpage.cta/button "Schnaqq bezpłatnie"
+   :startpage/subheading "Dogłębnie zrozum swoich uczestników"
+   :startpage/hook "Możesz w pełni zrozumieć swoich odbiorców w każdej chwili dzięki schnaq Q&A. Aktywuj wszystkich na swoim warsztacie, webinarze lub jakimkolwiek innym wydarzeniu i zademonstruj swoją wiedzę dzięki kartom wiedzy."
+   :schnaq.startpage.cta/button "Stwórz darmowy schnaq już teraz!"
+   :startpage.social-proof/teaser "Jesteś o jedno kliknięcie od dołączenia do setek innych użytkowników schnaq 👋"
 
    :startpage.usage/lead "Do czego mogę używać schnaq?"
    :startpage.features/more-information "Więcej informacji"
