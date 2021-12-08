@@ -113,6 +113,15 @@
     (ok {:share-hash share-hash
          :seen-statement-ids seen-statement-ids})))
 
+(defn- mark-all-statements-as-seen
+  "Mark all statements for a discussion as seen. Can be used when accessing a
+   schnaq to de-mark all new statements."
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash]} (:body parameters)
+        keycloak-id (:sub identity)]
+    (discussion-db/mark-all-statements-of-discussion-as-read keycloak-id share-hash)
+    (ok {:share-hash share-hash})))
+
 (defn- check-statement-author-and-state
   "Checks if a statement is authored by this user-identity and is valid, i.e. not deleted.
   If the statement is valid and authored by this user, `success-fn` is called. if the statement is not valid, `bad-request-fn`
@@ -449,7 +458,13 @@
                                          :seen-statement-ids (s/coll-of :db/id)}}
                      :responses {200 {:body {:share-hash :discussion/share-hash
                                              :seen-statement-ids (s/coll-of :db/id)}}
-                                 400 at/response-error-body}}]]
+                                 400 at/response-error-body}}]
+    ["/mark-all-as-seen" {:put mark-all-statements-as-seen
+                          :description (at/get-doc #'mark-all-statements-as-seen)
+                          :name :api.discussion.statements/all-seen
+                          :middleware [:user/authenticated?]
+                          :parameters {:body {:share-hash :discussion/share-hash}}
+                          :responses {200 {:body {:share-hash :discussion/share-hash}}}}]]
    ["/statement"
     ["/info" {:get get-statement-info
               :description (at/get-doc #'get-statement-info)

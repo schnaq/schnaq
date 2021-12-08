@@ -290,7 +290,7 @@
       (is (= :discussion.mode/discussion (:discussion/mode (db/discussion-by-share-hash share-hash)))))))
 
 (deftest new-statement-ids-for-user-test
-  (let [test-user (fast-pull [:user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"] patterns/private-user)]
+  (let [test-user (user-db/private-user-by-keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276")]
     (testing "test-user gets a list of new statements."
       (let [new-statements-in-discussion (db/new-statement-ids-for-user (:user.registered/keycloak-id test-user) "cat-dog-hash")]
         (is (pos-int? (count new-statements-in-discussion)))
@@ -300,14 +300,22 @@
         (is (zero? (count new-statements-in-discussion)))))))
 
 (deftest new-statements-by-discussion-hash-test
-  (let [test-user (fast-pull [:user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"] patterns/private-user)
+  (let [test-user (user-db/private-user-by-keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276")
         share-hash "cat-dog-hash"
-        anonymous-user-id (user-db/add-user "Definitely Anonymous")
-        share-hash-seen-statements-map (db/new-statements-by-discussion-hash test-user)
-        new-statements-before (get share-hash-seen-statements-map share-hash)
+        anonymous-user-id (user-db/add-user-if-not-exists "Anonymous")
+        new-statements-before (get (db/new-statements-by-discussion-hash test-user) share-hash)
         _ (db/add-starting-statement! "cat-dog-hash" anonymous-user-id "New Post!" false)
-        share-hash-seen-statements-map-after (db/new-statements-by-discussion-hash test-user)
-        new-statements-after (get share-hash-seen-statements-map-after share-hash)]
-    (testing ""
+        new-statements-after (get (db/new-statements-by-discussion-hash test-user) share-hash)]
+    (testing "Adding a new statement from a different user results in an unseen statement for the test-user."
       (is (not= new-statements-after new-statements-before))
       (is (> (count new-statements-after) (count new-statements-before))))))
+
+(deftest mark-all-statements-of-discussion-as-read-test
+  (let [test-user (user-db/private-user-by-keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276")
+        share-hash "cat-dog-hash"
+        new-statements-in-discussion (get (db/new-statements-by-discussion-hash test-user) share-hash)
+        _ (db/mark-all-statements-of-discussion-as-read "59456d4a-6950-47e8-88d8-a1a6a8de9276" share-hash)
+        statements-in-discussion-after-clearing (get (db/new-statements-by-discussion-hash test-user) share-hash)]
+    (testing "Before clearing unseen statements, there should be unseen statements in the collection."
+      (is (not (zero? (count new-statements-in-discussion))))
+      (is (nil? statements-in-discussion-after-clearing)))))

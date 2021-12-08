@@ -649,10 +649,17 @@
 (>defn mark-all-statements-as-read!
   [keycloak-id]
   [:user.registered/keycloak-id :ret ::specs/share-hash-statement-id-mapping]
-  (let [user (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user)
+  (let [user (user-db/private-user-by-keycloak-id keycloak-id)
         unread (new-statements-by-discussion-hash user)]
     (user-db/update-visited-statements keycloak-id unread)
     unread))
+
+(>defn mark-all-statements-of-discussion-as-read
+  "Query all new statements for a user and mark them as read."
+  [keycloak-id share-hash]
+  [:user.registered/keycloak-id :discussion/share-hash :ret any?]
+  (let [new-statements-with-share-hash (build-discussion-diff-list keycloak-id [share-hash])]
+    (user-db/update-visited-statements keycloak-id new-statements-with-share-hash)))
 
 ;; -----------------------------------------------------------------------------
 

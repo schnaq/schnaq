@@ -195,6 +195,15 @@
              (request))]})))
 
 (rf/reg-event-fx
+ :discussion.statements/mark-all-as-seen
+ ;; Mark all statements in a schnaq as read when accessing the schnaq.
+ (fn [{:keys [db]} [_ share-hash]]
+   (when (auth/user-authenticated? db)
+     {:fx [(http/xhrio-request db :put "/discussion/statements/mark-all-as-seen"
+                               [:no-op]
+                               {:share-hash share-hash})]})))
+
+(rf/reg-event-fx
  :schnaq/add-visited!
  (fn [{:keys [db]} [_ share-hash]]
    (when (auth/user-authenticated? db)
