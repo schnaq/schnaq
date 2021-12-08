@@ -23,7 +23,7 @@
   "Additional content to display the number of new statements and a navigation button
   to the corresponding schnaq. This functions maps over all schnaqs."
   [new-statements-per-discussion content-fn]
-  [::discussion-db/share-hash-statement-id-mapping fn? :ret string?]
+  [::specs/share-hash-statement-id-mapping fn? :ret string?]
   (reduce
    str
    (map (fn [[discussion-hash statements]]
@@ -40,7 +40,7 @@
 (>defn- build-new-statements-html
   "New statements info as html. Preparation for sending it via mail."
   [new-statements-per-discussion]
-  [::discussion-db/share-hash-statement-id-mapping :ret string?]
+  [::specs/share-hash-statement-id-mapping :ret string?]
   (build-new-statements-content
    new-statements-per-discussion
    (fn [title text discussion-hash]
@@ -51,7 +51,7 @@
   "New statements info as plain text. Preparation for a standard mail without 
    HTML."
   [new-statements-per-discussion]
-  [::discussion-db/share-hash-statement-id-mapping :ret string?]
+  [::specs/share-hash-statement-id-mapping :ret string?]
   (build-new-statements-content
    new-statements-per-discussion
    (fn [title text discussion-hash]

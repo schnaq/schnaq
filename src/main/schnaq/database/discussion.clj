@@ -618,9 +618,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(s/def ::share-hash-statement-id-mapping
-  (s/map-of :discussion/share-hash (s/coll-of :db/id)))
-
 (>defn new-statement-ids-for-user
   "Retrieve ids of new statements of a discussion for a user"
   [keycloak-id discussion-hash]
@@ -630,7 +627,7 @@
 (>defn- build-discussion-diff-list
   "Build a map of discussion hashes with new statements as values"
   [keycloak-id discussion-hashes]
-  [:user.registered/keycloak-id (s/coll-of :discussion/share-hash) :ret ::share-hash-statement-id-mapping]
+  [:user.registered/keycloak-id (s/coll-of :discussion/share-hash) :ret ::specs/share-hash-statement-id-mapping]
   (reduce conj
           (map (fn [discussion-hash]
                  {discussion-hash (new-statement-ids-for-user
@@ -642,15 +639,16 @@
    
    Example: `{\"ad508972-5e33-4b9b-b446-d5a33c81ab8d\" (17592186047296 17592186047298 17592186047318 17592186047324 17592186047326)}`"
   [{:user.registered/keys [keycloak-id visited-schnaqs]}]
-  [::specs/registered-user :ret ::share-hash-statement-id-mapping]
+  [::specs/registered-user :ret ::specs/share-hash-statement-id-mapping]
   (let [discussion-hashes (map :discussion/share-hash visited-schnaqs)]
     (into {}
           (filter
            (fn [[_ statements]] (seq statements))
            (build-discussion-diff-list keycloak-id discussion-hashes)))))
 
-(defn mark-all-statements-as-read!
+(>defn mark-all-statements-as-read!
   [keycloak-id]
+  [:user.registered/keycloak-id :ret ::specs/share-hash-statement-id-mapping]
   (let [user (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user)
         unread (new-statements-by-discussion-hash user)]
     (user-db/update-visited-statements keycloak-id unread)

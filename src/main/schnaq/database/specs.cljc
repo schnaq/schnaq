@@ -101,6 +101,9 @@
                                   :discussion/end-time :discussion/creation-secret :discussion/mode
                                   :discussion/access]))
 
+(s/def ::share-hash-statement-id-mapping
+  (s/map-of :discussion/share-hash (s/coll-of :db/id)))
+
 ;; Hubs
 (s/def :hub/name ::non-blank-string)
 (s/def :hub/keycloak-name ::non-blank-string)

@@ -91,7 +91,9 @@
             [?seen-statement :seen-statements/visited-statements ?visited-statements]]
           keycloak-id share-hash)))
 
-(defn create-visited-statements-for-discussion [keycloak-id discussion-hash visited-statements]
+(>defn create-visited-statements-for-discussion
+  [keycloak-id discussion-hash visited-statements]
+  [:user.registered/keycloak-id :discussion/share-hash (s/coll-of :db/id) :ret any?]
   (let [queried-id (seen-statements-entity keycloak-id discussion-hash)
         temp-id (or queried-id (str "seen-statements-" keycloak-id "-" discussion-hash))
         new-visited {:db/id temp-id
@@ -102,8 +104,9 @@
 
 (defn update-visited-statements
   "Updates the user's visited statements by adding the new ones."
-  [keycloak-id visited-statements]
-  (doseq [[discussion-hash statement-ids] visited-statements]
+  [keycloak-id share-hash-statement-ids]
+  [:user.registered/keycloak-id ::specs/share-hash-statement-id-mapping :ret nil?]
+  (doseq [[discussion-hash statement-ids] share-hash-statement-ids]
     (create-visited-statements-for-discussion keycloak-id discussion-hash statement-ids)))
 
 (defn- update-user-info
