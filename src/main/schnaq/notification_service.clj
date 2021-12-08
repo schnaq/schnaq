@@ -59,11 +59,8 @@
 
 (defn- send-schnaq-diffs
   "Build and send a mail containing links to each schnaq with new statements."
-  [{:user.registered/keys [keycloak-id email visited-schnaqs] :as user}]
-  (let [discussion-hashes (map :discussion/share-hash visited-schnaqs)
-        new-statements-per-schnaq (discussion-db/new-statements-by-discussion-hash
-                                   keycloak-id
-                                   discussion-hashes)
+  [{:user.registered/keys [keycloak-id email] :as user}]
+  (let [new-statements-per-schnaq (discussion-db/new-statements-by-discussion-hash user)
         total-new-statements (reduce + (map (fn [[_ news]] (count news)) new-statements-per-schnaq))
         new-statements-content-html (build-new-statements-html new-statements-per-schnaq)
         new-statements-content-plain (build-new-statements-plain new-statements-per-schnaq)

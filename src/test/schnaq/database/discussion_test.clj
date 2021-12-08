@@ -303,14 +303,10 @@
   (let [test-user (fast-pull [:user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"] patterns/private-user)
         share-hash "cat-dog-hash"
         anonymous-user-id (user-db/add-user "Definitely Anonymous")
-        share-hash-seen-statements-map (db/new-statements-by-discussion-hash
-                                        (:user.registered/keycloak-id test-user)
-                                        (map :discussion/share-hash (:user.registered/visited-schnaqs test-user)))
+        share-hash-seen-statements-map (db/new-statements-by-discussion-hash test-user)
         new-statements-before (get share-hash-seen-statements-map share-hash)
         _ (db/add-starting-statement! "cat-dog-hash" anonymous-user-id "New Post!" false)
-        share-hash-seen-statements-map-after (db/new-statements-by-discussion-hash
-                                              (:user.registered/keycloak-id test-user)
-                                              (map :discussion/share-hash (:user.registered/visited-schnaqs test-user)))
+        share-hash-seen-statements-map-after (db/new-statements-by-discussion-hash test-user)
         new-statements-after (get share-hash-seen-statements-map-after share-hash)]
     (testing ""
       (is (not= new-statements-after new-statements-before))

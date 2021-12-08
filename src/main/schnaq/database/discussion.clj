@@ -223,8 +223,7 @@
   [discussion-id parent-id new-content statement-type user-id registered-user?]
   [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id any? :ret associative?]
   @(transact
-    [(cond->
-       {:db/id (str "new-child-" new-content)
+    [(cond-> {:db/id (str "new-child-" new-content)
         :statement/author user-id
         :statement/content new-content
         :statement/version 1
@@ -291,7 +290,8 @@
                               :discussion/states :discussion.state.qa/mark-as-moderators-only]]
         enable-transaction [[:db/add [:discussion/share-hash share-hash]
                              :discussion/states :discussion.state.qa/mark-as-moderators-only]]
-        db-transaction (if mods-only? enable-transaction
+        db-transaction (if mods-only?
+                         enable-transaction
                                       disable-transaction)]
     (main-db/transact db-transaction)))
 
@@ -622,7 +622,9 @@
         :db-after
         (fast-pull statement-id patterns/statement))))
 
-(defn- build-discussion-diff-list
+(s/def ::share-hash-statement-id-mapping
+  (s/map-of :discussion/share-hash (s/coll-of :db/id)))
+
   "Build a map of discussion hashes with new statements as values"
   [user-keycloak-id discussion-hashes]
   (reduce conj
@@ -631,19 +633,20 @@
                                    user-keycloak-id discussion-hash)})
                discussion-hashes)))
 
-(defn new-statements-by-discussion-hash
+(>defn new-statements-by-discussion-hash
   "Get a list of all new statements for the discussions of the corresponding hashes"
-  [user-keycloak-id discussion-hashes]
+  [{:user.registered/keys [keycloak-id visited-schnaqs]}]
+  [::specs/registered-user :ret ::share-hash-statement-id-mapping]
+  (let [discussion-hashes (map :discussion/share-hash visited-schnaqs)]
   (into {}
         (filter
          (fn [[_ statements]] (seq statements))
-         (build-discussion-diff-list user-keycloak-id discussion-hashes))))
+           (build-discussion-diff-list keycloak-id discussion-hashes)))))
 
 (defn mark-all-statements-as-read!
   [keycloak-id]
   (let [user (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user)
-        discussion-hashes (map :discussion/share-hash (:user.registered/visited-schnaqs user))
-        unread (new-statements-by-discussion-hash keycloak-id discussion-hashes)]
+        unread (new-statements-by-discussion-hash user)]
     (user-db/update-visited-statements keycloak-id unread)
     unread))
 
