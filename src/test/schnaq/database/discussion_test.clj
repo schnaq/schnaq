@@ -249,7 +249,7 @@
   (testing "Tests whether labels are added correctly."
     (let [statement-id (:db/id (first (db/statements-by-content "Brainstorming ist total wichtig")))]
       (is (= [":comment"] (:statement/labels (db/add-label statement-id ":comment"))))
-      ;; test for fobidden label
+      ;; test for forbidden label
       (is (= [":comment"] (:statement/labels (db/add-label statement-id "anything goes here")))))))
 
 (deftest remove-label-test
@@ -288,3 +288,14 @@
       (is (= :discussion.mode/qanda (:discussion/mode (db/discussion-by-share-hash share-hash))))
       (db/discussion-mode! share-hash :discussion.mode/discussion)
       (is (= :discussion.mode/discussion (:discussion/mode (db/discussion-by-share-hash share-hash)))))))
+
+(deftest new-statements-by-discussion-hash-test
+  (let [test-user (fast-pull [:user.registered/email "alexander@schneider.gg"] patterns/private-user)]
+    (testing "test-user gets a list of new statements."
+      (let [new-statements-in-discussion (db/new-statement-ids-for-user (:user.registered/keycloak-id test-user) "cat-dog-hash")]
+        (is (pos-int? (count new-statements-in-discussion)))
+        (is (s/valid? (s/coll-of :db/id) new-statements-in-discussion))))
+    (testing "User who is not part of a discussion, gets no list of new statements."
+      (let [new-statements-in-discussion (db/new-statement-ids-for-user (:user.registered/keycloak-id test-user) "definitely not a valid hash")]
+        (is (zero? (count new-statements-in-discussion)))))))
+

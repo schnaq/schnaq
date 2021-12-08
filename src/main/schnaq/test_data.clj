@@ -266,12 +266,14 @@
 
 (def registered-users
   [{:db/id "user.registered/alex"
-    :user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276",
-    :user.registered/display-name "A. Schneider",
-    :user.registered/email "alexander@schneider.gg",
-    :user.registered/last-name "Schneider",
+    :user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
+    :user.registered/display-name "A. Schneider"
+    :user.registered/email "alexander@schneider.gg"
+    :user.registered/last-name "Schneider"
     :user.registered/first-name "Alexander"
-    :user.registered/groups ["test-group"]}])
+    :user.registered/groups ["test-group"]
+    :user.registered/visited-schnaqs
+    [#:discussion{:share-hash "cat-dog-hash"}]}])
 
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
