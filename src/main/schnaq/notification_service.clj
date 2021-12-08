@@ -14,11 +14,6 @@
 
 (defonce mail-update-schedule (atom nil))
 
-(def christian
-  (first (user-db/all-registered-users)))
-(def statements-discussion-shit
-  (discussion-db/new-statements-by-discussion-hash christian))
-
 (>defn- build-new-statements-content
   "Additional content to display the number of new statements and a navigation button
   to the corresponding schnaq. This functions maps over all schnaqs."
