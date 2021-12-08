@@ -6,8 +6,15 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.views.modal :as modal]
             [taoensso.timbre :as log]))
+
+(def ^:private refresh-token-time
+  "Seconds until the token should be refreshed."
+  30)
 
 (defn- error-to-console
   "Shorthand function to log to console."
@@ -19,6 +26,24 @@
   [db]
   (get-in db [:user :authenticated?] false))
 
+(defn- request-login-modal
+  "Show a modal requesting the user to login again. Can be used for 
+   error-handling, e.g. when a token expired and could not be refreshed"
+  []
+  (let [keycloak @(rf/subscribe [:keycloak/object])]
+    [modal/modal-template
+     (labels :auth.modal.request-login/title)
+     [:<>
+      [:p (labels :auth.modal.request-login/lead) " 👍"]
+      [:p.text-center
+       [:a.btn.btn-outline-secondary
+        {:href (.createLoginUrl keycloak)}
+        (labels :auth.modal.request-login/button)]]
+      [:p
+       [:small.text-muted
+        [icon :info "my-auto mr-1"]
+        (labels :auth.modal.request-login/info)]]]]))
+
 ;; -----------------------------------------------------------------------------
 ;; Init function of keycloak. Called in the beginning to check if the user was
 ;; logged in. Restores the last login state according to the settings in
@@ -27,13 +52,13 @@
 (rf/reg-event-fx
  :keycloak/init
  (fn [{:keys [db]} [_ _]]
-   (let [^js keycloak (Keycloak (clj->js config/keycloak))]
+   (let [keycloak (Keycloak (clj->js config/keycloak))]
      {:db (assoc-in db [:user :keycloak] keycloak)
       :fx [[:keycloak/silent-check keycloak]]})))
 
 (rf/reg-fx
  :keycloak/silent-check
- (fn [^js keycloak]
+ (fn [keycloak]
    (-> keycloak
        (.init #js{:onLoad "check-sso"
                   :checkLoginIframe false
@@ -56,18 +81,17 @@
 (rf/reg-event-fx
  :keycloak/login
  (fn [{:keys [db]} [_ _]]
-   (let [^js keycloak (get-in db [:user :keycloak])]
+   (let [keycloak (get-in db [:user :keycloak])]
      (when keycloak
        {:fx [[:keycloak/login-request keycloak]]}))))
 
 (rf/reg-fx
  :keycloak/login-request
- (fn [^js keycloak]
+ (fn [keycloak]
    (-> keycloak
        (.login)
        (.then #(rf/dispatch [:keycloak/load-user-profile]))
-       (.catch #(error-to-console
-                 "Login not successful. Request could not be fulfilled.")))))
+       (.catch #(rf/dispatch [:modal {:show? true :child [request-login-modal]}])))))
 
 ;; -----------------------------------------------------------------------------
 ;; If login / init was successful, ask in keycloak for the user's information.
@@ -75,7 +99,7 @@
 (rf/reg-event-fx
  :keycloak/load-user-profile
  (fn [{:keys [db]} _]
-   (let [^js keycloak (get-in db [:user :keycloak])]
+   (let [keycloak (get-in db [:user :keycloak])]
      (when (and keycloak (user-authenticated? db))
        {:fx [[:keycloak/load-user-profile-request keycloak]]}))))
 
@@ -86,13 +110,12 @@
 
 (rf/reg-fx
  :keycloak/load-user-profile-request
- (fn [^js keycloak]
+ (fn [keycloak]
    (-> keycloak
        (.loadUserProfile)
        (.then #(rf/dispatch [:keycloak/store-groups
                              (js->clj % :keywordize-keys true)]))
-       (.catch #(error-to-console
-                 "Could not load user profile from keycloak.")))))
+       (.catch #(rf/dispatch [:modal {:show? true :child [request-login-modal]}])))))
 
 (rf/reg-event-db
  :keycloak/store-groups
@@ -108,13 +131,13 @@
 (rf/reg-event-fx
  :keycloak/logout
  (fn [{:keys [db]} [_ _]]
-   (let [^js keycloak (get-in db [:user :keycloak])]
+   (let [keycloak (get-in db [:user :keycloak])]
      (when keycloak
        {:fx [[:keycloak/logout-request keycloak]]}))))
 
 (rf/reg-fx
  :keycloak/logout-request
- (fn [^js keycloak]
+ (fn [keycloak]
    (-> keycloak
        (.logout)
        (.then #(rf/dispatch [:user/authenticated! false]))
@@ -129,24 +152,40 @@
 (rf/reg-event-fx
  :keycloak/check-token-validity
  (fn [{:keys [db]} [_ _]]
-   (let [^js keycloak (get-in db [:user :keycloak])
-         authenticated? (get-in db [:user :authenticated?])]
-     (when (and keycloak authenticated?)
+   (let [keycloak (get-in db [:user :keycloak])]
+     (when (and keycloak (user-authenticated? db))
        {:fx [[:keycloak/loop-token-validity-check keycloak]]}))))
 
 (rf/reg-fx
  :keycloak/loop-token-validity-check
- (fn [^js keycloak]
+ (fn [keycloak]
    (go (while true
-         (<! (timeout 30000))
+         (<! (timeout (* 1000 refresh-token-time)))
          (-> keycloak
-             (.updateToken 30)
+             (.updateToken refresh-token-time)
              (.then
               #(when %
                  (log/trace "Access Token for user validation refreshed")))
              (.catch
-              #(log/error
-                "Error when updating the keycloak access token.")))))))
+              (fn [e]
+                (rf/dispatch [:modal {:show? true :child [request-login-modal]}])
+                (log/error "Error when updating the keycloak access token." e))))))))
+
+(defn- authorization-header [token]
+  {:Authorization (gstring/format "Token %s" token)})
+
+(>defn authentication-header
+  "Adds a map containing the token used for authenticating the user in the
+  backend."
+  [db]
+  [map? :ret map?]
+  (let [keycloak (get-in db [:user :keycloak])
+        external-jwt (get-in db [:user :jwt])]
+    (cond
+      (not (user-authenticated? db)) {}
+      keycloak (authorization-header (.-token keycloak))
+      external-jwt (authorization-header external-jwt)
+      :else {})))
 
 ;; -----------------------------------------------------------------------------
 
@@ -176,23 +215,12 @@
  :keycloak.roles/extract
  (fn [db [_ _]]
    (when (user-authenticated? db)
-     (let [^js keycloak (get-in db [:user :keycloak])
+     (let [keycloak (get-in db [:user :keycloak])
            roles (:roles (js->clj (oget keycloak [:realmAccess])
                                   :keywordize-keys true))]
        (assoc-in db [:user :roles] roles)))))
 
-(defn- authorization-header [token]
-  {:Authorization (gstring/format "Token %s" token)})
-
-(>defn authentication-header
-  "Adds a map containing the token used for authenticating the user in the
-  backend."
-  [db]
-  [map? :ret map?]
-  (let [^js keycloak (get-in db [:user :keycloak])
-        external-jwt (get-in db [:user :jwt])]
-    (cond
-      (not (user-authenticated? db)) {}
-      keycloak (authorization-header (.-token keycloak))
-      external-jwt (authorization-header external-jwt)
-      :else {})))
+(rf/reg-sub
+ :keycloak/object
+ (fn [db]
+   (get-in db [:user :keycloak])))
