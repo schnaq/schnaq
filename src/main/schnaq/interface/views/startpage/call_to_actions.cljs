@@ -39,9 +39,9 @@
    [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/bjorn)}]
    [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/frauke-kling)}]
    [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/lokay)}]
-   [:div.border-right.mr-2
-    [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/frank-stampa)}]
-    [icon :plus "my-auto mr-2"]]
+   [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/frank-stampa)}]
+   [icon :plus "my-auto mr-2"]
+   [:div.border-right.mr-2.d-inline-block]
    [:p.small.my-auto (labels :startpage.social-proof/teaser)]])
 
 (defn features-call-to-action
