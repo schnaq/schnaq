@@ -311,4 +311,3 @@
     (testing ""
       (is (not= new-statements-after new-statements-before))
       (is (> (count new-statements-after) (count new-statements-before))))))
-
