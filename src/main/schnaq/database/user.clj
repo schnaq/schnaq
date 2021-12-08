@@ -203,9 +203,10 @@
      :where [?users :user.registered/groups ?group]]
    group-name patterns/public-user))
 
-(defn user-by-email
+(>defn user-by-email
   "Returns the registered user by email."
   [user-email]
+  [:user.registered/email :ret ::specs/registered-user]
   (query
    '[:find (pull ?user registered-user-public-pattern) .
      :in $ ?email registered-user-public-pattern
@@ -215,7 +216,7 @@
 (>defn all-registered-users
   "Returns all registered users."
   []
-  [:ret (s/coll-of :registered-user)]
+  [:ret (s/coll-of ::specs/registered-user)]
   (toolbelt/pull-key-up
    (query
     '[:find [(pull ?registered-user user-pattern) ...]
