@@ -45,7 +45,7 @@
   [:div.card.panel-white.text-center
    [:div.card-body
     [:div.display-6.text-typography.mb-3.card-title (labels title)]
-    [icon icon-key "mb-3 mx-auto card-text" {:size "3x"}]
+    [icon icon-key "mb-3 mx-auto card-text text-primary" {:size "3x"}]
     [:p.text-justify.card-text (labels body)]]])
 
 (defn- how-does-schnaq-work
