@@ -9,7 +9,7 @@
 (defn- example-question
   "Box describing what schnaq does and why"
   []
-  [:div.my-5.py-5
+  [:div.mt-5.pt-5
    [rows/row-builder-text-left
     [rows/build-text-box :startpage.information.know-how]
     [examples/display-example-statements]]])
@@ -17,7 +17,7 @@
 (defn- schnaq-promise
   "Box describing schnaq's promise to the user"
   []
-  [:div.my-5.py-lg-5
+  [:div.my-5.pt-lg-5
    [rows/row-builder-text-left
     [rows/build-text-box :startpage.information.positioning]
     [:div.example-dashboard-image
@@ -26,17 +26,11 @@
        :src (img-path :startpage.example/dashboard)}]]]])
 
 (defn- use-it-anywhere []
-  [:div.my-5.py-lg-5
+  [:div.mb-5.py-lg-5
    [rows/row-builder-text-right
     [:img.shadow-lg.rounded-2
      {:src (img-path :startpage.information/anywhere)}]
     [rows/build-text-box :startpage.information.anywhere]]])
-
-(defn- hybrid-questioning []
-  [rows/row-builder-text-left
-   [rows/build-text-box :startpage.information.meetings]
-   [:img.shadow-lg.rounded-2
-    {:src (img-path :startpage.information/meeting)}]])
 
 (defn- feature-box
   ;; TODO früher auf einzelne Karten umbrechen
