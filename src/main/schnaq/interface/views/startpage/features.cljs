@@ -33,7 +33,6 @@
     [rows/build-text-box :startpage.information.anywhere]]])
 
 (defn- feature-box
-  ;; TODO früher auf einzelne Karten umbrechen
   "A Single feature box that can be put in a row. All inputs are keys."
   [title body icon-key]
   [:div.card.panel-white.text-center

@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.startpage.testimonials
   (:require [goog.string :as gstring]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.components.wavy :as wavy]
             [schnaq.interface.translations :refer [labels]]))
 
 (defn- testimonial-card
@@ -20,6 +19,7 @@
      [:div.display-5.text-primary.mr-1.mt-n2 "\""]
      [:p.card-text.text-primary (labels company-body)]]]])
 
+;; Testimonials can be used in the separate testimonials page soon
 (defn- testimonial-column-1
   "Columns displaying the testimonials of our users."
   []
@@ -95,29 +95,6 @@
     :testimonials.sensor/author
     :testimonial-picture/florian-clever]])
 
-(defn testimonial-carousel []
-  [:div#carouselTestimonialIndicators.carousel-testimonial.carousel.slide {:data-ride "carousel"}
-   [:ol.carousel-indicators.carousel-indicator-testimonial
-    [:li.active {:data-target "#carouselTestimonialIndicators" :data-slide-to "0"}]
-    [:li {:data-target "#carouselTestimonialIndicators" :data-slide-to "1"}]
-    [:li {:data-target "#carouselTestimonialIndicators" :data-slide-to "2"}]
-    [:li {:data-target "#carouselTestimonialIndicators" :data-slide-to "3"}]]
-   [:div.carousel-inner.p-md-4
-    [:div.carousel-item.active
-     [testimonial-column-1]]
-    [:div.carousel-item
-     [testimonial-column-2]]
-    [:div.carousel-item
-     [testimonial-column-3]]
-    [:div.carousel-item
-     [testimonial-column-4]]]
-   [:a.carousel-control-prev.carousel-control-testimonial {:href "#carouselTestimonialIndicators" :role "button" :data-slide "prev"}
-    [:span.carousel-control-prev-icon.carousel-control-color {:aria-hidden "true"}]
-    [:span.sr-only "Previous"]]
-   [:a.carousel-control-next.carousel-control-testimonial {:href "#carouselTestimonialIndicators" :role "button" :data-slide "next"}
-    [:span.carousel-control-next-icon.carousel-control-color {:aria-hidden "true"}]
-    [:span.sr-only "Next"]]])
-
 (defn- company-logo [logo company-name]
   [:article
    [:img.testimonial-logo.p-4.w-100
@@ -162,16 +139,3 @@
         :alt (gstring/format "A picture of %s" (labels :testimonial-picture/lokay))}]
       [:div.text-typography.mt-3.text-center
        [:div.small (labels :testimonials.lokay/author)]]]]]])
-
-;; -----------------------------------------------------------------------------
-(defn view
-  "Show all testimonials."
-  []
-  [:section.pb-5.pt-3
-   [wavy/top-and-bottom
-    :white
-    [:div.container
-     [:h3.h1.pb-4.text-typography
-      (labels :testimonials/heading)]
-     [testimonial-companies]
-     [testimonial-carousel]]]])

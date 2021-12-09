@@ -23,15 +23,6 @@
     (rfe/href :routes.schnaq/create)
     "btn-secondary d-inline-block"]])
 
-;; TODO kill alternative startpages and the classes used here
-(defn- social-proof
-  "A small section showing the user, that the risk was already taken by others."
-  []
-  [:p.text-social-proof.text-center.pt-2
-   [:img.social-proof-icon
-    {:src (img-path :schnaqqifant/white)}]
-   (labels :startpage.social-proof/numbers)])
-
 (defn- social-proof-abtf
   "Social proof above the fold, showing other people use schnaq."
   []
