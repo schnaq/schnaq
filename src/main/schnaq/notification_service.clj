@@ -28,7 +28,7 @@
   "Takes a `ZonedDateTime` and returns the date of the next monday."
   [timestamp]
   [:time/zoned-date-time :ret :time/zoned-date-time]
-  (let [timestamp-next-monday (-> timestamp (.with (TemporalAdjusters/nextOrSame DayOfWeek/MONDAY)))
+  (let [timestamp-next-monday (-> timestamp (.with (TemporalAdjusters/next DayOfWeek/MONDAY)))
         days-left (.between ChronoUnit/DAYS timestamp timestamp-next-monday)]
     (.plusDays timestamp days-left)))
 
@@ -137,16 +137,18 @@
    Infinitely loops and sends regularly mails."
   [channel interval]
   [any? :user.registered/notification-mail-interval :ret nil?]
+  (log/info "Starting mail schedule for" interval)
   (go-loop []
     (when-let [timestamp (<! @channel)]
       (log/info "Sending new mails, timestamp" timestamp)
-      (send-schnaq-diffs (first (user-db/users-by-notification-interval interval)))
+      (run! send-schnaq-diffs (user-db/users-by-notification-interval interval))
       (recur))))
 
 ;; -----------------------------------------------------------------------------
 
 (defn -main
   [& _args]
+  (log/info "Initialized mail notification service")
   (start-mail-schedule daily :notification-mail-interval/daily)
   (start-mail-schedule weekly :notification-mail-interval/weekly))
 
