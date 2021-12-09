@@ -134,7 +134,7 @@
    :startpage.feature-box.learnings/body "Deine Teilnehmer:innen kommen zu dir, weil du Expertise besitzt. Zeige das der Welt, indem du Wissenskarten von dir öffentlich teilst, oder sie als \"Häufig gestellte Fragen\" online stellst."
 
    :startpage.early-adopter/title "Neugierig geworden?"
-   :startpage.early-adopter/body "Sei einer der ersten die schnaq Hubs nutzen"
+   :startpage.early-adopter/body "Probiere den \"Frei für Immer\" Plan."
 
    :startpage.three-steps/heading "Drei Schritte zum aktiven Publikum"
    :startpage.three-steps/first "Erstelle einen schnaq"

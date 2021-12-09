@@ -133,7 +133,7 @@
    :startpage.feature-box.learnings/body "Twoi uczestnicy słuchają Cię ze względu na Twoją wiedzę ekspercką. Pokaż światu swoje know-how upubliczniając niektóre z Twoich kart wiedzy. Albo użyj wszystkich swoich odpowiedzi na pytania jako FAQ online."
 
    :startpage.early-adopter/title "Teraz jesteś ciekaw?"
-   :startpage.early-adopter/body "Bądź jedną z pierwszych osób korzystających z hubów schnaq"
+   :startpage.early-adopter/body "Wypróbuj plan \"Darmow na zawsze\""
 
    :startpage.three-steps/heading "Trzy kroki do aktywnej publiczności"
    :startpage.three-steps/first "Stwórz schnaq"

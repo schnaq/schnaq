@@ -135,7 +135,7 @@
    :startpage.feature-box.learnings/body "Your participants listen to you because of your expertise. Show your know-how to the world by making some of your knowledge cards public. Or use all your answered questions as an online FAQ."
 
    :startpage.early-adopter/title "Gotten Curious?"
-   :startpage.early-adopter/body "Be one of the first to use schnaq hubs"
+   :startpage.early-adopter/body "Try the \"Free Forever\" plan."
 
    :startpage.three-steps/heading "Three steps to an active audience"
    :startpage.three-steps/first "Create a schnaq"

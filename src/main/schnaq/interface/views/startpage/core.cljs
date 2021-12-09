@@ -56,16 +56,13 @@
 (defn- early-adopters
   "Present early-adopters section to catch up interest."
   []
-  [:section.overflow-hidden.py-3.my-5
-   [wavy/top-and-bottom
-    :white
-    [:div.container-lg.text-center
-     [:p.h4 (labels :startpage.early-adopter/title)]
-     [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
-     [:a.btn.btn-lg.button-secondary
-      {:role "button"
-       :href (reitfe/href :routes.schnaq/create)}
-      (labels :schnaq.create.button/save)]]]])
+  [:div.text-center.my-5
+   [:p.h4.text-primary (labels :startpage.early-adopter/title)]
+   [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
+   [:a.btn.btn-lg.button-secondary
+    {:role "button"
+     :href (reitfe/href :routes.schnaq/create)}
+    (labels :schnaq.startpage.cta/button)]])
 
 (defn supporters []
   [:section.pb-5.pt-3
@@ -146,9 +143,8 @@
      [:section.container
       [:h2.text-center.mt-4 (labels :startpage.social-proof/companies)]
       [testimonials/testimonial-companies]
-      [mailchimp-form]]
-     [early-adopters]
-     [:section.container
+      [early-adopters]
+      [mailchimp-form]
       [founders-note]
       [supporters]]]]])
 
