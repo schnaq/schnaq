@@ -108,6 +108,7 @@
    :startpage/hook "You can fully understand your audience anytime with schnaq Q&A. Activate everyone in your workshop, webinar or any other event and demonstrate your expertise with the knowledge cards."
    :schnaq.startpage.cta/button "Create a free schnaq now!"
    :startpage.social-proof/teaser "You are one click away from joining hundreds of other schnaq users 👋"
+   :startpage.social-proof/companies "They're already used to schnaq"
 
    :startpage.usage/lead "What do I use schnaq for?"
 
@@ -135,6 +136,11 @@
 
    :startpage.early-adopter/title "Gotten Curious?"
    :startpage.early-adopter/body "Be one of the first to use schnaq hubs"
+
+   :startpage.three-steps/heading "Three steps to an active audience"
+   :startpage.three-steps/first "Create a schnaq"
+   :startpage.three-steps/second "Share your schnaq"
+   :startpage.three-steps/third "Answer questions and understand the participants"
 
    :startpage.newsletter/heading "Be the first to know when you can profit from new features!"
    :startpage.newsletter/button "Give me exclusive previews!"

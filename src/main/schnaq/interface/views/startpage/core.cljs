@@ -122,10 +122,11 @@
   "A short three step explanation how schnaq leads to success. Could be expanded with a before / after persona."
   []
   [:div.row.mt-5
-   [:div.col-12.text-center.h2 "Drei Schritte zum aktiven Publikum"]
-   [single-step "1." [:a {:href (reitfe/href :routes.schnaq/create)} "Erstelle einen schnaq"] :startpage/create-schnaq]
-   [single-step "2." "Teile den schnaq" :startpage/share-schnaq]
-   [single-step "3." "Beantworte Fragen und analysiere Ergebnisse" :startpage/answer-schnaq]])
+   [:div.col-12.text-center.h2 (labels :startpage.three-steps/heading)]
+   [single-step "1."
+    [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.three-steps/first)] :startpage/create-schnaq]
+   [single-step "2." (labels :startpage.three-steps/second) :startpage/share-schnaq]
+   [single-step "3." (labels :startpage.three-steps/third) :startpage/answer-schnaq]])
 
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
@@ -143,6 +144,8 @@
       [startpage-features/feature-rows]]
      [faq]
      [:section.container
+      [:h2.text-center.mt-4 (labels :startpage.social-proof/companies)]
+      [testimonials/testimonial-companies]
       [mailchimp-form]]
      [early-adopters]
      [:section.container

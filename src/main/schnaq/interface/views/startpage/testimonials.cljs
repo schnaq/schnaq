@@ -124,7 +124,7 @@
     {:src (img-path logo)
      :alt (gstring/format "A company logo of %s" (labels company-name))}]])
 
-(defn- testimonial-companies []
+(defn testimonial-companies []
   [:div.d-flex.flex-wrap.mb-5
    [company-logo :logos/doctronic :testimonials.doctronic/company]
    [company-logo :logos/franky :testimonials.franky/company]
