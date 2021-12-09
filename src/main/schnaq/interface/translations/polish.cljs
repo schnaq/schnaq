@@ -733,6 +733,7 @@
    ;; Supporters
    :supporters/heading "Przy życzliwym wsparciu:"
    :startpage/team-schnaq "Pracujemy każdego dnia, aby zrobić co w naszej mocy dla lepszego dzielenia się wiedzą, gdzie każdy jest słyszany."
+   :startpage/team-schnaq-heading "Poznaj zespół stojący za schnaqiem"
 
    ;; Testimonials
    :testimonials/heading "Już przekąszali z nami"

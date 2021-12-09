@@ -89,16 +89,16 @@
       [:p.lead (labels :startpage.faq/subtitle)]]
      [qanda/question-field-and-search-results :dark]]]])
 
-(defn- founders-note
-  "A personal note from the founders, to the visitor of the page. Give a last personal touch."
+(defn- team-and-supporters
+  "Give a last personal touch."
   []
   [:section.pb-5.text-center
    [:div.row
-    [:div.col-6
+    [:div.col-12.col-lg-6
      [:img.img-fluid.mb-2 {:src (img-path :startpage/team-schnaq)
                            :style {:max-width "400px"}}]
-     [:h2 [:a {:href (reitfe/href :routes/about-us)} "Lerne das Team hinter schnaq kennen"]]]
-    [:div.col-6.my-auto
+     [:h2 [:a {:href (reitfe/href :routes/about-us)} (labels :startpage/team-schnaq-heading)]]]
+    [:div.col-12.col-lg-6.my-lg-auto
      [:p.h5.mb-5 (labels :startpage/team-schnaq)]
      [:p.h4.text-primary.text-center (labels :supporters/heading)]
      [supporters]]]])
@@ -143,7 +143,7 @@
       [testimonials/testimonial-companies]
       [early-adopters]
       [mailchimp-form]
-      [founders-note]]]]])
+      [team-and-supporters]]]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."

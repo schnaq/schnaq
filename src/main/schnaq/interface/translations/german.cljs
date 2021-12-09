@@ -736,6 +736,7 @@
    ;; Supporters
    :supporters/heading "Mit freundlicher Unterstützung von:"
    :startpage/team-schnaq "Wir arbeiten tagtäglich daran unseren Beitrag für einen besseren Wissensaustausch zu leisten, bei dem alle gehört werden."
+   :startpage/team-schnaq-heading "Lerne das Team hinter schnaq kennen"
 
    ;; Testimonials
    :testimonials/heading "Die haben schon mit uns geschnaqqt"

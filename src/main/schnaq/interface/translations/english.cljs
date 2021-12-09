@@ -735,6 +735,7 @@
    ;; Supporters
    :supporters/heading "Supported by:"
    :startpage/team-schnaq "We work every day to do our part for better knowledge exchange where everyone is heard."
+   :startpage/team-schnaq-heading "Get to know the team behind schnaq"
 
    ;; Testimonials
    :testimonials/heading "Testimonials"

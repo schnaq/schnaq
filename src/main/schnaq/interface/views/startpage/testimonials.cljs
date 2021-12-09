@@ -164,7 +164,6 @@
        [:div.small (labels :testimonials.lokay/author)]]]]]])
 
 ;; -----------------------------------------------------------------------------
-;; TODO own testimonials page
 (defn view
   "Show all testimonials."
   []
