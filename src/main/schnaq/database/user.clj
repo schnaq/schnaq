@@ -48,6 +48,17 @@
       :where [?registered-user :user.registered/keycloak-id _]]
     patterns/private-user)))
 
+(>defn users-by-notification-interval
+  "Query users from database matching the notification interval."
+  [interval]
+  [:user.registered/notification-mail-interval :ret (s/coll-of ::specs/registered-user)]
+  (toolbelt/pull-key-up
+   (query
+    '[:find [(pull ?users pattern) ...]
+      :in $ ?interval pattern
+      :where [?users :user.registered/notification-mail-interval ?interval]]
+    interval patterns/private-user)))
+
 ;; -----------------------------------------------------------------------------
 
 (>defn add-user
