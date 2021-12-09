@@ -48,7 +48,7 @@
     [icon icon-key "mb-3 mx-auto card-text text-primary" {:size "3x"}]
     [:p.text-justify.card-text (labels body)]]])
 
-(defn- how-does-schnaq-work
+(defn how-does-schnaq-work
   "Arguments for getting schnaq in three columns."
   []
   [:div.mt-lg-5
@@ -77,7 +77,6 @@
   "Collection of feature rows."
   []
   [:<>
-   [how-does-schnaq-work]
    [example-question]
    [hybrid-questioning]
    [use-it-anywhere]

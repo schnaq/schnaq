@@ -132,8 +132,39 @@
    [company-logo :logos/hhu :testimonials.hhu/company]
    [company-logo :logos/leetdesk :testimonials.leetdesk/company]])
 
-;; -----------------------------------------------------------------------------
+(defn highlights
+  "A few highlight-testimonials featured on the startpage."
+  []
+  [:div.row.mt-5
+   [:div.col-12.col-lg-6.p-2
+    [:div.row
+     [:div.col-4
+      [:img.w-100.rounded-50
+       {:src (img-path :testimonial-picture/frauke-kling)
+        :alt (gstring/format "A picture of %s" (labels :testimonial-picture/frauke-kling))}]
+      [:div.text-typography.my-3.text-center
+       [:div.small (labels :testimonials.bib/author)]]]
+     [:div.col-6.my-auto.mt-lg-0.mb-lg-auto
+      [:div.card-body.p-0
+       [:div.d-flex.flex-row
+        [:div.display-5.text-primary.mr-1.mt-n2 "\""]
+        [:p.card-text.text-primary (labels :testimonials.bib/quote)]]]]]]
+   [:div.col-12.col-lg-6.p-2
+    [:div.row
+     [:div.col-6.my-auto.mb-lg-0.mt-lg-auto
+      [:div.card-body.p-0
+       [:div.d-flex.flex-row
+        [:div.display-5.text-primary.mr-1.mt-n2 "\""]
+        [:p.card-text.text-primary (labels :testimonials.lokay/quote)]]]]
+     [:div.col-4
+      [:img.w-100.rounded-50
+       {:src (img-path :testimonial-picture/lokay)
+        :alt (gstring/format "A picture of %s" (labels :testimonial-picture/lokay))}]
+      [:div.text-typography.my-3.text-center
+       [:div.small (labels :testimonials.lokay/author)]]]]]])
 
+;; -----------------------------------------------------------------------------
+;; TODO own testimonials page
 (defn view
   "Show all testimonials."
   []
