@@ -122,7 +122,6 @@
       [testimonials/highlights]
       [startpage-features/feature-rows]]
      [faq]
-     [testimonials/view]
      [:section.container
       [mailchimp-form]]
      [early-adopters]
