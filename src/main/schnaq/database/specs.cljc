@@ -101,6 +101,9 @@
                                   :discussion/end-time :discussion/creation-secret :discussion/mode
                                   :discussion/access]))
 
+(s/def ::share-hash-statement-id-mapping
+  (s/map-of :discussion/share-hash (s/coll-of :db/id)))
+
 ;; Hubs
 (s/def :hub/name ::non-blank-string)
 (s/def :hub/keycloak-name ::non-blank-string)
@@ -217,7 +220,6 @@
 (s/def :app/code ::non-blank-string)
 
 ;; HTTP Related
-
 (s/def :http/status nat-int?)
 (s/def :http/headers map?)
 (s/def :ring/response (s/keys :req-un [:http/status :http/headers]))

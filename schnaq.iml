@@ -28,7 +28,7 @@
     <orderEntry type="library" name="Deps: org.jvnet.staxex/stax-ex:1.8" level="project" />
     <orderEntry type="library" name="Deps: day8.re-frame/test:0.1.5" level="project" />
     <orderEntry type="library" name="Deps: commons-codec:1.15" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/api:0.8.532" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/api:0.8.536" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: amperity/envoy:0.3.3" level="project" />
     <orderEntry type="library" name="Deps: com.bhauman/cljs-test-display:0.1.1" level="project" />
