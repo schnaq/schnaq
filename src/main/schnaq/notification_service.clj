@@ -18,7 +18,7 @@
 
 (s/def :time/zoned-date-time (partial instance? ZonedDateTime))
 
-(def ^:private start-this-morning
+(def ^:private start-next-morning
   "ZonedDateTime to indicate the start, today at 7 o'clock in UTC, which is 
    6 o'clock in Europe/Berlin."
   (-> (LocalDateTime/of (LocalDate/now) (LocalTime/of 7 0))
@@ -39,16 +39,16 @@
   [:time/zoned-date-time pos-int? :ret (s/coll-of inst?)]
   (chime-core/periodic-seq (.toInstant timestamp) (Period/ofDays days)))
 
-(def daily-channel
+(def ^:private daily
   "Create a core.async channel containing a list of instances, repeating every
    day. Drops first element in list to prevent direct-sending mail."
   (atom
-   (chime-ch (rest (create-schedule start-this-morning 1)))))
+   (chime-ch (rest (create-schedule start-next-morning 1)))))
 
-(def weekly-channel
-  "Same as `daily-channel`, but for a weekly schedule."
+(def ^:private weekly
+  "Same as `daily`, but for a weekly schedule."
   (atom
-   (chime-ch (create-schedule (timestamp-next-monday start-this-morning) 7))))
+   (chime-ch (create-schedule (timestamp-next-monday start-next-morning) 7))))
 
 ;; -----------------------------------------------------------------------------
 ;; Generate and style mail
@@ -130,7 +130,7 @@
 ;; -----------------------------------------------------------------------------
 ;; Mail sending
 
-(>defn- send-mails-on-schedule
+(>defn- start-mail-schedule
   "Takes a core.async channel-atom containing the instances of the next dates 
    when mails should be sent and an interval to pre-select the users.
    
@@ -147,8 +147,8 @@
 
 (defn -main
   [& _args]
-  (send-mails-on-schedule daily-channel :notification-mail-interval/daily)
-  (send-mails-on-schedule weekly-channel :notification-mail-interval/weekly))
+  (start-mail-schedule daily :notification-mail-interval/daily)
+  (start-mail-schedule weekly :notification-mail-interval/weekly))
 
 ;; -----------------------------------------------------------------------------
 
@@ -161,6 +161,6 @@
 
   (reset! dev-channel nil)
 
-  (send-mails-on-schedule dev-channel :notification-mail-interval/daily)
+  (start-mail-schedule dev-channel :notification-mail-interval/daily)
 
   nil)
