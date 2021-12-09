@@ -10,9 +10,9 @@
   "Box describing what schnaq does and why"
   []
   [:div.my-5.py-5
-   [rows/row-builder-text-right-mobile-above
-    [examples/display-example-statements]
-    [rows/build-text-box :startpage.information.know-how]]])
+   [rows/row-builder-text-left
+    [rows/build-text-box :startpage.information.know-how]
+    [examples/display-example-statements]]])
 
 (defn- schnaq-promise
   "Box describing schnaq's promise to the user"
@@ -78,6 +78,5 @@
   []
   [:<>
    [example-question]
-   [hybrid-questioning]
    [use-it-anywhere]
    [schnaq-promise]])
