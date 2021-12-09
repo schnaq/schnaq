@@ -156,11 +156,11 @@
        [:div.d-flex.flex-row
         [:div.display-5.text-primary.mr-1.mt-n2 "\""]
         [:p.card-text.text-primary (labels :testimonials.lokay/quote)]]]]
-     [:div.col-4
+     [:div.col-4.mt-lg-auto
       [:img.w-100.rounded-50
        {:src (img-path :testimonial-picture/lokay)
         :alt (gstring/format "A picture of %s" (labels :testimonial-picture/lokay))}]
-      [:div.text-typography.my-3.text-center
+      [:div.text-typography.mt-3.text-center
        [:div.small (labels :testimonials.lokay/author)]]]]]])
 
 ;; -----------------------------------------------------------------------------
