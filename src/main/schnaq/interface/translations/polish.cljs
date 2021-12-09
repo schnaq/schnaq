@@ -174,7 +174,7 @@
    Naszym celem jest uelastycznienie komunikacji i dzielenia się wiedzą w miejscu pracy. W ten sposób
    nie tylko potencjał poszczególnych członków zespołu, ale także całej firmy."
 
-   :startpage.founders-note/title "List od założycieli"
+   :startpage/get-to-know "Poznaj zespół stojący za schnaqiem"
 
    ;; Login Page
    :page.login/heading "Proszę się zalogować"
@@ -731,7 +731,8 @@
    :analytics/fetch-data-button "Pobierz dane"
 
    ;; Supporters
-   :supporters/heading "Wspierane przez Ministerstwo Gospodarki Kraju Związkowego Nadrenia Północna-Westfalia (Niemcy)"
+   :supporters/heading "Przy życzliwym wsparciu:"
+   :startpage/team-schnaq "Pracujemy każdego dnia, aby zrobić co w naszej mocy dla lepszego dzielenia się wiedzą, gdzie każdy jest słyszany."
 
    ;; Testimonials
    :testimonials/heading "Już przekąszali z nami"

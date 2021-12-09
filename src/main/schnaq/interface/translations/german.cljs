@@ -175,7 +175,7 @@
         Unser Ziel ist es Kommunikation und Wissensaustausch am Arbeitsplatz flexibel zu gestalten. So heben wir
         nicht nur das Potenzial einzelner Teammitglieder, sondern auch des gesamten Unternehmens."
 
-   :startpage.founders-note/title "Ein Brief von den Gründern"
+   :startpage/get-to-know "Lerne das Team hinter schnaq kennen"
 
    ;; Login Page
    :page.login/heading "Bitte logg dich ein"
@@ -734,7 +734,8 @@
    :analytics/fetch-data-button "Hole Daten"
 
    ;; Supporters
-   :supporters/heading "Unterstützt vom Wirtschaftsministerium des Landes Nordrhein-Westfalen"
+   :supporters/heading "Mit freundlicher Unterstützung von:"
+   :startpage/team-schnaq "Wir arbeiten tagtäglich daran unseren Beitrag für einen besseren Wissensaustausch zu leisten, bei dem alle gehört werden."
 
    ;; Testimonials
    :testimonials/heading "Die haben schon mit uns geschnaqqt"

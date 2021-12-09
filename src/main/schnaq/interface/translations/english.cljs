@@ -175,7 +175,7 @@
         Our goal is to make communication and knowledge-sharing at the workplace as flexible and easy as possible.
         This way we heighten the potential of every person in the company, and thus of the company itself."
 
-   :startpage.founders-note/title "A Note from the Founders"
+   :startpage/get-to-know "Get to know the team behind schnaq"
 
    ;; Login page
    :page.login/heading "Please Login"
@@ -733,7 +733,8 @@
    :analytics/fetch-data-button "Retrieving data…"
 
    ;; Supporters
-   :supporters/heading "Supported by the Ministry of Economics of the State of North Rhine-Westphalia"
+   :supporters/heading "Supported by:"
+   :startpage/team-schnaq "We work every day to do our part for better knowledge exchange where everyone is heard."
 
    ;; Testimonials
    :testimonials/heading "Testimonials"

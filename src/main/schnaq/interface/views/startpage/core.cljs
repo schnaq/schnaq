@@ -65,20 +65,17 @@
     (labels :schnaq.startpage.cta/button)]])
 
 (defn supporters []
-  [:section.pb-5.pt-3
-   [:p.display-6.text-center
-    (labels :supporters/heading)]
-   [:div.row.text-center
-    [:div.col-md-6
-     [:a {:href "https://ignitiondus.de"}
-      [:img.w-75
-       {:src (img-path :logos/ignition)
-        :alt "ignition logo"}]]]
-    [:div.col-md-6
-     [:a {:href "https://www.digihub.de/"}
-      [:img.w-75.pt-md-4
-       {:src (img-path :logos/digihub)
-        :alt "digihub logo"}]]]]])
+  [:<>
+   [:div.text-center
+    [:a {:href "https://ignitiondus.de"}
+     [:img.w-50
+      {:src (img-path :logos/ignition)
+       :alt "ignition logo"}]]]
+   [:div.text-center
+    [:a {:href "https://www.digihub.de/"}
+     [:img.w-50.pt-md-4
+      {:src (img-path :logos/digihub)
+       :alt "digihub logo"}]]]])
 
 (defn- faq
   "Handle some still open questions from the user."
@@ -96,14 +93,15 @@
   "A personal note from the founders, to the visitor of the page. Give a last personal touch."
   []
   [:section.pb-5.text-center
-   [:h4.text-center (labels :startpage.founders-note/title)]
-   [:div.d-flex.align-items-center
-    [:div
-     [:div.flex-fill
-      [:img.img-fluid.mb-2.shadow {:src (img-path :founders-note)}]]
-     [:p [:strong "– Alexander, Christian und Michael"]]]
-    [:div.flex-fill
-     [:img.img-fluid.shadow.w-75 {:src (img-path :team/sitting-on-couches)}]]]])
+   [:div.row
+    [:div.col-6
+     [:img.img-fluid.mb-2 {:src (img-path :startpage/team-schnaq)
+                           :style {:max-width "400px"}}]
+     [:h2 [:a {:href (reitfe/href :routes/about-us)} "Lerne das Team hinter schnaq kennen"]]]
+    [:div.col-6.my-auto
+     [:p.h5.mb-5 (labels :startpage/team-schnaq)]
+     [:p.h4.text-primary.text-center (labels :supporters/heading)]
+     [supporters]]]])
 
 (defn- single-step
   "A single step to success."
@@ -145,8 +143,7 @@
       [testimonials/testimonial-companies]
       [early-adopters]
       [mailchimp-form]
-      [founders-note]
-      [supporters]]]]])
+      [founders-note]]]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."
