@@ -3,7 +3,7 @@
             ["date-fns-tz" :as df-tz]
             ["date-fns/locale" :as df-locale]
             [ghostwheel.core :refer [>defn]]
-            [schnaq.interface.config :as config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (def ^:private select-locale
@@ -28,9 +28,9 @@
   [timestamp]
   [inst? :ret string?]
   (if timestamp
-    (df-tz/format (df-tz/utcToZonedTime timestamp (:timezone config/time-settings))
-                  (:pattern config/time-settings)
-                  #js {:timeZone (:timezone config/time-settings)})
+    (df-tz/format (df-tz/utcToZonedTime timestamp (:timezone shared-config/time-settings))
+                  (:pattern shared-config/time-settings)
+                  #js {:timeZone (:timezone shared-config/time-settings)})
     ""))
 
 (>defn timestamp-with-tooltip

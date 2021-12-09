@@ -65,3 +65,10 @@
 (def access-code-default-expiration
   "Default duration in days for the access code."
   7)
+
+;; -----------------------------------------------------------------------------
+;; Time settings
+
+(def time-settings
+  {:pattern "HH:mm dd.MM.yyy"
+   :timezone "Europe/Berlin"})

@@ -46,13 +46,6 @@
    :clientId keycloak-client})
 
 ;; -----------------------------------------------------------------------------
-;; Time settings
-
-(def time-settings
-  {:pattern "HH:mm dd.MM.yyy"
-   :timezone "Europe/Berlin"})
-
-;; -----------------------------------------------------------------------------
 
 (def max-allowed-profile-picture-size
   "Maximal allowed image size of profile picture in bytes."
