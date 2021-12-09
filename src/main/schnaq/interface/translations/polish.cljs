@@ -1,6 +1,5 @@
 (ns schnaq.interface.translations.polish
-  (:require [schnaq.interface.config :refer [marketing-num-schnaqs marketing-num-statements]]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+  (:require [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (def labels
   {:error/export-failed "Eksport nie zadziałał, spróbuj ponownie później."
@@ -104,11 +103,11 @@
 
    ;; Startpage
    :startpage/heading "Ułatwione zbieranie pytań"
-   :startpage/subheading "Q&A proste i dobre"
-   :startpage/hook "Po prostu zbieraj pytania i udzielaj odpowiedzi w swoich kursach hybrydowych - dla większej przejrzystości i zrównoważonej wymiany"
-   :startpage.social-proof/numbers [:span "schnaq pomógł poprowadzić ponad " [:b marketing-num-schnaqs]
-                                    " dyskusji i Q&A, co przekłada się na " [:b marketing-num-statements] " przypadków wspólnej wiedzy."]
-   :schnaq.startpage.cta/button "Schnaqq bezpłatnie"
+   :startpage/subheading "Dogłębnie zrozum swoich uczestników"
+   :startpage/hook "Możesz w pełni zrozumieć swoich odbiorców w każdej chwili dzięki schnaq Q&A. Aktywuj wszystkich na swoim warsztacie, webinarze lub jakimkolwiek innym wydarzeniu i zademonstruj swoją wiedzę dzięki kartom wiedzy."
+   :schnaq.startpage.cta/button "Stwórz darmowy schnaq już teraz!"
+   :startpage.social-proof/teaser "Jesteś o jedno kliknięcie od dołączenia do setek innych użytkowników schnaq 👋"
+   :startpage.social-proof/companies "Oni już użyli schnaq"
 
    :startpage.usage/lead "Do czego mogę używać schnaq?"
    :startpage.features/more-information "Więcej informacji"
@@ -125,18 +124,23 @@
    :startpage.information.meetings/title "Hybrydowe przesłuchanie"
    :startpage.information.meetings/body "Dotrzyj poprzez schnaq do ludzi, którzy nie mogą tam być. Każdy może być zaangażowany, a pytania mogą być zadawane anonimowo. Dzięki inteligentnemu Q&A możesz nawet być na bieżąco online!"
 
-   :startpage.feature-box/heading "Jak działa schnaq?"
-   :startpage.feature-box.know-how/title "Przygotuj się"
-   :startpage.feature-box.know-how/body "Stwórz schnaq, gdzie mogą być zbierane pytania. Otrzymasz kod dostępu, kod QR oraz link, za pomocą którego będziesz mógł zaprosić wszystkich uczestników."
-   :startpage.feature-box.discussion/title "Dołącz do kursu"
-   :startpage.feature-box.discussion/body "Dzięki smartfonom, tabletom i laptopom Twoi widzowie mogą dołączyć do schnaq i zadawać pytania. Automatycznie wyświetlane są im dopasowane pytania z odpowiedziami, które są podobne w treści."
-   :startpage.feature-box.learnings/title "Podziel się odpowiedziami"
-   :startpage.feature-box.learnings/body "Odpowiedzi na pytania są natychmiast dostępne w Twoim kursie i mogą być przeglądane w dowolnym momencie. Zawsze możesz dodać treść później lub użyć tej samej bazy pytań ponownie w kolejnym kursie."
+   :startpage.feature-box/heading "Twoje korzyści"
+   :startpage.feature-box.know-how/title "Bez wyjaśnień"
+   :startpage.feature-box.know-how/body "Schnaq jest zaprojektowany w taki sposób, że Twoi uczestnicy nie potrzebują od Ciebie żadnych wyjaśnień. Mogą wnieść swój wkład w dowolnym momencie i anonimowo, korzystając z dowolnej przeglądarki internetowej."
+   :startpage.feature-box.discussion/title "Oszczędzaj czas"
+   :startpage.feature-box.discussion/body "Dzięki dynamicznym Q&A i kartom wiedzy wystarczy, że odpowiesz na każde pytanie tylko raz. Weź wygenerowane karty i użyj ich ponownie podczas następnego wydarzenia, aby schnaq mógł automatycznie odpowiadać za Ciebie."
+   :startpage.feature-box.learnings/title "Pokaż swoje Know-How"
+   :startpage.feature-box.learnings/body "Twoi uczestnicy słuchają Cię ze względu na Twoją wiedzę ekspercką. Pokaż światu swoje know-how upubliczniając niektóre z Twoich kart wiedzy. Albo użyj wszystkich swoich odpowiedzi na pytania jako FAQ online."
 
    :startpage.early-adopter/title "Teraz jesteś ciekaw?"
-   :startpage.early-adopter/body "Bądź jedną z pierwszych osób korzystających z hubów schnaq"
+   :startpage.early-adopter/body "Wypróbuj plan \"Darmow na zawsze\""
 
-   :startpage.newsletter/heading "Bądź jednym z pierwszych, którzy skorzystają z nowych funkcji!"
+   :startpage.three-steps/heading "Trzy kroki do aktywnej publiczności"
+   :startpage.three-steps/first "Stwórz schnaq"
+   :startpage.three-steps/second "Podziel się swoim schnaqiem"
+   :startpage.three-steps/third "Odpowiadaj na pytania i zrozum uczestników"
+
+   :startpage.newsletter/heading "Zapisz się do newslettera schnaq i otrzymuj regularne aktualizacje, wskazówki i więcej!"
    :startpage.newsletter/button "Poproś o ekskluzywne informacje!"
    :startpage.newsletter/address-placeholder "Adres e-mail"
    :startpage.newsletter/consent "Chciałbym zapisać się do newslettera schnaq i otrzymywać regularnie informacje od schnaq.com w przyszłości."
@@ -170,7 +174,7 @@
    Naszym celem jest uelastycznienie komunikacji i dzielenia się wiedzą w miejscu pracy. W ten sposób
    nie tylko potencjał poszczególnych członków zespołu, ale także całej firmy."
 
-   :startpage.founders-note/title "List od założycieli"
+   :startpage/get-to-know "Poznaj zespół stojący za schnaqiem"
 
    ;; Login Page
    :page.login/heading "Proszę się zalogować"
@@ -727,7 +731,9 @@
    :analytics/fetch-data-button "Pobierz dane"
 
    ;; Supporters
-   :supporters/heading "Wspierane przez Ministerstwo Gospodarki Kraju Związkowego Nadrenia Północna-Westfalia (Niemcy)"
+   :supporters/heading "Przy życzliwym wsparciu:"
+   :startpage/team-schnaq "Pracujemy każdego dnia, aby zrobić co w naszej mocy dla lepszego dzielenia się wiedzą, gdzie każdy jest słyszany."
+   :startpage/team-schnaq-heading "Poznaj zespół stojący za schnaqiem"
 
    ;; Testimonials
    :testimonials/heading "Już przekąszali z nami"

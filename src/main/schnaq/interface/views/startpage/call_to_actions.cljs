@@ -19,18 +19,21 @@
   []
   [:section.mt-5.text-center
    [buttons/anchor-big
-    [:<> (labels :schnaq.startpage.cta/button)
-     [icon :arrow-right "ml-2"]]
+    (labels :schnaq.startpage.cta/button)
     (rfe/href :routes.schnaq/create)
     "btn-secondary d-inline-block"]])
 
-(defn- social-proof
-  "A small section showing the user, that the risk was already taken by others."
+(defn- social-proof-abtf
+  "Social proof above the fold, showing other people use schnaq."
   []
-  [:p.text-social-proof.text-center.pt-2
-   [:img.social-proof-icon
-    {:src (img-path :schnaqqifant/white)}]
-   (labels :startpage.social-proof/numbers)])
+  [:div.d-flex.mt-5.mb-5.mb-lg-0
+   [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/bjorn)}]
+   [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/frauke-kling)}]
+   [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/lokay)}]
+   [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/frank-stampa)}]
+   [icon :plus "my-auto mr-2"]
+   [:div.border-right.mr-2.d-inline-block]
+   [:p.small.my-auto (labels :startpage.social-proof/teaser)]])
 
 (defn features-call-to-action
   "Displays a list of features with a call-to-action button to start a schnaq"
@@ -40,6 +43,6 @@
     [:h1 (labels :startpage/subheading)]
     [:p.lead (labels :startpage/hook)]
     [start-schnaq-button]
-    [social-proof]]
+    [social-proof-abtf]]
    [:div.col-lg-6.col-xxxl-4.pb-lg-4
     [header-screenshot]]])
