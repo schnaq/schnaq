@@ -140,7 +140,7 @@
    :startpage.three-steps/second "Podziel się swoim schnaqiem"
    :startpage.three-steps/third "Odpowiadaj na pytania i zrozum uczestników"
 
-   :startpage.newsletter/heading "Bądź jednym z pierwszych, którzy skorzystają z nowych funkcji!"
+   :startpage.newsletter/heading "Zapisz się do newslettera schnaq i otrzymuj regularne aktualizacje, wskazówki i więcej!"
    :startpage.newsletter/button "Poproś o ekskluzywne informacje!"
    :startpage.newsletter/address-placeholder "Adres e-mail"
    :startpage.newsletter/consent "Chciałbym zapisać się do newslettera schnaq i otrzymywać regularnie informacje od schnaq.com w przyszłości."

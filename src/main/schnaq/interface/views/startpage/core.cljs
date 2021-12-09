@@ -16,7 +16,7 @@
    [:div.col-12.col-md-4.my-auto
     [:img.img-fluid {:src (img-path :schnaqqifant/mail)}]]
    [:div.col-12.col-md-8.my-auto
-    [:h3.text-center (labels :startpage.newsletter/heading)]
+    [:h4.text-center (labels :startpage.newsletter/heading)]
     [:form
      {:target "_blank" :name "mc-embedded-subscribe-form" :method "post" :action
       "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
@@ -39,7 +39,7 @@
        [:input#nochmal-nachfragen.form-check-input {:type "checkbox" :required true}]
        [:label.form-check-label {:for "nochmal-nachfragen"}
         (labels :startpage.newsletter/consent)]
-       [:a {:href "#" :type "button" :data-toggle "collapse" :data-target "#collapse-more-newsletter"
+       [:a {:href "#data" :type "button" :data-toggle "collapse" :data-target "#collapse-more-newsletter"
             :aria-expanded "false" :aria-controls "#collapse-more-newsletter" :data-reitit-handle-click false}
         (labels :startpage.newsletter/more-info-clicker)]
        [:div.collapse {:id "collapse-more-newsletter"}

@@ -141,7 +141,7 @@
    :startpage.three-steps/second "Teile den schnaq"
    :startpage.three-steps/third "Beantworte Fragen und verstehe Teilnehmer:innen"
 
-   :startpage.newsletter/heading "Gehöre zu den Ersten, die von neuen Funktionen profitieren!"
+   :startpage.newsletter/heading "Melde dich für den schnaq Newsletter an und erhalte regelmäßig Updates, Tipps und mehr!"
    :startpage.newsletter/button "Exklusive Informationen anfordern!"
    :startpage.newsletter/address-placeholder "E-Mail Adresse"
    :startpage.newsletter/consent "Ich möchte mich hiermit zum schnaq Newsletter anmelden, und in Zukunft regelmäßig Informationen von schnaq.com erhalten."

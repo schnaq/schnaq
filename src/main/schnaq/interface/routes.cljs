@@ -321,7 +321,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-               #(js-wrap/scroll-to-id window-hash)))))
+          #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
