@@ -108,6 +108,25 @@
     [:div.flex-fill
      [:img.img-fluid.shadow.w-75 {:src (img-path :team/sitting-on-couches)}]]]])
 
+(defn- single-step
+  "A single step to success."
+  [lead heading image-key]
+  [:div.col-12.col-lg-4
+   [:p.leading-number.text-center.m-0 lead]
+   [:div.text-center
+    [:p.mb-1 heading]
+    [:img.img-fluid.mt-2.shadow.rounded-1.startpage-step-image
+     {:src (img-path image-key)}]]])
+
+(defn- three-steps-to-success
+  "A short three step explanation how schnaq leads to success. Could be expanded with a before / after persona."
+  []
+  [:div.row.mt-5
+   [:div.col-12.text-center.h2 "Drei Schritte zum aktiven Publikum"]
+   [single-step "1." [:a {:href (reitfe/href :routes.schnaq/create)} "Erstelle einen schnaq"] :startpage/create-schnaq]
+   [single-step "2." "Teile den schnaq" :startpage/share-schnaq]
+   [single-step "3." "Beantworte Fragen und analysiere Ergebnisse" :startpage/answer-schnaq]])
+
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
   [:div.overflow-hidden
@@ -120,6 +139,7 @@
      [:section.container
       [startpage-features/how-does-schnaq-work]
       [testimonials/highlights]
+      [three-steps-to-success]
       [startpage-features/feature-rows]]
      [faq]
      [:section.container
