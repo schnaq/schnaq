@@ -64,6 +64,7 @@
     :pricing.others/miro "https://s3.schnaq.com/schnaq-common/startpage/pricing/miro.png"
     :schnaqqifant/admin "https://s3.schnaq.com/schnaq-schnaqqifanten/admin.png"
     :schnaqqifant/flat "https://s3.schnaq.com/schnaq-schnaqqifanten/schnaqqi_flat_front.png"
+    :schnaqqifant/three-d-bubble "https://s3.schnaq.com/schnaq-schnaqqifanten/schnaqqi_bubble.png"
     :schnaqqifant/three-d-head "https://s3.schnaq.com/schnaq-schnaqqifanten/schnaqqi-3d-head.png"
     :schnaqqifant/three-d-left "https://s3.schnaq.com/schnaq-schnaqqifanten/schnaqqi-3d-head-left.png"
     :schnaqqifant/erase "https://s3.schnaq.com/schnaq-schnaqqifanten/erase.png"
