@@ -85,7 +85,7 @@
    [:img.w-75.align-self-center.d-none.d-lg-block {:src (img-path :schnaqqifant/three-d-bubble)}]])
 
 (defn- register-cta
-  "Default page indicating a first time user registers."
+  "Default page indicating a first time user creates a schnaq."
   []
   [login-page-base
    :page.register/heading
