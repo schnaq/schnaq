@@ -78,7 +78,7 @@
 
 (rf/reg-event-fx
  :schnaq.create/new
- (fn [{:keys [db]} [_ form-elements mode]]
+ (fn [{:keys [db]} [_ form-elements]]
    (let [authenticated? (get-in db [:user :authenticated?] false)
          use-origin? (and authenticated?
                           (seq (get-in db [:user :groups] [])))
@@ -91,22 +91,20 @@
                                      :hub origin-hub)
                    (not authenticated?) (assoc :nickname nickname))]
      {:fx [(http/xhrio-request db :post "/schnaq/add"
-                               [:schnaq/created mode]
+                               [:schnaq/created]
                                payload
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
  :schnaq/created
- (fn [{:keys [db]} [_ mode {:keys [new-schnaq]}]]
+ (fn [{:keys [db]} [_ {:keys [new-schnaq]}]]
    (let [{:discussion/keys [share-hash edit-hash creation-secret]} new-schnaq
          updated-secrets (assoc (get-in db [:discussion :schnaqs :creation-secrets]) share-hash creation-secret)]
      {:db (-> db
               (assoc-in [:schnaq :last-added] new-schnaq)
               (assoc-in [:discussion :schnaqs :creation-secrets] updated-secrets)
               (update-in [:schnaqs :all] conj new-schnaq))
-      :fx [(if (= :qanda mode)
-             [:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]
-             [:dispatch [:navigation/navigate :routes.schnaq/value {:share-hash share-hash}]])
+      :fx [[:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]
            [:dispatch [:schnaq/select-current new-schnaq]]
            [:dispatch [:notification/add
                        #:notification{:title (labels :schnaq/created-success-heading)
