@@ -518,32 +518,13 @@
                             '[[?discussion :discussion/starting-statements ?statements]]
                             patterns/statement-with-children))
 
-(def ^:private summary-pattern
-  [:db/id
-   :summary/discussion
-   :summary/requested-at
-   :summary/text
-   :summary/created-at])
-
-(def ^:private summary-with-discussion-pattern
-  [:db/id
-   {:summary/discussion [:discussion/title
-                         :discussion/share-hash
-                         :db/id]}
-   :summary/requested-at
-   :summary/text
-   :summary/created-at
-   {:summary/requester [:user.registered/email
-                        :user.registered/display-name
-                        :user.registered/keycloak-id]}])
-
 (>defn- request-summary
   "Updates an existing summary request and returns the updated version."
   [summary-id requester]
   [:db/id :summary/requester :ret ::specs/summary]
   (let [tx-result @(transact [[:db/add summary-id :summary/requested-at (Date.)]
                               [:db/add summary-id :summary/requester requester]])]
-    (fast-pull summary-id summary-pattern (:db-after tx-result))))
+    (fast-pull summary-id patterns/summary (:db-after tx-result))))
 
 (>defn summary
   "Return a summary if it exists for a discussion's share-hash."
@@ -553,7 +534,7 @@
            :in $ ?share-hash summary-pattern
            :where [?discussion :discussion/share-hash ?share-hash]
            [?summary :summary/discussion ?discussion]]
-         share-hash summary-pattern))
+         share-hash patterns/summary))
 
 (>defn summary-request
   "Creates a new summary-request if there is none for the discussion. Otherwise, updates the request-time."
@@ -574,7 +555,7 @@
   (query '[:find [(pull ?summary summary-pattern) ...]
            :in $ summary-pattern
            :where [?summary :summary/requested-at _]]
-         summary-with-discussion-pattern))
+         patterns/summary-with-discussion))
 
 (>defn update-summary
   [share-hash new-text]
@@ -583,7 +564,7 @@
     (let [tx-result @(transact [{:db/id summary
                                  :summary/text new-text
                                  :summary/created-at (Date.)}])]
-      (fast-pull summary summary-with-discussion-pattern (:db-after tx-result)))))
+      (fast-pull summary patterns/summary-with-discussion (:db-after tx-result)))))
 
 (defn history-for-statement
   "Takes a statement entity and returns the statement-history."
