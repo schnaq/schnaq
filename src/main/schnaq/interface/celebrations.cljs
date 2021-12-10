@@ -15,6 +15,7 @@
 
 (rf/reg-event-fx
  :celebrate/schnaq-filled
+ ;; TODO  kill this. no more celebrations. only hate
  (fn []
    {:fx [[:dispatch [:celebrate/state :first-post true]]
          [:dispatch [:notification/add

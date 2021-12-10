@@ -73,7 +73,6 @@
 
 (defn create-schnaq-view []
   [create-qanda-page])
-;; TODO alle if mode = quanda vergleiche suchen
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx

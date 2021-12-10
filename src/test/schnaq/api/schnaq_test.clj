@@ -66,7 +66,7 @@
   (testing "schnaq creation. Takes an authenticated user and creates schnaqs."
     (let [minimal-request {:discussion-title "huhu"}]
       (are [status payload]
-           (= status (:status (add-authenticated-schnaq-request payload)))
+        (= status (:status (add-authenticated-schnaq-request payload)))
         400 {}
         400 {:nickname "penguin"}
         400 {:razupaltuff "kangaroo"}
@@ -75,15 +75,14 @@
         201 (merge minimal-request {:hub-exclusive? false})
         201 (merge minimal-request {:hub-exclusive? false
                                     :hub "works, because we don't provide error message"})
-        201 (merge minimal-request {:ends-in-days 42})
-        201 (merge minimal-request {:discussion-mode :discussion.mode/qanda})))))
+        201 (merge minimal-request {:ends-in-days 42})))))
 
 (deftest add-schnaq-as-anonymous-user-test
   (testing "schnaq creation."
     (let [minimal-request {:discussion-title "huhu" :nickname "kangaroo"}
           add-schnaq #'schnaq-api/add-schnaq]
       (are [status payload]
-           (= status (:status (add-schnaq {:parameters {:body payload}})))
+        (= status (:status (add-schnaq {:parameters {:body payload}})))
         400 {}
         400 {:nickname "penguin"}
         400 {:discussion-title "some title"}
@@ -93,8 +92,7 @@
         201 (merge minimal-request {:hub-exclusive? false})
         201 (merge minimal-request {:hub-exclusive? false
                                     :hub "works, because we don't provide error message"})
-        201 (merge minimal-request {:ends-in-days 42})
-        201 (merge minimal-request {:discussion-mode :discussion.mode/qanda})))))
+        201 (merge minimal-request {:ends-in-days 42})))))
 
 (def ^:private add-schnaq-request-missing-jwt
   "Looks like a normal request to create a schnaq, but the JWT header is missing."

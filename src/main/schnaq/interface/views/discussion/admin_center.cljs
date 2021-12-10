@@ -283,6 +283,7 @@
        (labels :schnaq.admin.edit.link.form/submit-button)]])])
 
 (defn- configure-discussion-mode
+  ;; TODO kill this. Only quanda in the house baby
   "Configure discussion mode. Toggles between q&a and classical discussions."
   []
   (let [qanda? @(rf/subscribe [:schnaq.mode/qanda?])

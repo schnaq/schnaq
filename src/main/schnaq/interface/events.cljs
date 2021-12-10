@@ -163,6 +163,7 @@
 
 (rf/reg-sub
  :schnaq.mode/qanda?
+ ;; TODO kill this dispatch. Everything is quanda now
  (fn [_ _]
    (rf/subscribe [:schnaq/selected]))
  (fn [selected-schnaq _ _]
