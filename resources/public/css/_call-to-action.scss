@@ -1,16 +1,6 @@
 @use 'rounded' as rounded;
 @use 'variables' as vars;
 
-.text-social-proof {
-  color: vars.$gray-100;
-  font-size: 0.8em !important;
-}
-
-.social-proof-icon {
-  display: inline;
-  height: 1.2em;
-}
-
 .layered-wave-background {
   background-image: url('https://s3.schnaq.com/schnaq-common/background/layered_background_square.svg');
   background-position: bottom;

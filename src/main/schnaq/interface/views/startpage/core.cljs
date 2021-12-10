@@ -16,7 +16,7 @@
    [:div.col-12.col-md-4.my-auto
     [:img.img-fluid {:src (img-path :schnaqqifant/mail)}]]
    [:div.col-12.col-md-8.my-auto
-    [:h3.text-center (labels :startpage.newsletter/heading)]
+    [:h4.text-center (labels :startpage.newsletter/heading)]
     [:form
      {:target "_blank" :name "mc-embedded-subscribe-form" :method "post" :action
       "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
@@ -39,7 +39,7 @@
        [:input#nochmal-nachfragen.form-check-input {:type "checkbox" :required true}]
        [:label.form-check-label {:for "nochmal-nachfragen"}
         (labels :startpage.newsletter/consent)]
-       [:a {:href "#" :type "button" :data-toggle "collapse" :data-target "#collapse-more-newsletter"
+       [:a {:href "#data" :type "button" :data-toggle "collapse" :data-target "#collapse-more-newsletter"
             :aria-expanded "false" :aria-controls "#collapse-more-newsletter" :data-reitit-handle-click false}
         (labels :startpage.newsletter/more-info-clicker)]
        [:div.collapse {:id "collapse-more-newsletter"}
@@ -56,32 +56,26 @@
 (defn- early-adopters
   "Present early-adopters section to catch up interest."
   []
-  [:section.overflow-hidden.py-3.my-5
-   [wavy/top-and-bottom
-    :white
-    [:div.container-lg.text-center
-     [:p.h4 (labels :startpage.early-adopter/title)]
-     [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
-     [:a.btn.btn-lg.button-secondary
-      {:role "button"
-       :href (reitfe/href :routes.schnaq/create)}
-      (labels :schnaq.create.button/save)]]]])
+  [:div.text-center.my-5
+   [:p.h4.text-primary (labels :startpage.early-adopter/title)]
+   [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
+   [:a.btn.btn-lg.button-secondary
+    {:role "button"
+     :href (reitfe/href :routes.schnaq/create)}
+    (labels :schnaq.startpage.cta/button)]])
 
 (defn supporters []
-  [:section.pb-5.pt-3
-   [:p.display-6.text-center
-    (labels :supporters/heading)]
-   [:div.row.text-center
-    [:div.col-md-6
-     [:a {:href "https://ignitiondus.de"}
-      [:img.w-75
-       {:src (img-path :logos/ignition)
-        :alt "ignition logo"}]]]
-    [:div.col-md-6
-     [:a {:href "https://www.digihub.de/"}
-      [:img.w-75.pt-md-4
-       {:src (img-path :logos/digihub)
-        :alt "digihub logo"}]]]]])
+  [:<>
+   [:div.text-center
+    [:a {:href "https://ignitiondus.de"}
+     [:img.w-50
+      {:src (img-path :logos/ignition)
+       :alt "ignition logo"}]]]
+   [:div.text-center
+    [:a {:href "https://www.digihub.de/"}
+     [:img.w-50.pt-md-4
+      {:src (img-path :logos/digihub)
+       :alt "digihub logo"}]]]])
 
 (defn- faq
   "Handle some still open questions from the user."
@@ -95,18 +89,39 @@
       [:p.lead (labels :startpage.faq/subtitle)]]
      [qanda/question-field-and-search-results :dark]]]])
 
-(defn- founders-note
-  "A personal note from the founders, to the visitor of the page. Give a last personal touch."
+(defn- team-and-supporters
+  "Give a last personal touch."
   []
   [:section.pb-5.text-center
-   [:h4.text-center (labels :startpage.founders-note/title)]
-   [:div.d-flex.align-items-center
-    [:div
-     [:div.flex-fill
-      [:img.img-fluid.mb-2.shadow {:src (img-path :founders-note)}]]
-     [:p [:strong "– Alexander, Christian und Michael"]]]
-    [:div.flex-fill
-     [:img.img-fluid.shadow.w-75 {:src (img-path :team/sitting-on-couches)}]]]])
+   [:div.row
+    [:div.col-12.col-lg-6
+     [:img.img-fluid.mb-2 {:src (img-path :startpage/team-schnaq)
+                           :style {:max-width "400px"}}]
+     [:h2 [:a {:href (reitfe/href :routes/about-us)} (labels :startpage/team-schnaq-heading)]]]
+    [:div.col-12.col-lg-6.my-lg-auto
+     [:p.h5.mb-5 (labels :startpage/team-schnaq)]
+     [:p.h4.text-primary.text-center (labels :supporters/heading)]
+     [supporters]]]])
+
+(defn- single-step
+  "A single step to success."
+  [lead heading image-key]
+  [:div.col-12.col-lg-4
+   [:p.leading-number.text-center.m-0 lead]
+   [:div.text-center
+    [:p.mb-1 heading]
+    [:img.img-fluid.mt-2.shadow.rounded-1.startpage-step-image
+     {:src (img-path image-key)}]]])
+
+(defn- three-steps-to-success
+  "A short three step explanation how schnaq leads to success. Could be expanded with a before / after persona."
+  []
+  [:div.row.mt-5
+   [:div.col-12.text-center.h2 (labels :startpage.three-steps/heading)]
+   [single-step "1."
+    [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.three-steps/first)] :startpage/create-schnaq]
+   [single-step "2." (labels :startpage.three-steps/second) :startpage/share-schnaq]
+   [single-step "3." (labels :startpage.three-steps/third) :startpage/answer-schnaq]])
 
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
@@ -118,15 +133,17 @@
      :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
     [:<>
      [:section.container
+      [startpage-features/how-does-schnaq-work]
+      [testimonials/highlights]
+      [three-steps-to-success]
       [startpage-features/feature-rows]]
      [faq]
-     [testimonials/view]
      [:section.container
-      [mailchimp-form]]
-     [early-adopters]
-     [:section.container
-      [founders-note]
-      [supporters]]]]])
+      [:h2.text-center.mt-4 (labels :startpage.social-proof/companies)]
+      [testimonials/testimonial-companies]
+      [early-adopters]
+      [mailchimp-form]
+      [team-and-supporters]]]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."

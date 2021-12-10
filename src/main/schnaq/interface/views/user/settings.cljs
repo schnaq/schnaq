@@ -41,7 +41,7 @@
   [:section
    [back-button]
    [:hr.my-4]
-   [settings-button :user/edit :user.settings/info :routes.user.manage/account]
+   [settings-button :edit :user.settings/info :routes.user.manage/account]
    [settings-button :bell :user.settings/notifications :routes.user.manage/notifications]])
 
 (defn user-view [page-heading-label content]

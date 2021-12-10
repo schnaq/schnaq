@@ -249,7 +249,7 @@
   (testing "Tests whether labels are added correctly."
     (let [statement-id (:db/id (first (db/statements-by-content "Brainstorming ist total wichtig")))]
       (is (= [":comment"] (:statement/labels (db/add-label statement-id ":comment"))))
-      ;; test for fobidden label
+      ;; test for forbidden label
       (is (= [":comment"] (:statement/labels (db/add-label statement-id "anything goes here")))))))
 
 (deftest remove-label-test
@@ -288,3 +288,34 @@
       (is (= :discussion.mode/qanda (:discussion/mode (db/discussion-by-share-hash share-hash))))
       (db/discussion-mode! share-hash :discussion.mode/discussion)
       (is (= :discussion.mode/discussion (:discussion/mode (db/discussion-by-share-hash share-hash)))))))
+
+(deftest new-statement-ids-for-user-test
+  (let [test-user (user-db/private-user-by-keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276")]
+    (testing "test-user gets a list of new statements."
+      (let [new-statements-in-discussion (db/new-statement-ids-for-user (:user.registered/keycloak-id test-user) "cat-dog-hash")]
+        (is (pos-int? (count new-statements-in-discussion)))
+        (is (s/valid? (s/coll-of :db/id) new-statements-in-discussion))))
+    (testing "User who is not part of a discussion, gets no list of new statements."
+      (let [new-statements-in-discussion (db/new-statement-ids-for-user (:user.registered/keycloak-id test-user) "definitely not a valid hash")]
+        (is (zero? (count new-statements-in-discussion)))))))
+
+(deftest new-statements-by-discussion-hash-test
+  (let [test-user (user-db/private-user-by-keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276")
+        share-hash "cat-dog-hash"
+        anonymous-user-id (user-db/add-user-if-not-exists "Anonymous")
+        new-statements-before (get (db/new-statements-by-discussion-hash test-user) share-hash)
+        _ (db/add-starting-statement! "cat-dog-hash" anonymous-user-id "New Post!" false)
+        new-statements-after (get (db/new-statements-by-discussion-hash test-user) share-hash)]
+    (testing "Adding a new statement from a different user results in an unseen statement for the test-user."
+      (is (not= new-statements-after new-statements-before))
+      (is (> (count new-statements-after) (count new-statements-before))))))
+
+(deftest mark-all-statements-of-discussion-as-read-test
+  (let [test-user (user-db/private-user-by-keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276")
+        share-hash "cat-dog-hash"
+        new-statements-in-discussion (get (db/new-statements-by-discussion-hash test-user) share-hash)
+        _ (db/mark-all-statements-of-discussion-as-read "59456d4a-6950-47e8-88d8-a1a6a8de9276" share-hash)
+        statements-in-discussion-after-clearing (get (db/new-statements-by-discussion-hash test-user) share-hash)]
+    (testing "Before clearing unseen statements, there should be unseen statements in the collection."
+      (is (not (zero? (count new-statements-in-discussion))))
+      (is (nil? statements-in-discussion-after-clearing)))))
