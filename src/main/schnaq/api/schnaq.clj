@@ -76,7 +76,7 @@
   "Adds a discussion to the database. Returns the newly-created discussion. Required fields are `discussion-title` and
    (`nickname` or an authenticated user)."
   [{:keys [parameters identity]}]
-  (let [{:keys [nickname discussion-title hub-exclusive? hub ends-in-days discussion-mode] :as parameters} (:body parameters)
+  (let [{:keys [nickname discussion-title hub-exclusive? hub ends-in-days] :as parameters} (:body parameters)
         keycloak-id (:sub identity)]
     (if-not (or keycloak-id nickname)
       (bad-request-schnaq-creation parameters)
@@ -87,19 +87,18 @@
             discussion-data (cond-> {:discussion/title discussion-title
                                      :discussion/share-hash (.toString (UUID/randomUUID))
                                      :discussion/edit-hash (.toString (UUID/randomUUID))
-                                     :discussion/author author}
+                                     :discussion/author author
+                                     :discussion/mode :discussion.mode/qanda}
                               keycloak-id (assoc :discussion/admins [author])
                               (and hub-exclusive? authorized-for-hub?)
                               (assoc :discussion/hub-origin [:hub/keycloak-name hub])
-                              ends-in-days (assoc :discussion/end-time (toolbelt/now-plus-days-instant ends-in-days))
-                              discussion-mode (assoc :discussion/mode discussion-mode))
+                              ends-in-days (assoc :discussion/end-time (toolbelt/now-plus-days-instant ends-in-days)))
             new-discussion-id (discussion-db/new-discussion discussion-data)]
         (if new-discussion-id
           (do
             (when (and hub-exclusive? hub authorized-for-hub?)
               (hub-db/add-discussions-to-hub! [:hub/keycloak-name hub] [new-discussion-id]))
-            (when (= :discussion.mode/qanda discussion-mode)
-              (ac/add-access-code-to-discussion! new-discussion-id))
+            (ac/add-access-code-to-discussion! new-discussion-id)
             (log/info "Discussion created: " discussion-data)
             (created "" {:new-schnaq (links/add-links-to-discussion (discussion-db/secret-discussion-data new-discussion-id))}))
           (bad-request-schnaq-creation parameters))))))

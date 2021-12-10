@@ -55,8 +55,7 @@
       {:on-submit (fn [e]
                     (jq/prevent-default e)
                     (rf/dispatch [:schnaq.create/new
-                                  (oget e [:currentTarget :elements])
-                                  :qanda]))}
+                                  (oget e [:currentTarget :elements])]))}
       [:h4.mb-5 (labels :schnaq.create.input/title)]
       [:div.panel-grey.row.p-4
        [:div.col-12
@@ -90,8 +89,7 @@
          payload (cond-> {:discussion-title discussion-title}
                    origin-hub (assoc :hub-exclusive? exclusive?
                                      :hub origin-hub)
-                   (not authenticated?) (assoc :nickname nickname)
-                   (= :qanda mode) (assoc :discussion-mode :discussion.mode/qanda))]
+                   (not authenticated?) (assoc :nickname nickname))]
      {:fx [(http/xhrio-request db :post "/schnaq/add"
                                [:schnaq/created mode]
                                payload
