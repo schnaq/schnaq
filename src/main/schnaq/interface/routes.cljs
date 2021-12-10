@@ -34,7 +34,6 @@
             [schnaq.interface.views.qa.inputs :as qanda]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
-            [schnaq.interface.views.schnaq.value :as value]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.user.edit-account :as edit-account]
@@ -175,10 +174,6 @@
        :view qanda/qanda-view
        :link-text (labels :router/qanda)
        :controllers [{:stop #(rf/dispatch [:schnaq.qa.search.results/reset])}]}]
-     ["/value"
-      {:name :routes.schnaq/value
-       :view value/schnaq-value-view
-       :link-text (labels :router/value)}]
      ["/dashboard"
       {:name :routes.schnaq/dashboard
        :view dashboard/view

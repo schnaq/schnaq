@@ -276,22 +276,6 @@
    :schnaq.create/info "Nadaj swojemu tematowi tytuł, który jest tak prosty i zrozumiały, jak to tylko możliwe."
    :schnaq.create.button/save "Uruchomienie schnaq"
 
-   ;; schnaq value
-   :schnaq.value/title "Jesteś gotowy do pracy"
-   :schnaq.value/subtitle "Kilka wskazówek, które pomogą Tobie i Twojemu zespołowi:"
-   :schnaq.value.security/title "Bezpieczeństwo danych"
-   :schnaq.value.security/text "Ochrona danych jest dla nas ważna! Twoje dane są bezpieczne na niemieckich serwerach."
-   :schnaq.value.respect/title "Dyskusja z szacunkiem"
-   :schnaq.value.respect/text "Pełna szacunku interakcja jest ważna, aby móc żyć ze sobą i stanowi podstawę do obiektywnych dyskusji."
-   :schnaq.value.share/title "Podziel się swoją dyskusją"
-   :schnaq.value.share/text "Wystarczy zaprosić uczestników poprzez link lub e-mail. Rejestracja nie jest konieczna!"
-   :schnaq.value.private/title "Zawsze prywatny"
-   :schnaq.value.private/text "Domyślnie, twoje schnaqs są widoczne tylko dla ciebie i osób, z którymi się dzielisz."
-   :schnaq.value.cards/title "Mindmap"
-   :schnaq.value.cards/text "Dla lepszego przeglądu, nasza mindmapa jest generowana automatycznie."
-   :schnaq.value.results/title "Widok wyników"
-   :schnaq.value.results/text "Zobacz podsumowania i analizy swojej dyskusji (funkcja beta)."
-
    ;; Discussion Creation
    :discussion.create.hub-exclusive-checkbox/title "Dodaj Schnaqa do huba"
    :discussion.create.hub-exclusive-checkbox/label "Dodaj do hubu"

@@ -278,22 +278,6 @@
    :schnaq.create/info "Add a simple and comprehensible title to your discussion."
    :schnaq.create.button/save "Start a new schnaq"
 
-   ;; schnaq value
-   :schnaq.value/title "You're ready to go!"
-   :schnaq.value/subtitle "A few tips to help you and your team:"
-   :schnaq.value.security/title "Privacy"
-   :schnaq.value.security/text "Privacy is important to us! Your data is safe on German servers in accordance with European law."
-   :schnaq.value.respect/title "Discuss with respect"
-   :schnaq.value.respect/text "Respectful interaction is important in order to be able to live with one another and is the basis for objective discussions."
-   :schnaq.value.share/title "Share your discussion"
-   :schnaq.value.share/text "Simply invite participants via link or email. No registration necessary!"
-   :schnaq.value.private/title "Private by default"
-   :schnaq.value.private/text "Your schnaqs can only be accessed by you and people you share them with."
-   :schnaq.value.cards/title "Mindmap"
-   :schnaq.value.cards/text "Our mind map is generated automatically and provides a quick overview."
-   :schnaq.value.results/title "Results view"
-   :schnaq.value.results/text "View summaries and analysis of your discussion (beta feature)."
-
    ;; Discussion Creation
    :discussion.create.hub-exclusive-checkbox/title "Add schnaq to a Hub"
    :discussion.create.hub-exclusive-checkbox/label "Add to Hub"
@@ -912,7 +896,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/all-feedbacks "All feedbacks"
    :router/analytics "Analytics dashboard"
    :router/create-schnaq "Create schnaq"
-   :router/value "Value of schnaq"
    :router/dashboard "schnaq dashboard"
    :router/graph-view "Graph view"
    :router/how-to "How do I use schnaq?"

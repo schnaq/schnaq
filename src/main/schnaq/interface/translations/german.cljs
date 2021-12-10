@@ -277,22 +277,6 @@
    :schnaq.create/info "Gib deinem Thema einen möglichst einfachen und verständlichen Titel."
    :schnaq.create.button/save "Schnaq starten"
 
-   ;; schnaq value
-   :schnaq.value/title "Du bist startklar"
-   :schnaq.value/subtitle "Ein paar Tipps, die dir und deinem Team helfen:"
-   :schnaq.value.security/title "Datensicherheit"
-   :schnaq.value.security/text "Datenschutz ist uns wichtig! Deine Daten sind sicher auf deutschen Servern."
-   :schnaq.value.respect/title "Diskutiere mit Respekt"
-   :schnaq.value.respect/text "Ein respektvoller Umgang ist wichtig, um miteinander leben zu können und bietet die Grundlage für sachliche Diskussionen."
-   :schnaq.value.share/title "Teile deine Diskussion"
-   :schnaq.value.share/text "Lade Teilnehmer:innen einfach per Link oder Mail ein. Keine Anmeldung notwendig!"
-   :schnaq.value.private/title "Immer privat"
-   :schnaq.value.private/text "Deine schnaqs sind standardmäßig nur von dir und den Leuten mit denen du teilst einsehbar."
-   :schnaq.value.cards/title "Mindmap"
-   :schnaq.value.cards/text "Für mehr Überblick sorgt unsere Mindmap, die automatisch generiert wird."
-   :schnaq.value.results/title "Ergebnisansicht"
-   :schnaq.value.results/text "Schau dir Zusammenfassungen und Analysen zu deiner Diskussion an (Beta Feature)."
-
    ;; Discussion Creation
    :discussion.create.hub-exclusive-checkbox/title "Schnaq zu einem Hub hinzufügen"
    :discussion.create.hub-exclusive-checkbox/label "Dem Hub hinzufügen"
