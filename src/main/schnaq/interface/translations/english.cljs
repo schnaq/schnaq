@@ -184,6 +184,10 @@
    :page.login/feature-2 "Unlimited participants"
    :page.login/feature-3 "Participation without registration"
 
+   ;; Register Page when creating a schnaq
+   :page.register/heading "Register now and use schnaq"
+   :page.register/register "Register For Free"
+
    :auth.modal.request-login/title "Session expired"
    :auth.modal.request-login/lead "Your session has expired. This can happen if you have not been active for a long time. Please reload the page and log in again"
    :auth.modal.request-login/button "Log in again"

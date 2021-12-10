@@ -174,7 +174,7 @@
 
    ;; Login Page
    :page.login/heading "Nie czekaj, pstryk!"
-   :page.login/subheading "100% Free Forever"
+   :page.login/subheading "100% za darmo na zawsze"
    :page.login/login "Zaloguj się / Zarejestruj się"
    :page.login.alert/text-1 "Obserwuj"
    :page.login.alert/button "tutaj"
@@ -182,6 +182,10 @@
    :page.login/feature-1 "create schnaqs"
    :page.login/feature-2 "nieograniczona liczba uczestników"
    :page.login/feature-3 "Uczestnictwo poprzez link bez rejestracji"
+
+   ;; Register Page when creating a schnaq
+   :page.register/heading "Zarejestruj się teraz i zacznij działać!"
+   :page.register/register "Zarejestruj się za darmo"
 
    :auth.modal.request-login/title "Sesja zakończona"
    :auth.modal.request-login/lead "Twoja sesja wygasła. Może się to zdarzyć, jeśli nie byłeś aktywny przez dłuższy czas. Proszę przeładować stronę i zalogować się ponownie"

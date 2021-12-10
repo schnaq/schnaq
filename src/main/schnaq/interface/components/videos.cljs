@@ -23,4 +23,6 @@
     :start-page.questions/webm "https://s3.schnaq.com/startpage/discussion.webm"
     :start-page.questions/mp4 "https://s3.schnaq.com/startpage/discussion.mp4"
     :start-page.work-together/webm "https://s3.schnaq.com/schnaq-how-to/WorkTogether.webm"
-    :start-page.work-together/mp4 "https://s3.schnaq.com/schnaq-how-to/WorkTogether.mp4"}))
+    :start-page.work-together/mp4 "https://s3.schnaq.com/schnaq-how-to/WorkTogether.mp4"
+    :register.point-right/webm "https://s3.schnaq.com/schnaq-schnaqqifanten/schnaqqi_point_right.webm"
+    :register.point-right/mp4 "https://s3.schnaq.com/schnaq-schnaqqifanten/schnaqqi_point_right.mp4"}))
