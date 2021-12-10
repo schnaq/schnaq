@@ -139,16 +139,9 @@
      :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]
    ["schnaq"
     ["/create"
-     [""
-      {:name :routes.schnaq/create
-       :view create/create-schnaq-view
-       :link-text (labels :router/create-schnaq)}]
-     ["/discussion"
-      {:name :routes.schnaq.create/discussion
-       :view create/create-discussion-view}]
-     ["/qanda"
-      {:name :routes.schnaq.create/qanda
-       :view create/create-qanda-view}]]
+     {:name :routes.schnaq/create
+      :view create/create-schnaq-view
+      :link-text (labels :router/create-schnaq)}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}

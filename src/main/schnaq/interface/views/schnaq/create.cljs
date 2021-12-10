@@ -174,13 +174,10 @@
         (labels :schnaq.create.dispatch.discussion/share)]]]]}])
 
 (defn create-schnaq-view []
-  [create-schnaq-type-selection-page])
+  [create-qanda-page])
 
 (defn create-discussion-view []
   [create-schnaq-page])
-
-(defn create-qanda-view []
-  [create-qanda-page])
 
 ;; -----------------------------------------------------------------------------
 
