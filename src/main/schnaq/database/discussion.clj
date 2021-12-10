@@ -345,9 +345,9 @@
 
 (>defn new-statements-within-time-slot
   "Returns all new statements, which were created between now and the provided
-   timestamp. Looks up the discussion in the current `db` and creates a
-   difference between now and the timestamp, which contains all new datoms
-   created in this time slot."
+  timestamp. Looks up the discussion in the current `db` and creates a
+  difference between now and the timestamp, which contains all new datoms
+  created in this time slot."
   [share-hash timestamp]
   [:discussion/share-hash inst? :ret (s/coll-of ::specs/statement)]
   (let [db (d/db (main-db/new-connection))]
@@ -358,6 +358,16 @@
            [$time-slot ?statements :statement/discussions ?discussion]
            (not [?statements :statement/deleted? true])]
          db (d/since db timestamp) share-hash patterns/statement)))
+
+(>defn discussions-with-new-statements
+  "Return all discussions and count their statements, if they received new
+  statements between now and the given timestamp."
+  [discussions timestamp]
+  [(s/coll-of ::specs/discussion) inst? :ret (s/coll-of ::specs/discussion)]
+  (->> discussions
+       (map #(assoc % :total-statements
+                    (count (new-statements-within-time-slot (:discussion/share-hash %) timestamp))))
+       (remove #(zero? (:total-statements %)))))
 
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."

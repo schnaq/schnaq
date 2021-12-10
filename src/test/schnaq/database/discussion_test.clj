@@ -333,3 +333,10 @@
     (is (zero? (count (db/new-statements-within-time-slot "cat-dog-hash" (main-db/now))))))
   (testing "After a moment, the new statements are stored."
     (is (= 18 (count (db/new-statements-within-time-slot "cat-dog-hash" (main-db/minutes-ago 1)))))))
+
+(deftest discussions-with-new-statements-test
+  (let [discussion (db/discussion-by-share-hash "cat-dog-hash")]
+    (testing "No new statements should be added in a zero time-slot."
+      (is (zero? (count (db/discussions-with-new-statements [discussion] (main-db/now))))))
+    (testing "In the last minute, 18 new statements were added to the cat-dog discussion."
+      (is (= 18 (:total-statements (first (db/discussions-with-new-statements [discussion] (main-db/minutes-ago 1)))))))))
