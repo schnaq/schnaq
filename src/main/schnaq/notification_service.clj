@@ -7,6 +7,7 @@
             [hiccup.util :as hiccup-util]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.main :as main-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.links :as schnaq-links]
@@ -148,9 +149,10 @@
 
 (defn -main
   [& _args]
-  (log/info "Initialized mail notification service")
-  (start-mail-schedule daily :notification-mail-interval/daily)
-  (start-mail-schedule weekly :notification-mail-interval/weekly))
+  (log/info "Initializing mail notification service")
+  (when (main-db/connection-possible?)
+    (start-mail-schedule daily :notification-mail-interval/daily)
+    (start-mail-schedule weekly :notification-mail-interval/weekly)))
 
 ;; -----------------------------------------------------------------------------
 

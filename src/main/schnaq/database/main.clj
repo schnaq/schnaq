@@ -9,7 +9,8 @@
             [schnaq.database.models :as models]
             [schnaq.database.specs :as specs]
             [schnaq.test-data :as test-data]
-            [schnaq.toolbelt :as toolbelt])
+            [schnaq.toolbelt :as toolbelt]
+            [taoensso.timbre :as log])
   (:import (java.time Instant)
            (java.util Date UUID)))
 
@@ -19,6 +20,19 @@
   "Connects to the database and returns a connection."
   []
   (d/connect @current-datomic-uri))
+
+(>defn connection-possible?
+  "Try to establish a connection to the database. If not possible, print error
+   message and stacktrace."
+  []
+  [:ret boolean?]
+  (try
+    (new-connection)
+    (log/info "Database connection established.")
+    true
+    (catch Exception e
+      (log/error (format "Database connection error! Please check credentials.\n%s" (.getMessage e)))
+      false)))
 
 (defn- convert-java-time-Instant-to-Date-walker
   "Converts all java.time.Instant instances from a data structure to a Date Instant"
