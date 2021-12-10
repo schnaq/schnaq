@@ -182,10 +182,11 @@
         [:div.text-typography
          [md/as-markdown (:statement/content statement)]]
         [:div.d-flex.flex-wrap.align-items-center
-         [:a.mr-3
+         [:a.btn.btn-sm.btn-outline-dark.mr-3.px-1.py-0
           {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
                                                                :statement-id (:db/id statement)})}
-          [:small.text-dark (labels :statement/discuss)]]
+          [icon :comments "my-auto mr-1"]
+          [:small (labels :statement/discuss)]]
          [up-down-vote statement]
          (when with-answer?
            [:div.d-flex.flex-row.align-items-center.ml-auto
