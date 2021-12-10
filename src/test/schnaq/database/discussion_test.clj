@@ -3,7 +3,7 @@
             [clojure.test :refer [deftest testing use-fixtures is are]]
             [schnaq.database.discussion :as db]
             [schnaq.database.discussion-test-data :as test-data]
-            [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.main :refer [fast-pull] :as main-db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
@@ -327,3 +327,9 @@
     (is (= 1 (count (db/discussions-by-share-hashes ["ameisenbär-hash"]))))
     (is (= 1 (count (db/discussions-by-share-hashes ["ameisenbär-hash" "razupaltuff"]))))
     (is (= 2 (count (db/discussions-by-share-hashes ["ameisenbär-hash" "cat-dog-hash"]))))))
+
+(deftest new-statements-within-time-slot-test
+  (testing "Between now and now are no new statements created."
+    (is (zero? (count (db/new-statements-within-time-slot "cat-dog-hash" (main-db/now))))))
+  (testing "After a moment, the new statements are stored."
+    (is (= 18 (count (db/new-statements-within-time-slot "cat-dog-hash" (main-db/minutes-ago 1)))))))
