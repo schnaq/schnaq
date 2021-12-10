@@ -1,9 +1,7 @@
 (ns schnaq.interface.user
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [default-anonymous-display-name]]
-            [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.modal :as modal]))
+            [schnaq.interface.utils.http :as http]))
 
 (rf/reg-event-fx
  :username/from-localstorage
@@ -11,18 +9,6 @@
    (let [username (:username local-storage)]
      (when username
        {:db (assoc-in db [:user :names :display] username)}))))
-
-(rf/reg-event-fx
- :username/open-dialog
- (fn [{:keys [db]} _]
-   (let [username (get-in db [:user :names :display])]
-     (when (and
-            (not (get-in db [:user :authenticated?]))
-            (or (= default-anonymous-display-name username)
-                (nil? username)))
-       {:fx [[:dispatch [:user/set-display-name default-anonymous-display-name]]
-             [:dispatch [:modal {:show? true
-                                 :child [modal/enter-name-modal]}]]]}))))
 
 (rf/reg-event-fx
  ;; Registers a user in the backend. Sets the returned user in the db

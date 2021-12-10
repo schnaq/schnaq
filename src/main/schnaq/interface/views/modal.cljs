@@ -44,33 +44,6 @@
 ;; -----------------------------------------------------------------------------
 ;; Enter Name Modal
 
-(defn- modal-name-input
-  "An input, where the user can set their name. Happens automatically by typing."
-  [username]
-  [:form.form
-   {:on-submit (fn [e]
-                 (js-wrap/prevent-default e)
-                 (rf/dispatch [:user/set-display-name (oget e [:target :elements :name-input :value])])
-                 (close-modal))}
-   [:div.px-2.pb-3
-    [:input#name-input.form-control.form-round-05.px-2.py-1
-     {:type "text"
-      :name "name-input"
-      :required true
-      :autoFocus true
-      :placeholder username}]]
-   [:div.modal-footer
-    [:input.btn.btn-primary
-     {:type "submit"
-      :value (labels :user.button/set-name)}]]])
-
-(defn enter-name-modal []
-  [modal-template
-   (labels :user.set-name.modal/header)
-   [:<>
-    [:p (labels :user.set-name.modal/primer)]
-    [modal-name-input (labels :user.button/set-name-placeholder)]]])
-
 (defn anonymous-modal
   "Basic modal which is presented to anonymous users trying to alter statements."
   [header-label shield-label info-label]

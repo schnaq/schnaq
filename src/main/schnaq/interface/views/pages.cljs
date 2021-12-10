@@ -47,8 +47,9 @@
 (defn- bullet-point [label]
   [:div.d-flex.flex-row [:h4 [icon :check/normal "mr-3"]] [:h4 (labels label)]])
 
-
-(defn- login-page-base [heading subheading button-label cta-media]
+(defn- login-page-base
+  "Basic login page for either registration or sign in."
+  [heading subheading button-label cta-media]
   [with-nav-and-header
    {:page/heading (labels heading)
     :page/subheading (labels subheading)
