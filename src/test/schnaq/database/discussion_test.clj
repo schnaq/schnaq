@@ -132,7 +132,7 @@
       (is (= "Man denkt viel nach dabei" (:statement/content meta-premise)))
       (is (= :statement.type/support (:statement/type meta-premise))))))
 
-(deftest valid-discussions-by-hashes-test
+(deftest discussions-by-share-hashes-test
   (let [new-discussion-hash "hello-i-am-new-here"
         author (user-db/add-user-if-not-exists "Christian")
         new-public-discussion {:discussion/title "Bla"
@@ -142,7 +142,7 @@
         _ (db/new-discussion new-public-discussion)]
     (testing "Valid discussions should be returned."
       (are [valid share-hashes]
-           (= valid (count (db/valid-discussions-by-hashes share-hashes)))
+           (= valid (count (db/discussions-by-share-hashes share-hashes)))
         0 []
         0 ["razupaltuff"]
         1 ["public-share-hash"]

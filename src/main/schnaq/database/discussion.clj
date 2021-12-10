@@ -93,18 +93,6 @@
   (pull-discussion share-hash patterns/discussion-private))
 
 (>defn discussions-by-share-hashes
-  "Query a collection of discussions based on their share-hashes."
-  ([share-hashes]
-   [(s/coll-of :discussion/share-hash) :ret (s/coll-of ::specs/discussion)]
-   (discussions-by-share-hashes (d/db (main-db/new-connection)) share-hashes))
-  ([db share-hashes]
-   [any? (s/coll-of :discussion/share-hash) :ret (s/coll-of ::specs/discussion)]
-   (d/q '[:find [(pull ?discussion pattern) ...]
-          :in $ [?share-hash ...] pattern
-          :where [?discussion :discussion/share-hash ?share-hash]]
-        db share-hashes patterns/discussion-minimal)))
-
-(>defn valid-discussions-by-hashes
   "Returns all discussions that are valid (non deleted e.g.). Input is a collection of share-hashes."
   [share-hashes]
   [(s/coll-of :discussion/share-hash) :ret (s/coll-of ::specs/discussion)]

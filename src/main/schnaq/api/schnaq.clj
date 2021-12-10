@@ -60,7 +60,7 @@
            (map #(-> %
                      processors/add-meta-info-to-schnaq
                      (processors/with-aggregated-votes user-id))
-                (discussion-db/valid-discussions-by-hashes share-hashes-list))})
+                (discussion-db/discussions-by-share-hashes share-hashes-list))})
       at/not-found-hash-invalid)))
 
 ;; -----------------------------------------------------------------------------
