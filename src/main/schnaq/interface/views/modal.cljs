@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.modal
   (:require [ghostwheel.core :refer [>defn]]
-            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
