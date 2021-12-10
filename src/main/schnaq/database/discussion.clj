@@ -365,9 +365,9 @@
   [discussions timestamp]
   [(s/coll-of ::specs/discussion) inst? :ret (s/coll-of ::specs/discussion)]
   (->> discussions
-       (map #(assoc % :total-statements
+       (map #(assoc % :new-statements
                     (count (new-statements-within-time-slot (:discussion/share-hash %) timestamp))))
-       (remove #(zero? (:total-statements %)))))
+       (remove #(zero? (:new-statements %)))))
 
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
