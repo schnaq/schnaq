@@ -177,11 +177,19 @@
    :startpage/get-to-know "Poznaj zespół stojący za schnaqiem"
 
    ;; Login Page
-   :page.login/heading "Proszę się zalogować"
-   :page.login/subheading "Musisz być zalogowany, aby uzyskać dostęp do następujących zasobów"
-   :page.login.alert/text-1 "Nie masz jeszcze konta? Utwórz darmowe konto tutaj, aby stworzyć swój pierwszy schnaq. Sprawdź"
-   :page.login.alert/button "ta strona"
-   :page.login.alert/text-2 "zobacz swoje korzyści jako zarejestrowany użytkownik"
+   :page.login/heading "Nie czekaj, pstryk!"
+   :page.login/subheading "100% za darmo na zawsze"
+   :page.login/login "Zaloguj się / Zarejestruj się"
+   :page.login.alert/text-1 "Obserwuj"
+   :page.login.alert/button "tutaj"
+   :page.login.alert/text-2 "zobacz wszystkie korzyści jako zarejestrowany:użytkownik:in."
+   :page.login/feature-1 "create schnaqs"
+   :page.login/feature-2 "nieograniczona liczba uczestników"
+   :page.login/feature-3 "Uczestnictwo poprzez link bez rejestracji"
+
+   ;; Register Page when creating a schnaq
+   :page.register/heading "Zarejestruj się teraz i zacznij działać!"
+   :page.register/register "Zarejestruj się za darmo"
 
    :auth.modal.request-login/title "Sesja zakończona"
    :auth.modal.request-login/lead "Twoja sesja wygasła. Może się to zdarzyć, jeśli nie byłeś aktywny przez dłuższy czas. Proszę przeładować stronę i zalogować się ponownie"
@@ -789,7 +797,7 @@
    :user.set-name.modal/primer "Nazwa jest wyświetlana dla innych uczestników schnaq."
    :user/login "Zaloguj się"
    :user/logout "Wyloguj się"
-   :user/register "Zaloguj się / Zarejestruj się"
+   :user/register "Zarejestruj się za darmo"
    :user.profile/settings "Ustawienia"
    :user.action/link-copied "Link skopiowany!"
    :user.action/link-copied-body "Udostępnij link innym, aby dać im dostęp."

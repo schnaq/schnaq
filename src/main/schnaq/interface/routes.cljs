@@ -138,7 +138,6 @@
      :link-text (labels :router/visited-schnaqs)
      :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]
    ["schnaq"
-    {:controllers [{:start #(rf/dispatch [:username/open-dialog])}]}
     ["/create"
      [""
       {:name :routes.schnaq/create

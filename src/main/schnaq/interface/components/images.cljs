@@ -61,6 +61,7 @@
     :schnaqqifant/share "https://s3.schnaq.com/schnaq-schnaqqifanten/share.png"
     :schnaqqifant/stop "https://s3.schnaq.com/schnaq-schnaqqifanten/stop.png"
     :schnaqqifant/talk "https://s3.schnaq.com/schnaq-schnaqqifanten/talk.png"
+    :schnaqqifant/three-d-bubble "https://s3.schnaq.com/schnaq-schnaqqifanten/schnaqqi_bubble.png"
     :schnaqqifant/three-d-head "https://s3.schnaq.com/schnaq-schnaqqifanten/schnaqqi-3d-head.png"
     :schnaqqifant/three-d-left "https://s3.schnaq.com/schnaq-schnaqqifanten/schnaqqi-3d-head-left.png"
     :schnaqqifant/white "https://s3.schnaq.com/schnaq-common/logos/schnaqqifant_white.png"

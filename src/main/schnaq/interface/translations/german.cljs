@@ -178,11 +178,19 @@
    :startpage/get-to-know "Lerne das Team hinter schnaq kennen"
 
    ;; Login Page
-   :page.login/heading "Bitte logg dich ein"
-   :page.login/subheading "Um auf die folgende Ressource zugreifen zu können, musst du eingeloggt sein"
-   :page.login.alert/text-1 "Noch keinen Account? Erstelle dir hier einen kostenfreien Zugang, um deinen ersten schnaq zu erstellen. Sieh dir auf"
-   :page.login.alert/button "dieser Seite"
-   :page.login.alert/text-2 "deine Vorteile als registrierte:r Nutzer:in an."
+   :page.login/heading "Nicht warten, schnaqqen!"
+   :page.login/subheading "100% kostenlos für immer"
+   :page.login/login "Anmelden / Registrieren"
+   :page.login.alert/text-1 "Sieh dir"
+   :page.login.alert/button "hier"
+   :page.login.alert/text-2 "alle Vorteile als registrierte:r Nutzer:in an."
+   :page.login/feature-1 "schnaqs erstellen"
+   :page.login/feature-2 "Unbegrenzt viele Teilnehmer:innen"
+   :page.login/feature-3 "Teilnahme per Link ohne Registrierung"
+
+   ;; Register Page when creating a schnaq
+   :page.register/heading "Jetzt Registrieren und direkt schnaqqen!"
+   :page.register/register "Kostenlos Registrieren"
 
    :auth.modal.request-login/title "Sitzung abgelaufen"
    :auth.modal.request-login/lead "Deine Sitzung ist abgelaufen. Das kann schonmal passieren, wenn du längere Zeit nicht aktiv warst. Bitte lade die Seite neu und logge dich erneut ein"
@@ -792,7 +800,7 @@
    :user.set-name.modal/primer "Der Name wird den anderen Teilnehmer:innen im schnaq angezeigt."
    :user/login "Anmelden"
    :user/logout "Logout"
-   :user/register "Anmelden / Registrieren"
+   :user/register "Kostenlos Registrieren"
    :user.profile/settings "Einstellungen"
    :user.action/link-copied "Link kopiert!"
    :user.action/link-copied-body "Teile den Link mit anderen, um ihnen Zugriff zu geben."
