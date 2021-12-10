@@ -272,8 +272,20 @@
     :user.registered/last-name "Schneider"
     :user.registered/first-name "Alexander"
     :user.registered/groups ["test-group"]
+    :user.registered/notification-mail-interval :notification-mail-interval/weekly
     :user.registered/visited-schnaqs
-    [#:discussion{:share-hash "cat-dog-hash"}]}])
+    [#:discussion{:share-hash "cat-dog-hash"}]}
+   {:db/id "user.registered/kangaroo"
+    :user.registered/keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    :user.registered/display-name "kangaroo"
+    :user.registered/email "k@ngar.oo"
+    :user.registered/last-name "the"
+    :user.registered/first-name "kangaroo"
+    :user.registered/groups ["test-group"]
+    :user.registered/notification-mail-interval :notification-mail-interval/daily
+    :user.registered/visited-schnaqs
+    [#:discussion{:share-hash "cat-dog-hash"}
+     #:discussion{:share-hash "simple-hash"}]}])
 
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
