@@ -220,14 +220,6 @@
    :schnaq.header-image.url/failed-setting-body "Obraz nie jest używany w podglądzie."
 
    ;; Create schnaq
-   :schnaq.create.dispatch/heading "Co chcesz zacząć?"
-   :schnaq.create.dispatch/qanda "Pytania i odpowiedzi"
-   :schnaq.create.dispatch.qanda/explain "Zbieraj pytania podczas kursu i odpowiadaj na nie, kiedy będziesz miał czas."
-   :schnaq.create.dispatch.qanda/share "Zaproś uczestników poprzez link lub kod."
-   :schnaq.create.dispatch/discussion "Dyskusja"
-   :schnaq.create.dispatch.discussion/explain "Prowadź wspomagane przez AI i uporczywe dyskusje z innymi."
-   :schnaq.create.dispatch.discussion/share "Zaproś uczestników poprzez link."
-
    :schnaq.create.input/title "O czym chcesz rozmawiać?"
    :schnaq.create.qanda.input/title "Czego powinny dotyczyć pytania?"
    :schnaq.create.input/placeholder "Ustal temat"
@@ -280,7 +272,6 @@
    ;; schnaq creation
    :schnaq.create/title "Uruchomienie schnaq"
    :schnaq.create/heading "Zacznij od swojego schnaq."
-   :schnaq.create/subheading "Dzięki schnaqowi możesz pozwolić swojemu zespołowi dyskutować i zabezpieczać zrównoważone decyzje."
    :schnaq.create.qanda/subheading "Dzięki schnaq, możesz mieć zoptymalizowane Q&A."
    :schnaq.create/info "Nadaj swojemu tematowi tytuł, który jest tak prosty i zrozumiały, jak to tylko możliwe."
    :schnaq.create.button/save "Uruchomienie schnaq"
@@ -325,10 +316,6 @@
    :discussion.progress/end "Koniec dyskusji"
    :discussion.progress/ends "Kończy się %s"
    :discussion.progress/ends-not "Nie kończy się"
-   :discussion.progress.creation/heading "Ogranicz czas trwania dyskusji"
-   :discussion.progress.creation/label "Koniec w dniach"
-   :discussion.progress.creation/button-limit "%s Dni"
-   :discussion.progress.creation/button-unlimited "Bez ograniczeń"
 
    ;; Conversion-Edit-Funnel
    :discussion.anonymous-edit.modal/title "Zaloguj się, aby edytować"

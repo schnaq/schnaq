@@ -1,17 +1,12 @@
 (ns schnaq.interface.views.schnaq.create
-  (:require [goog.string :as gstring]
-            [oops.core :refer [oget]]
+  (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reagent.core :as reagent]
-            [reitit.frontend.easy :as rfe]
-            [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- add-schnaq-to-hub
@@ -41,78 +36,11 @@
                      :key group-id}
             (get-in hubs [group-id :hub/name])])]]])))
 
-(defn- end-time-schnaq-options
-  "Options to give a schnaq an end-time."
-  []
-  (let [end-time (reagent/atom false)]
-    (fn []
-      [:section.text-center
-       [:h4.mb-3 (labels :discussion.progress.creation/heading)]
-       (when @end-time
-         [:div
-          [:label {:for :input-num-days-to-end} (labels :discussion.progress.creation/label)]
-          [common/form-input {:type :number
-                              :min 1
-                              :id :input-num-days-to-end
-                              :placeholder 7
-                              :defaultValue 7
-                              :required true
-                              :onChange #(reset! end-time (oget % [:currentTarget :value]))}]])
-       [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
-        {:class (when @end-time "active")
-         :type "button"
-         :on-click (fn [_e] (swap! end-time #(or @end-time 7)))}
-        [icon :calendar "mr-3"]
-        (gstring/format (labels :discussion.progress.creation/button-limit) (or @end-time 7))]
-       [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
-        {:class (when-not @end-time "active")
-         :type "button"
-         :on-click #(reset! end-time false)}
-        [icon :circle-notch "mr-3"]
-        (labels :discussion.progress.creation/button-unlimited)]])))
-
-(defn- create-schnaq-options
-  "Options that can be chosen when creating a schnaq."
-  []
-  [:div.row.my-5
-   [:div.col-12.col-xl-6.pb-5
-    [end-time-schnaq-options]]
-   [:div.col-12.col-xl-6.border-left
-    [add-schnaq-to-hub]]])
-
+;; TODO kill time sensitive schnaq code (:ends-in-days im backend) und frontend elemente
 (defn- create-schnaq-button []
   [:button.btn.btn-dark.p-3.rounded-1.ml-auto
    (labels :schnaq.create.button/save)
    [icon :arrow-right "ml-2"]])
-
-(defn- create-schnaq-page []
-  [pages/with-nav-and-header
-   {:page/heading (labels :schnaq.create/heading)
-    :page/subheading (labels :schnaq.create/subheading)
-    :page/title (labels :schnaq.create/title)
-    :page/classes "base-wrapper bg-white"
-    :condition/create-schnaq? true}
-   [:div.container
-    [:div.py-3
-     [:form
-      {:on-submit (fn [e]
-                    (jq/prevent-default e)
-                    (rf/dispatch [:schnaq.create/new
-                                  (oget e [:currentTarget :elements])
-                                  :discussion]))}
-      [:h4.mb-5 (labels :schnaq.create.input/title)]
-      [:div.panel-grey.row.p-4
-       [:div.col-12
-        [common/form-input {:id :schnaq-title
-                            :placeholder (labels :schnaq.create.input/placeholder)
-                            :css "font-150"}]]]
-      [:div.row.text-primary.p-3
-       [icon :info "my-auto mr-3"]
-       [:span (labels :schnaq.create/info)]]
-      [create-schnaq-options]
-      [:div.row.px-1.py-3
-       [create-schnaq-button]]]
-     [how-to-elements/quick-how-to-create]]]])
 
 (defn- create-qanda-page []
   [pages/with-nav-and-header
@@ -138,47 +66,15 @@
       [:div.row.text-primary.p-3
        [icon :info "my-auto mr-3"]
        [:span (labels :schnaq.create/info)]]
+      [:div.row.my-5
+       [:div.col-12.col-xl-6
+        [add-schnaq-to-hub]]]
       [:div.row.px-1.py-3
        [create-schnaq-button]]]]]])
 
-(defn- create-schnaq-type-selection-page
-  "Choose whether the type of schnaq you are starting is a Q&A or a discussion."
-  []
-  [pages/with-nav-and-header
-   {:page/title (labels :schnaq.create/title)
-    :page/more-for-heading
-    [:section
-     {:style {:min-height "600px"}}
-     [:h1.text-center.pb-5 (labels :schnaq.create.dispatch/heading)]
-     [:div.row.mx-auto.pb-5
-      {:style {:max-width "800px"}}
-      [:div.col-md-6.col-12.text-center
-       [buttons/anchor-big
-        (labels :schnaq.create.dispatch/qanda)
-        (rfe/href :routes.schnaq.create/qanda)
-        "btn-outline-white mb-3 miw-75"]
-       [:p.small.text-left
-        [icon :info "my-auto mr-1"]
-        (labels :schnaq.create.dispatch.qanda/explain)]
-       [:p.small.text-left
-        (labels :schnaq.create.dispatch.qanda/share)]]
-      [:div.col-md-6.col-12.text-center
-       [buttons/anchor-big
-        (labels :schnaq.create.dispatch/discussion)
-        (rfe/href :routes.schnaq.create/discussion)
-        "btn-outline-white mb-3 miw-75"]
-       [:p.small.text-left
-        [icon :info "my-auto mr-1"]
-        (labels :schnaq.create.dispatch.discussion/explain)]
-       [:p.small.text-left
-        (labels :schnaq.create.dispatch.discussion/share)]]]]}])
-
 (defn create-schnaq-view []
   [create-qanda-page])
-
-(defn create-discussion-view []
-  [create-schnaq-page])
-
+;; TODO alle if mode = quanda vergleiche suchen
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
@@ -191,11 +87,9 @@
          discussion-title (oget form-elements [:schnaq-title :value])
          exclusive? (when use-origin? (oget form-elements [:?hub-exclusive :checked]))
          origin-hub (when use-origin? (oget form-elements [:?exclusive-hub-select :value]))
-         end-from-now (oget form-elements [:?input-num-days-to-end :value])
          payload (cond-> {:discussion-title discussion-title}
                    origin-hub (assoc :hub-exclusive? exclusive?
                                      :hub origin-hub)
-                   end-from-now (assoc :ends-in-days (js/parseInt end-from-now))
                    (not authenticated?) (assoc :nickname nickname)
                    (= :qanda mode) (assoc :discussion-mode :discussion.mode/qanda))]
      {:fx [(http/xhrio-request db :post "/schnaq/add"
