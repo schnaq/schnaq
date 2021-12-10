@@ -319,3 +319,11 @@
     (testing "Before clearing unseen statements, there should be unseen statements in the collection."
       (is (not (zero? (count new-statements-in-discussion))))
       (is (nil? statements-in-discussion-after-clearing)))))
+
+(deftest discussions-by-share-hashes-test
+  (testing "Querying valid discussions by their share-hashes."
+    (is (empty? (db/discussions-by-share-hashes [""])))
+    (is (empty? (db/discussions-by-share-hashes ["razupaltuff"])))
+    (is (= 1 (count (db/discussions-by-share-hashes ["ameisenbär-hash"]))))
+    (is (= 1 (count (db/discussions-by-share-hashes ["ameisenbär-hash" "razupaltuff"]))))
+    (is (= 2 (count (db/discussions-by-share-hashes ["ameisenbär-hash" "cat-dog-hash"]))))))
