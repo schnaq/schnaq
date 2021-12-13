@@ -496,9 +496,7 @@
  (fn [{:keys [db]} [_ share-hash edit-hash]]
    (let [admin-access-map (assoc (:schnaqs/admin-access local-storage) share-hash edit-hash)]
      {:db (assoc-in db [:schnaqs :admin-access] admin-access-map)
-      :fx [[:localstorage/assoc [:schnaqs/admin-access admin-access-map]]
-           (when (= 1 (count admin-access-map))
-             [:dispatch [:celebrate/first-schnaq-created]])]})))
+      :fx [[:localstorage/assoc [:schnaqs/admin-access admin-access-map]]]})))
 
 (rf/reg-event-db
  :schnaqs.save-admin-access/store-hashes-from-localstorage

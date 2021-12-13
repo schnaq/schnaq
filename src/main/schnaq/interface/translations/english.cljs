@@ -591,14 +591,6 @@
    :legal-note.privacy/title "Privacy Policy"
    :legal-note.privacy/body "You can find our privacy policy here."
 
-   ;; Celebrations
-   :celebrations.schnaq-filled/title "🎉 Congratulations 🎉"
-   :celebrations.schnaq-filled/lead "You have filled a new schnaq with a first statement. This is the first milestone towards a successful discussion 💪"
-   :celebrations.schnaq-filled/share-now "Now share the schnaq with your team!"
-   :celebrations.schnaq-filled/button "Sharing Options"
-   :celebrations.first-schnaq-created/title "You have created your first schnaq 🎈"
-   :celebrations.first-schnaq-created/lead "Do you want to connect your schnaq to an account? Then register with a few clicks 🚀"
-
    ;; schnaqs not found
    :schnaqs.not-found/alert-lead "No schnaqs found"
    :schnaqs.not-found/alert-body "Create a schnaq or let yourself be invited"

@@ -588,14 +588,6 @@
    :legal-note.privacy/title "Polityka prywatności"
    :legal-note.privacy/body "Naszą politykę prywatności można znaleźć tutaj."
 
-   ;; Celebrations
-   :celebrations.schnaq-filled/title "🎉 Gratulacje 🎉"
-   :celebrations.schnaq-filled/lead "Wypełniłeś nowy schnaq pierwszym oświadczeniem. Jest to pierwszy kamień milowy do udanej dyskusji. 💪"
-   :celebrations.schnaq-filled/share-now "Teraz podziel się schnaqiem z zespołem!"
-   :celebrations.schnaq-filled/button "Opcje udostępniania"
-   :celebrations.first-schnaq-created/title "Stworzyłeś swój pierwszy schnaq 🎈"
-   :celebrations.first-schnaq-created/lead "Czy chcesz połączyć swojego schnaqa z kontem? Następnie zarejestruj się za pomocą kilku kliknięć 🚀"
-
    ;; schnaqs not found
    :schnaqs.not-found/alert-lead "Nie znaleziono schnaqs"
    :schnaqs.not-found/alert-body "Stwórz schnaq lub daj się zaprosić"
