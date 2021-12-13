@@ -78,13 +78,11 @@
                              {:share-hash share-hash :edit-hash edit-hash})}
          (labels :schnaq.admin/tooltip)]))))
 
-(defn- user-and-progress-bar
+(defn- user-bar
   "Display the progress bar and user avatar in the same row."
   []
-  [:div.d-flex.align-items-center
-   [nav-elements/progress-bar-hide-lg]
-   [:div.ml-auto
-    [nav-elements/user-button]]])
+  [:div.d-flex.align-items-center.ml-auto
+   [nav-elements/user-button]])
 
 (defn- views
   "Display all views as a list-group"
@@ -117,7 +115,7 @@
   [collapse-content-id]
   [external-content collapse-content-id
    [:<>
-    [user-and-progress-bar]
+    [user-bar]
     [views]
     [settings]]])
 
