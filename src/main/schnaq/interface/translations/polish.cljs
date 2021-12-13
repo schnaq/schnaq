@@ -298,10 +298,6 @@
    :discussion.anonymous-edit.modal/persuade "Posty, które ostatnio utworzyłeś w tej przeglądarce, zostaną przekonwertowane automatycznie."
    :discussion.anonymous-edit.modal/cta "Zaloguj się / Zarejestruj się"
 
-   :discussion.anonymous-labels.modal/title "Zaloguj się, aby edytować etykiety"
-   :discussion.anonymous-labels.modal/explain "Aby uniknąć nadużywania anonimowych postów, musisz się zalogować, aby móc edytować labensa."
-   :discussion.anonymous-labels.modal/cta "Zaloguj się / Zarejestruj się"
-
    ;; Conversion-Delete-Funnel
    :discussion.anonymous-delete.modal/title "Zaloguj się, aby usunąć swój post"
    :discussion.anonymous-delete.modal/explain "Aby uniknąć nadużywania anonimowych postów, musisz zarejestrować się w celu ich usunięcia."
@@ -908,13 +904,8 @@
 
    :filters.label/filter-for "Filtrowanie według"
    :filters.add/button "Dodaj filtr"
-   :filters.option.labels/text "Etykieta"
-   :filters.option.labels/includes "zawiera"
-   :filters.option.labels/excludes "nie obejmuje"
-   :filters.option.type/text "Rodzaj składki"
    :filters.option.type/is "jest"
    :filters.option.type/is-not "nie jest"
-   :filters.option.votes/text "Głosy"
    :filters.option.vote/bigger "więcej niż"
    :filters.option.vote/equal "to samo"
    :filters.option.vote/less "mniej niż"
@@ -923,21 +914,6 @@
    :filters.option.answered/unanswered "Bez odpowiedzi"
    :filters.buttons/clear "Wyczyść wszystkie filtry"
    :filters.heading/active "Filtry aktywne"
-
-   ;; Labels for programmatically created text in label overview
-   :filters.labels.type/labels "Etykiety"
-   :filters.labels.type/type "Rodzaj składki"
-   :filters.labels.type/votes "Głosy"
-   :filters.labels.criteria/includes "zamieścić"
-   :filters.labels.criteria/excludes "nie zawierać"
-   :filters.labels.criteria/is "jest"
-   :filters.labels.criteria/is-not "nie jest"
-   :filters.labels.criteria/> "są większe niż"
-   :filters.labels.criteria/= "to samo"
-   :filters.labels.criteria/< "są mniejsze niż"
-   :filters.stype/neutral "neutralny"
-   :filters.stype/attack "z drugiej strony"
-   :filters.stype/support "w tym celu"
 
    :filters.discussion.option.state/label "Status schnaq"
    :filters.discussion.option.state/closed "zamknięta"

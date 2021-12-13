@@ -301,10 +301,6 @@
    :discussion.anonymous-edit.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."
    :discussion.anonymous-edit.modal/cta "Sign in / Sign up"
 
-   :discussion.anonymous-labels.modal/title "Please sign in to edit labels"
-   :discussion.anonymous-labels.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to edit labels."]]
-   :discussion.anonymous-labels.modal/cta "Sign in / Sign up"
-
    ;; Conversion-Delete-Funnel
    :discussion.anonymous-delete.modal/title "Please sign in to delete"
    :discussion.anonymous-delete.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to delete a statement."]]
@@ -914,13 +910,8 @@ Now we write down questions and discuss them and can still understand what we ha
 
    :filters.label/filter-for "Filter for"
    :filters.add/button "Add Filter"
-   :filters.option.labels/text "labels"
-   :filters.option.labels/includes "includes"
-   :filters.option.labels/excludes "excludes"
-   :filters.option.type/text "statement type"
    :filters.option.type/is "is"
    :filters.option.type/is-not "is not"
-   :filters.option.votes/text "votes"
    :filters.option.vote/bigger "more than"
    :filters.option.vote/equal "equal"
    :filters.option.vote/less "less than"
@@ -929,21 +920,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :filters.option.answered/unanswered "Unanswered"
    :filters.buttons/clear "Clear all filters"
    :filters.heading/active "Active Filters"
-
-   ;; Labels for programattically created text in label overview
-   :filters.labels.type/labels "Labels"
-   :filters.labels.type/type "Statement type"
-   :filters.labels.type/votes "Votes"
-   :filters.labels.criteria/includes "include"
-   :filters.labels.criteria/excludes "exclude"
-   :filters.labels.criteria/is "is"
-   :filters.labels.criteria/is-not "is not"
-   :filters.labels.criteria/> "are more than"
-   :filters.labels.criteria/= "equal"
-   :filters.labels.criteria/< "are less than"
-   :filters.stype/neutral "neutral"
-   :filters.stype/attack "attack"
-   :filters.stype/support "support"
 
    :filters.discussion.option.state/label "Schnaq state"
    :filters.discussion.option.state/closed "closed"
