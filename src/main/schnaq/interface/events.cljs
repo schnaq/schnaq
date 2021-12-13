@@ -162,14 +162,6 @@
    (-> selected-schnaq :meta-info :all-statements)))
 
 (rf/reg-sub
- :schnaq.mode/qanda?
- ;; TODO kill this dispatch. Everything is quanda now
- (fn [_ _]
-   (rf/subscribe [:schnaq/selected]))
- (fn [selected-schnaq _ _]
-   (= :discussion.mode/qanda (:discussion/mode selected-schnaq))))
-
-(rf/reg-sub
  :schnaq.selected/access-code
  (fn [_ _]
    (rf/subscribe [:schnaq/selected]))

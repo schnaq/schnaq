@@ -303,10 +303,8 @@
      [:div.mr-1.mx-lg-2.pr-0.pr-lg-2
       [sort-options]]
      [:div.h-100
-      (if @(rf/subscribe [:schnaq.mode/qanda?])
-        (when (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-          [filters/filter-answered-statements])
-        [filters/filter-button])]]
+      (when (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+        [filters/filter-answered-statements])]]
     [:div.ml-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
      [search-bar]]]])
 

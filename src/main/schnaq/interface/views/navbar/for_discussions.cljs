@@ -4,13 +4,14 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.views.discussion.share :as share]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
             [schnaq.interface.views.navbar.elements :as nav-elements]
             [schnaq.interface.views.schnaq.admin :as admin]))
 
 (defn- interaction-elements []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
-   [nav-elements/share-modal]
+   [share/share-qanda-button]
    [nav-elements/navbar-download]
    [nav-elements/navbar-settings]
    [nav-elements/language-toggle]

@@ -12,7 +12,6 @@
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.views.discussion.share :as share-modal]
             [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.views.schnaq.admin :as admin]))
@@ -185,13 +184,6 @@
   []
   [:div.dropdown.ml-3
    [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]])
-
-(defn share-modal
-  "Display a share modal based on Q&A or Discussion Mode"
-  []
-  (if @(rf/subscribe [:schnaq.mode/qanda?])
-    [share-modal/share-qanda-button]
-    [share-modal/share-discussion-button]))
 
 (defn title-and-infos
   "Display the schnaq title and info"

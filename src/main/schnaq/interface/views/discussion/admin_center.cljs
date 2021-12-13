@@ -305,22 +305,20 @@
 
 (defn- only-moderators-mark-setting []
   (let [mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        beta-tester? @(rf/subscribe [:user/beta-tester?])
-        qanda? @(rf/subscribe [:schnaq.mode/qanda?])]
-    (when qanda?
-      [:div {:class (when-not beta-tester? "text-muted")}
-       [:input.big-checkbox
-        {:type :checkbox
-         :disabled (not beta-tester?)
-         :id :only-moderators-mark-checkbox
-         :checked mods-mark-only?
-         :on-change
-         (fn [e]
-           (js-wrap/prevent-default e)
-           (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
-       [:label.form-check-label.display-6.pl-1 {:for :only-moderators-mark-checkbox}
-        (labels :schnaq.admin.configurations.mods-mark-only/label)]
-       [:p (labels :schnaq.admin.configurations.mods-mark-only/explanation)]])))
+        beta-tester? @(rf/subscribe [:user/beta-tester?])]
+    [:div {:class (when-not beta-tester? "text-muted")}
+     [:input.big-checkbox
+      {:type :checkbox
+       :disabled (not beta-tester?)
+       :id :only-moderators-mark-checkbox
+       :checked mods-mark-only?
+       :on-change
+       (fn [e]
+         (js-wrap/prevent-default e)
+         (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
+     [:label.form-check-label.display-6.pl-1 {:for :only-moderators-mark-checkbox}
+      (labels :schnaq.admin.configurations.mods-mark-only/label)]
+     [:p (labels :schnaq.admin.configurations.mods-mark-only/explanation)]]))
 
 ;; -----------------------------------------------------------------------------
 

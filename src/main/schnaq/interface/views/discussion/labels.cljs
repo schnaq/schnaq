@@ -46,6 +46,7 @@
         [build-label label (set-labels label) :hover]]))])
 
 (defn edit-labels-button
+  ;; TODO remove labels in own MR
   "Give the registered user the ability to add or remove labels to a statement."
   [statement]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]

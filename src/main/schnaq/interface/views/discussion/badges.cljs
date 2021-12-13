@@ -6,7 +6,6 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.discussion.labels :as statement-labels]
             [schnaq.interface.views.modal :as modal]))
 
 (defn- anonymous-edit-modal
@@ -149,7 +148,6 @@
   ([statement with-edit-dropdown?]
    (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
          share-hash @(rf/subscribe [:schnaq/share-hash])
-         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
          old-statement-num (get old-statements-nums-map (:db/id statement) 0)
          statement-num (:meta/sub-statement-count statement 0)
          new? (not (= old-statement-num statement-num))]
@@ -162,8 +160,6 @@
          [icon :comments "m-auto text-secondary"]
          [icon :comments "m-auto"])
        " " statement-num]
-      (when-not q-and-a?
-        [statement-labels/edit-labels-button statement])
       (when with-edit-dropdown?
         [:div.ml-2
          [edit-statement-dropdown-menu statement]])])))
