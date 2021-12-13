@@ -10,7 +10,6 @@
 
 (defn- interaction-elements []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
-   [nav-elements/progress-bar-hide-lg]
    [nav-elements/share-modal]
    [nav-elements/navbar-download]
    [nav-elements/navbar-settings]
@@ -71,7 +70,6 @@
          :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]]
      [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
       [:div.d-flex.align-items-center.schnaq-navbar.px-4
-       [nav-elements/schnaq-progress-bar]
        [admin/txt-export share-hash title]
        (when edit-hash
          [admin/admin-center])

@@ -294,13 +294,6 @@
    :discussion.state/read-only-warning "Ta dyskusja jest tylko do odczytu, możesz tu tylko czytać, ale nie pisać."
    :discussion.navbar/settings "Ustawienia"
 
-   ;; schnaq progress bar related stuff
-   :discussion.progress/days-left "Pozostało %s dni"
-   :discussion.progress/unlimited "Nieograniczony otwarty"
-   :discussion.progress/end "Koniec dyskusji"
-   :discussion.progress/ends "Kończy się %s"
-   :discussion.progress/ends-not "Nie kończy się"
-
    ;; Conversion-Edit-Funnel
    :discussion.anonymous-edit.modal/title "Zaloguj się, aby edytować"
    :discussion.anonymous-edit.modal/explain "Aby zapobiec nadużywaniu anonimowych postów, musisz się zalogować, aby móc je edytować."

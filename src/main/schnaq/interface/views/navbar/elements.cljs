@@ -1,7 +1,5 @@
 (ns schnaq.interface.views.navbar.elements
-  (:require [cljs.spec.alpha :as s]
-            [clojure.string :as str]
-            [ghostwheel.core :refer [>defn-]]
+  (:require [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
@@ -11,9 +9,7 @@
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.language :as language]
-            [schnaq.interface.utils.time :as util-time]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.share :as share-modal]
@@ -133,46 +129,6 @@
          [qanda-view-button]]]]])))
 
 ;; -----------------------------------------------------------------------------
-
-(>defn- schnaq-progress-information
-  "Take the time the schnaq was created and the end-time and returns the percentage for the progress bar as well
-  as whole days left."
-  [created-at end-time]
-  [inst? inst? :ret (s/tuple float? int?)]
-  (let [distance (- end-time created-at)
-        elapsed-ms (min distance (- (.now js/Date) created-at))
-        elapsed-percent (* 100 (/ elapsed-ms distance))
-        days-left (jsw/number-trunc (/ (max 0 (- distance elapsed-ms)) 86400000))]
-    [elapsed-percent days-left]))
-
-(defn schnaq-progress-bar
-  "A progress bar indicating how far along a schnaq is."
-  []
-  (let [{:discussion/keys [end-time created-at]} @(rf/subscribe [:schnaq/selected])
-        [current-bar days-left] (schnaq-progress-information created-at end-time)
-        progress-text (cond
-                        (nil? end-time) (labels :discussion.progress/unlimited)
-                        (< end-time (.now js/Date)) (labels :discussion.progress/end)
-                        (inst? end-time) (gstring/format (labels :discussion.progress/days-left) days-left))
-        [first-word & rest] (str/split progress-text #" ")]
-    [tooltip/text
-     (if end-time
-       (gstring/format (labels :discussion.progress/ends) (util-time/formatted-with-timezone end-time))
-       (labels :discussion.progress/ends-not))
-     [:section
-      [:p.small.m-0 [:span.font-color-primary first-word " "] (str/join " " rest)]
-      [:div.progress.progress-schnaq.mr-3
-       [:div.progress-bar.progress-bar-schnaq
-        (cond->
-          {:role "progressbar" :aria-valuenow (str current-bar) :aria-valuemin "0" :aria-valuemax "100"
-           :style {:width (str current-bar "%")}}
-          (nil? end-time) (assoc :class "progress-bar-striped"))]]]]))
-
-(defn progress-bar-hide-lg
-  "Progress bar which is only visible on xl screens"
-  []
-  [:div.d-lg-none.d-xl-block
-   [schnaq-progress-bar]])
 
 (defn navbar-settings
   "Either display schnaq or graph settings button"

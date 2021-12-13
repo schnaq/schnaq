@@ -296,12 +296,6 @@
    :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
    :discussion.navbar/settings "Settings"
 
-   ;; schnaq progress bar related stuff
-   :discussion.progress/days-left "%s days left"
-   :discussion.progress/unlimited "Open unlimited"
-   :discussion.progress/end "End of discussion"
-   :discussion.progress/ends "Ends %s"
-   :discussion.progress/ends-not "Does not end"
 
    ;; Conversion-Edit-Funnel
    :discussion.anonymous-edit.modal/title "Please sign in to edit"

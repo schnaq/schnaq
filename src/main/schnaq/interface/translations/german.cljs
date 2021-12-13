@@ -295,13 +295,6 @@
    :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
    :discussion.navbar/settings "Einstellungen"
 
-   ;; schnaq progress bar related stuff
-   :discussion.progress/days-left "Noch %s Tage"
-   :discussion.progress/unlimited "Unbeschränkt offen"
-   :discussion.progress/end "Ende der Diskussion"
-   :discussion.progress/ends "Endet %s"
-   :discussion.progress/ends-not "Endet nicht"
-
    ;; Conversion-Edit-Funnel
    :discussion.anonymous-edit.modal/title "Bitte melde dich an zum Editieren"
    :discussion.anonymous-edit.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren anmelden."]]
