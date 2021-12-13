@@ -148,7 +148,7 @@
                                     :body (labels :statement.notifications/statement-flagged-body)
                                     :context :success}]]]}))
 
-(defn statement-dropdown-menu [dropdown-id dropdown-items]
+(defn- statement-dropdown-menu [dropdown-id dropdown-items]
   [:div.dropdown.ml-2
    [:div.dropdown-toggle.m-0.p-0
     {:id dropdown-id
