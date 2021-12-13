@@ -213,7 +213,8 @@
    {:db/ident :discussion/end-time
     :db/valueType :db.type/instant
     :db/cardinality :db.cardinality/one
-    :db/doc "An optional time, when the discussion is finished and follow-up processes are started."}
+    :db/doc "An optional time, when the discussion is finished and follow-up processes are started.
+    As of 2021.12.13  not in use."}
    {:db/ident :discussion/creation-secret
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one

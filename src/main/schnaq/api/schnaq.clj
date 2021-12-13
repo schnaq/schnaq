@@ -12,7 +12,6 @@
             [schnaq.database.user :as user-db]
             [schnaq.links :as links]
             [schnaq.processors :as processors]
-            [schnaq.toolbelt :as toolbelt]
             [schnaq.validator :as validator]
             [spec-tools.core :as st]
             [taoensso.timbre :as log])
@@ -76,7 +75,7 @@
   "Adds a discussion to the database. Returns the newly-created discussion. Required fields are `discussion-title` and
    (`nickname` or an authenticated user)."
   [{:keys [parameters identity]}]
-  (let [{:keys [nickname discussion-title hub-exclusive? hub ends-in-days] :as parameters} (:body parameters)
+  (let [{:keys [nickname discussion-title hub-exclusive? hub] :as parameters} (:body parameters)
         keycloak-id (:sub identity)]
     (if-not (or keycloak-id nickname)
       (bad-request-schnaq-creation parameters)
@@ -91,8 +90,7 @@
                                      :discussion/mode :discussion.mode/qanda}
                               keycloak-id (assoc :discussion/admins [author])
                               (and hub-exclusive? authorized-for-hub?)
-                              (assoc :discussion/hub-origin [:hub/keycloak-name hub])
-                              ends-in-days (assoc :discussion/end-time (toolbelt/now-plus-days-instant ends-in-days)))
+                              (assoc :discussion/hub-origin [:hub/keycloak-name hub]))
             new-discussion-id (discussion-db/new-discussion discussion-data)]
         (if new-discussion-id
           (do

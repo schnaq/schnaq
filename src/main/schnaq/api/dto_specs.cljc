@@ -41,12 +41,11 @@
           :opt-un [:discussion/meta-info]))
 
 (s/def ::discussion-title :discussion/title)
-(s/def ::ends-in-days pos-int?)
 (s/def ::hub-exclusive? boolean?)
 (s/def ::hub :hub/keycloak-name)
 (s/def ::discussion-add-body
   (s/keys :req-un [::discussion-title]
-          :opt-un [::ends-in-days :user/nickname ::hub-exclusive? ::hub]))
+          :opt-un [:user/nickname ::hub-exclusive? ::hub]))
 
 ;; Feedbacks
 (s/def ::feedback

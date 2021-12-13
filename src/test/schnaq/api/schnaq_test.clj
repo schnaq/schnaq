@@ -74,10 +74,10 @@
         201 (merge minimal-request {:hub-exclusive? true})
         201 (merge minimal-request {:hub-exclusive? false})
         201 (merge minimal-request {:hub-exclusive? false
-                                    :hub "works, because we don't provide error message"})
-        201 (merge minimal-request {:ends-in-days 42})))))
+                                    :hub "works, because we don't provide error message"})))))
 
 (deftest add-schnaq-as-anonymous-user-test
+  ;; TODO why does this not fail?
   (testing "schnaq creation."
     (let [minimal-request {:discussion-title "huhu" :nickname "kangaroo"}
           add-schnaq #'schnaq-api/add-schnaq]
@@ -91,8 +91,7 @@
         201 (merge minimal-request {:hub-exclusive? true})
         201 (merge minimal-request {:hub-exclusive? false})
         201 (merge minimal-request {:hub-exclusive? false
-                                    :hub "works, because we don't provide error message"})
-        201 (merge minimal-request {:ends-in-days 42})))))
+                                    :hub "works, because we don't provide error message"})))))
 
 (def ^:private add-schnaq-request-missing-jwt
   "Looks like a normal request to create a schnaq, but the JWT header is missing."
