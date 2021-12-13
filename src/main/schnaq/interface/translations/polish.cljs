@@ -220,14 +220,6 @@
    :schnaq.header-image.url/failed-setting-body "Obraz nie jest używany w podglądzie."
 
    ;; Create schnaq
-   :schnaq.create.dispatch/heading "Co chcesz zacząć?"
-   :schnaq.create.dispatch/qanda "Pytania i odpowiedzi"
-   :schnaq.create.dispatch.qanda/explain "Zbieraj pytania podczas kursu i odpowiadaj na nie, kiedy będziesz miał czas."
-   :schnaq.create.dispatch.qanda/share "Zaproś uczestników poprzez link lub kod."
-   :schnaq.create.dispatch/discussion "Dyskusja"
-   :schnaq.create.dispatch.discussion/explain "Prowadź wspomagane przez AI i uporczywe dyskusje z innymi."
-   :schnaq.create.dispatch.discussion/share "Zaproś uczestników poprzez link."
-
    :schnaq.create.input/title "O czym chcesz rozmawiać?"
    :schnaq.create.qanda.input/title "Czego powinny dotyczyć pytania?"
    :schnaq.create.input/placeholder "Ustal temat"
@@ -254,8 +246,6 @@
    :schnaq.admin.notifications/heading "Ustawienia"
    :schnaq.admin.configurations.read-only/checkbox "Aktywuj ochronę przed zapisem"
    :schnaq.admin.configurations.read-only/explanation "Aktywuj, aby nie zezwalać na nowe posty. Istniejące posty są nadal widoczne i mogą być nadal analizowane. Opcja ta może być zmieniona w dowolnym momencie."
-   :schnaq.admin.configurations.discussion-mode/label "Aktywuj tryb Q&A z kartami wiedzy"
-   :schnaq.admin.configurations.discussion-mode/explanation "Aktywuj, aby przełączyć się w tryb pytań i odpowiedzi. Następnie dostępne są karty wiedzy, na których można zaznaczyć prawidłowe odpowiedzi na pytania."
    :schnaq.admin.configurations.disable-pro-con/label "Za / przeciw Przycisk ukrycia"
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktywuj, aby przycisk \"za/ przeciw\" nie był już wyświetlany. Nowe wkłady są traktowane jako zgoda. Opcja ta może być zmieniona w dowolnym momencie."
    :schnaq.admin.configurations.mods-mark-only/label "Tylko moderatorzy zaznaczają odpowiedzi"
@@ -280,26 +270,9 @@
    ;; schnaq creation
    :schnaq.create/title "Uruchomienie schnaq"
    :schnaq.create/heading "Zacznij od swojego schnaq."
-   :schnaq.create/subheading "Dzięki schnaqowi możesz pozwolić swojemu zespołowi dyskutować i zabezpieczać zrównoważone decyzje."
    :schnaq.create.qanda/subheading "Dzięki schnaq, możesz mieć zoptymalizowane Q&A."
    :schnaq.create/info "Nadaj swojemu tematowi tytuł, który jest tak prosty i zrozumiały, jak to tylko możliwe."
    :schnaq.create.button/save "Uruchomienie schnaq"
-
-   ;; schnaq value
-   :schnaq.value/title "Jesteś gotowy do pracy"
-   :schnaq.value/subtitle "Kilka wskazówek, które pomogą Tobie i Twojemu zespołowi:"
-   :schnaq.value.security/title "Bezpieczeństwo danych"
-   :schnaq.value.security/text "Ochrona danych jest dla nas ważna! Twoje dane są bezpieczne na niemieckich serwerach."
-   :schnaq.value.respect/title "Dyskusja z szacunkiem"
-   :schnaq.value.respect/text "Pełna szacunku interakcja jest ważna, aby móc żyć ze sobą i stanowi podstawę do obiektywnych dyskusji."
-   :schnaq.value.share/title "Podziel się swoją dyskusją"
-   :schnaq.value.share/text "Wystarczy zaprosić uczestników poprzez link lub e-mail. Rejestracja nie jest konieczna!"
-   :schnaq.value.private/title "Zawsze prywatny"
-   :schnaq.value.private/text "Domyślnie, twoje schnaqs są widoczne tylko dla ciebie i osób, z którymi się dzielisz."
-   :schnaq.value.cards/title "Mindmap"
-   :schnaq.value.cards/text "Dla lepszego przeglądu, nasza mindmapa jest generowana automatycznie."
-   :schnaq.value.results/title "Widok wyników"
-   :schnaq.value.results/text "Zobacz podsumowania i analizy swojej dyskusji (funkcja beta)."
 
    ;; Discussion Creation
    :discussion.create.hub-exclusive-checkbox/title "Dodaj Schnaqa do huba"
@@ -318,17 +291,6 @@
    :discussion.state/read-only-label "tylko do odczytu"
    :discussion.state/read-only-warning "Ta dyskusja jest tylko do odczytu, możesz tu tylko czytać, ale nie pisać."
    :discussion.navbar/settings "Ustawienia"
-
-   ;; schnaq progress bar related stuff
-   :discussion.progress/days-left "Pozostało %s dni"
-   :discussion.progress/unlimited "Nieograniczony otwarty"
-   :discussion.progress/end "Koniec dyskusji"
-   :discussion.progress/ends "Kończy się %s"
-   :discussion.progress/ends-not "Nie kończy się"
-   :discussion.progress.creation/heading "Ogranicz czas trwania dyskusji"
-   :discussion.progress.creation/label "Koniec w dniach"
-   :discussion.progress.creation/button-limit "%s Dni"
-   :discussion.progress.creation/button-unlimited "Bez ograniczeń"
 
    ;; Conversion-Edit-Funnel
    :discussion.anonymous-edit.modal/title "Zaloguj się, aby edytować"
@@ -616,14 +578,6 @@
    :legal-note.copyright/body "Treści i dzieła stworzone przez administratorów stron na tych stronach podlegają niemieckiemu prawu autorskiemu. Powielanie, przetwarzanie, rozpowszechnianie i wszelkiego rodzaju wykorzystywanie wykraczające poza granice prawa autorskiego wymaga pisemnej zgody danego autora lub twórcy. Pobieranie i kopiowanie tej strony jest dozwolone tylko do prywatnego, niekomercyjnego użytku. O ile treści na tej stronie nie zostały stworzone przez operatora, prawa autorskie osób trzecich są respektowane. W szczególności treści osób trzecich są oznaczone jako takie. Jeśli mimo to dowiedzą się Państwo o naruszeniu praw autorskich, prosimy o stosowną informację. Jeśli dowiemy się o jakichkolwiek naruszeniach, natychmiast usuniemy takie treści."
    :legal-note.privacy/title "Polityka prywatności"
    :legal-note.privacy/body "Naszą politykę prywatności można znaleźć tutaj."
-
-   ;; Celebrations
-   :celebrations.schnaq-filled/title "🎉 Gratulacje 🎉"
-   :celebrations.schnaq-filled/lead "Wypełniłeś nowy schnaq pierwszym oświadczeniem. Jest to pierwszy kamień milowy do udanej dyskusji. 💪"
-   :celebrations.schnaq-filled/share-now "Teraz podziel się schnaqiem z zespołem!"
-   :celebrations.schnaq-filled/button "Opcje udostępniania"
-   :celebrations.first-schnaq-created/title "Stworzyłeś swój pierwszy schnaq 🎈"
-   :celebrations.first-schnaq-created/lead "Czy chcesz połączyć swojego schnaqa z kontem? Następnie zarejestruj się za pomocą kilku kliknięć 🚀"
 
    ;; schnaqs not found
    :schnaqs.not-found/alert-lead "Nie znaleziono schnaqs"

@@ -221,14 +221,6 @@
    :schnaq.header-image.url/failed-setting-body "The image will not be used as preview image."
 
    ;; Create schnaq
-   :schnaq.create.dispatch/heading "What do you want to start?"
-   :schnaq.create.dispatch/qanda "Questions and Answers"
-   :schnaq.create.dispatch.qanda/explain "Collect questions during the course and answer them, when you have the time."
-   :schnaq.create.dispatch.qanda/share "Invite participants via link or a code."
-   :schnaq.create.dispatch/discussion "Discussion"
-   :schnaq.create.dispatch.discussion/explain "Conduct AI assisted and persistent discussions with others."
-   :schnaq.create.dispatch.discussion/share "Invite participants via link."
-
    :schnaq.create.input/title "What would you like to discuss?"
    :schnaq.create.qanda.input/title "What should the questions be about?"
    :schnaq.create.input/placeholder "Specify Subject"
@@ -256,8 +248,6 @@
    :schnaq.admin.notifications/heading "Configuration"
    :schnaq.admin.configurations.read-only/checkbox "Set to read-only"
    :schnaq.admin.configurations.read-only/explanation "When checked, users can no longer add new posts to the discussion. Existing posts are still readable and can be analysed. You can change this option anytime."
-   :schnaq.admin.configurations.discussion-mode/label "Activate Q&A mode with knowledge cards"
-   :schnaq.admin.configurations.discussion-mode/explanation "Activate to switch to question and answer mode. Knowledge cards are then available where you can mark the correct answers to the questions."
    :schnaq.admin.configurations.disable-pro-con/label "Disable agree/disagree button"
    :schnaq.admin.configurations.disable-pro-con/explanation "When checked, users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
    :schnaq.admin.configurations.mods-mark-only/label "Only Moderators mark answers"
@@ -282,26 +272,9 @@
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
    :schnaq.create/heading "Start your schnaq."
-   :schnaq.create/subheading "With a schnaq, you can let your team discuss and secure sustainable decisions."
    :schnaq.create.qanda/subheading "With a schnaq, you can have optimized Q&As."
    :schnaq.create/info "Add a simple and comprehensible title to your discussion."
    :schnaq.create.button/save "Start a new schnaq"
-
-   ;; schnaq value
-   :schnaq.value/title "You're ready to go!"
-   :schnaq.value/subtitle "A few tips to help you and your team:"
-   :schnaq.value.security/title "Privacy"
-   :schnaq.value.security/text "Privacy is important to us! Your data is safe on German servers in accordance with European law."
-   :schnaq.value.respect/title "Discuss with respect"
-   :schnaq.value.respect/text "Respectful interaction is important in order to be able to live with one another and is the basis for objective discussions."
-   :schnaq.value.share/title "Share your discussion"
-   :schnaq.value.share/text "Simply invite participants via link or email. No registration necessary!"
-   :schnaq.value.private/title "Private by default"
-   :schnaq.value.private/text "Your schnaqs can only be accessed by you and people you share them with."
-   :schnaq.value.cards/title "Mindmap"
-   :schnaq.value.cards/text "Our mind map is generated automatically and provides a quick overview."
-   :schnaq.value.results/title "Results view"
-   :schnaq.value.results/text "View summaries and analysis of your discussion (beta feature)."
 
    ;; Discussion Creation
    :discussion.create.hub-exclusive-checkbox/title "Add schnaq to a Hub"
@@ -321,16 +294,6 @@
    :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
    :discussion.navbar/settings "Settings"
 
-   ;; schnaq progress bar related stuff
-   :discussion.progress/days-left "%s days left"
-   :discussion.progress/unlimited "Open unlimited"
-   :discussion.progress/end "End of discussion"
-   :discussion.progress/ends "Ends %s"
-   :discussion.progress/ends-not "Does not end"
-   :discussion.progress.creation/heading "Limit the duration of your discussion"
-   :discussion.progress.creation/label "End in days"
-   :discussion.progress.creation/button-limit "%s days"
-   :discussion.progress.creation/button-unlimited "Unlimited"
 
    ;; Conversion-Edit-Funnel
    :discussion.anonymous-edit.modal/title "Please sign in to edit"
@@ -619,14 +582,6 @@
    :legal-note.copyright/body "The content and works created by the site operators on these pages are subject to German copyright law. The reproduction, editing, distribution and any kind of exploitation outside the limits of copyright require the written consent of the respective author or creator. Downloads and copies of this site are only permitted for private, non-commercial use. Insofar as the content on this site was not created by the operator, the copyrights of third parties are respected. In particular, third-party content is identified as such. Should you nevertheless become aware of a copyright infringement, please inform us accordingly. If we become aware of any infringements, we will remove such content immediately."
    :legal-note.privacy/title "Privacy Policy"
    :legal-note.privacy/body "You can find our privacy policy here."
-
-   ;; Celebrations
-   :celebrations.schnaq-filled/title "🎉 Congratulations 🎉"
-   :celebrations.schnaq-filled/lead "You have filled a new schnaq with a first statement. This is the first milestone towards a successful discussion 💪"
-   :celebrations.schnaq-filled/share-now "Now share the schnaq with your team!"
-   :celebrations.schnaq-filled/button "Sharing Options"
-   :celebrations.first-schnaq-created/title "You have created your first schnaq 🎈"
-   :celebrations.first-schnaq-created/lead "Do you want to connect your schnaq to an account? Then register with a few clicks 🚀"
 
    ;; schnaqs not found
    :schnaqs.not-found/alert-lead "No schnaqs found"
@@ -925,7 +880,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/all-feedbacks "All feedbacks"
    :router/analytics "Analytics dashboard"
    :router/create-schnaq "Create schnaq"
-   :router/value "Value of schnaq"
    :router/dashboard "schnaq dashboard"
    :router/graph-view "Graph view"
    :router/how-to "How do I use schnaq?"

@@ -182,6 +182,7 @@
       (labels :filters.buttons/clear)])])
 
 (defn filter-button
+  ;; TODO kill in own MR
   "A button opening the default filters on click."
   []
   (let [active-filters? @(rf/subscribe [:filters/active?])]

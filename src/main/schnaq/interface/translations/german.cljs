@@ -221,14 +221,6 @@
    :schnaq.header-image.url/failed-setting-body "Das Bild wird nicht in der Vorschau genutzt."
 
    ;; Create schnaq
-   :schnaq.create.dispatch/heading "Was möchtest du starten?"
-   :schnaq.create.dispatch/qanda "Fragen und Antworten"
-   :schnaq.create.dispatch.qanda/explain "Sammel Fragen während einer Veranstaltung und beantworte sie wann immer du Zeit hast."
-   :schnaq.create.dispatch.qanda/share "Lade Teilnehmer:innen per Link oder Zahlencode ein."
-   :schnaq.create.dispatch/discussion "Diskussion"
-   :schnaq.create.dispatch.discussion/explain "Führe K.I. gestützte und nachhaltige Diskussionen mit anderen Teilnehmer:innen."
-   :schnaq.create.dispatch.discussion/share "Lade Teilnehmer:innen per Link ein."
-
    :schnaq.create.input/title "Worüber möchtest du diskutieren?"
    :schnaq.create.qanda.input/title "Worum sollen sich die Fragen drehen?"
    :schnaq.create.input/placeholder "Thema festlegen"
@@ -255,8 +247,6 @@
    :schnaq.admin.notifications/heading "Einstellungen"
    :schnaq.admin.configurations.read-only/checkbox "Schreibschutz aktivieren"
    :schnaq.admin.configurations.read-only/explanation "Aktivieren, um keine neuen Beiträge zu erlauben. Bestehende Beiträge sind weiterhin sichtbar und können weiterhin analysiert werden. Diese Option kann jederzeit geändert werden."
-   :schnaq.admin.configurations.discussion-mode/label "Q&A Modus mit Wissenskarten aktivieren"
-   :schnaq.admin.configurations.discussion-mode/explanation "Aktivieren, um auf Frage- und Antwortmodus zu wechseln. Es stehen dann Wissenskarten zur Verfügung, wo du die korrekten Antworten zu den Fragen markieren kannst."
    :schnaq.admin.configurations.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktivieren, um den  Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
    :schnaq.admin.configurations.mods-mark-only/label "Nur Moderator:innen Antworten markieren lassen"
@@ -281,26 +271,9 @@
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"
    :schnaq.create/heading "Starte mit deinem schnaq."
-   :schnaq.create/subheading "Mit einem schnaq kannst du dein Team diskutieren lassen und Entscheidungen nachhaltig sichern."
    :schnaq.create.qanda/subheading "Mit einem schnaq kannst du effizient Fragen sammeln und beantworten."
    :schnaq.create/info "Gib deinem Thema einen möglichst einfachen und verständlichen Titel."
    :schnaq.create.button/save "Schnaq starten"
-
-   ;; schnaq value
-   :schnaq.value/title "Du bist startklar"
-   :schnaq.value/subtitle "Ein paar Tipps, die dir und deinem Team helfen:"
-   :schnaq.value.security/title "Datensicherheit"
-   :schnaq.value.security/text "Datenschutz ist uns wichtig! Deine Daten sind sicher auf deutschen Servern."
-   :schnaq.value.respect/title "Diskutiere mit Respekt"
-   :schnaq.value.respect/text "Ein respektvoller Umgang ist wichtig, um miteinander leben zu können und bietet die Grundlage für sachliche Diskussionen."
-   :schnaq.value.share/title "Teile deine Diskussion"
-   :schnaq.value.share/text "Lade Teilnehmer:innen einfach per Link oder Mail ein. Keine Anmeldung notwendig!"
-   :schnaq.value.private/title "Immer privat"
-   :schnaq.value.private/text "Deine schnaqs sind standardmäßig nur von dir und den Leuten mit denen du teilst einsehbar."
-   :schnaq.value.cards/title "Mindmap"
-   :schnaq.value.cards/text "Für mehr Überblick sorgt unsere Mindmap, die automatisch generiert wird."
-   :schnaq.value.results/title "Ergebnisansicht"
-   :schnaq.value.results/text "Schau dir Zusammenfassungen und Analysen zu deiner Diskussion an (Beta Feature)."
 
    ;; Discussion Creation
    :discussion.create.hub-exclusive-checkbox/title "Schnaq zu einem Hub hinzufügen"
@@ -319,17 +292,6 @@
    :discussion.state/read-only-label "schreibgeschützt"
    :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
    :discussion.navbar/settings "Einstellungen"
-
-   ;; schnaq progress bar related stuff
-   :discussion.progress/days-left "Noch %s Tage"
-   :discussion.progress/unlimited "Unbeschränkt offen"
-   :discussion.progress/end "Ende der Diskussion"
-   :discussion.progress/ends "Endet %s"
-   :discussion.progress/ends-not "Endet nicht"
-   :discussion.progress.creation/heading "Begrenze die Laufzeit deiner Diskussion"
-   :discussion.progress.creation/label "Ende in Tagen"
-   :discussion.progress.creation/button-limit "%s Tage"
-   :discussion.progress.creation/button-unlimited "Unbegrenzt"
 
    ;; Conversion-Edit-Funnel
    :discussion.anonymous-edit.modal/title "Bitte melde dich an zum Editieren"
@@ -617,14 +579,6 @@
    :legal-note.copyright/body "Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen."
    :legal-note.privacy/title "Datenschutzerklärung"
    :legal-note.privacy/body "Unsere Datenschutzerklärung findest du hier."
-
-   ;; Celebrations
-   :celebrations.schnaq-filled/title "🎉 Glückwunsch 🎉"
-   :celebrations.schnaq-filled/lead "Du hast einen neuen schnaq mit einer ersten Aussage befüllt. Das ist der erste Meilenstein zu einer erfolgreichen Diskussion 💪"
-   :celebrations.schnaq-filled/share-now "Teile nun den schnaq mit deinem Team!"
-   :celebrations.schnaq-filled/button "Optionen zum Teilen"
-   :celebrations.first-schnaq-created/title "Du hast deinen ersten schnaq erstellt 🎈"
-   :celebrations.first-schnaq-created/lead "Möchtest du deinen schnaq mit einem Account verbinden? Dann registriere dich mit wenigen Klicks 🚀"
 
    ;; schnaqs not found
    :schnaqs.not-found/alert-lead "Keine schnaqs gefunden"
