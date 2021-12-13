@@ -247,8 +247,6 @@
    :schnaq.admin.notifications/heading "Einstellungen"
    :schnaq.admin.configurations.read-only/checkbox "Schreibschutz aktivieren"
    :schnaq.admin.configurations.read-only/explanation "Aktivieren, um keine neuen Beiträge zu erlauben. Bestehende Beiträge sind weiterhin sichtbar und können weiterhin analysiert werden. Diese Option kann jederzeit geändert werden."
-   :schnaq.admin.configurations.discussion-mode/label "Q&A Modus mit Wissenskarten aktivieren"
-   :schnaq.admin.configurations.discussion-mode/explanation "Aktivieren, um auf Frage- und Antwortmodus zu wechseln. Es stehen dann Wissenskarten zur Verfügung, wo du die korrekten Antworten zu den Fragen markieren kannst."
    :schnaq.admin.configurations.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktivieren, um den  Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
    :schnaq.admin.configurations.mods-mark-only/label "Nur Moderator:innen Antworten markieren lassen"

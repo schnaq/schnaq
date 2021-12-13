@@ -246,8 +246,6 @@
    :schnaq.admin.notifications/heading "Ustawienia"
    :schnaq.admin.configurations.read-only/checkbox "Aktywuj ochronę przed zapisem"
    :schnaq.admin.configurations.read-only/explanation "Aktywuj, aby nie zezwalać na nowe posty. Istniejące posty są nadal widoczne i mogą być nadal analizowane. Opcja ta może być zmieniona w dowolnym momencie."
-   :schnaq.admin.configurations.discussion-mode/label "Aktywuj tryb Q&A z kartami wiedzy"
-   :schnaq.admin.configurations.discussion-mode/explanation "Aktywuj, aby przełączyć się w tryb pytań i odpowiedzi. Następnie dostępne są karty wiedzy, na których można zaznaczyć prawidłowe odpowiedzi na pytania."
    :schnaq.admin.configurations.disable-pro-con/label "Za / przeciw Przycisk ukrycia"
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktywuj, aby przycisk \"za/ przeciw\" nie był już wyświetlany. Nowe wkłady są traktowane jako zgoda. Opcja ta może być zmieniona w dowolnym momencie."
    :schnaq.admin.configurations.mods-mark-only/label "Tylko moderatorzy zaznaczają odpowiedzi"

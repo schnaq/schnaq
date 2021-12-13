@@ -146,22 +146,6 @@
               #(-> % set (disj :discussion.state/read-only) vec))))
 
 (rf/reg-event-fx
- :discussion.admin/discussion-mode
- (fn [{:keys [db]} [_ discussion-mode]]
-   (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
-     {:fx [(http/xhrio-request db :put "/discussion/manage/discussion-mode"
-                               [:discussion.admin/discussion-mode-success]
-                               {:share-hash share-hash
-                                :edit-hash edit-hash
-                                :discussion-mode discussion-mode}
-                               [:ajax.error/as-notification])]})))
-
-(rf/reg-event-db
- :discussion.admin/discussion-mode-success
- (fn [db [_ {:keys [discussion-mode]}]]
-   (assoc-in db [:schnaq :selected :discussion/mode] discussion-mode)))
-
-(rf/reg-event-fx
  ;; Deletion success from admin center
  :discussion.admin/delete-statements-success
  (fn [_ [_ form _return]]
@@ -281,26 +265,6 @@
         (labels :schnaq.admin/addresses-privacy)]]
       [:button.btn.btn-outline-primary
        (labels :schnaq.admin.edit.link.form/submit-button)]])])
-
-(defn- configure-discussion-mode
-  ;; TODO kill this. Only quanda in the house baby
-  "Configure discussion mode. Toggles between q&a and classical discussions."
-  []
-  (let [qanda? @(rf/subscribe [:schnaq.mode/qanda?])
-        dispatch (if-not qanda?
-                   :discussion.mode/qanda
-                   :discussion.mode/discussion)]
-    [:<>
-     [:div.custom-control.custom-switch
-      [:input.big-checkbox.custom-control-input
-       {:type :checkbox
-        :id :toggle-discussion-mode
-        :checked qanda?
-        :on-change (fn [e] (js-wrap/prevent-default e)
-                     (rf/dispatch [:discussion.admin/discussion-mode dispatch]))}]
-      [:label.form-check-label.display-6.pl-1.custom-control-label {:for :toggle-discussion-mode}
-       (labels :schnaq.admin.configurations.discussion-mode/label)]]
-     [:p (labels :schnaq.admin.configurations.discussion-mode/explanation)]]))
 
 (defn- enable-discussion-read-only
   "A Checkbox that makes the current discussion read-only or writeable."
@@ -430,7 +394,6 @@
   [:ret :re-frame/component]
   [:<>
    [header-image/image-url-input]
-   [configure-discussion-mode]
    (if @(rf/subscribe [:user/beta-tester?])
      [discussion-settings]
      [:div.pt-1

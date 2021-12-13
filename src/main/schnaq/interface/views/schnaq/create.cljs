@@ -36,7 +36,6 @@
                      :key group-id}
             (get-in hubs [group-id :hub/name])])]]])))
 
-;; TODO kill time sensitive schnaq code (:ends-in-days im backend) und frontend elemente
 (defn- create-schnaq-button []
   [:button.btn.btn-dark.p-3.rounded-1.ml-auto
    (labels :schnaq.create.button/save)

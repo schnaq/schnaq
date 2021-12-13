@@ -79,7 +79,7 @@
          (labels :schnaq.admin/tooltip)]))))
 
 (defn- user-bar
-  "Display the progress bar and user avatar in the same row."
+  "Display the user avatar."
   []
   [:div.d-flex.align-items-center.ml-auto
    [nav-elements/user-button]])
