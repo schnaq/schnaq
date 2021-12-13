@@ -5,6 +5,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.analytics.charts :as chart]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.pages :as pages]))
@@ -67,18 +68,23 @@
           statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
           statement-types @(rf/subscribe [:analytics/statement-type-stats])
           labels-stats @(rf/subscribe [:analytics/labels-stats])]
-      [:div.container.px-5.py-3
-       [analytics-controls]
-       [:div.card-columns
-        [analytics-card (labels :analytics/overall-discussions) discussions-num]
-        [analytics-card (labels :analytics/user-numbers) usernames-num]
-        [analytics-card (labels :analytics/registered-users-numbers) registered-users]
-        [analytics-card (labels :analytics/average-statements-title) average-statements]
-        [analytics-card (labels :analytics/statements-num-title) statements-num]
-        [analytics-card (labels :analytics/active-users-num-title) active-users-num]
-        [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
-        [multi-arguments-card (labels :analytics/statement-types-title) statement-types]
-        [multi-arguments-card (labels :analytics/labels-stats) labels-stats]]])]])
+      [:<>
+       [:div.container.px-5.py-3
+        [analytics-controls]]
+       [:div.container-fluid
+        [:div.row
+         [:div.col-6
+          [chart/regular "Beiträge" [:a :b] [1 2]]]]
+        [:div.card-columns
+         [analytics-card (labels :analytics/overall-discussions) discussions-num]
+         [analytics-card (labels :analytics/user-numbers) usernames-num]
+         [analytics-card (labels :analytics/registered-users-numbers) registered-users]
+         [analytics-card (labels :analytics/average-statements-title) average-statements]
+         [analytics-card (labels :analytics/statements-num-title) statements-num]
+         [analytics-card (labels :analytics/active-users-num-title) active-users-num]
+         [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
+         [multi-arguments-card (labels :analytics/statement-types-title) statement-types]
+         [multi-arguments-card (labels :analytics/labels-stats) labels-stats]]]])]])
 
 (defn analytics-dashboard-entrypoint []
   [analytics-dashboard-view])
