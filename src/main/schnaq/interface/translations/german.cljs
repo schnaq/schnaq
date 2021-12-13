@@ -277,6 +277,11 @@
    :statement.edit.button/submit "Absenden"
    :statement.edit.button/cancel "Abbrechen"
    :schnaq.edit/label "Titel bearbeiten"
+   :statement/flag-statement "melden"
+   :statement/flag-statement-confirmation "Möchtest du diesen Beitrag wirklich den Administrator:innen melden?"
+   :statement.notifications/statement-flagged-title "Beitrag wurde gemeldet!"
+   :statement.notifications/statement-flagged-body "Vielen Dank für deine Meldung, wir kümmern uns."
+
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"

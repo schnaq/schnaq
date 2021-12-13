@@ -17,6 +17,11 @@
                  location (oget js/window :location)]
              (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
 
+(>defn get-link-to-statement
+  [share-hash statement-id]
+  [:discussion/share-hash :db/id :ret string?]
+  (str (get-share-link share-hash) "/statement/" statement-id))
+
 (>defn get-link-to-ask-interface
   "Return link to the ask-interface in the Q&A case."
   [share-hash]
