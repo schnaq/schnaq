@@ -40,14 +40,14 @@ test:
       - target/coverage/lcov.info
     expire_in: 1 hour
 
-test-cljs:
-  extends: .with-datomic-pro
-  image: gitlab.cs.uni-duesseldorf.de:5001/dialogo/images/clojure-yarn-chrome
-  before_script:
-    - yarn install
-  script:
-    - yarn shadow-cljs compile test-headless
-    - yarn karma start --single-run
+# test-cljs:
+#   extends: .with-datomic-pro
+#   image: gitlab.cs.uni-duesseldorf.de:5001/dialogo/images/clojure-yarn-chrome
+#   before_script:
+#     - yarn install
+#   script:
+#     - yarn shadow-cljs compile test-headless
+#     - yarn karma start --single-run
 
 lint:
   extends: .with-datomic-pro
