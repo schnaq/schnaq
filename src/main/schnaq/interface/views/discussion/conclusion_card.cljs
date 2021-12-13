@@ -251,15 +251,18 @@
   "Sort statements according to the filter method. If we are in q-and-a-mode,
   then always display own statements first."
   [user statements sort-method local-votes]
-  (let [selection-function (if (:authenticated? user)
+  (let [username (get-in user [:names :display])
+        selection-function (if (:authenticated? user)
                              #(= (:id user) (get-in % [:statement/author :db/id]))
-                             #(= (get-in user [:names :display]) (get-in % [:statement/author :user/nickname])))
+                             #(= username (get-in % [:statement/author :user/nickname])))
         keyfn (case sort-method
                 :newest :statement/created-at
                 :popular #(logic/calculate-votes % local-votes))
         own-statements (filter selection-function statements)
         other-statements (sort-by keyfn > (remove selection-function statements))]
-    (concat own-statements other-statements)))
+    (if (= "Anonymous" username)
+      (sort-by keyfn > statements)
+      (concat own-statements other-statements))))
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."
