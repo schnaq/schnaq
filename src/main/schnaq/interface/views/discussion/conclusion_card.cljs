@@ -112,17 +112,6 @@
                                 (labels :qanda.button.mark/as-answer))]
       [labels/build-label (if checked? label ":unchecked")]]]))
 
-(defn- show-active-labels
-  ;; TODO kill in own MR
-  "Shows all active labels."
-  [statement]
-  (let [statement-labels (set (:statement/labels statement))]
-    (when (seq statement-labels)
-      [:div.mx-1
-       (for [label statement-labels]
-         [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
-          [labels/build-label label]])])))
-
 (>defn- card-highlighting
   "Add card-highlighting to a statement card."
   [{:keys [meta/answered? statement/type]}]

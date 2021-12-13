@@ -299,10 +299,6 @@
    :discussion.anonymous-edit.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei automatisch umgewandelt."
    :discussion.anonymous-edit.modal/cta "Anmelden / Registrieren"
 
-   :discussion.anonymous-labels.modal/title "Bitte melde dich an, um Labels zu editieren"
-   :discussion.anonymous-labels.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren von Labels anmelden."]]
-   :discussion.anonymous-labels.modal/cta "Anmelden / Registrieren"
-
    ;; Conversion-Delete-Funnel
    :discussion.anonymous-delete.modal/title "Bitte melde dich an, um deinen Beitrag zu löschen"
    :discussion.anonymous-delete.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Löschen anmelden."]]
@@ -912,13 +908,8 @@
 
    :filters.label/filter-for "Filter nach"
    :filters.add/button "Filter hinzufügen"
-   :filters.option.labels/text "Label"
-   :filters.option.labels/includes "beinhaltet"
-   :filters.option.labels/excludes "beinhaltet kein"
-   :filters.option.type/text "Beitragstyp"
    :filters.option.type/is "ist"
    :filters.option.type/is-not "ist nicht"
-   :filters.option.votes/text "Votes"
    :filters.option.vote/bigger "mehr als"
    :filters.option.vote/equal "gleich"
    :filters.option.vote/less "weniger als"
@@ -927,21 +918,6 @@
    :filters.option.answered/unanswered "Unbeantwortete"
    :filters.buttons/clear "Alle Filter löschen"
    :filters.heading/active "Aktive Filter"
-
-   ;; Labels for programmatically created text in label overview
-   :filters.labels.type/labels "Labels"
-   :filters.labels.type/type "Beitragstyp"
-   :filters.labels.type/votes "Votes"
-   :filters.labels.criteria/includes "beinhalten"
-   :filters.labels.criteria/excludes "beinhalten kein"
-   :filters.labels.criteria/is "ist"
-   :filters.labels.criteria/is-not "ist nicht"
-   :filters.labels.criteria/> "sind größer als"
-   :filters.labels.criteria/= "gleich"
-   :filters.labels.criteria/< "sind kleiner als"
-   :filters.stype/neutral "neutral"
-   :filters.stype/attack "dagegen"
-   :filters.stype/support "dafür"
 
    :filters.discussion.option.state/label "Schnaq Status"
    :filters.discussion.option.state/closed "geschlossen"
