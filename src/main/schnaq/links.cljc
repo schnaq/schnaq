@@ -20,7 +20,7 @@
 (>defn get-link-to-statement
   [share-hash statement-id]
   [:discussion/share-hash :db/id :ret string?]
-  (format "%s/statement/" (get-share-link share-hash) statement-id))
+  (format "%s/statement/%s" (get-share-link share-hash) statement-id))
 
 (>defn get-link-to-ask-interface
   "Return link to the ask-interface in the Q&A case."
