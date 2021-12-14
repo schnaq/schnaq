@@ -525,7 +525,7 @@
    :privacy.extended.responsible/body
    [:<>
     [:p
-     "schnaq GmbH i.Gr." [:br]
+     "schnaq GmbH" [:br]
      "Speditionsstraße 15A" [:br]
      "40221 Düsseldorf" [:br]
      "Niemcy" [:br]
