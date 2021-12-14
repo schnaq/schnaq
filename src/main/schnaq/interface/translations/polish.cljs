@@ -79,21 +79,10 @@
    ;; how-to
    :how-to/button "Jak używać schnaq?"
    :how-to/title "Jak używać schnaq?"
-   :how-to.create/title "O czym chciałbyś porozmawiać ze swoim zespołem?"
-   :how-to.create/body
-   [:<>
-    [:p [:i "\"Jakich systemów używamy i kiedy?\", \"Jaką cenę oferujemy instytucjom edukacyjnym?\", \"Jaka jest nasza wizja?\"."]]
-    [:p "Nadaj swojemu schnaqowi znaczący tytuł i pozwól całemu zespołowi dyskutować. Wszystkie wypowiedzi są ważne i oferują indywidualne spojrzenie na dyskusję."]]
-   :how-to.why/title "Dlaczego powinienem schnaq?"
-   :how-to.why/body "Straciłeś wątek? Nie miałeś szansy się wypowiedzieć? Czy wszyscy wszystko zrozumieli? Po raz kolejny nie mam pojęcia dlaczego było tyle dyskusji?\nOszczędzaj czas i zdobywaj wiedzę dzięki schnaq. Weź udział, gdy masz czas. Mapa myśli z dyskusji jest darmowa."
-   :how-to.admin/title "Zarządzaj swoim schnaqiem lub uzyskaj pomoc"
-   :how-to.admin/body "Zaproś uczestników poprzez link lub email. Jeśli potrzebujesz pomocy w administracji, po prostu kliknij na \"Dostęp dla administratora\" i wyślij konto administracyjne przez e-mail.\n\nJako administrator, możesz usuwać posty i zapraszać ludzi przez e-mail."
    :how-to.schnaq/title "Jak używać schnaq?"
    :how-to.schnaq/body "Podziel się swoją opinią! Wprowadź go w polu wprowadzania danych, a pojawi się on na liście wpłat. Uczestnicy mogą na nią reagować i odpowiadać. Mapa myśli jest generowana automatycznie i aktualizuje się wraz z każdym nowym postem. Jeśli chcesz przejść do jakiegoś postu, po prostu kliknij na niego."
    :how-to.pro-con/title "Czy jesteś za, czy przeciw?"
    :how-to.pro-con/body "Podziel się z innymi swoją opinią na temat bieżącego postu. Klikając na nasz przycisk za/przeciw obok pola wprowadzania danych, możesz zmienić swoje stanowisko. Można też podać kilka argumentów za lub przeciw. Argumenty \"za\" są oznaczone kolorem niebieskim, a \"przeciw\" kolorem pomarańczowym."
-   :how-to.call-to-action/title "Teraz już wiesz!"
-   :how-to.call-to-action/body "To wyjaśnia wszystko, co jest do wyjaśnienia na temat schnaq, więc zacznij od razu!"
    :how-to/ask-question "Nie jesteś pewien jak używać schnaq?"
    :how-to/ask-question-2 "Jakieś pytania?"
    :how-to/answer-question "Spójrz tutaj!"

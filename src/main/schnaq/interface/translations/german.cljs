@@ -80,21 +80,10 @@
    ;; how-to
    :how-to/button "Wie schnaqqe ich?"
    :how-to/title "Wie verwende ich schnaq?"
-   :how-to.create/title "Worüber möchtest du mit deinem Team schnaqqen?"
-   :how-to.create/body
-   [:<>
-    [:p [:i "\"Welche Systeme nutzen wir wann?\", \"Welchen Preis bieten wir Bildungseinrichtungen?\", \"Was ist unsere Vision?\""]]
-    [:p "Gib deinem schnaq einen aussagekräftigen Titel und lasse das ganze Team diskutieren. Alle Beiträge sind wichtig und bieten eine individuelle Sicht auf die Diskussion."]]
-   :how-to.why/title "Wieso soll ich schnaqqen?"
-   :how-to.why/body "Faden verloren? Nicht zu Wort gekommen? Haben alle alles verstanden? Mal wieder keine Ahnung warum so viel diskutiert wurde?\nSpar dir Zeit und halte Wissen mit schnaq fest. Nimm teil, wann du Zeit hast. Die Mindmap der Diskussion gibt's geschenkt."
-   :how-to.admin/title "Administriere deinen schnaq oder lass dir helfen"
-   :how-to.admin/body "Lade Teilnehmer:innen per Link oder Mail ein. Wenn du Hilfe beim Administrieren brauchst, klicke einfach auf \"Admin Zugang\" und verschicke einen Administrationszugang per Mail.\n\nAls Admin kannst du Beiträge löschen und Personen per Mail einladen."
    :how-to.schnaq/title "Wie schnaqqe ich?"
    :how-to.schnaq/body "Teile deine Meinung! Trage sie in das Eingabefeld ein und sie erscheint in der Liste an Beiträgen. Teilnehmer:innen können drauf reagieren und antworten. Die Mindmap wird automatisch generiert und aktualisiert sich mit jedem neuen Beitrag. Wenn du zu einem Beitrag springen möchtest, klicke ihn einfach an."
    :how-to.pro-con/title "Bist du dafür oder dagegen?"
    :how-to.pro-con/body "Teile den Anderen deine Grundhaltung zum aktuellen Beitrag mit. Mit einem Klick auf unseren Dafür/Dagegen Knopf beim Eingabefeld änderst du deine Haltung. Du kannst auch mehrere Argumente dafür oder dagegen nennen. Pro-Argumente werden Blau eingefärbt, Kontra-Argumente Orange."
-   :how-to.call-to-action/title "Jetzt weißt du Bescheid!"
-   :how-to.call-to-action/body "Hiermit ist alles erklärt was über schnaq zu erklären gibt, also lege direkt los!"
    :how-to/ask-question "Nicht sicher wie du schnaq benutzen sollst?"
    :how-to/ask-question-2 "Noch Fragen?"
    :how-to/answer-question "Schau hier nach!"
