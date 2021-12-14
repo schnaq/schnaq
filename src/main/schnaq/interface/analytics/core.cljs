@@ -88,12 +88,12 @@
           active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
           statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
           statement-types @(rf/subscribe [:analytics/statement-type-stats])
-          labels-stats @(rf/subscribe [:analytics/labels-stats])]
+          marked-answers @(rf/subscribe [:analytics/marked-answers])]
       [:<>
        [:div.container.px-5.py-3
         [analytics-controls]]
        [:div.container-fluid
-        [:div.row
+        [:div.row.mb-3
          [:div.col-12.col-lg-6
           [statements-stats statements-num statements-series]]]
         [:div.card-columns
@@ -104,7 +104,7 @@
          [analytics-card (labels :analytics/active-users-num-title) active-users-num]
          [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
          [multi-arguments-card (labels :analytics/statement-types-title) statement-types]
-         [multi-arguments-card (labels :analytics/labels-stats) labels-stats]]]])]])
+         [analytics-card (labels :analytics/labels-stats) marked-answers]]]])]])
 
 (defn analytics-dashboard-entrypoint []
   [analytics-dashboard-view])
@@ -284,4 +284,11 @@
 (rf/reg-sub
  :analytics/labels-stats
  (fn [db _]
+   (println (get-in db [:analytics :labels]))
    (get-in db [:analytics :labels])))
+
+(rf/reg-sub
+ :analytics/marked-answers
+ :<- [:analytics/labels-stats]
+ (fn [{:keys [check]} _]
+   check))
