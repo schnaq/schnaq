@@ -15,7 +15,10 @@
 (s/def ::user-with-changed-discussions
   (s/merge ::specs/registered-user (s/keys :req-un [::discussions-with-new-statements])))
 
-(>defn discussions-with-new-statements-in-interval
+(>defn- discussions-with-new-statements-in-interval
+  "Query all discussions of users respecting their notification interval. Query
+  for these discussions all new statements in the time between now and the
+  timestamp and create a map to query these results."
   [timestamp interval]
   [inst? :user.registered/notification-mail-interval :ret (s/map-of :discussion/share-hash ::specs/discussion)]
   (let [subscribed-discussions (discussion-db/discussions-by-share-hashes (user-db/subscribed-share-hashes interval))
@@ -23,7 +26,7 @@
                      subscribed-discussions timestamp)]
     (into {} (map (juxt :discussion/share-hash identity) discussions))))
 
-(>defn assoc-discussions-with-new-statements
+(>defn- assoc-discussions-with-new-statements
   "Assoc all subscribed discussions to a user. Adds a new field 
   `:discussions-with-new-statements` containing all subscribed discussions,
    which received new statements."
@@ -54,7 +57,7 @@
   (let [total-new-statements (->> user :discussions-with-new-statements (map :new-statements) (apply +))
         new-statements-content-html (mail-builder/build-new-statements-html user)
         new-statements-content-plain (mail-builder/build-new-statements-plain user)
-        personal-greeting (mail-builder/build-personal-greetings user)
+        personal-greeting (mail-builder/build-personal-greeting user)
         new-statements-greeting (mail-builder/build-number-unseen-statements total-new-statements)]
     (when-not (zero? total-new-statements)
       (log/info (format "User %s has %d unread statements" keycloak-id total-new-statements))

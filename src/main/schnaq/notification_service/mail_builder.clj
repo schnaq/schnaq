@@ -1,7 +1,6 @@
 (ns schnaq.notification-service.mail-builder
   (:require [ghostwheel.core :refer [>defn- >defn]]
             [hiccup.util :as hiccup-util]
-            [schnaq.database.specs :as specs]
             [schnaq.links :as schnaq-links]
             [schnaq.mail.template :as template]))
 
@@ -22,10 +21,10 @@
 
 (>defn build-new-statements-html
   "New statements info as html. Preparation for sending it via mail."
-  [new-statements-per-discussion]
-  [::specs/share-hash-statement-id-mapping :ret string?]
+  [user]
+  [::user-with-changed-discussions :ret string?]
   (build-new-statements-content
-   new-statements-per-discussion
+   user
    (fn [title text discussion-hash]
      (template/mail-content-left-button-right
       title text "Zum schnaq" (schnaq-links/get-share-link discussion-hash)))))
@@ -33,14 +32,14 @@
 (>defn build-new-statements-plain
   "New statements info as plain text. Preparation for a standard mail without 
    HTML."
-  [new-statements-per-discussion]
-  [::specs/share-hash-statement-id-mapping :ret string?]
+  [user]
+  [::user-with-changed-discussions :ret string?]
   (build-new-statements-content
-   new-statements-per-discussion
+   user
    (fn [title text discussion-hash]
      (format "%s in %s: %s\n" text title (schnaq-links/get-share-link discussion-hash)))))
 
-(defn build-personal-greetings
+(defn build-personal-greeting
   "Takes the user's display name and creates a salutation."
   [{:user.registered/keys [display-name]}]
   (format "Hallo %s," (hiccup-util/escape-html display-name)))
