@@ -3,11 +3,13 @@
             [chime.core-async :refer [chime-ch]]
             [clojure.core.async :refer [go-loop <!]]
             [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn-]]
+            [datomic.api :as d]
+            [ghostwheel.core :refer [>defn- >defn]]
             [hiccup.util :as hiccup-util]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db]
+            [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.links :as schnaq-links]
@@ -168,3 +170,38 @@
   (start-mail-schedule dev-channel :notification-mail-interval/daily)
 
   nil)
+
+(>defn discussions-with-new-statements-in-interval
+  [timestamp interval]
+  [inst? :user.registered/notification-mail-interval :ret (s/map-of :discussion/share-hash ::specs/discussion)]
+  (let [subscribed-discussions (discussion-db/discussions-by-share-hashes (user-db/subscribed-share-hashes interval))
+        discussions (discussion-db/discussions-with-new-statements
+                     subscribed-discussions timestamp)]
+    (into {} (map (juxt :discussion/share-hash identity) discussions))))
+
+(s/def ::discussions-with-new-statements (s/coll-of ::specs/discussion))
+(s/def ::user-with-changed-discussions
+  (s/merge ::specs/registered-user (s/keys :req-un [::discussions-with-new-statements])))
+
+(>defn assoc-discussions-with-new-statements
+  "Assoc all subscribed discussions to a user. Adds a new field 
+  `:discussions-with-new-statements` containing all subscribed discussions,
+   which received new statements."
+  [discussions-with-new-statements user]
+  [::discussions-with-new-statements ::specs/registered-user :ret ::user-with-changed-discussions]
+  (assoc user :discussions-with-new-statements
+         (remove nil?
+                 (map #(get discussions-with-new-statements (:discussion/share-hash %))
+                      (:user.registered/visited-schnaqs user)))))
+
+(>defn- users-with-changed-discussions
+  "Assoc to all users those discussions, with received new statements between 
+  now and the timestamp."
+  [timestamp interval]
+  [inst? :user.registered/notification-mail-interval :ret (s/coll-of ::user-with-changed-discussions)]
+  (let [users (user-db/users-by-notification-interval interval)
+        changed-discussions (discussions-with-new-statements-in-interval timestamp interval)]
+    (remove #(empty? (:discussions-with-new-statements %))
+            (map (partial assoc-discussions-with-new-statements changed-discussions)
+                 users))))
+

@@ -95,6 +95,12 @@
   [:ret inst?]
   (-> (Instant/now) (.minus 7 ChronoUnit/DAYS) Date/from))
 
+(>defn days-ago
+  "Timestamp some days ago."
+  [days]
+  [integer? :ret inst?]
+  (-> (Instant/now) (.minus days ChronoUnit/DAYS) Date/from))
+
 (>defn minutes-ago
   "Timestamp minutes ago."
   [minutes]
