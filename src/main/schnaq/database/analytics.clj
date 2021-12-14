@@ -80,7 +80,7 @@
 (defn- date-to-day
   "Get only the date, without time from java.util.date"
   [date]
-  (let [df (SimpleDateFormat. "yyyy-MM-dd")]
+  (let [df (SimpleDateFormat. "YYYY-'W'ww")]
     (.format df date)))
 
 (defn- statement-num-by-day

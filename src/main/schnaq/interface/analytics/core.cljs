@@ -19,15 +19,25 @@
     [:p.card-text.display-1 metric]
     [:p.card-text [:small.text-muted "Last updated ..."]]]])
 
-(defn- chart-card
-  "A single card containing a metric, a chart and a title."
-  [title metric chart-content]
-  [:div.card
-   [:div.card-body
-    [:h5.card-title title]
-    [:p.card-text.display-4 "Overall: " metric]
-    chart-content
-    [:p.card-text [:small.text-muted "Last updated ..."]]]])
+(defn- percentage-change
+  "Calculate the percentage change between two values. Color positive changes green and negative red."
+  [initial-value changed-value]
+  (let [change (* 100 (/ (- changed-value initial-value) initial-value))]
+    [:span {:class (if (< change 0) "text-warning" "text-success")}
+     (gstring/format "%s %%" change)]))
+
+(defn- statements-stats
+  "A single card containing statement-growth metrics."
+  [statements-total statements-series]
+  (let [values (map second statements-series)
+        penultimate (last (butlast values))
+        ultimate (last values)]
+    [:div.card
+     [:div.card-body
+      [:h5.card-title (labels :analytics/statements-num-title)]
+      [:p.card-text.display-5 "Overall: " statements-total " — change: " [percentage-change penultimate ultimate]]
+      [chart/regular "Statements" (map first statements-series) values]
+      [:p.card-text [:small.text-muted "Last updated ..."]]]]))
 
 (>defn- multi-arguments-card
   "A card containing multiple sub-metrics that are related. Uses the keys of a map
@@ -85,8 +95,7 @@
        [:div.container-fluid
         [:div.row
          [:div.col-12.col-lg-6
-          [chart-card (labels :analytics/statements-num-title) statements-num
-           [chart/regular "Beiträge" (map first statements-series) (map second statements-series)]]]]
+          [statements-stats statements-num statements-series]]]
         [:div.card-columns
          [analytics-card (labels :analytics/overall-discussions) discussions-num]
          [analytics-card (labels :analytics/user-numbers) usernames-num]
@@ -255,7 +264,7 @@
 (rf/reg-sub
  :analytics/number-of-statements-series
  (fn [db _]
-   (get-in db [:analytics :statements :number :series])))
+   (sort-by first (get-in db [:analytics :statements :number :series]))))
 
 (rf/reg-sub
  :analytics/number-of-active-users-overall
