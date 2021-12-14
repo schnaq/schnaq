@@ -50,7 +50,7 @@
                   (js-wrap/stop-propagation e)
                   (if edit-hash (admin-delete-fn) (user-delete-fn)))
       :title (labels :discussion.badges/delete-statement)}
-     [icon :trash "m-y-auto mr-1"] " " (labels :discussion.badges/delete-statement)]))
+     [icon :trash "my-auto mr-1"] " " (labels :discussion.badges/delete-statement)]))
 
 (defn- edit-dropdown-button
   "Edit button to trigger custom functionality."
@@ -61,7 +61,7 @@
                 (js-wrap/stop-propagation e)
                 (on-click-fn))
     :title (labels :discussion.badges/edit-statement)}
-   [icon :edit "m-y-auto"] " " (labels :discussion.badges/edit-statement)])
+   [icon :edit "my-auto"] " " (labels :discussion.badges/edit-statement)])
 
 (defn- edit-dropdown-button-statement
   "Give the registered user the ability to edit their statement."
@@ -127,7 +127,7 @@
       :on-click (fn [e] (js-wrap/stop-propagation e)
                   (flag-statement-fn))
       :title (labels :discussion.badges/edit-statement)}
-     [icon :flag "m-y-auto mr-1"] " " (labels :statement/flag-statement)]))
+     [icon :flag "my-auto mr-1"] " " (labels :statement/flag-statement)]))
 
 (rf/reg-event-fx
  :statement/flag
