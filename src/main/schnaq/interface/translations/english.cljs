@@ -627,7 +627,7 @@
    :discussion.add.button/neutral "Neutral"
    :discussion.add.statement/new "New post from you"
    :discussion.badges/user-overview "All participants"
-   :discussion.badges/delete-statement "Delete statement"
+   :discussion.badges/delete-statement "delete"
    :discussion.badges/posts "Posts"
    :discussion.badges/delete-statement-confirmation "Do you really want to delete the statement?"
    :discussion.notification/new-content-title "New statement!"

@@ -623,7 +623,7 @@
    :discussion.add.button/neutral "Neutralny"
    :discussion.add.statement/new "Nowy wkład od Ciebie"
    :discussion.badges/user-overview "Wszyscy uczestnicy"
-   :discussion.badges/delete-statement "Usuń post"
+   :discussion.badges/delete-statement "usuń"
    :discussion.badges/posts "Składki"
    :discussion.badges/delete-statement-confirmation "Czy naprawdę chcesz usunąć ten post?"
    :discussion.notification/new-content-title "Nowy wkład!"

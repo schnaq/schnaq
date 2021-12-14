@@ -625,7 +625,7 @@
    :discussion.add.button/neutral "Neutral"
    :discussion.add.statement/new "Neuer Beitrag von dir"
    :discussion.badges/user-overview "Alle Teilnehmer:innen"
-   :discussion.badges/delete-statement "Beitrag löschen"
+   :discussion.badges/delete-statement "löschen"
    :discussion.badges/posts "Beiträge"
    :discussion.badges/delete-statement-confirmation "Möchtest du den Beitrag wirklich löschen?"
    :discussion.notification/new-content-title "Neuer Beitrag!"
