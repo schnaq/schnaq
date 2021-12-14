@@ -119,7 +119,7 @@
    {:db/id "statement/moody"
     :statement/author "user/wegi"
     :statement/content "cats are capricious"
-    :statement/created-at #inst "2020-01-01"
+    :statement/created-at #inst "2020-01-07"
     :statement/version 1
     :statement/parent "statement/get-cat"
     :statement/type :statement.type/attack

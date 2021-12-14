@@ -693,7 +693,7 @@
    :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
    :analytics/statement-lengths-title "Beitragslängen"
    :analytics/statement-types-title "Argumenttypen"
-   :analytics/labels-stats "Label Nutzung"
+   :analytics/labels-stats "Markierte Antworten"
    :analytics/fetch-data-button "Hole Daten"
 
    ;; Supporters
