@@ -11,7 +11,7 @@
 
 (def ^:private start-next-morning
   "ZonedDateTime to indicate the start, today at 7 o'clock in UTC, which is 
-   6 o'clock in Europe/Berlin in winter (5 during summer time)."
+   8 o'clock in Europe/Berlin in winter (9 during summer time)."
   (-> (LocalDateTime/of (LocalDate/now) (LocalTime/of 7 0))
       (.adjustInto (ZonedDateTime/now (ZoneId/of (:timezone shared-config/time-settings))))))
 
