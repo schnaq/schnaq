@@ -3,7 +3,7 @@
             [clojure.test :refer [deftest testing use-fixtures is are]]
             [schnaq.database.discussion :as db]
             [schnaq.database.discussion-test-data :as test-data]
-            [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.main :refer [fast-pull] :as main-db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
@@ -132,7 +132,7 @@
       (is (= "Man denkt viel nach dabei" (:statement/content meta-premise)))
       (is (= :statement.type/support (:statement/type meta-premise))))))
 
-(deftest valid-discussions-by-hashes-test
+(deftest discussions-by-share-hashes-test
   (let [new-discussion-hash "hello-i-am-new-here"
         author (user-db/add-user-if-not-exists "Christian")
         new-public-discussion {:discussion/title "Bla"
@@ -142,7 +142,7 @@
         _ (db/new-discussion new-public-discussion)]
     (testing "Valid discussions should be returned."
       (are [valid share-hashes]
-           (= valid (count (db/valid-discussions-by-hashes share-hashes)))
+           (= valid (count (db/discussions-by-share-hashes share-hashes)))
         0 []
         0 ["razupaltuff"]
         1 ["public-share-hash"]
@@ -311,3 +311,16 @@
     (testing "Before clearing unseen statements, there should be unseen statements in the collection."
       (is (not (zero? (count new-statements-in-discussion))))
       (is (nil? statements-in-discussion-after-clearing)))))
+
+(deftest new-statements-within-time-slot-test
+  (testing "Between now and now are no new statements created."
+    (is (zero? (count (db/new-statements-within-time-slot "cat-dog-hash" (main-db/now))))))
+  (testing "After a moment, the new statements are stored."
+    (is (= 18 (count (db/new-statements-within-time-slot "cat-dog-hash" (main-db/minutes-ago 1)))))))
+
+(deftest discussions-with-new-statements-test
+  (let [discussion (db/discussion-by-share-hash "cat-dog-hash")]
+    (testing "No new statements should be added in a zero time-slot."
+      (is (zero? (count (db/discussions-with-new-statements [discussion] (main-db/now))))))
+    (testing "In the last minute, 18 new statements were added to the cat-dog discussion."
+      (is (= 18 (:new-statements (first (db/discussions-with-new-statements [discussion] (main-db/minutes-ago 1)))))))))

@@ -12,6 +12,7 @@
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
   (:import (java.time Instant)
+           (java.time.temporal ChronoUnit)
            (java.util Date UUID)))
 
 (def ^:private current-datomic-uri (atom config/datomic-uri))
@@ -81,6 +82,18 @@
 
 ;; ##### Input functions #####
 (defn now [] (Date.))
+
+(>defn days-ago
+  "Timestamp some days ago."
+  [days]
+  [integer? :ret inst?]
+  (-> (Instant/now) (.minus days ChronoUnit/DAYS) Date/from))
+
+(>defn minutes-ago
+  "Timestamp minutes ago."
+  [minutes]
+  [integer? :ret inst?]
+  (-> (Instant/now) (.minus minutes ChronoUnit/MINUTES) Date/from))
 
 (>defn clean-db-vals
   "Removes all entries from a map that have a value of nil or empty string."

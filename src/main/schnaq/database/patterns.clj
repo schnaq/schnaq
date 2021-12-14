@@ -96,3 +96,24 @@
 (def access-code-with-discussion
   "Return the access-code and directly query the discussion."
   (conj access-code {:discussion.access/discussion discussion}))
+
+;; -----------------------------------------------------------------------------
+
+(def summary
+  [:db/id
+   :summary/discussion
+   :summary/requested-at
+   :summary/text
+   :summary/created-at])
+
+(def summary-with-discussion
+  [:db/id
+   {:summary/discussion [:discussion/title
+                         :discussion/share-hash
+                         :db/id]}
+   :summary/requested-at
+   :summary/text
+   :summary/created-at
+   {:summary/requester [:user.registered/email
+                        :user.registered/display-name
+                        :user.registered/keycloak-id]}])

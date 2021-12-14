@@ -64,3 +64,17 @@
   (testing "Are the members pulled correctly?"
     (is (empty? (db/members-of-group "some-group-thats-not-there")))
     (is (some #(= "A. Schneider" (:user.registered/display-name %)) (db/members-of-group "test-group")))))
+
+(deftest users-by-notification-interval-test
+  (testing "Load users by their notification interval setting."
+    (is (= 1 (count (db/users-by-notification-interval :notification-mail-interval/daily))))
+    (is (= 1 (count (db/users-by-notification-interval :notification-mail-interval/weekly))))
+    (is (= 0 (count (db/users-by-notification-interval :notification-mail-interval/never))))))
+
+(deftest subscribed-share-hashes-test
+  (testing "Retrieve share-hashes by users dependent on their notification settings."
+    (is (= #{"cat-dog-hash" "simple-hash"}
+           (db/subscribed-share-hashes :notification-mail-interval/daily)))
+    (is (= #{"cat-dog-hash"}
+           (db/subscribed-share-hashes :notification-mail-interval/weekly)))
+    (is (= #{} (db/subscribed-share-hashes :notification-mail-interval/never)))))

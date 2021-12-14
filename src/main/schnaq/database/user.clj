@@ -231,12 +231,6 @@
   [:user.registered/keycloak-id :user.registered/profile-picture :ret ::specs/registered-user]
   (update-user-field keycloak-id :user.registered/profile-picture profile-picture-url))
 
-(>defn update-notification-mail-interval
-  "Update the name of an existing user."
-  [keycloak-id interval]
-  [:user.registered/keycloak-id :user.registered/notification-mail-interval :ret ::specs/registered-user]
-  (update-user-field keycloak-id :user.registered/notification-mail-interval interval patterns/private-user))
-
 (>defn members-of-group
   "Returns all members of a certain group."
   [group-name]
@@ -247,3 +241,20 @@
      :where [?users :user.registered/groups ?group]]
    group-name patterns/public-user))
 
+;; -----------------------------------------------------------------------------
+
+(>defn update-notification-mail-interval
+  "Update the name of an existing user."
+  [keycloak-id interval]
+  [:user.registered/keycloak-id :user.registered/notification-mail-interval :ret ::specs/registered-user]
+  (update-user-field keycloak-id :user.registered/notification-mail-interval interval patterns/private-user))
+
+(>defn subscribed-share-hashes
+  "Return all subscribed share-hashes from the users respecting their 
+  notification settings."
+  [interval]
+  [::specs/notification-mail-interval :ret (s/coll-of :discussion/share-hash)]
+  (set
+   (map :discussion/share-hash
+        (flatten
+         (map :user.registered/visited-schnaqs (users-by-notification-interval interval))))))

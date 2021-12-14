@@ -4,6 +4,7 @@
             [clojure.data :as cdata]
             [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
+            [datomic.api :as d]
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
@@ -91,7 +92,7 @@
   [share-hash]
   (pull-discussion share-hash patterns/discussion-private))
 
-(>defn valid-discussions-by-hashes
+(>defn discussions-by-share-hashes
   "Returns all discussions that are valid (non deleted e.g.). Input is a collection of share-hashes."
   [share-hashes]
   [(s/coll-of :discussion/share-hash) :ret (s/coll-of ::specs/discussion)]
@@ -335,6 +336,32 @@
               (some #(= % (:db/id statement)) seen-statements))
             all-statements)))
 
+(>defn new-statements-within-time-slot
+  "Returns all new statements, which were created between now and the provided
+  timestamp. Looks up the discussion in the current `db` and creates a
+  difference between now and the timestamp, which contains all new datoms
+  created in this time slot."
+  [share-hash timestamp]
+  [:discussion/share-hash inst? :ret (s/coll-of ::specs/statement)]
+  (let [db (d/db (main-db/new-connection))]
+    (d/q '[:find [(pull ?statements pattern) ...]
+           :in $ $time-slot ?share-hash pattern
+           :where
+           [?discussion :discussion/share-hash ?share-hash]
+           [$time-slot ?statements :statement/discussions ?discussion]
+           (not [?statements :statement/deleted? true])]
+         db (d/since db timestamp) share-hash patterns/statement)))
+
+(>defn discussions-with-new-statements
+  "Return all discussions and count their statements, if they received new
+  statements between now and the given timestamp."
+  [discussions timestamp]
+  [(s/coll-of ::specs/discussion) inst? :ret (s/coll-of ::specs/discussion)]
+  (->> discussions
+       (map #(assoc % :new-statements
+                    (count (new-statements-within-time-slot (:discussion/share-hash %) timestamp))))
+       (remove #(zero? (:new-statements %)))))
+
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
   [share-hash]
@@ -511,32 +538,13 @@
                             '[[?discussion :discussion/starting-statements ?statements]]
                             patterns/statement-with-children))
 
-(def ^:private summary-pattern
-  [:db/id
-   :summary/discussion
-   :summary/requested-at
-   :summary/text
-   :summary/created-at])
-
-(def ^:private summary-with-discussion-pattern
-  [:db/id
-   {:summary/discussion [:discussion/title
-                         :discussion/share-hash
-                         :db/id]}
-   :summary/requested-at
-   :summary/text
-   :summary/created-at
-   {:summary/requester [:user.registered/email
-                        :user.registered/display-name
-                        :user.registered/keycloak-id]}])
-
 (>defn- request-summary
   "Updates an existing summary request and returns the updated version."
   [summary-id requester]
   [:db/id :summary/requester :ret ::specs/summary]
   (let [tx-result @(transact [[:db/add summary-id :summary/requested-at (Date.)]
                               [:db/add summary-id :summary/requester requester]])]
-    (fast-pull summary-id summary-pattern (:db-after tx-result))))
+    (fast-pull summary-id patterns/summary (:db-after tx-result))))
 
 (>defn summary
   "Return a summary if it exists for a discussion's share-hash."
@@ -546,7 +554,7 @@
            :in $ ?share-hash summary-pattern
            :where [?discussion :discussion/share-hash ?share-hash]
            [?summary :summary/discussion ?discussion]]
-         share-hash summary-pattern))
+         share-hash patterns/summary))
 
 (>defn summary-request
   "Creates a new summary-request if there is none for the discussion. Otherwise, updates the request-time."
@@ -567,7 +575,7 @@
   (query '[:find [(pull ?summary summary-pattern) ...]
            :in $ summary-pattern
            :where [?summary :summary/requested-at _]]
-         summary-with-discussion-pattern))
+         patterns/summary-with-discussion))
 
 (>defn update-summary
   [share-hash new-text]
@@ -576,7 +584,7 @@
     (let [tx-result @(transact [{:db/id summary
                                  :summary/text new-text
                                  :summary/created-at (Date.)}])]
-      (fast-pull summary summary-with-discussion-pattern (:db-after tx-result)))))
+      (fast-pull summary patterns/summary-with-discussion (:db-after tx-result)))))
 
 (defn history-for-statement
   "Takes a statement entity and returns the statement-history."
