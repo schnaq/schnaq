@@ -17,7 +17,6 @@
             [schnaq.interface.pages.privacy :as privacy]
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
             [schnaq.interface.pages.publications :as publications]
-            [schnaq.interface.pages.umfrage-danke :as thanks]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.admin.control-center :as admin-center]
@@ -35,11 +34,6 @@
             [schnaq.interface.views.qa.inputs :as qanda]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
-            [schnaq.interface.views.schnaq.value :as value]
-            [schnaq.interface.views.startpage.alternatives.consulting :as consulting]
-            [schnaq.interface.views.startpage.alternatives.creators :as creators]
-            [schnaq.interface.views.startpage.alternatives.e-learning :as e-learning]
-            [schnaq.interface.views.startpage.alternatives.wima :as wima]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.user.edit-account :as edit-account]
@@ -78,29 +72,6 @@
    ["alphazulu"
     {:name :routes/alphazulu
      :view az/view}]
-   ["danke"
-    {:name :routes.umfrage/thanks
-     :view thanks/view}]
-   ["consulting"
-    [""
-     {:name :routes/consulting
-      :view consulting/consulting-view}]
-    ["/umfrage"
-     {:name :routes.consulting/umfrage
-      :view consulting/consulting-umfrage}]]
-   ["creators"
-    {:name :routes/creators
-     :view creators/creator-view}]
-   ["wima"
-    {:name :routes/wima
-     :view wima/wima-view}]
-   ["e-learning"
-    [""
-     {:name :routes/e-learning
-      :view e-learning/e-learning-view}]
-    ["/umfrage"
-     {:name :routes.e-learning/umfrage
-      :view e-learning/e-learning-umfrage}]]
    ["login"
     {:name :routes/login
      :view pages/login-page
@@ -166,18 +137,10 @@
      :link-text (labels :router/visited-schnaqs)
      :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]
    ["schnaq"
-    {:controllers [{:start #(rf/dispatch [:username/open-dialog])}]}
     ["/create"
-     [""
-      {:name :routes.schnaq/create
-       :view create/create-schnaq-view
-       :link-text (labels :router/create-schnaq)}]
-     ["/discussion"
-      {:name :routes.schnaq.create/discussion
-       :view create/create-discussion-view}]
-     ["/qanda"
-      {:name :routes.schnaq.create/qanda
-       :view create/create-qanda-view}]]
+     {:name :routes.schnaq/create
+      :view create/create-schnaq-view
+      :link-text (labels :router/create-schnaq)}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
@@ -211,10 +174,6 @@
        :view qanda/qanda-view
        :link-text (labels :router/qanda)
        :controllers [{:stop #(rf/dispatch [:schnaq.qa.search.results/reset])}]}]
-     ["/value"
-      {:name :routes.schnaq/value
-       :view value/schnaq-value-view
-       :link-text (labels :router/value)}]
      ["/dashboard"
       {:name :routes.schnaq/dashboard
        :view dashboard/view
@@ -322,7 +281,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-               #(js-wrap/scroll-to-id window-hash)))))
+          #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))

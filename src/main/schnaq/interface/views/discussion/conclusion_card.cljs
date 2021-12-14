@@ -112,16 +112,6 @@
                                 (labels :qanda.button.mark/as-answer))]
       [labels/build-label (if checked? label ":unchecked")]]]))
 
-(defn- show-active-labels
-  "Shows all active labels."
-  [statement]
-  (let [statement-labels (set (:statement/labels statement))]
-    (when (seq statement-labels)
-      [:div.mx-1
-       (for [label statement-labels]
-         [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
-          [labels/build-label label]])])))
-
 (>defn- card-highlighting
   "Add card-highlighting to a statement card."
   [{:keys [meta/answered? statement/type]}]
@@ -134,13 +124,11 @@
   ([statement]
    [statement-card statement nil])
   ([statement additional-content]
-   (let [q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
-         current-route @(rf/subscribe [:navigation/current-route-name])
+   (let [current-route @(rf/subscribe [:navigation/current-route-name])
          history-length (count @(rf/subscribe [:discussion-history]))
          mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
          authenticated? @(rf/subscribe [:user/authenticated?])
-         show-answer? (and q-and-a?
-                           (= 1 history-length)
+         show-answer? (and (= 1 history-length)
                            (= :routes.schnaq.select/statement current-route) ;; history-length == 1 => a reply to a question
                            (or (not mods-mark-only?)
                                (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
@@ -162,36 +150,33 @@
          [statement-information-row statement]]
         [:div.ml-1.mr-3
          [input/reply-in-statement-input-form statement]
-         (when-not q-and-a?
-           [show-active-labels statement])
          additional-content]]]])))
 
 (defn reduced-statement
   "A reduced statement-card focusing on the statement."
   [statement with-answer?]
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
-        q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])]
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [motion/fade-in-and-out
      [:article.statement-card.mt-1.border
       [:div.d-flex.flex-row
        [:div.mr-2 {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
        [:div.card-view.card-body.p-2
         [:div.d-flex.justify-content-start.pt-2
-         [user/user-info statement 25 "w-100"]]
+         [user/user-info statement 25 "w-100"]
+         [badges/reduced-statement-dropdown-menu statement]]
         [:div.my-3]
         [:div.text-typography
          [md/as-markdown (:statement/content statement)]]
         [:div.d-flex.flex-wrap.align-items-center
-         [:a.mr-3
+         [:a.btn.btn-sm.btn-outline-dark.mr-3.px-1.py-0
           {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
                                                                :statement-id (:db/id statement)})}
-          [:small.text-dark (labels :statement/discuss)]]
+          [icon :comments "my-auto mr-1"]
+          [:small (labels :statement/discuss)]]
          [up-down-vote statement]
          (when with-answer?
            [:div.d-flex.flex-row.align-items-center.ml-auto
-            [mark-as-answer-button statement]])]
-        (when-not q-and-a?
-          [show-active-labels statement])]]]]))
+            [mark-as-answer-button statement]])]]]]]))
 
 (defn- answers [statement]
   (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
@@ -266,18 +251,19 @@
 (defn- sort-statements
   "Sort statements according to the filter method. If we are in q-and-a-mode,
   then always display own statements first."
-  [q-and-a? user statements sort-method local-votes]
-  (let [selection-function (if (:authenticated? user)
+  [user statements sort-method local-votes]
+  (let [username (get-in user [:names :display])
+        selection-function (if (:authenticated? user)
                              #(= (:id user) (get-in % [:statement/author :db/id]))
-                             #(= (get-in user [:names :display]) (get-in % [:statement/author :user/nickname])))
+                             #(= username (get-in % [:statement/author :user/nickname])))
         keyfn (case sort-method
                 :newest :statement/created-at
                 :popular #(logic/calculate-votes % local-votes))
         own-statements (filter selection-function statements)
         other-statements (sort-by keyfn > (remove selection-function statements))]
-    (if q-and-a?
-      (concat own-statements other-statements)
-      (sort-by keyfn > statements))))
+    (if (= "Anonymous" username)
+      (sort-by keyfn > statements)
+      (concat own-statements other-statements))))
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."
@@ -286,11 +272,10 @@
         sort-method @(rf/subscribe [:discussion.statements/sort-method])
         local-votes @(rf/subscribe [:local-votes])
         user @(rf/subscribe [:user/current])
-        q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
         card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
         shown-premises @(rf/subscribe [:discussion.statements/show])]
     (if (seq shown-premises)
-      (let [sorted-conclusions (sort-statements q-and-a? user shown-premises sort-method local-votes)
+      (let [sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
             filtered-conclusions (filters/filter-statements sorted-conclusions active-filters (rf/subscribe [:local-votes]))]
         [:div.card-columns.pb-3 {:class card-column-class}
          (for [statement filtered-conclusions]

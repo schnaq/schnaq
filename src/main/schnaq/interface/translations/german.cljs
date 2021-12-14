@@ -1,6 +1,5 @@
 (ns schnaq.interface.translations.german
-  (:require [schnaq.interface.config :refer [marketing-num-schnaqs marketing-num-statements]]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+  (:require [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (def labels
   {:error/export-failed "Export hat nicht geklappt, versuche es später erneut."
@@ -105,11 +104,11 @@
 
    ;; Startpage
    :startpage/heading "Fragen sammeln leicht gemacht"
-   :startpage/subheading "Q&A einfach und gut"
-   :startpage/hook "Sammle einfach Fragen und liefere Antworten in deinen hybriden Kursen – für mehr Übersicht und nachhaltigen Austausch."
-   :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
-                                    " Diskussionen und Q&As geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
-   :schnaq.startpage.cta/button "Kostenfrei schnaqqen"
+   :startpage/subheading "Verstehe deine Teilnehmer:innen zu 100 %"
+   :startpage/hook "Mit schnaq Q&A (Fragen und Antworten) verstehst du jederzeit, was deine Zuhörer:innen wissen möchten. Aktiviere alle in deinem Workshop, Seminar oder anderen Veranstaltung und zeige deine Expertise mit den Wissenskarten."
+   :schnaq.startpage.cta/button "Jetzt kostenfrei schnaq erstellen"
+   :startpage.social-proof/teaser "Mit einem Klick gehörst du zu den hunderten Menschen, die schnaq nutzen 👋"
+   :startpage.social-proof/companies "Mit denen haben wir schon geschnaqqt"
 
    :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
    :startpage.features/more-information "Mehr Informationen"
@@ -126,18 +125,23 @@
    :startpage.information.meetings/title "Hybrides Fragenstellen"
    :startpage.information.meetings/body "Erreiche durch schnaq auch die Menschen, die nicht vor Ort sein können. Alle können eingebunden und die Fragen anonym gestellt werden. Mit intelligentem Q&A kannst du sogar online up-to-date bleiben!"
 
-   :startpage.feature-box/heading "Wie funktioniert schnaq?"
-   :startpage.feature-box.know-how/title "Bereite dich vor"
-   :startpage.feature-box.know-how/body "Erstelle einen schnaq, wo Fragen gesammelt werde können. Du erhältst einen Zugangscode, QR-Code und einen Link, mit dem du alle Teilnehmer:innen einladen kannst."
-   :startpage.feature-box.discussion/title "Binde den Kurs ein"
-   :startpage.feature-box.discussion/body "Mit Smartphones, Tablets und Laptops können deine Zuhörer:innen dem schnaq beitreten und ihre Fragen stellen. Automatisch werden ihnen passende Fragen mit Antworten gezeigt, die inhaltlich ähnlich sind."
-   :startpage.feature-box.learnings/title "Teile die Antworten"
-   :startpage.feature-box.learnings/body "Beantwortete Fragen stehen deinem Kurs sofort zur Verfügung und können jederzeit eingesehen werden. Im Nachgang kannst du jederzeit noch Inhalte ergänzen oder die selbe Fragenbasis wieder im nächsten Kurs verwenden."
+   :startpage.feature-box/heading "Deine Vorteile"
+   :startpage.feature-box.know-how/title "Keine Erklärung"
+   :startpage.feature-box.know-how/body "Schnaq ist so gestaltet, dass alle deine Teilnehmer:innen keine Erklärung benötigen und sofort anonym und ohne Registrierung loslegen können. Egal welches Betriebssystem und welcher Browser."
+   :startpage.feature-box.discussion/title "Spare Zeit"
+   :startpage.feature-box.discussion/body "Durch die dynamischen Q&A und die Wissenskarten musst du jede Frage nur einmal beantworten. Nimm deine Wissenskarten mit zur nächsten Veranstaltung und lasse schnaq automatisiert den Rest erledigen."
+   :startpage.feature-box.learnings/title "Zeige Expertise"
+   :startpage.feature-box.learnings/body "Deine Teilnehmer:innen kommen zu dir, weil du Expertise besitzt. Zeige das der Welt, indem du Wissenskarten von dir öffentlich teilst, oder sie als \"Häufig gestellte Fragen\" online stellst."
 
    :startpage.early-adopter/title "Neugierig geworden?"
-   :startpage.early-adopter/body "Sei einer der ersten die schnaq Hubs nutzen"
+   :startpage.early-adopter/body "Probiere den \"Frei für Immer\" Plan."
 
-   :startpage.newsletter/heading "Gehöre zu den Ersten, die von neuen Funktionen profitieren!"
+   :startpage.three-steps/heading "Drei Schritte zum aktiven Publikum"
+   :startpage.three-steps/first "Erstelle einen schnaq"
+   :startpage.three-steps/second "Teile den schnaq"
+   :startpage.three-steps/third "Beantworte Fragen und verstehe Teilnehmer:innen"
+
+   :startpage.newsletter/heading "Melde dich für den schnaq Newsletter an und erhalte regelmäßig Updates, Tipps und mehr!"
    :startpage.newsletter/button "Exklusive Informationen anfordern!"
    :startpage.newsletter/address-placeholder "E-Mail Adresse"
    :startpage.newsletter/consent "Ich möchte mich hiermit zum schnaq Newsletter anmelden, und in Zukunft regelmäßig Informationen von schnaq.com erhalten."
@@ -171,14 +175,22 @@
         Unser Ziel ist es Kommunikation und Wissensaustausch am Arbeitsplatz flexibel zu gestalten. So heben wir
         nicht nur das Potenzial einzelner Teammitglieder, sondern auch des gesamten Unternehmens."
 
-   :startpage.founders-note/title "Ein Brief von den Gründern"
+   :startpage/get-to-know "Lerne das Team hinter schnaq kennen"
 
    ;; Login Page
-   :page.login/heading "Bitte logg dich ein"
-   :page.login/subheading "Um auf die folgende Ressource zugreifen zu können, musst du eingeloggt sein"
-   :page.login.alert/text-1 "Noch keinen Account? Erstelle dir hier einen kostenfreien Zugang, um deinen ersten schnaq zu erstellen. Sieh dir auf"
-   :page.login.alert/button "dieser Seite"
-   :page.login.alert/text-2 "deine Vorteile als registrierte:r Nutzer:in an."
+   :page.login/heading "Nicht warten, schnaqqen!"
+   :page.login/subheading "100% kostenlos für immer"
+   :page.login/login "Anmelden / Registrieren"
+   :page.login.alert/text-1 "Sieh dir"
+   :page.login.alert/button "hier"
+   :page.login.alert/text-2 "alle Vorteile als registrierte:r Nutzer:in an."
+   :page.login/feature-1 "schnaqs erstellen"
+   :page.login/feature-2 "Unbegrenzt viele Teilnehmer:innen"
+   :page.login/feature-3 "Teilnahme per Link ohne Registrierung"
+
+   ;; Register Page when creating a schnaq
+   :page.register/heading "Jetzt Registrieren und direkt schnaqqen!"
+   :page.register/register "Kostenlos Registrieren"
 
    :auth.modal.request-login/title "Sitzung abgelaufen"
    :auth.modal.request-login/lead "Deine Sitzung ist abgelaufen. Das kann schonmal passieren, wenn du längere Zeit nicht aktiv warst. Bitte lade die Seite neu und logge dich erneut ein"
@@ -209,14 +221,6 @@
    :schnaq.header-image.url/failed-setting-body "Das Bild wird nicht in der Vorschau genutzt."
 
    ;; Create schnaq
-   :schnaq.create.dispatch/heading "Was möchtest du starten?"
-   :schnaq.create.dispatch/qanda "Fragen und Antworten"
-   :schnaq.create.dispatch.qanda/explain "Sammel Fragen während einer Veranstaltung und beantworte sie wann immer du Zeit hast."
-   :schnaq.create.dispatch.qanda/share "Lade Teilnehmer:innen per Link oder Zahlencode ein."
-   :schnaq.create.dispatch/discussion "Diskussion"
-   :schnaq.create.dispatch.discussion/explain "Führe K.I. gestützte und nachhaltige Diskussionen mit anderen Teilnehmer:innen."
-   :schnaq.create.dispatch.discussion/share "Lade Teilnehmer:innen per Link ein."
-
    :schnaq.create.input/title "Worüber möchtest du diskutieren?"
    :schnaq.create.qanda.input/title "Worum sollen sich die Fragen drehen?"
    :schnaq.create.input/placeholder "Thema festlegen"
@@ -243,8 +247,6 @@
    :schnaq.admin.notifications/heading "Einstellungen"
    :schnaq.admin.configurations.read-only/checkbox "Schreibschutz aktivieren"
    :schnaq.admin.configurations.read-only/explanation "Aktivieren, um keine neuen Beiträge zu erlauben. Bestehende Beiträge sind weiterhin sichtbar und können weiterhin analysiert werden. Diese Option kann jederzeit geändert werden."
-   :schnaq.admin.configurations.discussion-mode/label "Q&A Modus mit Wissenskarten aktivieren"
-   :schnaq.admin.configurations.discussion-mode/explanation "Aktivieren, um auf Frage- und Antwortmodus zu wechseln. Es stehen dann Wissenskarten zur Verfügung, wo du die korrekten Antworten zu den Fragen markieren kannst."
    :schnaq.admin.configurations.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktivieren, um den  Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
    :schnaq.admin.configurations.mods-mark-only/label "Nur Moderator:innen Antworten markieren lassen"
@@ -265,30 +267,18 @@
    :statement.edit.button/submit "Absenden"
    :statement.edit.button/cancel "Abbrechen"
    :schnaq.edit/label "Titel bearbeiten"
+   :statement/flag-statement "melden"
+   :statement/flag-statement-confirmation "Möchtest du diesen Beitrag wirklich den Administrator:innen melden?"
+   :statement.notifications/statement-flagged-title "Beitrag wurde gemeldet!"
+   :statement.notifications/statement-flagged-body "Vielen Dank für deine Meldung, wir kümmern uns."
+
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"
    :schnaq.create/heading "Starte mit deinem schnaq."
-   :schnaq.create/subheading "Mit einem schnaq kannst du dein Team diskutieren lassen und Entscheidungen nachhaltig sichern."
    :schnaq.create.qanda/subheading "Mit einem schnaq kannst du effizient Fragen sammeln und beantworten."
    :schnaq.create/info "Gib deinem Thema einen möglichst einfachen und verständlichen Titel."
    :schnaq.create.button/save "Schnaq starten"
-
-   ;; schnaq value
-   :schnaq.value/title "Du bist startklar"
-   :schnaq.value/subtitle "Ein paar Tipps, die dir und deinem Team helfen:"
-   :schnaq.value.security/title "Datensicherheit"
-   :schnaq.value.security/text "Datenschutz ist uns wichtig! Deine Daten sind sicher auf deutschen Servern."
-   :schnaq.value.respect/title "Diskutiere mit Respekt"
-   :schnaq.value.respect/text "Ein respektvoller Umgang ist wichtig, um miteinander leben zu können und bietet die Grundlage für sachliche Diskussionen."
-   :schnaq.value.share/title "Teile deine Diskussion"
-   :schnaq.value.share/text "Lade Teilnehmer:innen einfach per Link oder Mail ein. Keine Anmeldung notwendig!"
-   :schnaq.value.private/title "Immer privat"
-   :schnaq.value.private/text "Deine schnaqs sind standardmäßig nur von dir und den Leuten mit denen du teilst einsehbar."
-   :schnaq.value.cards/title "Mindmap"
-   :schnaq.value.cards/text "Für mehr Überblick sorgt unsere Mindmap, die automatisch generiert wird."
-   :schnaq.value.results/title "Ergebnisansicht"
-   :schnaq.value.results/text "Schau dir Zusammenfassungen und Analysen zu deiner Diskussion an (Beta Feature)."
 
    ;; Discussion Creation
    :discussion.create.hub-exclusive-checkbox/title "Schnaq zu einem Hub hinzufügen"
@@ -308,26 +298,11 @@
    :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
    :discussion.navbar/settings "Einstellungen"
 
-   ;; schnaq progress bar related stuff
-   :discussion.progress/days-left "Noch %s Tage"
-   :discussion.progress/unlimited "Unbeschränkt offen"
-   :discussion.progress/end "Ende der Diskussion"
-   :discussion.progress/ends "Endet %s"
-   :discussion.progress/ends-not "Endet nicht"
-   :discussion.progress.creation/heading "Begrenze die Laufzeit deiner Diskussion"
-   :discussion.progress.creation/label "Ende in Tagen"
-   :discussion.progress.creation/button-limit "%s Tage"
-   :discussion.progress.creation/button-unlimited "Unbegrenzt"
-
    ;; Conversion-Edit-Funnel
    :discussion.anonymous-edit.modal/title "Bitte melde dich an zum Editieren"
    :discussion.anonymous-edit.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren anmelden."]]
    :discussion.anonymous-edit.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei automatisch umgewandelt."
    :discussion.anonymous-edit.modal/cta "Anmelden / Registrieren"
-
-   :discussion.anonymous-labels.modal/title "Bitte melde dich an, um Labels zu editieren"
-   :discussion.anonymous-labels.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren von Labels anmelden."]]
-   :discussion.anonymous-labels.modal/cta "Anmelden / Registrieren"
 
    ;; Conversion-Delete-Funnel
    :discussion.anonymous-delete.modal/title "Bitte melde dich an, um deinen Beitrag zu löschen"
@@ -552,7 +527,7 @@
    :privacy.extended.responsible/body
    [:<>
     [:p
-     "schnaq GmbH i.Gr." [:br]
+     "schnaq GmbH" [:br]
      "Speditionsstraße 15A" [:br]
      "40221 Düsseldorf" [:br]
      "Deutschland" [:br]
@@ -606,14 +581,6 @@
    :legal-note.privacy/title "Datenschutzerklärung"
    :legal-note.privacy/body "Unsere Datenschutzerklärung findest du hier."
 
-   ;; Celebrations
-   :celebrations.schnaq-filled/title "🎉 Glückwunsch 🎉"
-   :celebrations.schnaq-filled/lead "Du hast einen neuen schnaq mit einer ersten Aussage befüllt. Das ist der erste Meilenstein zu einer erfolgreichen Diskussion 💪"
-   :celebrations.schnaq-filled/share-now "Teile nun den schnaq mit deinem Team!"
-   :celebrations.schnaq-filled/button "Optionen zum Teilen"
-   :celebrations.first-schnaq-created/title "Du hast deinen ersten schnaq erstellt 🎈"
-   :celebrations.first-schnaq-created/lead "Möchtest du deinen schnaq mit einem Account verbinden? Dann registriere dich mit wenigen Klicks 🚀"
-
    ;; schnaqs not found
    :schnaqs.not-found/alert-lead "Keine schnaqs gefunden"
    :schnaqs.not-found/alert-body "Erstelle einen schnaq oder lass dich einladen"
@@ -658,7 +625,7 @@
    :discussion.add.button/neutral "Neutral"
    :discussion.add.statement/new "Neuer Beitrag von dir"
    :discussion.badges/user-overview "Alle Teilnehmer:innen"
-   :discussion.badges/delete-statement "Beitrag löschen"
+   :discussion.badges/delete-statement "löschen"
    :discussion.badges/posts "Beiträge"
    :discussion.badges/delete-statement-confirmation "Möchtest du den Beitrag wirklich löschen?"
    :discussion.notification/new-content-title "Neuer Beitrag!"
@@ -726,11 +693,13 @@
    :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
    :analytics/statement-lengths-title "Beitragslängen"
    :analytics/statement-types-title "Argumenttypen"
-   :analytics/labels-stats "Label Nutzung"
+   :analytics/labels-stats "Markierte Antworten"
    :analytics/fetch-data-button "Hole Daten"
 
    ;; Supporters
-   :supporters/heading "Unterstützt vom Wirtschaftsministerium des Landes Nordrhein-Westfalen"
+   :supporters/heading "Mit freundlicher Unterstützung von:"
+   :startpage/team-schnaq "Wir arbeiten tagtäglich daran unseren Beitrag für einen besseren Wissensaustausch zu leisten, bei dem alle gehört werden."
+   :startpage/team-schnaq-heading "Lerne das Team hinter schnaq kennen"
 
    ;; Testimonials
    :testimonials/heading "Die haben schon mit uns geschnaqqt"
@@ -786,7 +755,7 @@
    :user.set-name.modal/primer "Der Name wird den anderen Teilnehmer:innen im schnaq angezeigt."
    :user/login "Anmelden"
    :user/logout "Logout"
-   :user/register "Anmelden / Registrieren"
+   :user/register "Kostenlos Registrieren"
    :user.profile/settings "Einstellungen"
    :user.action/link-copied "Link kopiert!"
    :user.action/link-copied-body "Teile den Link mit anderen, um ihnen Zugriff zu geben."
@@ -944,13 +913,8 @@
 
    :filters.label/filter-for "Filter nach"
    :filters.add/button "Filter hinzufügen"
-   :filters.option.labels/text "Label"
-   :filters.option.labels/includes "beinhaltet"
-   :filters.option.labels/excludes "beinhaltet kein"
-   :filters.option.type/text "Beitragstyp"
    :filters.option.type/is "ist"
    :filters.option.type/is-not "ist nicht"
-   :filters.option.votes/text "Votes"
    :filters.option.vote/bigger "mehr als"
    :filters.option.vote/equal "gleich"
    :filters.option.vote/less "weniger als"
@@ -959,21 +923,6 @@
    :filters.option.answered/unanswered "Unbeantwortete"
    :filters.buttons/clear "Alle Filter löschen"
    :filters.heading/active "Aktive Filter"
-
-   ;; Labels for programmatically created text in label overview
-   :filters.labels.type/labels "Labels"
-   :filters.labels.type/type "Beitragstyp"
-   :filters.labels.type/votes "Votes"
-   :filters.labels.criteria/includes "beinhalten"
-   :filters.labels.criteria/excludes "beinhalten kein"
-   :filters.labels.criteria/is "ist"
-   :filters.labels.criteria/is-not "ist nicht"
-   :filters.labels.criteria/> "sind größer als"
-   :filters.labels.criteria/= "gleich"
-   :filters.labels.criteria/< "sind kleiner als"
-   :filters.stype/neutral "neutral"
-   :filters.stype/attack "dagegen"
-   :filters.stype/support "dafür"
 
    :filters.discussion.option.state/label "Schnaq Status"
    :filters.discussion.option.state/closed "geschlossen"

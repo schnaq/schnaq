@@ -5,8 +5,9 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.videos :refer [video]]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -24,10 +25,11 @@
 (s/def :page/more-for-heading vector?)
 (s/def :condition/needs-authentication? boolean?)
 (s/def :condition/needs-administrator? boolean?)
+(s/def :condition/create-schnaq? boolean?)
 (s/def ::page-options
   (s/keys :req [:page/heading]
           :opt [:page/subheading :page/title :page/more-for-heading :page/vertical-header?
-                :condition/needs-authentication? :condition/needs-administrator?]))
+                :condition/needs-authentication? :condition/needs-administrator? :condition/create-schnaq?]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -42,22 +44,57 @@
    (when @(rf/subscribe [:user/authenticated?])
      (rf/dispatch [:navigation/navigate :routes/startpage]))])
 
-(defn- please-login
-  "Default page indicating, that it is necessary to login."
-  []
+(defn- bullet-point [label]
+  [:div.d-flex.flex-row [:h4 [icon :check/normal "mr-3"]] [:h4 (labels label)]])
+
+(defn- login-page-base
+  "Basic login page for either registration or sign in."
+  [heading subheading button-label cta-media]
   [with-nav-and-header
-   {:page/heading (labels :page.login/heading)
-    :page/subheading (labels :page.login/subheading)
-    :page/vertical-header? true}
-   [:div.container.text-center.pt-3
-    [:div.alert.alert-primary {:role "alert"}
-     [icon :info "mr-1"]
-     (labels :page.login.alert/text-1)
-     [buttons/anchor (labels :page.login.alert/button) (rfe/href :routes/pricing) "btn-link"]
-     (labels :page.login.alert/text-2)]
-    [:button.btn.btn-lg.btn-secondary.mt-3
-     {:on-click #(rf/dispatch [:keycloak/login])}
-     (labels :user/register)]]])
+   {:page/heading (labels heading)
+    :page/subheading (labels subheading)
+    :page/vertical-header? true
+    :page/classes "base-wrapper bg-typography"
+    :page/more-for-heading
+    [:section.container {:style {:min-height "50vh"}}
+     [:div.row.pt-lg-5
+      [:div.col-12.col-lg-7.col-xl-6
+       cta-media]
+      [:div.col-12.col-lg-5.col-xl-6
+       [:div.text-center.my-5.my-lg-3.pt-lg-5
+        [:button.btn.btn-lg.btn-dark.mb-3.mx-auto
+         {:on-click #(rf/dispatch [:keycloak/login])}
+         [:div.display-5 (labels button-label)]]
+        [:div.my-3.text-left
+         [bullet-point :page.login/feature-1]
+         [bullet-point :page.login/feature-2]
+         [bullet-point :page.login/feature-3]]
+        [:div.mt-3.text-center
+         (labels :page.login.alert/text-1)
+         [:a.text-dark.mx-1 {:href (rfe/href :routes/pricing)} (labels :page.login.alert/button)]
+         (labels :page.login.alert/text-2)]
+        [:img.w-50.align-self-center.d-lg-none {:src (img-path :schnaqqifant/three-d-bubble)}]]]]]}])
+
+(defn- please-login
+  "Default page indicating that it is necessary to login."
+  []
+  [login-page-base
+   :page.login/heading
+   :page.login/subheading
+   :page.login/login
+   [:img.w-75.align-self-center.d-none.d-lg-block {:src (img-path :schnaqqifant/three-d-bubble)}]])
+
+(defn- register-cta
+  "Default page indicating a first time user creates a schnaq."
+  []
+  [login-page-base
+   :page.register/heading
+   :page.login/subheading
+   :page.register/register
+   [:video.w-75.rounded-5.my-auto.d-none.d-lg-block
+    {:auto-play true :loop true :muted true :plays-inline true}
+    [:source {:src (video :register.point-right/webm) :type "video/webm"}]
+    [:source {:src (video :register.point-right/mp4) :type "video/mp4"}]]])
 
 (defn- beta-only
   "Default page indicating, that only beta users are allowed."
@@ -70,12 +107,13 @@
 
 (>defn- validate-conditions-middleware
   "Takes the conditions and returns either the page or redirects to other views."
-  [{:condition/keys [needs-authentication? needs-administrator? needs-beta-tester?]} page]
+  [{:condition/keys [needs-authentication? needs-administrator? needs-beta-tester? create-schnaq?]} page]
   [::page-options (s/+ vector?) :ret vector?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         admin? @(rf/subscribe [:user/administrator?])
         beta-tester? @(rf/subscribe [:user/beta-tester?])]
     (cond
+      (and create-schnaq? (not authenticated?)) [register-cta]
       (and (or needs-authentication? needs-administrator? needs-beta-tester?)
            (not authenticated?)) [please-login]
       (and needs-administrator? (not admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])

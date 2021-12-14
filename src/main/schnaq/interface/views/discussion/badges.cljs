@@ -6,7 +6,6 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.discussion.labels :as statement-labels]
             [schnaq.interface.views.modal :as modal]))
 
 (defn- anonymous-edit-modal
@@ -45,12 +44,12 @@
                          #(rf/dispatch [:modal {:show? true :child [anonymous-delete-modal]}])
                          #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))))]
     [:button.dropdown-item
-     {:tabIndex 50
+     {:tabIndex 60
       :on-click (fn [e]
                   (js-wrap/stop-propagation e)
                   (if edit-hash (admin-delete-fn) (user-delete-fn)))
       :title (labels :discussion.badges/delete-statement)}
-     [icon :trash "m-auto"] " " (labels :discussion.badges/delete-statement)]))
+     [icon :trash "my-auto mr-1"] " " (labels :discussion.badges/delete-statement)]))
 
 (defn- edit-dropdown-button
   "Edit button to trigger custom functionality."
@@ -61,7 +60,7 @@
                 (js-wrap/stop-propagation e)
                 (on-click-fn))
     :title (labels :discussion.badges/edit-statement)}
-   [icon :edit "m-auto"] " " (labels :discussion.badges/edit-statement)])
+   [icon :edit "my-auto"] " " (labels :discussion.badges/edit-statement)])
 
 (defn- edit-dropdown-button-statement
   "Give the registered user the ability to edit their statement."
@@ -118,7 +117,49 @@
           [:dropdown-item
            [edit-dropdown-button-discussion id share-hash]])]])))
 
-(defn edit-statement-dropdown-menu [{:keys [db/id] :as statement}]
+(defn- flag-dropdown-button-statement [statement]
+  (let [confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :statement/flag-statement-confirmation))
+                                            (dispatch-fn)))
+        flag-statement-fn #(confirmation-fn (fn [] (rf/dispatch [:statement/flag (:db/id statement)])))]
+    [:button.dropdown-item
+     {:tabIndex 50
+      :on-click (fn [e] (js-wrap/stop-propagation e)
+                  (flag-statement-fn))
+      :title (labels :discussion.badges/edit-statement)}
+     [icon :flag "my-auto mr-1"] " " (labels :statement/flag-statement)]))
+
+(rf/reg-event-fx
+ :statement/flag
+ (fn [{:keys [db]} [_ statement-id]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :post "/discussion/statement/flag"
+                               [:discussion.admin/flag-statement-success statement-id]
+                               {:statement-id statement-id
+                                :share-hash share-hash}
+                               [:ajax.error/as-notification])]})))
+
+(rf/reg-event-fx
+ ;; Success event when flagging a post
+ :discussion.admin/flag-statement-success
+ (fn [_ [_ _statement-id]]
+   {:fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :statement.notifications/statement-flagged-title)
+                                    :body (labels :statement.notifications/statement-flagged-body)
+                                    :context :success}]]]}))
+
+(defn- statement-dropdown-menu [dropdown-id dropdown-items]
+  [:div.dropdown.ml-2
+   [:div.dropdown-toggle.m-0.p-0
+    {:id dropdown-id
+     :href "#" :role "button" :data-toggle "dropdown"
+     :aria-haspopup "true" :aria-expanded "false"}
+    [icon :dots]]
+   [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
+    dropdown-items]])
+
+(defn edit-statement-dropdown-menu
+  "Dropdown menu for statements containing edit report and deletion."
+  [{:keys [db/id] :as statement}]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
         share-hash @(rf/subscribe [:schnaq/share-hash])
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
@@ -127,20 +168,24 @@
         creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
         deletable? (deletable? statement current-edit-hash user-id creation-secrets)
         editable? (editable? statement user-id creation-secrets)]
-    (when (or deletable? editable?)
-      [:div.dropdown.ml-2
-       [:div.dropdown-toggle.m-0.p-0
-        {:id dropdown-id
-         :href "#" :role "button" :data-toggle "dropdown"
-         :aria-haspopup "true" :aria-expanded "false"}
-        [icon :dots]]
-       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
-        (when editable?
-          [:dropdown-item
-           [edit-dropdown-button-statement statement]])
-        (when deletable?
-          [:dropdown-item
-           [delete-dropdown-button statement current-edit-hash]])]])))
+    [statement-dropdown-menu dropdown-id
+     [:<>
+      (when editable?
+        [:dropdown-item
+         [edit-dropdown-button-statement statement]])
+      [:dropdown-item
+       [flag-dropdown-button-statement statement]]
+      (when deletable?
+        [:dropdown-item
+         [delete-dropdown-button statement current-edit-hash]])]]))
+
+(defn reduced-statement-dropdown-menu
+  "Dropdown menu for reduced statements containing the report button."
+  [{:keys [db/id] :as statement}]
+  (let [dropdown-id (str "drop-down-reduced-card-" id)]
+    [statement-dropdown-menu dropdown-id
+     [:dropdown-item
+      [flag-dropdown-button-statement statement]]]))
 
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
@@ -149,7 +194,6 @@
   ([statement with-edit-dropdown?]
    (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
          share-hash @(rf/subscribe [:schnaq/share-hash])
-         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
          old-statement-num (get old-statements-nums-map (:db/id statement) 0)
          statement-num (:meta/sub-statement-count statement 0)
          new? (not (= old-statement-num statement-num))]
@@ -162,8 +206,6 @@
          [icon :comments "m-auto text-secondary"]
          [icon :comments "m-auto"])
        " " statement-num]
-      (when-not q-and-a?
-        [statement-labels/edit-labels-button statement])
       (when with-edit-dropdown?
         [:div.ml-2
          [edit-statement-dropdown-menu statement]])])))

@@ -2,7 +2,6 @@
   (:require [clojure.test :refer [deftest is are testing use-fixtures]]
             [muuntaja.core :as m]
             [schnaq.api :as api]
-            [schnaq.api.schnaq :as schnaq-api]
             [schnaq.test.toolbelt :as toolbelt]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
@@ -66,7 +65,7 @@
   (testing "schnaq creation. Takes an authenticated user and creates schnaqs."
     (let [minimal-request {:discussion-title "huhu"}]
       (are [status payload]
-           (= status (:status (add-authenticated-schnaq-request payload)))
+        (= status (:status (add-authenticated-schnaq-request payload)))
         400 {}
         400 {:nickname "penguin"}
         400 {:razupaltuff "kangaroo"}
@@ -74,27 +73,7 @@
         201 (merge minimal-request {:hub-exclusive? true})
         201 (merge minimal-request {:hub-exclusive? false})
         201 (merge minimal-request {:hub-exclusive? false
-                                    :hub "works, because we don't provide error message"})
-        201 (merge minimal-request {:ends-in-days 42})
-        201 (merge minimal-request {:discussion-mode :discussion.mode/qanda})))))
-
-(deftest add-schnaq-as-anonymous-user-test
-  (testing "schnaq creation."
-    (let [minimal-request {:discussion-title "huhu" :nickname "kangaroo"}
-          add-schnaq #'schnaq-api/add-schnaq]
-      (are [status payload]
-           (= status (:status (add-schnaq {:parameters {:body payload}})))
-        400 {}
-        400 {:nickname "penguin"}
-        400 {:discussion-title "some title"}
-        400 {:razupaltuff "kangaroo"}
-        201 minimal-request
-        201 (merge minimal-request {:hub-exclusive? true})
-        201 (merge minimal-request {:hub-exclusive? false})
-        201 (merge minimal-request {:hub-exclusive? false
-                                    :hub "works, because we don't provide error message"})
-        201 (merge minimal-request {:ends-in-days 42})
-        201 (merge minimal-request {:discussion-mode :discussion.mode/qanda})))))
+                                    :hub "works, because we don't provide error message"})))))
 
 (def ^:private add-schnaq-request-missing-jwt
   "Looks like a normal request to create a schnaq, but the JWT header is missing."

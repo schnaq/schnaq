@@ -296,13 +296,6 @@
                          disable-transaction)]
     (main-db/transact db-transaction)))
 
-(defn discussion-mode!
-  "Set the new discussion mode."
-  [share-hash discussion-mode]
-  (let [transaction [[:db/add [:discussion/share-hash share-hash]
-                      :discussion/mode discussion-mode]]]
-    (main-db/transact transaction)))
-
 (defn edit-title
   "Edits a schnaq title by share-hash"
   [share-hash title]

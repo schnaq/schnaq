@@ -1,6 +1,5 @@
 (ns schnaq.interface.translations.polish
-  (:require [schnaq.interface.config :refer [marketing-num-schnaqs marketing-num-statements]]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+  (:require [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (def labels
   {:error/export-failed "Eksport nie zadziałał, spróbuj ponownie później."
@@ -104,11 +103,11 @@
 
    ;; Startpage
    :startpage/heading "Ułatwione zbieranie pytań"
-   :startpage/subheading "Q&A proste i dobre"
-   :startpage/hook "Po prostu zbieraj pytania i udzielaj odpowiedzi w swoich kursach hybrydowych - dla większej przejrzystości i zrównoważonej wymiany"
-   :startpage.social-proof/numbers [:span "schnaq pomógł poprowadzić ponad " [:b marketing-num-schnaqs]
-                                    " dyskusji i Q&A, co przekłada się na " [:b marketing-num-statements] " przypadków wspólnej wiedzy."]
-   :schnaq.startpage.cta/button "Schnaqq bezpłatnie"
+   :startpage/subheading "Dogłębnie zrozum swoich uczestników"
+   :startpage/hook "Możesz w pełni zrozumieć swoich odbiorców w każdej chwili dzięki schnaq Q&A. Aktywuj wszystkich na swoim warsztacie, webinarze lub jakimkolwiek innym wydarzeniu i zademonstruj swoją wiedzę dzięki kartom wiedzy."
+   :schnaq.startpage.cta/button "Stwórz darmowy schnaq już teraz!"
+   :startpage.social-proof/teaser "Jesteś o jedno kliknięcie od dołączenia do setek innych użytkowników schnaq 👋"
+   :startpage.social-proof/companies "Oni już użyli schnaq"
 
    :startpage.usage/lead "Do czego mogę używać schnaq?"
    :startpage.features/more-information "Więcej informacji"
@@ -125,18 +124,23 @@
    :startpage.information.meetings/title "Hybrydowe przesłuchanie"
    :startpage.information.meetings/body "Dotrzyj poprzez schnaq do ludzi, którzy nie mogą tam być. Każdy może być zaangażowany, a pytania mogą być zadawane anonimowo. Dzięki inteligentnemu Q&A możesz nawet być na bieżąco online!"
 
-   :startpage.feature-box/heading "Jak działa schnaq?"
-   :startpage.feature-box.know-how/title "Przygotuj się"
-   :startpage.feature-box.know-how/body "Stwórz schnaq, gdzie mogą być zbierane pytania. Otrzymasz kod dostępu, kod QR oraz link, za pomocą którego będziesz mógł zaprosić wszystkich uczestników."
-   :startpage.feature-box.discussion/title "Dołącz do kursu"
-   :startpage.feature-box.discussion/body "Dzięki smartfonom, tabletom i laptopom Twoi widzowie mogą dołączyć do schnaq i zadawać pytania. Automatycznie wyświetlane są im dopasowane pytania z odpowiedziami, które są podobne w treści."
-   :startpage.feature-box.learnings/title "Podziel się odpowiedziami"
-   :startpage.feature-box.learnings/body "Odpowiedzi na pytania są natychmiast dostępne w Twoim kursie i mogą być przeglądane w dowolnym momencie. Zawsze możesz dodać treść później lub użyć tej samej bazy pytań ponownie w kolejnym kursie."
+   :startpage.feature-box/heading "Twoje korzyści"
+   :startpage.feature-box.know-how/title "Bez wyjaśnień"
+   :startpage.feature-box.know-how/body "Schnaq jest zaprojektowany w taki sposób, że Twoi uczestnicy nie potrzebują od Ciebie żadnych wyjaśnień. Mogą wnieść swój wkład w dowolnym momencie i anonimowo, korzystając z dowolnej przeglądarki internetowej."
+   :startpage.feature-box.discussion/title "Oszczędzaj czas"
+   :startpage.feature-box.discussion/body "Dzięki dynamicznym Q&A i kartom wiedzy wystarczy, że odpowiesz na każde pytanie tylko raz. Weź wygenerowane karty i użyj ich ponownie podczas następnego wydarzenia, aby schnaq mógł automatycznie odpowiadać za Ciebie."
+   :startpage.feature-box.learnings/title "Pokaż swoje Know-How"
+   :startpage.feature-box.learnings/body "Twoi uczestnicy słuchają Cię ze względu na Twoją wiedzę ekspercką. Pokaż światu swoje know-how upubliczniając niektóre z Twoich kart wiedzy. Albo użyj wszystkich swoich odpowiedzi na pytania jako FAQ online."
 
    :startpage.early-adopter/title "Teraz jesteś ciekaw?"
-   :startpage.early-adopter/body "Bądź jedną z pierwszych osób korzystających z hubów schnaq"
+   :startpage.early-adopter/body "Wypróbuj plan \"Darmow na zawsze\""
 
-   :startpage.newsletter/heading "Bądź jednym z pierwszych, którzy skorzystają z nowych funkcji!"
+   :startpage.three-steps/heading "Trzy kroki do aktywnej publiczności"
+   :startpage.three-steps/first "Stwórz schnaq"
+   :startpage.three-steps/second "Podziel się swoim schnaqiem"
+   :startpage.three-steps/third "Odpowiadaj na pytania i zrozum uczestników"
+
+   :startpage.newsletter/heading "Zapisz się do newslettera schnaq i otrzymuj regularne aktualizacje, wskazówki i więcej!"
    :startpage.newsletter/button "Poproś o ekskluzywne informacje!"
    :startpage.newsletter/address-placeholder "Adres e-mail"
    :startpage.newsletter/consent "Chciałbym zapisać się do newslettera schnaq i otrzymywać regularnie informacje od schnaq.com w przyszłości."
@@ -170,14 +174,22 @@
    Naszym celem jest uelastycznienie komunikacji i dzielenia się wiedzą w miejscu pracy. W ten sposób
    nie tylko potencjał poszczególnych członków zespołu, ale także całej firmy."
 
-   :startpage.founders-note/title "List od założycieli"
+   :startpage/get-to-know "Poznaj zespół stojący za schnaqiem"
 
    ;; Login Page
-   :page.login/heading "Proszę się zalogować"
-   :page.login/subheading "Musisz być zalogowany, aby uzyskać dostęp do następujących zasobów"
-   :page.login.alert/text-1 "Nie masz jeszcze konta? Utwórz darmowe konto tutaj, aby stworzyć swój pierwszy schnaq. Sprawdź"
-   :page.login.alert/button "ta strona"
-   :page.login.alert/text-2 "zobacz swoje korzyści jako zarejestrowany użytkownik"
+   :page.login/heading "Nie czekaj, pstryk!"
+   :page.login/subheading "100% za darmo na zawsze"
+   :page.login/login "Zaloguj się / Zarejestruj się"
+   :page.login.alert/text-1 "Obserwuj"
+   :page.login.alert/button "tutaj"
+   :page.login.alert/text-2 "zobacz wszystkie korzyści jako zarejestrowany:użytkownik:in."
+   :page.login/feature-1 "create schnaqs"
+   :page.login/feature-2 "nieograniczona liczba uczestników"
+   :page.login/feature-3 "Uczestnictwo poprzez link bez rejestracji"
+
+   ;; Register Page when creating a schnaq
+   :page.register/heading "Zarejestruj się teraz i zacznij działać!"
+   :page.register/register "Zarejestruj się za darmo"
 
    :auth.modal.request-login/title "Sesja zakończona"
    :auth.modal.request-login/lead "Twoja sesja wygasła. Może się to zdarzyć, jeśli nie byłeś aktywny przez dłuższy czas. Proszę przeładować stronę i zalogować się ponownie"
@@ -208,14 +220,6 @@
    :schnaq.header-image.url/failed-setting-body "Obraz nie jest używany w podglądzie."
 
    ;; Create schnaq
-   :schnaq.create.dispatch/heading "Co chcesz zacząć?"
-   :schnaq.create.dispatch/qanda "Pytania i odpowiedzi"
-   :schnaq.create.dispatch.qanda/explain "Zbieraj pytania podczas kursu i odpowiadaj na nie, kiedy będziesz miał czas."
-   :schnaq.create.dispatch.qanda/share "Zaproś uczestników poprzez link lub kod."
-   :schnaq.create.dispatch/discussion "Dyskusja"
-   :schnaq.create.dispatch.discussion/explain "Prowadź wspomagane przez AI i uporczywe dyskusje z innymi."
-   :schnaq.create.dispatch.discussion/share "Zaproś uczestników poprzez link."
-
    :schnaq.create.input/title "O czym chcesz rozmawiać?"
    :schnaq.create.qanda.input/title "Czego powinny dotyczyć pytania?"
    :schnaq.create.input/placeholder "Ustal temat"
@@ -242,8 +246,6 @@
    :schnaq.admin.notifications/heading "Ustawienia"
    :schnaq.admin.configurations.read-only/checkbox "Aktywuj ochronę przed zapisem"
    :schnaq.admin.configurations.read-only/explanation "Aktywuj, aby nie zezwalać na nowe posty. Istniejące posty są nadal widoczne i mogą być nadal analizowane. Opcja ta może być zmieniona w dowolnym momencie."
-   :schnaq.admin.configurations.discussion-mode/label "Aktywuj tryb Q&A z kartami wiedzy"
-   :schnaq.admin.configurations.discussion-mode/explanation "Aktywuj, aby przełączyć się w tryb pytań i odpowiedzi. Następnie dostępne są karty wiedzy, na których można zaznaczyć prawidłowe odpowiedzi na pytania."
    :schnaq.admin.configurations.disable-pro-con/label "Za / przeciw Przycisk ukrycia"
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktywuj, aby przycisk \"za/ przeciw\" nie był już wyświetlany. Nowe wkłady są traktowane jako zgoda. Opcja ta może być zmieniona w dowolnym momencie."
    :schnaq.admin.configurations.mods-mark-only/label "Tylko moderatorzy zaznaczają odpowiedzi"
@@ -264,30 +266,17 @@
    :statement.edit.button/submit "Prześlij"
    :statement.edit.button/cancel "Anuluj"
    :schnaq.edit/label "Edytuj tytuł"
+   :statement/flag-statement "report"
+   :statement/flag-statement-confirmation "Czy naprawdę chcesz zgłosić ten post do administratorów?"
+   :statement.notifications/statement-flagged-title "Post został zgłoszony!"
+   :statement.notifications/statement-flagged-body "Dziękujemy za wiadomość, zajmiemy się tym."
 
    ;; schnaq creation
    :schnaq.create/title "Uruchomienie schnaq"
    :schnaq.create/heading "Zacznij od swojego schnaq."
-   :schnaq.create/subheading "Dzięki schnaqowi możesz pozwolić swojemu zespołowi dyskutować i zabezpieczać zrównoważone decyzje."
    :schnaq.create.qanda/subheading "Dzięki schnaq, możesz mieć zoptymalizowane Q&A."
    :schnaq.create/info "Nadaj swojemu tematowi tytuł, który jest tak prosty i zrozumiały, jak to tylko możliwe."
    :schnaq.create.button/save "Uruchomienie schnaq"
-
-   ;; schnaq value
-   :schnaq.value/title "Jesteś gotowy do pracy"
-   :schnaq.value/subtitle "Kilka wskazówek, które pomogą Tobie i Twojemu zespołowi:"
-   :schnaq.value.security/title "Bezpieczeństwo danych"
-   :schnaq.value.security/text "Ochrona danych jest dla nas ważna! Twoje dane są bezpieczne na niemieckich serwerach."
-   :schnaq.value.respect/title "Dyskusja z szacunkiem"
-   :schnaq.value.respect/text "Pełna szacunku interakcja jest ważna, aby móc żyć ze sobą i stanowi podstawę do obiektywnych dyskusji."
-   :schnaq.value.share/title "Podziel się swoją dyskusją"
-   :schnaq.value.share/text "Wystarczy zaprosić uczestników poprzez link lub e-mail. Rejestracja nie jest konieczna!"
-   :schnaq.value.private/title "Zawsze prywatny"
-   :schnaq.value.private/text "Domyślnie, twoje schnaqs są widoczne tylko dla ciebie i osób, z którymi się dzielisz."
-   :schnaq.value.cards/title "Mindmap"
-   :schnaq.value.cards/text "Dla lepszego przeglądu, nasza mindmapa jest generowana automatycznie."
-   :schnaq.value.results/title "Widok wyników"
-   :schnaq.value.results/text "Zobacz podsumowania i analizy swojej dyskusji (funkcja beta)."
 
    ;; Discussion Creation
    :discussion.create.hub-exclusive-checkbox/title "Dodaj Schnaqa do huba"
@@ -307,26 +296,11 @@
    :discussion.state/read-only-warning "Ta dyskusja jest tylko do odczytu, możesz tu tylko czytać, ale nie pisać."
    :discussion.navbar/settings "Ustawienia"
 
-   ;; schnaq progress bar related stuff
-   :discussion.progress/days-left "Pozostało %s dni"
-   :discussion.progress/unlimited "Nieograniczony otwarty"
-   :discussion.progress/end "Koniec dyskusji"
-   :discussion.progress/ends "Kończy się %s"
-   :discussion.progress/ends-not "Nie kończy się"
-   :discussion.progress.creation/heading "Ogranicz czas trwania dyskusji"
-   :discussion.progress.creation/label "Koniec w dniach"
-   :discussion.progress.creation/button-limit "%s Dni"
-   :discussion.progress.creation/button-unlimited "Bez ograniczeń"
-
    ;; Conversion-Edit-Funnel
    :discussion.anonymous-edit.modal/title "Zaloguj się, aby edytować"
    :discussion.anonymous-edit.modal/explain "Aby zapobiec nadużywaniu anonimowych postów, musisz się zalogować, aby móc je edytować."
    :discussion.anonymous-edit.modal/persuade "Posty, które ostatnio utworzyłeś w tej przeglądarce, zostaną przekonwertowane automatycznie."
    :discussion.anonymous-edit.modal/cta "Zaloguj się / Zarejestruj się"
-
-   :discussion.anonymous-labels.modal/title "Zaloguj się, aby edytować etykiety"
-   :discussion.anonymous-labels.modal/explain "Aby uniknąć nadużywania anonimowych postów, musisz się zalogować, aby móc edytować labensa."
-   :discussion.anonymous-labels.modal/cta "Zaloguj się / Zarejestruj się"
 
    ;; Conversion-Delete-Funnel
    :discussion.anonymous-delete.modal/title "Zaloguj się, aby usunąć swój post"
@@ -551,7 +525,7 @@
    :privacy.extended.responsible/body
    [:<>
     [:p
-     "schnaq GmbH i.Gr." [:br]
+     "schnaq GmbH" [:br]
      "Speditionsstraße 15A" [:br]
      "40221 Düsseldorf" [:br]
      "Niemcy" [:br]
@@ -605,14 +579,6 @@
    :legal-note.privacy/title "Polityka prywatności"
    :legal-note.privacy/body "Naszą politykę prywatności można znaleźć tutaj."
 
-   ;; Celebrations
-   :celebrations.schnaq-filled/title "🎉 Gratulacje 🎉"
-   :celebrations.schnaq-filled/lead "Wypełniłeś nowy schnaq pierwszym oświadczeniem. Jest to pierwszy kamień milowy do udanej dyskusji. 💪"
-   :celebrations.schnaq-filled/share-now "Teraz podziel się schnaqiem z zespołem!"
-   :celebrations.schnaq-filled/button "Opcje udostępniania"
-   :celebrations.first-schnaq-created/title "Stworzyłeś swój pierwszy schnaq 🎈"
-   :celebrations.first-schnaq-created/lead "Czy chcesz połączyć swojego schnaqa z kontem? Następnie zarejestruj się za pomocą kilku kliknięć 🚀"
-
    ;; schnaqs not found
    :schnaqs.not-found/alert-lead "Nie znaleziono schnaqs"
    :schnaqs.not-found/alert-body "Stwórz schnaq lub daj się zaprosić"
@@ -657,7 +623,7 @@
    :discussion.add.button/neutral "Neutralny"
    :discussion.add.statement/new "Nowy wkład od Ciebie"
    :discussion.badges/user-overview "Wszyscy uczestnicy"
-   :discussion.badges/delete-statement "Usuń post"
+   :discussion.badges/delete-statement "usuń"
    :discussion.badges/posts "Składki"
    :discussion.badges/delete-statement-confirmation "Czy naprawdę chcesz usunąć ten post?"
    :discussion.notification/new-content-title "Nowy wkład!"
@@ -723,11 +689,13 @@
    :analytics/active-users-num-title "Aktywni użytkownicy (min. 1 wkład)"
    :analytics/statement-lengths-title "Długości wkładów"
    :analytics/statement-types-title "Typy argumentów"
-   :analytics/labels-stats "Użycie etykiet"
+   :analytics/labels-stats "Zaznaczone odpowiedzi"
    :analytics/fetch-data-button "Pobierz dane"
 
    ;; Supporters
-   :supporters/heading "Wspierane przez Ministerstwo Gospodarki Kraju Związkowego Nadrenia Północna-Westfalia (Niemcy)"
+   :supporters/heading "Przy życzliwym wsparciu:"
+   :startpage/team-schnaq "Pracujemy każdego dnia, aby zrobić co w naszej mocy dla lepszego dzielenia się wiedzą, gdzie każdy jest słyszany."
+   :startpage/team-schnaq-heading "Poznaj zespół stojący za schnaqiem"
 
    ;; Testimonials
    :testimonials/heading "Już przekąszali z nami"
@@ -783,7 +751,7 @@
    :user.set-name.modal/primer "Nazwa jest wyświetlana dla innych uczestników schnaq."
    :user/login "Zaloguj się"
    :user/logout "Wyloguj się"
-   :user/register "Zaloguj się / Zarejestruj się"
+   :user/register "Zarejestruj się za darmo"
    :user.profile/settings "Ustawienia"
    :user.action/link-copied "Link skopiowany!"
    :user.action/link-copied-body "Udostępnij link innym, aby dać im dostęp."
@@ -940,13 +908,8 @@
 
    :filters.label/filter-for "Filtrowanie według"
    :filters.add/button "Dodaj filtr"
-   :filters.option.labels/text "Etykieta"
-   :filters.option.labels/includes "zawiera"
-   :filters.option.labels/excludes "nie obejmuje"
-   :filters.option.type/text "Rodzaj składki"
    :filters.option.type/is "jest"
    :filters.option.type/is-not "nie jest"
-   :filters.option.votes/text "Głosy"
    :filters.option.vote/bigger "więcej niż"
    :filters.option.vote/equal "to samo"
    :filters.option.vote/less "mniej niż"
@@ -955,21 +918,6 @@
    :filters.option.answered/unanswered "Bez odpowiedzi"
    :filters.buttons/clear "Wyczyść wszystkie filtry"
    :filters.heading/active "Filtry aktywne"
-
-   ;; Labels for programmatically created text in label overview
-   :filters.labels.type/labels "Etykiety"
-   :filters.labels.type/type "Rodzaj składki"
-   :filters.labels.type/votes "Głosy"
-   :filters.labels.criteria/includes "zamieścić"
-   :filters.labels.criteria/excludes "nie zawierać"
-   :filters.labels.criteria/is "jest"
-   :filters.labels.criteria/is-not "nie jest"
-   :filters.labels.criteria/> "są większe niż"
-   :filters.labels.criteria/= "to samo"
-   :filters.labels.criteria/< "są mniejsze niż"
-   :filters.stype/neutral "neutralny"
-   :filters.stype/attack "z drugiej strony"
-   :filters.stype/support "w tym celu"
 
    :filters.discussion.option.state/label "Status schnaq"
    :filters.discussion.option.state/closed "zamknięta"

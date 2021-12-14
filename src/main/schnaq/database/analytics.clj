@@ -1,8 +1,10 @@
 (ns schnaq.database.analytics
   (:require [ghostwheel.core :refer [>defn >defn-]]
-            [schnaq.database.main :as main-db])
+            [schnaq.database.main :as main-db]
+            [schnaq.database.patterns :as patterns])
   (:import (java.util Date)
-           (java.time Instant)))
+           (java.time Instant)
+           (java.text SimpleDateFormat)))
 
 (def ^:private max-time-back Instant/EPOCH)
 
@@ -14,14 +16,14 @@
   ([attribute since]
    [keyword? inst? :ret int?]
    (or
-     (main-db/query
-      '[:find (count ?entities) .
-        :in $ ?since ?attribute
-        :where [?entities ?attribute _ ?tx]
-        [?tx :db/txInstant ?start-date]
-        [(< ?since ?start-date)]]
-      (Date/from since) attribute)
-     0)))
+    (main-db/query
+     '[:find (count ?entities) .
+       :in $ ?since ?attribute
+       :where [?entities ?attribute _ ?tx]
+       [?tx :db/txInstant ?start-date]
+       [(< ?since ?start-date)]]
+     (Date/from since) attribute)
+    0)))
 
 (>defn- number-of-entities-with-value-since
   "Returns the number of entities in the db since some timestamp. Default is all."
@@ -31,14 +33,14 @@
   ([attribute value since]
    [keyword? any? inst? :ret int?]
    (or
-     (main-db/query
-      '[:find (count ?entities) .
-        :in $ ?since ?attribute ?value
-        :where [?entities ?attribute ?value ?tx]
-        [?tx :db/txInstant ?start-date]
-        [(< ?since ?start-date)]]
-      (Date/from since) attribute value)
-     0)))
+    (main-db/query
+     '[:find (count ?entities) .
+       :in $ ?since ?attribute ?value
+       :where [?entities ?attribute ?value ?tx]
+       [?tx :db/txInstant ?start-date]
+       [(< ?since ?start-date)]]
+     (Date/from since) attribute value)
+    0)))
 
 (>defn number-of-discussions
   "Returns the number of meetings. Optionally takes a date since when this counts."
@@ -48,15 +50,15 @@
   ([since]
    [:statistics/since :ret :statistics/discussions-sum]
    (or
-     (main-db/query
-      '[:find (count ?discussions) .
-        :in $ ?since
-        :where [?discussions :discussion/created-at ?timestamp]
-        (not-join [?discussions]
-                  [?discussions :discussion/states :discussion.state/deleted])
-        [(< ?since ?timestamp)]]
-      (Date/from since))
-     0)))
+    (main-db/query
+     '[:find (count ?discussions) .
+       :in $ ?since
+       :where [?discussions :discussion/created-at ?timestamp]
+       (not-join [?discussions]
+                 [?discussions :discussion/states :discussion.state/deleted])
+       [(< ?since ?timestamp)]]
+     (Date/from since))
+    0)))
 
 (>defn number-of-usernames
   "Returns the number of different usernames in the database."
@@ -76,6 +78,18 @@
    [:statistics/since :ret :statistics/registered-users-num]
    (number-of-entities-since :user.registered/display-name since)))
 
+(defn- date-to-day
+  "Get only the date, without time from java.util.date"
+  [date]
+  (let [df (SimpleDateFormat. "YYYY-'W'ww")]
+    (.format df date)))
+
+(defn- statement-num-by-week
+  "Counts the frequencies of statements by week."
+  [statements]
+  (frequencies
+   (map #(date-to-day (:statement/created-at %)) statements)))
+
 (>defn number-of-statements
   "Returns the number of different statements in the database."
   ([]
@@ -83,20 +97,21 @@
    (number-of-statements max-time-back))
   ([since]
    [:statistics/since :ret :statistics/statements-num]
-   (or
-     (main-db/query
-      '[:find (count ?statements) .
-        :in $ ?since
-        :where
-        ;; Make sure the discussion is not deleted where the statements are from
-        (not [?discussions :discussion/states :discussion.state/deleted])
-        [?statements :statement/discussions ?discussions]
-        ;; Make sure statements are not deleted
-        (not [?statements :statement/deleted? true])
-        [?statements :statement/created-at ?timestamp]
-        [(< ?since ?timestamp)]]
-      (Date/from since))
-     0)))
+   (let [all-statements
+         (main-db/query
+          '[:find [(pull ?statements [:statement/created-at]) ...]
+            :in $ ?since
+            :where
+            ;; Make sure the discussion is not deleted where the statements are from
+            (not [?discussions :discussion/states :discussion.state/deleted])
+            [?statements :statement/discussions ?discussions]
+            ;; Make sure statements are not deleted
+            (not [?statements :statement/deleted? true])
+            [?statements :statement/created-at ?timestamp]
+            [(< ?since ?timestamp)]]
+          (Date/from since))]
+     {:overall (count all-statements)
+      :series (statement-num-by-week all-statements)})))
 
 (>defn average-number-of-statements
   "Returns the average number of statements per discussion."
@@ -106,25 +121,31 @@
   ([since]
    [:statistics/since :ret :statistics/average-statements-num]
    (let [discussions (number-of-discussions since)
-         statements (number-of-statements since)]
+         statements (:overall (number-of-statements since))]
      (if (zero? discussions)
        0
        (/ statements discussions)))))
 
 (>defn number-of-active-discussion-users
-  "Returns the number of active users (With at least one statement or suggestion)."
+  "Returns the number of active (anonymous or registered) users (With at least one statement)."
   ([]
    [:ret :statistics/active-users-num]
    (number-of-active-discussion-users max-time-back))
   ([since]
    [:statistics/since :ret :statistics/active-users-num]
-   (main-db/query
-    '[:find (count ?authors) .
-      :in $ ?since
-      :where [?statements :statement/author ?authors ?tx]
-      [?tx :db/txInstant ?start-date]
-      [(< ?since ?start-date)]]
-    (Date/from since))))
+   (let [active-authors
+         (main-db/query
+          '[:find [(pull ?authors public-user-pattern) ...]
+            :in $ ?since public-user-pattern
+            :where [?statements :statement/author ?authors ?tx]
+            [?tx :db/txInstant ?start-date]
+            [(< ?since ?start-date)]]
+          (Date/from since) patterns/public-user)
+         registered-authors (filter :user.registered/display-name active-authors)
+         anonymous-authors (filter :user/nickname active-authors)]
+     {:overall (count active-authors)
+      :overall/registered (count registered-authors)
+      :overall/anonymous (count anonymous-authors)})))
 
 (>defn statement-length-stats
   "Returns a map of stats about statement-length."

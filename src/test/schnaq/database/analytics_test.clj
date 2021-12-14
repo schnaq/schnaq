@@ -37,8 +37,8 @@
 
 (deftest number-of-statements-test
   (testing "Return the correct number of statements."
-    (is (= 28 (db/number-of-statements)))
-    (is (zero? (db/number-of-statements (Instant/now))))
+    (is (= 28 (:overall (db/number-of-statements))))
+    (is (zero? (:overall (db/number-of-statements (Instant/now)))))
     (let [user-id (user-db/add-user-if-not-exists "Wegi")
           share-hash "asd"]
       (discussion-db/new-discussion {:discussion/title "test"
@@ -46,7 +46,10 @@
                                      :discussion/share-hash share-hash
                                      :discussion/author user-id})
       (discussion-db/add-starting-statement! share-hash user-id "test" false)
-      (is (= 29 (db/number-of-statements))))))
+      (is (= 29 (:overall (db/number-of-statements))))))
+  (testing "The statements in the series should be grouped accordingly"
+    (is (= 27 (get (:series (db/number-of-statements)) "2020-W01")))
+    (is (= 1 (get (:series (db/number-of-statements)) "2020-W02")))))
 
 (deftest average-number-of-statements-test
   (testing "Test whether the average number of statements fits."
@@ -56,12 +59,13 @@
 
 (deftest number-of-active-users-test
   (testing "Test whether the active users are returned correctly."
-    (is (= 3 (db/number-of-active-discussion-users)))
+    (is (= 3 (:overall (db/number-of-active-discussion-users))))
     (let [woggler-id (user-db/add-user-if-not-exists "wooooggler")]
-      (is (= 3 (db/number-of-active-discussion-users)))
+      (is (= 3 (:overall (db/number-of-active-discussion-users))))
       (main-db/transact
        [(discussion-db/add-starting-statement! "cat-dog-hash" woggler-id "Alles doof" false)]))
-    (is (= 4 (db/number-of-active-discussion-users)))))
+    (is (= 4 (:overall (db/number-of-active-discussion-users))))
+    (is (zero? (:overall/registered (db/number-of-active-discussion-users))))))
 
 (deftest statement-length-stats-test
   (testing "Testing the function that returns lengths of statements statistics"

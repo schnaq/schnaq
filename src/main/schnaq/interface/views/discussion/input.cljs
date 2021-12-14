@@ -141,7 +141,7 @@
       statement-type
       false
       true]
-     [:div.input-group-append.mt-1
+     [:div.input-group-append.mt-1.ml-1
       [statement-type-choose-button
        [:form/statement-type statement-id]
        [:form/statement-type! statement-id] true]]]))

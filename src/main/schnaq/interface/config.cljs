@@ -51,8 +51,8 @@
   "Maximal allowed image size of profile picture in bytes."
   5000000)
 
-(def marketing-num-schnaqs 550)
-(def marketing-num-statements 3600)
+(def marketing-num-schnaqs 600)
+(def marketing-num-statements 4000)
 
 ;; -----------------------------------------------------------------------------
 ;; Example schnaqs and statements

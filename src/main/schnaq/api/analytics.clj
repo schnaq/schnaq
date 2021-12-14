@@ -62,7 +62,7 @@
           :active-users-num (analytics-db/number-of-active-discussion-users timestamp-since)
           :statement-length-stats (analytics-db/statement-length-stats timestamp-since)
           :statement-type-stats (analytics-db/statement-type-stats timestamp-since)
-          :registered-users-num (analytics-db/number-or-registered-users)
+          :registered-users-num (analytics-db/number-or-registered-users timestamp-since)
           :labels-stats (analytics-db/labels-stats timestamp-since)}})))
 
 ;; -----------------------------------------------------------------------------

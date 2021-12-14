@@ -88,14 +88,6 @@
  (fn [db _]
    (get-in db [:how-to :disabled])))
 
-(defn quick-how-to-create []
-  [quick-how-to
-   :how-to.create/webm
-   :how-to.create/mp4
-   :how-to.create/title
-   :how-to.create/body
-   :how-to/create])
-
 (defn quick-how-to-schnaq []
   [quick-how-to
    :how-to.discussion/webm

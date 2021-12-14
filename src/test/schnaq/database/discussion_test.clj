@@ -281,14 +281,6 @@
              (count (db/search-similar-questions share-hash "shald"))))
       (is (empty? (db/search-similar-questions share-hash "scholt"))))))
 
-(deftest discussion-mode!-test
-  (testing "Changing discussion mode."
-    (let [share-hash "cat-dog-hash"]
-      (db/discussion-mode! share-hash :discussion.mode/qanda)
-      (is (= :discussion.mode/qanda (:discussion/mode (db/discussion-by-share-hash share-hash))))
-      (db/discussion-mode! share-hash :discussion.mode/discussion)
-      (is (= :discussion.mode/discussion (:discussion/mode (db/discussion-by-share-hash share-hash)))))))
-
 (deftest new-statement-ids-for-user-test
   (let [test-user (user-db/private-user-by-keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276")]
     (testing "test-user gets a list of new statements."

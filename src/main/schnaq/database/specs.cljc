@@ -78,8 +78,6 @@
 (s/def :discussion/admin-link ::non-blank-string)
 (s/def :discussion/author ::user-or-reference)
 (s/def :discussion/header-image-url string?)
-(s/def :discussion/created-at inst?)
-(s/def :discussion/end-time inst?)
 (s/def :discussion/hub-origin (s/or :reference :db/id
                                     :hub ::hub))
 (s/def :discussion/admins (s/coll-of (s/or :registered-user ::registered-user
@@ -98,8 +96,7 @@
                                   :discussion/header-image-url :discussion/edit-hash
                                   :discussion/admins :discussion/hub-origin :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/admin-link
-                                  :discussion/end-time :discussion/creation-secret :discussion/mode
-                                  :discussion/access]))
+                                  :discussion/creation-secret :discussion/mode :discussion/access]))
 
 (s/def ::share-hash-statement-id-mapping
   (s/map-of :discussion/share-hash (s/coll-of :db/id)))
@@ -191,8 +188,8 @@
 (s/def :statistics/discussions-sum nat-int?)
 (s/def :statistics/usernames-sum nat-int?)
 (s/def :statistics/average-statements-num number?)
-(s/def :statistics/statements-num nat-int?)
-(s/def :statistics/active-users-num nat-int?)
+(s/def :statistics/statements-num map?)
+(s/def :statistics/active-users-num map?)
 (s/def :statistics.statement.type/supports nat-int?)
 (s/def :statistics.statement.type/attacks nat-int?)
 (s/def :statistics.statement.type/neutrals nat-int?)
