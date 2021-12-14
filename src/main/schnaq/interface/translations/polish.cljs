@@ -266,6 +266,10 @@
    :statement.edit.button/submit "Prześlij"
    :statement.edit.button/cancel "Anuluj"
    :schnaq.edit/label "Edytuj tytuł"
+   :statement/flag-statement "report"
+   :statement/flag-statement-confirmation "Czy naprawdę chcesz zgłosić ten post do administratorów?"
+   :statement.notifications/statement-flagged-title "Post został zgłoszony!"
+   :statement.notifications/statement-flagged-body "Dziękujemy za wiadomość, zajmiemy się tym."
 
    ;; schnaq creation
    :schnaq.create/title "Uruchomienie schnaq"

@@ -1,8 +1,11 @@
 (ns schnaq.mail.emails
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn- ?]]
+            [hiccup.util :as hiccup-util]
             [postal.core :refer [send-message]]
             [schnaq.config :as config]
+            [schnaq.database.specs :as specs]
+            [schnaq.links :as schnaq-links]
             [schnaq.mail.template :as template]
             [schnaq.translations :refer [email-templates]]
             [taoensso.timbre :as log]))
@@ -89,3 +92,16 @@
    (email-templates :lead-magnet/title)
    recipient
    (template/remote-work-lead-magnet)))
+
+(>defn send-flagged-post
+  "Send a mail containing the content and link to the flagged statement "
+  [discussion statement recipients]
+  [::specs/discussion ::specs/statement (s/coll-of string?) :ret any?]
+  (send-mails
+   "Beitrag mit bedenklichem Inhalt!"
+   (format "Ein:e Nutzer:in hat folgenden Beitrag als Bedenklich gemeldet:\n\n'%s'\n\n %s"
+           (hiccup-util/escape-html (:statement/content statement))
+           (schnaq-links/get-link-to-statement
+            (:discussion/share-hash discussion)
+            (:db/id statement)))
+   recipients))

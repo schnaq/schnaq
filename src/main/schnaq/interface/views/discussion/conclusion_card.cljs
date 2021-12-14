@@ -162,7 +162,8 @@
        [:div.mr-2 {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
        [:div.card-view.card-body.p-2
         [:div.d-flex.justify-content-start.pt-2
-         [user/user-info statement 25 "w-100"]]
+         [user/user-info statement 25 "w-100"]
+         [badges/reduced-statement-dropdown-menu statement]]
         [:div.my-3]
         [:div.text-typography
          [md/as-markdown (:statement/content statement)]]

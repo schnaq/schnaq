@@ -12,6 +12,7 @@
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.discussion :as discussion]
+            [schnaq.mail.emails :as emails]
             [schnaq.media :as media]
             [schnaq.processors :as processors]
             [schnaq.toolbelt :as toolbelt]
@@ -153,6 +154,19 @@
                                   first)})
      #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not edit a closed / deleted discussion or statement."))
      #(validator/deny-access at/invalid-rights-message))))
+
+(defn- flag-statement
+  "Sends a mail to the schnaq author and info@schnaq.com with a link to the flagged post."
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash statement-id]} (:body parameters)
+        discussion (discussion-db/discussion-by-share-hash share-hash)
+        statement (db/fast-pull statement-id patterns/statement)
+        author-keycloak-id (-> discussion :discussion/author :user.registered/keycloak-id)
+        author (user-db/private-user-by-keycloak-id author-keycloak-id)
+        recipients ["info@schnaq.com" (:user.registered/email author)]]
+    (log/info "Flagged Statetement:" statement-id "in discussion:" share-hash)
+    (emails/send-flagged-post discussion statement recipients)
+    (ok {:flagged-statement statement-id})))
 
 (defn- delete-statement!
   "Deletes a statement, when the user is the registered author."
@@ -475,6 +489,12 @@
                :responses {200 {:body {:updated-statement ::dto/statement}}
                            400 at/response-error-body
                            403 at/response-error-body}}]
+     ["/flag" {:post flag-statement
+               :description (at/get-doc #'flag-statement)
+               :name :api.discussion.statements/flag
+               :parameters {:body {:share-hash :discussion/share-hash
+                                   :statement-id :db/id}}
+               :responses {200 {:body {:flagged-statement :db/id}}}}]
      ["/delete" {:delete delete-statement!
                  :description (at/get-doc #'delete-statement!)
                  :name :api.discussion.statement/delete

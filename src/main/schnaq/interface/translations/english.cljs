@@ -268,6 +268,10 @@
    :statement.edit.button/submit "Submit"
    :statement.edit.button/cancel "Cancel"
    :schnaq.edit/label "Edit title"
+   :statement/flag-statement "report"
+   :statement/flag-statement-confirmation "Do you really want to report this post to the administrators?"
+   :statement.notifications/statement-flagged-title "Post has been reported!"
+   :statement.notifications/statement-flagged-body "Thank you for reporting this post, we'll take care of it."
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
