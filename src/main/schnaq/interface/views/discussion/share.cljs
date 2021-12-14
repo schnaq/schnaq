@@ -96,12 +96,6 @@
                         :large? true
                         :child [share-discussion-modal]}]))
 
-(defn share-discussion-button
-  "Button to copy access link and notify the user."
-  []
-  [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
-   [icon :share "m-auto"] open-share-discussion])
-
 (defn share-qanda-button
   "Button to copy access link and acces code."
   []

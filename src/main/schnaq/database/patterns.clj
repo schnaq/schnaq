@@ -76,7 +76,6 @@
    :discussion/header-image-url
    {:discussion/mode [:db/ident]}
    :discussion/created-at
-   :discussion/end-time
    {:discussion/author public-user}
    {[:discussion.access/_discussion :as :discussion/access]
     access-code}])

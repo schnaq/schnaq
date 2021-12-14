@@ -272,15 +272,6 @@
     (discussion-db/mods-mark-only! share-hash mods-mark-only?)
     (ok {:share-hash share-hash})))
 
-(defn- configure-discussion-mode
-  "Endpoint to change the discussion mode."
-  [{:keys [parameters]}]
-  (let [{:keys [discussion-mode share-hash]} (:body parameters)]
-    (log/info (format "Change discussion mode of %s to %s" share-hash discussion-mode))
-    (discussion-db/discussion-mode! share-hash discussion-mode)
-    (ok {:discussion-mode discussion-mode
-         :share-hash share-hash})))
-
 ;; -----------------------------------------------------------------------------
 ;; Votes
 
@@ -401,12 +392,7 @@
      ["/make-writeable" {:put make-discussion-writeable!
                          :description (at/get-doc #'make-discussion-writeable!)
                          :middleware [:user/beta-tester?]
-                         :name :api.discussion.manage/make-writeable}]
-     ["/discussion-mode" {:put configure-discussion-mode
-                          :description (at/get-doc #'configure-discussion-mode)
-                          :parameters {:body {:discussion-mode :discussion/mode}}
-                          :responses {200 {:body {:discussion-mode :discussion/mode}}}
-                          :name :api.discussion.manage/discussion-mode}]]]
+                         :name :api.discussion.manage/make-writeable}]]]
    ["/header-image" {:post media/set-preview-image
                      :description (at/get-doc #'media/set-preview-image)
                      :name :api.discussion/header-image

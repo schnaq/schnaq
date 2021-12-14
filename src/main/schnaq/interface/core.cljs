@@ -11,7 +11,6 @@
             [schnaq.database.specs]
             [schnaq.interface.analytics.core]
             [schnaq.interface.auth]
-            [schnaq.interface.celebrations]
             [schnaq.interface.components.buttons]
             [schnaq.interface.components.colors]
             [schnaq.interface.components.icons]

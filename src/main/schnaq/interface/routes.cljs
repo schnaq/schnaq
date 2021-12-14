@@ -34,7 +34,6 @@
             [schnaq.interface.views.qa.inputs :as qanda]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
-            [schnaq.interface.views.schnaq.value :as value]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.user.edit-account :as edit-account]
@@ -139,16 +138,9 @@
      :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]
    ["schnaq"
     ["/create"
-     [""
-      {:name :routes.schnaq/create
-       :view create/create-schnaq-view
-       :link-text (labels :router/create-schnaq)}]
-     ["/discussion"
-      {:name :routes.schnaq.create/discussion
-       :view create/create-discussion-view}]
-     ["/qanda"
-      {:name :routes.schnaq.create/qanda
-       :view create/create-qanda-view}]]
+     {:name :routes.schnaq/create
+      :view create/create-schnaq-view
+      :link-text (labels :router/create-schnaq)}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
@@ -182,10 +174,6 @@
        :view qanda/qanda-view
        :link-text (labels :router/qanda)
        :controllers [{:stop #(rf/dispatch [:schnaq.qa.search.results/reset])}]}]
-     ["/value"
-      {:name :routes.schnaq/value
-       :view value/schnaq-value-view
-       :link-text (labels :router/value)}]
      ["/dashboard"
       {:name :routes.schnaq/dashboard
        :view dashboard/view
