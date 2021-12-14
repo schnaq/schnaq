@@ -59,12 +59,13 @@
 
 (deftest number-of-active-users-test
   (testing "Test whether the active users are returned correctly."
-    (is (= 3 (db/number-of-active-discussion-users)))
+    (is (= 3 (:overall (db/number-of-active-discussion-users))))
     (let [woggler-id (user-db/add-user-if-not-exists "wooooggler")]
-      (is (= 3 (db/number-of-active-discussion-users)))
+      (is (= 3 (:overall (db/number-of-active-discussion-users))))
       (main-db/transact
        [(discussion-db/add-starting-statement! "cat-dog-hash" woggler-id "Alles doof" false)]))
-    (is (= 4 (db/number-of-active-discussion-users)))))
+    (is (= 4 (:overall (db/number-of-active-discussion-users))))
+    (is (zero? (:overall/registered (db/number-of-active-discussion-users))))))
 
 (deftest statement-length-stats-test
   (testing "Testing the function that returns lengths of statements statistics"

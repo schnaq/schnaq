@@ -101,7 +101,7 @@
          [analytics-card (labels :analytics/user-numbers) usernames-num]
          [analytics-card (labels :analytics/registered-users-numbers) registered-users]
          [analytics-card (labels :analytics/average-statements-title) average-statements]
-         [analytics-card (labels :analytics/active-users-num-title) active-users-num]
+         [multi-arguments-card (labels :analytics/active-users-num-title) active-users-num]
          [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
          [multi-arguments-card (labels :analytics/statement-types-title) statement-types]
          [analytics-card (labels :analytics/labels-stats) marked-answers]]]])]])
@@ -199,7 +199,7 @@
 (rf/reg-event-db
  :analytics/active-users-num-loaded
  (fn [db [_ {:keys [active-users-num]}]]
-   (assoc-in db [:analytics :active-users-num :overall] active-users-num)))
+   (assoc-in db [:analytics :active-users-nums] active-users-num)))
 
 (rf/reg-event-db
  :analytics/statements-per-discussion-loaded
@@ -231,7 +231,7 @@
                                       :lengths (:statement-length-stats statistics)
                                       :average-per-discussion (:average-statements-num statistics)
                                       :types (:statement-type-stats statistics)}
-                         :active-users-num {:overall (:active-users-num statistics)}
+                         :active-users-nums (:active-users-num statistics)
                          :labels (:labels-stats statistics)})))
 
 ;; #### Subs ####
@@ -269,7 +269,7 @@
 (rf/reg-sub
  :analytics/number-of-active-users-overall
  (fn [db _]
-   (get-in db [:analytics :active-users-num :overall])))
+   (get-in db [:analytics :active-users-nums])))
 
 (rf/reg-sub
  :analytics/statement-lengths-stats
@@ -284,7 +284,6 @@
 (rf/reg-sub
  :analytics/labels-stats
  (fn [db _]
-   (println (get-in db [:analytics :labels]))
    (get-in db [:analytics :labels])))
 
 (rf/reg-sub

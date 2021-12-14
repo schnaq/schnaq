@@ -189,7 +189,7 @@
 (s/def :statistics/usernames-sum nat-int?)
 (s/def :statistics/average-statements-num number?)
 (s/def :statistics/statements-num map?)
-(s/def :statistics/active-users-num nat-int?)
+(s/def :statistics/active-users-num map?)
 (s/def :statistics.statement.type/supports nat-int?)
 (s/def :statistics.statement.type/attacks nat-int?)
 (s/def :statistics.statement.type/neutrals nat-int?)

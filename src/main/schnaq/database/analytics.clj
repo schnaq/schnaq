@@ -1,6 +1,7 @@
 (ns schnaq.database.analytics
   (:require [ghostwheel.core :refer [>defn >defn-]]
-            [schnaq.database.main :as main-db])
+            [schnaq.database.main :as main-db]
+            [schnaq.database.patterns :as patterns])
   (:import (java.util Date)
            (java.time Instant)
            (java.text SimpleDateFormat)))
@@ -83,8 +84,8 @@
   (let [df (SimpleDateFormat. "YYYY-'W'ww")]
     (.format df date)))
 
-(defn- statement-num-by-day
-  "Counts the frequencies of statements by day."
+(defn- statement-num-by-week
+  "Counts the frequencies of statements by week."
   [statements]
   (frequencies
    (map #(date-to-day (:statement/created-at %)) statements)))
@@ -110,7 +111,7 @@
             [(< ?since ?timestamp)]]
           (Date/from since))]
      {:overall (count all-statements)
-      :series (statement-num-by-day all-statements)})))
+      :series (statement-num-by-week all-statements)})))
 
 (>defn average-number-of-statements
   "Returns the average number of statements per discussion."
@@ -126,19 +127,25 @@
        (/ statements discussions)))))
 
 (>defn number-of-active-discussion-users
-  "Returns the number of active users (With at least one statement or suggestion)."
+  "Returns the number of active (anonymous or registered) users (With at least one statement)."
   ([]
    [:ret :statistics/active-users-num]
    (number-of-active-discussion-users max-time-back))
   ([since]
    [:statistics/since :ret :statistics/active-users-num]
-   (main-db/query
-    '[:find (count ?authors) .
-      :in $ ?since
-      :where [?statements :statement/author ?authors ?tx]
-      [?tx :db/txInstant ?start-date]
-      [(< ?since ?start-date)]]
-    (Date/from since))))
+   (let [active-authors
+         (main-db/query
+          '[:find [(pull ?authors public-user-pattern) ...]
+            :in $ ?since public-user-pattern
+            :where [?statements :statement/author ?authors ?tx]
+            [?tx :db/txInstant ?start-date]
+            [(< ?since ?start-date)]]
+          (Date/from since) patterns/public-user)
+         registered-authors (filter :user.registered/display-name active-authors)
+         anonymous-authors (filter :user/nickname active-authors)]
+     {:overall (count active-authors)
+      :overall/registered (count registered-authors)
+      :overall/anonymous (count anonymous-authors)})))
 
 (>defn statement-length-stats
   "Returns a map of stats about statement-length."
