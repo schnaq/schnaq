@@ -4,7 +4,7 @@
             [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn-]]
             [schnaq.config.shared :as shared-config])
-  (:import (java.time LocalTime LocalDate LocalDateTime ZonedDateTime ZoneId Period DayOfWeek Instant Duration)
+  (:import (java.time LocalTime LocalDate LocalDateTime ZonedDateTime ZoneId Period DayOfWeek)
            (java.time.temporal ChronoUnit TemporalAdjusters)))
 
 (s/def :time/zoned-date-time (partial instance? ZonedDateTime))

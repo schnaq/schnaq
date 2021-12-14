@@ -1,7 +1,7 @@
 (ns schnaq.notification-service.core
   (:require [clojure.core.async :refer [go-loop <!]]
             [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn- >defn]]
+            [ghostwheel.core :refer [>defn-]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db]
             [schnaq.database.specs :as specs]
