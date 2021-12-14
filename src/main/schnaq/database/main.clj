@@ -83,18 +83,6 @@
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
-(>defn yesterday
-  "Timestamp a day ago."
-  []
-  [:ret inst?]
-  (-> (Instant/now) (.minus 24 ChronoUnit/HOURS) Date/from))
-
-(>defn a-week-ago
-  "Timestamp a week ago."
-  []
-  [:ret inst?]
-  (-> (Instant/now) (.minus 7 ChronoUnit/DAYS) Date/from))
-
 (>defn days-ago
   "Timestamp some days ago."
   [days]
