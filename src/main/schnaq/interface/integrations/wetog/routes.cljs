@@ -28,6 +28,7 @@
      :view dashboard/embedded-view
      :link-text (labels :router/dashboard)
      :controllers [{:start (fn []
+                             (rf/dispatch [:wordcloud/for-current-discussion])
                              (rf/dispatch [:schnaq/refresh-selected])
                              (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
    ["statement/:statement-id"
