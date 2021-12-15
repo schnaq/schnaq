@@ -78,17 +78,12 @@
    :coc.content/body "Wir halten das Deutsche Grundgesetz ein; dies gilt auch und insbesondere für Datenschutz, Gleichberechtigung und Nichtdiskriminierung.\nInhalte, die gegen geltendes Recht verstoßen, werden von uns gelöscht."
 
    ;; how-to
-   :how-to/button "Wie schnaqqe ich?"
    :how-to.schnaq/title "Wie schnaqqe ich?"
    :how-to.schnaq/body "Teile deine Meinung! Trage sie in das Eingabefeld ein und sie erscheint in der Liste an Beiträgen. Teilnehmer:innen können drauf reagieren und antworten. Die Mindmap wird automatisch generiert und aktualisiert sich mit jedem neuen Beitrag. Wenn du zu einem Beitrag springen möchtest, klicke ihn einfach an."
    :how-to.pro-con/title "Bist du dafür oder dagegen?"
    :how-to.pro-con/body "Teile den Anderen deine Grundhaltung zum aktuellen Beitrag mit. Mit einem Klick auf unseren Dafür/Dagegen Knopf beim Eingabefeld änderst du deine Haltung. Du kannst auch mehrere Argumente dafür oder dagegen nennen. Pro-Argumente werden Blau eingefärbt, Kontra-Argumente Orange."
-   :how-to/ask-question "Nicht sicher wie du schnaq benutzen sollst?"
-   :how-to/ask-question-2 "Noch Fragen?"
-   :how-to/answer-question "Schau hier nach!"
    :how-to/question-dont-show-again "Verstanden?"
    :how-to/answer-dont-show-again "In Zukunft nicht mehr anzeigen!"
-   :how-to/back-to-start "Zurück zu schnaq"
 
    ;; Startpage
    :startpage/heading "Fragen sammeln leicht gemacht"
@@ -262,6 +257,8 @@
 
 
    ;; schnaq creation
+
+
    :schnaq.create/title "Schnaq starten"
    :schnaq.create/heading "Starte mit deinem schnaq."
    :schnaq.create.qanda/subheading "Mit einem schnaq kannst du effizient Fragen sammeln und beantworten."

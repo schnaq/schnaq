@@ -78,17 +78,12 @@
    :coc.content/body "We comply with German law; this applies especially to data protection, equality and non-discrimination.\nContent that violates applicable law will be deleted."
 
    ;; how-to
-   :how-to/button "How to schnaq?"
    :how-to.schnaq/title "How do I schnaq?"
    :how-to.schnaq/body "Share your opinion! Others can react to your post or add a comment. The mindmap is automatically generated and updated whenever there is a new statement. Fancy a post? Just click on it and jump right at it."
    :how-to.pro-con/title "To Agree or Disagree ..."
    :how-to.pro-con/body "Share your basic attitude towards the current post. With a click on our agree/disagree-button you change your post's attitude. Pro statements are highlighted blue and contra statements are highlighted orange. You can add multiple pro statements as well as contra statements in response to the same statement."
-   :how-to/ask-question "Not sure how to schnaq?"
-   :how-to/ask-question-2 "Still not sure how to use schnaq?"
-   :how-to/answer-question "Let us show you how!"
    :how-to/question-dont-show-again "Got it?"
    :how-to/answer-dont-show-again "Don't show this tip anymore!"
-   :how-to/back-to-start "Back to schnaq"
 
    ;; Startpage
    :startpage/heading "Collecting questions made simple"

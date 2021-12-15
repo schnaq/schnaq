@@ -77,17 +77,13 @@
    :coc.content/body "Przestrzegamy niemieckiej Ustawy Zasadniczej; dotyczy to również i w szczególności ochrony danych, równouprawnienia i niedyskryminacji.\nTreści, które naruszają obowiązujące prawo, będą przez nas usuwane."
 
    ;; how-to
-   :how-to/button "Jak używać schnaq?"
    :how-to.schnaq/title "Jak używać schnaq?"
    :how-to.schnaq/body "Podziel się swoją opinią! Wprowadź go w polu wprowadzania danych, a pojawi się on na liście wpłat. Uczestnicy mogą na nią reagować i odpowiadać. Mapa myśli jest generowana automatycznie i aktualizuje się wraz z każdym nowym postem. Jeśli chcesz przejść do jakiegoś postu, po prostu kliknij na niego."
    :how-to.pro-con/title "Czy jesteś za, czy przeciw?"
    :how-to.pro-con/body "Podziel się z innymi swoją opinią na temat bieżącego postu. Klikając na nasz przycisk za/przeciw obok pola wprowadzania danych, możesz zmienić swoje stanowisko. Można też podać kilka argumentów za lub przeciw. Argumenty \"za\" są oznaczone kolorem niebieskim, a \"przeciw\" kolorem pomarańczowym."
-   :how-to/ask-question "Nie jesteś pewien jak używać schnaq?"
-   :how-to/ask-question-2 "Jakieś pytania?"
-   :how-to/answer-question "Spójrz tutaj!"
    :how-to/question-dont-show-again "Rozumiesz?"
    :how-to/answer-dont-show-again "Nie wyświetlać w przyszłości!"
-   :how-to/back-to-start "Powrót do schnaq"
+   :how-to/brt "Powrót do schnaq"
 
    ;; Startpage
    :startpage/heading "Ułatwione zbieranie pytań"
