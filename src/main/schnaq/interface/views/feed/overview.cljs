@@ -174,8 +174,7 @@
   [:section.panel-white.text-center
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
-     [outline-info-button :coc/heading (reitfe/href :routes/code-of-conduct)]
-     [outline-info-button :how-to/button (reitfe/href :routes/how-to)]]]])
+     [outline-info-button :coc/heading (reitfe/href :routes/code-of-conduct)]]]])
 
 (defn- personal-discussions-view
   "Shows the page for an overview of schnaqs. Takes a subscription-key which

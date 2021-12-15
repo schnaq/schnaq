@@ -78,29 +78,12 @@
    :coc.content/body "We comply with German law; this applies especially to data protection, equality and non-discrimination.\nContent that violates applicable law will be deleted."
 
    ;; how-to
-   :how-to/button "How to schnaq?"
-   :how-to/title "How to schnaq?"
-   :how-to.create/title "What would you like to schnaq about with your team??"
-   :how-to.create/body
-   [:<>
-    [:p [:i "\"Which systems do we use and when?\", \"What price do we offer educational institutions?\", \"What is our vision?\""]]
-    [:p "Give your schnaq a meaningful title and let the whole team discuss. All contributions are important and offer an individual perspective on the discussion."]]
-   :how-to.why/title "Why should I schnaq?"
-   :how-to.why/body "Fluffed your lines? Didn't get a chance to speak? Did everyone get everything? No clue why the discussion took so long?\nSave your time and store your knowledge in schnaq. Participate whenever you like. The mindmap of the discussion is on the house."
-   :how-to.admin/title "Administer your schnaq or invite someone to help you"
-   :how-to.admin/body "Invite participants via link or mail. If you need any help as admin just invite someone to lend you a hand."
    :how-to.schnaq/title "How do I schnaq?"
    :how-to.schnaq/body "Share your opinion! Others can react to your post or add a comment. The mindmap is automatically generated and updated whenever there is a new statement. Fancy a post? Just click on it and jump right at it."
    :how-to.pro-con/title "To Agree or Disagree ..."
    :how-to.pro-con/body "Share your basic attitude towards the current post. With a click on our agree/disagree-button you change your post's attitude. Pro statements are highlighted blue and contra statements are highlighted orange. You can add multiple pro statements as well as contra statements in response to the same statement."
-   :how-to.call-to-action/title "Now you know!"
-   :how-to.call-to-action/body "That's actually all there is to know about schnaq. Now use it!"
-   :how-to/ask-question "Not sure how to schnaq?"
-   :how-to/ask-question-2 "Still not sure how to use schnaq?"
-   :how-to/answer-question "Let us show you how!"
    :how-to/question-dont-show-again "Got it?"
    :how-to/answer-dont-show-again "Don't show this tip anymore!"
-   :how-to/back-to-start "Back to schnaq"
 
    ;; Startpage
    :startpage/heading "Collecting questions made simple"
@@ -300,6 +283,8 @@
 
 
    ;; Conversion-Edit-Funnel
+
+
    :discussion.anonymous-edit.modal/title "Please sign in to edit"
    :discussion.anonymous-edit.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to edit a statement."]]
    :discussion.anonymous-edit.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."

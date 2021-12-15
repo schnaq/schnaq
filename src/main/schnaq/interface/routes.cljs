@@ -27,7 +27,6 @@
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
             [schnaq.interface.views.graph.view :as graph-view]
-            [schnaq.interface.views.howto.how-to :as how-to]
             [schnaq.interface.views.hub.overview :as hubs]
             [schnaq.interface.views.hub.settings :as hub-settings]
             [schnaq.interface.views.pages :as pages]
@@ -121,10 +120,6 @@
     {:name :routes/code-of-conduct
      :view coc/view
      :link-text (labels :router/code-of-conduct)}]
-   ["how-to"
-    {:name :routes/how-to
-     :view how-to/view
-     :link-text (labels :router/how-to)}]
    ["press"
     {:name :routes/press
      :view press/view}]
@@ -281,7 +276,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-          #(js-wrap/scroll-to-id window-hash)))))
+               #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
