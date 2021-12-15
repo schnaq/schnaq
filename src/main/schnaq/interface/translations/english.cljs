@@ -281,10 +281,10 @@
    :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
    :discussion.navbar/settings "Settings"
 
+   :dashboard.wordcloud/title "Word Cloud"
+   :dashboard.wordcloud/subtitle "See the most common words from your schnaq."
 
    ;; Conversion-Edit-Funnel
-
-
    :discussion.anonymous-edit.modal/title "Please sign in to edit"
    :discussion.anonymous-edit.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to edit a statement."]]
    :discussion.anonymous-edit.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."
