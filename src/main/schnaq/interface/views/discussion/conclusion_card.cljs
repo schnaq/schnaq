@@ -32,18 +32,8 @@
      [:div.col-10.py-md-5
       body]]]])
 
-(defn- call-to-discuss
-  "If no contributions are available, add a call to action to engage the users."
-  []
-  [call-to-action-schnaq
-   [:<>
-    [:h2 (labels :call-to-contribute/body)]
-    [:p.mt-5 (labels :how-to/ask-question)
-     [:a.text-dark.btn.btn-link {:href (reitfe/href :routes/how-to)}
-      (labels :how-to/answer-question)]]]])
-
-(defn- call-to-q&a
-  "If no statements are present show the access code in Q&A"
+(defn- call-to-share
+  "Present access code and link to schnaq.app."
   []
   [call-to-action-schnaq
    [:<>
@@ -57,13 +47,6 @@
      (labels :qanda.call-to-action/intro-2)]
     [:p.pt-3 [icon :info "m-auto fas"] " "
      (labels :qanda.call-to-action/help) " " [icon :share "m-auto fas"]]]])
-
-(defn- call-to-action-content
-  "Either display cta for discussion or Q&A"
-  []
-  (if @(rf/subscribe [:schnaq.selected/access-code])
-    [call-to-q&a]
-    [call-to-discuss]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -109,7 +92,7 @@
                     (rf/dispatch [:statement.labels/remove statement label])
                     (rf/dispatch [:statement.labels/add statement label]))}
       [:small.pr-2 (if checked? (labels :qanda.button.mark/as-unanswered)
-                                (labels :qanda.button.mark/as-answer))]
+                       (labels :qanda.button.mark/as-answer))]
       [labels/build-label (if checked? label ":unchecked")]]]))
 
 (>defn- card-highlighting
@@ -192,9 +175,9 @@
         collapsed? @(rf/subscribe [:toggle-replies/is-collapsed? statement-id])
         button-content (if collapsed? [:<> [icon :collapse-up "my-auto mr-2"]
                                        (labels :qanda.button.show/replies)]
-                                      [:<> [icon :collapse-down "my-auto mr-2"]
-                                       (labels :qanda.button.hide/replies)])
-        collapsable-id (str "collapse-Replies-" statement-id)
+                           [:<> [icon :collapse-down "my-auto mr-2"]
+                            (labels :qanda.button.hide/replies)])
+        collapsible-id (str "collapse-Replies-" statement-id)
         replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
         current-route @(rf/subscribe [:navigation/current-route-name])
         mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
@@ -206,11 +189,11 @@
       [:<>
        [:button.btn.btn-transparent.border-0
         {:type "button" :data-toggle "collapse" :aria-expanded "false"
-         :data-target (str "#" collapsable-id)
+         :data-target (str "#" collapsible-id)
          :on-click #(rf/dispatch [:toggle-replies/is-collapsed! statement-id (not collapsed?)])
-         :aria-controls collapsable-id}
+         :aria-controls collapsible-id}
         button-content]
-       [:div.collapse {:id collapsable-id}
+       [:div.collapse {:id collapsible-id}
         [:<>
          (for [reply replies]
            (with-meta
@@ -284,7 +267,7 @@
               [statement-or-edit-wrapper statement]
               0.1]
              {:key (:db/id statement)}))])
-      [call-to-action-content])))
+      [call-to-share])))
 
 (rf/reg-event-fx
  :discussion.select/conclusion

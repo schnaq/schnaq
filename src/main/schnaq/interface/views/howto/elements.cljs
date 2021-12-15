@@ -52,9 +52,6 @@
           [:div.mb-2 [icon :info-question "m-auto"]]
           [text-box title body]
           [:div.feature-text-box
-           [:p (labels :how-to/ask-question-2)
-            [:a.btn.btn-link {:href (reitfe/href :routes/how-to)}
-             (labels :how-to/answer-question)]]
            [:p (labels :how-to/question-dont-show-again)
             [:button.btn.btn-link
              {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}

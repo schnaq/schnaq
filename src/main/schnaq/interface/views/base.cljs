@@ -48,7 +48,6 @@
 (defn- footer-nav []
   [:<>
    [:ul.list-inline
-    [footer-button :routes/how-to :router/how-to]
     [footer-button :routes/code-of-conduct :coc/heading]
     [footer-button :routes/about-us :footer.buttons/about-us]
     [footer-button :routes/press :footer.buttons/press-kit]

@@ -4,8 +4,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.discussion.dashboard :as dashboard]
-            [schnaq.interface.views.graph.view :as graph-view]
-            [schnaq.interface.views.howto.how-to :as how-to]))
+            [schnaq.interface.views.graph.view :as graph-view]))
 
 (def routes
   ["/"
@@ -54,8 +53,4 @@
                              (rf/dispatch [:graph/load-data-for-discussion]))
                     :stop (fn []
                             (rf/dispatch [:updates.periodic/graph false])
-                            (rf/dispatch [:notifications/reset]))}]}]
-   ["how-to"
-    {:name :routes/how-to
-     :view how-to/embedded-view
-     :link-text (labels :router/how-to)}]])
+                            (rf/dispatch [:notifications/reset]))}]}]])
