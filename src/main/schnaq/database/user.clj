@@ -71,22 +71,22 @@
                   :user/nickname nickname}])
      [:tempids "temp-user"])))
 
-(defn user-id
-  "Returns the user-id of the passed user. Takes a username and a keycloak-id that may be nil.
-  Returns the keycloak-user if logged-in, otherwise the anon user-id."
-  [display-name keycloak-id]
-  (if keycloak-id
-    (:db/id (fast-pull [:user.registered/keycloak-id keycloak-id] [:db/id]))
-    (user-by-nickname display-name)))
-
 (>defn add-user-if-not-exists
   "Adds a user if they do not exist yet. Returns the (new) user-id."
   [nickname]
   [:user/nickname :ret :db/id]
   (if-let [user-id (user-by-nickname nickname)]
     user-id
-    (do (log/info "Added a new user: " nickname)
+    (do (log/info "Added a new user:" nickname)
         (add-user nickname))))
+
+(defn user-id
+  "Returns the user-id of the passed user. Takes a username and a keycloak-id that may be nil.
+  Returns the keycloak-user if logged-in, otherwise the anon user-id."
+  [display-name keycloak-id]
+  (if keycloak-id
+    (:db/id (fast-pull [:user.registered/keycloak-id keycloak-id] [:db/id]))
+    (add-user-if-not-exists display-name)))
 
 (>defn update-groups
   "Updates the user groups to be equal to the new input."
