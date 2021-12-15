@@ -4,7 +4,7 @@
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]))
 
-(defn- spinner-icon
+(defn spinner-icon
   "Display a spinner icon."
   []
   [:div.spinner-border.text-primary {:role "loading-status"}
