@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.howto.elements
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -14,30 +13,6 @@
   [:article.feature-text-box.pb-3
    [:h5 (labels title)]
    (labels body)])
-
-(defn feature-row-video-left
-  "Feature row where the video is located on the right side."
-  [video-key-webm vide-key-webm title body]
-  [:div.row.align-items-center.feature-row
-   [:div.col-12.col-lg-6
-    [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
-    [:video.w-100.how-to-animations {:auto-play true :loop true :muted true :plays-inline true}
-     [:source {:src (video video-key-webm) :type "video/webm"}]
-     [:source {:src (video vide-key-webm) :type "video/mp4"}]]]
-   [:div.col-12.col-lg-5.offset-lg-1
-    [text-box title body]]])
-
-(defn feature-row-video-right
-  "Feature row where the video is located on the right side."
-  [video-key-webm vide-key-webm title body]
-  [:div.row.align-items-center.feature-row
-   [:div.col-12.col-lg-5
-    [text-box title body]]
-   [:div.col-12.col-lg-6.offset-lg-1
-    [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
-    [:video.w-100.how-to-animations {:auto-play true :loop true :muted true :plays-inline true}
-     [:source {:src (video video-key-webm) :type "video/webm"}]
-     [:source {:src (video vide-key-webm) :type "video/mp4"}]]]])
 
 (defn- quick-how-to
   "Feature row where the video is located on the right side."
@@ -66,7 +41,7 @@
            [:source {:src (video video-key-webm) :type "video/webm"}]
            [:source {:src (video vide-key-webm) :type "video/mp4"}]]]]]])))
 
-;; subs
+;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
  :how-to-visibility/to-localstorage

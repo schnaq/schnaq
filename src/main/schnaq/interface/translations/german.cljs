@@ -79,7 +79,6 @@
 
    ;; how-to
    :how-to/button "Wie schnaqqe ich?"
-   :how-to/title "Wie verwende ich schnaq?"
    :how-to.schnaq/title "Wie schnaqqe ich?"
    :how-to.schnaq/body "Teile deine Meinung! Trage sie in das Eingabefeld ein und sie erscheint in der Liste an Beiträgen. Teilnehmer:innen können drauf reagieren und antworten. Die Mindmap wird automatisch generiert und aktualisiert sich mit jedem neuen Beitrag. Wenn du zu einem Beitrag springen möchtest, klicke ihn einfach an."
    :how-to.pro-con/title "Bist du dafür oder dagegen?"

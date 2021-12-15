@@ -79,7 +79,6 @@
 
    ;; how-to
    :how-to/button "How to schnaq?"
-   :how-to/title "How to schnaq?"
    :how-to.schnaq/title "How do I schnaq?"
    :how-to.schnaq/body "Share your opinion! Others can react to your post or add a comment. The mindmap is automatically generated and updated whenever there is a new statement. Fancy a post? Just click on it and jump right at it."
    :how-to.pro-con/title "To Agree or Disagree ..."

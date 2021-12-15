@@ -78,7 +78,6 @@
 
    ;; how-to
    :how-to/button "Jak używać schnaq?"
-   :how-to/title "Jak używać schnaq?"
    :how-to.schnaq/title "Jak używać schnaq?"
    :how-to.schnaq/body "Podziel się swoją opinią! Wprowadź go w polu wprowadzania danych, a pojawi się on na liście wpłat. Uczestnicy mogą na nią reagować i odpowiadać. Mapa myśli jest generowana automatycznie i aktualizuje się wraz z każdym nowym postem. Jeśli chcesz przejść do jakiegoś postu, po prostu kliknij na niego."
    :how-to.pro-con/title "Czy jesteś za, czy przeciw?"
