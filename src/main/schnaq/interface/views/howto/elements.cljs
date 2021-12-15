@@ -29,12 +29,12 @@
           [:div.feature-text-box
            [:p (labels :how-to/question-dont-show-again)
             [:button.btn.btn-link
-             {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}
+             {:on-click #(rf/dispatch [:how-to-visibility/to-localstorage hide-tag])}
              (labels :how-to/answer-dont-show-again)]]]]
          [:div.col-12.col-lg-4.offset-lg-1
           [:div.text-right
            [:button.btn.btn-outline-dark.mb-3
-            {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}
+            {:on-click #(rf/dispatch [:how-to-visibility/to-localstorage hide-tag])}
             [icon :cross "m-auto"]]]
           [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
           [:video.video-scalable-with-shadow-and-border {:auto-play true :loop true :muted true :plays-inline true}
