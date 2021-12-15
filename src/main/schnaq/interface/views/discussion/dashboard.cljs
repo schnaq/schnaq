@@ -4,6 +4,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.wordcloud :refer [wordcloud]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.views.discussion.pie-chart :as pie-chart]
@@ -64,9 +65,6 @@
        [summary/summary-body current-schnaq]
        [beta-only-modal])]))
 
-(defn- schnaq-summaries []
-  [summary-view])
-
 (defn- count-information [icon number-of unit]
   [:div.panel-white.px-5.mb-3
    [:div.row
@@ -85,6 +83,14 @@
      [count-information :icon-posts statement-count :dashboard/posts]
      [count-information :icon-users user-count :dashboard/members]]))
 
+(defn- wordcloud-view
+  "Display a word cloud with common words of the discussion."
+  []
+  [:section.panel-white.mb-3
+   [:h3 (labels :dashboard.wordcloud/title)]
+   [:small.text-muted (labels :dashboard.wordcloud/subtitle)]
+   [wordcloud]])
+
 (defn- dashboard-view []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
     [pages/with-discussion-header
@@ -93,12 +99,15 @@
       [:div.col-lg-3.p-0.p-md-3
        [schnaq-infos]]
       [:div.col-lg-5.col-12.mb-3.p-0.p-md-3
-       [schnaq-summaries]]
+       [wordcloud-view]
+       [summary-view]]
       [:div.col-lg-4.col-12.mb-3.p-0.p-md-3
        [schnaq-statistics]]]]))
 
 (defn view []
   [dashboard-view])
+
+;; -----------------------------------------------------------------------------
 
 (defn- embedded-dashboard-statement [statement]
   (let [chart-data (pie-chart/create-vote-chart-data statement)
@@ -132,7 +141,8 @@
       [:div.col-xxl-3.p-0.p-md-3
        [schnaq-infos]]
       [:div.col-xxl-5.col-12.mb-3.p-0.p-md-3
-       [schnaq-summaries]]
+       [wordcloud-view]
+       [summary-view]]
       [:div.col-xxl-4.col-12.mb-3.p-0.p-md-3
        [embedded-statistics]]]]))
 
