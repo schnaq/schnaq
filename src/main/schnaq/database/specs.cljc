@@ -76,6 +76,7 @@
 (s/def :discussion/edit-hash ::non-blank-string)
 (s/def :discussion/share-link ::non-blank-string)
 (s/def :discussion/admin-link ::non-blank-string)
+(s/def :discussion/created-at inst?)
 (s/def :discussion/author ::user-or-reference)
 (s/def :discussion/header-image-url string?)
 (s/def :discussion/hub-origin (s/or :reference :db/id
