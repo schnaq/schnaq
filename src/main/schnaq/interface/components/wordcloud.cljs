@@ -6,6 +6,7 @@
             [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
+            [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.loading :refer [spinner-icon]]))
 
@@ -41,13 +42,29 @@
       {:text word
        :value total})))
 
+(def ^:private options
+  {:colors (vals colors)
+   :enableTooltip true
+   :deterministic true
+   :fontFamily "Poppins"
+   :fontSizes [20 60]
+   :fontStyle "normal"
+   :fontWeight "normal"
+   :padding 1
+   :rotations 3
+   :rotationAngles [0 90]
+   :scale "sqrt"
+   :spiral "archimedean"
+   :transitionDuration 1000})
+
 ;; -----------------------------------------------------------------------------
+
 
 (defn wordcloud
   "Create a wordcloud based on the data in the db."
   []
   (if-let [words @(rf/subscribe [:wordcloud/words])]
-    [:> ReactWordcloud {:words words}]
+    [:> ReactWordcloud {:words words :options options}]
     [:div.text-center.py-3 [spinner-icon]]))
 
 ;; -----------------------------------------------------------------------------
