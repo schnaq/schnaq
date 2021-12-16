@@ -1,10 +1,13 @@
 .preview-image {
+    @extend .text-center;
     position: relative;
 
     div {
+        cursor: pointer;
+        left: 50%;
+        line-height: 1;
         position: absolute;
         top: 50%;
-        left: 50%;
         transform: translate(-50%, -50%);
     }
 }
