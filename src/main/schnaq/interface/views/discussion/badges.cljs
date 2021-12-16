@@ -29,8 +29,9 @@
   [statement edit-hash user-id creation-secrets]
   (when-not (:statement/deleted? statement)
     (let [anonymous-owner? (contains? creation-secrets (:db/id statement))
-          registered-owner? (= user-id (:db/id (:statement/author statement)))]
-      (or edit-hash anonymous-owner? registered-owner?))))
+          registered-owner? (= user-id (:db/id (:statement/author statement)))
+          administrator? @(rf/subscribe [:user/administrator?])]
+      (or edit-hash anonymous-owner? registered-owner? administrator?))))
 
 (defn- delete-dropdown-button
   "Give admin and author the ability to delete a statement."
