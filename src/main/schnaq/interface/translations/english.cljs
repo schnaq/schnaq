@@ -296,14 +296,9 @@
    :discussion.anonymous-delete.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."
    :discussion.anonymous-delete.modal/cta "Sign in / Sign up"
 
-   ;; Beta Only Funnel
-   :beta.modal/title "Beta-Feature"
-   :beta.modal/explain [:<> "This feature is in a test-state and you need to " [:strong "be a beta-tester to use it."]]
-   :beta.modal/persuade "You can write us an email if you would like to become a beta-tester."
-   :beta.modal/cta "Request Access"
-   :beta.modal.login/intro "Already beta tester"
-   :beta.modal.login/button "Then login"
-   :page.beta.modal/cta "If you are interested in joining our beta-tester programm, please write us an email at"
+   ;; Preview
+   :preview.image-overlay/title "This is a pro function."
+   :preview.image-overlay/body "To use it, you need a Pro or Beta account."
 
    ;; Press Kit
    :press-kit/heading "Press & Media"

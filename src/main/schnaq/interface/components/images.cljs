@@ -47,6 +47,7 @@
     :press-kit/logo "https://s3.schnaq.com/schnaq-presskit/logo_card.png"
     :press-kit/product "https://s3.schnaq.com/schnaq-presskit/schnaq_liste_auf_tablet.jpg"
     :press-kit/team "https://s3.schnaq.com/schnaq-presskit/team.jpg"
+    :preview/summary "https://s3.schnaq.com/schnaq-common/blurred/blurred_summary.png"
     :preview/wordcloud "https://s3.schnaq.com/schnaq-common/blurred/blurred_wordcloud.png"
     :pricing.others/confluence "https://s3.schnaq.com/schnaq-common/startpage/pricing/confluence.jpeg"
     :pricing.others/loomio "https://s3.schnaq.com/schnaq-common/startpage/pricing/loomio.png"

@@ -298,14 +298,9 @@
    :discussion.anonymous-delete.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei deinem Konto hinzugefügt."
    :discussion.anonymous-delete.modal/cta "Anmelden / Registrieren"
 
-   ;; Beta Only Funnel
-   :beta.modal/title "Beta-Feature"
-   :beta.modal/explain [:<> "Das ist eine Testfunktion. Um sie benutzen zu können, musst du " [:strong "Beta-Tester:in sein."]]
-   :beta.modal/persuade "Schreib uns eine E-Mail, wenn du auch zu den Beta-Tester:innen gehören möchtest."
-   :beta.modal/cta "Anfrage senden"
-   :beta.modal.login/intro "Bereits Beta-Tester:in?"
-   :beta.modal.login/button "Dann melde dich an"
-   :page.beta.modal/cta "Wenn du daran interessiert bist ein:e Beta-Tester:in zu werden, schreibe uns eine E-Mail unter"
+   ;; Preview
+   :preview.image-overlay/title "Dies ist eine Pro-Funktion."
+   :preview.image-overlay/body "Um sie nutzen zu können, benötigst du einen Pro- oder Beta-Zugang."
 
    ;; Press Kit
    :press-kit/heading "Presse & Medien"
