@@ -71,7 +71,7 @@
          [bullet-point :page.login/feature-3]]
         [:div.mt-3.text-center
          (labels :page.login.alert/text-1)
-         [:a.text-dark.mx-1 {:href (rfe/href :routes/pricing)} (labels :page.login.alert/button)]
+         [:a.btn.btn-link.text-dark.mx-1 {:href (rfe/href :routes/pricing)} (labels :page.login.alert/button)]
          (labels :page.login.alert/text-2)]
         [:img.w-50.align-self-center.d-lg-none {:src (img-path :schnaqqifant/three-d-bubble)}]]]]]}])
 
