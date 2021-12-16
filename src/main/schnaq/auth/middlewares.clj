@@ -1,18 +1,11 @@
 (ns schnaq.auth.middlewares
   (:require [buddy.auth :refer [authenticated?]]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn-]]
             [ring.util.http-response :refer [unauthorized forbidden]]
             [schnaq.api.toolbelt :as at]
+            [schnaq.auth.lib :as auth-lib]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]))
-
-(>defn- has-role?
-  "Check if user has realm-wide admin access."
-  [request roles]
-  [map? coll? :ret boolean?]
-  (string? (some roles
-                 (get-in request [:identity :roles]))))
 
 (defn- valid-app-code?
   "Check if an app-code was provided via the request-body."
@@ -35,7 +28,7 @@
   "Check if user has admin-role."
   [handler]
   (fn [request]
-    (if (has-role? request shared-config/admin-roles)
+    (if (auth-lib/has-role? (:identity request) shared-config/admin-roles)
       (handler request)
       (forbidden (at/build-error-body :auth/not-an-admin "You are not an admin.")))))
 
@@ -43,7 +36,7 @@
   "Check if is eligible for our beta-testers program."
   [handler]
   (fn [request]
-    (if (has-role? request shared-config/beta-tester-roles)
+    (if (auth-lib/has-role? (:identity request) shared-config/beta-tester-roles)
       (handler request)
       (forbidden (at/build-error-body :auth/not-a-beta-tester "You are not a beta tester.")))))
 
@@ -61,14 +54,7 @@
   [handler]
   (fn [request]
     (if (authenticated? request)
-      (-> request
-          (update-in [:identity :sub] str)
-          (assoc-in [:identity :id] (str (get-in request [:identity :sub])))
-          (assoc-in [:identity :preferred_username] (or (get-in request [:identity :preferred_username])
-                                                        (get-in request [:identity :name])))
-          (assoc-in [:identity :roles] (get-in request [:identity :realm_access :roles]))
-          (assoc-in [:identity :admin?] (has-role? request shared-config/admin-roles))
-          handler)
+      (handler (auth-lib/prepare-identity-map request))
       (handler request))))
 
 (defn replace-bearer-with-token
