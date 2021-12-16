@@ -172,8 +172,8 @@
    :page.login/feature-3 "Teilnahme per Link ohne Registrierung"
 
    ;; Register Page when creating a schnaq
-   :page.register/heading "Jetzt Registrieren und direkt schnaqqen!"
-   :page.register/register "Kostenlos Registrieren"
+   :page.register/heading "Jetzt registrieren und direkt schnaqqen!"
+   :page.register/register "Kostenlos registrieren"
 
    :auth.modal.request-login/title "Sitzung abgelaufen"
    :auth.modal.request-login/lead "Deine Sitzung ist abgelaufen. Das kann schonmal passieren, wenn du längere Zeit nicht aktiv warst. Bitte lade die Seite neu und logge dich erneut ein"
