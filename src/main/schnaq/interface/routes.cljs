@@ -175,8 +175,8 @@
        :link-text (labels :router/dashboard)
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
-                               (rf/dispatch [:wordcloud/for-current-discussion])
                                (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
+                               (rf/dispatch [:scheduler.after/login [:wordcloud/for-current-discussion]])
                                (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
      ["/summary"
       {:name :routes.schnaq/summary
