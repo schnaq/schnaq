@@ -128,25 +128,25 @@
   If the statement is valid and authored by this user, `success-fn` is called. if the statement is not valid, `bad-request-fn`
   is called. And if the authored user does not match `deny-access-fn` will be called."
   [user-identity statement-id share-hash statement success-fn bad-request-fn deny-access-fn]
-  (if (= user-identity (-> statement :statement/author :user.registered/keycloak-id))
-    (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
-             (not (:statement/deleted? statement)))
-      (success-fn)
-      (bad-request-fn))
-    (deny-access-fn)))
+  (let [user-is-author? (= (:sub user-identity) (-> statement :statement/author :user.registered/keycloak-id))]
+    (if (or user-is-author? (:admin? user-identity))
+      (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
+               (not (:statement/deleted? statement)))
+        (success-fn)
+        (bad-request-fn))
+      (deny-access-fn))))
 
 (defn- edit-statement!
   "Edits the content (and possibly type) of a statement, when the user is the registered author.
   `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`."
   [{:keys [parameters identity]}]
   (let [{:keys [statement-id statement-type new-content share-hash display-name]} (:body parameters)
-        user-identity (:sub identity)
         statement (db/fast-pull statement-id [:db/id :statement/parent
                                               {:statement/author [:user.registered/keycloak-id]}
                                               :statement/deleted?])
-        author-id (user-db/user-id display-name user-identity)]
+        author-id (user-db/user-id display-name (:sub identity))]
     (check-statement-author-and-state
-     user-identity statement-id share-hash statement
+     identity statement-id share-hash statement
      #(ok {:updated-statement (-> [(discussion-db/change-statement-text-and-type statement statement-type new-content)]
                                   (processors/with-aggregated-votes author-id)
                                   processors/with-sub-statement-count
@@ -164,7 +164,7 @@
         author-keycloak-id (-> discussion :discussion/author :user.registered/keycloak-id)
         author (user-db/private-user-by-keycloak-id author-keycloak-id)
         recipients ["info@schnaq.com" (:user.registered/email author)]]
-    (log/info "Flagged Statetement:" statement-id "in discussion:" share-hash)
+    (log/info "Flagged Statement:" statement-id "in discussion:" share-hash)
     (emails/send-flagged-post discussion statement recipients)
     (ok {:flagged-statement statement-id})))
 
@@ -172,12 +172,11 @@
   "Deletes a statement, when the user is the registered author."
   [{:keys [parameters identity]}]
   (let [{:keys [statement-id share-hash]} (:body parameters)
-        user-identity (:sub identity)
         statement (db/fast-pull statement-id [:db/id :statement/parent
                                               {:statement/author [:user.registered/keycloak-id]}
                                               :statement/deleted?])]
     (check-statement-author-and-state
-     user-identity statement-id share-hash statement
+     identity statement-id share-hash statement
      #(ok {:deleted-statement statement-id
            :method (discussion-db/delete-statement! statement-id)})
      #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not delete a closed / deleted discussion or statement."))
@@ -498,7 +497,7 @@
      ["/delete" {:delete delete-statement!
                  :description (at/get-doc #'delete-statement!)
                  :name :api.discussion.statement/delete
-                 :middleware [:user/authenticated?]
+                 :middleware [:user/authenticated?] ;; TODO
                  :responses {200 {:body {:deleted-statement :db/id
                                          :method keyword?}}
                              400 at/response-error-body
