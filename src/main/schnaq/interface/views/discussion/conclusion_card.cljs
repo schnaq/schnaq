@@ -92,7 +92,7 @@
                     (rf/dispatch [:statement.labels/remove statement label])
                     (rf/dispatch [:statement.labels/add statement label]))}
       [:small.pr-2 (if checked? (labels :qanda.button.mark/as-unanswered)
-                       (labels :qanda.button.mark/as-answer))]
+                                (labels :qanda.button.mark/as-answer))]
       [labels/build-label (if checked? label ":unchecked")]]]))
 
 (>defn- card-highlighting
@@ -175,8 +175,8 @@
         collapsed? @(rf/subscribe [:toggle-replies/is-collapsed? statement-id])
         button-content (if collapsed? [:<> [icon :collapse-up "my-auto mr-2"]
                                        (labels :qanda.button.show/replies)]
-                           [:<> [icon :collapse-down "my-auto mr-2"]
-                            (labels :qanda.button.hide/replies)])
+                                      [:<> [icon :collapse-down "my-auto mr-2"]
+                                       (labels :qanda.button.hide/replies)])
         collapsible-id (str "collapse-Replies-" statement-id)
         replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
         current-route @(rf/subscribe [:navigation/current-route-name])
@@ -256,7 +256,8 @@
         local-votes @(rf/subscribe [:local-votes])
         user @(rf/subscribe [:user/current])
         card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
-        shown-premises @(rf/subscribe [:discussion.statements/show])]
+        shown-premises @(rf/subscribe [:discussion.statements/show])
+        search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))]
     (if (seq shown-premises)
       (let [sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
             filtered-conclusions (filters/filter-statements sorted-conclusions active-filters (rf/subscribe [:local-votes]))]
@@ -267,7 +268,8 @@
               [statement-or-edit-wrapper statement]
               0.1]
              {:key (:db/id statement)}))])
-      [call-to-share])))
+      (when-not search?
+        [call-to-share]))))
 
 (rf/reg-event-fx
  :discussion.select/conclusion
