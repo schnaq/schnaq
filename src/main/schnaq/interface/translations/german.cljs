@@ -283,6 +283,9 @@
    :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
    :discussion.navbar/settings "Einstellungen"
 
+   :dashboard.wordcloud/title "Wortwolke"
+   :dashboard.wordcloud/subtitle "Siehe die häufigsten Wörter aus deinem schnaq."
+
    ;; Conversion-Edit-Funnel
    :discussion.anonymous-edit.modal/title "Bitte melde dich an zum Editieren"
    :discussion.anonymous-edit.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren anmelden."]]

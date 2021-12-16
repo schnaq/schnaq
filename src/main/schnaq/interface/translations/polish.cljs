@@ -280,6 +280,9 @@
    :discussion.state/read-only-warning "Ta dyskusja jest tylko do odczytu, możesz tu tylko czytać, ale nie pisać."
    :discussion.navbar/settings "Ustawienia"
 
+   :dashboard.wordcloud/title "Chmura słów"
+   :dashboard.wordcloud/subtitle "Zobacz najbardziej popularne słowa z Twojego schnaq."
+
    ;; Conversion-Edit-Funnel
    :discussion.anonymous-edit.modal/title "Zaloguj się, aby edytować"
    :discussion.anonymous-edit.modal/explain "Aby zapobiec nadużywaniu anonimowych postów, musisz się zalogować, aby móc je edytować."
