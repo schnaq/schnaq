@@ -740,7 +740,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :user.set-name.modal/primer "The name will be visible to other participants of the schnaq."
    :user/login "Sign In"
    :user/logout "Logout"
-   :user/register "Sign Up For Free"
+   :user/register "Sign Up"
    :user.profile/settings "Settings"
    :user.action/link-copied "Link copied!"
    :user.action/link-copied-body "Share the link with others, to give them access to the schnaq."

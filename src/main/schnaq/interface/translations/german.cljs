@@ -743,7 +743,7 @@
    :user.set-name.modal/primer "Der Name wird den anderen Teilnehmer:innen im schnaq angezeigt."
    :user/login "Anmelden"
    :user/logout "Logout"
-   :user/register "Kostenlos Registrieren"
+   :user/register "Einloggen / Registrieren"
    :user.profile/settings "Einstellungen"
    :user.action/link-copied "Link kopiert!"
    :user.action/link-copied-body "Teile den Link mit anderen, um ihnen Zugriff zu geben."
