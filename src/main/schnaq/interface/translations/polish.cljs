@@ -738,7 +738,7 @@
    :user.set-name.modal/primer "Nazwa jest wyświetlana dla innych uczestników schnaq."
    :user/login "Zaloguj się"
    :user/logout "Wyloguj się"
-   :user/register "Zarejestruj się za darmo"
+   :user/register "Zapisać się"
    :user.profile/settings "Ustawienia"
    :user.action/link-copied "Link skopiowany!"
    :user.action/link-copied-body "Udostępnij link innym, aby dać im dostęp."

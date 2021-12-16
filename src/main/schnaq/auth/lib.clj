@@ -3,7 +3,7 @@
             [schnaq.config.shared :as shared-config]))
 
 (>defn has-role?
-  "Check if user has realm-wide admin access."
+  "Check if user has realm-wide role."
   [user-identity roles]
   [map? coll? :ret boolean?]
   (string?

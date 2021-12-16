@@ -172,8 +172,8 @@
    :page.login/feature-3 "Teilnahme per Link ohne Registrierung"
 
    ;; Register Page when creating a schnaq
-   :page.register/heading "Jetzt Registrieren und direkt schnaqqen!"
-   :page.register/register "Kostenlos Registrieren"
+   :page.register/heading "Jetzt registrieren und direkt schnaqqen!"
+   :page.register/register "Kostenlos registrieren"
 
    :auth.modal.request-login/title "Sitzung abgelaufen"
    :auth.modal.request-login/lead "Deine Sitzung ist abgelaufen. Das kann schonmal passieren, wenn du längere Zeit nicht aktiv warst. Bitte lade die Seite neu und logge dich erneut ein"
@@ -743,7 +743,7 @@
    :user.set-name.modal/primer "Der Name wird den anderen Teilnehmer:innen im schnaq angezeigt."
    :user/login "Anmelden"
    :user/logout "Logout"
-   :user/register "Kostenlos Registrieren"
+   :user/register "Einloggen / Registrieren"
    :user.profile/settings "Einstellungen"
    :user.action/link-copied "Link kopiert!"
    :user.action/link-copied-body "Teile den Link mit anderen, um ihnen Zugriff zu geben."
