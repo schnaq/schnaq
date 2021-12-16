@@ -2,16 +2,15 @@
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.preview :as preview]
             [schnaq.interface.components.wordcloud :refer [wordcloud]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.views.discussion.pie-chart :as pie-chart]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.summary :as summary]
-            [schnaq.interface.views.user :as user]
-            [schnaq.interface.components.preview :as preview]))
+            [schnaq.interface.views.user :as user]))
 
 (defn- dashboard-statement [statement]
   (let [chart-data (pie-chart/create-vote-chart-data statement)
