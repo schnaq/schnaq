@@ -123,6 +123,7 @@
         placeholder (labels :statement.reply/placeholder)
         send-button-label (labels :statement/reply)
         statement-type @(rf/subscribe [:form/statement-type statement-id])
+        pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         answer-to-statement-event (fn [e]
                                     (jq/prevent-default e)
                                     (logic/reply-to-statement
@@ -141,10 +142,11 @@
       statement-type
       false
       true]
-     [:div.input-group-append.mt-1.ml-1
-      [statement-type-choose-button
-       [:form/statement-type statement-id]
-       [:form/statement-type! statement-id] true]]]))
+     (when-not pro-con-disabled?
+       [:div.input-group-append.mt-1.ml-1
+        [statement-type-choose-button
+         [:form/statement-type statement-id]
+         [:form/statement-type! statement-id] true]])]))
 
 (rf/reg-event-db
  ;; Assoc statement-type with statement-id as key. The current topic is assigned via :selected

@@ -140,10 +140,8 @@
   Updates :statement/children and :meta/sub-statement-count afterwards in app-db."
   [statement-to-reply-to attitude form-name form]
   (let [new-text-element (oget+ form [form-name])
-        new-text (oget new-text-element [:value])
-        pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        statement-type (if pro-con-disabled? :neutral attitude)]
-    (rf/dispatch [:discussion.reply.statement/send statement-to-reply-to statement-type new-text])
+        new-text (oget new-text-element [:value])]
+    (rf/dispatch [:discussion.reply.statement/send statement-to-reply-to attitude new-text])
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
 (rf/reg-event-fx

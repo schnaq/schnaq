@@ -296,14 +296,9 @@
    :discussion.anonymous-delete.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."
    :discussion.anonymous-delete.modal/cta "Sign in / Sign up"
 
-   ;; Beta Only Funnel
-   :beta.modal/title "Beta-Feature"
-   :beta.modal/explain [:<> "This feature is in a test-state and you need to " [:strong "be a beta-tester to use it."]]
-   :beta.modal/persuade "You can write us an email if you would like to become a beta-tester."
-   :beta.modal/cta "Request Access"
-   :beta.modal.login/intro "Already beta tester"
-   :beta.modal.login/button "Then login"
-   :page.beta.modal/cta "If you are interested in joining our beta-tester programm, please write us an email at"
+   ;; Preview
+   :preview.image-overlay/title "This is a pro function."
+   :preview.image-overlay/body "To use it, you need a Pro or Beta account."
 
    ;; Press Kit
    :press-kit/heading "Press & Media"
@@ -740,7 +735,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :user.set-name.modal/primer "The name will be visible to other participants of the schnaq."
    :user/login "Sign In"
    :user/logout "Logout"
-   :user/register "Sign Up For Free"
+   :user/register "Sign Up"
    :user.profile/settings "Settings"
    :user.action/link-copied "Link copied!"
    :user.action/link-copied-body "Share the link with others, to give them access to the schnaq."
