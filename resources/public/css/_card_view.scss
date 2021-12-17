@@ -1,4 +1,4 @@
-@use 'rounded' as rounded;
+@use "rounded" as rounded;
 
 .panel-white {
   @include rounded.rounded-1;
@@ -73,7 +73,6 @@
   @extend .discussion-input-content;
   min-height: 0;
   padding: 0.5rem 0.5rem 0.5rem 0;
-
 }
 
 .textarea-resize-none {
@@ -99,6 +98,7 @@
 
 .statement-card {
   @extend .card;
+  @extend .my-2;
   @include rounded.rounded-1;
   border: 0;
   white-space: pre-line;
@@ -106,6 +106,14 @@
   @include media-breakpoint-down(sm) {
     border-radius: 0;
   }
+}
+
+.selection-card {
+  @extend .statement-card;
+  @extend .border;
+  @extend .border-warning;
+  @extend .p-3;
+  @extend .shadow;
 }
 
 .highlight-card {
