@@ -103,7 +103,7 @@
   []
   (let [selected-hub @(rf/subscribe [:hub/selected])
         user-not-authenticated? (not @(rf/subscribe [:user/authenticated?]))]
-    (if (or selected-hub user-not-authenticated?)
+    (if (or (nil? selected-hub) user-not-authenticated?)
       (rfe/href :routes.schnaqs/personal)
       (rfe/href :routes/hub {:keycloak-name selected-hub}))))
 
@@ -113,6 +113,6 @@
   []
   (let [selected-hub @(rf/subscribe [:hub/selected])
         user-not-authenticated? (not @(rf/subscribe [:user/authenticated?]))]
-    (if (or (= selected-hub :none) user-not-authenticated?)
+    (if (or (nil? selected-hub) user-not-authenticated?)
       [:navigation/navigate :routes.schnaqs/personal]
       [:navigation/navigate :routes/hub {:keycloak-name selected-hub}])))
