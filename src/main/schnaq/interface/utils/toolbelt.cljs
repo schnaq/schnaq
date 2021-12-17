@@ -98,19 +98,21 @@
   (get-in db [:user :names :display] config/default-anonymous-display-name))
 
 (defn current-overview-link
-  "Builds an href link to either the last selected hub or all visited schnaqs"
+  "Builds a href link to either the last selected hub or all visited schnaqs.
+  When the user is not logged in ':routes.schnaqs/personal' will be selected."
   []
-  (let [current-hub @(rf/subscribe [:hub/selected])]
-    (print current-hub)
-    (if (= current-hub :none)
+  (let [selected-hub @(rf/subscribe [:hub/selected])
+        user-not-authenticated? (not @(rf/subscribe [:user/authenticated?]))]
+    (if (or (= selected-hub :none) user-not-authenticated?)
       (rfe/href :routes.schnaqs/personal)
-      (rfe/href :routes/hub {:keycloak-name current-hub}))))
+      (rfe/href :routes/hub {:keycloak-name selected-hub}))))
 
 (defn current-overview-navigation-route
-  "Builds :navigation event parameter to navigate to the last selected hub or all visited schnaqs"
+  "Builds :navigation event parameter to navigate to the last selected hub or all visited schnaqs.
+   When the user is not logged in ':routes.schnaqs/personal' will be selected."
   []
-  (let [current-overview @(rf/subscribe [:hub/selected])]
-    (print current-overview)
-    (if (= current-overview :none)
+  (let [selected-hub @(rf/subscribe [:hub/selected])
+        user-not-authenticated? (not @(rf/subscribe [:user/authenticated?]))]
+    (if (or (= selected-hub :none) user-not-authenticated?)
       [:navigation/navigate :routes.schnaqs/personal]
-      [:navigation/navigate :routes/hub {:keycloak-name current-overview}])))
+      [:navigation/navigate :routes/hub {:keycloak-name selected-hub}])))
