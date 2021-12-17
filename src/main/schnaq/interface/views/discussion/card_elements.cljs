@@ -185,17 +185,19 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- current-topic-badges [schnaq statement is-topic?]
+(defn- current-topic-badges [schnaq statement]
   (let [badges-start [badges/static-info-badges-discussion schnaq]
         badges-conclusion [badges/extra-discussion-info-badges statement true]
-        badges (if is-topic? badges-start badges-conclusion)]
+        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        badges (if starting-route? badges-start badges-conclusion)]
     [:div.ml-auto badges]))
 
-(defn- title-view [statement is-topic?]
-  (let [title [md/as-markdown (:statement/content statement)]
+(defn- title-view [statement]
+  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        title [md/as-markdown (:statement/content statement)]
         edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if edit-active?
-      (if is-topic?
+      (if starting-route?
         [edit/edit-card-discussion statement]
         [edit/edit-card-statement statement])
       [:h2.h6 title])))
@@ -213,10 +215,9 @@
 (defn- title-and-input-element
   "Element containing Title and textarea input"
   [statement]
-  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        statement-labels (set (:statement/labels statement))]
+  (let [statement-labels (set (:statement/labels statement))]
     [:<>
-     [title-view statement starting-route?]
+     [title-view statement]
      (for [label statement-labels]
        [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
         [labels/build-label label]])
@@ -229,17 +230,17 @@
                  :statement/content title
                  :statement/author author
                  :statement/created-at created-at}
-        is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        statement (if is-topic? content current-conclusion)
+        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        statement (if starting-route? content current-conclusion)
         info-content [info-content-conclusion statement (:discussion/edit-hash statement)]]
     [motion/move-in :left
      [:div.p-2
       [:div.d-flex.flex-wrap.mb-4
        [user/user-info statement 32 nil]
        [:div.d-flex.flex-row.ml-auto
-        (when-not is-topic?
+        (when-not starting-route?
           [:div.mr-auto info-content])
-        [current-topic-badges schnaq statement is-topic?]]]
+        [current-topic-badges schnaq statement]]]
       [title-and-input-element statement]]]))
 
 (defn- topic-view [content]
