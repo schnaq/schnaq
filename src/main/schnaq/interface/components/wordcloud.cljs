@@ -7,6 +7,7 @@
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.colors :refer [colors]]
+            [schnaq.interface.components.preview :as preview]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.loading :refer [spinner-icon]]))
 
@@ -59,13 +60,14 @@
 
 ;; -----------------------------------------------------------------------------
 
-
 (defn wordcloud
   "Create a wordcloud based on the data in the db."
   []
-  (if-let [words @(rf/subscribe [:wordcloud/words])]
-    [:> ReactWordcloud {:words words :options options}]
-    [:div.text-center.py-3 [spinner-icon]]))
+  (if @(rf/subscribe [:user/beta-tester?])
+    (if-let [words @(rf/subscribe [:wordcloud/words])]
+      [:> ReactWordcloud {:words words :options options}]
+      [:div.text-center.py-3 [spinner-icon]])
+    [preview/preview-image :preview/wordcloud]))
 
 ;; -----------------------------------------------------------------------------
 

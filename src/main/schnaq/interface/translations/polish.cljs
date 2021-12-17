@@ -295,14 +295,9 @@
    :discussion.anonymous-delete.modal/persuade "Posty, które ostatnio utworzyłeś w tej przeglądarce, zostaną dodane do Twojego konta."
    :discussion.anonymous-delete.modal/cta "Zaloguj się / Zarejestruj się"
 
-   ;; Beta Only Funnel
-   :beta.modal/title "Funkcja beta"
-   :beta.modal/explain "Jest to funkcja testowa. Aby z niego korzystać, musisz być beta testerem."
-   :beta.modal/persuade "Napisz do nas e-mail, jeśli chciałbyś zostać jednym z beta testerów.."
-   :beta.modal/cta "Wyślij zapytanie"
-   :beta.modal.login/intro "Jesteś już beta testerem?"
-   :beta.modal.login/button "Następnie zarejestruj się"
-   :page.beta.modal/cta "Jeśli jesteś zainteresowany zostaniem beta testerem, wyślij do nas e-mail na adres"
+   ;; Preview
+   :preview.image-overlay/title "To jest funkcja dla profesjonalistów."
+   :preview.image-overlay/body "Aby z niej korzystać, musisz posiadać konto Pro lub Beta."
 
    ;; Press Kit
    :press-kit/heading "Prasa i media"
