@@ -49,7 +49,7 @@
 
 (defn- login-page-base
   "Basic login page for either registration or sign in."
-  [heading subheading button-label cta-media]
+  [heading subheading button-label]
   [with-nav-and-header
    {:page/heading (labels heading)
     :page/subheading (labels subheading)
@@ -59,7 +59,10 @@
     [:section.container {:style {:min-height "50vh"}}
      [:div.row.pt-lg-5
       [:div.col-12.col-lg-7.col-xl-6
-       cta-media]
+       [:video.w-75.rounded-5.my-auto.d-none.d-lg-block
+        {:auto-play true :loop true :muted true :plays-inline true}
+        [:source {:src (video :register.point-right-christmas/webm) :type "video/webm"}]
+        [:source {:src (video :register.point-right-christmas/mp4) :type "video/mp4"}]]]
       [:div.col-12.col-lg-5.col-xl-6
        [:div.text-center.my-5.my-lg-3.pt-lg-5
         [:button.btn.btn-lg.btn-dark.mb-3.mx-auto
@@ -81,8 +84,7 @@
   [login-page-base
    :page.login/heading
    :page.login/subheading
-   :page.login/login
-   [:img.w-75.align-self-center.d-none.d-lg-block {:src (img-path :schnaqqifant/three-d-bubble)}]])
+   :page.login/login])
 
 (defn- register-cta
   "Default page indicating a first time user creates a schnaq."
@@ -90,11 +92,7 @@
   [login-page-base
    :page.register/heading
    :page.login/subheading
-   :page.register/register
-   [:video.w-75.rounded-5.my-auto.d-none.d-lg-block
-    {:auto-play true :loop true :muted true :plays-inline true}
-    [:source {:src (video :register.point-right/webm) :type "video/webm"}]
-    [:source {:src (video :register.point-right/mp4) :type "video/mp4"}]]])
+   :page.register/register])
 
 (defn- beta-only
   "Default page indicating, that only beta users are allowed."
