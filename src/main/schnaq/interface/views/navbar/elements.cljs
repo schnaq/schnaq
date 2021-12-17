@@ -42,7 +42,7 @@
   "Brand logo and title with dynamic resizing."
   [title additional-content]
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.mr-2.bg-white
-   [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
+   [:a.schnaq-logo-container.d-flex.h-100 {:href (toolbelt/current-overview-link)}
     [schnaq-logo]]
    [:div.mx-0.mx-md-4
     title]
@@ -50,7 +50,7 @@
 
 (defn navbar-qanda-title []
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.mr-2
-   [:a.p-3.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
+   [:a.p-3.d-flex.h-100 {:href (toolbelt/current-overview-link)}
     [schnaq-logo]]
    [:div.mx-1.mx-md-5.px-md-5.pt-2.flex-column
     [clickable-title "text-white" "text-white"]]])

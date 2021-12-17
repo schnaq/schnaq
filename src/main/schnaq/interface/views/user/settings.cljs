@@ -3,6 +3,7 @@
             [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed-overview]
@@ -33,7 +34,7 @@
   [tooltip/text
    (labels :history.all-schnaqs/tooltip)
    [:a.button.btn.btn-dark.p-3
-    {:href (rfe/href :routes.schnaqs/personal)}
+    {:href (toolbelt/current-overview-link)}
     [:div.d-flex
      [icon :arrow-left "m-auto"]]]])
 

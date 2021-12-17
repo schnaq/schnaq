@@ -68,7 +68,7 @@
     ;; menu items
     [:div#schnaq-navbar.collapse.navbar-collapse
      [:ul.navbar-nav.ml-auto
-      [:li.nav-item [navbar-components/button :nav/schnaqs (reitfe/href :routes.schnaqs/personal)]]
+      [:li.nav-item [navbar-components/button :nav/schnaqs (toolbelt/current-overview-link)]]
       [:li.nav-item [pricing-button]]
       [:li.nav-item [privacy-button]]
       [:li.nav-item [blog-link]]

@@ -128,6 +128,17 @@
    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
      (get-in db [:hubs keycloak-name]))))
 
+(rf/reg-event-db
+ :hub/select!
+ (fn [db [_ keycloak-name]]
+   (assoc db :hub-selected keycloak-name)))
+
+(rf/reg-sub
+ :hub/selected
+ (fn [db]
+   (get db :hub-selected :none)))
+
+
 (rf/reg-sub
  :hub.current/members
  (fn [db _]
