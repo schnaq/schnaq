@@ -44,7 +44,7 @@
        :value total})))
 
 (def ^:private options
-  {:colors (vals colors)
+  {:colors (vals (dissoc colors :white))
    :enableTooltip true
    :deterministic true
    :fontFamily "Poppins"
