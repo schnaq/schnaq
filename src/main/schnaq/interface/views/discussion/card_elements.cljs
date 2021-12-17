@@ -37,7 +37,7 @@
   []
   (let [history @(rf/subscribe [:discussion-history])
         has-history? (seq history)
-        back-feed [:navigation/navigate :routes.schnaqs/personal]
+        back-feed (toolbelt/current-overview-navigation-route)
         back-history [:discussion.history/time-travel 1]
         back-label (if has-history?
                      (labels :history.back/label)

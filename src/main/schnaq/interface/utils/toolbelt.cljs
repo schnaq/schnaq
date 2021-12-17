@@ -3,6 +3,8 @@
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn]]
             [oops.core :refer [oset! oget oget+]]
+            [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.interface.config :as config]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
@@ -94,3 +96,23 @@
   "Central fn for extracting current display-name from db."
   [db]
   (get-in db [:user :names :display] config/default-anonymous-display-name))
+
+(defn current-overview-link
+  "Builds a href link to either the last selected hub or all visited schnaqs.
+  When the user is not logged in ':routes.schnaqs/personal' will be selected."
+  []
+  (let [selected-hub @(rf/subscribe [:hub/selected])
+        user-not-authenticated? (not @(rf/subscribe [:user/authenticated?]))]
+    (if (or selected-hub user-not-authenticated?)
+      (rfe/href :routes.schnaqs/personal)
+      (rfe/href :routes/hub {:keycloak-name selected-hub}))))
+
+(defn current-overview-navigation-route
+  "Builds :navigation event parameter to navigate to the last selected hub or all visited schnaqs.
+   When the user is not logged in ':routes.schnaqs/personal' will be selected."
+  []
+  (let [selected-hub @(rf/subscribe [:hub/selected])
+        user-not-authenticated? (not @(rf/subscribe [:user/authenticated?]))]
+    (if (or (= selected-hub :none) user-not-authenticated?)
+      [:navigation/navigate :routes.schnaqs/personal]
+      [:navigation/navigate :routes/hub {:keycloak-name selected-hub}])))

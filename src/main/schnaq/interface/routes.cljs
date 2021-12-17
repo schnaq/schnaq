@@ -79,7 +79,8 @@
     {:parameters {:path {:keycloak-name string?}}
      :controllers [{:parameters {:path [:keycloak-name]}
                     :start (fn [{:keys [path]}]
-                             (rf/dispatch [:scheduler.after/login [:hub/load (:keycloak-name path)]]))}]}
+                             (rf/dispatch [:scheduler.after/login [:hub/load (:keycloak-name path)]])
+                             (rf/dispatch [:hub/select! (:keycloak-name path)]))}]}
     ["/"
      {:name :routes/hub
       :view hubs/hub-overview}]
@@ -130,7 +131,9 @@
     {:name :routes.schnaqs/personal
      :view feed/page
      :link-text (labels :router/visited-schnaqs)
-     :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]
+     :controllers [{:start (fn [_]
+                             (rf/dispatch [:schnaqs.visited/load])
+                             (rf/dispatch [:hub/select! nil]))}]}]
    ["schnaq"
     ["/create"
      {:name :routes.schnaq/create

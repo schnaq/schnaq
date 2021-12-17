@@ -21,7 +21,7 @@
         [:input.form-check-input.big-checkbox
          {:type :checkbox
           :id :hub-exclusive
-          :defaultChecked false
+          :defaultChecked true
           :on-change
           #(when (oget % [:target :checked])
              (jq/prop (jq/$ "#public-discussion") "checked" false))}]
@@ -42,33 +42,36 @@
    [icon :arrow-right "ml-2"]])
 
 (defn- create-qanda-page []
-  [pages/with-nav-and-header
-   {:page/heading (labels :schnaq.create/heading)
-    :page/subheading (labels :schnaq.create.qanda/subheading)
-    :page/title (labels :schnaq.create/title)
-    :page/classes "base-wrapper bg-white"
-    :condition/create-schnaq? true}
-   [:div.container
-    [:div.py-3
-     [:form
-      {:on-submit (fn [e]
-                    (jq/prevent-default e)
-                    (rf/dispatch [:schnaq.create/new
-                                  (oget e [:currentTarget :elements])]))}
-      [:h4.mb-5 (labels :schnaq.create.input/title)]
-      [:div.panel-grey.row.p-4
-       [:div.col-12
-        [common/form-input {:id :schnaq-title
-                            :placeholder (labels :schnaq.create.input/placeholder)
-                            :css "font-150"}]]]
-      [:div.row.text-primary.p-3
-       [icon :info "my-auto mr-3"]
-       [:span (labels :schnaq.create/info)]]
-      [:div.row.my-5
-       [:div.col-12.col-xl-6
-        [add-schnaq-to-hub]]]
-      [:div.row.px-1.py-3
-       [create-schnaq-button]]]]]])
+  (let [selected-hub @(rf/subscribe [:hub/selected])]
+    [pages/with-nav-and-header
+     {:page/heading (labels :schnaq.create/heading)
+      :page/subheading (labels :schnaq.create.qanda/subheading)
+      :page/title (labels :schnaq.create/title)
+      :page/classes "base-wrapper bg-white"
+      :condition/create-schnaq? true}
+     [:div.container
+      [:div.py-3
+       [:form
+        {:on-submit (fn [e]
+                      (jq/prevent-default e)
+                      (rf/dispatch [:schnaq.create/new
+                                    (oget e [:currentTarget :elements])
+                                    selected-hub]))}
+        [:h4.mb-5 (labels :schnaq.create.input/title)]
+        [:div.panel-grey.row.p-4
+         [:div.col-12
+          [common/form-input {:id :schnaq-title
+                              :placeholder (labels :schnaq.create.input/placeholder)
+                              :css "font-150"}]]]
+        [:div.row.text-primary.p-3
+         [icon :info "my-auto mr-3"]
+         [:span (labels :schnaq.create/info)]]
+        (when selected-hub
+          [:div.row.my-5
+           [:div.col-12.offset-xl-3.col-xl-6
+            [add-schnaq-to-hub]]])
+        [:div.row.px-1.py-3
+         [create-schnaq-button]]]]]]))
 
 (defn create-schnaq-view []
   [create-qanda-page])
@@ -76,14 +79,14 @@
 
 (rf/reg-event-fx
  :schnaq.create/new
- (fn [{:keys [db]} [_ form-elements]]
+ (fn [{:keys [db]} [_ form-elements selected-hub]]
    (let [authenticated? (get-in db [:user :authenticated?] false)
          use-origin? (and authenticated?
                           (seq (get-in db [:user :groups] [])))
          nickname (tools/current-display-name db)
          discussion-title (oget form-elements [:schnaq-title :value])
-         exclusive? (when use-origin? (oget form-elements [:?hub-exclusive :checked]))
-         origin-hub (when use-origin? (oget form-elements [:?exclusive-hub-select :value]))
+         exclusive? (when use-origin? (or (oget form-elements [:?hub-exclusive :checked]) (not (nil? selected-hub))))
+         origin-hub (when use-origin? (or (oget form-elements [:?exclusive-hub-select :value]) selected-hub))
          payload (cond-> {:discussion-title discussion-title}
                    origin-hub (assoc :hub-exclusive? exclusive?
                                      :hub origin-hub)
