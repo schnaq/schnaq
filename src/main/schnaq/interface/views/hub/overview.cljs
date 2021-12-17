@@ -138,7 +138,7 @@
 (rf/reg-sub
  :hub/selected
  (fn [db]
-   (get db :hub-selected)))
+   (:hub-selected db)))
 
 (rf/reg-sub
  :hub.current/members
