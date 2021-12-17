@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.conclusion-card
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
+            [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.specs :as specs]
@@ -13,6 +14,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.filters :as filters]
@@ -116,7 +118,7 @@
                            (= :routes.schnaq.select/statement current-route) ;; history-length == 1 => a reply to a question
                            (or (not mods-mark-only?)
                                (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
-     [:article.statement-card.my-2
+     [:article.statement-card
       [:div.d-flex.flex-row
        [:div {:class (card-highlighting statement)}]
        [:div.card-view.card-body.py-2.px-0
@@ -250,6 +252,34 @@
       (sort-by keyfn > statements)
       (concat own-statements other-statements))))
 
+(defn input-card []
+  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        input-style (if starting-route? "statement-text" "premise-text")]
+    [:section.statement-card
+     (if read-only?
+       [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
+       [input/input-form input-style])]))
+
+(defn tabs []
+  (let [selected-option (reagent/atom :question)
+        on-click #(reset! selected-option %)]
+    (fn []
+      [:section.selection-card
+       [:ul.nav.nav-tabs
+        [:li.nav-item
+         [:a.nav-link {:class (when (= @selected-option :question) "active")
+                       :href "#"
+                       :on-click #(on-click :question)} [:<> [icon :info-question] " Fragen"]]]
+        [:li.nav-item
+         [:a.nav-link.text-muted {:href "#"}  ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
+          [tooltip/text "Coming Soon" [:span "Umfrage"]]]]
+        [:li.nav-item
+         [:a.nav-link.text-muted {:href "#"}
+          [tooltip/text "Coming Soon" [:span "Aktivierung"]]]]]
+       (case @selected-option
+         :question [input-card])])))
+
 (defn conclusion-cards-list
   "Displays a list of conclusions."
   []
@@ -264,12 +294,14 @@
       (let [sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
             filtered-conclusions (filters/filter-statements sorted-conclusions active-filters (rf/subscribe [:local-votes]))]
         [:div.card-columns.pb-3 {:class card-column-class}
-         (for [statement filtered-conclusions]
-           (with-meta
-             [motion/fade-in-and-out
-              [statement-or-edit-wrapper statement]
-              0.1]
-             {:key (:db/id statement)}))])
+         (conj
+          (for [statement filtered-conclusions]
+            (with-meta
+              [motion/fade-in-and-out
+               [statement-or-edit-wrapper statement]
+               0.1]
+              {:key (:db/id statement)}))
+          (with-meta [tabs] {:key "list-response-options"}))])
       (when-not search?
         [call-to-share]))))
 

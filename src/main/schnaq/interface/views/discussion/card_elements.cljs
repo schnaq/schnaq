@@ -202,16 +202,6 @@
         [edit/edit-card-statement statement])
       [:h2.h6 title])))
 
-(defn- input-card []
-  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        input-style (if starting-route? "statement-text" "premise-text")]
-    [:<>
-     [:div.line-divider.my-2.my-md-3]
-     (if read-only?
-       [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
-       [input/input-form input-style])]))
-
 (defn- title-and-input-element
   "Element containing Title and textarea input"
   [statement]
@@ -220,8 +210,7 @@
      [title-view statement]
      (for [label statement-labels]
        [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
-        [labels/build-label label]])
-     [input-card]]))
+        [labels/build-label label]])]))
 
 (defn- topic-bubble-view []
   (let [{:discussion/keys [title author created-at] :as schnaq} @(rf/subscribe [:schnaq/selected])
