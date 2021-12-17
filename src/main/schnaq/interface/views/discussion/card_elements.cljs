@@ -201,7 +201,7 @@
       [:h2.h6 title])))
 
 (defn- input-card []
-  (let [starting-route? @(rf/subscribe [:routes.discussion/starting?])
+  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         input-style (if starting-route? "statement-text" "premise-text")]
     [:<>
@@ -213,7 +213,7 @@
 (defn- title-and-input-element
   "Element containing Title and textarea input"
   [statement]
-  (let [starting-route? @(rf/subscribe [:routes.discussion/starting?])
+  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
         statement-labels (set (:statement/labels statement))]
     [:<>
      [title-view statement starting-route?]
@@ -259,7 +259,7 @@
    (get-in db [:discussion :statements :sort-method] :newest)))
 
 (defn- show-how-to []
-  (if @(rf/subscribe [:routes.discussion/starting?])
+  (if @(rf/subscribe [:schnaq.routes/starting?])
     [how-to-elements/quick-how-to-schnaq]
     [how-to-elements/quick-how-to-pro-con]))
 

@@ -245,7 +245,7 @@
                               :edit-hash edit-hash})]}))
 
 (rf/reg-sub
- :routes.discussion/starting?
+ :schnaq.routes/starting?
  :<- [:navigation/current-route-name]
  (fn [route-name _]
    (= :routes.schnaq/start route-name)))

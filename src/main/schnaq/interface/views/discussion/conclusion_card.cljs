@@ -181,7 +181,7 @@
                           (labels :qanda.button.hide/replies)])
         collapsible-id (str "collapse-Replies-" statement-id)
         replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
-        starting-route? @(rf/subscribe [:routes.discussion/starting?])
+        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
         mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
         authenticated? @(rf/subscribe [:user/authenticated?])
         with-answer? (and starting-route?
