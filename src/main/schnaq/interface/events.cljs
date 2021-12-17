@@ -243,3 +243,9 @@
    {:fx [(http/xhrio-request db :post "/schnaq/by-hash-as-admin" [:schnaq/save-as-last-added]
                              {:share-hash share-hash
                               :edit-hash edit-hash})]}))
+
+(rf/reg-sub
+ :routes.discussion/starting?
+ :<- [:navigation/current-route-name]
+ (fn [route-name _]
+   (= :routes.schnaq/start route-name)))
