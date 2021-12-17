@@ -68,7 +68,7 @@
          [:span (labels :schnaq.create/info)]]
         (when selected-hub
           [:div.row.my-5
-           [:div.col-12.col-xl-6
+           [:div.col-12.offset-xl-3.col-xl-6
             [add-schnaq-to-hub]]])
         [:div.row.px-1.py-3
          [create-schnaq-button]]]]]]))
