@@ -131,13 +131,14 @@
 (rf/reg-event-db
  :hub/select!
  (fn [db [_ keycloak-name]]
-   (assoc db :hub-selected keycloak-name)))
+   (if keycloak-name
+     (assoc db :hub-selected keycloak-name)
+     (dissoc db :hub-selected))))
 
 (rf/reg-sub
  :hub/selected
  (fn [db]
-   (get db :hub-selected :none)))
-
+   (get db :hub-selected)))
 
 (rf/reg-sub
  :hub.current/members

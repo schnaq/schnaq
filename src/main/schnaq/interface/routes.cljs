@@ -133,7 +133,7 @@
      :link-text (labels :router/visited-schnaqs)
      :controllers [{:start (fn [_]
                              (rf/dispatch [:schnaqs.visited/load])
-                             (rf/dispatch [:hub/select! :none]))}]}]
+                             (rf/dispatch [:hub/select!]))}]}]
    ["schnaq"
     ["/create"
      {:name :routes.schnaq/create

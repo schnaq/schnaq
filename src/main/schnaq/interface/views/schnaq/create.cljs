@@ -66,7 +66,7 @@
         [:div.row.text-primary.p-3
          [icon :info "my-auto mr-3"]
          [:span (labels :schnaq.create/info)]]
-        (when (= :none selected-hub)
+        (when selected-hub
           [:div.row.my-5
            [:div.col-12.col-xl-6
             [add-schnaq-to-hub]]])
@@ -85,7 +85,7 @@
                           (seq (get-in db [:user :groups] [])))
          nickname (tools/current-display-name db)
          discussion-title (oget form-elements [:schnaq-title :value])
-         exclusive? (when use-origin? (or (oget form-elements [:?hub-exclusive :checked]) (not= :none selected-hub)))
+         exclusive? (when use-origin? (or (oget form-elements [:?hub-exclusive :checked]) (not (nil? selected-hub))))
          origin-hub (when use-origin? (or (oget form-elements [:?exclusive-hub-select :value]) selected-hub))
          payload (cond-> {:discussion-title discussion-title}
                    origin-hub (assoc :hub-exclusive? exclusive?
