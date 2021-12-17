@@ -70,8 +70,7 @@
 (defn- topic-input-area
   "Input form with an option to chose statement type."
   [textarea-name]
-  (let [current-route-name @(rf/subscribe [:navigation/current-route-name])
-        starting-route? (= :routes.schnaq/start current-route-name)
+  (let [starting-route? @(rf/subscribe [:routes.discussion/starting?])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         statement-type (if starting-route?
                          :statement.type/neutral
@@ -99,8 +98,7 @@
 (defn input-form
   "Form to collect the user's statements."
   [textarea-name]
-  (let [current-route-name @(rf/subscribe [:navigation/current-route-name])
-        starting-route? (= :routes.schnaq/start current-route-name)
+  (let [starting-route? @(rf/subscribe [:routes.discussion/starting?])
         when-starting (fn [e] (jq/prevent-default e)
                         (rf/dispatch [:discussion.add.statement/starting
                                       (oget e [:currentTarget :elements])]))

@@ -200,22 +200,27 @@
         [edit/edit-card-statement statement])
       [:h2.h6 title])))
 
-(defn- title-and-input-element
-  "Element containing Title and textarea input"
-  [statement]
-  (let [is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+(defn- input-card []
+  (let [starting-route? @(rf/subscribe [:routes.discussion/starting?])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        input-style (if is-topic? "statement-text" "premise-text")
-        statement-labels (set (:statement/labels statement))]
+        input-style (if starting-route? "statement-text" "premise-text")]
     [:<>
-     [title-view statement is-topic?]
-     (for [label statement-labels]
-       [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
-        [labels/build-label label]])
      [:div.line-divider.my-2.my-md-3]
      (if read-only?
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
        [input/input-form input-style])]))
+
+(defn- title-and-input-element
+  "Element containing Title and textarea input"
+  [statement]
+  (let [starting-route? @(rf/subscribe [:routes.discussion/starting?])
+        statement-labels (set (:statement/labels statement))]
+    [:<>
+     [title-view statement starting-route?]
+     (for [label statement-labels]
+       [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
+        [labels/build-label label]])
+     [input-card]]))
 
 (defn- topic-bubble-view []
   (let [{:discussion/keys [title author created-at] :as schnaq} @(rf/subscribe [:schnaq/selected])
@@ -254,10 +259,9 @@
    (get-in db [:discussion :statements :sort-method] :newest)))
 
 (defn- show-how-to []
-  (let [is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
-    (if is-topic?
-      [how-to-elements/quick-how-to-schnaq]
-      [how-to-elements/quick-how-to-pro-con])))
+  (if @(rf/subscribe [:routes.discussion/starting?])
+    [how-to-elements/quick-how-to-schnaq]
+    [how-to-elements/quick-how-to-pro-con]))
 
 (def throttled-in-schnaq-search
   (gfun/throttle
