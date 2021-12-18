@@ -111,7 +111,7 @@
 .selection-card {
   @extend .statement-card;
   @extend .border;
-  @extend .border-warning;
+  @extend .border-secondary;
   @extend .p-3;
   @extend .shadow;
 }
