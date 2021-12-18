@@ -23,6 +23,10 @@
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]))
 
+(def ^:private card-fade-in-time
+  "Set a common setting for fading in the cards, e.g. statement cards."
+  0.1)
+
 (defn- call-to-action-schnaq
   "If no contributions are available, add a call to action to engage the users."
   [body]
@@ -252,58 +256,70 @@
       (sort-by keyfn > statements)
       (concat own-statements other-statements))))
 
-(defn input-card []
-  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        input-style (if starting-route? "statement-text" "premise-text")]
-    [:section.statement-card
-     (if read-only?
-       [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
-       [input/input-form input-style])]))
-
-(defn tabs []
-  (let [selected-option (reagent/atom :question)
-        on-click #(reset! selected-option %)]
-    (fn []
-      [:section.selection-card
-       [:ul.nav.nav-tabs
-        [:li.nav-item
-         [:a.nav-link {:class (when (= @selected-option :question) "active")
-                       :href "#"
-                       :on-click #(on-click :question)} [:<> [icon :info-question] " Fragen"]]]
-        [:li.nav-item
-         [:a.nav-link.text-muted {:href "#"}  ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
-          [tooltip/text "Coming Soon" [:span "Umfrage"]]]]
-        [:li.nav-item
-         [:a.nav-link.text-muted {:href "#"}
-          [tooltip/text "Coming Soon" [:span "Aktivierung"]]]]]
-       (case @selected-option
-         :question [input-card])])))
-
-(defn conclusion-cards-list
-  "Displays a list of conclusions."
+(defn- input-form-or-disabled-alert
+  "Dispatch to show input form or an alert that it is currently not allowed to 
+  add statements."
   []
+  (if @(rf/subscribe [:schnaq.selected/read-only?])
+    [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
+    [input/input-form]))
+
+(defn selection-card
+  "Dispatch the different input options, e.g. questions, survey or activation."
+  []
+  (let [selected-option (reagent/atom :question)
+        on-click #(reset! selected-option %)
+        active-class #(when (= @selected-option %) "active")
+        iconed-heading (fn [icon-key label]
+                         [:<> [icon icon-key] " " (labels label)])]
+    (fn []
+      [motion/fade-in-and-out
+       [:section.selection-card
+        [:ul.nav.nav-tabs
+         [:li.nav-item
+          [:a.nav-link {:class (active-class :question)
+                        :href "#"
+                        :on-click #(on-click :question)}
+           [iconed-heading :info-question :schnaq.input-type/question]]]
+         [:li.nav-item
+          [:a.nav-link.text-muted {:href "#"}  ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
+           [tooltip/text (labels :schnaq.input-type/coming-soon)
+            [:span [iconed-heading :chart-pie :schnaq.input-type/survey]]]]]
+         [:li.nav-item
+          [:a.nav-link.text-muted {:href "#"}
+           [tooltip/text (labels :schnaq.input-type/coming-soon)
+            [:span [iconed-heading :magic :schnaq.input-type/activation]]]]]]
+        (case @selected-option
+          :question [input-form-or-disabled-alert])]
+       card-fade-in-time])))
+
+(defn- prepare-statements []
   (let [active-filters @(rf/subscribe [:filters/active])
         sort-method @(rf/subscribe [:discussion.statements/sort-method])
         local-votes @(rf/subscribe [:local-votes])
         user @(rf/subscribe [:user/current])
-        card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
         shown-premises @(rf/subscribe [:discussion.statements/show])
-        search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))]
-    (if (seq shown-premises)
-      (let [sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
-            filtered-conclusions (filters/filter-statements sorted-conclusions active-filters (rf/subscribe [:local-votes]))]
-        [:div.card-columns.pb-3 {:class card-column-class}
-         (conj
-          (for [statement filtered-conclusions]
-            (with-meta
-              [motion/fade-in-and-out
-               [statement-or-edit-wrapper statement]
-               0.1]
-              {:key (:db/id statement)}))
-          (with-meta [tabs] {:key "list-response-options"}))])
-      (when-not search?
-        [call-to-share]))))
+        sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
+        filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))]
+    (for [statement filtered-conclusions]
+      (with-meta
+        [motion/fade-in-and-out
+         [statement-or-edit-wrapper statement]
+         card-fade-in-time]
+        {:key (:db/id statement)}))))
+
+(defn conclusion-cards-list
+  "Prepare a list of statements and group them together."
+  []
+  (let [card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
+        search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
+        statements-list (prepare-statements)]
+    [:<>
+     [:div.card-columns.pb-3 {:class card-column-class}
+      (conj statements-list
+            (with-meta [selection-card] {:key "list-response-options"}))]
+     (when-not (or search? (seq statements-list))
+       [call-to-share])]))
 
 (rf/reg-event-fx
  :discussion.select/conclusion
