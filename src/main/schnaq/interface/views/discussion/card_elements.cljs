@@ -21,7 +21,6 @@
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.filters :as filters]
-            [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.user :as user]
