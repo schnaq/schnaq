@@ -255,6 +255,11 @@
    :statement.notifications/statement-flagged-title "Post został zgłoszony!"
    :statement.notifications/statement-flagged-body "Dziękujemy za wiadomość, zajmiemy się tym."
 
+   :schnaq.input-type/question "Pytanie"
+   :schnaq.input-type/survey "Ankieta"
+   :schnaq.input-type/activation "Aktywacja"
+   :schnaq.input-type/coming-soon "Wkrótce dostępne"
+
    ;; schnaq creation
    :schnaq.create/title "Uruchomienie schnaq"
    :schnaq.create/heading "Zacznij od swojego schnaq."
