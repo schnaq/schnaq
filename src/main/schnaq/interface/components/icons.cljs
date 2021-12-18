@@ -4,9 +4,9 @@
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub faFontAwesomeFlag]]
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faCheck
+             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck
               faCog faComment faComments faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
-              faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLocationArrow faLock
+              faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLocationArrow faLock faMagic
               faPaperPlane faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faTag faTerminal
               faTimes faTimesCircle faTrashAlt faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
@@ -22,6 +22,7 @@
    :calendar-alt faCalendarAlt
    :camera faCamera
    :chalkboard-teacher faChalkboardTeacher
+   :chart-pie faChartPie
    :check/normal faCheck
    :cog faCog
    :collapse-down faAngleDown
@@ -57,6 +58,7 @@
    :linkedin faLinkedin
    :location-arrow faLocationArrow
    :lock faLock
+   :magic faMagic
    :plane faPaperPlane
    :plus faPlus
    :question faQuestion
