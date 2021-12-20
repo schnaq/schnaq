@@ -180,14 +180,6 @@
         [:dropdown-item
          [delete-dropdown-button statement current-edit-hash]])]]))
 
-(defn reduced-statement-dropdown-menu
-  "Dropdown menu for reduced statements containing the report button."
-  [{:keys [db/id] :as statement}]
-  (let [dropdown-id (str "drop-down-reduced-card-" id)]
-    [statement-dropdown-menu dropdown-id
-     [:dropdown-item
-      [flag-dropdown-button-statement statement]]]))
-
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
   ([statement]

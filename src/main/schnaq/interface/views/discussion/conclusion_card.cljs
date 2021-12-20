@@ -108,6 +108,15 @@
   [::specs/statement :ret string?]
   (str "highlight-card-" (if answered? "answered" (name (or type :neutral)))))
 
+(defn- statement-card->editable-card
+  "Wrap `statement-card-component`. Check if this statement is currently being
+  edited, show edit-card if true."
+  [statement statement-card-component]
+  (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
+    (if currently-edited?
+      [edit/edit-card-statement statement]
+      statement-card-component)))
+
 (defn statement-card
   "Display a full interactive statement. Takes `additional-content`, e.g. the
   answer of a question."
@@ -142,7 +151,7 @@
          [input/reply-in-statement-input-form statement]
          additional-content]]]])))
 
-(defn reduced-statement
+(defn reduced-statement-card
   "A reduced statement-card focusing on the statement."
   [statement with-answer?]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
@@ -153,7 +162,7 @@
        [:div.card-view.card-body.p-2
         [:div.d-flex.justify-content-start.pt-2
          [user/user-info statement 25 "w-100"]
-         [badges/reduced-statement-dropdown-menu statement]]
+         [badges/edit-statement-dropdown-menu statement]]
         [:div.my-3]
         [:div.text-typography
          [md/as-markdown (:statement/content statement)]]
@@ -168,13 +177,18 @@
            [:div.d-flex.flex-row.align-items-center.ml-auto
             [mark-as-answer-button statement]])]]]]]))
 
+(defn reduced-or-edit-card
+  "Wrap reduced statement card to make it editable."
+  [statement args]
+  [statement-card->editable-card statement [reduced-statement-card statement args]])
+
 (defn- answers [statement]
   (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
     (when (seq answers)
       [:div.mt-2
        (for [answer answers]
          (with-meta
-           [reduced-statement answer :with-answer]
+           [reduced-or-edit-card answer :with-answer]
            {:key (str "answer-" (:db/id answer))}))])))
 
 (defn- replies [statement]
@@ -202,11 +216,10 @@
          :aria-controls collapsible-id}
         button-content]
        [:div.collapse {:id collapsible-id}
-        [:<>
-         (for [reply replies]
-           (with-meta
-             [reduced-statement reply with-answer?]
-             {:key (str "reply-" (:db/id reply))}))]]])))
+        (for [reply replies]
+          (with-meta
+            [reduced-or-edit-card reply with-answer?]
+            {:key (str "reply-" (:db/id reply))}))]])))
 
 (rf/reg-event-db
  :toggle-replies/is-collapsed!
@@ -231,13 +244,10 @@
     [answers statement]
     [replies statement]]])
 
-(defn- statement-or-edit-wrapper
+(defn- answer-or-edit-card
   "Either show the clickable statement, or its edit-view."
   [statement]
-  (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
-    (if currently-edited?
-      [edit/edit-card-statement statement]
-      [answer-card statement])))
+  [statement-card->editable-card statement [answer-card statement]])
 
 (defn- sort-statements
   "Sort statements according to the filter method. If we are in q-and-a-mode,
@@ -304,7 +314,7 @@
     (for [statement filtered-conclusions]
       (with-meta
         [motion/fade-in-and-out
-         [statement-or-edit-wrapper statement]
+         [answer-or-edit-card statement]
          card-fade-in-time]
         {:key (:db/id statement)}))))
 
