@@ -71,8 +71,7 @@
 
 (rf/reg-sub
  :current-language
- (fn [_ _]
-   (rf/subscribe [:current-locale]))
+ :<- [:current-locale]
  (fn [locale _]
    (case locale
      :de "Deutsch"
@@ -142,36 +141,31 @@
 
 (rf/reg-sub
  :schnaq/share-hash
- (fn [_ _]
-   (rf/subscribe [:schnaq/selected]))
+ :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
    (:discussion/share-hash selected-schnaq)))
 
 (rf/reg-sub
  :schnaq/edit-hash
- (fn [_ _]
-   (rf/subscribe [:schnaq/selected]))
+ :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
    (:discussion/edit-hash selected-schnaq)))
 
 (rf/reg-sub
  :schnaq.selected/statement-number
- (fn [_ _]
-   (rf/subscribe [:schnaq/selected]))
+ :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
    (-> selected-schnaq :meta-info :all-statements)))
 
 (rf/reg-sub
  :schnaq.selected/access-code
- (fn [_ _]
-   (rf/subscribe [:schnaq/selected]))
+ :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
    (get-in selected-schnaq [:discussion/access :discussion.access/code])))
 
 (rf/reg-sub
  :schnaq.selected/read-only?
- (fn [_ _]
-   (rf/subscribe [:schnaq/selected]))
+ :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
    (not (nil? (some #{:discussion.state/read-only} (:discussion/states selected-schnaq))))))
 

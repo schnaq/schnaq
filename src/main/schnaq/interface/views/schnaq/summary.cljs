@@ -251,8 +251,7 @@
 
 (rf/reg-sub
  :summaries/open
- (fn [_ _]
-   (rf/subscribe [:summaries/all]))
+ :<- [:summaries/all]
  (fn [summaries _ _]
    (sort-by
     :summary/requested-at
@@ -262,8 +261,7 @@
 
 (rf/reg-sub
  :summaries/closed
- (fn [_ _]
-   (rf/subscribe [:summaries/all]))
+ :<- [:summaries/all]
  (fn [summaries _ _]
    (sort-by
     :summary/created-at
