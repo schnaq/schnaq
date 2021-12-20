@@ -324,8 +324,7 @@
 
 (rf/reg-sub
  :schnaq.selected/pro-con?
- (fn [_ _]
-   (rf/subscribe [:schnaq/selected]))
+ :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
    (not (nil? (some #{:discussion.state/disable-pro-con} (:discussion/states selected-schnaq))))))
 
@@ -352,8 +351,7 @@
 
 (rf/reg-sub
  :schnaq.selected.qa/mods-mark-only?
- (fn [_ _]
-   (rf/subscribe [:schnaq/selected]))
+ :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
    (not (nil? (some #{:discussion.state.qa/mark-as-moderators-only} (:discussion/states selected-schnaq))))))
 

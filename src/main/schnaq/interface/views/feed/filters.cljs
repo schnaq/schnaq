@@ -154,8 +154,7 @@
 
 (rf/reg-sub
  :filters.discussion/active?
- (fn [_]
-   (rf/subscribe [:filters.discussion/active]))
+ :<- [:filters.discussion/active]
  (fn [active-filters _]
    (seq active-filters)))
 

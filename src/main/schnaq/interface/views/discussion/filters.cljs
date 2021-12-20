@@ -29,6 +29,7 @@
 
 ;; -----------------------------------------------------------------------------
 
+
 (defn- register-new-filter [db new-filter]
   (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))
 
@@ -51,8 +52,7 @@
 
 (rf/reg-sub
  :filters/active?
- (fn [_]
-   (rf/subscribe [:filters/active]))
+ :<- [:filters/active]
  (fn [active-filters _]
    (seq active-filters)))
 
