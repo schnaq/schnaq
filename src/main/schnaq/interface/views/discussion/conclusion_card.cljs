@@ -108,6 +108,15 @@
   [::specs/statement :ret string?]
   (str "highlight-card-" (if answered? "answered" (name (or type :neutral)))))
 
+(defn- statement-card->editable-card
+  "Wrap `statement-card-component`. Check if this statement is currently being
+  edited, show edit-card if true."
+  [statement statement-card-component]
+  (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
+    (if currently-edited?
+      [edit/edit-card-statement statement]
+      [statement-card-component statement])))
+
 (defn statement-card
   "Display a full interactive statement. Takes `additional-content`, e.g. the
   answer of a question."
@@ -153,7 +162,7 @@
        [:div.card-view.card-body.p-2
         [:div.d-flex.justify-content-start.pt-2
          [user/user-info statement 25 "w-100"]
-         [badges/reduced-statement-dropdown-menu statement]]
+         [badges/edit-statement-dropdown-menu statement]]
         [:div.my-3]
         [:div.text-typography
          [md/as-markdown (:statement/content statement)]]
@@ -168,11 +177,10 @@
            [:div.d-flex.flex-row.align-items-center.ml-auto
             [mark-as-answer-button statement]])]]]]]))
 
-(defn reduced-or-edit-card [statement]
-  (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
-    (if currently-edited?
-      [edit/edit-card-statement statement]
-      [reduced-statement-card statement])))
+(defn reduced-or-edit-card
+  "Wrap reduced statement card to make it editable."
+  [statement]
+  [statement-card->editable-card statement reduced-statement-card])
 
 (defn- answers [statement]
   (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
@@ -239,10 +247,7 @@
 (defn- answer-or-edit-card
   "Either show the clickable statement, or its edit-view."
   [statement]
-  (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
-    (if currently-edited?
-      [edit/edit-card-statement statement]
-      [answer-card statement])))
+  [statement-card->editable-card statement answer-card])
 
 (defn- sort-statements
   "Sort statements according to the filter method. If we are in q-and-a-mode,
