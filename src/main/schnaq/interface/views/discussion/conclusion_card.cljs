@@ -142,7 +142,7 @@
          [input/reply-in-statement-input-form statement]
          additional-content]]]])))
 
-(defn reduced-statement
+(defn reduced-statement-card
   "A reduced statement-card focusing on the statement."
   [statement with-answer?]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
@@ -168,13 +168,19 @@
            [:div.d-flex.flex-row.align-items-center.ml-auto
             [mark-as-answer-button statement]])]]]]]))
 
+(defn reduced-or-edit-card [statement]
+  (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
+    (if currently-edited?
+      [edit/edit-card-statement statement]
+      [reduced-statement-card statement])))
+
 (defn- answers [statement]
   (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
     (when (seq answers)
       [:div.mt-2
        (for [answer answers]
          (with-meta
-           [reduced-statement answer :with-answer]
+           [reduced-or-edit-card answer :with-answer]
            {:key (str "answer-" (:db/id answer))}))])))
 
 (defn- replies [statement]
@@ -202,11 +208,10 @@
          :aria-controls collapsible-id}
         button-content]
        [:div.collapse {:id collapsible-id}
-        [:<>
-         (for [reply replies]
-           (with-meta
-             [reduced-statement reply with-answer?]
-             {:key (str "reply-" (:db/id reply))}))]]])))
+        (for [reply replies]
+          (with-meta
+            [reduced-or-edit-card reply with-answer?]
+            {:key (str "reply-" (:db/id reply))}))]])))
 
 (rf/reg-event-db
  :toggle-replies/is-collapsed!
@@ -231,7 +236,7 @@
     [answers statement]
     [replies statement]]])
 
-(defn- statement-or-edit-wrapper
+(defn- answer-or-edit-card
   "Either show the clickable statement, or its edit-view."
   [statement]
   (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
@@ -304,7 +309,7 @@
     (for [statement filtered-conclusions]
       (with-meta
         [motion/fade-in-and-out
-         [statement-or-edit-wrapper statement]
+         [answer-or-edit-card statement]
          card-fade-in-time]
         {:key (:db/id statement)}))))
 
