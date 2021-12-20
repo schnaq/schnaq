@@ -91,12 +91,15 @@
      {:display-name "Visualization of Discussion Graph"
       :reagent-render
       (fn [_graph]
-        (let [^js graph-object @(rf/subscribe [:graph/get-object])
+        (let [graph-object @(rf/subscribe [:graph/get-object])
               gravity @(rf/subscribe [:graph.settings/gravity])]
           (when graph-object
             (.setOptions graph-object
                          (clj->js (assoc-in options [:physics :barnesHut :avoidOverlap]
-                                            gravity))))
+                                            gravity)))
+            ;; Disable gravitation / physics after graph is stabilized
+            (.on graph-object "stabilizationIterationsDone"
+                 #(.setOptions graph-object (clj->js {:physics false}))))
           [:div {:id graph-settings/graph-id}]))
       :component-did-mount
       (fn [this]
