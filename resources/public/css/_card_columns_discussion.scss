@@ -11,7 +11,7 @@
     column-count: 3;
   }
 
-  @include media-breakpoint-up(hd) {
+  @include media-breakpoint-up(qhd) {
     column-count: 4;
   }
 }

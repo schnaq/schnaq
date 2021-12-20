@@ -20,7 +20,8 @@ $grid-breakpoints: (
   xl: 1200px,
   xxl: 1439px,
   xxxl: 1600px,
-  hd: 1900px
+  hd: 1900px,
+  qhd: 2560px
 );
 
 @import '../node_modules/bootstrap/scss/bootstrap';
