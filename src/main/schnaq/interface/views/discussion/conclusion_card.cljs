@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.conclusion-card
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
+            [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.specs :as specs]
@@ -13,6 +14,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.filters :as filters]
@@ -20,6 +22,10 @@
             [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]))
+
+(def ^:private card-fade-in-time
+  "Set a common setting for fading in the cards, e.g. statement cards."
+  0.1)
 
 (defn- call-to-action-schnaq
   "If no contributions are available, add a call to action to engage the users."
@@ -116,7 +122,7 @@
                            (= :routes.schnaq.select/statement current-route) ;; history-length == 1 => a reply to a question
                            (or (not mods-mark-only?)
                                (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
-     [:article.statement-card.my-2
+     [:article.statement-card
       [:div.d-flex.flex-row
        [:div {:class (card-highlighting statement)}]
        [:div.card-view.card-body.py-2.px-0
@@ -181,10 +187,10 @@
                           (labels :qanda.button.hide/replies)])
         collapsible-id (str "collapse-Replies-" statement-id)
         replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
-        current-route @(rf/subscribe [:navigation/current-route-name])
+        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
         mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
         authenticated? @(rf/subscribe [:user/authenticated?])
-        with-answer? (and (= :routes.schnaq/start current-route)
+        with-answer? (and starting-route?
                           (or (not mods-mark-only?)
                               (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
     (when (not-empty replies)
@@ -250,28 +256,70 @@
       (sort-by keyfn > statements)
       (concat own-statements other-statements))))
 
-(defn conclusion-cards-list
-  "Displays a list of conclusions."
+(defn- input-form-or-disabled-alert
+  "Dispatch to show input form or an alert that it is currently not allowed to 
+  add statements."
   []
+  (if @(rf/subscribe [:schnaq.selected/read-only?])
+    [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
+    [input/input-form]))
+
+(defn selection-card
+  "Dispatch the different input options, e.g. questions, survey or activation."
+  []
+  (let [selected-option (reagent/atom :question)
+        on-click #(reset! selected-option %)
+        active-class #(when (= @selected-option %) "active")
+        iconed-heading (fn [icon-key label]
+                         [:<> [icon icon-key] " " (labels label)])]
+    (fn []
+      [motion/fade-in-and-out
+       [:section.selection-card
+        [:ul.nav.nav-tabs
+         [:li.nav-item
+          [:a.nav-link {:class (active-class :question)
+                        :href "#"
+                        :on-click #(on-click :question)}
+           [iconed-heading :info-question :schnaq.input-type/question]]]
+         [:li.nav-item
+          [:a.nav-link.text-muted {:href "#"}  ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
+           [tooltip/text (labels :schnaq.input-type/coming-soon)
+            [:span [iconed-heading :chart-pie :schnaq.input-type/survey]]]]]
+         [:li.nav-item
+          [:a.nav-link.text-muted {:href "#"}
+           [tooltip/text (labels :schnaq.input-type/coming-soon)
+            [:span [iconed-heading :magic :schnaq.input-type/activation]]]]]]
+        (case @selected-option
+          :question [input-form-or-disabled-alert])]
+       card-fade-in-time])))
+
+(defn- prepare-statements []
   (let [active-filters @(rf/subscribe [:filters/active])
         sort-method @(rf/subscribe [:discussion.statements/sort-method])
         local-votes @(rf/subscribe [:local-votes])
         user @(rf/subscribe [:user/current])
-        card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
         shown-premises @(rf/subscribe [:discussion.statements/show])
-        search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))]
-    (if (seq shown-premises)
-      (let [sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
-            filtered-conclusions (filters/filter-statements sorted-conclusions active-filters (rf/subscribe [:local-votes]))]
-        [:div.card-columns.pb-3 {:class card-column-class}
-         (for [statement filtered-conclusions]
-           (with-meta
-             [motion/fade-in-and-out
-              [statement-or-edit-wrapper statement]
-              0.1]
-             {:key (:db/id statement)}))])
-      (when-not search?
-        [call-to-share]))))
+        sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
+        filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))]
+    (for [statement filtered-conclusions]
+      (with-meta
+        [motion/fade-in-and-out
+         [statement-or-edit-wrapper statement]
+         card-fade-in-time]
+        {:key (:db/id statement)}))))
+
+(defn conclusion-cards-list
+  "Prepare a list of statements and group them together."
+  []
+  (let [card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
+        search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
+        statements-list (prepare-statements)]
+    [:<>
+     [:div.card-columns.pb-3 {:class card-column-class}
+      (conj statements-list
+            (with-meta [selection-card] {:key "list-response-options"}))]
+     (when-not (or search? (seq statements-list))
+       [call-to-share])]))
 
 (rf/reg-event-fx
  :discussion.select/conclusion

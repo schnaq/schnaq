@@ -256,6 +256,11 @@
    :statement.notifications/statement-flagged-title "Post has been reported!"
    :statement.notifications/statement-flagged-body "Thank you for reporting this post, we'll take care of it."
 
+   :schnaq.input-type/question "Question"
+   :schnaq.input-type/survey "Survey"
+   :schnaq.input-type/activation "Activation"
+   :schnaq.input-type/coming-soon "Coming Soon"
+
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
    :schnaq.create/heading "Start your schnaq."

@@ -69,9 +69,9 @@
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
-  [textarea-name]
-  (let [current-route-name @(rf/subscribe [:navigation/current-route-name])
-        starting-route? (= :routes.schnaq/start current-route-name)
+  []
+  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        textarea-name (if starting-route? "statement-text" "premise-text")
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         statement-type (if starting-route?
                          :statement.type/neutral
@@ -91,16 +91,15 @@
       true
       false]
      (when-not (or starting-route? pro-con-disabled?)
-       [:div.input-group-prepend.mt-3
+       [:div.mt-3
         [statement-type-choose-button
          [:form/statement-type :selected]
          [:form/statement-type! :selected]]])]))
 
 (defn input-form
   "Form to collect the user's statements."
-  [textarea-name]
-  (let [current-route-name @(rf/subscribe [:navigation/current-route-name])
-        starting-route? (= :routes.schnaq/start current-route-name)
+  []
+  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
         when-starting (fn [e] (jq/prevent-default e)
                         (rf/dispatch [:discussion.add.statement/starting
                                       (oget e [:currentTarget :elements])]))
@@ -111,9 +110,8 @@
                         when-starting when-deeper-in-discussion)]
     [:form.my-md-2
      {:on-submit #(event-to-send %)
-      :on-key-down #(when (jq/ctrl-press % 13)
-                      (event-to-send %))}
-     [topic-input-area textarea-name]]))
+      :on-key-down #(when (jq/ctrl-press % 13) (event-to-send %))}
+     [topic-input-area]]))
 
 (defn reply-in-statement-input-form
   "Input form inside a statement card. This form is used to directly reply to a statement inside its own card."

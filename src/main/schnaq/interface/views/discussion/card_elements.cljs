@@ -21,7 +21,6 @@
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.filters :as filters]
-            [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.user :as user]
@@ -185,17 +184,19 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- current-topic-badges [schnaq statement is-topic?]
+(defn- current-topic-badges [schnaq statement]
   (let [badges-start [badges/static-info-badges-discussion schnaq]
         badges-conclusion [badges/extra-discussion-info-badges statement true]
-        badges (if is-topic? badges-start badges-conclusion)]
+        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        badges (if starting-route? badges-start badges-conclusion)]
     [:div.ml-auto badges]))
 
-(defn- title-view [statement is-topic?]
-  (let [title [md/as-markdown (:statement/content statement)]
+(defn- title-view [statement]
+  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        title [md/as-markdown (:statement/content statement)]
         edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if edit-active?
-      (if is-topic?
+      (if starting-route?
         [edit/edit-card-discussion statement]
         [edit/edit-card-statement statement])
       [:h2.h6 title])))
@@ -203,19 +204,12 @@
 (defn- title-and-input-element
   "Element containing Title and textarea input"
   [statement]
-  (let [is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        input-style (if is-topic? "statement-text" "premise-text")
-        statement-labels (set (:statement/labels statement))]
+  (let [statement-labels (set (:statement/labels statement))]
     [:<>
-     [title-view statement is-topic?]
+     [title-view statement]
      (for [label statement-labels]
        [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
-        [labels/build-label label]])
-     [:div.line-divider.my-2.my-md-3]
-     (if read-only?
-       [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
-       [input/input-form input-style])]))
+        [labels/build-label label]])]))
 
 (defn- topic-bubble-view []
   (let [{:discussion/keys [title author created-at] :as schnaq} @(rf/subscribe [:schnaq/selected])
@@ -224,17 +218,17 @@
                  :statement/content title
                  :statement/author author
                  :statement/created-at created-at}
-        is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        statement (if is-topic? content current-conclusion)
+        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        statement (if starting-route? content current-conclusion)
         info-content [info-content-conclusion statement (:discussion/edit-hash statement)]]
     [motion/move-in :left
      [:div.p-2
       [:div.d-flex.flex-wrap.mb-4
        [user/user-info statement 32 nil]
        [:div.d-flex.flex-row.ml-auto
-        (when-not is-topic?
+        (when-not starting-route?
           [:div.mr-auto info-content])
-        [current-topic-badges schnaq statement is-topic?]]]
+        [current-topic-badges schnaq statement]]]
       [title-and-input-element statement]]]))
 
 (defn- topic-view [content]
@@ -254,10 +248,9 @@
    (get-in db [:discussion :statements :sort-method] :newest)))
 
 (defn- show-how-to []
-  (let [is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
-    (if is-topic?
-      [how-to-elements/quick-how-to-schnaq]
-      [how-to-elements/quick-how-to-pro-con])))
+  (if @(rf/subscribe [:schnaq.routes/starting?])
+    [how-to-elements/quick-how-to-schnaq]
+    [how-to-elements/quick-how-to-pro-con]))
 
 (def throttled-in-schnaq-search
   (gfun/throttle

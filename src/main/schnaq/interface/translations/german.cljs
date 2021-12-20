@@ -255,10 +255,12 @@
    :statement.notifications/statement-flagged-title "Beitrag wurde gemeldet!"
    :statement.notifications/statement-flagged-body "Vielen Dank für deine Meldung, wir kümmern uns."
 
-
+   :schnaq.input-type/question "Frage"
+   :schnaq.input-type/survey "Umfrage"
+   :schnaq.input-type/activation "Aktivierung"
+   :schnaq.input-type/coming-soon "Bald verfügbar"
+   
    ;; schnaq creation
-
-
    :schnaq.create/title "Schnaq starten"
    :schnaq.create/heading "Starte mit deinem schnaq."
    :schnaq.create.qanda/subheading "Mit einem schnaq kannst du effizient Fragen sammeln und beantworten."
