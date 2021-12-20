@@ -115,7 +115,7 @@
   (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if currently-edited?
       [edit/edit-card-statement statement]
-      [statement-card-component statement])))
+      statement-card-component)))
 
 (defn statement-card
   "Display a full interactive statement. Takes `additional-content`, e.g. the
@@ -179,8 +179,8 @@
 
 (defn reduced-or-edit-card
   "Wrap reduced statement card to make it editable."
-  [statement]
-  [statement-card->editable-card statement reduced-statement-card])
+  [statement args]
+  [statement-card->editable-card statement [reduced-statement-card statement args]])
 
 (defn- answers [statement]
   (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
@@ -247,7 +247,7 @@
 (defn- answer-or-edit-card
   "Either show the clickable statement, or its edit-view."
   [statement]
-  [statement-card->editable-card statement answer-card])
+  [statement-card->editable-card statement [answer-card statement]])
 
 (defn- sort-statements
   "Sort statements according to the filter method. If we are in q-and-a-mode,
