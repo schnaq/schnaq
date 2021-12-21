@@ -1,0 +1,19 @@
+@keyframes walk_sprite {
+  to {
+    background-position: -4200px;
+  }
+}
+
+.schnaqqi-walk {
+  animation: walk_sprite 1s steps(24) infinite;
+  background: url('https://s3.schnaq.com/schnaq-schnaqqifanten/sprites/spritesheet_schnaqqi_walk_24.png');
+  height: 135px;
+  transform: translate(-25%, -25%) scale(0.5);
+  width: 175px;
+}
+
+@media only screen and (min-width: 175px) {
+  .schnaqqi-walk {
+    transform: scale(1);
+  }
+}
