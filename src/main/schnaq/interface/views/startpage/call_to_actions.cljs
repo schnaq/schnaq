@@ -3,16 +3,18 @@
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.components.videos :refer [video]]
             [schnaq.interface.translations :refer [labels]]))
 
-(defn- header-screenshot
+(defn- header-video
   "Display header screenshot of an example discussion."
   []
-  [:section.above-the-fold-screenshot
-   [:img.taskbar-background.mb-2 {:src (img-path :how-to/taskbar)}]
-   [motion/zoom-image {:class "img-fluid"
-                       :src (img-path :startpage.screenshots/qanda)}]])
+  [:section.rounded-5.shadow
+   [:div.d-inline-block.bg-ipad
+    [:video.rounded-2.m-auto.overflow-hidden
+     {:auto-play true :loop true :muted true :plays-inline true}
+     [:source {:src (video :startpage.above-the-fold/webm) :type "video/webm"}]
+     [:source {:src (video :startpage.above-the-fold/mp4) :type "video/mp4"}]]]])
 
 (defn- start-schnaq-button
   "Tell user to create a schnaq now."
@@ -45,4 +47,4 @@
     [start-schnaq-button]
     [social-proof-abtf]]
    [:div.col-lg-6.col-xxxl-4.pb-lg-4
-    [header-screenshot]]])
+    [header-video]]])
