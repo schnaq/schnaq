@@ -2,10 +2,13 @@
   (:require [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
+            [oops.core :refer [oset!]]
+            [re-frame.core :as rf]
             [reitit.frontend.easy :as reititfe]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.qa.inputs :as qanda]))
@@ -111,7 +114,10 @@
    :pricing.pro-tier/description
    (add-class-to-feature (concat (starter-features) (business-features)) "text-primary")
    (coming-soon)
-   [cta-button (labels :pricing.pro-tier/call-to-action) "btn-secondary" "mailto:info@schnaq.com"]
+   [:div.text-center.py-4
+    [:button.btn.btn-secondary
+     {:on-click #(rf/dispatch [:subscription/create-checkout-session config/stripe-product-price-id-schnaq-pro])}
+     (labels :pricing.pro-tier/call-to-action)]]
    {:class "border-primary shadow-lg"}])
 
 (defn- enterprise-tier-card
@@ -202,3 +208,26 @@
   "The pricing view."
   []
   [pricing-page])
+
+
+;; -----------------------------------------------------------------------------
+
+
+(rf/reg-fx
+ :navigation.redirect/follow!
+ (fn [redirect-url]
+   (oset! js/window [:location :href] redirect-url)))
+
+(rf/reg-event-fx
+ :navigation.redirect/follow
+ (fn [_ [_ {:keys [redirect]}]]
+   {:fx [[:navigation.redirect/follow! redirect]]}))
+
+(rf/reg-event-fx
+ :subscription/create-checkout-session
+ (fn [{:keys [db]} [_ product-price-id]]
+   (prn product-price-id)
+   {:fx [(http/xhrio-request db :post "/subscription/create-checkout-session"
+                             [:navigation.redirect/follow]
+                             {:product-price-id product-price-id}
+                             [:ajax.error/as-notification])]}))
