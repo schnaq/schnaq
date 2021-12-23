@@ -224,3 +224,6 @@
 (s/def :ring/body-params map?)
 (s/def :ring/route-params map?)
 (s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
+
+;; Stripe
+(s/def :stripe/product-price-id (s/and string? #(.startsWith % "price_")))

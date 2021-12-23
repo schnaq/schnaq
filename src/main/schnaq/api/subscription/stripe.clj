@@ -1,48 +1,31 @@
 (ns schnaq.api.subscription.stripe
-  (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn-]]
+  (:require [ghostwheel.core :refer [>defn-]]
             [ring.util.http-response :refer [ok forbidden not-found]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config])
   (:import [com.stripe Stripe]
            [com.stripe.exception InvalidRequestException]
            [com.stripe.model Price]
-           [com.stripe.model.checkout Session]
-           [com.stripe.param.checkout SessionCreateParams SessionCreateParams$LineItem SessionCreateParams$Mode]))
-
-(s/def :stripe/line-item (partial instance? SessionCreateParams$LineItem))
-(s/def :stripe/session-create-params (partial instance? SessionCreateParams))
+           [com.stripe.model.checkout Session]))
 
 (set! (. Stripe -apiKey) config/stripe-secret-api-key)
 
-(>defn- build-line-item
-  "Take the current product price id and use stripe's java API to construct
-  a line item, which can be added to the checkout session parameters, i.e. this
-  is an item in the cart of the customer."
-  [product-price-id]
-  [string? :ret :stripe/line-item]
-  (.. (SessionCreateParams$LineItem/builder)
-      (setPrice product-price-id)
-      (setQuantity 1)
-      (build)))
-
-(defn- build-checkout-session-parameters
-  "Build a checkout session, i.e. open stripe's checkout window, with the line-
-  items added to the cart."
-  [line-item]
-  [:stripe/line-item :ret :stripe/session-create-params]
-  (.. (SessionCreateParams/builder)
-      (addLineItem line-item)
-      (setMode SessionCreateParams$Mode/SUBSCRIPTION)
-      (setSuccessUrl (format "%s/subscription/success" config/frontend-url))
-      (setCancelUrl (format "%s/subscription/cancel" config/frontend-url))
-      (build)))
+(>defn- build-checkout-session-parameters
+  [product-price-id keycloak-id]
+  [:stripe/product-price-id :user.registered/keycloak-id :ret map?]
+  (let [items [{"price" product-price-id
+                "quantity" 1}]]
+    {"success_url" (format "%s/subscription/success" config/frontend-url)
+     "cancel_url" (format "%s/subscription/cancel" config/frontend-url)
+     "mode" "subscription"
+     "client_reference_id" keycloak-id
+     "line_items" items}))
 
 (defn create-checkout-session
   "Open stripe's checkout page with the currently selected item."
-  [{{{:keys [product-price-id]} :body} :parameters}]
-  (let [line-item (build-line-item product-price-id)
-        checkout-session-parameters (build-checkout-session-parameters line-item)
+  [{:keys [identity parameters]}]
+  (let [product-price-id (get-in parameters [:body :product-price-id])
+        checkout-session-parameters (build-checkout-session-parameters product-price-id (:id identity))
         session (Session/create checkout-session-parameters)]
     (ok {:redirect (.getUrl session)})))
 
@@ -67,7 +50,8 @@
      {:post create-checkout-session
       :description (at/get-doc #'create-checkout-session)
       :parameters {:body {:product-price-id string?}}
-      :responses {200 {:body {:redirect string?}}}}]
+      :responses {200 {:body {:redirect string?}}}
+      :middleware [:user/authenticated?]}]
     ["/price"
      {:get get-product-price
       :description (at/get-doc #'get-product-price)
