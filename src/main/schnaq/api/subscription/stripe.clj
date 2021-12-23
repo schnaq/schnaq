@@ -14,6 +14,8 @@
 (set! (. Stripe -apiKey) config/stripe-secret-api-key)
 
 (>defn- build-checkout-session-parameters
+  "Configure all checkout-session parameters. Adds items, defines URLs and adds
+  costumer metadata to the user."
   [product-price-id keycloak-id email]
   [:stripe/product-price-id :user.registered/keycloak-id :user.registered/email :ret map?]
   (let [items [{"price" product-price-id
@@ -25,7 +27,7 @@
      "customer_email" email
      "line_items" items}))
 
-(defn create-checkout-session
+(defn- create-checkout-session
   "Open stripe's checkout page with the currently selected item."
   [{:keys [identity parameters]}]
   (try
@@ -57,11 +59,14 @@
      {:post create-checkout-session
       :description (at/get-doc #'create-checkout-session)
       :parameters {:body {:product-price-id :stripe/product-price-id}}
-      :responses {200 {:body {:redirect string?}}}
+      :responses {200 {:body {:redirect string?}}
+                  400 at/response-error-body}
       :middleware [:user/authenticated?]}]
     ["/price"
      {:get get-product-price
       :description (at/get-doc #'get-product-price)
       :parameters {:query {:product-price-id :stripe/product-price-id}}
       :responses {200 {:body {:price number?
-                              :product-price-id :stripe/product-price-id}}}}]]])
+                              :product-price-id :stripe/product-price-id}}
+                  403 at/response-error-body
+                  404 at/response-error-body}}]]])
