@@ -32,3 +32,16 @@
     (is (empty? (discussion-db/all-discussions-by-title "")))
     (is (empty? (discussion-db/all-discussions-by-title "👾")))
     (is (seq (discussion-db/all-discussions-by-title "Cat or Dog?")))))
+
+(deftest transact-and-pull-temp-test
+  (testing "Is the newly created object delivered corectly?"
+    (is (= "Hi thar" (:discussion/title
+                      (db/transact-and-pull-temp
+                       [{:db/id "test"
+                         :discussion/title "Hi thar"
+                         :discussion/share-hash "Bypassing all other fields"}]
+                       "test" '[:discussion/title]))))
+    (is (= :my-ident (:db/ident (db/transact-and-pull-temp
+                                 [{:db/id "test2"
+                                   :db/ident :my-ident}]
+                                 "test2" '[*]))))))

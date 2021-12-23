@@ -214,6 +214,19 @@
                    :statistics/statement-type-stats :statistics/registered-users-num
                    :statistics/labels-stats]))
 
+;; Surveys
+(s/def :survey/title ::non-blank-string)
+(s/def :survey/type #{:survey.type/multiple-choice :survey.type/single-choice})
+(s/def :survey/discussion (s/or :id :db/id
+                                :discussion ::discussion))
+(s/def :option/value ::non-blank-string)
+(s/def :option/votes nat-int?)
+(s/def ::option (s/keys :req-un [:option/value]
+                        :opt-un [:option/votes]))
+(s/def :survey/options (s/coll-of ::option))
+(s/def ::survey
+  (s/keys :req-un [:survey/title :survey/options :survey/type :survey/discussion]))
+
 ;; App-Codes
 (s/def :app/code ::non-blank-string)
 

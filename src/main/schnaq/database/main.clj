@@ -127,6 +127,16 @@
        @(transact [(assoc clean-entity :db/id identifier)])
        [:tempids identifier]))))
 
+(>defn transact-and-pull-temp
+  "Syntactic sugar to transact and then synchronously pull an id from the resulting database.
+  Takes a temp-id from the transaction instead of a live-id."
+  [transaction-vector temp-id pattern]
+  [vector? ::specs/non-blank-string vector? :ret map?]
+  (let [tx @(transact transaction-vector)
+        entity-id (get-in tx [:tempids temp-id])
+        db-after (:db-after tx)]
+    (fast-pull entity-id pattern db-after)))
+
 ;; -----------------------------------------------------------------------------
 ;; Feedback functions
 
