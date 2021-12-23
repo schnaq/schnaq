@@ -57,7 +57,8 @@
 ;; -----------------------------------------------------------------------------
 
 (def other-routes
-  [["" {:swagger {:tags ["other"]}}
+  [["" {:swagger {:tags ["other"]}
+        :middleware [:security/schnaq-csrf-header]}
     ["/ping" {:get ping
               :description (at/get-doc #'ping)
               :responses {200 {:body {:text string?}}}}]

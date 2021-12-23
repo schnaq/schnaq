@@ -19,7 +19,7 @@
   [screenshot file-name]
   [:feedback/screenshot (s/or :number number? :string string?) :ret string?]
   (let [[_header image] (string/split screenshot #",")
-        #^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)]
+        ^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)]
     (s3/upload-stream
      :feedbacks/screenshots
      (io/input-stream decodedBytes)
@@ -53,7 +53,8 @@
 ;; -----------------------------------------------------------------------------
 
 (def feedback-routes
-  [["" {:swagger {:tags ["feedbacks"]}}
+  [["" {:swagger {:tags ["feedbacks"]}
+        :middleware [:security/schnaq-csrf-header]}
     ["/feedback/add" {:post add-feedback
                       :description (at/get-doc #'add-feedback)
                       :name :api.feedback/add

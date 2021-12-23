@@ -10,6 +10,7 @@
 
 (def debug-routes
   [(when-not shared-config/production?
-     ["/debug" {:swagger {:tags ["debug"]}}
+     ["/debug" {:swagger {:tags ["debug"]}
+                :middleware [:security/schnaq-csrf-header]}
       ["" {:get reveal-information
            :post reveal-information}]])])

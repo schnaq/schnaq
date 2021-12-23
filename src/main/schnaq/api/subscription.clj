@@ -1,4 +1,4 @@
-(ns schnaq.api.subscription.stripe
+(ns schnaq.api.subscription
   (:require [ghostwheel.core :refer [>defn-]]
             [ring.util.http-response :refer [ok forbidden not-found bad-request]]
             [schnaq.api.toolbelt :as at]
@@ -53,20 +53,32 @@
 
 ;; -----------------------------------------------------------------------------
 
-(def stripe-routes
+(defn- webhook
+  "TODO"
+  [request]
+  (ok {:status :toll}))
+
+;; -----------------------------------------------------------------------------
+
+(def subscription-routes
   [["/subscription" {:swagger {:tags ["subscription"]}}
-    ["/create-checkout-session"
-     {:post create-checkout-session
-      :description (at/get-doc #'create-checkout-session)
-      :parameters {:body {:product-price-id :stripe/product-price-id}}
-      :responses {200 {:body {:redirect string?}}
-                  400 at/response-error-body}
-      :middleware [:user/authenticated?]}]
-    ["/price"
-     {:get get-product-price
-      :description (at/get-doc #'get-product-price)
-      :parameters {:query {:product-price-id :stripe/product-price-id}}
-      :responses {200 {:body {:price number?
-                              :product-price-id :stripe/product-price-id}}
-                  403 at/response-error-body
-                  404 at/response-error-body}}]]])
+    ["" {:middleware [:security/schnaq-csrf-header]}
+     ["/create-checkout-session"
+      {:post create-checkout-session
+       :description (at/get-doc #'create-checkout-session)
+       :parameters {:body {:product-price-id :stripe/product-price-id}}
+       :responses {200 {:body {:redirect string?}}
+                   400 at/response-error-body}
+       :middleware [:user/authenticated?]}]
+     ["/price"
+      {:get get-product-price
+       :description (at/get-doc #'get-product-price)
+       :parameters {:query {:product-price-id :stripe/product-price-id}}
+       :responses {200 {:body {:price number?
+                               :product-price-id :stripe/product-price-id}}
+                   403 at/response-error-body
+                   404 at/response-error-body}}]]
+    ["/webhook"
+     {:post webhook
+      :description (at/get-doc #'webhook)}]]])
+

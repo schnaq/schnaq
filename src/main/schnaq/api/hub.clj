@@ -122,7 +122,7 @@
 
 (def hub-routes
   [["" {:swagger {:tags ["hubs"]}
-        :middleware [:user/authenticated?]
+        :middleware [:user/authenticated? :security/schnaq-csrf-header]
         :responses {401 at/response-error-body
                     403 at/response-error-body}}
     ["/hubs/personal" {:get all-hubs-for-user

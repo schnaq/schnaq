@@ -83,7 +83,8 @@
                                         ::schnaq-creation-secrets]))
 
 (def user-routes
-  ["/user" {:swagger {:tags ["user"]}}
+  ["/user" {:swagger {:tags ["user"]}
+            :middleware [:security/schnaq-csrf-header]}
    ["/anonymous/add" {:put add-anonymous-user
                       :description (at/get-doc #'add-anonymous-user)
                       :parameters {:body {:nickname :user/nickname}}

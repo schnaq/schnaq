@@ -25,7 +25,7 @@
             [schnaq.api.hub :refer [hub-routes]]
             [schnaq.api.middlewares :as middlewares]
             [schnaq.api.schnaq :refer [schnaq-routes]]
-            [schnaq.api.subscription.stripe :refer [stripe-routes]]
+            [schnaq.api.subscription :refer [subscription-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
             [schnaq.api.user :refer [user-routes]]
             [schnaq.auth :as auth]
@@ -94,9 +94,10 @@
     hub-routes
     other-routes
     schnaq-routes
-    stripe-routes
+    subscription-routes
     summary-routes
     user-routes
+    ;; Don't forget to add the `:security/schnaq-csrf-header` middleware in new routes
 
     ["/swagger.json"
      {:get {:no-doc true
@@ -132,15 +133,15 @@
                         multipart/multipart-middleware
                         auth-middlewares/replace-bearer-with-token
                         auth/wrap-jwt-authentication
-                        auth-middlewares/update-jwt-middleware
-                        middlewares/wrap-custom-schnaq-csrf-header]}
+                        auth-middlewares/update-jwt-middleware]}
     ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
                            :user/admin? auth-middlewares/admin?-middleware
                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
                            :app/valid-code? auth-middlewares/valid-app-code?-middleware
                            :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
                            :discussion/valid-statement? middlewares/valid-statement?-middleware
-                           :discussion/valid-credentials? middlewares/valid-credentials?-middleware}}))
+                           :discussion/valid-credentials? middlewares/valid-credentials?-middleware
+                           :security/schnaq-csrf-header middlewares/wrap-custom-schnaq-csrf-header}}))
 
 (defn route-by-name
   "Return a route by its name."

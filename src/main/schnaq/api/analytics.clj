@@ -70,7 +70,7 @@
 (def analytics-routes
   ["/admin/analytics"
    {:swagger {:tags ["analytics" "admin"]}
-    :middleware [:user/authenticated? :user/admin?]
+    :middleware [:user/authenticated? :user/admin? :security/schnaq-csrf-header]
     :responses {401 at/response-error-body}}
    ["" {:get all-stats
         :parameters {:query {:days-since nat-int?}}

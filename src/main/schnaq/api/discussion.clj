@@ -355,7 +355,8 @@
 ;; -----------------------------------------------------------------------------
 
 (def discussion-routes
-  ["/discussion" {:swagger {:tags ["discussions"]}}
+  ["/discussion" {:swagger {:tags ["discussions"]}
+                  :middleware [:security/schnaq-csrf-header]}
    ["/conclusions/starting" {:get get-starting-conclusions
                              :description (at/get-doc #'get-starting-conclusions)
                              :name :api.discussion.conclusions/starting
