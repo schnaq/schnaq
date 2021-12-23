@@ -5,9 +5,10 @@
             [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as reitit-front-easy]
             [reitit.frontend.history :as rfh]
-            [schnaq.config.shared :as config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
+            [schnaq.interface.config :as config]
             [schnaq.interface.integrations.wetog.routes :as wetog-routes]
             [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.alphazulu :as az]
@@ -230,7 +231,9 @@
     {:name :routes/pricing
      :view pricing-view/pricing-view
      :link-text (labels :router/pricing)
-     :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
+     :controllers [{:start (fn []
+                             (rf/dispatch [:load-preview-statements])
+                             (rf/dispatch [:pricing/get-price config/stripe-product-price-id-schnaq-pro]))}]}]
    ["privacy"
     [""
      {:name :routes/privacy
@@ -267,7 +270,7 @@
 
 (def router
   (reitit-front/router
-   (if config/embedded?
+   (if shared-config/embedded?
      wetog-routes/routes
      routes)
    ;; This disables automatic conflict checking. So: Please check your own
@@ -276,7 +279,7 @@
 
 (defn- on-navigate [new-match]
   (let [window-hash (.. js/window -location -hash)]
-    (when (not config/embedded?)
+    (when (not shared-config/embedded?)
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
@@ -289,7 +292,7 @@
   (reitit-front-easy/start!
    router
    on-navigate
-   {:use-fragment config/embedded?
+   {:use-fragment shared-config/embedded?
     :ignore-anchor-click? (fn [router e el uri]
                             (and (rfh/ignore-anchor-click? router e el uri)
                                  (empty? (.-hash el))))}))
