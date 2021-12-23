@@ -22,3 +22,14 @@
                                          :option/value val}) options)}]
       "newly-created-survey"
       patterns/survey))))
+
+(>defn surveys
+  "Return all surveys which reference the discussion from the passed `share-hash`."
+  [share-hash]
+  [:discussion/share-hash :ret (s/coll-of ::specs/survey)]
+  (tools/pull-key-up
+   (db/query '[:find [(pull ?survey survey-pattern) ...]
+               :in $ ?share-hash survey-pattern
+               :where [?discussion :discussion/share-hash ?share-hash]
+               [?survey :survey/discussion ?discussion]]
+             share-hash patterns/survey)))

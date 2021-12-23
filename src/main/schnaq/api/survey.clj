@@ -24,6 +24,12 @@
         (log/info "Created a survey for discussion" discussion-id "of type" survey-type)
         (ok {:new-survey survey-created})))))
 
+(defn- surveys-for-discussion
+  "Returns all surveys belonging to the `share-hash` in the payload."
+  [{:keys [_parameters]}]
+  ;; TODO finish this function
+  (ok {:surveys ::TODO #_(get-in parameters [:body :share-hash])}))
+
 (def survey-routes
   [["/survey" {:swagger {:tags ["survey"]}}
     ["" {:post {:handler new-survey
