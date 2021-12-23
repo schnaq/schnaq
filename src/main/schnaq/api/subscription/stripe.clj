@@ -1,10 +1,12 @@
 (ns schnaq.api.subscription.stripe
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn-]]
-            [ring.util.http-response :refer [ok]]
+            [ring.util.http-response :refer [ok forbidden not-found]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config])
   (:import [com.stripe Stripe]
+           [com.stripe.exception InvalidRequestException]
+           [com.stripe.model Price]
            [com.stripe.model.checkout Session]
            [com.stripe.param.checkout SessionCreateParams SessionCreateParams$LineItem SessionCreateParams$Mode]))
 
@@ -46,10 +48,27 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- get-product-price
+  "Query a product's price by its stripe-identifier, which is a string, e.g.
+  `\"price_4242424242\"`."
+  [{{{:keys [product-price-id]} :query} :parameters}]
+  (try
+    (let [article (Price/retrieve product-price-id)]
+      (if (.getActive article)
+        (ok {:price (-> article .getUnitAmount (/ 100) float)})
+        (forbidden (at/build-error-body :article/not-active "Article is not active."))))
+    (catch InvalidRequestException _
+      (not-found (at/build-error-body :article/not-found "Article could not be found.")))))
+
 (def stripe-routes
   [["/subscription" {:swagger {:tags ["subscription"]}}
     ["/create-checkout-session"
      {:post create-checkout-session
       :description (at/get-doc #'create-checkout-session)
       :parameters {:body {:product-price-id string?}}
-      :responses {200 {:body {:redirect string?}}}}]]])
+      :responses {200 {:body {:redirect string?}}}}]
+    ["/price"
+     {:get get-product-price
+      :description (at/get-doc #'get-product-price)
+      :parameters {:query {:product-price-id string?}}
+      :responses {200 {:body {:price number?}}}}]]])
