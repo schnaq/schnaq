@@ -46,8 +46,6 @@
         session (Session/create checkout-session-parameters)]
     (ok {:redirect (.getUrl session)})))
 
-;; -----------------------------------------------------------------------------
-
 (defn- get-product-price
   "Query a product's price by its stripe-identifier, which is a string, e.g.
   `\"price_4242424242\"`."
@@ -55,10 +53,13 @@
   (try
     (let [article (Price/retrieve product-price-id)]
       (if (.getActive article)
-        (ok {:price (-> article .getUnitAmount (/ 100) float)})
+        (ok {:price (-> article .getUnitAmount (/ 100) float)
+             :product-price-id product-price-id})
         (forbidden (at/build-error-body :article/not-active "Article is not active."))))
     (catch InvalidRequestException _
       (not-found (at/build-error-body :article/not-found "Article could not be found.")))))
+
+;; -----------------------------------------------------------------------------
 
 (def stripe-routes
   [["/subscription" {:swagger {:tags ["subscription"]}}
@@ -71,4 +72,5 @@
      {:get get-product-price
       :description (at/get-doc #'get-product-price)
       :parameters {:query {:product-price-id string?}}
-      :responses {200 {:body {:price number?}}}}]]])
+      :responses {200 {:body {:price number?
+                              :product-price-id string?}}}}]]])
