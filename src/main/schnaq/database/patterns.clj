@@ -117,3 +117,14 @@
    {:summary/requester [:user.registered/email
                         :user.registered/display-name
                         :user.registered/keycloak-id]}])
+
+(def survey
+  [:db/id
+   :survey/title
+   {:survey/type [:db/ident]}
+   {:survey/options [:db/id
+                     :option/value
+                     [:option/votes :default 0]]}
+   {:survey/discussion [:db/id
+                       :discussion/share-hash
+                       :discussion/title]}])
