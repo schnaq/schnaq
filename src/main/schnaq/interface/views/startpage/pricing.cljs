@@ -2,7 +2,6 @@
   (:require [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
-            [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reititfe]
             [schnaq.interface.components.icons :refer [icon]]
@@ -10,6 +9,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.loading :refer [spinner-icon]]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.qa.inputs :as qanda]))
 
@@ -37,15 +37,23 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- price-tag
-  "Unify the price-tag design."
-  [price per-account?]
+(defn- price-tag-pro-tier
+  "Price tag for pro tier."
+  []
+  (if-let [pro-price @(rf/subscribe [:pricing/pro-tier])]
+    [:<>
+     [:span.display-5 pro-price " €"]
+     [:span (labels :pricing.units/per-month)]
+     [:br]
+     [:small.text-muted (labels :pricing.notes/with-vat)]]
+    [spinner-icon]))
+
+(defn- price-tag-free-tier
+  "Price tag for free tier."
+  []
   [:<>
-   [:span.display-5 price " €"]
-   [:span (labels :pricing.units/per-month)]
-   (when per-account?
-     [:<> [:br]
-      [:small.text-muted (labels :pricing.notes/with-vat)]])])
+   [:span.display-5 "0 €"]
+   [:span (labels :pricing.units/per-month)]])
 
 (defn- intro
   "Welcome new users to the pricing page."
@@ -79,7 +87,7 @@
        [:h3.card-title.text-center title-label]
        [:h6.card-subtitle.mb-3.text-muted.text-center (labels subtitle)]
        [:p.card-text.text-center [icon icon-name "text-primary" {:size "4x"}]]
-       [:p.text-center price]
+       [:div.text-center.pb-2 price]
        [:p.card-text.text-justify (labels description)]]
       cta-button
       [:ul.pricing-feature-list
@@ -99,7 +107,7 @@
   []
   [tier-card
    :pricing.free-tier/title :pricing.free-tier/subtitle :rocket
-   [price-tag 0]
+   [price-tag-free-tier]
    :pricing.free-tier/description
    (add-class-to-feature (concat (starter-features) [(labels :pricing.free-tier/for-free)]) "text-primary")
    nil
@@ -110,7 +118,7 @@
   []
   [tier-card
    :pricing.pro-tier/title :pricing.pro-tier/subtitle :crown
-   [price-tag config/pricing-pro-tier true]
+   [price-tag-pro-tier]
    :pricing.pro-tier/description
    (add-class-to-feature (concat (starter-features) (business-features)) "text-primary")
    (coming-soon)
@@ -216,8 +224,23 @@
 (rf/reg-event-fx
  :subscription/create-checkout-session
  (fn [{:keys [db]} [_ product-price-id]]
-   (prn product-price-id)
    {:fx [(http/xhrio-request db :post "/subscription/create-checkout-session"
                              [:navigation.redirect/follow]
-                             {:product-price-id product-price-id}
-                             [:ajax.error/as-notification])]}))
+                             {:product-price-id product-price-id})]}))
+
+(rf/reg-event-fx
+ :pricing/get-price
+ (fn [{:keys [db]} [_ product-price-id]]
+   {:fx [(http/xhrio-request db :get "/subscription/price"
+                             [:pricing/store-price]
+                             {:product-price-id product-price-id})]}))
+
+(rf/reg-event-db
+ :pricing/store-price
+ (fn [db [_ {:keys [price product-price-id]}]]
+   (assoc-in db [:pricing product-price-id] price)))
+
+(rf/reg-sub
+ :pricing/pro-tier
+ (fn [db _]
+   (get-in db [:pricing config/stripe-product-price-id-schnaq-pro])))
