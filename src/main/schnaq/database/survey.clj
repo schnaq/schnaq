@@ -1,7 +1,7 @@
 (ns schnaq.database.survey
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn- ?]]
-            [schnaq.database.main :refer [fast-pull] :as db]
+            [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.toolbelt :as tools])
