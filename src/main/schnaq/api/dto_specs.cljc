@@ -30,6 +30,11 @@
 (def statement-type (st/spec :statement/type {:type :keyword}))
 (s/def :statement/unqualified-types #{:attack :support :neutral})
 
+(def survey-type (st/spec :survey/type {:type :keyword}))
+(s/def ::survey
+  (s/keys :req [:db/id :survey/title :survey/type :survey/options]
+          :opt [:survey/discussion]))
+
 ;; Discussions
 (s/def :discussion/meta-info
   (s/keys :req-un [:meta/all-statements :meta/authors]))

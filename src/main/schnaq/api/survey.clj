@@ -1,6 +1,7 @@
 (ns schnaq.api.survey
   (:require [clojure.spec.alpha :as s]
             [ring.util.http-response :refer [ok bad-request]]
+            [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.specs :as specs]
@@ -12,7 +13,7 @@
   This can only be done by a registered user, that is also the moderator of the schnaq and
   has at least the pro subscription."
   [{:keys [parameters]}]
-  (let [{:keys [title survey-type options share-hash]} parameters
+  (let [{:keys [title survey-type options share-hash]} (:body parameters)
         discussion-id (:db/id (fast-pull [:discussion/share-hash share-hash] '[:db/id]))
         survey-created (survey-db/new-survey title survey-type options discussion-id)]
     (if (nil? survey-created)
@@ -24,17 +25,17 @@
         (ok {:new-survey survey-created})))))
 
 (def survey-routes
-  [["survey" {:swagger {:tags ["survey"]}}
-    ["" {:post new-survey
-         :description (at/get-doc #'new-survey)
-         :middleware [:user/authenticated?
-                      :user/beta-tester?
-                      :discussion/valid-credentials?]
-         :name :survey/create
-         :parameters {:body {:title :survey/title
-                             :survey-type :survey/type
-                             :options (s/coll-of ::specs/non-blank-string)
-                             :share-hash :discussion/share-hash
-                             :edit-hash :discussion/edit-hash}}
-         :responses {200 {:body {:new-survey ::specs/survey}}
-                     400 at/response-error-body}}]]])
+  [["/survey" {:swagger {:tags ["survey"]}}
+    ["" {:post {:handler new-survey
+                :description (at/get-doc #'new-survey)
+                :middleware [:user/authenticated?
+                             :user/beta-tester?
+                             :discussion/valid-credentials?]
+                :name :survey/create
+                :parameters {:body {:title :survey/title
+                                    :survey-type dto/survey-type
+                                    :options (s/coll-of ::specs/non-blank-string)
+                                    :share-hash :discussion/share-hash
+                                    :edit-hash :discussion/edit-hash}}
+                :responses {200 {:body {:new-survey ::dto/survey}}
+                            400 at/response-error-body}}}]]])
