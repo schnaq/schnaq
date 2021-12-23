@@ -64,3 +64,8 @@
 (goog-define example-share-hash "6586e787-8704-4b4b-9221-5821d15626b5")
 (goog-define example-api-url "https://api.staging.schnaq.com")
 (goog-define example-statement 17592186049502)
+
+;; -----------------------------------------------------------------------------
+;; Stripe
+
+(goog-define stripe-product-price-id-schnaq-pro "price_1K9S66FrKCGqvoMokD1SoBic")

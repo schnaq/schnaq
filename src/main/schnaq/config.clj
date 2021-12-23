@@ -75,3 +75,9 @@
 (def testing-public-key
   (keys/str->public-key
    (slurp "https://s3.schnaq.com/on-premise/testing/jwt.key.pub")))
+
+;; -----------------------------------------------------------------------------
+;; Stripe
+
+(def stripe-secret-api-key
+  "***REMOVED***")
