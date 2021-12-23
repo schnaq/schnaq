@@ -12,14 +12,13 @@
   [title survey-type options discussion-id]
   [:survey/title :survey/type (s/coll-of ::specs/non-blank-string) :db/id :ret (? ::specs/survey)]
   (when (< 0 (count options))
-    (let [tx @(db/transact [{:db/id "newly-created-survey"
-                             :survey/title title
-                             :survey/type survey-type
-                             :survey/discussion discussion-id
-                             :survey/options (mapv (fn [val] {:db/id (.toString (UUID/randomUUID))
-                                                              :option/value val}) options)}])
-          ;; TODO make this its own function pattern
-          new-survey-id (get-in tx [:tempids "newly-created-survey"])
-          db-after (:db-after tx)]
-      (tools/pull-key-up
-       (fast-pull new-survey-id patterns/survey db-after)))))
+    (tools/pull-key-up
+     (db/transact-and-pull-temp
+      [{:db/id "newly-created-survey"
+        :survey/title title
+        :survey/type survey-type
+        :survey/discussion discussion-id
+        :survey/options (mapv (fn [val] {:db/id (.toString (UUID/randomUUID))
+                                         :option/value val}) options)}]
+      "newly-created-survey"
+      patterns/survey))))
