@@ -25,13 +25,6 @@
   false)
 
 ;; -----------------------------------------------------------------------------
-;; Pricing
-
-(def pricing-pro-tier
-  "Price in euros, exclusively VAT."
-  6.99)
-
-;; -----------------------------------------------------------------------------
 ;; Keycloak
 
 (goog-define keycloak-realm "development")
@@ -66,6 +59,7 @@
 (goog-define example-statement 17592186049502)
 
 ;; -----------------------------------------------------------------------------
-;; Stripe
+;; Stripe Pricing
 
+;; Price of Pro Tier
 (goog-define stripe-product-price-id-schnaq-pro "price_1K9S66FrKCGqvoMokD1SoBic")
