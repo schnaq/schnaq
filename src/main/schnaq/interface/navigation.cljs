@@ -1,5 +1,6 @@
 (ns schnaq.interface.navigation
-  (:require [re-frame.core :as rf]
+  (:require [oops.core :refer [oset!]]
+            [re-frame.core :as rf]
             [reitit.frontend.controllers :as reitit-front-controllers]
             [reitit.frontend.easy :as reitit-front-easy]))
 
@@ -29,3 +30,13 @@
    (let [old-match (:current-route db)
          controllers (reitit-front-controllers/apply-controllers (:controllers old-match) new-match)]
      (assoc db :current-route (assoc new-match :controllers controllers)))))
+
+(rf/reg-fx
+ :navigation.redirect/follow!
+ (fn [redirect-url]
+   (oset! js/window [:location :href] redirect-url)))
+
+(rf/reg-event-fx
+ :navigation.redirect/follow
+ (fn [_ [_ {:keys [redirect]}]]
+   {:fx [[:navigation.redirect/follow! redirect]]}))

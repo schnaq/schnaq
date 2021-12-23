@@ -213,16 +213,6 @@
 ;; -----------------------------------------------------------------------------
 
 
-(rf/reg-fx
- :navigation.redirect/follow!
- (fn [redirect-url]
-   (oset! js/window [:location :href] redirect-url)))
-
-(rf/reg-event-fx
- :navigation.redirect/follow
- (fn [_ [_ {:keys [redirect]}]]
-   {:fx [[:navigation.redirect/follow! redirect]]}))
-
 (rf/reg-event-fx
  :subscription/create-checkout-session
  (fn [{:keys [db]} [_ product-price-id]]
