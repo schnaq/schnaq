@@ -26,13 +26,14 @@
 
 (defn- surveys-for-discussion
   "Returns all surveys belonging to the `share-hash` in the payload."
-  [{:keys [_parameters]}]
-  ;; TODO finish this function
-  (ok {:surveys ::TODO #_(get-in parameters [:body :share-hash])}))
+  [{:keys [parameters]}]
+  (let [share-hash (get-in parameters [:query :share-hash])]
+    (log/info "Requested surveys for share-hash " share-hash)
+    (ok {:surveys (survey-db/surveys share-hash)})))
 
 (def survey-routes
-  [["/survey" {:swagger {:tags ["survey"]}}
-    ["" {:post {:handler new-survey
+  [["" {:swagger {:tags ["survey"]}}
+    ["/survey" {:post new-survey
                 :description (at/get-doc #'new-survey)
                 :middleware [:user/authenticated?
                              :user/beta-tester?
@@ -44,4 +45,9 @@
                                     :share-hash :discussion/share-hash
                                     :edit-hash :discussion/edit-hash}}
                 :responses {200 {:body {:new-survey ::dto/survey}}
-                            400 at/response-error-body}}}]]])
+                            400 at/response-error-body}}]
+    ["/surveys" {:get surveys-for-discussion
+                 :description (at/get-doc #'surveys-for-discussion)
+                 :name :surveys/get
+                 :parameters {:query {:share-hash :discussion/share-hash}}
+                 :responses {200 {:body {:surveys (s/coll-of ::dto/survey)}}}}]]])
