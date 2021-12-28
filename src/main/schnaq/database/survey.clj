@@ -7,7 +7,7 @@
             [schnaq.toolbelt :as tools])
   (:import (java.util UUID)))
 
-(>defn new-survey
+(>defn new-survey!
   "Create and return a survey entity. Options must be passed as a collection of strings."
   [title survey-type options discussion-id]
   [:survey/title :survey/type (s/coll-of ::specs/non-blank-string) :db/id :ret (? ::specs/survey)]

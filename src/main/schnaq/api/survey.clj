@@ -15,7 +15,7 @@
   [{:keys [parameters]}]
   (let [{:keys [title survey-type options share-hash]} (:body parameters)
         discussion-id (:db/id (fast-pull [:discussion/share-hash share-hash] '[:db/id]))
-        survey-created (survey-db/new-survey title survey-type options discussion-id)]
+        survey-created (survey-db/new-survey! title survey-type options discussion-id)]
     (if (nil? survey-created)
       (do
         (log/warn "Creating survey with title" title "and options" options "failed for discussion" discussion-id)

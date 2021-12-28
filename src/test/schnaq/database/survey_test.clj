@@ -10,10 +10,10 @@
 (deftest new-survey-test
   (testing "Check whether the survey object is created correctly."
     (let [discussion-id (:db/id (fast-pull [:discussion/share-hash "cat-dog-hash"] '[:db/id]))
-          new-survey (db/new-survey "Test Survey" :survey.type/multiple-choice
-                                    ["Eis" "Sorbet" "Joghurt"] discussion-id)
-          failed-survey (db/new-survey "Failed" :survey.type/single-choice
-                                       [] discussion-id)]
+          new-survey (db/new-survey! "Test Survey" :survey.type/multiple-choice
+                                     ["Eis" "Sorbet" "Joghurt"] discussion-id)
+          failed-survey (db/new-survey! "Failed" :survey.type/single-choice
+                                        [] discussion-id)]
       (is (zero? (apply + (map :option/votes (:survey/options new-survey)))))
       (is (= 3 (count (:survey/options new-survey))))
       (is (= :survey.type/multiple-choice (:survey/type new-survey)))
