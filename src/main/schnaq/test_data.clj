@@ -310,7 +310,16 @@
                      {:db/id "option/wassers"
                       :option/value "Wassers"
                       :option/votes 1}]
-    :survey/discussion "discussion/cat-or-dog"}])
+    :survey/discussion "discussion/cat-or-dog"}
+   {:db/id "survey/increment-test"
+    :survey/title "Incrementier die Votes!"
+    :survey/type :survey.type/single-choice
+    :survey/options [{:db/id "option/mit-vote"
+                      :option/value "Mit Vote"
+                      :option/votes 1}
+                     {:db/id "option/ohne-vote"
+                      :option/value "Ohne Vote"}]
+    :survey/discussion "discussion/simple"}])
 
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
