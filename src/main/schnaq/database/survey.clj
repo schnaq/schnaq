@@ -33,3 +33,19 @@
                :where [?discussion :discussion/share-hash ?share-hash]
                [?survey :survey/discussion ?discussion]]
              share-hash patterns/survey)))
+
+(>defn vote!
+  "Casts a vote for a certain option.
+  Share-hash of option must be known to prove one is not randomly incrementing values.
+  Returns nil if combination is invalid and the transaction otherwise."
+  [option-id share-hash]
+  [:db/id :discussion/share-hash :ret (? map?)]
+  (when-let [matching-option
+             (db/query
+              '[:find ?option .
+                :in $ ?option ?share-hash
+                :where [?survey :survey/options ?option]
+                [?survey :survey/discussion ?discussion]
+                [?discussion :discussion/share-hash ?share-hash]]
+              option-id share-hash)]
+    (db/increment-number matching-option :option/votes)))

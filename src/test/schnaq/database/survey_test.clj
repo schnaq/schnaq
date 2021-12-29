@@ -31,3 +31,16 @@
       (is (= "Ganz allein mit mehreren" (:survey/title multiple)))
       (is (= 4 (apply + (map :option/votes (:survey/options single)))))
       (is (= 3 (apply + (map :option/votes (:survey/options multiple))))))))
+
+(deftest vote!-test
+  (let [share-hash "simple-hash"
+        survey (first (db/surveys share-hash))
+        option (first (filter #(= 0 (:option/votes %)) (:survey/options survey)))]
+    (testing "A vote always increments the number when the option and share-hash match."
+      (db/vote! (:db/id option) share-hash)
+      (is (= 1 (:option/votes (fast-pull (:db/id option) '[:option/votes]))))
+      (db/vote! (:db/id option) share-hash)
+      (is (= 2 (:option/votes (fast-pull (:db/id option) '[:option/votes])))))
+    (testing "Providing a non-matching share-hash should do nothing"
+      (is (nil? (db/vote! (:db/id option) "Non-matching share hash 123")))
+      (is (= 2 (:option/votes (fast-pull (:db/id option) '[:option/votes])))))))
