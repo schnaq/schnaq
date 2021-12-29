@@ -35,12 +35,16 @@
 (deftest vote!-test
   (let [share-hash "simple-hash"
         survey (first (db/surveys share-hash))
+        survey-id (:db/id survey)
         option (first (filter #(= 0 (:option/votes %)) (:survey/options survey)))]
     (testing "A vote always increments the number when the option and share-hash match."
-      (db/vote! (:db/id option) share-hash)
+      (db/vote! (:db/id option) survey-id share-hash)
       (is (= 1 (:option/votes (fast-pull (:db/id option) '[:option/votes]))))
-      (db/vote! (:db/id option) share-hash)
+      (db/vote! (:db/id option) survey-id share-hash)
       (is (= 2 (:option/votes (fast-pull (:db/id option) '[:option/votes])))))
     (testing "Providing a non-matching share-hash should do nothing"
-      (is (nil? (db/vote! (:db/id option) "Non-matching share hash 123")))
+      (is (nil? (db/vote! (:db/id option) survey-id "Non-matching share hash 123")))
+      (is (= 2 (:option/votes (fast-pull (:db/id option) '[:option/votes])))))
+    (testing "Providing a non-matching survey-id should do nothing as well"
+      (is (nil? (db/vote! (:db/id option) (inc survey-id) share-hash)))
       (is (= 2 (:option/votes (fast-pull (:db/id option) '[:option/votes])))))))

@@ -36,16 +36,16 @@
 
 (>defn vote!
   "Casts a vote for a certain option.
-  Share-hash of option must be known to prove one is not randomly incrementing values.
+  Share-hash, survey-id and option-id must be known to prove one is not randomly incrementing values.
   Returns nil if combination is invalid and the transaction otherwise."
-  [option-id share-hash]
-  [:db/id :discussion/share-hash :ret (? map?)]
+  [option-id survey-id share-hash]
+  [:db/id :db/id :discussion/share-hash :ret (? map?)]
   (when-let [matching-option
              (db/query
               '[:find ?option .
-                :in $ ?option ?share-hash
+                :in $ ?option ?survey ?share-hash
                 :where [?survey :survey/options ?option]
                 [?survey :survey/discussion ?discussion]
                 [?discussion :discussion/share-hash ?share-hash]]
-              option-id share-hash)]
+              option-id survey-id share-hash)]
     (db/increment-number matching-option :option/votes)))
