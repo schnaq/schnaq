@@ -155,6 +155,7 @@
     :discussion/description "Should a person looking for a pet rather buy a dog or a cat?"
     :discussion/states []
     :discussion/share-hash "cat-dog-hash"
+    :discussion/edit-hash "cat-dog-edit-hash"
     :discussion/author "user/wegi"
     :discussion/created-at #inst "2019-01-01"
     :discussion/starting-statements ["statement/get-dog" "statement/get-both" "statement/get-cat"]}
