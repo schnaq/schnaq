@@ -60,7 +60,7 @@
 (def synonyms-german (atom {}))
 
 ;; Excellent macro copied from user kotarak: https://stackoverflow.com/a/1879961/552491
-(defn- try-times*
+(defn try-times*
   "Executes thunk. If an exception is thrown, will retry. At most n retries
   are done. If still some exception is thrown it is bubbled upwards in
   the call chain."
