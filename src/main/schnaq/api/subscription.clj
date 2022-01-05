@@ -53,12 +53,77 @@
 
 ;; -----------------------------------------------------------------------------
 
+(def sample-payload
+  {:request {:idempotency_key "c3f22fa4-28f4-42c0-a534-ed7c24dc8dc5", :id "req_oghFbDE3aNtgul"}
+   :type "payment_intent.created"
+   :created 1640270702
+   :pending_webhooks 1
+   :id "evt_3K9sXSFrKCGqvoMo0sWX8MwM"
+   :api_version "2020-08-27"
+   :livemode false
+   :object "event"
+   :data
+   {:object
+    {:description "Subscription creation"
+     :amount 699
+     :canceled_at nil
+     :payment_method nil
+     :amount_capturable 0
+     :processing nil
+     :capture_method "automatic"
+     :application_fee_amount nil
+     :application nil
+     :automatic_payment_methods nil
+     :setup_future_usage "off_session"
+     :statement_descriptor_suffix nil
+     :receipt_email nil
+     :charges
+     {:total_count 0
+      :url "/v1/charges?payment_intent=pi_3K9sXSFrKCGqvoMo0nca4k9h"
+      :has_more false
+      :object "list"
+      :data []}
+     :on_behalf_of nil
+     :created 1640270702
+     :payment_method_types ["card" "sepa_debit"]
+     :source nil
+     :customer "cus_KpXcTOgIYp7Rac"
+     :amount_received 0
+     :transfer_group nil
+     :invoice "in_1K9sXRFrKCGqvoMoXuhbx0a3"
+     :cancellation_reason nil
+     :currency "eur"
+     :confirmation_method "automatic"
+     :review nil
+     :next_action nil
+     :status "requires_payment_method"
+     :id "pi_3K9sXSFrKCGqvoMo0nca4k9h"
+     :transfer_data nil
+     :last_payment_error nil
+     :livemode false
+     :shipping nil
+     :metadata {}
+     :object "payment_intent"
+     :client_secret "pi_3K9sXSFrKCGqvoMo0nca4k9h_secret_lxLF5I3SX023mv4KepUBCRVVx"
+     :statement_descriptor nil
+     :payment_method_options
+     {:card {:installments nil, :request_three_d_secure "automatic", :network nil}, :sepa_debit {}}}}})
+
 (defn- webhook
   "TODO"
-  [request]
+  [{:keys [headers body-params] :as request}]
+  (prn request)
+  (def foor request)
   (ok {:status :toll}))
 
+(comment
+
+  (:parameters foor)
+
+  nil)
+
 ;; -----------------------------------------------------------------------------
+
 
 (def subscription-routes
   [["/subscription" {:swagger {:tags ["subscription"]}}
@@ -80,5 +145,8 @@
                    404 at/response-error-body}}]]
     ["/webhook"
      {:post webhook
-      :description (at/get-doc #'webhook)}]]])
+      :description (at/get-doc #'webhook)
+      :parameters {:body {:type keyword?
+                          :created number?
+                          :data {:object {:id string?}}}}}]]])
 
