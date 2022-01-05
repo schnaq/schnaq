@@ -32,9 +32,9 @@
                       (toolbelt/mock-authorization-header user-token)))]
     (testing "Non logged in user can not create a survey."
       (is (= 401 (-> toolbelt/token-timed-out request api/app :status))))
-    (testing "Logged in user without premium can not create a survey."
+    (testing "Logged in user without pro cannot create a survey."
       (is (= 403 (-> toolbelt/token-wegi-no-beta-user request api/app :status))))
-    (testing "Premium user, that has wrong admin credentials cannot create survey."
+    (testing "Pro user, that has wrong admin credentials cannot create survey."
       (is (= 403 (-> toolbelt/token-schnaqqifant-user request (assoc-in [:body-params :edit-hash] "wrong-edit")
                      api/app :status))))
     (testing "User with correct pro status, credentials and admin, has provided no options."

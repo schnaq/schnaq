@@ -8,7 +8,7 @@
             [schnaq.database.survey :as survey-db]
             [taoensso.timbre :as log]))
 
-(defn new-survey
+(defn- new-survey
   "Create a new survey.
   This can only be done by a registered user, that is also the moderator of the schnaq and
   has at least the pro subscription."
@@ -28,11 +28,11 @@
   "Returns all surveys belonging to the `share-hash` in the payload."
   [{:keys [parameters]}]
   (let [share-hash (get-in parameters [:query :share-hash])]
-    (log/info "Requested surveys for share-hash " share-hash)
+    (log/info "Requested surveys for share-hash" share-hash)
     (ok {:surveys (survey-db/surveys share-hash)})))
 
 (defn- cast-vote
-  "Lets the user cast a vote"
+  "Lets the user cast a vote."
   [{:keys [parameters]}]
   (let [{:keys [share-hash option-id]} (:body parameters)
         survey-id (get-in parameters [:path :survey-id])]
