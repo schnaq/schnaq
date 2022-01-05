@@ -93,17 +93,6 @@ $header-opacity: 1;
   }
 }
 
-.above-the-fold-screenshot {
-  @include rounded.rounded-3;
-  background: vars.$light-background;
-  box-shadow: vars.$wide-shadow;
-  overflow: hidden;
-
-  @include media-breakpoint-up(lg) {
-    margin-right: -15rem;
-  }
-}
-
 .social-proof-img {
   max-height: 40px;
   width: 40px;
