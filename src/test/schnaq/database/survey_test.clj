@@ -36,7 +36,7 @@
   (let [share-hash "simple-hash"
         survey (first (db/surveys share-hash))
         survey-id (:db/id survey)
-        option (first (filter #(= 0 (:option/votes %)) (:survey/options survey)))]
+        option (first (filter #(zero? (:option/votes %)) (:survey/options survey)))]
     (testing "A vote always increments the number when the option and share-hash match."
       (db/vote! (:db/id option) survey-id share-hash)
       (is (= 1 (:option/votes (fast-pull (:db/id option) '[:option/votes]))))

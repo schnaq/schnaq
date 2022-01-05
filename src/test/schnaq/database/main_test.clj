@@ -51,7 +51,7 @@
   (let [survey (first (survey-db/surveys "simple-hash"))
         ;; Pattern adds default value of 0 where there is none
         option-with-vote-attr (first (filter #(not= 0 (:option/votes %)) (:survey/options survey))) ;; votes = 1
-        option-without-vote-attr (first (filter #(= 0 (:option/votes %)) (:survey/options survey)))]
+        option-without-vote-attr (first (filter #(zero? (:option/votes %)) (:survey/options survey)))]
     (testing "Show whether incrementing a number that's there works"
       (db/increment-number (:db/id option-with-vote-attr) :option/votes)
       (is (= 2 (:option/votes (db/fast-pull (:db/id option-with-vote-attr) '[:option/votes]))))
