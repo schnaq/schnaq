@@ -221,8 +221,8 @@
                                 :discussion ::discussion))
 (s/def :option/value ::non-blank-string)
 (s/def :option/votes nat-int?)
-(s/def ::option (s/keys :req-un [:option/value]
-                        :opt-un [:option/votes]))
+(s/def ::option (s/keys :req [:option/value]
+                        :opt [:option/votes]))
 (s/def :survey/options (s/coll-of ::option))
 (s/def ::survey
   (s/keys :req-un [:survey/title :survey/options :survey/type :survey/discussion]))

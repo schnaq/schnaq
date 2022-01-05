@@ -19,11 +19,11 @@
         http-kit/http-kit {:mvn/version "2.5.3"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
         jarohen/chime {:mvn/version "0.3.3"}
-        keycloak-clojure/keycloak-clojure {:mvn/version "1.20.1"}
+        keycloak-clojure/keycloak-clojure {:mvn/version "1.20.2"}
         metosin/reitit {:mvn/version "0.5.15"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
         org.clojure/clojure {:mvn/version "1.10.3"}
-        org.clojure/clojurescript {:mvn/version "1.10.914"}
+        org.clojure/clojurescript {:mvn/version "1.11.4"}
         org.clojure/core.async {:mvn/version "1.5.648"}
         org.clojure/data.json {:mvn/version "2.4.0"}
         org.clojure/test.check {:mvn/version "1.1.1"}
@@ -34,14 +34,14 @@
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring/ring {:mvn/version "1.9.4"}
         ring/ring-mock {:mvn/version "0.4.0"}
-        thheller/shadow-cljs {:mvn/version "2.16.9"}}
+        thheller/shadow-cljs {:mvn/version "2.16.12"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}
              "my.datomic.com" {:url "https://my.datomic.com/repo"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.60.972"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.60.977"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
                   :jvm-opts ["-Dghostwheel.enabled=true"]
