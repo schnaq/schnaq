@@ -1,5 +1,5 @@
 (ns schnaq.auth.lib
-  (:require [ghostwheel.core :refer [>defn]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn]]
             [schnaq.config.shared :as shared-config]))
 
 (>defn has-role?

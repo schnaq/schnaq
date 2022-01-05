@@ -3,7 +3,7 @@
   (:require [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [ring.util.http-response :refer [ok created]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]

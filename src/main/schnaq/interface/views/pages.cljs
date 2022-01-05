@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.pages
   "Defining page-layouts."
   (:require [cljs.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn >defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]

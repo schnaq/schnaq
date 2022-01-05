@@ -2,7 +2,7 @@
   (:require [clj-http.client :as client]
             [clojure.java.io :as io]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn >defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
             [image-resizer.core :as resizer-core]
             [image-resizer.format :as resizer-format]
             [ring.util.http-response :refer [created bad-request forbidden]]
@@ -64,7 +64,7 @@
   [string? number? :ret map?]
   (try
     (let [[header image-without-header] (string/split image-data-url #",")
-          #^bytes image-bytes (.decode (Base64/getDecoder) ^String image-without-header)
+          ^bytes image-bytes (.decode (Base64/getDecoder) ^String image-without-header)
           image-type (second (re-find #"/([A-z]*);" header))
           content-type (second (re-find #":(([A-z]*)/[A-z]*);" header))
           resized-image (resizer-core/resize-to-height (io/input-stream image-bytes) height)

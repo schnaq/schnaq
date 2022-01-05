@@ -1,7 +1,7 @@
 (ns schnaq.interface.utils.toolbelt
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [oops.core :refer [oset! oget oget+]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]

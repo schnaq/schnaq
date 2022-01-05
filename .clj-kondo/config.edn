@@ -1,4 +1,4 @@
-{:lint-as {ghostwheel.core/>defn clojure.core/defn
-           ghostwheel.core/>defn- clojure.core/defn}
+{:lint-as {com.fulcrologic.guardrails.core/>defn clojure.core/defn
+           com.fulcrologic.guardrails.core/>defn- clojure.core/defn}
  :linters {:single-key-in {:level :warning}
            :unsorted-required-namespaces {:level :warning}}}

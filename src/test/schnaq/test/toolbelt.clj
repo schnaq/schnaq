@@ -1,9 +1,9 @@
 (ns schnaq.test.toolbelt
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as stest]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [datomic.api :as datomic]
             [expound.alpha :as expound]
-            [ghostwheel.core :refer [>defn]]
             [ring.mock.request :as mock]
             [schnaq.auth.jwt :as sjwt]
             [schnaq.config :as config]

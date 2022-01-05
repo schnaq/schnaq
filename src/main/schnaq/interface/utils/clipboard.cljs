@@ -1,5 +1,5 @@
 (ns schnaq.interface.utils.clipboard
-  (:require [ghostwheel.core :refer [>defn]]))
+  (:require [com.fulcrologic.guardrails.core :refer [>defn]]))
 
 (>defn copy-to-clipboard!
   "Copies a string to the users clipboard."

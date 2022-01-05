@@ -5,7 +5,7 @@
             [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
             [datomic.api :as d]
-            [ghostwheel.core :refer [>defn ? >defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.access-codes :as ac]

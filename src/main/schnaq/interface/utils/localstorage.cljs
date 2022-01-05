@@ -1,6 +1,6 @@
 (ns schnaq.interface.utils.localstorage
   (:require [clojure.string :as string]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]))
 

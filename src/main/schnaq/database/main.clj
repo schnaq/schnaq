@@ -3,7 +3,7 @@
             [clojure.string :as string]
             [clojure.walk :as walk]
             [datomic.api :as d]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.config :as config]
             [schnaq.database.models :as models]

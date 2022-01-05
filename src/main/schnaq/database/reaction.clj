@@ -1,5 +1,5 @@
 (ns schnaq.database.reaction
-  (:require [ghostwheel.core :refer [>defn >defn- ?]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [schnaq.database.main :refer [transact query]]))
 
 ;; ----------------------------------------------------------------------------

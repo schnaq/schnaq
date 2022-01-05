@@ -2,7 +2,7 @@
   "Utility functions supporting the backend."
   (:require [clojure.string :as string]
             [clojure.walk :as walk]
-            [ghostwheel.core :refer [>defn ?]])
+            [com.fulcrologic.guardrails.core :refer [>defn ?]])
   (:import (clojure.lang PersistentArrayMap)
            (java.time Instant LocalDateTime ZoneOffset)
            (java.time.temporal ChronoUnit TemporalUnit)))
