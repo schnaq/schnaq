@@ -2,7 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [clojure.walk :as walk]
-            [com.fulcrologic.guardrails.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [datomic.api :as d]
             [schnaq.api.dto-specs :as dto]
             [schnaq.config :as config]
