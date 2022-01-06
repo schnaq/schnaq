@@ -64,7 +64,7 @@
   [string? number? :ret map?]
   (try
     (let [[header image-without-header] (string/split image-data-url #",")
-          ^bytes image-bytes (.decode (Base64/getDecoder) ^String image-without-header)
+          image-bytes (.decode (Base64/getDecoder) image-without-header)
           image-type (second (re-find #"/([A-z]*);" header))
           content-type (second (re-find #":(([A-z]*)/[A-z]*);" header))
           resized-image (resizer-core/resize-to-height (io/input-stream image-bytes) height)
