@@ -44,7 +44,6 @@
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.60.977"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
-                  :jvm-opts ["-Dguardrails.enabled=true"]
                   :main-opts ["-m" "kaocha.runner"]}
 
            :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
@@ -84,6 +83,5 @@
                         :verbose true
                         :jar "target/schnaq-standalone.jar"}}
 
-           :run-server {:main-opts ["-m" "schnaq.api"]
-                        :jvm-opts ["-Dguardrails.enabled=true"]}
+           :run-server {:main-opts ["-m" "schnaq.api"]}
            :notification-service {:main-opts ["-m" "schnaq.notification-service.core"]}}}
