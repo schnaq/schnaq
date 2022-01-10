@@ -18,7 +18,7 @@
   (:require ["framer-motion" :refer [AnimatePresence]]
             [cljs.spec.alpha :as s]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn- >defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn- >defn]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reagent.dom]

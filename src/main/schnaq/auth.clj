@@ -2,7 +2,7 @@
   (:require [buddy.auth.backends :as backends]
             [buddy.auth.middleware :refer [wrap-authentication]]
             [buddy.core.keys :as keys]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.shared :as shared-config]

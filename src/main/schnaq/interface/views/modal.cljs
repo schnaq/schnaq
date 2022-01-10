@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.modal
-  (:require [ghostwheel.core :refer [>defn]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]

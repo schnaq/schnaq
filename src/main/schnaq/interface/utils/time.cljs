@@ -2,7 +2,7 @@
   (:require ["date-fns" :as df]
             ["date-fns-tz" :as df-tz]
             ["date-fns/locale" :as df-locale]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.utils.tooltip :as tooltip]))
 

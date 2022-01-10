@@ -1,6 +1,6 @@
 (ns schnaq.discussion
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn >defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.patterns :as patterns]

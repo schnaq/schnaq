@@ -1,5 +1,5 @@
 (ns schnaq.config.summy
-  (:require [ghostwheel.core :refer [>defn ?]]))
+  (:require [com.fulcrologic.guardrails.core :refer [>defn ?]]))
 
 (def base-url
   "URL to our machine-learning service."

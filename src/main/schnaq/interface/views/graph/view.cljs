@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.graph.view
   (:require ["vis-network/standalone/esm/vis-network" :refer [DataSet Network]]
             [clojure.set :as set]
-            [ghostwheel.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]

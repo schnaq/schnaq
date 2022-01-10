@@ -1,7 +1,7 @@
 (ns schnaq.database.access-codes
   (:require [clojure.spec.alpha :as s]
             [clojure.walk :as walk]
-            [ghostwheel.core :refer [>defn >defn- ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.main :refer [transact fast-pull clean-and-add-to-db! query]]
             [schnaq.database.patterns :as patterns]
