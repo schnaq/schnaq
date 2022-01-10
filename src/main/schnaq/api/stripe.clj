@@ -1,12 +1,15 @@
-(ns schnaq.api.subscription
-  (:require [ghostwheel.core :refer [>defn-]]
+(ns schnaq.api.stripe
+  (:require [clojure.pprint :refer [pprint]]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [ring.util.http-response :refer [ok forbidden not-found bad-request]]
             [schnaq.api.toolbelt :as at]
-            [schnaq.config :as config])
+            [schnaq.config :as config]
+            [taoensso.timbre :as log])
   (:import [com.stripe Stripe]
            [com.stripe.exception InvalidRequestException]
            [com.stripe.model Price]
-           [com.stripe.model.checkout Session]))
+           [com.stripe.model.checkout Session]
+           [com.stripe.net Webhook]))
 
 (def ^:private error-article-not-found
   (at/build-error-body :article/not-found "Article could not be found."))
@@ -15,7 +18,7 @@
 
 (>defn- build-checkout-session-parameters
   "Configure all checkout-session parameters. Adds items, defines URLs and adds
-  costumer metadata to the user."
+        costumer metadata to the user."
   [product-price-id keycloak-id email]
   [:stripe/product-price-id :user.registered/keycloak-id :user.registered/email :ret map?]
   (let [items [{"price" product-price-id
@@ -25,6 +28,7 @@
      "mode" "subscription"
      "client_reference_id" keycloak-id
      "customer_email" email
+     "metadata" {:keycloak-id keycloak-id}
      "line_items" items}))
 
 (defn- create-checkout-session
@@ -53,70 +57,29 @@
 
 ;; -----------------------------------------------------------------------------
 
-(def sample-payload
-  {:request {:idempotency_key "c3f22fa4-28f4-42c0-a534-ed7c24dc8dc5", :id "req_oghFbDE3aNtgul"}
-   :type "payment_intent.created"
-   :created 1640270702
-   :pending_webhooks 1
-   :id "evt_3K9sXSFrKCGqvoMo0sWX8MwM"
-   :api_version "2020-08-27"
-   :livemode false
-   :object "event"
-   :data
-   {:object
-    {:description "Subscription creation"
-     :amount 699
-     :canceled_at nil
-     :payment_method nil
-     :amount_capturable 0
-     :processing nil
-     :capture_method "automatic"
-     :application_fee_amount nil
-     :application nil
-     :automatic_payment_methods nil
-     :setup_future_usage "off_session"
-     :statement_descriptor_suffix nil
-     :receipt_email nil
-     :charges
-     {:total_count 0
-      :url "/v1/charges?payment_intent=pi_3K9sXSFrKCGqvoMo0nca4k9h"
-      :has_more false
-      :object "list"
-      :data []}
-     :on_behalf_of nil
-     :created 1640270702
-     :payment_method_types ["card" "sepa_debit"]
-     :source nil
-     :customer "cus_KpXcTOgIYp7Rac"
-     :amount_received 0
-     :transfer_group nil
-     :invoice "in_1K9sXRFrKCGqvoMoXuhbx0a3"
-     :cancellation_reason nil
-     :currency "eur"
-     :confirmation_method "automatic"
-     :review nil
-     :next_action nil
-     :status "requires_payment_method"
-     :id "pi_3K9sXSFrKCGqvoMo0nca4k9h"
-     :transfer_data nil
-     :last_payment_error nil
-     :livemode false
-     :shipping nil
-     :metadata {}
-     :object "payment_intent"
-     :client_secret "pi_3K9sXSFrKCGqvoMo0nca4k9h_secret_lxLF5I3SX023mv4KepUBCRVVx"
-     :statement_descriptor nil
-     :payment_method_options
-     {:card {:installments nil, :request_three_d_secure "automatic", :network nil}, :sepa_debit {}}}}})
+(defmulti stripe-event
+  (fn [event] (:type event)))
+
+(defmethod stripe-event :payment_intent.succeeded [event]
+  (def success-event event)
+  (log/info "Payment intent successful 🤑"))
+
+(defmethod stripe-event :default [_event])
 
 (defn- webhook
   "TODO"
-  [{:keys [headers body-params] :as request}]
-  (prn request)
+  [{:keys [headers body-params parameters] :as request}]
+  (pprint body-params)
+  (stripe-event (:body parameters))
   (def foor request)
   (ok {:status :toll}))
 
 (comment
+
+  (:body foor)
+  (def sig (get-in foor [:headers "stripe-signature"]))
+
+  (Webhook/constructEvent (slurp (:body foor)) sig config/stripe-webhook-access-key)
 
   (:parameters foor)
 
@@ -125,8 +88,8 @@
 ;; -----------------------------------------------------------------------------
 
 
-(def subscription-routes
-  [["/subscription" {:swagger {:tags ["subscription"]}}
+(def stripe-routes
+  [["/stripe" {:swagger {:tags ["subscription" "stripe"]}}
     ["" {:middleware [:security/schnaq-csrf-header]}
      ["/create-checkout-session"
       {:post create-checkout-session

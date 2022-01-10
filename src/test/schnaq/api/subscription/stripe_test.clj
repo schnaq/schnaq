@@ -1,6 +1,6 @@
-(ns schnaq.api.subscription.stripe-test
+(ns schnaq.api.stripe-test
   (:require [clojure.test :refer [deftest is]]
-            [schnaq.api.subscription :as sut]))
+            [schnaq.api.stripe :as sut]))
 
 (deftest create-checkout-session-test
   (is (= true true)))

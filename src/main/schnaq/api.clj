@@ -25,7 +25,7 @@
             [schnaq.api.hub :refer [hub-routes]]
             [schnaq.api.middlewares :as middlewares]
             [schnaq.api.schnaq :refer [schnaq-routes]]
-            [schnaq.api.subscription :refer [subscription-routes]]
+            [schnaq.api.stripe :refer [stripe-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
             [schnaq.api.survey :refer [survey-routes]]
             [schnaq.api.user :refer [user-routes]]
@@ -95,7 +95,7 @@
     hub-routes
     other-routes
     schnaq-routes
-    subscription-routes
+    stripe-routes
     summary-routes
     survey-routes
     user-routes
