@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.qa.inputs
-  (:require [ghostwheel.core :refer [>defn >defn-]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]

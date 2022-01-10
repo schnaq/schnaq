@@ -1,6 +1,6 @@
 (ns schnaq.database.survey
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]

@@ -1,6 +1,6 @@
 (ns schnaq.interface.utils.js-wrapper
   (:require ["jquery" :as jquery]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [goog.dom :as gdom]
             [goog.dom.dataset :as dataset]))
 

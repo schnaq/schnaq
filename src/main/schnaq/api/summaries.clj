@@ -1,7 +1,7 @@
 (ns schnaq.api.summaries
   (:require [clj-http.client :as client]
             [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [muuntaja.core :as m]
             [reitit.core :as r]
             [ring.util.http-response :refer [ok]]

@@ -3,7 +3,7 @@
             ["stopwords-de" :as stopwords-de]
             [clojure.spec.alpha :as s]
             [clojure.string :as str]
-            [ghostwheel.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.colors :refer [colors]]

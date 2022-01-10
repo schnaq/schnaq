@@ -1,5 +1,5 @@
 (ns schnaq.notification-service.mail-builder
-  (:require [ghostwheel.core :refer [>defn- >defn]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn- >defn]]
             [hiccup.util :as hiccup-util]
             [schnaq.links :as schnaq-links]
             [schnaq.mail.template :as template]))

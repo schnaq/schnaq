@@ -2,7 +2,7 @@
   (:require [chime.core :as chime-core]
             [chime.core-async :refer [chime-ch]]
             [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [schnaq.config.shared :as shared-config])
   (:import (java.time LocalTime LocalDate LocalDateTime ZonedDateTime ZoneId Period DayOfWeek)
            (java.time.temporal ChronoUnit TemporalAdjusters)))

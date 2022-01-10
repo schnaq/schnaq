@@ -1,6 +1,6 @@
 (ns schnaq.mail.emails
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn >defn- ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [hiccup.util :as hiccup-util]
             [postal.core :refer [send-message]]
             [schnaq.config :as config]

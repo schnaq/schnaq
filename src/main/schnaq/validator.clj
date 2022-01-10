@@ -1,6 +1,6 @@
 (ns schnaq.validator
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [ring.util.http-response :refer [forbidden]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.discussion :as db]

@@ -1,5 +1,5 @@
 (ns schnaq.database.analytics
-  (:require [ghostwheel.core :refer [>defn >defn-]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
             [schnaq.database.main :as main-db]
             [schnaq.database.patterns :as patterns])
   (:import (java.util Date)

@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.navbar.elements
-  (:require [ghostwheel.core :refer [>defn-]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]

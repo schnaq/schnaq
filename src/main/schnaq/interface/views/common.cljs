@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.common
   (:require ["jdenticon" :as jdenticon]
             [cljs.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
