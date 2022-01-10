@@ -13,11 +13,12 @@
   width: 100% !important;
 }
 
-.video-scalable-with-shadow-and-border {
-  @extend .video-scalable;
-  background-color: vars.$gray-100;
-  border-radius: 0 0 20px 20px;
-  box-shadow: vars.$wide-shadow;
+.video-scalable-only-on-medium {
+  @include media-breakpoint-down(md) {
+    height: auto !important;
+    overflow: hidden;
+    width: 100% !important;
+  }
 }
 
 .bg-ipad {
@@ -25,4 +26,9 @@
   background-repeat: no-repeat;
   background-size: cover;
   padding: 2rem 2rem 1.5rem;
+
+  @include media-breakpoint-down(sm) {
+    padding: 1rem 1rem 0.75rem;
+  }
 }
+
