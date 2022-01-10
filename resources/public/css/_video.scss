@@ -13,7 +13,11 @@
   width: 100% !important;
 }
 
-.video-scalable-only-on-medium {
+.video-header {
+  @extend .rounded-2;
+  margin: auto;
+  overflow: hidden;
+
   @include media-breakpoint-down(md) {
     height: auto !important;
     overflow: hidden;
