@@ -11,7 +11,7 @@
   []
   [:section.rounded-5.shadow
    [:div.d-inline-block.bg-ipad
-    [:video.rounded-2.m-auto.overflow-hidden
+    [:video.video-header
      {:auto-play true :loop true :muted true :plays-inline true}
      [:source {:src (video :startpage.above-the-fold/webm) :type "video/webm"}]
      [:source {:src (video :startpage.above-the-fold/mp4) :type "video/mp4"}]]]])
@@ -46,5 +46,5 @@
     [:p.lead (labels :startpage/hook)]
     [start-schnaq-button]
     [social-proof-abtf]]
-   [:div.col-lg-6.col-xxxl-4.pb-lg-4
+   [:div.col-lg-6.col-xxxl-4.pb-4
     [header-video]]])
