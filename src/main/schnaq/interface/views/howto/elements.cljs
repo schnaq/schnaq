@@ -36,10 +36,11 @@
            [:button.btn.btn-outline-dark.mb-3
             {:on-click #(rf/dispatch [:how-to-visibility/to-localstorage hide-tag])}
             [icon :cross "m-auto"]]]
-          [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
-          [:video.video-scalable-with-shadow-and-border {:auto-play true :loop true :muted true :plays-inline true}
-           [:source {:src (video video-key-webm) :type "video/webm"}]
-           [:source {:src (video vide-key-webm) :type "video/mp4"}]]]]]])))
+          [:div.rounded-1.shadow
+           [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
+           [:video.video-scalable {:auto-play true :loop true :muted true :plays-inline true}
+            [:source {:src (video video-key-webm) :type "video/webm"}]
+            [:source {:src (video vide-key-webm) :type "video/mp4"}]]]]]]])))
 
 ;; -----------------------------------------------------------------------------
 
