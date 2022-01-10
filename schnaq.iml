@@ -34,7 +34,7 @@
     <orderEntry type="library" name="Deps: org.apache.tomcat/tomcat-juli:7.0.27" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-compress:1.21" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-devel:1.9.4" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.129" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.136" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.9.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.5" level="project" />
@@ -72,7 +72,7 @@
     <orderEntry type="library" name="Deps: io.perfmark/perfmark-api:0.23.0" level="project" />
     <orderEntry type="library" name="Deps: clojure-future-spec:1.9.0" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-http:9.4.44.v20210927" level="project" />
-    <orderEntry type="library" name="Deps: day8.re-frame/http-fx:0.2.3" level="project" />
+    <orderEntry type="library" name="Deps: day8.re-frame/http-fx:0.2.4" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-util:9.4.44.v20210927" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/encore:3.12.1" level="project" />
     <orderEntry type="library" name="Deps: com.lucasbradstreet/cljs-uuid-utils:1.0.2" level="project" />
