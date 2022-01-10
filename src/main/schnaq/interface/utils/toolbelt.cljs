@@ -1,7 +1,7 @@
 (ns schnaq.interface.utils.toolbelt
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [oops.core :refer [oset! oget oget+]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
@@ -53,7 +53,7 @@
 (>defn truncate-to-n-chars
   "Truncate a string to the first x chars and return it in a tooltiped span."
   [text char-count]
-  [string? nat-int? :ret string?]
+  [(? string?) nat-int? :ret (? (s/or :truncated :re-frame/component :normal string?))]
   (if (< char-count (count text))
     [tooltip/text
      text

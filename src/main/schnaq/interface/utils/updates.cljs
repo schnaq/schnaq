@@ -9,7 +9,7 @@
 (>defn- loop-builder
   "Build looping functions for several update methods and subscriptions."
   [subscription-key update-fn]
-  [keyword? fn? :ret nil?]
+  [keyword? fn? :ret any?]
   (go (while true
         (<! (timeout periodic-update-time))
         (when @(rf/subscribe [subscription-key])

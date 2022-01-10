@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.startpage.pricing
   (:require [cljs.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [goog.string :as gstring]
             [reitit.frontend.easy :as reititfe]
             [schnaq.interface.components.icons :refer [icon]]
@@ -28,7 +28,7 @@
 (>defn- add-class-to-feature
   "Takes a list of features and appends a css-class to it for proper styling."
   [feature-list class]
-  [(s/coll-of string?) string? :ret (s/tuple string? string?)]
+  [(? (s/coll-of string?)) string? :ret (s/coll-of (s/tuple string? string?))]
   (for [feature feature-list]
     [feature class]))
 

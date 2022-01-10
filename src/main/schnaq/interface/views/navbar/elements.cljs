@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.navbar.elements
-  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
@@ -65,7 +65,7 @@
 (>defn- discussion-button-builder
   "Build buttons in the discussion navigation."
   [label icon href]
-  [keyword? keyword? fn? :ret vector?]
+  [keyword? keyword? (? string?) :ret vector?]
   [:a.dropdown-item {:href href}
    [:div.text-center
     [:img.header-standalone-icon
