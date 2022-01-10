@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.qa.search
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [goog.functions :as gfun]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]

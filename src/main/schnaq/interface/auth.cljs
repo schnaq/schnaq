@@ -1,7 +1,7 @@
 (ns schnaq.interface.auth
   (:require ["keycloak-js" :as Keycloak]
             [cljs.core.async :refer [go <! timeout]]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]

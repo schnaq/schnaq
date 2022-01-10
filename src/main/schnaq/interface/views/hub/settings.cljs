@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.hub.settings
   (:require [clojure.string :as string]
-            [ghostwheel.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget+]]
             [re-frame.core :as rf]

@@ -1,7 +1,7 @@
 (ns schnaq.interface.utils.http
   (:require [ajax.core :as ajax]
             [cljs.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.auth :as auth]))
 

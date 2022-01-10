@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.startpage.pricing
   (:require [cljs.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reititfe]

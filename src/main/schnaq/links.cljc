@@ -1,8 +1,8 @@
 (ns schnaq.links
-  #?(:clj  (:require [ghostwheel.core :refer [>defn]]
+  #?(:clj  (:require [com.fulcrologic.guardrails.core :refer [>defn]]
                      [schnaq.config :as config]
                      [schnaq.database.specs :as specs])
-     :cljs (:require [ghostwheel.core :refer [>defn]]
+     :cljs (:require [com.fulcrologic.guardrails.core :refer [>defn]]
                      [goog.string :as gstring]
                      [oops.core :refer [oget]]
                      [reitit.frontend.easy :as reitfe]

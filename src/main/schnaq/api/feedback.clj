@@ -3,7 +3,7 @@
   (:require [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [ring.util.http-response :refer [ok created]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
@@ -19,7 +19,7 @@
   [screenshot file-name]
   [:feedback/screenshot (s/or :number number? :string string?) :ret string?]
   (let [[_header image] (string/split screenshot #",")
-        ^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)]
+        decodedBytes (.decode (Base64/getDecoder) image)]
     (s3/upload-stream
      :feedbacks/screenshots
      (io/input-stream decodedBytes)

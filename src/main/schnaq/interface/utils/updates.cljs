@@ -1,7 +1,7 @@
 (ns schnaq.interface.utils.updates
   "Coordinating asynchronous updates."
   (:require [cljs.core.async :refer [go <! timeout]]
-            [ghostwheel.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [periodic-update-time]]
             [taoensso.timbre :as log]))

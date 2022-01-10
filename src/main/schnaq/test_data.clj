@@ -155,6 +155,7 @@
     :discussion/description "Should a person looking for a pet rather buy a dog or a cat?"
     :discussion/states []
     :discussion/share-hash "cat-dog-hash"
+    :discussion/edit-hash "cat-dog-edit-hash"
     :discussion/author "user/wegi"
     :discussion/created-at #inst "2019-01-01"
     :discussion/starting-statements ["statement/get-dog" "statement/get-both" "statement/get-cat"]}
@@ -287,6 +288,40 @@
     [#:discussion{:share-hash "cat-dog-hash"}
      #:discussion{:share-hash "simple-hash"}]}])
 
+(def surveys
+  [{:db/id "survey/single-choice"
+    :survey/title "Ganz allein"
+    :survey/type :survey.type/single-choice
+    :survey/options [{:db/id "option/milch"
+                      :option/value "Milch"}
+                     {:db/id "option/eis"
+                      :option/value "Eis"}
+                     {:db/id "option/wasser"
+                      :option/value "Wasser"
+                      :option/votes 4}]
+    :survey/discussion "discussion/cat-or-dog"}
+   {:db/id "survey/multiple-choice"
+    :survey/title "Ganz allein mit mehreren"
+    :survey/type :survey.type/multiple-choice
+    :survey/options [{:db/id "option/milche"
+                      :option/value "Milche"}
+                     {:db/id "option/eise"
+                      :option/value "Eise"
+                      :option/votes 2}
+                     {:db/id "option/wassers"
+                      :option/value "Wassers"
+                      :option/votes 1}]
+    :survey/discussion "discussion/cat-or-dog"}
+   {:db/id "survey/increment-test"
+    :survey/title "Incrementier die Votes!"
+    :survey/type :survey.type/single-choice
+    :survey/options [{:db/id "option/mit-vote"
+                      :option/value "Mit Vote"
+                      :option/votes 1}
+                     {:db/id "option/ohne-vote"
+                      :option/value "Ohne Vote"}]
+    :survey/discussion "discussion/simple"}])
+
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
-          graph-discussion simple-discussion registered-users))
+          graph-discussion simple-discussion registered-users surveys))

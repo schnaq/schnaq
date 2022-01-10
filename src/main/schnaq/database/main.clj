@@ -2,8 +2,8 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [clojure.walk :as walk]
+            [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [datomic.api :as d]
-            [ghostwheel.core :refer [>defn]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.config :as config]
             [schnaq.database.models :as models]
@@ -126,6 +126,29 @@
       (get-in
        @(transact [(assoc clean-entity :db/id identifier)])
        [:tempids identifier]))))
+
+(>defn transact-and-pull-temp
+  "Syntactic sugar to transact and then synchronously pull an id from the resulting database.
+  Takes a temp-id from the transaction instead of a live-id."
+  [transaction-vector temp-id pattern]
+  [vector? ::specs/non-blank-string vector? :ret map?]
+  (let [tx @(transact transaction-vector)
+        entity-id (get-in tx [:tempids temp-id])
+        db-after (:db-after tx)]
+    (fast-pull entity-id pattern db-after)))
+
+(>defn increment-number
+  "A generic transaction that atomically increments a number, using compare-and-swap.
+  When there is no value, it is assumed to be 0.
+  Prevents race-conditions and updating the same value multiple times. Tries at most 20 times until cas works.
+  Returns the dereffed transaction."
+  [entity attribute]
+  [:db/id keyword? :ret (? map?)]
+  (let [old-val (get (fast-pull entity [attribute]) attribute)
+        new-val (if old-val (inc old-val) 1)]
+    (toolbelt/try-times
+     20
+     @(transact [[:db/cas entity attribute old-val new-val]]))))
 
 ;; -----------------------------------------------------------------------------
 ;; Feedback functions

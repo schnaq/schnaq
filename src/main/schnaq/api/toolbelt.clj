@@ -1,6 +1,6 @@
 (ns schnaq.api.toolbelt
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [ring.util.http-response :refer [not-found]]))
 
 (s/def ::error keyword?)

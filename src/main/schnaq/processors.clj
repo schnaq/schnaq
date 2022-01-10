@@ -1,7 +1,7 @@
 (ns schnaq.processors
   (:require [clojure.spec.alpha :as s]
             [clojure.walk :as walk]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]

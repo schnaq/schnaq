@@ -2,7 +2,7 @@
   "Utility functions supporting the backend."
   (:require [clojure.string :as string]
             [clojure.walk :as walk]
-            [ghostwheel.core :refer [>defn ?]])
+            [com.fulcrologic.guardrails.core :refer [>defn ?]])
   (:import (clojure.lang PersistentArrayMap)
            (java.time Instant LocalDateTime ZoneOffset)
            (java.time.temporal ChronoUnit TemporalUnit)))
@@ -58,3 +58,25 @@
       (re-pattern (format regex domain-name tld)))))
 
 (def synonyms-german (atom {}))
+
+;; Excellent macro copied from user kotarak: https://stackoverflow.com/a/1879961/552491
+(defn try-times*
+  "Executes thunk. If an exception is thrown, will retry. At most n retries
+  are done. If still some exception is thrown it is bubbled upwards in
+  the call chain."
+  [n thunk]
+  (loop [n n]
+    (if-let [result (try
+                      [(thunk)]
+                      (catch Exception e
+                        (when (zero? n)
+                          (throw e))))]
+      (result 0)
+      (recur (dec n)))))
+
+(defmacro try-times
+  "Executes body. If an exception is thrown, will retry. At most n retries
+  are done. If still some exception is thrown it is bubbled upwards in
+  the call chain."
+  [n & body]
+  `(try-times* ~n (fn [] ~@body)))
