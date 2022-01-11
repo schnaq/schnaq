@@ -260,6 +260,8 @@
    :schnaq.input-type/survey "Survey"
    :schnaq.input-type/activation "Activation"
    :schnaq.input-type/coming-soon "Coming Soon"
+   :schnaq.input-type/not-admin "Only for moderators"
+   :schnaq.input-type/beta-only "Only for beta testers"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"

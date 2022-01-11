@@ -259,6 +259,8 @@
    :schnaq.input-type/survey "Ankieta"
    :schnaq.input-type/activation "Aktywacja"
    :schnaq.input-type/coming-soon "Wkrótce dostępne"
+   :schnaq.input-type/not-admin "Tylko dla moderatorów"
+   :schnaq.input-type/beta-only "Tylko dla beta testerów"
 
    ;; schnaq creation
    :schnaq.create/title "Uruchomienie schnaq"

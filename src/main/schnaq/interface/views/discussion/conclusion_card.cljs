@@ -276,7 +276,8 @@
     [input/input-form]))
 
 (defn selection-card
-  "Dispatch the different input options, e.g. questions, survey or activation."
+  "Dispatch the different input options, e.g. questions, survey or activation.
+  The survey and activation feature are not available for free plan users."
   []
   (let [selected-option (reagent/atom :question)
         on-click #(reset! selected-option %)
@@ -284,25 +285,40 @@
         iconed-heading (fn [icon-key label]
                          [:<> [icon icon-key] " " (labels label)])]
     (fn []
-      [motion/fade-in-and-out
-       [:section.selection-card
-        [:ul.nav.nav-tabs
-         [:li.nav-item
-          [:a.nav-link {:class (active-class :question)
-                        :href "#"
-                        :on-click #(on-click :question)}
-           [iconed-heading :info-question :schnaq.input-type/question]]]
-         [:li.nav-item
-          [:a.nav-link.text-muted {:href "#"}               ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
-           [tooltip/text (labels :schnaq.input-type/coming-soon)
-            [:span [iconed-heading :chart-pie :schnaq.input-type/survey]]]]]
-         [:li.nav-item
-          [:a.nav-link.text-muted {:href "#"}
-           [tooltip/text (labels :schnaq.input-type/coming-soon)
-            [:span [iconed-heading :magic :schnaq.input-type/activation]]]]]]
-        (case @selected-option
-          :question [input-form-or-disabled-alert])]
-       card-fade-in-time])))
+      (let [survey-tab [:span [iconed-heading :chart-pie :schnaq.input-type/survey]]
+            beta-user? @(rf/subscribe [:user/beta-tester?])
+            admin? @(rf/subscribe [:schnaq.current/admin-access])
+            disabled-tooltip-key (cond
+                                   (not beta-user?) :schnaq.input-type/beta-only
+                                   (not admin?) :schnaq.input-type/not-admin
+                                   :else :schnaq.input-type/coming-soon)]
+        [motion/fade-in-and-out
+         [:section.selection-card
+          [:ul.nav.nav-tabs
+           [:li.nav-item
+            [:a.nav-link {:class (active-class :question)
+                          :href "#"
+                          :on-click #(on-click :question)}
+             [iconed-heading :info-question :schnaq.input-type/question]]]
+           [:li.nav-item
+            (if (and beta-user? admin?)
+              [:a.nav-link
+               {:class (active-class :survey)
+                :href "#"
+                :on-click #(on-click :survey)}
+               survey-tab]
+              [:a.nav-link.text-muted
+               {:href "#"}
+               [tooltip/text (labels disabled-tooltip-key) survey-tab]])]
+           [:li.nav-item
+            ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
+            [:a.nav-link.text-muted {:href "#"}
+             [tooltip/text (labels disabled-tooltip-key)
+              [:span [iconed-heading :magic :schnaq.input-type/activation]]]]]]
+          (case @selected-option
+            :question [input-form-or-disabled-alert]
+            :survey [:h3 "TODO here be Survey"])]
+         card-fade-in-time]))))
 
 (defn- prepare-statements []
   (let [active-filters @(rf/subscribe [:filters/active])
