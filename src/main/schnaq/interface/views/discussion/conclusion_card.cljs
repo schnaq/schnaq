@@ -281,9 +281,12 @@
   ([placeholder rank]
    [inputs/text placeholder (str "survey-option-" rank)]))
 
+;; TODO ongoing survey Karte
+
 (defn- survey-form
   "Input form to create a survey with multiple options."
   []
+  ;; TODO bei submit das survey auch anlegen
   (let [option-count (reagent/atom 2)]
     (fn []
       [:form.pt-2
@@ -304,10 +307,11 @@
          {:type :button
           :on-click #(swap! option-count inc)}
          [icon :plus] " " (labels :schnaq.survey.create/add-button)]
-        [:button.btn.btn-dark
-         {:type :button
-          :on-click #(swap! option-count dec)}
-         [icon :minus] " " (labels :schnaq.survey.create/remove-button)]]
+        (when (> @option-count 2)
+          [:button.btn.btn-dark
+           {:type :button
+            :on-click #(swap! option-count dec)}
+           [icon :minus] " " (labels :schnaq.survey.create/remove-button)])]
        [:div.form-check.form-check-inline
         [:input#radio-single-choice.form-check-input
          {:type "radio"
