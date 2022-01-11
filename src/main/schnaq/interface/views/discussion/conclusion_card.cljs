@@ -293,7 +293,7 @@
                         :on-click #(on-click :question)}
            [iconed-heading :info-question :schnaq.input-type/question]]]
          [:li.nav-item
-          [:a.nav-link.text-muted {:href "#"}  ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
+          [:a.nav-link.text-muted {:href "#"}               ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
            [tooltip/text (labels :schnaq.input-type/coming-soon)
             [:span [iconed-heading :chart-pie :schnaq.input-type/survey]]]]]
          [:li.nav-item

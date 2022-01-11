@@ -162,9 +162,7 @@
   "Dropdown menu for statements containing edit report and deletion."
   [{:keys [db/id] :as statement}]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
-        share-hash @(rf/subscribe [:schnaq/share-hash])
-        admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
-        current-edit-hash (get admin-access-map share-hash)
+        current-edit-hash @(rf/subscribe [:schnaq.current/admin-access])
         user-id @(rf/subscribe [:user/id])
         creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
         deletable? (deletable? statement current-edit-hash user-id creation-secrets)

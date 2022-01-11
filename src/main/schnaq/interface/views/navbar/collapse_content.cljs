@@ -66,8 +66,7 @@
   "Either display schnaq settings or graph settings button."
   []
   (let [{:discussion/keys [share-hash]} @(rf/subscribe [:schnaq/selected])
-        admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
-        edit-hash (get admin-access-map share-hash)
+        edit-hash @(rf/subscribe [:schnaq.current/admin-access])
         current-route @(rf/subscribe [:navigation/current-route-name])
         graph? (= current-route :routes/graph-view)]
     (if graph?
