@@ -288,27 +288,26 @@
     (fn []
       [:form.pt-2
        [:div.form-group
-        ;; TODO labelize
-        [:label {:for :survey-topic} "Survey Topic"]
-        [inputs/text "What is your favorite elephant?" :survey-topic]
-        [:small.form-text.text-muted "Ask a clear question for good results!"]]
+        [:label {:for :survey-topic} (labels :schnaq.survey.create/topic-label)]
+        [inputs/text (labels :schnaq.survey.create/placeholder) :survey-topic]
+        [:small.form-text.text-muted (labels :schnaq.survey.create/hint)]]
        [:div.form-group
-        [:p "Options"]
+        [:label (labels :schnaq.survey.create/options-label)]
         [survey-option "Pyrrhus" 1]
         [survey-option "Surus" 2]
         (for [rank (range 3 (inc @option-count))]
           (with-meta
-            [survey-option (str "Elephant " rank) rank]
+            [survey-option (str (labels :schnaq.survey.create/options-placeholder) " " rank) rank]
             {:key (str "survey-option-key-" rank)}))]
        [:div.text-center.mb-3
         [:button.btn.btn-dark.mr-2
          {:type :button
           :on-click #(swap! option-count inc)}
-         "+ Add Option"]
+         [icon :plus] " " (labels :schnaq.survey.create/add-button)]
         [:button.btn.btn-dark
          {:type :button
           :on-click #(swap! option-count dec)}
-         "- Remove Option"]]
+         [icon :minus] " " (labels :schnaq.survey.create/remove-button)]]
        [:div.form-check.form-check-inline
         [:input#radio-single-choice.form-check-input
          {:type "radio"
@@ -316,16 +315,16 @@
           :value :single
           :defaultChecked true}]
         [:label.form-check-label
-         {:for :radio-single-choice} "Single Choice"]]
+         {:for :radio-single-choice} (labels :schnaq.survey.create/single-choice-label)]]
        [:div.form-check.form-check-inline
         [:input#radio-multiple-choice.form-check-input
          {:type "radio"
           :name :radio-type-choice
           :value :multiple}]
         [:label.form-check-label
-         {:for :radio-multiple-choice} "Multiple Choice"]]
+         {:for :radio-multiple-choice} (labels :schnaq.survey.create/multiple-choice-label)]]
        [:div.text-center.pt-2
-        [:button.btn.btn-primary.w-75 {:type "submit"} "Create Survey"]]])))
+        [:button.btn.btn-primary.w-75 {:type "submit"} (labels :schnaq.survey.create/submit-button)]]])))
 
 (defn selection-card
   "Dispatch the different input options, e.g. questions, survey or activation.

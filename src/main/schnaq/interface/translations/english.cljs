@@ -263,6 +263,18 @@
    :schnaq.input-type/not-admin "Only for moderators"
    :schnaq.input-type/beta-only "Only for beta testers"
 
+   ;; Survey feature
+   :schnaq.survey.create/topic-label "Survey Topic"
+   :schnaq.survey.create/placeholder "What is your favorite elephant?"
+   :schnaq.survey.create/hint "Ask a clear question for good results!"
+   :schnaq.survey.create/options-label "Options"
+   :schnaq.survey.create/options-placeholder "Elephant"
+   :schnaq.survey.create/add-button "Add Option"
+   :schnaq.survey.create/remove-button "Remove Option"
+   :schnaq.survey.create/single-choice-label "Single Choice"
+   :schnaq.survey.create/multiple-choice-label "Multiple Choice"
+   :schnaq.survey.create/submit-button "Create Survey"
+
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
    :schnaq.create/heading "Start your schnaq."
