@@ -17,7 +17,8 @@
                                             schnaq.interface.config/keycloak-realm #shadow/env "KEYCLOAK_REALM"
                                             schnaq.interface.config/keycloak-client #shadow/env "KEYCLOAK_CLIENT"
                                             schnaq.config.shared/s3-host #shadow/env "S3_HOST"
-                                            schnaq.config.shared/embedded? #shadow/env "EMBEDDED"}}
+                                            schnaq.config.shared/embedded? #shadow/env "EMBEDDED"}
+                          :build-options {:ns-aliases {com.fulcrologic.guardrails.core com.fulcrologic.guardrails.noop}}}
                 :devtools {:preloads [devtools.preload day8.re-frame-10x.preload]}}
           :test-headless {:target :karma
                           :output-to "target/ci.js"
