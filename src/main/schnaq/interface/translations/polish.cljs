@@ -262,6 +262,18 @@
    :schnaq.input-type/not-admin "Tylko dla moderatorów"
    :schnaq.input-type/beta-only "Tylko dla beta testerów"
 
+   ;; Survey Feature
+   :schnaq.survey.create/topic-label "Temat ankiety"
+   :schnaq.survey.create/placeholder "Jaki jest Twój ulubiony słoń?"
+   :schnaq.survey.create/hint "Zadaj jasne pytanie, aby uzyskać dobre wyniki!"
+   :schnaq.survey.create/options-label "Opcje"
+   :schnaq.survey.create/options-placeholder "Słoń"
+   :schnaq.survey.create/add-button "Dodaj opcję"
+   :schnaq.survey.create/remove-button "Usuń opcję"
+   :schnaq.survey.create/single-choice-label "Pojedynczy wybór"
+   :schnaq.survey.create/multiple-choice-label "Wybór wielokrotny"
+   :schnaq.survey.create/submit-button "Utwórz ankietę"
+
    ;; schnaq creation
    :schnaq.create/title "Uruchomienie schnaq"
    :schnaq.create/heading "Zacznij od swojego schnaq."
