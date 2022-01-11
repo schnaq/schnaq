@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.discussion.admin-center
   (:require ["tippy.js" :refer [followCursor]]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]

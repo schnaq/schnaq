@@ -2,6 +2,7 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
+            [schnaq.database.survey :as survey-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -45,3 +46,17 @@
                                  [{:db/id "test2"
                                    :db/ident :my-ident}]
                                  "test2" '[*]))))))
+
+(deftest increment-number-test
+  (let [survey (first (survey-db/surveys "simple-hash"))
+        ;; Pattern adds default value of 0 where there is none
+        option-with-vote-attr (first (filter #(not= 0 (:option/votes %)) (:survey/options survey))) ;; votes = 1
+        option-without-vote-attr (first (filter #(zero? (:option/votes %)) (:survey/options survey)))]
+    (testing "Show whether incrementing a number that's there works"
+      (db/increment-number (:db/id option-with-vote-attr) :option/votes)
+      (is (= 2 (:option/votes (db/fast-pull (:db/id option-with-vote-attr) '[:option/votes]))))
+      (db/increment-number (:db/id option-with-vote-attr) :option/votes)
+      (is (= 3 (:option/votes (db/fast-pull (:db/id option-with-vote-attr) '[:option/votes])))))
+    (testing "Incrementing a value that is not there adds an attribute with the value 1"
+      (db/increment-number (:db/id option-without-vote-attr) :option/votes)
+      (is (= 1 (:option/votes (db/fast-pull (:db/id option-without-vote-attr) '[:option/votes])))))))

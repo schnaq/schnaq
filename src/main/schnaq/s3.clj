@@ -2,7 +2,7 @@
   (:require [clojure.string :as string]
             [cognitect.aws.client.api :as aws]
             [cognitect.aws.credentials :as credentials]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn]]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
             [taoensso.timbre :as log]))

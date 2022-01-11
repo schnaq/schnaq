@@ -1,6 +1,6 @@
 (ns schnaq.interface.analytics.core
   (:require [clojure.string :as string]
-            [ghostwheel.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -43,7 +43,7 @@
   "A card containing multiple sub-metrics that are related. Uses the keys of a map
   to make sub-headings."
   [title content]
-  [string? map? :ret vector?]
+  [string? (? map?) :ret vector?]
   [:div.card
    [:div.card-body
     [:h5.card-title title]
@@ -129,7 +129,7 @@
 (rf/reg-event-fx
  :analytics/load-all-with-time
  (fn [{:keys [db]} [_ days]]
-   (fetch-statistics db "/admin/analytics" :analytics/all-stats-loaded days)))
+   (fetch-statistics db "/admin/analytics" :analytics/all-stats-loaded (js/parseInt days))))
 
 (rf/reg-event-fx
  :analytics/load-discussions-num

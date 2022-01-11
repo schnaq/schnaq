@@ -1,6 +1,6 @@
 (ns schnaq.interface.scheduler
   "Scheduler, which can be called to trigger events after another event occurred."
-  (:require [ghostwheel.core :refer [>defn]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn]]
             [re-frame.core :as rf]))
 
 (rf/reg-event-db

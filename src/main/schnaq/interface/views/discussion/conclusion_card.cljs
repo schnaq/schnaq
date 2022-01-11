@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [ghostwheel.core :refer [>defn-]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]

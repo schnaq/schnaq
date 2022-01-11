@@ -1,6 +1,6 @@
 (ns schnaq.database.user
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn >defn- ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [schnaq.database.main :refer [transact fast-pull clean-db-vals query]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]

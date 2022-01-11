@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.hub.overview
-  (:require [ghostwheel.core :refer [>defn-]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]

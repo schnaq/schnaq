@@ -1,6 +1,6 @@
 (ns schnaq.export
   (:require [clojure.string :as string]
-            [ghostwheel.core :refer [>defn >defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
             [schnaq.database.discussion :as db]
             [schnaq.database.specs :as specs]))
 

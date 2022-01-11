@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.pages
   "Defining page-layouts."
   (:require [cljs.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn >defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
@@ -18,17 +18,19 @@
 
 (declare with-nav-and-header)
 
-(s/def :page/heading string?)
-(s/def :page/subheading string?)
-(s/def :page/title string?)
+(s/def ::string-or-component
+  (s/or :string string? :not-yet nil? :component :re-frame/component))
+
+(s/def :page/heading ::string-or-component)
+(s/def :page/subheading ::string-or-component)
+(s/def :page/title ::string-or-component)
 (s/def :page/vertical-header? boolean?)
 (s/def :page/more-for-heading vector?)
 (s/def :condition/needs-authentication? boolean?)
 (s/def :condition/needs-administrator? boolean?)
 (s/def :condition/create-schnaq? boolean?)
 (s/def ::page-options
-  (s/keys :req [:page/heading]
-          :opt [:page/subheading :page/title :page/more-for-heading :page/vertical-header?
+  (s/keys :opt [:page/heading :page/subheading :page/title :page/more-for-heading :page/vertical-header?
                 :condition/needs-authentication? :condition/needs-administrator? :condition/create-schnaq?]))
 
 ;; -----------------------------------------------------------------------------
@@ -135,7 +137,7 @@
 (>defn with-nav-and-header
   "Default page with header and curly wave."
   [{:page/keys [title heading classes] :as options} body]
-  [::page-options vector? :ret vector?]
+  [::page-options (? :re-frame/component) :ret :re-frame/component]
   (common/set-website-title! (or title heading))
   [scheduler/middleware
    [validate-conditions-middleware

@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.common
   (:require ["jdenticon" :as jdenticon]
             [cljs.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
@@ -32,7 +32,7 @@
    [string? :ret vector?]
    [identicon display-name])
   ([display-name size]
-   [string? number? :ret vector?]
+   [(? string?) number? :ret vector?]
    [:span.shadow-sm {:title display-name
                      :dangerouslySetInnerHTML
                      {:__html (generate-identicon display-name size)}}]))
@@ -46,7 +46,7 @@
                                            :display-name (get-in user [:names :display])}]
      [avatar user-registered size]))
   ([{:user.registered/keys [profile-picture display-name] :as user} size]
-   [map? nat-int? :ret vector?]
+   [(? map?) nat-int? :ret vector?]
    (let [display-name (or display-name (:user/nickname user))]
      [:div.avatar-image.p-0
       (if profile-picture
@@ -138,10 +138,11 @@
 (>defn set-website-title!
   "Set a document's website title."
   [title]
-  [string? :ret nil?]
+  [(? string?) :ret any?]
   (when-not shared-config/embedded?
-    (let [new-title (gstring/format "schnaq - %s" title)]
-      (oset! js/document [:title] new-title))))
+    (when title
+      (let [new-title (gstring/format "schnaq - %s" title)]
+        (oset! js/document [:title] new-title)))))
 
 ;; -----------------------------------------------------------------------------
 ;; schnaqqi speak
