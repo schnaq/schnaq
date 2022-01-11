@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.schnaq.survey
-  (:require [oops.core :refer [oget]]
+  (:require [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.interface.components.icons :refer [icon]]
@@ -18,7 +18,6 @@
 (defn- survey-form
   "Input form to create a survey with multiple options."
   []
-  ;; TODO bei submit das survey auch anlegen
   (let [option-count (reagent/atom 2)]
     (fn []
       [:form.pt-2
@@ -75,10 +74,17 @@
                  :survey-type (case (oget form-elements :radio-type-choice :value)
                                 "single" :survey.type/single-choice
                                 "multiple" :survey.type/multiple-choice)
-                 :options (mapv #(oget form-elements (str "survey-option-" %) :value)
+                 :options (mapv #(oget+ form-elements (str "survey-option-" %) :value)
                                 (range 1 (inc number-of-options)))
                  :share-hash share-hash
                  :edit-hash (get-in db [:schnaqs :admin-access share-hash])}]
      {:fx [(http/xhrio-request db :post "/survey"
                                [:schnaq.survey.create-new/success]
                                params)]})))
+
+(rf/reg-event-db
+ :schnaq.survey.create-new/success
+ ;; TODO write the survey to the  appropriate place, once it is shown
+ (fn [db [_ response]]
+   (println (:new-survey response))
+   db))
