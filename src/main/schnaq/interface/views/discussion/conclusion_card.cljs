@@ -3,7 +3,6 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.components.inputs :as inputs]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
@@ -22,6 +21,7 @@
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.discussion.logic :as logic]
+            [schnaq.interface.views.schnaq.survey :as survey]
             [schnaq.interface.views.user :as user]))
 
 (def ^:private card-fade-in-time
@@ -276,60 +276,6 @@
     [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
     [input/input-form]))
 
-(defn- survey-option
-  "Returns a single option component. Can contain a button for removal of said component."
-  ([placeholder rank]
-   [inputs/text placeholder (str "survey-option-" rank)]))
-
-;; TODO ongoing survey Karte
-
-(defn- survey-form
-  "Input form to create a survey with multiple options."
-  []
-  ;; TODO bei submit das survey auch anlegen
-  (let [option-count (reagent/atom 2)]
-    (fn []
-      [:form.pt-2
-       [:div.form-group
-        [:label {:for :survey-topic} (labels :schnaq.survey.create/topic-label)]
-        [inputs/text (labels :schnaq.survey.create/placeholder) :survey-topic]
-        [:small.form-text.text-muted (labels :schnaq.survey.create/hint)]]
-       [:div.form-group
-        [:label (labels :schnaq.survey.create/options-label)]
-        [survey-option "Pyrrhus" 1]
-        [survey-option "Surus" 2]
-        (for [rank (range 3 (inc @option-count))]
-          (with-meta
-            [survey-option (str (labels :schnaq.survey.create/options-placeholder) " " rank) rank]
-            {:key (str "survey-option-key-" rank)}))]
-       [:div.text-center.mb-3
-        [:button.btn.btn-dark.mr-2
-         {:type :button
-          :on-click #(swap! option-count inc)}
-         [icon :plus] " " (labels :schnaq.survey.create/add-button)]
-        (when (> @option-count 2)
-          [:button.btn.btn-dark
-           {:type :button
-            :on-click #(swap! option-count dec)}
-           [icon :minus] " " (labels :schnaq.survey.create/remove-button)])]
-       [:div.form-check.form-check-inline
-        [:input#radio-single-choice.form-check-input
-         {:type "radio"
-          :name :radio-type-choice
-          :value :single
-          :defaultChecked true}]
-        [:label.form-check-label
-         {:for :radio-single-choice} (labels :schnaq.survey.create/single-choice-label)]]
-       [:div.form-check.form-check-inline
-        [:input#radio-multiple-choice.form-check-input
-         {:type "radio"
-          :name :radio-type-choice
-          :value :multiple}]
-        [:label.form-check-label
-         {:for :radio-multiple-choice} (labels :schnaq.survey.create/multiple-choice-label)]]
-       [:div.text-center.pt-2
-        [:button.btn.btn-primary.w-75 {:type "submit"} (labels :schnaq.survey.create/submit-button)]]])))
-
 (defn selection-card
   "Dispatch the different input options, e.g. questions, survey or activation.
   The survey and activation feature are not available for free plan users."
@@ -372,7 +318,7 @@
               [:span [iconed-heading :magic :schnaq.input-type/activation]]]]]]
           (case @selected-option
             :question [input-form-or-disabled-alert]
-            :survey [survey-form])]
+            :survey [survey/survey-form])]
          card-fade-in-time]))))
 
 (defn- prepare-statements []
