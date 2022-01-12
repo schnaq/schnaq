@@ -274,6 +274,7 @@
    :schnaq.survey.create/single-choice-label "Pojedynczy wybór"
    :schnaq.survey.create/multiple-choice-label "Wybór wielokrotny"
    :schnaq.survey.create/submit-button "Utwórz ankietę"
+   :schnaq.survey/votes "Głosy"
 
    ;; schnaq creation
    :schnaq.create/title "Uruchomienie schnaq"

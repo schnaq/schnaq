@@ -2,7 +2,7 @@
   (:require [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [schnaq.interface.components.colors :refer [colors]]
+            [schnaq.interface.components.colors :as colors]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.translations :refer [labels]]
@@ -13,15 +13,23 @@
   "A graph displaying the results of the survey."
   [options total-value]
   [:section
-   (for [option options]
-     [:div.my-1
-      {:key (str "option-" (:db/id option))}
-      [:div.percentage-bar.rounded-1
-       {:style {:background-color (:positive/default colors)
-                :width (str (* 100 (/ (:option/votes option) total-value)) "%")
-                :height "30px"}}]
-      ;; TODO continue here making the graph not ugly
-      [:p.ml-1 (:option/value option)]])])
+   (for [index (range (count options))]
+     (let [option (get options index)
+           vote-number (:option/votes option)
+           percentage (if (zero? total-value)
+                        "0%"
+                        (str (.toFixed (* 100 (/ vote-number total-value)) 2) "%"))]
+       [:div.my-1
+        {:key (str "option-" (:db/id option))}
+        [:div.percentage-bar.rounded-1
+         {:style {:background-color (colors/get-graph-color index)
+                  :width percentage
+                  :height "30px"}}]
+        [:p.small.ml-1
+         (:option/value option)
+         [:span.float-right
+          [:span.mr-3 vote-number " " (labels :schnaq.survey/votes)]
+          percentage]]]))])
 
 (defn survey-list
   " Displays all surveys of the current schnaq. "
@@ -128,7 +136,7 @@
 (rf/reg-event-fx
  :schnaq.surveys/load-from-backend
  (fn [{:keys [db]} _]
-   {:fx [(http/xhrio-request db :get " /surveys "
+   {:fx [(http/xhrio-request db :get "surveys"
                              [:schnaq.surveys.load-from-backend/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 

@@ -23,3 +23,13 @@
             :negative/selected "#dc3545"
             :neutral/dark "#170051"
             :neutral/medium "#2a1861"})))
+
+(def graph-colors
+  ;; Generated with https://learnui.design/tools/data-color-picker.html with primary as starting point
+  ;; and secondary as endpoint
+  ["#1292ee" "#8389f2" "#c37ce5" "#f36cc8" "#ff64a1" "#ff6c75" "#ff8247" "#ff9e0d"])
+
+(defn get-graph-color
+  "Returns a graph color, given an index."
+  [index]
+  (get graph-colors (mod index 8)))
