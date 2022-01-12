@@ -1,11 +1,15 @@
 (ns schnaq.auth.middlewares-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [compojure.core :refer [routes GET wrap-routes]]
             [ring.mock.request :as mock]
             [ring.util.http-response :refer [ok]]
             [schnaq.auth :as auth]
             [schnaq.auth.middlewares :as auth-middlewares]
-            [schnaq.test.toolbelt :refer [token-schnaqqifant-user token-n2o-admin token-wrong-signature token-timed-out mock-authorization-header]]))
+            [schnaq.database.user :as user-db]
+            [schnaq.test.toolbelt :as schnaq-toolbelt :refer [token-schnaqqifant-user token-n2o-admin token-wrong-signature token-timed-out mock-authorization-header]]))
+
+(use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
+(use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (def ^:private test-routes
   "Define own routes just for testing."
@@ -49,3 +53,11 @@
       (is (= 401 (:status (response token-wrong-signature))))
       (is (= 401 (:status (test-routes (mock/request :get path))))))))
 
+(deftest pro-user?-middleware-test
+  (let [kangaroo-keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+        mw (auth-middlewares/pro-user?-middleware identity)]
+    (testing "Non-existent user is no pro user."
+      (is (= 403 (:status (mw {:identity {:sub "non-existent-user"}})))))
+    (testing "Pro-User shall pass."
+      (let [_pro-kangaroo (user-db/subscribe-pro-tier kangaroo-keycloak-id "" "")]
+        (is (map? (mw {:identity {:sub kangaroo-keycloak-id}})))))))
