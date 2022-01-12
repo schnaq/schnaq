@@ -340,16 +340,6 @@
           card-fade-in-time]
          {:key (:db/id statement)}))]))
 
-(defn- survey-list
-  "Displays all surveys of the current schnaq."
-  []
-  (let [surveys @(rf/subscribe [:schnaq/surveys])]
-    [:<>
-     (for [survey surveys]
-       [:section.statement-card
-        [:div.mx-4.my-2
-         (:survey/title survey)]])]))
-
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."
   []
@@ -357,7 +347,7 @@
         search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements [statements-list]
         top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        surveys (if top-level? [survey-list] nil)]
+        surveys (if top-level? [survey/survey-list] nil)]
     [:<>
      [:div.card-columns.pb-3 {:class card-column-class}
       [selection-card]
