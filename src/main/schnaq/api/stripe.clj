@@ -1,13 +1,13 @@
 (ns schnaq.api.stripe
-  (:require [clojure.pprint :refer [pprint]]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
             [ring.util.http-response :refer [ok forbidden not-found bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
-            [taoensso.timbre :as log])
+            [taoensso.timbre :as log]
+            [schnaq.database.user :as user-db])
   (:import [com.stripe Stripe]
            [com.stripe.exception InvalidRequestException]
-           [com.stripe.model Price]
+           [com.stripe.model Price Customer]
            [com.stripe.model.checkout Session]
            [com.stripe.net Webhook]))
 
@@ -28,7 +28,8 @@
      "mode" "subscription"
      "client_reference_id" keycloak-id
      "customer_email" email
-     "metadata" {:keycloak-id keycloak-id}
+     "metadata" {"keycloak-id" keycloak-id}
+     "subscription_data" {"metadata" {"keycloak-id" keycloak-id}}
      "line_items" items}))
 
 (defn- create-checkout-session
@@ -57,31 +58,53 @@
 
 ;; -----------------------------------------------------------------------------
 
+;; TODO: delete me
+(def events (atom {}))
+(def n2o-id "TODO: Delete me"
+  "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18")
+
 (defmulti stripe-event
+  "Dispatch incoming stripe events."
   (fn [event] (:type event)))
 
-(defmethod stripe-event :payment_intent.succeeded [event]
-  (def success-event event)
-  (log/info "Payment intent successful 🤑"))
+(defmethod stripe-event "customer.subscription.created" [event]
+  '"This event is triggered when a new user creates a subscription on stripe. We
+   extract all information from the event and store the relevant information in
+   our database."
+  (def subscription-event event)
+  (let [keycloak-id (get-in event [:data :object :metadata :keycloak-id])
+        stripe-customer-id (get-in event [:data :object :customer])
+        stripe-subscription-id (get-in event [:data :object :id])]
+    (user-db/subscribe-pro-tier keycloak-id stripe-subscription-id stripe-customer-id))
+  (log/info "Subscription successfully created 🤑"))
 
-(defmethod stripe-event :default [_event])
+(defmethod stripe-event "checkout.session.completed" [event]
+  (def session-completed-event event))
+
+(defmethod stripe-event :default [event]
+  (swap! events assoc (keyword (:type event)) event))
 
 (defn- webhook
-  "TODO"
-  [{:keys [headers body-params parameters] :as request}]
-  (pprint body-params)
-  (stripe-event (:body parameters))
-  (def foor request)
-  (ok {:status :toll}))
+  "Handle incoming stripe requests. This function receives all events from 
+  stripe and dispatches them further."
+  [{:keys [body-params]}]
+  (log/info "Event type:" (:type body-params))
+  (stripe-event body-params)
+  (ok {:message "Always return 200 to stripe."}))
 
 (comment
+  (reset! events {})
+  @events
+  (keys @events)
 
-  (:body foor)
-  (def sig (get-in foor [:headers "stripe-signature"]))
+  (:customer.subscription.updated @events)
 
-  (Webhook/constructEvent (slurp (:body foor)) sig config/stripe-webhook-access-key)
-
-  (:parameters foor)
+  (let [keycloak-id (get-in subscription-event [:data :object :metadata :keycloak-id])
+        stripe-customer-id (get-in subscription-event [:data :object :customer])
+        stripe-subscription-id (get-in subscription-event [:data :object :id])]
+    (user-db/subscribe-pro-tier keycloak-id stripe-subscription-id stripe-customer-id))
+  (user-db/private-user-by-keycloak-id n2o-id)
+  (user-db/unsubscribe-pro-tier n2o-id)
 
   nil)
 
@@ -109,7 +132,5 @@
     ["/webhook"
      {:post webhook
       :description (at/get-doc #'webhook)
-      :parameters {:body {:type keyword?
-                          :created number?
-                          :data {:object {:id string?}}}}}]]])
+      :responses {200 {:body {:message string?}}}}]]])
 
