@@ -256,6 +256,7 @@
    :statement.notifications/statement-flagged-body "Dziękujemy za wiadomość, zajmiemy się tym."
 
    :schnaq.input-type/question "Pytanie"
+   :schnaq.input-type/answer "Odpowiedź"
    :schnaq.input-type/survey "Ankieta"
    :schnaq.input-type/activation "Aktywacja"
    :schnaq.input-type/coming-soon "Wkrótce dostępne"

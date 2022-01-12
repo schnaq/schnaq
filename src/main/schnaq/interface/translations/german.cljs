@@ -256,6 +256,7 @@
    :statement.notifications/statement-flagged-body "Vielen Dank für deine Meldung, wir kümmern uns."
 
    :schnaq.input-type/question "Frage"
+   :schnaq.input-type/answer "Antwort"
    :schnaq.input-type/survey "Umfrage"
    :schnaq.input-type/activation "Aktivierung"
    :schnaq.input-type/coming-soon "Bald verfügbar"

@@ -292,7 +292,8 @@
             disabled-tooltip-key (cond
                                    (not beta-user?) :schnaq.input-type/beta-only
                                    (not admin?) :schnaq.input-type/not-admin
-                                   :else :schnaq.input-type/coming-soon)]
+                                   :else :schnaq.input-type/coming-soon)
+            top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
         [motion/fade-in-and-out
          [:section.selection-card
           [:ul.nav.nav-tabs
@@ -300,22 +301,24 @@
             [:a.nav-link {:class (active-class :question)
                           :href "#"
                           :on-click #(on-click :question)}
-             [iconed-heading :info-question :schnaq.input-type/question]]]
-           [:li.nav-item
-            (if (and beta-user? admin?)
-              [:a.nav-link
-               {:class (active-class :survey)
-                :href "#"
-                :on-click #(on-click :survey)}
-               survey-tab]
-              [:a.nav-link.text-muted
-               {:href "#"}
-               [tooltip/text (labels disabled-tooltip-key) survey-tab]])]
-           [:li.nav-item
-            ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
-            [:a.nav-link.text-muted {:href "#"}
-             [tooltip/text (labels disabled-tooltip-key)
-              [:span [iconed-heading :magic :schnaq.input-type/activation]]]]]]
+             [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
+           (when top-level?
+             [:<>
+              [:li.nav-item
+               (if (and beta-user? admin?)
+                 [:a.nav-link
+                  {:class (active-class :survey)
+                   :href "#"
+                   :on-click #(on-click :survey)}
+                  survey-tab]
+                 [:a.nav-link.text-muted
+                  {:href "#"}
+                  [tooltip/text (labels disabled-tooltip-key) survey-tab]])]
+              [:li.nav-item
+               ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
+               [:a.nav-link.text-muted {:href "#"}
+                [tooltip/text (labels disabled-tooltip-key)
+                 [:span [iconed-heading :magic :schnaq.input-type/activation]]]]]])]
           (case @selected-option
             :question [input-form-or-disabled-alert]
             :survey [survey/survey-form])]
