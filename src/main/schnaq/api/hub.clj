@@ -5,7 +5,7 @@
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.auth :as auth]
-            [schnaq.config.keycloak :as kc-config]
+            [schnaq.config.keycloak :as kc-config :refer [kc-client]]
             [schnaq.database.hub :as hub-db]
             [schnaq.database.main :refer [fast-pull transact]]
             [schnaq.database.specs :as specs]
