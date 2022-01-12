@@ -78,9 +78,6 @@
     (user-db/subscribe-pro-tier keycloak-id stripe-subscription-id stripe-customer-id))
   (log/info "Subscription successfully created 🤑"))
 
-(defmethod stripe-event "checkout.session.completed" [event]
-  (def session-completed-event event))
-
 (defmethod stripe-event :default [event]
   (swap! events assoc (keyword (:type event)) event))
 
