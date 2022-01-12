@@ -321,7 +321,7 @@
             :survey [survey/survey-form])]
          card-fade-in-time]))))
 
-(defn- prepare-statements []
+(defn- statements-list []
   (let [active-filters @(rf/subscribe [:filters/active])
         sort-method @(rf/subscribe [:discussion.statements/sort-method])
         local-votes @(rf/subscribe [:local-votes])
@@ -329,24 +329,37 @@
         shown-premises @(rf/subscribe [:discussion.statements/show])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
         filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))]
-    (for [statement filtered-conclusions]
-      (with-meta
-        [motion/fade-in-and-out
-         [answer-or-edit-card statement]
-         card-fade-in-time]
-        {:key (:db/id statement)}))))
+    [:<>                                                    ;; This is needed so this list can be called as a component
+     (for [statement filtered-conclusions]
+       (with-meta
+         [motion/fade-in-and-out
+          [answer-or-edit-card statement]
+          card-fade-in-time]
+         {:key (:db/id statement)}))]))
+
+(defn- survey-list
+  "Displays all surveys of the current schnaq."
+  []
+  (let [surveys @(rf/subscribe [:schnaq/surveys])]
+    [:<>
+     (for [survey surveys]
+       [:section.statement-card
+        [:div.mx-4.my-2
+         (:survey/title survey)]])]))
 
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."
   []
   (let [card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
         search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
-        statements-list (prepare-statements)]
+        statements [statements-list]
+        surveys [survey-list]]
     [:<>
      [:div.card-columns.pb-3 {:class card-column-class}
-      (conj statements-list
-            (with-meta [selection-card] {:key "list-response-options"}))]
-     (when-not (or search? (seq statements-list))
+      [selection-card]
+      surveys
+      statements]
+     (when-not (or search? (seq statements) (seq surveys))
        [call-to-share])]))
 
 (rf/reg-event-fx

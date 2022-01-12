@@ -92,3 +92,9 @@
                  [%2]
                  (conj %1 %2))
               (:new-survey response))))
+
+(rf/reg-sub
+ :schnaq/surveys
+ ;; Returns all surveys of the selected schnaq.
+ (fn [db _]
+   (get-in db [:schnaq :current :surveys] [])))
