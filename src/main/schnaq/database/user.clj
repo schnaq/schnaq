@@ -28,7 +28,7 @@
   [user-email]
   [:user.registered/email :ret ::specs/registered-user]
   (fast-pull [:user.registered/email user-email]
-             patterns/registered-user-public))
+             patterns/public-user))
 
 (>defn private-user-by-keycloak-id
   "Returns the registered user by email."
@@ -201,7 +201,7 @@
         [false existing-user])
       (let [new-user-from-db (-> @(transact [(clean-db-vals new-user)])
                                  (get-in [:tempids temp-id])
-                                 (fast-pull patterns/registered-user-public))]
+                                 (fast-pull patterns/public-user))]
         (when-not (nil? visited-statements)
           (update-visited-statements (:db/id new-user-from-db) visited-statements))
         [true new-user-from-db]))))
@@ -210,7 +210,7 @@
   "Updates a user's field in the database and return updated user."
   ([keycloak-id field value]
    [:user.registered/keycloak-id keyword? any? :ret ::specs/registered-user]
-   (update-user-field keycloak-id field value patterns/registered-user-public))
+   (update-user-field keycloak-id field value patterns/public-user))
   ([keycloak-id field value pattern]
    [:user.registered/keycloak-id keyword? any? any? :ret ::specs/registered-user]
    (let [new-db (:db-after
@@ -258,3 +258,26 @@
    (map :discussion/share-hash
         (flatten
          (map :user.registered/visited-schnaqs (users-by-notification-interval interval))))))
+
+
+;; -----------------------------------------------------------------------------
+;; Subscriptions
+
+
+(>defn subscribe-pro-tier
+  "Confirm subscription of pro tier and persist it in the user."
+  [keycloak-id stripe-subscription-id]
+  [:user.registered/keycloak-id string? :ret ::specs/registered-user]
+  (let [new-db (:db-after
+                @(transact [{:db/id [:user.registered/keycloak-id keycloak-id]
+                             :user.registered.subscription/type :user.registered.subscription.type/pro
+                             :user.registered.subscription/stripe-id stripe-subscription-id}]))]
+    (toolbelt/pull-key-up
+     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db))))
+
+(>defn unsubscribe-pro-tier
+  "Remove subscription from user."
+  [keycloak-id]
+  [:user.registered/keycloak-id :ret any?]
+  (transact [[:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered.subscription/type]
+             [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered.subscription/stripe-id]]))

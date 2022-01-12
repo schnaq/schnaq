@@ -53,6 +53,17 @@
    {:db/ident :notification-mail-interval/weekly}
    {:db/ident :notification-mail-interval/never}
 
+   ;; Subscriptions
+   {:db/ident :user.registered.subscription/stripe-id
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Store the subscription id of stripe."}
+   {:db/ident :user.registered.subscription/type
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "Define which plan the user subscribed to."}
+   {:db/ident :user.registered.subscription.type/pro}
+
    ;; Seen statements
    {:db/ident :seen-statements/user
     :db/valueType :db.type/ref
@@ -321,4 +332,3 @@
     :db/valueType :db.type/long
     :db/cardinality :db.cardinality/one
     :db/doc "The cummulative number of votes for this option. Must be 0 or positive."}])
-
