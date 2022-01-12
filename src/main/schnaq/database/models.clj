@@ -58,6 +58,10 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "Store the subscription id of stripe."}
+   {:db/ident :user.registered.subscription/stripe-customer-id
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Store the customer id from stripe."}
    {:db/ident :user.registered.subscription/type
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one

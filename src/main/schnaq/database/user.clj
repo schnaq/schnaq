@@ -266,12 +266,13 @@
 
 (>defn subscribe-pro-tier
   "Confirm subscription of pro tier and persist it in the user."
-  [keycloak-id stripe-subscription-id]
-  [:user.registered/keycloak-id string? :ret ::specs/registered-user]
+  [keycloak-id stripe-subscription-id stripe-customer-id]
+  [:user.registered/keycloak-id string? string? :ret ::specs/registered-user]
   (let [new-db (:db-after
                 @(transact [{:db/id [:user.registered/keycloak-id keycloak-id]
                              :user.registered.subscription/type :user.registered.subscription.type/pro
-                             :user.registered.subscription/stripe-id stripe-subscription-id}]))]
+                             :user.registered.subscription/stripe-id stripe-subscription-id
+                             :user.registered.subscription/stripe-customer-id stripe-customer-id}]))]
     (toolbelt/pull-key-up
      (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db))))
 
@@ -279,8 +280,10 @@
   "Remove subscription from user."
   [keycloak-id]
   [:user.registered/keycloak-id :ret any?]
-  (let [new-db (:db-after
-                @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered.subscription/type]
-                            [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered.subscription/stripe-id]]))]
+  (let [retractions [:db/retract [:user.registered/keycloak-id keycloak-id]]
+        new-db (:db-after
+                @(transact [(conj retractions :user.registered.subscription/type)
+                            (conj retractions :user.registered.subscription/stripe-id)
+                            (conj retractions :user.registered.subscription/stripe-customer-id)]))]
     (toolbelt/pull-key-up
      (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db))))

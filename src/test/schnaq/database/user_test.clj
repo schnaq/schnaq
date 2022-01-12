@@ -84,7 +84,8 @@
 (deftest subscribe-pro-tier-test
   (let [kangaroo-keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
         stripe-subscription-id "razupaltuff"
-        pro-kangaroo (db/subscribe-pro-tier kangaroo-keycloak-id stripe-subscription-id)]
+        stripe-customer-id "cus_kangaroo"
+        pro-kangaroo (db/subscribe-pro-tier kangaroo-keycloak-id stripe-subscription-id stripe-customer-id)]
     (testing "User subscribes to pro-tier."
       (is (= :user.registered.subscription.type/pro (:user.registered.subscription/type pro-kangaroo)))
       (is (= stripe-subscription-id (:user.registered.subscription/stripe-id pro-kangaroo))))
