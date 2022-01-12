@@ -356,7 +356,8 @@
   (let [card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
         search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements [statements-list]
-        surveys [survey-list]]
+        top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+        surveys (if top-level? [survey-list] nil)]
     [:<>
      [:div.card-columns.pb-3 {:class card-column-class}
       [selection-card]
