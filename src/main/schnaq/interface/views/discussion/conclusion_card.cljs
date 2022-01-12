@@ -280,7 +280,7 @@
   "Dispatch the different input options, e.g. questions, survey or activation.
   The survey and activation feature are not available for free plan users."
   []
-  (let [selected-option (reagent/atom :survey)
+  (let [selected-option (reagent/atom :question)
         on-click #(reset! selected-option %)
         active-class #(when (= @selected-option %) "active")
         iconed-heading (fn [icon-key label]

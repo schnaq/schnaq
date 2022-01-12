@@ -15,7 +15,7 @@
 
 ;; TODO ongoing survey Karte
 
-(defn- survey-form
+(defn survey-form
   "Input form to create a survey with multiple options."
   []
   (let [option-count (reagent/atom 2)]
@@ -25,7 +25,8 @@
                      (jsw/prevent-default event)
                      (rf/dispatch [:schnaq.survey/create-new
                                    (oget event [:target :elements])
-                                   @option-count]))}
+                                   @option-count])
+                     (reset! option-count 2))}
        [:div.form-group
         [:label {:for :survey-topic} (labels :schnaq.survey.create/topic-label)]
         [inputs/text (labels :schnaq.survey.create/placeholder) :survey-topic]
@@ -80,11 +81,14 @@
                  :edit-hash (get-in db [:schnaqs :admin-access share-hash])}]
      {:fx [(http/xhrio-request db :post "/survey"
                                [:schnaq.survey.create-new/success]
-                               params)]})))
+                               params)
+           [:form/clear form-elements]]})))
 
 (rf/reg-event-db
  :schnaq.survey.create-new/success
- ;; TODO write the survey to the  appropriate place, once it is shown
  (fn [db [_ response]]
-   (println (:new-survey response))
-   db))
+   (update-in db [:schnaq :current :surveys]
+              #(if (nil? %1)
+                 [%2]
+                 (conj %1 %2))
+              (:new-survey response))))
