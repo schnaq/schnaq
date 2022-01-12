@@ -267,7 +267,7 @@
 (>defn subscribe-pro-tier
   "Confirm subscription of pro tier and persist it in the user."
   [keycloak-id stripe-subscription-id stripe-customer-id]
-  [:user.registered/keycloak-id string? string? :ret ::specs/registered-user]
+  [:user.registered/keycloak-id :user.registered.subscription/stripe-id :user.registered.subscription/stripe-customer-id :ret ::specs/registered-user]
   (let [new-db (:db-after
                 @(transact [{:db/id [:user.registered/keycloak-id keycloak-id]
                              :user.registered.subscription/type :user.registered.subscription.type/pro

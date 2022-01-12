@@ -30,11 +30,16 @@
 (s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)
                                               :schnaqs (s/coll-of ::discussion)))
+(s/def :user.registered.subscription/stripe-id ::non-blank-string)
+(s/def :user.registered.subscription/stripe-customer-id ::non-blank-string)
+(s/def :user.registered.subscription/type #{:user.registered.subscription.type/pro})
 (s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/display-name]
                                  :opt [:user.registered/last-name :user.registered/first-name
                                        :user.registered/groups :user.registered/profile-picture
                                        :user.registered/email :user.registered/notification-mail-interval
-                                       :user.registered/visited-schnaqs]))
+                                       :user.registered/visited-schnaqs :user.registered.subscription/type
+                                       :user.registered.subscription/stripe-id
+                                       :user.registered.subscription/stripe-customer-id]))
 
 ;; Could be anonymous or registered
 (s/def ::any-user (s/or :user ::user

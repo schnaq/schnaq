@@ -88,8 +88,10 @@
         pro-kangaroo (db/subscribe-pro-tier kangaroo-keycloak-id stripe-subscription-id stripe-customer-id)]
     (testing "User subscribes to pro-tier."
       (is (= :user.registered.subscription.type/pro (:user.registered.subscription/type pro-kangaroo)))
-      (is (= stripe-subscription-id (:user.registered.subscription/stripe-id pro-kangaroo))))
+      (is (= stripe-subscription-id (:user.registered.subscription/stripe-id pro-kangaroo)))
+      (is (= stripe-customer-id (:user.registered.subscription/stripe-customer-id pro-kangaroo))))
     (testing "User unsubscribes from pro tier."
       (let [no-pro-kangaroo (db/unsubscribe-pro-tier kangaroo-keycloak-id)]
         (is (nil? (:user.registered.subscription/type no-pro-kangaroo)))
-        (is (nil? (:user.registered.subscription/stripe-id no-pro-kangaroo)))))))
+        (is (nil? (:user.registered.subscription/stripe-id no-pro-kangaroo)))
+        (is (nil? (:user.registered.subscription/stripe-customer-id no-pro-kangaroo)))))))
