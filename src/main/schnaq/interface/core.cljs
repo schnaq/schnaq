@@ -5,6 +5,7 @@
             [day8.re-frame.http-fx]
             [goog.dom :as gdom]
             [goog.string :as gstring]
+            [goog.string.format]  ;; required for goog.string. We need to require it once in our project.
             [re-frame.core :as rf]
             [reagent.dom]
             [schnaq.config.shared :as shared-config]

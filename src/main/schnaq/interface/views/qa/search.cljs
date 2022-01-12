@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.qa.search
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
-            [com.fulcrologic.guardrails.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [goog.functions :as gfun]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -49,7 +49,7 @@
   "A list of statement results that came out of search.
   Background type can be either :dark or :light"
   [background-schema]
-  [:background/schema :ret :re-frame/component]
+  [:background/schema :ret (? :re-frame/component)]
   (let [search-results @(rf/subscribe [:schnaq.qa.search/results])
         dark? (= :dark background-schema)]
     (when (seq search-results)
