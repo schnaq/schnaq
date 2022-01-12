@@ -10,7 +10,6 @@
             [schnaq.database.main :refer [fast-pull transact]]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
-            [schnaq.keycloak :refer [kc-client]]
             [schnaq.media :as media]
             [schnaq.processors :as processors]
             [schnaq.validator :as validators]
