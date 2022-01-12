@@ -15,7 +15,8 @@
    {:user.registered/notification-mail-interval [:db/ident]}
    {:user.registered/visited-schnaqs [:discussion/share-hash]}
    {:user.registered.subscription/type [:db/ident]}
-   :user.registered.subscription/stripe-id])
+   :user.registered.subscription/stripe-id
+   :user.registered.subscription/stripe-customer-id])
 
 (def seen-statements
   [:seen-statements/user

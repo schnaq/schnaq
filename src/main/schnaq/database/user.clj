@@ -34,8 +34,9 @@
   "Returns the registered user by email."
   [keycloak-id]
   [:user.registered/keycloak-id :ret ::specs/registered-user]
-  (fast-pull [:user.registered/keycloak-id keycloak-id]
-             patterns/private-user))
+  (toolbelt/pull-key-up
+   (fast-pull [:user.registered/keycloak-id keycloak-id]
+              patterns/private-user)))
 
 (>defn all-registered-users
   "Returns all registered users."
