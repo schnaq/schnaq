@@ -154,6 +154,8 @@
                                (rf/dispatch [:discussion.history/clear])
                                (rf/dispatch [:updates.periodic/starting-conclusions true])
                                (rf/dispatch [:discussion.query.conclusions/starting])
+                               (rf/dispatch [:schnaq.surveys/load-from-backend])
+                               ;; TODO periodic live updates for surveys
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/starting-conclusions false])
@@ -280,7 +282,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-               #(js-wrap/scroll-to-id window-hash)))))
+          #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))

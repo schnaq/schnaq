@@ -13,8 +13,6 @@
   ([placeholder rank]
    [inputs/text placeholder (str "survey-option-" rank)]))
 
-;; TODO ongoing survey Karte
-
 (defn survey-form
   "Input form to create a survey with multiple options."
   []
@@ -98,3 +96,15 @@
  ;; Returns all surveys of the selected schnaq.
  (fn [db _]
    (get-in db [:schnaq :current :surveys] [])))
+
+(rf/reg-event-fx
+ :schnaq.surveys/load-from-backend
+ (fn [{:keys [db]} _]
+   {:fx [(http/xhrio-request db :get "/surveys"
+                             [:schnaq.surveys.load-from-backend/success]
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
+
+(rf/reg-event-db
+ :schnaq.surveys.load-from-backend/success
+ (fn [db [_ response]]
+   (assoc-in db [:schnaq :current :surveys] (:surveys response))))
