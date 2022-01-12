@@ -1,19 +1,21 @@
 (ns schnaq.database.patterns
   "Define pull patterns for the database.")
 
-(def registered-user-public
+(def ^:private registered-user-public
   "Small version of a user to show only necessary information."
   [:db/id
    :user.registered/keycloak-id
    :user.registered/display-name
    :user.registered/profile-picture])
 
-(def registered-private-user
+(def ^:private registered-private-user
   [:user.registered/email
    :user.registered/last-name
    :user.registered/first-name
    {:user.registered/notification-mail-interval [:db/ident]}
-   {:user.registered/visited-schnaqs [:discussion/share-hash]}])
+   {:user.registered/visited-schnaqs [:discussion/share-hash]}
+   {:user.registered.subscription/type [:db/ident]}
+   :user.registered.subscription/stripe-id])
 
 (def seen-statements
   [:seen-statements/user
@@ -126,5 +128,5 @@
                      :option/value
                      [:option/votes :default 0]]}
    {:survey/discussion [:db/id
-                       :discussion/share-hash
-                       :discussion/title]}])
+                        :discussion/share-hash
+                        :discussion/title]}])

@@ -279,5 +279,8 @@
   "Remove subscription from user."
   [keycloak-id]
   [:user.registered/keycloak-id :ret any?]
-  (transact [[:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered.subscription/type]
-             [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered.subscription/stripe-id]]))
+  (let [new-db (:db-after
+                @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered.subscription/type]
+                            [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered.subscription/stripe-id]]))]
+    (toolbelt/pull-key-up
+     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db))))
