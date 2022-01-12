@@ -79,6 +79,7 @@
            (db/subscribed-share-hashes :notification-mail-interval/weekly)))
     (is (= #{} (db/subscribed-share-hashes :notification-mail-interval/never)))))
 
+;; -----------------------------------------------------------------------------
 ;; Subscriptions
 
 (deftest subscribe-pro-tier-test
@@ -95,3 +96,11 @@
         (is (nil? (:user.registered.subscription/type no-pro-kangaroo)))
         (is (nil? (:user.registered.subscription/stripe-id no-pro-kangaroo)))
         (is (nil? (:user.registered.subscription/stripe-customer-id no-pro-kangaroo)))))))
+
+(deftest pro-subscription?-test
+  (testing "Check pro-status in database.")
+  (let [kangaroo-keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+        stripe-subscription-id "razupaltuff"
+        stripe-customer-id "cus_kangaroo"
+        _ (db/subscribe-pro-tier kangaroo-keycloak-id stripe-subscription-id stripe-customer-id)]
+    (is (db/pro-subscription? kangaroo-keycloak-id))))
