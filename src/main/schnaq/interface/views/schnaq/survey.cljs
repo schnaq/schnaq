@@ -31,6 +31,8 @@
           [:span.mr-3 vote-number " " (labels :schnaq.survey/votes)]
           percentage]]]))])
 
+;; TODO add ability to actually cast a vote
+
 (defn survey-list
   " Displays all surveys of the current schnaq. "
   []
@@ -39,18 +41,18 @@
      (for [survey surveys]
        (let [total-value (apply + (map :option/votes (:survey/options survey)))]
          [:section.statement-card
-          {:key (str " survey-result- " (:db/id survey))}
+          {:key (str "survey-result-" (:db/id survey))}
           [:div.mx-4.my-2
            [:p (:survey/title survey)]
            [results-graph (:survey/options survey) total-value]]]))]))
 
 (defn- survey-option
-  " Returns a single option component. Can contain a button for removal of said component. "
+  "Returns a single option component. Can contain a button for removal of said component."
   ([placeholder rank]
    [inputs/text placeholder (str " survey-option- " rank)]))
 
 (defn survey-form
-  " Input form to create a survey with multiple options. "
+  "Input form to create a survey with multiple options."
   []
   (let [option-count (reagent/atom 2)]
     (fn []
@@ -67,12 +69,12 @@
         [:small.form-text.text-muted (labels :schnaq.survey.create/hint)]]
        [:div.form-group
         [:label (labels :schnaq.survey.create/options-label)]
-        [survey-option " Pyrrhus " 1]
-        [survey-option " Surus " 2]
+        [survey-option "Pyrrhus" 1]
+        [survey-option "Surus" 2]
         (for [rank (range 3 (inc @option-count))]
           (with-meta
             [survey-option (str (labels :schnaq.survey.create/options-placeholder) " " rank) rank]
-            {:key (str " survey-option-key- " rank)}))]
+            {:key (str "survey-option-key-" rank)}))]
        [:div.text-center.mb-3
         [:button.btn.btn-dark.mr-2
          {:type :button
@@ -85,7 +87,7 @@
            [icon :minus] " " (labels :schnaq.survey.create/remove-button)])]
        [:div.form-check.form-check-inline
         [:input#radio-single-choice.form-check-input
-         {:type " radio "
+         {:type "radio"
           :name :radio-type-choice
           :value :single
           :defaultChecked true}]
@@ -93,13 +95,13 @@
          {:for :radio-single-choice} (labels :schnaq.survey.create/single-choice-label)]]
        [:div.form-check.form-check-inline
         [:input#radio-multiple-choice.form-check-input
-         {:type " radio "
+         {:type "radio"
           :name :radio-type-choice
           :value :multiple}]
         [:label.form-check-label
          {:for :radio-multiple-choice} (labels :schnaq.survey.create/multiple-choice-label)]]
        [:div.text-center.pt-2
-        [:button.btn.btn-primary.w-75 {:type " submit "} (labels :schnaq.survey.create/submit-button)]]])))
+        [:button.btn.btn-primary.w-75 {:type "submit"} (labels :schnaq.survey.create/submit-button)]]])))
 
 (rf/reg-event-fx
  :schnaq.survey/create-new
@@ -107,13 +109,13 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          params {:title (oget form-elements :survey-topic :value)
                  :survey-type (case (oget form-elements :radio-type-choice :value)
-                                " single " :survey.type/single-choice
-                                " multiple " :survey.type/multiple-choice)
-                 :options (mapv #(oget+ form-elements (str " survey-option- " %) :value)
+                                "single" :survey.type/single-choice
+                                "multiple" :survey.type/multiple-choice)
+                 :options (mapv #(oget+ form-elements (str "survey-option-" %) :value)
                                 (range 1 (inc number-of-options)))
                  :share-hash share-hash
                  :edit-hash (get-in db [:schnaqs :admin-access share-hash])}]
-     {:fx [(http/xhrio-request db :post " /survey "
+     {:fx [(http/xhrio-request db :post "/survey"
                                [:schnaq.survey.create-new/success]
                                params)
            [:form/clear form-elements]]})))
@@ -136,7 +138,7 @@
 (rf/reg-event-fx
  :schnaq.surveys/load-from-backend
  (fn [{:keys [db]} _]
-   {:fx [(http/xhrio-request db :get "surveys"
+   {:fx [(http/xhrio-request db :get "/surveys"
                              [:schnaq.surveys.load-from-backend/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
