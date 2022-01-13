@@ -34,10 +34,10 @@
   `(let [element (oget e [:target :elements :contact-name])]
      (reset-form-fields! [element]))`"
   ([fields]
-   [(s/coll-of any?) :ret nil?]
+   [any? :ret nil?]
    (reset-form-fields! fields ""))
   ([fields default]
-   [(s/coll-of any?) string? :ret nil?]
+   [any? string? :ret nil?]
    (run! #(oset! % [:value] default) fields)
    (reset-form-height! fields)))
 
