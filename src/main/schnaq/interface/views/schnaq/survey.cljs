@@ -12,24 +12,32 @@
 (defn- results-graph
   "A graph displaying the results of the survey."
   [options total-value]
-  [:section
+  [:section.row
    (for [index (range (count options))]
-     (let [option (get options index)
-           vote-number (:option/votes option)
+     (let [{:keys [option/votes db/id option/value]} (get options index)
+           vote-number votes
            percentage (if (zero? total-value)
                         "0%"
                         (str (.toFixed (* 100 (/ vote-number total-value)) 2) "%"))]
-       [:div.my-1
-        {:key (str "option-" (:db/id option))}
-        [:div.percentage-bar.rounded-1
-         {:style {:background-color (colors/get-graph-color index)
-                  :width percentage
-                  :height "30px"}}]
-        [:p.small.ml-1
-         (:option/value option)
-         [:span.float-right
-          [:span.mr-3 vote-number " " (labels :schnaq.survey/votes)]
-          percentage]]]))])
+       [:<>
+        {:key (str "option-" id)}
+        [:div.col-1
+         [:input.form-check-input.mt-3.mx-auto
+          (cond->
+            {:type "radio"
+             :name :radio-type-choice
+             :value id}
+            (zero? index) (assoc :defaultChecked true))]]
+        [:div.col-11.my-1
+         [:div.percentage-bar.rounded-1
+          {:style {:background-color (colors/get-graph-color index)
+                   :width percentage
+                   :height "30px"}}]
+         [:p.small.ml-1
+          value
+          [:span.float-right
+           [:span.mr-3 vote-number " " (labels :schnaq.survey/votes)]
+           percentage]]]]))])
 
 ;; TODO add ability to actually cast a vote
 
@@ -42,9 +50,17 @@
        (let [total-value (apply + (map :option/votes (:survey/options survey)))]
          [:section.statement-card
           {:key (str "survey-result-" (:db/id survey))}
-          [:div.mx-4.my-2
-           [:p (:survey/title survey)]
-           [results-graph (:survey/options survey) total-value]]]))]))
+          [:form
+           {:on-submit (fn [e]
+                         (jsw/prevent-default e)
+                         (println "submitting"))}
+           [:div.mx-4.my-2
+            [:h6.pb-2.text-center (:survey/title survey)]
+            [results-graph (:survey/options survey) total-value]
+            [:div.text-center
+             [:button.btn.btn-primary.btn-sm
+              {:type :submit}
+              "Abstimmen"]]]]]))]))
 
 (defn- survey-option
   "Returns a single option component. Can contain a button for removal of said component."
