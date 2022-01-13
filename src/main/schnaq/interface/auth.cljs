@@ -212,10 +212,17 @@
      (string? (some shared-config/beta-tester-roles roles)))))
 
 (rf/reg-sub
- :user/pro-user?
+ :user/subscription
  (fn [db _]
-   (let [subscription (get-in db [:user :subscription])]
-     (= :user.registered.subscription.type/pro subscription))))
+   (get-in db [:user :subscription])))
+
+(rf/reg-sub
+ :user/pro-user?
+ :<- [:user/beta-tester?]
+ :<- [:user/subscription]
+ (fn [[beta-tester? subscription]]
+   (or beta-tester?
+       (= :user.registered.subscription.type/pro subscription))))
 
 (rf/reg-event-db
  :keycloak.roles/extract
