@@ -63,7 +63,7 @@
 (defn wordcloud
   "Create a wordcloud based on the data in the db."
   []
-  (if @(rf/subscribe [:user/beta-tester?])
+  (if @(rf/subscribe [:user/pro-user?])
     (if-let [words @(rf/subscribe [:wordcloud/words])]
       [:> ReactWordcloud {:words words :options options}]
       [:div.text-center.py-3 [spinner-icon]])
