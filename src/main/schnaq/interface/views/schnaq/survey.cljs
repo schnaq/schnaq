@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.schnaq.survey
-  (:require [oops.core :refer [oget oget+]]
+  (:require [goog.string :as gstring]
+            [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.interface.components.colors :as colors]
@@ -25,7 +26,7 @@
          [:input.form-check-input.mt-3.mx-auto
           (cond->
             {:type "radio"
-             :name :radio-type-choice
+             :name :radio-option-choice
              :value id}
             (zero? index) (assoc :defaultChecked true))]]
         [:div.col-11.my-1
@@ -40,6 +41,8 @@
            percentage]]]]))])
 
 ;; TODO add ability to actually cast a vote
+;; TODO add multiple choice
+;; TODO only cast vote if user has no memory of casting vote in local storage
 
 (defn survey-list
   " Displays all surveys of the current schnaq. "
@@ -53,7 +56,7 @@
           [:form
            {:on-submit (fn [e]
                          (jsw/prevent-default e)
-                         (println "submitting"))}
+                         (rf/dispatch [:schnaq.survey/cast-vote (oget e [:target :elements]) survey]))}
            [:div.mx-4.my-2
             [:h6.pb-2.text-center (:survey/title survey)]
             [results-graph (:survey/options survey) total-value]
@@ -135,6 +138,26 @@
                                [:schnaq.survey.create-new/success]
                                params)
            [:form/clear form-elements]]})))
+
+(rf/reg-event-fx
+ :schnaq.survey/cast-vote
+ (fn [{:keys [db]} [_ form-elements survey]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         survey-id (:db/id survey)
+         chosen-option (js/parseInt (oget form-elements :radio-option-choice :value))
+         updated-survey (update survey :survey/options
+                                (fn [options]
+                                  (mapv #(if (= chosen-option (:db/id %))
+                                           (update % :option/votes inc)
+                                           %)
+                                        options)))]
+     {:db (update-in db [:schnaq :current :surveys]
+                     (fn [surveys]
+                       (map #(if (= survey-id (:db/id %)) updated-survey %) surveys)))
+      :fx [(http/xhrio-request db :put (gstring/format "/survey/%s/vote" survey-id)
+                               [:no-op]                     ;; Create the localstorage entry on success later here
+                               {:share-hash share-hash
+                                :option-id chosen-option})]})))
 
 (rf/reg-event-db
  :schnaq.survey.create-new/success
