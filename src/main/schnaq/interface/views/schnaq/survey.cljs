@@ -8,27 +8,29 @@
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as jsw]))
+            [schnaq.interface.utils.js-wrapper :as jsw]
+            [schnaq.interface.utils.toolbelt :as tools]))
 
 (defn- results-graph
   "A graph displaying the results of the survey."
-  [options total-value]
+  [options total-value survey-type]
   [:section.row
    (for [index (range (count options))]
      (let [{:keys [option/votes db/id option/value]} (get options index)
            vote-number votes
            percentage (if (zero? total-value)
                         "0%"
-                        (str (.toFixed (* 100 (/ vote-number total-value)) 2) "%"))]
+                        (str (.toFixed (* 100 (/ vote-number total-value)) 2) "%"))
+           single-choice? (= :survey.type/single-choice survey-type)]
        [:<>
         {:key (str "option-" id)}
         [:div.col-1
          [:input.form-check-input.mt-3.mx-auto
           (cond->
-            {:type "radio"
-             :name :radio-option-choice
+            {:type (if single-choice? "radio" "checkbox")
+             :name :option-choice
              :value id}
-            (zero? index) (assoc :defaultChecked true))]]
+            (and (zero? index) single-choice?) (assoc :defaultChecked true))]]
         [:div.col-11.my-1
          [:div.percentage-bar.rounded-1
           {:style {:background-color (colors/get-graph-color index)
@@ -40,12 +42,10 @@
            [:span.mr-3 vote-number " " (labels :schnaq.survey/votes)]
            percentage]]]]))])
 
-;; TODO add ability to actually cast a vote
-;; TODO add multiple choice
 ;; TODO only cast vote if user has no memory of casting vote in local storage
 
 (defn survey-list
-  " Displays all surveys of the current schnaq. "
+  "Displays all surveys of the current schnaq."
   []
   (let [surveys @(rf/subscribe [:schnaq/surveys])]
     [:<>
@@ -59,16 +59,16 @@
                          (rf/dispatch [:schnaq.survey/cast-vote (oget e [:target :elements]) survey]))}
            [:div.mx-4.my-2
             [:h6.pb-2.text-center (:survey/title survey)]
-            [results-graph (:survey/options survey) total-value]
+            [results-graph (:survey/options survey) total-value (:survey/type survey)]
             [:div.text-center
              [:button.btn.btn-primary.btn-sm
               {:type :submit}
-              "Abstimmen"]]]]]))]))
+              (labels :schnaq.survey/vote!)]]]]]))]))
 
 (defn- survey-option
   "Returns a single option component. Can contain a button for removal of said component."
   ([placeholder rank]
-   [inputs/text placeholder (str " survey-option- " rank)]))
+   [inputs/text placeholder (str "survey-option-" rank)]))
 
 (defn survey-form
   "Input form to create a survey with multiple options."
@@ -143,19 +143,25 @@
  :schnaq.survey/cast-vote
  (fn [{:keys [db]} [_ form-elements survey]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         single-choice? (= :survey.type/single-choice (:survey/type survey))
          survey-id (:db/id survey)
-         chosen-option (js/parseInt (oget form-elements :radio-option-choice :value))
-         updated-survey (update survey :survey/options
-                                (fn [options]
-                                  (mapv #(if (= chosen-option (:db/id %))
-                                           (update % :option/votes inc)
-                                           %)
-                                        options)))]
+         chosen-option (if single-choice?
+                         (js/parseInt (oget form-elements :option-choice :value))
+                         (tools/checked-values (oget form-elements :option-choice)))
+         survey-update-fn (if single-choice?
+                            #(if (= chosen-option (:db/id %))
+                               (update % :option/votes inc)
+                               %)
+                            #(if (contains? (set chosen-option) (:db/id %))
+                               (update % :option/votes inc)
+                               %))
+         updated-survey (update survey :survey/options #(mapv survey-update-fn %))]
      {:db (update-in db [:schnaq :current :surveys]
                      (fn [surveys]
                        (map #(if (= survey-id (:db/id %)) updated-survey %) surveys)))
       :fx [(http/xhrio-request db :put (gstring/format "/survey/%s/vote" survey-id)
-                               [:no-op]                     ;; Create the localstorage entry on success later here
+                               [:no-op]
+                               ;; TODO Create the localstorage entry on success later here
                                {:share-hash share-hash
                                 :option-id chosen-option})]})))
 

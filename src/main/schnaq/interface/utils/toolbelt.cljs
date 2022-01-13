@@ -116,3 +116,9 @@
     (if (or (nil? selected-hub) user-not-authenticated?)
       [:navigation/navigate :routes.schnaqs/personal]
       [:navigation/navigate :routes/hub {:keycloak-name selected-hub}])))
+
+(defn checked-values
+  "Returns a list of all values that have been checked provided a list of Checkboxes from a form."
+  [checkboxes]
+  (map #(js/parseInt (oget % :value))
+       (filter #(oget % :checked) checkboxes)))

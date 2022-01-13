@@ -276,6 +276,7 @@
    :schnaq.survey.create/multiple-choice-label "Multiple Choice"
    :schnaq.survey.create/submit-button "Create Survey"
    :schnaq.survey/votes "Votes"
+   :schnaq.survey/vote! "Vote"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
