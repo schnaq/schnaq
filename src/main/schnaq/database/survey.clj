@@ -49,3 +49,22 @@
                 [?discussion :discussion/share-hash ?share-hash]]
               option-id survey-id share-hash)]
     (db/increment-number matching-option :option/votes)))
+
+(defn vote-multiple!
+  "Casts a vote for a multiple options.
+  Share-hash, survey-id and option-ids must be known to prove one is not randomly incrementing values.
+  Returns nil if all combinations are invalid and the transaction with the valid votes otherwise."
+  [option-ids survey-id share-hash]
+  [(s/coll-of :db/id) :db/id :discussion/share-hash :ret (? map?)]
+  (let [matching-options
+        (db/query
+         '[:find [?options ...]
+           :in $ [?options ...] ?survey ?share-hash
+           :where [?survey :survey/options ?options]
+           [?survey :survey/discussion ?discussion]
+           [?discussion :discussion/share-hash ?share-hash]]
+         option-ids survey-id share-hash)
+        transaction-results (doall (map #(db/increment-number % :option/votes) matching-options))
+        clean-results (remove nil? transaction-results)]
+    (when (seq clean-results)
+      clean-results)))
