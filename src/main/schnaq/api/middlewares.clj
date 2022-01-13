@@ -64,8 +64,10 @@
   further processing.
   Must be called before other functions read the body's input stream!"
   [handler]
-  (fn [request]
-    (handler (assoc request :body (slurp (:body request))))))
+  (fn [{:keys [body] :as request}]
+    (if body
+      (handler (assoc request :body (slurp (:body request))))
+      (handler request))))
 
 ;; -----------------------------------------------------------------------------
 ;; Error handling
