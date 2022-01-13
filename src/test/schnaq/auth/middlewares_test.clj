@@ -5,6 +5,7 @@
             [ring.util.http-response :refer [ok]]
             [schnaq.auth :as auth]
             [schnaq.auth.middlewares :as auth-middlewares]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.user :as user-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt :refer [token-schnaqqifant-user token-n2o-admin token-wrong-signature token-timed-out mock-authorization-header]]))
 
@@ -55,9 +56,12 @@
 
 (deftest pro-user?-middleware-test
   (let [kangaroo-keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
-        mw (auth-middlewares/pro-user?-middleware identity)]
+        mw (auth-middlewares/pro-user?-middleware (constantly :success))]
     (testing "Non-existent user is no pro user."
       (is (= 403 (:status (mw {:identity {:sub "non-existent-user"}})))))
     (testing "Pro-User shall pass."
       (let [_pro-kangaroo (user-db/subscribe-pro-tier kangaroo-keycloak-id "" "")]
-        (is (map? (mw {:identity {:sub kangaroo-keycloak-id}})))))))
+        (is (= :success (mw {:identity {:sub kangaroo-keycloak-id}})))))
+    (testing "Beta-Users also have access to pro-features."
+      (is (= :success (mw {:identity {:sub "doesnt-matter-is-beta-tester"
+                                      :realm_access {:roles (vec shared-config/beta-tester-roles)}}}))))))

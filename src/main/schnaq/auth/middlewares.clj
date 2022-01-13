@@ -37,15 +37,16 @@
   "Check if is eligible for our beta-testers program."
   [handler]
   (fn [request]
-    (if (auth-lib/has-role? (:identity request) shared-config/beta-tester-roles)
+    (if (auth-lib/beta-tester? request)
       (handler request)
       (forbidden (at/build-error-body :auth/not-a-beta-tester "You are not a beta tester.")))))
 
 (defn pro-user?-middleware
-  "Validate, that user has a subscription in our database."
+  "Validate, that user has a subscription in our database or is a beta user."
   [handler]
   (fn [request]
-    (if (user-db/pro-subscription? (get-in request [:identity :sub]))
+    (if (or (auth-lib/beta-tester? request)
+            (user-db/pro-subscription? (get-in request [:identity :sub])))
       (handler request)
       (forbidden (at/build-error-body :auth/no-pro-subscription "You have no valid pro-subscription.")))))
 
