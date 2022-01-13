@@ -128,6 +128,7 @@
                    404 at/response-error-body}}]]
     ["/webhook"
      {:post webhook
+      :name :stripe/webhook
       :description (at/get-doc #'webhook)
       :responses {200 {:body {:message string?}}}}]]])
 
