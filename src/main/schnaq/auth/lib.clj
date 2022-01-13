@@ -24,5 +24,5 @@
 (>defn beta-tester?
   "Verify that user has a valid beta-tester role in the JWT token."
   [request]
-  [coll? :ret boolean?]
+  [map? :ret boolean?]
   (has-role? (:identity request) shared-config/beta-tester-roles))

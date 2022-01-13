@@ -2,6 +2,7 @@
   (:require [reitit.ring.middleware.exception :as exception]
             [ring.util.http-response :refer [forbidden not-found]]
             [schnaq.api.toolbelt :as at]
+            [schnaq.config :as config]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
@@ -43,17 +44,19 @@
 
 (defn wrap-custom-schnaq-csrf-header
   "A handler, that checks for a custom schnaq-csrf header. This can only be present when sent from an allowed origin
-  via XMLHttpRequest."
+  via XMLHttpRequest. Allows whitelists for incoming requests, e.g. from the Stripe API."
   [handler]
   (fn [request]
-    ;; Only relevant for those three methods
+    ;; Only relevant for those three verbs
     (if (#{:post :put :delete} (:request-method request))
-      ;; X-schnaq-csrf header must be present, otherwise raise error
-      (if (get-in request [:headers "x-schnaq-csrf"])
-        (handler request)
-        (forbidden (at/build-error-body
-                    :csrf/missing-header
-                    "You are trying to access the route without the proper headers: \"x-schnaq-csrf\"")))
+      (let [route-name (get-in request [:reitit.core/match :data :name])]
+        ;; Either the route is whitelisted, or there must be a x-schnaq-csrf header.
+        (if (or (and route-name (route-name config/routes-without-csrf-check))
+                (get-in request [:headers "x-schnaq-csrf"]))
+          (handler request)
+          (forbidden (at/build-error-body
+                      :csrf/missing-header
+                      "You are trying to access the route without the proper headers: \"x-schnaq-csrf\""))))
       (handler request))))
 
 ;; -----------------------------------------------------------------------------

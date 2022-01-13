@@ -25,6 +25,12 @@
    (or (System/getenv "ADDITIONAL_CORS_ORIGINS") "")
    #","))
 
+(def routes-without-csrf-check
+  "Collection of route-names, where the middleware does not check for our csrf
+  header. Commonly used for incoming requests from external services, like
+  stripe."
+  #{:stripe/webhook})
+
 (def app-codes
   "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
   #{summy-config/app-code})
