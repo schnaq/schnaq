@@ -22,7 +22,9 @@
            percentage (if (zero? total-value)
                         "0%"
                         (str (.toFixed (* 100 (/ vote-number total-value)) 2) "%"))
-           single-choice? (= :survey.type/single-choice survey-type)]
+           single-choice? (= :survey.type/single-choice survey-type)
+           votes-set (if single-choice? #{cast-votes} (set cast-votes))
+           option-voted? (votes-set id)]
        [:<>
         {:key (str "option-" id)}
         (when-not cast-votes
@@ -36,16 +38,16 @@
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
          [:div.percentage-bar.rounded-1
-          {:style {:background-color (colors/get-graph-color index)
+          {:class (when option-voted? "percentage-bar-highlight")
+           :style {:background-color (colors/get-graph-color index)
                    :width percentage
                    :height "30px"}}]
          [:p.small.ml-1
+          {:class (when option-voted? "font-italic")}
           value
           [:span.float-right
            [:span.mr-3 vote-number " " (labels :schnaq.survey/votes)]
            percentage]]]]))])
-
-;; TODO highlight options that were the chosen votes
 
 (defn survey-list
   "Displays all surveys of the current schnaq."
