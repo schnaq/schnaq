@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.schnaq.survey
   (:require [goog.string :as gstring]
+            [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
@@ -42,7 +43,9 @@
            [:span.mr-3 vote-number " " (labels :schnaq.survey/votes)]
            percentage]]]]))])
 
-;; TODO only cast vote if user has no memory of casting vote in local storage
+;; TODO remove voting option if a vote was already cast
+;; TODO error on form clear on survey creation
+;; TODO highlight options that were the chosen votes
 
 (defn survey-list
   "Displays all surveys of the current schnaq."
@@ -156,14 +159,26 @@
                                (update % :option/votes inc)
                                %))
          updated-survey (update survey :survey/options #(mapv survey-update-fn %))]
-     {:db (update-in db [:schnaq :current :surveys]
-                     (fn [surveys]
-                       (map #(if (= survey-id (:db/id %)) updated-survey %) surveys)))
+     {:db (-> db
+              (update-in [:schnaq :current :surveys]
+                         (fn [surveys]
+                           (map #(if (= survey-id (:db/id %)) updated-survey %) surveys)))
+              (assoc-in [:schnaq :surveys :past-votes survey-id] chosen-option))
       :fx [(http/xhrio-request db :put (gstring/format "/survey/%s/vote" survey-id)
-                               [:no-op]
-                               ;; TODO Create the localstorage entry on success later here
+                               [:schnaq.survey.cast-vote/success]
                                {:share-hash share-hash
-                                :option-id chosen-option})]})))
+                                :option-id chosen-option}
+                               [:schnaq.survey.cast-vote/failure survey-id])]})))
+
+(rf/reg-event-fx
+ :schnaq.survey.cast-vote/success
+ (fn [{:keys [db]} _]
+   {:fx [[:localstorage/assoc [:survey/cast-votes (get-in db [:schnaq :surveys :past-votes])]]]}))
+
+(rf/reg-event-db
+ :schnaq.survey.cast-vote/failure
+ (fn [db [_ survey-id]]
+   (update-in db [:schnaq :surveys :past-votes] dissoc survey-id)))
 
 (rf/reg-event-db
  :schnaq.survey.create-new/success
@@ -180,6 +195,12 @@
  (fn [db _]
    (get-in db [:schnaq :current :surveys] [])))
 
+(rf/reg-sub
+ :schnaq/vote-cast
+ ;; Show whether and what a user has already voted for a certain survey
+ (fn [db [_ survey-id]]
+   (get-in db [:schnaq :surveys :past-votes survey-id])))
+
 (rf/reg-event-fx
  :schnaq.surveys/load-from-backend
  (fn [{:keys [db]} _]
@@ -191,3 +212,9 @@
  :schnaq.surveys.load-from-backend/success
  (fn [db [_ response]]
    (assoc-in db [:schnaq :current :surveys] (:surveys response))))
+
+(rf/reg-event-db
+ :schnaq.surveys/load-past-votes
+ ;; Load past votes from localstorage
+ (fn [db _]
+   (assoc-in db [:schnaq :surveys :past-votes] (:survey/cast-votes local-storage))))
