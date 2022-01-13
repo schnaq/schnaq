@@ -127,3 +127,9 @@ $header-opacity: 1;
   max-height: 200px;
   max-width: 300px;
 }
+
+.startpage-feature-box-image {
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
