@@ -1,5 +1,5 @@
 (ns schnaq.api.middlewares-test
-  (:require [clojure.test :refer [deftest is are testing]]
+  (:require [clojure.test :refer [deftest are testing]]
             [schnaq.api.middlewares :as middlewares]
             [schnaq.config :as config]))
 
@@ -12,7 +12,7 @@
   (testing "CSRF Header must be present if manipulating-verb is used and the route is not whitelisted."
     (let [mw (middlewares/wrap-custom-schnaq-csrf-header (constantly {:status 200}))]
       (are [status-code verb route-name header?] (= status-code (:status (mw (build-request verb route-name header?))))
-      ;; Head and get are okay
+        ;; Head and get are okay
         200 :head :_ false
         200 :get :_ false
         200 :get :api.schnaqs/by-hashes false

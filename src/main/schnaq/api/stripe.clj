@@ -110,7 +110,7 @@
 
 (def stripe-routes
   [["/stripe" {:swagger {:tags ["subscription" "stripe"]}}
-    ["" {:middleware [:security/schnaq-csrf-header]}
+    [""
      ["/create-checkout-session"
       {:post create-checkout-session
        :description (at/get-doc #'create-checkout-session)

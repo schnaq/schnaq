@@ -165,8 +165,7 @@
 ;; -----------------------------------------------------------------------------
 
 (def schnaq-routes
-  [["" {:swagger {:tags ["schnaqs"]}
-        :middleware [:security/schnaq-csrf-header]}
+  [["" {:swagger {:tags ["schnaqs"]}}
     ["/schnaq"
      ["/by-hash" {:get schnaq-by-hash
                   :description (at/get-doc #'schnaq-by-hash)

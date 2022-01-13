@@ -99,7 +99,6 @@
     summary-routes
     survey-routes
     user-routes
-    ;; Don't forget to add the `:security/schnaq-csrf-header` middleware in new routes
 
     ["/swagger.json"
      {:get {:no-doc true
@@ -135,7 +134,8 @@
                         multipart/multipart-middleware
                         auth-middlewares/replace-bearer-with-token
                         auth/wrap-jwt-authentication
-                        auth-middlewares/update-jwt-middleware]}
+                        auth-middlewares/update-jwt-middleware
+                        middlewares/wrap-custom-schnaq-csrf-header]}
     ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
                            :user/admin? auth-middlewares/admin?-middleware
                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
@@ -143,8 +143,7 @@
                            :app/valid-code? auth-middlewares/valid-app-code?-middleware
                            :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
                            :discussion/valid-statement? middlewares/valid-statement?-middleware
-                           :discussion/valid-credentials? middlewares/valid-credentials?-middleware
-                           :security/schnaq-csrf-header middlewares/wrap-custom-schnaq-csrf-header}}))
+                           :discussion/valid-credentials? middlewares/valid-credentials?-middleware}}))
 
 (defn route-by-name
   "Return a route by its name."

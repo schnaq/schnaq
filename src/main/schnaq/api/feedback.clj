@@ -53,8 +53,7 @@
 ;; -----------------------------------------------------------------------------
 
 (def feedback-routes
-  [["" {:swagger {:tags ["feedbacks"]}
-        :middleware [:security/schnaq-csrf-header]}
+  [["" {:swagger {:tags ["feedbacks"]}}
     ["/feedback/add" {:post add-feedback
                       :description (at/get-doc #'add-feedback)
                       :name :api.feedback/add

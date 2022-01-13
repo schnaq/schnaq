@@ -44,7 +44,7 @@
 
 (def email-routes
   ["/emails" {:swagger {:tags ["emails"]}
-              :middleware [:discussion/valid-credentials? :security/schnaq-csrf-header]
+              :middleware [:discussion/valid-credentials?]
               :parameters {:body {:share-hash :discussion/share-hash
                                   :edit-hash :discussion/edit-hash}}
               :responses {403 at/response-error-body}}
