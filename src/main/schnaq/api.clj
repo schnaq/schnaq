@@ -139,6 +139,7 @@
     ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
                            :user/admin? auth-middlewares/admin?-middleware
                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
+                           :user/pro-user? auth-middlewares/pro-user?-middleware
                            :app/valid-code? auth-middlewares/valid-app-code?-middleware
                            :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
                            :discussion/valid-statement? middlewares/valid-statement?-middleware

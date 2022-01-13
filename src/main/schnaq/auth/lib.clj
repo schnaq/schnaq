@@ -20,3 +20,9 @@
                                                     (get-in request [:identity :name])))
       (assoc-in [:identity :roles] (get-in request [:identity :realm_access :roles]))
       (assoc-in [:identity :admin?] (has-role? (:identity request) shared-config/admin-roles))))
+
+(>defn beta-tester?
+  "Verify that user has a valid beta-tester role in the JWT token."
+  [request]
+  [coll? :ret boolean?]
+  (has-role? (:identity request) shared-config/beta-tester-roles))
