@@ -155,10 +155,11 @@
                                (rf/dispatch [:updates.periodic/starting-conclusions true])
                                (rf/dispatch [:discussion.query.conclusions/starting])
                                (rf/dispatch [:schnaq.surveys/load-from-backend])
-                               ;; TODO periodic live updates for surveys
+                               (rf/dispatch [:updates.periodic/surveys true])
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/starting-conclusions false])
+                              (rf/dispatch [:updates.periodic/surveys false])
                               (rf/dispatch [:statement.edit/reset-edits])
                               (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
                               (rf/dispatch [:toggle-replies/clear!]))}]
