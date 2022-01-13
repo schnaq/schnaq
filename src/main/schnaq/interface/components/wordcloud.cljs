@@ -39,6 +39,7 @@
     (for [[word total] (->> (str/split replaced #"\s")
                             (remove #((set stopwords-de) %))
                             (map extract-link-text-from-md)
+                            (remove empty?)
                             frequencies)]
       {:text word
        :value total})))
