@@ -235,7 +235,7 @@
                         :opt [:option/votes]))
 (s/def :survey/options (s/coll-of ::option))
 (s/def ::survey
-  (s/keys :req-un [:survey/title :survey/options :survey/type :survey/discussion]))
+  (s/keys :req [:survey/title :survey/options :survey/type :survey/discussion]))
 
 ;; App-Codes
 (s/def :app/code ::non-blank-string)

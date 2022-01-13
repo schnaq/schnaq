@@ -28,20 +28,24 @@
   "Returns all surveys belonging to the `share-hash` in the payload."
   [{:keys [parameters]}]
   (let [share-hash (get-in parameters [:query :share-hash])]
-    (log/info "Requested surveys for share-hash" share-hash)
     (ok {:surveys (survey-db/surveys share-hash)})))
 
 (defn- cast-vote
   "Lets the user cast a vote."
   [{:keys [parameters]}]
   (let [{:keys [share-hash option-id]} (:body parameters)
-        survey-id (get-in parameters [:path :survey-id])]
-    (if (survey-db/vote! option-id survey-id share-hash)
+        survey-id (get-in parameters [:path :survey-id])
+        survey-type (-> (fast-pull survey-id '[{:survey/type [:db/ident]}])
+                        :survey/type :db/ident)
+        voting-fn (case survey-type
+                    :survey.type/single-choice survey-db/vote!
+                    :survey.type/multiple-choice survey-db/vote-multiple!)]
+    (if (voting-fn option-id survey-id share-hash)
       (do
-        (log/info "Vote cast for option" option-id)
+        (log/info "Vote cast for option(s)" option-id)
         (ok {:voted? true}))
       (do
-        (log/debug "Something went wrong with a vote with option" option-id
+        (log/debug "Something went wrong with a vote with option(s)" option-id
                    "for survey" survey-id "and share hash" share-hash)
         (bad-request (at/build-error-body :survey.vote/bad-parameters "This vote was not for a valid option or survey"))))))
 
@@ -65,7 +69,8 @@
                           :description (at/get-doc #'cast-vote)
                           :name :survey/vote!
                           :parameters {:body {:share-hash :discussion/share-hash
-                                              :option-id :db/id}
+                                              :option-id (s/or :id :db/id
+                                                               :id-seq (s/coll-of :db/id))}
                                        :path {:survey-id :db/id}}
                           :responses {200 {:body {:voted? boolean?}}
                                       400 at/response-error-body}}]]

@@ -110,8 +110,7 @@
  :discussion.edit-title/send
  (fn [{:keys [db]} [_ html-selector form]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
-         edit-hash (get admin-access-map share-hash)]
+         edit-hash @(rf/subscribe [:schnaq.current/admin-access])]
      {:fx [(http/xhrio-request db :put "/schnaq/edit/title"
                                [:discussion.edit.send/success form]
                                {:share-hash share-hash

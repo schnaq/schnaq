@@ -39,6 +39,16 @@
   []
   (loop-builder :updates.periodic/graph? update-graph))
 
+(defn- update-surveys
+  "Call events to update surveys."
+  []
+  (rf/dispatch [:schnaq.surveys/load-from-backend]))
+
+(defn- loop-update-surveys!
+  "Define loop to periodically update surveys."
+  []
+  (loop-builder :updates.periodic/surveys? update-surveys))
+
 ;; -----------------------------------------------------------------------------
 ;; Init
 
@@ -48,7 +58,8 @@
   []
   (log/info "Preparing periodic updates of discussion entities...")
   (loop-update-starting-conclusions!)
-  (loop-update-graph!))
+  (loop-update-graph!)
+  (loop-update-surveys!))
 
 ;; -----------------------------------------------------------------------------
 ;; Events
@@ -62,6 +73,16 @@
  :updates.periodic/starting-conclusions
  (fn [db [_ trigger?]]
    (assoc-in db [:updates/periodic :conclusions/starting?] trigger?)))
+
+(rf/reg-sub
+ :updates.periodic/surveys?
+ (fn [db _]
+   (get-in db [:updates/periodic :surveys] false)))
+
+(rf/reg-event-db
+ :updates.periodic/surveys
+ (fn [db [_ trigger?]]
+   (assoc-in db [:updates/periodic :surveys] trigger?)))
 
 (rf/reg-sub
  :updates.periodic/graph?

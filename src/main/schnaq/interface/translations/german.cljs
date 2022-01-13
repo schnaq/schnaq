@@ -256,9 +256,26 @@
    :statement.notifications/statement-flagged-body "Vielen Dank für deine Meldung, wir kümmern uns."
 
    :schnaq.input-type/question "Frage"
+   :schnaq.input-type/answer "Antwort"
    :schnaq.input-type/survey "Umfrage"
    :schnaq.input-type/activation "Aktivierung"
    :schnaq.input-type/coming-soon "Bald verfügbar"
+   :schnaq.input-type/not-admin "Nur für Moderatoren"
+   :schnaq.input-type/beta-only "Nur für Beta-Tester:innen"
+
+   ;; Survey feature
+   :schnaq.survey.create/topic-label "Umfragethema"
+   :schnaq.survey.create/placeholder "Was ist dein Lieblingselefant?"
+   :schnaq.survey.create/hint "Stelle eine klare Frage für gute Ergebnisse!"
+   :schnaq.survey.create/options-label "Optionen"
+   :schnaq.survey.create/options-placeholder "Elefant"
+   :schnaq.survey.create/add-button "Option hinzufügen"
+   :schnaq.survey.create/remove-button "Option entfernen"
+   :schnaq.survey.create/single-choice-label "Single Choice"
+   :schnaq.survey.create/multiple-choice-label "Multiple Choice"
+   :schnaq.survey.create/submit-button "Umfrage erstellen"
+   :schnaq.survey/votes "Stimmen"
+   :schnaq.survey/vote! "Abstimmen"
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"

@@ -77,6 +77,7 @@
             [schnaq.interface.views.schnaq.admin]
             [schnaq.interface.views.schnaq.create]
             [schnaq.interface.views.schnaq.summary]
+            [schnaq.interface.views.schnaq.survey]
             [schnaq.interface.views.schnaq.visited]
             [schnaq.interface.views.startpage.core]
             [schnaq.interface.views.user]

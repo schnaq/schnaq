@@ -49,8 +49,7 @@
 (defn embeddable-header []
   ;; The view breaks earlier, because the breakpoints heed the screen size, not the div size
   (let [{:discussion/keys [title share-hash] :as discussion} @(rf/subscribe [:schnaq/selected])
-        admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
-        edit-hash (get admin-access-map share-hash)
+        admin-access? @(rf/subscribe [:schnaq.current/admin-access])
         meta-info (:meta-info discussion)
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
@@ -72,7 +71,7 @@
      [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
       [:div.d-flex.align-items-center.schnaq-navbar.px-4
        [admin/txt-export share-hash title]
-       (when edit-hash
+       (when admin-access?
          [admin/admin-center])
        [navbar-components/language-toggle-with-tooltip false {:class "btn-lg"}]]
       [:div.d-flex.align-items-center.mt-4.mt-md-0

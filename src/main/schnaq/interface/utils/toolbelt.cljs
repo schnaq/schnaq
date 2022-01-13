@@ -34,10 +34,10 @@
   `(let [element (oget e [:target :elements :contact-name])]
      (reset-form-fields! [element]))`"
   ([fields]
-   [(s/coll-of any?) :ret nil?]
+   [any? :ret nil?]
    (reset-form-fields! fields ""))
   ([fields default]
-   [(s/coll-of any?) string? :ret nil?]
+   [any? string? :ret nil?]
    (run! #(oset! % [:value] default) fields)
    (reset-form-height! fields)))
 
@@ -116,3 +116,9 @@
     (if (or (nil? selected-hub) user-not-authenticated?)
       [:navigation/navigate :routes.schnaqs/personal]
       [:navigation/navigate :routes/hub {:keycloak-name selected-hub}])))
+
+(defn checked-values
+  "Returns a list of all values that have been checked provided a list of Checkboxes from a form."
+  [checkboxes]
+  (map #(js/parseInt (oget % :value))
+       (filter #(oget % :checked) checkboxes)))

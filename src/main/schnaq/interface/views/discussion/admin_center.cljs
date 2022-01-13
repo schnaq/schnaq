@@ -450,6 +450,14 @@
  (fn [db [_]]
    (get-in db [:schnaqs :admin-access])))
 
+(rf/reg-sub
+ :schnaq.current/admin-access
+ ;; Returns the edit-hash, when there and nil otherwise
+ :<- [:schnaq/selected]
+ :<- [:schnaqs/load-admin-access]
+ (fn [[{:keys [discussion/share-hash]} admin-access-map] _]
+   (get admin-access-map share-hash)))
+
 (rf/reg-event-fx
  :schnaqs.save-admin-access/to-localstorage-and-db
  (fn [{:keys [db]} [_ share-hash edit-hash]]

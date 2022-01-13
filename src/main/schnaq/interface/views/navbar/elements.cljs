@@ -132,14 +132,12 @@
 (defn navbar-settings
   "Either display schnaq or graph settings button"
   []
-  (let [{:discussion/keys [share-hash]} @(rf/subscribe [:schnaq/selected])
-        admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
-        edit-hash (get admin-access-map share-hash)
-        current-route @(rf/subscribe [:navigation/current-route-name])
-        graph? (= current-route :routes/graph-view)]
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])
+        graph? (= current-route :routes/graph-view)
+        admin? @(rf/subscribe [:schnaq.current/admin-access])]
     (if graph?
       [graph-settings/open-settings]
-      (when edit-hash
+      (when admin?
         [admin/admin-center]))))
 
 (defn navbar-download

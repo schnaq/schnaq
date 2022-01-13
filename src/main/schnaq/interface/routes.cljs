@@ -155,9 +155,12 @@
                                (rf/dispatch [:discussion.history/clear])
                                (rf/dispatch [:updates.periodic/starting-conclusions true])
                                (rf/dispatch [:discussion.query.conclusions/starting])
+                               (rf/dispatch [:schnaq.surveys/load-from-backend])
+                               (rf/dispatch [:updates.periodic/surveys true])
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/starting-conclusions false])
+                              (rf/dispatch [:updates.periodic/surveys false])
                               (rf/dispatch [:statement.edit/reset-edits])
                               (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
                               (rf/dispatch [:toggle-replies/clear!]))}]
@@ -283,7 +286,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-               #(js-wrap/scroll-to-id window-hash)))))
+          #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
