@@ -13,6 +13,11 @@
 (s/def :db/id (s/or :transacted integer? :temporary any?))
 (s/def :db/txInstant inst?)
 
+;; Stripe
+(s/def :stripe/product-price-id (s/and string? #(.startsWith % "price_")))
+(s/def :stripe/customer-id (s/and string? #(.startsWith % "cus_")))
+(s/def :stripe/subscription-id (s/and string? #(.startsWith % "sub_")))
+
 ;; User
 (s/def :user/nickname string?)
 (s/def ::user (s/keys :req [:user/nickname]))
@@ -30,8 +35,8 @@
 (s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)
                                               :schnaqs (s/coll-of ::discussion)))
-(s/def :user.registered.subscription/stripe-id ::non-blank-string)
-(s/def :user.registered.subscription/stripe-customer-id ::non-blank-string)
+(s/def :user.registered.subscription/stripe-id :stripe/subscription-id)
+(s/def :user.registered.subscription/stripe-customer-id :stripe/customer-id)
 (s/def :user.registered.subscription/type #{:user.registered.subscription.type/pro})
 (s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/display-name]
                                  :opt [:user.registered/last-name :user.registered/first-name
@@ -242,6 +247,3 @@
 (s/def :ring/body-params map?)
 (s/def :ring/route-params map?)
 (s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
-
-;; Stripe
-(s/def :stripe/product-price-id (s/and string? #(.startsWith % "price_")))
