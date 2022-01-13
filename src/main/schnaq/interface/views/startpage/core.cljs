@@ -132,10 +132,15 @@
      :page/vertical-header? true
      :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
     [:<>
-     [:section.container
+     [:section.container.mb-5
       [startpage-features/how-does-schnaq-work]
-      [testimonials/highlights]
-      [three-steps-to-success]
+      [three-steps-to-success]]
+     [wavy/top-and-bottom
+      :white
+      [:section.container.my-0
+       [testimonials/highlights]]
+      :white-small]
+     [:section.container
       [startpage-features/feature-rows]]
      [faq]
      [:section.container
