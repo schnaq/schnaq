@@ -28,7 +28,6 @@
   "Returns all surveys belonging to the `share-hash` in the payload."
   [{:keys [parameters]}]
   (let [share-hash (get-in parameters [:query :share-hash])]
-    (log/info "Requested surveys for share-hash" share-hash)
     (ok {:surveys (survey-db/surveys share-hash)})))
 
 (defn- cast-vote
