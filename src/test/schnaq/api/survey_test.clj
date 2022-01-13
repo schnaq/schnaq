@@ -47,14 +47,27 @@
 (deftest cast-vote-test
   (testing "Casting a vote works always, as long as survey-id, option-id and discussion share-hash match."
     (let [share-hash "simple-hash"
+          multiple-hash "cat-dog-hash"
           survey (first (survey-db/surveys share-hash))
+          multi-survey (first (filter #(= :survey.type/multiple-choice (:survey/type %))
+                                      (survey-db/surveys multiple-hash)))
           option-id (-> survey :survey/options first :db/id)
+          option-ids (->> multi-survey :survey/options (map :db/id))
           request (fn [option-id]
                     (-> {:request-method :put
                          :uri (format "/survey/%s/vote" (:db/id survey))
                          :body-params {:share-hash share-hash
                                        :option-id option-id}}
-                        toolbelt/add-csrf-header))]
+                        toolbelt/add-csrf-header))
+          multiple-request (fn [option-ids]
+                             (-> {:request-method :put
+                                  :uri (format "/survey/%s/vote" (:db/id multi-survey))
+                                  :body-params {:share-hash multiple-hash
+                                                :option-id option-ids}}
+                                 toolbelt/add-csrf-header))]
       (is (= 200 (-> option-id request api/app :status)))
       (is (-> option-id request api/app m/decode-response-body :voted?))
-      (is (= 400 (-> 1 request api/app :status))))))
+      (is (= 400 (-> 1 request api/app :status)))
+      (testing "Cast multiple votes for a multiple choice survey"
+        (is (= 200 (-> option-ids multiple-request api/app :status)))
+        (is (-> option-ids multiple-request api/app m/decode-response-body :voted?))))))
