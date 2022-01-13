@@ -127,6 +127,7 @@
            :muuntaja m/instance
            :middleware [swagger/swagger-feature
                         parameters/parameters-middleware    ;; query-params & form-params
+                        middlewares/convert-body-middleware  ;; must be called *before* muuntaja/format-middleware
                         muuntaja/format-middleware
                         middlewares/exception-printing-middleware
                         coercion/coerce-response-middleware ;; coercing response bodies

@@ -59,6 +59,14 @@
                       "You are trying to access the route without the proper headers: \"x-schnaq-csrf\""))))
       (handler request))))
 
+(defn convert-body-middleware
+  "Convert InputStream to String to have the \"raw\"-request available for
+  further processing.
+  Must be called before other functions read the body's input stream!"
+  [handler]
+  (fn [request]
+    (handler (assoc request :body (slurp (:body request))))))
+
 ;; -----------------------------------------------------------------------------
 ;; Error handling
 
