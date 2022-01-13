@@ -14,7 +14,7 @@
 
 (defn- results-graph
   "A graph displaying the results of the survey."
-  [options total-value survey-type]
+  [options total-value survey-type cast-votes]
   [:section.row
    (for [index (range (count options))]
      (let [{:keys [option/votes db/id option/value]} (get options index)
@@ -25,14 +25,16 @@
            single-choice? (= :survey.type/single-choice survey-type)]
        [:<>
         {:key (str "option-" id)}
-        [:div.col-1
-         [:input.form-check-input.mt-3.mx-auto
-          (cond->
-            {:type (if single-choice? "radio" "checkbox")
-             :name :option-choice
-             :value id}
-            (and (zero? index) single-choice?) (assoc :defaultChecked true))]]
-        [:div.col-11.my-1
+        (when-not cast-votes
+          [:div.col-1
+           [:input.form-check-input.mt-3.mx-auto
+            (cond->
+              {:type (if single-choice? "radio" "checkbox")
+               :name :option-choice
+               :value id}
+              (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
+        [:div.my-1
+         {:class (if cast-votes "col-12" "col-11")}
          [:div.percentage-bar.rounded-1
           {:style {:background-color (colors/get-graph-color index)
                    :width percentage
@@ -43,7 +45,6 @@
            [:span.mr-3 vote-number " " (labels :schnaq.survey/votes)]
            percentage]]]]))])
 
-;; TODO remove voting option if a vote was already cast
 ;; TODO error on form clear on survey creation
 ;; TODO highlight options that were the chosen votes
 
@@ -53,20 +54,23 @@
   (let [surveys @(rf/subscribe [:schnaq/surveys])]
     [:<>
      (for [survey surveys]
-       (let [total-value (apply + (map :option/votes (:survey/options survey)))]
+       (let [total-value (apply + (map :option/votes (:survey/options survey)))
+             survey-id (:db/id survey)
+             cast-votes @(rf/subscribe [:schnaq/vote-cast survey-id])]
          [:section.statement-card
-          {:key (str "survey-result-" (:db/id survey))}
+          {:key (str "survey-result-" survey-id)}
           [:form
            {:on-submit (fn [e]
                          (jsw/prevent-default e)
                          (rf/dispatch [:schnaq.survey/cast-vote (oget e [:target :elements]) survey]))}
            [:div.mx-4.my-2
             [:h6.pb-2.text-center (:survey/title survey)]
-            [results-graph (:survey/options survey) total-value (:survey/type survey)]
-            [:div.text-center
-             [:button.btn.btn-primary.btn-sm
-              {:type :submit}
-              (labels :schnaq.survey/vote!)]]]]]))]))
+            [results-graph (:survey/options survey) total-value (:survey/type survey) cast-votes]
+            (when-not cast-votes
+              [:div.text-center
+               [:button.btn.btn-primary.btn-sm
+                {:type :submit}
+                (labels :schnaq.survey/vote!)]])]]]))]))
 
 (defn- survey-option
   "Returns a single option component. Can contain a button for removal of said component."
