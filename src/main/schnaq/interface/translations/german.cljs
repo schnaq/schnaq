@@ -79,9 +79,9 @@
 
    ;; how-to
    :how-to.schnaq/title "Wie schnaqqe ich?"
-   :how-to.schnaq/body "Teile deine Meinung! Trage sie in das Eingabefeld ein und sie erscheint in der Liste an Beiträgen. Teilnehmer:innen können drauf reagieren und antworten. Die Mindmap wird automatisch generiert und aktualisiert sich mit jedem neuen Beitrag. Wenn du zu einem Beitrag springen möchtest, klicke ihn einfach an."
+   :how-to.schnaq/body "Teile deine Frage! Trage sie in das Eingabefeld ein und sie erscheint in der Liste an Beiträgen. Du kannst Fragen als relevant markieren und beantworten. Die Mindmap wird automatisch generiert und aktualisiert sich mit jedem neuen Beitrag."
    :how-to.pro-con/title "Bist du dafür oder dagegen?"
-   :how-to.pro-con/body "Teile den Anderen deine Grundhaltung zum aktuellen Beitrag mit. Mit einem Klick auf unseren Dafür/Dagegen Knopf beim Eingabefeld änderst du deine Haltung. Du kannst auch mehrere Argumente dafür oder dagegen nennen. Pro-Argumente werden Blau eingefärbt, Kontra-Argumente Orange."
+   :how-to.pro-con/body "Teile den Anderen deine Grundhaltung zur aktuellen Frage mit. Mit einem Klick auf unseren Dafür/Dagegen Knopf beim Eingabefeld änderst du deine Haltung. Du kannst auch mehrere Argumente dafür oder dagegen nennen. Pro-Argumente werden Blau eingefärbt, Kontra-Argumente Orange."
    :how-to/question-dont-show-again "Verstanden?"
    :how-to/answer-dont-show-again "In Zukunft nicht mehr anzeigen!"
 
