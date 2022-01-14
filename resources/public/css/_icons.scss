@@ -1,3 +1,5 @@
+@use "rounded" as rounded;
+
 .navbar-view-toggle {
   @extend .mx-auto;
   width: 25px;
@@ -6,6 +8,6 @@
 .icon-card {
   @extend .panel-white;
   @extend .text-center;
+  @include rounded.rounded-2;
   display: inline-block;
-  width: 3.5rem;
 }
