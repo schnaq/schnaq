@@ -36,6 +36,7 @@
             [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
+            [schnaq.interface.views.subscription :as subscription-views]
             [schnaq.interface.views.user.edit-account :as edit-account]
             [schnaq.interface.views.user.edit-notifications :as edit-notifications]))
 
@@ -237,6 +238,11 @@
      :controllers [{:start (fn []
                              (rf/dispatch [:load-preview-statements])
                              (rf/dispatch [:pricing/get-price config/stripe-product-price-id-schnaq-pro]))}]}]
+   ["subscription"
+    ["/success" {:name :routes.subscription/success
+                 :view subscription-views/success-view}]
+    ["/cancel" {:name :routes.subscription/cancel
+                :view subscription-views/cancel-view}]]
    ["privacy"
     [""
      {:name :routes/privacy
@@ -286,7 +292,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-          #(js-wrap/scroll-to-id window-hash)))))
+               #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
