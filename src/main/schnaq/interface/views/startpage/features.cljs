@@ -36,7 +36,7 @@
   [title body img-url img-alt]
   [:div.card.panel-transparent.text-center
    [:div.card-body
-    [:img.startpage-feature-box-image.w-75 {:src (img-path img-url) :alt img-alt}]
+    [:img.startpage-feature-box-image {:src (img-path img-url) :alt img-alt}]
     [:div.display-6.text-typography.card-title (labels title)]
     [:p.text-justify.card-text (labels body)]]])
 
@@ -48,7 +48,7 @@
     [feature-box
      :startpage.feature-box.know-how/title
      :startpage.feature-box.know-how/body
-     :startpage.schnaqqifant/easy
+     :schnaqqifant/show
      :startpage.feature-box.know-how/img-alt]
     ;; This block is used to break the card deck into one card per row for devices smaller than md
     ;; Without this only sm devices break.
@@ -56,13 +56,13 @@
     [feature-box
      :startpage.feature-box.discussion/title
      :startpage.feature-box.discussion/body
-     :startpage.schnaqqifant/time
+     :schnaqqifant/rocket
      :startpage.feature-box.discussion/img-alt]
     [:div.w-100.d-none.d-sm-block.d-lg-none.py-2]
     [feature-box
      :startpage.feature-box.learnings/title
      :startpage.feature-box.learnings/body
-     :startpage.schnaqqifant/know-how
+     :schnaqqifant/lamp
      :startpage.feature-box.learning/img-alt]]])
 
 ;; -----------------------------------------------------------------------------
