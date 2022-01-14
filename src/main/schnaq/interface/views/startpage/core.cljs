@@ -137,7 +137,7 @@
     {:page/title (labels :startpage/heading)
      :page/wrapper-classes "container container-85"
      :page/vertical-header? true
-     :page/bottom-wave-class "wave-bottom-typography"
+     :page/wavy-footer? true
      :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
     [:div.bubble-background-xxl
      [:section.container.mb-5
