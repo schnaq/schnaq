@@ -14,7 +14,7 @@
         com.taoensso/timbre {:mvn/version "5.1.2"}
         compojure/compojure {:mvn/version "1.6.2"}
         day8.re-frame/http-fx {:mvn/version "0.2.4"}
-        expound/expound {:mvn/version "0.8.10"}
+        expound/expound {:mvn/version "0.9.0"}
         funcool/hodgepodge {:mvn/version "0.1.4"}
         http-kit/http-kit {:mvn/version "2.5.3"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
