@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.startpage.features
-  (:require [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.components.images :refer [img-path]]
+  (:require [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.rows :as rows]
@@ -34,35 +33,36 @@
 
 (defn- feature-box
   "A Single feature box that can be put in a row. All inputs are keys."
-  [title body icon-key]
-  [:div.card.panel-white.text-center
+  [title body img-url img-alt]
+  [:div.card.panel-transparent.text-center
    [:div.card-body
-    [:div.display-6.text-typography.mb-3.card-title (labels title)]
-    [icon icon-key "mb-3 mx-auto card-text text-primary" {:size "3x"}]
+    [:img.startpage-feature-box-image {:src (img-path img-url) :alt img-alt}]
+    [:div.display-6.text-typography.card-title (labels title)]
     [:p.text-justify.card-text (labels body)]]])
 
 (defn how-does-schnaq-work
   "Arguments for getting schnaq in three columns."
   []
-  [:div.mt-lg-5
-   [:h3.h2.text-center (labels :startpage.feature-box/heading)]
-   [:div.card-deck.py-3
-    [feature-box
-     :startpage.feature-box.know-how/title
-     :startpage.feature-box.know-how/body
-     :chalkboard-teacher]
+  [:div.card-deck
+   [feature-box
+    :startpage.feature-box.know-how/title
+    :startpage.feature-box.know-how/body
+    :schnaqqifant/show
+    :startpage.feature-box.know-how/img-alt]
     ;; This block is used to break the card deck into one card per row for devices smaller than md
     ;; Without this only sm devices break.
-    [:div.w-100.d-none.d-sm-block.d-lg-none.py-2]
-    [feature-box
-     :startpage.feature-box.discussion/title
-     :startpage.feature-box.discussion/body
-     :qrcode]
-    [:div.w-100.d-none.d-sm-block.d-lg-none.py-2]
-    [feature-box
-     :startpage.feature-box.learnings/title
-     :startpage.feature-box.learnings/body
-     :user/group]]])
+   [:div.w-100.d-none.d-sm-block.d-lg-none.py-2]
+   [feature-box
+    :startpage.feature-box.discussion/title
+    :startpage.feature-box.discussion/body
+    :schnaqqifant/rocket
+    :startpage.feature-box.discussion/img-alt]
+   [:div.w-100.d-none.d-sm-block.d-lg-none.py-2]
+   [feature-box
+    :startpage.feature-box.learnings/title
+    :startpage.feature-box.learnings/body
+    :schnaqqifant/lamp
+    :startpage.feature-box.learning/img-alt]])
 
 ;; -----------------------------------------------------------------------------
 
