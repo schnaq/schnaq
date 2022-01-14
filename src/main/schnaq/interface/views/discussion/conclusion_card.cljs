@@ -10,6 +10,7 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.schnaq :as sc]
+            [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -349,7 +350,8 @@
         surveys (if top-level? (survey/survey-list) nil)]
     [:<>
      [:> Masonry
-      {:columns 3
+      {:breakpoints config/breakpoints
+       :columns {:xs 1 :md 2 :xxl 3 :qhd 4}
        :autoArrange true
        :gap 10}
       [selection-card]
