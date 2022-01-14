@@ -87,7 +87,8 @@
      [:span.text-center.text-white
       [:h2 (labels :startpage.faq/title)]
       [:p.lead (labels :startpage.faq/subtitle)]]
-     [qanda/question-field-and-search-results :dark]]]])
+     [qanda/question-field-and-search-results :dark]]
+    :primary-and-secondary]])
 
 (defn- team-and-supporters
   "Give a last personal touch."
@@ -116,7 +117,7 @@
 (defn- three-steps-to-success
   "A short three step explanation how schnaq leads to success. Could be expanded with a before / after persona."
   []
-  [:div.row.mt-5
+  [:div.row
    [:div.col-12.text-center.h2.mb-5 (labels :startpage.three-steps/heading)]
    [single-step
     [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.three-steps/first)]
@@ -143,10 +144,10 @@
       [testimonials/highlights]]
      [wavy/top-and-bottom
       :white
-      [:section.container.mb-3
+      [:section.container
        [three-steps-to-success]]
-      :white-small]
-     [:section.container
+      :white-and-primary]
+     [:div.container.py-5
       [startpage-features/feature-rows]]
      [faq]
      [:section.container

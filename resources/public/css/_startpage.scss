@@ -56,10 +56,14 @@ $header-opacity: 1;
   width: 100%;
 }
 
-.wave-bottom-white-small {
+.wave-bottom-white-and-primary {
   @extend .wave-bottom-white;
-  background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-white-small.svg');
-  padding-top: 4.5%;
+  background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-white-primary.svg');
+}
+
+.wave-bottom-primary-and-secondary {
+  @extend .wave-bottom-white;
+  background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-primary-secondary.svg');
 }
 
 .wave-bottom-light {
@@ -84,7 +88,7 @@ $header-opacity: 1;
 
 .bubble-background-xxl {
   background-image: none;
-  @include media-breakpoint-up(xxl) {
+  @include media-breakpoint-up(xl) {
     background-image: url('https://s3.schnaq.com/schnaq-common/background/background-bubbles-large.svg');
     background-repeat: repeat;
   }
@@ -160,6 +164,9 @@ $header-opacity: 1;
 
 .startpage-feature-box-image {
   height: auto;
-  max-width: 100%;
+  max-width: 75%;
   object-fit: contain;
+  @include media-breakpoint-down(md) {
+    max-width: 30%;
+  }
 }
