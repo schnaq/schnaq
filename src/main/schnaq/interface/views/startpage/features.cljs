@@ -43,27 +43,26 @@
 (defn how-does-schnaq-work
   "Arguments for getting schnaq in three columns."
   []
-  [:div
-   [:div.card-deck
-    [feature-box
-     :startpage.feature-box.know-how/title
-     :startpage.feature-box.know-how/body
-     :schnaqqifant/show
-     :startpage.feature-box.know-how/img-alt]
+  [:div.card-deck
+   [feature-box
+    :startpage.feature-box.know-how/title
+    :startpage.feature-box.know-how/body
+    :schnaqqifant/show
+    :startpage.feature-box.know-how/img-alt]
     ;; This block is used to break the card deck into one card per row for devices smaller than md
     ;; Without this only sm devices break.
-    [:div.w-100.d-none.d-sm-block.d-lg-none.py-2]
-    [feature-box
-     :startpage.feature-box.discussion/title
-     :startpage.feature-box.discussion/body
-     :schnaqqifant/rocket
-     :startpage.feature-box.discussion/img-alt]
-    [:div.w-100.d-none.d-sm-block.d-lg-none.py-2]
-    [feature-box
-     :startpage.feature-box.learnings/title
-     :startpage.feature-box.learnings/body
-     :schnaqqifant/lamp
-     :startpage.feature-box.learning/img-alt]]])
+   [:div.w-100.d-none.d-sm-block.d-lg-none.py-2]
+   [feature-box
+    :startpage.feature-box.discussion/title
+    :startpage.feature-box.discussion/body
+    :schnaqqifant/rocket
+    :startpage.feature-box.discussion/img-alt]
+   [:div.w-100.d-none.d-sm-block.d-lg-none.py-2]
+   [feature-box
+    :startpage.feature-box.learnings/title
+    :startpage.feature-box.learnings/body
+    :schnaqqifant/lamp
+    :startpage.feature-box.learning/img-alt]])
 
 ;; -----------------------------------------------------------------------------
 
