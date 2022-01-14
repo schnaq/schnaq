@@ -79,9 +79,9 @@
 
    ;; how-to
    :how-to.schnaq/title "How do I schnaq?"
-   :how-to.schnaq/body "Share your opinion! Others can react to your post or add a comment. The mindmap is automatically generated and updated whenever there is a new statement. Fancy a post? Just click on it and jump right at it."
+   :how-to.schnaq/body "Share your question! Others can upvote your question or answer it. The mindmap is automatically generated and updated whenever there is a new statement."
    :how-to.pro-con/title "To Agree or Disagree ..."
-   :how-to.pro-con/body "Share your basic attitude towards the current post. With a click on our agree/disagree-button you change your post's attitude. Pro statements are highlighted blue and contra statements are highlighted orange. You can add multiple pro statements as well as contra statements in response to the same statement."
+   :how-to.pro-con/body "Share your basic attitude towards the current question. With a click on our agree/disagree-button you change your answers's attitude. Pro statements are highlighted blue and contra statements are highlighted orange. You can add multiple pro statements as well as contra statements in response to the same question."
    :how-to/question-dont-show-again "Got it?"
    :how-to/answer-dont-show-again "Don't show this tip anymore!"
 

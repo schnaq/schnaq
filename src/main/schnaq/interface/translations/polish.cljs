@@ -78,9 +78,9 @@
 
    ;; how-to
    :how-to.schnaq/title "Jak używać schnaq?"
-   :how-to.schnaq/body "Podziel się swoją opinią! Wprowadź go w polu wprowadzania danych, a pojawi się on na liście wpłat. Uczestnicy mogą na nią reagować i odpowiadać. Mapa myśli jest generowana automatycznie i aktualizuje się wraz z każdym nowym postem. Jeśli chcesz przejść do jakiegoś postu, po prostu kliknij na niego."
+   :how-to.schnaq/body "Podziel się swoim pytaniem! Wprowadź go w polu wprowadzania danych, a pojawi się on na liście postów. Możesz zaznaczać pytania jako istotne i odpowiadać na nie. Mapa myśli jest generowana automatycznie i aktualizuje się wraz z każdym nowym postem."
    :how-to.pro-con/title "Czy jesteś za, czy przeciw?"
-   :how-to.pro-con/body "Podziel się z innymi swoją opinią na temat bieżącego postu. Klikając na nasz przycisk za/przeciw obok pola wprowadzania danych, możesz zmienić swoje stanowisko. Można też podać kilka argumentów za lub przeciw. Argumenty \"za\" są oznaczone kolorem niebieskim, a \"przeciw\" kolorem pomarańczowym."
+   :how-to.pro-con/body "Przekaż innym swoje podstawowe stanowisko na temat aktualnej kwestii. Możesz zmienić swoje stanowisko, klikając na przycisk \"za\" lub \"przeciw\" obok pola wprowadzania danych. Można też podać kilka argumentów za lub przeciw. Argumenty \"za\" są oznaczone kolorem niebieskim, a \"przeciw\" kolorem pomarańczowym."
    :how-to/question-dont-show-again "Rozumiesz?"
    :how-to/answer-dont-show-again "Nie wyświetlać w przyszłości!"
    :how-to/brt "Powrót do schnaq"
