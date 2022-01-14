@@ -4,7 +4,6 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.config.shared :as shared-config]
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
