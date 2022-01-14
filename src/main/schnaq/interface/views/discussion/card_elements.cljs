@@ -248,9 +248,10 @@
    (get-in db [:discussion :statements :sort-method] :newest)))
 
 (defn- show-how-to []
-  (if @(rf/subscribe [:schnaq.routes/starting?])
-    [how-to-elements/quick-how-to-schnaq]
-    [how-to-elements/quick-how-to-pro-con]))
+  [:div.py-5
+   (if @(rf/subscribe [:schnaq.routes/starting?])
+     [how-to-elements/quick-how-to-schnaq]
+     [how-to-elements/quick-how-to-pro-con])])
 
 (def throttled-in-schnaq-search
   (gfun/throttle
