@@ -110,13 +110,13 @@
 
    :startpage.feature-box.know-how/title "Selbsterklärend"
    :startpage.feature-box.know-how/body "Schnaq braucht keine Erklärung und kann sofort anonym und ohne Registrierung benutzt werden."
-   :startpage.feature-box.know-how/img-alt "Das Maskottchen von schnaq zeigt Features"
+   :startpage.feature-box.know-how/img-alt "schnaqqi zeigt Features"
    :startpage.feature-box.discussion/title "Spare Zeit"
    :startpage.feature-box.discussion/body "Beantworte häufige Fragen nur einmal und lass' schnaq den Rest erledigen!"
-   :startpage.feature-box.discussio/img-alt "Das Maskottchen fliegt auf einer Rakete"
+   :startpage.feature-box.discussio/img-alt "schnaqqi fliegt auf einer Rakete"
    :startpage.feature-box.learnings/title "Zeige Expertise"
    :startpage.feature-box.learnings/body "Teile dein Wissen mit der Welt, indem du deine Wissenskarten veröffentlichst."
-   :startpage.feature-box.learnings/img-alt "Das Maskottchen hat eine Glühbirne über dem Kopf"
+   :startpage.feature-box.learnings/img-alt "schnaqqi hat eine Glühbirne über dem Kopf"
 
    :startpage.early-adopter/title "Neugierig geworden?"
    :startpage.early-adopter/body "Probiere den \"Frei für Immer\" Plan."

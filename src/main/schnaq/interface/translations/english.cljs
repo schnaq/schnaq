@@ -114,10 +114,10 @@
    :startpage.feature-box.know-how/img-alt "The mascot of schnaq shows the features"
    :startpage.feature-box.discussion/title "Save Time"
    :startpage.feature-box.discussion/body "Answer common questions only once and let schnaq do the rest!"
-   :startpage.feature-box.discussio/img-alt "Mascoot riding a rocket"
+   :startpage.feature-box.discussio/img-alt "schnaqqi riding a rocket"
    :startpage.feature-box.learnings/title "Show expertise"
    :startpage.feature-box.learnings/body "Share your knowledge with the world by sharing your knowledge cards."
-   :startpage.feature-box.learnings/img-alt "Mascot with lighbulb over its head"
+   :startpage.feature-box.learnings/img-alt "schnaqqi with lighbulb over its head"
 
    :startpage.early-adopter/title "Gotten Curious?"
    :startpage.early-adopter/body "Try the \"Free Forever\" plan."
