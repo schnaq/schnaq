@@ -765,7 +765,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :user/edit-notifications "Manage Notifications"
    :user/edit-hubs "Manage Hubs"
    :user.settings "Settings"
-   :user.keycloak-settings "Advanced Settings"
+   :user.keycloak-settings "Profile Settings"
    :user.settings/header "Manage User Data"
    :user.settings/info "User infos"
    :user.settings/notifications "Notifications"

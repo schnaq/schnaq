@@ -765,7 +765,7 @@
    :user/edit-notifications "Benachrichtigungen verwalten"
    :user/edit-hubs "Hubs verwalten"
    :user.settings "Einstellungen"
-   :user.keycloak-settings "Erweiterte Einstellungen"
+   :user.keycloak-settings "Profileinstellungen"
    :user.settings/header "Nutzer:innendaten verwalten"
    :user.settings/info "Persönliche Informationen"
    :user.settings/notifications "Benachrichtigungen"

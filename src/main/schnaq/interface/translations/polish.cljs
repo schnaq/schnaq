@@ -763,7 +763,7 @@
    :user/edit-notifications "Zarządzaj powiadomieniami"
    :user/edit-hubs "Zarządzaj węzłami"
    :user.settings "Ustawienia"
-   :user.keycloak-settings "Ustawienia zaawansowane"
+   :user.keycloak-settings "Ustawienia profilu"
    :user.settings/header "Zarządzaj danymi użytkownika"
    :user.settings/info "Dane osobowe"
    :user.settings/notifications "Powiadomienia"
