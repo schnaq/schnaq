@@ -50,9 +50,11 @@
   []
   (let [admin? @(rf/subscribe [:user/administrator?])
         beta-tester? @(rf/subscribe [:user/beta-tester?])
+        pro-user? @(rf/subscribe [:user/pro-user?])
         icon-name (cond
                     admin? :star
-                    beta-tester? :rocket)]
+                    beta-tester? :rocket
+                    (and pro-user? (not beta-tester?)) :sun)]
     (when icon-name
       [icon icon-name "pr-1"])))
 
