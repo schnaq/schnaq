@@ -48,3 +48,29 @@
     (testing "Providing a non-matching survey-id should do nothing as well"
       (is (nil? (db/vote! (:db/id option) (inc survey-id) share-hash)))
       (is (= 2 (:option/votes (fast-pull (:db/id option) '[:option/votes])))))))
+
+(deftest vote-multiple!-test
+  (let [share-hash "cat-dog-hash"
+        survey (first (filter #(= :survey.type/multiple-choice (:survey/type %))
+                              (db/surveys share-hash)))
+        survey-id (:db/id survey)
+        options (:survey/options survey)
+        option-0 (first (filter #(zero? (:option/votes %)) options))
+        option-1 (first (filter #(= 1 (:option/votes %)) options))
+        option-2 (first (filter #(= 2 (:option/votes %)) options))
+        all-option-ids [(:db/id option-0) (:db/id option-1) (:db/id option-2)]]
+    (testing "A vote always increments the number when the options and share-hash match."
+      (db/vote-multiple! all-option-ids survey-id share-hash)
+      (is (= 1 (:option/votes (fast-pull (:db/id option-0) '[:option/votes]))))
+      (is (= 2 (:option/votes (fast-pull (:db/id option-1) '[:option/votes]))))
+      (is (= 3 (:option/votes (fast-pull (:db/id option-2) '[:option/votes])))))
+    (testing "Providing a non-matching share-hash should do nothing"
+      (is (nil? (db/vote-multiple! all-option-ids survey-id "Non-matching share hash 123")))
+      (is (= 1 (:option/votes (fast-pull (:db/id option-0) '[:option/votes])))))
+    (testing "Providing a non-matching option-id should ignore the particular option"
+      (let [txs (db/vote-multiple! [(:db/id option-0) (:db/id option-1) (+ 99 (:db/id option-2))]
+                                   survey-id share-hash)]
+        (is (= 2 (count txs))))
+      (is (= 2 (:option/votes (fast-pull (:db/id option-0) '[:option/votes]))))
+      (is (= 3 (:option/votes (fast-pull (:db/id option-1) '[:option/votes]))))
+      (is (= 3 (:option/votes (fast-pull (:db/id option-2) '[:option/votes])))))))

@@ -21,6 +21,7 @@
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.discussion.logic :as logic]
+            [schnaq.interface.views.schnaq.survey :as survey]
             [schnaq.interface.views.user :as user]))
 
 (def ^:private card-fade-in-time
@@ -276,7 +277,8 @@
     [input/input-form]))
 
 (defn selection-card
-  "Dispatch the different input options, e.g. questions, survey or activation."
+  "Dispatch the different input options, e.g. questions, survey or activation.
+  The survey and activation feature are not available for free plan users."
   []
   (let [selected-option (reagent/atom :question)
         on-click #(reset! selected-option %)
@@ -284,27 +286,45 @@
         iconed-heading (fn [icon-key label]
                          [:<> [icon icon-key] " " (labels label)])]
     (fn []
-      [motion/fade-in-and-out
-       [:section.selection-card
-        [:ul.nav.nav-tabs
-         [:li.nav-item
-          [:a.nav-link {:class (active-class :question)
-                        :href "#"
-                        :on-click #(on-click :question)}
-           [iconed-heading :info-question :schnaq.input-type/question]]]
-         [:li.nav-item
-          [:a.nav-link.text-muted {:href "#"}  ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
-           [tooltip/text (labels :schnaq.input-type/coming-soon)
-            [:span [iconed-heading :chart-pie :schnaq.input-type/survey]]]]]
-         [:li.nav-item
-          [:a.nav-link.text-muted {:href "#"}
-           [tooltip/text (labels :schnaq.input-type/coming-soon)
-            [:span [iconed-heading :magic :schnaq.input-type/activation]]]]]]
-        (case @selected-option
-          :question [input-form-or-disabled-alert])]
-       card-fade-in-time])))
+      (let [survey-tab [:span [iconed-heading :chart-pie :schnaq.input-type/survey]]
+            beta-user? @(rf/subscribe [:user/beta-tester?])
+            admin? @(rf/subscribe [:schnaq.current/admin-access])
+            disabled-tooltip-key (cond
+                                   (not beta-user?) :schnaq.input-type/beta-only
+                                   (not admin?) :schnaq.input-type/not-admin
+                                   :else :schnaq.input-type/coming-soon)
+            top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
+        [motion/fade-in-and-out
+         [:section.selection-card
+          [:ul.nav.nav-tabs
+           [:li.nav-item
+            [:a.nav-link {:class (active-class :question)
+                          :href "#"
+                          :on-click #(on-click :question)}
+             [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
+           (when top-level?
+             [:<>
+              [:li.nav-item
+               (if (and beta-user? admin?)
+                 [:a.nav-link
+                  {:class (active-class :survey)
+                   :href "#"
+                   :on-click #(on-click :survey)}
+                  survey-tab]
+                 [:a.nav-link.text-muted
+                  {:href "#"}
+                  [tooltip/text (labels disabled-tooltip-key) survey-tab]])]
+              [:li.nav-item
+               ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
+               [:a.nav-link.text-muted {:href "#"}
+                [tooltip/text (labels disabled-tooltip-key)
+                 [:span [iconed-heading :magic :schnaq.input-type/activation]]]]]])]
+          (case @selected-option
+            :question [input-form-or-disabled-alert]
+            :survey [survey/survey-form])]
+         card-fade-in-time]))))
 
-(defn- prepare-statements []
+(defn- statements-list []
   (let [active-filters @(rf/subscribe [:filters/active])
         sort-method @(rf/subscribe [:discussion.statements/sort-method])
         local-votes @(rf/subscribe [:local-votes])
@@ -312,24 +332,28 @@
         shown-premises @(rf/subscribe [:discussion.statements/show])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
         filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))]
-    (for [statement filtered-conclusions]
-      (with-meta
-        [motion/fade-in-and-out
-         [answer-or-edit-card statement]
-         card-fade-in-time]
-        {:key (:db/id statement)}))))
+    [:<>                                                    ;; This is needed so this list can be called as a component
+     (for [statement filtered-conclusions]
+       (with-meta
+         [motion/fade-in-and-out
+          [answer-or-edit-card statement]
+          card-fade-in-time]
+         {:key (:db/id statement)}))]))
 
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."
   []
   (let [card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
         search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
-        statements-list (prepare-statements)]
+        statements [statements-list]
+        top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+        surveys (if top-level? [survey/survey-list] nil)]
     [:<>
      [:div.card-columns.pb-3 {:class card-column-class}
-      (conj statements-list
-            (with-meta [selection-card] {:key "list-response-options"}))]
-     (when-not (or search? (seq statements-list))
+      [selection-card]
+      surveys
+      statements]
+     (when-not (or search? (seq statements) (seq surveys))
        [call-to-share])]))
 
 (rf/reg-event-fx

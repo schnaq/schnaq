@@ -144,10 +144,10 @@
   Returns the dereffed transaction."
   [entity attribute]
   [:db/id keyword? :ret (? map?)]
-  (let [old-val (get (fast-pull entity [attribute]) attribute)
-        new-val (if old-val (inc old-val) 1)]
-    (toolbelt/try-times
-     20
+  (toolbelt/try-times
+   20
+   (let [old-val (get (fast-pull entity [attribute]) attribute)
+         new-val (if old-val (inc old-val) 1)]
      @(transact [[:db/cas entity attribute old-val new-val]]))))
 
 ;; -----------------------------------------------------------------------------

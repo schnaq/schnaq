@@ -175,3 +175,11 @@
     outline: 0;
   }
 }
+
+.percentage-bar {
+  border: 1px solid $gray-300;
+}
+
+.percentage-bar-highlight {
+  box-shadow: 0 0 5px 1px $gray-500;
+}
