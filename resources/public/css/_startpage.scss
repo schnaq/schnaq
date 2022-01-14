@@ -82,6 +82,14 @@ $header-opacity: 1;
   background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-dark.svg');
 }
 
+.bubble-background-xxl {
+  background-image: none;
+  @include media-breakpoint-up(xxl) {
+    background-image: url('https://s3.schnaq.com/schnaq-common/background/background-bubbles-large.svg');
+    background-repeat: repeat;
+  }
+}
+
 .feature-text-box {
   p,
   li,
@@ -132,6 +140,22 @@ $header-opacity: 1;
 .startpage-step-image {
   max-height: 200px;
   max-width: 300px;
+}
+
+.startpage-step-1 {
+  padding-top: 0;
+}
+
+.startpage-step-2 {
+  @include media-breakpoint-up(lg) {
+    padding-top: 5rem;
+  }
+}
+
+.startpage-step-3 {
+  @include media-breakpoint-up(lg) {
+    padding-top: 10rem;
+  }
 }
 
 .startpage-feature-box-image {

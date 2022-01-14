@@ -105,23 +105,29 @@
 
 (defn- single-step
   "A single step to success."
-  [lead heading image-key]
+  [heading image-key padding-class]
   [:div.col-12.col-lg-4
-   [:p.leading-number.text-center.m-0 lead]
+   {:class padding-class}
    [:div.text-center
     [:p.mb-1 heading]
-    [:img.img-fluid.mt-2.shadow.rounded-1.startpage-step-image
+    [:img.img-fluid.mt-2.startpage-step-image
      {:src (img-path image-key)}]]])
 
 (defn- three-steps-to-success
   "A short three step explanation how schnaq leads to success. Could be expanded with a before / after persona."
   []
   [:div.row.mt-5
-   [:div.col-12.text-center.h2 (labels :startpage.three-steps/heading)]
-   [single-step "1."
-    [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.three-steps/first)] :startpage/create-schnaq]
-   [single-step "2." (labels :startpage.three-steps/second) :startpage/share-schnaq]
-   [single-step "3." (labels :startpage.three-steps/third) :startpage/answer-schnaq]])
+   [:div.col-12.text-center.h2.mb-5 (labels :startpage.three-steps/heading)]
+   [single-step
+    [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.three-steps/first)]
+    :startpage.schnaqqifant/create-schnaq
+    "startpage-step-1"]
+   [single-step (labels :startpage.three-steps/second)
+    :startpage.schnaqqifant/share-schnaq
+    "startpage-step-2"]
+   [single-step (labels :startpage.three-steps/third)
+    :startpage.schnaqqifant/knowledge-card
+    "startpage-step-3"]])
 
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
@@ -131,14 +137,14 @@
      :page/wrapper-classes "container container-85"
      :page/vertical-header? true
      :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
-    [:<>
+    [:div.bubble-background-xxl
      [:section.container.mb-5
       [startpage-features/how-does-schnaq-work]
-      [three-steps-to-success]]
+      [testimonials/highlights]]
      [wavy/top-and-bottom
       :white
-      [:section.container.my-0
-       [testimonials/highlights]]
+      [:section.container.mb-3
+       [three-steps-to-success]]
       :white-small]
      [:section.container
       [startpage-features/feature-rows]]
