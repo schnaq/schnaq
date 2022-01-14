@@ -2,7 +2,7 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.icons :refer [icon pro-badge]]
             [schnaq.interface.components.navbar :as nav-component]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -51,12 +51,12 @@
   (let [admin? @(rf/subscribe [:user/administrator?])
         beta-tester? @(rf/subscribe [:user/beta-tester?])
         pro-user? @(rf/subscribe [:user/pro-user?])
-        icon-name (cond
-                    admin? :star
-                    beta-tester? :rocket
-                    (and pro-user? (not beta-tester?)) :sun)]
-    (when icon-name
-      [icon icon-name "pr-1"])))
+        indicator (cond
+                    admin? [icon :star]
+                    beta-tester? [icon :rocket]
+                    (and pro-user? (not beta-tester?)) [pro-badge])]
+    (when indicator
+      [:span.pr-1 indicator])))
 
 (defn admin-dropdown
   "Show Admin pages when user is authenticated and has admin role."
