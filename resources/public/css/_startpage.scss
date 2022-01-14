@@ -86,7 +86,7 @@ $header-opacity: 1;
   background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-dark.svg');
 }
 
-.bubble-background-xxl {
+.bubble-background-xl {
   background-image: none;
   @include media-breakpoint-up(xl) {
     background-image: url('https://s3.schnaq.com/schnaq-common/background/background-bubbles-large.svg');

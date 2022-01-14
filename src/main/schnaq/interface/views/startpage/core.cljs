@@ -139,7 +139,7 @@
      :page/vertical-header? true
      :page/wavy-footer? true
      :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
-    [:div.bubble-background-xxl
+    [:div.bubble-background-xl
      [:section.container.mb-5
       [startpage-features/how-does-schnaq-work]
       [testimonials/highlights]]
