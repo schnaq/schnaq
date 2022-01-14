@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
+  (:require ["react-smart-masonry" :default Masonry]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
@@ -332,24 +333,25 @@
         shown-premises @(rf/subscribe [:discussion.statements/show])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
         filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))]
-    [:<>                                                    ;; This is needed so this list can be called as a component
-     (for [statement filtered-conclusions]
-       (with-meta
-         [motion/fade-in-and-out
-          [answer-or-edit-card statement]
-          card-fade-in-time]
-         {:key (:db/id statement)}))]))
+    (for [statement filtered-conclusions]
+      (with-meta
+        [motion/fade-in-and-out
+         [answer-or-edit-card statement]
+         card-fade-in-time]
+        {:key (:db/id statement)}))))
 
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."
   []
-  (let [card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
-        search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
-        statements [statements-list]
+  (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
+        statements (statements-list)
         top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        surveys (if top-level? [survey/survey-list] nil)]
+        surveys (if top-level? (survey/survey-list) nil)]
     [:<>
-     [:div.card-columns.pb-3 {:class card-column-class}
+     [:> Masonry
+      {:columns 3
+       :autoArrange true
+       :gap 10}
       [selection-card]
       surveys
       statements]
