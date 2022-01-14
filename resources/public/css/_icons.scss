@@ -1,5 +1,11 @@
-.header-standalone-icon {
-  margin-left: auto;
-  margin-right: auto;
+.navbar-view-toggle {
+  @extend .mx-auto;
   width: 25px;
+}
+
+.icon-card {
+  @extend .panel-white;
+  @extend .text-center;
+  display: inline-block;
+  width: 3.5rem;
 }

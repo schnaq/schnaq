@@ -68,7 +68,7 @@
   [keyword? keyword? (? string?) :ret vector?]
   [:a.dropdown-item {:href href}
    [:div.text-center
-    [:img.header-standalone-icon
+    [:img.navbar-view-toggle
      {:src (img-path icon)
       :alt "graph icon"}]
     [:p.small.m-0.text-nowrap (labels label)]]])
@@ -117,7 +117,7 @@
        [navbar-components/separated-button
         [:div.dropdown-toggle
          {:class toggle-class}
-         [:img.header-standalone-icon
+         [:img.navbar-view-toggle
           {:src (img-path icon-id) :alt "graph icon"}]]
         {:id dropdown-id :data-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
