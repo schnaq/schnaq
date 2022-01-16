@@ -346,13 +346,14 @@
         search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (statements-list)
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
-        surveys (when top-level? (survey/survey-list))]
+        surveys (when top-level? (survey/survey-list))
+        access-code @(rf/subscribe [:schnaq.selected/access-code])]
     [:<>
      [:div.card-columns.pb-3 {:class card-column-class}
       [selection-card]
       surveys
       statements]
-     (when-not (or search? (seq statements) (seq surveys))
+     (when-not (or search? (seq statements) (seq surveys) (not access-code))
        [call-to-share])]))
 
 (rf/reg-event-fx
