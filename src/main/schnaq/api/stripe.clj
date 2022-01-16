@@ -3,13 +3,15 @@
             [ring.util.http-response :refer [ok forbidden not-found bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
+            [muuntaja.core :as m]
             [schnaq.database.user :as user-db]
             [taoensso.timbre :as log])
   (:import [com.stripe Stripe]
            [com.stripe.exception InvalidRequestException SignatureVerificationException]
-           [com.stripe.model Price]
+           [com.stripe.model Price Subscription]
            [com.stripe.model.checkout Session]
-           [com.stripe.net Webhook]))
+           [com.stripe.net Webhook]
+           [com.stripe.param SubscriptionUpdateParams]))
 
 (def ^:private error-article-not-found
   (at/build-error-body :article/not-found "Article could not be found."))
@@ -109,18 +111,45 @@
         (handler request)
         (verification-failed error message)))))
 
+(>defn- cancel-subscription
+  "Toggle subscription. If `toggle` is true, the subscription ends at the next 
+  payment period. If it is false, the cancelled subscription is re-activated."
+  [keycloak-id cancel?]
+  [:user.registered/keycloak-id boolean? :ret any?]
+  (let [subscription (Subscription/retrieve
+                      "sub_1KHQnuFrKCGqvoMoahtQ3VD6"
+                      #_(:user.registered.subscription/stripe-id
+                         (user-db/private-user-by-keycloak-id keycloak-id)))
+        parameters (-> (SubscriptionUpdateParams/builder)
+                       (.setCancelAtPeriodEnd cancel?)
+                       (.build))]
+    (def foo (.update subscription parameters))))
+
 ;; -----------------------------------------------------------------------------
 
 (defn- webhook
   "Handle incoming stripe requests. This function receives all events from 
   stripe and dispatches them further."
   [{:keys [body-params] :as request}]
-  (def r request)
   (log/info "Event type:" (:type body-params))
   (stripe-event body-params)
   (ok {:message "Always return 200 to stripe."}))
 
+(defn- cancel-subscription2
+  "Cancel a user's subscription"
+  [{:keys [identity]}])
+
 (comment
+
+  (cancel-subscription "foo" true)
+
+  (m/decode "application/json" foo)
+
+  (.-status foo)
+  (.getStatus foo)
+
+  (.build (.setCancelAtPeriodEnd (SubscriptionUpdateParams/builder) true))
+
   (reset! events {})
   @events
   (keys @events)
@@ -130,6 +159,7 @@
   nil)
 
 ;; -----------------------------------------------------------------------------
+
 
 (def stripe-routes
   [["/stripe" {:swagger {:tags ["subscription" "stripe"]}}
