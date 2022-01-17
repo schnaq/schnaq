@@ -1,14 +1,15 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
+  (:require ["react-smart-masonry" :default Masonry]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.config.shared :as shared-config]
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.schnaq :as sc]
+            [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -262,7 +263,7 @@
         keyfn (case sort-method
                 :newest :statement/created-at
                 :popular #(logic/calculate-votes % local-votes))
-        own-statements (filter selection-function statements)
+        own-statements (sort-by keyfn > (filter selection-function statements))
         other-statements (sort-by keyfn > (remove selection-function statements))]
     (if (= "Anonymous" username)
       (sort-by keyfn > statements)
@@ -342,14 +343,17 @@
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."
   []
-  (let [card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
-        search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
+  (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (statements-list)
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
         surveys (when top-level? (survey/survey-list))
         access-code @(rf/subscribe [:schnaq.selected/access-code])]
     [:<>
-     [:div.card-columns.pb-3 {:class card-column-class}
+     [:> Masonry
+      {:breakpoints config/breakpoints
+       :columns {:xs 1 :md 2 :xxl 3 :qhd 4}
+       :autoArrange true
+       :gap 10}
       [selection-card]
       surveys
       statements]
