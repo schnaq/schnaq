@@ -31,9 +31,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-              {:type (if single-choice? "radio" "checkbox")
-               :name :option-choice
-               :value id}
+             {:type (if single-choice? "radio" "checkbox")
+              :name :option-choice
+              :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -53,6 +53,7 @@
   "Displays all surveys of the current schnaq."
   []
   (let [surveys @(rf/subscribe [:schnaq/surveys])]
+     ;; This doall is needed, for the reactive deref inside to work
     (doall
      (for [survey surveys]
        (let [total-value (apply + (map :option/votes (:survey/options survey)))

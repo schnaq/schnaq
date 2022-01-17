@@ -79,9 +79,9 @@
 
    ;; how-to
    :how-to.schnaq/title "Wie schnaqqe ich?"
-   :how-to.schnaq/body "Teile deine Meinung! Trage sie in das Eingabefeld ein und sie erscheint in der Liste an Beiträgen. Teilnehmer:innen können drauf reagieren und antworten. Die Mindmap wird automatisch generiert und aktualisiert sich mit jedem neuen Beitrag. Wenn du zu einem Beitrag springen möchtest, klicke ihn einfach an."
+   :how-to.schnaq/body "Teile deine Frage! Trage sie in das Eingabefeld ein und sie erscheint in der Liste an Beiträgen. Du kannst Fragen als relevant markieren und beantworten. Die Mindmap wird automatisch generiert und aktualisiert sich mit jedem neuen Beitrag."
    :how-to.pro-con/title "Bist du dafür oder dagegen?"
-   :how-to.pro-con/body "Teile den Anderen deine Grundhaltung zum aktuellen Beitrag mit. Mit einem Klick auf unseren Dafür/Dagegen Knopf beim Eingabefeld änderst du deine Haltung. Du kannst auch mehrere Argumente dafür oder dagegen nennen. Pro-Argumente werden Blau eingefärbt, Kontra-Argumente Orange."
+   :how-to.pro-con/body "Teile den Anderen deine Grundhaltung zur aktuellen Frage mit. Mit einem Klick auf unseren Dafür/Dagegen Knopf beim Eingabefeld änderst du deine Haltung. Du kannst auch mehrere Argumente dafür oder dagegen nennen. Pro-Argumente werden Blau eingefärbt, Kontra-Argumente Orange."
    :how-to/question-dont-show-again "Verstanden?"
    :how-to/answer-dont-show-again "In Zukunft nicht mehr anzeigen!"
 
@@ -108,13 +108,15 @@
    :startpage.information.meetings/title "Hybrides Fragenstellen"
    :startpage.information.meetings/body "Erreiche durch schnaq auch die Menschen, die nicht vor Ort sein können. Alle können eingebunden und die Fragen anonym gestellt werden. Mit intelligentem Q&A kannst du sogar online up-to-date bleiben!"
 
-   :startpage.feature-box/heading "Deine Vorteile"
-   :startpage.feature-box.know-how/title "Keine Erklärung"
-   :startpage.feature-box.know-how/body "Schnaq ist so gestaltet, dass alle deine Teilnehmer:innen keine Erklärung benötigen und sofort anonym und ohne Registrierung loslegen können. Egal welches Betriebssystem und welcher Browser."
+   :startpage.feature-box.know-how/title "Selbsterklärend"
+   :startpage.feature-box.know-how/body "Schnaq braucht keine Erklärung und kann sofort anonym und ohne Registrierung benutzt werden."
+   :startpage.feature-box.know-how/img-alt "schnaqqi zeigt Features"
    :startpage.feature-box.discussion/title "Spare Zeit"
-   :startpage.feature-box.discussion/body "Durch die dynamischen Q&A und die Wissenskarten musst du jede Frage nur einmal beantworten. Nimm deine Wissenskarten mit zur nächsten Veranstaltung und lasse schnaq automatisiert den Rest erledigen."
+   :startpage.feature-box.discussion/body "Beantworte häufige Fragen nur einmal und lass' schnaq den Rest erledigen!"
+   :startpage.feature-box.discussio/img-alt "schnaqqi fliegt auf einer Rakete"
    :startpage.feature-box.learnings/title "Zeige Expertise"
-   :startpage.feature-box.learnings/body "Deine Teilnehmer:innen kommen zu dir, weil du Expertise besitzt. Zeige das der Welt, indem du Wissenskarten von dir öffentlich teilst, oder sie als \"Häufig gestellte Fragen\" online stellst."
+   :startpage.feature-box.learnings/body "Teile dein Wissen mit der Welt, indem du deine Wissenskarten veröffentlichst."
+   :startpage.feature-box.learnings/img-alt "schnaqqi hat eine Glühbirne über dem Kopf"
 
    :startpage.early-adopter/title "Neugierig geworden?"
    :startpage.early-adopter/body "Probiere den \"Frei für Immer\" Plan."

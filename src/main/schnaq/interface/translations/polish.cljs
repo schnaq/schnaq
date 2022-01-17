@@ -78,9 +78,9 @@
 
    ;; how-to
    :how-to.schnaq/title "Jak używać schnaq?"
-   :how-to.schnaq/body "Podziel się swoją opinią! Wprowadź go w polu wprowadzania danych, a pojawi się on na liście wpłat. Uczestnicy mogą na nią reagować i odpowiadać. Mapa myśli jest generowana automatycznie i aktualizuje się wraz z każdym nowym postem. Jeśli chcesz przejść do jakiegoś postu, po prostu kliknij na niego."
+   :how-to.schnaq/body "Podziel się swoim pytaniem! Wprowadź go w polu wprowadzania danych, a pojawi się on na liście postów. Możesz zaznaczać pytania jako istotne i odpowiadać na nie. Mapa myśli jest generowana automatycznie i aktualizuje się wraz z każdym nowym postem."
    :how-to.pro-con/title "Czy jesteś za, czy przeciw?"
-   :how-to.pro-con/body "Podziel się z innymi swoją opinią na temat bieżącego postu. Klikając na nasz przycisk za/przeciw obok pola wprowadzania danych, możesz zmienić swoje stanowisko. Można też podać kilka argumentów za lub przeciw. Argumenty \"za\" są oznaczone kolorem niebieskim, a \"przeciw\" kolorem pomarańczowym."
+   :how-to.pro-con/body "Przekaż innym swoje podstawowe stanowisko na temat aktualnej kwestii. Możesz zmienić swoje stanowisko, klikając na przycisk \"za\" lub \"przeciw\" obok pola wprowadzania danych. Można też podać kilka argumentów za lub przeciw. Argumenty \"za\" są oznaczone kolorem niebieskim, a \"przeciw\" kolorem pomarańczowym."
    :how-to/question-dont-show-again "Rozumiesz?"
    :how-to/answer-dont-show-again "Nie wyświetlać w przyszłości!"
    :how-to/brt "Powrót do schnaq"
@@ -108,13 +108,15 @@
    :startpage.information.meetings/title "Hybrydowe przesłuchanie"
    :startpage.information.meetings/body "Dotrzyj poprzez schnaq do ludzi, którzy nie mogą tam być. Każdy może być zaangażowany, a pytania mogą być zadawane anonimowo. Dzięki inteligentnemu Q&A możesz nawet być na bieżąco online!"
 
-   :startpage.feature-box/heading "Twoje korzyści"
-   :startpage.feature-box.know-how/title "Bez wyjaśnień"
-   :startpage.feature-box.know-how/body "Schnaq jest zaprojektowany w taki sposób, że Twoi uczestnicy nie potrzebują od Ciebie żadnych wyjaśnień. Mogą wnieść swój wkład w dowolnym momencie i anonimowo, korzystając z dowolnej przeglądarki internetowej."
+   :startpage.feature-box.know-how/title "Samoobjaśniające się"
+   :startpage.feature-box.know-how/body "Schnaq nie potrzebuje wyjaśnień i może być używany natychmiast anonimowo bez rejestracji."
+   :startpage.feature-box.know-how/img-alt "maskotka schnaqa pokazuje funkcje"
    :startpage.feature-box.discussion/title "Oszczędzaj czas"
-   :startpage.feature-box.discussion/body "Dzięki dynamicznym Q&A i kartom wiedzy wystarczy, że odpowiesz na każde pytanie tylko raz. Weź wygenerowane karty i użyj ich ponownie podczas następnego wydarzenia, aby schnaq mógł automatycznie odpowiadać za Ciebie."
-   :startpage.feature-box.learnings/title "Pokaż swoje Know-How"
-   :startpage.feature-box.learnings/body "Twoi uczestnicy słuchają Cię ze względu na Twoją wiedzę ekspercką. Pokaż światu swoje know-how upubliczniając niektóre z Twoich kart wiedzy. Albo użyj wszystkich swoich odpowiedzi na pytania jako FAQ online."
+   :startpage.feature-box.discussion/body "Odpowiedz na często zadawane pytania tylko raz i pozwól schnaqowi zrobić resztę!"
+   :startpage.feature-box.discussio/img-alt "Maskotka leci na rakiecie"
+   :startpage.feature-box.learnings/title "Pokaż wiedzę specjalistyczną"
+   :startpage.feature-box.learnings/body "Podziel się swoją wiedzą ze światem, udostępniając swoje karty wiedzy."
+   :startpage.feature-box.learnings/img-alt "Maskotka ma żarówkę nad głową"
 
    :startpage.early-adopter/title "Teraz jesteś ciekaw?"
    :startpage.early-adopter/body "Wypróbuj plan \"Darmow na zawsze\""

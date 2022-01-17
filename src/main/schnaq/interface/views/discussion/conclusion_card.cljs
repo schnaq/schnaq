@@ -345,8 +345,9 @@
   []
   (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (statements-list)
-        top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        surveys (if top-level? (survey/survey-list) nil)]
+        top-level? @(rf/subscribe [:schnaq.routes/starting?])
+        surveys (when top-level? (survey/survey-list))
+        access-code @(rf/subscribe [:schnaq.selected/access-code])]
     [:<>
      [:> Masonry
       {:breakpoints config/breakpoints
@@ -356,7 +357,7 @@
       [selection-card]
       surveys
       statements]
-     (when-not (or search? (seq statements) (seq surveys))
+     (when-not (or search? (seq statements) (seq surveys) (not access-code))
        [call-to-share])]))
 
 (rf/reg-event-fx

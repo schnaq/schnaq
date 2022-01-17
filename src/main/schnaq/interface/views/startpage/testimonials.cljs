@@ -20,7 +20,7 @@
 (defn highlights
   "A few highlight-testimonials featured on the startpage."
   []
-  [:div.row.mt-5
+  [:div.row.mt-5.py-lg-5
    [:div.col-12.col-lg-6.p-2
     [:div.row
      [:div.col-4
@@ -35,7 +35,7 @@
         [:div.display-5.text-primary.mr-1.mt-n2 "\""]
         [:p.card-text.text-primary (labels :testimonials.bib/quote)]]]]]]
    [:div.col-12.col-lg-6.p-2
-    [:div.row
+    [:div.row.startpage-step-3
      [:div.col-6.my-auto.mb-lg-0.mt-lg-auto
       [:div.card-body.p-0
        [:div.d-flex.flex-row
