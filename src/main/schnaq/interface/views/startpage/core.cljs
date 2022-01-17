@@ -110,7 +110,7 @@
   [:div.col-12.col-lg-4
    {:class padding-class}
    [:div.text-center
-    [:p.mb-1 heading]
+    [:div.display-6.mb-1 heading]
     [:img.img-fluid.mt-2.startpage-step-image
      {:src (img-path image-key)}]]])
 

@@ -147,8 +147,12 @@ $header-opacity: 1;
 }
 
 .startpage-step-image {
-  max-height: 200px;
-  max-width: 300px;
+  object-fit: contain;
+  width: 100%;
+
+  @include media-breakpoint-down(md) {
+    max-width: 75%;
+  }
 }
 
 .startpage-step-1 {
