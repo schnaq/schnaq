@@ -263,7 +263,7 @@
         keyfn (case sort-method
                 :newest :statement/created-at
                 :popular #(logic/calculate-votes % local-votes))
-        own-statements (filter selection-function statements)
+        own-statements (sort-by keyfn > (filter selection-function statements))
         other-statements (sort-by keyfn > (remove selection-function statements))]
     (if (= "Anonymous" username)
       (sort-by keyfn > statements)
