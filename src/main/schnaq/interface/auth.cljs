@@ -214,7 +214,7 @@
 (rf/reg-sub
  :user/subscription
  (fn [db _]
-   (get-in db [:user :subscription])))
+   (get-in db [:user :subscription :type])))
 
 (rf/reg-sub
  :user/pro-user?

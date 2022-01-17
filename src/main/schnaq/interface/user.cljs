@@ -41,7 +41,7 @@
               (assoc-in [:user :profile-picture :display] profile-picture)
               (cond-> first-name (assoc-in [:user :names :first] first-name))
               (cond-> last-name (assoc-in [:user :names :last] last-name))
-              (cond-> subscription-type (assoc-in [:user :subscription] subscription-type))
+              (cond-> subscription-type (assoc-in [:user :subscription :type] subscription-type))
               ;; Clear secrets, they have been persisted.
               (assoc-in [:discussion :statements :creation-secrets] {})
               (assoc-in [:discussion :schnaqs :creation-secrets] {}))
