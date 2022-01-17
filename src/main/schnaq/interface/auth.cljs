@@ -214,7 +214,7 @@
 (rf/reg-sub
  :user/subscription
  (fn [db _]
-   (get-in db [:user :subscription :type])))
+   (get-in db [:user :subscription])))
 
 (rf/reg-sub
  :user/pro-user?
@@ -222,7 +222,7 @@
  :<- [:user/subscription]
  (fn [[beta-tester? subscription]]
    (or beta-tester?
-       (= :user.registered.subscription.type/pro subscription))))
+       (= :user.registered.subscription.type/pro (:type subscription)))))
 
 (rf/reg-event-db
  :keycloak.roles/extract

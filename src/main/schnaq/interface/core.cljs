@@ -14,6 +14,7 @@
             [schnaq.interface.auth]
             [schnaq.interface.components.buttons]
             [schnaq.interface.components.colors]
+            [schnaq.interface.components.common]
             [schnaq.interface.components.icons]
             [schnaq.interface.components.images]
             [schnaq.interface.components.navbar]
@@ -83,6 +84,7 @@
             [schnaq.interface.views.user]
             [schnaq.interface.views.user.edit-account]
             [schnaq.interface.views.user.settings]
+            [schnaq.interface.views.user.subscription]
             [taoensso.timbre :as log]))
 ;; NOTE: If you use subs and events in another module, you need to require it
 ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
