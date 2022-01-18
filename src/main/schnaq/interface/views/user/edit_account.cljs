@@ -13,7 +13,8 @@
             [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.image-upload :as image]
-            [schnaq.interface.views.user.settings :as settings]))
+            [schnaq.interface.views.user.settings :as settings]
+            [schnaq.interface.views.user.subscription :as user-subscription]))
 
 (defn- avatar-input [input-id]
   (let [user @(rf/subscribe [:user/current])
@@ -71,6 +72,8 @@
    (labels :user.settings/header)
    [:<>
     [change-user-info]
+    [:hr.my-5]
+    [user-subscription/stripe-management]
     [:hr.my-5]
     [hub-common/list-hubs-with-heading]]])
 
