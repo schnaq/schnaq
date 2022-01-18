@@ -94,7 +94,8 @@
      {:name :routes.user.manage/account
       :view edit-account/view
       :link-text (labels :user/edit-account)
-      :controllers [{:stop (fn [] (rf/dispatch [:user.picture/reset]))}]}]
+      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:user.subscription/status]]))
+                     :stop (fn [] (rf/dispatch [:user.picture/reset]))}]}]
     ["/notifications"
      {:name :routes.user.manage/notifications
       :view edit-notifications/view
