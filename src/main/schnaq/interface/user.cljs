@@ -29,7 +29,7 @@
 (rf/reg-event-fx
  :user.register/success
  (fn [{:keys [db]} [_ {:keys [registered-user updated-statements? updated-schnaqs?]}]]
-   (let [{:user.registered/keys [display-name first-name last-name email profile-picture visited-schnaqs]} registered-user
+   (let [{:user.registered/keys [display-name first-name last-name email profile-picture visited-schnaqs keycloak-id]} registered-user
          subscription-type (:user.registered.subscription/type registered-user)
          current-route (get-in db [:current-route :data :name])
          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
@@ -38,6 +38,7 @@
               (assoc-in [:user :names :display] display-name)
               (assoc-in [:user :email] email)
               (assoc-in [:user :id] (:db/id registered-user))
+              (assoc-in [:user :keycloak-id] keycloak-id)
               (assoc-in [:user :profile-picture :display] profile-picture)
               (cond-> first-name (assoc-in [:user :names :first] first-name))
               (cond-> last-name (assoc-in [:user :names :last] last-name))
