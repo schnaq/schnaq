@@ -87,7 +87,7 @@
 (s/def ::non-blank-string (s/and string? (complement string/blank?)))
 
 (s/def :notification/title ::non-blank-string)
-(s/def :notification/body ::non-blank-string)
+(s/def :notification/body (s/or :string? ::non-blank-string :component :re-frame/component))
 (s/def :notification/id string?)
 (s/def :notification/context #{:primary :secondary :success :danger :warning :info})
 (s/def :notification/stay-visible? boolean?)
