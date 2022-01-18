@@ -1,9 +1,9 @@
 (ns schnaq.api.stripe
-  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
+  (:require [clojure.spec.alpha :as s]
+            [com.fulcrologic.guardrails.core :refer [>defn- => ?]]
             [ring.util.http-response :refer [ok forbidden not-found bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
-            [muuntaja.core :as m]
             [schnaq.database.user :as user-db]
             [taoensso.timbre :as log])
   (:import [com.stripe Stripe]
@@ -18,11 +18,26 @@
 
 (set! (. Stripe -apiKey) config/stripe-secret-api-key)
 
+(s/def ::subscription (partial instance? Subscription))
+
+(s/def ::status #{:incomplete :incomplete_expired :trialing :active :past_due :canceled :unpaid})
+(s/def ::cancelled? boolean?)
+(s/def ::period-start nat-int?)
+(s/def ::period-start nat-int?)
+(s/def ::cancel-at nat-int?)
+(s/def ::cancelled-at nat-int?)
+(s/def ::subscription-status
+  (s/keys :req-un [::status ::cancelled? ::period-start ::period-end]
+          :opt-un [::cancel-at ::cancelled-at]))
+
+;; -----------------------------------------------------------------------------
+
+
 (>defn- build-checkout-session-parameters
   "Configure all checkout-session parameters. Adds items, defines URLs and adds
         costumer metadata to the user."
   [product-price-id keycloak-id email]
-  [:stripe/product-price-id :user.registered/keycloak-id :user.registered/email :ret map?]
+  [:stripe/product-price-id :user.registered/keycloak-id :user.registered/email => map?]
   (let [items [{"price" product-price-id
                 "quantity" 1}]]
     {"success_url" (format "%s/subscription/success" config/frontend-url)
@@ -105,61 +120,68 @@
   "Verify the signature of incoming stripe requests."
   [handler]
   (fn [request]
-    (let [verification-failed #(bad-request (at/build-error-body %1 %2))
-          {:keys [passed? error message]} (verify-signature request)]
+    (let [{:keys [passed? error message]} (verify-signature request)]
       (if passed?
         (handler request)
-        (verification-failed error message)))))
+        (bad-request (at/build-error-body error message))))))
+
+(>defn- keycloak-id->subscription
+  "Retrieve current subscription status from stripe."
+  [keycloak-id]
+  [:user.registered/keycloak-id => (? ::subscription)]
+  (try
+    (Subscription/retrieve
+     (:user.registered.subscription/stripe-id
+      (user-db/private-user-by-keycloak-id keycloak-id)))
+    (catch InvalidRequestException _e)))
 
 (>defn- cancel-subscription
-  "Toggle subscription. If `toggle` is true, the subscription ends at the next 
+  "Toggle subscription. If `cancel?` is true, the subscription ends at the next 
   payment period. If it is false, the cancelled subscription is re-activated."
   [keycloak-id cancel?]
-  [:user.registered/keycloak-id boolean? :ret any?]
-  (let [subscription (Subscription/retrieve
-                      "sub_1KHQnuFrKCGqvoMoahtQ3VD6"
-                      #_(:user.registered.subscription/stripe-id
-                         (user-db/private-user-by-keycloak-id keycloak-id)))
+  [:user.registered/keycloak-id boolean? => ::subscription]
+  (let [subscription (keycloak-id->subscription keycloak-id)
         parameters (-> (SubscriptionUpdateParams/builder)
                        (.setCancelAtPeriodEnd cancel?)
                        (.build))]
-    (def foo (.update subscription parameters))))
+    (.update subscription parameters)))
+
+(>defn- subscription->edn
+  "Take the subscription and convert interesting information to EDN."
+  [subscription]
+  [::subscription => ::subscription-status]
+  (let [cancelled? (.getCancelAtPeriodEnd subscription)]
+    (cond->
+     {:status (keyword (.getStatus subscription))
+      :cancelled? (.getCancelAtPeriodEnd subscription)
+      :period-start (.getCurrentPeriodStart subscription)
+      :period-end (.getCurrentPeriodEnd subscription)}
+      cancelled? (assoc :cancel-at (.getCancelAt subscription)
+                        :cancelled-at (.getCanceledAt subscription)))))
 
 ;; -----------------------------------------------------------------------------
 
 (defn- webhook
   "Handle incoming stripe requests. This function receives all events from 
   stripe and dispatches them further."
-  [{:keys [body-params] :as request}]
+  [{:keys [body-params]}]
   (log/info "Event type:" (:type body-params))
   (stripe-event body-params)
   (ok {:message "Always return 200 to stripe."}))
 
-(defn- cancel-subscription2
+(defn- cancel-user-subscription
   "Cancel a user's subscription"
-  [{:keys [identity]}])
+  [{:keys [body-params identity]}]
+  (ok (subscription->edn (cancel-subscription (:sub identity) (:cancel? body-params)))))
 
-(comment
-
-  (cancel-subscription "foo" true)
-
-  (m/decode "application/json" foo)
-
-  (.-status foo)
-  (.getStatus foo)
-
-  (.build (.setCancelAtPeriodEnd (SubscriptionUpdateParams/builder) true))
-
-  (reset! events {})
-  @events
-  (keys @events)
-
-  (:customer.subscription.updated @events)
-
-  nil)
+(defn- retrieve-subscription-status
+  "Return the subscription-status."
+  [{{:keys [sub]} :identity}]
+  (if-let [subscription (keycloak-id->subscription sub)]
+    (ok (subscription->edn subscription))
+    (ok)))
 
 ;; -----------------------------------------------------------------------------
-
 
 (def stripe-routes
   [["/stripe" {:swagger {:tags ["subscription" "stripe"]}}
@@ -178,7 +200,16 @@
        :responses {200 {:body {:price number?
                                :product-price-id :stripe/product-price-id}}
                    403 at/response-error-body
-                   404 at/response-error-body}}]]
+                   404 at/response-error-body}}]
+     ["/subscription"
+      ["/status" {:get retrieve-subscription-status
+                  :description (at/get-doc #'retrieve-subscription-status)
+                  :responses {200 {:body (s/or :subscription ::subscription-status
+                                               :no-subscription nil?)}}}]
+      ["/cancel" {:post cancel-user-subscription
+                  :description (at/get-doc #'cancel-user-subscription)
+                  :parameters {:body {:cancel? boolean?}}
+                  :responses {200 {:body ::subscription-status}}}]]]
     ["/webhook"
      {:post webhook
       :middleware [verify-signature-middleware]
