@@ -532,7 +532,7 @@
    [:<>
     [:p
      "schnaq GmbH" [:br]
-     "Speditionsstraße 15A" [:br]
+     "Speditionstraße 15A" [:br]
      "40221 Düsseldorf" [:br]
      "Deutschland" [:br]
      (toolbelt/obfuscate-mail "info@schnaq.com")]
