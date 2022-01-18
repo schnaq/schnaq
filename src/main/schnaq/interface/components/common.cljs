@@ -10,3 +10,8 @@
    [:div.d-flex.flex-row
     [icon :info "my-auto mr-3"]
     text]])
+
+(defn pro-badge
+  "Display a pro badge for pro users."
+  []
+  [:span.badge.badge-pill.badge-light "pro"])

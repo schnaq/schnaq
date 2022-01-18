@@ -4,7 +4,7 @@
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub faFontAwesomeFlag]]
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck
+             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
               faCog faComment faComments faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
               faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLocationArrow faLock faMagic
               faPaperPlane faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
@@ -23,6 +23,7 @@
    :camera faCamera
    :chalkboard-teacher faChalkboardTeacher
    :chart-pie faChartPie
+   :check/circle faCheckCircle
    :check/normal faCheck
    :cog faCog
    :collapse-down faAngleDown
@@ -106,8 +107,3 @@
   ([identifier classes extras]
    [:span.icon-card
     [icon identifier classes extras]]))
-
-(defn pro-badge
-  "Display a pro badge for pro users."
-  []
-  [:span.badge.badge-pill.badge-light "pro"])
