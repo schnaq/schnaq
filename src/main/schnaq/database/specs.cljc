@@ -21,12 +21,23 @@
 
 ;; Stripe
 (s/def :stripe/customer-id (s/and string? #(.startsWith % "cus_")))
-(s/def :stripe/subscription-id (s/and string? #(.startsWith % "sub_")))
+
 (s/def :stripe.price/cost number?)
 (s/def :stripe.price/id (s/and string? #(.startsWith % "price_")))
 (s/def :stripe/price
   (s/or :valid (s/keys :req-un [:stripe.price/id :stripe.price/cost])
         :request-failed :api.response/error-body))
+
+(s/def :stripe.subscription/id (s/and string? #(.startsWith % "sub_")))
+(s/def :stripe.subscription/status #{:incomplete :incomplete_expired :trialing :active :past_due :canceled :unpaid})
+(s/def :stripe.subscription/cancelled? boolean?)
+(s/def :stripe.subscription/period-start nat-int?)
+(s/def :stripe.subscription/period-start nat-int?)
+(s/def :stripe.subscription/cancel-at nat-int?)
+(s/def :stripe.subscription/cancelled-at nat-int?)
+(s/def :stripe/subscription
+  (s/keys :req-un [::status ::cancelled? ::period-start ::period-end]
+          :opt-un [::cancel-at ::cancelled-at]))
 
 ;; User
 (s/def :user/nickname string?)
@@ -45,7 +56,7 @@
 (s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)
                                               :schnaqs (s/coll-of ::discussion)))
-(s/def :user.registered.subscription/stripe-id :stripe/subscription-id)
+(s/def :user.registered.subscription/stripe-id :stripe.subscription/id)
 (s/def :user.registered.subscription/stripe-customer-id :stripe/customer-id)
 (s/def :user.registered.subscription/type #{:user.registered.subscription.type/pro})
 (s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/display-name]

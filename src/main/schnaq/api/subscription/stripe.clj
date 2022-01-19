@@ -16,18 +16,7 @@
 
 (set! (. Stripe -apiKey) config/stripe-secret-api-key)
 
-(s/def ::status #{:incomplete :incomplete_expired :trialing :active :past_due :canceled :unpaid})
-(s/def ::cancelled? boolean?)
-(s/def ::period-start nat-int?)
-(s/def ::period-start nat-int?)
-(s/def ::cancel-at nat-int?)
-(s/def ::cancelled-at nat-int?)
-(s/def :stripe/subscription-status
-  (s/keys :req-un [::status ::cancelled? ::period-start ::period-end]
-          :opt-un [::cancel-at ::cancelled-at]))
-
 ;; -----------------------------------------------------------------------------
-
 
 (>defn- build-checkout-session-parameters
   "Configure all checkout-session parameters. Adds items, defines URLs and adds
@@ -100,7 +89,7 @@
   (ok {:message "Always return 200 to stripe."}))
 
 (defn- cancel-user-subscription
-  "Cancel a user's subscription"
+  "Cancel a user's subscription."
   [{:keys [body-params identity]}]
   (ok (stripe-lib/subscription->edn (stripe-lib/cancel-subscription! (:sub identity) (:cancel? body-params)))))
 
@@ -133,12 +122,12 @@
      ["/subscription"
       ["/status" {:get retrieve-subscription-status
                   :description (at/get-doc #'retrieve-subscription-status)
-                  :responses {200 {:body (s/or :subscription ::subscription-status
+                  :responses {200 {:body (s/or :subscription :stripe/subscription
                                                :no-subscription nil?)}}}]
       ["/cancel" {:post cancel-user-subscription
                   :description (at/get-doc #'cancel-user-subscription)
                   :parameters {:body {:cancel? boolean?}}
-                  :responses {200 {:body ::subscription-status}}}]]]
+                  :responses {200 {:body :stripe/subscription}}}]]]
     ["/webhook"
      {:post webhook
       :middleware [stripe-lib/verify-signature-middleware]

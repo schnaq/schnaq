@@ -1,6 +1,7 @@
 (ns schnaq.api.toolbelt
   (:require [com.fulcrologic.guardrails.core :refer [>defn]]
-            [ring.util.http-response :refer [not-found]]))
+            [ring.util.http-response :refer [not-found]]
+            [schnaq.database.specs]))
 
 (def response-error-body
   {:body :api.response/error-body})

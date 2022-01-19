@@ -4,6 +4,7 @@
             [ring.util.http-response :refer [bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
+            [schnaq.database.specs]
             [schnaq.database.user :as user-db]
             [taoensso.timbre :as log])
   (:import [com.stripe.exception InvalidRequestException SignatureVerificationException]
@@ -11,7 +12,7 @@
            [com.stripe.net Webhook]
            [com.stripe.param SubscriptionUpdateParams]))
 
-(s/def ::subscription (partial instance? Subscription))
+(s/def ::subscription-obj (partial instance? Subscription))
 
 (>defn retrieve-price
   "Query current price via stripe's api."
@@ -35,7 +36,7 @@
 (>defn keycloak-id->subscription
   "Retrieve current subscription status from stripe."
   [keycloak-id]
-  [:user.registered/keycloak-id => (? ::subscription)]
+  [:user.registered/keycloak-id => (? ::subscription-obj)]
   (try
     (Subscription/retrieve
      (:user.registered.subscription/stripe-id
