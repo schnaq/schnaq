@@ -45,26 +45,27 @@
 (>defn subscription->edn
   "Take the subscription and convert interesting information to EDN."
   [subscription]
-  [::subscription-obj => :stripe/subscription]
-  (let [cancelled? (.getCancelAtPeriodEnd subscription)]
-    (cond->
-     {:status (keyword (.getStatus subscription))
-      :cancelled? (.getCancelAtPeriodEnd subscription)
-      :period-start (.getCurrentPeriodStart subscription)
-      :period-end (.getCurrentPeriodEnd subscription)}
-      cancelled? (assoc :cancel-at (.getCancelAt subscription)
-                        :cancelled-at (.getCanceledAt subscription)))))
+  [::subscription-obj => (? :stripe/subscription)]
+  (when subscription
+    (let [cancelled? (.getCancelAtPeriodEnd subscription)]
+      (cond->
+       {:status (keyword (.getStatus subscription))
+        :cancelled? (.getCancelAtPeriodEnd subscription)
+        :period-start (.getCurrentPeriodStart subscription)
+        :period-end (.getCurrentPeriodEnd subscription)}
+        cancelled? (assoc :cancel-at (.getCancelAt subscription)
+                          :cancelled-at (.getCanceledAt subscription))))))
 
 (>defn cancel-subscription!
   "Toggle subscription. If `cancel?` is true, the subscription ends at the next 
   payment period. If it is false, the cancelled subscription is re-activated."
   [keycloak-id cancel?]
-  [:user.registered/keycloak-id boolean? => ::subscription-obj]
-  (let [subscription (keycloak-id->subscription keycloak-id)
-        parameters (-> (SubscriptionUpdateParams/builder)
-                       (.setCancelAtPeriodEnd cancel?)
-                       (.build))]
-    (.update subscription parameters)))
+  [:user.registered/keycloak-id boolean? => (? ::subscription-obj)]
+  (when-let [subscription (keycloak-id->subscription keycloak-id)]
+    (let [parameters (-> (SubscriptionUpdateParams/builder)
+                         (.setCancelAtPeriodEnd cancel?)
+                         (.build))]
+      (.update subscription parameters))))
 
 ;; -----------------------------------------------------------------------------
 

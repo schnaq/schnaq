@@ -37,3 +37,6 @@
   (testing "Invalid prices can't be queried."
     (is (= :stripe.price/invalid-request (:error (stripe-lib/retrieve-price "price_foo"))))))
 
+(deftest keycloak-id->subscription-test
+  (is (nil? (stripe-lib/keycloak-id->subscription "foo")))
+  (is (nil? (stripe-lib/keycloak-id->subscription "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"))))

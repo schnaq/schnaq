@@ -91,7 +91,9 @@
 (defn- cancel-user-subscription
   "Cancel a user's subscription."
   [{:keys [body-params identity]}]
-  (ok (stripe-lib/subscription->edn (stripe-lib/cancel-subscription! (:sub identity) (:cancel? body-params)))))
+  (if-let [cancelled-subscription (stripe-lib/cancel-subscription! (:sub identity) (:cancel? body-params))]
+    (ok (stripe-lib/subscription->edn cancelled-subscription))
+    (bad-request (at/build-error-body :stripe.subscription/user-not-existing "The requested user does not have a subscription."))))
 
 (defn- retrieve-subscription-status
   "Return the subscription-status."
@@ -107,6 +109,7 @@
     [""
      ["/create-checkout-session"
       {:post create-checkout-session
+       :name :api.stripe/create-checkout-session
        :description (at/get-doc #'create-checkout-session)
        :parameters {:body {:price-id :stripe.price/id}}
        :responses {200 {:body {:redirect string?}}
@@ -114,24 +117,29 @@
        :middleware [:user/authenticated?]}]
      ["/price"
       {:get get-product-price
+       :name :api.stripe/get-product-price
        :description (at/get-doc #'get-product-price)
        :parameters {:query {:price-id :stripe.price/id}}
        :responses {200 {:body :stripe/price}
                    403 at/response-error-body
                    404 at/response-error-body}}]
-     ["/subscription"
-      ["/status" {:get retrieve-subscription-status
-                  :description (at/get-doc #'retrieve-subscription-status)
-                  :responses {200 {:body (s/or :subscription :stripe/subscription
-                                               :no-subscription nil?)}}}]
-      ["/cancel" {:post cancel-user-subscription
-                  :description (at/get-doc #'cancel-user-subscription)
-                  :parameters {:body {:cancel? boolean?}}
-                  :responses {200 {:body :stripe/subscription}}}]]]
+     ["/subscription" {:middleware [:user/authenticated?]}
+      ["/status"
+       {:get retrieve-subscription-status
+        :name :api.stripe/retrieve-subscription-status
+        :description (at/get-doc #'retrieve-subscription-status)
+        :responses {200 {:body (s/or :subscription :stripe/subscription
+                                     :no-subscription nil?)}}}]
+      ["/cancel"
+       {:post cancel-user-subscription
+        :name :api.stripe/cancel-user-subscription
+        :description (at/get-doc #'cancel-user-subscription)
+        :parameters {:body {:cancel? boolean?}}
+        :responses {200 {:body :stripe/subscription}}}]]]
     ["/webhook"
      {:post webhook
       :middleware [stripe-lib/verify-signature-middleware]
-      :name :stripe/webhook
+      :name :api.stripe/webhook
       :description (at/get-doc #'webhook)
       :responses {200 {:body {:message string?}}}}]]])
 
