@@ -223,22 +223,22 @@
 
 (rf/reg-event-fx
  :subscription/create-checkout-session
- (fn [{:keys [db]} [_ product-price-id]]
+ (fn [{:keys [db]} [_ price-id]]
    {:fx [(http/xhrio-request db :post "/stripe/create-checkout-session"
                              [:navigation.redirect/follow]
-                             {:product-price-id product-price-id})]}))
+                             {:price-id price-id})]}))
 
 (rf/reg-event-fx
  :pricing/get-price
- (fn [{:keys [db]} [_ product-price-id]]
+ (fn [{:keys [db]} [_ price-id]]
    {:fx [(http/xhrio-request db :get "/stripe/price"
                              [:pricing/store-price]
-                             {:product-price-id product-price-id})]}))
+                             {:price-id price-id})]}))
 
 (rf/reg-event-db
  :pricing/store-price
- (fn [db [_ {:keys [price product-price-id]}]]
-   (assoc-in db [:pricing product-price-id] price)))
+ (fn [db [_ {:keys [id cost]}]]
+   (assoc-in db [:pricing id] cost)))
 
 (rf/reg-sub
  :pricing/pro-tier

@@ -36,9 +36,9 @@
 (>defn- build-checkout-session-parameters
   "Configure all checkout-session parameters. Adds items, defines URLs and adds
         costumer metadata to the user."
-  [product-price-id keycloak-id email]
-  [:stripe/product-price-id :user.registered/keycloak-id :user.registered/email => map?]
-  (let [items [{"price" product-price-id
+  [price-id keycloak-id email]
+  [:stripe.price/id :user.registered/keycloak-id :user.registered/email => map?]
+  (let [items [{"price" price-id
                 "quantity" 1}]]
     {"success_url" (format "%s/subscription/success" config/frontend-url)
      "cancel_url" (format "%s/subscription/cancel" config/frontend-url)
@@ -53,29 +53,52 @@
   "Open stripe's checkout page with the currently selected item."
   [{:keys [identity parameters]}]
   (try
-    (let [product-price-id (get-in parameters [:body :product-price-id])
-          checkout-session-parameters (build-checkout-session-parameters product-price-id (:id identity) (:email identity))
+    (let [price-id (get-in parameters [:body :price-id])
+          checkout-session-parameters (build-checkout-session-parameters price-id (:id identity) (:email identity))
           session (Session/create checkout-session-parameters)]
       (ok {:redirect (.getUrl session)}))
     (catch InvalidRequestException _
       (bad-request error-article-not-found))))
 
+(>defn- retrieve-price [price-id]
+  [:stripe.price/id => (? :stripe/price)]
+  (try
+    (let [price (Price/retrieve price-id)]
+      (if (.getActive price)
+        {:id price-id
+         :cost (-> price .getUnitAmount (/ 100) float)}
+        (do (log/error "Queried article is not active:" price-id)
+            (at/build-error-body
+             :stripe.price/inactive
+             (format "Queried article is not active: %s" price-id)))))
+    (catch InvalidRequestException _
+      (log/error "Price could not be found:" price-id)
+      (at/build-error-body
+       :stripe.price/invalid-request
+       (format "Request could not be fulfilled. Maybe the queried price is not available: %s" price-id)))))
+
 (defn- get-product-price
   "Query a product's price by its stripe-identifier, which is a string, e.g.
   `\"price_4242424242\"`."
-  [{{{:keys [product-price-id]} :query} :parameters}]
-  (try
-    (let [article (Price/retrieve product-price-id)]
-      (if (.getActive article)
-        (ok {:price (-> article .getUnitAmount (/ 100) float)
-             :product-price-id product-price-id})
-        (forbidden (at/build-error-body :article/not-active "Article is not active."))))
-    (catch InvalidRequestException _
-      (not-found error-article-not-found))))
+  ([request]
+   (get-product-price request retrieve-price))
+  ([{{{:keys [price-id]} :query} :parameters} price-by-id]
+   (if-let [price (price-by-id price-id)]
+     (ok price)
+     (not-found error-article-not-found))))
+
+(comment
+
+  (retrieve-price "price_1K9S66FrKCGqvoMokD1SoBic")
+  (retrieve-price "price_1K9S66FrKCGqvoMokD1SoBica")
+
+  (get-product-price
+   {:parameters {:query {:price-id "foo"}}})
+
+  nil)
 
 ;; -----------------------------------------------------------------------------
 
-;; TODO: delete me
 (def events (atom {}))
 (def n2o-id "TODO: Delete me"
   "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18")
@@ -189,16 +212,15 @@
      ["/create-checkout-session"
       {:post create-checkout-session
        :description (at/get-doc #'create-checkout-session)
-       :parameters {:body {:product-price-id :stripe/product-price-id}}
+       :parameters {:body {:price-id :stripe.price/id}}
        :responses {200 {:body {:redirect string?}}
                    400 at/response-error-body}
        :middleware [:user/authenticated?]}]
      ["/price"
       {:get get-product-price
        :description (at/get-doc #'get-product-price)
-       :parameters {:query {:product-price-id :stripe/product-price-id}}
-       :responses {200 {:body {:price number?
-                               :product-price-id :stripe/product-price-id}}
+       :parameters {:query {:price-id :stripe.price/id}}
+       :responses {200 {:body :stripe/price}
                    403 at/response-error-body
                    404 at/response-error-body}}]
      ["/subscription"
