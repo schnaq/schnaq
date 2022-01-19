@@ -67,18 +67,3 @@
     (activation-increase! discussion-id)
     (db/fast-pull discussion-id patterns/activation)))
 
-(comment
-
-  "8069bddc-d02e-469b-9f22-e2193605c70e"
-
-  (new-activation! 17592186061900)
-
-  (start-activation! 17592186061900)
-
-  (activation-increase-by-share-hash! "8069bddc-d02e-469b-9f22-e2193605c70e")
-
-  (activation-by-share-hash "8069bddc-d02e-469b-9f22-e2193605c70e")
-
-  (activation-increase! 17592186061926)
-
-  (reset-activation! 17592186061926))
