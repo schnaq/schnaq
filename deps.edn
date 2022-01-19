@@ -15,7 +15,7 @@
         com.taoensso/timbre {:mvn/version "5.1.2"}
         compojure/compojure {:mvn/version "1.6.2"}
         day8.re-frame/http-fx {:mvn/version "0.2.4"}
-        expound/expound {:mvn/version "0.8.10"}
+        expound/expound {:mvn/version "0.9.0"}
         funcool/hodgepodge {:mvn/version "0.1.4"}
         http-kit/http-kit {:mvn/version "2.5.3"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
@@ -33,7 +33,7 @@
         re-frame/re-frame {:mvn/version "1.2.0"}
         reagent/reagent {:mvn/version "1.1.0"}
         ring-cors/ring-cors {:mvn/version "0.1.13"}
-        ring/ring {:mvn/version "1.9.4"}
+        ring/ring {:mvn/version "1.9.5"}
         ring/ring-mock {:mvn/version "0.4.0"}
         thheller/shadow-cljs {:mvn/version "2.16.12"}}
 
