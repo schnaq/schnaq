@@ -4,8 +4,8 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reititfe]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -124,7 +124,7 @@
    (coming-soon)
    [:div.text-center.py-4
     [:button.btn.btn-secondary
-     {:on-click #(rf/dispatch [:subscription/create-checkout-session config/stripe-product-price-id-schnaq-pro])}
+     {:on-click #(rf/dispatch [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro])}
      (labels :pricing.pro-tier/call-to-action)]]
    {:class "border-primary shadow-lg"}])
 
@@ -243,4 +243,4 @@
 (rf/reg-sub
  :pricing/pro-tier
  (fn [db _]
-   (get-in db [:pricing config/stripe-product-price-id-schnaq-pro])))
+   (get-in db [:pricing shared-config/stripe-price-id-schnaq-pro])))
