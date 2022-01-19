@@ -1,14 +1,15 @@
-(ns schnaq.api.stripe
+(ns schnaq.api.subscription.stripe
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn- => ?]]
-            [ring.util.http-response :refer [ok forbidden not-found bad-request]]
+            [ring.util.http-response :refer [ok not-found bad-request]]
+            [schnaq.api.subscription.stripe-lib :as stripe-lib]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
             [schnaq.database.user :as user-db]
             [taoensso.timbre :as log])
   (:import [com.stripe Stripe]
            [com.stripe.exception InvalidRequestException SignatureVerificationException]
-           [com.stripe.model Price Subscription]
+           [com.stripe.model Subscription]
            [com.stripe.model.checkout Session]
            [com.stripe.net Webhook]
            [com.stripe.param SubscriptionUpdateParams]))
@@ -60,37 +61,17 @@
     (catch InvalidRequestException _
       (bad-request error-article-not-found))))
 
-(>defn- retrieve-price [price-id]
-  [:stripe.price/id => (? :stripe/price)]
-  (try
-    (let [price (Price/retrieve price-id)]
-      (if (.getActive price)
-        {:id price-id
-         :cost (-> price .getUnitAmount (/ 100) float)}
-        (do (log/error "Queried article is not active:" price-id)
-            (at/build-error-body
-             :stripe.price/inactive
-             (format "Queried article is not active: %s" price-id)))))
-    (catch InvalidRequestException _
-      (log/error "Price could not be found:" price-id)
-      (at/build-error-body
-       :stripe.price/invalid-request
-       (format "Request could not be fulfilled. Maybe the queried price is not available: %s" price-id)))))
-
 (defn- get-product-price
   "Query a product's price by its stripe-identifier, which is a string, e.g.
   `\"price_4242424242\"`."
   ([request]
-   (get-product-price request retrieve-price))
+   (get-product-price request stripe-lib/retrieve-price))
   ([{{{:keys [price-id]} :query} :parameters} price-by-id]
    (if-let [price (price-by-id price-id)]
      (ok price)
      (not-found error-article-not-found))))
 
 (comment
-
-  (retrieve-price "price_1K9S66FrKCGqvoMokD1SoBic")
-  (retrieve-price "price_1K9S66FrKCGqvoMokD1SoBica")
 
   (get-product-price
    {:parameters {:query {:price-id "foo"}}})
