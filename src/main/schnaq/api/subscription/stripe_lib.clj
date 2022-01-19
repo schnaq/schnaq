@@ -4,7 +4,6 @@
             [ring.util.http-response :refer [bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
-            [schnaq.database.specs]
             [schnaq.database.user :as user-db]
             [taoensso.timbre :as log])
   (:import [com.stripe.exception InvalidRequestException SignatureVerificationException]

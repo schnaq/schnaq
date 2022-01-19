@@ -32,12 +32,13 @@
 (s/def :stripe.subscription/status #{:incomplete :incomplete_expired :trialing :active :past_due :canceled :unpaid})
 (s/def :stripe.subscription/cancelled? boolean?)
 (s/def :stripe.subscription/period-start nat-int?)
-(s/def :stripe.subscription/period-start nat-int?)
+(s/def :stripe.subscription/period-end nat-int?)
 (s/def :stripe.subscription/cancel-at nat-int?)
 (s/def :stripe.subscription/cancelled-at nat-int?)
 (s/def :stripe/subscription
-  (s/keys :req-un [::status ::cancelled? ::period-start ::period-end]
-          :opt-un [::cancel-at ::cancelled-at]))
+  (s/keys :req-un [:stripe.subscription/status :stripe.subscription/cancelled?
+                   :stripe.subscription/period-start :stripe.subscription/period-end]
+          :opt-un [:stripe.subscription/cancel-at :stripe.subscription/cancelled-at]))
 
 ;; User
 (s/def :user/nickname string?)
