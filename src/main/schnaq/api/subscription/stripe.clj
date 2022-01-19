@@ -1,6 +1,6 @@
 (ns schnaq.api.subscription.stripe
   (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn- => ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn- =>]]
             [ring.util.http-response :refer [ok not-found bad-request]]
             [schnaq.api.subscription.stripe-lib :as stripe-lib]
             [schnaq.api.toolbelt :as at]
@@ -8,18 +8,13 @@
             [schnaq.database.user :as user-db]
             [taoensso.timbre :as log])
   (:import [com.stripe Stripe]
-           [com.stripe.exception InvalidRequestException SignatureVerificationException]
-           [com.stripe.model Subscription]
-           [com.stripe.model.checkout Session]
-           [com.stripe.net Webhook]
-           [com.stripe.param SubscriptionUpdateParams]))
+           [com.stripe.exception InvalidRequestException]
+           [com.stripe.model.checkout Session]))
 
 (def ^:private error-article-not-found
   (at/build-error-body :article/not-found "Article could not be found."))
 
 (set! (. Stripe -apiKey) config/stripe-secret-api-key)
-
-(s/def ::subscription (partial instance? Subscription))
 
 (s/def ::status #{:incomplete :incomplete_expired :trialing :active :past_due :canceled :unpaid})
 (s/def ::cancelled? boolean?)
@@ -27,7 +22,7 @@
 (s/def ::period-start nat-int?)
 (s/def ::cancel-at nat-int?)
 (s/def ::cancelled-at nat-int?)
-(s/def ::subscription-status
+(s/def :stripe/subscription-status
   (s/keys :req-un [::status ::cancelled? ::period-start ::period-end]
           :opt-un [::cancel-at ::cancelled-at]))
 
@@ -71,13 +66,6 @@
      (ok price)
      (not-found error-article-not-found))))
 
-(comment
-
-  (get-product-price
-   {:parameters {:query {:price-id "foo"}}})
-
-  nil)
-
 ;; -----------------------------------------------------------------------------
 
 (def events (atom {}))
@@ -103,68 +91,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- verify-signature
-  "Verify the signature of the incoming stripe-request."
-  [request]
-  (try
-    (Webhook/constructEvent (:body request)
-                            (get-in request [:headers "stripe-signature"])
-                            config/stripe-webhook-access-key)
-    {:passed? true}
-    (catch SignatureVerificationException e
-      {:passed? false
-       :error :stripe.verification/invalid-signature
-       :message (.getMessage e)})
-    (catch Exception e
-      {:passed? false
-       :error :stripe.verification/error
-       :message (.getMessage e)})))
-
-(defn- verify-signature-middleware
-  "Verify the signature of incoming stripe requests."
-  [handler]
-  (fn [request]
-    (let [{:keys [passed? error message]} (verify-signature request)]
-      (if passed?
-        (handler request)
-        (bad-request (at/build-error-body error message))))))
-
-(>defn- keycloak-id->subscription
-  "Retrieve current subscription status from stripe."
-  [keycloak-id]
-  [:user.registered/keycloak-id => (? ::subscription)]
-  (try
-    (Subscription/retrieve
-     (:user.registered.subscription/stripe-id
-      (user-db/private-user-by-keycloak-id keycloak-id)))
-    (catch InvalidRequestException _e)))
-
-(>defn- cancel-subscription
-  "Toggle subscription. If `cancel?` is true, the subscription ends at the next 
-  payment period. If it is false, the cancelled subscription is re-activated."
-  [keycloak-id cancel?]
-  [:user.registered/keycloak-id boolean? => ::subscription]
-  (let [subscription (keycloak-id->subscription keycloak-id)
-        parameters (-> (SubscriptionUpdateParams/builder)
-                       (.setCancelAtPeriodEnd cancel?)
-                       (.build))]
-    (.update subscription parameters)))
-
-(>defn- subscription->edn
-  "Take the subscription and convert interesting information to EDN."
-  [subscription]
-  [::subscription => ::subscription-status]
-  (let [cancelled? (.getCancelAtPeriodEnd subscription)]
-    (cond->
-     {:status (keyword (.getStatus subscription))
-      :cancelled? (.getCancelAtPeriodEnd subscription)
-      :period-start (.getCurrentPeriodStart subscription)
-      :period-end (.getCurrentPeriodEnd subscription)}
-      cancelled? (assoc :cancel-at (.getCancelAt subscription)
-                        :cancelled-at (.getCanceledAt subscription)))))
-
-;; -----------------------------------------------------------------------------
-
 (defn- webhook
   "Handle incoming stripe requests. This function receives all events from 
   stripe and dispatches them further."
@@ -176,13 +102,13 @@
 (defn- cancel-user-subscription
   "Cancel a user's subscription"
   [{:keys [body-params identity]}]
-  (ok (subscription->edn (cancel-subscription (:sub identity) (:cancel? body-params)))))
+  (ok (stripe-lib/subscription->edn (stripe-lib/cancel-subscription! (:sub identity) (:cancel? body-params)))))
 
 (defn- retrieve-subscription-status
   "Return the subscription-status."
   [{{:keys [sub]} :identity}]
-  (if-let [subscription (keycloak-id->subscription sub)]
-    (ok (subscription->edn subscription))
+  (if-let [subscription (stripe-lib/keycloak-id->subscription sub)]
+    (ok (stripe-lib/subscription->edn subscription))
     (ok)))
 
 ;; -----------------------------------------------------------------------------
@@ -215,7 +141,7 @@
                   :responses {200 {:body ::subscription-status}}}]]]
     ["/webhook"
      {:post webhook
-      :middleware [verify-signature-middleware]
+      :middleware [stripe-lib/verify-signature-middleware]
       :name :stripe/webhook
       :description (at/get-doc #'webhook)
       :responses {200 {:body {:message string?}}}}]]])
