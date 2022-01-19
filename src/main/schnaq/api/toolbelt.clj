@@ -9,7 +9,7 @@
   "Builds common error responses. Provide an `error-message` and it builds a
   body for an api response."
   [error-type error-message]
-  [::error ::message :ret :api.response/error-body]
+  [:api.response/error :api.response/message :ret :api.response/error-body]
   {:error error-type
    :message error-message})
 
