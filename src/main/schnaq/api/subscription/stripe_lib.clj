@@ -45,7 +45,7 @@
 (>defn subscription->edn
   "Take the subscription and convert interesting information to EDN."
   [subscription]
-  [::subscription => :stripe/subscription-status]
+  [::subscription-obj => :stripe/subscription]
   (let [cancelled? (.getCancelAtPeriodEnd subscription)]
     (cond->
      {:status (keyword (.getStatus subscription))
@@ -59,7 +59,7 @@
   "Toggle subscription. If `cancel?` is true, the subscription ends at the next 
   payment period. If it is false, the cancelled subscription is re-activated."
   [keycloak-id cancel?]
-  [:user.registered/keycloak-id boolean? => ::subscription]
+  [:user.registered/keycloak-id boolean? => ::subscription-obj]
   (let [subscription (keycloak-id->subscription keycloak-id)
         parameters (-> (SubscriptionUpdateParams/builder)
                        (.setCancelAtPeriodEnd cancel?)

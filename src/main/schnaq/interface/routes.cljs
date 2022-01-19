@@ -238,7 +238,7 @@
      :link-text (labels :router/pricing)
      :controllers [{:start (fn []
                              (rf/dispatch [:load-preview-statements])
-                             (rf/dispatch [:pricing/get-price config/stripe-product-price-id-schnaq-pro]))}]}]
+                             (rf/dispatch [:pricing/get-price shared-config/stripe-price-id-schnaq-pro]))}]}]
    ["subscription"
     ["/success" {:name :routes.subscription/success
                  :view subscription-views/success-view}]
