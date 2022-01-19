@@ -13,10 +13,20 @@
 (s/def :db/id (s/or :transacted integer? :temporary any?))
 (s/def :db/txInstant inst?)
 
+;; API
+(s/def :api.response/error keyword?)
+(s/def :api.response/message string?)
+(s/def :api.response/error-body
+  (s/keys :req-un [:api.response/error :api.response/message]))
+
 ;; Stripe
-(s/def :stripe/product-price-id (s/and string? #(.startsWith % "price_")))
 (s/def :stripe/customer-id (s/and string? #(.startsWith % "cus_")))
 (s/def :stripe/subscription-id (s/and string? #(.startsWith % "sub_")))
+(s/def :stripe.price/cost number?)
+(s/def :stripe.price/id (s/and string? #(.startsWith % "price_")))
+(s/def :stripe/price
+  (s/or :valid (s/keys :req-un [:stripe.price/id :stripe.price/cost])
+        :request-failed :api.response/error-body))
 
 ;; User
 (s/def :user/nickname string?)

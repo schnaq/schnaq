@@ -1,21 +1,15 @@
 (ns schnaq.api.toolbelt
-  (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn]]
             [ring.util.http-response :refer [not-found]]))
 
-(s/def ::error keyword?)
-(s/def ::message string?)
-(s/def ::error-body
-  (s/keys :req-un [::error ::message]))
-
 (def response-error-body
-  {:body ::error-body})
+  {:body :api.response/error-body})
 
 (>defn build-error-body
   "Builds common error responses. Provide an `error-message` and it builds a
   body for an api response."
   [error-type error-message]
-  [::error ::message :ret ::error-body]
+  [::error ::message :ret :api.response/error-body]
   {:error error-type
    :message error-message})
 
