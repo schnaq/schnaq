@@ -128,3 +128,10 @@
    {:survey/discussion [:db/id
                        :discussion/share-hash
                        :discussion/title]}])
+
+(def activation
+  [:db/id 
+   :activation/count
+   {:activation/discussion [:db/id
+                            :discussion/share-hash
+                            :discussion/title]}])

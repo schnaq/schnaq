@@ -320,5 +320,15 @@
    {:db/ident :option/votes
     :db/valueType :db.type/long
     :db/cardinality :db.cardinality/one
-    :db/doc "The cummulative number of votes for this option. Must be 0 or positive."}])
+    :db/doc "The cummulative number of votes for this option. Must be 0 or positive."}
+
+    ;; Activation
+   {:db/ident :activation/count
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "Activation counter"}
+   {:db/ident :activation/discussion
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The discussion to which the activation belongs to."}])
 

@@ -35,6 +35,10 @@
   (s/keys :req [:db/id :survey/title :survey/type :survey/options]
           :opt [:survey/discussion]))
 
+;; Activation
+(s/def ::activation
+       (s/keys :req [:db/id :activation/count :activation/discussion]))
+
 ;; Discussions
 (s/def :discussion/meta-info
   (s/keys :req-un [:meta/all-statements :meta/authors]))
