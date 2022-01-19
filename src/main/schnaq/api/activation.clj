@@ -7,7 +7,7 @@
 
 (defn- start-activation
   "Endpoint to start an activation for a discussion.
-   If one already exists returns the existing one."
+   Only creates a new one if none exists."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:body parameters)]
     (log/info "Starting activation for " share-hash)
@@ -28,7 +28,7 @@
     (ok {:activation (activation-db/reset-activation-by-share-hash! share-hash)})))
 
 (def activation-routes
-  [["" {:swagger {:tags ["survey"]}}
+  [["" {:swagger {:tags ["activation"]}}
     ["/activation"
      ["" {:put start-activation
           :description (at/get-doc #'start-activation)
