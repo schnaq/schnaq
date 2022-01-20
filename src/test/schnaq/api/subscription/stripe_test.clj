@@ -1,7 +1,10 @@
 (ns schnaq.api.subscription.stripe-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [schnaq.api :as api]
             [schnaq.test.toolbelt :as toolbelt :refer [token-n2o-admin]]))
+
+(use-fixtures :each toolbelt/init-test-delete-db-fixture)
+(use-fixtures :once toolbelt/clean-database-fixture)
 
 (defn- request [verb route-name body-params]
   (-> {:request-method verb
