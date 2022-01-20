@@ -8,7 +8,6 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
-            [schnaq.interface.config :as config]
             [schnaq.interface.integrations.wetog.routes :as wetog-routes]
             [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.alphazulu :as az]
@@ -243,7 +242,11 @@
     ["/success" {:name :routes.subscription/success
                  :view subscription-views/success-view}]
     ["/cancel" {:name :routes.subscription/cancel
-                :view subscription-views/cancel-view}]]
+                :view subscription-views/cancel-view}]
+    ["/redirect/checkout/pro"
+     {:name :routes.subscription.redirect/checkout
+      :controllers [{:start #(rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro]])}]
+      :view subscription-views/success-view}]]
    ["privacy"
     [""
      {:name :routes/privacy

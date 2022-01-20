@@ -11,7 +11,8 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.loading :refer [spinner-icon]]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.qa.inputs :as qanda]))
+            [schnaq.interface.views.qa.inputs :as qanda]
+            [schnaq.links :as links]))
 
 (defn- label-builder
   "Extract vector from labels and drop the first element, which is always a
@@ -122,10 +123,13 @@
    :pricing.pro-tier/description
    (add-class-to-feature (concat (starter-features) (business-features)) "text-primary")
    (coming-soon)
-   [:div.text-center.py-4
-    [:button.btn.btn-secondary
-     {:on-click #(rf/dispatch [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro])}
-     (labels :pricing.pro-tier/call-to-action)]]
+   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
+     [:div.text-center.py-4
+      [:button.btn.btn-secondary
+       {:on-click #(if authenticated?
+                     (rf/dispatch [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro])
+                     (rf/dispatch [:keycloak/login (links/checkout-link)]))}
+       (labels :pricing.pro-tier/call-to-action)]])
    {:class "border-primary shadow-lg"}])
 
 (defn- enterprise-tier-card

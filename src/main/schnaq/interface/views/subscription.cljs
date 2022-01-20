@@ -1,10 +1,8 @@
 (ns schnaq.interface.views.subscription
-  (:require [schnaq.interface.components.icons :refer [icon-card]]
-            [schnaq.interface.components.videos :refer [video]]
-            [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.views.pages :as pages]
+  (:require [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.buttons :as buttons]
-            [reitit.frontend.easy :as rfe]))
+            [schnaq.interface.components.icons :refer [icon-card]]
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- next-step [icon title body button-text route-name]
   (let [href (rfe/href route-name)]
