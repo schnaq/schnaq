@@ -48,10 +48,8 @@
 (defn- get-product-price
   "Query a product's price by its stripe-identifier, which is a string, e.g.
   `\"price_4242424242\"`."
-  ([request]
-   (get-product-price request stripe-lib/retrieve-price))
-  ([{{{:keys [price-id]} :query} :parameters} price-by-id]
-   (if-let [price (price-by-id price-id)]
+  ([{{{:keys [price-id]} :query} :parameters}]
+   (if-let [price (stripe-lib/retrieve-price price-id)]
      (ok price)
      (not-found error-article-not-found))))
 

@@ -2,6 +2,7 @@
   (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [schnaq.api :as api]
             [schnaq.api.subscription.stripe :as stripe]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.user :as user-db]
             [schnaq.test-data :refer [kangaroo]]
             [schnaq.test.toolbelt :as toolbelt :refer [token-n2o-admin]]))
@@ -19,8 +20,7 @@
 
 (deftest cancel-subscription-test
   (testing "Test users have no valid subscription and can't cancel it."
-    (is (= 400 (-> (request :post :api.stripe/cancel-user-subscription {:cancel? true})
-                   :status)))))
+    (is (= 400 (:status (request :post :api.stripe/cancel-user-subscription {:cancel? true}))))))
 
 ;; -----------------------------------------------------------------------------
 ;; Testing webhook events
@@ -30,7 +30,7 @@
 
 (deftest webhook-customer-subscription-created-test
   (let [subscription-id "sub_foo"]
-    (testing "Store subscription information from sripe into the database."
+    (testing "Store subscription information from stripe into the database."
       (is (= 200 (:status (webhook {:body-params {:type "customer.subscription.created"
                                                   :data {:object {:metadata {:keycloak-id keycloak-id}
                                                                   :customer "cus_foo"
@@ -38,3 +38,18 @@
       (is (= subscription-id
              (:user.registered.subscription/stripe-id
               (user-db/private-user-by-keycloak-id keycloak-id)))))))
+
+;; -----------------------------------------------------------------------------
+
+(defn get-product-price-call [price-id]
+  (#'stripe/get-product-price {:parameters {:query {:price-id price-id}}}))
+
+(deftest get-product-price
+  (let [price-id shared-config/stripe-price-id-schnaq-pro]
+    (testing "Price retrieval"
+      (testing "is successful if article can be found."
+        (is (= price-id (get-in (get-product-price-call price-id)
+                                [:body :id]))))
+      (testing "fails if article can't be found."
+        (is (= :stripe.price/invalid-request (get-in (get-product-price-call "price_foo")
+                                                     [:body :error])))))))
