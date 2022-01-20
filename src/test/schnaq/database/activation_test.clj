@@ -9,12 +9,11 @@
 (deftest increase-activation-counter
   (let [share-hash "cat-dog-hash"]
     (testing "Test Activation creation and counter."
-      (let [activation-0 (activation-db/start-activation! share-hash)
-            activation-id (:db/id activation-0)]
+      (let [activation-0 (activation-db/start-activation! share-hash)]
         (is (not (nil? activation-0)))
         (is (zero? (:activation/count activation-0)))
         (testing "Increase Counter by 1."
-          (let [_inc-counter (activation-db/activation-increase! activation-id)
+          (let [_inc-counter (activation-db/increase-activation! share-hash)
                 activation-1 (activation-db/activation-by-share-hash share-hash)]
             (is (= (inc (:activation/count activation-0))
                    (:activation/count activation-1)))))))))
@@ -26,7 +25,7 @@
             activation-id (:db/id activation-0)
             max-inc 30]
         (doseq [x (range 1 (inc max-inc))
-                :let [_ (activation-db/activation-increase! activation-id)
+                :let [_ (activation-db/increase-activation! share-hash)
                       activation-inc (activation-db/activation-by-share-hash share-hash)]]
           (testing (str "Increase counter by: " x)
             (is (= (+ x (:activation/count activation-0))

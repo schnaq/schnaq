@@ -49,21 +49,15 @@
   "Reset activation by share hash and return activation entity"
   [share-hash]
   [:discussion/share-hash :ret ::specs/activation]
-  (let [discussion-id (:db/id (activation-by-share-hash share-hash))]
-    (reset-activation! discussion-id)
-    (db/fast-pull discussion-id patterns/activation)))
+  (let [activation-id (:db/id (activation-by-share-hash share-hash))]
+    (reset-activation! activation-id)
+    (db/fast-pull activation-id patterns/activation)))
 
-(>defn- activation-increase!
-  "Increase the activation counter"
-  [activation-id]
-  [:db/id :ret (? map?)]
-  (db/increment-number activation-id :activation/count))
-
-(>defn increase-activation-by-share-hash!
+(>defn increase-activation!
   "Increase activation by share hash and return activation entity"
   [share-hash]
   [:discussion/share-hash :ret ::specs/activation]
-  (let [discussion-id (:db/id (activation-by-share-hash share-hash))]
-    (activation-increase! discussion-id)
-    (db/fast-pull discussion-id patterns/activation)))
+  (let [activation-id (:db/id (activation-by-share-hash share-hash))]
+    (db/increment-number activation-id :activation/count)
+    (db/fast-pull activation-id patterns/activation)))
 

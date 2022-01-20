@@ -87,7 +87,7 @@
         edit-hash test-edit-hash
         wrong-edit "wrong-edit"
         _activation-0 (activation-db/start-activation! share-hash)
-        activation-1 (activation-db/increase-activation-by-share-hash! share-hash)]
+        activation-1 (activation-db/increase-activation! share-hash)]
     (testing "Test reset api."
       (is (= 1 (:activation/count activation-1)))
       (testing "Non beta user cannot reset activation."

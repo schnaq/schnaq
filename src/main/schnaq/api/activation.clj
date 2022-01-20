@@ -18,7 +18,7 @@
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:body parameters)]
     (log/info "Increase activation counter for " share-hash)
-    (ok {:activation (activation-db/increase-activation-by-share-hash! share-hash)})))
+    (ok {:activation (activation-db/increase-activation! share-hash)})))
 
 (defn- reset-activation
   "Endpoint to reset activation counter."
