@@ -25,7 +25,7 @@
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:body parameters)]
     (log/info "Reset activation counter for " share-hash)
-    (ok {:activation (activation-db/reset-activation-by-share-hash! share-hash)})))
+    (ok {:activation (activation-db/reset-activation! share-hash)})))
 
 (def activation-routes
   [["" {:swagger {:tags ["activation"]}}

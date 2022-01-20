@@ -22,7 +22,6 @@
   (let [share-hash "cat-dog-hash"]
     (testing "Test increase and reset."
       (let [activation-0 (activation-db/start-activation! share-hash)
-            activation-id (:db/id activation-0)
             max-inc 30]
         (doseq [x (range 1 (inc max-inc))
                 :let [_ (activation-db/increase-activation! share-hash)
@@ -31,6 +30,6 @@
             (is (= (+ x (:activation/count activation-0))
                    (:activation/count activation-inc)))))
         (testing "Reset counter."
-          (let [_ (activation-db/reset-activation! activation-id)
+          (let [_ (activation-db/reset-activation! share-hash)
                 activation-reset (activation-db/activation-by-share-hash share-hash)]
             (is (zero? (:activation/count activation-reset)))))))))

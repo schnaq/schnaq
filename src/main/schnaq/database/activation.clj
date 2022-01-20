@@ -39,18 +39,12 @@
     activation
     (new-activation! share-hash)))
 
-(>defn- reset-activation!
-  "Reset an activation counter to 0"
-  [activation-id]
-  [:db/id :ret any?]
-  (db/transact [[:db/add activation-id :activation/count 0]]))
-
-(>defn reset-activation-by-share-hash!
+(>defn reset-activation!
   "Reset activation by share hash and return activation entity"
   [share-hash]
   [:discussion/share-hash :ret ::specs/activation]
   (let [activation-id (:db/id (activation-by-share-hash share-hash))]
-    (reset-activation! activation-id)
+    (db/transact [[:db/add activation-id :activation/count 0]])
     (db/fast-pull activation-id patterns/activation)))
 
 (>defn increase-activation!
