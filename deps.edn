@@ -10,7 +10,7 @@
         com.datomic/datomic-pro {:mvn/version "1.0.6344"}
         com.draines/postal {:mvn/version "2.0.5"}
         com.fulcrologic/guardrails {:mvn/version "1.1.10"}
-        com.stripe/stripe-java {:mvn/version "20.95.0"}
+        com.stripe/stripe-java {:mvn/version "20.97.0"}
         com.taoensso/tempura {:mvn/version "1.2.1"}
         com.taoensso/timbre {:mvn/version "5.1.2"}
         compojure/compojure {:mvn/version "1.6.2"}
