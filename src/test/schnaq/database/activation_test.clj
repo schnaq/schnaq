@@ -13,7 +13,7 @@
         (is (not (nil? activation-0)))
         (is (zero? (:activation/count activation-0)))
         (testing "Increase Counter by 1."
-          (let [_inc-counter (activation-db/increase-activation! share-hash)
+          (let [_inc-counter (activation-db/increment-activation! share-hash)
                 activation-1 (activation-db/activation-by-share-hash share-hash)]
             (is (= (inc (:activation/count activation-0))
                    (:activation/count activation-1)))))))))
@@ -24,7 +24,7 @@
       (let [activation-0 (activation-db/start-activation! share-hash)
             max-inc 30]
         (doseq [x (range 1 (inc max-inc))
-                :let [_ (activation-db/increase-activation! share-hash)
+                :let [_ (activation-db/increment-activation! share-hash)
                       activation-inc (activation-db/activation-by-share-hash share-hash)]]
           (testing (str "Increase counter by: " x)
             (is (= (+ x (:activation/count activation-0))

@@ -46,7 +46,7 @@
     (db/transact [[:db/add activation-id :activation/count 0]])
     (db/fast-pull activation-id patterns/activation)))
 
-(>defn increase-activation!
+(>defn increment-activation!
   "Increase activation by share hash and return activation entity"
   [share-hash]
   [:discussion/share-hash :ret ::specs/activation]

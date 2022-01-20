@@ -52,7 +52,7 @@
 ;; -----------------------------------------------------------------------------
 
 (defn- increase-activation-by-share-hash [share-hash]
-  (-> {:request-method :put :uri (:path (api/route-by-name :activation/increase))
+  (-> {:request-method :put :uri (:path (api/route-by-name :activation/increment))
        :body-params {:share-hash share-hash}}
       toolbelt/add-csrf-header))
 
@@ -86,7 +86,7 @@
         edit-hash test-edit-hash
         wrong-edit "wrong-edit"
         _activation-0 (activation-db/start-activation! share-hash)
-        activation-1 (activation-db/increase-activation! share-hash)]
+        activation-1 (activation-db/increment-activation! share-hash)]
     (testing "Test reset api."
       (is (= 1 (:activation/count activation-1)))
       (testing "Non beta user cannot reset activation."

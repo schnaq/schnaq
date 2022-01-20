@@ -10,21 +10,21 @@
    Only creates a new one if none exists."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:body parameters)]
-    (log/info "Starting activation for " share-hash)
+    (log/info "Starting activation for" share-hash)
     (ok {:activation (activation-db/start-activation! share-hash)})))
 
-(defn- increase-activation-counter
+(defn- increment-activation-counter
   "Endpoint to increase activation counter by one."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:body parameters)]
-    (log/info "Increase activation counter for " share-hash)
-    (ok {:activation (activation-db/increase-activation! share-hash)})))
+    (log/info "Increase activation counter for" share-hash)
+    (ok {:activation (activation-db/increment-activation! share-hash)})))
 
 (defn- reset-activation
   "Endpoint to reset activation counter."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:body parameters)]
-    (log/info "Reset activation counter for " share-hash)
+    (log/info "Reset activation counter for" share-hash)
     (ok {:activation (activation-db/reset-activation! share-hash)})))
 
 (def activation-routes
@@ -40,9 +40,9 @@
                               :edit-hash :discussion/edit-hash}}
           :responses {200 {:body {:activation ::dto/activation}}
                       400 at/response-error-body}}]
-     ["/increase" {:put increase-activation-counter
-                   :description (at/get-doc #'increase-activation-counter)
-                   :name :activation/increase
+     ["/increment" {:put increment-activation-counter
+                   :description (at/get-doc #'increment-activation-counter)
+                   :name :activation/increment
                    :parameters {:body {:share-hash :discussion/share-hash}}
                    :responses {200 {:body {:activation ::dto/activation}}
                                400 at/response-error-body}}]
