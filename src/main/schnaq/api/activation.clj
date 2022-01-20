@@ -6,22 +6,22 @@
             [taoensso.timbre :as log]))
 
 (defn- start-activation
-  "Endpoint to start an activation for a discussion.
-   Only creates a new one if none exists."
+  "Start activation-feature for a discussion. Only creates a new one if none
+  exists."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:body parameters)]
     (log/info "Starting activation for" share-hash)
     (ok {:activation (activation-db/start-activation! share-hash)})))
 
 (defn- increment-activation-counter
-  "Endpoint to increase activation counter by one."
+  "Increment activation counter."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:body parameters)]
-    (log/info "Increase activation counter for" share-hash)
+    (log/info "Increment activation counter for" share-hash)
     (ok {:activation (activation-db/increment-activation! share-hash)})))
 
 (defn- reset-activation
-  "Endpoint to reset activation counter."
+  "Reset activation counter."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:body parameters)]
     (log/info "Reset activation counter for" share-hash)
@@ -41,11 +41,11 @@
           :responses {200 {:body {:activation ::dto/activation}}
                       400 at/response-error-body}}]
      ["/increment" {:put increment-activation-counter
-                   :description (at/get-doc #'increment-activation-counter)
-                   :name :activation/increment
-                   :parameters {:body {:share-hash :discussion/share-hash}}
-                   :responses {200 {:body {:activation ::dto/activation}}
-                               400 at/response-error-body}}]
+                    :description (at/get-doc #'increment-activation-counter)
+                    :name :activation/increment
+                    :parameters {:body {:share-hash :discussion/share-hash}}
+                    :responses {200 {:body {:activation ::dto/activation}}
+                                400 at/response-error-body}}]
      ["/reset" {:put reset-activation
                 :description (at/get-doc #'reset-activation)
                 :middleware [:user/authenticated?

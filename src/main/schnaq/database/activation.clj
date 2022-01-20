@@ -7,7 +7,7 @@
 
 (>defn- new-activation!
   "Create a new activation for a discussion. 
-   This should only be called via start-activation! to avoid duplicates."
+  This should only be called via start-activation! to avoid duplicates."
   [share-hash]
   [:discussion/share-hash :ret (? ::specs/activation)]
   (let [temp-id "new-activation"]
@@ -31,7 +31,7 @@
               share-hash patterns/activation))))
 
 (>defn start-activation!
-  "Starts a new activation if none has already been created"
+  "Starts a new activation if none has already been created."
   [share-hash]
   [:discussion/share-hash :ret (? ::specs/activation)]
   (if-let [activation (activation-by-share-hash share-hash)]
@@ -39,7 +39,7 @@
     (new-activation! share-hash)))
 
 (>defn reset-activation!
-  "Reset activation by share hash and return activation entity"
+  "Reset activation by share hash and return activation entity."
   [share-hash]
   [:discussion/share-hash :ret ::specs/activation]
   (let [activation-id (:db/id (activation-by-share-hash share-hash))]
@@ -47,7 +47,7 @@
     (db/fast-pull activation-id patterns/activation)))
 
 (>defn increment-activation!
-  "Increase activation by share hash and return activation entity"
+  "Increment activation by share hash and return activation entity."
   [share-hash]
   [:discussion/share-hash :ret ::specs/activation]
   (let [activation-id (:db/id (activation-by-share-hash share-hash))]
