@@ -59,7 +59,7 @@
   [:db/id :ret (? map?)]
   (db/increment-number activation-id :activation/count))
 
-(>defn activation-increase-by-share-hash!
+(>defn increase-activation-by-share-hash!
   "Increase activation by share hash and return activation entity"
   [share-hash]
   [:discussion/share-hash :ret ::specs/activation]
