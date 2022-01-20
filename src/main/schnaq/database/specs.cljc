@@ -227,6 +227,13 @@
 (s/def ::survey
   (s/keys :req [:survey/title :survey/options :survey/type :survey/discussion]))
 
+;; Activation
+(s/def :activation/discussion (s/or :id :db/id :discussion ::discussion))
+(s/def :activation/count nat-int?)
+(s/def ::activation (s/keys :req [:db/id
+                                  :activation/count
+                                  :activation/discussion]))
+
 ;; App-Codes
 (s/def :app/code ::non-blank-string)
 
