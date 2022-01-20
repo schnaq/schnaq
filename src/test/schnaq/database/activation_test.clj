@@ -6,7 +6,7 @@
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
 
-(deftest increase-activation-counter
+(deftest increase-activation-counter-test
   (let [share-hash "cat-dog-hash"]
     (testing "Test Activation creation and counter."
       (let [activation-0 (activation-db/start-activation! share-hash)]
@@ -18,7 +18,7 @@
             (is (= (inc (:activation/count activation-0))
                    (:activation/count activation-1)))))))))
 
-(deftest increase-and-reset-activation-counter
+(deftest increase-and-reset-activation-counter-test
   (let [share-hash "cat-dog-hash"]
     (testing "Test increase and reset."
       (let [activation-0 (activation-db/start-activation! share-hash)

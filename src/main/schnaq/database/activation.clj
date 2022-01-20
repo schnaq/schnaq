@@ -16,8 +16,7 @@
       [{:db/id temp-id
         :activation/count 0
         :activation/discussion [:discussion/share-hash share-hash]}]
-      temp-id
-      patterns/activation))))
+      temp-id patterns/activation))))
 
 (>defn activation-by-share-hash
   "Get the activation for a discussion by share-hash."

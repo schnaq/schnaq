@@ -17,49 +17,46 @@
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)))
 
-(deftest start-activation
-  (let [share-hash test-share-hash
-        edit-hash test-edit-hash
-        wrong-edit-hash "wrong-edit-hash"]
+(deftest start-activation-test
+  (let [wrong-edit-hash "wrong-edit-hash"]
     (testing "Test activation features."
       (testing "Non beta user cannot start activation."
         (is (= 403 (-> (start-activation-by-share-hash
-                        share-hash
-                        edit-hash
+                        test-share-hash
+                        test-edit-hash
                         toolbelt/token-wegi-no-beta-user)
                        api/app :status))))
       (testing "Beta user with wrong edit hash cannot start activation."
         (is (= 403 (-> (start-activation-by-share-hash
-                        share-hash
+                        test-share-hash
                         wrong-edit-hash
                         toolbelt/token-schnaqqifant-user)
                        api/app :status))))
       (testing "Admin and pro user can start activation."
         (is (= 200 (-> (start-activation-by-share-hash
-                        share-hash
-                        edit-hash
+                        test-share-hash
+                        test-edit-hash
                         toolbelt/token-n2o-admin)
                        api/app :status)))))))
 
-(deftest create-activation
-  (let [share-hash test-share-hash
-        edit-hash test-edit-hash]
-    (testing "Test Activation creation."
-      (testing "Create an Activation."
-        (is (nil? (activation-db/activation-by-share-hash share-hash)))
-        (is (= 200 (-> (start-activation-by-share-hash
-                        share-hash
-                        edit-hash
-                        toolbelt/token-n2o-admin)
-                       api/app :status)))
-        (is (not (nil? (activation-db/activation-by-share-hash share-hash))))))))
+(deftest create-activation-test
+  (testing "Create an Activation."
+    (is (nil? (activation-db/activation-by-share-hash test-share-hash)))
+    (is (= 200 (-> (start-activation-by-share-hash
+                    test-share-hash
+                    test-edit-hash
+                    toolbelt/token-n2o-admin)
+                   api/app :status)))
+    (is (not (nil? (activation-db/activation-by-share-hash test-share-hash))))))
+
+;; -----------------------------------------------------------------------------
 
 (defn- increase-activation-by-share-hash [share-hash]
   (-> {:request-method :put :uri (:path (api/route-by-name :activation/increase))
        :body-params {:share-hash share-hash}}
       toolbelt/add-csrf-header))
 
-(deftest increase-activation
+(deftest increase-activation-test
   (let [share-hash test-share-hash
         edit-hash test-edit-hash]
     (testing "Test Increase Activation."
@@ -75,6 +72,8 @@
         (let [activation-1 (activation-db/activation-by-share-hash share-hash)]
           (is (= 1 (:activation/count activation-1))))))))
 
+;; -----------------------------------------------------------------------------
+
 (defn- reset-activation-by-share-hash [share-hash edit-hash user-token]
   (-> {:request-method :put :uri (:path (api/route-by-name :activation/reset))
        :body-params {:share-hash share-hash
@@ -82,7 +81,7 @@
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)))
 
-(deftest reset-activation
+(deftest reset-activation-test
   (let [share-hash test-share-hash
         edit-hash test-edit-hash
         wrong-edit "wrong-edit"
