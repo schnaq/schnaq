@@ -22,10 +22,10 @@
       (if (.getActive price)
         {:id price-id
          :cost (-> price .getUnitAmount (/ 100) float)}
-        (do (log/error "Queried article is not active:" price-id)
+        (do (log/error "Queried price is not active:" price-id)
             (at/build-error-body
              :stripe.price/inactive
-             (format "Queried article is not active: %s" price-id)))))
+             (format "Queried price is not active: %s" price-id)))))
     (catch InvalidRequestException _
       (log/error "Price could not be found:" price-id)
       (at/build-error-body

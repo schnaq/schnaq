@@ -1,6 +1,9 @@
 (ns schnaq.api.subscription.stripe-test
   (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [schnaq.api :as api]
+            [schnaq.api.subscription.stripe :as stripe]
+            [schnaq.database.user :as user-db]
+            [schnaq.test-data :refer [kangaroo]]
             [schnaq.test.toolbelt :as toolbelt :refer [token-n2o-admin]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
@@ -11,10 +14,27 @@
        :uri (:template (api/route-by-name route-name))
        :body-params body-params}
       toolbelt/add-csrf-header
-      (toolbelt/mock-authorization-header token-n2o-admin)))
+      (toolbelt/mock-authorization-header token-n2o-admin)
+      api/app))
 
 (deftest cancel-subscription-test
   (testing "Test users have no valid subscription and can't cancel it."
     (is (= 400 (-> (request :post :api.stripe/cancel-user-subscription {:cancel? true})
-                   api/app
                    :status)))))
+
+;; -----------------------------------------------------------------------------
+;; Testing webhook events
+
+(def webhook #'stripe/webhook)
+(def keycloak-id (:user.registered/keycloak-id kangaroo))
+
+(deftest webhook-customer-subscription-created-test
+  (let [subscription-id "sub_foo"]
+    (testing "Store subscription information from sripe into the database."
+      (is (= 200 (:status (webhook {:body-params {:type "customer.subscription.created"
+                                                  :data {:object {:metadata {:keycloak-id keycloak-id}
+                                                                  :customer "cus_foo"
+                                                                  :id subscription-id}}}}))))
+      (is (= subscription-id
+             (:user.registered.subscription/stripe-id
+              (user-db/private-user-by-keycloak-id keycloak-id)))))))

@@ -265,28 +265,33 @@
     :statement/type :statement.type/attack
     :statement/discussions ["discussion/simple"]}])
 
+(def alex
+  {:db/id "user.registered/alex"
+   :user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
+   :user.registered/display-name "A. Schneider"
+   :user.registered/email "alexander@schneider.gg"
+   :user.registered/last-name "Schneider"
+   :user.registered/first-name "Alexander"
+   :user.registered/groups ["test-group"]
+   :user.registered/notification-mail-interval :notification-mail-interval/weekly
+   :user.registered/visited-schnaqs
+   [#:discussion{:share-hash "cat-dog-hash"}]})
+
+(def kangaroo
+  {:db/id "user.registered/kangaroo"
+   :user.registered/keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+   :user.registered/display-name "kangaroo"
+   :user.registered/email "k@ngar.oo"
+   :user.registered/last-name "the"
+   :user.registered/first-name "kangaroo"
+   :user.registered/groups ["test-group"]
+   :user.registered/notification-mail-interval :notification-mail-interval/daily
+   :user.registered/visited-schnaqs
+   [#:discussion{:share-hash "cat-dog-hash"}
+    #:discussion{:share-hash "simple-hash"}]})
+
 (def registered-users
-  [{:db/id "user.registered/alex"
-    :user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
-    :user.registered/display-name "A. Schneider"
-    :user.registered/email "alexander@schneider.gg"
-    :user.registered/last-name "Schneider"
-    :user.registered/first-name "Alexander"
-    :user.registered/groups ["test-group"]
-    :user.registered/notification-mail-interval :notification-mail-interval/weekly
-    :user.registered/visited-schnaqs
-    [#:discussion{:share-hash "cat-dog-hash"}]}
-   {:db/id "user.registered/kangaroo"
-    :user.registered/keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
-    :user.registered/display-name "kangaroo"
-    :user.registered/email "k@ngar.oo"
-    :user.registered/last-name "the"
-    :user.registered/first-name "kangaroo"
-    :user.registered/groups ["test-group"]
-    :user.registered/notification-mail-interval :notification-mail-interval/daily
-    :user.registered/visited-schnaqs
-    [#:discussion{:share-hash "cat-dog-hash"}
-     #:discussion{:share-hash "simple-hash"}]}])
+  [alex kangaroo])
 
 (def surveys
   [{:db/id "survey/single-choice"
