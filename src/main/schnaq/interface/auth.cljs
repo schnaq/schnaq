@@ -80,17 +80,16 @@
 
 (rf/reg-event-fx
  :keycloak/login
- (fn [{:keys [db]} [_ _]]
+ (fn [{:keys [db]} [_ redirect-uri]]
    (let [keycloak (get-in db [:user :keycloak])]
      (when keycloak
-       {:fx [[:keycloak/login-request keycloak]]}))))
+       {:fx [[:keycloak/login-request [keycloak redirect-uri]]]}))))
 
 (rf/reg-fx
  :keycloak/login-request
- (fn [keycloak]
+ (fn [[keycloak redirect-uri]]
    (-> keycloak
-       (.login)
-       (.then #(rf/dispatch [:keycloak/load-user-profile]))
+       (.login #js {:redirectUri redirect-uri})
        (.catch #(rf/dispatch [:modal {:show? true :child [request-login-modal]}])))))
 
 ;; -----------------------------------------------------------------------------
