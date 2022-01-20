@@ -1,8 +1,8 @@
 (ns schnaq.api.activation
   (:require [ring.util.http-response :refer [ok]]
-            [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.activation :as activation-db]
+            [schnaq.database.specs :as specs]
             [taoensso.timbre :as log]))
 
 (defn- start-activation
@@ -35,13 +35,13 @@
           :name :activation/start
           :parameters {:body {:share-hash :discussion/share-hash
                               :edit-hash :discussion/edit-hash}}
-          :responses {200 {:body {:activation ::dto/activation}}
+          :responses {200 {:body {:activation ::specs/activation}}
                       400 at/response-error-body}}]
      ["/increment" {:put increment-activation-counter
                     :description (at/get-doc #'increment-activation-counter)
                     :name :activation/increment
                     :parameters {:body {:share-hash :discussion/share-hash}}
-                    :responses {200 {:body {:activation ::dto/activation}}
+                    :responses {200 {:body {:activation ::specs/activation}}
                                 400 at/response-error-body}}]
      ["/reset" {:put reset-activation
                 :description (at/get-doc #'reset-activation)
@@ -51,5 +51,5 @@
                 :name :activation/reset
                 :parameters {:body {:share-hash :discussion/share-hash
                                     :edit-hash :discussion/edit-hash}}
-                :responses {200 {:body {:activation ::dto/activation}}
+                :responses {200 {:body {:activation ::specs/activation}}
                             400 at/response-error-body}}]]]])
