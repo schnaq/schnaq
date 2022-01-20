@@ -16,6 +16,7 @@
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
             [ring.middleware.cors :refer [wrap-cors]]
+            [schnaq.api.activation :refer [activation-routes]]
             [schnaq.api.analytics :refer [analytics-routes]]
             [schnaq.api.common :refer [other-routes]]
             [schnaq.api.debug :refer [debug-routes]]
@@ -87,7 +88,8 @@
 
 (def router
   (ring/router
-   [analytics-routes
+   [activation-routes
+    analytics-routes
     debug-routes
     discussion-routes
     email-routes

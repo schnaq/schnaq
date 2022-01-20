@@ -38,6 +38,18 @@
    :realm keycloak-realm
    :clientId keycloak-client})
 
+(def breakpoints
+  "Mirrors the breakpoints used in the bootsrap css."
+  {:xs 0,
+   :sm 576,
+   :md 768,
+   :lg 992,
+   :xl 1200,
+   :xxl 1439,
+   :xxxl 1600,
+   :hd 1900,
+   :qhd 2560})
+
 ;; -----------------------------------------------------------------------------
 
 (def max-allowed-profile-picture-size

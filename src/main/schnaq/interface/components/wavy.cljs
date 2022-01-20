@@ -3,9 +3,10 @@
 (defn top-and-bottom
   "Adds a wave-bottom and a wave-top to the component.
   Valid classes: see `_startpage.scss`"
-  [class component]
+  [class component wave-class]
   (let [str-class (name class)
-        wave-bottom-class (str "wave-bottom-" str-class)]
+        str-wave-class (if wave-class (name wave-class) str-class)
+        wave-bottom-class (str "wave-bottom-" str-wave-class)]
     [:<>
      [:div {:class wave-bottom-class}]
      [:div {:class (str "py-1 bg-" str-class)} component]

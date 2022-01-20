@@ -136,7 +136,7 @@
 
 (>defn with-nav-and-header
   "Default page with header and curly wave."
-  [{:page/keys [title heading classes] :as options} body]
+  [{:page/keys [title heading classes wavy-footer?] :as options} body]
   [::page-options (? :re-frame/component) :ret :re-frame/component]
   (common/set-website-title! (or title heading))
   [scheduler/middleware
@@ -146,7 +146,9 @@
      [:div.masthead-layered
       [navbar-pages/navbar-transparent (:page/wrapper-classes options)]
       [base/header options]]
-     body]]])
+     body
+     (when wavy-footer?
+       [:div.wave-bottom-typography])]]])
 
 (>defn with-nav
   "Default page with header and curly wave."

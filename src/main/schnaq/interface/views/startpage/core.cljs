@@ -87,7 +87,8 @@
      [:span.text-center.text-white
       [:h2 (labels :startpage.faq/title)]
       [:p.lead (labels :startpage.faq/subtitle)]]
-     [qanda/question-field-and-search-results :dark]]]])
+     [qanda/question-field-and-search-results :dark]]
+    :primary-and-secondary]])
 
 (defn- team-and-supporters
   "Give a last personal touch."
@@ -105,23 +106,29 @@
 
 (defn- single-step
   "A single step to success."
-  [lead heading image-key]
+  [heading image-key padding-class]
   [:div.col-12.col-lg-4
-   [:p.leading-number.text-center.m-0 lead]
+   {:class padding-class}
    [:div.text-center
-    [:p.mb-1 heading]
-    [:img.img-fluid.mt-2.shadow.rounded-1.startpage-step-image
+    [:div.display-6.mb-1 heading]
+    [:img.img-fluid.mt-2.startpage-step-image
      {:src (img-path image-key)}]]])
 
 (defn- three-steps-to-success
   "A short three step explanation how schnaq leads to success. Could be expanded with a before / after persona."
   []
-  [:div.row.mt-5
-   [:div.col-12.text-center.h2 (labels :startpage.three-steps/heading)]
-   [single-step "1."
-    [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.three-steps/first)] :startpage/create-schnaq]
-   [single-step "2." (labels :startpage.three-steps/second) :startpage/share-schnaq]
-   [single-step "3." (labels :startpage.three-steps/third) :startpage/answer-schnaq]])
+  [:div.row
+   [:div.col-12.text-center.h2.mb-5 (labels :startpage.three-steps/heading)]
+   [single-step
+    [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.three-steps/first)]
+    :startpage.schnaqqifant/create-schnaq
+    "startpage-step-1"]
+   [single-step (labels :startpage.three-steps/second)
+    :startpage.schnaqqifant/share-schnaq
+    "startpage-step-2"]
+   [single-step (labels :startpage.three-steps/third)
+    :startpage.schnaqqifant/knowledge-card
+    "startpage-step-3"]])
 
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
@@ -130,12 +137,18 @@
     {:page/title (labels :startpage/heading)
      :page/wrapper-classes "container container-85"
      :page/vertical-header? true
+     :page/wavy-footer? true
      :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
-    [:<>
-     [:section.container
+    [:div.bubble-background-xl
+     [:section.container.mb-5
       [startpage-features/how-does-schnaq-work]
-      [testimonials/highlights]
-      [three-steps-to-success]
+      [testimonials/highlights]]
+     [wavy/top-and-bottom
+      :white
+      [:section.container
+       [three-steps-to-success]]
+      :white-and-primary]
+     [:div.container.py-5
       [startpage-features/feature-rows]]
      [faq]
      [:section.container
