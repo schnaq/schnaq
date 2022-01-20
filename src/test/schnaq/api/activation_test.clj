@@ -9,8 +9,6 @@
 
 (def test-share-hash "cat-dog-hash")
 (def test-edit-hash "cat-dog-edit-hash")
-;; (def test-share-hash "8069bddc-d02e-469b-9f22-e2193605c70e")
-;; (def test-edit-hash "d115882c-842e-487f-9441-66b3a3cb75c4")
 
 (defn- start-activation-by-share-hash [share-hash edit-hash user-token]
   (-> {:request-method :put :uri (:path (api/route-by-name :activation/start))
@@ -89,7 +87,7 @@
         edit-hash test-edit-hash
         wrong-edit "wrong-edit"
         _activation-0 (activation-db/start-activation! share-hash)
-        activation-1 (activation-db/activation-increase-by-share-hash! share-hash)]
+        activation-1 (activation-db/increase-activation-by-share-hash! share-hash)]
     (testing "Test reset api."
       (is (= 1 (:activation/count activation-1)))
       (testing "Non beta user cannot reset activation."

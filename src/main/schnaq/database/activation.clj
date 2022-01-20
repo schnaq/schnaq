@@ -40,7 +40,7 @@
     (new-activation! share-hash)))
 
 (>defn- reset-activation!
-  "Delete an activation entity"
+  "Reset an activation counter to 0"
   [activation-id]
   [:db/id :ret any?]
   (db/transact [[:db/add activation-id :activation/count 0]]))
