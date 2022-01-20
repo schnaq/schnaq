@@ -31,11 +31,11 @@
   "Placeholder to give feedback to user, that data is currently on its way."
   []
   [motion/fade-in-and-out
-   [:section.alert.alert-primary.text-center.pt-4
+   [:section.text-center.pt-4
     [spinner-icon]
     [:p.lead.pt-3 (labels :loading.placeholder/lead)]
     [motion/fade-in-and-out
-     [:p.text-secondary
+     [:p.text-info
       "🤔 "
       (labels :loading.placeholder/takes-too-long)]
      5]]])

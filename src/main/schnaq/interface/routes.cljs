@@ -246,7 +246,7 @@
     ["/redirect/checkout/pro"
      {:name :routes.subscription.redirect/checkout
       :controllers [{:start #(rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro]])}]
-      :view subscription-views/success-view}]]
+      :view pages/loading-page}]]
    ["privacy"
     [""
      {:name :routes/privacy

@@ -1,6 +1,5 @@
 (ns schnaq.links
-  #?(:clj  (:require [clojure.spec.alpha :as s]
-                     [com.fulcrologic.guardrails.core :refer [>defn]]
+  #?(:clj  (:require [com.fulcrologic.guardrails.core :refer [>defn]]
                      [schnaq.config :as config]
                      [schnaq.database.specs :as specs])
      :cljs (:require [com.fulcrologic.guardrails.core :refer [>defn]]
