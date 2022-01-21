@@ -76,6 +76,8 @@
 ;; -----------------------------------------------------------------------------
 ;; Stripe
 
+#?(:cljs (goog-define stripe-enabled? true))
+
 ;; Price of Pro Tier
 #?(:clj  (def stripe-price-id-schnaq-pro
            (or (System/getenv "STRIPE_PRICE_PRO_ID") "price_1K9S66FrKCGqvoMokD1SoBic"))

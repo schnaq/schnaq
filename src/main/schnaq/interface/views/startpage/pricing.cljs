@@ -3,8 +3,9 @@
             [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as reititfe]
+            [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -112,7 +113,7 @@
    :pricing.free-tier/description
    (add-class-to-feature (concat (starter-features) [(labels :pricing.free-tier/for-free)]) "text-primary")
    nil
-   [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (reititfe/href :routes.schnaq/create)]])
+   [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (rfe/href :routes.schnaq/create)]])
 
 (defn- pro-tier-card
   "Display the pro tier card."
@@ -123,13 +124,20 @@
    :pricing.pro-tier/description
    (add-class-to-feature (concat (starter-features) (business-features)) "text-primary")
    (coming-soon)
-   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
-     [:div.text-center.py-4
-      [:button.btn.btn-secondary
-       {:on-click #(if authenticated?
-                     (rf/dispatch [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro])
-                     (rf/dispatch [:keycloak/login (links/checkout-link)]))}
-       (labels :pricing.pro-tier/call-to-action)]])
+   (let [authenticated? @(rf/subscribe [:user/authenticated?])
+         pro-user? @(rf/subscribe [:user/pro-user?])]
+     (if pro-user?
+       [:div.alert.alert-info.text-center
+        [:p "Du bist bereits Pro-User. Möchtest du zu deinen Abonnement-Einstellungen?"]
+        [buttons/anchor "Zu den Einstellungen" (rfe/href :routes.user.manage/account) "btn-outline-dark btn-sm"]]
+       [:div.text-center.py-4
+        [buttons/button
+         (labels :pricing.pro-tier/call-to-action)
+         #(if authenticated?
+            (rf/dispatch [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro])
+            (rf/dispatch [:keycloak/login (links/checkout-link)]))
+         "btn-secondary"
+         (when-not shared-config/stripe-enabled? {:disabled true})]]))
    {:class "border-primary shadow-lg"}])
 
 (defn- enterprise-tier-card
