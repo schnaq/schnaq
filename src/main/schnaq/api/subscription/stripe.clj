@@ -98,7 +98,7 @@
   [{{:keys [sub]} :identity}]
   (if-let [subscription (stripe-lib/keycloak-id->subscription sub)]
     (ok (stripe-lib/subscription->edn subscription))
-    (ok)))
+    (ok {})))
 
 ;; -----------------------------------------------------------------------------
 
@@ -127,7 +127,7 @@
         :name :api.stripe/retrieve-subscription-status
         :description (at/get-doc #'retrieve-subscription-status)
         :responses {200 {:body (s/or :subscription :stripe/subscription
-                                     :no-subscription nil?)}}}]
+                                     :no-subscription empty?)}}}]
       ["/cancel"
        {:post cancel-user-subscription
         :name :api.stripe/cancel-user-subscription
