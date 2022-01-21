@@ -50,7 +50,7 @@
     (let [cancelled? (.getCancelAtPeriodEnd subscription)]
       (cond->
        {:status (keyword (.getStatus subscription))
-        :cancelled? (.getCancelAtPeriodEnd subscription)
+        :cancelled? cancelled?
         :period-start (.getCurrentPeriodStart subscription)
         :period-end (.getCurrentPeriodEnd subscription)}
         cancelled? (assoc :cancel-at (.getCancelAt subscription)

@@ -794,11 +794,11 @@ Now we write down questions and discuss them and can still understand what we ha
    :subscription.cancel/button-hint "Here you can cancel your subscription at the next possible time. You can still use all Pro functions until the end of the period. You can reactivate your subscription here at any time."
    :subscription.cancel/confirmation "Do you really want to cancel your subscription at the end of the payment period?"
    :subscription.cancel.error/title "Problem cancelling"
-   :subscription.cancel.error/body "There was an error cancelling your subscription. Please contact us so we can help you as soon as possible."
+   :subscription.cancel.error/body "There was an error cancelling your subscription. Please contact us at hello@schnaq.com so we can help you as soon as possible."
    :subscription.cancel.success/title "Subscription cancelled successfully"
-   :subscription.cancel.success/body "Sorry you no longer want to use the Pro features of schnaq. You can still change your mind until the end of the current payment period."
+   :subscription.cancel.success/body "We are sorry that you no longer want to use the Pro features of schnaq. You can still change your mind until the end of the current payment period. We would love to know how we could do better at hello@schnaq.com"
    :subscription.reactivate/button "Reactivate Subscription"
-   :subscription.reactivate/button-hint "Do you want to reactivate your subscription? It's a shame you want to end it. You still have access to Pro features until the end of the term."
+   :subscription.reactivate/button-hint "Do you want to reactivate your subscription? We are sorry to hear that schnaq is not to your liking. Help us understand how we can do better with a message to hello@schnaq.com. You still have access to Pro features until the end of the term."
    :subscription.reactivate/confirmation "Would you like to reactivate your subscription?"
    :subscription.reactivated.success/title "Subscription reactivated"
    :subscription.reactivated.success/body "Welcome back! Glad you changed your mind."
@@ -820,7 +820,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :subscription.page.success.next-2/button "Go to settings"
    :subscription.page.cancel/title "Too bad you didn't complete the process"
    :subscription.page.cancel/lead "You're missing out on the opportunity to realise the full potential from your interactions with your subscribers."
-   :subscription.page.cancel/body "In the free plan, all basic features are still available to you. We would be very happy to hear from you why you do not want to use the Pro functions. Feel free to contact us 👍 Are you missing a function? Let us know - we'll find a solution!"
+   :subscription.page.cancel/body "In the free plan, all basic features are still available to you. We would be very happy to hear from you why you do not want to use the Pro functions. Feel free to contact us 👍 Are you missing a function? Let us know at hello@schnaq.com - we'll find a solution!"
    :subscription.page.cancel/button "Change your mind?"
 
    ; mail interval

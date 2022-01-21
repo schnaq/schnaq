@@ -796,7 +796,7 @@
    :subscription.cancel.error/title "Problem beim Kündigen"
    :subscription.cancel.error/body "Bei der Kündigung deines Abonnements ist ein Fehler aufgetreten. Bitte kontaktiere uns, damit wir dir schnellstmöglich helfen können"
    :subscription.cancel.success/title "Abonnement erfolgreich gekündigt"
-   :subscription.cancel.success/body "Schade, dass du die Pro-Funktionen von schnaq nicht mehr verwenden möchtest. Bis zum Ablauf der aktuellen Bezahlperiode kannst du dich noch umentscheiden."
+   :subscription.cancel.success/body "Schade, dass du die Pro-Funktionen von schnaq nicht mehr verwenden möchtest. Bis zum Ablauf der aktuellen Bezahlperiode kannst du dich noch umentscheiden. Schreib uns gerne unter hello@schnaq.com, was wir besser machen können."
    :subscription.reactivate/button "Abonnement reaktivieren"
    :subscription.reactivate/button-hint "Möchtest du dein Abonnement wieder aktivieren? Schade, dass du es beenden möchtest. Bis zum Ende der Laufzeit hast du noch Zugang zu Pro-Funktionen."
    :subscription.reactivate/confirmation "Möchtest du dein Abo wieder aktivieren?"
@@ -819,7 +819,7 @@
    :subscription.page.success.next-2/button "Zu den Einstellungen"
    :subscription.page.cancel/title "Schade, dass du den Vorgang nicht abgeschlossen hast"
    :subscription.page.cancel/lead "Dir entgeht damit die Möglichkeit das volle Potenzial aus den Interaktionen mit deinen Teilnehmer:innen auszuschöpfen."
-   :subscription.page.cancel/body "Im kostenfreien Plan stehen dir weiterhin alle Basisfunktionen zur Verfügung. Wir würden uns sehr freuen von dir zu hören, warum du doch nicht die Pro-Funktionen verwenden möchtest. Kontaktiere uns dazu gerne 👍 Fehlt dir vielleicht eine Funktion? Lass es uns wissen – wir finden eine Lösung!"
+   :subscription.page.cancel/body "Im kostenfreien Plan stehen dir weiterhin alle Basisfunktionen zur Verfügung. Wir würden uns sehr freuen von dir zu hören, warum du doch nicht die Pro-Funktionen verwenden möchtest. Kontaktiere uns dazu gerne unter hello@schnaq.com 👍 Fehlt dir vielleicht eine Funktion? Lass es uns wissen – wir finden eine Lösung!"
    :subscription.page.cancel/button "Anders überlegt?"
 
    ; mail interval
