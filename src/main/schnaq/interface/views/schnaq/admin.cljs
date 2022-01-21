@@ -16,10 +16,11 @@
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/selected])]
     [tooltip/text
      (labels :schnaq.admin/tooltip)
-     [:a.btn.btn-outline-muted.btn-lg
+     [:a.btn.btn-outline-muted
       {:href (rfe/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
        :role :button}
-      [icon :cog "m-auto"]]]))
+      [icon :cog "mx-auto d-block" {:size "lg"}]
+      [:span.small (labels :discussion.navbar/settings)]]]))
 
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."
@@ -36,7 +37,9 @@
   "Download the current graph as a png file."
   [surrounding-div]
   [tooltip/tooltip-button "bottom" (labels :graph.download/as-png)
-   [icon :file-download "m-auto"]
+   [:<>
+    [icon :file-download "m-auto d-block" {:size "lg"}]
+    [:span.small (labels :discussion.navbar/download)]]
    (fn []
      (let [canvas (.querySelector js/document (gstring/format "%s div canvas" surrounding-div))
            anchor (.createElement js/document "a")]
@@ -57,5 +60,7 @@
                       :error-handler show-error})]
     (when share-hash
       [tooltip/tooltip-button "bottom" (labels :schnaq.export/as-text)
-       [icon :file-download "m-auto"]
+       [:<>
+        [icon :file-download "mx-auto d-block" {:size "lg"}]
+        [:span.small (labels :discussion.navbar/download)]]
        #(request-fn)])))

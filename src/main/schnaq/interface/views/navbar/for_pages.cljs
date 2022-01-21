@@ -29,7 +29,7 @@
    [:div.mr-1 [blog-link]]
    [:div.mr-1
     [:div.dropdown.ml-auto
-     [navbar-components/language-dropdown]]]
+     [navbar-components/language-dropdown false {}]]]
    [:div.mx-1
     [um/admin-dropdown "btn-outline-secondary"]]
    [:div.mx-1.d-none.d-md-block
