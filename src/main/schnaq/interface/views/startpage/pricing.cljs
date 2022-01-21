@@ -136,7 +136,7 @@
          #(if authenticated?
             (rf/dispatch [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro])
             (rf/dispatch [:keycloak/login (links/checkout-link)]))
-         "btn-secondary"
+         "btn-secondary btn-lg"
          (when-not shared-config/stripe-enabled? {:disabled true})]]))
    {:class "border-primary shadow-lg"}])
 
