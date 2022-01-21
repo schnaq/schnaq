@@ -802,13 +802,14 @@ Now we write down questions and discuss them and can still understand what we ha
    :subscription.reactivate/confirmation "Would you like to reactivate your subscription?"
    :subscription.reactivated.success/title "Subscription reactivated"
    :subscription.reactivated.success/body "Welcome back! Glad you changed your mind."
+   :subscription.overview/title "Subscription Settings"
    :subscription.overview/status "Status"
    :subscription.overview/type "Type"
    :subscription.overview/started-at "Subscription started"
    :subscription.overview/stops-at "Subscription ends"
    :subscription.overview/next-invoice "Next billing"
    :subscription.overview/cancelled "Subscription cancelled"
-   :subscription.overview/cancelled? "Canceled?"
+   :subscription.overview/cancelled? "Cancelled?"
 
    ; mail interval
    :notification-mail-interval/daily "Daily"
@@ -840,7 +841,7 @@ Now we write down questions and discuss them and can still understand what we ha
 
    ;; Pricing Page
    :pricing.intro/heading "Starting soon!"
-   :pricing.intro/lead [:span "You will soon be able to book your plan here. Would you like to be part of our beta and test the business plan exclusively and free of charge? Then please contact us at " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
+   :pricing.intro/lead [:span "You will soon be able to book your plan here. Would you like to be part of our beta and test the pro plan exclusively and free of charge? Then please contact us at " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
    :pricing.free-tier/title "Free"
    :pricing.free-tier/subtitle "Forever"
    :pricing.free-tier/description "For efficient makers and small teams, that don't need a lot. Create discussions and Q&As with two clicks."
@@ -849,8 +850,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.free-tier/for-free "Free forever"
    :pricing.pro-tier/title "Pro"
    :pricing.pro-tier/subtitle "Activate your potential"
-   :pricing.pro-tier/description "Gain full control over your discussions and Q&As and completley understand your participants."
-   :pricing.pro-tier/call-to-action "Test Business now"
+   :pricing.pro-tier/description "Gain full control over your discussions and Q&As and completeley understand your participants."
+   :pricing.pro-tier/call-to-action "Test Pro now"
    :pricing.enterprise-tier/title "Enterprise"
    :pricing.enterprise-tier/subtitle "Big plans?"
    :pricing.enterprise-tier/description "Optimize the communication of your company. Special wishes and requirements can be accomodated for easily."

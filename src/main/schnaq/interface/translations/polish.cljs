@@ -800,6 +800,7 @@
    :subscription.reactivate/confirmation "Czy chciałbyś reaktywować swoją subskrypcję?"
    :subscription.reactivated.success/title "Subskrypcja reaktywowana"
    :subscription.reactivated.success/body "Witaj z powrotem! Cieszę się, że zmieniłaś zdanie."
+   :subscription.overview/title "Ustawienia subskrypcji"
    :subscription.overview/status "Status"
    :subscription.overview/typ "Typ"
    :subscription.overview/started-at "Subskrypcja rozpoczęta"

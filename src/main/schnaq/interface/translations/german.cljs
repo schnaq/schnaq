@@ -802,6 +802,7 @@
    :subscription.reactivate/confirmation "Möchtest du dein Abo wieder aktivieren?"
    :subscription.reactivated.success/title "Abonnement erneut aktiviert"
    :subscription.reactivated.success/body "Willkommen zurück! Schön, dass du es dir anders überlegt hast."
+   :subscription.overview/title "Abonnementeinstellungen"
    :subscription.overview/status "Status"
    :subscription.overview/type "Typ"
    :subscription.overview/started-at "Abonnement gestartet"

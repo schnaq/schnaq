@@ -39,9 +39,7 @@
      [buttons/button (labels :subscription.reactivate/button) on-click "btn-outline-secondary mb-3"]
      [common-components/hint-text (labels :subscription.reactivate/button-hint)]]))
 
-
 ;; -----------------------------------------------------------------------------
-
 
 (defn- status-pill
   "Display a status pill depending on the subscription status."
@@ -52,7 +50,9 @@
                                       "badge-warning")}
      status]))
 
-(defn- cancel-indicator []
+(defn- cancel-indicator
+  "Shows if subscription has been cancelled."
+  []
   (let [{:keys [cancelled?]} @(rf/subscribe [:user/subscription])]
     (when cancelled?
       [subscription-entry (labels :subscription.overview/cancelled?)
@@ -63,7 +63,7 @@
         locale @(rf/subscribe [:current-locale])]
     (when status
       [:section
-       [:h2 "Abonnementeinstellungen"]
+       [:h2 (labels :subscription.overview/title)]
        [:dl.row
         [subscription-entry (labels :subscription.overview/status) [status-pill]]
         [subscription-entry (labels :subscription.overview/type) type]
