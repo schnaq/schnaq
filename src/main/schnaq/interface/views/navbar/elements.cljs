@@ -110,7 +110,8 @@
   ([]
    [dropdown-views :icon-views-dark ""])
   ([icon-id toggle-class]
-   (let [dropdown-id "schnaq-views-dropdown"]
+   (let [dropdown-id "schnaq-views-dropdown"
+         current-route @(rf/subscribe [:navigation/current-route-name])]
      [tooltip/text
       (labels :discussion.navbar/views)
       [:div.dropdown
@@ -118,9 +119,15 @@
         [:div.dropdown-toggle
          {:class toggle-class}
          [:img.header-standalone-icon.d-block
-          {:src (img-path icon-id) :alt "graph icon"}]
-         ;; TODO labelize oder zeige aktuelle Ansicht an
-         [:span.small "Ansichten"]]
+          {:src (img-path icon-id) :alt "Icon representing different views"}]
+         [:span.small
+          (case current-route
+            :routes.schnaq/start (labels :discussion.button/text)
+            :routes.schnaq.select/statement (labels :discussion.button/text)
+            :routes/graph-view (labels :graph.button/text)
+            :routes.schnaq/dashboard (labels :summary.link.button/text)
+            :routes.schnaq/qanda (labels :qanda.button/text)
+            (labels :discussion.navbar/views))]]
         {:id dropdown-id :data-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
         [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}

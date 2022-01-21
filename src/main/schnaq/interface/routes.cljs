@@ -185,6 +185,7 @@
                                (rf/dispatch [:scheduler.after/login [:wordcloud/for-current-discussion]])
                                (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
      ["/summary"
+      ;; TODO remove unused view
       {:name :routes.schnaq/summary
        :view summary/public-user-view
        :controllers [{:parameters {:path [:share-hash]}
