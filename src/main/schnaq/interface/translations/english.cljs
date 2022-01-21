@@ -789,6 +789,27 @@ Now we write down questions and discuss them and can still understand what we ha
    :user.notifications.set-all-to-read/button "Mark everything as read"
    :user.notifications.set-all-to-read/info "You still receive notifications from old discussions? No problem, just mark everything as read and only receive notifications from new discussions."
 
+   ;; Subscriptions
+   :subscription.cancel/button "Cancel subscription"
+   :subscription.cancel/button-hint "Here you can cancel your subscription at the next possible time. You can still use all Pro functions until the end of the period. You can reactivate your subscription here at any time."
+   :subscription.cancel/confirmation "Do you really want to cancel your subscription at the end of the payment period?"
+   :subscription.cancel.error/title "Problem cancelling"
+   :subscription.cancel.error/body "There was an error cancelling your subscription. Please contact us so we can help you as soon as possible."
+   :subscription.cancel.success/title "Subscription cancelled successfully"
+   :subscription.cancel.success/body "Sorry you no longer want to use the Pro features of schnaq. You can still change your mind until the end of the current payment period."
+   :subscription.reactivate/button "Reactivate Subscription"
+   :subscription.reactivate/button-hint "Do you want to reactivate your subscription? It's a shame you want to end it. You still have access to Pro features until the end of the term."
+   :subscription.reactivate/confirmation "Would you like to reactivate your subscription?"
+   :subscription.reactivated.success/title "Subscription reactivated"
+   :subscription.reactivated.success/body "Welcome back! Glad you changed your mind."
+   :subscription.overview/status "Status"
+   :subscription.overview/type "Type"
+   :subscription.overview/started-at "Subscription started"
+   :subscription.overview/stops-at "Subscription ends"
+   :subscription.overview/next-invoice "Next billing"
+   :subscription.overview/cancelled "Subscription cancelled"
+   :subscription.overview/cancelled? "Canceled?"
+
    ; mail interval
    :notification-mail-interval/daily "Daily"
    :notification-mail-interval/weekly "Weekly"

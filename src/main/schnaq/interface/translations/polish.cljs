@@ -787,6 +787,27 @@
    :user.notifications.set-all-to-read/button "Oznacz wszystkie jako przeczytane"
    :user.notifications.set-all-to-read/info "Nadal otrzymujesz powiadomienia ze starych dyskusji? Nie ma problemu, wystarczy ustawić wszystko jako przeczytane i otrzymywać powiadomienia tylko o nowych dyskusjach.."
 
+   ;; Subscriptions
+   :subscription.cancel/button "Anuluj subskrypcję"
+   :subscription.cancel/button-hint "Tutaj możesz anulować swoją subskrypcję w następnym możliwym czasie. Do końca okresu można jeszcze korzystać z wszystkich funkcji Pro. W każdej chwili możesz tutaj reaktywować swoją subskrypcję."
+   :subscription.cancel/confirmation "Czy naprawdę chcesz anulować swoją subskrypcję na koniec okresu płatności?"
+   :subscription.cancel.error/title "Problem z anulowaniem."
+   :subscription.cancel.error/body "Wystąpił błąd przy anulowaniu subskrypcji. Prosimy o kontakt z nami, abyśmy mogli pomóc jak najszybciej."
+   :subscription.cancel.success/title "Subskrypcja anulowana pomyślnie"
+   :subscription.cancel.success/body "Przykro nam, że nie chcesz już używać funkcji Pro w schnaq. Możesz jeszcze zmienić zdanie do końca bieżącego okresu płatności."
+   :subscription.reactivate/button "reaktywuj subskrypcję"
+   :subscription.reactivate/button-hint "Czy chcesz ponownie aktywować swoją subskrypcję? Szkoda, że chcesz to zakończyć. Do końca semestru nadal masz dostęp do funkcji Pro."
+   :subscription.reactivate/confirmation "Czy chciałbyś reaktywować swoją subskrypcję?"
+   :subscription.reactivated.success/title "Subskrypcja reaktywowana"
+   :subscription.reactivated.success/body "Witaj z powrotem! Cieszę się, że zmieniłaś zdanie."
+   :subscription.overview/status "Status"
+   :subscription.overview/typ "Typ"
+   :subscription.overview/started-at "Subskrypcja rozpoczęta"
+   :subscription.overview/stops-at "Subskrypcja kończy się"
+   :subscription.overview/next-invoice "Następne rozliczenie"
+   :subscription.overview/cancelled "Subskrypcja anulowana"
+   :subscription.overview/cancelled? "Odwołany?"
+
    ; mail interval
    :notification-mail-interval/daily "Codziennie"
    :notification-mail-interval/weekly "Tygodnik"
