@@ -18,7 +18,7 @@
                                             schnaq.interface.config/keycloak-client #shadow/env "KEYCLOAK_CLIENT"
                                             schnaq.config.shared/s3-host #shadow/env "S3_HOST"
                                             schnaq.config.shared/embedded? #shadow/env "EMBEDDED"
-                                            schnaq.config.shared/stripe-enabled? #shadow/env "STRIPE_ENABLED"
+                                            schnaq.config.shared/stripe-enable #shadow/env "STRIPE_ENABLE"
                                             schnaq.config.shared/stripe-price-id-schnaq-pro #shadow/env "STRIPE_PRICE_PRO_ID"}
                           :build-options {:ns-aliases {com.fulcrologic.guardrails.core com.fulcrologic.guardrails.noop}}}
                 :devtools {:preloads [devtools.preload day8.re-frame-10x.preload]}}
