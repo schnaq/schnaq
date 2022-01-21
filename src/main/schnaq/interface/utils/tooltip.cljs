@@ -41,7 +41,7 @@
   [tooltip-location tooltip content on-click-fn]
   [text
    tooltip
-   [:button.btn.btn-outline-muted.btn-lg
+   [:button.btn.btn-outline-muted
     {:on-click on-click-fn}
     content]
    {:placement tooltip-location}])

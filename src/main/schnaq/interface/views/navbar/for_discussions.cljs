@@ -73,7 +73,7 @@
        [admin/txt-export share-hash title]
        (when admin-access?
          [admin/admin-center])
-       [navbar-components/language-toggle-with-tooltip false {:class "btn-lg"}]]
+       [navbar-components/language-toggle-with-tooltip true {:class "btn"}]]
       [:div.d-flex.align-items-center.mt-4.mt-md-0
        [:div.mx-2.embedded-nav-button [nav-elements/graph-button]]
        [:div.mr-2.embedded-nav-button [nav-elements/summary-button]]]]]))

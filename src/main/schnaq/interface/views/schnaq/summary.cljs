@@ -76,20 +76,6 @@
      [:hr.py-2]
      [summary-request-button (:discussion/share-hash schnaq)]]))
 
-(defn- user-summary-view
-  []
-  (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
-    [pages/with-discussion-header
-     {:page/heading (labels :summary.user/heading)
-      :page/subheading (labels :summary.user/subheading)
-      :condition/needs-beta-tester? true}
-     [:div.container.panel-white.mt-3
-      [:h2.text-center (labels :summary.user/label) " " (:discussion/title current-schnaq)]
-      [summary-body current-schnaq]]]))
-
-(defn public-user-view []
-  [user-summary-view])
-
 (defn- list-open-summaries
   "Shows a list of all still open summaries."
   []
