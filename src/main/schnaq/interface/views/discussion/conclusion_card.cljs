@@ -22,6 +22,7 @@
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.discussion.logic :as logic]
+            [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.schnaq.survey :as survey]
             [schnaq.interface.views.user :as user]))
 
@@ -288,6 +289,7 @@
                          [:<> [icon icon-key] " " (labels label)])]
     (fn []
       (let [survey-tab [:span [iconed-heading :chart-pie :schnaq.input-type/survey]]
+            activation-tab [:span [iconed-heading :magic :schnaq.input-type/activation]]
             beta-user? @(rf/subscribe [:user/beta-tester?])
             admin? @(rf/subscribe [:schnaq.current/admin-access])
             disabled-tooltip-key (cond
@@ -304,25 +306,33 @@
                           :on-click #(on-click :question)}
              [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
            (when top-level?
-             [:<>
-              [:li.nav-item
-               (if (and beta-user? admin?)
+             (if (and beta-user? admin?)
+               [:<>
+                [:li.nav-item
                  [:a.nav-link
                   {:class (active-class :survey)
                    :href "#"
                    :on-click #(on-click :survey)}
-                  survey-tab]
+                  survey-tab]]
+                [:li.nav-item
+                 [:a.nav-link
+                  {:class (active-class :activation)
+                   :href "#"
+                   :on-click #(on-click :activation)}
+                  activation-tab]]]
+               [:<>
+                [:li.nav-item
                  [:a.nav-link.text-muted
                   {:href "#"}
-                  [tooltip/text (labels disabled-tooltip-key) survey-tab]])]
-              [:li.nav-item
-               ;; .text-muted = workaround to enable tooltip. Otherwise `.disabled` would still be preferred.
-               [:a.nav-link.text-muted {:href "#"}
-                [tooltip/text (labels disabled-tooltip-key)
-                 [:span [iconed-heading :magic :schnaq.input-type/activation]]]]]])]
+                  [tooltip/text (labels disabled-tooltip-key) survey-tab]]]
+                [:li.nav-item
+                 [:a.nav-link.text-muted
+                  {:href "#"}
+                  [tooltip/text (labels disabled-tooltip-key) activation-tab]]]]))]
           (case @selected-option
             :question [input-form-or-disabled-alert]
-            :survey [survey/survey-form])]
+            :survey [survey/survey-form]
+            :activation [activation/activation-tab])]
          card-fade-in-time]))))
 
 (defn- statements-list []
@@ -346,6 +356,7 @@
   (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (statements-list)
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
+        activation (when top-level?  activation/activation-card)
         surveys (when top-level? (survey/survey-list))
         access-code @(rf/subscribe [:schnaq.selected/access-code])]
     [:<>
@@ -355,6 +366,7 @@
        :autoArrange true
        :gap 10}
       [selection-card]
+      [activation]
       surveys
       statements]
      (when-not (or search? (seq statements) (seq surveys) (not access-code))

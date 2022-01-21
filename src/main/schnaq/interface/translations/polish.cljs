@@ -279,6 +279,14 @@
    :schnaq.survey/votes "Głosy"
    :schnaq.survey/vote! "Głosowanie"
 
+   ;; Activation feature
+
+   :schnaq.activation.create/label "Sprezentuj swoim uczestnikom wpis aktywacyjny!"
+   :schnaq.activation.create/start-button "Rozpocznij aktywację"
+   :schnaq.activation.create/reset-button "Resetuj aktywację"
+   :schnaq.activation/title "Töröös total:"
+   :schnaq.activation/activation-button "Törööö"
+
    ;; schnaq creation
    :schnaq.create/title "Uruchomienie schnaq"
    :schnaq.create/heading "Zacznij od swojego schnaq."
