@@ -184,13 +184,6 @@
                                (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
                                (rf/dispatch [:scheduler.after/login [:wordcloud/for-current-discussion]])
                                (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
-     ["/summary"
-      ;; TODO remove unused view
-      {:name :routes.schnaq/summary
-       :view summary/public-user-view
-       :controllers [{:parameters {:path [:share-hash]}
-                      :start (fn []
-                               (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
      ["/manage/:edit-hash"
       {:name :routes.schnaq/admin-center
        :view discussion-admin/admin-center-view
