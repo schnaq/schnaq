@@ -5,6 +5,7 @@
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.time :as util-time]))
 
@@ -25,18 +26,18 @@
                     (util-time/formatted-with-timezone date))))
 
 (defn- cancel-subscription-button []
-  (let [on-click #(when (js/confirm "Möchtest du dein Abonnement wirklich zum Ablauf des Bezahlzeitraums kündigen?")
+  (let [on-click #(when (js/confirm (labels :subscription.cancel/confirmation))
                     (rf/dispatch [:user.subscription/cancel true]))]
     [:<>
-     [buttons/button "Abonnement beenden" on-click "btn-outline-dark btn-sm mb-3"]
-     [common-components/hint-text "Hier kannst du dein Abonnement zum nächstmöglichen Zeitpunkt beenden. Du hast bist zum Ablauf der Frist noch die Möglichkeit alle Pro-Funktionen zu nutzen. Du kannst jederzeit dein Abo hier wieder aktivieren."]]))
+     [buttons/button (labels :subscription.cancel/button) on-click "btn-outline-dark btn-sm mb-3"]
+     [common-components/hint-text (labels :subscription.cancel/button-hint)]]))
 
 (defn- continue-subscription-button []
-  (let [on-click #(when (js/confirm "Möchtest du dein Abo wieder aktivieren?")
+  (let [on-click #(when (js/confirm (labels :subscription.reactivate/confirmation))
                     (rf/dispatch [:user.subscription/cancel false]))]
     [:<>
-     [buttons/button "Abonnement aktivieren" on-click "btn-outline-secondary mb-3"]
-     [common-components/hint-text "Möchtest du dein Abonnement wieder aktivieren? Schade, dass du es beenden möchtest. Bis zum Ende der Laufzeit hast du noch Zugang zu Pro-Funktionen."]]))
+     [buttons/button (labels :subscription.reactivate/button) on-click "btn-outline-secondary mb-3"]
+     [common-components/hint-text (labels :subscription.reactivate/button-hint)]]))
 
 
 ;; -----------------------------------------------------------------------------
@@ -54,7 +55,7 @@
 (defn- cancel-indicator []
   (let [{:keys [cancelled?]} @(rf/subscribe [:user/subscription])]
     (when cancelled?
-      [subscription-entry "Gekündigt?"
+      [subscription-entry (labels :subscription.overview/cancelled?)
        [icon :check/circle "text-success"]])))
 
 (defn stripe-management []
@@ -64,11 +65,11 @@
       [:section
        [:h2 "Abonnementeinstellungen"]
        [:dl.row
-        [subscription-entry "Status" [status-pill]]
-        [subscription-entry "Typ" type]
+        [subscription-entry (labels :subscription.overview/status) [status-pill]]
+        [subscription-entry (labels :subscription.overview/type) type]
         [cancel-indicator]
-        [subscription-entry "Abonnement gestartet" (formatted-subscription-date period-start locale)]
-        [subscription-entry (if cancelled? "Abonnement endet" "Nächste Abrechnung")
+        [subscription-entry (labels :subscription.overview/started-at) (formatted-subscription-date period-start locale)]
+        [subscription-entry (if cancelled? (labels :subscription.overview/stops-at) (labels :subscription.overview/next-invoice))
          (formatted-subscription-date period-end locale)]]
        (if cancelled?
          [continue-subscription-button]
@@ -100,9 +101,9 @@
  (fn [_ [_ failure]]
    {:fx [[:dispatch [:ajax.error/to-console failure]]
          [:dispatch [:notification/add
-                     #:notification{:title "Problem beim Stornieren"
+                     #:notification{:title (labels :subscription.cancel.error/title)
                                     :body [:<>
-                                           "Bei der Kündigung deines Abonnements ist ein Fehler aufgetreten. Bitte kontaktiere uns, damit wir dir schnellstmöglich helfen können" " 🤒"
+                                           [:p (labels :subscription.cancel.error/body) " 🤒"]
                                            [buttons/anchor "info@schnaq.com" "mailto:info@schnaq.com" "btn-outline-dark"]]
                                     :context :danger
                                     :stay-visible? true}]]]}))
@@ -112,12 +113,12 @@
    {:fx [[:dispatch [:user.subscription/status subscription-status]]
          [:dispatch [:notification/add
                      #:notification{:title (if cancel?
-                                             "Abonnement erfolgreich gekündigt"
-                                             (str "Abonnement erneut aktiviert" " 🎉"))
+                                             (labels :subscription.cancel.success/title)
+                                             (str (labels :subscription.reactivated.success/title) " 🎉"))
                                     :body (str
                                            (if cancel?
-                                             "Schade, dass du die Pro-Funktionen von schnaq nicht mehr verwenden möchtest. Bis zum Ablauf der aktuellen Bezahlperiode kannst du dich noch umentscheiden."
-                                             "Willkommen zurück! Schön, dass du es dir anders überlegt hast.")
+                                             (labels :subscription.cancel.success/body)
+                                             (labels :subscription.reactivated.success/body))
                                            " 🍀")
                                     :context :success
                                     :stay-visible? true}]]]}))

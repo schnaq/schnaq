@@ -789,6 +789,26 @@
    :user.notifications.set-all-to-read/button "Alles als gelesen markieren"
    :user.notifications.set-all-to-read/info "Du erhältst noch Benachrichtigungen von alten Diskussionen? Kein Problem, setze einfach alles auf gelesen und erhalte nur noch Benachrichtigungen für neue Diskussionen."
 
+   ;; Subscriptions
+   :subscription.cancel/button "Abonnement beenden"
+   :subscription.cancel/button-hint "Hier kannst du dein Abonnement zum nächstmöglichen Zeitpunkt beenden. Du hast bist zum Ablauf der Frist noch die Möglichkeit alle Pro-Funktionen zu nutzen. Du kannst jederzeit dein Abo hier wieder aktivieren."
+   :subscription.cancel/confirmation "Möchtest du dein Abonnement wirklich zum Ablauf des Bezahlzeitraums kündigen?"
+   :subscription.cancel.error/title "Problem beim Kündigen"
+   :subscription.cancel.error/body "Bei der Kündigung deines Abonnements ist ein Fehler aufgetreten. Bitte kontaktiere uns, damit wir dir schnellstmöglich helfen können"
+   :subscription.cancel.success/title "Abonnement erfolgreich gekündigt"
+   :subscription.cancel.success/body "Schade, dass du die Pro-Funktionen von schnaq nicht mehr verwenden möchtest. Bis zum Ablauf der aktuellen Bezahlperiode kannst du dich noch umentscheiden."
+   :subscription.reactivate/button "Abonnement reaktivieren"
+   :subscription.reactivate/button-hint "Möchtest du dein Abonnement wieder aktivieren? Schade, dass du es beenden möchtest. Bis zum Ende der Laufzeit hast du noch Zugang zu Pro-Funktionen."
+   :subscription.reactivate/confirmation "Möchtest du dein Abo wieder aktivieren?"
+   :subscription.reactivated.success/title "Abonnement erneut aktiviert"
+   :subscription.reactivated.success/body "Willkommen zurück! Schön, dass du es dir anders überlegt hast."
+   :subscription.overview/status "Status"
+   :subscription.overview/type "Typ"
+   :subscription.overview/started-at "Abonnement gestartet"
+   :subscription.overview/stops-at "Abonnement endet"
+   :subscription.overview/next-invoice "Nächste Abrechnung"
+   :subscription.overview/cancelled? "Gekündigt?"
+
    ; mail interval
    :notification-mail-interval/daily "Täglich"
    :notification-mail-interval/weekly "Wöchentlich"
