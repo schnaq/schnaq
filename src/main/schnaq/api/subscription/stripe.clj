@@ -70,8 +70,13 @@
   (let [keycloak-id (get-in event [:data :object :metadata :keycloak-id])
         stripe-customer-id (get-in event [:data :object :customer])
         stripe-subscription-id (get-in event [:data :object :id])]
-    (user-db/subscribe-pro-tier keycloak-id stripe-subscription-id stripe-customer-id))
-  (log/info "Subscription successfully created 🤑"))
+    (user-db/subscribe-pro-tier keycloak-id stripe-subscription-id stripe-customer-id)
+    (log/info "Subscription successfully created 🤑 User:" keycloak-id)))
+
+(defmethod stripe-event "customer.subscription.deleted" [event]
+  (let [keycloak-id (get-in event [:data :object :metadata :keycloak-id])]
+    (user-db/unsubscribe-pro-tier keycloak-id)
+    (log/info "Subscription deleted for user" keycloak-id)))
 
 (defmethod stripe-event :default [event]
   (swap! events assoc (keyword (:type event)) event))
