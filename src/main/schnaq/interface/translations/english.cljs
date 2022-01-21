@@ -304,6 +304,8 @@
    :discussion.state/read-only-label "read-only"
    :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
    :discussion.navbar/settings "Settings"
+   :discussion.navbar/download "Export"
+   :discussion.navbar/share "Share"
 
    :dashboard.wordcloud/title "Word Cloud"
    :dashboard.wordcloud/subtitle "See the most common words from your schnaq."

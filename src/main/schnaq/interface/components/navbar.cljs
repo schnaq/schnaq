@@ -10,17 +10,16 @@
   "Dropdown for bootstrap navbar to display the allowed languages."
   ([]
    [language-dropdown true {}])
-  ([show-label? options]
-   (let [current-language @(rf/subscribe [:current-language])]
+  ([side-by-side? options]
+   (let [icon-classes (if side-by-side? "" "d-block mx-auto")]
      [:<>
       [:a#schnaq-language-dropdown.nav-link.dropdown-toggle
        (merge
         {:href "#" :role "button" :data-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
         options)
-       [icon :language]
-       (when show-label?
-         (str " " current-language))]
+       [icon :language icon-classes {:size "lg"}]
+       [:span.small " " @(rf/subscribe [:current-language])]]
       [:div.dropdown-menu {:aria-labelledby "schnaq-language-dropdown"}
        [:button.dropdown-item
         {:on-click #(language/set-language :de)} "Deutsch"]

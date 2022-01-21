@@ -303,6 +303,8 @@
    :discussion.state/read-only-label "schreibgeschützt"
    :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
    :discussion.navbar/settings "Einstellungen"
+   :discussion.navbar/download "Exportieren"
+   :discussion.navbar/share "Teilen"
 
    :dashboard.wordcloud/title "Wortwolke"
    :dashboard.wordcloud/subtitle "Siehe die häufigsten Wörter aus deinem schnaq."

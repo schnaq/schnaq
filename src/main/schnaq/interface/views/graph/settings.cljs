@@ -53,5 +53,7 @@
   "Open Settings for the graph."
   []
   [tooltip/tooltip-button "bottom" (labels :graph.settings/title)
-   [icon :sliders-h]
+   [:<>
+    [icon :sliders-h "d-block mx-auto" {:size "lg"}]
+    [:span.small (labels :discussion.navbar/settings)]]
    show-notification])

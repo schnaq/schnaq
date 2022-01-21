@@ -303,6 +303,8 @@
    :discussion.state/read-only-label "tylko do odczytu"
    :discussion.state/read-only-warning "Ta dyskusja jest tylko do odczytu, możesz tu tylko czytać, ale nie pisać."
    :discussion.navbar/settings "Ustawienia"
+   :discussion.navbar/download "Eksport"
+   :discussion.navbar/share "Udostępnij"
 
    :dashboard.wordcloud/title "Chmura słów"
    :dashboard.wordcloud/subtitle "Zobacz najbardziej popularne słowa z Twojego schnaq."

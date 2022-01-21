@@ -100,4 +100,7 @@
   "Button to copy access link and acces code."
   []
   [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
-   [icon :share "m-auto"] open-share-qanda])
+   [:<>
+    [icon :share "m-auto d-block" {:size "lg"}]
+    [:span.small (labels :discussion.navbar/share)]]
+   open-share-qanda])

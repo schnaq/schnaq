@@ -117,8 +117,10 @@
        [navbar-components/separated-button
         [:div.dropdown-toggle
          {:class toggle-class}
-         [:img.header-standalone-icon
-          {:src (img-path icon-id) :alt "graph icon"}]]
+         [:img.header-standalone-icon.d-block
+          {:src (img-path icon-id) :alt "graph icon"}]
+         ;; TODO labelize oder zeige aktuelle Ansicht an
+         [:span.small "Ansichten"]]
         {:id dropdown-id :data-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
         [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
@@ -180,8 +182,8 @@
 (defn language-toggle
   "Language Toggle dropdown button"
   []
-  [:div.dropdown.ml-3
-   [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]])
+  [:div.dropdown
+   [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn"}]])
 
 (defn title-and-infos
   "Display the schnaq title and info"
