@@ -72,9 +72,7 @@
    (labels :user.settings/header)
    [:<>
     [change-user-info]
-    [:hr.my-5]
     [user-subscription/stripe-management]
-    [:hr.my-5]
     [hub-common/list-hubs-with-heading]]])
 
 (defn view []

@@ -63,6 +63,7 @@
         locale @(rf/subscribe [:current-locale])]
     (when status
       [:section
+       [:hr.pt-3]
        [:h2 (labels :subscription.overview/title)]
        [:dl.row
         [subscription-entry (labels :subscription.overview/status) [status-pill]]

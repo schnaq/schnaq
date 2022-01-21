@@ -3,7 +3,7 @@
             [schnaq.interface.components.icons :refer [icon]]))
 
 (>defn hint-text
-  "Info box to explain functionality.."
+  "Info box to explain functionality."
   [text]
   [string? => :re-frame/component]
   [:small.text-muted.text-left

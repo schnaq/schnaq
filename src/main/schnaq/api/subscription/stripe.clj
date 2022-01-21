@@ -55,10 +55,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(def events (atom {}))
-(def n2o-id "TODO: Delete me"
-  "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18")
-
 (defmulti ^:private stripe-event
   "Dispatch incoming stripe events."
   (fn [event] (:type event)))
@@ -79,7 +75,7 @@
     (log/info "Subscription deleted for user" keycloak-id)))
 
 (defmethod stripe-event :default [event]
-  (swap! events assoc (keyword (:type event)) event))
+  (log/debug "Received unhandled event:" (:type event)))
 
 ;; -----------------------------------------------------------------------------
 
@@ -87,7 +83,6 @@
   "Handle incoming stripe requests. This function receives all events from 
   stripe and dispatches them further."
   [{:keys [body-params]}]
-  (log/info "Event type:" (:type body-params))
   (stripe-event body-params)
   (ok {:message "Always return 200 to stripe."}))
 

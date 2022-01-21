@@ -77,7 +77,6 @@
 ;; Stripe
 
 #?(:cljs (goog-define stripe-enable "true"))
-
 #?(:cljs (def stripe-enabled?
            (= "true" (.toLowerCase stripe-enable))))
 
