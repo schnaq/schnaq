@@ -808,6 +808,18 @@
    :subscription.overview/next-invoice "Następne rozliczenie"
    :subscription.overview/cancelled "Subskrypcja anulowana"
    :subscription.overview/cancelled? "Odwołany?"
+   :subscription.page.success/heading "Jesteś gotowy do pracy"
+   :subscription.page.success/subheading "Od teraz wszystkie funkcje Pro są dostępne dla Ciebie."
+   :subscription.page.success.next-1/title "Zacznij działać!"
+   :subscription.page.success.next-1/lead "Teraz możesz w pełni wykorzystać potencjał swoich schnaqs. Masz teraz do dyspozycji analitykę, opcje aktywacji, chmury słów i wiele więcej."
+   :subscription.page.success.next-1/button "Przejdź do swoich schnaqs"
+   :subscription.page.success.next-2/title "Zarządzaj swoją subskrypcją"
+   :subscription.page.success.next-2/lead "Możesz zarządzać swoją subskrypcją w dowolnym momencie w swoich ustawieniach. Jeśli masz jakiekolwiek problemy lub pytania, zapraszamy do kontaktu z nami!"
+   :subscription.page.success.next-2/button "Do ustawień"
+   :subscription.page.cancel/title "Szkoda, że nie dokończyłeś procesu"
+   :subscription.page.cancel/lead "Tracisz okazję do wykorzystania pełnego potencjału z interakcji z subskrybentami."
+   :subscription.page.cancel/body "W planie darmowym, wszystkie podstawowe funkcje są nadal dostępne dla Ciebie. Chętnie dowiemy się od Ciebie, dlaczego nie chcesz korzystać z funkcji Pro. Zapraszamy do kontaktu z nami 👍 Może jest jakaś funkcja, której Ci brakuje? Daj nam znać - znajdziemy rozwiązanie!"
+   :subscription.page.cancel/button "Zmieniłeś zdanie?"
 
    ; mail interval
    :notification-mail-interval/daily "Codziennie"

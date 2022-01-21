@@ -809,8 +809,22 @@
    :subscription.overview/stops-at "Abonnement endet"
    :subscription.overview/next-invoice "Nächste Abrechnung"
    :subscription.overview/cancelled? "Gekündigt?"
+   :subscription.page.success/heading "Du bist startklar"
+   :subscription.page.success/subheading "Von nun an stehen dir alle Pro-Features zur Verfügung."
+   :subscription.page.success.next-1/title "Lege los!"
+   :subscription.page.success.next-1/lead "Du kannst nun das volle Potenzial aus deinen schnaqs schöpfen. Dir stehen nun Analysen, Aktivierungsoptionen, Wortwolken und vieles mehr zur Verfügung."
+   :subscription.page.success.next-1/button "Zu deinen schnaqs"
+   :subscription.page.success.next-2/title "Abonnement verwalten"
+   :subscription.page.success.next-2/lead "In deinen Einstellungen kannst du jederzeit das Abonnement verwalten. Solltest du Probleme oder Fragen haben, so kontaktiere uns gerne!"
+   :subscription.page.success.next-2/button "Zu den Einstellungen"
+   :subscription.page.cancel/title "Schade, dass du den Vorgang nicht abgeschlossen hast"
+   :subscription.page.cancel/lead "Dir entgeht damit die Möglichkeit das volle Potenzial aus den Interaktionen mit deinen Teilnehmer:innen auszuschöpfen."
+   :subscription.page.cancel/body "Im kostenfreien Plan stehen dir weiterhin alle Basisfunktionen zur Verfügung. Wir würden uns sehr freuen von dir zu hören, warum du doch nicht die Pro-Funktionen verwenden möchtest. Kontaktiere uns dazu gerne 👍 Fehlt dir vielleicht eine Funktion? Lass es uns wissen – wir finden eine Lösung!"
+   :subscription.page.cancel/button "Anders überlegt?"
 
    ; mail interval
+
+
    :notification-mail-interval/daily "Täglich"
    :notification-mail-interval/weekly "Wöchentlich"
    :notification-mail-interval/never "Niemals"
