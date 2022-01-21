@@ -128,8 +128,8 @@
          pro-user? @(rf/subscribe [:user/pro-user?])]
      (if pro-user?
        [:div.alert.alert-info.text-center
-        [:p "Du bist bereits Pro-User. Möchtest du zu deinen Abonnement-Einstellungen?"]
-        [buttons/anchor "Zu den Einstellungen" (rfe/href :routes.user.manage/account) "btn-outline-dark btn-sm"]]
+        [:p (labels :pricing.pro-tier/already-subscribed)]
+        [buttons/anchor (labels :pricing.pro-tier/go-to-settings) (rfe/href :routes.user.manage/account) "btn-outline-dark btn-sm"]]
        [:div.text-center.py-4
         [buttons/button
          (labels :pricing.pro-tier/call-to-action)
