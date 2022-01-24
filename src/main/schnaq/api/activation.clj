@@ -16,7 +16,6 @@
 (defn- get-activation
   "Get the current activation for a discussion."
   [{{{:keys [share-hash]} :query} :parameters}]
-  (log/info "Get activation for" share-hash)
   (ok {:activation (activation-db/activation-by-share-hash share-hash)}))
 
 (defn- increment-activation-counter
