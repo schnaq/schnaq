@@ -285,8 +285,8 @@
    :schnaq.activation.create/label "Present your participant:s with an activation input!"
    :schnaq.activation.create/start-button "Start activation"
    :schnaq.activation.create/reset-button "Reset Activation"
-   :schnaq.activation/title "Törööös total:"
-   :schnaq.activation/activation-button "Törööö"
+   :schnaq.activation/title "Toots total:"
+   :schnaq.activation/activation-button "Toot"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
