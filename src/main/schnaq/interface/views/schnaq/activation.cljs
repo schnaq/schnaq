@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.schnaq.activation
   (:require ["framer-motion" :refer [motion]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]))
 
@@ -52,16 +53,17 @@
 
 (defn- activation-view [background-class button-class]
   (when-let [activation @(rf/subscribe [:schnaq/activation])]
-    [:section.statement-card.p-3.text-white
-     {:class background-class}
-     [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
-     [:div.mx-auto.display-3 (:activation/count activation)]
-     [schnaqqi-walk]
-     [:div.text-center
-      [:button.btn.btn-lg.btn-secondary
-       {:class button-class
-        :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
-       (labels :schnaq.activation/activation-button)]]]))
+    [motion/fade-in-and-out
+     [:section.statement-card.p-3.text-white
+      {:class background-class}
+      [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
+      [:div.mx-auto.display-3 (:activation/count activation)]
+      [schnaqqi-walk]
+      [:div.text-center
+       [:button.btn.btn-lg.btn-secondary
+        {:class button-class
+         :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
+        (labels :schnaq.activation/activation-button)]]]]))
 
 (defn activation-event-view
   "Activation card for q-and-a view."
@@ -95,6 +97,12 @@
  ;; Returns the activation of the selected schnaq.
  (fn [db _]
    (get-in db [:schnaq :current :activation])))
+
+(rf/reg-event-db
+ :schnaq.activation/dissoc
+ ;; Remove current activation
+ (fn [db]
+   (update-in db [:schnaq :current] dissoc :activation)))
 
 (rf/reg-sub
  :schnaq.activation/temp-counter
@@ -141,17 +149,17 @@
 
 (rf/reg-event-db
  :schnaq.activation.load-from-backend/success
- (fn [db [_ response]]
-   (let [activation (:activation response)
-         ;; when previous count is larger than the current count, the counter has been reset
-         current-count (:activation/count activation)
-         previous-count (get-in db [:schnaq :current :activation :activation/count] 0)
-         current-activation #(update-in % [:schnaq :current :activation] merge activation)
-         temp-counter #(assoc-in % [:schnaq :current :activation :temp-counter] 0)]
-     (if (> previous-count current-count)
-       (-> db current-activation
-           temp-counter)
-       (-> db current-activation)))))
+ (fn [db [_ {:keys [activation]}]]
+   (when activation
+     (let [;; when previous count is larger than the current count, the counter has been reset
+           current-count (:activation/count activation)
+           previous-count (get-in db [:schnaq :current :activation :activation/count] 0)
+           current-activation #(update-in % [:schnaq :current :activation] merge activation)
+           temp-counter #(assoc-in % [:schnaq :current :activation :temp-counter] 0)]
+       (if (> previous-count current-count)
+         (-> db current-activation
+             temp-counter)
+         (-> db current-activation))))))
 
 (rf/reg-event-fx
  :activation/reset

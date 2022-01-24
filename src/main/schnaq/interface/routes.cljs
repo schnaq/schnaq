@@ -163,6 +163,7 @@
                               (rf/dispatch [:updates.periodic/starting-conclusions false])
                               (rf/dispatch [:updates.periodic/surveys false])
                               (rf/dispatch [:updates.periodic/activation false])
+                              (rf/dispatch [:schnaq.activation/dissoc])
                               (rf/dispatch [:statement.edit/reset-edits])
                               (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
                               (rf/dispatch [:toggle-replies/clear!]))}]
