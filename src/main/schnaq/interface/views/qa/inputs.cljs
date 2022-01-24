@@ -7,7 +7,8 @@
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.qa.search :refer [throttled-search] :as search]))
+            [schnaq.interface.views.qa.search :refer [throttled-search] :as search]
+            [schnaq.interface.views.schnaq.activation :as activation]))
 
 (defn- text-input-for-qanda
   "Input where users can enter their questions for Q&A."
@@ -68,6 +69,8 @@
      {:page/heading (:discussion/title current-discussion)
       :page/classes "base-wrapper layered-wave-background h-100 d-flex flex-column"}
      [:<>
+      [:div.container
+       [activation/activation-event-view]]
       [question-field-and-search-results :dark]
       [:div.wave-bottom-typography.d-flex.align-self-end.mt-auto]]]))
 

@@ -11,3 +11,9 @@
   margin-top: -100px;
   min-height: 150px;  
 }
+
+.activation-button-rounded {
+  @include rounded.rounded-50;
+  min-height: 7.5rem;
+  min-width: 7.5rem;
+}

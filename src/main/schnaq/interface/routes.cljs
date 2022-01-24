@@ -177,7 +177,12 @@
       {:name :routes.schnaq/qanda
        :view qanda/qanda-view
        :link-text (labels :router/qanda)
-       :controllers [{:stop #(rf/dispatch [:schnaq.qa.search.results/reset])}]}]
+       :controllers [{:start (fn []
+                               (rf/dispatch [:schnaq.activation/load-from-backend])
+                               (rf/dispatch [:updates.periodic/activation true]))
+                      :stop (fn []
+                              (rf/dispatch [:updates.periodic/activation false])
+                              (rf/dispatch [:schnaq.qa.search.results/reset]))}]}]
      ["/dashboard"
       {:name :routes.schnaq/dashboard
        :view dashboard/view

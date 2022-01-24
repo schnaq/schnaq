@@ -35,8 +35,8 @@
   []
   [:> (.-div motion)
    {:initial {:x "-50%"}
-    :animate {:x ["-50%" "0%" "50%" "100%" "150%"]
-              :opacity [1 1 1 1 0]}
+    :animate {:x ["-25%" "0%" "25%" "50%" "75%" "100%" "125%" "150%"]
+              :opacity [0 1 1 1 1 1 1 1 0]}
     :exit {:opacity 0}
     :transition {:ease :linear
                  :duration [10]}
@@ -51,17 +51,25 @@
      (when walk?
        [schnaqqi-walk-motion])]))
 
-(defn activation-card []
+(defn activation-view [background-class button-class]
   (let [activation @(rf/subscribe [:schnaq/activation])]
     (when activation
-      [:section.statement-card.p-3.activation-background.text-white.overflow-hidden
+      [:section.statement-card.p-3.text-white
+       {:class background-class}
        [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
        [:div.mx-auto.display-3 (:activation/count activation)]
        [schnaqqi-walk]
        [:div.text-center
-        [:button.btn.btn-secondary.w-75
-         {:on-click (fn [_e] (rf/dispatch [:activation/activate]))}
+        [:button.btn.btn-lg.btn-secondary
+         {:class button-class
+          :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
          (labels :schnaq.activation/activation-button)]]])))
+
+(defn activation-event-view []
+  [activation-view "bg-transparent" "btn-lg activation-button-rounded"])
+
+(defn activation-card []
+  [activation-view "activation-background overflow-hidden" "w-75"])
 
 (defn activation-tab []
   (let [activation @(rf/subscribe [:schnaq/activation])]
