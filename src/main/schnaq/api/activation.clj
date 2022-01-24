@@ -47,8 +47,8 @@
                         :description (at/get-doc #'get-activation)
                         :name :activation/get
                         :parameters {:query {:share-hash :discussion/share-hash}}
-                        :responses {200 {:body {:activation  (s/or :activation ::specs/activation
-                                                                   :no-activation nil?)}}
+                        :responses {200 {:body {:activation (s/or :activation ::specs/activation
+                                                                  :no-activation nil?)}}
                                     400 at/response-error-body}}]
      ["/increment" {:put increment-activation-counter
                     :description (at/get-doc #'increment-activation-counter)
