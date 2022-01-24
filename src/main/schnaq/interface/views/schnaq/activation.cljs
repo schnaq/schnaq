@@ -52,18 +52,16 @@
        [schnaqqi-walk-motion])]))
 
 (defn activation-card []
-  (let [activation @(rf/subscribe [:schnaq/activation])
-        voted? @(rf/subscribe [:schnaq.activation/voted?])]
+  (let [activation @(rf/subscribe [:schnaq/activation])]
     (when activation
       [:section.statement-card.p-3.activation-background.text-white.overflow-hidden
        [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
        [:div.mx-auto.display-3 (:activation/count activation)]
        [schnaqqi-walk]
        [:div.text-center
-        (when-not voted?
-          [:button.btn.btn-secondary.w-75
-           {:on-click (fn [_e] (rf/dispatch [:activation/activate]))}
-           (labels :schnaq.activation/activation-button)])]])))
+        [:button.btn.btn-secondary.w-75
+         {:on-click (fn [_e] (rf/dispatch [:activation/activate]))}
+         (labels :schnaq.activation/activation-button)]]])))
 
 (defn activation-tab []
   (let [activation @(rf/subscribe [:schnaq/activation])]
@@ -85,12 +83,6 @@
  ;; Returns the activation of the selected schnaq.
  (fn [db _]
    (get-in db [:schnaq :current :activation])))
-
-(rf/reg-sub
- :schnaq.activation/voted?
- ;; Returns if the user already voted.
- (fn [db _]
-   (get-in db [:schnaq :current :activation :voted?] false)))
 
 (rf/reg-sub
  :schnaq.activation/temp-counter
@@ -143,12 +135,10 @@
          current-count (:activation/count activation)
          previous-count (get-in db [:schnaq :current :activation :activation/count] 0)
          current-activation #(update-in % [:schnaq :current :activation] merge activation)
-         temp-counter #(assoc-in % [:schnaq :current :activation :temp-counter] 0)
-         voted-counter #(assoc-in % [:schnaq :current :activation :voted?] false)]
+         temp-counter #(assoc-in % [:schnaq :current :activation :temp-counter] 0)]
      (if (> previous-count current-count)
        (-> db current-activation
-           temp-counter
-           voted-counter)
+           temp-counter)
        (-> db current-activation)))))
 
 (rf/reg-event-fx
@@ -162,7 +152,6 @@
 (rf/reg-event-fx
  :activation/activate
  (fn [{:keys [db]} _]
-   {:db (assoc-in db [:schnaq :current :activation :voted?] true)
-    :fx [(http/xhrio-request db :put "/activation/increment"
+   {:fx [(http/xhrio-request db :put "/activation/increment"
                              [:schnaq.activation.load-from-backend/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
