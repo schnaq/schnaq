@@ -25,6 +25,12 @@
    (or (System/getenv "ADDITIONAL_CORS_ORIGINS") "")
    #","))
 
+(def routes-without-csrf-check
+  "Collection of route-names, where the middleware does not check for our csrf
+  header. Commonly used for incoming requests from external services, like
+  stripe."
+  #{:api.stripe/webhook})
+
 (def app-codes
   "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
   #{summy-config/app-code})
@@ -75,3 +81,13 @@
 (def testing-public-key
   (keys/str->public-key
    (slurp "https://s3.schnaq.com/on-premise/testing/jwt.key.pub")))
+
+;; -----------------------------------------------------------------------------
+;; Stripe
+
+(def stripe-secret-api-key
+  (or (System/getenv "STRIPE_SECRET_KEY")
+      "***REMOVED***"))
+(def stripe-webhook-access-key
+  (or (System/getenv "STRIPE_WEBHOOK_ACCESS_KEY")
+      "***REMOVED***"))

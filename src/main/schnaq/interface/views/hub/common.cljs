@@ -42,5 +42,6 @@
   []
   (when @(rf/subscribe [:hubs/all])
     [:section
-     [:p.h5.text-muted.pb-2 (labels :hubs/heading)]
+     [:hr.pt-3]
+     [:h3.text-muted.pb-2 (labels :hubs/heading)]
      [hub-list]]))

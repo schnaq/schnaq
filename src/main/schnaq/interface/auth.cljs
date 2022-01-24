@@ -80,17 +80,16 @@
 
 (rf/reg-event-fx
  :keycloak/login
- (fn [{:keys [db]} [_ _]]
+ (fn [{:keys [db]} [_ redirect-uri]]
    (let [keycloak (get-in db [:user :keycloak])]
      (when keycloak
-       {:fx [[:keycloak/login-request keycloak]]}))))
+       {:fx [[:keycloak/login-request [keycloak redirect-uri]]]}))))
 
 (rf/reg-fx
  :keycloak/login-request
- (fn [keycloak]
+ (fn [[keycloak redirect-uri]]
    (-> keycloak
-       (.login)
-       (.then #(rf/dispatch [:keycloak/load-user-profile]))
+       (.login #js {:redirectUri redirect-uri})
        (.catch #(rf/dispatch [:modal {:show? true :child [request-login-modal]}])))))
 
 ;; -----------------------------------------------------------------------------
@@ -210,6 +209,19 @@
  (fn [db _]
    (let [roles (get-in db [:user :roles])]
      (string? (some shared-config/beta-tester-roles roles)))))
+
+(rf/reg-sub
+ :user/subscription
+ (fn [db _]
+   (get-in db [:user :subscription])))
+
+(rf/reg-sub
+ :user/pro-user?
+ :<- [:user/beta-tester?]
+ :<- [:user/subscription]
+ (fn [[beta-tester? subscription]]
+   (or beta-tester?
+       (= :user.registered.subscription.type/pro (:type subscription)))))
 
 (rf/reg-event-db
  :keycloak.roles/extract

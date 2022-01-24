@@ -273,12 +273,12 @@
         dispatch (if schnaq-read-only?
                    :discussion.admin/make-writeable
                    :discussion.admin/make-read-only)
-        beta-tester? @(rf/subscribe [:user/beta-tester?])]
-    [:div {:class (when-not beta-tester? "text-muted")}
+        pro-user? @(rf/subscribe [:user/pro-user?])]
+    [:div {:class (when-not pro-user? "text-muted")}
      [:input.big-checkbox
       {:type :checkbox
        :id :enable-read-only?
-       :disabled (not beta-tester?)
+       :disabled (not pro-user?)
        :checked schnaq-read-only?
        :on-change (fn [e] (js-wrap/prevent-default e)
                     (rf/dispatch [dispatch]))}]
@@ -288,12 +288,12 @@
 
 (defn- disable-pro-con []
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        beta-tester? @(rf/subscribe [:user/beta-tester?])]
-    [:div {:class (when-not beta-tester? "text-muted")}
+        pro-user? @(rf/subscribe [:user/pro-user?])]
+    [:div {:class (when-not pro-user? "text-muted")}
      [:input.big-checkbox
       {:type :checkbox
        :id :disable-pro-con-checkbox?
-       :disabled (not beta-tester?)
+       :disabled (not pro-user?)
        :checked pro-con-disabled?
        :on-change
        (fn [e]
@@ -305,11 +305,11 @@
 
 (defn- only-moderators-mark-setting []
   (let [mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        beta-tester? @(rf/subscribe [:user/beta-tester?])]
-    [:div {:class (when-not beta-tester? "text-muted")}
+        pro-user? @(rf/subscribe [:user/pro-user?])]
+    [:div {:class (when-not pro-user? "text-muted")}
      [:input.big-checkbox
       {:type :checkbox
-       :disabled (not beta-tester?)
+       :disabled (not pro-user?)
        :id :only-moderators-mark-checkbox
        :checked mods-mark-only?
        :on-change
@@ -390,7 +390,7 @@
   [:ret :re-frame/component]
   [:<>
    [header-image/image-url-input]
-   (if @(rf/subscribe [:user/beta-tester?])
+   (if @(rf/subscribe [:user/pro-user?])
      [discussion-settings]
      [:div.pt-1
       [:hr.pt-3]

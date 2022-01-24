@@ -59,6 +59,7 @@
 (def other-routes
   [["" {:swagger {:tags ["other"]}}
     ["/ping" {:get ping
+              :name :api.other/ping
               :description (at/get-doc #'ping)
               :responses {200 {:body {:text string?}}}}]
     ["/export" {:middleware [:discussion/valid-share-hash?]

@@ -31,11 +31,13 @@
   "OpenID Endpoint to authenticate using oauth2."
   (format "%sauth/realms/%s/protocol/openid-connect/auth" server realm))
 
-(def backend-admin-id (or (System/getenv "KEYCLOAK_ADMIN_ID") "info@schnaq.com"))
-
-(def backend-admin-secret (or (System/getenv "KEYCLOAK_ADMIN_SECRET") "***REMOVED***"))
+(def ^:private backend-admin-id
+  (or (System/getenv "KEYCLOAK_ADMIN_ID") "info@schnaq.com"))
+(def ^:private backend-admin-secret
+  (or (System/getenv "KEYCLOAK_ADMIN_SECRET") "***REMOVED***"))
 
 (def kc-client
+  "Client to interact with our keycloak instance."
   (-> (client-conf {:auth-server-url (format "%sauth/" server)
                     :realm realm
                     :client-id "admin-cli"})

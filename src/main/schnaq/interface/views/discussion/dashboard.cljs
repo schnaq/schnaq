@@ -37,11 +37,11 @@
          {:key (str "dashboard-statement-" (:db/id statement))}))]))
 
 (defn- summary-view []
-  (let [beta-user? @(rf/subscribe [:user/beta-tester?])
+  (let [pro-user? @(rf/subscribe [:user/pro-user?])
         current-schnaq @(rf/subscribe [:schnaq/selected])]
     [:div.panel-white.p-3
      [:h3.mb-3.text-break (labels :dashboard/summary)]
-     (if (or beta-user? shared-config/embedded?)
+     (if (or pro-user? shared-config/embedded?)
        [summary/summary-body current-schnaq]
        [preview/preview-image :preview/summary])]))
 

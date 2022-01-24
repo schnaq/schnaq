@@ -18,7 +18,7 @@
                   {:href href :class "text-primary"}
                   {:href href})]
     [:a.li.list-group-item.list-group-item-action classes
-     [:img.header-standalone-icon.mr-3
+     [:img.navbar-view-toggle.mr-3
       {:src (img-path icon)
        :alt "graph icon"}]
      (labels label)]))

@@ -136,9 +136,10 @@
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
      [:<>
-      (when-let [graph (:graph @(rf/subscribe [:graph/current]))]
-        [graph-canvas graph])
-      [loading/spinner]]]))
+      (if-let [graph (:graph @(rf/subscribe [:graph/current]))]
+        [graph-canvas graph]
+        [:div.spinner-position
+         [loading/spinner-icon]])]]))
 
 (defn graph-view-entrypoint []
   [graph-view])

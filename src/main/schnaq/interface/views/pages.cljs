@@ -13,6 +13,7 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.navbar.for-discussions :as discussion-navbar]
             [schnaq.interface.views.navbar.for-pages :as navbar-pages]))
 
@@ -104,6 +105,16 @@
     :page/subheading (labels :page.beta/subheading)}
    [:div.container.text-center.pt-5
     [:p (labels :page.beta.modal/cta) " " [:a {:href "mailto:info@schnaq.com"} (tools/obfuscate-mail "info@schnaq.com")] "."]]])
+
+(defn loading-page
+  "Show a loading page."
+  []
+  [with-nav-and-header
+   {:page/vertical-header? true
+    :page/heading "Seite wird geladen"
+    :page/subheading "Du wirst bald weitergeleitet"}
+   [:div.container
+    [loading/loading-placeholder]]])
 
 (>defn- validate-conditions-middleware
   "Takes the conditions and returns either the page or redirects to other views."

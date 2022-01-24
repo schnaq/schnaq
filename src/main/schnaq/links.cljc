@@ -54,3 +54,11 @@
   (assoc discussion
          :discussion/share-link (get-share-link share-hash)
          :discussion/admin-link (get-admin-link share-hash edit-hash)))
+
+(>defn checkout-link
+  "Get link to checkout page. This should be called after the login of a user."
+  []
+  [:ret string?]
+  #?(:cljs (let [path (reitfe/href :routes.subscription.redirect/checkout)
+                 location (oget js/window :location)]
+             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))

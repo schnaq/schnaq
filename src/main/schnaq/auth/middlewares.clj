@@ -5,7 +5,8 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.auth.lib :as auth-lib]
             [schnaq.config :as config]
-            [schnaq.config.shared :as shared-config]))
+            [schnaq.config.shared :as shared-config]
+            [schnaq.database.user :as user-db]))
 
 (defn- valid-app-code?
   "Check if an app-code was provided via the request-body."
@@ -36,9 +37,18 @@
   "Check if is eligible for our beta-testers program."
   [handler]
   (fn [request]
-    (if (auth-lib/has-role? (:identity request) shared-config/beta-tester-roles)
+    (if (auth-lib/beta-tester? request)
       (handler request)
       (forbidden (at/build-error-body :auth/not-a-beta-tester "You are not a beta tester.")))))
+
+(defn pro-user?-middleware
+  "Validate, that user has a subscription in our database or is a beta user."
+  [handler]
+  (fn [request]
+    (if (or (auth-lib/beta-tester? request)
+            (user-db/pro-subscription? (get-in request [:identity :sub])))
+      (handler request)
+      (forbidden (at/build-error-body :auth/no-pro-subscription "You have no valid pro-subscription.")))))
 
 (defn valid-app-code?-middleware
   "Validate the app code provided by the application. Only registered

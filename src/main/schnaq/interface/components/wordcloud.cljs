@@ -39,6 +39,7 @@
     (for [[word total] (->> (str/split replaced #"\s")
                             (remove #((set stopwords-de) %))
                             (map extract-link-text-from-md)
+                            (remove empty?)
                             frequencies)]
       {:text word
        :value total})))
@@ -63,7 +64,7 @@
 (defn wordcloud
   "Create a wordcloud based on the data in the db."
   []
-  (if @(rf/subscribe [:user/beta-tester?])
+  (if @(rf/subscribe [:user/pro-user?])
     (if-let [words @(rf/subscribe [:wordcloud/words])]
       [:> ReactWordcloud {:words words :options options}]
       [:div.text-center.py-3 [spinner-icon]])

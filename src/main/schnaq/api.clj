@@ -26,6 +26,7 @@
             [schnaq.api.hub :refer [hub-routes]]
             [schnaq.api.middlewares :as middlewares]
             [schnaq.api.schnaq :refer [schnaq-routes]]
+            [schnaq.api.subscription.stripe :refer [stripe-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
             [schnaq.api.survey :refer [survey-routes]]
             [schnaq.api.user :refer [user-routes]]
@@ -64,6 +65,7 @@
   (log/info (format "Frontend URL: %s, host: %s" config/frontend-url config/frontend-host))
   (log/info (if (:sender-password config/email) "E-Mail configured" "E-Mail not configured"))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm))
+  (log/info (format "[Stripe] Product ID schnaq pro: %s" shared-config/stripe-price-id-schnaq-pro))
   (log/info "All systems ready to go"))
 
 (def ^:private description
@@ -96,6 +98,7 @@
     hub-routes
     other-routes
     schnaq-routes
+    stripe-routes
     summary-routes
     survey-routes
     user-routes
@@ -127,6 +130,7 @@
            :muuntaja m/instance
            :middleware [swagger/swagger-feature
                         parameters/parameters-middleware    ;; query-params & form-params
+                        middlewares/convert-body-middleware  ;; must be called *before* muuntaja/format-middleware
                         muuntaja/format-middleware
                         middlewares/exception-printing-middleware
                         coercion/coerce-response-middleware ;; coercing response bodies
@@ -139,6 +143,7 @@
     ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
                            :user/admin? auth-middlewares/admin?-middleware
                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
+                           :user/pro-user? auth-middlewares/pro-user?-middleware
                            :app/valid-code? auth-middlewares/valid-app-code?-middleware
                            :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
                            :discussion/valid-statement? middlewares/valid-statement?-middleware

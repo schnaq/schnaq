@@ -25,13 +25,6 @@
   false)
 
 ;; -----------------------------------------------------------------------------
-;; Pricing
-
-(def pricing-pro-tier
-  "Price in euros, exclusively VAT."
-  6.99)
-
-;; -----------------------------------------------------------------------------
 ;; Keycloak
 
 (goog-define keycloak-realm "development")

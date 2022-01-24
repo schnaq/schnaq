@@ -4,10 +4,10 @@
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub faFontAwesomeFlag]]
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck
+             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
               faCog faComment faComments faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
               faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLocationArrow faLock faMagic
-              faPaperPlane faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faTag faTerminal
+              faPaperPlane faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
               faTimes faTimesCircle faTrashAlt faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
@@ -23,6 +23,7 @@
    :camera faCamera
    :chalkboard-teacher faChalkboardTeacher
    :chart-pie faChartPie
+   :check/circle faCheckCircle
    :check/normal faCheck
    :cog faCog
    :collapse-down faAngleDown
@@ -70,6 +71,7 @@
    :share faShareAlt
    :shield faShieldAlt
    :star faStar
+   :sun faSun
    :tag faTag
    :terminal faTerminal
    :times faTimes
@@ -84,7 +86,7 @@
 (defn icon
   "The core icon building-block. Pass extra-attributes as a third parameter.
   e.g. `{:size \"lg\"
-        :rotation 180}`"
+         :rotation 180}`"
   ([identifier]
    [icon identifier ""])
   ([identifier classes]
@@ -95,3 +97,13 @@
      {:icon (get icons identifier)
       :className classes}
      extras)]))
+
+(defn icon-card
+  "Wrap an icon into a panel to emphasize it. Takes same parameters as `icon`."
+  ([identifier]
+   [icon-card identifier ""])
+  ([identifier classes]
+   [icon-card identifier classes {}])
+  ([identifier classes extras]
+   [:span.icon-card
+    [icon identifier classes extras]]))

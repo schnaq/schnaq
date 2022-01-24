@@ -5,7 +5,7 @@
             [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as reitit-front-easy]
             [reitit.frontend.history :as rfh]
-            [schnaq.config.shared :as config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.integrations.wetog.routes :as wetog-routes]
@@ -35,6 +35,7 @@
             [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
+            [schnaq.interface.views.subscription :as subscription-views]
             [schnaq.interface.views.user.edit-account :as edit-account]
             [schnaq.interface.views.user.edit-notifications :as edit-notifications]))
 
@@ -92,7 +93,8 @@
      {:name :routes.user.manage/account
       :view edit-account/view
       :link-text (labels :user/edit-account)
-      :controllers [{:stop (fn [] (rf/dispatch [:user.picture/reset]))}]}]
+      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:user.subscription/status]]))
+                     :stop (fn [] (rf/dispatch [:user.picture/reset]))}]}]
     ["/notifications"
      {:name :routes.user.manage/notifications
       :view edit-notifications/view
@@ -227,7 +229,18 @@
     {:name :routes/pricing
      :view pricing-view/pricing-view
      :link-text (labels :router/pricing)
-     :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
+     :controllers [{:start (fn []
+                             (rf/dispatch [:load-preview-statements])
+                             (rf/dispatch [:pricing/get-price shared-config/stripe-price-id-schnaq-pro]))}]}]
+   ["subscription"
+    ["/success" {:name :routes.subscription/success
+                 :view subscription-views/success-view}]
+    ["/cancel" {:name :routes.subscription/cancel
+                :view subscription-views/cancel-view}]
+    ["/redirect/checkout/pro"
+     {:name :routes.subscription.redirect/checkout
+      :controllers [{:start #(rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro]])}]
+      :view pages/loading-page}]]
    ["privacy"
     [""
      {:name :routes/privacy
@@ -264,7 +277,7 @@
 
 (def router
   (reitit-front/router
-   (if config/embedded?
+   (if shared-config/embedded?
      wetog-routes/routes
      routes)
    ;; This disables automatic conflict checking. So: Please check your own
@@ -273,11 +286,11 @@
 
 (defn- on-navigate [new-match]
   (let [window-hash (.. js/window -location -hash)]
-    (when (not config/embedded?)
+    (when (not shared-config/embedded?)
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-          #(js-wrap/scroll-to-id window-hash)))))
+               #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
@@ -286,7 +299,7 @@
   (reitit-front-easy/start!
    router
    on-navigate
-   {:use-fragment config/embedded?
+   {:use-fragment shared-config/embedded?
     :ignore-anchor-click? (fn [router e el uri]
                             (and (rfh/ignore-anchor-click? router e el uri)
                                  (empty? (.-hash el))))}))

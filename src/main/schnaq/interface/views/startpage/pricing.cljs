@@ -2,13 +2,18 @@
   (:require [cljs.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [goog.string :as gstring]
-            [reitit.frontend.easy :as reititfe]
+            [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
+            [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.loading :refer [spinner-icon]]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.qa.inputs :as qanda]))
+            [schnaq.interface.views.qa.inputs :as qanda]
+            [schnaq.links :as links]))
 
 (defn- label-builder
   "Extract vector from labels and drop the first element, which is always a
@@ -34,15 +39,23 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- price-tag
-  "Unify the price-tag design."
-  [price per-account?]
+(defn- price-tag-pro-tier
+  "Price tag for pro tier."
+  []
+  (if-let [pro-price @(rf/subscribe [:pricing/pro-tier])]
+    [:<>
+     [:span.display-5 pro-price " €"]
+     [:span (labels :pricing.units/per-month)]
+     [:br]
+     [:small.text-muted (labels :pricing.notes/with-vat)]]
+    [spinner-icon]))
+
+(defn- price-tag-free-tier
+  "Price tag for free tier."
+  []
   [:<>
-   [:span.display-5 price " €"]
-   [:span (labels :pricing.units/per-month)]
-   (when per-account?
-     [:<> [:br]
-      [:small.text-muted (labels :pricing.notes/with-vat)]])])
+   [:span.display-5 "0 €"]
+   [:span (labels :pricing.units/per-month)]])
 
 (defn- intro
   "Welcome new users to the pricing page."
@@ -76,7 +89,7 @@
        [:h3.card-title.text-center title-label]
        [:h6.card-subtitle.mb-3.text-muted.text-center (labels subtitle)]
        [:p.card-text.text-center [icon icon-name "text-primary" {:size "4x"}]]
-       [:p.text-center price]
+       [:div.text-center.pb-2 price]
        [:p.card-text.text-justify (labels description)]]
       cta-button
       [:ul.pricing-feature-list
@@ -96,22 +109,35 @@
   []
   [tier-card
    :pricing.free-tier/title :pricing.free-tier/subtitle :rocket
-   [price-tag 0]
+   [price-tag-free-tier]
    :pricing.free-tier/description
    (add-class-to-feature (concat (starter-features) [(labels :pricing.free-tier/for-free)]) "text-primary")
    nil
-   [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (reititfe/href :routes.schnaq/create)]])
+   [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (rfe/href :routes.schnaq/create)]])
 
 (defn- pro-tier-card
   "Display the pro tier card."
   []
   [tier-card
    :pricing.pro-tier/title :pricing.pro-tier/subtitle :crown
-   [price-tag config/pricing-pro-tier true]
+   [price-tag-pro-tier]
    :pricing.pro-tier/description
    (add-class-to-feature (concat (starter-features) (business-features)) "text-primary")
    (coming-soon)
-   [cta-button (labels :pricing.pro-tier/call-to-action) "btn-secondary" "mailto:info@schnaq.com"]
+   (let [authenticated? @(rf/subscribe [:user/authenticated?])
+         pro-user? @(rf/subscribe [:user/pro-user?])]
+     (if pro-user?
+       [:div.alert.alert-info.text-center
+        [:p (labels :pricing.pro-tier/already-subscribed)]
+        [buttons/anchor (labels :pricing.pro-tier/go-to-settings) (rfe/href :routes.user.manage/account) "btn-outline-dark btn-sm"]]
+       [:div.text-center.py-4
+        [buttons/button
+         (labels :pricing.pro-tier/call-to-action)
+         #(if authenticated?
+            (rf/dispatch [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro])
+            (rf/dispatch [:keycloak/login (links/checkout-link)]))
+         "btn-secondary btn-lg"
+         (when-not shared-config/stripe-enabled? {:disabled true})]]))
    {:class "border-primary shadow-lg"}])
 
 (defn- enterprise-tier-card
@@ -202,3 +228,31 @@
   "The pricing view."
   []
   [pricing-page])
+
+
+;; -----------------------------------------------------------------------------
+
+
+(rf/reg-event-fx
+ :subscription/create-checkout-session
+ (fn [{:keys [db]} [_ price-id]]
+   {:fx [(http/xhrio-request db :post "/stripe/create-checkout-session"
+                             [:navigation.redirect/follow]
+                             {:price-id price-id})]}))
+
+(rf/reg-event-fx
+ :pricing/get-price
+ (fn [{:keys [db]} [_ price-id]]
+   {:fx [(http/xhrio-request db :get "/stripe/price"
+                             [:pricing/store-price]
+                             {:price-id price-id})]}))
+
+(rf/reg-event-db
+ :pricing/store-price
+ (fn [db [_ {:keys [id cost]}]]
+   (assoc-in db [:pricing id] cost)))
+
+(rf/reg-sub
+ :pricing/pro-tier
+ (fn [db _]
+   (get-in db [:pricing shared-config/stripe-price-id-schnaq-pro])))

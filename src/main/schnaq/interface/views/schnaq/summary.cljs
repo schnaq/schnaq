@@ -5,7 +5,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -16,16 +16,6 @@
 
 (def ^:private calculation-states
   #{:request-succeeded :requested})
-
-(defn- hint-text
-  "Info box to inform the user that summary is on its way."
-  []
-  [:small.text-muted.text-left
-   [:div.d-flex.flex-row
-    [icon :info "my-auto mr-3"]
-    (labels :summary.user/computation-time)
-    (when-not shared-config/embedded?
-      (str " " (labels :summary.user/privacy-warning)))]])
 
 (defn- abort-summary
   "Something went wrong. Add link to abort the summary request
@@ -60,7 +50,11 @@
         {:on-click #(rf/dispatch [:schnaq.summary/request share-hash])})
       button-text]
      [abort-summary share-hash]
-     [hint-text]]))
+     [common-components/hint-text
+      (str
+       (labels :summary.user/computation-time)
+       (when-not shared-config/embedded?
+         (str " " (labels :summary.user/privacy-warning))))]]))
 
 (defn summary-body
   "Contains the summary and possibly some meta information."

@@ -68,7 +68,7 @@
   [keyword? keyword? (? string?) :ret vector?]
   [:a.dropdown-item {:href href}
    [:div.text-center
-    [:img.header-standalone-icon
+    [:img.navbar-view-toggle
      {:src (img-path icon)
       :alt "graph icon"}]
     [:p.small.m-0.text-nowrap (labels label)]]])
@@ -118,7 +118,7 @@
        [navbar-components/separated-button
         [:div.dropdown-toggle
          {:class toggle-class}
-         [:img.header-standalone-icon.d-block
+         [:img.navbar-view-toggle.d-block
           {:src (img-path icon-id) :alt "Icon representing different views"}]
          [:span.small
           (case current-route

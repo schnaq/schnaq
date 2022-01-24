@@ -13,6 +13,33 @@
 (s/def :db/id (s/or :transacted integer? :temporary any?))
 (s/def :db/txInstant inst?)
 
+;; API
+(s/def :api.response/error keyword?)
+(s/def :api.response/message string?)
+(s/def :api.response/error-body
+  (s/keys :req-un [:api.response/error :api.response/message]))
+
+;; Stripe
+(s/def :stripe/customer-id (s/and string? #(.startsWith % "cus_")))
+
+(s/def :stripe.price/cost number?)
+(s/def :stripe.price/id (s/and string? #(.startsWith % "price_")))
+(s/def :stripe/price
+  (s/or :valid (s/keys :req-un [:stripe.price/id :stripe.price/cost])
+        :request-failed :api.response/error-body))
+
+(s/def :stripe.subscription/id (s/and string? #(.startsWith % "sub_")))
+(s/def :stripe.subscription/status #{:incomplete :incomplete_expired :trialing :active :past_due :canceled :unpaid})
+(s/def :stripe.subscription/cancelled? boolean?)
+(s/def :stripe.subscription/period-start nat-int?)
+(s/def :stripe.subscription/period-end nat-int?)
+(s/def :stripe.subscription/cancel-at nat-int?)
+(s/def :stripe.subscription/cancelled-at nat-int?)
+(s/def :stripe/subscription
+  (s/keys :req-un [:stripe.subscription/status :stripe.subscription/cancelled?
+                   :stripe.subscription/period-start :stripe.subscription/period-end]
+          :opt-un [:stripe.subscription/cancel-at :stripe.subscription/cancelled-at]))
+
 ;; User
 (s/def :user/nickname string?)
 (s/def ::user (s/keys :req [:user/nickname]))
@@ -30,11 +57,16 @@
 (s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)
                                               :schnaqs (s/coll-of ::discussion)))
+(s/def :user.registered.subscription/stripe-id :stripe.subscription/id)
+(s/def :user.registered.subscription/stripe-customer-id :stripe/customer-id)
+(s/def :user.registered.subscription/type #{:user.registered.subscription.type/pro})
 (s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/display-name]
                                  :opt [:user.registered/last-name :user.registered/first-name
                                        :user.registered/groups :user.registered/profile-picture
                                        :user.registered/email :user.registered/notification-mail-interval
-                                       :user.registered/visited-schnaqs]))
+                                       :user.registered/visited-schnaqs :user.registered.subscription/type
+                                       :user.registered.subscription/stripe-id
+                                       :user.registered.subscription/stripe-customer-id]))
 
 ;; Could be anonymous or registered
 (s/def ::any-user (s/or :user ::user

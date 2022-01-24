@@ -14,6 +14,7 @@
             [schnaq.interface.auth]
             [schnaq.interface.components.buttons]
             [schnaq.interface.components.colors]
+            [schnaq.interface.components.common]
             [schnaq.interface.components.icons]
             [schnaq.interface.components.images]
             [schnaq.interface.components.navbar]
@@ -83,6 +84,7 @@
             [schnaq.interface.views.user]
             [schnaq.interface.views.user.edit-account]
             [schnaq.interface.views.user.settings]
+            [schnaq.interface.views.user.subscription]
             [taoensso.timbre :as log]))
 ;; NOTE: If you use subs and events in another module, you need to require it
 ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
@@ -112,7 +114,8 @@
   (log/info (gstring/format "API: %s" shared-config/api-url))
   (log/info (gstring/format "Environment: %s" shared-config/environment))
   (log/info (gstring/format "Example Data: %s from %s, statements [%d]" config/example-share-hash config/example-api-url config/example-statement))
-  (log/info (gstring/format "[Keycloak] Realm: %s, Client: %s" config/keycloak-realm config/keycloak-client)))
+  (log/info (gstring/format "[Keycloak] Realm: %s, Client: %s" config/keycloak-realm config/keycloak-client))
+  (log/info (gstring/format "[Stripe] Subscriptions %s" (if shared-config/stripe-enabled? "enabled" "disabled"))))
 
 (defn init
   "Entrypoint into the application."
