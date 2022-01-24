@@ -86,6 +86,8 @@
 ;; Stripe
 
 (def stripe-secret-api-key
-  "***REMOVED***")
+  (or (System/getenv "STRIPE_SECRET_KEY")
+      "***REMOVED***"))
 (def stripe-webhook-access-key
-  "***REMOVED***")
+  (or (System/getenv "STRIPE_WEBHOOK_ACCESS_KEY")
+      "***REMOVED***"))
