@@ -356,7 +356,7 @@
   (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (statements-list)
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
-        activation (when top-level?  activation/activation-card)
+        activation (when top-level? activation/activation-card)
         surveys (when top-level? (survey/survey-list))
         access-code @(rf/subscribe [:schnaq.selected/access-code])]
     [:<>

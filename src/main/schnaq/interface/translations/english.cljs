@@ -282,7 +282,7 @@
 
    ;; Activation feature
 
-   :schnaq.activation.create/label "Present your participant:s with an activation input!"
+   :schnaq.activation.create/label "Present your participants with an activation input!"
    :schnaq.activation.create/start-button "Start activation"
    :schnaq.activation.create/reset-button "Reset Activation"
    :schnaq.activation/title "Toots total:"

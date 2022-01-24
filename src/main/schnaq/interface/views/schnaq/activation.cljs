@@ -1,8 +1,8 @@
 (ns schnaq.interface.views.schnaq.activation
-  (:require   ["framer-motion" :refer [motion]]
-              [re-frame.core :as rf]
-              [schnaq.interface.translations :refer [labels]]
-              [schnaq.interface.utils.http :as http]))
+  (:require ["framer-motion" :refer [motion]]
+            [re-frame.core :as rf]
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.http :as http]))
 
 (defn- schnaqqis
   "Walking schnaqqis with varying x and y positions."
@@ -46,32 +46,36 @@
     (schnaqqis)]])
 
 (defn- schnaqqi-walk []
-  (let [walk? @(rf/subscribe [:schnaq.activation/walk?])]
-    [:div.activation-schnaqqi-space
-     (when walk?
-       [schnaqqi-walk-motion])]))
+  [:div.activation-schnaqqi-space
+   (when @(rf/subscribe [:schnaq.activation/walk?])
+     [schnaqqi-walk-motion])])
 
-(defn activation-view [background-class button-class]
-  (let [activation @(rf/subscribe [:schnaq/activation])]
-    (when activation
-      [:section.statement-card.p-3.text-white
-       {:class background-class}
-       [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
-       [:div.mx-auto.display-3 (:activation/count activation)]
-       [schnaqqi-walk]
-       [:div.text-center
-        [:button.btn.btn-lg.btn-secondary
-         {:class button-class
-          :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
-         (labels :schnaq.activation/activation-button)]]])))
+(defn- activation-view [background-class button-class]
+  (when-let [activation @(rf/subscribe [:schnaq/activation])]
+    [:section.statement-card.p-3.text-white
+     {:class background-class}
+     [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
+     [:div.mx-auto.display-3 (:activation/count activation)]
+     [schnaqqi-walk]
+     [:div.text-center
+      [:button.btn.btn-lg.btn-secondary
+       {:class button-class
+        :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
+       (labels :schnaq.activation/activation-button)]]]))
 
-(defn activation-event-view []
+(defn activation-event-view
+  "Activation card for q-and-a view."
+  []
   [activation-view "bg-transparent" "btn-lg activation-button-rounded"])
 
-(defn activation-card []
+(defn activation-card
+  "Activation card for the discussion-view."
+  []
   [activation-view "activation-background overflow-hidden" "w-75"])
 
-(defn activation-tab []
+(defn activation-tab
+  "Activation menu to create and reset the current activation."
+  []
   (let [activation @(rf/subscribe [:schnaq/activation])]
     [:div.pt-2
      [:div.text (labels :schnaq.activation.create/label)]
