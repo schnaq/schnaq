@@ -8,6 +8,9 @@
   animation: walk_sprite 1s steps(24) infinite;
   background: url('https://s3.schnaq.com/schnaq-schnaqqifanten/sprites/spritesheet_schnaqqi_walk_24.png');
   height: 135px;
+  left: 0;
+  position: absolute;
+  top: 0;
   transform: translate(-25%, -25%) scale(0.5);
   width: 175px;
 }
@@ -16,4 +19,11 @@
   .schnaqqi-walk {
     transform: scale(1);
   }
+}
+
+
+.schnaqqi-walk-container {
+  height: 150px;
+  position: relative;
+  width: 100%;
 }

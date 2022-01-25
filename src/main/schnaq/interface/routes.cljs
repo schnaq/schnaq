@@ -157,11 +157,15 @@
                                (rf/dispatch [:updates.periodic/starting-conclusions true])
                                (rf/dispatch [:discussion.query.conclusions/starting])
                                (rf/dispatch [:schnaq.surveys/load-from-backend])
+                               (rf/dispatch [:schnaq.activation/load-from-backend])
                                (rf/dispatch [:updates.periodic/surveys true])
+                               (rf/dispatch [:updates.periodic/activation true])
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/starting-conclusions false])
                               (rf/dispatch [:updates.periodic/surveys false])
+                              (rf/dispatch [:updates.periodic/activation false])
+                              (rf/dispatch [:schnaq.activation/dissoc])
                               (rf/dispatch [:statement.edit/reset-edits])
                               (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
                               (rf/dispatch [:toggle-replies/clear!]))}]
@@ -176,7 +180,12 @@
       {:name :routes.schnaq/qanda
        :view qanda/qanda-view
        :link-text (labels :router/qanda)
-       :controllers [{:stop #(rf/dispatch [:schnaq.qa.search.results/reset])}]}]
+       :controllers [{:start (fn []
+                               (rf/dispatch [:schnaq.activation/load-from-backend])
+                               (rf/dispatch [:updates.periodic/activation true]))
+                      :stop (fn []
+                              (rf/dispatch [:updates.periodic/activation false])
+                              (rf/dispatch [:schnaq.qa.search.results/reset]))}]}]
      ["/dashboard"
       {:name :routes.schnaq/dashboard
        :view dashboard/view
