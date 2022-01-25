@@ -85,6 +85,10 @@
    :how-to/question-dont-show-again "Got it?"
    :how-to/answer-dont-show-again "Don't show this tip anymore!"
 
+      ;; localized startpage videos
+   :startpage.above-the-fold/webm "https://s3.schnaq.com/startpage/videos/above_the_fold_english.webm"
+   :startpage.above-the-fold/mp4 "https://s3.schnaq.com/startpage/videos/above_the_fold_english.mp4"
+
    ;; Startpage
    :startpage/heading "Collecting questions made simple"
    :startpage/subheading "Deeply understand your participants"

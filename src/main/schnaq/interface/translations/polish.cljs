@@ -85,6 +85,10 @@
    :how-to/answer-dont-show-again "Nie wyświetlać w przyszłości!"
    :how-to/brt "Powrót do schnaq"
 
+   ;; localized startpage videos
+   :startpage.above-the-fold/webm "https://s3.schnaq.com/startpage/videos/above_the_fold_english.webm"
+   :startpage.above-the-fold/mp4 "https://s3.schnaq.com/startpage/videos/above_the_fold_english.mp4"
+
    ;; Startpage
    :startpage/heading "Ułatwione zbieranie pytań"
    :startpage/subheading "Dogłębnie zrozum swoich uczestników"

@@ -85,6 +85,10 @@
    :how-to/question-dont-show-again "Verstanden?"
    :how-to/answer-dont-show-again "In Zukunft nicht mehr anzeigen!"
 
+   ;; localized startpage videos
+   :startpage.above-the-fold/webm "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"
+   :startpage.above-the-fold/mp4 "https://s3.schnaq.com/startpage/videos/above_the_fold.mp4"
+
    ;; Startpage
    :startpage/heading "Fragen sammeln leicht gemacht"
    :startpage/subheading "Verstehe deine Teilnehmer:innen zu 100 %"
