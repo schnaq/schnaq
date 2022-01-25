@@ -44,7 +44,7 @@
     :on-animation-complete (fn [_]
                              (rf/dispatch [:schnaq.activation/finish-animation]))}
    [:div.schnaqqi-walk-container
-    (schnaqqis)]])
+    [schnaqqis]]])
 
 (defn- schnaqqi-walk []
   [:div.activation-schnaqqi-space
