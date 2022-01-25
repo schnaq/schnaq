@@ -91,8 +91,8 @@
 
    ;; Startpage
    :startpage/heading "Ułatwione zbieranie pytań"
-   :startpage/subheading "Dogłębnie zrozum swoich uczestników"
-   :startpage/hook "Możesz w pełni zrozumieć swoich odbiorców w każdej chwili dzięki schnaq Q&A. Aktywuj wszystkich na swoim warsztacie, webinarze lub jakimkolwiek innym wydarzeniu i zademonstruj swoją wiedzę dzięki kartom wiedzy."
+   :startpage/subheading "Pytania i odpowiedzi na żywo dla Twojego wydarzenia"
+   :startpage/hook "Wydobądź ukryte pytania od swoich odbiorców."
    :schnaq.startpage.cta/button "Stwórz darmowy schnaq już teraz!"
    :startpage.social-proof/teaser "Jesteś o jedno kliknięcie od dołączenia do setek innych użytkowników schnaq 👋"
    :startpage.social-proof/companies "Oni już użyli schnaq"

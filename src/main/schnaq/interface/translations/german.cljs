@@ -91,8 +91,8 @@
 
    ;; Startpage
    :startpage/heading "Fragen sammeln leicht gemacht"
-   :startpage/subheading "Verstehe deine Teilnehmer:innen zu 100 %"
-   :startpage/hook "Mit schnaq Q&A (Fragen und Antworten) verstehst du jederzeit, was deine Zuhörer:innen wissen möchten. Aktiviere alle in deinem Workshop, Seminar oder anderen Veranstaltung und zeige deine Expertise mit den Wissenskarten."
+   :startpage/subheading "Das live Q&A für deine Veranstaltung"
+   :startpage/hook "Hole die versteckten Fragen aus deinem Publikum raus."
    :schnaq.startpage.cta/button "Jetzt kostenfrei schnaq erstellen"
    :startpage.social-proof/teaser "Mit einem Klick gehörst du zu den hunderten Menschen, die schnaq nutzen 👋"
    :startpage.social-proof/companies "Mit denen haben wir schon geschnaqqt"
