@@ -85,10 +85,14 @@
    :how-to/question-dont-show-again "Got it?"
    :how-to/answer-dont-show-again "Don't show this tip anymore!"
 
+      ;; localized startpage videos
+   :startpage.above-the-fold/webm "https://s3.schnaq.com/startpage/videos/above_the_fold_english.webm"
+   :startpage.above-the-fold/mp4 "https://s3.schnaq.com/startpage/videos/above_the_fold_english.mp4"
+
    ;; Startpage
    :startpage/heading "Collecting questions made simple"
-   :startpage/subheading "Deeply understand your participants"
-   :startpage/hook "You can fully understand your audience anytime with schnaq Q&A. Activate everyone in your workshop, webinar or any other event and demonstrate your expertise with the knowledge cards."
+   :startpage/subheading "The live Q&A for your event"
+   :startpage/hook "Discover the hidden questions of your audience."
    :schnaq.startpage.cta/button "Create a free schnaq now!"
    :startpage.social-proof/teaser "You are one click away from joining hundreds of other schnaq users 👋"
    :startpage.social-proof/companies "They're already used to schnaq"

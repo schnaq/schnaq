@@ -3,7 +3,6 @@
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.components.videos :refer [video]]
             [schnaq.interface.translations :refer [labels]]))
 
 (defn- header-video
@@ -13,8 +12,8 @@
    [:div.d-inline-block.bg-ipad
     [:video.video-header
      {:auto-play true :loop true :muted true :plays-inline true}
-     [:source {:src (video :startpage.above-the-fold/webm) :type "video/webm"}]
-     [:source {:src (video :startpage.above-the-fold/mp4) :type "video/mp4"}]]]])
+     [:source {:src (labels :startpage.above-the-fold/webm) :type "video/webm"}]
+     [:source {:src (labels :startpage.above-the-fold/mp4) :type "video/mp4"}]]]])
 
 (defn- start-schnaq-button
   "Tell user to create a schnaq now."

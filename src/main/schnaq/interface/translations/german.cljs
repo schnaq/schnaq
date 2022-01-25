@@ -85,10 +85,14 @@
    :how-to/question-dont-show-again "Verstanden?"
    :how-to/answer-dont-show-again "In Zukunft nicht mehr anzeigen!"
 
+   ;; localized startpage videos
+   :startpage.above-the-fold/webm "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"
+   :startpage.above-the-fold/mp4 "https://s3.schnaq.com/startpage/videos/above_the_fold.mp4"
+
    ;; Startpage
    :startpage/heading "Fragen sammeln leicht gemacht"
-   :startpage/subheading "Verstehe deine Teilnehmer:innen zu 100 %"
-   :startpage/hook "Mit schnaq Q&A (Fragen und Antworten) verstehst du jederzeit, was deine Zuhörer:innen wissen möchten. Aktiviere alle in deinem Workshop, Seminar oder anderen Veranstaltung und zeige deine Expertise mit den Wissenskarten."
+   :startpage/subheading "Das live Q&A für deine Veranstaltung"
+   :startpage/hook "Hole die versteckten Fragen aus deinem Publikum raus."
    :schnaq.startpage.cta/button "Jetzt kostenfrei schnaq erstellen"
    :startpage.social-proof/teaser "Mit einem Klick gehörst du zu den hunderten Menschen, die schnaq nutzen 👋"
    :startpage.social-proof/companies "Mit denen haben wir schon geschnaqqt"
