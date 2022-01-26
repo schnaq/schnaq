@@ -34,6 +34,7 @@
      "tax_id_collection" {"enabled" true}  ;; Collect tax id from registered companies
      "metadata" {"keycloak-id" keycloak-id}
      "subscription_data" {"metadata" {"keycloak-id" keycloak-id}}
+     "payment_method_types" ["card" "sepa_debit"]  ;; Allowed payment methods
      "line_items" items}))
 
 (defn- create-checkout-session
