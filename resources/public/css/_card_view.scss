@@ -102,6 +102,13 @@
   }
 }
 
+.statement-column {
+  @extend .col-qhd-3;
+  @extend .col-xxl-4;
+  @extend .col-lg-6;
+  @extend .col-12;
+}
+
 .statement-card {
   @extend .card;
   @extend .my-2;

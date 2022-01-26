@@ -51,7 +51,7 @@
 
 (defn survey-list
   "Displays all surveys of the current schnaq."
-  []
+  [col-class]
   (let [surveys @(rf/subscribe [:schnaq/surveys])]
      ;; This doall is needed, for the reactive deref inside to work
     (doall
@@ -59,20 +59,22 @@
        (let [total-value (apply + (map :option/votes (:survey/options survey)))
              survey-id (:db/id survey)
              cast-votes @(rf/subscribe [:schnaq/vote-cast survey-id])]
-         [:section.statement-card
-          {:key (str "survey-result-" survey-id)}
-          [:form
-           {:on-submit (fn [e]
-                         (jsw/prevent-default e)
-                         (rf/dispatch [:schnaq.survey/cast-vote (oget e [:target :elements]) survey]))}
-           [:div.mx-4.my-2
-            [:h6.pb-2.text-center (:survey/title survey)]
-            [results-graph (:survey/options survey) total-value (:survey/type survey) cast-votes]
-            (when-not cast-votes
-              [:div.text-center
-               [:button.btn.btn-primary.btn-sm
-                {:type :submit}
-                (labels :schnaq.survey/vote!)]])]]])))))
+         [:div
+          {:key (str "survey-result-" survey-id)
+           :class col-class}
+          [:section.statement-card
+           [:form
+            {:on-submit (fn [e]
+                          (jsw/prevent-default e)
+                          (rf/dispatch [:schnaq.survey/cast-vote (oget e [:target :elements]) survey]))}
+            [:div.mx-4.my-2
+             [:h6.pb-2.text-center (:survey/title survey)]
+             [results-graph (:survey/options survey) total-value (:survey/type survey) cast-votes]
+             (when-not cast-votes
+               [:div.text-center
+                [:button.btn.btn-primary.btn-sm
+                 {:type :submit}
+                 (labels :schnaq.survey/vote!)]])]]]])))))
 
 (defn- survey-option
   "Returns a single option component. Can contain a button for removal of said component."

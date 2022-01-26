@@ -420,11 +420,11 @@
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
         filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))]
     (for [statement filtered-conclusions]
-      (with-meta
-        [motion/fade-in-and-out
-         [answer-or-edit-card statement]
-         card-fade-in-time]
-        {:key (:db/id statement)}))))
+      [:div.statement-column
+       {:key (:db/id statement)}
+       [motion/fade-in-and-out
+        [answer-or-edit-card statement]
+        card-fade-in-time]])))
 
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."
@@ -433,18 +433,14 @@
         statements (statements-list)
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
         activation (when top-level? [activation/activation-card])
-        surveys (when top-level? (survey/survey-list))
+        surveys (when top-level? (survey/survey-list "statement-column"))
         access-code @(rf/subscribe [:schnaq.selected/access-code])]
-    [:<>
-     [:> Masonry
-      {:breakpoints config/breakpoints
-       :columns {:xs 1 :md 2 :xxl 3 :qhd 4}
-       :autoArrange true
-       :gap 10}
-      [selection-card]
-      activation
-      surveys
-      statements]
+    [:div.row
+     [:div.statement-column
+      [selection-card]]
+     activation
+     surveys
+     statements
      (when-not (or search? (seq statements) (seq surveys) (not access-code))
        [call-to-share])]))
 
