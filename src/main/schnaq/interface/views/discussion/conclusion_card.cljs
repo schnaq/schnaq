@@ -102,10 +102,12 @@
 
 (>defn- card-highlighting
   "Add card-highlighting to a statement card."
-  [{:keys [statement/type]}]
+  [{:keys [meta/answered? statement/type]}]
   [::specs/statement :ret string?]
   (let [statement-type (when type (str "-" (name type)))]
-    (str "highlight-card" statement-type)))
+    (if answered?
+      "highlight-card-answered"
+      (str "highlight-card" statement-type))))
 
 (defn- statement-card->editable-card
   "Wrap `statement-card-component`. Check if this statement is currently being

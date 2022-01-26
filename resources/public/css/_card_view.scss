@@ -166,6 +166,11 @@
   background: $negative;
 }
 
+.highlight-card-answered {
+  @extend .highlight-card;
+  background: $green;
+}
+
 .search-bar {
   @include rounded.rounded-1;
   background: $white;
