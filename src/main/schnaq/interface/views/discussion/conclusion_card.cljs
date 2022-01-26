@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.conclusion-card
   (:require ["react-smart-masonry" :default Masonry]
+            [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
@@ -278,6 +279,80 @@
     [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
     [input/input-form]))
 
+;; -----------------------------------------------------------------------------
+
+
+(defn- current-topic-badges [schnaq statement]
+  (let [badges-start [badges/static-info-badges-discussion schnaq]
+        badges-conclusion [badges/extra-discussion-info-badges statement true]
+        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        badges (if starting-route? badges-start badges-conclusion)]
+    [:div.ml-auto badges]))
+
+(defn- title-view [statement]
+  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        title [md/as-markdown (:statement/content statement)]
+        edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
+    (if edit-active?
+      (if starting-route?
+        [edit/edit-card-discussion statement]
+        [edit/edit-card-statement statement])
+      [:h2.h6 title])))
+
+(defn- title-and-input-element
+  "Element containing Title and textarea input"
+  [statement]
+  (let [statement-labels (set (:statement/labels statement))]
+    [:<>
+     [title-view statement]
+     (for [label statement-labels]
+       [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
+        [labels/build-label label]])]))
+
+(defn- topic-bubble-view []
+  (let [{:discussion/keys [title author created-at] :as schnaq} @(rf/subscribe [:schnaq/selected])
+        current-conclusion @(rf/subscribe [:discussion.conclusion/selected])
+        content {:db/id (:db/id schnaq)
+                 :statement/content title
+                 :statement/author author
+                 :statement/created-at created-at}
+        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        statement (if starting-route? content current-conclusion)
+        info-content [up-down-vote statement]]
+    [motion/move-in :left
+     [:div.p-2
+      [:div.d-flex.flex-wrap.mb-4
+       [user/user-info statement 32 nil]
+       [:div.d-flex.flex-row.ml-auto
+        (when-not starting-route?
+          [:div.mr-auto info-content])
+        [current-topic-badges schnaq statement]]]
+      [title-and-input-element statement]]]))
+
+(defn- search-info []
+  (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
+        search-results @(rf/subscribe [:schnaq.search.current/result])]
+    [motion/move-in :left
+     [:div.my-4
+      [:div.d-inline-block
+       [:h2 (labels :schnaq.search/heading)]
+       [:div.row.mx-0.mt-4.mb-3
+        [:img.dashboard-info-icon-sm {:src (img-path :icon-search)}]
+        [:div.text.display-6.my-auto.mx-3
+         search-string]]]
+      [:div.row.m-0
+       [:img.dashboard-info-icon-sm {:src (img-path :icon-posts)}]
+       (if (empty? search-results)
+         [:p.mx-3 (labels :schnaq.search/new-search-title)]
+         [:p.mx-3 (str (count search-results) " " (labels :schnaq.search/results))])]]]))
+
+(defn- topic-or-search-content []
+  (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
+    [:div.overflow-hidden.mb-4
+     (if search-inactive?
+       [topic-bubble-view]
+       [search-info])]))
+
 (defn selection-card
   "Dispatch the different input options, e.g. questions, survey or activation.
   The survey and activation feature are not available for free plan users."
@@ -299,6 +374,7 @@
             top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
         [motion/fade-in-and-out
          [:section.selection-card
+          [topic-or-search-content]
           [:ul.nav.nav-tabs
            [:li.nav-item
             [:a.nav-link {:class (active-class :question)
@@ -356,7 +432,7 @@
   (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (statements-list)
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
-        activation (when top-level? activation/activation-card)
+        activation (when top-level? [activation/activation-card])
         surveys (when top-level? (survey/survey-list))
         access-code @(rf/subscribe [:schnaq.selected/access-code])]
     [:<>
@@ -366,7 +442,7 @@
        :autoArrange true
        :gap 10}
       [selection-card]
-      [activation]
+      activation
       surveys
       statements]
      (when-not (or search? (seq statements) (seq surveys) (not access-code))

@@ -3,6 +3,7 @@
             [re-frame.core :as rf]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.pages :as pages]))
 
@@ -27,7 +28,9 @@
 (defn- discussion-view
   "The first step after starting a discussion."
   []
-  (let [schnaq @(rf/subscribe [:schnaq/selected])]
+  (let [schnaq @(rf/subscribe [:schnaq/selected])
+        title (:discussion/title schnaq)]
+    (common/set-website-title! title)
     [elements/discussion-view (:discussion/share-hash schnaq)]))
 
 (rf/reg-sub
