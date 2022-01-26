@@ -60,12 +60,14 @@
   (log/info (format "Build Hash: %s" config/build-hash))
   (log/info (format "Environment: %s" shared-config/environment))
   (log/info (format "Database Name: %s" config/db-name))
-  (log/info (format "Database URI (truncated): %s" (subs config/datomic-uri 0 30)))
+  (log/info (format "Database URI (truncated): %s..." (subs config/datomic-uri 0 30)))
   (log/info (format "Summy URL: %s" summy-config/base-url))
   (log/info (format "Frontend URL: %s, host: %s" config/frontend-url config/frontend-host))
   (log/info (if (:sender-password config/email) "E-Mail configured" "E-Mail not configured"))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm))
   (log/info (format "[Stripe] Product ID schnaq pro: %s" shared-config/stripe-price-id-schnaq-pro))
+  (log/info (format "[Stripe] Webhook access key (truncated): %s..." (subs config/stripe-webhook-access-key 0 15)))
+  (log/info (format "[Stripe] Secret key (truncated): %s..." (subs config/stripe-secret-api-key 0 15)))
   (log/info "All systems ready to go"))
 
 (def ^:private description
