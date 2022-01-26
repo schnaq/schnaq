@@ -433,7 +433,7 @@
         statements (statements-list)
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
         activation (when top-level? [activation/activation-card])
-        surveys (when top-level? (survey/survey-list "statement-column"))
+        surveys (when top-level? (survey/survey-list))
         access-code @(rf/subscribe [:schnaq.selected/access-code])]
     [:div.row
      [:div.statement-column

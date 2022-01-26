@@ -51,7 +51,7 @@
 
 (defn survey-list
   "Displays all surveys of the current schnaq."
-  [col-class]
+  []
   (let [surveys @(rf/subscribe [:schnaq/surveys])]
      ;; This doall is needed, for the reactive deref inside to work
     (doall
@@ -59,9 +59,8 @@
        (let [total-value (apply + (map :option/votes (:survey/options survey)))
              survey-id (:db/id survey)
              cast-votes @(rf/subscribe [:schnaq/vote-cast survey-id])]
-         [:div
-          {:key (str "survey-result-" survey-id)
-           :class col-class}
+         [:div.statement-column
+          {:key (str "survey-result-" survey-id)}
           [:section.statement-card
            [:form
             {:on-submit (fn [e]
