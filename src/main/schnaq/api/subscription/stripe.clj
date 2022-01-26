@@ -30,6 +30,8 @@
      "mode" "subscription"
      "client_reference_id" keycloak-id
      "customer_email" email
+     "automatic_tax" {"enabled" true}  ;; Activate automatic tax collection
+     "tax_id_collection" {"enabled" true}  ;; Collect tax id from registered companies
      "metadata" {"keycloak-id" keycloak-id}
      "subscription_data" {"metadata" {"keycloak-id" keycloak-id}}
      "line_items" items}))
