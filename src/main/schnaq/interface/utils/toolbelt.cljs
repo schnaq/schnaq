@@ -60,6 +60,14 @@
      [:span (apply str (concat (take char-count text) "…"))]]
     text))
 
+(>defn truncate-to-n-chars-string
+  "Truncate a string to the first x chars and return it with … at the end as a string."
+  [text char-count]
+  [(? string?) nat-int? :ret (? (s/or :truncated :re-frame/component :normal string?))]
+  (if (< char-count (count text))
+    (apply str (concat (take char-count text) "…"))
+    text))
+
 (defn obfuscate-mail
   "Hide real mail address."
   [mail]

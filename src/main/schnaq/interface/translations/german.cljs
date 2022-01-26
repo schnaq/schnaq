@@ -670,6 +670,8 @@
    :qanda.button.mark/as-unanswered "Markierung aufheben"
    :qanda.button.show/replies "Beiträge anzeigen"
    :qanda.button.hide/replies "Beiträge verbergen"
+   :qanda.button.show/statement "Mehr anzeigen"
+   :qanda.button.hide/statement "Weniger anzeigen"
 
    :schnaqs/header "Deine schnaqs"
    :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
