@@ -27,10 +27,6 @@
             [schnaq.interface.views.schnaq.survey :as survey]
             [schnaq.interface.views.user :as user]))
 
-(def ^:private card-fade-in-time
-  "Set a common setting for fading in the cards, e.g. statement cards."
-  0.1)
-
 (defn- call-to-action-schnaq
   "If no contributions are available, add a call to action to engage the users."
   [body]
@@ -409,7 +405,7 @@
             :question [input-form-or-disabled-alert]
             :survey [survey/survey-form]
             :activation [activation/activation-tab])]
-         card-fade-in-time]))))
+         motion/card-fade-in-time]))))
 
 (defn- statements-list []
   (let [active-filters @(rf/subscribe [:filters/active])
@@ -419,12 +415,13 @@
         shown-premises @(rf/subscribe [:discussion.statements/show])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
         filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))]
-    (for [statement filtered-conclusions]
+    (for [index (range (count filtered-conclusions))
+          :let [statement (nth filtered-conclusions index)]]
       [:div.statement-column
        {:key (:db/id statement)}
        [motion/fade-in-and-out
         [answer-or-edit-card statement]
-        card-fade-in-time]])))
+        (+ (/ (inc index) 10) motion/card-fade-in-time)]])))
 
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."

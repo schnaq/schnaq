@@ -65,7 +65,8 @@
         [:button.btn.btn-lg.btn-secondary
          {:class button-class
           :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
-         (labels :schnaq.activation/activation-button)]]]]]))
+         (labels :schnaq.activation/activation-button)]]]
+      motion/card-fade-in-time]]))
 
 (defn activation-event-view
   "Activation card for q-and-a view."

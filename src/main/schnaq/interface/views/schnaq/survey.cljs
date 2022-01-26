@@ -7,6 +7,7 @@
             [schnaq.interface.components.colors :as colors]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jsw]
@@ -61,19 +62,21 @@
              cast-votes @(rf/subscribe [:schnaq/vote-cast survey-id])]
          [:div.statement-column
           {:key (str "survey-result-" survey-id)}
-          [:section.statement-card
-           [:form
-            {:on-submit (fn [e]
-                          (jsw/prevent-default e)
-                          (rf/dispatch [:schnaq.survey/cast-vote (oget e [:target :elements]) survey]))}
-            [:div.mx-4.my-2
-             [:h6.pb-2.text-center (:survey/title survey)]
-             [results-graph (:survey/options survey) total-value (:survey/type survey) cast-votes]
-             (when-not cast-votes
-               [:div.text-center
-                [:button.btn.btn-primary.btn-sm
-                 {:type :submit}
-                 (labels :schnaq.survey/vote!)]])]]]])))))
+          [motion/fade-in-and-out
+           [:section.statement-card
+            [:form
+             {:on-submit (fn [e]
+                           (jsw/prevent-default e)
+                           (rf/dispatch [:schnaq.survey/cast-vote (oget e [:target :elements]) survey]))}
+             [:div.mx-4.my-2
+              [:h6.pb-2.text-center (:survey/title survey)]
+              [results-graph (:survey/options survey) total-value (:survey/type survey) cast-votes]
+              (when-not cast-votes
+                [:div.text-center
+                 [:button.btn.btn-primary.btn-sm
+                  {:type :submit}
+                  (labels :schnaq.survey/vote!)]])]]]
+           motion/card-fade-in-time]])))))
 
 (defn- survey-option
   "Returns a single option component. Can contain a button for removal of said component."
