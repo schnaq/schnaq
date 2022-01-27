@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.discussion.toggle-content
+(ns schnaq.interface.views.discussion.truncated-content
   (:require   [re-frame.core :as rf]
               [schnaq.interface.components.icons :refer [icon]]
               [schnaq.interface.translations :refer [labels]]

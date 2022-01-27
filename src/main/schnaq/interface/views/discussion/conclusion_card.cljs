@@ -21,7 +21,7 @@
               [schnaq.interface.views.discussion.input :as input]
               [schnaq.interface.views.discussion.labels :as labels]
               [schnaq.interface.views.discussion.logic :as logic]
-              [schnaq.interface.views.discussion.toggle-content :as toggle-content]
+              [schnaq.interface.views.discussion.truncated-content :as truncated-content]
               [schnaq.interface.views.schnaq.activation :as activation]
               [schnaq.interface.views.schnaq.survey :as survey]
               [schnaq.interface.views.user :as user]))
@@ -147,7 +147,7 @@
           [badges/edit-statement-dropdown-menu statement]]]
         [:div.my-4]
         [:div.text-typography.px-3
-         [toggle-content/statement statement]
+         [truncated-content/statement statement]
          [statement-information-row statement]]
         [:div.ml-1.mr-3
          [input/reply-in-statement-input-form statement]
@@ -167,7 +167,7 @@
          [badges/edit-statement-dropdown-menu statement]]
         [:div.my-3]
         [:div.text-typography
-         [toggle-content/statement statement]]
+         [truncated-content/statement statement]]
         [:div.d-flex.flex-wrap.align-items-center
          [:a.btn.btn-sm.btn-outline-dark.mr-3.px-1.py-0
           {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
