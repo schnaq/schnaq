@@ -6,8 +6,8 @@
 .schnaq-entry {
   @include rounded.rounded-1;
   background-color: vars.$white;
-  min-height: 5rem;
   cursor: pointer;
+  min-height: 5rem;
 
   @include media-breakpoint-down(sm) {
     border-radius: 0;
@@ -36,9 +36,9 @@
 
 .schnaq-header-hub-image {
   @include rounded.rounded-1;
-  min-height: 2rem;
-  margin-top: -1rem;
   margin-left: 1rem;
+  margin-top: -1rem;
+  min-height: 2rem;
   object-fit: cover;
   overflow: hidden;
   position: absolute;
