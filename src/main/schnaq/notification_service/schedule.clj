@@ -3,11 +3,10 @@
             [chime.core-async :refer [chime-ch]]
             [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
-            [schnaq.config.shared :as shared-config])
-  (:import (java.time LocalTime LocalDate LocalDateTime ZonedDateTime ZoneId Period DayOfWeek)
+            [schnaq.config.shared :as shared-config]
+            [schnaq.notification-service.specs])
+  (:import (java.time Duration Instant LocalTime LocalDate LocalDateTime ZonedDateTime ZoneId Period DayOfWeek)
            (java.time.temporal ChronoUnit TemporalAdjusters)))
-
-(s/def :time/zoned-date-time (partial instance? ZonedDateTime))
 
 (def ^:private start-next-morning
   "ZonedDateTime to indicate the start, today at 7 o'clock in UTC, which is 
@@ -43,7 +42,13 @@
   (atom
    (chime-ch (create-schedule (timestamp-next-monday start-next-morning) 7))))
 
+(def every-second
+  (atom
+   (chime-ch (chime-core/periodic-seq (Instant/now) (Duration/ofSeconds 5)))))
+
 (comment
+  @daily
+
   (create-schedule (timestamp-next-monday start-next-morning) 7)
   (timestamp-next-monday start-next-morning)
   nil)

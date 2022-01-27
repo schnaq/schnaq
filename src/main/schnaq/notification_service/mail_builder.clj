@@ -2,13 +2,14 @@
   (:require [com.fulcrologic.guardrails.core :refer [>defn- >defn]]
             [hiccup.util :as hiccup-util]
             [schnaq.links :as schnaq-links]
-            [schnaq.mail.template :as template]))
+            [schnaq.mail.template :as template]
+            [schnaq.notification-service.specs]))
 
 (>defn- build-new-statements-content
   "Additional content to display the number of new statements and a navigation button
   to the corresponding schnaq. This functions maps over all schnaqs."
   [user content-fn]
-  [::user-with-changed-discussions fn? :ret string?]
+  [:notification-service/user-with-changed-discussions fn? :ret string?]
   (reduce
    str
    (map (fn [{:keys [discussion/share-hash discussion/title new-statements]}]
@@ -22,7 +23,7 @@
 (>defn build-new-statements-html
   "New statements info as html. Preparation for sending it via mail."
   [user]
-  [::user-with-changed-discussions :ret string?]
+  [:notification-service/user-with-changed-discussions :ret string?]
   (build-new-statements-content
    user
    (fn [title text discussion-hash]
@@ -33,7 +34,7 @@
   "New statements info as plain text. Preparation for a standard mail without 
    HTML."
   [user]
-  [::user-with-changed-discussions :ret string?]
+  [:notification-service/user-with-changed-discussions :ret string?]
   (build-new-statements-content
    user
    (fn [title text discussion-hash]
