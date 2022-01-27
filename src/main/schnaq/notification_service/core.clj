@@ -12,23 +12,18 @@
             [schnaq.notification-service.specs]
             [taoensso.timbre :as log]))
 
-(def interval :notification-mail-interval/every-minute)
-(def timestamp (main-db/minutes-ago 101))
-
-(def subscribed-discussions (discussion-db/discussions-by-share-hashes (user-db/subscribed-share-hashes interval)))
-
 (>defn- discussions-with-new-statements-in-interval
   "Query all discussions of users respecting their notification interval. Query
   for these discussions all new statements in the time between now and the
   timestamp and create a map to query these results."
   [timestamp interval]
-  [inst? :user.registered/notification-mail-interval :ret :notification-service/share-hash-to-discussion]
+  [inst? :user.registered/notification-mail-interval => :notification-service/share-hash-to-discussion]
   (let [subscribed-discussions (discussion-db/discussions-by-share-hashes (user-db/subscribed-share-hashes interval))
         discussions (discussion-db/discussions-with-new-statements
                      subscribed-discussions timestamp)]
     (into {} (map (juxt :discussion/share-hash identity) discussions))))
 
-(>defn- remove-discussions-from-user
+(>defn- remove-discussions-with-no-other-users
   "Remove those discussions, where the user is the only author of newly created
   statements."
   [discussions-with-new-statements user-id]
@@ -45,18 +40,19 @@
   `:discussions-with-new-statements` containing all subscribed discussions,
    which received new statements."
   [discussions-with-new-statements user]
-  [:notification-service/share-hash-to-discussion ::specs/registered-user :ret :notification-service/user-with-changed-discussions]
-  (->> user
-       :user.registered/visited-schnaqs
-       (map #(get discussions-with-new-statements (:discussion/share-hash %)))
-       (remove nil?)
-       (assoc user :discussions-with-new-statements)))
+  [:notification-service/share-hash-to-discussion ::specs/registered-user => :notification-service/user-with-changed-discussions]
+  (let [discussions (remove-discussions-with-no-other-users discussions-with-new-statements (:db/id user))]
+    (->> user
+         :user.registered/visited-schnaqs
+         (map #(get discussions (:discussion/share-hash %)))
+         (remove nil?)
+         (assoc user :discussions-with-new-statements))))
 
 (>defn- users-with-changed-discussions
   "Assoc to all users those discussions, with received new statements between 
   now and the timestamp."
   [timestamp interval]
-  [inst? :user.registered/notification-mail-interval :ret (s/coll-of :notification-service/user-with-changed-discussions)]
+  [inst? :user.registered/notification-mail-interval => (s/coll-of :notification-service/user-with-changed-discussions)]
   (let [users (user-db/users-by-notification-interval interval)
         changed-discussions (discussions-with-new-statements-in-interval timestamp interval)]
     (remove #(empty? (:discussions-with-new-statements %))
@@ -68,7 +64,7 @@
 (>defn- send-schnaq-diffs
   "Build and send a mail containing links to each schnaq with new statements."
   [{:user.registered/keys [keycloak-id email] :as user}]
-  [:notification-service/user-with-changed-discussions :ret nil?]
+  [:notification-service/user-with-changed-discussions => nil?]
   (log/info "send-schnaq-diffs")
   (let [total-new-statements (->> user :discussions-with-new-statements (map :new-statements) (apply +))
         new-statements-content-html (mail-builder/build-new-statements-html user)
@@ -91,7 +87,7 @@
    when mails should be sent and an interval to pre-select the users.
    Infinitely loops and sends regularly mails."
   [channel time-fn interval]
-  [any? fn? :user.registered/notification-mail-interval :ret any?]
+  [any? fn? :user.registered/notification-mail-interval => any?]
   (log/info "Starting mail schedule for" interval)
   (go-loop []
     (when-let [_current-time (<! @channel)]
@@ -122,8 +118,8 @@
                :user.registered/display-name "n2o"}
               :new-statements {:total 15, :authors #{17592186045435}}}})
 
-  (users-with-changed-discussions (main-db/minutes-ago 152) :notification-mail-interval/every-minute)
+  (users-with-changed-discussions (main-db/minutes-ago 152) :notification-mail-interval/daily)
 
-  (remove-discussions-from-user data 17592186045435)
+  (remove-discussions-with-no-other-users data 17592186045435)
 
   nil)

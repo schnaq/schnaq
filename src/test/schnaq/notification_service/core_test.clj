@@ -31,7 +31,7 @@
     :new-statements {:total 42 :authors #{424242424242 232323232323}}}})
 
 (deftest remove-discussions-from-user-test
-  (let [remove-discussions-from-user #'sut/remove-discussions-from-user]
+  (let [remove-discussions-from-user #'sut/remove-discussions-with-no-other-users]
     (testing "If user is author of newly created statements, remove the discussion from the discussion."
       (is (= 1 (count (remove-discussions-from-user discussions-with-new-statements 424242424242))))
       (is (= 1 (count (remove-discussions-from-user discussions-with-new-statements 232323232323)))))
