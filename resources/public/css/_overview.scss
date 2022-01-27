@@ -37,9 +37,9 @@
 .schnaq-header-hub-image {
   @include rounded.rounded-1;
   min-height: 2rem;
-  object-fit: cover;
   margin-top: -1rem;
   margin-left: 1rem;
+  object-fit: cover;
   overflow: hidden;
   position: absolute;
   width: 2rem;
