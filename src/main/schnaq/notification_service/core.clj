@@ -72,14 +72,13 @@
   "Takes a core.async channel-atom containing the instances of the next dates 
    when mails should be sent and an interval to pre-select the users.
    Infinitely loops and sends regularly mails."
-  [channel timestamp interval]
+  [channel time-fn interval]
   [any? fn? :user.registered/notification-mail-interval :ret any?]
   (log/info "Starting mail schedule for" interval)
   (go-loop []
     (when-let [current-time (<! @channel)]
       (log/info "Sending new mails, timestamp" current-time)
-      (prn "foo")
-      (let [users (users-with-changed-discussions (timestamp) interval)]
+      (let [users (users-with-changed-discussions (time-fn) interval)]
         (prn users)
         (prn (count users))
         (doseq [user users]
@@ -92,17 +91,14 @@
   [& _args]
   (log/info "Initializing mail notification service")
   (when (main-db/connection-possible?)
+    (start-mail-schedule schedule/every-minute #(main-db/seconds-ago 5) :notification-mail-interval/every-minute)
     (start-mail-schedule schedule/daily #(main-db/days-ago 1) :notification-mail-interval/daily)
     (start-mail-schedule schedule/weekly #(main-db/days-ago 7) :notification-mail-interval/weekly)))
 
 (comment
 
-  (users-with-changed-discussions (main-db/minutes-ago 15) :notification-mail-interval/daily)
-  (users-with-changed-discussions (main-db/days-ago 1) :notification-mail-interval/daily)
+  (users-with-changed-discussions (main-db/seconds-ago 5) :notification-mail-interval/daily)
 
-  (reset! schedule/every-second nil)
-
-  (start-mail-schedule schedule/every-second #(main-db/seconds-ago 5) :notification-mail-interval/daily)
   (main-db/minutes-ago 1)
 
   nil)

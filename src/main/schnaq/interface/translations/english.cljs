@@ -839,7 +839,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :subscription.page.cancel/body "In the free plan, all basic features are still available to you. We would be very happy to hear from you why you do not want to use the Pro functions. Feel free to contact us 👍 Are you missing a function? Let us know at hello@schnaq.com - we'll find a solution!"
    :subscription.page.cancel/button "Change your mind?"
 
-   ; mail interval
+   ;; mail interval
+   :notification-mail-interval/every-minute "Check every Minute"
    :notification-mail-interval/daily "Daily"
    :notification-mail-interval/weekly "Weekly"
    :notification-mail-interval/never "Never"
