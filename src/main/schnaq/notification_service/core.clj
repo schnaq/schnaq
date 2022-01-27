@@ -76,13 +76,9 @@
   [any? fn? :user.registered/notification-mail-interval :ret any?]
   (log/info "Starting mail schedule for" interval)
   (go-loop []
-    (when-let [current-time (<! @channel)]
-      (log/info "Sending new mails, timestamp" current-time)
-      (let [users (users-with-changed-discussions (time-fn) interval)]
-        (prn users)
-        (prn (count users))
-        (doseq [user users]
-          (send-schnaq-diffs user)))
+    (when-let [_current-time (<! @channel)]
+      (log/info "Sending new mails [%s]" interval)
+      (run! send-schnaq-diffs (users-with-changed-discussions (time-fn) interval))
       (recur))))
 
 ;; -----------------------------------------------------------------------------
@@ -94,11 +90,3 @@
     (start-mail-schedule schedule/every-minute #(main-db/seconds-ago 5) :notification-mail-interval/every-minute)
     (start-mail-schedule schedule/daily #(main-db/days-ago 1) :notification-mail-interval/daily)
     (start-mail-schedule schedule/weekly #(main-db/days-ago 7) :notification-mail-interval/weekly)))
-
-(comment
-
-  (users-with-changed-discussions (main-db/seconds-ago 5) :notification-mail-interval/daily)
-
-  (main-db/minutes-ago 1)
-
-  nil)
