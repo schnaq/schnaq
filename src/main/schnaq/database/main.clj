@@ -95,6 +95,12 @@
   [integer? :ret inst?]
   (-> (Instant/now) (.minus minutes ChronoUnit/MINUTES) Date/from))
 
+(>defn seconds-ago
+  "Timestamp seconds ago."
+  [seconds]
+  [integer? :ret inst?]
+  (-> (Instant/now) (.minus seconds ChronoUnit/SECONDS) Date/from))
+
 (>defn clean-db-vals
   "Removes all entries from a map that have a value of nil or empty string."
   [data]
