@@ -21,7 +21,7 @@
     [:<>
      [md/as-markdown display-content]
      [:button.btn.btn-transparent.border-0.p-0.mt-n3
-      {:on-click #(rf/dispatch [:toggle-statement-content/is-collapsed!
+      {:on-click #(rf/dispatch [:toggle-statement-content/collapse!
                                 statement-id (not collapsed?)])}
       button-content]]))
 
@@ -36,11 +36,12 @@
       [md/as-markdown content])))
 
 (rf/reg-event-db
- :toggle-statement-content/is-collapsed!
+ :toggle-statement-content/collapse!
  (fn [db [_ statement-id collapsed?]]
    (assoc-in db [:statements :statement-content-collapsed? statement-id] collapsed?)))
 
 (rf/reg-event-db
+ ;; clear the statement-content-collapsed map to reset any collapsed content
  :toggle-statement-content/clear!
  (fn [db _]
    (assoc-in db [:statements :statement-content-collapsed?] {})))
