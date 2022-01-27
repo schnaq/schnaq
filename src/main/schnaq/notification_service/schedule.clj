@@ -15,7 +15,7 @@
   (-> (LocalDateTime/of (LocalDate/now) (LocalTime/of 7 0))
       (.adjustInto (ZonedDateTime/now (ZoneId/of (:timezone shared-config/time-settings))))))
 
-(defn- timestamp-next-monday
+(>defn- timestamp-next-monday
   "Takes a `ZonedDateTime` and returns the date of the next monday."
   [timestamp]
   [:time/zoned-date-time :ret :time/zoned-date-time]
@@ -27,7 +27,7 @@
   "Create an infinite collection with instances, re-occurring depending on the 
    `days`-parameter starting at `timestamp`."
   [timestamp days]
-  [:time/zoned-date-time pos-int? :ret (s/coll-of inst?)]
+  [:time/zoned-date-time pos-int? :ret (s/every inst?)]
   (chime-core/periodic-seq (.toInstant timestamp) (Period/ofDays days)))
 
 ;; -----------------------------------------------------------------------------
@@ -42,3 +42,8 @@
   "Same as `daily`, but for a weekly schedule."
   (atom
    (chime-ch (create-schedule (timestamp-next-monday start-next-morning) 7))))
+
+(comment
+  (create-schedule (timestamp-next-monday start-next-morning) 7)
+  (timestamp-next-monday start-next-morning)
+  nil)
