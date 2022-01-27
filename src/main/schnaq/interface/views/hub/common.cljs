@@ -45,3 +45,8 @@
      [:hr.pt-3]
      [:h3.text-muted.pb-2 (labels :hubs/heading)]
      [hub-list]]))
+
+(defn hub-contains-schnaq?
+  "Check if a hub contains a schnaq and if so returns true"
+  [hub schnaq]
+  (true? (some #(=  (:db/id %) (:db/id schnaq)) (:hub/schnaqs hub))))

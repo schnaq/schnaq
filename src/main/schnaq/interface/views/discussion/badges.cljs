@@ -205,8 +205,7 @@
   "Badge that display the comment count."
   [schnaq]
   (let [meta-info (:meta-info schnaq)
-        statement-count (:all-statements meta-info)
-        user-count (count (:authors meta-info))]
+        statement-count (:all-statements meta-info)]
     [:p.mb-0
      [:span.small.mr-2
       [icon :comment/alt "m-auto"]

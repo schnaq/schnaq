@@ -70,13 +70,27 @@
    [:div.d-none.d-hd-block.d-qhd-none (toolbelt/truncate-to-n-chars title 70)]
    [:div.d-none.d-qhd-block (toolbelt/truncate-to-n-chars title 100)]])
 
+(defn- schnaq-hub-icon
+  "Display a the hub icon above a schnaq."
+  [schnaq]
+  (let [hubs @(rf/subscribe [:hubs/all])
+        logo-map  (map (fn [[_keycloak-name hub]]
+                         (when (hub/hub-contains-schnaq? hub schnaq)
+                           [:img.schnaq-header-hub-image {:src (:hub/logo hub)}])) hubs)
+        logo (first (filter some? logo-map))]
+    (when logo
+      logo)))
+
 (defn- schnaq-header-image [schnaq]
   (let [img-title (take 2 (:discussion/title schnaq))
-        img-url (:discussion/header-image-url schnaq)]
+        img-url (:discussion/header-image-url schnaq)
+        hubs @(rf/subscribe [:hubs/all])]
     [:div.d-flex.schnaq-header-image
      {:style {:background-image (str "url('" (header-image/check-for-header-img img-url) "')")}}
+     (when hubs
+       [schnaq-hub-icon schnaq])
      (when-not img-url
-       [:div.display-4.m-auto img-title])]))
+       [:div.display-4.m-auto.text-white img-title])]))
 
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
