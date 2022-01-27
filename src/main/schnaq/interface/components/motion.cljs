@@ -3,6 +3,10 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]))
 
+(def card-fade-in-time
+  "Set a common setting for fading in the cards, e.g. statement cards."
+  0.25)
+
 (defn zoom-image
   "Create an image, which zooms in and out on click.
 

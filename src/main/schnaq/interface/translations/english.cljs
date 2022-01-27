@@ -672,6 +672,8 @@
    :qanda.button.mark/as-unanswered "Unmark as answer"
    :qanda.button.show/replies "Show posts"
    :qanda.button.hide/replies "Hide posts"
+   :qanda.button.show/statement "Show more"
+   :qanda.button.hide/statement "Show less"
 
    ;; meetings overview
    :schnaqs/header "Your schnaqs"

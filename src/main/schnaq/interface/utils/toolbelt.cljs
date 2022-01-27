@@ -50,6 +50,14 @@
       (string/join " " (conj (vec (take n-words s)) "…"))
       text)))
 
+(>defn truncate-to-n-chars-string
+  "Truncate a string to the first x chars and return it with … at the end as a string."
+  [text char-count]
+  [(? string?) nat-int? :ret (? string?)]
+  (if (< char-count (count text))
+    (apply str (concat (take char-count text) "…"))
+    text))
+
 (>defn truncate-to-n-chars
   "Truncate a string to the first x chars and return it in a tooltiped span."
   [text char-count]
@@ -57,7 +65,7 @@
   (if (< char-count (count text))
     [tooltip/text
      text
-     [:span (apply str (concat (take char-count text) "…"))]]
+     [:span (truncate-to-n-chars-string text char-count)]]
     text))
 
 (defn obfuscate-mail

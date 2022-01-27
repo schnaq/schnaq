@@ -670,6 +670,8 @@
    :qanda.button.mark/as-unanswered "Odznacz"
    :qanda.button.show/replies "Pokaż stanowiska"
    :qanda.button.hide/replies "Ukryj posty"
+   :qanda.button.show/statement "Pokaż więcej"
+   :qanda.button.hide/statement "Pokaż mniej"
 
    :schnaqs/header "Twój schnaqs"
    :schnaqs/subheader "Masz dostęp do tych schnaqs"
