@@ -408,6 +408,9 @@
             :activation [activation/activation-tab])]
          motion/card-fade-in-time]))))
 
+(defn- delay-fade-in-for-subsequent-content [index]
+  (+ (/ (inc index) 10) motion/card-fade-in-time))
+
 (defn- statements-list []
   (let [active-filters @(rf/subscribe [:filters/active])
         sort-method @(rf/subscribe [:discussion.statements/sort-method])
@@ -422,7 +425,7 @@
        {:key (:db/id statement)}
        [motion/fade-in-and-out
         [answer-or-edit-card statement]
-        (+ (/ (inc index) 10) motion/card-fade-in-time)]])))
+        (delay-fade-in-for-subsequent-content index)]])))
 
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."
