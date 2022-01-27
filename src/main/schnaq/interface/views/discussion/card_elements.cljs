@@ -7,29 +7,18 @@
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
-            [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
-            [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.filters :as filters]
-            [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.howto.elements :as how-to-elements]
-            [schnaq.interface.views.user :as user]
             [schnaq.user :as user-utils]))
-
-(defn info-content-conclusion
-  "Badges and up/down-votes to be displayed in the topic bubble."
-  [statement]
-  [cards/up-down-vote statement])
 
 (defn- back-button
   "Return to your schnaqs Button"
@@ -184,59 +173,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- current-topic-badges [schnaq statement]
-  (let [badges-start [badges/static-info-badges-discussion schnaq]
-        badges-conclusion [badges/extra-discussion-info-badges statement true]
-        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        badges (if starting-route? badges-start badges-conclusion)]
-    [:div.ml-auto badges]))
-
-(defn- title-view [statement]
-  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        title [md/as-markdown (:statement/content statement)]
-        edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
-    (if edit-active?
-      (if starting-route?
-        [edit/edit-card-discussion statement]
-        [edit/edit-card-statement statement])
-      [:h2.h6 title])))
-
-(defn- title-and-input-element
-  "Element containing Title and textarea input"
-  [statement]
-  (let [statement-labels (set (:statement/labels statement))]
-    [:<>
-     [title-view statement]
-     (for [label statement-labels]
-       [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
-        [labels/build-label label]])]))
-
-(defn- topic-bubble-view []
-  (let [{:discussion/keys [title author created-at] :as schnaq} @(rf/subscribe [:schnaq/selected])
-        current-conclusion @(rf/subscribe [:discussion.conclusion/selected])
-        content {:db/id (:db/id schnaq)
-                 :statement/content title
-                 :statement/author author
-                 :statement/created-at created-at}
-        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        statement (if starting-route? content current-conclusion)
-        info-content [info-content-conclusion statement (:discussion/edit-hash statement)]]
-    [motion/move-in :left
-     [:div.p-2
-      [:div.d-flex.flex-wrap.mb-4
-       [user/user-info statement 32 nil]
-       [:div.d-flex.flex-row.ml-auto
-        (when-not starting-route?
-          [:div.mr-auto info-content])
-        [current-topic-badges schnaq statement]]]
-      [title-and-input-element statement]]]))
-
-(defn- topic-view [content]
-  (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
-    (common/set-website-title! title)
-    [:div.panel-white.mb-4
-     [:div.discussion-light-background content]]))
-
 (rf/reg-event-db
  :discussion.statements.sort/set
  (fn [db [_ method]]
@@ -302,42 +238,20 @@
     [:div.ml-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
      [search-bar]]]])
 
-(defn- search-info []
-  (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
-        search-results @(rf/subscribe [:schnaq.search.current/result])]
-    [motion/move-in :left
-     [:div.my-4
-      [:div.d-inline-block
-       [:h2 (labels :schnaq.search/heading)]
-       [:div.row.mx-0.mt-4.mb-3
-        [:img.dashboard-info-icon-sm {:src (img-path :icon-search)}]
-        [:div.text.display-6.my-auto.mx-3
-         search-string]]]
-      [:div.row.m-0
-       [:img.dashboard-info-icon-sm {:src (img-path :icon-posts)}]
-       (if (empty? search-results)
-         [:p.mx-3 (labels :schnaq.search/new-search-title)]
-         [:p.mx-3 (str (count search-results) " " (labels :schnaq.search/results))])]]]))
-
 (defn discussion-view
   "Displays a history  and input field on the left and conclusions in its center"
-  [share-hash]
-  (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
-    [:div.container-fluid.px-0.px-md-3
-     [:div.row
-      [:div.col-md-12.col-xxl-8.py-0.pt-md-3
-       [:div.d-none.d-md-block [action-view]]
-       [topic-view
-        (if search-inactive?
-          [topic-bubble-view]
-          [search-info])]]]
-     [:div.d-md-none [action-view]]
-     [cards/conclusion-cards-list share-hash]
-     [:div.d-md-none [history-view]]
-     [:div.mx-auto
-      {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
-      [show-how-to]]
-     [:div.d-none.d-md-block [history-view]]]))
+  []
+  [:div.container-fluid.px-0.px-md-3
+   [:div.row
+    [:div.col-md-12.col-xxl-8.py-0.pt-md-3
+     [:div.d-none.d-md-block [action-view]]]]
+   [:div.d-md-none [action-view]]
+   [cards/conclusion-cards-list]
+   [:div.d-md-none [history-view]]
+   [:div.mx-auto
+    {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
+    [show-how-to]]
+   [:div.d-none.d-md-block [history-view]]])
 
 (rf/reg-sub
  :schnaq.search.current/search-string

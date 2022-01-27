@@ -168,7 +168,8 @@
                               (rf/dispatch [:schnaq.activation/dissoc])
                               (rf/dispatch [:statement.edit/reset-edits])
                               (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
-                              (rf/dispatch [:toggle-replies/clear!]))}]
+                              (rf/dispatch [:toggle-replies/clear!])
+                              (rf/dispatch [:toggle-statement-content/clear!]))}]
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]
@@ -221,7 +222,8 @@
                               (rf/dispatch [:visited.statement-ids/to-localstorage-and-merge-with-app-db])
                               (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
                               (rf/dispatch [:statement.edit/reset-edits])
-                              (rf/dispatch [:toggle-replies/clear!]))}]}]
+                              (rf/dispatch [:toggle-replies/clear!])
+                              (rf/dispatch [:toggle-statement-content/clear!]))}]}]
      ["/graph"
       {:name :routes/graph-view
        :view graph-view/graph-view-entrypoint

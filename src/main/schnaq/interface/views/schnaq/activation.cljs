@@ -17,14 +17,14 @@
        (with-meta
          [:span.schnaqqi-walk
           {:style {:left (str (* -75 x) "px")
-                   :top (str (* -5 x) "px")}}]
+                   :top (str (max -50 (* -5 x)) "px")}}]
          {:key (str "schnaqqi-" x)}))
      ;; schnaqqis foreground
      (for [x (range 2 new-elephants 2)]
        (with-meta
          [:span.schnaqqi-walk
           {:style {:left (str (* -75 x) "px")
-                   :top (str (* 2 x) "px")}}]
+                   :top (str (min (+ 20 (* 30 (Math/sin x))) (* 2 x)) "px")}}]
          {:key (str "schnaqqi-" x)}))
      ;; leading schnaqqi
      [:span.schnaqqi-walk
@@ -51,29 +51,37 @@
    (when @(rf/subscribe [:schnaq.activation/walk?])
      [schnaqqi-walk-motion])])
 
-(defn- activation-view [background-class button-class]
+(defn- activation-view [background-class button-class col-class]
   (when-let [activation @(rf/subscribe [:schnaq/activation])]
-    [motion/fade-in-and-out
-     [:section.statement-card.p-3.text-white
-      {:class background-class}
-      [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
-      [:div.mx-auto.display-3 (:activation/count activation)]
-      [schnaqqi-walk]
-      [:div.text-center
-       [:button.btn.btn-lg.btn-secondary
-        {:class button-class
-         :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
-        (labels :schnaq.activation/activation-button)]]]]))
+    [:div
+     {:class col-class}
+     [motion/fade-in-and-out
+      [:section.statement-card.p-3.text-white
+       {:class background-class}
+       [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
+       [:div.mx-auto.display-3 (:activation/count activation)]
+       [schnaqqi-walk]
+       [:div.text-center
+        [:button.btn.btn-lg.btn-secondary
+         {:class button-class
+          :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
+         (labels :schnaq.activation/activation-button)]]]
+      motion/card-fade-in-time]]))
 
 (defn activation-event-view
   "Activation card for q-and-a view."
   []
-  [activation-view "bg-transparent" "btn-lg activation-button-rounded"])
+  [activation-view
+   "bg-transparent"
+   "btn-lg activation-button-rounded"])
 
 (defn activation-card
   "Activation card for the discussion-view."
   []
-  [activation-view "activation-background overflow-hidden" "w-75"])
+  [activation-view
+   "activation-background overflow-hidden"
+   "w-75"
+   "statement-column"])
 
 (defn activation-tab
   "Activation menu to create and reset the current activation."

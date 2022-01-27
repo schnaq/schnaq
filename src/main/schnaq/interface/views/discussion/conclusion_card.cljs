@@ -1,34 +1,30 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require ["react-smart-masonry" :default Masonry]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
-            [re-frame.core :as rf]
-            [reagent.core :as reagent]
-            [reitit.frontend.easy :as reitfe]
-            [schnaq.database.specs :as specs]
-            [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.components.motion :as motion]
-            [schnaq.interface.components.schnaq :as sc]
-            [schnaq.interface.config :as config]
-            [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.markdown :as md]
-            [schnaq.interface.utils.toolbelt :as tools]
-            [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.views.discussion.badges :as badges]
-            [schnaq.interface.views.discussion.edit :as edit]
-            [schnaq.interface.views.discussion.filters :as filters]
-            [schnaq.interface.views.discussion.input :as input]
-            [schnaq.interface.views.discussion.labels :as labels]
-            [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.schnaq.activation :as activation]
-            [schnaq.interface.views.schnaq.survey :as survey]
-            [schnaq.interface.views.user :as user]))
-
-(def ^:private card-fade-in-time
-  "Set a common setting for fading in the cards, e.g. statement cards."
-  0.1)
+  (:require   [clojure.string :as cstring]
+              [com.fulcrologic.guardrails.core :refer [>defn-]]
+              [re-frame.core :as rf]
+              [reagent.core :as reagent]
+              [reitit.frontend.easy :as reitfe]
+              [schnaq.database.specs :as specs]
+              [schnaq.interface.components.icons :refer [icon]]
+              [schnaq.interface.components.images :refer [img-path]]
+              [schnaq.interface.components.motion :as motion]
+              [schnaq.interface.components.schnaq :as sc]
+              [schnaq.interface.translations :refer [labels]]
+              [schnaq.interface.utils.http :as http]
+              [schnaq.interface.utils.js-wrapper :as js-wrap]
+              [schnaq.interface.utils.markdown :as md]
+              [schnaq.interface.utils.toolbelt :as tools]
+              [schnaq.interface.utils.tooltip :as tooltip]
+              [schnaq.interface.views.discussion.badges :as badges]
+              [schnaq.interface.views.discussion.edit :as edit]
+              [schnaq.interface.views.discussion.filters :as filters]
+              [schnaq.interface.views.discussion.input :as input]
+              [schnaq.interface.views.discussion.labels :as labels]
+              [schnaq.interface.views.discussion.logic :as logic]
+              [schnaq.interface.views.discussion.truncated-content :as truncated-content]
+              [schnaq.interface.views.schnaq.activation :as activation]
+              [schnaq.interface.views.schnaq.survey :as survey]
+              [schnaq.interface.views.user :as user]))
 
 (defn- call-to-action-schnaq
   "If no contributions are available, add a call to action to engage the users."
@@ -107,10 +103,12 @@
 
 (>defn- card-highlighting
   "Add card-highlighting to a statement card."
-  [{:keys [statement/type]}]
+  [{:keys [meta/answered? statement/type]}]
   [::specs/statement :ret string?]
   (let [statement-type (when type (str "-" (name type)))]
-    (str "highlight-card" statement-type)))
+    (if answered?
+      "highlight-card-answered"
+      (str "highlight-card" statement-type))))
 
 (defn- statement-card->editable-card
   "Wrap `statement-card-component`. Check if this statement is currently being
@@ -149,7 +147,7 @@
           [badges/edit-statement-dropdown-menu statement]]]
         [:div.my-4]
         [:div.text-typography.px-3
-         [md/as-markdown (:statement/content statement)]
+         [truncated-content/statement statement]
          [statement-information-row statement]]
         [:div.ml-1.mr-3
          [input/reply-in-statement-input-form statement]
@@ -169,7 +167,7 @@
          [badges/edit-statement-dropdown-menu statement]]
         [:div.my-3]
         [:div.text-typography
-         [md/as-markdown (:statement/content statement)]]
+         [truncated-content/statement statement]]
         [:div.d-flex.flex-wrap.align-items-center
          [:a.btn.btn-sm.btn-outline-dark.mr-3.px-1.py-0
           {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
@@ -278,6 +276,80 @@
     [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
     [input/input-form]))
 
+;; -----------------------------------------------------------------------------
+
+
+(defn- current-topic-badges [schnaq statement]
+  (let [badges-start [badges/static-info-badges-discussion schnaq]
+        badges-conclusion [badges/extra-discussion-info-badges statement true]
+        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        badges (if starting-route? badges-start badges-conclusion)]
+    [:div.ml-auto badges]))
+
+(defn- title-view [statement]
+  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        title [md/as-markdown (:statement/content statement)]
+        edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
+    (if edit-active?
+      (if starting-route?
+        [edit/edit-card-discussion statement]
+        [edit/edit-card-statement statement])
+      [:h2.h6 title])))
+
+(defn- title-and-input-element
+  "Element containing Title and textarea input"
+  [statement]
+  (let [statement-labels (set (:statement/labels statement))]
+    [:<>
+     [title-view statement]
+     (for [label statement-labels]
+       [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
+        [labels/build-label label]])]))
+
+(defn- topic-bubble-view []
+  (let [{:discussion/keys [title author created-at] :as schnaq} @(rf/subscribe [:schnaq/selected])
+        current-conclusion @(rf/subscribe [:discussion.conclusion/selected])
+        content {:db/id (:db/id schnaq)
+                 :statement/content title
+                 :statement/author author
+                 :statement/created-at created-at}
+        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        statement (if starting-route? content current-conclusion)
+        info-content [up-down-vote statement]]
+    [motion/move-in :left
+     [:div.p-2
+      [:div.d-flex.flex-wrap.mb-4
+       [user/user-info statement 32 nil]
+       [:div.d-flex.flex-row.ml-auto
+        (when-not starting-route?
+          [:div.mr-auto info-content])
+        [current-topic-badges schnaq statement]]]
+      [title-and-input-element statement]]]))
+
+(defn- search-info []
+  (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
+        search-results @(rf/subscribe [:schnaq.search.current/result])]
+    [motion/move-in :left
+     [:div.my-4
+      [:div.d-inline-block
+       [:h2 (labels :schnaq.search/heading)]
+       [:div.row.mx-0.mt-4.mb-3
+        [:img.dashboard-info-icon-sm {:src (img-path :icon-search)}]
+        [:div.text.display-6.my-auto.mx-3
+         search-string]]]
+      [:div.row.m-0
+       [:img.dashboard-info-icon-sm {:src (img-path :icon-posts)}]
+       (if (empty? search-results)
+         [:p.mx-3 (labels :schnaq.search/new-search-title)]
+         [:p.mx-3 (str (count search-results) " " (labels :schnaq.search/results))])]]]))
+
+(defn- topic-or-search-content []
+  (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
+    [:div.overflow-hidden.mb-4
+     (if search-inactive?
+       [topic-bubble-view]
+       [search-info])]))
+
 (defn selection-card
   "Dispatch the different input options, e.g. questions, survey or activation.
   The survey and activation feature are not available for free plan users."
@@ -299,6 +371,7 @@
             top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
         [motion/fade-in-and-out
          [:section.selection-card
+          [topic-or-search-content]
           [:ul.nav.nav-tabs
            [:li.nav-item
             [:a.nav-link {:class (active-class :question)
@@ -333,7 +406,10 @@
             :question [input-form-or-disabled-alert]
             :survey [survey/survey-form]
             :activation [activation/activation-tab])]
-         card-fade-in-time]))))
+         motion/card-fade-in-time]))))
+
+(defn- delay-fade-in-for-subsequent-content [index]
+  (+ (/ (inc index) 10) motion/card-fade-in-time))
 
 (defn- statements-list []
   (let [active-filters @(rf/subscribe [:filters/active])
@@ -343,12 +419,13 @@
         shown-premises @(rf/subscribe [:discussion.statements/show])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
         filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))]
-    (for [statement filtered-conclusions]
-      (with-meta
-        [motion/fade-in-and-out
-         [answer-or-edit-card statement]
-         card-fade-in-time]
-        {:key (:db/id statement)}))))
+    (for [index (range (count filtered-conclusions))
+          :let [statement (nth filtered-conclusions index)]]
+      [:div.statement-column
+       {:key (:db/id statement)}
+       [motion/fade-in-and-out
+        [answer-or-edit-card statement]
+        (delay-fade-in-for-subsequent-content index)]])))
 
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."
@@ -356,19 +433,15 @@
   (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (statements-list)
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
-        activation (when top-level? activation/activation-card)
+        activation (when top-level? [activation/activation-card])
         surveys (when top-level? (survey/survey-list))
         access-code @(rf/subscribe [:schnaq.selected/access-code])]
-    [:<>
-     [:> Masonry
-      {:breakpoints config/breakpoints
-       :columns {:xs 1 :md 2 :xxl 3 :qhd 4}
-       :autoArrange true
-       :gap 10}
-      [selection-card]
-      [activation]
-      surveys
-      statements]
+    [:div.row
+     [:div.statement-column
+      [selection-card]]
+     activation
+     surveys
+     statements
      (when-not (or search? (seq statements) (seq surveys) (not access-code))
        [call-to-share])]))
 

@@ -22,7 +22,8 @@
                     :stop (fn []
                             (rf/dispatch [:updates.periodic/starting-conclusions false])
                             (rf/dispatch [:statement.edit/reset-edits])
-                            (rf/dispatch [:toggle-replies/clear!]))}]}]
+                            (rf/dispatch [:toggle-replies/clear!])
+                            (rf/dispatch [:toggle-statement-content/clear!]))}]}]
    ["dashboard"
     {:name :routes.schnaq/dashboard
      :view dashboard/embedded-view
@@ -42,7 +43,8 @@
                             (rf/dispatch [:visited.statement-nums/to-localstorage])
                             (rf/dispatch [:visited.statement-ids/to-localstorage-and-merge-with-app-db])
                             (rf/dispatch [:statement.edit/reset-edits])
-                            (rf/dispatch [:toggle-replies/clear!]))}]}]
+                            (rf/dispatch [:toggle-replies/clear!])
+                            (rf/dispatch [:toggle-statement-content/clear!]))}]}]
    ["graph"
     {:name :routes/graph-view
      :view graph-view/graph-view-entrypoint
