@@ -60,6 +60,24 @@
                                                    (rf/dispatch [:hub.remove/schnaq share-hash])))}
        (labels :hub.remove.schnaq/tooltip)]]]))
 
+(defn- schnaq-title [title]
+  [:div.schnaq-entry-title
+   [:div.d-md-none (toolbelt/truncate-to-n-chars title 25)]
+   [:div.d-none.d-md-block.d-lg-none (toolbelt/truncate-to-n-chars title 50)]
+   [:div.d-none.d-lg-block.d-xl-none (toolbelt/truncate-to-n-chars title 25)]
+   [:div.d-none.d-xl-block.d-xxl-none (toolbelt/truncate-to-n-chars title 35)]
+   [:div.d-none.d-xxl-block.d-hd-none (toolbelt/truncate-to-n-chars title 50)]
+   [:div.d-none.d-hd-block.d-qhd-none (toolbelt/truncate-to-n-chars title 70)]
+   [:div.d-none.d-qhd-block (toolbelt/truncate-to-n-chars title 100)]])
+
+(defn- schnaq-header-image [schnaq]
+  (let [img-title (take 2 (:discussion/title schnaq))
+        img-url (:discussion/header-image-url schnaq)]
+    [:div.d-flex.schnaq-header-image
+     {:style {:background-image (str "url('" (header-image/check-for-header-img img-url) "')")}}
+     (when-not img-url
+       [:div.display-4.m-auto img-title])]))
+
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
   [schnaq delete-from-hub?]
@@ -67,15 +85,16 @@
    [:a.d-flex.flex-row.flex-grow-1.text-reset.text-decoration-none
     {:href (reitfe/href :routes.schnaq/start {:share-hash (:discussion/share-hash schnaq)})
      :on-click #(rf/dispatch [:schnaq/select-current schnaq])}
-    [:img.schnaq-header-image {:src (header-image/check-for-header-img (:discussion/header-image-url schnaq))}]
+    [schnaq-header-image schnaq]
     [:div.ml-3.w-100.py-2
-     [:div.schnaq-entry-title (toolbelt/truncate-to-n-chars (:discussion/title schnaq) 40)]
+     [schnaq-title (:discussion/title schnaq)]
      [:div.d-flex.flex-row.mt-auto.pt-3
-      [user/user-info-only (:discussion/author schnaq) 24]
+      [:div [badges/comments-info-badge schnaq]]
       [badges/read-only-badge schnaq]
-      [:div [badges/static-info-badges schnaq]]
-      [:small.font-weight-light.d-inline.my-auto.ml-auto
-       [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]]
+      [:div.d-flex.flex-row.ml-auto
+       [user/user-info-only (:discussion/author schnaq) 24]
+       [:small.font-weight-light.d-inline.my-auto.ml-2
+        [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]]]
    (when delete-from-hub?
      [schnaq-options schnaq])])
 
@@ -93,14 +112,14 @@
                           (sort-by :discussion/created-at > filtered-schnaqs))]
      (if (empty? schnaqs)
        [no-schnaqs-found]
-       [:div.panel-white.rounded-1
+       [:div.panel-white.rounded-1.p-4
         [:div.d-flex.flex-row.mb-4
          [:h6.text-typography.d-none.d-md-block (labels :router/visited-schnaqs)]
          [:div.ml-auto
           [sort-options]
           [filters/filter-button]]]
         (for [schnaq sorted-schnaqs]
-          [:div.pb-4 {:key (:db/id schnaq)}
+          [:div.py-3 {:key (:db/id schnaq)}
            [schnaq-entry schnaq show-delete-from-hub-button?]])]))))
 
 (defn- feed-button

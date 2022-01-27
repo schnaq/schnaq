@@ -999,7 +999,7 @@
    :loading.placeholder/lead "Daten werden geladen..."
    :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
 
-   :hubs/heading "Hubs"
+   :hubs/heading "Bereiche"
    :hub/heading "Persönlicher %s Hub"
    :hub/settings "Verwaltung"
    :hub.settings/change-name "Name des Hubs ändern"
