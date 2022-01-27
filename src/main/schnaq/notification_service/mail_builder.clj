@@ -13,10 +13,11 @@
   (reduce
    str
    (map (fn [{:keys [discussion/share-hash discussion/title new-statements]}]
-          (let [discussion-title (hiccup-util/escape-html title)
-                new-statements-text (if (= 1 new-statements)
-                                      (str new-statements " neuer Beitrag")
-                                      (str new-statements " neue Beiträge"))]
+          (let [total (:total new-statements)
+                discussion-title (hiccup-util/escape-html title)
+                new-statements-text (if (= 1 total)
+                                      (str total " neuer Beitrag")
+                                      (str total " neue Beiträge"))]
             (content-fn discussion-title new-statements-text share-hash)))
         (:discussions-with-new-statements user))))
 
@@ -47,7 +48,7 @@
 
 (>defn build-number-unseen-statements
   "Sum up all new statements over all discussions and put the sum in a text 
-   body."
+  body."
   [total-new-statements]
   [nat-int? :ret string?]
   (let [statements-text (if (= 1 total-new-statements)

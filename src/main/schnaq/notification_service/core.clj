@@ -65,8 +65,7 @@
   "Build and send a mail containing links to each schnaq with new statements."
   [{:user.registered/keys [keycloak-id email] :as user}]
   [:notification-service/user-with-changed-discussions => nil?]
-  (log/info "send-schnaq-diffs")
-  (let [total-new-statements (->> user :discussions-with-new-statements (map :new-statements) (apply +))
+  (let [total-new-statements (->> user :discussions-with-new-statements (map #(get-in % [:new-statements :total])) (apply +))
         new-statements-content-html (mail-builder/build-new-statements-html user)
         new-statements-content-plain (mail-builder/build-new-statements-plain user)
         personal-greeting (mail-builder/build-personal-greeting user)
@@ -107,19 +106,7 @@
 
 (comment
 
-  (def data {"fbc512d7-89d1-4f6c-be6a-fc05a44b2976"
-             {:db/id 17592186049507
-              :discussion/title "123"
-              :discussion/share-hash "fbc512d7-89d1-4f6c-be6a-fc05a44b2976"
-              :discussion/created-at #inst "2022-01-16T20:08:48.741-00:00"
-              :discussion/author
-              {:db/id 17592186045435
-               :user.registered/keycloak-id "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18"
-               :user.registered/display-name "n2o"}
-              :new-statements {:total 15, :authors #{17592186045435}}}})
-
-  (users-with-changed-discussions (main-db/minutes-ago 152) :notification-mail-interval/daily)
-
-  (remove-discussions-with-no-other-users data 17592186045435)
+  (users-with-changed-discussions (main-db/minutes-ago 5) :notification-mail-interval/every-minute)
+  (reset! schedule/every-minute nil)
 
   nil)
