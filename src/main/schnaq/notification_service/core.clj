@@ -1,7 +1,7 @@
 (ns schnaq.notification-service.core
   (:require [clojure.core.async :refer [go-loop <!]]
             [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn- =>]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db]
             [schnaq.database.specs :as specs]
@@ -11,6 +11,11 @@
             [schnaq.notification-service.schedule :as schedule]
             [schnaq.notification-service.specs]
             [taoensso.timbre :as log]))
+
+(def interval :notification-mail-interval/every-minute)
+(def timestamp (main-db/minutes-ago 101))
+
+(def subscribed-discussions (discussion-db/discussions-by-share-hashes (user-db/subscribed-share-hashes interval)))
 
 (>defn- discussions-with-new-statements-in-interval
   "Query all discussions of users respecting their notification interval. Query
@@ -23,16 +28,29 @@
                      subscribed-discussions timestamp)]
     (into {} (map (juxt :discussion/share-hash identity) discussions))))
 
+(>defn- remove-discussions-from-user
+  "Remove those discussions, where the user is the only author of newly created
+  statements."
+  [discussions-with-new-statements user-id]
+  [:notification-service/share-hash-to-discussion :db/id => :notification-service/share-hash-to-discussion]
+  (->> (seq discussions-with-new-statements)
+       (remove (fn [[_share-hash discussion]]
+                 (let [authors (get-in discussion [:new-statements :authors])]
+                   (and (= 1 (count authors))
+                        (authors user-id)))))
+       (into {})))
+
 (>defn- assoc-discussions-with-new-statements
   "Assoc all subscribed discussions to a user. Adds a new field 
   `:discussions-with-new-statements` containing all subscribed discussions,
    which received new statements."
   [discussions-with-new-statements user]
   [:notification-service/share-hash-to-discussion ::specs/registered-user :ret :notification-service/user-with-changed-discussions]
-  (assoc user :discussions-with-new-statements
-         (remove nil?
-                 (map #(get discussions-with-new-statements (:discussion/share-hash %))
-                      (:user.registered/visited-schnaqs user)))))
+  (->> user
+       :user.registered/visited-schnaqs
+       (map #(get discussions-with-new-statements (:discussion/share-hash %)))
+       (remove nil?)
+       (assoc user :discussions-with-new-statements)))
 
 (>defn- users-with-changed-discussions
   "Assoc to all users those discussions, with received new statements between 
@@ -77,7 +95,7 @@
   (log/info "Starting mail schedule for" interval)
   (go-loop []
     (when-let [_current-time (<! @channel)]
-      (log/info "Sending new mails [%s]" interval)
+      (log/info (format "Sending new mails [%s]" interval))
       (run! send-schnaq-diffs (users-with-changed-discussions (time-fn) interval))
       (recur))))
 
@@ -87,6 +105,25 @@
   [& _args]
   (log/info "Initializing mail notification service")
   (when (main-db/connection-possible?)
-    (start-mail-schedule schedule/every-minute #(main-db/seconds-ago 5) :notification-mail-interval/every-minute)
+    (start-mail-schedule schedule/every-minute #(main-db/minutes-ago 1) :notification-mail-interval/every-minute)
     (start-mail-schedule schedule/daily #(main-db/days-ago 1) :notification-mail-interval/daily)
     (start-mail-schedule schedule/weekly #(main-db/days-ago 7) :notification-mail-interval/weekly)))
+
+(comment
+
+  (def data {"fbc512d7-89d1-4f6c-be6a-fc05a44b2976"
+             {:db/id 17592186049507
+              :discussion/title "123"
+              :discussion/share-hash "fbc512d7-89d1-4f6c-be6a-fc05a44b2976"
+              :discussion/created-at #inst "2022-01-16T20:08:48.741-00:00"
+              :discussion/author
+              {:db/id 17592186045435
+               :user.registered/keycloak-id "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18"
+               :user.registered/display-name "n2o"}
+              :new-statements {:total 15, :authors #{17592186045435}}}})
+
+  (users-with-changed-discussions (main-db/minutes-ago 152) :notification-mail-interval/every-minute)
+
+  (remove-discussions-from-user data 17592186045435)
+
+  nil)

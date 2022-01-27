@@ -352,15 +352,23 @@
            (not [?statements :statement/deleted? true])]
          db (d/since db timestamp) share-hash patterns/statement)))
 
+(>defn- new-statements+author->discussion
+  "Check for new statements and the corresponding authors in the discussion."
+  [discussion timestamp]
+  [::specs/discussion inst? :ret ::specs/discussion]
+  (let [new-statements (new-statements-within-time-slot (:discussion/share-hash discussion) timestamp)
+        from-these-authors (set (map #(get-in % [:statement/author :db/id]) new-statements))]
+    (assoc discussion :new-statements {:total (count new-statements)
+                                       :authors from-these-authors})))
+
 (>defn discussions-with-new-statements
   "Return all discussions and count their statements, if they received new
   statements between now and the given timestamp."
   [discussions timestamp]
   [(s/coll-of ::specs/discussion) inst? :ret (s/coll-of ::specs/discussion)]
   (->> discussions
-       (map #(assoc % :new-statements
-                    (count (new-statements-within-time-slot (:discussion/share-hash %) timestamp))))
-       (remove #(zero? (:new-statements %)))))
+       (map #(new-statements+author->discussion % timestamp))
+       (remove #(zero? (:total (:new-statements %))))))
 
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."

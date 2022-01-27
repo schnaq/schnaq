@@ -43,7 +43,8 @@
    (chime-ch (create-schedule (timestamp-next-monday start-next-morning) 7))))
 
 (def every-minute
-  "Create async channel with timestamps in 5 seconds steps. Used for sending
+  "Create async channel with timestamps in one minute steps. Used for sending
   mails nearly instantly."
   (atom
-   (chime-ch (drop 5 (chime-core/periodic-seq (Instant/now) (Duration/ofSeconds 5))))))
+   (chime-ch (rest (chime-core/periodic-seq (Instant/now) (Duration/ofMinutes 1))))))
+
