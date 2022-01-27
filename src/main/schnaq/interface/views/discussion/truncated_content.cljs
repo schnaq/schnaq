@@ -11,7 +11,7 @@
   (let [statement-id (:db/id statement)
         full-content (:statement/content statement)
         short-content (tools/truncate-to-n-chars-string full-content statement-max-char-length)
-        collapsed? @(rf/subscribe [:toggle-statement-content/is-collapsed? statement-id])
+        collapsed? @(rf/subscribe [:toggle-statement-content/collapsed? statement-id])
         display-content (if collapsed? short-content full-content)
         button-content (if collapsed?
                          [:<> [icon :collapse-up "my-auto mr-2"]
@@ -47,6 +47,6 @@
    (assoc-in db [:statements :statement-content-collapsed?] {})))
 
 (rf/reg-sub
- :toggle-statement-content/is-collapsed?
+ :toggle-statement-content/collapsed?
  (fn [db [_ statement-id]]
    (get-in db [:statements :statement-content-collapsed? statement-id] true)))
