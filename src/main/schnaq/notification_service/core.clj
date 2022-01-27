@@ -55,9 +55,9 @@
   [inst? :user.registered/notification-mail-interval => (s/coll-of :notification-service/user-with-changed-discussions)]
   (let [users (user-db/users-by-notification-interval interval)
         changed-discussions (discussions-with-new-statements-in-interval timestamp interval)]
-    (remove #(empty? (:discussions-with-new-statements %))
-            (map (partial assoc-discussions-with-new-statements changed-discussions)
-                 users))))
+    (->> users
+         (map (partial assoc-discussions-with-new-statements changed-discussions))
+         (remove #(empty? (:discussions-with-new-statements %))))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -90,7 +90,7 @@
   (log/info "Starting mail schedule for" interval)
   (go-loop []
     (when-let [_current-time (<! @channel)]
-      (log/info (format "Sending new mails [%s]" interval))
+      (log/info (format "Checking for changes in interval [%s]" interval))
       (run! send-schnaq-diffs (users-with-changed-discussions (time-fn) interval))
       (recur))))
 
