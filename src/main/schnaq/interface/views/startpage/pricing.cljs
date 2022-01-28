@@ -24,9 +24,9 @@
 (defn- coming-soon []
   (label-builder :pricing.features/upcoming))
 (defn- starter-features []
-  (label-builder :pricing.features/starter))
-(defn- business-features []
-  (label-builder :pricing.features/business))
+  (label-builder :pricing.features/free))
+(defn- pro-features []
+  (label-builder :pricing.features/pro))
 (defn- enterprise-features []
   (label-builder :pricing.features/enterprise))
 
@@ -111,7 +111,12 @@
    :pricing.free-tier/title :pricing.free-tier/subtitle :rocket
    [price-tag-free-tier]
    :pricing.free-tier/description
-   (add-class-to-feature (concat (starter-features) [(labels :pricing.free-tier/for-free)]) "text-primary")
+   (add-class-to-feature
+    (concat
+     [(gstring/format (labels :pricing.features/number-of-users) 100)]
+     (starter-features)
+     [(labels :pricing.free-tier/for-free)])
+    "text-primary")
    nil
    [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (rfe/href :routes.schnaq/create)]])
 
@@ -122,7 +127,12 @@
    :pricing.pro-tier/title :pricing.pro-tier/subtitle :crown
    [price-tag-pro-tier]
    :pricing.pro-tier/description
-   (add-class-to-feature (concat (starter-features) (business-features)) "text-primary")
+   (add-class-to-feature
+    (concat
+     [(gstring/format (labels :pricing.features/number-of-users) 300)]
+     (starter-features)
+     (pro-features))
+    "text-primary")
    (coming-soon)
    (let [authenticated? @(rf/subscribe [:user/authenticated?])
          pro-user? @(rf/subscribe [:user/pro-user?])]
@@ -147,7 +157,13 @@
    :pricing.enterprise-tier/title :pricing.enterprise-tier/subtitle :building
    [:span.display-5 (labels :pricing.enterprise-tier/on-request)]
    :pricing.enterprise-tier/description
-   (add-class-to-feature (concat (starter-features) (business-features) (enterprise-features)) "text-primary")
+   (add-class-to-feature
+    (concat
+     [(labels :pricing.features.number-of-users/unlimited)]
+     (starter-features)
+     (pro-features)
+     (enterprise-features))
+    "text-primary")
    (coming-soon)
    [cta-button (labels :pricing.enterprise-tier/call-to-action) "btn-primary" "mailto:info@schnaq.com"]])
 
@@ -192,7 +208,7 @@
    [:div.card-deck
     [feature-card (labels :pricing.features.user-numbers/heading) (labels :pricing.features.user-numbers/content)]
     [feature-card (labels :pricing.features.team-numbers/heading) (labels :pricing.features.team-numbers/content)]
-    [feature-card (labels :pricing.features.app-integration/heading) (labels :pricing.features.app-integration/content)]]
+    [feature-card (labels :pricing.features.engage/heading) (labels :pricing.features.engage/content)]]
    [:div.card-deck.mt-2
     [feature-card (labels :pricing.features.analysis/heading) (labels :pricing.features.analysis/content)]
     [feature-card (labels :pricing.features.knowledge-db/heading) (labels :pricing.features.knowledge-db/content)]

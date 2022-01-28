@@ -887,9 +887,11 @@
    :pricing.enterprise-tier/on-request "Na żądanie"
    :pricing.features/implemented "Już wdrożone"
    :pricing.features/to-be-implemented "Wkrótce dostępne"
-   :pricing.features/starter ["Hosting w Niemczech" "Nieograniczona ilość sznapsów" "Nieograniczona ilość uczestników" "Tworzenie dyskusji" "Przeprowadzić Q&A" "Automatyczna Mindmap" "Możliwość udostępniania za pomocą linku, kodu QR i kodu cyfrowego" "Eksport tekstu i obrazu"]
-   :pricing.features/business ["Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista" "Opcje moderacji"]
-   :pricing.features/enterprise ["Osadzanie w istniejących systemach\" \"Logowanie SSO (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
+   :pricing.features/number-of-users "Do %d użytkowników w widowni"
+   :pricing.features.number-of-users/unlimited "Nieograniczona publiczność"
+   :pricing.features/free ["Hosting w Niemczech" "Nieograniczona ilość schnaqs" "Tworzenie dyskusji" "Przeprowadzić Q&A" "Automatyczna Mindmap" "Możliwość udostępniania za pomocą linku, kodu QR i kodu cyfrowego" "Eksport tekstu i obrazu" "Email support"]
+   :pricing.features/pro ["Ankiety publiczności" "Przycisk szybkiego angażowania się" "Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista" "Opcje moderacji" "Priorytetowe wsparcie"]
+   :pricing.features/enterprise ["Osadzanie w istniejących systemach\" \"Logowanie SSO (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise" "Wsparcie telefoniczne 24/7"]
    :pricing.features/upcoming ["Analiza nastrojów A.I." "Integracje"]
    :pricing.units/per-month "/ Miesiąc"
    :pricing.notes/with-vat "plus VAT."
@@ -897,16 +899,16 @@
    :pricing.trial/description "Karta kredytowa nie jest konieczna! Możliwość odwołania w dowolnym momencie."
    :pricing.trial.temporary/deactivation "Dostępne wkrótce"
    :pricing.features/heading "Zalety subskrypcji Schnaq"
-   :pricing.features.user-numbers/heading "Nieograniczona liczba uczestników"
-   :pricing.features.user-numbers/content "Pozwól współpracować tylu pracownikom, ilu chcesz."
+   :pricing.features.user-numbers/heading "Dla każdej publiczności"
+   :pricing.features.user-numbers/content "Pozwól uczestniczyć setkom osób z Twojej widowni."
    :pricing.features.team-numbers/heading "Nieograniczone zespoły"
    :pricing.features.team-numbers/content "Liczba zespołów, które możesz utworzyć jest nieograniczona. *"
-   :pricing.features.app-integration/heading "Integracja aplikacji"
-   :pricing.features.app-integration/content "Podłącz schnaq łatwo do innego oprogramowania, którego używasz."
+   :pricing.features.engage/heading "Zaangażuj swoich odbiorców"
+   :pricing.features.engage/content "Używaj ankiet, szybkich aktywacji, feedbacku i wielu innych, aby utrzymać zaangażowanie swoich odbiorców. *"
    :pricing.features.analysis/heading "Analizy automatyczne"
    :pricing.features.analysis/content "Wkłady są automatycznie analizowane i przygotowywane dla wszystkich uczestników. *"
    :pricing.features.knowledge-db/heading "Baza danych wiedzy"
-   :pricing.features.knowledge-db/content "Gromadzenie zdobytej wiedzy i pomysłów w jednym miejscu."
+   :pricing.features.knowledge-db/content "Gromadzenie zdobytej wiedzy i pomysłów w jednym miejscu. Wykorzystaj je ponownie i podziel się nimi z całym światem."
    :pricing.features.mindmap/heading "Interaktywna mapa myśli"
    :pricing.features.mindmap/content "Wszystkie wkłady są automatycznie wyświetlane graficznie i interaktywnie."
    :pricing.features/disclaimer "* Obowiązuje tylko dla subskrypcji Pro"

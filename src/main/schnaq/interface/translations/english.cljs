@@ -85,7 +85,7 @@
    :how-to/question-dont-show-again "Got it?"
    :how-to/answer-dont-show-again "Don't show this tip anymore!"
 
-      ;; localized startpage videos
+   ;; localized startpage videos
    :startpage.above-the-fold/webm "https://s3.schnaq.com/startpage/videos/above_the_fold_english.webm"
    :startpage.above-the-fold/mp4 "https://s3.schnaq.com/startpage/videos/above_the_fold_english.mp4"
 
@@ -890,26 +890,28 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.enterprise-tier/on-request "On Request"
    :pricing.features/implemented "Already implemented"
    :pricing.features/to-be-implemented "Soon available"
-   :pricing.features/starter ["Hosted in Germany" "Unlimited schnaqs" "Unlimited participants" "Create Discussions" "Hold Q&As" "Automatic Mindmap" "Shareable by Link, QR Code and digit code" "Text and Image Export"]
-   :pricing.features/business ["Analysis Dashboard" "A.I. Summaries" "Personal Spaces" "Moderation Options"]
-   :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
-   :pricing.features/upcoming ["A.I. Sentiment Analysis" "Integrations"]
+   :pricing.features/number-of-users "Up to %d users in the audience"
+   :pricing.features.number-of-users/unlimited "Unlimited audience"
+   :pricing.features/free ["Hosted in Germany" "Unlimited schnaqs" "Create Discussions" "Live Q&As" "Automatic Mindmap" "Shareable by Link, QR Code and digit code" "Text and Image Export" "Email support"]
+   :pricing.features/pro ["Audience polls" "Quick-engage button" "Analysis Dashboard" "A.I. Summaries" "Personal Spaces" "Moderation Options" "Priority Support"]
+   :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise" "24/7 telephone support"]
+   :pricing.features/upcoming ["Theming" "A.I. Sentiment Analysis" "Integrations"]
    :pricing.units/per-month "/ month"
    :pricing.notes/with-vat "plus VAT"
    :pricing.trial/call-to-action "Test the pro plan 30 days free of charge"
    :pricing.trial/description "No credit card needed! Cancel anytime."
    :pricing.trial.temporary/deactivation "Available soon"
    :pricing.features/heading "Schnaq subscription advantages"
-   :pricing.features.user-numbers/heading "Unlimited member accounts"
-   :pricing.features.user-numbers/content "Set no bounds for how many people can collaborate."
+   :pricing.features.user-numbers/heading "For any audience"
+   :pricing.features.user-numbers/content "Let hundreds of people in your audience participate."
    :pricing.features.team-numbers/heading "Unlimited number of teams"
    :pricing.features.team-numbers/content "Create as many teams as are needed for your projects. *"
-   :pricing.features.app-integration/heading "App integration"
-   :pricing.features.app-integration/content "Connect schnaq easily to other software you use."
+   :pricing.features.engage/heading "Engage your audience"
+   :pricing.features.engage/content "Use polls, quick activation, feedbacks and much more to keep your audience engaged. *"
    :pricing.features.analysis/heading "Automatic Analyses"
    :pricing.features.analysis/content "All discussions are automatically analyzed and presented to the participants. *"
    :pricing.features.knowledge-db/heading "Knowledge Database"
-   :pricing.features.knowledge-db/content "Collect all your knowledge in one spot."
+   :pricing.features.knowledge-db/content "Collect all your knowledge in one spot. Reuse it and share it with the world."
    :pricing.features.mindmap/heading "Interactive mindmap"
    :pricing.features.mindmap/content "All statements are automatically structured and shown in an interactive mindmap."
    :pricing.features/disclaimer "* Applies only to pro plan"
