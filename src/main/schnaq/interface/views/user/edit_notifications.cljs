@@ -115,8 +115,8 @@
    (let [interval (:user.registered/notification-mail-interval updated-user)]
      {:db (assoc-in db [:user :notification-mail-interval] interval)
       :fx [[:dispatch [:notification/add
-                       #:notification{:title "Benachrichtigung aktualisiert"
-                                      :body [:p "Du erhältst nun Benachrichtigungen gemäß deiner Einstellungen:" " " (labels interval)]
+                       #:notification{:title (labels :user.notifications.mail-interval.success/title)
+                                      :body [:p (labels :user.notifications.mail-interval.success/body) " " (labels interval)]
                                       :context :success
                                       :stay-visible? false}]]]})))
 

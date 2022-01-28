@@ -804,6 +804,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :user.notifications/info "You will only receive notifications when there are new posts in your visited schnaqs."
    :user.notifications.set-all-to-read/button "Mark everything as read"
    :user.notifications.set-all-to-read/info "You still receive notifications from old discussions? No problem, just mark everything as read and only receive notifications from new discussions."
+   :user.notifications.mail-interval.success/title "Notification updated"
+   :user.notifications.mail-interval.success/body "You will now receive notifications according to your settings:"
 
    ;; Subscriptions
    :subscription.cancel/button "Cancel subscription"
