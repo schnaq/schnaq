@@ -25,7 +25,7 @@
   (label-builder :pricing.features/upcoming))
 (defn- starter-features []
   (label-builder :pricing.features/free))
-(defn- business-features []
+(defn- pro-features []
   (label-builder :pricing.features/pro))
 (defn- enterprise-features []
   (label-builder :pricing.features/enterprise))
@@ -131,7 +131,7 @@
     (concat
      [(gstring/format (labels :pricing.features/number-of-users) 300)]
      (starter-features)
-     (business-features))
+     (pro-features))
     "text-primary")
    (coming-soon)
    (let [authenticated? @(rf/subscribe [:user/authenticated?])
@@ -161,7 +161,7 @@
     (concat
      [(labels :pricing.features.number-of-users/unlimited)]
      (starter-features)
-     (business-features)
+     (pro-features)
      (enterprise-features))
     "text-primary")
    (coming-soon)

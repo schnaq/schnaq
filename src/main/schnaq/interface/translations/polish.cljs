@@ -887,7 +887,7 @@
    :pricing.enterprise-tier/on-request "Na żądanie"
    :pricing.features/implemented "Już wdrożone"
    :pricing.features/to-be-implemented "Wkrótce dostępne"
-   :pricing.features/number-of-users "Do %s użytkowników w widowni"
+   :pricing.features/number-of-users "Do %d użytkowników w widowni"
    :pricing.features.number-of-users/unlimited "Nieograniczona publiczność"
    :pricing.features/free ["Hosting w Niemczech" "Nieograniczona ilość schnaqs" "Tworzenie dyskusji" "Przeprowadzić Q&A" "Automatyczna Mindmap" "Możliwość udostępniania za pomocą linku, kodu QR i kodu cyfrowego" "Eksport tekstu i obrazu" "Email support"]
    :pricing.features/pro ["Ankiety publiczności" "Przycisk szybkiego angażowania się" "Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista" "Opcje moderacji" "Priorytetowe wsparcie"]

@@ -890,7 +890,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.enterprise-tier/on-request "On Request"
    :pricing.features/implemented "Already implemented"
    :pricing.features/to-be-implemented "Soon available"
-   :pricing.features/number-of-users "Up to %s users in the audience"
+   :pricing.features/number-of-users "Up to %d users in the audience"
    :pricing.features.number-of-users/unlimited "Unlimited audience"
    :pricing.features/free ["Hosted in Germany" "Unlimited schnaqs" "Create Discussions" "Live Q&As" "Automatic Mindmap" "Shareable by Link, QR Code and digit code" "Text and Image Export" "Email support"]
    :pricing.features/pro ["Audience polls" "Quick-engage button" "Analysis Dashboard" "A.I. Summaries" "Personal Spaces" "Moderation Options" "Priority Support"]
