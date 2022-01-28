@@ -24,9 +24,10 @@
 
 (defn navbar-user []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
-   [:div.mx-1 [privacy-button]]
-   [:div.mr-1 [pricing-button]]
-   [:div.mr-1 [blog-link]]
+   [navbar-components/button :router/startpage (reitfe/href :routes/startpage)]
+   [:div [pricing-button]]
+   [:div [privacy-button]]
+   [:div [blog-link]]
    [:div.mr-1
     [:div.dropdown.ml-auto
      [navbar-components/language-dropdown false {}]]]
