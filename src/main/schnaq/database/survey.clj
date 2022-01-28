@@ -68,7 +68,7 @@
         (db/query
          '[:find [?options ...]
            :in $ [?options ...] ?survey ?share-hash
-           :where [?survey :survey/options ?option]
+           :where [?survey :survey/options ?options]
            [?survey :survey/discussion ?discussion]
            [?discussion :discussion/share-hash ?share-hash]]
          option-ids survey-id share-hash)
