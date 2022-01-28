@@ -58,9 +58,9 @@
      button-content]
     dropdown-content]))
 
-(defn collapsable-nav-bar
-  "Collapsable navbar with split content header, collapsable-content-id must match id of collapsable-content."
-  [brand-content collapse-content-id navbar-bg-class top-right-content collapsable-content]
+(defn collapsible-nav-bar
+  "Collapsible navbar with split content header, collapsible-content-id must match id of collapsible-content."
+  [brand-content collapse-content-id navbar-bg-class top-right-content collapsible-content]
   [:<>
    [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
     {:class navbar-bg-class}
@@ -73,4 +73,4 @@
      [:span.navbar-toggler-icon]]
     [:div.ml-auto.d-none.d-lg-block
      top-right-content]]
-   collapsable-content])
+   collapsible-content])
