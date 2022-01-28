@@ -1,11 +1,13 @@
 (ns schnaq.api.subscription.stripe
-  (:require [clojure.spec.alpha :as s]
+  (:require [clj-http.client :as client]
+            [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn- =>]]
             [ring.util.http-response :refer [ok not-found bad-request]]
             [schnaq.api.subscription.stripe-lib :as stripe-lib]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
             [schnaq.database.user :as user-db]
+            [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
   (:import [com.stripe Stripe]
            [com.stripe.exception InvalidRequestException]
@@ -56,6 +58,12 @@
      (ok price)
      (not-found error-article-not-found))))
 
+(defn- post-to-mattermost-if-in-production
+  "Post a message to mattermost if stripe is in production mode."
+  []
+  (when (.startsWith config/stripe-secret-api-key "sk_live")
+    (toolbelt/post-in-mattermost! "Someone just started a subscription :tada:")))
+
 ;; -----------------------------------------------------------------------------
 
 (defmulti ^:private stripe-event
@@ -70,6 +78,7 @@
         stripe-customer-id (get-in event [:data :object :customer])
         stripe-subscription-id (get-in event [:data :object :id])]
     (user-db/subscribe-pro-tier keycloak-id stripe-subscription-id stripe-customer-id)
+    (post-to-mattermost-if-in-production)
     (log/info "Subscription successfully created 🤑 User:" keycloak-id)))
 
 (defmethod stripe-event "customer.subscription.deleted" [event]

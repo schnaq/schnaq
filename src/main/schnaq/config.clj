@@ -54,6 +54,11 @@
 (def mail-template "https://s3.schnaq.com/email/template/mail-template.html")
 (def mail-content-button-right-template "https://s3.schnaq.com/email/template/content-left-button-right-template.html")
 
+(def mattermost-webhook-url
+  "URL to mattermost-webhook to post news to the chat."
+  (or (System/getenv "MATTERMOST_WEBHOOK_URL")
+      "***REMOVED***"))
+
 (def profile-picture-height
   "Profile Picture height in pixels."
   200)
