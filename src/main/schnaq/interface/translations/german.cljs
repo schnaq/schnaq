@@ -804,6 +804,8 @@
    :user.notifications/info "Du erhältst nur Benachrichtigungen, wenn es neue Beiträge in deinen besuchten schnaqs gibt."
    :user.notifications.set-all-to-read/button "Alles als gelesen markieren"
    :user.notifications.set-all-to-read/info "Du erhältst noch Benachrichtigungen von alten Diskussionen? Kein Problem, setze einfach alles auf gelesen und erhalte nur noch Benachrichtigungen für neue Diskussionen."
+   :user.notifications.mail-interval.success/title "Benachrichtigung aktualisiert"
+   :user.notifications.mail-interval.success/body "Du erhältst nun Benachrichtigungen gemäß deiner Einstellungen:"
 
    ;; Subscriptions
    :subscription.cancel/button "Abonnement beenden"

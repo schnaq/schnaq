@@ -802,6 +802,8 @@
    :user.notifications/info "Będziesz otrzymywać powiadomienia tylko wtedy, gdy pojawią się nowe posty w odwiedzonych przez Ciebie schnaqs.."
    :user.notifications.set-all-to-read/button "Oznacz wszystkie jako przeczytane"
    :user.notifications.set-all-to-read/info "Nadal otrzymujesz powiadomienia ze starych dyskusji? Nie ma problemu, wystarczy ustawić wszystko jako przeczytane i otrzymywać powiadomienia tylko o nowych dyskusjach.."
+   :user.notifications.mail-interval.success/title "Powiadomienie zaktualizowane"
+   :user.notifications.mail-interval.success/body "Będziesz teraz otrzymywać powiadomienia zgodnie z Twoimi ustawieniami:"
 
    ;; Subscriptions
    :subscription.cancel/button "Anuluj subskrypcję"

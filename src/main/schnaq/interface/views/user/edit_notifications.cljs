@@ -56,7 +56,7 @@
                            :notification-mail-interval/daily (labels daily)
                            :notification-mail-interval/weekly (labels weekly)
                            :notification-mail-interval/never (labels never)
-                           (labels :notification-mail-interval/daily))]
+                           (labels :notification-mail-interval/never))]
     [:div.dropdown.mx-3
      [:button.btn.btn-outline-dark.dropdown-toggle
       {:id dropdown-id :type "button" :data-toggle "dropdown"
@@ -99,7 +99,7 @@
 (rf/reg-sub
  :user.notification/mail-interval
  (fn [db _]
-   (get-in db [:user :notification-mail-interval] :notification-mail-interval/daily)))
+   (get-in db [:user :notification-mail-interval] :notification-mail-interval/never)))
 
 (rf/reg-event-fx
  :user.notification/mail-interval!
@@ -113,7 +113,12 @@
  :user.notification/mail-interval-success
  (fn [{:keys [db]} [_ {:keys [updated-user]}]]
    (let [interval (:user.registered/notification-mail-interval updated-user)]
-     {:db (assoc-in db [:user :notification-mail-interval] interval)})))
+     {:db (assoc-in db [:user :notification-mail-interval] interval)
+      :fx [[:dispatch [:notification/add
+                       #:notification{:title (labels :user.notifications.mail-interval.success/title)
+                                      :body [:p (labels :user.notifications.mail-interval.success/body) " " (labels interval)]
+                                      :context :success
+                                      :stay-visible? false}]]]})))
 
 (rf/reg-event-fx
  :user.notification/mark-all-as-read!
