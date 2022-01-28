@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.navbar.for-pages
   (:require [clojure.string :as str]
+            [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
@@ -22,16 +23,15 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn navbar-user []
+(defn- navbar-user []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
-   [:div.mx-1 [privacy-button]]
-   [:div.mr-1 [pricing-button]]
-   [:div.mr-1 [blog-link]]
-   [:div.mr-1
-    [:div.dropdown.ml-auto
-     [navbar-components/language-dropdown false {}]]]
-   [:div.mx-1
-    [um/admin-dropdown "btn-outline-secondary"]]
+   [pricing-button]
+   [privacy-button]
+   [blog-link]
+   [:div.dropdown.ml-auto
+    [navbar-components/language-dropdown false {}]]
+   (when @(rf/subscribe [:user/administrator?])
+     [um/admin-dropdown "btn-outline-secondary"])
    [:div.mx-1.d-none.d-md-block
     [:div.d-flex.flex-row.align-items-center
      [um/register-handling-menu "btn-link"]]]])
@@ -41,7 +41,7 @@
   [title]
   (let [navbar-content-id "Overview-Content"
         navbar-title (toolbelt/truncate-to-n-chars title 20)]
-    [navbar-components/collapsable-nav-bar
+    [navbar-components/collapsible-nav-bar
      [elements/navbar-title
       [:h1.h6.font-weight-bold.my-auto.text-dark navbar-title]]
      navbar-content-id

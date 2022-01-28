@@ -16,7 +16,7 @@
             [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.views.schnaq.admin :as admin]))
 
-(defn clickable-title
+(defn- clickable-title
   ([]
    [clickable-title "text-primary" "text-dark"])
   ([label-class title-class]
@@ -42,7 +42,7 @@
   "Brand logo and title with dynamic resizing."
   [title additional-content]
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.mr-2.bg-white
-   [:a.schnaq-logo-container.d-flex.h-100 {:href (toolbelt/current-overview-link)}
+   [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes/startpage)}
     [schnaq-logo]]
    [:div.mx-0.mx-md-4
     title]

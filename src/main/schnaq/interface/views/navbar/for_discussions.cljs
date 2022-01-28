@@ -22,7 +22,7 @@
   "Header for schnaq view overview"
   []
   (let [navbar-content-id "Navbar-Content"]
-    [navbar-components/collapsable-nav-bar
+    [navbar-components/collapsible-nav-bar
      [nav-elements/title-and-infos]
      navbar-content-id
      "navbar-bg-transparent-sm-white"
@@ -39,7 +39,7 @@
   "Header for schnaq Q&A View"
   []
   (let [navbar-content-id "Qanda-Content"]
-    [navbar-components/collapsable-nav-bar
+    [navbar-components/collapsible-nav-bar
      [nav-elements/navbar-qanda-title]
      navbar-content-id
      "bg-transparent"

@@ -110,7 +110,7 @@
    content])
 
 (defn navbar-external-content
-  "External content to display in a collapsable section of a navigation bar."
+  "External content to display in a collapsible section of a navigation bar."
   [collapse-content-id]
   [external-content collapse-content-id
    [:<>
@@ -125,7 +125,7 @@
    (labels label)])
 
 (defn navbar-external-overview-content
-  "Collapsable content for schnaq overview"
+  "Collapsible content for schnaq overview."
   [collapse-content-id]
   [external-content collapse-content-id
    [:<>
@@ -133,9 +133,9 @@
      [:div.ml-auto
       [um/register-handling-menu "btn-link"]]]
     [:ul.list-group.list-group-flush
-     [li-link-button :nav/blog "https://schnaq.com/blog/"]
      [li-link-button :router/pricing (reitfe/href :routes/pricing)]
      [li-link-button :router/privacy (reitfe/href :routes/privacy)]
+     [li-link-button :nav/blog "https://schnaq.com/blog/"]
      [:li.list-group-item.dropdown [nav-elements/language-with-label-dropdown]]]]])
 
 
