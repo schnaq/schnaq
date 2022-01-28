@@ -85,7 +85,7 @@
    :how-to/question-dont-show-again "Got it?"
    :how-to/answer-dont-show-again "Don't show this tip anymore!"
 
-      ;; localized startpage videos
+   ;; localized startpage videos
    :startpage.above-the-fold/webm "https://s3.schnaq.com/startpage/videos/above_the_fold_english.webm"
    :startpage.above-the-fold/mp4 "https://s3.schnaq.com/startpage/videos/above_the_fold_english.mp4"
 
@@ -890,10 +890,12 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.enterprise-tier/on-request "On Request"
    :pricing.features/implemented "Already implemented"
    :pricing.features/to-be-implemented "Soon available"
-   :pricing.features/starter ["Hosted in Germany" "Unlimited schnaqs" "Unlimited participants" "Create Discussions" "Hold Q&As" "Automatic Mindmap" "Shareable by Link, QR Code and digit code" "Text and Image Export"]
-   :pricing.features/business ["Analysis Dashboard" "A.I. Summaries" "Personal Spaces" "Moderation Options"]
+   :pricing.features/number-of-users "Up to %s users in the audience"
+   :pricing.features.number-of-users/unlimited "Unlimited audience"
+   :pricing.features/starter ["Hosted in Germany" "Unlimited schnaqs" "Create Discussions" "Live Q&As" "Automatic Mindmap" "Shareable by Link, QR Code and digit code" "Text and Image Export"]
+   :pricing.features/pro ["Audience polls" "Quick-engage button" "Analysis Dashboard" "A.I. Summaries" "Personal Spaces" "Moderation Options"]
    :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
-   :pricing.features/upcoming ["A.I. Sentiment Analysis" "Integrations"]
+   :pricing.features/upcoming ["Theming" "A.I. Sentiment Analysis" "Integrations"]
    :pricing.units/per-month "/ month"
    :pricing.notes/with-vat "plus VAT"
    :pricing.trial/call-to-action "Test the pro plan 30 days free of charge"
