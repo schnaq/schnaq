@@ -56,7 +56,7 @@
                            :notification-mail-interval/daily (labels daily)
                            :notification-mail-interval/weekly (labels weekly)
                            :notification-mail-interval/never (labels never)
-                           (labels :notification-mail-interval/daily))]
+                           (labels :notification-mail-interval/never))]
     [:div.dropdown.mx-3
      [:button.btn.btn-outline-dark.dropdown-toggle
       {:id dropdown-id :type "button" :data-toggle "dropdown"
@@ -99,7 +99,7 @@
 (rf/reg-sub
  :user.notification/mail-interval
  (fn [db _]
-   (get-in db [:user :notification-mail-interval] :notification-mail-interval/daily)))
+   (get-in db [:user :notification-mail-interval] :notification-mail-interval/never)))
 
 (rf/reg-event-fx
  :user.notification/mail-interval!
