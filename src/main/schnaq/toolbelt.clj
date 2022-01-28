@@ -86,14 +86,14 @@
 
 (>defn post-in-mattermost!
   "Post a message via webhook in our mattermost. Optional `channel` must be the
-  slug of a channel name. Defaults to the configuration set in mattermost."
+  slug of a channel name, e.g. `gitlabs-dirty-secrets`. Defaults to the
+  configuration set in mattermost."
   ([message]
    [string? => map?]
    (post-in-mattermost! message nil))
   ([message channel]
    [string? (? string?) => map?]
-   (let [body {:text message}
-         body-ready (cond-> body
+   (let [body-ready (cond-> {:text message}
                       channel (assoc :channel channel))]
      (client/post
       config/mattermost-webhook-url
