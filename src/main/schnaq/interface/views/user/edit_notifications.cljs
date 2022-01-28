@@ -113,7 +113,12 @@
  :user.notification/mail-interval-success
  (fn [{:keys [db]} [_ {:keys [updated-user]}]]
    (let [interval (:user.registered/notification-mail-interval updated-user)]
-     {:db (assoc-in db [:user :notification-mail-interval] interval)})))
+     {:db (assoc-in db [:user :notification-mail-interval] interval)
+      :fx [[:dispatch [:notification/add
+                       #:notification{:title "Benachrichtigung aktualisiert"
+                                      :body [:p "Du erhältst nun Benachrichtigungen gemäß deiner Einstellungen:" " " (labels interval)]
+                                      :context :success
+                                      :stay-visible? false}]]]})))
 
 (rf/reg-event-fx
  :user.notification/mark-all-as-read!
