@@ -47,10 +47,12 @@
   []
   (let [dropdown-id "dropdownMailInterval"
         current-interval @(rf/subscribe [:user.notification/mail-interval])
+        every-minute :notification-mail-interval/every-minute
         daily :notification-mail-interval/daily
         weekly :notification-mail-interval/weekly
         never :notification-mail-interval/never
         interval-display (case current-interval
+                           :notification-mail-interval/every-minute (labels every-minute)
                            :notification-mail-interval/daily (labels daily)
                            :notification-mail-interval/weekly (labels weekly)
                            :notification-mail-interval/never (labels never)
@@ -63,6 +65,7 @@
      [:div.dropdown-menu {:aria-labelledby dropdown-id}
       [interval-dropdown-item daily]
       [interval-dropdown-item weekly]
+      [interval-dropdown-item every-minute]
       [:div.dropdown-divider]
       [interval-dropdown-item never]]]))
 

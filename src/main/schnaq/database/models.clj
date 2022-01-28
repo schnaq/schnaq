@@ -49,6 +49,7 @@
     :db/doc "Interval in which the user will receive updates via mail"}
 
    ;; Notification Mail Intervals
+   {:db/ident :notification-mail-interval/every-minute}
    {:db/ident :notification-mail-interval/daily}
    {:db/ident :notification-mail-interval/weekly}
    {:db/ident :notification-mail-interval/never}

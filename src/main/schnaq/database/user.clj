@@ -254,7 +254,7 @@
   "Return all subscribed share-hashes from the users respecting their 
   notification settings."
   [interval]
-  [::specs/notification-mail-interval :ret (s/coll-of :discussion/share-hash)]
+  [:user.registered/notification-mail-interval :ret (s/coll-of :discussion/share-hash)]
   (set
    (map :discussion/share-hash
         (flatten

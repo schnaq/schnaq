@@ -53,6 +53,7 @@
 (s/def :user.registered/profile-picture ::non-blank-string)
 (s/def :user.registered/notification-mail-interval #{:notification-mail-interval/daily
                                                      :notification-mail-interval/weekly
+                                                     :notification-mail-interval/every-minute
                                                      :notification-mail-interval/never})
 (s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)

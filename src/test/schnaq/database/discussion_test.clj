@@ -323,4 +323,4 @@
     (testing "No new statements should be added in a zero time-slot."
       (is (zero? (count (db/discussions-with-new-statements [discussion] (main-db/now))))))
     (testing "In the last minute, 18 new statements were added to the cat-dog discussion."
-      (is (= 18 (:new-statements (first (db/discussions-with-new-statements [discussion] (main-db/minutes-ago 1)))))))))
+      (is (= 18 (:total (:new-statements (first (db/discussions-with-new-statements [discussion] (main-db/minutes-ago 1))))))))))

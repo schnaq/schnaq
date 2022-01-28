@@ -46,7 +46,7 @@
           (log/error exception)
           (swap! failed-sendings conj recipient)))
       (swap! failed-sendings conj recipient))
-    (log/info "Should send an email now, but email is not configured.")))
+    (log/info (format "Should send an email to %s now, but email is not configured." recipient))))
 
 (>defn send-mail
   "Sends a single mail to the recipient. Title and content are used as passed."

@@ -21,7 +21,7 @@
 (>defn activation-by-share-hash
   "Get the activation for a discussion by share-hash."
   [share-hash]
-  [:discussion/share-hash :ret ::specs/activation]
+  [:discussion/share-hash :ret (? ::specs/activation)]
   (first
    (tools/pull-key-up
     (db/query '[:find [(pull ?activation activation-pattern)]

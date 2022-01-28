@@ -3,11 +3,10 @@
             [chime.core-async :refer [chime-ch]]
             [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
-            [schnaq.config.shared :as shared-config])
-  (:import (java.time LocalTime LocalDate LocalDateTime ZonedDateTime ZoneId Period DayOfWeek)
+            [schnaq.config.shared :as shared-config]
+            [schnaq.notification-service.specs])
+  (:import (java.time Duration Instant LocalTime LocalDate LocalDateTime ZonedDateTime ZoneId Period DayOfWeek)
            (java.time.temporal ChronoUnit TemporalAdjusters)))
-
-(s/def :time/zoned-date-time (partial instance? ZonedDateTime))
 
 (def ^:private start-next-morning
   "ZonedDateTime to indicate the start, today at 7 o'clock in UTC, which is 
@@ -15,7 +14,7 @@
   (-> (LocalDateTime/of (LocalDate/now) (LocalTime/of 7 0))
       (.adjustInto (ZonedDateTime/now (ZoneId/of (:timezone shared-config/time-settings))))))
 
-(defn- timestamp-next-monday
+(>defn- timestamp-next-monday
   "Takes a `ZonedDateTime` and returns the date of the next monday."
   [timestamp]
   [:time/zoned-date-time :ret :time/zoned-date-time]
@@ -27,7 +26,7 @@
   "Create an infinite collection with instances, re-occurring depending on the 
    `days`-parameter starting at `timestamp`."
   [timestamp days]
-  [:time/zoned-date-time pos-int? :ret (s/coll-of inst?)]
+  [:time/zoned-date-time pos-int? :ret (s/every inst?)]
   (chime-core/periodic-seq (.toInstant timestamp) (Period/ofDays days)))
 
 ;; -----------------------------------------------------------------------------
@@ -42,3 +41,10 @@
   "Same as `daily`, but for a weekly schedule."
   (atom
    (chime-ch (create-schedule (timestamp-next-monday start-next-morning) 7))))
+
+(def every-minute
+  "Create async channel with timestamps in one minute steps. Used for sending
+  mails nearly instantly."
+  (atom
+   (chime-ch (rest (chime-core/periodic-seq (Instant/now) (Duration/ofMinutes 1))))))
+

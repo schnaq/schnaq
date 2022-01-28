@@ -1,7 +1,7 @@
 (ns schnaq.notification-service.core
   (:require [clojure.core.async :refer [go-loop <!]]
             [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn- =>]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db]
             [schnaq.database.specs :as specs]
@@ -9,52 +9,63 @@
             [schnaq.mail.emails :as emails]
             [schnaq.notification-service.mail-builder :as mail-builder]
             [schnaq.notification-service.schedule :as schedule]
+            [schnaq.notification-service.specs]
             [taoensso.timbre :as log]))
-
-(s/def ::discussions-with-new-statements (s/coll-of ::specs/discussion))
-(s/def ::user-with-changed-discussions
-  (s/merge ::specs/registered-user (s/keys :req-un [::discussions-with-new-statements])))
 
 (>defn- discussions-with-new-statements-in-interval
   "Query all discussions of users respecting their notification interval. Query
   for these discussions all new statements in the time between now and the
   timestamp and create a map to query these results."
   [timestamp interval]
-  [inst? :user.registered/notification-mail-interval :ret (s/map-of :discussion/share-hash ::specs/discussion)]
+  [inst? :user.registered/notification-mail-interval => :notification-service/share-hash-to-discussion]
   (let [subscribed-discussions (discussion-db/discussions-by-share-hashes (user-db/subscribed-share-hashes interval))
         discussions (discussion-db/discussions-with-new-statements
                      subscribed-discussions timestamp)]
     (into {} (map (juxt :discussion/share-hash identity) discussions))))
+
+(>defn- remove-discussions-with-no-other-users
+  "Remove those discussions, where the user is the only author of newly created
+  statements."
+  [discussions-with-new-statements user-id]
+  [:notification-service/share-hash-to-discussion :db/id => :notification-service/share-hash-to-discussion]
+  (->> (seq discussions-with-new-statements)
+       (remove (fn [[_share-hash discussion]]
+                 (let [authors (get-in discussion [:new-statements :authors])]
+                   (and (= 1 (count authors))
+                        (authors user-id)))))
+       (into {})))
 
 (>defn- assoc-discussions-with-new-statements
   "Assoc all subscribed discussions to a user. Adds a new field 
   `:discussions-with-new-statements` containing all subscribed discussions,
    which received new statements."
   [discussions-with-new-statements user]
-  [::discussions-with-new-statements ::specs/registered-user :ret ::user-with-changed-discussions]
-  (assoc user :discussions-with-new-statements
-         (remove nil?
-                 (map #(get discussions-with-new-statements (:discussion/share-hash %))
-                      (:user.registered/visited-schnaqs user)))))
+  [:notification-service/share-hash-to-discussion ::specs/registered-user => :notification-service/user-with-changed-discussions]
+  (let [discussions (remove-discussions-with-no-other-users discussions-with-new-statements (:db/id user))]
+    (->> user
+         :user.registered/visited-schnaqs
+         (map #(get discussions (:discussion/share-hash %)))
+         (remove nil?)
+         (assoc user :discussions-with-new-statements))))
 
 (>defn- users-with-changed-discussions
   "Assoc to all users those discussions, with received new statements between 
   now and the timestamp."
   [timestamp interval]
-  [inst? :user.registered/notification-mail-interval :ret (s/coll-of ::user-with-changed-discussions)]
+  [inst? :user.registered/notification-mail-interval => (s/coll-of :notification-service/user-with-changed-discussions)]
   (let [users (user-db/users-by-notification-interval interval)
         changed-discussions (discussions-with-new-statements-in-interval timestamp interval)]
-    (remove #(empty? (:discussions-with-new-statements %))
-            (map (partial assoc-discussions-with-new-statements changed-discussions)
-                 users))))
+    (->> users
+         (map (partial assoc-discussions-with-new-statements changed-discussions))
+         (remove #(empty? (:discussions-with-new-statements %))))))
 
 ;; -----------------------------------------------------------------------------
 
 (>defn- send-schnaq-diffs
   "Build and send a mail containing links to each schnaq with new statements."
   [{:user.registered/keys [keycloak-id email] :as user}]
-  [::users-with-changed-discussions :ret nil?]
-  (let [total-new-statements (->> user :discussions-with-new-statements (map :new-statements) (apply +))
+  [:notification-service/user-with-changed-discussions => nil?]
+  (let [total-new-statements (->> user :discussions-with-new-statements (map #(get-in % [:new-statements :total])) (apply +))
         new-statements-content-html (mail-builder/build-new-statements-html user)
         new-statements-content-plain (mail-builder/build-new-statements-plain user)
         personal-greeting (mail-builder/build-personal-greeting user)
@@ -73,15 +84,14 @@
 (>defn- start-mail-schedule
   "Takes a core.async channel-atom containing the instances of the next dates 
    when mails should be sent and an interval to pre-select the users.
-   
    Infinitely loops and sends regularly mails."
-  [channel timestamp interval]
-  [any? inst? :user.registered/notification-mail-interval :ret nil?]
+  [channel time-fn interval]
+  [any? fn? :user.registered/notification-mail-interval => any?]
   (log/info "Starting mail schedule for" interval)
   (go-loop []
-    (when-let [current-time (<! @channel)]
-      (log/info "Sending new mails, timestamp" current-time)
-      (run! send-schnaq-diffs (users-with-changed-discussions timestamp interval))
+    (when-let [_current-time (<! @channel)]
+      (log/info (format "Checking for changes in interval [%s]" interval))
+      (run! send-schnaq-diffs (users-with-changed-discussions (time-fn) interval))
       (recur))))
 
 ;; -----------------------------------------------------------------------------
@@ -90,5 +100,13 @@
   [& _args]
   (log/info "Initializing mail notification service")
   (when (main-db/connection-possible?)
-    (start-mail-schedule schedule/daily (main-db/days-ago 1) :notification-mail-interval/daily)
-    (start-mail-schedule schedule/weekly (main-db/days-ago 7) :notification-mail-interval/weekly)))
+    (start-mail-schedule schedule/every-minute #(main-db/minutes-ago 1) :notification-mail-interval/every-minute)
+    (start-mail-schedule schedule/daily #(main-db/days-ago 1) :notification-mail-interval/daily)
+    (start-mail-schedule schedule/weekly #(main-db/days-ago 7) :notification-mail-interval/weekly)))
+
+(comment
+
+  (users-with-changed-discussions (main-db/minutes-ago 5) :notification-mail-interval/every-minute)
+  (reset! schedule/every-minute nil)
+
+  nil)

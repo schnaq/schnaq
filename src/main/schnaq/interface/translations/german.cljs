@@ -838,9 +838,8 @@
    :subscription.page.cancel/body "Im kostenfreien Plan stehen dir weiterhin alle Basisfunktionen zur Verfügung. Wir würden uns sehr freuen von dir zu hören, warum du doch nicht die Pro-Funktionen verwenden möchtest. Kontaktiere uns dazu gerne unter hello@schnaq.com 👍 Fehlt dir vielleicht eine Funktion? Lass es uns wissen – wir finden eine Lösung!"
    :subscription.page.cancel/button "Anders überlegt?"
 
-   ; mail interval
-
-
+   ;; mail interval
+   :notification-mail-interval/every-minute "Prüfe jede Minute"
    :notification-mail-interval/daily "Täglich"
    :notification-mail-interval/weekly "Wöchentlich"
    :notification-mail-interval/never "Niemals"

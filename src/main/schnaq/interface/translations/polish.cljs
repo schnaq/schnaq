@@ -837,7 +837,8 @@
    :subscription.page.cancel/body "W planie darmowym, wszystkie podstawowe funkcje są nadal dostępne dla Ciebie. Chętnie dowiemy się od Ciebie, dlaczego nie chcesz korzystać z funkcji Pro. Zapraszamy do kontaktu z nami 👍 Może jest jakaś funkcja, której Ci brakuje? Daj nam znać - znajdziemy rozwiązanie!"
    :subscription.page.cancel/button "Zmieniłeś zdanie?"
 
-   ; mail interval
+   ;; mail interval
+   :notification-mail-interval/every-minute "Sprawdzaj co minutę"
    :notification-mail-interval/daily "Codziennie"
    :notification-mail-interval/weekly "Tygodnik"
    :notification-mail-interval/never "Nigdy"
