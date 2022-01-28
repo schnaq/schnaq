@@ -31,7 +31,9 @@
    (db/query '[:find [(pull ?survey survey-pattern) ...]
                :in $ ?share-hash survey-pattern
                :where [?discussion :discussion/share-hash ?share-hash]
-               [?survey :survey/discussion ?discussion]]
+               (or
+                [?survey :survey/discussion ?discussion]
+                [?survey :poll/discussion ?discussion])]
              share-hash patterns/survey)))
 
 (>defn vote!
@@ -44,8 +46,11 @@
              (db/query
               '[:find ?option .
                 :in $ ?option ?survey ?share-hash
-                :where [?survey :survey/options ?option]
-                [?survey :survey/discussion ?discussion]
+                :where (or [?survey :survey/options ?option]
+                           [?survey :poll/options ?option])
+                (or
+                 [?survey :survey/discussion ?discussion]
+                 [?survey :poll/discussion ?discussion])
                 [?discussion :discussion/share-hash ?share-hash]]
               option-id survey-id share-hash)]
     (db/increment-number matching-option :option/votes)))
@@ -60,8 +65,11 @@
         (db/query
          '[:find [?options ...]
            :in $ [?options ...] ?survey ?share-hash
-           :where [?survey :survey/options ?options]
-           [?survey :survey/discussion ?discussion]
+           :where (or [?survey :survey/options ?option]
+                      [?survey :poll/options ?option])
+           (or
+            [?survey :survey/discussion ?discussion]
+            [?survey :poll/discussion ?discussion])
            [?discussion :discussion/share-hash ?share-hash]]
          option-ids survey-id share-hash)
         transaction-results (doall (map #(db/increment-number % :option/votes) matching-options))

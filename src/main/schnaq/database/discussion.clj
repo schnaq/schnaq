@@ -696,3 +696,12 @@
     (when valid-secrets
       @(transact
         (mapv #(vector :db/add [:discussion/share-hash %] :discussion/author author-id) (keys valid-secrets))))))
+
+(defn migrate-surveys []
+  @(transact
+    [[:db/add [:db/ident :survey/title] :db/ident :poll/title]
+     [:db/add [:db/ident :survey/discussion] :db/ident :poll/discussion]
+     [:db/add [:db/ident :survey/type] :db/ident :poll/type]
+     [:db/add [:db/ident :survey.type/single-choice] :db/ident :poll.type/single-choice]
+     [:db/add [:db/ident :survey.type/multiple-choice] :db/ident :poll.type/multiple-choice]
+     [:db/add [:db/ident :survey/options] :db/ident :poll/options]]))

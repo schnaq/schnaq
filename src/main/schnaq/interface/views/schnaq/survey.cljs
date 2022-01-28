@@ -23,7 +23,8 @@
            percentage (if (zero? total-value)
                         "0%"
                         (str (.toFixed (* 100 (/ vote-number total-value)) 2) "%"))
-           single-choice? (= :survey.type/single-choice survey-type)
+           single-choice? (or (= :survey.type/single-choice survey-type)
+                              (= :poll.type/single-choice survey-type))
            votes-set (if single-choice? #{cast-votes} (set cast-votes))
            option-voted? (votes-set id)]
        [:<>
@@ -32,9 +33,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-             {:type (if single-choice? "radio" "checkbox")
-              :name :option-choice
-              :value id}
+              {:type (if single-choice? "radio" "checkbox")
+               :name :option-choice
+               :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -54,10 +55,11 @@
   "Displays all surveys of the current schnaq."
   []
   (let [surveys @(rf/subscribe [:schnaq/surveys])]
-     ;; This doall is needed, for the reactive deref inside to work
+    ;; This doall is needed, for the reactive deref inside to work
     (doall
      (for [survey surveys]
-       (let [total-value (apply + (map :option/votes (:survey/options survey)))
+       (let [total-value (apply + (map :option/votes (or (:survey/options survey)
+                                                         (:poll/options survey))))
              survey-id (:db/id survey)
              cast-votes @(rf/subscribe [:schnaq/vote-cast survey-id])]
          [:div.statement-column
@@ -69,8 +71,12 @@
                            (jsw/prevent-default e)
                            (rf/dispatch [:schnaq.survey/cast-vote (oget e [:target :elements]) survey]))}
              [:div.mx-4.my-2
-              [:h6.pb-2.text-center (:survey/title survey)]
-              [results-graph (:survey/options survey) total-value (:survey/type survey) cast-votes]
+              [:h6.pb-2.text-center (or (:survey/title survey)
+                                        (:poll/title survey))]
+              [results-graph (or (:survey/options survey)
+                                 (:poll/options survey))
+               total-value (or (:survey/type survey)
+                               (:poll/type survey)) cast-votes]
               (when-not cast-votes
                 [:div.text-center
                  [:button.btn.btn-primary.btn-sm
@@ -156,7 +162,8 @@
  :schnaq.survey/cast-vote
  (fn [{:keys [db]} [_ form-elements survey]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         single-choice? (= :survey.type/single-choice (:survey/type survey))
+         single-choice? (or (= :survey.type/single-choice (:survey/type survey))
+                            (= :poll.type/single-choice (:poll/type survey)))
          survey-id (:db/id survey)
          chosen-option (if single-choice?
                          (js/parseInt (oget form-elements :option-choice :value))
