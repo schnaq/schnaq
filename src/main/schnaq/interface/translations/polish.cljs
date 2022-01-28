@@ -889,9 +889,9 @@
    :pricing.features/to-be-implemented "Wkrótce dostępne"
    :pricing.features/number-of-users "Do %s użytkowników w widowni"
    :pricing.features.number-of-users/unlimited "Nieograniczona publiczność"
-   :pricing.features/starter ["Hosting w Niemczech" "Nieograniczona ilość schnaqs" "Tworzenie dyskusji" "Przeprowadzić Q&A" "Automatyczna Mindmap" "Możliwość udostępniania za pomocą linku, kodu QR i kodu cyfrowego" "Eksport tekstu i obrazu"]
-   :pricing.features/pro ["Ankiety publiczności" "Przycisk szybkiego angażowania się" "Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista" "Opcje moderacji"]
-   :pricing.features/enterprise ["Osadzanie w istniejących systemach\" \"Logowanie SSO (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
+   :pricing.features/free ["Hosting w Niemczech" "Nieograniczona ilość schnaqs" "Tworzenie dyskusji" "Przeprowadzić Q&A" "Automatyczna Mindmap" "Możliwość udostępniania za pomocą linku, kodu QR i kodu cyfrowego" "Eksport tekstu i obrazu" "Email support"]
+   :pricing.features/pro ["Ankiety publiczności" "Przycisk szybkiego angażowania się" "Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista" "Opcje moderacji" "Priorytetowe wsparcie"]
+   :pricing.features/enterprise ["Osadzanie w istniejących systemach\" \"Logowanie SSO (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise" "Wsparcie telefoniczne 24/7"]
    :pricing.features/upcoming ["Analiza nastrojów A.I." "Integracje"]
    :pricing.units/per-month "/ Miesiąc"
    :pricing.notes/with-vat "plus VAT."

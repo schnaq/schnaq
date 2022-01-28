@@ -24,7 +24,7 @@
 (defn- coming-soon []
   (label-builder :pricing.features/upcoming))
 (defn- starter-features []
-  (label-builder :pricing.features/starter))
+  (label-builder :pricing.features/free))
 (defn- business-features []
   (label-builder :pricing.features/pro))
 (defn- enterprise-features []

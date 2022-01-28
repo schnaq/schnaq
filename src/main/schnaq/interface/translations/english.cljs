@@ -892,9 +892,9 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.features/to-be-implemented "Soon available"
    :pricing.features/number-of-users "Up to %s users in the audience"
    :pricing.features.number-of-users/unlimited "Unlimited audience"
-   :pricing.features/starter ["Hosted in Germany" "Unlimited schnaqs" "Create Discussions" "Live Q&As" "Automatic Mindmap" "Shareable by Link, QR Code and digit code" "Text and Image Export"]
-   :pricing.features/pro ["Audience polls" "Quick-engage button" "Analysis Dashboard" "A.I. Summaries" "Personal Spaces" "Moderation Options"]
-   :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
+   :pricing.features/free ["Hosted in Germany" "Unlimited schnaqs" "Create Discussions" "Live Q&As" "Automatic Mindmap" "Shareable by Link, QR Code and digit code" "Text and Image Export" "Email support"]
+   :pricing.features/pro ["Audience polls" "Quick-engage button" "Analysis Dashboard" "A.I. Summaries" "Personal Spaces" "Moderation Options" "Priority Support"]
+   :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise" "24/7 telephone support"]
    :pricing.features/upcoming ["Theming" "A.I. Sentiment Analysis" "Integrations"]
    :pricing.units/per-month "/ month"
    :pricing.notes/with-vat "plus VAT"
