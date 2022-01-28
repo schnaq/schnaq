@@ -89,57 +89,70 @@
   ([placeholder rank]
    [inputs/text placeholder (str "survey-option-" rank)]))
 
+(rf/reg-event-db
+ :polls.create/set-option-count
+ (fn [db [_ new-count]]
+   (assoc-in db [:survey :create :option-count] new-count)))
+
+(rf/reg-event-db
+ :polls.create/reset-option-count
+ (fn [db _]
+   (assoc-in db [:survey :create :option-count] 2)))
+
+(rf/reg-sub
+ :polls.create/option-count
+ (fn [db _]
+   (get-in db [:survey :create :option-count] 2)))
+
 (defn survey-form
   "Input form to create a survey with multiple options."
   []
-  (let [option-count (reagent/atom 2)]
-    (fn []
-      [:form.pt-2
-       {:on-submit (fn [event]
-                     (jsw/prevent-default event)
-                     (rf/dispatch [:schnaq.survey/create-new
-                                   (oget event [:target :elements])
-                                   @option-count])
-                     (reset! option-count 2))}
-       [:div.form-group
-        [:label {:for :survey-topic} (labels :schnaq.survey.create/topic-label)]
-        [inputs/text (labels :schnaq.survey.create/placeholder) :survey-topic]
-        [:small.form-text.text-muted (labels :schnaq.survey.create/hint)]]
-       [:div.form-group
-        [:label (labels :schnaq.survey.create/options-label)]
-        [survey-option "Pyrrhus" 1]
-        [survey-option "Surus" 2]
-        (for [rank (range 3 (inc @option-count))]
-          (with-meta
-            [survey-option (str (labels :schnaq.survey.create/options-placeholder) " " rank) rank]
-            {:key (str "survey-option-key-" rank)}))]
-       [:div.text-center.mb-3
-        [:button.btn.btn-dark.mr-2
+  (let [option-count @(rf/subscribe [:polls.create/option-count])]
+    [:form.pt-2
+     {:on-submit (fn [event]
+                   (jsw/prevent-default event)
+                   (rf/dispatch [:schnaq.survey/create-new
+                                 (oget event [:target :elements])
+                                 option-count]))}
+     [:div.form-group
+      [:label {:for :survey-topic} (labels :schnaq.survey.create/topic-label)]
+      [inputs/text (labels :schnaq.survey.create/placeholder) :survey-topic]
+      [:small.form-text.text-muted (labels :schnaq.survey.create/hint)]]
+     [:div.form-group
+      [:label (labels :schnaq.survey.create/options-label)]
+      [survey-option "Pyrrhus" 1]
+      [survey-option "Surus" 2]
+      (for [rank (range 3 (inc option-count))]
+        (with-meta
+          [survey-option (str (labels :schnaq.survey.create/options-placeholder) " " rank) rank]
+          {:key (str "survey-option-key-" rank)}))]
+     [:div.text-center.mb-3
+      [:button.btn.btn-dark.mr-2
+       {:type :button
+        :on-click #(rf/dispatch [:polls.create/set-option-count (inc option-count)])}
+       [icon :plus] " " (labels :schnaq.survey.create/add-button)]
+      (when (> option-count 2)
+        [:button.btn.btn-dark
          {:type :button
-          :on-click #(swap! option-count inc)}
-         [icon :plus] " " (labels :schnaq.survey.create/add-button)]
-        (when (> @option-count 2)
-          [:button.btn.btn-dark
-           {:type :button
-            :on-click #(swap! option-count dec)}
-           [icon :minus] " " (labels :schnaq.survey.create/remove-button)])]
-       [:div.form-check.form-check-inline
-        [:input#radio-single-choice.form-check-input
-         {:type "radio"
-          :name :radio-type-choice
-          :value :single
-          :defaultChecked true}]
-        [:label.form-check-label
-         {:for :radio-single-choice} (labels :schnaq.survey.create/single-choice-label)]]
-       [:div.form-check.form-check-inline
-        [:input#radio-multiple-choice.form-check-input
-         {:type "radio"
-          :name :radio-type-choice
-          :value :multiple}]
-        [:label.form-check-label
-         {:for :radio-multiple-choice} (labels :schnaq.survey.create/multiple-choice-label)]]
-       [:div.text-center.pt-2
-        [:button.btn.btn-primary.w-75 {:type "submit"} (labels :schnaq.survey.create/submit-button)]]])))
+          :on-click #(rf/dispatch [:polls.create/set-option-count (dec option-count)])}
+         [icon :minus] " " (labels :schnaq.survey.create/remove-button)])]
+     [:div.form-check.form-check-inline
+      [:input#radio-single-choice.form-check-input
+       {:type "radio"
+        :name :radio-type-choice
+        :value :single
+        :defaultChecked true}]
+      [:label.form-check-label
+       {:for :radio-single-choice} (labels :schnaq.survey.create/single-choice-label)]]
+     [:div.form-check.form-check-inline
+      [:input#radio-multiple-choice.form-check-input
+       {:type "radio"
+        :name :radio-type-choice
+        :value :multiple}]
+      [:label.form-check-label
+       {:for :radio-multiple-choice} (labels :schnaq.survey.create/multiple-choice-label)]]
+     [:div.text-center.pt-2
+      [:button.btn.btn-primary.w-75 {:type "submit"} (labels :schnaq.survey.create/submit-button)]]]))
 
 (rf/reg-event-fx
  :schnaq.survey/create-new
@@ -154,9 +167,8 @@
                  :share-hash share-hash
                  :edit-hash (get-in db [:schnaqs :admin-access share-hash])}]
      {:fx [(http/xhrio-request db :post "/survey"
-                               [:schnaq.survey.create-new/success]
-                               params)
-           [:form/clear form-elements]]})))
+                               [:schnaq.survey.create-new/success form-elements]
+                               params)]})))
 
 (rf/reg-event-fx
  :schnaq.survey/cast-vote
@@ -197,14 +209,16 @@
  (fn [db [_ survey-id]]
    (update-in db [:schnaq :surveys :past-votes] dissoc survey-id)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  :schnaq.survey.create-new/success
- (fn [db [_ response]]
-   (update-in db [:schnaq :current :surveys]
-              #(if (nil? %1)
-                 [%2]
-                 (conj %1 %2))
-              (:new-survey response))))
+ (fn [{:keys [db]} [_ form-elements response]]
+   {:db (update-in db [:schnaq :current :surveys]
+                   #(if (nil? %1)
+                      [%2]
+                      (conj %1 %2))
+                   (:new-survey response))
+    :fx [[:form/clear form-elements]
+         [:dispatch [:polls.create/reset-option-count]]]}))
 
 (rf/reg-sub
  :schnaq/surveys
