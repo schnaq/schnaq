@@ -1,6 +1,5 @@
 (ns schnaq.api.subscription.stripe
-  (:require [clj-http.client :as client]
-            [clojure.spec.alpha :as s]
+  (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn- =>]]
             [ring.util.http-response :refer [ok not-found bad-request]]
             [schnaq.api.subscription.stripe-lib :as stripe-lib]
