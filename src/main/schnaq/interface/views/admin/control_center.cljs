@@ -46,6 +46,7 @@
  :admin.schnaq.migrate/survey->polls
  (fn [{:keys [db]} _]
    {:fx [(http/xhrio-request db :post "/admin/schnaq/migrate/survey" [:no-op]
+                             {}
                              [:ajax.error/as-notification])]}))
 
 (defn- center-overview

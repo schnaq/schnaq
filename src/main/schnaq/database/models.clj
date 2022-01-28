@@ -307,6 +307,28 @@
     :db/cardinality :db.cardinality/one
     :db/doc "The last requester (registered user) of a summary."}
 
+
+   ;; Polls
+   {:db/ident :poll/title
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The title of a poll. Usually a question that is posed."}
+   {:db/ident :poll/discussion
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The discussion that the poll belongs to."}
+   {:db/ident :poll/type
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The type of poll being conducted. i.e. multiple or single choice. Referenced by `:poll.type` entities"}
+   {:db/ident :poll.type/single-choice
+    :db/doc "A typical single-choice poll, where only one vote per person is allowed."}
+   {:db/ident :poll.type/multiple-choice
+    :db/doc "A multiple choice poll, where participants may choose multiple answers."}
+   {:db/ident :poll/options
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The options that are possible in this poll. An option knows how many voted for it."}
    ;; Surveys
    {:db/ident :survey/title
     :db/valueType :db.type/string
@@ -338,7 +360,7 @@
     :db/cardinality :db.cardinality/one
     :db/doc "The cummulative number of votes for this option. Must be 0 or positive."}
 
-    ;; Activation
+   ;; Activation
    {:db/ident :activation/count
     :db/valueType :db.type/long
     :db/cardinality :db.cardinality/one

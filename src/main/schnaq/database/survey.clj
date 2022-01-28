@@ -19,7 +19,15 @@
         :survey/type survey-type
         :survey/discussion discussion-id
         :survey/options (mapv (fn [val] {:db/id (.toString (UUID/randomUUID))
-                                         :option/value val}) options)}]
+                                         :option/value val}) options)}
+       {:db/id "newly-created-poll"
+        :poll/title title
+        :poll/type (if (= :survey.type/single-choice survey-type)
+                     :poll.type/single-choice
+                     :poll.type/multiple-choice)
+        :poll/discussion discussion-id
+        :poll/options (mapv (fn [val] {:db/id (.toString (UUID/randomUUID))
+                                       :option/value val}) options)}]
       "newly-created-survey"
       patterns/survey))))
 
@@ -31,9 +39,7 @@
    (db/query '[:find [(pull ?survey survey-pattern) ...]
                :in $ ?share-hash survey-pattern
                :where [?discussion :discussion/share-hash ?share-hash]
-               (or
-                [?survey :survey/discussion ?discussion]
-                [?survey :poll/discussion ?discussion])]
+               [?survey :survey/discussion ?discussion]]
              share-hash patterns/survey)))
 
 (>defn vote!
@@ -46,11 +52,8 @@
              (db/query
               '[:find ?option .
                 :in $ ?option ?survey ?share-hash
-                :where (or [?survey :survey/options ?option]
-                           [?survey :poll/options ?option])
-                (or
-                 [?survey :survey/discussion ?discussion]
-                 [?survey :poll/discussion ?discussion])
+                :where [?survey :survey/options ?option]
+                [?survey :survey/discussion ?discussion]
                 [?discussion :discussion/share-hash ?share-hash]]
               option-id survey-id share-hash)]
     (db/increment-number matching-option :option/votes)))
@@ -65,11 +68,8 @@
         (db/query
          '[:find [?options ...]
            :in $ [?options ...] ?survey ?share-hash
-           :where (or [?survey :survey/options ?option]
-                      [?survey :poll/options ?option])
-           (or
-            [?survey :survey/discussion ?discussion]
-            [?survey :poll/discussion ?discussion])
+           :where [?survey :survey/options ?option]
+           [?survey :survey/discussion ?discussion]
            [?discussion :discussion/share-hash ?share-hash]]
          option-ids survey-id share-hash)
         transaction-results (doall (map #(db/increment-number % :option/votes) matching-options))
