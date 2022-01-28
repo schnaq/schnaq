@@ -1,13 +1,13 @@
 (ns schnaq.interface.views.navbar.for-pages
   (:require [clojure.string :as str]
+            [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
             [schnaq.interface.views.navbar.elements :as elements]
-            [schnaq.interface.views.navbar.user-management :as um]
-            [re-frame.core :as rf]))
+            [schnaq.interface.views.navbar.user-management :as um]))
 
 ;; -----------------------------------------------------------------------------
 ;; Navbar Elements
