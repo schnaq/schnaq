@@ -208,7 +208,7 @@
    [:div.card-deck
     [feature-card (labels :pricing.features.user-numbers/heading) (labels :pricing.features.user-numbers/content)]
     [feature-card (labels :pricing.features.team-numbers/heading) (labels :pricing.features.team-numbers/content)]
-    [feature-card (labels :pricing.features.app-integration/heading) (labels :pricing.features.app-integration/content)]]
+    [feature-card (labels :pricing.features.engage/heading) (labels :pricing.features.engage/content)]]
    [:div.card-deck.mt-2
     [feature-card (labels :pricing.features.analysis/heading) (labels :pricing.features.analysis/content)]
     [feature-card (labels :pricing.features.knowledge-db/heading) (labels :pricing.features.knowledge-db/content)]
