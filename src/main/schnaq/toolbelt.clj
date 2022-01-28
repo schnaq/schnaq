@@ -1,8 +1,11 @@
 (ns schnaq.toolbelt
   "Utility functions supporting the backend."
-  (:require [clojure.string :as string]
+  (:require [clj-http.client :as client]
+            [clojure.string :as string]
             [clojure.walk :as walk]
-            [com.fulcrologic.guardrails.core :refer [>defn ?]])
+            [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
+            [muuntaja.core :as m]
+            [schnaq.config :as config])
   (:import (clojure.lang PersistentArrayMap)
            (java.time Instant LocalDateTime ZoneOffset)
            (java.time.temporal ChronoUnit TemporalUnit)))
@@ -80,3 +83,20 @@
   the call chain."
   [n & body]
   `(try-times* ~n (fn [] ~@body)))
+
+(>defn post-in-mattermost!
+  "Post a message via webhook in our mattermost. Optional `channel` must be the
+  slug of a channel name, e.g. `gitlabs-dirty-secrets`. Defaults to the
+  configuration set in mattermost."
+  ([message]
+   [string? => map?]
+   (post-in-mattermost! message nil))
+  ([message channel]
+   [string? (? string?) => map?]
+   (let [body-ready (cond-> {:text message}
+                      channel (assoc :channel channel))]
+     (client/post
+      config/mattermost-webhook-url
+      {:body (m/encode "application/json" body-ready)
+       :content-type :json
+       :accept :json}))))
