@@ -133,7 +133,6 @@
      [:div.ml-auto
       [um/register-handling-menu "btn-link"]]]
     [:ul.list-group.list-group-flush
-     [li-link-button :router/startpage (reitfe/href :routes/startpage)]
      [li-link-button :router/pricing (reitfe/href :routes/pricing)]
      [li-link-button :router/privacy (reitfe/href :routes/privacy)]
      [li-link-button :nav/blog "https://schnaq.com/blog/"]

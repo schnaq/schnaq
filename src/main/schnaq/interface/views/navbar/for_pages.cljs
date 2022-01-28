@@ -6,7 +6,8 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
             [schnaq.interface.views.navbar.elements :as elements]
-            [schnaq.interface.views.navbar.user-management :as um]))
+            [schnaq.interface.views.navbar.user-management :as um]
+            [re-frame.core :as rf]))
 
 ;; -----------------------------------------------------------------------------
 ;; Navbar Elements
@@ -22,17 +23,15 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn navbar-user []
+(defn- navbar-user []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
-   [navbar-components/button :router/startpage (reitfe/href :routes/startpage)]
-   [:div [pricing-button]]
-   [:div [privacy-button]]
-   [:div [blog-link]]
-   [:div.mr-1
-    [:div.dropdown.ml-auto
-     [navbar-components/language-dropdown false {}]]]
-   [:div.mx-1
-    [um/admin-dropdown "btn-outline-secondary"]]
+   [pricing-button]
+   [privacy-button]
+   [blog-link]
+   [:div.dropdown.ml-auto
+    [navbar-components/language-dropdown false {}]]
+   (when @(rf/subscribe [:user/administrator?])
+     [um/admin-dropdown "btn-outline-secondary"])
    [:div.mx-1.d-none.d-md-block
     [:div.d-flex.flex-row.align-items-center
      [um/register-handling-menu "btn-link"]]]])
@@ -42,7 +41,7 @@
   [title]
   (let [navbar-content-id "Overview-Content"
         navbar-title (toolbelt/truncate-to-n-chars title 20)]
-    [navbar-components/collapsable-nav-bar
+    [navbar-components/collapsible-nav-bar
      [elements/navbar-title
       [:h1.h6.font-weight-bold.my-auto.text-dark navbar-title]]
      navbar-content-id
