@@ -201,6 +201,17 @@
         [:div.ml-2
          [edit-statement-dropdown-menu statement]])])))
 
+(defn comments-info-badge
+  "Badge that display the comment count."
+  [schnaq]
+  (let [meta-info (:meta-info schnaq)
+        statement-count (:all-statements meta-info)]
+    [:p.mb-0
+     [:span.small.mr-2
+      [icon :comment/alt "m-auto"]
+      " " statement-count
+      " " (labels :discussion.badges/posts)]]))
+
 (defn static-info-badges
   "Badges that display schnaq info."
   [schnaq]
@@ -232,7 +243,7 @@
   [schnaq]
   (let [read-only? (some #{:discussion.state/read-only} (:discussion/states schnaq))]
     (when read-only?
-      [:span.badge.badge-pill.badge-secondary-outline (labels :discussion.state/read-only-label)])))
+      [:div.small.my-auto.text-secondary (labels :discussion.state/read-only-label)])))
 
 ;; -----------------------------------------------------------------------------
 

@@ -1,18 +1,13 @@
 @use 'variables' as vars;
 @use 'rounded' as rounded;
 
-.schnaq-entry-no-hover {
-  @include rounded.rounded-1;
-  background-color: vars.$white;
-  min-height: 5rem;
-  overflow: hidden;
-}
+
 
 .schnaq-entry {
-  /* stylelint-disable */
-  @extend .schnaq-entry-no-hover;
-  /* stylelint-enable */
+  @include rounded.rounded-1;
+  background-color: vars.$white;
   cursor: pointer;
+  min-height: 5rem;
 
   @include media-breakpoint-down(sm) {
     border-radius: 0;
@@ -32,8 +27,20 @@
 .schnaq-header-image {
   @include rounded.rounded-1;
   background-position: center center;
+  background-size: cover;
   min-height: 100%;
   object-fit: cover;
   overflow: hidden;
-  width: 0.5rem;
+  width: 10rem;
+}
+
+.schnaq-header-hub-image {
+  @include rounded.rounded-1;
+  margin-left: 1rem;
+  margin-top: -1rem;
+  min-height: 2rem;
+  object-fit: cover;
+  overflow: hidden;
+  position: absolute;
+  width: 2rem;
 }
