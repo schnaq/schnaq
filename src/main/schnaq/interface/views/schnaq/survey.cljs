@@ -3,7 +3,6 @@
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
-            [reagent.core :as reagent]
             [schnaq.interface.components.colors :as colors]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
