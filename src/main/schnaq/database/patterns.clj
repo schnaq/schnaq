@@ -121,21 +121,13 @@
                         :user.registered/display-name
                         :user.registered/keycloak-id]}])
 
-(def survey
+(def poll
   [:db/id
-   :survey/title
    :poll/title
-   {:survey/type [:db/ident]}
    {:poll/type [:db/ident]}
-   {:survey/options [:db/id
-                     :option/value
-                     [:option/votes :default 0]]}
    {:poll/options [:db/id
                    :option/value
                    [:option/votes :default 0]]}
-   {:survey/discussion [:db/id
-                        :discussion/share-hash
-                        :discussion/title]}
    {:poll/discussion [:db/id
                       :discussion/share-hash
                       :discussion/title]}])

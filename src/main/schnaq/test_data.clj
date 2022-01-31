@@ -293,40 +293,40 @@
 (def registered-users
   [alex kangaroo])
 
-(def surveys
-  [{:db/id "survey/single-choice"
-    :survey/title "Ganz allein"
-    :survey/type :survey.type/single-choice
-    :survey/options [{:db/id "option/milch"
-                      :option/value "Milch"}
-                     {:db/id "option/eis"
-                      :option/value "Eis"}
-                     {:db/id "option/wasser"
-                      :option/value "Wasser"
-                      :option/votes 4}]
-    :survey/discussion "discussion/cat-or-dog"}
-   {:db/id "survey/multiple-choice"
-    :survey/title "Ganz allein mit mehreren"
-    :survey/type :survey.type/multiple-choice
-    :survey/options [{:db/id "option/milche"
-                      :option/value "Milche"}
-                     {:db/id "option/eise"
-                      :option/value "Eise"
-                      :option/votes 2}
-                     {:db/id "option/wassers"
-                      :option/value "Wassers"
-                      :option/votes 1}]
-    :survey/discussion "discussion/cat-or-dog"}
-   {:db/id "survey/increment-test"
-    :survey/title "Incrementier die Votes!"
-    :survey/type :survey.type/single-choice
-    :survey/options [{:db/id "option/mit-vote"
-                      :option/value "Mit Vote"
-                      :option/votes 1}
-                     {:db/id "option/ohne-vote"
-                      :option/value "Ohne Vote"}]
-    :survey/discussion "discussion/simple"}])
+(def polls
+  [{:db/id "poll/single-choice"
+    :poll/title "Ganz allein"
+    :poll/type :poll.type/single-choice
+    :poll/options [{:db/id "option/milch"
+                    :option/value "Milch"}
+                   {:db/id "option/eis"
+                    :option/value "Eis"}
+                   {:db/id "option/wasser"
+                    :option/value "Wasser"
+                    :option/votes 4}]
+    :poll/discussion "discussion/cat-or-dog"}
+   {:db/id "poll/multiple-choice"
+    :poll/title "Ganz allein mit mehreren"
+    :poll/type :poll.type/multiple-choice
+    :poll/options [{:db/id "option/milche"
+                    :option/value "Milche"}
+                   {:db/id "option/eise"
+                    :option/value "Eise"
+                    :option/votes 2}
+                   {:db/id "option/wassers"
+                    :option/value "Wassers"
+                    :option/votes 1}]
+    :poll/discussion "discussion/cat-or-dog"}
+   {:db/id "poll/increment-test"
+    :poll/title "Incrementier die Votes!"
+    :poll/type :poll.type/single-choice
+    :poll/options [{:db/id "option/mit-vote"
+                    :option/value "Mit Vote"
+                    :option/votes 1}
+                   {:db/id "option/ohne-vote"
+                    :option/value "Ohne Vote"}]
+    :poll/discussion "discussion/simple"}])
 
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
-          graph-discussion simple-discussion registered-users surveys))
+          graph-discussion simple-discussion registered-users polls))

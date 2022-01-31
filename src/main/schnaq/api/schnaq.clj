@@ -118,13 +118,6 @@
       (ok {:share-hash share-hash})
       (bad-request (at/build-error-body :error-deleting-schnaq "An error occurred, while deleting the schnaq.")))))
 
-(defn- migrate-surveys!
-  "Migrates the surveys to polls"
-  [_req]
-  (if (discussion-db/migrate-surveys)
-    (ok {:ok :ok})
-    (bad-request (at/build-error-body :error-deleting-schnaq "An error occurred, while deleting the schnaq."))))
-
 (defn- check-edit-discussion-error
   "Check if an editor is the author of a discussion or if it is deleted."
   [user-identity author-identity share-hash ok-answer bad-answer forbidden-answer]
@@ -249,7 +242,4 @@
                         :description (at/get-doc #'delete-schnaq!)
                         :parameters {:body {:share-hash :discussion/share-hash}}
                         :responses {200 {:share-hash :discussion/share-hash}
-                                    400 at/response-error-body}}]
-     ["/schnaq/migrate/survey" {:post migrate-surveys!
-                                :name :api.schnaq.admin/migrate-surveys
-                                :description (at/get-doc #'migrate-surveys!)}]]]])
+                                    400 at/response-error-body}}]]]])

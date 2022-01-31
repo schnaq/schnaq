@@ -31,24 +31,6 @@
     [:div.col-auto
      [:button.btn.btn-secondary {:type "submit"} (labels :admin.center.delete.public/button)]]]])
 
-(defn- migrate-survey-to-poll-form
-  "Migrate the database idents of the survey to be a part of polls"
-  []
-  [:form#private-schnaq-form.form
-   {:on-submit (fn [e]
-                 (js-wrap/prevent-default e)
-                 (rf/dispatch [:admin.schnaq.migrate/survey->polls]))}
-   [:div.form-row.align-items-center
-    [:div.col-auto
-     [:button.btn.btn-secondary {:type "submit"} "Migriere Surveys zu Polls"]]]])
-
-(rf/reg-event-fx
- :admin.schnaq.migrate/survey->polls
- (fn [{:keys [db]} _]
-   {:fx [(http/xhrio-request db :post "/admin/schnaq/migrate/survey" [:no-op]
-                             {}
-                             [:ajax.error/as-notification])]}))
-
 (defn- center-overview
   "The startpage of the admin center."
   []
@@ -60,9 +42,7 @@
    [:div.container
     [:h2 (labels :admin.center.delete/heading)]
     [:h4 (labels :admin.center.delete.private/heading)]
-    [private-schnaq-deletion-form]
-    [:hr]
-    [migrate-survey-to-poll-form]]])
+    [private-schnaq-deletion-form]]])
 
 (defn center-overview-route
   []

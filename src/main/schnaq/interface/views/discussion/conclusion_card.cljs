@@ -1,30 +1,30 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require   [clojure.string :as cstring]
-              [com.fulcrologic.guardrails.core :refer [>defn-]]
-              [re-frame.core :as rf]
-              [reagent.core :as reagent]
-              [reitit.frontend.easy :as reitfe]
-              [schnaq.database.specs :as specs]
-              [schnaq.interface.components.icons :refer [icon]]
-              [schnaq.interface.components.images :refer [img-path]]
-              [schnaq.interface.components.motion :as motion]
-              [schnaq.interface.components.schnaq :as sc]
-              [schnaq.interface.translations :refer [labels]]
-              [schnaq.interface.utils.http :as http]
-              [schnaq.interface.utils.js-wrapper :as js-wrap]
-              [schnaq.interface.utils.markdown :as md]
-              [schnaq.interface.utils.toolbelt :as tools]
-              [schnaq.interface.utils.tooltip :as tooltip]
-              [schnaq.interface.views.discussion.badges :as badges]
-              [schnaq.interface.views.discussion.edit :as edit]
-              [schnaq.interface.views.discussion.filters :as filters]
-              [schnaq.interface.views.discussion.input :as input]
-              [schnaq.interface.views.discussion.labels :as labels]
-              [schnaq.interface.views.discussion.logic :as logic]
-              [schnaq.interface.views.discussion.truncated-content :as truncated-content]
-              [schnaq.interface.views.schnaq.activation :as activation]
-              [schnaq.interface.views.schnaq.survey :as survey]
-              [schnaq.interface.views.user :as user]))
+  (:require [clojure.string :as cstring]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [re-frame.core :as rf]
+            [reagent.core :as reagent]
+            [reitit.frontend.easy :as reitfe]
+            [schnaq.database.specs :as specs]
+            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.components.schnaq :as sc]
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.markdown :as md]
+            [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.interface.utils.tooltip :as tooltip]
+            [schnaq.interface.views.discussion.badges :as badges]
+            [schnaq.interface.views.discussion.edit :as edit]
+            [schnaq.interface.views.discussion.filters :as filters]
+            [schnaq.interface.views.discussion.input :as input]
+            [schnaq.interface.views.discussion.labels :as labels]
+            [schnaq.interface.views.discussion.logic :as logic]
+            [schnaq.interface.views.discussion.truncated-content :as truncated-content]
+            [schnaq.interface.views.schnaq.activation :as activation]
+            [schnaq.interface.views.schnaq.poll :as poll]
+            [schnaq.interface.views.user :as user]))
 
 (defn- call-to-action-schnaq
   "If no contributions are available, add a call to action to engage the users."
@@ -351,8 +351,8 @@
        [search-info])]))
 
 (defn selection-card
-  "Dispatch the different input options, e.g. questions, survey or activation.
-  The survey and activation feature are not available for free plan users."
+  "Dispatch the different input options, e.g. questions, poll or activation.
+  The poll and activation feature are not available for free plan users."
   []
   (let [selected-option (reagent/atom :question)
         on-click #(reset! selected-option %)
@@ -360,7 +360,7 @@
         iconed-heading (fn [icon-key label]
                          [:<> [icon icon-key] " " (labels label)])]
     (fn []
-      (let [survey-tab [:span [iconed-heading :chart-pie :schnaq.input-type/survey]]
+      (let [poll-tab [:span [iconed-heading :chart-pie :schnaq.input-type/poll]]
             activation-tab [:span [iconed-heading :magic :schnaq.input-type/activation]]
             beta-user? @(rf/subscribe [:user/beta-tester?])
             admin? @(rf/subscribe [:schnaq.current/admin-access])
@@ -383,10 +383,10 @@
                [:<>
                 [:li.nav-item
                  [:a.nav-link
-                  {:class (active-class :survey)
+                  {:class (active-class :poll)
                    :href "#"
-                   :on-click #(on-click :survey)}
-                  survey-tab]]
+                   :on-click #(on-click :poll)}
+                  poll-tab]]
                 [:li.nav-item
                  [:a.nav-link
                   {:class (active-class :activation)
@@ -397,14 +397,14 @@
                 [:li.nav-item
                  [:a.nav-link.text-muted
                   {:href "#"}
-                  [tooltip/text (labels disabled-tooltip-key) survey-tab]]]
+                  [tooltip/text (labels disabled-tooltip-key) poll-tab]]]
                 [:li.nav-item
                  [:a.nav-link.text-muted
                   {:href "#"}
                   [tooltip/text (labels disabled-tooltip-key) activation-tab]]]]))]
           (case @selected-option
             :question [input-form-or-disabled-alert]
-            :survey [survey/survey-form]
+            :poll [poll/poll-form]
             :activation [activation/activation-tab])]
          motion/card-fade-in-time]))))
 
@@ -434,15 +434,15 @@
         statements (statements-list)
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
         activation (when top-level? [activation/activation-card])
-        surveys (when top-level? (survey/survey-list))
+        poll (when top-level? (poll/poll-list))
         access-code @(rf/subscribe [:schnaq.selected/access-code])]
     [:div.row
      [:div.statement-column
       [selection-card]]
      activation
-     surveys
+     poll
      statements
-     (when-not (or search? (seq statements) (seq surveys) (not access-code))
+     (when-not (or search? (seq statements) (seq poll) (not access-code))
        [call-to-share])]))
 
 (rf/reg-event-fx

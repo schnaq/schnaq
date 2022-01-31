@@ -30,14 +30,10 @@
 (def statement-type (st/spec :statement/type {:type :keyword}))
 (s/def :statement/unqualified-types #{:attack :support :neutral})
 
-(def survey-type (s/or :survey (st/spec :survey/type {:type :keyword})
-                       :poll (st/spec :poll/type {:type :keyword})))
-(s/def ::survey
-  (s/keys :req [:db/id]
-          :opt [:survey/discussion
-                ;; TODO below back to req after migration
-                :survey/title :survey/type :survey/options
-                :poll/title :poll/type :poll/options]))
+(def poll-type (st/spec :poll/type {:type :keyword}))
+(s/def ::poll
+  (s/keys :req [:db/id :poll/title :poll/type :poll/options]
+          :opt [:poll/discussion]))
 
 ;; Discussions
 (s/def :discussion/meta-info
