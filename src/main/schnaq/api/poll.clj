@@ -28,7 +28,7 @@
   "Returns all polls belonging to the `share-hash` in the payload."
   [{:keys [parameters]}]
   (let [share-hash (get-in parameters [:query :share-hash])]
-    (ok {:poll (poll-db/polls share-hash)})))
+    (ok {:polls (poll-db/polls share-hash)})))
 
 (defn- cast-vote
   "Lets the user cast a vote."
@@ -74,7 +74,7 @@
                         :responses {200 {:body {:voted? boolean?}}
                                     400 at/response-error-body}}]]
     ["/polls" {:get polls-for-discussion
-                 :description (at/get-doc #'polls-for-discussion)
-                 :name :poll/get
-                 :parameters {:query {:share-hash :discussion/share-hash}}
-                 :responses {200 {:body {:poll (s/coll-of ::dto/poll)}}}}]]])
+               :description (at/get-doc #'polls-for-discussion)
+               :name :poll/get
+               :parameters {:query {:share-hash :discussion/share-hash}}
+               :responses {200 {:body {:polls (s/coll-of ::dto/poll)}}}}]]])
