@@ -3,8 +3,8 @@
             [ring.util.http-response :refer [ok bad-request]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
-            [schnaq.database.poll :as poll-db]
             [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.poll :as poll-db]
             [schnaq.database.specs :as specs]
             [taoensso.timbre :as log]))
 
