@@ -329,28 +329,8 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The options that are possible in this poll. An option knows how many voted for it."}
-   ;; Surveys
-   {:db/ident :survey/title
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/doc "The title of a survey. Usually a question that is posed."}
-   {:db/ident :survey/discussion
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "The discussion that the survey belongs to."}
-   {:db/ident :survey/type
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "The type of survey being conducted. i.e. multiple or single choice. Referenced by `:survey.type` entities"}
-   {:db/ident :survey.type/single-choice
-    :db/doc "A typical single-choice survey, where only one vote per person is allowed."}
-   {:db/ident :survey.type/multiple-choice
-    :db/doc "A multiple choice survey, where participants may choose multiple answers."}
-   {:db/ident :survey/options
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "The options that are possible in this survey. An option knows how many voted for it."}
-   ;; Survey Option
+
+   ;; Polls Option
    {:db/ident :option/value
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one

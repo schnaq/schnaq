@@ -696,28 +696,3 @@
     (when valid-secrets
       @(transact
         (mapv #(vector :db/add [:discussion/share-hash %] :discussion/author author-id) (keys valid-secrets))))))
-
-(defn migrate-surveys []
-  (let [all-surveys
-        (toolbelt/pull-key-up
-         (query '[:find [(pull ?survey survey-pattern) ...]
-                  :in $ survey-pattern
-                  :where [?survey :survey/title _]]
-                patterns/survey))
-        tx-data (vec
-                 (remove nil?
-                         (map (fn [{:survey/keys [title type options discussion]}]
-                                ;; Only create the migration if that poll does not already exist
-                                (when-not (query '[:find ?poll .
-                                                   :in $ ?title ?discussion
-                                                   :where [?poll :poll/title ?title]
-                                                   [?poll :poll/discussion ?discussion]]
-                                                 title (:db/id discussion))
-                                  {:poll/title title
-                                   :poll/type (if (= type :survey.type/single-choice)
-                                                :poll.type/single-choice
-                                                :poll.type/multiple-choice)
-                                   :poll/discussion (:db/id discussion)
-                                   :poll/options (mapv #(:db/id %) options)}))
-                              all-surveys)))]
-    @(transact tx-data)))

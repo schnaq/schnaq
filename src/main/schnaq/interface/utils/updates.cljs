@@ -39,15 +39,15 @@
   []
   (loop-builder :updates.periodic/graph? update-graph))
 
-(defn- update-surveys
-  "Call events to update surveys."
+(defn- update-polls
+  "Call events to update polls."
   []
-  (rf/dispatch [:schnaq.surveys/load-from-backend]))
+  (rf/dispatch [:schnaq.polls/load-from-backend]))
 
-(defn- loop-update-surveys!
-  "Define loop to periodically update surveys."
+(defn- loop-update-polls!
+  "Define loop to periodically update polls."
   []
-  (loop-builder :updates.periodic/surveys? update-surveys))
+  (loop-builder :updates.periodic/polls? update-polls))
 
 (defn- update-activation
   "Call events to update activation."
@@ -55,7 +55,7 @@
   (rf/dispatch [:schnaq.activation/load-from-backend]))
 
 (defn- loop-update-activation!
-  "Define loop to periodically update surveys."
+  "Define loop to periodically update polls."
   []
   (loop-builder :updates.periodic/activation? update-activation))
 
@@ -69,7 +69,7 @@
   (log/info "Preparing periodic updates of discussion entities...")
   (loop-update-starting-conclusions!)
   (loop-update-graph!)
-  (loop-update-surveys!)
+  (loop-update-polls!)
   (loop-update-activation!))
 
 ;; -----------------------------------------------------------------------------
@@ -86,14 +86,14 @@
    (assoc-in db [:updates/periodic :conclusions/starting?] trigger?)))
 
 (rf/reg-sub
- :updates.periodic/surveys?
+ :updates.periodic/polls?
  (fn [db _]
-   (get-in db [:updates/periodic :surveys] false)))
+   (get-in db [:updates/periodic :polls] false)))
 
 (rf/reg-event-db
- :updates.periodic/surveys
+ :updates.periodic/polls
  (fn [db [_ trigger?]]
-   (assoc-in db [:updates/periodic :surveys] trigger?)))
+   (assoc-in db [:updates/periodic :polls] trigger?)))
 
 (rf/reg-sub
  :updates.periodic/activation?

@@ -263,25 +263,25 @@
 
    :schnaq.input-type/question "Pytanie"
    :schnaq.input-type/answer "Odpowiedź"
-   :schnaq.input-type/survey "Ankieta"
+   :schnaq.input-type/poll "Ankieta"
    :schnaq.input-type/activation "Aktywacja"
    :schnaq.input-type/coming-soon "Wkrótce dostępne"
    :schnaq.input-type/not-admin "Tylko dla moderatorów"
    :schnaq.input-type/beta-only "Tylko dla beta testerów"
 
-   ;; Survey Feature
-   :schnaq.survey.create/topic-label "Temat ankiety"
-   :schnaq.survey.create/placeholder "Jaki jest Twój ulubiony słoń?"
-   :schnaq.survey.create/hint "Zadaj jasne pytanie, aby uzyskać dobre wyniki!"
-   :schnaq.survey.create/options-label "Opcje"
-   :schnaq.survey.create/options-placeholder "Słoń"
-   :schnaq.survey.create/add-button "Dodaj opcję"
-   :schnaq.survey.create/remove-button "Usuń opcję"
-   :schnaq.survey.create/single-choice-label "Pojedynczy wybór"
-   :schnaq.survey.create/multiple-choice-label "Wybór wielokrotny"
-   :schnaq.survey.create/submit-button "Utwórz ankietę"
-   :schnaq.survey/votes "Głosy"
-   :schnaq.survey/vote! "Głosowanie"
+   ;; Polls Feature
+   :schnaq.poll.create/topic-label "Temat ankiety"
+   :schnaq.poll.create/placeholder "Jaki jest Twój ulubiony słoń?"
+   :schnaq.poll.create/hint "Zadaj jasne pytanie, aby uzyskać dobre wyniki!"
+   :schnaq.poll.create/options-label "Opcje"
+   :schnaq.poll.create/options-placeholder "Słoń"
+   :schnaq.poll.create/add-button "Dodaj opcję"
+   :schnaq.poll.create/remove-button "Usuń opcję"
+   :schnaq.poll.create/single-choice-label "Pojedynczy wybór"
+   :schnaq.poll.create/multiple-choice-label "Wybór wielokrotny"
+   :schnaq.poll.create/submit-button "Utwórz ankietę"
+   :schnaq.poll/votes "Głosy"
+   :schnaq.poll/vote! "Głosowanie"
 
    ;; Activation feature
 

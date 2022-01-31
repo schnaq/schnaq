@@ -264,25 +264,25 @@
 
    :schnaq.input-type/question "Question"
    :schnaq.input-type/answer "Answer"
-   :schnaq.input-type/survey "Survey"
+   :schnaq.input-type/poll "Poll"
    :schnaq.input-type/activation "Activation"
    :schnaq.input-type/coming-soon "Coming Soon"
    :schnaq.input-type/not-admin "Only for moderators"
    :schnaq.input-type/beta-only "Only for beta testers"
 
-   ;; Survey feature
-   :schnaq.survey.create/topic-label "Survey Topic"
-   :schnaq.survey.create/placeholder "What is your favorite elephant?"
-   :schnaq.survey.create/hint "Ask a clear question for good results!"
-   :schnaq.survey.create/options-label "Options"
-   :schnaq.survey.create/options-placeholder "Elephant"
-   :schnaq.survey.create/add-button "Add Option"
-   :schnaq.survey.create/remove-button "Remove Option"
-   :schnaq.survey.create/single-choice-label "Single Choice"
-   :schnaq.survey.create/multiple-choice-label "Multiple Choice"
-   :schnaq.survey.create/submit-button "Create Survey"
-   :schnaq.survey/votes "Votes"
-   :schnaq.survey/vote! "Vote"
+   ;; Poll feature
+   :schnaq.poll.create/topic-label "Poll Topic"
+   :schnaq.poll.create/placeholder "What is your favorite elephant?"
+   :schnaq.poll.create/hint "Ask a clear question for good results!"
+   :schnaq.poll.create/options-label "Options"
+   :schnaq.poll.create/options-placeholder "Elephant"
+   :schnaq.poll.create/add-button "Add Option"
+   :schnaq.poll.create/remove-button "Remove Option"
+   :schnaq.poll.create/single-choice-label "Single Choice"
+   :schnaq.poll.create/multiple-choice-label "Multiple Choice"
+   :schnaq.poll.create/submit-button "Create Poll"
+   :schnaq.poll/votes "Votes"
+   :schnaq.poll/vote! "Vote"
 
    ;; Activation feature
 

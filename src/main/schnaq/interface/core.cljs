@@ -5,7 +5,7 @@
             [day8.re-frame.http-fx]
             [goog.dom :as gdom]
             [goog.string :as gstring]
-            [goog.string.format]  ;; required for goog.string. We need to require it once in our project.
+            [goog.string.format]                            ;; required for goog.string. We need to require it once in our project.
             [re-frame.core :as rf]
             [reagent.dom]
             [schnaq.config.shared :as shared-config]
@@ -80,7 +80,7 @@
             [schnaq.interface.views.schnaq.admin]
             [schnaq.interface.views.schnaq.create]
             [schnaq.interface.views.schnaq.summary]
-            [schnaq.interface.views.schnaq.survey]
+            [schnaq.interface.views.schnaq.poll]
             [schnaq.interface.views.schnaq.visited]
             [schnaq.interface.views.startpage.core]
             [schnaq.interface.views.user]

@@ -2,7 +2,7 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
-            [schnaq.database.survey :as survey-db]
+            [schnaq.database.poll :as poll-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -48,10 +48,10 @@
                                  "test2" '[*]))))))
 
 (deftest increment-number-test
-  (let [survey (first (survey-db/surveys "simple-hash"))
+  (let [poll (first (poll-db/polls "simple-hash"))
         ;; Pattern adds default value of 0 where there is none
-        option-with-vote-attr (first (filter #(not= 0 (:option/votes %)) (:survey/options survey))) ;; votes = 1
-        option-without-vote-attr (first (filter #(zero? (:option/votes %)) (:survey/options survey)))]
+        option-with-vote-attr (first (filter #(not= 0 (:option/votes %)) (:poll/options poll))) ;; votes = 1
+        option-without-vote-attr (first (filter #(zero? (:option/votes %)) (:poll/options poll)))]
     (testing "Show whether incrementing a number that's there works"
       (db/increment-number (:db/id option-with-vote-attr) :option/votes)
       (is (= 2 (:option/votes (db/fast-pull (:db/id option-with-vote-attr) '[:option/votes]))))
