@@ -35,11 +35,15 @@
   [{:keys [parameters]}]
   (let [{:keys [share-hash option-id]} (:body parameters)
         survey-id (get-in parameters [:path :survey-id])
-        survey-type (-> (fast-pull survey-id '[{:survey/type [:db/ident]}])
-                        :survey/type :db/ident)
+        raw-type (fast-pull survey-id '[{:survey/type [:db/ident]}
+                                        {:poll/type [:db/ident]}])
+        survey-type (or (-> raw-type :survey/type :db/ident)
+                        (-> raw-type :poll/type :db/ident))
         voting-fn (case survey-type
                     :survey.type/single-choice survey-db/vote!
-                    :survey.type/multiple-choice survey-db/vote-multiple!)]
+                    :poll.type/single-choice survey-db/vote!
+                    :survey.type/multiple-choice survey-db/vote-multiple!
+                    :poll.type/multiple-choice survey-db/vote-multiple!)]
     (if (voting-fn option-id survey-id share-hash)
       (do
         (log/info "Vote cast for option(s)" option-id)

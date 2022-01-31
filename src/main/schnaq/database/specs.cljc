@@ -249,16 +249,23 @@
 
 ;; Surveys
 (s/def :survey/title ::non-blank-string)
+(s/def :poll/title ::non-blank-string)
 (s/def :survey/type #{:survey.type/multiple-choice :survey.type/single-choice})
+(s/def :poll/type #{:poll.type/multiple-choice :poll.type/single-choice})
 (s/def :survey/discussion (s/or :id :db/id
                                 :discussion ::discussion))
+(s/def :poll/discussion (s/or :id :db/id
+                              :discussion ::discussion))
 (s/def :option/value ::non-blank-string)
 (s/def :option/votes nat-int?)
 (s/def ::option (s/keys :req [:option/value]
                         :opt [:option/votes]))
 (s/def :survey/options (s/coll-of ::option))
+(s/def :poll/options (s/coll-of ::option))
 (s/def ::survey
-  (s/keys :req [:survey/title :survey/options :survey/type :survey/discussion]))
+  ;; TODO change back to :req after migration
+  (s/keys :opt [:survey/title :survey/options :survey/type :survey/discussion
+                :poll/title :poll/options :poll/type :poll/discussion]))
 
 ;; Activation
 (s/def :activation/discussion (s/or :id :db/id :discussion ::discussion))

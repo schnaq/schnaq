@@ -19,7 +19,15 @@
         :survey/type survey-type
         :survey/discussion discussion-id
         :survey/options (mapv (fn [val] {:db/id (.toString (UUID/randomUUID))
-                                         :option/value val}) options)}]
+                                         :option/value val}) options)}
+       {:db/id "newly-created-poll"
+        :poll/title title
+        :poll/type (if (= :survey.type/single-choice survey-type)
+                     :poll.type/single-choice
+                     :poll.type/multiple-choice)
+        :poll/discussion discussion-id
+        :poll/options (mapv (fn [val] {:db/id (.toString (UUID/randomUUID))
+                                       :option/value val}) options)}]
       "newly-created-survey"
       patterns/survey))))
 
