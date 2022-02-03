@@ -491,6 +491,20 @@
     [:p "Die Verarbeitung der anonymisierten Daten der Nutzer:innen ermöglicht uns eine Analyse der Nutzung unserer Webseite. Wir sind in durch die Auswertung der gewonnen Daten in der Lage, Informationen über die Nutzung der einzelnen Komponenten unserer Webseite zusammenzustellen. Dies hilft uns dabei unsere Dienste und deren Nutzer:innenfreundlichkeit stetig zu verbessern. Durch die Anonymisierung der IP-Adresse wird dem Interesse der:die Nutzer:in an deren Schutz personenbezogener Daten hinreichend Rechnung getragen."]
     [:p "Es werden keine Profile erstellt, die uns einen tieferen Einblick in das Nutzungsverhalten der einzelnen Nutzer:innen geben würden. Die Auswertung erfolgt ausschließlich anonymisiert und aggregiert, dass kein Schluss auf einzelne Personen zu ziehen ist."]
     [:p "Der Einsatz von Matomo auf unserer Homepage erfolgt auf Rechtsgrundlage des Art. 6 Abs. 1 lit. f DSGVO."]]
+   :privacy.extended.cleverreach/title "Newsletter und Infomails mit CleverReach"
+   :privacy.extended.cleverreach/body
+   [:<>
+    [:p "Wir nutzen CleverReach für den Versand von Newslettern und Infomails. Anbieterin ist die CleverReach GmbH & Co. KG, Mühlenstr. 43, 26180 Rastede, Deutschland. CleverReach ist ein Dienst, mit dem der Newsletterversand organisiert und analysiert werden kann. Die von Ihnen zwecks Newsletterbezug eingegebenen Daten (z.B. E-Mail-Adresse) werden auf den Servern von CleverReach in Deutschland bzw. Irland gespeichert."]
+    [:p "Unsere mit CleverReach versandten Newsletter ermöglichen uns die Analyse des Verhaltens der Newsletterempfänger:innen. Hierbei kann u. a. analysiert werden, wie viele Empfänger:innen die Newsletternachricht geöffnet haben und wie oft welcher Link im Newsletter angeklickt wurde. Mit Hilfe des sogenannten Conversion-Trackings kann außerdem analysiert werden, ob nach Anklicken des Links im Newsletter eine vorab definierte Aktion (z.B. Kauf eines Produkts auf unserer Website) erfolgt ist."]
+    [:p "Des Weiteren verschicken wir auch Infomails an Ihre hinterlegte Adresse, sofern Sie bei uns einen Zugang erstellt haben und dem bei der Registrierung zugestimmt haben."]
+    [:p "Die Datenverarbeitung erfolgt auf Grundlage Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Sie können diese Einwilligung jederzeit widerrufen, indem Sie den Newsletter abbestellen. Die Rechtmäßigkeit der bereits erfolgten Datenverarbeitungsvorgänge bleibt vom Widerruf unberührt."]
+    [:p "Wenn Sie keine Analyse durch CleverReach wollen, müssen Sie den Newsletter abbestellen. Hierfür stellen wir in jeder Newsletternachricht einen entsprechenden Link zur Verfügung."]
+    [:p "Die von Ihnen zum Zwecke des Newsletter-Bezugs bei uns hinterlegten Daten werden von uns bis zu Ihrer Austragung aus dem Newsletter gespeichert und nach der Abbestellung des Newsletters sowohl von unseren Servern als auch von den Servern von CleverReach gelöscht. Daten, die zu anderen Zwecken bei uns gespeichert wurden (z.B. E-Mail-Adressen für den Mitgliederbereich) bleiben hiervon unberührt."]
+    [:h4 "Abschluss eines Auftragsdatenverarbeitungsvertrags (AV-Vertrag)"]
+    [:p "Wir haben mit CleverReach einen Vertrag zur Auftragsdatenverarbeitung abgeschlossen und setzen die strengen Vorgaben der deutschen Datenschutzbehörden bei der Nutzung von CleverReach vollständig um."]
+    [:p "Weitere Informationen zum Datenschutz und Reporting-Funktionen von CleverReach finden Sie hinter den folgenden Buttons:"]]
+   :privacy.extended.cleverreach.buttons/privacy "CleverReach's Datenschutz"
+   :privacy.extended.cleverreach.buttons/reports "Über CleverReach's Berichte und Nachverfolgung"
    :privacy.extended.hotjar/title "Nutzer:innenverhalten verstehen mit Hotjar"
    :privacy.extended.hotjar/body
    [:<>

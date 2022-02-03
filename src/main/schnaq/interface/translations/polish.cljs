@@ -491,6 +491,20 @@
     [:p "Przetwarzanie zanonimizowanych danych użytkowników umożliwia nam analizę korzystania z naszej strony internetowej. Poprzez analizę uzyskanych danych jesteśmy w stanie opracować informacje na temat korzystania z poszczególnych elementów naszej strony internetowej. Pomaga nam to w ciągłym ulepszaniu naszych usług i ich przyjazności dla użytkownika. Dzięki anonimizacji adresu IP interes użytkownika w zakresie ochrony jego danych osobowych zostaje odpowiednio uwzględniony."]
     [:p "Nie są tworzone żadne profile, które dawałyby nam głębszy wgląd w zachowania użytkowników. Ocena jest wyłącznie anonimowa i zagregowana, tak aby nie można było wyciągać żadnych wniosków na temat poszczególnych osób."]
     [:p "Korzystanie z Matomo na naszej stronie internetowej opiera się na podstawie prawnej Art. 6 ust. 1 lit. f GDPR."]]
+   :privacy.extended.cleverreach/title "Newslettery i Infomails z CleverReach"
+   :privacy.extended.cleverreach/body
+   [:<>
+    [:p "Używamy CleverReach do wysyłania newsletterów i info-maili. Dostawcą jest CleverReach GmbH & Co. KG, Mühlenstr. 43, 26180 Rastede, Niemcy. CleverReach jest serwisem, za pomocą którego można organizować i analizować wysyłkę newslettera. Dane, które podają Państwo w celu otrzymywania newsletterów (np. adres e-mail), są przechowywane na serwerach CleverReach w Niemczech lub Irlandii."]
+    [:p "Nasze newslettery wysyłane za pomocą CleverReach umożliwiają nam analizę zachowań odbiorców newslettera. Między innymi możemy analizować, ilu odbiorców otworzyło wiadomość newslettera i jak często który link w newsletterze został kliknięty. Za pomocą tak zwanego śledzenia konwersji można również przeanalizować, czy po kliknięciu na link w newsletterze nastąpiło wcześniej zdefiniowane działanie (np. zakup produktu na naszej stronie internetowej)."]
+    [:p "Ponadto wysyłamy również maile informacyjne na Państwa zdeponowany adres, o ile założyli Państwo u nas konto i wyrazili na to zgodę podczas rejestracji."]
+    [:p "Przetwarzanie danych odbywa się na podstawie Państwa zgody (art. 6 ust. 1 lit. a GDPR). Zgodę tę mogą Państwo w każdej chwili odwołać, wypisując się z newslettera. Odwołanie zgody pozostaje bez wpływu na zgodność z prawem już przeprowadzonych operacji przetwarzania danych."]
+    [:p "Jeśli nie życzą sobie Państwo żadnych analiz ze strony CleverReach, muszą Państwo wypisać się z newslettera. W tym celu w każdej wiadomości newsletterowej udostępniamy odpowiedni link."]
+    [:p "Dane, które podają Państwo w celu otrzymywania newslettera, będą przez nas przechowywane do momentu wypisania się z newslettera i zostaną usunięte z naszych serwerów, jak również z serwerów CleverReach po wypisaniu się z newslettera. Dane przechowywane przez nas w innych celach (np. adresy e-mail do strefy dla członków) pozostają nienaruszone."]
+    [:h4 "Zawarcie umowy o przetwarzanie danych na zlecenie (umowa AV)"]
+    [:p "Zawarliśmy z CleverReach umowę o przetwarzanie danych na zlecenie i w pełni realizujemy surowe wymagania niemieckich organów ochrony danych podczas korzystania z CleverReach."]
+    [:p "Dalsze informacje na temat ochrony danych i funkcji raportowania CleverReach można znaleźć za następującymi przyciskami:"]]
+   :privacy.extended.cleverreach.buttons/privacy "Polityka prywatności CleverReach"
+   :privacy.extended.cleverreach.buttons/reports "O raportach i trackingu CleverReach"
    :privacy.extended.hotjar/title "Śledzenie użytkowników za pomocą Hotjar"
    :privacy.extended.hotjar/body
    [:<>
