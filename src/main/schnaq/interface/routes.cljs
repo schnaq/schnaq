@@ -242,20 +242,18 @@
      :link-text (labels :router/pricing)
      :controllers [{:start (fn []
                              (rf/dispatch [:load-preview-statements])
-                             (rf/dispatch [:pricing/get-price (:schnaq.pro/monthly shared-config/stripe-prices)])
-                             (rf/dispatch [:pricing/get-price (:schnaq.pro/yearly shared-config/stripe-prices)]))}]}]
+                             (rf/dispatch [:pricing/get-prices]))}]}]
    ["subscription"
     ["/success" {:name :routes.subscription/success
                  :view subscription-views/success-view}]
     ["/cancel" {:name :routes.subscription/cancel
                 :view subscription-views/cancel-view}]
-    ["/redirect/checkout/pro" {:view pages/loading-page}
-     ["/monthly"
-      {:name :routes.subscription.checkout.pro.redirect/monthly
-       :controllers [{:start #(rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session (:schnaq.pro/monthly shared-config/stripe-prices)]])}]}]
-     ["/yearly"
-      {:name :routes.subscription.checkout.pro.redirect/yearly
-       :controllers [{:start #(rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session (:schnaq.pro/yearly shared-config/stripe-prices)]])}]}]]]
+    ["/redirect/checkout"
+     {:view pages/loading-page
+      :name :routes.subscription.redirect/checkout
+      :controllers [{:parameters {:query [:price-id]}
+                     :start (fn [parameters]
+                              (rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session (get-in parameters [:query :price-id])]]))}]}]]
    ["privacy"
     [""
      {:name :routes/privacy

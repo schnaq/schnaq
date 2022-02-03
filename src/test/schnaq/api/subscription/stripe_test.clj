@@ -2,7 +2,7 @@
   (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [schnaq.api :as api]
             [schnaq.api.subscription.stripe :as stripe]
-            [schnaq.config.shared :as shared-config]
+            [schnaq.config.stripe :refer [prices]]
             [schnaq.database.user :as user-db]
             [schnaq.test-data :refer [kangaroo]]
             [schnaq.test.toolbelt :as toolbelt :refer [token-n2o-admin]]))
@@ -45,7 +45,7 @@
   (#'stripe/get-product-price {:parameters {:query {:price-id price-id}}}))
 
 (deftest get-product-price
-  (let [price-id (:schnaq.pro/monthly shared-config/stripe-prices)]
+  (let [price-id (:schnaq.pro/monthly prices)]
     (testing "Price retrieval"
       (testing "is successful if article can be found."
         (is (= price-id (get-in (get-product-price-call price-id)

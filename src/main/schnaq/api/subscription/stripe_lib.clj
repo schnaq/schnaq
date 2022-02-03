@@ -21,7 +21,8 @@
     (let [price (Price/retrieve price-id)]
       (if (.getActive price)
         {:id price-id
-         :cost (-> price .getUnitAmount (/ 100) float)}
+         :cost (-> price .getUnitAmount (/ 100) float)
+         :interval (keyword (.getInterval (.getRecurring price)))}
         (do (log/error "Queried price is not active:" price-id)
             (at/build-error-body
              :stripe.price/inactive

@@ -42,8 +42,8 @@
 (defn- discount-for-choosing-yearly
   "Calculating the discount if user chooses the yearly subscription."
   []
-  (let [price-monthly @(rf/subscribe [:pricing/per-id (:schnaq.pro/monthly shared-config/stripe-prices)])
-        price-yearly @(rf/subscribe [:pricing/per-id (:schnaq.pro/yearly shared-config/stripe-prices)])
+  (let [price-monthly (:cost @(rf/subscribe [:pricing.pro/monthly]))
+        price-yearly (:cost @(rf/subscribe [:pricing.pro/yearly]))
         discount (- (* (/ (/ price-yearly 12) price-monthly) 100) 100)]
     (when (and price-monthly price-yearly)
       [:span.badge.badge-pill.badge-success.ml-1
@@ -163,7 +163,8 @@
    (coming-soon)
    (let [authenticated? @(rf/subscribe [:user/authenticated?])
          pro-user? @(rf/subscribe [:user/pro-user?])
-         yearly? @(rf/subscribe [:pricing.period/yearly?])]
+         yearly? @(rf/subscribe [:pricing.period/yearly?])
+         price-id (:id @(rf/subscribe [(if yearly? :pricing.pro/yearly :pricing.pro/monthly)]))]
      (if pro-user?
        [:div.alert.alert-info.text-center
         [:p (labels :pricing.pro-tier/already-subscribed)]
@@ -171,10 +172,9 @@
        [:div.text-center.py-4
         [buttons/button
          (labels :pricing.pro-tier/call-to-action)
-         #(cond
-            (not authenticated?) (rf/dispatch [:keycloak/login (links/checkout-link yearly?)])
-            yearly? (rf/dispatch [:subscription/create-checkout-session (:schnaq.pro/yearly shared-config/stripe-prices)])
-            :else (rf/dispatch [:subscription/create-checkout-session (:schnaq.pro/monthly shared-config/stripe-prices)]))
+         #(if authenticated?
+            (rf/dispatch [:subscription/create-checkout-session price-id])
+            (rf/dispatch [:keycloak/login (links/checkout-link price-id)]))
          "btn-secondary btn-lg"
          (when-not shared-config/stripe-enabled? {:disabled true})]]))
    {:class "border-primary shadow-lg"}])
@@ -282,36 +282,41 @@
 (rf/reg-event-fx
  :subscription/create-checkout-session
  (fn [{:keys [db]} [_ price-id]]
-   {:fx [(http/xhrio-request db :post "/stripe/create-checkout-session"
+   (prn price-id)
+   {:fx [(http/xhrio-request db :get "/stripe/create-checkout-session"
                              [:navigation.redirect/follow]
                              {:price-id price-id})]}))
 
 (rf/reg-event-fx
- :pricing/get-price
- (fn [{:keys [db]} [_ price-id]]
-   {:fx [(http/xhrio-request db :get "/stripe/price"
-                             [:pricing/store-price]
-                             {:price-id price-id})]}))
+ :pricing/get-prices
+ (fn [{:keys [db]}]
+   {:fx [(http/xhrio-request db :get "/stripe/prices"
+                             [:pricing/store-prices])]}))
 
 (rf/reg-event-db
- :pricing/store-price
- (fn [db [_ {:keys [id cost]}]]
-   (assoc-in db [:pricing id] cost)))
+ :pricing/store-prices
+ (fn [db [_ {:keys [prices]}]]
+   (update db :pricing merge prices)))
 
 (rf/reg-sub
- :pricing/per-id
- (fn [db [_ price-id]]
-   (get-in db [:pricing price-id])))
+ :pricing.pro/monthly
+ (fn [db]
+   (get-in db [:pricing :schnaq.pro/monthly])))
+
+(rf/reg-sub
+ :pricing.pro/yearly
+ (fn [db]
+   (get-in db [:pricing :schnaq.pro/yearly])))
 
 (rf/reg-sub
  :pricing/pro-tier
  :<- [:pricing.period/yearly?]
- :<- [:pricing/per-id (:schnaq.pro/yearly shared-config/stripe-prices)]
- :<- [:pricing/per-id (:schnaq.pro/monthly shared-config/stripe-prices)]
- (fn [[yearly? price-yearly price-monthly]]
+ :<- [:pricing.pro/yearly]
+ :<- [:pricing.pro/monthly]
+ (fn [[yearly? price-yearly price-monthly] a b]
    (if yearly?
-     (/ price-yearly 12)
-     price-monthly)))
+     (/ (:cost price-yearly) 12)
+     (:cost price-monthly))))
 
 (rf/reg-event-db
  :pricing.period/toggle-yearly
