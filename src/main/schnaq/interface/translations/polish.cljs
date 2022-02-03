@@ -909,6 +909,10 @@
    :pricing.features/pro ["Ankiety publiczności" "Przycisk szybkiego angażowania się" "Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista" "Opcje moderacji" "Priorytetowe wsparcie"]
    :pricing.features/enterprise ["Osadzanie w istniejących systemach\" \"Logowanie SSO (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise" "Wsparcie telefoniczne 24/7"]
    :pricing.features/upcoming ["Analiza nastrojów A.I." "Integracje"]
+   :pricing.schnaq.pro.monthly/payment-method "miesięczna metoda płatności"
+   :pricing.schnaq.pro.monthly/cancel-period "miesięczna odwoływalna"
+   :pricing.schnaq.pro.yearly/payment-method "rozliczane rocznie"
+   :pricing.schnaq.pro.yearly/cancel-period "corocznie odwoływalny"
    :pricing.units/per-month "/ Miesiąc"
    :pricing.notes/with-vat "plus VAT."
    :pricing.trial/call-to-action "Test Pro przez 30 dni"

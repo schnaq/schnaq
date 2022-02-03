@@ -1,7 +1,7 @@
 (ns schnaq.api.subscription.stripe-lib-test
   (:require [clojure.test :refer [deftest testing is are use-fixtures]]
             [schnaq.api.subscription.stripe-lib :as stripe-lib]
-            [schnaq.config.shared :as shared-config]
+            [schnaq.config.stripe :refer [prices]]
             [schnaq.test.toolbelt :as toolbelt]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
@@ -34,7 +34,7 @@
 
 (deftest retrieve-price-test
   (testing "Valid price can be queried."
-    (let [price-id shared-config/stripe-price-id-schnaq-pro]
+    (let [price-id (:schnaq.pro/monthly prices)]
       (is (= price-id (:id (stripe-lib/retrieve-price price-id)))))))
 
 (deftest retrieve-price-invalid-test

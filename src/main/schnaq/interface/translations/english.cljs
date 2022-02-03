@@ -912,6 +912,10 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.features/pro ["Audience polls" "Quick-engage button" "Analysis Dashboard" "A.I. Summaries" "Personal Spaces" "Moderation Options" "Priority Support"]
    :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise" "24/7 telephone support"]
    :pricing.features/upcoming ["Theming" "A.I. Sentiment Analysis" "Integrations"]
+   :pricing.schnaq.pro.monthly/payment-method "billed monthly"
+   :pricing.schnaq.pro.monthly/cancel-period "monthly cancellable"
+   :pricing.schnaq.pro.yearly/payment-method "billed annually"
+   :pricing.schnaq.pro.yearly/cancel-period "annually cancellable"
    :pricing.units/per-month "/ month"
    :pricing.notes/with-vat "plus VAT"
    :pricing.trial/call-to-action "Test the pro plan 30 days free of charge"

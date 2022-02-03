@@ -2,7 +2,7 @@
   (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [schnaq.api :as api]
             [schnaq.api.subscription.stripe :as stripe]
-            [schnaq.config.shared :as shared-config]
+            [schnaq.config.stripe :refer [prices]]
             [schnaq.database.user :as user-db]
             [schnaq.test-data :refer [kangaroo]]
             [schnaq.test.toolbelt :as toolbelt :refer [token-n2o-admin]]))
@@ -41,15 +41,12 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn get-product-price-call [price-id]
-  (#'stripe/get-product-price {:parameters {:query {:price-id price-id}}}))
-
-(deftest get-product-price
-  (let [price-id shared-config/stripe-price-id-schnaq-pro]
-    (testing "Price retrieval"
-      (testing "is successful if article can be found."
-        (is (= price-id (get-in (get-product-price-call price-id)
-                                [:body :id]))))
-      (testing "fails if article can't be found."
-        (is (= :stripe.price/invalid-request (get-in (get-product-price-call "price_foo")
-                                                     [:body :error])))))))
+(deftest get-product-prices-test
+  (let [get-product-prices #'stripe/get-product-prices
+        monthly-price-id (:schnaq.pro/monthly prices)
+        yearly-price-id (:schnaq.pro/yearly prices)]
+    (testing "Price retrieval should query prices from stripe."
+      (is (= monthly-price-id (get-in (get-product-prices {})
+                                      [:body :prices :schnaq.pro/monthly :id])))
+      (is (= yearly-price-id (get-in (get-product-prices {})
+                                     [:body :prices :schnaq.pro/yearly :id]))))))

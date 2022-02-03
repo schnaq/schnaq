@@ -1,10 +1,11 @@
 (ns schnaq.api.subscription.stripe
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn- =>]]
-            [ring.util.http-response :refer [ok not-found bad-request]]
+            [ring.util.http-response :refer [ok bad-request]]
             [schnaq.api.subscription.stripe-lib :as stripe-lib]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
+            [schnaq.config.stripe :refer [prices]]
             [schnaq.database.user :as user-db]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
@@ -42,20 +43,21 @@
   "Open stripe's checkout page with the currently selected item."
   [{:keys [identity parameters]}]
   (try
-    (let [price-id (get-in parameters [:body :price-id])
+    (let [price-id (get-in parameters [:query :price-id])
           checkout-session-parameters (build-checkout-session-parameters price-id (:id identity) (:email identity))
           session (Session/create checkout-session-parameters)]
       (ok {:redirect (.getUrl session)}))
     (catch InvalidRequestException _
       (bad-request error-article-not-found))))
 
-(defn- get-product-price
-  "Query a product's price by its stripe-identifier, which is a string, e.g.
-  `\"price_4242424242\"`."
-  ([{{{:keys [price-id]} :query} :parameters}]
-   (if-let [price (stripe-lib/retrieve-price price-id)]
-     (ok price)
-     (not-found error-article-not-found))))
+(defn- get-product-prices
+  "Query all product prices stored in the stripe config."
+  [_request]
+  (let [price-id-with-costs (->> (seq prices)
+                                 (map (fn [[k price-id]]
+                                        [k (stripe-lib/retrieve-price price-id)]))
+                                 (into {}))]
+    (ok {:prices price-id-with-costs})))
 
 (defn- post-to-mattermost-if-in-production
   "Post a message to mattermost if stripe is in production mode."
@@ -117,21 +119,19 @@
   [["/stripe" {:swagger {:tags ["subscription" "stripe"]}}
     [""
      ["/create-checkout-session"
-      {:post create-checkout-session
+      {:get create-checkout-session
        :name :api.stripe/create-checkout-session
        :description (at/get-doc #'create-checkout-session)
-       :parameters {:body {:price-id :stripe.price/id}}
+       :parameters {:query {:price-id :stripe.price/id}}
        :responses {200 {:body {:redirect string?}}
                    400 at/response-error-body}
        :middleware [:user/authenticated?]}]
-     ["/price"
-      {:get get-product-price
+     ["/prices"
+      {:get get-product-prices
        :name :api.stripe/get-product-price
-       :description (at/get-doc #'get-product-price)
-       :parameters {:query {:price-id :stripe.price/id}}
-       :responses {200 {:body :stripe/price}
-                   403 at/response-error-body
-                   404 at/response-error-body}}]
+       :description (at/get-doc #'get-product-prices)
+       :responses {200 {:body {:prices :stripe/kw-to-price}}
+                   403 at/response-error-body}}]
      ["/subscription" {:middleware [:user/authenticated?]}
       ["/status"
        {:get retrieve-subscription-status
@@ -151,4 +151,3 @@
       :name :api.stripe/webhook
       :description (at/get-doc #'webhook)
       :responses {200 {:body {:message string?}}}}]]])
-

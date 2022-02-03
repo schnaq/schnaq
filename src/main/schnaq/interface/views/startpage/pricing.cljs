@@ -39,16 +39,47 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- discount-for-choosing-yearly
+  "Calculating the discount if user chooses the yearly subscription."
+  []
+  (let [yearly? @(rf/subscribe [:pricing.interval/yearly?])
+        price-monthly (:cost @(rf/subscribe [:pricing.pro/monthly]))
+        price-yearly (:cost @(rf/subscribe [:pricing.pro/yearly]))
+        discount (- (* (/ (/ price-yearly 12) price-monthly) 100) 100)]
+    (when (and price-monthly price-yearly)
+      [:span.badge.badge-pill.badge-success.ml-1
+       {:class (when-not yearly? "text-muted")}
+       (gstring/format "%.0f %" discount)])))
+
+(defn- toggle-payment-period
+  "Show toggle to switch between monthly and yearly payment."
+  []
+  (let [yearly? @(rf/subscribe [:pricing.interval/yearly?])]
+    [:div.d-flex.flex-row.pb-3
+     [:div.pr-2 {:class (when yearly? "text-muted")}
+      (labels :pricing.schnaq.pro.monthly/payment-method)]
+     [:div.custom-control.custom-switch
+      [:input#subscription-switch.custom-control-input
+       {:type :checkbox :checked yearly?
+        :on-change #(rf/dispatch [:pricing.interval/toggle-yearly])}]
+      [:label.custom-control-label {:for "subscription-switch"}]]
+     [:div {:class (when-not yearly? "text-muted")}
+      (labels :pricing.schnaq.pro.yearly/payment-method) [discount-for-choosing-yearly]]]))
+
 (defn- price-tag-pro-tier
   "Price tag for pro tier."
   []
-  (if-let [pro-price @(rf/subscribe [:pricing/pro-tier])]
-    [:<>
-     [:span.display-5 pro-price " €"]
-     [:span (labels :pricing.units/per-month)]
-     [:br]
-     [:small.text-muted (labels :pricing.notes/with-vat)]]
-    [spinner-icon]))
+  (let [pro-price @(rf/subscribe [:pricing/pro-tier])
+        yearly? @(rf/subscribe [:pricing.interval/yearly?])]
+    (if pro-price
+      [:<>
+       [:span.display-5 pro-price " €"]
+       [:span (labels :pricing.units/per-month)]
+       [:p
+        (labels :pricing.notes/with-vat)
+        ", "
+        (labels (if yearly? :pricing.schnaq.pro.yearly/cancel-period :pricing.schnaq.pro.monthly/cancel-period))]]
+      [spinner-icon])))
 
 (defn- price-tag-free-tier
   "Price tag for free tier."
@@ -135,7 +166,9 @@
     "text-primary")
    (coming-soon)
    (let [authenticated? @(rf/subscribe [:user/authenticated?])
-         pro-user? @(rf/subscribe [:user/pro-user?])]
+         pro-user? @(rf/subscribe [:user/pro-user?])
+         yearly? @(rf/subscribe [:pricing.interval/yearly?])
+         price-id (:id @(rf/subscribe [(if yearly? :pricing.pro/yearly :pricing.pro/monthly)]))]
      (if pro-user?
        [:div.alert.alert-info.text-center
         [:p (labels :pricing.pro-tier/already-subscribed)]
@@ -144,8 +177,8 @@
         [buttons/button
          (labels :pricing.pro-tier/call-to-action)
          #(if authenticated?
-            (rf/dispatch [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro])
-            (rf/dispatch [:keycloak/login (links/checkout-link)]))
+            (rf/dispatch [:subscription/create-checkout-session price-id])
+            (rf/dispatch [:keycloak/login (links/checkout-link price-id)]))
          "btn-secondary btn-lg"
          (when-not shared-config/stripe-enabled? {:disabled true})]]))
    {:class "border-primary shadow-lg"}])
@@ -233,6 +266,7 @@
    [:<>
     [:div.container
      [intro]
+     [toggle-payment-period]
      [tier-cards]
      [newsletter]
      [trial-box]
@@ -252,23 +286,50 @@
 (rf/reg-event-fx
  :subscription/create-checkout-session
  (fn [{:keys [db]} [_ price-id]]
-   {:fx [(http/xhrio-request db :post "/stripe/create-checkout-session"
+   {:fx [(http/xhrio-request db :get "/stripe/create-checkout-session"
                              [:navigation.redirect/follow]
                              {:price-id price-id})]}))
 
 (rf/reg-event-fx
- :pricing/get-price
- (fn [{:keys [db]} [_ price-id]]
-   {:fx [(http/xhrio-request db :get "/stripe/price"
-                             [:pricing/store-price]
-                             {:price-id price-id})]}))
+ :pricing/get-prices
+ (fn [{:keys [db]}]
+   {:fx [(http/xhrio-request db :get "/stripe/prices"
+                             [:pricing/store-prices])]}))
 
 (rf/reg-event-db
- :pricing/store-price
- (fn [db [_ {:keys [id cost]}]]
-   (assoc-in db [:pricing id] cost)))
+ :pricing/store-prices
+ (fn [db [_ {:keys [prices]}]]
+   (update db :pricing merge prices)))
+
+(rf/reg-sub
+ :pricing.pro/monthly
+ (fn [db]
+   (get-in db [:pricing :schnaq.pro/monthly])))
+
+(rf/reg-sub
+ :pricing.pro/yearly
+ (fn [db]
+   (get-in db [:pricing :schnaq.pro/yearly])))
 
 (rf/reg-sub
  :pricing/pro-tier
- (fn [db _]
-   (get-in db [:pricing shared-config/stripe-price-id-schnaq-pro])))
+ :<- [:pricing.interval/yearly?]
+ :<- [:pricing.pro/yearly]
+ :<- [:pricing.pro/monthly]
+ (fn [[yearly? price-yearly price-monthly]]
+   (if yearly?
+     (/ (:cost price-yearly) 12)
+     (:cost price-monthly))))
+
+(rf/reg-event-db
+ :pricing.interval/toggle-yearly
+ (fn [db]
+   (let [yearly-path [:pricing :yearly?]]
+     (if (nil? (get-in db yearly-path))
+       (assoc-in db yearly-path false)
+       (update-in db yearly-path not)))))
+
+(rf/reg-sub
+ :pricing.interval/yearly?
+ (fn [db]
+   (get-in db [:pricing :yearly?] true)))

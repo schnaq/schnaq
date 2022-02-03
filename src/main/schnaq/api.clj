@@ -35,6 +35,7 @@
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.shared :as shared-config]
+            [schnaq.config.stripe :refer [prices]]
             [schnaq.config.summy :as summy-config]
             [schnaq.core :as schnaq-core]
             [schnaq.toolbelt :as toolbelt]
@@ -65,7 +66,8 @@
   (log/info (format "Frontend URL: %s, host: %s" config/frontend-url config/frontend-host))
   (log/info (if (:sender-password config/email) "E-Mail configured" "E-Mail not configured"))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm))
-  (log/info (format "[Stripe] Product ID schnaq pro: %s" shared-config/stripe-price-id-schnaq-pro))
+  (log/info (format "[Stripe] Price ID schnaq pro monthly: %s" (:schnaq.pro/monthly prices)))
+  (log/info (format "[Stripe] Price ID schnaq pro yearly: %s" (:schnaq.pro/yearly prices)))
   (log/info (format "[Stripe] Webhook access key (truncated): %s..." (subs config/stripe-webhook-access-key 0 15)))
   (log/info (format "[Stripe] Secret key (truncated): %s..." (subs config/stripe-secret-api-key 0 15)))
   (log/info "All systems ready to go"))

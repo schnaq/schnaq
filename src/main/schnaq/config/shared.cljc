@@ -79,8 +79,3 @@
 #?(:cljs (goog-define stripe-enable "true"))
 #?(:cljs (def stripe-enabled?
            (= "true" (.toLowerCase stripe-enable))))
-
-;; Price of Pro Tier
-#?(:clj  (def stripe-price-id-schnaq-pro
-           (or (System/getenv "STRIPE_PRICE_PRO_ID") "price_1K9S66FrKCGqvoMokD1SoBic"))
-   :cljs (goog-define stripe-price-id-schnaq-pro "price_1K9S66FrKCGqvoMokD1SoBic"))
