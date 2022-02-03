@@ -284,7 +284,6 @@
 (rf/reg-event-fx
  :subscription/create-checkout-session
  (fn [{:keys [db]} [_ price-id]]
-   (prn price-id)
    {:fx [(http/xhrio-request db :get "/stripe/create-checkout-session"
                              [:navigation.redirect/follow]
                              {:price-id price-id})]}))
