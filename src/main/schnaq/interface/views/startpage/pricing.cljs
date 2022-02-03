@@ -314,7 +314,7 @@
  :<- [:pricing.period/yearly?]
  :<- [:pricing.pro/yearly]
  :<- [:pricing.pro/monthly]
- (fn [[yearly? price-yearly price-monthly] a b]
+ (fn [[yearly? price-yearly price-monthly]]
    (if yearly?
      (/ (:cost price-yearly) 12)
      (:cost price-monthly))))

@@ -41,15 +41,12 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn get-product-price-call [price-id]
-  (#'stripe/get-product-price {:parameters {:query {:price-id price-id}}}))
-
-(deftest get-product-price
-  (let [price-id (:schnaq.pro/monthly prices)]
-    (testing "Price retrieval"
-      (testing "is successful if article can be found."
-        (is (= price-id (get-in (get-product-price-call price-id)
-                                [:body :id]))))
-      (testing "fails if article can't be found."
-        (is (= :stripe.price/invalid-request (get-in (get-product-price-call "price_foo")
-                                                     [:body :error])))))))
+(deftest get-product-prices-test
+  (let [get-product-prices #'stripe/get-product-prices
+        monthly-price-id (:schnaq.pro/monthly prices)
+        yearly-price-id (:schnaq.pro/yearly prices)]
+    (testing "Price retrieval should query prices from stripe."
+      (is (= monthly-price-id (get-in (get-product-prices {})
+                                      [:body :prices :schnaq.pro/monthly :id])))
+      (is (= yearly-price-id (get-in (get-product-prices {})
+                                     [:body :prices :schnaq.pro/yearly :id]))))))
