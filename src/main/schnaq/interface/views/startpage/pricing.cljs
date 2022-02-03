@@ -39,16 +39,43 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- discount-for-choosing-yearly
+  "Calculating the discount if user chooses the yearly subscription."
+  []
+  (let [price-monthly @(rf/subscribe [:pricing/per-id (:schnaq.pro/monthly shared-config/stripe-prices)])
+        price-yearly @(rf/subscribe [:pricing/per-id (:schnaq.pro/yearly shared-config/stripe-prices)])
+        discount (- (* (/ (/ price-yearly 12) price-monthly) 100) 100)]
+    (when (and price-monthly price-yearly)
+      [:span.badge.badge-pill.badge-success.ml-1
+       (gstring/format "%.0f %" discount)])))
+
+(defn- toggle-payment-period
+  "Show toggle to switch between monthly and yearly payment."
+  []
+  (let [yearly? @(rf/subscribe [:pricing.period/yearly?])]
+    [:div.d-flex.flex-row.pb-3
+     [:div.pr-2 (labels :pricing.schnaq.pro.monthly/payment-method)]
+     [:div.custom-control.custom-switch
+      [:input#subscription-switch.custom-control-input
+       {:type :checkbox :checked yearly?
+        :on-change #(rf/dispatch [:pricing.period/toggle-yearly])}]
+      [:label.custom-control-label {:for "subscription-switch"}]]
+     [:div (labels :pricing.schnaq.pro.yearly/payment-method) [discount-for-choosing-yearly]]]))
+
 (defn- price-tag-pro-tier
   "Price tag for pro tier."
   []
-  (if-let [pro-price @(rf/subscribe [:pricing/per-id (:schnaq.pro/monthly shared-config/stripe-prices)])]
-    [:<>
-     [:span.display-5 pro-price " €"]
-     [:span (labels :pricing.units/per-month)]
-     [:br]
-     [:small.text-muted (labels :pricing.notes/with-vat)]]
-    [spinner-icon]))
+  (let [pro-price @(rf/subscribe [:pricing/pro-tier])
+        yearly? @(rf/subscribe [:pricing.period/yearly?])]
+    (if pro-price
+      [:<>
+       [:span.display-5 pro-price " €"]
+       [:span (labels :pricing.units/per-month)]
+       [:p
+        (labels :pricing.notes/with-vat)
+        ", "
+        (labels (if yearly? :pricing.schnaq.pro.yearly/cancel-period :pricing.schnaq.pro.monthly/cancel-period))]]
+      [spinner-icon])))
 
 (defn- price-tag-free-tier
   "Price tag for free tier."
@@ -135,7 +162,8 @@
     "text-primary")
    (coming-soon)
    (let [authenticated? @(rf/subscribe [:user/authenticated?])
-         pro-user? @(rf/subscribe [:user/pro-user?])]
+         pro-user? @(rf/subscribe [:user/pro-user?])
+         yearly? @(rf/subscribe [:pricing.period/yearly?])]
      (if pro-user?
        [:div.alert.alert-info.text-center
         [:p (labels :pricing.pro-tier/already-subscribed)]
@@ -143,9 +171,10 @@
        [:div.text-center.py-4
         [buttons/button
          (labels :pricing.pro-tier/call-to-action)
-         #(if authenticated?
-            (rf/dispatch [:subscription/create-checkout-session (:schnaq.pro/monthly shared-config/stripe-prices)])
-            (rf/dispatch [:keycloak/login (links/checkout-link)]))
+         #(cond
+            (not authenticated?) (rf/dispatch [:keycloak/login (links/checkout-link yearly?)])
+            yearly? (rf/dispatch [:subscription/create-checkout-session (:schnaq.pro/yearly shared-config/stripe-prices)])
+            :else (rf/dispatch [:subscription/create-checkout-session (:schnaq.pro/monthly shared-config/stripe-prices)]))
          "btn-secondary btn-lg"
          (when-not shared-config/stripe-enabled? {:disabled true})]]))
    {:class "border-primary shadow-lg"}])
@@ -233,6 +262,7 @@
    [:<>
     [:div.container
      [intro]
+     [toggle-payment-period]
      [tier-cards]
      [newsletter]
      [trial-box]
@@ -272,3 +302,26 @@
  :pricing/per-id
  (fn [db [_ price-id]]
    (get-in db [:pricing price-id])))
+
+(rf/reg-sub
+ :pricing/pro-tier
+ :<- [:pricing.period/yearly?]
+ :<- [:pricing/per-id (:schnaq.pro/yearly shared-config/stripe-prices)]
+ :<- [:pricing/per-id (:schnaq.pro/monthly shared-config/stripe-prices)]
+ (fn [[yearly? price-yearly price-monthly]]
+   (if yearly?
+     (/ price-yearly 12)
+     price-monthly)))
+
+(rf/reg-event-db
+ :pricing.period/toggle-yearly
+ (fn [db]
+   (let [yearly-path [:pricing :yearly?]]
+     (if (nil? (get-in db yearly-path))
+       (assoc-in db yearly-path false)
+       (update-in db yearly-path not)))))
+
+(rf/reg-sub
+ :pricing.period/yearly?
+ (fn [db]
+   (get-in db [:pricing :yearly?] true)))

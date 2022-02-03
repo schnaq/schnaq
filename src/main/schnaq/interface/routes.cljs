@@ -249,10 +249,13 @@
                  :view subscription-views/success-view}]
     ["/cancel" {:name :routes.subscription/cancel
                 :view subscription-views/cancel-view}]
-    ["/redirect/checkout/pro/monthly"
-     {:name :routes.subscription.redirect/checkout
-      :controllers [{:start #(rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session (:schnaq.pro/monthly shared-config/stripe-prices)]])}]
-      :view pages/loading-page}]]
+    ["/redirect/checkout/pro" {:view pages/loading-page}
+     ["/monthly"
+      {:name :routes.subscription.checkout.pro.redirect/monthly
+       :controllers [{:start #(rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session (:schnaq.pro/monthly shared-config/stripe-prices)]])}]}]
+     ["/yearly"
+      {:name :routes.subscription.checkout.pro.redirect/yearly
+       :controllers [{:start #(rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session (:schnaq.pro/yearly shared-config/stripe-prices)]])}]}]]]
    ["privacy"
     [""
      {:name :routes/privacy

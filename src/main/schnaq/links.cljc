@@ -57,8 +57,10 @@
 
 (>defn checkout-link
   "Get link to checkout page. This should be called after the login of a user."
-  []
-  [:ret string?]
-  #?(:cljs (let [path (reitfe/href :routes.subscription.redirect/checkout)
+  [yearly?]
+  [boolean? :ret string?]
+  #?(:cljs (let [route (if yearly? :routes.subscription.checkout.pro.redirect/monthly :routes.subscription.checkout.pro.redirect/yearly)
+                 path (reitfe/href route)
                  location (oget js/window :location)]
-             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
+             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))
+     :clj (throw (ex-info "Not implemented" {:yearly? yearly?}))))

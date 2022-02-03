@@ -897,6 +897,10 @@
    :pricing.features/pro ["Zuschauerumfragen" "Schnaq Schnellaktivierung" "Analyse-Dashboard" "K.I. Zusammenfassungen" "Persönlicher Bereich" "Moderationsoptionen" "Support Priorität"]
    :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling" "On-Premise" "24/7 Telefonsupport"]
    :pricing.features/upcoming ["K.I. Stimmungsanalyse" "Integrationen"]
+   :pricing.schnaq.pro.monthly/payment-method "monatliche Zahlweise"
+   :pricing.schnaq.pro.monthly/cancel-period "monatlich kündbar"
+   :pricing.schnaq.pro.yearly/payment-method "jährliche Zahlweise"
+   :pricing.schnaq.pro.yearly/cancel-period "jährlich kündbar"
    :pricing.units/per-month "/ Monat"
    :pricing.notes/with-vat "zzgl. MwSt."
    :pricing.trial/call-to-action "30 Tage den Pro Plan testen"
