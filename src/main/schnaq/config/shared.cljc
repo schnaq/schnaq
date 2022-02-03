@@ -82,13 +82,13 @@
 
 ;; Price of Pro Tier
 #?(:clj  (def ^:private stripe-price-id-schnaq-pro
-           (or (System/getenv "STRIPE_PRICE_PRO_ID") "price_1K9S66FrKCGqvoMokD1SoBic"))
-   :cljs (goog-define stripe-price-id-schnaq-pro "price_1K9S66FrKCGqvoMokD1SoBic"))
+           (or (System/getenv "STRIPE_PRICE_PRO_ID") "***REMOVED***"))
+   :cljs (goog-define stripe-price-id-schnaq-pro "***REMOVED***"))
 #?(:clj  (def ^:private stripe-price-id-yearly-schnaq-pro
-           (or (System/getenv "STRIPE_PRICE_PRO_YEARLY_ID") "price_1KP2QCFrKCGqvoMoqplzFbeZ"))
-   :cljs (goog-define stripe-price-id-yearly-schnaq-pro "price_1KP2QCFrKCGqvoMoqplzFbeZ"))
+           (or (System/getenv "STRIPE_PRICE_PRO_YEARLY_ID") "***REMOVED***"))
+   :cljs (goog-define stripe-price-id-yearly-schnaq-pro "***REMOVED***"))
 
 (def stripe-prices
-  "Lookup prices of schnaq pro."
+  "Lookup prices from stripe."
   {:schnaq.pro/monthly stripe-price-id-schnaq-pro
    :schnaq.pro/yearly stripe-price-id-yearly-schnaq-pro})

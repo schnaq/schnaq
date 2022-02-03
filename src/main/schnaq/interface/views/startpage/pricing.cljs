@@ -42,7 +42,7 @@
 (defn- price-tag-pro-tier
   "Price tag for pro tier."
   []
-  (if-let [pro-price @(rf/subscribe [:pricing/pro-tier-monthly])]
+  (if-let [pro-price @(rf/subscribe [:pricing/per-id (:schnaq.pro/monthly shared-config/stripe-prices)])]
     [:<>
      [:span.display-5 pro-price " €"]
      [:span (labels :pricing.units/per-month)]
@@ -269,6 +269,6 @@
    (assoc-in db [:pricing id] cost)))
 
 (rf/reg-sub
- :pricing/pro-tier-monthly
- (fn [db _]
-   (get-in db [:pricing (:schnaq.pro/monthly shared-config/stripe-prices)])))
+ :pricing/per-id
+ (fn [db [_ price-id]]
+   (get-in db [:pricing price-id])))

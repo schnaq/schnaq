@@ -7,7 +7,7 @@
             [schnaq.database.user :as user-db]
             [taoensso.timbre :as log])
   (:import [com.stripe.exception InvalidRequestException SignatureVerificationException]
-           [com.stripe.model Price Product Subscription]
+           [com.stripe.model Price Subscription]
            [com.stripe.net Webhook]
            [com.stripe.param SubscriptionUpdateParams]))
 
