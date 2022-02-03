@@ -1,6 +1,7 @@
 (ns schnaq.interface.pages.privacy-extended
   "Page explaining our privacy and how we are storing data."
-  (:require [schnaq.interface.pages.privacy :as privacy]
+  (:require [schnaq.interface.components.buttons :as buttons]
+            [schnaq.interface.pages.privacy :as privacy]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]))
@@ -35,10 +36,26 @@
 (defn- hotjar []
   [privacy-entry :privacy.extended.hotjar
    [:<>
-    [:a.btn.btn-outline-primary.mr-3 {:href "https://help.hotjar.com/hc/en-us/categories/115001323967-About-Hotjar"
-                                      :target :_blank}
-     "Hotjar Help Page"]
+    [buttons/anchor
+     "Hotjar Help Page"
+     "https://help.hotjar.com/hc/en-us/categories/115001323967-About-Hotjar"
+     "btn-outline-primary mr-3"
+     {:target :_blank}]
     [privacy/open-privacy-settings]]])
+
+(defn- cleverreach []
+  [privacy-entry :privacy.extended.cleverreach
+   [:<>
+    [buttons/anchor
+     (labels :privacy.extended.cleverreach.buttons/privacy)
+     "https://www.cleverreach.com/de/datenschutz/"
+     "btn-outline-primary mr-3"
+     {:target :_blank}]
+    [buttons/anchor
+     (labels :privacy.extended.cleverreach.buttons/reports)
+     "https://www.cleverreach.com/de/funktionen/reporting-und-tracking/"
+     "btn-outline-primary"
+     {:target :_blank}]]])
 
 (defn- rights-of-the-affected []
   [privacy-entry :privacy.extended.rights-of-the-affected])
@@ -66,6 +83,7 @@
     [cookies]
     [personal-data]
     [matomo]
+    [cleverreach]
     [hotjar]
     [rights-of-the-affected]
     [right-to-complain]

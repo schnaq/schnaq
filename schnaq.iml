@@ -34,7 +34,7 @@
     <orderEntry type="library" name="Deps: org.apache.tomcat/tomcat-juli:7.0.27" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-compress:1.21" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-devel:1.9.5" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.145" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.150" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.9.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.5" level="project" />
@@ -84,7 +84,7 @@
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpasyncclient:4.1.4" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer.jvm:1.2.2" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-handler-proxy:4.1.51.Final" level="project" />
-    <orderEntry type="library" name="Deps: keycloak-clojure:1.23.4" level="project" />
+    <orderEntry type="library" name="Deps: keycloak-clojure:1.23.5" level="project" />
     <orderEntry type="library" name="Deps: jarohen/chime:0.3.3" level="project" />
     <orderEntry type="library" name="Deps: net.incongru.watchservice/barbary-watchservice:1.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.protobuf/protobuf-java-util:3.18.1" level="project" />
@@ -137,7 +137,7 @@
     <orderEntry type="library" name="Deps: spec-coerce:1.0.0-alpha6" level="project" />
     <orderEntry type="library" name="Deps: commons-io:2.10.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
-    <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.3.1" level="project" />
+    <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.3.2" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.namespace:0.3.1" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/tempura:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: fipp:0.6.24" level="project" />
