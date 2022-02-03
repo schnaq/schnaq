@@ -45,7 +45,7 @@
   (#'stripe/get-product-price {:parameters {:query {:price-id price-id}}}))
 
 (deftest get-product-price
-  (let [price-id shared-config/stripe-price-id-schnaq-pro]
+  (let [price-id (:schnaq.pro/monthly shared-config/stripe-prices)]
     (testing "Price retrieval"
       (testing "is successful if article can be found."
         (is (= price-id (get-in (get-product-price-call price-id)

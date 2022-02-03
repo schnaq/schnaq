@@ -242,15 +242,16 @@
      :link-text (labels :router/pricing)
      :controllers [{:start (fn []
                              (rf/dispatch [:load-preview-statements])
-                             (rf/dispatch [:pricing/get-price shared-config/stripe-price-id-schnaq-pro]))}]}]
+                             (rf/dispatch [:pricing/get-price (:schnaq.pro/monthly shared-config/stripe-prices)])
+                             (rf/dispatch [:pricing/get-price (:schnaq.pro/yearly shared-config/stripe-prices)]))}]}]
    ["subscription"
     ["/success" {:name :routes.subscription/success
                  :view subscription-views/success-view}]
     ["/cancel" {:name :routes.subscription/cancel
                 :view subscription-views/cancel-view}]
-    ["/redirect/checkout/pro"
+    ["/redirect/checkout/pro/monthly"
      {:name :routes.subscription.redirect/checkout
-      :controllers [{:start #(rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro]])}]
+      :controllers [{:start #(rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session (:schnaq.pro/monthly shared-config/stripe-prices)]])}]
       :view pages/loading-page}]]
    ["privacy"
     [""

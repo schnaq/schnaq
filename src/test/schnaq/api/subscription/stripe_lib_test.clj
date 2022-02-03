@@ -34,7 +34,7 @@
 
 (deftest retrieve-price-test
   (testing "Valid price can be queried."
-    (let [price-id shared-config/stripe-price-id-schnaq-pro]
+    (let [price-id (:schnaq.pro/monthly shared-config/stripe-prices)]
       (is (= price-id (:id (stripe-lib/retrieve-price price-id)))))))
 
 (deftest retrieve-price-invalid-test

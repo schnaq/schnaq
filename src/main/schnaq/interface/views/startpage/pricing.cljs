@@ -42,7 +42,7 @@
 (defn- price-tag-pro-tier
   "Price tag for pro tier."
   []
-  (if-let [pro-price @(rf/subscribe [:pricing/pro-tier])]
+  (if-let [pro-price @(rf/subscribe [:pricing/pro-tier-monthly])]
     [:<>
      [:span.display-5 pro-price " €"]
      [:span (labels :pricing.units/per-month)]
@@ -144,7 +144,7 @@
         [buttons/button
          (labels :pricing.pro-tier/call-to-action)
          #(if authenticated?
-            (rf/dispatch [:subscription/create-checkout-session shared-config/stripe-price-id-schnaq-pro])
+            (rf/dispatch [:subscription/create-checkout-session (:schnaq.pro/monthly shared-config/stripe-prices)])
             (rf/dispatch [:keycloak/login (links/checkout-link)]))
          "btn-secondary btn-lg"
          (when-not shared-config/stripe-enabled? {:disabled true})]]))
@@ -269,6 +269,6 @@
    (assoc-in db [:pricing id] cost)))
 
 (rf/reg-sub
- :pricing/pro-tier
+ :pricing/pro-tier-monthly
  (fn [db _]
-   (get-in db [:pricing shared-config/stripe-price-id-schnaq-pro])))
+   (get-in db [:pricing (:schnaq.pro/monthly shared-config/stripe-prices)])))
