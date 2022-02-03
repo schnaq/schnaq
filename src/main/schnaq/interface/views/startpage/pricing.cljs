@@ -54,13 +54,15 @@
   []
   (let [yearly? @(rf/subscribe [:pricing.period/yearly?])]
     [:div.d-flex.flex-row.pb-3
-     [:div.pr-2 (labels :pricing.schnaq.pro.monthly/payment-method)]
+     [:div.pr-2 {:class (when yearly? "text-muted")}
+      (labels :pricing.schnaq.pro.monthly/payment-method)]
      [:div.custom-control.custom-switch
       [:input#subscription-switch.custom-control-input
        {:type :checkbox :checked yearly?
         :on-change #(rf/dispatch [:pricing.period/toggle-yearly])}]
       [:label.custom-control-label {:for "subscription-switch"}]]
-     [:div (labels :pricing.schnaq.pro.yearly/payment-method) [discount-for-choosing-yearly]]]))
+     [:div {:class (when-not yearly? "text-muted")}
+      (labels :pricing.schnaq.pro.yearly/payment-method) [discount-for-choosing-yearly]]]))
 
 (defn- price-tag-pro-tier
   "Price tag for pro tier."
