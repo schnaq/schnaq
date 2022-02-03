@@ -493,6 +493,20 @@
     [:p "The processing of anonymized user data enables us to analyze the use of our website. By evaluating the data obtained, we are able to compile information about the use of the individual components of our website. This helps us to continuously improve our services and their user-friendliness. By anonymizing the IP address, the interest of the user in the protection of his personal data is sufficiently taken into account."]
     [:p "No profiles are created that would give us a deeper insight into the usage behavior of individual users. The evaluation is exclusively anonymized and aggregated so that no conclusion can be drawn about individual persons."]
     [:p "The use of Matomo on our homepage is based on the legal basis of Art. 6 para. 1 lit. f GDPR."]]
+   :privacy.extended.cleverreach/title "Newsletters and Infomails with CleverReach"
+   :privacy.extended.cleverreach/body
+   [:<>
+    [:p "We use CleverReach to send newsletters and info mails. The provider is CleverReach GmbH & Co. KG, Mühlenstr. 43, 26180 Rastede, Germany. CleverReach is a service with which the newsletter dispatch can be organised and analysed. The data you enter for the purpose of receiving newsletters (e.g. e-mail address) is stored on CleverReach's servers in Germany or Ireland."]
+    [:p "Our newsletters sent with CleverReach enable us to analyse the behaviour of the newsletter recipients. Among other things, we can analyse how many recipients have opened the newsletter message and how often which link in the newsletter was clicked. With the help of so-called conversion tracking, it can also be analysed whether a predefined action (e.g. purchase of a product on our website) has taken place after clicking on the link in the newsletter."]
+    [:p "Furthermore, we also send info mails to your deposited address, provided you have created an account with us and agreed to this during registration."]
+    [:p "The data processing is based on your consent (Art. 6 para. 1 lit. a GDPR). You can revoke this consent at any time by unsubscribing from the newsletter. The legality of the data processing operations already carried out remains unaffected by the revocation."]
+    [:p "If you do not want any analysis by CleverReach, you must unsubscribe from the newsletter. For this purpose, we provide a corresponding link in every newsletter message."]
+    [:p "The data you provide for the purpose of receiving the newsletter will be stored by us until you unsubscribe from the newsletter and will be deleted from our servers as well as from the servers of CleverReach after you unsubscribe from the newsletter. Data stored by us for other purposes (e.g. email addresses for the members' area) remain unaffected by this."]
+    [:h4 "Conclusion of a commissioned data processing contract (AV contract)"]
+    [:p "We have concluded an order data processing contract with CleverReach and fully implement the strict requirements of the German data protection authorities when using CleverReach."]
+    [:p "Further information on CleverReach's data protection and reporting functions can be found behind the following buttons:"]]
+   :privacy.extended.cleverreach.buttons/privacy "CleverReach's Privacy Policy"
+   :privacy.extended.cleverreach.buttons/reports "About CleverReach's Reports and Tracking"
    :privacy.extended.hotjar/title "Understanding User's Behavior with Hotjar"
    :privacy.extended.hotjar/body
    [:<>
