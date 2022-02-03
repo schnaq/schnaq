@@ -42,24 +42,26 @@
 (defn- discount-for-choosing-yearly
   "Calculating the discount if user chooses the yearly subscription."
   []
-  (let [price-monthly (:cost @(rf/subscribe [:pricing.pro/monthly]))
+  (let [yearly? @(rf/subscribe [:pricing.interval/yearly?])
+        price-monthly (:cost @(rf/subscribe [:pricing.pro/monthly]))
         price-yearly (:cost @(rf/subscribe [:pricing.pro/yearly]))
         discount (- (* (/ (/ price-yearly 12) price-monthly) 100) 100)]
     (when (and price-monthly price-yearly)
       [:span.badge.badge-pill.badge-success.ml-1
+       {:class (when-not yearly? "text-muted")}
        (gstring/format "%.0f %" discount)])))
 
 (defn- toggle-payment-period
   "Show toggle to switch between monthly and yearly payment."
   []
-  (let [yearly? @(rf/subscribe [:pricing.period/yearly?])]
+  (let [yearly? @(rf/subscribe [:pricing.interval/yearly?])]
     [:div.d-flex.flex-row.pb-3
      [:div.pr-2 {:class (when yearly? "text-muted")}
       (labels :pricing.schnaq.pro.monthly/payment-method)]
      [:div.custom-control.custom-switch
       [:input#subscription-switch.custom-control-input
        {:type :checkbox :checked yearly?
-        :on-change #(rf/dispatch [:pricing.period/toggle-yearly])}]
+        :on-change #(rf/dispatch [:pricing.interval/toggle-yearly])}]
       [:label.custom-control-label {:for "subscription-switch"}]]
      [:div {:class (when-not yearly? "text-muted")}
       (labels :pricing.schnaq.pro.yearly/payment-method) [discount-for-choosing-yearly]]]))
@@ -68,7 +70,7 @@
   "Price tag for pro tier."
   []
   (let [pro-price @(rf/subscribe [:pricing/pro-tier])
-        yearly? @(rf/subscribe [:pricing.period/yearly?])]
+        yearly? @(rf/subscribe [:pricing.interval/yearly?])]
     (if pro-price
       [:<>
        [:span.display-5 pro-price " €"]
@@ -165,7 +167,7 @@
    (coming-soon)
    (let [authenticated? @(rf/subscribe [:user/authenticated?])
          pro-user? @(rf/subscribe [:user/pro-user?])
-         yearly? @(rf/subscribe [:pricing.period/yearly?])
+         yearly? @(rf/subscribe [:pricing.interval/yearly?])
          price-id (:id @(rf/subscribe [(if yearly? :pricing.pro/yearly :pricing.pro/monthly)]))]
      (if pro-user?
        [:div.alert.alert-info.text-center
@@ -311,7 +313,7 @@
 
 (rf/reg-sub
  :pricing/pro-tier
- :<- [:pricing.period/yearly?]
+ :<- [:pricing.interval/yearly?]
  :<- [:pricing.pro/yearly]
  :<- [:pricing.pro/monthly]
  (fn [[yearly? price-yearly price-monthly]]
@@ -320,7 +322,7 @@
      (:cost price-monthly))))
 
 (rf/reg-event-db
- :pricing.period/toggle-yearly
+ :pricing.interval/toggle-yearly
  (fn [db]
    (let [yearly-path [:pricing :yearly?]]
      (if (nil? (get-in db yearly-path))
@@ -328,6 +330,6 @@
        (update-in db yearly-path not)))))
 
 (rf/reg-sub
- :pricing.period/yearly?
+ :pricing.interval/yearly?
  (fn [db]
    (get-in db [:pricing :yearly?] true)))
