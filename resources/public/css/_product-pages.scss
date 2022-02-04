@@ -1,0 +1,14 @@
+@use "rounded" as rounded;
+@import 'variables';
+
+.product-page-ipad {
+  height: auto;
+  width: 100%;
+}
+
+
+.product-page-feature-image {
+  @include rounded.rounded-2;
+  height: auto;
+  width: 100%;
+}

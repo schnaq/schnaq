@@ -89,6 +89,7 @@ $header-opacity: 1;
 .bubble-background-xl {
   background-image: none;
   background-repeat: repeat;
+  background-size: cover;
 
   @include media-breakpoint-up(xl) {
     background-image: url('https://s3.schnaq.com/schnaq-common/background/background-bubbles-large.svg');

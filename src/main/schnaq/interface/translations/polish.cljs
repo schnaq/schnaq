@@ -963,6 +963,7 @@
    :router/not-found-label "Nie znaleziono Przekierowanie trasy"
    :router/pricing "Wycena"
    :router/privacy "Ochrona danych"
+   :router/product-page "Strona produktu"
    :router/qanda "PYTANIA I ODPOWIEDZI"
    :router/start-discussion "Rozpocznij dyskusję"
    :router/startpage "Strona główna"

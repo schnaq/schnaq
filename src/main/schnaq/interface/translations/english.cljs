@@ -967,6 +967,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/not-found-label "Not found route redirect"
    :router/pricing "Pricing"
    :router/privacy "Privacy Policy"
+   :router/product-page "Product page"
    :router/qanda "Q&A"
    :router/start-discussion "Start discussion"
    :router/startpage "Startpage"
