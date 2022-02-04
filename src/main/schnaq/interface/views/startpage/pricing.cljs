@@ -70,10 +70,11 @@
   "Price tag for pro tier."
   []
   (let [pro-price @(rf/subscribe [:pricing/pro-tier])
-        yearly? @(rf/subscribe [:pricing.interval/yearly?])]
+        yearly? @(rf/subscribe [:pricing.interval/yearly?])
+        formatted-price (if (js/Number.isInteger pro-price) "%d €" "%.2f €")]
     (if pro-price
       [:<>
-       [:span.display-5 pro-price " €"]
+       [:span.display-5 (gstring/format formatted-price pro-price)]
        [:span (labels :pricing.units/per-month)]
        [:p
         (labels :pricing.notes/with-vat)
