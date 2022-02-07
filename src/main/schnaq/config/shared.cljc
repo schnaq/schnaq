@@ -72,10 +72,3 @@
 (def time-settings
   {:pattern "HH:mm dd.MM.yyy"
    :timezone "Europe/Berlin"})
-
-;; -----------------------------------------------------------------------------
-;; Stripe
-
-#?(:cljs (goog-define stripe-enable "true"))
-#?(:cljs (def stripe-enabled?
-           (= "true" (.toLowerCase stripe-enable))))

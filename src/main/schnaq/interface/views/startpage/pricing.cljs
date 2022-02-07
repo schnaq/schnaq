@@ -4,7 +4,6 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
@@ -179,8 +178,7 @@
          #(if authenticated?
             (rf/dispatch [:subscription/create-checkout-session price-id])
             (rf/dispatch [:keycloak/login (links/checkout-link price-id)]))
-         "btn-secondary btn-lg"
-         (when-not shared-config/stripe-enabled? {:disabled true})]]))
+         "btn-secondary btn-lg"]]))
    {:class "border-primary shadow-lg"}])
 
 (defn- enterprise-tier-card
