@@ -54,7 +54,7 @@
      ["" {:post new-poll
           :description (at/get-doc #'new-poll)
           :middleware [:user/authenticated?
-                       :user/beta-tester?
+                       :user/pro-user?
                        :discussion/valid-credentials?]
           :name :poll/create
           :parameters {:body {:title :poll/title
