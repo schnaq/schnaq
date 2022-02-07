@@ -5,8 +5,7 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.auth.lib :as auth-lib]
             [schnaq.config :as config]
-            [schnaq.config.shared :as shared-config]
-            [schnaq.database.user :as user-db]))
+            [schnaq.config.shared :as shared-config]))
 
 (defn- valid-app-code?
   "Check if an app-code was provided via the request-body."

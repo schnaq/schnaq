@@ -210,12 +210,6 @@
      [:div {:class classes} [pro-tier-card]]
      [:div {:class classes} [enterprise-tier-card]]]))
 
-(defn- feature-card
-  [title description]
-  [:div.card.text-center.feature-card.shadow-sm.mb-1
-   [:p.card-text.font-weight-bold title]
-   [:p description]])
-
 (defn- faq
   "A taste of the most burning questions of the user answered by our live Q&A."
   []
