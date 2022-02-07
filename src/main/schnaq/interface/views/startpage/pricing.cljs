@@ -179,8 +179,7 @@
          #(if authenticated?
             (rf/dispatch [:subscription/create-checkout-session price-id])
             (rf/dispatch [:keycloak/login (links/checkout-link price-id)]))
-         "btn-secondary btn-lg"
-         (when-not shared-config/stripe-enabled? {:disabled true})]]))
+         "btn-secondary btn-lg"]]))
    {:class "border-primary shadow-lg"}])
 
 (defn- enterprise-tier-card
