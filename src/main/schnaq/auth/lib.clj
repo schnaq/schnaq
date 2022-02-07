@@ -24,13 +24,13 @@
 
 (>defn beta-tester?
   "Verify that user has a valid beta-tester role in the JWT token."
-  [request]
+  [user-identity]
   [map? :ret boolean?]
-  (has-role? (:identity request) shared-config/beta-tester-roles))
+  (has-role? user-identity shared-config/beta-tester-roles))
 
 (>defn pro-user?
   "Check that user has at least pro-access."
   [user-identity]
   [map? :ret boolean?]
-  (or (beta-tester? {:identity user-identity})
+  (or (beta-tester? user-identity)
       (user-db/pro-subscription? (:sub user-identity))))

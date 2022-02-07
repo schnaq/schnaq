@@ -22,13 +22,13 @@
   (testing "Beta-tester fn."
     (testing "User has beta-tester role, so user shall pass."
       (is (auth-lib/beta-tester?
-           {:identity {:realm_access {:roles (vec shared-config/beta-tester-roles)}}})))
+           {:realm_access {:roles (vec shared-config/beta-tester-roles)}})))
     (testing "Admins also have beta access."
       (is (auth-lib/beta-tester?
-           {:identity {:realm_access {:roles (vec shared-config/admin-roles)}}})))
+           {:realm_access {:roles (vec shared-config/admin-roles)}})))
     (testing "No roles, no access."
-      (is (not (auth-lib/beta-tester? {:identity {:realm_access {:roles []}}})))
-      (is (not (auth-lib/beta-tester? {:identity {}}))))))
+      (is (not (auth-lib/beta-tester? {:realm_access {:roles []}})))
+      (is (not (auth-lib/beta-tester? {}))))))
 
 (deftest pro-user?-test
   (testing "Verify that"

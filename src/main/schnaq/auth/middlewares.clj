@@ -37,7 +37,7 @@
   "Check if is eligible for our beta-testers program."
   [handler]
   (fn [request]
-    (if (auth-lib/beta-tester? request)
+    (if (auth-lib/beta-tester? (:identity request))
       (handler request)
       (forbidden (at/build-error-body :auth/not-a-beta-tester "You are not a beta tester.")))))
 
