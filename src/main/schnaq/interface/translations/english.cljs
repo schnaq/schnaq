@@ -241,7 +241,7 @@
    :schnaq.admin.configurations.disable-pro-con/explanation "When checked, users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
    :schnaq.admin.configurations.mods-mark-only/label "Only Moderators mark answers"
    :schnaq.admin.configurations.mods-mark-only/explanation "When checked, only moderators are allowed to mark an answer as the correct one. Otherwise, everybody is able to do this."
-   :schnaq.admin.configurations.mods-mark-only/beta "Only beta-users are allowed to change this setting. Request access at hello@schnaq.com."
+   :schnaq.admin.configurations.mods-mark-only/beta "Only pro-users are allowed to change this setting. Upgrade your account, to have access."
 
    :schnaq.access-code.clipboard/header "Access code copied"
    :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."
@@ -268,7 +268,7 @@
    :schnaq.input-type/activation "Activation"
    :schnaq.input-type/coming-soon "Coming Soon"
    :schnaq.input-type/not-admin "Only for moderators"
-   :schnaq.input-type/beta-only "Only for beta testers"
+   :schnaq.input-type/pro-only "Only for pro users"
 
    ;; Poll feature
    :schnaq.poll.create/topic-label "Poll Topic"
@@ -885,8 +885,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :graph.settings/stabilize "Stabilize Mindmap"
 
    ;; Pricing Page
-   :pricing.intro/heading "Starting soon!"
-   :pricing.intro/lead [:span "You will soon be able to book your plan here. Would you like to be part of our beta and test the pro plan exclusively and free of charge? Then please contact us at " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
+   :pricing/headline "Switch to schnaq"
+   :pricing.intro/heading "schnaq helps you gain more insights from your webinars."
    :pricing.free-tier/title "Free"
    :pricing.free-tier/subtitle "Forever"
    :pricing.free-tier/description "For efficient makers and small teams, that don't need a lot. Create discussions and Q&As with two clicks."
@@ -918,27 +918,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.schnaq.pro.yearly/cancel-period "annually cancellable"
    :pricing.units/per-month "/ month"
    :pricing.notes/with-vat "plus VAT"
-   :pricing.trial/call-to-action "Test the pro plan 30 days free of charge"
-   :pricing.trial/description "No credit card needed! Cancel anytime."
-   :pricing.trial.temporary/deactivation "Available soon"
-   :pricing.features/heading "Schnaq subscription advantages"
-   :pricing.features.user-numbers/heading "For any audience"
-   :pricing.features.user-numbers/content "Let hundreds of people in your audience participate."
-   :pricing.features.team-numbers/heading "Unlimited number of teams"
-   :pricing.features.team-numbers/content "Create as many teams as are needed for your projects. *"
-   :pricing.features.engage/heading "Engage your audience"
-   :pricing.features.engage/content "Use polls, quick activation, feedbacks and much more to keep your audience engaged. *"
-   :pricing.features.analysis/heading "Automatic Analyses"
-   :pricing.features.analysis/content "All discussions are automatically analyzed and presented to the participants. *"
-   :pricing.features.knowledge-db/heading "Knowledge Database"
-   :pricing.features.knowledge-db/content "Collect all your knowledge in one spot. Reuse it and share it with the world."
-   :pricing.features.mindmap/heading "Interactive mindmap"
-   :pricing.features.mindmap/content "All statements are automatically structured and shown in an interactive mindmap."
-   :pricing.features/disclaimer "* Applies only to pro plan"
-   :pricing.competitors/per-month-per-user " € per month per user"
-   :pricing/headline "Subscriptions"
-   :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live:"
-   :pricing.newsletter/name "schnaq newsletter."
+   :pricing.billing/info-1 "Prices shown are exclusive of any applicable sales taxes such as VAT."
+   :pricing.billing/info-2 "Subscriptions to the Pro plan renews automatically at the end of each billing cycle unless duly terminated, at which point we'll charge the credit card in your account."
 
    ;; tooltips
    :tooltip/history-statement "Back to statement made by"

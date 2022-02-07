@@ -36,7 +36,7 @@
      ["" {:put start-activation
           :description (at/get-doc #'start-activation)
           :middleware [:user/authenticated?
-                       :user/beta-tester?
+                       :user/pro-user?
                        :discussion/valid-credentials?]
           :name :activation/start
           :parameters {:body {:share-hash :discussion/share-hash
@@ -59,7 +59,7 @@
      ["/reset" {:put reset-activation
                 :description (at/get-doc #'reset-activation)
                 :middleware [:user/authenticated?
-                             :user/beta-tester?
+                             :user/pro-user?
                              :discussion/valid-credentials?]
                 :name :activation/reset
                 :parameters {:body {:share-hash :discussion/share-hash

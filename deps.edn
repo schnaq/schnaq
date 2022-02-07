@@ -20,7 +20,7 @@
         http-kit/http-kit {:mvn/version "2.5.3"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
         jarohen/chime {:mvn/version "0.3.3"}
-        keycloak-clojure/keycloak-clojure {:mvn/version "1.23.5"}
+        keycloak-clojure/keycloak-clojure {:mvn/version "1.23.10"}
         metosin/reitit {:mvn/version "0.5.15"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
         org.clojure/clojure {:mvn/version "1.10.3"}
@@ -42,13 +42,14 @@
              "my.datomic.com" {:url "https://my.datomic.com/repo"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.60.977"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.62.993"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
                   :main-opts ["-m" "kaocha.runner"]}
 
            :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
                       :main-opts ["-m" "antq.core"
+                                  "--exclude=thheller/shadow-cljs"
                                   "--exclude=com.datomic/datomic-pro"
                                   "--exclude=clj-kondo/tools"]}
 
