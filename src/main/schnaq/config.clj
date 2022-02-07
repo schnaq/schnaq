@@ -95,4 +95,4 @@
       "***REMOVED***"))
 (def stripe-webhook-access-key
   (or (System/getenv "STRIPE_WEBHOOK_ACCESS_KEY")
-      "***REMOVED***"))
+      "whsec_d6e7801c1f679d0372611f9e42d86b9931c7fe3bfa98c0a11e228df1e11cf9fc"))
