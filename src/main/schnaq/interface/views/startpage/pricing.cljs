@@ -210,34 +210,11 @@
      [:div {:class classes} [pro-tier-card]]
      [:div {:class classes} [enterprise-tier-card]]]))
 
-(defn- trial-box
-  []
-  [:div.d-flex.justify-content-center.py-5
-   [:div.trial-box.text-center.button-dark.shadow-sm
-    [:p.display-6.font-weight-bold (labels :pricing.trial/call-to-action)]
-    [:p (labels :pricing.trial/description)]
-    [:p.text-sm.text-muted (labels :pricing.trial.temporary/deactivation)]]])
-
 (defn- feature-card
   [title description]
   [:div.card.text-center.feature-card.shadow-sm.mb-1
    [:p.card-text.font-weight-bold title]
    [:p description]])
-
-(defn- schnaq-features
-  "List all features that are making schnaq a good deal."
-  []
-  [:div.my-3
-   [:h3.text-center (labels :pricing.features/heading)]
-   [:div.card-deck
-    [feature-card (labels :pricing.features.user-numbers/heading) (labels :pricing.features.user-numbers/content)]
-    [feature-card (labels :pricing.features.team-numbers/heading) (labels :pricing.features.team-numbers/content)]
-    [feature-card (labels :pricing.features.engage/heading) (labels :pricing.features.engage/content)]]
-   [:div.card-deck.mt-2
-    [feature-card (labels :pricing.features.analysis/heading) (labels :pricing.features.analysis/content)]
-    [feature-card (labels :pricing.features.knowledge-db/heading) (labels :pricing.features.knowledge-db/content)]
-    [feature-card (labels :pricing.features.mindmap/heading) (labels :pricing.features.mindmap/content)]]
-   [:p.text-sm.text-muted (labels :pricing.features/disclaimer)]])
 
 (defn- faq
   "A taste of the most burning questions of the user answered by our live Q&A."
@@ -264,10 +241,8 @@
      [intro]
      [toggle-payment-period]
      [tier-cards]
-     [subscription-information]
-     [trial-box]
-     [schnaq-features]]
-    [:div.container-fluid
+     [subscription-information]]
+    [:div.container-fluid.pt-5
      [faq]]]])
 
 (defn pricing-view
