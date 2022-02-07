@@ -93,8 +93,7 @@
   "Welcome new users to the pricing page."
   []
   [:section.text-center.pb-5
-   [:h2 (labels :pricing.intro/heading)]
-   [:p.lead (labels :pricing.intro/lead)]])
+   [:h3 (labels :pricing.intro/heading)]])
 
 (defn- mark-explanation
   "Explain the check marks."
@@ -219,15 +218,6 @@
     [:p (labels :pricing.trial/description)]
     [:p.text-sm.text-muted (labels :pricing.trial.temporary/deactivation)]]])
 
-(defn- newsletter
-  "A box displaying the different subscription tiers we offer."
-  []
-  [:p.text-typography.display-6.text-center.pt-4
-   (labels :pricing.newsletter/lead)
-   [:a.btn.btn-lg.btn-link
-    {:href "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
-    (labels :pricing.newsletter/name)]])
-
 (defn- feature-card
   [title description]
   [:div.card.text-center.feature-card.shadow-sm.mb-1
@@ -258,6 +248,11 @@
     [:p.lead (labels :startpage.faq/subtitle)]]
    [qanda/question-field-and-search-results :light]])
 
+(defn- subscription-information []
+  [:div.text-center.text-muted
+   [:p (labels :pricing.billing/info-1)]
+   [:p (labels :pricing.billing/info-2)]])
+
 (defn- pricing-page
   "A full page depicting our pricing and related items."
   []
@@ -269,7 +264,7 @@
      [intro]
      [toggle-payment-period]
      [tier-cards]
-     [newsletter]
+     [subscription-information]
      [trial-box]
      [schnaq-features]]
     [:div.container-fluid

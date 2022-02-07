@@ -885,8 +885,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :graph.settings/stabilize "Stabilize Mindmap"
 
    ;; Pricing Page
-   :pricing.intro/heading "Starting soon!"
-   :pricing.intro/lead [:span "You will soon be able to book your plan here. Would you like to be part of our beta and test the pro plan exclusively and free of charge? Then please contact us at " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
+   :pricing/headline "Switch to schnaq"
+   :pricing.intro/heading "schnaq helps you gain more insights from your webinars."
    :pricing.free-tier/title "Free"
    :pricing.free-tier/subtitle "Forever"
    :pricing.free-tier/description "For efficient makers and small teams, that don't need a lot. Create discussions and Q&As with two clicks."
@@ -936,9 +936,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.features.mindmap/content "All statements are automatically structured and shown in an interactive mindmap."
    :pricing.features/disclaimer "* Applies only to pro plan"
    :pricing.competitors/per-month-per-user " € per month per user"
-   :pricing/headline "Subscriptions"
-   :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live:"
-   :pricing.newsletter/name "schnaq newsletter."
+   :pricing.billing/info-1 "Prices shown are exclusive of any applicable sales taxes such as VAT."
+   :pricing.billing/info-2 "Subscriptions to the Pro plan renew automatically at the end of each billing cycle unless duly terminated, at which point we'll charge the credit card in your account."
 
    ;; tooltips
    :tooltip/history-statement "Back to statement made by"

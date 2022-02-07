@@ -882,8 +882,8 @@
    :graph.settings/stabilize "Ustabilizuj mapę myśli"
 
    ;; Pricing Page
-   :pricing.intro/heading "Wkrótce się zacznie!"
-   :pricing.intro/lead [:span "Już wkrótce będziesz mógł zarezerwować swoją taryfę tutaj. Czy chcieliby Państwo wziąć udział w naszej wersji beta i przetestować taryfę biznesową na wyłączność i bezpłatnie? Następnie prosimy o kontakt z nami pod adresem " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
+   :pricing/headline "Przełącz się na schnaq"
+   :pricing.intro/heading "schnaq pomoże Ci uzyskać więcej informacji z Twoich webinarów."
    :pricing.free-tier/title "Darmowy"
    :pricing.free-tier/subtitle "na zawsze"
    :pricing.free-tier/description "Dla sprawnych twórców i małych zespołów, które nie potrzebują wiele. Twórz dyskusje i Q&A za pomocą dwóch kliknięć."
@@ -933,9 +933,8 @@
    :pricing.features.mindmap/content "Wszystkie wkłady są automatycznie wyświetlane graficznie i interaktywnie."
    :pricing.features/disclaimer "* Obowiązuje tylko dla subskrypcji Pro"
    :pricing.competitors/per-month-per-user " € miesięcznie za użytkownika"
-   :pricing/headline "Abonamenty"
-   :pricing.newsletter/lead "Bądź informowany natychmiast, gdy subskrypcja wejdzie w życie:"
-   :pricing.newsletter/name "newsletter schnaq."
+   :pricing.billing/info-1 "Podane ceny nie zawierają żadnych obowiązujących podatków od sprzedaży, takich jak VAT."
+   :pricing.billing/info-2 "Subskrypcje planu Pro odnawiają się automatycznie na koniec każdego cyklu rozliczeniowego, chyba że zostaną należycie wypowiedziane, w którym to momencie obciążymy kartę kredytową na Twoim koncie."
 
    ;; Tooltips
    :tooltip/history-statement "Wracając do wkładu"

@@ -884,8 +884,8 @@
    :graph.settings/stabilize "Stabilisiere Mindmap"
 
    ;; Pricing Page
-   :pricing.intro/heading "Bald geht es los!"
-   :pricing.intro/lead [:span "Schon bald kannst du hier deinen Tarif buchen. Möchtest du Teil unserer Beta sein und schon jetzt exklusiv und kostenfrei den Business-Tarif testen? Dann kontaktiere uns gerne unter " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
+   :pricing/headline "Wechsle zu schnaq"
+   :pricing.intro/heading "schnaq hilft dir mehr Erkenntnisse aus deinen Webinaren zu gewinnen."
    :pricing.free-tier/title "Frei"
    :pricing.free-tier/subtitle "für immer"
    :pricing.free-tier/description "Für effiziente Macher:innen und kleine Teams, die nicht viel brauchen. Erstelle Diskussionen und Q&As mit zwei Klicks."
@@ -935,9 +935,8 @@
    :pricing.features.mindmap/content "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."
    :pricing.features/disclaimer "* Gilt nur für Pro-Abonnement"
    :pricing.competitors/per-month-per-user " € pro Monat pro Nutzer:in"
-   :pricing/headline "Abonnements"
-   :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht:"
-   :pricing.newsletter/name "schnaq Newsletter."
+   :pricing.billing/info-1 "Die angegebenen Preise verstehen sich exklusive aller anfallenden Umsatzsteuern wie z.B. der Mehrwertsteuer."
+   :pricing.billing/info-2 "Abonnements des Pro-Tarifs verlängern sich automatisch am Ende jedes Abrechnungszyklus, es sei denn, sie werden ordnungsgemäß gekündigt. Ohne erfolgte Kündigung wird dein hinterlegtes Zahlungsmittel belastet."
 
    ;; Tooltips
    :tooltip/history-statement "Zurück zum Beitrag von"
