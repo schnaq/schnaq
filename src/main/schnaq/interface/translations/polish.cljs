@@ -240,7 +240,7 @@
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktywuj, aby przycisk \"za/ przeciw\" nie był już wyświetlany. Nowe wkłady są traktowane jako zgoda. Opcja ta może być zmieniona w dowolnym momencie."
    :schnaq.admin.configurations.mods-mark-only/label "Tylko moderatorzy zaznaczają odpowiedzi"
    :schnaq.admin.configurations.mods-mark-only/explanation "Gdy zaznaczone, tylko moderatorzy mogą zaznaczyć odpowiedź jako poprawną. W przeciwnym razie każdy jest w stanie to zrobić."
-   :schnaq.admin.configurations.mods-mark-only/beta "Tylko pro-użytkownicy mogą zmieniać to ustawienie. Poproś o dostęp na hello@schnaq.com."
+   :schnaq.admin.configurations.mods-mark-only/beta "Tylko pro-użytkownicy mogą zmieniać to ustawienie."
 
    :schnaq.access-code.clipboard/header "Skopiowany kod dostępu"
    :schnaq.access-code.clipboard/body "Kod dostępu został skopiowany do schowka."

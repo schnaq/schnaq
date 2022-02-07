@@ -241,7 +241,7 @@
    :schnaq.admin.configurations.disable-pro-con/explanation "When checked, users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
    :schnaq.admin.configurations.mods-mark-only/label "Only Moderators mark answers"
    :schnaq.admin.configurations.mods-mark-only/explanation "When checked, only moderators are allowed to mark an answer as the correct one. Otherwise, everybody is able to do this."
-   :schnaq.admin.configurations.mods-mark-only/beta "Only pro-users are allowed to change this setting. Request access at hello@schnaq.com."
+   :schnaq.admin.configurations.mods-mark-only/beta "Only pro-users are allowed to change this setting. Upgrade your account, to have access."
 
    :schnaq.access-code.clipboard/header "Access code copied"
    :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."
@@ -919,7 +919,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.units/per-month "/ month"
    :pricing.notes/with-vat "plus VAT"
    :pricing.billing/info-1 "Prices shown are exclusive of any applicable sales taxes such as VAT."
-   :pricing.billing/info-2 "Subscriptions to the Pro plan renew automatically at the end of each billing cycle unless duly terminated, at which point we'll charge the credit card in your account."
+   :pricing.billing/info-2 "Subscriptions to the Pro plan renews automatically at the end of each billing cycle unless duly terminated, at which point we'll charge the credit card in your account."
 
    ;; tooltips
    :tooltip/history-statement "Back to statement made by"
