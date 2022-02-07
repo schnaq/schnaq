@@ -362,10 +362,10 @@
     (fn []
       (let [poll-tab [:span [iconed-heading :chart-pie :schnaq.input-type/poll]]
             activation-tab [:span [iconed-heading :magic :schnaq.input-type/activation]]
-            beta-user? @(rf/subscribe [:user/beta-tester?])
+            pro-user? @(rf/subscribe [:user/pro-user?])
             admin? @(rf/subscribe [:schnaq.current/admin-access])
             disabled-tooltip-key (cond
-                                   (not beta-user?) :schnaq.input-type/beta-only
+                                   (not pro-user?) :schnaq.input-type/pro-only
                                    (not admin?) :schnaq.input-type/not-admin
                                    :else :schnaq.input-type/coming-soon)
             top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
@@ -379,7 +379,7 @@
                           :on-click #(on-click :question)}
              [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
            (when top-level?
-             (if (and beta-user? admin?)
+             (if pro-user?
                [:<>
                 [:li.nav-item
                  [:a.nav-link
