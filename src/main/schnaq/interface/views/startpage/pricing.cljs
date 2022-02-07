@@ -72,7 +72,7 @@
   (let [pro-price @(rf/subscribe [:pricing/pro-tier])
         yearly? @(rf/subscribe [:pricing.interval/yearly?])
         formatted-price (if (js/Number.isInteger pro-price) "%d €" "%.2f €")]
-    (if pro-price
+    (if (and pro-price (not (zero? pro-price)))
       [:<>
        [:span.display-5 (gstring/format formatted-price pro-price)]
        [:span (labels :pricing.units/per-month)]
