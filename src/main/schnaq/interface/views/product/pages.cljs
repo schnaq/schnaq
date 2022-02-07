@@ -27,22 +27,25 @@
     [:img.product-page-ipad {:src (img-path :productpage.overview/ipad)}]]])
 
 (defn- feature-text [title text]
-  [:div
-   [:div.display-5.text-primary.mb-5 (labels title)]
+  [:<>
+   [:div.display-4.text-primary.mb-5 (labels title)]
    [:div.display-6.text-typography (labels text)]])
 
 (defn- feature-image [image]
-  [:img.product-page-feature-image.my-auto {:src (img-path image)}])
+  [:div
+   [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
+   [:img.product-page-feature-image.my-auto {:src (img-path image)}]])
 
 (defn- feature-text-img-right [title text image]
   [:div.row.py-5.mt-5
-   [:div.col-12.col-lg-5 [feature-text title text]]
-   [:div.col-12.col-lg-7 [feature-image image]]])
+   [:div.col-12.col-lg-6 [feature-text title text]]
+   [:div.col-12.col-lg-6.mt-5.mt-lg-0 [:div.mr-lg-n5 [feature-image image]]]])
 
 (defn- feature-text-img-left [title text image]
   [:div.row.py-5.mt-5
-   [:div.col-12.col-lg-7 [feature-image image]]
-   [:div.col-12.col-lg-5 [feature-text title text]]])
+   [:div.col-12.col-lg-6.d-none.d-lg-block [:div.ml-lg-n5 [feature-image image]]]
+   [:div.col-12.col-lg-6 [feature-text title text]]
+   [:div.col-12.d-lg-none.mt-5 [feature-image image]]])
 
 (defn- product-tour []
   [:div.overflow-hidden
@@ -50,13 +53,12 @@
     {:page/title (labels :startpage/heading)
      :page/wrapper-classes "container container-85"
      :page/vertical-header? true
-     :page/wavy-footer? true
      :page/more-for-heading (with-meta [product-above-the-fold
                                         :productpage.overview/title
                                         :productpage.overview/subtitle]
                               {:key "unique-cta-key"})}
-    [:div.bubble-background-xl
-     [:section.container
+    [:div.product-background
+     [:section.container.container-85
       [feature-text-img-right
        :productpage.overview.qa/title
        :productpage.overview.qa/text
@@ -72,7 +74,8 @@
       [feature-text-img-left
        :productpage.overview.feedback/title
        :productpage.overview.feedback/text
-       :productpage.overview/analysis]]]]])
+       :productpage.overview/analysis]]
+     [:div.wave-bottom-typography]]]])
 
 (defn overview-view []
   [product-tour])

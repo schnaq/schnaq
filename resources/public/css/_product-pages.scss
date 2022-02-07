@@ -8,7 +8,18 @@
 
 
 .product-page-feature-image {
-  @include rounded.rounded-2;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 0 25px rgba($primary, 0.125);
   height: auto;
   width: 100%;
+}
+
+.product-background {
+  background-image: url('https://s3.schnaq.com/schnaq-common/background/background-product-md.svg');
+  background-repeat: repeat;
+  background-size: 100%;
+
+    @include media-breakpoint-up(xl) {
+    background-image: url('https://s3.schnaq.com/schnaq-common/background/background-product.svg');
+  }
 }

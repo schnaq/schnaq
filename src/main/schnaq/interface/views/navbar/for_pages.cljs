@@ -18,6 +18,9 @@
 (defn- pricing-button []
   [navbar-components/button :router/pricing (reitfe/href :routes/pricing)])
 
+(defn- product-button []
+  [navbar-components/button :router/product-page (reitfe/href :routes/product-page)])
+
 (defn- privacy-button []
   [navbar-components/button :router/privacy (reitfe/href :routes/privacy)])
 
@@ -69,6 +72,7 @@
     [:div#schnaq-navbar.collapse.navbar-collapse
      [:ul.navbar-nav.ml-auto
       [:li.nav-item [navbar-components/button :nav/schnaqs (toolbelt/current-overview-link)]]
+      [:li.nav-item [product-button]]
       [:li.nav-item [pricing-button]]
       [:li.nav-item [privacy-button]]
       [:li.nav-item [blog-link]]

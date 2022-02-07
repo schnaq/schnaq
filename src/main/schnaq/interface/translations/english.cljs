@@ -166,7 +166,22 @@
 
    :startpage/get-to-know "Get to know the team behind schnaq"
 
+   ;; Product Pages
+   :productpage.overview/title "Events as interactive as they should be"
+   :productpage.overview/subtitle "schnaq is the Swiss army knife for your event"
+   :productpage.overview.qa/title "Your participants have questions, you have the answers"
+   :productpage.overview.qa/text "Collect questions and answer them whenever it fits into your schedule! You can filter by unanswered questions and date for a quicker overview."
+   :productpage.overview.poll/title "Let your participants vote"
+   :productpage.overview.poll/text "Create polls and find out what your participants think! Decide for yourself whether single or multiple choice."
+   :productpage.overview.activation/title "Activate your audience"
+   :productpage.overview.activation/text "Get your participants actively involved in your event! Concentration waning? Increase their attention with a short action! Let them react at the touch of a button."
+   :productpage.overview.feedback/title "Your personal feedback channel"
+   :productpage.overview.feedback/text "Get important insights in the analysis overview. Unlock feedback or take a look at the automatically generated word cloud."
+
+
    ;; Login page
+
+
    :page.login/heading "Let's schnaq"
    :page.login/subheading "100% free forever"
    :page.login/login "Sign In / Sign Up"
