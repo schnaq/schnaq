@@ -4,7 +4,7 @@
             [ring.util.http-response :refer [ok created bad-request forbidden]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
-            [schnaq.config.shared :as shared-config]
+            [schnaq.auth.lib :as auth-lib]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
@@ -314,13 +314,13 @@
 (defn- user-allowed-to-label?
   "Helper function checking, whether the user is allowed to use labels in the discussion."
   [identity share-hash]
-  (let [beta-tester? (string? (some shared-config/beta-tester-roles (:roles identity)))
+  (let [pro-user? (auth-lib/pro-user? identity)
         mods-only? (-> (discussion-db/discussion-by-share-hash share-hash)
                        :discussion/states
                        set
                        (contains? :discussion.state.qa/mark-as-moderators-only))]
     (or (not mods-only?)
-        (and mods-only? beta-tester?))))
+        (and mods-only? pro-user?))))
 
 (defn- add-label
   "Add a label to a statement. Only pre-approved labels can be set. Custom labels have no effect.
@@ -335,7 +335,7 @@
                           processors/with-sub-statement-count
                           (processors/with-new-post-info share-hash keycloak-id)
                           first)})
-      (forbidden (at/build-error-body :forbidden/user-not-beta "You are not allowed to edit labels")))))
+      (forbidden (at/build-error-body :permission/forbidden "You are not allowed to edit labels")))))
 
 (defn- remove-label
   "Remove a label from a statement. Removing a label not present has no effect.
@@ -350,7 +350,7 @@
                           processors/with-sub-statement-count
                           (processors/with-new-post-info share-hash keycloak-id)
                           first)})
-      (forbidden (at/build-error-body :forbidden/user-not-beta "You are not allowed to edit labels")))))
+      (forbidden (at/build-error-body :permission/forbidden "You are not allowed to edit labels")))))
 
 ;; -----------------------------------------------------------------------------
 

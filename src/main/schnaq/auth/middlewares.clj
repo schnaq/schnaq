@@ -45,8 +45,7 @@
   "Validate, that user has a subscription in our database or is a beta user."
   [handler]
   (fn [request]
-    (if (or (auth-lib/beta-tester? request)
-            (user-db/pro-subscription? (get-in request [:identity :sub])))
+    (if (auth-lib/pro-user? (:identity request))
       (handler request)
       (forbidden (at/build-error-body :auth/no-pro-subscription "You have no valid pro-subscription.")))))
 
