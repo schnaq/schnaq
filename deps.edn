@@ -42,7 +42,7 @@
              "my.datomic.com" {:url "https://my.datomic.com/repo"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.60.993"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.62.993"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
                   :main-opts ["-m" "kaocha.runner"]}
