@@ -2,7 +2,7 @@
 @use 'rounded' as rounded;
 
 .avatar-image {
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     height: 35px;
     overflow: hidden;
     width: 35px;

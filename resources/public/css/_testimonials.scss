@@ -5,7 +5,7 @@
   max-width: 33%;
   min-width: 20rem;
 
-  @include media-breakpoint-down(md) {
+  @include media-breakpoint-down(lg) {
     max-width: 100%;
     min-width: 10rem;
   }
@@ -20,7 +20,7 @@
 .carousel-testimonial {
   min-height: 48rem;
 
-  @include media-breakpoint-down(md) {
+  @include media-breakpoint-down(lg) {
     min-height: 100rem;
   }
 }

@@ -18,7 +18,7 @@
   margin: auto;
   overflow: hidden;
 
-  @include media-breakpoint-down(md) {
+  @include media-breakpoint-down(lg) {
     height: auto !important;
     overflow: hidden;
     width: 100% !important;
@@ -31,7 +31,7 @@
   background-size: cover;
   padding: 2rem 2rem 1.5rem;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     padding: 1rem 1rem 0.75rem;
   }
 }

@@ -8,7 +8,7 @@
   background-size: cover;
   overflow: hidden;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     border-radius: 0;
   }
 }

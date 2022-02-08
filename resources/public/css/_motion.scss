@@ -38,7 +38,7 @@
     position: fixed;
     width: auto;
 
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       max-width: 100%;
     }
   }
