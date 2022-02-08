@@ -167,6 +167,7 @@
    :startpage/get-to-know "Poznaj zespół stojący za schnaqiem"
 
     ;; Product Pages
+   
    :productpage.overview/title "Wydarzenia tak interaktywne, jak być powinny"
    :productpage.overview/subtitle "schnaq to szwajcarski nóż wojskowy dla Twojego wydarzenia"
    :productpage.overview.qa/title "Twoi uczestnicy mają pytania, Ty masz odpowiedzi"
@@ -177,8 +178,10 @@
    :productpage.overview.activation/text "Spraw, aby uczestnicy aktywnie zaangażowali się w Twoje wydarzenie! Koncentracja słabnie? Zwiększ ich uwagę za pomocą krótkiej akcji! Niech reagują po naciśnięciu przycisku."
    :productpage.overview.feedback/title "Twój osobisty kanał opinii"
    :productpage.overview.feedback/text "Uzyskaj ważne spostrzeżenia w przeglądzie analizy. Odblokuj informacje zwrotne lub spójrz na automatycznie wygenerowaną chmurę słów."
+   :productpage/cta "Zmodernizuj swoje następne wydarzenie dzięki schnaq"
 
    ;; Login Page
+
    :page.login/heading "Nie czekaj, pstryk!"
    :page.login/subheading "100% za darmo na zawsze"
    :page.login/login "Zaloguj się / Zarejestruj się"

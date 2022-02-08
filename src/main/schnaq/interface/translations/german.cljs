@@ -167,6 +167,7 @@
    :startpage/get-to-know "Lerne das Team hinter schnaq kennen"
 
    ;; Product Pages
+
    :productpage.overview/title "Veranstaltungen so interaktiv wie sie sein sollen"
    :productpage.overview/subtitle "schnaq ist das Schweizer Taschenmesser für deine Veranstaltung"
    :productpage.overview.qa/title "Deine Teilnehmer:innen haben Fragen, du die Antworten"
@@ -177,10 +178,9 @@
    :productpage.overview.activation/text "Binde deine Teilnehmer:innen aktiv in deine Veranstaltung mit ein! Schwindet die Konzentration? Steigere die Aufmerksamkeit mit einer kurzen Aktion! Lass sie per Knopfdruck reagieren."
    :productpage.overview.feedback/title "Dein persönlicher Feedback-Kanal"
    :productpage.overview.feedback/text "Erhalte wichtige Erkenntnisse in der Analyseübersicht. Schalte Feedback frei oder wirf einen Blick auf die automatisch generierte Wortwolke."
-
+   :productpage/cta "Modernisiere deine nächste Veranstaltung mit schnaq"
 
    ;; Login Page
-
 
    :page.login/heading "Nicht warten, schnaqqen!"
    :page.login/subheading "100% kostenlos für immer"

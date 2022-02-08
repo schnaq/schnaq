@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.product.pages
   (:require [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.buttons :as buttons]
-            [schnaq.interface.components.wavy :as wavy]
-            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.videos :refer [video]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- start-schnaq-button
@@ -47,6 +47,25 @@
    [:div.col-12.col-lg-6 [feature-text title text]]
    [:div.col-12.d-lg-none.mt-5 [feature-image image]]])
 
+(defn- try-schnaq
+  "Present early-adopters section to catch up interest."
+  []
+  (let [cta-video [:video.product-page-cta-video
+                   {:auto-play true :loop true :muted true :plays-inline true}
+                   [:source {:src (video :register.point-right/webm) :type "video/webm"}]
+                   [:source {:src (video :register.point-right/mp4) :type "video/mp4"}]]]
+    [:section.container.container-85.mb-5
+     [:div.d-flex.flex-row.justify-content-center
+      [:div.mt-auto.mr-3.d-none.d-lg-block cta-video]
+      [:div
+       [:div.display-5.text-white.mb-5 (labels :productpage/cta)]
+       [:div.d-flex.flex-row
+        [:div.mt-auto.mr-3.d-lg-none cta-video]
+        [:a.btn.btn-lg.btn-dark.my-auto.w-100
+         {:role "button"
+          :href (rfe/href :routes.schnaq/create)}
+         (labels :schnaq.startpage.cta/button)]]]]]))
+
 (defn- product-tour []
   [:div.overflow-hidden
    [pages/with-nav-and-header
@@ -75,7 +94,10 @@
        :productpage.overview.feedback/title
        :productpage.overview.feedback/text
        :productpage.overview/analysis]]
-     [:div.wave-bottom-typography]]]])
+     [:div.wave-bottom-primary]
+     [:div.bg-primary
+      [try-schnaq]
+      [:div.wave-bottom-typography]]]]])
 
 (defn overview-view []
   [product-tour])
