@@ -28,7 +28,7 @@
         [:label.form-check-label.display-6.pl-1 {:for :hub-exclusive}
          (labels :discussion.create.hub-exclusive-checkbox/label)]
         [:small.form-text.text-muted (labels :schnaq.create.hub/help-text)]
-        [:select.form-control.custom-select.mt-3
+        [:select.form-control.form-select.mt-3
          {:id :exclusive-hub-select
           :style {:max-width "80%"}}
          (for [group-id user-groups]
