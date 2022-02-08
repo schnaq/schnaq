@@ -104,7 +104,7 @@
    {:page/heading (labels :page.beta/heading)
     :page/subheading (labels :page.beta/subheading)}
    [:div.container.text-center.pt-5
-    [:p (labels :page.beta.modal/cta) " " [:a {:href "mailto:info@schnaq.com"} (tools/obfuscate-mail "info@schnaq.com")] "."]]])
+    [:p (labels :page.beta.modal/cta) " " [:a {:href "mailto:info@schnaq.com"} (tools/obfuscate-text "info@schnaq.com")] "."]]])
 
 (defn loading-page
   "Show a loading page."

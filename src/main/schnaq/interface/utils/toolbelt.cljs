@@ -68,11 +68,12 @@
      [:span (truncate-to-n-chars-string text char-count)]]
     text))
 
-(defn obfuscate-mail
-  "Hide real mail address."
-  [mail]
+(>defn obfuscate-text
+  "Reverse string and add css-class, which re-reverses the string."
+  [text]
+  [string? :ret :re-frame/component]
   [:span.obfuscate
-   (apply str (reverse mail))])
+   (apply str (reverse text))])
 
 (defn update-statement-in-list
   "Updates the content of a statement in a collection."

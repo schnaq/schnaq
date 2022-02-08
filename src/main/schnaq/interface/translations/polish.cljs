@@ -578,7 +578,7 @@
      "Speditionstraße 15A" [:br]
      "40221 Düsseldorf" [:br]
      "Niemcy" [:br]
-     (toolbelt/obfuscate-mail "info@schnaq.com")]
+     (toolbelt/obfuscate-text "info@schnaq.com")]
     [:p "Reprezentowane przez zarząd:" [:br]
      "Dr. Christian Meter, Dr. Alexander Schneider i Michael Birkhoff"]
     [:p "Prawnie wiążąca jest niemiecka wersja tej strony."]]
