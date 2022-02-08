@@ -30,7 +30,7 @@
                  (jq/prevent-default e)
                  (rf/dispatch [:lead-magnet/subscribe (oget e [:target :elements "EMAIL" :value])]))}
 
-   [:div.form-group
+   [:div.mb-3
     [:label {:for "EMAIL"} (labels :lead-magnet.form/label)]
     [:input#dsgvo-checklist
      {:required true
@@ -38,25 +38,23 @@
       :name "EMAIL" :defaultValue "" :type "email"
       :class "form-control"}]]
 
-   [:div.form-group
-    [:div.form-check
-     [:input#nochmal-nachfragen.form-check-input {:type "checkbox" :required true}]
-     [:label.form-check-label {:for "nochmal-nachfragen"}
-      (labels :lead-magnet.privacy/consent)]
-     [:p
-      [:a {:href "#" :type "button" :data-toggle "collapse" :data-target "#collapse-more-newsletter"
-           :aria-expanded "false" :aria-controls "#collapse-more-newsletter" :data-reitit-handle-click false}
-       (labels :startpage.newsletter/more-info-clicker)]]
-     [:div.collapse {:id "collapse-more-newsletter"}
-      [:p.small (labels :startpage.newsletter/policy-disclaimer)
-       [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
-       [:a {:href (reitfe/href :routes/privacy-extended)}
-        (labels :privacy/note)] "."]]]]
+   [:div.form-check.mb-3
+    [:input#nochmal-nachfragen.form-check-input {:type "checkbox" :required true}]
+    [:label.form-check-label {:for "nochmal-nachfragen"}
+     (labels :lead-magnet.privacy/consent)]
+    [:p
+     [:a {:href "#" :type "button" :data-toggle "collapse" :data-target "#collapse-more-newsletter"
+          :aria-expanded "false" :aria-controls "#collapse-more-newsletter" :data-reitit-handle-click false}
+      (labels :startpage.newsletter/more-info-clicker)]]
+    [:div.collapse {:id "collapse-more-newsletter"}
+     [:p.small (labels :startpage.newsletter/policy-disclaimer)
+      [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
+      [:a {:href (reitfe/href :routes/privacy-extended)}
+       (labels :privacy/note)] "."]]]
 
-   [:div.form-group
-    [:input
-     {:name "subscribe" :value (labels :lead-magnet.form/button) :type "submit" :readOnly true
-      :class "btn btn-primary d-block mx-auto"}]]])
+   [:input.mb-3
+    {:name "subscribe" :value (labels :lead-magnet.form/button) :type "submit" :readOnly true
+     :class "btn btn-primary d-block mx-auto"}]])
 
 (defn- thank-you-view
   []

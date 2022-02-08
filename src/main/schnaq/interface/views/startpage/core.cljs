@@ -21,37 +21,33 @@
      {:target "_blank" :name "mc-embedded-subscribe-form" :method "post" :action
       "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
 
-     [:div.form-group
-      [:input
-       {:required true
-        :placeholder (labels :startpage.newsletter/address-placeholder)
-        :name "EMAIL" :defaultValue "" :type "email"
-        :class "form-control"}]]
+     [:input.mb-3
+      {:required true
+       :placeholder (labels :startpage.newsletter/address-placeholder)
+       :name "EMAIL" :defaultValue "" :type "email"
+       :class "form-control"}]
 
-     [:div.form-group
-      [:div.this-is-just-for-bots-do-not-fill-this-out
-       {:aria-hidden "true" :style {:position "absolute" :left "-5000px"}}
-       [:input {:defaultValue "" :tabIndex "-1" :type "text"
-                :name "b_adbf5722068bcbcc4c7c14a72_407d47335d"}]]]
+     [:div.this-is-just-for-bots-do-not-fill-this-out
+      {:aria-hidden "true" :style {:position "absolute" :left "-5000px"}}
+      [:input {:defaultValue "" :tabIndex "-1" :type "text"
+               :name "b_adbf5722068bcbcc4c7c14a72_407d47335d"}]]
 
-     [:div.form-group
-      [:div.form-check
-       [:input#nochmal-nachfragen.form-check-input {:type "checkbox" :required true}]
-       [:label.form-check-label {:for "nochmal-nachfragen"}
-        (labels :startpage.newsletter/consent)]
-       [:a {:href "#data" :type "button" :data-toggle "collapse" :data-target "#collapse-more-newsletter"
-            :aria-expanded "false" :aria-controls "#collapse-more-newsletter" :data-reitit-handle-click false}
-        (labels :startpage.newsletter/more-info-clicker)]
-       [:div.collapse {:id "collapse-more-newsletter"}
-        [:p.small (labels :startpage.newsletter/policy-disclaimer)
-         [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
-         [:a {:href (reitfe/href :routes/privacy-extended)}
-          (labels :privacy/note)] "."]]]]
+     [:div.form-check.mb-3
+      [:input#nochmal-nachfragen.form-check-input {:type "checkbox" :required true}]
+      [:label.form-check-label {:for "nochmal-nachfragen"}
+       (labels :startpage.newsletter/consent)]
+      [:a {:href "#data" :type "button" :data-toggle "collapse" :data-target "#collapse-more-newsletter"
+           :aria-expanded "false" :aria-controls "#collapse-more-newsletter" :data-reitit-handle-click false}
+       (labels :startpage.newsletter/more-info-clicker)]
+      [:div.collapse {:id "collapse-more-newsletter"}
+       [:p.small (labels :startpage.newsletter/policy-disclaimer)
+        [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
+        [:a {:href (reitfe/href :routes/privacy-extended)}
+         (labels :privacy/note)] "."]]]
 
-     [:div.form-group
-      [:input
-       {:name "subscribe" :value (labels :startpage.newsletter/button) :type "submit" :readOnly true
-        :class "btn btn-primary d-block mx-auto"}]]]]])
+     [:input.mb-3
+      {:name "subscribe" :value (labels :startpage.newsletter/button) :type "submit" :readOnly true
+       :class "btn btn-primary d-block mx-auto"}]]]])
 
 (defn- early-adopters
   "Present early-adopters section to catch up interest."

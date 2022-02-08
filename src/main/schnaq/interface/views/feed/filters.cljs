@@ -56,7 +56,7 @@
     (fn []
       (let [display-name @(rf/subscribe [:user/display-name])]
         [:section.border-bottom.pb-2.text-left
-         [:div.form-group
+         [:div.mb-3
           [:label {:for :add-filter-menu}
            (labels :filters.label/filter-for)]
           [:select#add-filter-menu.mr-1.form-control

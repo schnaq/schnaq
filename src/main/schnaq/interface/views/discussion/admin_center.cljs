@@ -78,7 +78,7 @@
                     (js-wrap/prevent-default e)
                     (rf/dispatch [:discussion.admin/send-email-invites
                                   (oget e [:target :elements])]))}
-      [:div.form-group
+      [:div.mb-3
        [:label.m-1 {:for input-id} (labels :schnaq.admin/addresses-label)]
        [:textarea.form-control.m-1.rounded-3
         {:id input-id
@@ -253,7 +253,7 @@
                     (js-wrap/prevent-default e)
                     (rf/dispatch [:discussion.admin/send-admin-center-link
                                   (oget e [:target :elements])]))}
-      [:div.form-group
+      [:div.mb-3
        [:label {:for input-id} (labels :schnaq.admin.edit.link.form/label)]
        [:input.form-control.m-1.rounded-3
         {:id input-id
