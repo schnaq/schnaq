@@ -166,7 +166,22 @@
 
    :startpage/get-to-know "Lerne das Team hinter schnaq kennen"
 
+   ;; Product Pages
+
+   :productpage.overview/title "Veranstaltungen so interaktiv wie sie sein sollen"
+   :productpage.overview/subtitle "schnaq ist das Schweizer Taschenmesser für deine Veranstaltung"
+   :productpage.overview.qa/title "Nach der Veranstaltung ist vor der Veranstaltung"
+   :productpage.overview.qa/text "Beantworte Fragen einmal und verwende sie in deiner nächsten Veranstaltung wieder. Gewinne sofort Übersicht und spare Zeit in der Zukunft."
+   :productpage.overview.poll/title "Lass deine Teilnehmer:innen abstimmen"
+   :productpage.overview.poll/text "Erstelle Umfragen und finde heraus, was deine Teilnehmer:innen denken! Entscheide selbst, ob Single- oder Multiple-Choice."
+   :productpage.overview.activation/title "Aktiviere dein Publikum"
+   :productpage.overview.activation/text "Binde deine Teilnehmer:innen aktiv in deine Veranstaltung mit ein! Schwindet die Konzentration? Steigere die Aufmerksamkeit mit einer kurzen Aktion! Lass sie per Knopfdruck reagieren."
+   :productpage.overview.feedback/title "Dein persönlicher Feedback-Kanal"
+   :productpage.overview.feedback/text "Erhalte wichtige Erkenntnisse in der Analyseübersicht. Schalte Feedback frei oder wirf einen Blick auf die automatisch generierte Wortwolke."
+   :productpage/cta "Modernisiere deine nächste Veranstaltung mit schnaq"
+
    ;; Login Page
+
    :page.login/heading "Nicht warten, schnaqqen!"
    :page.login/subheading "100% kostenlos für immer"
    :page.login/login "Anmelden / Registrieren"
@@ -559,12 +574,17 @@
    [:<>
     [:p
      "schnaq GmbH" [:br]
-     "Speditionstraße 15A" [:br]
+     "Speditionstraße 15a" [:br]
      "40221 Düsseldorf" [:br]
-     "Deutschland" [:br]
-     (toolbelt/obfuscate-mail "info@schnaq.com")]
+     "Deutschland"]
+    [:p
+     (toolbelt/obfuscate-text "+49176 72265456") [:br]
+     (toolbelt/obfuscate-text "info@schnaq.com")]
+    [:p
+     "Handelsregister: HRB 95753" [:br]
+     "Registergericht: Amtsgericht Düsseldorf"]
     [:p "Vertreten durch die Geschäftsführung:" [:br]
-     "Dr. Christian Meter, Dr. Alexander Schneider und Michael Birkhoff"]
+     "Dr. Alexander Schneider, Dr. Christian Meter und Michael Birkhoff"]
     [:p "Rechtlich bindend ist die deutsche Fassung dieser Seite."]]
 
    ;; About us
@@ -945,6 +965,7 @@
    :router/not-found-label "Not Found route redirect"
    :router/pricing "Preise"
    :router/privacy "Datenschutz"
+   :router/product "Produkt"
    :router/qanda "Fragen & Antworten"
    :router/start-discussion "Starte Diskussion"
    :router/startpage "Startseite"

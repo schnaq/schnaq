@@ -30,6 +30,7 @@
             [schnaq.interface.views.hub.overview :as hubs]
             [schnaq.interface.views.hub.settings :as hub-settings]
             [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.product.pages :as product-pages]
             [schnaq.interface.views.qa.inputs :as qanda]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
@@ -69,6 +70,10 @@
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)
      :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
+   ["product"
+    {:name :routes/product-page
+     :view product-pages/overview-view
+     :link-text (labels :router/product)}]
    ["alphazulu"
     {:name :routes/alphazulu
      :view az/view}]

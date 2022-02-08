@@ -137,18 +137,12 @@
     {:page/title (labels :startpage/heading)
      :page/wrapper-classes "container container-85"
      :page/vertical-header? true
-     :page/wavy-footer? true
      :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
-    [:div.bubble-background-xl
+    [:div.wave-background
      [:section.container.mb-5
       [startpage-features/how-does-schnaq-work]
-      [testimonials/highlights]]
-     [wavy/top-and-bottom
-      :white
-      [:section.container
-       [three-steps-to-success]]
-      :white-and-primary]
-     [:div.container.py-5
+      [testimonials/highlights]
+      [three-steps-to-success]
       [startpage-features/feature-rows]]
      [faq]
      [:section.container
@@ -156,7 +150,8 @@
       [testimonials/testimonial-companies]
       [early-adopters]
       [mailchimp-form]
-      [team-and-supporters]]]]])
+      [team-and-supporters]]
+     [:div.wave-bottom-typography]]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."
