@@ -1,7 +1,6 @@
 @import "../node_modules/bootstrap/scss/functions";
 @import '../node_modules/bootstrap/scss/variables';
-@import "../node_modules/bootstrap/scss/mixins";
-// The three imports above (functions, variables, mixins) are all needed to define the custom maps from bs 5
+// The two imports above (functions, variables) are needed to define the custom maps from bs 5
 @import 'variables';
 
 // Additional colors. Defaults are primary, secondary, ... and here you can add
