@@ -1,7 +1,8 @@
-(ns schnaq.interface.views.product.pages
+(ns schnaq.interface.views.product.overview
   (:require [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.videos :refer [video]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
@@ -34,7 +35,9 @@
 (defn- feature-image [image]
   [:div
    [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
-   [:img.product-page-feature-image.my-auto {:src (img-path image)}]])
+   [motion/zoom-image
+    {:class "product-page-feature-image my-auto"
+     :src (img-path image)}]])
 
 (defn- feature-text-img-right [title text image]
   [:div.row.py-5.mt-5

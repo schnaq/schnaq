@@ -103,7 +103,7 @@
    :startpage.information.know-how/title "Fragen sammeln leicht gemacht"
    :startpage.information.know-how/body "Schnaq's Q&A Funktionen und strukturierte Diskussionen helfen deinem Kurs, Workshop oder Schulung blitzschnell Wissen auszutauschen und nachhaltig aufzubereiten. Nur wo Wissen fließt, kann Großartiges entstehen."
 
-   :startpage.information.positioning/title "Verstehe was gefragt wird"
+   :startpage.information.positioning/title "Verstehe, was gefragt wird"
    :startpage.information.positioning/body "Erkenne auf einen Blick die Probleme deines Kurses. Mit der automatisch generierten Mindmap und den K.I. Analysen, wird jede Fragerunde übersichtlich und einfach zu verstehen aufbereitet."
 
    :startpage.information.anywhere/title "Nutze schnaq überall zu jeder Zeit"

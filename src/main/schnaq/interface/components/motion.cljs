@@ -12,14 +12,13 @@
 
   Usage: `[zoom-image {:src \"path-to-file\" :class \"additional-classes\"}]`"
   ([properties]
-   [zoom-image properties ""])
-  ([properties container-class]
    (let [open? (reagent/atom false)
-         transition {:type "spring"
+         transition {:type :spring
                      :damping 25
                      :stiffness 120}]
      (fn []
-       [:div.image-container {:class (if @open? (str container-class " open") container-class)}
+       [:div.image-container {:class (when @open? "open")
+                              :style {:z-index (when @open? 1000)}}
         [:> (.-div motion)
          {:animate {:opacity (if @open? 1 0)}
           :transition transition
