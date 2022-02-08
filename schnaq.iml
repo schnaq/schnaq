@@ -143,6 +143,7 @@
     <orderEntry type="library" name="Deps: fipp:0.6.24" level="project" />
     <orderEntry type="library" name="Deps: org.apache.tomcat/tomcat-jdbc:7.0.27" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.logging/jboss-logging:3.4.1.Final" level="project" />
+    <orderEntry type="library" name="Deps: com.nextjournal/beholder:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-swagger:0.5.15" level="project" />
     <orderEntry type="library" name="Deps: com.wsscode/spec-inspec:1.0.0-alpha2" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-core:2.12.4" level="project" />
