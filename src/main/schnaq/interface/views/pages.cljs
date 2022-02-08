@@ -6,6 +6,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.videos :refer [video]]
@@ -82,7 +83,7 @@
         [:div.my-5 [bullet-points]]
         [:div.mt-3.text-center
          (labels :page.login.alert/text-1)
-         [:a.btn.btn-link.text-dark.mx-1 {:href (rfe/href :routes/pricing)} (labels :page.login.alert/button)]
+         [buttons/anchor (labels :page.login.alert/button) (rfe/href :routes/pricing) "btn-sm btn-outline-white mx-2"]
          (labels :page.login.alert/text-2)]
         [:img.w-50.align-self-center.d-lg-none {:src (img-path :schnaqqifant/three-d-bubble)}]]]]]}])
 
