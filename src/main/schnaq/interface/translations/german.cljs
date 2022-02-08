@@ -562,7 +562,8 @@
      "schnaq GmbH" [:br]
      "Speditionstraße 15a" [:br]
      "40221 Düsseldorf" [:br]
-     "Deutschland" [:br] [:br]
+     "Deutschland"]
+    [:p
      (toolbelt/obfuscate-text "+49176 72265456") [:br]
      (toolbelt/obfuscate-text "info@schnaq.com")]
     [:p
