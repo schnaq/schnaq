@@ -170,7 +170,7 @@
 
    :productpage.overview/title "Wydarzenia tak interaktywne, jak być powinny"
    :productpage.overview/subtitle "schnaq to szwajcarski nóż wojskowy dla Twojego wydarzenia"
-   :productpage.overview.qa/title "After the event is before the event"
+   :productpage.overview.qa/title "Po wydarzeniu jest przed wydarzeniem"
    :productpage.overview.qa/text "Odpowiedz na pytania raz i wykorzystaj je ponownie podczas kolejnego wydarzenia. Uzyskaj natychmiastowy przegląd i oszczędzaj czas w przyszłości."
    :productpage.overview.poll/title "Pozwól swoim uczestnikom głosować"
    :productpage.overview.poll/text "Twórz ankiety i dowiedz się, co myślą Twoi uczestnicy! Zdecyduj sam, czy pojedynczy czy wielokrotny wybór"
@@ -959,7 +959,7 @@
    :router/not-found-label "Nie znaleziono Przekierowanie trasy"
    :router/pricing "Wycena"
    :router/privacy "Ochrona danych"
-   :router/product-page "Strona produktu"
+   :router/product "produktu"
    :router/qanda "PYTANIA I ODPOWIEDZI"
    :router/start-discussion "Rozpocznij dyskusję"
    :router/startpage "Strona główna"

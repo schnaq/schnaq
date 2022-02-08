@@ -961,7 +961,7 @@
    :router/not-found-label "Not Found route redirect"
    :router/pricing "Preise"
    :router/privacy "Datenschutz"
-   :router/product-page "Produkt"
+   :router/product "Produkt"
    :router/qanda "Fragen & Antworten"
    :router/start-discussion "Starte Diskussion"
    :router/startpage "Startseite"
