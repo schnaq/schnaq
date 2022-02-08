@@ -181,7 +181,6 @@
    :productpage/cta "Zmodernizuj swoje następne wydarzenie dzięki schnaq"
 
    ;; Login Page
-
    :page.login/heading "Nie czekaj, pstryk!"
    :page.login/subheading "100% za darmo na zawsze"
    :page.login/login "Zaloguj się / Zarejestruj się"

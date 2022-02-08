@@ -181,13 +181,12 @@
    :productpage/cta "Modernise your next event with schnaq"
 
    ;; Login page
-
    :page.login/heading "Let's schnaq"
    :page.login/subheading "100% free forever"
    :page.login/login "Sign In / Sign Up"
    :page.login.alert/text-1 "Check out all benefits of a registered user"
    :page.login.alert/button "here"
-   :page.login.alert/text-2 "."
+   :page.login.alert/text-2 ""
    :page.login/feature-1 "Create schnaqs"
    :page.login/feature-3 "Participation without registration"
 

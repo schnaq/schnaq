@@ -181,7 +181,6 @@
    :productpage/cta "Modernisiere deine nächste Veranstaltung mit schnaq"
 
    ;; Login Page
-
    :page.login/heading "Nicht warten, schnaqqen!"
    :page.login/subheading "100% kostenlos für immer"
    :page.login/login "Anmelden / Registrieren"
