@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.product.pages
+(ns schnaq.interface.views.product.overview
   (:require [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.images :refer [img-path]]
