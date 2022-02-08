@@ -20,7 +20,7 @@
   max-width: 20rem;
   width: 100%;
 
-    @include media-breakpoint-down(md) {
+  @include media-breakpoint-down(md) {
     width: 5rem;
   }
 }
