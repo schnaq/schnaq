@@ -170,8 +170,8 @@
 
    :productpage.overview/title "Events as interactive as they should be"
    :productpage.overview/subtitle "schnaq is the Swiss army knife for your event"
-   :productpage.overview.qa/title "Your participants have questions, you have the answers"
-   :productpage.overview.qa/text "Collect questions and answer them whenever it fits into your schedule! You can filter by unanswered questions and date for a quicker overview."
+   :productpage.overview.qa/title "Your participants have questions, you have answers"
+   :productpage.overview.qa/text "Answer questions once and use them again in your next event. Gain an instant overview and save time in the future."
    :productpage.overview.poll/title "Let your participants vote"
    :productpage.overview.poll/text "Create polls and find out what your participants think! Decide for yourself whether single or multiple choice."
    :productpage.overview.activation/title "Activate your audience"
