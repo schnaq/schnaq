@@ -4,7 +4,6 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
@@ -72,7 +71,7 @@
   (let [pro-price @(rf/subscribe [:pricing/pro-tier])
         yearly? @(rf/subscribe [:pricing.interval/yearly?])
         formatted-price (if (js/Number.isInteger pro-price) "%d €" "%.2f €")]
-    (if pro-price
+    (if (and pro-price (not (zero? pro-price)))
       [:<>
        [:span.display-5 (gstring/format formatted-price pro-price)]
        [:span (labels :pricing.units/per-month)]
@@ -93,8 +92,7 @@
   "Welcome new users to the pricing page."
   []
   [:section.text-center.pb-5
-   [:h2 (labels :pricing.intro/heading)]
-   [:p.lead (labels :pricing.intro/lead)]])
+   [:h3 (labels :pricing.intro/heading)]])
 
 (defn- mark-explanation
   "Explain the check marks."
@@ -180,8 +178,7 @@
          #(if authenticated?
             (rf/dispatch [:subscription/create-checkout-session price-id])
             (rf/dispatch [:keycloak/login (links/checkout-link price-id)]))
-         "btn-secondary btn-lg"
-         (when-not shared-config/stripe-enabled? {:disabled true})]]))
+         "btn-secondary btn-lg"]]))
    {:class "border-primary shadow-lg"}])
 
 (defn- enterprise-tier-card
@@ -211,44 +208,6 @@
      [:div {:class classes} [pro-tier-card]]
      [:div {:class classes} [enterprise-tier-card]]]))
 
-(defn- trial-box
-  []
-  [:div.d-flex.justify-content-center.py-5
-   [:div.trial-box.text-center.button-dark.shadow-sm
-    [:p.display-6.font-weight-bold (labels :pricing.trial/call-to-action)]
-    [:p (labels :pricing.trial/description)]
-    [:p.text-sm.text-muted (labels :pricing.trial.temporary/deactivation)]]])
-
-(defn- newsletter
-  "A box displaying the different subscription tiers we offer."
-  []
-  [:p.text-typography.display-6.text-center.pt-4
-   (labels :pricing.newsletter/lead)
-   [:a.btn.btn-lg.btn-link
-    {:href "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
-    (labels :pricing.newsletter/name)]])
-
-(defn- feature-card
-  [title description]
-  [:div.card.text-center.feature-card.shadow-sm.mb-1
-   [:p.card-text.font-weight-bold title]
-   [:p description]])
-
-(defn- schnaq-features
-  "List all features that are making schnaq a good deal."
-  []
-  [:div.my-3
-   [:h3.text-center (labels :pricing.features/heading)]
-   [:div.card-deck
-    [feature-card (labels :pricing.features.user-numbers/heading) (labels :pricing.features.user-numbers/content)]
-    [feature-card (labels :pricing.features.team-numbers/heading) (labels :pricing.features.team-numbers/content)]
-    [feature-card (labels :pricing.features.engage/heading) (labels :pricing.features.engage/content)]]
-   [:div.card-deck.mt-2
-    [feature-card (labels :pricing.features.analysis/heading) (labels :pricing.features.analysis/content)]
-    [feature-card (labels :pricing.features.knowledge-db/heading) (labels :pricing.features.knowledge-db/content)]
-    [feature-card (labels :pricing.features.mindmap/heading) (labels :pricing.features.mindmap/content)]]
-   [:p.text-sm.text-muted (labels :pricing.features/disclaimer)]])
-
 (defn- faq
   "A taste of the most burning questions of the user answered by our live Q&A."
   []
@@ -257,6 +216,11 @@
     [:h2 (labels :startpage.faq/title)]
     [:p.lead (labels :startpage.faq/subtitle)]]
    [qanda/question-field-and-search-results :light]])
+
+(defn- subscription-information []
+  [:div.text-center.text-muted
+   [:p (labels :pricing.billing/info-1)]
+   [:p (labels :pricing.billing/info-2)]])
 
 (defn- pricing-page
   "A full page depicting our pricing and related items."
@@ -269,10 +233,8 @@
      [intro]
      [toggle-payment-period]
      [tier-cards]
-     [newsletter]
-     [trial-box]
-     [schnaq-features]]
-    [:div.container-fluid
+     [subscription-information]]
+    [:div.container-fluid.pt-5
      [faq]]]])
 
 (defn pricing-view

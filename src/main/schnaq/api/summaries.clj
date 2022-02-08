@@ -45,7 +45,7 @@
 ;; -----------------------------------------------------------------------------
 
 (defn- request-summary
-  "Request a summary of a discussion. Works only if person is in a beta group."
+  "Request a summary of a discussion."
   [{:keys [parameters identity]}]
   (let [share-hash (get-in parameters [:body :share-hash])]
     (log/info "Requesting new summary for schnaq" share-hash)
@@ -118,7 +118,7 @@
                          :summary :summary/text
                          :app-code :app/code}}
      :responses {200 {:body {:status keyword?}}}}]
-   ["/admin" {:swagger {:tags ["summaries" "admin" "beta"]}
+   ["/admin" {:swagger {:tags ["summaries" "admin"]}
               :middleware [:user/authenticated? :user/admin?]
               :responses {401 at/response-error-body}}
     ["/summary/send" {:put new-summary

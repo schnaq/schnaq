@@ -255,7 +255,7 @@
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktivieren, um den  Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
    :schnaq.admin.configurations.mods-mark-only/label "Nur Moderator:innen Antworten markieren lassen"
    :schnaq.admin.configurations.mods-mark-only/explanation "Wenn aktiviert, haben nur Moderatoren die Möglichkeit Antworten als korrekt zu markieren."
-   :schnaq.admin.configurations.mods-mark-only/beta "Nur Beta-Nutzer:innen können diese Einstellung verändern. Frage nach Zugang unter hello@schnaq.com."
+   :schnaq.admin.configurations.mods-mark-only/beta "Nur Pro-Nutzer:innen können diese Einstellung verändern. Upgrade deinen Account auf den Pro Plan um Zugang zu erhalten."
 
    :schnaq.access-code.clipboard/header "Zugangscode kopiert"
    :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."
@@ -282,7 +282,7 @@
    :schnaq.input-type/activation "Aktivierung"
    :schnaq.input-type/coming-soon "Bald verfügbar"
    :schnaq.input-type/not-admin "Nur für Moderatoren"
-   :schnaq.input-type/beta-only "Nur für Beta-Tester:innen"
+   :schnaq.input-type/pro-only "Nur für Pro User"
 
    ;; Poll feature
    :schnaq.poll.create/topic-label "Umfragethema"
@@ -899,8 +899,8 @@
    :graph.settings/stabilize "Stabilisiere Mindmap"
 
    ;; Pricing Page
-   :pricing.intro/heading "Bald geht es los!"
-   :pricing.intro/lead [:span "Schon bald kannst du hier deinen Tarif buchen. Möchtest du Teil unserer Beta sein und schon jetzt exklusiv und kostenfrei den Business-Tarif testen? Dann kontaktiere uns gerne unter " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
+   :pricing/headline "Wechsle zu schnaq"
+   :pricing.intro/heading "schnaq hilft dir mehr Erkenntnisse aus deinen Webinaren zu gewinnen."
    :pricing.free-tier/title "Frei"
    :pricing.free-tier/subtitle "für immer"
    :pricing.free-tier/description "Für effiziente Macher:innen und kleine Teams, die nicht viel brauchen. Erstelle Diskussionen und Q&As mit zwei Klicks."
@@ -932,27 +932,8 @@
    :pricing.schnaq.pro.yearly/cancel-period "jährlich kündbar"
    :pricing.units/per-month "/ Monat"
    :pricing.notes/with-vat "zzgl. MwSt."
-   :pricing.trial/call-to-action "30 Tage den Pro Plan testen"
-   :pricing.trial/description "Keine Kreditkarte nötig! Jederzeit kündbar."
-   :pricing.trial.temporary/deactivation "Demnächst verfügbar"
-   :pricing.features/heading "Schnaq-Abonnement Vorteile"
-   :pricing.features.user-numbers/heading "Für jede Veranstaltungsgröße"
-   :pricing.features.user-numbers/content "Lasse hunderte von Personen im Publikum teilnehmen."
-   :pricing.features.team-numbers/heading "Unbegrenzte Teams"
-   :pricing.features.team-numbers/content "Die Anzahl der Teams, die du erstellen kannst, ist unlimitiert. *"
-   :pricing.features.engage/heading "Aktiviere dein Publikum"
-   :pricing.features.engage/content "Nutze Umfragen, Schnellaktivierungen, Feedbacks und vieles mehr um dein Publikum aktiv zu halten. *"
-   :pricing.features.analysis/heading "Automatische Analysen"
-   :pricing.features.analysis/content "Die Beiträge werden automatisch analysiert und für alle Teilnehmer:innen aufbereitet. *"
-   :pricing.features.knowledge-db/heading "Wissensdatenbank"
-   :pricing.features.knowledge-db/content "Sammle erarbeitetes Wissen und Ideen an einem Ort. Verwende es wieder und teile es mit der Welt."
-   :pricing.features.mindmap/heading "Interaktive Mindmap"
-   :pricing.features.mindmap/content "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."
-   :pricing.features/disclaimer "* Gilt nur für Pro-Abonnement"
-   :pricing.competitors/per-month-per-user " € pro Monat pro Nutzer:in"
-   :pricing/headline "Abonnements"
-   :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht:"
-   :pricing.newsletter/name "schnaq Newsletter."
+   :pricing.billing/info-1 "Die angegebenen Preise verstehen sich exklusive aller anfallenden Umsatzsteuern wie z.B. der Mehrwertsteuer."
+   :pricing.billing/info-2 "Abonnements des Pro-Tarifs verlängern sich automatisch am Ende jedes Abrechnungszyklus, es sei denn, sie werden ordnungsgemäß gekündigt. Ohne erfolgte Kündigung wird dein hinterlegtes Zahlungsmittel belastet."
 
    ;; Tooltips
    :tooltip/history-statement "Zurück zum Beitrag von"

@@ -49,6 +49,7 @@
 
            :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
                       :main-opts ["-m" "antq.core"
+                                  "--exclude=thheller/shadow-cljs"
                                   "--exclude=com.datomic/datomic-pro"
                                   "--exclude=clj-kondo/tools"]}
 

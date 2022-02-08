@@ -255,7 +255,7 @@
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktywuj, aby przycisk \"za/ przeciw\" nie był już wyświetlany. Nowe wkłady są traktowane jako zgoda. Opcja ta może być zmieniona w dowolnym momencie."
    :schnaq.admin.configurations.mods-mark-only/label "Tylko moderatorzy zaznaczają odpowiedzi"
    :schnaq.admin.configurations.mods-mark-only/explanation "Gdy zaznaczone, tylko moderatorzy mogą zaznaczyć odpowiedź jako poprawną. W przeciwnym razie każdy jest w stanie to zrobić."
-   :schnaq.admin.configurations.mods-mark-only/beta "Tylko beta-użytkownicy mogą zmieniać to ustawienie. Poproś o dostęp na hello@schnaq.com."
+   :schnaq.admin.configurations.mods-mark-only/beta "Tylko pro-użytkownicy mogą zmieniać to ustawienie."
 
    :schnaq.access-code.clipboard/header "Skopiowany kod dostępu"
    :schnaq.access-code.clipboard/body "Kod dostępu został skopiowany do schowka."
@@ -282,7 +282,7 @@
    :schnaq.input-type/activation "Aktywacja"
    :schnaq.input-type/coming-soon "Wkrótce dostępne"
    :schnaq.input-type/not-admin "Tylko dla moderatorów"
-   :schnaq.input-type/beta-only "Tylko dla beta testerów"
+   :schnaq.input-type/pro-only "Tylko dla pro testerów"
 
    ;; Polls Feature
    :schnaq.poll.create/topic-label "Temat ankiety"
@@ -897,8 +897,8 @@
    :graph.settings/stabilize "Ustabilizuj mapę myśli"
 
    ;; Pricing Page
-   :pricing.intro/heading "Wkrótce się zacznie!"
-   :pricing.intro/lead [:span "Już wkrótce będziesz mógł zarezerwować swoją taryfę tutaj. Czy chcieliby Państwo wziąć udział w naszej wersji beta i przetestować taryfę biznesową na wyłączność i bezpłatnie? Następnie prosimy o kontakt z nami pod adresem " [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com!"]]
+   :pricing/headline "Przełącz się na schnaq"
+   :pricing.intro/heading "schnaq pomoże Ci uzyskać więcej informacji z Twoich webinarów."
    :pricing.free-tier/title "Darmowy"
    :pricing.free-tier/subtitle "na zawsze"
    :pricing.free-tier/description "Dla sprawnych twórców i małych zespołów, które nie potrzebują wiele. Twórz dyskusje i Q&A za pomocą dwóch kliknięć."
@@ -930,27 +930,8 @@
    :pricing.schnaq.pro.yearly/cancel-period "corocznie odwoływalny"
    :pricing.units/per-month "/ Miesiąc"
    :pricing.notes/with-vat "plus VAT."
-   :pricing.trial/call-to-action "Test Pro przez 30 dni"
-   :pricing.trial/description "Karta kredytowa nie jest konieczna! Możliwość odwołania w dowolnym momencie."
-   :pricing.trial.temporary/deactivation "Dostępne wkrótce"
-   :pricing.features/heading "Zalety subskrypcji Schnaq"
-   :pricing.features.user-numbers/heading "Dla każdej publiczności"
-   :pricing.features.user-numbers/content "Pozwól uczestniczyć setkom osób z Twojej widowni."
-   :pricing.features.team-numbers/heading "Nieograniczone zespoły"
-   :pricing.features.team-numbers/content "Liczba zespołów, które możesz utworzyć jest nieograniczona. *"
-   :pricing.features.engage/heading "Zaangażuj swoich odbiorców"
-   :pricing.features.engage/content "Używaj ankiet, szybkich aktywacji, feedbacku i wielu innych, aby utrzymać zaangażowanie swoich odbiorców. *"
-   :pricing.features.analysis/heading "Analizy automatyczne"
-   :pricing.features.analysis/content "Wkłady są automatycznie analizowane i przygotowywane dla wszystkich uczestników. *"
-   :pricing.features.knowledge-db/heading "Baza danych wiedzy"
-   :pricing.features.knowledge-db/content "Gromadzenie zdobytej wiedzy i pomysłów w jednym miejscu. Wykorzystaj je ponownie i podziel się nimi z całym światem."
-   :pricing.features.mindmap/heading "Interaktywna mapa myśli"
-   :pricing.features.mindmap/content "Wszystkie wkłady są automatycznie wyświetlane graficznie i interaktywnie."
-   :pricing.features/disclaimer "* Obowiązuje tylko dla subskrypcji Pro"
-   :pricing.competitors/per-month-per-user " € miesięcznie za użytkownika"
-   :pricing/headline "Abonamenty"
-   :pricing.newsletter/lead "Bądź informowany natychmiast, gdy subskrypcja wejdzie w życie:"
-   :pricing.newsletter/name "newsletter schnaq."
+   :pricing.billing/info-1 "Podane ceny nie zawierają żadnych obowiązujących podatków od sprzedaży, takich jak VAT."
+   :pricing.billing/info-2 "Subskrypcje planu Pro odnawiają się automatycznie na koniec każdego cyklu rozliczeniowego, chyba że zostaną należycie wypowiedziane, w którym to momencie obciążymy kartę kredytową na Twoim koncie."
 
    ;; Tooltips
    :tooltip/history-statement "Wracając do wkładu"
