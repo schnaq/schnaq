@@ -71,7 +71,7 @@
 (>defn obfuscate-text
   "Reverse string and add css-class, which re-reverses the string."
   [text]
-  [string? :ret string?]
+  [string? :ret :re-frame/component]
   [:span.obfuscate
    (apply str (reverse text))])
 
