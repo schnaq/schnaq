@@ -7,7 +7,7 @@
 
 (def deleted-statement-text "[deleted]")
 
-(def user-language (atom :de))
+(def user-language (atom :en))
 
 (def graph-controversy-upper-bound 65)
 
@@ -39,15 +39,15 @@
    :clientId keycloak-client})
 
 (def breakpoints
-  "Mirrors the breakpoints used in the bootsrap css."
-  {:xs 0,
-   :sm 576,
-   :md 768,
-   :lg 992,
-   :xl 1200,
-   :xxl 1439,
-   :xxxl 1600,
-   :hd 1900,
+  "Mirrors the breakpoints used in the bootstrap css."
+  {:xs 0
+   :sm 576
+   :md 768
+   :lg 992
+   :xl 1200
+   :xxl 1439
+   :xxxl 1600
+   :hd 1900
    :qhd 2560})
 
 ;; -----------------------------------------------------------------------------
@@ -58,6 +58,9 @@
 
 (def marketing-num-schnaqs 600)
 (def marketing-num-statements 4000)
+
+(def max-concurrent-users-free-tier 100)
+(def max-concurrent-users-pro-tier 300)
 
 ;; -----------------------------------------------------------------------------
 ;; Example schnaqs and statements

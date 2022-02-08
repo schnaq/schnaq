@@ -174,7 +174,6 @@
    :page.login.alert/button "tutaj"
    :page.login.alert/text-2 "zobacz wszystkie korzyści jako zarejestrowany:użytkownik:in."
    :page.login/feature-1 "create schnaqs"
-   :page.login/feature-2 "nieograniczona liczba uczestników"
    :page.login/feature-3 "Uczestnictwo poprzez link bez rejestracji"
 
    ;; Register Page when creating a schnaq

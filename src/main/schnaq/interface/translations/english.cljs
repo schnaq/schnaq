@@ -174,7 +174,6 @@
    :page.login.alert/button "here"
    :page.login.alert/text-2 "."
    :page.login/feature-1 "Create schnaqs"
-   :page.login/feature-2 "Unlimited participants"
    :page.login/feature-3 "Participation without registration"
 
    ;; Register Page when creating a schnaq

@@ -2,12 +2,14 @@
   "Defining page-layouts."
   (:require [cljs.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
+            [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.videos :refer [video]]
+            [schnaq.interface.config :as config]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -47,8 +49,13 @@
    (when @(rf/subscribe [:user/authenticated?])
      (rf/dispatch [:navigation/navigate :routes/startpage]))])
 
-(defn- bullet-point [label]
-  [:div.d-flex.flex-row [:h4 [icon :check/normal "mr-3"]] [:h4 (labels label)]])
+(defn- bullet-points
+  "Short overview of free-features."
+  []
+  [:ul.fa-ul
+   [:li.h4 [icon :check/normal "mr-3"] (labels :page.login/feature-1)]
+   [:li.h4 [icon :check/normal "mr-3"] (gstring/format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]
+   [:li.h4 [icon :check/normal "mr-3"] (labels :page.login/feature-3)]])
 
 (defn- login-page-base
   "Basic login page for either registration or sign in."
@@ -67,14 +74,12 @@
         [:source {:src (video :register.point-right/webm) :type "video/webm"}]
         [:source {:src (video :register.point-right/mp4) :type "video/mp4"}]]]
       [:div.col-12.col-lg-5.col-xl-6
-       [:div.text-center.my-5.my-lg-3.pt-lg-5
-        [:button.btn.btn-lg.btn-dark.mb-3.mx-auto
-         {:on-click #(rf/dispatch [:keycloak/login])}
-         [:div.display-5 (labels button-label)]]
-        [:div.my-3.text-left
-         [bullet-point :page.login/feature-1]
-         [bullet-point :page.login/feature-2]
-         [bullet-point :page.login/feature-3]]
+       [:div.my-5.my-lg-3.pt-lg-5
+        [:div.text-center
+         [:button.btn.btn-lg.btn-dark.mb-3
+          {:on-click #(rf/dispatch [:keycloak/login])}
+          [:div.display-5 (labels button-label)]]]
+        [:div.my-5 [bullet-points]]
         [:div.mt-3.text-center
          (labels :page.login.alert/text-1)
          [:a.btn.btn-link.text-dark.mx-1 {:href (rfe/href :routes/pricing)} (labels :page.login.alert/button)]
