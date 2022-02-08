@@ -562,12 +562,17 @@
    [:<>
     [:p
      "schnaq GmbH" [:br]
-     "Speditionstraße 15A" [:br]
+     "Speditionstraße 15a" [:br]
      "40221 Düsseldorf" [:br]
-     "Germany" [:br]
-     (toolbelt/obfuscate-mail "info@schnaq.com")]
+     "Germany"]
+    [:p
+     (toolbelt/obfuscate-text "+49176 72265456") [:br]
+     (toolbelt/obfuscate-text "info@schnaq.com")]
+    [:p
+     "Commercial Register (Handelsregister): HRB 95753" [:br]
+     "Register court: Local Court (Amtsgericht) of Düsseldorf"]
     [:p "Represented by the management:" [:br]
-     "Dr Christian Meter, Dr Alexander Schneider and Michael Birkhoff"]
+     "Dr Alexander Schneider, Dr Christian Meter, and Michael Birkhoff"]
     [:p "Legally binding is the German version of this page."]]
 
    ;; About us
