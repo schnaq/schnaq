@@ -149,7 +149,7 @@
         [:div.text-typography.px-3
          [truncated-content/statement statement]
          [statement-information-row statement]]
-        [:div.ml-1.mr-3
+        [:div.mx-3
          [input/reply-in-statement-input-form statement]
          additional-content]]]])))
 

@@ -27,7 +27,7 @@
   Clicking a button will dispatch the set-subscription with the button-type as parameter."
   [get-subscription set-event sm?]
   (let [additional-btn-class (if sm? "btn-group-sm" "")]
-    [:div.btn-group.btn-group-toggle {:class additional-btn-class :data-toggle "buttons"}
+    [:div.btn-group.btn-group-toggle.mt-1.ml-1 {:class additional-btn-class :data-toggle "buttons"}
      [statement-type-button :statement.type/support
       :discussion.add.button/support :discussion/add-premise-against
       get-subscription set-event]
@@ -59,13 +59,12 @@
        :required true
        :data-dynamic-height true
        :placeholder placeholder}]
-     [:div.input-group-append
-      [:button.btn.btn-outline-dark
-       {:class additional-btn-class
-        :type "submit" :title (labels :discussion/create-argument-action)}
-       [:div.d-flex.flex-row
-        [:div.d-none.d-lg-block.mr-1 send-button-label]
-        [icon :plane "m-auto"]]]]]))
+     [:button.btn.btn-outline-dark
+      {:class additional-btn-class
+       :type "submit" :title (labels :discussion/create-argument-action)}
+      [:div.d-flex.flex-row
+       [:div.d-none.d-lg-block.mr-1 send-button-label]
+       [icon :plane "m-auto"]]]]))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
@@ -141,10 +140,9 @@
       false
       true]
      (when-not pro-con-disabled?
-       [:div.input-group-append.mt-1.ml-1
-        [statement-type-choose-button
-         [:form/statement-type statement-id]
-         [:form/statement-type! statement-id] true]])]))
+       [statement-type-choose-button
+        [:form/statement-type statement-id]
+        [:form/statement-type! statement-id] true])]))
 
 (rf/reg-event-db
  ;; Assoc statement-type with statement-id as key. The current topic is assigned via :selected

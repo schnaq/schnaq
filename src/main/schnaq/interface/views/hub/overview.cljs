@@ -26,9 +26,8 @@
     [:input.form-control {:name "schnaq-add-input"
                           :required true
                           :placeholder (labels :hub.add.schnaq.input/placeholder)}]
-    [:div.input-group-append
-     [:button.btn.btn-primary {:type "submit"}
-      [icon :plus "m-auto"]]]]])
+    [:button.btn.btn-primary {:type "submit"}
+     [icon :plus "m-auto"]]]])
 
 (defn hub-panel
   "Small overview for the hub."
