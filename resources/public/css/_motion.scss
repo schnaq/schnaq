@@ -2,7 +2,6 @@
 .image-container {
   cursor: zoom-in;
   position: relative;
-  z-index: 1000;
 
   &.open {
     cursor: zoom-out;
