@@ -24,13 +24,3 @@
     width: 5rem;
   }
 }
-
-.product-background {
-  background-image: url('https://s3.schnaq.com/schnaq-common/background/background-product-md.svg');
-  background-repeat: repeat;
-  background-size: 100%;
-
-  @include media-breakpoint-up(xl) {
-    background-image: url('https://s3.schnaq.com/schnaq-common/background/background-product.svg');
-  }
-}

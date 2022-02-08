@@ -86,17 +86,13 @@ $header-opacity: 1;
   background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-dark.svg');
 }
 
-.bubble-background-xl {
-  background-image: none;
+.wave-background {
+  background-image: url('https://s3.schnaq.com/schnaq-common/background/background-product-md.svg');
   background-repeat: repeat;
   background-size: 100%;
 
   @include media-breakpoint-up(xl) {
-    background-image: url('https://s3.schnaq.com/schnaq-common/background/background-bubbles-large.svg');
-  }
-
-  @include media-breakpoint-up(xxxl) {
-    background-image: url('https://s3.schnaq.com/schnaq-common/background/background-bubbles-xxl.svg');
+    background-image: url('https://s3.schnaq.com/schnaq-common/background/background-product.svg');
   }
 }
 

@@ -76,7 +76,7 @@
                                         :productpage.overview/title
                                         :productpage.overview/subtitle]
                               {:key "unique-cta-key"})}
-    [:div.product-background
+    [:div.wave-background
      [:section.container.container-85
       [feature-text-img-right
        :productpage.overview.qa/title
