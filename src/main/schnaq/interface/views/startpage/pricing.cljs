@@ -6,6 +6,7 @@
             [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -143,7 +144,7 @@
    :pricing.free-tier/description
    (add-class-to-feature
     (concat
-     [(gstring/format (labels :pricing.features/number-of-users) 100)]
+     [(gstring/format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]
      (starter-features)
      [(labels :pricing.free-tier/for-free)])
     "text-primary")
@@ -159,7 +160,7 @@
    :pricing.pro-tier/description
    (add-class-to-feature
     (concat
-     [(gstring/format (labels :pricing.features/number-of-users) 300)]
+     [(gstring/format (labels :pricing.features/number-of-users) config/max-concurrent-users-pro-tier)]
      (starter-features)
      (pro-features))
     "text-primary")

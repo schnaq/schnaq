@@ -181,7 +181,6 @@
    :productpage/cta "Zmodernizuj swoje następne wydarzenie dzięki schnaq"
 
    ;; Login Page
-
    :page.login/heading "Nie czekaj, pstryk!"
    :page.login/subheading "100% za darmo na zawsze"
    :page.login/login "Zaloguj się / Zarejestruj się"
@@ -189,7 +188,6 @@
    :page.login.alert/button "tutaj"
    :page.login.alert/text-2 "zobacz wszystkie korzyści jako zarejestrowany:użytkownik:in."
    :page.login/feature-1 "create schnaqs"
-   :page.login/feature-2 "nieograniczona liczba uczestników"
    :page.login/feature-3 "Uczestnictwo poprzez link bez rejestracji"
 
    ;; Register Page when creating a schnaq
