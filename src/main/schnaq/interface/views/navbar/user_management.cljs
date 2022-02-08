@@ -32,6 +32,7 @@
 (defn- change-name-button
   "Display button to change the user's nickname."
   []
+  ;; TODO this form inline is shite and needs to be looked at, when the dropdown works again
   [:form.form-inline.clickable
    {:on-click #(rf/dispatch [:user/show-display-name-input])
     :on-submit #(js-wrap/prevent-default %)}

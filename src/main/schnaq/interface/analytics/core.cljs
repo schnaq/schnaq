@@ -57,20 +57,22 @@
 (defn- analytics-controls
   "The controls for the analytics view."
   []
-  [:form.form-inline
+  [:form.row
    {:on-submit (fn [e]
                  (js-wrap/prevent-default e)
                  (rf/dispatch [:analytics/load-all-with-time (oget e [:target :elements :days-input :value])]))}
-   [:input#days-input.form-control.form-round-05.py-1.mr-sm-2
-    {:type "number"
-     :name "days-input"
-     :placeholder "Stats for last X days"
-     :autoFocus true
-     :required true
-     :defaultValue 30}]
-   [:input.btn.btn-outline-primary.mt-1.mt-sm-0
-    {:type "submit"
-     :value (labels :analytics/fetch-data-button)}]])
+   [:div.col
+    [:input#days-input.form-control.form-round-05.mr-sm-2
+     {:type "number"
+      :name "days-input"
+      :placeholder "Stats for last X days"
+      :autoFocus true
+      :required true
+      :defaultValue 30}]]
+   [:div.col
+    [:input.btn.btn-outline-primary.mt-1.mt-sm-0
+     {:type "submit"
+      :value (labels :analytics/fetch-data-button)}]]])
 
 (defn- analytics-dashboard-view
   "The dashboard displaying all analytics."

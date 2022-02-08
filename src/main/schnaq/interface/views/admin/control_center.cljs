@@ -21,7 +21,7 @@
                  (when (js/confirm (labels :admin.center.delete/confirmation))
                    (rf/dispatch [:admin.schnaq/delete
                                  (oget e [:target :elements :private-meeting-hash :value])])))}
-   [:div.form-row.align-items-center
+   [:div.row.align-items-center
     [:div.col-auto
      [:label
       {:for "private-schnaq-hash"} (labels :admin.center.delete.private/label)]]
