@@ -68,9 +68,10 @@
      [:span (truncate-to-n-chars-string text char-count)]]
     text))
 
-(defn obfuscate-text
+(>defn obfuscate-text
   "Reverse string and add css-class, which re-reverses the string."
   [text]
+  [string? :ret string?]
   [:span.obfuscate
    (apply str (reverse text))])
 
