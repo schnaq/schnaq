@@ -18,7 +18,7 @@
           ":times" ["label-red" :cross]
           ":unchecked" ["label-teal" :check/normal])
         extra-class (if set? (str badge-color " label-set") badge-color)]
-    [:span.badge.badge-pill.px-4
+    [:span.badge.rounded-pill.px-4
      {:class (if hover? (str extra-class " label") extra-class)}
      [icon icon-name "m-auto"]]))
 

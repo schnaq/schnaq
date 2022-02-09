@@ -14,4 +14,4 @@
 (defn pro-badge
   "Display a pro badge for pro users."
   []
-  [:span.badge.badge-pill.bg-light "pro"])
+  [:span.badge.rounded-pill.bg-light "pro"])
