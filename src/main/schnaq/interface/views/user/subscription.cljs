@@ -46,8 +46,8 @@
   []
   (let [{:keys [status]} @(rf/subscribe [:user/subscription])]
     [:span.badge.badge-pill {:class (case status
-                                      :active "badge-success"
-                                      "badge-warning")}
+                                      :active "bg-success"
+                                      "bg-warning")}
      status]))
 
 (defn- cancel-indicator
