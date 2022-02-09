@@ -30,13 +30,13 @@
   [[first-button & rest-buttons]]
   (let [{:keys [on-click label-key]} first-button]
     [:div.btn-group.btn-group-toggle.button-discussion-options.h-100 {:data-toggle "buttons"}
-     [:label.btn.btn-sm.btn-outline-primary.active
+     [:label.form-label.btn.btn-sm.btn-outline-primary.active
       [:input {:type "radio" :autoComplete "off" :defaultChecked true
                :onClick on-click}]
       [:small.d-md-none (labels label-key)]
       [:div.d-none.d-md-block.mt-2 (labels label-key)]]
      (for [{:keys [on-click label-key]} rest-buttons]
-       [:label.btn.btn-sm.btn-outline-primary.px-1.px-md-2 {:key (str "discussion-options-button-group-item-" label-key)}
+       [:label.form-label.btn.btn-sm.btn-outline-primary.px-1.px-md-2 {:key (str "discussion-options-button-group-item-" label-key)}
         [:input {:type "radio" :autoComplete "off"
                  :onClick on-click}]
         [:small.d-md-none (labels label-key)]

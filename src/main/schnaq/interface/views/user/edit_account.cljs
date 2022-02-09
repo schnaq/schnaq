@@ -33,7 +33,7 @@
                       (rf/dispatch [:user.picture/reset]))}
          [icon :cross]]
         ;; upload temporary button
-        [:label.btn.btn-light.change-profile-pic-button
+        [:label.form-label.btn.btn-light.change-profile-pic-button
          [icon :camera]
          [:input {:id input-id
                   :accept (string/join "," shared-config/allowed-mime-types)

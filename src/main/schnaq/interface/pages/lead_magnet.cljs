@@ -31,7 +31,7 @@
                  (rf/dispatch [:lead-magnet/subscribe (oget e [:target :elements "EMAIL" :value])]))}
 
    [:div.mb-3
-    [:label {:for "EMAIL"} (labels :lead-magnet.form/label)]
+    [:label.form-label {:for "EMAIL"} (labels :lead-magnet.form/label)]
     [:input#dsgvo-checklist
      {:required true
       :placeholder (labels :startpage.newsletter/address-placeholder)

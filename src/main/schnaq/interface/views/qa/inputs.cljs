@@ -21,7 +21,7 @@
                     (rf/dispatch [:schnaq.qa.new-question/pulse true]))]
     [:form {:on-submit #(submit-fn %)
             :on-key-down #(when (jq/ctrl-press % 13) (submit-fn %))}
-     [:label.h5.mb-3 {:for input-id} (labels :qanda/add-question-label)]
+     [:label.form-label.h5.mb-3 {:for input-id} (labels :qanda/add-question-label)]
      [:div.d-flex.flex-row.qanda-input-content.rounded-1
       [:div {:class "highlight-card-neutral"}]
       [:textarea.form-control.discussion-text-input-area.m-1.w-100.mb-0

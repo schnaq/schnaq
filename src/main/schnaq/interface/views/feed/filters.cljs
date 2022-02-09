@@ -57,7 +57,7 @@
       (let [display-name @(rf/subscribe [:user/display-name])]
         [:section.border-bottom.pb-2.text-left
          [:div.mb-3
-          [:label {:for :add-filter-menu}
+          [:label.form-label {:for :add-filter-menu}
            (labels :filters.label/filter-for)]
           [:select#add-filter-menu.mr-1.form-control
            {:on-change #(reset! current-selection (tools/get-selection-from-event %))}

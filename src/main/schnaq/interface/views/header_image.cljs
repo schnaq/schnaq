@@ -22,7 +22,7 @@
                    (rf/dispatch [:schnaq.admin/set-header-image-url
                                  (oget e [:target :elements])]))}
      [:div.mb-2
-      [:label {:for input-id} (labels :schnaq.header-image.url/label)]
+      [:label.form-label {:for input-id} (labels :schnaq.header-image.url/label)]
       [:input.form-control.m-1.rounded-3
        {:id input-id
         :name image-form-name

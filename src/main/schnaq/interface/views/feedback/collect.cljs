@@ -44,7 +44,7 @@
             (rf/dispatch [:feedback/new feedback (when @with-screenshot? @screenshot-url)
                           [contact-name contact-mail description]])))}
        [:div.mb-3
-        [:label {:for "feedback-contact-name"}
+        [:label.form-label {:for "feedback-contact-name"}
          (labels :feedbacks.modal/contact-name)]
         [:input {:id "feedback-contact-name"
                  :class-name "form-control"
@@ -54,7 +54,7 @@
         [:small.form-text.text-muted
          (labels :feedbacks.modal/optional)]]
        [:div.mb-3
-        [:label {:for "feedback-contact-mail"}
+        [:label.form-label {:for "feedback-contact-mail"}
          (labels :feedbacks.modal/contact-mail)]
         [:input {:id "feedback-contact-mail" :name "contact-mail"
                  :class-name "form-control" :type "email"
@@ -62,7 +62,7 @@
         [:small.form-text.text-muted
          (labels :feedbacks.modal/optional)]]
        [:div.mb-3
-        [:label {:for "feedback-description"}
+        [:label.form-label {:for "feedback-description"}
          (gstring/format "%s *" (labels :feedbacks.modal/description))]
         [:textarea {:id "feedback-description"
                     :class-name "form-control"

@@ -13,7 +13,7 @@
   [statement-type label tooltip get-subscription set-event]
   (let [current-attitude @(rf/subscribe get-subscription)
         checked? (= statement-type current-attitude)]
-    [:label.btn.btn-outline-dark
+    [:label.form-label.btn.btn-outline-dark
      (when checked? {:class "active"})
      [:input {:type "radio" :name "options" :autoComplete "off"
               :defaultChecked checked?

@@ -23,7 +23,7 @@
                                  (oget e [:target :elements :private-meeting-hash :value])])))}
    [:div.row.align-items-center
     [:div.col-auto
-     [:label
+     [:label.form-label
       {:for "private-schnaq-hash"} (labels :admin.center.delete.private/label)]]
     [:div.col-auto
      [:input.form-control

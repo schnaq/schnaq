@@ -24,7 +24,7 @@
                        (let [slider-value (js/parseInt (oget e [:target :value]))]
                          (rf/dispatch [:graph.settings/gravity! (/ slider-value 100)])))]
     [:div.mb-3
-     [:label {:for slider-id}
+     [:label.form-label {:for slider-id}
       (labels :graph.settings.gravity/label)]
      [:input.form-control-range.graph-settings-gravity.d-block
       {:id slider-id
