@@ -12,22 +12,25 @@
   On-Click triggers the set-event with statement-type as last parameter."
   [statement-type label tooltip get-subscription set-event]
   (let [current-attitude @(rf/subscribe get-subscription)
-        checked? (= statement-type current-attitude)]
-    [:label.form-label.btn.btn-outline-dark
-     (when checked? {:class "active"})
-     [:input {:type "radio" :name "options" :autoComplete "off"
-              :defaultChecked checked?
-              :title (labels tooltip)
-              :on-click (fn [e] (jq/prevent-default e)
-                          (rf/dispatch (conj set-event statement-type)))}]
-     (labels label)]))
+        checked? (= statement-type current-attitude)
+        uuid (random-uuid)]
+    [:<>
+     [:input.btn-check {:id uuid
+                        :type "radio" :name "options" :autoComplete "off"
+                        :title (labels tooltip)
+                        :on-click (fn [e] (jq/prevent-default e)
+                                    (rf/dispatch (conj set-event statement-type)))}]
+     [:label.btn.btn-outline-dark
+      (cond-> {:for uuid}
+        checked? (assoc :class "active"))
+      (labels label)]]))
 
 (defn statement-type-choose-button
   "Button group to differentiate between the statement types. The button with a matching get-subscription will be checked.
   Clicking a button will dispatch the set-subscription with the button-type as parameter."
   [get-subscription set-event sm?]
   (let [additional-btn-class (if sm? "btn-group-sm" "")]
-    [:div.btn-group.btn-group-toggle.mt-1.ml-1 {:class additional-btn-class :data-toggle "buttons"}
+    [:div.btn-group.mt-1.ml-1 {:class additional-btn-class :data-toggle "buttons"}
      [statement-type-button :statement.type/support
       :discussion.add.button/support :discussion/add-premise-against
       get-subscription set-event]
