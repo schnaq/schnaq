@@ -385,7 +385,7 @@
    [disable-pro-con]])
 
 (>defn- administrate-discussion
-  "A form which allows removing single statements from the discussion."
+  "Settings for the discussion."
   []
   [:ret :re-frame/component]
   [:<>
@@ -393,7 +393,7 @@
    (if @(rf/subscribe [:user/pro-user?])
      [discussion-settings]
      [:div.pt-1
-      [:hr.pt-3]
+      [:hr]
       [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
       [:div.border.border-danger.p-3.mt-4
        [discussion-settings]]])])

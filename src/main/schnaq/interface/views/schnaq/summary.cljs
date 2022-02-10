@@ -67,7 +67,7 @@
     [:<>
      [:small.text-muted (labels :summary.user/last-updated) " " updated-at]
      [:p.p-3 (or text "-")]
-     [:hr.py-2]
+     [:hr.my-2]
      [summary-request-button (:discussion/share-hash schnaq)]]))
 
 (defn- list-open-summaries
