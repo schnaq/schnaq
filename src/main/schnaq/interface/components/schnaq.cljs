@@ -34,7 +34,6 @@
      [:input.btn-check {:id label-key :name :filter-discussion-options
                         :type "radio" :autoComplete "off"
                         :onClick on-click}]
-     (println active-filters?)
      [:label.btn.btn-sm.btn-outline-primary
       (cond-> {:for label-key}
         (not active-filters?) (assoc :class "active"))
