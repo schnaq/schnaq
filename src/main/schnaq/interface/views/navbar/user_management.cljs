@@ -137,5 +137,4 @@
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     (if authenticated?
       [user-dropdown-button button-class]
-      [nav-component/separated-button
-       [register-button]])))
+      [register-button])))

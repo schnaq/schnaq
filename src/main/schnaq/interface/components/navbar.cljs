@@ -15,7 +15,7 @@
      [:<>
       [:a#schnaq-language-dropdown.nav-link.dropdown-toggle
        (merge
-        {:href "#" :role "button" :data-toggle "dropdown"
+        {:href "#" :role "button" :data-bs-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
         options)
        [icon :language icon-classes {:size "lg"}]

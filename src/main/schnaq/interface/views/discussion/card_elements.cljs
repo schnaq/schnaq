@@ -7,7 +7,6 @@
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
@@ -163,13 +162,18 @@
                        :popular (labels :badges.sort/popular)
                        (labels :badges/sort))
         dropdown-menu-id "dropdownSortButton"]
-    [sc/discussion-options-dropdown
-     button-title
-     dropdown-menu-id
-     [{:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])
-       :label-key :badges.sort/newest}
-      {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
-       :label-key :badges.sort/popular}]]))
+    [:div.dropdown.h-100
+     [:button.btn.btn-sm.btn-primary.dropdown-toggle.h-100
+      {:id dropdown-menu-id :type "button" :data-bs-toggle "dropdown"
+       :aria-haspopup "true" :aria-expanded "false"}
+      button-title]
+     [:div.dropdown-menu {:aria-labelledby dropdown-menu-id}
+      [:button.dropdown-item
+       {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
+       (labels :badges.sort/newest)]
+      [:button.dropdown-item
+       {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
+       (labels :badges.sort/popular)]]]))
 
 ;; -----------------------------------------------------------------------------
 
