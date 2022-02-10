@@ -22,7 +22,6 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reagent.dom]
-            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]))
 
 (def ^:private display-time
