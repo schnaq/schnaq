@@ -77,8 +77,8 @@
                              {:share-hash share-hash :edit-hash edit-hash})}
          (labels :schnaq.admin/tooltip)]))))
 
-(defn- user-bar
-  "Display the user avatar."
+(defn- user-button
+  "Display the user avatar and fitting dropdown."
   []
   [:div.d-flex.align-items-center.ml-auto
    [nav-elements/user-button]])
@@ -101,7 +101,7 @@
    [:div.font-weight-bold.mt-3 (labels :discussion.navbar/settings)]
    [:ul.list-group.list-group-flush
     [li-button (labels :sharing/tooltip) (fn [_] (share-modal/open-share-discussion))]
-    [:li.list-group-item.dropdown [nav-elements/language-with-label-dropdown]]
+    [:li.list-group-item.dropdown [nav-elements/collapsed-view-language-with-label-dropdown]]
     [settings-li-button]]])
 
 (defn- external-content [collapse-content-id content]
@@ -114,7 +114,7 @@
   [collapse-content-id]
   [external-content collapse-content-id
    [:<>
-    [user-bar]
+    [user-button]
     [views]
     [settings]]])
 
@@ -131,11 +131,11 @@
    [:<>
     [:div.d-flex.align-items-center
      [:div.ml-auto
-      [um/register-handling-menu "btn-link"]]]
+      [um/register-or-user-button "btn-link"]]]
     [:ul.list-group.list-group-flush
      [li-link-button :router/pricing (reitfe/href :routes/pricing)]
      [li-link-button :router/privacy (reitfe/href :routes/privacy)]
      [li-link-button :nav/blog "https://schnaq.com/blog/"]
-     [:li.list-group-item.dropdown [nav-elements/language-with-label-dropdown]]]]])
+     [:li.list-group-item.dropdown [nav-elements/collapsed-view-language-with-label-dropdown]]]]])
 
 

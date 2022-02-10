@@ -59,7 +59,7 @@
                            (labels :notification-mail-interval/never))]
     [:div.dropdown.mx-3
      [:button.btn.btn-outline-dark.dropdown-toggle
-      {:id dropdown-id :type "button" :data-toggle "dropdown"
+      {:id dropdown-id :type "button" :data-bs-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
       interval-display]
      [:div.dropdown-menu {:aria-labelledby dropdown-id}

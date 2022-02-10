@@ -110,7 +110,7 @@
       [:div.dropdown.ml-2
        [:div.dropdown-toggle.m-0.p-0
         {:id dropdown-id
-         :href "#" :role "button" :data-toggle "dropdown"
+         :href "#" :role "button" :data-bs-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
         [icon :dots]]
        [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
@@ -152,7 +152,7 @@
   [:div.dropdown.ml-2
    [:div.dropdown-toggle.m-0.p-0
     {:id dropdown-id
-     :href "#" :role "button" :data-toggle "dropdown"
+     :href "#" :role "button" :data-bs-toggle "dropdown"
      :aria-haspopup "true" :aria-expanded "false"}
     [icon :dots]]
    [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}

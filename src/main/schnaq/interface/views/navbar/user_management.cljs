@@ -32,14 +32,13 @@
 (defn- change-name-button
   "Display button to change the user's nickname."
   []
-  ;; TODO this form inline is shite and needs to be looked at, when the dropdown works again
-  [:form.form-inline.clickable
+  [:form.clickable
    {:on-click #(rf/dispatch [:user/show-display-name-input])
     :on-submit #(js-wrap/prevent-default %)}
    [:input.btn.dropdown-item {:type "submit"
                               :value (labels :user.button/change-name)}]])
 
-(defn- user-submenu
+(defn- namechange-menu-point
   "A bar containing all user related utilities and information."
   []
   (let [show-input? @(rf/subscribe [:user/show-display-name-input?])]
@@ -68,22 +67,22 @@
     (when admin?
       [:ul.navbar-nav.dropdown
        [:a#admin-dropdown.nav-link
-        {:href "#" :role "button" :data-toggle "dropdown" :id ul-id
+        {:href "#" :role "button" :data-bs-toggle "dropdown" :id ul-id
          :aria-haspopup "true" :aria-expanded "false"}
         [:button.btn.dropdown-toggle.rounded-2 {:class button-class}
          (labels :nav/admin)]]
-       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby (str ul-id)}
-        [:li.nav-item
-         [:a.nav-link {:role "button" :href (reitfe/href :routes/admin-center)}
+       [:ul.dropdown-menu.dropdown-menu-right {:aria-labelledby (str ul-id)}
+        [:li.dropdown-item
+         [:a.btn {:role "button" :href (reitfe/href :routes/admin-center)}
           (labels :router/admin-center)]]
-        [:li.nav-item
-         [:a.nav-link {:role "button" :href (reitfe/href :routes/feedbacks)}
+        [:li.dropdown-item
+         [:a.btn {:role "button" :href (reitfe/href :routes/feedbacks)}
           (labels :router/all-feedbacks)]]
-        [:li.nav-item
-         [:a.nav-link {:role "button" :href (reitfe/href :routes/analytics)}
+        [:li.dropdown-item
+         [:a.btn {:role "button" :href (reitfe/href :routes/analytics)}
           (labels :router/analytics)]]
-        [:li.nav-item
-         [:a.nav-link {:role "button" :href (reitfe/href :routes.admin/summaries)}
+        [:li.dropdown-item
+         [:a.btn {:role "button" :href (reitfe/href :routes.admin/summaries)}
           (labels :router/summaries)]]]])))
 
 (defn- profile-picture-in-nav
@@ -93,9 +92,8 @@
         authenticated? @(rf/subscribe [:user/authenticated?])
         icon-size 32]
     [:<>
-     [:div.row.m-0
-      [:div.mx-auto.rounded-2.overflow-hidden
-       (if authenticated? [common/avatar icon-size] [common/identicon username icon-size])]]
+     [:div.mx-auto.rounded-2.overflow-hidden
+      (if authenticated? [common/avatar icon-size] [common/identicon username icon-size])]
      [:p.small.text-nowrap.dropdown-toggle
       [role-indicator]
       (toolbelt/truncate-to-n-chars username 15)]]))
@@ -108,20 +106,22 @@
                       :on-click #(rf/dispatch [:keycloak/logout])}
     (labels :user/logout)]])
 
-(defn user-handling-menu
-  "Menu elements to change user name, to log in, ..."
+(defn user-dropdown-button
+  "The default user dropdown. It displays the avatar and a name with a droppable menu.
+  The menu depends on the login-state of the user. Must be used as a child of a .dropdown."
   [button-class]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     [:div.dropdown
      [nav-component/separated-button
       [profile-picture-in-nav]
-      {:class button-class :data-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}
+      {:class button-class
+       :data-bs-toggle "dropdown"
+       :aria-expanded "false"}
       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
        (if authenticated?
          [login-dropdown-items]
          [:<>
-          [user-submenu]
+          [namechange-menu-point]
           [:a.btn.dropdown-item {:href "#"
                                  :on-click #(rf/dispatch [:keycloak/login])}
            (labels :user/register)]])]]]))
@@ -131,17 +131,10 @@
    {:href "#" :on-click #(rf/dispatch [:keycloak/login])}
    (labels :nav/register)])
 
-(defn register-handling-menu
-  "If not authenticated show register button else show user menu"
+(defn register-or-user-button
+  "If not authenticated, show register button else show user menu"
   [button-class]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     (if authenticated?
-      [:div.dropdown
-       [nav-component/separated-button
-        [profile-picture-in-nav]
-        {:class button-class :data-toggle "dropdown"
-         :aria-haspopup "true" :aria-expanded "false"}
-        [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
-         [login-dropdown-items]]]]
-      [nav-component/separated-button
-       [register-button]])))
+      [user-dropdown-button button-class]
+      [register-button])))

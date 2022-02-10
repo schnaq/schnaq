@@ -50,27 +50,6 @@
          [:small.d-md-none (labels label-key)]
          [:div.d-none.d-md-block.mt-2 (labels label-key)]]])]))
 
-(defn discussion-options-dropdown
-  "Build a dropdown menu for the discussion view"
-  [button-title dropdown-id [first-button & rest-buttons]]
-  (let [{:keys [on-click label-key]} first-button
-        dropdown-menu-id dropdown-id
-        button-title button-title]
-    [:div.dropdown.h-100
-     [:button.btn.btn-sm.btn-primary.dropdown-toggle.h-100
-      {:id dropdown-menu-id :type "button" :data-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}
-      button-title]
-     [:div.dropdown-menu {:aria-labelledby dropdown-menu-id}
-      [:button.dropdown-item
-       {:on-click on-click}
-       (labels label-key)]
-      (for [{:keys [on-click label-key]} rest-buttons]
-        [:button.dropdown-item
-         {:key (str "discussion-options-dropdown-item-" label-key)
-          :on-click on-click}
-         (labels label-key)])]]))
-
 (defn qr-code
   ([link]
    [qr-code link 300])

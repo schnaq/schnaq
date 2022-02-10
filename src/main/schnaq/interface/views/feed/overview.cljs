@@ -50,7 +50,7 @@
         share-hash (:discussion/share-hash schnaq)]
     [:div.dropdown
      [:button.btn.btn-transparent
-      {:id options-id :type "button" :data-toggle "dropdown"
+      {:id options-id :type "button" :data-bs-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
       [icon :dots-v]]
      [:div.dropdown-menu.dropdown-menu-right {:id dropdown-id :aria-labelledby options-id}
@@ -74,9 +74,9 @@
   "Display a the hub icon above a schnaq."
   [schnaq]
   (let [hubs @(rf/subscribe [:hubs/all])
-        logo-map  (map (fn [[_keycloak-name hub]]
-                         (when (hub/hub-contains-schnaq? hub schnaq)
-                           [:img.schnaq-header-hub-image {:src (:hub/logo hub)}])) hubs)
+        logo-map (map (fn [[_keycloak-name hub]]
+                        (when (hub/hub-contains-schnaq? hub schnaq)
+                          [:img.schnaq-header-hub-image {:src (:hub/logo hub)}])) hubs)
         logo (first (filter some? logo-map))]
     (when logo
       logo)))
