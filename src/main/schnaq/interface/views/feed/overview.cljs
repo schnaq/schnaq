@@ -107,7 +107,7 @@
       [badges/read-only-badge schnaq]
       [:div.d-flex.flex-row.ms-auto
        [user/user-info-only (:discussion/author schnaq) 24]
-       [:small.font-weight-light.d-inline.my-auto.ms-2
+       [:small.fw-light.d-inline.my-auto.ms-2
         [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]]]
    (when delete-from-hub?
      [schnaq-options schnaq])])
@@ -142,8 +142,8 @@
    [feed-button text image-div class-button route nil])
   ([text image-div button-class route route-params]
    [:a.btn.btn-link.text-start {:class button-class
-                               :role "button"
-                               :href (reitfe/href route route-params)}
+                                :role "button"
+                                :href (reitfe/href route route-params)}
     [:div.d-flex.flex-row
      image-div
      [:div.my-auto.ps-2 text]]]))

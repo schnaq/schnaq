@@ -46,7 +46,7 @@
         navbar-title (toolbelt/truncate-to-n-chars title 20)]
     [navbar-components/collapsible-nav-bar
      [elements/navbar-title
-      [:h1.h6.font-weight-bold.my-auto.text-dark navbar-title]]
+      [:h1.h6.fw-bold.my-auto.text-dark navbar-title]]
      navbar-content-id
      "navbar-bg-transparent-sm-white"
      [navbar-user]

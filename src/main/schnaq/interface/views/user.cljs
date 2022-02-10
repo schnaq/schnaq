@@ -20,7 +20,7 @@
      [common/avatar user avatar-size]
      [:div.mx-2.d-inline.my-auto [:span.text-sm.text-typography display-name]
       (when created
-        [:div.small.font-weight-light.text-muted.d-inline.ms-2.my-auto
+        [:div.small.fw-light.text-muted.d-inline.ms-2.my-auto
          [util-time/timestamp-with-tooltip created locale]])]]))
 
 (defn user-info-only

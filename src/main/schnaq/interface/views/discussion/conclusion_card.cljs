@@ -45,7 +45,7 @@
     [:p.h5 (labels :qanda.call-to-action/display-code)]
     [:p.h1.py-3 [sc/access-code]]
     [:p.h5 (labels :qanda.call-to-action/intro-1) " "
-     [:span.text-monospace.mx-2 {:href "https://schnaq.app"
+     [:span.font-monospace.mx-2 {:href "https://schnaq.app"
                                  :target :_blank}
       "https://schnaq.app"]
      " "

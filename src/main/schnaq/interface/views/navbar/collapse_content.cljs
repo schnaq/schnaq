@@ -87,7 +87,7 @@
   "Display all views as a list-group"
   []
   [:<>
-   [:div.font-weight-bold.mt-3 (labels :discussion.navbar/views)]
+   [:div.fw-bold.mt-3 (labels :discussion.navbar/views)]
    [:ul.list-group.list-group-flush
     [standard-view-li]
     [graph-li]
@@ -98,7 +98,7 @@
   "Display all settings as a list group"
   []
   [:<>
-   [:div.font-weight-bold.mt-3 (labels :discussion.navbar/settings)]
+   [:div.fw-bold.mt-3 (labels :discussion.navbar/settings)]
    [:ul.list-group.list-group-flush
     [li-button (labels :sharing/tooltip) (fn [_] (share-modal/open-share-discussion))]
     [:li.list-group-item.dropdown [nav-elements/collapsed-view-language-with-label-dropdown]]
