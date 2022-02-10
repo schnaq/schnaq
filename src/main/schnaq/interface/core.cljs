@@ -56,6 +56,7 @@
             [schnaq.interface.views.discussion.history]
             [schnaq.interface.views.discussion.labels]
             [schnaq.interface.views.discussion.logic]
+            [schnaq.interface.views.discussion.theming]
             [schnaq.interface.views.discussion.truncated-content]
             [schnaq.interface.views.errors]
             [schnaq.interface.views.feed.filters]
