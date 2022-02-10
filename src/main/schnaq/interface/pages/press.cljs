@@ -8,17 +8,18 @@
 (defn- card [title photo-keyword link-url]
   (let [anchor {:href link-url :target :_blank}
         title-string (labels title)]
-    [:article.card.shadow
-     [:div.card-body.text-center.d-flex.flex-column
-      [:h5.card-title title-string]
-      [:a.my-auto anchor
-       [:img.img-fluid.p-lg-4 {:src (img-path photo-keyword) :alt title-string}]]
-      [:a.btn.btn-primary.mt-2 anchor (labels :press-kit.materials/download)]]]))
+    [:div.col
+     [:article.card.shadow.h-100
+      [:div.card-body.text-center.d-flex.flex-column
+       [:h5.card-title title-string]
+       [:a.my-auto anchor
+        [:img.img-fluid.p-lg-4 {:src (img-path photo-keyword) :alt title-string}]]
+       [:a.btn.btn-primary.mt-2 anchor (labels :press-kit.materials/download)]]]]))
 
 (defn- materials []
   [:section.py-5
    [:h3.text-center.pb-4 (labels :press-kit.materials/heading)]
-   [:div.card-deck
+   [:div.row.row-cols-2.row-cols-lg-4.g-5
     [card :press-kit.materials/fact-sheet :press-kit/fact-sheet "https://s3.schnaq.com/schnaq-presskit/fact-sheet-schnaq.pdf"]
     [card :press-kit.materials/logos :press-kit/logo "https://s3.schnaq.com/schnaq-presskit/logos-schnaq.zip"]
     [card :press-kit.materials/team :press-kit/team "https://s3.schnaq.com/schnaq-presskit/images-schnaq.zip"]
