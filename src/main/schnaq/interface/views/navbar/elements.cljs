@@ -211,7 +211,7 @@
    [user-button "btn-link text-dark"])
   ([classes]
    [:div.d-flex.align-items-center
-    [um/user-handling-menu classes]]))
+    [um/user-dropdown-button classes]]))
 
 (defn language-with-label-dropdown
   "Display a language dropdown menu with a description label"

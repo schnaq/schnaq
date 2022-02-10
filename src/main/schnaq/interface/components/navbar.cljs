@@ -51,7 +51,7 @@
    [separated-button button-content attributes nil])
   ([button-content attributes dropdown-content]
    [:<>
-    [:button.btn.discussion-navbar-button
+    [:button.btn.discussion-navbar-button.text-decoration-none
      (merge
       {:type "button"}
       attributes)

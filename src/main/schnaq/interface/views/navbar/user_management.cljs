@@ -32,14 +32,13 @@
 (defn- change-name-button
   "Display button to change the user's nickname."
   []
-  ;; TODO this form inline is shite and needs to be looked at, when the dropdown works again
-  [:form.form-inline.clickable
+  [:form.clickable
    {:on-click #(rf/dispatch [:user/show-display-name-input])
     :on-submit #(js-wrap/prevent-default %)}
    [:input.btn.dropdown-item {:type "submit"
                               :value (labels :user.button/change-name)}]])
 
-(defn- user-submenu
+(defn- namechange-menu-point
   "A bar containing all user related utilities and information."
   []
   (let [show-input? @(rf/subscribe [:user/show-display-name-input?])]
@@ -93,9 +92,8 @@
         authenticated? @(rf/subscribe [:user/authenticated?])
         icon-size 32]
     [:<>
-     [:div.row.m-0
-      [:div.mx-auto.rounded-2.overflow-hidden
-       (if authenticated? [common/avatar icon-size] [common/identicon username icon-size])]]
+     [:div.mx-auto.rounded-2.overflow-hidden
+      (if authenticated? [common/avatar icon-size] [common/identicon username icon-size])]
      [:p.small.text-nowrap.dropdown-toggle
       [role-indicator]
       (toolbelt/truncate-to-n-chars username 15)]]))
@@ -108,20 +106,22 @@
                       :on-click #(rf/dispatch [:keycloak/logout])}
     (labels :user/logout)]])
 
-(defn user-handling-menu
-  "Menu elements to change user name, to log in, ..."
+(defn user-dropdown-button
+  "The default user dropdown. It displays the avatar and a name with a droppable menu.
+  The menu depends on the login-state of the user. Must be used as a child of a .dropdown."
   [button-class]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     [:div.dropdown
      [nav-component/separated-button
       [profile-picture-in-nav]
-      {:class button-class :data-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}
+      {:class button-class
+       :data-bs-toggle "dropdown"
+       :aria-expanded "false"}
       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
        (if authenticated?
          [login-dropdown-items]
          [:<>
-          [user-submenu]
+          [namechange-menu-point]
           [:a.btn.dropdown-item {:href "#"
                                  :on-click #(rf/dispatch [:keycloak/login])}
            (labels :user/register)]])]]]))
@@ -131,17 +131,11 @@
    {:href "#" :on-click #(rf/dispatch [:keycloak/login])}
    (labels :nav/register)])
 
-(defn register-handling-menu
-  "If not authenticated show register button else show user menu"
+(defn register-or-user-button
+  "If not authenticated, show register button else show user menu"
   [button-class]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     (if authenticated?
-      [:div.dropdown
-       [nav-component/separated-button
-        [profile-picture-in-nav]
-        {:class button-class :data-toggle "dropdown"
-         :aria-haspopup "true" :aria-expanded "false"}
-        [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
-         [login-dropdown-items]]]]
+      [user-dropdown-button button-class]
       [nav-component/separated-button
        [register-button]])))
