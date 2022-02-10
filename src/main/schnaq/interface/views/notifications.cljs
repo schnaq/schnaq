@@ -49,12 +49,11 @@
      :aria-atomic "true", :aria-live "assertive", :role "alert"}
     [:div.toast-header
      [:strong.mr-auto title]
-     [:button.close {:type "button"
-                     :on-click (fn []
-                                 (when on-close-fn (on-close-fn))
-                                 (rf/dispatch [:notification/remove id]))}
-      [:span {:aria-hidden "true"}
-       [icon :delete-icon "m-auto" {:size "xs"}]]]]
+     [:button.btn-close {:type "button"
+                         :on-click (fn []
+                                     (when on-close-fn (on-close-fn))
+                                     (rf/dispatch [:notification/remove id]))}
+      [:span {:aria-hidden "true"}]]]
     [:div.toast-body.scrollable-toast body]]])
 
 (>defn notify!
