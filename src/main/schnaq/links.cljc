@@ -1,8 +1,8 @@
 (ns schnaq.links
-  #?(:clj  (:require [com.fulcrologic.guardrails.core :refer [>defn]]
+  #?(:clj  (:require [com.fulcrologic.guardrails.core :refer [>defn ?]]
                      [schnaq.config :as config]
                      [schnaq.database.specs :as specs])
-     :cljs (:require [com.fulcrologic.guardrails.core :refer [>defn]]
+     :cljs (:require [com.fulcrologic.guardrails.core :refer [>defn ?]]
                      [goog.string :as gstring]
                      [oops.core :refer [oget]]
                      [reitit.frontend.easy :as reitfe]
@@ -11,7 +11,7 @@
 (>defn get-share-link
   "Takes a share hash and returns a link to the schnaq."
   [share-hash]
-  [:discussion/share-hash :ret string?]
+  [(? :discussion/share-hash) :ret (? string?)]
   #?(:clj  (format "%s/schnaq/%s" config/frontend-url share-hash)
      :cljs (let [path (reitfe/href :routes.schnaq/start {:share-hash share-hash})
                  location (oget js/window :location)]
