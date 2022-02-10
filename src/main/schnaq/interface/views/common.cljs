@@ -23,8 +23,8 @@
   [display-name size]
   (fn [image]
     (oset! image [:target :src]
-           (str "data:image/svg+xml;base64,"
-                (js/btoa (generate-identicon display-name size))))))
+      (str "data:image/svg+xml;base64,"
+           (js/btoa (generate-identicon display-name size))))))
 
 (>defn identicon
   "Generate unique identicon component."
@@ -89,27 +89,27 @@
      [:<>
       [:nav.nav-justified
        [:div.nav.nav-tabs {:role "tablist"}
-        [:a.nav-item.nav-link.active {:data-toggle "tab"
+        [:a.nav-item.nav-link.active {:data-bs-toggle "tab"
                                       :href (str tab-prefix# "-home")
                                       :role "tab"
                                       :aria-controls (str tab-prefix "-home")
                                       :aria-selected "true"}
          (:link first-tab)]
-        [:a.nav-item.nav-link {:data-toggle "tab"
+        [:a.nav-item.nav-link {:data-bs-toggle "tab"
                                :href (str tab-prefix# "-link")
                                :role "tab"
                                :aria-controls (str tab-prefix "-link")
                                :aria-selected "false"}
          (:link second-tab)]
         (when third-tab
-          [:a.nav-item.nav-link {:data-toggle "tab"
+          [:a.nav-item.nav-link {:data-bs-toggle "tab"
                                  :href (str tab-prefix# "-link-3")
                                  :role "tab"
                                  :aria-controls (str tab-prefix "-link-3")
                                  :aria-selected "false"}
            (:link third-tab)])
         (when fourth-tab
-          [:a.nav-item.nav-link {:data-toggle "tab"
+          [:a.nav-item.nav-link {:data-bs-toggle "tab"
                                  :href (str tab-prefix# "-link-4")
                                  :role "tab"
                                  :aria-controls (str tab-prefix "-link-4")
