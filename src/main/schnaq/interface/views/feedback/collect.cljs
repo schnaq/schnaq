@@ -80,7 +80,7 @@
        (when (and @screenshot-url @with-screenshot?)
          [:img#feedback-screenshot.img-fluid.img-thumbnail.my-2 {:src @screenshot-url}])
        [:div.modal-footer
-        [:input.btn.btn-primary.mr-auto {:type "submit"}]
+        [:input.btn.btn-primary.me-auto {:type "submit"}]
         [:small.text-muted (labels :feedbacks.modal/disclaimer)]]])))
 
 (defn- feedback-modal

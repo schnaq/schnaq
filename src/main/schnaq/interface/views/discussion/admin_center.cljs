@@ -43,7 +43,7 @@
          :type "text"
          :value display-content
          :readOnly true}]
-       [:label.form-label.clickable-no-hover.align-right.ml-4.d-flex.justify-content-center {:for meeting-link-id}
+       [:label.form-label.clickable-no-hover.align-right.ms-4.d-flex.justify-content-center {:for meeting-link-id}
         [icon :copy "m-auto" {:size "lg"}]]]
       {:plugins followCursor
        :followCursor true}]]))
@@ -73,7 +73,7 @@
   (let [input-id "participant-email-addresses"]
     [:<>
      [:h4.mt-4 (labels :schnaq.admin/send-invites-heading)]
-     [:form.form.text-left.mb-5
+     [:form.form.text-start.mb-5
       {:on-submit (fn [e]
                     (js-wrap/prevent-default e)
                     (rf/dispatch [:discussion.admin/send-email-invites
@@ -86,7 +86,7 @@
          :auto-complete "off"
          :required true
          :placeholder (labels :schnaq.admin/addresses-placeholder)}]
-       [:small.form-text.text-muted.float-right
+       [:small.form-text.text-muted.float-end
         (labels :schnaq.admin/addresses-privacy)]]
       [:button.btn.btn-outline-primary
        (labels :schnaq.admin/send-invites-button-text)]]]))
@@ -248,7 +248,7 @@
       (labels :schnaq.admin.edit.link/admin-privileges)]]]
    ;; admin mail input
    (let [input-id "admin-link-mail-address"]
-     [:form.form.text-left.mb-5
+     [:form.form.text-start.mb-5
       {:on-submit (fn [e]
                     (js-wrap/prevent-default e)
                     (rf/dispatch [:discussion.admin/send-admin-center-link
@@ -261,7 +261,7 @@
          :auto-complete "off"
          :required true
          :placeholder (labels :schnaq.admin.edit.link.form/placeholder)}]
-       [:small.form-text.text-muted.float-right
+       [:small.form-text.text-muted.float-end
         (labels :schnaq.admin/addresses-privacy)]]
       [:button.btn.btn-outline-primary
        (labels :schnaq.admin.edit.link.form/submit-button)]])])
@@ -282,7 +282,7 @@
        :checked schnaq-read-only?
        :on-change (fn [e] (js-wrap/prevent-default e)
                     (rf/dispatch [dispatch]))}]
-     [:label.form-check-label.display-6.pl-1 {:for :enable-read-only?}
+     [:label.form-check-label.display-6.ps-1 {:for :enable-read-only?}
       (labels :schnaq.admin.configurations.read-only/checkbox)]
      [:p (labels :schnaq.admin.configurations.read-only/explanation)]]))
 
@@ -299,7 +299,7 @@
        (fn [e]
          (js-wrap/prevent-default e)
          (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
-     [:label.form-check-label.display-6.pl-1 {:for :disable-pro-con-checkbox?}
+     [:label.form-check-label.display-6.ps-1 {:for :disable-pro-con-checkbox?}
       (labels :schnaq.admin.configurations.disable-pro-con/label)]
      [:p (labels :schnaq.admin.configurations.disable-pro-con/explanation)]]))
 
@@ -316,7 +316,7 @@
        (fn [e]
          (js-wrap/prevent-default e)
          (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
-     [:label.form-check-label.display-6.pl-1 {:for :only-moderators-mark-checkbox}
+     [:label.form-check-label.display-6.ps-1 {:for :only-moderators-mark-checkbox}
       (labels :schnaq.admin.configurations.mods-mark-only/label)]
      [:p (labels :schnaq.admin.configurations.mods-mark-only/explanation)]]))
 

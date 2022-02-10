@@ -18,7 +18,7 @@
   [logo display-name size]
   [:div.d-flex.flex-row
    [hub-logo logo display-name size]
-   [:div.pt-1.pl-2 display-name]])
+   [:div.pt-1.ps-2 display-name]])
 
 (defn single-hub
   "Display a single hub."

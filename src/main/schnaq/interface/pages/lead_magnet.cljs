@@ -25,7 +25,7 @@
 
 (defn- subscription-form
   []
-  [:form.text-left
+  [:form.text-start
    {:on-submit (fn [e]
                  (jq/prevent-default e)
                  (rf/dispatch [:lead-magnet/subscribe (oget e [:target :elements "EMAIL" :value])]))}
@@ -72,9 +72,9 @@
    [:section.container.text-center.pb-5
     [:a.btn.button-secondary.mb-3 {:href "#dsgvo-checklist"} (labels :lead-magnet.cta/button)]
     [:h4 (labels :lead-magnet.explain.what/heading)]
-    [:p.text-left (labels :lead-magnet.explain.what/text)]
+    [:p.text-start (labels :lead-magnet.explain.what/text)]
     [:h4 (labels :lead-magnet.explain.how/heading)]
-    [:p.text-left.pb-3 (labels :lead-magnet.explain.how/text)]
+    [:p.text-start.pb-3 (labels :lead-magnet.explain.how/text)]
     [:a {:href "#dsgvo-checklist"}
      [:img.img-fluid.mb-5.mx-auto.text-center.shadow
       {:src (img-path :lead-magnet/cover)

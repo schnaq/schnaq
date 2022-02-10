@@ -48,7 +48,7 @@
     {:class-name (toast-classes context)
      :aria-atomic "true", :aria-live "assertive", :role "alert"}
     [:div.toast-header
-     [:strong.mr-auto title]
+     [:strong.me-auto title]
      [:button.btn-close {:type "button"
                          :on-click (fn []
                                      (when on-close-fn (on-close-fn))

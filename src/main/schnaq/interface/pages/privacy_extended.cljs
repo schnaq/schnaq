@@ -39,7 +39,7 @@
     [buttons/anchor
      "Hotjar Help Page"
      "https://help.hotjar.com/hc/en-us/categories/115001323967-About-Hotjar"
-     "btn-outline-primary mr-3"
+     "btn-outline-primary me-3"
      {:target :_blank}]
     [privacy/open-privacy-settings]]])
 
@@ -49,7 +49,7 @@
     [buttons/anchor
      (labels :privacy.extended.cleverreach.buttons/privacy)
      "https://www.cleverreach.com/de/datenschutz/"
-     "btn-outline-primary mr-3"
+     "btn-outline-primary me-3"
      {:target :_blank}]
     [buttons/anchor
      (labels :privacy.extended.cleverreach.buttons/reports)

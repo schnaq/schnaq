@@ -50,7 +50,7 @@
                   (js-wrap/stop-propagation e)
                   (if edit-hash (admin-delete-fn) (user-delete-fn)))
       :title (labels :discussion.badges/delete-statement)}
-     [icon :trash "my-auto mr-1"] " " (labels :discussion.badges/delete-statement)]))
+     [icon :trash "my-auto me-1"] " " (labels :discussion.badges/delete-statement)]))
 
 (defn- edit-dropdown-button
   "Edit button to trigger custom functionality."
@@ -107,7 +107,7 @@
         editable? (or anonymous-owner?
                       (= user-id (:db/id author)))]
     (when editable?
-      [:div.dropdown.ml-2
+      [:div.dropdown.ms-2
        [:div.dropdown-toggle.m-0.p-0
         {:id dropdown-id
          :href "#" :role "button" :data-bs-toggle "dropdown"
@@ -127,7 +127,7 @@
       :on-click (fn [e] (js-wrap/stop-propagation e)
                   (flag-statement-fn))
       :title (labels :discussion.badges/edit-statement)}
-     [icon :flag "my-auto mr-1"] " " (labels :statement/flag-statement)]))
+     [icon :flag "my-auto me-1"] " " (labels :statement/flag-statement)]))
 
 (rf/reg-event-fx
  :statement/flag
@@ -149,7 +149,7 @@
                                     :context :success}]]]}))
 
 (defn- statement-dropdown-menu [dropdown-id dropdown-items]
-  [:div.dropdown.ml-2
+  [:div.dropdown.ms-2
    [:div.dropdown-toggle.m-0.p-0
     {:id dropdown-id
      :href "#" :role "button" :data-bs-toggle "dropdown"
@@ -189,7 +189,7 @@
          statement-num (:meta/sub-statement-count statement 0)
          new? (not (= old-statement-num statement-num))]
      [:div.d-flex.flex-row.align-items-center
-      [:a.badge.rounded-pill.badge-transparent.badge-clickable.ml-3
+      [:a.badge.rounded-pill.badge-transparent.badge-clickable.ms-3
        {:href (rfe/href :routes.schnaq.select/statement {:share-hash share-hash
                                                          :statement-id (:db/id statement)})
         :role :button}
@@ -198,7 +198,7 @@
          [icon :comments "m-auto"])
        " " statement-num]
       (when with-edit-dropdown?
-        [:div.ml-2
+        [:div.ms-2
          [edit-statement-dropdown-menu statement]])])))
 
 (defn comments-info-badge
@@ -207,7 +207,7 @@
   (let [meta-info (:meta-info schnaq)
         statement-count (:all-statements meta-info)]
     [:p.mb-0
-     [:span.small.mr-2
+     [:span.small.me-2
       [icon :comment/alt "m-auto"]
       " " statement-count
       " " (labels :discussion.badges/posts)]]))
@@ -219,10 +219,10 @@
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
     [:p.mb-0
-     [:span.badge.rounded-pill.badge-transparent.mr-2
+     [:span.badge.rounded-pill.badge-transparent.me-2
       [icon :comments "m-auto"]
       " " statement-count]
-     [:span.badge.rounded-pill.badge-transparent.mr-2
+     [:span.badge.rounded-pill.badge-transparent.me-2
       {:tabIndex 20
        :title (labels :discussion.badges/user-overview)}
       [icon :user/group "m-auto"] " " user-count]]))
@@ -233,7 +233,7 @@
   (let [meta-info (:meta-info schnaq)
         statement-count (:all-statements meta-info)]
     [:div.d-flex.flex-row.mb-0
-     [:span.badge.rounded-pill.badge-transparent.mr-2
+     [:span.badge.rounded-pill.badge-transparent.me-2
       [icon :comments "m-auto"]
       " " statement-count]
      [edit-discussion-dropdown-menu schnaq]]))

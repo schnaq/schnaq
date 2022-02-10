@@ -56,7 +56,7 @@
   []
   (let [yearly? @(rf/subscribe [:pricing.interval/yearly?])]
     [:div.d-flex.flex-row.pb-3
-     [:div.pr-2 {:class (when yearly? "text-muted")}
+     [:div.pe-2 {:class (when yearly? "text-muted")}
       (labels :pricing.schnaq.pro.monthly/payment-method)]
      [:div.form-check.form-switch
       [:input#subscription-switch.form-check-input
@@ -98,10 +98,10 @@
 (defn- mark-explanation
   "Explain the check marks."
   []
-  [:section.pl-4.pt-2
-   [:p.h6 [icon :check/normal "text-primary pr-2" {:size "lg"}]
+  [:section.ps-4.pt-2
+   [:p.h6 [icon :check/normal "text-primary pe-2" {:size "lg"}]
     (labels :pricing.features/implemented)]
-   [:p.h6 [icon :check/normal "text-muted pr-2" {:size "lg"}]
+   [:p.h6 [icon :check/normal "text-muted pe-2" {:size "lg"}]
     (labels :pricing.features/to-be-implemented)]])
 
 (defn- cta-button
@@ -127,12 +127,12 @@
        (for [[feature class] features]
          (with-meta
            [:li.list-group-item
-            [icon :check/normal (str class " mr-2")] feature]
+            [icon :check/normal (str class " me-2")] feature]
            {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))
        (for [[feature class] (add-class-to-feature upcoming-features "text-muted")]
          (with-meta
            [:li.list-group-item
-            [icon :check/normal (str class " mr-2")] feature]
+            [icon :check/normal (str class " me-2")] feature]
            {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))]]]))
 
 (defn- free-tier-card

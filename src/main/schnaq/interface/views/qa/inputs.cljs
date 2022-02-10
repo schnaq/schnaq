@@ -35,7 +35,7 @@
       {:type "submit" :title (labels :qanda.button/submit)}
       [:div.d-inline-block
        [:div.d-flex.flex-row.justify-content-center
-        [:div.mr-3 (labels :qanda.button/submit)]
+        [:div.me-3 (labels :qanda.button/submit)]
         [icon :plane "m-auto"]]]]]))
 
 (>defn- ask-question

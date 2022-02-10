@@ -22,7 +22,7 @@
                                   :info
                                   false))}
             options)
-     (subs padded-access-code 0 (/ code-length 2)) [:span.pl-3]
+     (subs padded-access-code 0 (/ code-length 2)) [:span.ps-3]
      (subs padded-access-code (/ code-length 2))]))
 
 (defn schnaq-statement-filter-button-group

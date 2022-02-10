@@ -41,7 +41,7 @@
    [:p (labels :press-kit.about-us/body)]
    [:a.btn.btn-primary {:href (reitfe/href :routes/about-us)}
     (labels :footer.buttons/about-us)]
-   [:a.btn.btn-primary.ml-3 {:href (reitfe/href :routes/publications)}
+   [:a.btn.btn-primary.ms-3 {:href (reitfe/href :routes/publications)}
     (labels :footer.buttons/publications)]])
 
 ;; -----------------------------------------------------------------------------

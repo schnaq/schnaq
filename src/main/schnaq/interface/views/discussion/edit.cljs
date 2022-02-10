@@ -32,7 +32,7 @@
                    (jq/prevent-default e)
                    (rf/dispatch [:statement.edit/deactivate-edit edit-id]))}
       (labels :statement.edit.button/cancel)]
-     [:button.btn.btn-outline-dark.ml-1 {:type "submit"} (labels :statement.edit.button/submit)]]]])
+     [:button.btn.btn-outline-dark.ms-1 {:type "submit"} (labels :statement.edit.button/submit)]]]])
 
 (defn edit-card-statement
   "Editable statement input."

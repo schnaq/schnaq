@@ -39,11 +39,11 @@
 (defn- feature-text-img-right [title text image]
   [:div.row.py-5.mt-5
    [:div.col-12.col-lg-6 [feature-text title text]]
-   [:div.col-12.col-lg-6.mt-5.mt-lg-0 [:div.mr-lg-n5 [feature-image image]]]])
+   [:div.col-12.col-lg-6.mt-5.mt-lg-0 [:div.me-lg-n5 [feature-image image]]]])
 
 (defn- feature-text-img-left [title text image]
   [:div.row.py-5.mt-5
-   [:div.col-12.col-lg-6.d-none.d-lg-block [:div.ml-lg-n5 [feature-image image]]]
+   [:div.col-12.col-lg-6.d-none.d-lg-block [:div.ms-lg-n5 [feature-image image]]]
    [:div.col-12.col-lg-6 [feature-text title text]]
    [:div.col-12.d-lg-none.mt-5 [feature-image image]]])
 
@@ -56,11 +56,11 @@
                    [:source {:src (video :register.point-right/mp4) :type "video/mp4"}]]]
     [:section.container.container-85.mb-5
      [:div.d-flex.flex-row.justify-content-center
-      [:div.mt-auto.mr-3.d-none.d-lg-block cta-video]
+      [:div.mt-auto.me-3.d-none.d-lg-block cta-video]
       [:div
        [:div.display-5.text-white.mb-5 (labels :productpage/cta)]
        [:div.d-flex.flex-row
-        [:div.mt-auto.mr-3.d-lg-none cta-video]
+        [:div.mt-auto.me-3.d-lg-none cta-video]
         [:a.btn.btn-lg.btn-dark.my-auto.w-100
          {:role "button"
           :href (rfe/href :routes.schnaq/create)}

@@ -31,17 +31,17 @@
 
 (defn- schnaq-logo []
   [:<>
-   [:img.schnaq-brand-logo.align-middle.mr-2.d-md-none.d-none.d-xxl-block
+   [:img.schnaq-brand-logo.align-middle.me-2.d-md-none.d-none.d-xxl-block
     {:src (img-path :logo-white) :alt "schnaq logo"
      :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]
-   [:img.schnaq-brand-logo.align-middle.mr-2.d-xxl-none
+   [:img.schnaq-brand-logo.align-middle.me-2.d-xxl-none
     {:src (img-path :schnaqqifant/white) :alt "schnaq logo"
      :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]])
 
 (defn navbar-title
   "Brand logo and title with dynamic resizing."
   [title additional-content]
-  [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.mr-2.bg-white
+  [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2.bg-white
    [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes/startpage)}
     [schnaq-logo]]
    [:div.mx-0.mx-md-4
@@ -49,14 +49,14 @@
    additional-content])
 
 (defn navbar-qanda-title []
-  [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.mr-2
+  [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2
    [:a.p-3.d-flex.h-100 {:href (toolbelt/current-overview-link)}
     [schnaq-logo]]
    [:div.mx-1.mx-md-5.px-md-5.pt-2.flex-column
     [clickable-title "text-white" "text-white"]]])
 
 (defn additional-label-counter [label count]
-  [:div.mx-4.ml-auto.d-none.d-xxl-block
+  [:div.mx-4.ms-auto.d-none.d-xxl-block
    [:small.text-primary label]
    [:h5.text-center count]])
 
@@ -173,7 +173,7 @@
         (:white colors)
         (:secondary colors)]
 
-       [:div.ml-2 number-of-questions]]
+       [:div.ms-2 number-of-questions]]
       {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])}]]))
 
 (rf/reg-event-db

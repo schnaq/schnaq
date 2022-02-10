@@ -103,7 +103,7 @@
                                    (rf/dispatch
                                     [:summary.admin/send share-hash (str summary-id) (oget e [:currentTarget :elements])]))}
                      [:textarea.form-control {:name (str summary-id) :rows 3 :defaultValue (:summary/text summary)}]
-                     [:button.btn.btn-outline-primary.ml-1 {:type "submit"} (labels :summary.admin/submit)]]]]))]]]
+                     [:button.btn.btn-outline-primary.ms-1 {:type "submit"} (labels :summary.admin/submit)]]]]))]]]
        [loading/loading-placeholder]))])
 
 (defn- list-closed-summaries

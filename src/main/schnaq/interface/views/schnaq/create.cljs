@@ -25,7 +25,7 @@
           :on-change
           #(when (oget % [:target :checked])
              (jq/prop (jq/$ "#public-discussion") "checked" false))}]
-        [:label.form-check-label.display-6.pl-1 {:for :hub-exclusive}
+        [:label.form-check-label.display-6.ps-1 {:for :hub-exclusive}
          (labels :discussion.create.hub-exclusive-checkbox/label)]
         [:small.form-text.text-muted (labels :schnaq.create.hub/help-text)]
         [:select.form-control.form-select.mt-3
@@ -37,9 +37,9 @@
             (get-in hubs [group-id :hub/name])])]]])))
 
 (defn- create-schnaq-button []
-  [:button.btn.btn-dark.p-3.rounded-1.ml-auto
+  [:button.btn.btn-dark.p-3.rounded-1.ms-auto
    (labels :schnaq.create.button/save)
-   [icon :arrow-right "ml-2"]])
+   [icon :arrow-right "ms-2"]])
 
 (defn- create-qanda-page []
   (let [selected-hub @(rf/subscribe [:hub/selected])]
@@ -64,7 +64,7 @@
                               :placeholder (labels :schnaq.create.input/placeholder)
                               :css "font-150"}]]]
         [:div.row.text-primary.p-3
-         [icon :info "my-auto mr-3"]
+         [icon :info "my-auto me-3"]
          [:span (labels :schnaq.create/info)]]
         (when selected-hub
           [:div.row.my-5

@@ -62,14 +62,14 @@
   [{:user.registered/keys [display-name] :as user} size]
   [map? number? :ret vector?]
   [:div.row
-   [:div.mr-4 [avatar user size]]
+   [:div.me-4 [avatar user size]]
    [:h4.my-auto display-name]])
 
 (defn inline-avatar
   "Creates an inline image and name."
   [{:user.registered/keys [display-name] :as user} size]
   [:<>
-   [:div.d-inline-block.pr-1
+   [:div.d-inline-block.pe-1
     [avatar user size]]
    [:p.d-inline-block display-name]])
 
@@ -153,7 +153,7 @@
   [number? vector? string? keyword?]
   [:section.d-flex
    [:div.speech-bubble.text-center.text-gray {:class css-classes} bubble-content]
-   [:img.ml-3 {:style {:width schnaqqi-size
+   [:img.ms-3 {:style {:width schnaqqi-size
                        :object-fit "contain"}
                :alt "schnaqqi speaking"
                :src (img-path image-key)}]])

@@ -42,11 +42,11 @@
            :style {:background-color (colors/get-graph-color index)
                    :width percentage
                    :height "30px"}}]
-         [:p.small.ml-1
+         [:p.small.ms-1
           {:class (when option-voted? "font-italic")}
           value
-          [:span.float-right
-           [:span.mr-3 vote-number " " (labels :schnaq.poll/votes)]
+          [:span.float-end
+           [:span.me-3 vote-number " " (labels :schnaq.poll/votes)]
            percentage]]]]))])
 
 (defn poll-list
@@ -121,7 +121,7 @@
           [poll-option (str (labels :schnaq.poll.create/options-placeholder) " " rank) rank]
           {:key (str "poll-option-key-" rank)}))]
      [:div.text-center.mb-3
-      [:button.btn.btn-dark.mr-2
+      [:button.btn.btn-dark.me-2
        {:type :button
         :on-click #(rf/dispatch [:polls.create/set-option-count (inc option-count)])}
        [icon :plus] " " (labels :schnaq.poll.create/add-button)]

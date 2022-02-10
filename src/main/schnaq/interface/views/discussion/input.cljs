@@ -30,7 +30,7 @@
   Clicking a button will dispatch the set-subscription with the button-type as parameter."
   [get-subscription set-event sm?]
   (let [additional-btn-class (if sm? "btn-group-sm" "")]
-    [:div.btn-group.mt-1.ml-1 {:class additional-btn-class}
+    [:div.btn-group.mt-1.ms-1 {:class additional-btn-class}
      [statement-type-button :statement.type/support
       :discussion.add.button/support :discussion/add-premise-against
       get-subscription set-event]
@@ -66,7 +66,7 @@
       {:class additional-btn-class
        :type "submit" :title (labels :discussion/create-argument-action)}
       [:div.d-flex.flex-row
-       [:div.d-none.d-lg-block.mr-1 send-button-label]
+       [:div.d-none.d-lg-block.me-1 send-button-label]
        [icon :plane "m-auto"]]]]))
 
 (defn- topic-input-area

@@ -18,7 +18,7 @@
                   {:href href :class "text-primary"}
                   {:href href})]
     [:a.li.list-group-item.list-group-item-action classes
-     [:img.navbar-view-toggle.mr-3
+     [:img.navbar-view-toggle.me-3
       {:src (img-path icon)
        :alt "graph icon"}]
      (labels label)]))
@@ -80,7 +80,7 @@
 (defn- user-button
   "Display the user avatar and fitting dropdown."
   []
-  [:div.d-flex.align-items-center.ml-auto
+  [:div.d-flex.align-items-center.ms-auto
    [nav-elements/user-button]])
 
 (defn- views
@@ -130,7 +130,7 @@
   [external-content collapse-content-id
    [:<>
     [:div.d-flex.align-items-center
-     [:div.ml-auto
+     [:div.ms-auto
       [um/register-or-user-button "btn-link"]]]
     [:ul.list-group.list-group-flush
      [li-link-button :router/pricing (reitfe/href :routes/pricing)]

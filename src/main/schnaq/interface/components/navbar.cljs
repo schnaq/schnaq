@@ -72,6 +72,6 @@
                                    :aria-expanded "false"
                                    :aria-label "Toggle navigation"}
       [:span.navbar-toggler-icon]]
-     [:div.ml-auto.d-none.d-lg-block
+     [:div.ms-auto.d-none.d-lg-block
       top-right-content]]]
    collapsible-content])

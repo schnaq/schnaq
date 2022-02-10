@@ -16,7 +16,7 @@
 
 (defn image-url-input []
   (let [input-id "admin-image-url"]
-    [:form.form.text-left.mb-5
+    [:form.form.text-start.mb-5
      {:on-submit (fn [e]
                    (js-wrap/prevent-default e)
                    (rf/dispatch [:schnaq.admin/set-header-image-url
@@ -29,7 +29,7 @@
         :auto-complete "off"
         :required true
         :placeholder (labels :schnaq.header-image.url/placeholder)}]
-      [:small.form-text.text-muted.float-right
+      [:small.form-text.text-muted.float-end
        (labels :schnaq.header-image.url/note)]]
      [:button.btn.btn-outline-primary
       (labels :schnaq.header-image.url/button)]]))

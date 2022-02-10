@@ -21,7 +21,7 @@
         profile-picture (get-in user [:profile-picture :display])
         temporary-picture (get-in user [:profile-picture :temporary :content])
         preview-image (or temporary-picture profile-picture)]
-    [:div.d-flex.mr-4
+    [:div.d-flex.me-4
      [:div.d-flex.avatar-image
       [common/avatar #:user.registered{:profile-picture preview-image
                                        :display-name (get-in user [:names :display])} 80]]
@@ -60,10 +60,10 @@
                            :default-value display-name
                            :css "font-150"}]]
       [:div.row.pt-5
-       [:div.col.text-left.my-3
+       [:div.col.text-start.my-3
         [:a.btn.btn-lg.btn-outline-secondary {:href config/keycloak-profile-page}
          (labels :user.keycloak-settings)]]
-       [:div.col.text-right.my-3
+       [:div.col.text-end.my-3
         [:button.btn.btn-lg.btn-outline-primary {:type :submit}
          (labels :user.settings.button/change-account-information)]]]]]))
 

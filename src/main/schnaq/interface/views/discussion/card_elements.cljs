@@ -42,7 +42,7 @@
          {:on-click #(rf/dispatch navigation-target)}
          [:div.d-flex
           [icon :arrow-left "m-auto"]]]]
-       [:small.my-auto.ml-2.d-none.d-xxl-block back-label]])))
+       [:small.my-auto.ms-2.d-none.d-xxl-block back-label]])))
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -80,7 +80,7 @@
                history-content [:div
                                 [:div.d-flex.flex-row
                                  [:h6 (labels :history.statement/user) " " (toolbelt/truncate-to-n-chars nickname 20)]
-                                 [:div.ml-auto [common/avatar user 22]]]
+                                 [:div.ms-auto [common/avatar user 22]]]
                                 (toolbelt/truncate-to-n-words statement-content max-word-count)]]
            [:article {:key (str "history-container-" (:db/id statement))}
             [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
@@ -230,15 +230,15 @@
 (defn action-view []
   [:div.d-inline-block.text-dark.w-100.mb-3.mx-1.mx-md-0
    [:div.d-flex.flex-row.flex-wrap
-    [:div.mr-1.mr-lg-2.mr-xxl-5.pr-lg-2
+    [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2
      [back-button]]
     [:div.d-flex
-     [:div.mr-1.mx-lg-2.pr-0.pr-lg-2
+     [:div.me-1.mx-lg-2.pe-0.pe-lg-2
       [sort-options]]
      [:div.h-100
       (when (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         [filters/filter-answered-statements])]]
-    [:div.ml-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
+    [:div.ms-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
      [search-bar]]]])
 
 (defn discussion-view
