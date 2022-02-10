@@ -21,14 +21,13 @@
    {:on-submit (fn [e]
                  (js-wrap/prevent-default e)
                  (rf/dispatch [:hub.schnaqs/add (oget e [:target :elements])]))}
-   [:label.small (labels :hub.add.schnaq.input/label)]
+   [:label.form-label.small (labels :hub.add.schnaq.input/label)]
    [:div.input-group
     [:input.form-control {:name "schnaq-add-input"
                           :required true
                           :placeholder (labels :hub.add.schnaq.input/placeholder)}]
-    [:div.input-group-append
-     [:button.btn.btn-primary {:type "submit"}
-      [icon :plus "m-auto"]]]]])
+    [:button.btn.btn-primary {:type "submit"}
+     [icon :plus "m-auto"]]]])
 
 (defn hub-panel
   "Small overview for the hub."

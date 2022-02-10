@@ -43,8 +43,8 @@
                           :feedback/has-image? @with-screenshot?}]
             (rf/dispatch [:feedback/new feedback (when @with-screenshot? @screenshot-url)
                           [contact-name contact-mail description]])))}
-       [:div.form-group
-        [:label {:for "feedback-contact-name"}
+       [:div.mb-3
+        [:label.form-label {:for "feedback-contact-name"}
          (labels :feedbacks.modal/contact-name)]
         [:input {:id "feedback-contact-name"
                  :class-name "form-control"
@@ -53,29 +53,29 @@
                  :autoFocus true :name "contact-name"}]
         [:small.form-text.text-muted
          (labels :feedbacks.modal/optional)]]
-       [:div.form-group
-        [:label {:for "feedback-contact-mail"}
+       [:div.mb-3
+        [:label.form-label {:for "feedback-contact-mail"}
          (labels :feedbacks.modal/contact-mail)]
         [:input {:id "feedback-contact-mail" :name "contact-mail"
                  :class-name "form-control" :type "email"
                  :placeholder (labels :feedbacks.modal/contact-mail)}]
         [:small.form-text.text-muted
          (labels :feedbacks.modal/optional)]]
-       [:div.form-group
-        [:label {:for "feedback-description"}
+       [:div.mb-3
+        [:label.form-label {:for "feedback-description"}
          (gstring/format "%s *" (labels :feedbacks.modal/description))]
         [:textarea {:id "feedback-description"
                     :class-name "form-control"
                     :rows "3" :name "description"
                     :required true}]]
-       [:div.form-check
+       [:div.mb-3
         [:input.form-check-input
          {:id "feedback-include-screenshot"
           :on-click #(reset! with-screenshot?
                              (oget (gdom/getElement "feedback-include-screenshot") [:checked]))
           :type "checkbox"
           :name "screenshot?"}]
-        [:label.form-check-label {:for "feedback-include-screenshot"}
+        [:label.form-check-label.mx-2 {:for "feedback-include-screenshot"}
          (labels :feedbacks.modal/screenshot)]]
        (when (and @screenshot-url @with-screenshot?)
          [:img#feedback-screenshot.img-fluid.img-thumbnail.my-2 {:src @screenshot-url}])

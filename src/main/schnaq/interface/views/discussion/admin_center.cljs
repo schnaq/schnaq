@@ -43,7 +43,7 @@
          :type "text"
          :value display-content
          :readOnly true}]
-       [:label.clickable-no-hover.align-right.ml-4.d-flex.justify-content-center {:for meeting-link-id}
+       [:label.form-label.clickable-no-hover.align-right.ml-4.d-flex.justify-content-center {:for meeting-link-id}
         [icon :copy "m-auto" {:size "lg"}]]]
       {:plugins followCursor
        :followCursor true}]]))
@@ -78,8 +78,8 @@
                     (js-wrap/prevent-default e)
                     (rf/dispatch [:discussion.admin/send-email-invites
                                   (oget e [:target :elements])]))}
-      [:div.form-group
-       [:label.m-1 {:for input-id} (labels :schnaq.admin/addresses-label)]
+      [:div.mb-3
+       [:label.form-label.m-1 {:for input-id} (labels :schnaq.admin/addresses-label)]
        [:textarea.form-control.m-1.rounded-3
         {:id input-id
          :name "participant-addresses" :wrap "soft" :rows 3
@@ -253,8 +253,8 @@
                     (js-wrap/prevent-default e)
                     (rf/dispatch [:discussion.admin/send-admin-center-link
                                   (oget e [:target :elements])]))}
-      [:div.form-group
-       [:label {:for input-id} (labels :schnaq.admin.edit.link.form/label)]
+      [:div.mb-3
+       [:label.form-label {:for input-id} (labels :schnaq.admin.edit.link.form/label)]
        [:input.form-control.m-1.rounded-3
         {:id input-id
          :name "admin-center-recipient"

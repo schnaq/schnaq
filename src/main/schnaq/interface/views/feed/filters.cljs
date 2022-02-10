@@ -12,7 +12,7 @@
 (defn- state-selections
   "Selection-options for discussion state filters."
   []
-  [:div.form-row.pb-3
+  [:div.row.pb-3
    [:div.col-auto
     [:select#filter-state-selection.mr-1.form-control
      [:option {:value :is} (labels :filters.option.type/is)]
@@ -26,7 +26,7 @@
 (defn- author-selections
   "Selection-options for discussion author filters."
   []
-  [:div.form-row.pb-3
+  [:div.row.pb-3
    [:div.col-auto.align-self-center
     [:p.my-auto (labels :filters.discussion.option.author/prelude)]]
    [:div.col-auto
@@ -37,7 +37,7 @@
 (defn- statement-number-selections
   "Selection-options for number of statements filters."
   []
-  [:div.form-row.pb-3
+  [:div.row.pb-3
    [:div.col-auto
     [:select#filter-numbers-selection.mr-1.form-control
      [:option {:value ">"} (labels :filters.option.vote/bigger)]
@@ -56,8 +56,8 @@
     (fn []
       (let [display-name @(rf/subscribe [:user/display-name])]
         [:section.border-bottom.pb-2.text-left
-         [:div.form-group
-          [:label {:for :add-filter-menu}
+         [:div.mb-3
+          [:label.form-label {:for :add-filter-menu}
            (labels :filters.label/filter-for)]
           [:select#add-filter-menu.mr-1.form-control
            {:on-change #(reset! current-selection (tools/get-selection-from-event %))}

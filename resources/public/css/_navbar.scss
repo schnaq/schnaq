@@ -11,7 +11,7 @@ $height-of-components: 4.25rem;
   @include rounded.rounded-1;
   height: $height-of-components;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     max-height: 8rem;
     width: 100%;
   }
@@ -23,7 +23,7 @@ $height-of-components: 4.25rem;
   overflow: visible;
   padding: 0;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     border-radius: 0;
   }
 }
@@ -32,7 +32,7 @@ $height-of-components: 4.25rem;
   background: transparent;
   overflow: visible;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     padding: 0;
   }
 }
@@ -49,7 +49,7 @@ $height-of-components: 4.25rem;
   overflow: hidden;
   padding: 1rem 4rem 1rem 1rem;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     border-radius: 0;
     padding: 1rem 1rem 1rem 0.5rem;
   }
@@ -70,7 +70,7 @@ $height-of-components: 4.25rem;
 
 .navbar-bg-transparent-sm-white {
   background: transparent;
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     background: $white;
   }
 }

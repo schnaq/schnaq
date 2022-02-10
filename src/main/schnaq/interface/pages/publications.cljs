@@ -6,14 +6,15 @@
 
 (defn- publication-card
   [pub-type title link summary & authors]
-  [:div.card.shadow-sm
-   [:div.card-body
-    [:p.card-text
-     [:a {:href link} title] [:br]
-     [:span.text-muted [:i (labels pub-type)]]]
-    [:p.card-text (labels summary)]
-    (when authors
-      [:p.card-text [:small "Autoren: " authors]])]])
+  [:div.col
+   [:div.card.shadow-sm.h-100
+    [:div.card-body
+     [:p.card-text
+      [:a {:href link} title] [:br]
+      [:span.text-muted [:i (labels pub-type)]]]
+     [:p.card-text (labels summary)]
+     (when authors
+       [:p.card-text [:small "Autoren: " authors]])]]])
 
 (defn- publication-primer []
   [:section
@@ -26,7 +27,7 @@
 
 (defn- publications []
   [:section.pt-3
-   [:div.card-columns.pb-5
+   [:div.row.row-cols-1.row-cols-lg-3.pb-5.g-3
     [publication-card :publications.kind/newspaper-article
      "\"Kann eine Software die Wut im Netz zähmen? 2 Forscher haben es versucht\""
      "https://perspective-daily.de/article/1355/YzjQDzO2"

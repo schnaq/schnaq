@@ -28,19 +28,27 @@
 (defn discussion-options-button-group
   "Build a button-group with for the discussion-view."
   [[first-button & rest-buttons]]
-  (let [{:keys [on-click label-key]} first-button]
-    [:div.btn-group.btn-group-toggle.button-discussion-options.h-100 {:data-toggle "buttons"}
-     [:label.btn.btn-sm.btn-outline-primary.active
-      [:input {:type "radio" :autoComplete "off" :defaultChecked true
-               :onClick on-click}]
+  (let [{:keys [on-click label-key]} first-button
+        active-filters? @(rf/subscribe [:filters/active?])]
+    [:div.btn-group.button-discussion-options.h-100 {:data-toggle "buttons"}
+     [:input.btn-check {:id label-key :name :filter-discussion-options
+                        :type "radio" :autoComplete "off"
+                        :onClick on-click}]
+     (println active-filters?)
+     [:label.btn.btn-sm.btn-outline-primary
+      (cond-> {:for label-key}
+        (not active-filters?) (assoc :class "active"))
       [:small.d-md-none (labels label-key)]
       [:div.d-none.d-md-block.mt-2 (labels label-key)]]
      (for [{:keys [on-click label-key]} rest-buttons]
-       [:label.btn.btn-sm.btn-outline-primary.px-1.px-md-2 {:key (str "discussion-options-button-group-item-" label-key)}
-        [:input {:type "radio" :autoComplete "off"
-                 :onClick on-click}]
-        [:small.d-md-none (labels label-key)]
-        [:div.d-none.d-md-block.mt-2 (labels label-key)]])]))
+       [:<>
+        {:key (str "discussion-options-button-group-item-" label-key)}
+        [:input.btn-check {:id label-key :type "radio" :autoComplete "off"
+                           :onClick on-click :name :filter-discussion-options}]
+        [:label.btn.btn-sm.btn-outline-primary.px-1.px-md-2
+         {:for label-key}
+         [:small.d-md-none (labels label-key)]
+         [:div.d-none.d-md-block.mt-2 (labels label-key)]]])]))
 
 (defn discussion-options-dropdown
   "Build a dropdown menu for the discussion view"

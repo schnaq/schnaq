@@ -66,7 +66,7 @@
 (def ^:private team-focus
   [:section
    [:h2.text-center (labels :about-us.team/title)]
-   [:div.card-deck.pb-5.pt-4
+   [:div.row.row-cols-1.row-cols-md-3.pb-5.pt-4
     [:div.col
      [person-card :team/alexander "Dr. Alexander Schneider" (labels :about-us.team/alexander)]]
     [:div.col

@@ -189,7 +189,7 @@
          statement-num (:meta/sub-statement-count statement 0)
          new? (not (= old-statement-num statement-num))]
      [:div.d-flex.flex-row.align-items-center
-      [:a.badge.badge-pill.badge-transparent.badge-clickable.ml-3
+      [:a.badge.rounded-pill.badge-transparent.badge-clickable.ml-3
        {:href (rfe/href :routes.schnaq.select/statement {:share-hash share-hash
                                                          :statement-id (:db/id statement)})
         :role :button}
@@ -219,10 +219,10 @@
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
     [:p.mb-0
-     [:span.badge.badge-pill.badge-transparent.mr-2
+     [:span.badge.rounded-pill.badge-transparent.mr-2
       [icon :comments "m-auto"]
       " " statement-count]
-     [:span.badge.badge-pill.badge-transparent.mr-2
+     [:span.badge.rounded-pill.badge-transparent.mr-2
       {:tabIndex 20
        :title (labels :discussion.badges/user-overview)}
       [icon :user/group "m-auto"] " " user-count]]))
@@ -233,7 +233,7 @@
   (let [meta-info (:meta-info schnaq)
         statement-count (:all-statements meta-info)]
     [:div.d-flex.flex-row.mb-0
-     [:span.badge.badge-pill.badge-transparent.mr-2
+     [:span.badge.rounded-pill.badge-transparent.mr-2
       [icon :comments "m-auto"]
       " " statement-count]
      [edit-discussion-dropdown-menu schnaq]]))

@@ -6,7 +6,7 @@
   overflow: hidden;
   padding: 1rem;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     border-radius: 0;
     padding: 0.5rem;
   }
@@ -70,7 +70,7 @@
   outline: 0 none;
   padding: 1rem 0.5rem 0.5rem 0;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     padding: 0.2rem 0.2rem 0.2rem 0;
   }
 }
@@ -116,7 +116,7 @@
   border: 0;
   white-space: pre-line;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     border-radius: 0;
   }
 }
@@ -136,7 +136,7 @@
   min-width: 0.5rem;
   overflow: hidden;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     margin-right: 1rem;
   }
 }

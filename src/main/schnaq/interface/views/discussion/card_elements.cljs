@@ -198,12 +198,11 @@
   [clear-id]
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
         action-icon (if (cstring/blank? search-string) :search :times)]
-    [:div.input-group-append
-     [:button.btn.button-muted.h-100
-      {:on-click (fn [_e]
-                   (jq/clear-input clear-id)
-                   (rf/dispatch [:schnaq.search.current/clear-search-string]))}
-      [icon action-icon "m-auto"]]]))
+    [:button.btn.button-muted.h-100
+     {:on-click (fn [_e]
+                  (jq/clear-input clear-id)
+                  (rf/dispatch [:schnaq.search.current/clear-search-string]))}
+     [icon action-icon "m-auto"]]))
 
 (defn search-bar
   "A search-bar to search inside a schnaq."

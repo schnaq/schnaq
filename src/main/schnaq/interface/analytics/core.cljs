@@ -13,11 +13,12 @@
 (defn- analytics-card
   "A single card containing a metric and a title."
   [title metric]
-  [:div.card
-   [:div.card-body
-    [:h5.card-title title]
-    [:p.card-text.display-1 metric]
-    [:p.card-text [:small.text-muted "Last updated ..."]]]])
+  [:div.col
+   [:div.card
+    [:div.card-body
+     [:h5.card-title title]
+     [:p.card-text.display-1 metric]
+     [:p.card-text [:small.text-muted "Last updated ..."]]]]])
 
 (defn- percentage-change
   "Calculate the percentage change between two values. Color positive changes green and negative red."
@@ -44,33 +45,36 @@
   to make sub-headings."
   [title content]
   [string? (? map?) :ret vector?]
-  [:div.card
-   [:div.card-body
-    [:h5.card-title title]
-    (for [[metric-name metric-value] content]
-      [:div {:key metric-name}
-       [:p.card-text [:strong (string/capitalize (name metric-name))]]
-       [:p.card-text.display-1 metric-value]
-       [:hr]])
-    [:p.card-text [:small.text-muted "Last updated ..."]]]])
+  [:div.col
+   [:div.card
+    [:div.card-body
+     [:h5.card-title title]
+     (for [[metric-name metric-value] content]
+       [:div {:key metric-name}
+        [:p.card-text [:strong (string/capitalize (name metric-name))]]
+        [:p.card-text.display-1 metric-value]
+        [:hr]])
+     [:p.card-text [:small.text-muted "Last updated ..."]]]]])
 
 (defn- analytics-controls
   "The controls for the analytics view."
   []
-  [:form.form-inline
+  [:form.row
    {:on-submit (fn [e]
                  (js-wrap/prevent-default e)
                  (rf/dispatch [:analytics/load-all-with-time (oget e [:target :elements :days-input :value])]))}
-   [:input#days-input.form-control.form-round-05.py-1.mr-sm-2
-    {:type "number"
-     :name "days-input"
-     :placeholder "Stats for last X days"
-     :autoFocus true
-     :required true
-     :defaultValue 30}]
-   [:input.btn.btn-outline-primary.mt-1.mt-sm-0
-    {:type "submit"
-     :value (labels :analytics/fetch-data-button)}]])
+   [:div.col
+    [:input#days-input.form-control.form-round-05.mr-sm-2
+     {:type "number"
+      :name "days-input"
+      :placeholder "Stats for last X days"
+      :autoFocus true
+      :required true
+      :defaultValue 30}]]
+   [:div.col
+    [:input.btn.btn-outline-primary.mt-1.mt-sm-0
+     {:type "submit"
+      :value (labels :analytics/fetch-data-button)}]]])
 
 (defn- analytics-dashboard-view
   "The dashboard displaying all analytics."
@@ -96,7 +100,7 @@
         [:div.row.mb-3
          [:div.col-12.col-lg-6
           [statements-stats statements-num statements-series]]]
-        [:div.card-columns
+        [:div.row.row-cols-1.row-cols-lg-3.g-3
          [analytics-card (labels :analytics/overall-discussions) discussions-num]
          [analytics-card (labels :analytics/user-numbers) usernames-num]
          [analytics-card (labels :analytics/registered-users-numbers) registered-users]

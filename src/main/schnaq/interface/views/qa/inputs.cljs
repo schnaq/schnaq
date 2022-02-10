@@ -21,17 +21,16 @@
                     (rf/dispatch [:schnaq.qa.new-question/pulse true]))]
     [:form {:on-submit #(submit-fn %)
             :on-key-down #(when (jq/ctrl-press % 13) (submit-fn %))}
-     [:label.h5.mb-3 {:for input-id} (labels :qanda/add-question-label)]
+     [:label.form-label.h5.mb-3 {:for input-id} (labels :qanda/add-question-label)]
      [:div.d-flex.flex-row.qanda-input-content.rounded-1
       [:div {:class "highlight-card-neutral"}]
-      [:div.form-group.w-100.mb-0
-       [:textarea.form-control.discussion-text-input-area.m-1
-        {:name "statement-text" :wrap "soft" :rows 1 :id input-id
-         :auto-complete "off" :autoFocus (= :routes.schnaq/qanda current-route)
-         :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-         :required true :data-dynamic-height true
-         :placeholder (labels :qanda/add-question)
-         :on-key-up #(throttled-search %)}]]]
+      [:textarea.form-control.discussion-text-input-area.m-1.w-100.mb-0
+       {:name "statement-text" :wrap "soft" :rows 1 :id input-id
+        :auto-complete "off" :autoFocus (= :routes.schnaq/qanda current-route)
+        :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
+        :required true :data-dynamic-height true
+        :placeholder (labels :qanda/add-question)
+        :on-key-up #(throttled-search %)}]]
      [:button.btn.btn-lg.btn-secondary.w-100.shadow-sm.mt-3.rounded-1
       {:type "submit" :title (labels :qanda.button/submit)}
       [:div.d-inline-block

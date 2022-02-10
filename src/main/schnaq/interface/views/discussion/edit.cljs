@@ -16,8 +16,8 @@
                  (dispatch-fn e))
     :on-key-down (fn [e]
                    (when (jq/ctrl-press e 13) (dispatch-fn e)))}
-   [:div.form-group
-    [:label {:for html-id} (labels label)]
+   [:div.mb-3
+    [:label.form-label {:for html-id} (labels label)]
     [:textarea.form-control {:name html-id
                              :rows 3
                              :placeholder content

@@ -8,7 +8,7 @@
   max-width: 30rem;
   padding: 0.5rem;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     max-width: 100%;
   }
 }
@@ -19,7 +19,7 @@
   white-space: pre-line;
   width: 100%;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     padding: 0.35rem 0 0;
   }
 

@@ -149,7 +149,7 @@
         [:div.text-typography.px-3
          [truncated-content/statement statement]
          [statement-information-row statement]]
-        [:div.ml-1.mr-3
+        [:div.mx-3
          [input/reply-in-statement-input-form statement]
          additional-content]]]])))
 
@@ -245,11 +245,6 @@
    [:<>
     [answers statement]
     [replies statement]]])
-
-(defn- answer-or-edit-card
-  "Either show the clickable statement, or its edit-view."
-  [statement]
-  [statement-card->editable-card statement [answer-card statement]])
 
 (defn- sort-statements
   "Sort statements according to the filter method. If we are in q-and-a-mode,
@@ -424,7 +419,7 @@
       [:div.statement-column
        {:key (:db/id statement)}
        [motion/fade-in-and-out
-        [answer-or-edit-card statement]
+        [statement-card->editable-card statement [answer-card statement]]
         (delay-fade-in-for-subsequent-content index)]])))
 
 (defn conclusion-cards-list

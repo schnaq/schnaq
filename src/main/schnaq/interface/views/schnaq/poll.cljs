@@ -108,12 +108,12 @@
                    (rf/dispatch [:schnaq.poll/create-new
                                  (oget event [:target :elements])
                                  option-count]))}
-     [:div.form-group
-      [:label {:for :poll-topic} (labels :schnaq.poll.create/topic-label)]
+     [:div.mb-3
+      [:label.form-label {:for :poll-topic} (labels :schnaq.poll.create/topic-label)]
       [inputs/text (labels :schnaq.poll.create/placeholder) :poll-topic]
       [:small.form-text.text-muted (labels :schnaq.poll.create/hint)]]
-     [:div.form-group
-      [:label (labels :schnaq.poll.create/options-label)]
+     [:div.mb-3
+      [:label.form-label (labels :schnaq.poll.create/options-label)]
       [poll-option "Pyrrhus" 1]
       [poll-option "Surus" 2]
       (for [rank (range 3 (inc option-count))]
