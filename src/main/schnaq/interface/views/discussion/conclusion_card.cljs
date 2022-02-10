@@ -45,7 +45,7 @@
     [:p.h5 (labels :qanda.call-to-action/display-code)]
     [:p.h1.py-3 [sc/access-code]]
     [:p.h5 (labels :qanda.call-to-action/intro-1) " "
-     [:span.text-monospace.mx-2 {:href "https://schnaq.app"
+     [:span.font-monospace.mx-2 {:href "https://schnaq.app"
                                  :target :_blank}
       "https://schnaq.app"]
      " "
@@ -64,14 +64,14 @@
         upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
         downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)]
     [:div.d-flex.flex-row.align-items-center
-     [:div.mr-2
+     [:div.me-2
       {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")
        :on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-upvote statement]))}
       [icon :arrow-up "vote-arrow m-auto"]]
-     [:span.mr-3 (logic/get-up-votes statement votes)]
-     [:div.mr-2
+     [:span.me-3 (logic/get-up-votes statement votes)]
+     [:div.me-2
       {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")
        :on-click (fn [e]
                    (js-wrap/stop-propagation e)
@@ -82,7 +82,7 @@
 (defn- statement-information-row [statement]
   [:div.d-flex.flex-wrap.align-items-center
    [up-down-vote statement]
-   [:div.ml-sm-0.ml-lg-auto
+   [:div.ms-sm-0.ms-lg-auto
     [badges/extra-discussion-info-badges statement]]])
 
 (defn- mark-as-answer-button
@@ -92,11 +92,11 @@
         label ":check"
         checked? (statement-labels label)]
     [:section.w-100
-     [:button.btn.btn-sm.btn-link.text-dark.pr-0
+     [:button.btn.btn-sm.btn-link.text-dark.pe-0
       {:on-click #(if checked?
                     (rf/dispatch [:statement.labels/remove statement label])
                     (rf/dispatch [:statement.labels/add statement label]))}
-      [:small.pr-2 (if checked?
+      [:small.pe-2 (if checked?
                      (labels :qanda.button.mark/as-unanswered)
                      (labels :qanda.button.mark/as-answer))]
       [labels/build-label (if checked? label ":unchecked")]]]))
@@ -138,18 +138,18 @@
        [:div {:class (card-highlighting statement)}]
        [:div.card-view.card-body.py-2.px-0
         (when (:meta/new? statement)
-          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right
+          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
            (labels :discussion.badges/new)])
         [:div.pt-2.d-flex.px-3
-         [:div.mr-auto [user/user-info statement 32 "w-100"]]
-         [:div.d-flex.flex-row.align-items-center.ml-auto
+         [:div.me-auto [user/user-info statement 32 "w-100"]]
+         [:div.d-flex.flex-row.align-items-center.ms-auto
           (when show-answer? [mark-as-answer-button statement])
           [badges/edit-statement-dropdown-menu statement]]]
         [:div.my-4]
         [:div.text-typography.px-3
          [truncated-content/statement statement]
          [statement-information-row statement]]
-        [:div.ml-1.mr-3
+        [:div.mx-3
          [input/reply-in-statement-input-form statement]
          additional-content]]]])))
 
@@ -160,7 +160,7 @@
     [motion/fade-in-and-out
      [:article.statement-card.mt-1.border
       [:div.d-flex.flex-row
-       [:div.mr-2 {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
+       [:div.me-2 {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
        [:div.card-view.card-body.p-2
         [:div.d-flex.justify-content-start.pt-2
          [user/user-info statement 25 "w-100"]
@@ -169,14 +169,14 @@
         [:div.text-typography
          [truncated-content/statement statement]]
         [:div.d-flex.flex-wrap.align-items-center
-         [:a.btn.btn-sm.btn-outline-dark.mr-3.px-1.py-0
+         [:a.btn.btn-sm.btn-outline-dark.me-3.px-1.py-0
           {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
                                                                :statement-id (:db/id statement)})}
-          [icon :comments "my-auto mr-1"]
+          [icon :comments "my-auto me-1"]
           [:small (labels :statement/discuss)]]
          [up-down-vote statement]
          (when with-answer?
-           [:div.d-flex.flex-row.align-items-center.ml-auto
+           [:div.d-flex.flex-row.align-items-center.ms-auto
             [mark-as-answer-button statement]])]]]]]))
 
 (defn reduced-or-edit-card
@@ -197,9 +197,9 @@
   (let [statement-id (:db/id statement)
         collapsed? @(rf/subscribe [:toggle-replies/is-collapsed? statement-id])
         button-content (if collapsed?
-                         [:<> [icon :collapse-up "my-auto mr-2"]
+                         [:<> [icon :collapse-up "my-auto me-2"]
                           (labels :qanda.button.show/replies)]
-                         [:<> [icon :collapse-down "my-auto mr-2"]
+                         [:<> [icon :collapse-down "my-auto me-2"]
                           (labels :qanda.button.hide/replies)])
         collapsible-id (str "collapse-Replies-" statement-id)
         replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
@@ -212,8 +212,8 @@
     (when (not-empty replies)
       [:<>
        [:button.btn.btn-transparent.border-0
-        {:type "button" :data-toggle "collapse" :aria-expanded "false"
-         :data-target (str "#" collapsible-id)
+        {:type "button" :data-bs-toggle "collapse" :aria-expanded "false"
+         :data-bs-target (str "#" collapsible-id)
          :on-click #(rf/dispatch [:toggle-replies/is-collapsed! statement-id (not collapsed?)])
          :aria-controls collapsible-id}
         button-content]
@@ -245,11 +245,6 @@
    [:<>
     [answers statement]
     [replies statement]]])
-
-(defn- answer-or-edit-card
-  "Either show the clickable statement, or its edit-view."
-  [statement]
-  [statement-card->editable-card statement [answer-card statement]])
 
 (defn- sort-statements
   "Sort statements according to the filter method. If we are in q-and-a-mode,
@@ -284,7 +279,7 @@
         badges-conclusion [badges/extra-discussion-info-badges statement true]
         starting-route? @(rf/subscribe [:schnaq.routes/starting?])
         badges (if starting-route? badges-start badges-conclusion)]
-    [:div.ml-auto badges]))
+    [:div.ms-auto badges]))
 
 (defn- title-view [statement]
   (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
@@ -303,7 +298,7 @@
     [:<>
      [title-view statement]
      (for [label statement-labels]
-       [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
+       [:span.pe-1 {:key (str "show-label-" (:db/id statement) label)}
         [labels/build-label label]])]))
 
 (defn- topic-bubble-view []
@@ -320,9 +315,9 @@
      [:div.p-2
       [:div.d-flex.flex-wrap.mb-4
        [user/user-info statement 32 nil]
-       [:div.d-flex.flex-row.ml-auto
+       [:div.d-flex.flex-row.ms-auto
         (when-not starting-route?
-          [:div.mr-auto info-content])
+          [:div.me-auto info-content])
         [current-topic-badges schnaq statement]]]
       [title-and-input-element statement]]]))
 
@@ -424,7 +419,7 @@
       [:div.statement-column
        {:key (:db/id statement)}
        [motion/fade-in-and-out
-        [answer-or-edit-card statement]
+        [statement-card->editable-card statement [answer-card statement]]
         (delay-fade-in-for-subsequent-content index)]])))
 
 (defn conclusion-cards-list

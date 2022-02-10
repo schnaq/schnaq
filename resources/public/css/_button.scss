@@ -13,11 +13,19 @@
 .btn-secondary {
   @include button-template;
   color: $white;
+
+  &:hover {
+    color: $white;
+  }
 }
 
 .btn-primary {
   @include button-template;
   color: $white;
+
+  &:hover {
+    color: $white;
+  }
 }
 
 .btn-outline-secondary:hover {
@@ -53,6 +61,20 @@
   @extend .btn-outline-primary;
   border-radius: 0.3rem;
   padding: 0.1rem 0.3rem;
+
+  &:hover {
+    color: $white;
+  }
+}
+
+.btn-outline-primary {
+  &:hover,
+  &:focus,
+  &:active,
+  &:visited,
+  &.active {
+    color: $white;
+  }
 }
 
 .button-primary {

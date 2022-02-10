@@ -7,7 +7,7 @@
 
 (defn- value-card
   [icon-key title body]
-  [:div.card.p-3.mb-4.border-0
+  [:div.card.p-3.mb-4.border-0.h-100
    [:div.card-img-top.text-center
     [icon icon-key "text-primary" {:size "3x"}]]
    [:div.card-body
@@ -28,7 +28,7 @@
     [:p.card-subtitle.text-muted [:i title]]]])
 
 (def ^:private schnaq-unity
-  [:section
+  [:section.py-5
    [:div.row.pt-3
     [:div.col-lg-5
      [:img.img-fluid.shadow {:src (img-path :team/at-table-with-laptop)}]]
@@ -37,10 +37,10 @@
      (labels :about-us.unity/body)]]])
 
 (def ^:private our-values
-  [:section
+  [:section.py-5
    [:h2.text-center (labels :about-us.value/title)]
    [:h4.text-center.text-muted.pb-5 (labels :about-us.value/subtitle)]
-   [:div.row.justify-content-around
+   [:div.row.justify-content-around.pb-4
     [:div.col-lg-4
      [value-card :envelope-open-text :about-us.honesty/title :about-us.honesty/body]]
     [:div.col-lg-4
@@ -55,7 +55,7 @@
      [value-card :user/group :about-us.diversity/title :about-us.diversity/body]]]])
 
 (def ^:private schnaq-in-numbers
-  [:section
+  [:section.py-5
    [:h2.text-center.pb-3 (labels :about-us.numbers/title)]
    [:div.row
     [:div.col [number-cell "6+" (labels :about-us.numbers/research)]]
@@ -64,9 +64,9 @@
     [:div.col [number-cell "12.000+" (labels :about-us.numbers/loc)]]]])
 
 (def ^:private team-focus
-  [:section
+  [:section.py-5
    [:h2.text-center (labels :about-us.team/title)]
-   [:div.card-deck.pb-5.pt-4
+   [:div.row.row-cols-1.row-cols-md-3.pb-5.pt-4
     [:div.col
      [person-card :team/alexander "Dr. Alexander Schneider" (labels :about-us.team/alexander)]]
     [:div.col
@@ -83,9 +83,6 @@
     :page/vertical-header? true}
    [:div.container
     schnaq-unity
-    [:hr.pb-4.mt-5]
     our-values
-    [:hr.pb-4.mt-5]
     schnaq-in-numbers
-    [:hr.pb-4.mt-5]
     team-focus]])

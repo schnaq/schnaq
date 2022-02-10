@@ -66,10 +66,9 @@
           [icon :arrow-up "m-auto"]
           " "
           (labels :qanda.search/similar-results-explanation-2)]]]
-
-       [:div.card-columns.card-columns-discussion
+       [:div.row
         (for [result search-results]
-          (with-meta
-            [motion/move-in-spring :bottom
-             [card/answer-card result]]
-            {:key (str (:db/id result) "-search-result")}))]])))
+          [:div.statement-column
+           {:key (str (:db/id result) "-search-result")}
+           [motion/move-in-spring :bottom
+            [card/answer-card result]]])]])))

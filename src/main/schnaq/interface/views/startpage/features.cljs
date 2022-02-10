@@ -34,7 +34,7 @@
 (defn- feature-box
   "A Single feature box that can be put in a row. All inputs are keys."
   [title body img-url img-alt]
-  [:div.card.panel-transparent.text-center
+  [:div.card.panel-transparent.text-center.col
    [:div.card-body
     [:img.startpage-feature-box-image {:src (img-path img-url) :alt img-alt}]
     [:div.display-6.text-typography.card-title (labels title)]
@@ -43,21 +43,17 @@
 (defn how-does-schnaq-work
   "Arguments for getting schnaq in three columns."
   []
-  [:div.card-deck
+  [:div.row.row-cols-1.row-cols-lg-3
    [feature-box
     :startpage.feature-box.know-how/title
     :startpage.feature-box.know-how/body
     :schnaqqifant/show
     :startpage.feature-box.know-how/img-alt]
-    ;; This block is used to break the card deck into one card per row for devices smaller than md
-    ;; Without this only sm devices break.
-   [:div.w-100.d-none.d-sm-block.d-lg-none.py-2]
    [feature-box
     :startpage.feature-box.discussion/title
     :startpage.feature-box.discussion/body
     :schnaqqifant/rocket
     :startpage.feature-box.discussion/img-alt]
-   [:div.w-100.d-none.d-sm-block.d-lg-none.py-2]
    [feature-box
     :startpage.feature-box.learnings/title
     :startpage.feature-box.learnings/body

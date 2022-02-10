@@ -32,7 +32,7 @@
              [:td (:feedback/contact-name feedback)
               (when-not (string/blank? (:feedback/contact-mail feedback))
                 [:a {:href (gstring/format "mailto:%s" (:feedback/contact-mail feedback))}
-                 [icon :envelope "pl-1"]])]
+                 [icon :envelope "ps-1"]])]
              [:td (util-time/format-distance (:feedback/created-at feedback) locale)]
              [:td (:feedback/description feedback)]
              [:td.image

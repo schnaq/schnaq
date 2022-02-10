@@ -12,13 +12,13 @@
 (defn- state-selections
   "Selection-options for discussion state filters."
   []
-  [:div.form-row.pb-3
+  [:div.row.pb-3
    [:div.col-auto
-    [:select#filter-state-selection.mr-1.form-control
+    [:select#filter-state-selection.me-1.form-control
      [:option {:value :is} (labels :filters.option.type/is)]
      [:option {:value :is-not} (labels :filters.option.type/is-not)]]]
    [:div.col-auto
-    [:select#filter-state.mr-1.form-control
+    [:select#filter-state.me-1.form-control
      ;; Needs to be string, otherwise ns will be stripped
      [:option {:value "discussion.state/closed"} (labels :filters.discussion.option.state/closed)]
      [:option {:value "statement.type/read-only"} (labels :filters.discussion.option.state/read-only)]]]])
@@ -26,25 +26,25 @@
 (defn- author-selections
   "Selection-options for discussion author filters."
   []
-  [:div.form-row.pb-3
+  [:div.row.pb-3
    [:div.col-auto.align-self-center
     [:p.my-auto (labels :filters.discussion.option.author/prelude)]]
    [:div.col-auto
-    [:select#filter-author-selection.mr-1.form-control
+    [:select#filter-author-selection.me-1.form-control
      [:option {:value :included} (labels :filters.discussion.option.author/included)]
      [:option {:value :excluded} (labels :filters.discussion.option.author/excluded)]]]])
 
 (defn- statement-number-selections
   "Selection-options for number of statements filters."
   []
-  [:div.form-row.pb-3
+  [:div.row.pb-3
    [:div.col-auto
-    [:select#filter-numbers-selection.mr-1.form-control
+    [:select#filter-numbers-selection.me-1.form-control
      [:option {:value ">"} (labels :filters.option.vote/bigger)]
      [:option {:value "="} (labels :filters.option.vote/equal)]
      [:option {:value "<"} (labels :filters.option.vote/less)]]]
    [:div.col-auto
-    [:input#filter-numbers.mr-1.form-control
+    [:input#filter-numbers.me-1.form-control
      {:type :number
       :placeholder 0
       :defaultValue 0}]]])
@@ -55,11 +55,11 @@
   (let [current-selection (r/atom "state")]
     (fn []
       (let [display-name @(rf/subscribe [:user/display-name])]
-        [:section.border-bottom.pb-2.text-left
-         [:div.form-group
-          [:label {:for :add-filter-menu}
+        [:section.border-bottom.pb-2.text-start
+         [:div.mb-3
+          [:label.form-label {:for :add-filter-menu}
            (labels :filters.label/filter-for)]
-          [:select#add-filter-menu.mr-1.form-control
+          [:select#add-filter-menu.me-1.form-control
            {:on-change #(reset! current-selection (tools/get-selection-from-event %))}
            [:option {:value :state} (labels :filters.discussion.option.state/label)]
            [:option {:value :numbers} (labels :filters.discussion.option.numbers/label)]
@@ -68,7 +68,7 @@
            "state" [state-selections]
            "numbers" [statement-number-selections]
            "author" [author-selections])
-         [:button.btn.btn-outline-dark.mr-2
+         [:button.btn.btn-outline-dark.me-2
           {:on-click #(case @current-selection
                         "state"
                         (rf/dispatch [:filters.discussion/activate :state
@@ -94,7 +94,7 @@
                       :numbers extra
                       :author "")]
     [:div.d-flex.justify-content-between
-     [:p.d-inline-block.pr-2.my-auto {:key (str filter-data)}
+     [:p.d-inline-block.pe-2.my-auto {:key (str filter-data)}
       [:strong type-label] " "
       criteria-label " "
       extra-label]
@@ -105,7 +105,7 @@
   "A menu showing the currently active filters."
   []
   (let [active @(rf/subscribe [:filters.discussion/active])]
-    [:section.pt-2.text-left
+    [:section.pt-2.text-start
      [:p (labels :filters.heading/active)]
      (when (seq active)
        (for [filter-data active]
@@ -132,7 +132,7 @@
   (let [active-filters? @(rf/subscribe [:filters.discussion/active?])]
     [tooltip/html
      [default-menu]
-     [:span.ml-2.pl-1.border-left
+     [:span.ms-2.ps-1.border-start
       [:button.btn.btn-outline-primary.btn-sm.mx-1
        {:class (when active-filters? "btn-outline-secondary active")}
        (labels :badges.filters/button)]]

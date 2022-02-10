@@ -35,9 +35,8 @@
   [:div.modal-content.px-4
    [:div.modal-header
     [:h5.modal-title header]
-    [:button.close {:type "button" :data-dismiss "modal" :aria-label "Close" :on-click close-modal}
-     [:span {:aria-hidden "true"}
-      [icon :cross]]]]
+    [:button.btn-close {:type "button" :data-dismiss "modal" :aria-label "Close" :on-click close-modal}
+     [:span {:aria-hidden "true"}]]]
    [:div.modal-body body]])
 
 ;; -----------------------------------------------------------------------------

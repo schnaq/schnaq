@@ -54,9 +54,9 @@
   "Short overview of free-features."
   []
   [:ul.fa-ul
-   [:li.h4 [icon :check/normal "mr-3"] (labels :page.login/feature-1)]
-   [:li.h4 [icon :check/normal "mr-3"] (gstring/format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]
-   [:li.h4 [icon :check/normal "mr-3"] (labels :page.login/feature-3)]])
+   [:li.h4 [icon :check/normal "me-3"] (labels :page.login/feature-1)]
+   [:li.h4 [icon :check/normal "me-3"] (gstring/format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]
+   [:li.h4 [icon :check/normal "me-3"] (labels :page.login/feature-3)]])
 
 (defn- login-page-base
   "Basic login page for either registration or sign in."

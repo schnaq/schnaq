@@ -10,7 +10,7 @@ $header-opacity: 1;
   padding-top: 1rem;
   position: relative;
 
-  @include media-breakpoint-down(md) {
+  @include media-breakpoint-down(lg) {
     padding-top: 2rem;
 
     h1 {
@@ -147,7 +147,7 @@ $header-opacity: 1;
   object-fit: contain;
   width: 100%;
 
-  @include media-breakpoint-down(md) {
+  @include media-breakpoint-down(lg) {
     max-width: 75%;
   }
 }
@@ -172,7 +172,7 @@ $header-opacity: 1;
   height: auto;
   max-width: 75%;
   object-fit: contain;
-  @include media-breakpoint-down(md) {
+  @include media-breakpoint-down(lg) {
     max-width: 30%;
   }
 }

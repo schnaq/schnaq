@@ -7,7 +7,6 @@
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
@@ -43,7 +42,7 @@
          {:on-click #(rf/dispatch navigation-target)}
          [:div.d-flex
           [icon :arrow-left "m-auto"]]]]
-       [:small.my-auto.ml-2.d-none.d-xxl-block back-label]])))
+       [:small.my-auto.ms-2.d-none.d-xxl-block back-label]])))
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -81,7 +80,7 @@
                history-content [:div
                                 [:div.d-flex.flex-row
                                  [:h6 (labels :history.statement/user) " " (toolbelt/truncate-to-n-chars nickname 20)]
-                                 [:div.ml-auto [common/avatar user 22]]]
+                                 [:div.ms-auto [common/avatar user 22]]]
                                 (toolbelt/truncate-to-n-words statement-content max-word-count)]]
            [:article {:key (str "history-container-" (:db/id statement))}
             [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
@@ -163,13 +162,18 @@
                        :popular (labels :badges.sort/popular)
                        (labels :badges/sort))
         dropdown-menu-id "dropdownSortButton"]
-    [sc/discussion-options-dropdown
-     button-title
-     dropdown-menu-id
-     [{:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])
-       :label-key :badges.sort/newest}
-      {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])
-       :label-key :badges.sort/popular}]]))
+    [:div.dropdown.h-100
+     [:button.btn.btn-sm.btn-primary.dropdown-toggle.h-100
+      {:id dropdown-menu-id :type "button" :data-bs-toggle "dropdown"
+       :aria-haspopup "true" :aria-expanded "false"}
+      button-title]
+     [:div.dropdown-menu {:aria-labelledby dropdown-menu-id}
+      [:button.dropdown-item
+       {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
+       (labels :badges.sort/newest)]
+      [:button.dropdown-item
+       {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
+       (labels :badges.sort/popular)]]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -198,12 +202,11 @@
   [clear-id]
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
         action-icon (if (cstring/blank? search-string) :search :times)]
-    [:div.input-group-append
-     [:button.btn.button-muted.h-100
-      {:on-click (fn [_e]
-                   (jq/clear-input clear-id)
-                   (rf/dispatch [:schnaq.search.current/clear-search-string]))}
-      [icon action-icon "m-auto"]]]))
+    [:button.btn.button-muted.h-100
+     {:on-click (fn [_e]
+                  (jq/clear-input clear-id)
+                  (rf/dispatch [:schnaq.search.current/clear-search-string]))}
+     [icon action-icon "m-auto"]]))
 
 (defn search-bar
   "A search-bar to search inside a schnaq."
@@ -227,15 +230,15 @@
 (defn action-view []
   [:div.d-inline-block.text-dark.w-100.mb-3.mx-1.mx-md-0
    [:div.d-flex.flex-row.flex-wrap
-    [:div.mr-1.mr-lg-2.mr-xxl-5.pr-lg-2
+    [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2
      [back-button]]
     [:div.d-flex
-     [:div.mr-1.mx-lg-2.pr-0.pr-lg-2
+     [:div.me-1.mx-lg-2.pe-0.pe-lg-2
       [sort-options]]
      [:div.h-100
       (when (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         [filters/filter-answered-statements])]]
-    [:div.ml-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
+    [:div.ms-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
      [search-bar]]]])
 
 (defn discussion-view

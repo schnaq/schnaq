@@ -16,8 +16,8 @@
      [:hr.my-4]
      [:div.d-flex.flex-row.my-3
       [:p (labels :share-access-code/via)]
-      [:div.flex.flex-fill.text-center.pr-5
-       [:p.mb-0 (labels :share-access-code/title-1) " " [:span.text-monospace "https://schnaq.app"]]
+      [:div.flex.flex-fill.text-center.pe-5
+       [:p.mb-0 (labels :share-access-code/title-1) " " [:span.font-monospace "https://schnaq.app"]]
        [:p (labels :share-access-code/title-2)]
        [:div.display-4.text-primary [sc/access-code]]]]]))
 
@@ -26,7 +26,7 @@
    [:hr.my-4]
    [:div.d-flex.flex-row.flex-wrap.my-3
     [:p (labels :share-qr-code/via)]
-    [:div.flex.flex-fill.text-center.pr-5
+    [:div.flex.flex-fill.text-center.pe-5
      [:div.d-md-none
       [sc/qr-code link 200]]
      [:div.d-none.d-md-block
@@ -36,13 +36,13 @@
   [:<>
    [:hr.my-4]
    [:div.d-flex.flex-row.flex-wrap.flex-md-nowrap.my-3.pb-3.my-1
-    [:div.d-flex.mr-1.mr-lg-5.align-self-center (labels :share-link/via)]
+    [:div.d-flex.me-1.me-lg-5.align-self-center (labels :share-link/via)]
     [:div.d-flex.flex-row.flex-grow-1.flex-wrap.flex-md-nowrap
      ;[:div.input-group]
      [:input.form-control.border-0.text-gray.my-1
       {:value link
        :readOnly true}]
-     [:button.btn.btn-primary.text-nowrap.ml-md-3.my-1
+     [:button.btn.btn-primary.text-nowrap.ms-md-3.my-1
       {:on-click (fn []
                    (clipboard/copy-to-clipboard! link)
                    (notify! (labels :schnaq/link-copied-heading)

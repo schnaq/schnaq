@@ -32,14 +32,14 @@
      [:div.col-6.my-auto.mt-lg-0.mb-lg-auto
       [:div.card-body.p-0
        [:div.d-flex.flex-row
-        [:div.display-5.text-primary.mr-1.mt-n2 "\""]
+        [:div.display-5.text-primary.me-1.mt-n2 "\""]
         [:p.card-text.text-primary (labels :testimonials.bib/quote)]]]]]]
    [:div.col-12.col-lg-6.p-2
     [:div.row.startpage-step-3
      [:div.col-6.my-auto.mb-lg-0.mt-lg-auto
       [:div.card-body.p-0
        [:div.d-flex.flex-row
-        [:div.display-5.text-primary.mr-1.mt-n2 "\""]
+        [:div.display-5.text-primary.me-1.mt-n2 "\""]
         [:p.card-text.text-primary (labels :testimonials.lokay/quote)]]]]
      [:div.col-4.mt-lg-auto
       [:img.w-100.rounded-50

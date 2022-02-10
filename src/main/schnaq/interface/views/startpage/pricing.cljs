@@ -47,7 +47,7 @@
         price-yearly (:cost @(rf/subscribe [:pricing.pro/yearly]))
         discount (- (* (/ (/ price-yearly 12) price-monthly) 100) 100)]
     (when (and price-monthly price-yearly)
-      [:span.badge.badge-pill.badge-success.ml-1
+      [:span.badge.rounded-pill.bg-success.mx-1
        {:class (when-not yearly? "text-muted")}
        (gstring/format "%.0f %" discount)])))
 
@@ -56,13 +56,13 @@
   []
   (let [yearly? @(rf/subscribe [:pricing.interval/yearly?])]
     [:div.d-flex.flex-row.pb-3
-     [:div.pr-2 {:class (when yearly? "text-muted")}
+     [:div.pe-2 {:class (when yearly? "text-muted")}
       (labels :pricing.schnaq.pro.monthly/payment-method)]
-     [:div.custom-control.custom-switch
-      [:input#subscription-switch.custom-control-input
+     [:div.form-check.form-switch
+      [:input#subscription-switch.form-check-input
        {:type :checkbox :checked yearly?
         :on-change #(rf/dispatch [:pricing.interval/toggle-yearly])}]
-      [:label.custom-control-label {:for "subscription-switch"}]]
+      [:label.form-check-label {:for "subscription-switch"}]]
      [:div {:class (when-not yearly? "text-muted")}
       (labels :pricing.schnaq.pro.yearly/payment-method) [discount-for-choosing-yearly]]]))
 
@@ -98,10 +98,10 @@
 (defn- mark-explanation
   "Explain the check marks."
   []
-  [:section.pl-4.pt-2
-   [:p.h6 [icon :check/normal "text-primary pr-2" {:size "lg"}]
+  [:section.ps-4.pt-2
+   [:p.h6 [icon :check/normal "text-primary pe-2" {:size "lg"}]
     (labels :pricing.features/implemented)]
-   [:p.h6 [icon :check/normal "text-muted pr-2" {:size "lg"}]
+   [:p.h6 [icon :check/normal "text-muted pe-2" {:size "lg"}]
     (labels :pricing.features/to-be-implemented)]])
 
 (defn- cta-button
@@ -127,12 +127,12 @@
        (for [[feature class] features]
          (with-meta
            [:li.list-group-item
-            [icon :check/normal (str class " mr-2")] feature]
+            [icon :check/normal (str class " me-2")] feature]
            {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))
        (for [[feature class] (add-class-to-feature upcoming-features "text-muted")]
          (with-meta
            [:li.list-group-item
-            [icon :check/normal (str class " mr-2")] feature]
+            [icon :check/normal (str class " me-2")] feature]
            {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))]]]))
 
 (defn- free-tier-card

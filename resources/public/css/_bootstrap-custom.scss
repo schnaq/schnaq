@@ -1,3 +1,6 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import '../node_modules/bootstrap/scss/variables';
+// The two imports above (functions, variables) are needed to define the custom maps from bs 5
 @import 'variables';
 
 // Additional colors. Defaults are primary, secondary, ... and here you can add
@@ -5,24 +8,22 @@
 //
 // I.e.: If you add the key "indigo" to this map, there will also be btn-indigo
 // etc. available for use.
-$theme-colors: (
+$custom-colors: (
   'white': $white,
   'typography': $typography,
   'gray': $gray-base,
   'white-shade' :$white-shade,
 );
 
-$grid-breakpoints: (
-  xs: 0,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px,
-  xxl: 1439px,
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
+$custom-breakpoints: (
   xxxl: 1600px,
   hd: 1900px,
   qhd: 2560px
 );
+
+$grid-breakpoints: map-merge($grid-breakpoints, $custom-breakpoints);
 
 @import '../node_modules/bootstrap/scss/bootstrap';
 

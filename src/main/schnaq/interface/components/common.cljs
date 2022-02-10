@@ -6,12 +6,12 @@
   "Info box to explain functionality."
   [text]
   [string? => :re-frame/component]
-  [:small.text-muted.text-left
+  [:small.text-muted.text-start
    [:div.d-flex.flex-row
-    [icon :info "my-auto mr-3"]
+    [icon :info "my-auto me-3"]
     text]])
 
 (defn pro-badge
   "Display a pro badge for pro users."
   []
-  [:span.badge.badge-pill.badge-light "pro"])
+  [:span.badge.rounded-pill.bg-light "pro"])

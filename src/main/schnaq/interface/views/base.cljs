@@ -105,12 +105,12 @@
     [:div.row
      [:div.col-md-4.col-12
       [logo-and-slogan]]
-     [:div.col-md-8.col-12.text-md-right.pt-3.pt-md-0
+     [:div.col-md-8.col-12.text-md-end.pt-3.pt-md-0
       [footer-nav]]]
     [:div.row
      [:div.col-md-6.col-12
       [developed-in-nrw]
       [registered-trademark]]
-     [:div.col-md-6.col-12.text-md-right.pt-3.pt-md-0
+     [:div.col-md-6.col-12.text-md-end.pt-3.pt-md-0
       [social-media]
       [sponsors]]]]])

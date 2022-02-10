@@ -15,7 +15,7 @@
      [:<>
       [:a#schnaq-language-dropdown.nav-link.dropdown-toggle
        (merge
-        {:href "#" :role "button" :data-toggle "dropdown"
+        {:href "#" :role "button" :data-bs-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
         options)
        [icon :language icon-classes {:size "lg"}]
@@ -51,7 +51,7 @@
    [separated-button button-content attributes nil])
   ([button-content attributes dropdown-content]
    [:<>
-    [:button.btn.discussion-navbar-button
+    [:button.btn.discussion-navbar-button.text-decoration-none
      (merge
       {:type "button"}
       attributes)
@@ -64,13 +64,14 @@
   [:<>
    [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
     {:class navbar-bg-class}
-    [:navbar-brand.p-0 {:href "#"} brand-content]
-    [:button.navbar-toggler.mx-2 {:type "button" :data-toggle "collapse"
-                                  :data-target (str "#" collapse-content-id)
-                                  :aria-controls collapse-content-id
-                                  :aria-expanded "false"
-                                  :aria-label "Toggle navigation"}
-     [:span.navbar-toggler-icon]]
-    [:div.ml-auto.d-none.d-lg-block
-     top-right-content]]
+    [:div.container-fluid
+     [:navbar-brand.p-0 {:href "#"} brand-content]
+     [:button.navbar-toggler.mx-2 {:type "button" :data-bs-toggle "collapse"
+                                   :data-bs-target (str "#" collapse-content-id)
+                                   :aria-controls collapse-content-id
+                                   :aria-expanded "false"
+                                   :aria-label "Toggle navigation"}
+      [:span.navbar-toggler-icon]]
+     [:div.ms-auto.d-none.d-lg-block
+      top-right-content]]]
    collapsible-content])

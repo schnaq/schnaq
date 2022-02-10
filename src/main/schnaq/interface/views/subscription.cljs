@@ -8,9 +8,9 @@
 
 (defn- next-step [icon title body button-text route-name]
   (let [href (rfe/href route-name)]
-    [:article.pb-3.pr-3
+    [:article.pb-3.pe-3
      [:a {:href href} [icon-card icon "text-typography" {:size :lg}]]
-     [:p.font-weight-bold.my-2 title]
+     [:p.fw-bold.my-2 title]
      [:p body]
      [buttons/anchor button-text href :btn-white]]))
 

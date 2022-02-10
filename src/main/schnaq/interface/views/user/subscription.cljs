@@ -45,9 +45,9 @@
   "Display a status pill depending on the subscription status."
   []
   (let [{:keys [status]} @(rf/subscribe [:user/subscription])]
-    [:span.badge.badge-pill {:class (case status
-                                      :active "badge-success"
-                                      "badge-warning")}
+    [:span.badge.rounded-pill {:class (case status
+                                        :active "bg-success"
+                                        "bg-warning")}
      status]))
 
 (defn- cancel-indicator
@@ -63,7 +63,7 @@
         locale @(rf/subscribe [:current-locale])]
     (when status
       [:section
-       [:hr.pt-3]
+       [:hr.mt-3]
        [:h2 (labels :subscription.overview/title)]
        [:dl.row
         [subscription-entry (labels :subscription.overview/status) [status-pill]]

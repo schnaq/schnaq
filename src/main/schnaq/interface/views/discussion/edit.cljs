@@ -16,8 +16,8 @@
                  (dispatch-fn e))
     :on-key-down (fn [e]
                    (when (jq/ctrl-press e 13) (dispatch-fn e)))}
-   [:div.form-group
-    [:label {:for html-id} (labels label)]
+   [:div.mb-3
+    [:label.form-label {:for html-id} (labels label)]
     [:textarea.form-control {:name html-id
                              :rows 3
                              :placeholder content
@@ -32,7 +32,7 @@
                    (jq/prevent-default e)
                    (rf/dispatch [:statement.edit/deactivate-edit edit-id]))}
       (labels :statement.edit.button/cancel)]
-     [:button.btn.btn-outline-dark.ml-1 {:type "submit"} (labels :statement.edit.button/submit)]]]])
+     [:button.btn.btn-outline-dark.ms-1 {:type "submit"} (labels :statement.edit.button/submit)]]]])
 
 (defn edit-card-statement
   "Editable statement input."

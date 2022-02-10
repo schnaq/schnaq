@@ -23,10 +23,10 @@
         set-gravity! (fn [e]
                        (let [slider-value (js/parseInt (oget e [:target :value]))]
                          (rf/dispatch [:graph.settings/gravity! (/ slider-value 100)])))]
-    [:div.form-group
-     [:label {:for slider-id}
+    [:div.mb-3
+     [:label.form-label {:for slider-id}
       (labels :graph.settings.gravity/label)]
-     [:input.form-control-range.graph-settings-gravity
+     [:input.form-control-range.graph-settings-gravity.d-block
       {:id slider-id
        :on-input set-gravity!                               ;; For browser compatibility, set both events
        :on-change set-gravity!

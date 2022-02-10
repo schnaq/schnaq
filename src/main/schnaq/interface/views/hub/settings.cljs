@@ -21,7 +21,7 @@
         {:hub/keys [keycloak-name name logo]} hub
         temporary-logo (get-in hub [:logo-temporary :content])
         preview-image (or temporary-logo logo)]
-    [:div.d-flex.mr-4
+    [:div.d-flex.me-4
      [:div.d-flex.avatar-image
       [hub-common/hub-logo preview-image name 80]]
      [:div.mt-auto
@@ -32,7 +32,7 @@
                       (rf/dispatch [:hub.logo/reset hub]))}
          [icon :cross]]
         ;; upload temporary button
-        [:label.btn.btn-light.change-profile-pic-button
+        [:label.form-label.btn.btn-light.change-profile-pic-button
          [icon :camera]
          [:input {:id input-id
                   :accept (string/join "," shared-config/allowed-mime-types)
@@ -64,7 +64,7 @@
         [common/form-input {:id input-id
                             :default-value name
                             :css "font-150"}]]
-       [:div.text-right.my-3
+       [:div.text-end.my-3
         [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
          (labels :hub.settings/save)]]]]
      [pages/settings-panel
@@ -78,7 +78,7 @@
         [common/form-input {:id :add-member-input
                             :placeholder "contact@email.com"
                             :css "font-150"}]]
-       [:div.text-right.my-3
+       [:div.text-end.my-3
         [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
          (labels :hub.members.add.form/button)]]]]]))
 
