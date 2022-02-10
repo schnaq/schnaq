@@ -16,7 +16,7 @@
 (defn filter-answered-statements
   "Show buttons to toggle between answered / unanswered statements."
   []
-  [sc/discussion-options-button-group
+  [sc/schnaq-statement-filter-button-group
    [{:on-click #(rf/dispatch [:filters/clear])
      :label-key :filters.option.answered/all}
     {:on-click (fn [] (rf/dispatch [:filters/clear])

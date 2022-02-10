@@ -25,12 +25,12 @@
      (subs padded-access-code 0 (/ code-length 2)) [:span.pl-3]
      (subs padded-access-code (/ code-length 2))]))
 
-(defn discussion-options-button-group
-  "Build a button-group with for the discussion-view."
+(defn schnaq-statement-filter-button-group
+  "Build a button-group to filter the statements in a schnaq."
   [[first-button & rest-buttons]]
   (let [{:keys [on-click label-key]} first-button
         active-filters? @(rf/subscribe [:filters/active?])]
-    [:div.btn-group.button-discussion-options.h-100 {:data-toggle "buttons"}
+    [:div.btn-group.button-discussion-options.h-100
      [:input.btn-check {:id label-key :name :filter-discussion-options
                         :type "radio" :autoComplete "off"
                         :onClick on-click}]

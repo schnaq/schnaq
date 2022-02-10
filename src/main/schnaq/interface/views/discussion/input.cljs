@@ -30,7 +30,7 @@
   Clicking a button will dispatch the set-subscription with the button-type as parameter."
   [get-subscription set-event sm?]
   (let [additional-btn-class (if sm? "btn-group-sm" "")]
-    [:div.btn-group.mt-1.ml-1 {:class additional-btn-class :data-toggle "buttons"}
+    [:div.btn-group.mt-1.ml-1 {:class additional-btn-class}
      [statement-type-button :statement.type/support
       :discussion.add.button/support :discussion/add-premise-against
       get-subscription set-event]
