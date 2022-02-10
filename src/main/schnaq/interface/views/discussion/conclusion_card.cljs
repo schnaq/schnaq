@@ -212,8 +212,8 @@
     (when (not-empty replies)
       [:<>
        [:button.btn.btn-transparent.border-0
-        {:type "button" :data-toggle "collapse" :aria-expanded "false"
-         :data-target (str "#" collapsible-id)
+        {:type "button" :data-bs-toggle "collapse" :aria-expanded "false"
+         :data-bs-target (str "#" collapsible-id)
          :on-click #(rf/dispatch [:toggle-replies/is-collapsed! statement-id (not collapsed?)])
          :aria-controls collapsible-id}
         button-content]

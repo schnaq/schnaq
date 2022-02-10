@@ -64,13 +64,14 @@
   [:<>
    [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
     {:class navbar-bg-class}
-    [:navbar-brand.p-0 {:href "#"} brand-content]
-    [:button.navbar-toggler.mx-2 {:type "button" :data-toggle "collapse"
-                                  :data-target (str "#" collapse-content-id)
-                                  :aria-controls collapse-content-id
-                                  :aria-expanded "false"
-                                  :aria-label "Toggle navigation"}
-     [:span.navbar-toggler-icon]]
-    [:div.ml-auto.d-none.d-lg-block
-     top-right-content]]
+    [:div.container-fluid
+     [:navbar-brand.p-0 {:href "#"} brand-content]
+     [:button.navbar-toggler.mx-2 {:type "button" :data-bs-toggle "collapse"
+                                   :data-bs-target (str "#" collapse-content-id)
+                                   :aria-controls collapse-content-id
+                                   :aria-expanded "false"
+                                   :aria-label "Toggle navigation"}
+      [:span.navbar-toggler-icon]]
+     [:div.ml-auto.d-none.d-lg-block
+      top-right-content]]]
    collapsible-content])

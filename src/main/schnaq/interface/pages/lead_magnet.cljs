@@ -43,7 +43,7 @@
     [:label.form-check-label {:for "nochmal-nachfragen"}
      (labels :lead-magnet.privacy/consent)]
     [:p
-     [:a {:href "#" :type "button" :data-toggle "collapse" :data-target "#collapse-more-newsletter"
+     [:a {:href "#" :type "button" :data-bs-toggle "collapse" :data-bs-target "#collapse-more-newsletter"
           :aria-expanded "false" :aria-controls "#collapse-more-newsletter" :data-reitit-handle-click false}
       (labels :startpage.newsletter/more-info-clicker)]]
     [:div.collapse {:id "collapse-more-newsletter"}

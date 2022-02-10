@@ -105,7 +105,7 @@
     [settings-li-button]]])
 
 (defn- external-content [collapse-content-id content]
-  [:div.collapse.bg-white.p-2.m-1.rounded-2.d-lg-none
+  [:div.collapse.navbar-collapse.bg-white.p-2.m-1.rounded-2.d-lg-none
    {:id collapse-content-id}
    content])
 
