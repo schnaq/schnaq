@@ -67,22 +67,22 @@
     (when admin?
       [:ul.navbar-nav.dropdown
        [:a#admin-dropdown.nav-link
-        {:href "#" :role "button" :data-toggle "dropdown" :id ul-id
+        {:href "#" :role "button" :data-bs-toggle "dropdown" :id ul-id
          :aria-haspopup "true" :aria-expanded "false"}
         [:button.btn.dropdown-toggle.rounded-2 {:class button-class}
          (labels :nav/admin)]]
-       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby (str ul-id)}
-        [:li.nav-item
-         [:a.nav-link {:role "button" :href (reitfe/href :routes/admin-center)}
+       [:ul.dropdown-menu.dropdown-menu-right {:aria-labelledby (str ul-id)}
+        [:li.dropdown-item
+         [:a.btn {:role "button" :href (reitfe/href :routes/admin-center)}
           (labels :router/admin-center)]]
-        [:li.nav-item
-         [:a.nav-link {:role "button" :href (reitfe/href :routes/feedbacks)}
+        [:li.dropdown-item
+         [:a.btn {:role "button" :href (reitfe/href :routes/feedbacks)}
           (labels :router/all-feedbacks)]]
-        [:li.nav-item
-         [:a.nav-link {:role "button" :href (reitfe/href :routes/analytics)}
+        [:li.dropdown-item
+         [:a.btn {:role "button" :href (reitfe/href :routes/analytics)}
           (labels :router/analytics)]]
-        [:li.nav-item
-         [:a.nav-link {:role "button" :href (reitfe/href :routes.admin/summaries)}
+        [:li.dropdown-item
+         [:a.btn {:role "button" :href (reitfe/href :routes.admin/summaries)}
           (labels :router/summaries)]]]])))
 
 (defn- profile-picture-in-nav

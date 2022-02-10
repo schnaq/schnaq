@@ -128,7 +128,7 @@
             :routes.schnaq/dashboard (labels :summary.link.button/text)
             :routes.schnaq/qanda (labels :qanda.button/text)
             (labels :discussion.navbar/views))]]
-        {:id dropdown-id :data-toggle "dropdown"
+        {:id dropdown-id :data-bs-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
         [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
          [standard-view-button]
@@ -213,14 +213,14 @@
    [:div.d-flex.align-items-center
     [um/user-dropdown-button classes]]))
 
-(defn language-with-label-dropdown
+(defn collapsed-view-language-with-label-dropdown
   "Display a language dropdown menu with a description label"
   []
   (let [dropdown-id "schnaq-collapsed-language-dropdown"]
     [:<>
      [:nav-link.dropdown-toggle
       {:id dropdown-id
-       :href "#" :role "button" :data-toggle "dropdown"
+       :href "#" :role "button" :data-bs-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
       (labels :nav.buttons/language-toggle) " "
       [icon :language]]

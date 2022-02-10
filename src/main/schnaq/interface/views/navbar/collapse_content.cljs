@@ -101,7 +101,7 @@
    [:div.font-weight-bold.mt-3 (labels :discussion.navbar/settings)]
    [:ul.list-group.list-group-flush
     [li-button (labels :sharing/tooltip) (fn [_] (share-modal/open-share-discussion))]
-    [:li.list-group-item.dropdown [nav-elements/language-with-label-dropdown]]
+    [:li.list-group-item.dropdown [nav-elements/collapsed-view-language-with-label-dropdown]]
     [settings-li-button]]])
 
 (defn- external-content [collapse-content-id content]
@@ -136,6 +136,6 @@
      [li-link-button :router/pricing (reitfe/href :routes/pricing)]
      [li-link-button :router/privacy (reitfe/href :routes/privacy)]
      [li-link-button :nav/blog "https://schnaq.com/blog/"]
-     [:li.list-group-item.dropdown [nav-elements/language-with-label-dropdown]]]]])
+     [:li.list-group-item.dropdown [nav-elements/collapsed-view-language-with-label-dropdown]]]]])
 
 
