@@ -6,31 +6,31 @@
 @use "variables" as vars;
 
 :root {
-  --branding-primary: var(--bs-primary);
-  --branding-secondary: var(--bs-secondary);
-  --branding-background: #{vars.$light-background};
+  --theming-primary: var(--bs-primary);
+  --theming-secondary: var(--bs-secondary);
+  --theming-background: #{vars.$light-background};
 }
 
 // -----------------------------------------------------------------------------
 // Button
 
 .btn-primary {
-  background-color: var(--branding-primary) !important;
+  background-color: var(--theming-primary) !important;
 
   &:hover,
   &:active,
   &:visited {
-    background-color: var(--branding-primary) !important;
+    background-color: var(--theming-primary) !important;
   }
 }
 
 .btn-secondary {
-  background-color: var(--branding-secondary) !important;
+  background-color: var(--theming-secondary) !important;
 
   &:hover,
   &:active,
   &:visited {
-    background-color: var(--branding-secondary) !important;
+    background-color: var(--theming-secondary) !important;
   }
 }
 
@@ -38,13 +38,13 @@
 // Button Outlines
 
 .btn-outline-primary {
-  color: var(--branding-primary) !important;
-  border-color: var(--branding-primary) !important;
+  border-color: var(--theming-primary) !important;
+  color: var(--theming-primary) !important;
 
   &:not(.disabled):not(.disabled).active,
   &:hover {
+    background-color: var(--theming-primary) !important;
     color: #fff !important;
-    background-color: var(--branding-primary) !important;
   }
 }
 
@@ -52,11 +52,11 @@
 // Text Color
 
 .text-primary {
-  color: var(--branding-primary) !important;
+  color: var(--theming-primary) !important;
 }
 
 .text-secondary {
-  color: var(--branding-secondary) !important;
+  color: var(--theming-secondary) !important;
 }
 
 // -----------------------------------------------------------------------------
@@ -66,5 +66,5 @@
 // Background
 
 .base-wrapper {
-  background: var(--branding-background);
+  background: var(--theming-background);
 }
