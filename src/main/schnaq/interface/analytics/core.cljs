@@ -13,11 +13,12 @@
 (defn- analytics-card
   "A single card containing a metric and a title."
   [title metric]
-  [:div.card
-   [:div.card-body
-    [:h5.card-title title]
-    [:p.card-text.display-1 metric]
-    [:p.card-text [:small.text-muted "Last updated ..."]]]])
+  [:div.col
+   [:div.card
+    [:div.card-body
+     [:h5.card-title title]
+     [:p.card-text.display-1 metric]
+     [:p.card-text [:small.text-muted "Last updated ..."]]]]])
 
 (defn- percentage-change
   "Calculate the percentage change between two values. Color positive changes green and negative red."
@@ -44,15 +45,16 @@
   to make sub-headings."
   [title content]
   [string? (? map?) :ret vector?]
-  [:div.card
-   [:div.card-body
-    [:h5.card-title title]
-    (for [[metric-name metric-value] content]
-      [:div {:key metric-name}
-       [:p.card-text [:strong (string/capitalize (name metric-name))]]
-       [:p.card-text.display-1 metric-value]
-       [:hr]])
-    [:p.card-text [:small.text-muted "Last updated ..."]]]])
+  [:div.col
+   [:div.card
+    [:div.card-body
+     [:h5.card-title title]
+     (for [[metric-name metric-value] content]
+       [:div {:key metric-name}
+        [:p.card-text [:strong (string/capitalize (name metric-name))]]
+        [:p.card-text.display-1 metric-value]
+        [:hr]])
+     [:p.card-text [:small.text-muted "Last updated ..."]]]]])
 
 (defn- analytics-controls
   "The controls for the analytics view."
@@ -98,7 +100,7 @@
         [:div.row.mb-3
          [:div.col-12.col-lg-6
           [statements-stats statements-num statements-series]]]
-        [:div.card-columns
+        [:div.row.row-cols-1.row-cols-lg-3.g-3
          [analytics-card (labels :analytics/overall-discussions) discussions-num]
          [analytics-card (labels :analytics/user-numbers) usernames-num]
          [analytics-card (labels :analytics/registered-users-numbers) registered-users]

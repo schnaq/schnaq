@@ -246,11 +246,6 @@
     [answers statement]
     [replies statement]]])
 
-(defn- answer-or-edit-card
-  "Either show the clickable statement, or its edit-view."
-  [statement]
-  [statement-card->editable-card statement [answer-card statement]])
-
 (defn- sort-statements
   "Sort statements according to the filter method. If we are in q-and-a-mode,
   then always display own statements first."
@@ -424,7 +419,7 @@
       [:div.statement-column
        {:key (:db/id statement)}
        [motion/fade-in-and-out
-        [answer-or-edit-card statement]
+        [statement-card->editable-card statement [answer-card statement]]
         (delay-fade-in-for-subsequent-content index)]])))
 
 (defn conclusion-cards-list
