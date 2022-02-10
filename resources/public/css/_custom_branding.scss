@@ -1,0 +1,70 @@
+// This namespace is to set the current branding of the page. We override in our
+// interface the defined variables, which are referenced by our bootstrap
+// overrides.
+
+// @use "../node_modules/bootstrap/mixins/buttons" as bs;
+@use "variables" as vars;
+
+:root {
+  --branding-primary: var(--bs-primary);
+  --branding-secondary: var(--bs-secondary);
+  --branding-background: #{vars.$light-background};
+}
+
+// -----------------------------------------------------------------------------
+// Button
+
+.btn-primary {
+  background-color: var(--branding-primary) !important;
+
+  &:hover,
+  &:active,
+  &:visited {
+    background-color: var(--branding-primary) !important;
+  }
+}
+
+.btn-secondary {
+  background-color: var(--branding-secondary) !important;
+
+  &:hover,
+  &:active,
+  &:visited {
+    background-color: var(--branding-secondary) !important;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Button Outlines
+
+.btn-outline-primary {
+  color: var(--branding-primary) !important;
+  border-color: var(--branding-primary) !important;
+
+  &:not(.disabled):not(.disabled).active,
+  &:hover {
+    color: #fff !important;
+    background-color: var(--branding-primary) !important;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Text Color
+
+.text-primary {
+  color: var(--branding-primary) !important;
+}
+
+.text-secondary {
+  color: var(--branding-secondary) !important;
+}
+
+// -----------------------------------------------------------------------------
+// Borders
+
+// -----------------------------------------------------------------------------
+// Background
+
+.base-wrapper {
+  background: var(--branding-background);
+}
