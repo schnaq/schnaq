@@ -36,7 +36,7 @@
       [:input#nochmal-nachfragen.form-check-input {:type "checkbox" :required true}]
       [:label.form-check-label {:for "nochmal-nachfragen"}
        (labels :startpage.newsletter/consent)]
-      [:a {:href "#data" :type "button" :data-toggle "collapse" :data-target "#collapse-more-newsletter"
+      [:a {:href "#data" :type "button" :data-bs-toggle "collapse" :data-bs-target "#collapse-more-newsletter"
            :aria-expanded "false" :aria-controls "#collapse-more-newsletter" :data-reitit-handle-click false}
        (labels :startpage.newsletter/more-info-clicker)]
       [:div.collapse {:id "collapse-more-newsletter"}

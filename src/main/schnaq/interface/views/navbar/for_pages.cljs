@@ -56,15 +56,14 @@
   "Navbar definition for the default pages."
   [wrapper-classes]
   [:nav.navbar.navbar-expand-lg.py-3.navbar-transparent.bg-transparent.mb-4
-   ;; logo
    [:section
-    {:class (if (str/blank? wrapper-classes) "container" wrapper-classes)}
+    {:class (if (str/blank? wrapper-classes) "container-fluid" wrapper-classes)}
     [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
      [:img.d-inline-block.align-middle.mr-2
       {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
     ;; hamburger
     [:button.navbar-toggler
-     {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
+     {:type "button" :data-bs-toggle "collapse" :data-bs-target "#schnaq-navbar"
       :aria-controls "schnaq-navbar" :aria-expanded "false" :aria-label "Toggle navigation"
       :data-html2canvas-ignore true}
      [:span.navbar-toggler-icon]]
