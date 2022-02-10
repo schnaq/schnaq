@@ -15,31 +15,30 @@
   (let [user-groups @(rf/subscribe [:user/groups])
         hubs @(rf/subscribe [:hubs/all])]
     (when (seq user-groups)
-      [:section.text-center
-       [:h4.mb-3 (labels :discussion.create.hub-exclusive-checkbox/title)]
-       [:div.form-check
-        [:input.form-check-input.big-checkbox
-         {:type :checkbox
-          :id :hub-exclusive
-          :defaultChecked true
-          :on-change
-          #(when (oget % [:target :checked])
-             (jq/prop (jq/$ "#public-discussion") "checked" false))}]
-        [:label.form-check-label.display-6.ps-1 {:for :hub-exclusive}
-         (labels :discussion.create.hub-exclusive-checkbox/label)]
-        [:small.form-text.text-muted (labels :schnaq.create.hub/help-text)]
-        [:select.form-control.form-select.mt-3
-         {:id :exclusive-hub-select
-          :style {:max-width "80%"}}
-         (for [group-id user-groups]
-           [:option {:value group-id
-                     :key group-id}
-            (get-in hubs [group-id :hub/name])])]]])))
+      [:div.form-check
+       [:input.form-check-input.big-checkbox
+        {:type :checkbox
+         :id :hub-exclusive
+         :defaultChecked true
+         :on-change
+         #(when (oget % [:target :checked])
+            (jq/prop (jq/$ "#public-discussion") "checked" false))}]
+       [:label.form-check-label.display-6.ps-1 {:for :hub-exclusive}
+        (labels :discussion.create.hub-exclusive-checkbox/title)]
+       [:p.small.form-text.text-muted.ms-2 (labels :schnaq.create.hub/help-text)]
+       [:select.form-control.form-select.mt-3
+        {:id :exclusive-hub-select
+         :style {:max-width "80%"}}
+        (for [group-id user-groups]
+          [:option {:value group-id
+                    :key group-id}
+           (get-in hubs [group-id :hub/name])])]])))
 
 (defn- create-schnaq-button []
-  [:button.btn.btn-dark.p-3.rounded-1.ms-auto
-   (labels :schnaq.create.button/save)
-   [icon :arrow-right "ms-2"]])
+  [:div.text-end
+   [:button.btn.btn-dark.p-3.rounded-1
+    (labels :schnaq.create.button/save)
+    [icon :arrow-right "ms-2"]]])
 
 (defn- create-qanda-page []
   (let [selected-hub @(rf/subscribe [:hub/selected])]
@@ -63,15 +62,14 @@
           [common/form-input {:id :schnaq-title
                               :placeholder (labels :schnaq.create.input/placeholder)
                               :css "font-150"}]]]
-        [:div.row.text-primary.p-3
-         [icon :info "my-auto me-3"]
+        [:div.text-primary.p-3
+         [icon :info " my-auto me-3"]
          [:span (labels :schnaq.create/info)]]
         (when selected-hub
           [:div.row.my-5
-           [:div.col-12.offset-xl-3.col-xl-6
+           [:div.col-12.col-xl-6
             [add-schnaq-to-hub]]])
-        [:div.row.px-1.py-3
-         [create-schnaq-button]]]]]]))
+        [create-schnaq-button]]]]]))
 
 (defn create-schnaq-view []
   [create-qanda-page])

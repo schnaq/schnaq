@@ -116,7 +116,7 @@
   [:div.row
    [:div.col-12.text-center.h2.mb-5 (labels :startpage.three-steps/heading)]
    [single-step
-    [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.three-steps/first)]
+    [:a.text-decoration-none {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.three-steps/first)]
     :startpage.schnaqqifant/create-schnaq
     "startpage-step-1"]
    [single-step (labels :startpage.three-steps/second)
