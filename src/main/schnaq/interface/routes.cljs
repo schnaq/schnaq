@@ -156,17 +156,18 @@
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
+                              (rf/dispatch [:body.class/add "theming-enabled"])
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
                               (rf/dispatch [:schnaq/add-visited! (:share-hash path)])
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/mark-all-as-seen (:share-hash path)]])
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
                      :stop (fn []
+                             (rf/dispatch [:body.class/remove "theming-enabled"])
                              (rf/dispatch [:filters/clear])
                              (rf/dispatch [:schnaq.selected/dissoc]))}]}
      [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
-                               (rf/dispatch [:body.class/add "theming-enabled"])
                                (rf/dispatch [:discussion.history/clear])
                                (rf/dispatch [:updates.periodic/starting-conclusions true])
                                (rf/dispatch [:discussion.query.conclusions/starting])
@@ -176,7 +177,6 @@
                                (rf/dispatch [:updates.periodic/activation true])
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
-                              (rf/dispatch [:body.class/remove "theming-enabled"])
                               (rf/dispatch [:updates.periodic/starting-conclusions false])
                               (rf/dispatch [:updates.periodic/polls false])
                               (rf/dispatch [:updates.periodic/activation false])

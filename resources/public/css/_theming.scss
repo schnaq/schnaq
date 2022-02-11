@@ -2,7 +2,6 @@
 // interface the defined variables, which are referenced by our bootstrap
 // overrides.
 
-// @use "../node_modules/bootstrap/mixins/buttons" as bs;
 @use "variables" as vars;
 
 :root {
@@ -61,7 +60,11 @@
   }
 
   // -----------------------------------------------------------------------------
-  // Borders
+  // Tabs
+
+  .nav-tabs .nav-link {
+    color: var(--theming-primary) !important;
+  }
 
   // -----------------------------------------------------------------------------
   // Background
