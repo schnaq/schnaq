@@ -64,7 +64,7 @@
                  (js-wrap/prevent-default e)
                  (rf/dispatch [:analytics/load-all-with-time (oget e [:target :elements :days-input :value])]))}
    [:div.col
-    [:input#days-input.form-control.form-round-05.mr-sm-2
+    [:input#days-input.form-control.form-round-05.me-sm-2
      {:type "number"
       :name "days-input"
       :placeholder "Stats for last X days"

@@ -40,7 +40,7 @@
      [:div.text-center
       [:a.btn.btn-outline-dark.btn-rounded-2
        {:href (reitfe/href :routes.hub/edit {:keycloak-name (:hub/keycloak-name hub)})}
-       [icon :cog "mr-1"]
+       [icon :cog "me-1"]
        (labels :hub/settings)]]
      [:hr]
      [feed/sidebar-info-links]]))

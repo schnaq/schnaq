@@ -22,7 +22,7 @@
                                   :info
                                   false))}
             options)
-     (subs padded-access-code 0 (/ code-length 2)) [:span.pl-3]
+     (subs padded-access-code 0 (/ code-length 2)) [:span.ps-3]
      (subs padded-access-code (/ code-length 2))]))
 
 (defn schnaq-statement-filter-button-group
@@ -34,7 +34,6 @@
      [:input.btn-check {:id label-key :name :filter-discussion-options
                         :type "radio" :autoComplete "off"
                         :onClick on-click}]
-     (println active-filters?)
      [:label.btn.btn-sm.btn-outline-primary
       (cond-> {:for label-key}
         (not active-filters?) (assoc :class "active"))

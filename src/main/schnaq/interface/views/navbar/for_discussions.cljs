@@ -54,7 +54,7 @@
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
     [:div.d-flex.flex-row.flex-wrap.p-md-3
-     [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4.mr-3
+     [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4.me-3
       ;; schnaq logo
       [:div.mx-4.d-none.d-md-block
        [:small.text-primary (labels :discussion.navbar/posts)]
@@ -65,10 +65,10 @@
       [:a.schnaq-logo-container.d-flex.h-100.text-decoration-none
        {:href (reitfe/href :routes.schnaq/start)}
        [:small.text-white "powered by"]
-       [:img.d-inline-block.align-middle.mr-2
+       [:img.d-inline-block.align-middle.me-2
         {:src (img-path :logo-white) :alt "schnaq logo"
          :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]]
-     [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
+     [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ms-xl-auto
       [:div.d-flex.align-items-center.schnaq-navbar.px-4
        [admin/txt-export share-hash title]
        (when admin-access?
@@ -76,4 +76,4 @@
        [navbar-components/language-toggle-with-tooltip true {:class "btn"}]]
       [:div.d-flex.align-items-center.mt-4.mt-md-0
        [:div.mx-2.embedded-nav-button [nav-elements/graph-button]]
-       [:div.mr-2.embedded-nav-button [nav-elements/summary-button]]]]]))
+       [:div.me-2.embedded-nav-button [nav-elements/summary-button]]]]]))

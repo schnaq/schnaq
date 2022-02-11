@@ -57,7 +57,7 @@
                     beta-tester? [icon :rocket]
                     (and pro-user? (not beta-tester?)) [pro-badge])]
     (when indicator
-      [:span.pr-1 indicator])))
+      [:span.pe-1 indicator])))
 
 (defn admin-dropdown
   "Show Admin pages when user is authenticated and has admin role."

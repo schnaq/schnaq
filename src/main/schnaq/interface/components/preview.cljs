@@ -9,6 +9,6 @@
   [:div.preview-image
    [:img.img-fluid {:src (img-path img-key)}]
    [:div.alert.alert-primary {:on-click #(rf/dispatch [:navigation/navigate :routes/pricing])}
-    [:p.mb-1 [:small.font-weight-bold
+    [:p.mb-1 [:small.fw-bold
               (labels :preview.image-overlay/title)]]
     [:p.mb-0 [:small (labels :preview.image-overlay/body)]]]])

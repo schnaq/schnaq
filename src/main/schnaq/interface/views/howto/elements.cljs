@@ -32,7 +32,7 @@
              {:on-click #(rf/dispatch [:how-to-visibility/to-localstorage hide-tag])}
              (labels :how-to/answer-dont-show-again)]]]]
          [:div.col-12.col-lg-4.offset-lg-1
-          [:div.text-right
+          [:div.text-end
            [:button.btn.btn-outline-dark.mb-3
             {:on-click #(rf/dispatch [:how-to-visibility/to-localstorage hide-tag])}
             [icon :cross "m-auto"]]]

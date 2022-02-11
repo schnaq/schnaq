@@ -31,7 +31,7 @@
    [pricing-button]
    [privacy-button]
    [blog-link]
-   [:div.dropdown.ml-auto
+   [:div.dropdown.ms-auto
     [navbar-components/language-dropdown false {}]]
    (when @(rf/subscribe [:user/administrator?])
      [um/admin-dropdown "btn-outline-secondary"])
@@ -46,7 +46,7 @@
         navbar-title (toolbelt/truncate-to-n-chars title 20)]
     [navbar-components/collapsible-nav-bar
      [elements/navbar-title
-      [:h1.h6.font-weight-bold.my-auto.text-dark navbar-title]]
+      [:h1.h6.fw-bold.my-auto.text-dark navbar-title]]
      navbar-content-id
      "navbar-bg-transparent-sm-white"
      [navbar-user]
@@ -59,7 +59,7 @@
    [:section
     {:class (if (str/blank? wrapper-classes) "container-fluid" wrapper-classes)}
     [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
-     [:img.d-inline-block.align-middle.mr-2
+     [:img.d-inline-block.align-middle.me-2
       {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
     ;; hamburger
     [:button.navbar-toggler
@@ -69,7 +69,7 @@
      [:span.navbar-toggler-icon]]
     ;; menu items
     [:div#schnaq-navbar.collapse.navbar-collapse
-     [:ul.navbar-nav.ml-auto
+     [:ul.navbar-nav.ms-auto
       [:li.nav-item [navbar-components/button :nav/schnaqs (toolbelt/current-overview-link)]]
       [:li.nav-item [product-button]]
       [:li.nav-item [pricing-button]]

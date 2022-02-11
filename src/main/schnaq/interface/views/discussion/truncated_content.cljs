@@ -14,9 +14,9 @@
         collapsed? @(rf/subscribe [:toggle-statement-content/collapsed? statement-id])
         display-content (if collapsed? short-content full-content)
         button-content (if collapsed?
-                         [:<> [icon :collapse-up "my-auto mr-2"]
+                         [:<> [icon :collapse-up "my-auto me-2"]
                           (labels :qanda.button.show/statement)]
-                         [:<> [icon :collapse-down "my-auto mr-2"]
+                         [:<> [icon :collapse-down "my-auto me-2"]
                           (labels :qanda.button.hide/statement)])]
     [:<>
      [md/as-markdown display-content]

@@ -18,7 +18,7 @@
                   {:href href :class "text-primary"}
                   {:href href})]
     [:a.li.list-group-item.list-group-item-action classes
-     [:img.navbar-view-toggle.mr-3
+     [:img.navbar-view-toggle.me-3
       {:src (img-path icon)
        :alt "graph icon"}]
      (labels label)]))
@@ -80,14 +80,14 @@
 (defn- user-button
   "Display the user avatar and fitting dropdown."
   []
-  [:div.d-flex.align-items-center.ml-auto
+  [:div.d-flex.align-items-center.ms-auto
    [nav-elements/user-button]])
 
 (defn- views
   "Display all views as a list-group"
   []
   [:<>
-   [:div.font-weight-bold.mt-3 (labels :discussion.navbar/views)]
+   [:div.fw-bold.mt-3 (labels :discussion.navbar/views)]
    [:ul.list-group.list-group-flush
     [standard-view-li]
     [graph-li]
@@ -98,7 +98,7 @@
   "Display all settings as a list group"
   []
   [:<>
-   [:div.font-weight-bold.mt-3 (labels :discussion.navbar/settings)]
+   [:div.fw-bold.mt-3 (labels :discussion.navbar/settings)]
    [:ul.list-group.list-group-flush
     [li-button (labels :sharing/tooltip) (fn [_] (share-modal/open-share-discussion))]
     [:li.list-group-item.dropdown [nav-elements/collapsed-view-language-with-label-dropdown]]
@@ -130,7 +130,7 @@
   [external-content collapse-content-id
    [:<>
     [:div.d-flex.align-items-center
-     [:div.ml-auto
+     [:div.ms-auto
       [um/register-or-user-button "btn-link"]]]
     [:ul.list-group.list-group-flush
      [li-link-button :router/pricing (reitfe/href :routes/pricing)]

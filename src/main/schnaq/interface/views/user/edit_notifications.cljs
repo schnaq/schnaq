@@ -76,7 +76,7 @@
    [:div.row.mt-5.mb-3.pt-5
     [:div.col
      [:h5.text-muted (labels :user.notifications/mails)]]
-    [:div.col.text-right
+    [:div.col.text-end
      [change-interval-drop-down]]]
    [:small.text-muted (labels :user.notifications/info)]])
 

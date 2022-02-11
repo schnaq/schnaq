@@ -22,7 +22,6 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reagent.dom]
-            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]))
 
 (def ^:private display-time
@@ -48,7 +47,7 @@
     {:class-name (toast-classes context)
      :aria-atomic "true", :aria-live "assertive", :role "alert"}
     [:div.toast-header
-     [:strong.mr-auto title]
+     [:strong.me-auto title]
      [:button.btn-close {:type "button"
                          :on-click (fn []
                                      (when on-close-fn (on-close-fn))

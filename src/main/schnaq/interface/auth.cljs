@@ -41,7 +41,7 @@
         (labels :auth.modal.request-login/button)]]
       [:p
        [:small.text-muted
-        [icon :info "my-auto mr-1"]
+        [icon :info "my-auto me-1"]
         (labels :auth.modal.request-login/info)]]]]))
 
 ;; -----------------------------------------------------------------------------

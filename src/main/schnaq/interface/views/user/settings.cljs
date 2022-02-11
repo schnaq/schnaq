@@ -11,7 +11,7 @@
 
 (defn- current-user []
   (let [user @(rf/subscribe [:user/current])]
-    [:div.pl-4
+    [:div.ps-4
      [common/avatar-with-nickname-right #:user.registered{:profile-picture (get-in user [:profile-picture :display])
                                                           :display-name (get-in user [:names :display])} 40]]))
 
@@ -21,12 +21,12 @@
   (let [current-route @(rf/subscribe [:navigation/current-route-name])
         button-class (if (= current-route route) "feed-button-focused" "feed-button")]
     [:article
-     [:a.btn.btn-link.text-left {:class button-class
+     [:a.btn.btn-link.text-start {:class button-class
                                  :role "button"
                                  :href (rfe/href route)}
-      [:div.row.text-left
+      [:div.row.text-start
        [:div.col-1
-        [icon icon-name "mr-4 my-auto"]]
+        [icon icon-name "me-4 my-auto"]]
        [:div.col
         [:span (labels label)]]]]]))
 

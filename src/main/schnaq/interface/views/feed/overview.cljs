@@ -31,7 +31,7 @@
   "Displays the different sort options for feed elements."
   []
   (let [sort-method @(rf/subscribe [:feed/sort])]
-    [:span.pl-2.text-right
+    [:span.ps-2.text-end
      [:button.btn.btn-outline-primary.btn-sm.mx-1
       {:class (when (= sort-method :time) "active")
        :on-click #(rf/dispatch [:feed.sort/set :time])}
@@ -100,14 +100,14 @@
     {:href (reitfe/href :routes.schnaq/start {:share-hash (:discussion/share-hash schnaq)})
      :on-click #(rf/dispatch [:schnaq/select-current schnaq])}
     [schnaq-header-image schnaq]
-    [:div.ml-3.w-100.py-2
+    [:div.ms-3.w-100.py-2
      [schnaq-title (:discussion/title schnaq)]
      [:div.d-flex.flex-row.mt-auto.pt-3
       [:div [badges/comments-info-badge schnaq]]
       [badges/read-only-badge schnaq]
-      [:div.d-flex.flex-row.ml-auto
+      [:div.d-flex.flex-row.ms-auto
        [user/user-info-only (:discussion/author schnaq) 24]
-       [:small.font-weight-light.d-inline.my-auto.ml-2
+       [:small.fw-light.d-inline.my-auto.ms-2
         [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]]]
    (when delete-from-hub?
      [schnaq-options schnaq])])
@@ -129,7 +129,7 @@
        [:div.panel-white.rounded-1.p-4
         [:div.d-flex.flex-row.mb-4
          [:h6.text-typography.d-none.d-md-block (labels :router/visited-schnaqs)]
-         [:div.ml-auto
+         [:div.ms-auto
           [sort-options]
           [filters/filter-button]]]
         (for [schnaq sorted-schnaqs]
@@ -141,12 +141,12 @@
   ([text image-div class-button route]
    [feed-button text image-div class-button route nil])
   ([text image-div button-class route route-params]
-   [:a.btn.btn-link.text-left {:class button-class
-                               :role "button"
-                               :href (reitfe/href route route-params)}
+   [:a.btn.btn-link.text-start {:class button-class
+                                :role "button"
+                                :href (reitfe/href route route-params)}
     [:div.d-flex.flex-row
      image-div
-     [:div.my-auto.pl-2 text]]]))
+     [:div.my-auto.ps-2 text]]]))
 
 (defn icon-and-label-feed-button
   [label icon-name route route-params]
@@ -175,7 +175,7 @@
 (defn feed-hubs []
   (when-let [hubs @(rf/subscribe [:hubs/all])]
     [:section
-     [:h6.text-typography.pb-2.ml-4 (labels :hubs/heading)]
+     [:h6.text-typography.pb-2.ms-4 (labels :hubs/heading)]
      [:div.d-flex.flex-column
       (for [[keycloak-name hub] hubs]
         (with-meta [hub-feed-button hub] {:key keycloak-name}))

@@ -6,7 +6,7 @@
   "Display a spinner icon."
   []
   [:div.spinner-border.text-primary {:role "loading-status"}
-   [:span.sr-only "Loading..."]])
+   [:span.visually-hidden "Loading..."]])
 
 (defn loading-placeholder
   "Placeholder to give feedback to user, that data is currently on its way."
