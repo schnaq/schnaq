@@ -40,13 +40,18 @@
 
 (defn navbar-title
   "Brand logo and title with dynamic resizing."
-  [title additional-content]
-  [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2.bg-white
-   [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes/startpage)}
-    [schnaq-logo]]
-   [:div.mx-0.mx-md-4
-    title]
-   additional-content])
+  ([title]
+   [navbar-title title nil true])
+  ([title additional-content]
+   [navbar-title title additional-content true])
+  ([title additional-content clickable-title?]
+   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2.bg-white
+    [:a.schnaq-logo-container.d-flex.h-100 (when clickable-title?
+                                             {:href (reitfe/href :routes/startpage)})
+     [schnaq-logo]]
+    [:div.mx-0.mx-md-4
+     title]
+    additional-content]))
 
 (defn navbar-qanda-title []
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2
