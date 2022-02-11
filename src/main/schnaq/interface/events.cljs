@@ -65,6 +65,26 @@
  (fn [form-elements]
    (toolbelt/reset-form-fields! form-elements)))
 
+(rf/reg-event-fx
+ :body.class/add
+ (fn [_ [_ class]]
+   {:fx [[:body.class/add! class]]}))
+
+(rf/reg-fx
+ :body.class/add!
+ (fn [class]
+   (.add (.. js/document -body -classList) class)))
+
+(rf/reg-event-fx
+ :body.class/remove
+ (fn [_ [_ class]]
+   {:fx [[:body.class/remove! class]]}))
+
+(rf/reg-fx
+ :body.class/remove!
+ (fn [class]
+   (.remove (.. js/document -body -classList) class)))
+
 (rf/reg-sub
  :current-locale
  (fn [db _]
