@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.schnaq.activation
   (:require ["framer-motion" :refer [motion]]
+            [goog.string :as gstring]
             [re-frame.core :as rf]
             [schnaq.interface.components.motion :as motion-comp]
             [schnaq.interface.translations :refer [labels]]
@@ -58,7 +59,7 @@
      [motion-comp/fade-in-and-out
       [:section.statement-card.p-3.text-white
        {:class background-class}
-       [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
+       [:h4.mx-auto.mt-3 (gstring/format (labels :schnaq.activation/title) (labels :schnaq.activation/activation-button))]
        [:div.mx-auto.display-3 (:activation/count activation)]
        [schnaqqi-walk]
        [:div.text-center

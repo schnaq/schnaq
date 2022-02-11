@@ -301,7 +301,7 @@
    :schnaq.activation.create/label "Präsentiere deinen Teilnehmer:innen eine Eingabe zur Aktivierung!"
    :schnaq.activation.create/start-button "Aktivierung starten"
    :schnaq.activation.create/reset-button "Aktivierung zurücksetzen"
-   :schnaq.activation/title "Törööös gesamt:"
+   :schnaq.activation/title "%ss gesamt:"
    :schnaq.activation/activation-button "Törööö"
 
    ;; schnaq creation
