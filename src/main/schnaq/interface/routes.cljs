@@ -166,6 +166,7 @@
      [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
+                               (rf/dispatch [:body.class/add "theming-enabled"])
                                (rf/dispatch [:discussion.history/clear])
                                (rf/dispatch [:updates.periodic/starting-conclusions true])
                                (rf/dispatch [:discussion.query.conclusions/starting])
@@ -175,6 +176,7 @@
                                (rf/dispatch [:updates.periodic/activation true])
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
+                              (rf/dispatch [:body.class/remove "theming-enabled"])
                               (rf/dispatch [:updates.periodic/starting-conclusions false])
                               (rf/dispatch [:updates.periodic/polls false])
                               (rf/dispatch [:updates.periodic/activation false])
