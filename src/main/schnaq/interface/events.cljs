@@ -170,6 +170,12 @@
  (fn [selected-schnaq _ _]
    (not (nil? (some #{:discussion.state/read-only} (:discussion/states selected-schnaq))))))
 
+(rf/reg-event-db
+ :schnaq.selected/dissoc
+ ;; Remove currently selected schnaq
+ (fn [db]
+   (update db :schnaq dissoc :selected)))
+
 (rf/reg-event-fx
  :schnaq/load-by-share-hash
  ;; Explicit api-url is optional
