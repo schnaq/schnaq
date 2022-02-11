@@ -12,6 +12,9 @@
 ;; -----------------------------------------------------------------------------
 ;; Navbar Elements
 
+(defn- schnaqs-button []
+  [navbar-components/button :nav/schnaqs (toolbelt/current-overview-link)])
+
 (defn- blog-link []
   [navbar-components/button :nav/blog "https://schnaq.com/blog/"])
 
@@ -28,6 +31,7 @@
 
 (defn- navbar-user []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
+   [schnaqs-button]
    [pricing-button]
    [privacy-button]
    [blog-link]
