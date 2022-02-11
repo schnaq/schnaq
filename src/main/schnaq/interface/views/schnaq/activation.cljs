@@ -181,6 +181,7 @@
 (rf/reg-event-fx
  :activation/activate
  (fn [{:keys [db]} _]
-   {:fx [(http/xhrio-request db :put "/activation/increment"
-                             [:schnaq.activation.load-from-backend/success]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
+   (when-let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :put "/activation/increment"
+                               [:schnaq.activation.load-from-backend/success]
+                               {:share-hash share-hash})]})))

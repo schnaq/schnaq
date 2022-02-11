@@ -474,26 +474,28 @@
 (rf/reg-event-fx
  :discussion/toggle-upvote
  (fn [{:keys [db]} [_ {:keys [db/id meta/upvoted?] :as statement}]]
-   {:db (-> db
-            (update-in [:votes :own :up id] #(not (if (nil? %) upvoted? %)))
-            (assoc-in [:votes :own :down id] false))
-    :fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
-                             {:statement-id id
-                              :nickname (tools/current-display-name db)
-                              :share-hash (-> db :schnaq :selected :discussion/share-hash)}
-                             [:ajax.error/as-notification])]}))
+   (when-let [share-hash (-> db :schnaq :selected :discussion/share-hash)]
+     {:db (-> db
+              (update-in [:votes :own :up id] #(not (if (nil? %) upvoted? %)))
+              (assoc-in [:votes :own :down id] false))
+      :fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
+                               {:statement-id id
+                                :nickname (tools/current-display-name db)
+                                :share-hash share-hash}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
  :discussion/toggle-downvote
  (fn [{:keys [db]} [_ {:keys [db/id meta/downvoted?] :as statement}]]
-   {:db (-> db
-            (assoc-in [:votes :own :up id] false)
-            (update-in [:votes :own :down id] #(not (if (nil? %) downvoted? %))))
-    :fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
-                             {:statement-id id
-                              :nickname (tools/current-display-name db)
-                              :share-hash (-> db :schnaq :selected :discussion/share-hash)}
-                             [:ajax.error/as-notification])]}))
+   (when-let [share-hash (-> db :schnaq :selected :discussion/share-hash)]
+     {:db (-> db
+              (assoc-in [:votes :own :up id] false)
+              (update-in [:votes :own :down id] #(not (if (nil? %) downvoted? %))))
+      :fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
+                               {:statement-id id
+                                :nickname (tools/current-display-name db)
+                                :share-hash share-hash}
+                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
  :upvote-success
