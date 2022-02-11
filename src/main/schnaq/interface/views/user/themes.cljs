@@ -11,7 +11,8 @@
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.settings :as settings]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
-            [schnaq.interface.views.navbar.elements :as elements]))
+            [schnaq.interface.views.navbar.elements :as elements]
+            [schnaq.interface.components.buttons :as buttons]))
 
 (s/def ::hex-color (s/and string? #(.startsWith % "#")))
 (s/def ::css-variable (s/and string? #(.startsWith % "--")))
@@ -69,6 +70,9 @@
       [:h1.h6.fw-bold.my-auto.text-dark "Welcome to schnaq"]
       nil false]
      [activation/activation-card]
+     [:div.d-flex.flex-row
+      [buttons/button "primary button"]
+      [buttons/button "secondary button" (constantly "#") "btn-secondary ms-2"]]
      [selection-card]]]])
 
 (defn theming []
