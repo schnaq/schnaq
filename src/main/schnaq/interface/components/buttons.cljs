@@ -31,7 +31,7 @@
 (defn button
   "Create a `button`-Tag styled. By default, styled in primary colors."
   ([content]
-   [button content "#"])
+   [button content (constantly "#")])
   ([content on-click]
    [button content on-click "btn-primary"])
   ([content on-click classes]
