@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.schnaq.activation
   (:require ["framer-motion" :refer [motion]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.components.motion :as motion-comp]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]))
 
@@ -29,7 +29,7 @@
      ;; leading schnaqqi
      [:span.schnaqqi-walk
       {:style {:left "30px"
-               :top  "10px"}}]]))
+               :top "10px"}}]]))
 
 (defn- schnaqqi-walk-motion
   "A basic move-in animation. Pass any transition you like."
@@ -55,7 +55,7 @@
   (when-let [activation @(rf/subscribe [:schnaq/activation])]
     [:div
      {:class col-class}
-     [motion/fade-in-and-out
+     [motion-comp/fade-in-and-out
       [:section.statement-card.p-3.text-white
        {:class background-class}
        [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
@@ -66,7 +66,7 @@
          {:class button-class
           :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
          (labels :schnaq.activation/activation-button)]]]
-      motion/card-fade-in-time]]))
+      motion-comp/card-fade-in-time]]))
 
 (defn activation-event-view
   "Activation card for q-and-a view."
