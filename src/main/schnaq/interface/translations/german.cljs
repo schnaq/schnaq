@@ -966,6 +966,7 @@
    :router/pricing "Preise"
    :router/privacy "Datenschutz"
    :router/product "Produkt"
+   :router/product-qa "Q&"
    :router/qanda "Fragen & Antworten"
    :router/start-discussion "Starte Diskussion"
    :router/startpage "Startseite"

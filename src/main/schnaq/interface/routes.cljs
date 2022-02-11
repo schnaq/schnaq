@@ -71,9 +71,10 @@
      :link-text (labels :router/startpage)
      :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
    ["product"
-    {:name :routes/product-page
-     :view product-overview/overview-view
-     :link-text (labels :router/product)}
+    ["/"
+     {:name :routes/product-page
+      :view product-overview/overview-view
+      :link-text (labels :router/product)}]
     ["/qa"
      {:name :routes/product-page-qa
       :view product-overview/qa-view

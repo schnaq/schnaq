@@ -959,6 +959,7 @@
    :router/pricing "Wycena"
    :router/privacy "Ochrona danych"
    :router/product "produktu"
+   :router/product-qa "PYTANIA I ODPOWIEDZI"
    :router/qanda "PYTANIA I ODPOWIEDZI"
    :router/start-discussion "Rozpocznij dyskusję"
    :router/startpage "Strona główna"

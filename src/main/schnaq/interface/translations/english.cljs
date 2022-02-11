@@ -968,6 +968,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/pricing "Pricing"
    :router/privacy "Privacy Policy"
    :router/product "Product"
+   :router/product-qa "Q&A"
    :router/qanda "Q&A"
    :router/start-discussion "Start discussion"
    :router/startpage "Startpage"
