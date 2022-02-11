@@ -179,6 +179,7 @@
    :productpage.overview.feedback/title "Your personal feedback channel"
    :productpage.overview.feedback/text "Get important insights in the analysis overview. Unlock feedback or take a look at the automatically generated word cloud."
    :productpage/cta "Modernise your next event with schnaq"
+   :productpage/learn-more "Learn more!"
 
    ;; Login page
    :page.login/heading "Let's schnaq"

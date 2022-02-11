@@ -73,7 +73,11 @@
    ["product"
     {:name :routes/product-page
      :view product-overview/overview-view
-     :link-text (labels :router/product)}]
+     :link-text (labels :router/product)}
+    ["/qa"
+     {:name :routes/product-page-qa
+      :view product-overview/qa-view
+      :link-text (labels :router/product-qa)}]]
    ["alphazulu"
     {:name :routes/alphazulu
      :view az/view}]

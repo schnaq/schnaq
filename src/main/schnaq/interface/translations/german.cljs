@@ -179,6 +179,7 @@
    :productpage.overview.feedback/title "Dein persönlicher Feedback-Kanal"
    :productpage.overview.feedback/text "Erhalte wichtige Erkenntnisse in der Analyseübersicht. Schalte Feedback frei oder wirf einen Blick auf die automatisch generierte Wortwolke."
    :productpage/cta "Modernisiere deine nächste Veranstaltung mit schnaq"
+   :productpage/learn-more "Erfahre mehr"
 
    ;; Login Page
    :page.login/heading "Nicht warten, schnaqqen!"

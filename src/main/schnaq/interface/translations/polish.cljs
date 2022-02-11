@@ -179,6 +179,7 @@
    :productpage.overview.feedback/title "Twój osobisty kanał opinii"
    :productpage.overview.feedback/text "Uzyskaj ważne spostrzeżenia w przeglądzie analizy. Odblokuj informacje zwrotne lub spójrz na automatycznie wygenerowaną chmurę słów."
    :productpage/cta "Zmodernizuj swoje następne wydarzenie dzięki schnaq"
+   :productpage/learn-more "Dowiedz się więcej"
 
    ;; Login Page
    :page.login/heading "Nie czekaj, pstryk!"
