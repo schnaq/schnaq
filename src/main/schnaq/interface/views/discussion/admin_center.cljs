@@ -16,7 +16,6 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.discussion.theming :refer [theming]]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.pages :as pages]
@@ -404,11 +403,9 @@
   []
   [common/tab-builder
    "invite-participants"
-   {:link "Thema"
-    :view [theming]}
    ;; Manage discussion settings
-   #_{:link (labels :schnaq.admin.edit/administrate)
-      :view [administrate-discussion]}
+   {:link (labels :schnaq.admin.edit/administrate)
+    :view [administrate-discussion]}
    ;; participants access via link
    {:link (labels :schnaq.admin.invite/via-link)
     :view [:div.text-center

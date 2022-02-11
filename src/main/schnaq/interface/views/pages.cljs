@@ -144,8 +144,8 @@
   "Construct a common panel for the middle in a feed."
   [heading body]
   [string? vector? :ret vector?]
-  [:div.panel-white.p-5.mb-3
-   [:h1.text-muted.mb-5 heading]
+  [:div.panel-white.p-5
+   [:h1.text-center heading]
    body])
 
 ;; -----------------------------------------------------------------------------

@@ -38,7 +38,8 @@
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.subscription :as subscription-views]
             [schnaq.interface.views.user.edit-account :as edit-account]
-            [schnaq.interface.views.user.edit-notifications :as edit-notifications]))
+            [schnaq.interface.views.user.edit-notifications :as edit-notifications]
+            [schnaq.interface.views.user.themes :as themes]))
 
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
@@ -98,13 +99,17 @@
      {:name :routes.user.manage/account
       :view edit-account/view
       :link-text (labels :user/edit-account)
-      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:user.subscription/status]]))
-                     :stop (fn [] (rf/dispatch [:user.picture/reset]))}]}]
+      :controllers [{:start #(rf/dispatch [:scheduler.after/login [:user.subscription/status]])
+                     :stop #(rf/dispatch [:user.picture/reset])}]}]
     ["/notifications"
      {:name :routes.user.manage/notifications
       :view edit-notifications/view
       :link-text (labels :user/edit-notifications)
-      :controllers [{:stop (fn [] (rf/dispatch [:user.settings.temporary/reset]))}]}]]
+      :controllers [{:stop (fn [] (rf/dispatch [:user.settings.temporary/reset]))}]}]
+    ["/themes"
+     {:name :routes.user.manage/themes
+      :view themes/view
+      #_#_:controllers [{:stop (fn [] (rf/dispatch [:user.settings.temporary/reset]))}]}]]
    ["admin"
     ["/center"
      {:name :routes/admin-center

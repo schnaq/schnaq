@@ -820,6 +820,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :user.settings/info "User infos"
    :user.settings/notifications "Notifications"
    :user.settings/hubs "Hubs"
+   :user.settings/themes "Themes / Branding"
    :user.settings/change-name "Change name and profile picture"
    :user.settings.button/change-account-information "Save changes"
    :user.settings.profile-picture-title/success "Profile picture successfully uploaded"

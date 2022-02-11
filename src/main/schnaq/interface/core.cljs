@@ -56,7 +56,6 @@
             [schnaq.interface.views.discussion.history]
             [schnaq.interface.views.discussion.labels]
             [schnaq.interface.views.discussion.logic]
-            [schnaq.interface.views.discussion.theming]
             [schnaq.interface.views.discussion.truncated-content]
             [schnaq.interface.views.errors]
             [schnaq.interface.views.feed.filters]
@@ -88,6 +87,7 @@
             [schnaq.interface.views.user.edit-account]
             [schnaq.interface.views.user.settings]
             [schnaq.interface.views.user.subscription]
+            [schnaq.interface.views.user.themes]
             [taoensso.timbre :as log]))
 ;; NOTE: If you use subs and events in another module, you need to require it
 ;; Requiring other views is needed to have dynamic updates from shadow and re-frame

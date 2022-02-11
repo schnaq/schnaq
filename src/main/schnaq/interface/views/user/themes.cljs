@@ -1,9 +1,12 @@
-(ns schnaq.interface.views.discussion.theming
+(ns schnaq.interface.views.user.themes
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
             [oops.core :refer [oget]]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.user.settings :as settings]))
 
 (s/def ::hex-color (s/and string? #(.startsWith % "#")))
 (s/def ::css-variable (s/and string? #(.startsWith % "--")))
@@ -51,7 +54,6 @@
 (defn theming []
   [:section
    [:div.text-center
-    [:h1 "Theming"]
     [:p.lead "Stelle hier das Erscheinungsbild deines schnaqs ein!"]]
    [:div.row
     [:div.col-md-3
@@ -63,6 +65,13 @@
      [color-picker :primary]
      [color-picker :secondary]
      [color-picker :background]]]])
+
+(defn view []
+  [settings/user-view
+   :user.settings/themes
+   [pages/settings-panel
+    "Thema / Branding definieren"
+    [theming]]])
 
 (rf/reg-fx
  :page.root/set-color
