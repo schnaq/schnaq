@@ -14,7 +14,7 @@
 // -----------------------------------------------------------------------------
 // Button
 
-.btn-primary {
+.theming-enabled > .btn-primary {
   background-color: var(--theming-primary) !important;
 
   &:hover,
@@ -37,7 +37,7 @@
 // -----------------------------------------------------------------------------
 // Button Outlines
 
-.btn-outline-primary {
+.theming-enabled > .btn-outline-primary {
   border-color: var(--theming-primary) !important;
   color: var(--theming-primary) !important;
 
@@ -51,11 +51,11 @@
 // -----------------------------------------------------------------------------
 // Text Color
 
-.text-primary {
+.theming-enabled > .text-primary {
   color: var(--theming-primary) !important;
 }
 
-.text-secondary {
+.theming-enabled > .text-secondary {
   color: var(--theming-secondary) !important;
 }
 
@@ -65,6 +65,6 @@
 // -----------------------------------------------------------------------------
 // Background
 
-.base-wrapper {
+.theming-enabled > .base-wrapper {
   background: var(--theming-background);
 }

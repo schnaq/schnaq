@@ -4,10 +4,14 @@
             [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
+            [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.views.discussion.conclusion-card :refer [selection-card]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user.settings :as settings]))
+            [schnaq.interface.views.user.settings :as settings]
+            [schnaq.interface.views.discussion.card-view :as discussion-card-view]
+            [schnaq.interface.views.navbar.elements :as elements]))
 
 (s/def ::hex-color (s/and string? #(.startsWith % "#")))
 (s/def ::css-variable (s/and string? #(.startsWith % "--")))
@@ -56,6 +60,17 @@
                      (let [color (oget e :target :value)]
                        (rf/dispatch [:theme/field theme-field color])))}]]]))
 
+(defn- preview []
+  [:<>
+   [:h2 "Vorschau"]
+   [:section.theming-enabled
+    [:div.base-wrapper.p-3
+     [elements/navbar-title
+      [:h1.h6.fw-bold.my-auto.text-dark "Welcome to schnaq"]
+      nil false]
+     [activation/activation-card]
+     [selection-card]]]])
+
 (defn theming []
   [:section
    [:div.text-center
@@ -78,16 +93,18 @@
      [:label {:for "theme-title"} "Give your theme a title"]]
     [:div.row
      [:div.col-md-5
-      [:h2.h5 "Logo"]
+      [:strong "Logo"]
       [:p.text-muted "Coming Soon"]
-      [:h2.h5 "Vorschaubild"]
+      [:strong "Vorschaubild"]
       [:p.text-muted "Coming Soon"]]
      [:div.col-md-7
-      [:h2.h5 "Farbeinstellungen"]
+      [:strong "Farbeinstellungen"]
       [color-picker :primary "Primäre Farbe"]
       [color-picker :secondary "Sekundäre Farbe"]
       [color-picker :background "Hintergrundfarbe"]]]
-    [:button.btn.btn-outline-primary {:type :submit} "Speichern"]]])
+    [:button.btn.btn-outline-primary {:type :submit} "Speichern"]]
+   [:hr.my-5]
+   [preview]])
 
 (defn view []
   [settings/user-view
@@ -113,3 +130,17 @@
  :theme/field
  (fn [db [_ field]]
    (get-in db [:theme :preview field])))
+
+(rf/reg-event-fx
+ :theming/dummy
+ ;; Add dummy data to the selected schnaq, e.g. for preview functions
+ (fn [{:keys [db]}]
+   (let [discussion #:discussion{:author {:user.registered/display-name "schnaqqi"}
+                                 :title "Welcome to schnaq"}
+         conclusion #:statement{:content "Welcome to schnaq"
+                                :author {:user.registered/display-name "schnaqqi"}
+                                :created-at nil}]
+     {:db (-> db
+              (assoc-in [:schnaq :selected] discussion)
+              (assoc-in [:discussion :conclusion :selected] conclusion))
+      :fx [[:dispatch [:schnaq.activation/temp-counter 0]]]})))

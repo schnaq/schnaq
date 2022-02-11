@@ -109,7 +109,8 @@
     ["/themes"
      {:name :routes.user.manage/themes
       :view themes/view
-      #_#_:controllers [{:stop (fn [] (rf/dispatch [:user.settings.temporary/reset]))}]}]]
+      :controllers [{:start #(rf/dispatch [:theming/dummy])
+                     :stop #(rf/dispatch [:schnaq.selected/dissoc])}]}]]
    ["admin"
     ["/center"
      {:name :routes/admin-center
@@ -159,7 +160,9 @@
                               (rf/dispatch [:schnaq/add-visited! (:share-hash path)])
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/mark-all-as-seen (:share-hash path)]])
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
-                     :stop #(rf/dispatch [:filters/clear])}]}
+                     :stop (fn []
+                             (rf/dispatch [:filters/clear])
+                             (rf/dispatch [:schnaq.selected/dissoc]))}]}
      [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
