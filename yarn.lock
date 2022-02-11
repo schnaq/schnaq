@@ -3110,9 +3110,9 @@ shadow-cljs-jar@1.3.2:
   integrity sha512-XmeffAZHv8z7451kzeq9oKh8fh278Ak+UIOGGrapyqrFBB773xN8vMQ3O7J7TYLnb9BUwcqadKkmgaq7q6fhZg==
 
 shadow-cljs@^2.16.12:
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/shadow-cljs/-/shadow-cljs-2.17.0.tgz#bf57918cee2cbabc0eb33e2c5036928be8d41429"
-  integrity sha512-GQjDa2eNyGRykekrWzyoPQ1CMiepcSUUmqg1WLa2At9BGNn+BstvmVgeDGkGCwi/PFcicJohYh2PHUWA+Xwg8Q==
+  version "2.17.1"
+  resolved "https://registry.yarnpkg.com/shadow-cljs/-/shadow-cljs-2.17.1.tgz#8f30670c24516b6a6fd50db0298bb47da69aefcb"
+  integrity sha512-h5Bbt7xeGj9ttAj+I5y1AKJgBEzgSZ+8fhQM3BqR4D7L9PKJPqGJqlZVP71lYBJ6Bw/8vGhsQOpTYqNZVTqCfQ==
   dependencies:
     node-libs-browser "^2.2.1"
     readline-sync "^1.4.7"
@@ -3764,9 +3764,9 @@ write-file-atomic@^3.0.3:
     typedarray-to-buffer "^3.1.5"
 
 ws@^7.4.6:
-  version "7.5.6"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.6.tgz#e59fc509fb15ddfb65487ee9765c5a51dec5fe7b"
-  integrity sha512-6GLgCqo2cy2A2rjCNFlxQS6ZljG/coZfZXclldI8FB/1G3CCI36Zd8xy2HrFVACi8tfk5XrgLQEk+P0Tnz9UcA==
+  version "7.5.7"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.7.tgz#9e0ac77ee50af70d58326ecff7e85eb3fa375e67"
+  integrity sha512-KMvVuFzpKBuiIXW3E4u3mySRO2/mCHSyZDJQM5NQ9Q9KHWHWh0NHgfbRMLLrceUK5qAL4ytALJbpRMjixFZh8A==
 
 ws@~7.4.2:
   version "7.4.6"
