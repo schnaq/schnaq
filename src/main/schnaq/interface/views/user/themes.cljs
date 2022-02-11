@@ -2,31 +2,16 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
-            [oops.core :refer [oget]]
+            [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.settings :as settings]))
 
 (s/def ::hex-color (s/and string? #(.startsWith % "#")))
 (s/def ::css-variable (s/and string? #(.startsWith % "--")))
-
 (s/def :theme/field #{:primary :secondary :background :logo :activation})
-
-(>defn- color-from-root
-  "Read css color value."
-  [css-variable]
-  [::css-variable => ::hex-color]
-  (str/trim
-   (.getPropertyValue
-    (js/getComputedStyle (.-body js/document))
-    css-variable)))
-
-(>defn- set-root-color [css-variable color]
-  [::css-variable ::hex-color => nil?]
-  (.setProperty
-   (.. js/document -documentElement -style)
-   css-variable color))
 
 (>defn- theme-field->css-variable
   "Convert between internally used keywords for addressing the currently
@@ -35,36 +20,74 @@
   [keyword? => ::css-variable]
   (str "--theming-" (name theme-field)))
 
-(>defn- color-picker [theme-field]
-  [keyword? => :re-frame/component]
-  (let [color @(rf/subscribe [:theme/color theme-field])
+(>defn- color-from-root
+  "Read css color value."
+  [theme-field]
+  [:theme/field => ::hex-color]
+  (str/trim
+   (.getPropertyValue
+    (js/getComputedStyle (.-body js/document))
+    (theme-field->css-variable theme-field))))
+
+(>defn- set-root-color
+  "Set global root css definition to document."
+  [css-variable color]
+  [::css-variable ::hex-color => nil?]
+  (.setProperty
+   (.. js/document -documentElement -style)
+   css-variable color))
+
+(>defn- color-picker
+  "Color picker for the theme colors."
+  [theme-field label]
+  [keyword? string? => :re-frame/component]
+  (let [color @(rf/subscribe [:theme/field theme-field])
         color-picker-id (str (name theme-field) "-color-picker")]
     [:div.row
      [:div.col
-      [:label.form-label {:for color-picker-id} "Primäre Akzentfarbe"]]
+      [:label.form-label {:for color-picker-id} label]]
      [:div.col
       [:input.form-control.form-control-color
        {:id color-picker-id
         :type :color
-        :value color
+        :value (if color color (color-from-root theme-field))
+        :name (str "color-" (name theme-field))
         :on-change (fn [e]
                      (let [color (oget e :target :value)]
-                       (rf/dispatch [:theme/color theme-field color])))}]]]))
+                       (rf/dispatch [:theme/field theme-field color])))}]]]))
 
 (defn theming []
   [:section
    [:div.text-center
-    [:p.lead "Stelle hier das Erscheinungsbild deines schnaqs ein!"]]
-   [:div.row
-    [:div.col-md-3
-     [:h2.h4 "Logo"]]
-    [:div.col-md-4
-     [:h2.h4 "Vorschaubild"]]
-    [:div.col-md-5
-     [:h2.h4 "Farbeinstellungen"]
-     [color-picker :primary]
-     [color-picker :secondary]
-     [color-picker :background]]]])
+    [:p.lead.pb-3 "Stelle hier das Erscheinungsbild deiner schnaqs ein!"]]
+   [:form
+    {:on-submit (fn [e]
+                  (js-wrap/prevent-default e)
+                  (let [get-field #(oget+ e [:target :elements % :value])]
+                    (prn {:colors {:primary (get-field :color-primary)
+                                   :secondary (get-field :color-secondary)
+                                   :background (get-field :color-background)}})))}
+    [:div.form-floating.mb-3
+     [:input.form-control
+      {:id "theme-title"
+       :placeholder "Give your theme a title"
+       :required true
+       :value "Title"
+       :name "title"
+       :on-change #(prn "change")}]
+     [:label {:for "theme-title"} "Give your theme a title"]]
+    [:div.row
+     [:div.col-md-5
+      [:h2.h5 "Logo"]
+      [:p.text-muted "Coming Soon"]
+      [:h2.h5 "Vorschaubild"]
+      [:p.text-muted "Coming Soon"]]
+     [:div.col-md-7
+      [:h2.h5 "Farbeinstellungen"]
+      [color-picker :primary "Primäre Farbe"]
+      [color-picker :secondary "Sekundäre Farbe"]
+      [color-picker :background "Hintergrundfarbe"]]]
+    [:button.btn.btn-outline-primary {:type :submit} "Speichern"]]])
 
 (defn view []
   [settings/user-view
@@ -73,18 +96,20 @@
     "Thema / Branding definieren"
     [theming]]])
 
+;; -----------------------------------------------------------------------------
+
 (rf/reg-fx
  :page.root/set-color
  (fn [[theme-field color]]
    (set-root-color (theme-field->css-variable theme-field) color)))
 
 (rf/reg-event-fx
- :theme/color
+ :theme/field
  (fn [{:keys [db]} [_ field color]]
-   {:db (assoc-in db [:theme :new field] color)
+   {:db (assoc-in db [:theme :preview field] color)
     :fx [[:page.root/set-color [field color]]]}))
 
 (rf/reg-sub
- :theme/color
+ :theme/field
  (fn [db [_ field]]
-   (get-in db [:theme :new field])))
+   (get-in db [:theme :preview field])))
