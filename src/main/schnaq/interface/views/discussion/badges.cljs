@@ -132,7 +132,7 @@
 (rf/reg-event-fx
  :statement/flag
  (fn [{:keys [db]} [_ statement-id]]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+   (when-let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [(http/xhrio-request db :post "/discussion/statement/flag"
                                [:discussion.admin/flag-statement-success statement-id]
                                {:statement-id statement-id
@@ -250,7 +250,7 @@
 (rf/reg-event-fx
  :statement/delete
  (fn [{:keys [db]} [_ statement-id]]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+   (when-let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [(http/xhrio-request db :delete "/discussion/statement/delete"
                                [:discussion.admin/delete-statement-success statement-id]
                                {:statement-id statement-id
