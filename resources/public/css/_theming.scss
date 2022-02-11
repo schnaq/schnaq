@@ -14,57 +14,59 @@
 // -----------------------------------------------------------------------------
 // Button
 
-.theming-enabled > .btn-primary {
-  background-color: var(--theming-primary) !important;
-
-  &:hover,
-  &:active,
-  &:visited {
+.theming-enabled {
+  .btn-primary {
     background-color: var(--theming-primary) !important;
+
+    &:hover,
+    &:active,
+    &:visited {
+      background-color: var(--theming-primary) !important;
+    }
   }
-}
 
-.btn-secondary {
-  background-color: var(--theming-secondary) !important;
-
-  &:hover,
-  &:active,
-  &:visited {
+  .btn-secondary {
     background-color: var(--theming-secondary) !important;
+
+    &:hover,
+    &:active,
+    &:visited {
+      background-color: var(--theming-secondary) !important;
+    }
   }
-}
 
-// -----------------------------------------------------------------------------
-// Button Outlines
+  // -----------------------------------------------------------------------------
+  // Button Outlines
 
-.theming-enabled > .btn-outline-primary {
-  border-color: var(--theming-primary) !important;
-  color: var(--theming-primary) !important;
+  .btn-outline-primary {
+    border-color: var(--theming-primary) !important;
+    color: var(--theming-primary) !important;
 
-  &:not(.disabled):not(.disabled).active,
-  &:hover {
-    background-color: var(--theming-primary) !important;
-    color: #fff !important;
+    &:not(.disabled):not(.disabled).active,
+    &:hover {
+      background-color: var(--theming-primary) !important;
+      color: #fff !important;
+    }
   }
-}
 
-// -----------------------------------------------------------------------------
-// Text Color
+  // -----------------------------------------------------------------------------
+  // Text Color
 
-.theming-enabled > .text-primary {
-  color: var(--theming-primary) !important;
-}
+  .text-primary {
+    color: var(--theming-primary) !important;
+  }
 
-.theming-enabled > .text-secondary {
-  color: var(--theming-secondary) !important;
-}
+  .text-secondary {
+    color: var(--theming-secondary) !important;
+  }
 
-// -----------------------------------------------------------------------------
-// Borders
+  // -----------------------------------------------------------------------------
+  // Borders
 
-// -----------------------------------------------------------------------------
-// Background
+  // -----------------------------------------------------------------------------
+  // Background
 
-.theming-enabled > .base-wrapper {
-  background: var(--theming-background);
+  .base-wrapper {
+    background: var(--theming-background);
+  }
 }

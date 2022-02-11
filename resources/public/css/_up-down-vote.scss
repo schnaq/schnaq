@@ -24,10 +24,12 @@
 .badge-upvote {
   background: none;
   color: $positive;
+  color: var(--theming-primary);
 }
 
 .badge-upvote-selected {
   background-color: $positive;
+  color: var(--theming-primary);
   color: $white;
 
   :hover {
@@ -38,10 +40,12 @@
 .badge-downvote {
   background: none;
   color: $negative;
+  color: var(--theming-secondary);
 }
 
 .badge-downvote-selected {
   background-color: $negative;
+  background-color: var(--theming-secondary);
   color: $white;
 
   :hover {
