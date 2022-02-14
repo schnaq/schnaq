@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.navbar.collapse-content
   (:require [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.discussion.share :as share-modal]
             [schnaq.interface.views.graph.settings :as graph-settings]
@@ -13,7 +13,7 @@
   [label icon route share-hash]
   (let [current-route @(rf/subscribe [:navigation/current-route-name])
         is-active? (= current-route route)
-        href (reitfe/href route {:share-hash share-hash})
+        href (navigation/href route {:share-hash share-hash})
         classes (if is-active?
                   {:href href :class "text-primary"}
                   {:href href})]
@@ -73,8 +73,8 @@
       [li-button (labels :graph.settings/title) (fn [_] (graph-settings/show-notification))]
       (when edit-hash
         [:a.button.list-group-item.list-group-item-action
-         {:href (reitfe/href :routes.schnaq/admin-center
-                             {:share-hash share-hash :edit-hash edit-hash})}
+         {:href (navigation/href :routes.schnaq/admin-center
+                                 {:share-hash share-hash :edit-hash edit-hash})}
          (labels :schnaq.admin/tooltip)]))))
 
 (defn- user-button
@@ -133,8 +133,8 @@
      [:div.ms-auto
       [um/register-or-user-button "btn-link"]]]
     [:ul.list-group.list-group-flush
-     [li-link-button :router/pricing (reitfe/href :routes/pricing)]
-     [li-link-button :router/privacy (reitfe/href :routes/privacy)]
+     [li-link-button :router/pricing (navigation/href :routes/pricing)]
+     [li-link-button :router/privacy (navigation/href :routes/privacy)]
      [li-link-button :nav/blog "https://schnaq.com/blog/"]
      [:li.list-group-item.dropdown [nav-elements/collapsed-view-language-with-label-dropdown]]]]])
 

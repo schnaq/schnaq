@@ -1,8 +1,8 @@
 (ns schnaq.interface.views.startpage.core
   "Defining the startpage of schnaq."
-  (:require [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.components.images :refer [img-path]]
+  (:require [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.wavy :as wavy]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.qa.inputs :as qanda]
@@ -42,7 +42,7 @@
       [:div.collapse {:id "collapse-more-newsletter"}
        [:p.small (labels :startpage.newsletter/policy-disclaimer)
         [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
-        [:a {:href (reitfe/href :routes/privacy-extended)}
+        [:a {:href (navigation/href :routes/privacy-extended)}
          (labels :privacy/note)] "."]]]
 
      [:input.mb-3
@@ -57,7 +57,7 @@
    [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
    [:a.btn.btn-lg.button-secondary
     {:role "button"
-     :href (reitfe/href :routes.schnaq/create)}
+     :href (navigation/href :routes.schnaq/create)}
     (labels :schnaq.startpage.cta/button)]])
 
 (defn supporters []
@@ -94,7 +94,7 @@
     [:div.col-12.col-lg-6
      [:img.img-fluid.mb-2 {:src (img-path :startpage/team-schnaq)
                            :style {:max-width "400px"}}]
-     [:h2 [:a {:href (reitfe/href :routes/about-us)} (labels :startpage/team-schnaq-heading)]]]
+     [:h2 [:a {:href (navigation/href :routes/about-us)} (labels :startpage/team-schnaq-heading)]]]
     [:div.col-12.col-lg-6.my-lg-auto
      [:p.h5.mb-5 (labels :startpage/team-schnaq)]
      [:p.h4.text-primary.text-center (labels :supporters/heading)]
@@ -116,7 +116,7 @@
   [:div.row
    [:div.col-12.text-center.h2.mb-5 (labels :startpage.three-steps/heading)]
    [single-step
-    [:a.text-decoration-none {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.three-steps/first)]
+    [:a.text-decoration-none {:href (navigation/href :routes.schnaq/create)} (labels :startpage.three-steps/first)]
     :startpage.schnaqqifant/create-schnaq
     "startpage-step-1"]
    [single-step (labels :startpage.three-steps/second)

@@ -1,5 +1,5 @@
 (ns schnaq.interface.pages.legal-note
-  (:require [reitit.frontend.easy :as reitfe]
+  (:require [schnaq.interface.navigation :as navigation]
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
@@ -21,7 +21,7 @@
 (defn- privacy []
   [:article.pb-3
    [:h2 (labels :legal-note.privacy/title)]
-   [:p [:a.btn.btn-link.ps-0 {:href (reitfe/href :routes/privacy-extended)}
+   [:p [:a.btn.btn-link.ps-0 {:href (navigation/href :routes/privacy-extended)}
         (labels :legal-note.privacy/body)]]])
 
 ;; ----------------------------------------------------------------------------

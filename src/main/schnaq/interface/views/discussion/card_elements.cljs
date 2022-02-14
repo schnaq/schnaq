@@ -4,9 +4,9 @@
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
@@ -50,7 +50,7 @@
   (let [schnaq @(rf/subscribe [:schnaq/selected])
         title (:discussion/title schnaq)]
     [:a.text-decoration-none
-     {:href (rfe/href :routes.schnaq/start {:share-hash (:discussion/share-hash schnaq)})}
+     {:href (navigation/href :routes.schnaq/start {:share-hash (:discussion/share-hash schnaq)})}
      [:div.clickable.card-history-home.text-dark
       [tooltip/text
        (labels :history.home/tooltip)

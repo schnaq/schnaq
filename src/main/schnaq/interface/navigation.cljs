@@ -1,5 +1,6 @@
 (ns schnaq.interface.navigation
-  (:require [oops.core :refer [oset!]]
+  (:require [goog.string :as gstring]
+            [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [reitit.frontend.controllers :as reitit-front-controllers]
             [reitit.frontend.easy :as reitit-front-easy]))
@@ -40,3 +41,16 @@
  :navigation.redirect/follow
  (fn [_ [_ {:keys [redirect]}]]
    {:fx [[:navigation.redirect/follow! redirect]]}))
+
+(defn href
+  "A drop-in replacement for `reitit.frontend.easy/href` that is aware of schnaqs language path-prefix.
+  Looks up the language set and always adds the prefix to the path."
+  ([route-name]
+   (href route-name nil nil))
+  ([route-name params]
+   (href route-name params nil))
+  ([route-name params query]
+   (let [route-match (reitit-front-easy/href route-name params query)
+         language-prefix (str (name @(rf/subscribe [:current-locale])))
+         prefixed-path (gstring/format "/%s%s" language-prefix route-match)]
+     prefixed-path)))

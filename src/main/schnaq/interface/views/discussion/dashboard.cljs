@@ -1,10 +1,10 @@
 (ns schnaq.interface.views.discussion.dashboard
   (:require [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.preview :as preview]
             [schnaq.interface.components.wordcloud :refer [wordcloud]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.views.discussion.pie-chart :as pie-chart]
@@ -17,7 +17,7 @@
         path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div.schnaq-entry.my-3.p-3
      [:a.link-unstyled
-      {:href (rfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
+      {:href (navigation/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
       [:div.row.h-100
        [:div.col-xl-4.col-12
         [user/user-info statement 24]]
@@ -94,7 +94,7 @@
         path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div.schnaq-entry.my-3.p-3
      [:a.link-unstyled
-      {:href (rfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
+      {:href (navigation/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
       [:div.row.h-100
        [:div.col-12
         [user/user-info statement 24]]

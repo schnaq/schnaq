@@ -68,7 +68,7 @@
 (rf/reg-sub
  :current-locale
  (fn [db _]
-   (get db :locale)))
+   (get db :locale :en)))
 
 (rf/reg-sub
  :current-language
