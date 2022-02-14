@@ -29,6 +29,7 @@
             [schnaq.api.schnaq :refer [schnaq-routes]]
             [schnaq.api.subscription.stripe :refer [stripe-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
+            [schnaq.api.themes :refer [theme-routes]]
             [schnaq.api.user :refer [user-routes]]
             [schnaq.auth :as auth]
             [schnaq.auth.middlewares :as auth-middlewares]
@@ -101,10 +102,11 @@
     feedback-routes
     hub-routes
     other-routes
+    poll-routes
     schnaq-routes
     stripe-routes
     summary-routes
-    poll-routes
+    theme-routes
     user-routes
 
     ["/swagger.json"

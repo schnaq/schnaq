@@ -13,6 +13,7 @@
 (s/def :db/id (s/or :transacted integer? :temporary any?))
 (s/def :db/txInstant inst?)
 (s/def :color/hex (s/and ::non-blank-string #(.startsWith % "#") #(= 7 (.length %))))
+(s/def ::uri-as-string (s/and ::non-blank-string #(new java.net.URI %)))
 
 ;; API
 (s/def :api.response/error keyword?)
@@ -288,8 +289,8 @@
 (s/def :theme.colors/primary :color/hex)
 (s/def :theme.colors/secondary :color/hex)
 (s/def :theme.colors/background :color/hex)
-(s/def :theme.images/logo uri?)
-(s/def :theme.images/activation uri?)
+(s/def :theme.images/logo ::uri-as-string)
+(s/def :theme.images/activation ::uri-as-string)
 (s/def ::theme (s/keys :req [:theme/title :theme/user :theme/discussions]
                        :opt [:theme.colors/primary :theme.colors/secondary
                              :theme.colors/background :theme.images/logo
