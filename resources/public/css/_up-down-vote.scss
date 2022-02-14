@@ -29,7 +29,7 @@
 
 .badge-upvote-selected {
   background-color: $positive;
-  color: var(--theming-primary);
+  background-color: var(--theming-primary);
   color: $white;
 
   :hover {
