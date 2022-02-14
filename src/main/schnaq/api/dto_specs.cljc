@@ -61,3 +61,10 @@
 (s/def ::summary
   (s/keys :req [:summary/requested-at]
           :opt [:summary/discussion :summary/text :summary/created-at :summary/requester]))
+
+;; Themes
+(s/def ::theme
+  (s/keys :req [:theme/title]
+          :opt [:theme.colors/primary :theme.colors/secondary
+                :theme.colors/background :theme.images/logo
+                :theme.images/activation]))
