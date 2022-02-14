@@ -2,6 +2,7 @@
   (:require [com.fulcrologic.guardrails.core :refer [>defn]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.tooltip :as tooltip]))
@@ -21,12 +22,13 @@
        [icon :language icon-classes {:size "lg"}]
        [:span.small " " @(rf/subscribe [:current-language])]]
       [:div.dropdown-menu {:aria-labelledby "schnaq-language-dropdown"}
-       [:button.dropdown-item
-        {:on-click #(language/set-language :de)} "Deutsch"]
-       [:button.dropdown-item
-        {:on-click #(language/set-language :en)} "English"]
-       [:button.dropdown-item
-        {:on-click #(language/set-language :pl)} "Polski"]]])))
+       [:a.btn.dropdown-item
+        ;; TODO noch die hreflang richtig setzen
+        {:href (navigation/switch-language-href :de)} "Deutsch"]
+       [:a.btn.dropdown-item
+        {:href (navigation/switch-language-href :en)} "English"]
+       [:a.btn.dropdown-item
+        {:href (navigation/switch-language-href :pl)} "Polski"]]])))
 
 (defn language-toggle-with-tooltip
   "Uses language-dropdown and adds a mouse-over label."

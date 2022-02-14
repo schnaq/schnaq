@@ -225,6 +225,7 @@
       (labels :nav.buttons/language-toggle) " "
       [icon :language]]
      [:div.dropdown-menu {:aria-labelledby dropdown-id}
+      ;; TODO hier aktiv die URL switchen
       [:button.dropdown-item
        {:on-click #(language/set-language :de)} "Deutsch"]
       [:button.dropdown-item

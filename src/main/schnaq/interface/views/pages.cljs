@@ -4,7 +4,6 @@
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]

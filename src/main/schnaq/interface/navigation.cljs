@@ -1,6 +1,6 @@
 (ns schnaq.interface.navigation
   (:require [goog.string :as gstring]
-            [oops.core :refer [oset!]]
+            [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reitit.frontend.controllers :as reitit-front-controllers]
             [reitit.frontend.easy :as reitit-front-easy]))
@@ -42,9 +42,26 @@
  (fn [_ [_ {:keys [redirect]}]]
    {:fx [[:navigation.redirect/follow! redirect]]}))
 
+(defn switch-language-href
+  ;; TODO test
+  "Take the current path and return it with the desired locale."
+  [locale]
+  (let [current-url (new js/URL (oget js/window [:location :href]))
+        full-path (gstring/format "%s%s%s"
+                                  (.-pathname current-url)
+                                  (.-search current-url)
+                                  (.-hash current-url))
+        locale-clean-path (if (or (gstring/startsWith full-path "/en")
+                                  (gstring/startsWith full-path "/de")
+                                  (gstring/startsWith full-path "/pl"))
+                            (subs full-path 3)
+                            full-path)]
+    (gstring/format "/%s%s" (str (name locale)) locale-clean-path)))
+
 (defn href
   "A drop-in replacement for `reitit.frontend.easy/href` that is aware of schnaqs language path-prefix.
   Looks up the language set and always adds the prefix to the path."
+  ;; TODO test
   ([route-name]
    (href route-name nil nil))
   ([route-name params]
