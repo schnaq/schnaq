@@ -307,7 +307,6 @@
     :db/cardinality :db.cardinality/one
     :db/doc "The last requester (registered user) of a summary."}
 
-
    ;; Polls
    {:db/ident :poll/title
     :db/valueType :db.type/string
@@ -376,10 +375,10 @@
     :db/cardinality :db.cardinality/one
     :db/doc "Set the background color of a theme."}
    {:db/ident :theme.images/logo
-    :db/valueType :db.type/uri
+    :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "The custom user logo."}
    {:db/ident :theme.images/activation
-    :db/valueType :db.type/uri
+    :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "Background image for the activation card."}])
