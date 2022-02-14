@@ -348,5 +348,38 @@
    {:db/ident :activation/discussion
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/doc "The discussion to which the activation belongs to."}])
+    :db/doc "The discussion to which the activation belongs to."}
 
+   ;; Themes
+   {:db/ident :theme/title
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Title of a theme."}
+   {:db/ident :theme/user
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "Reference to the creating user."}
+   {:db/ident :theme/discussions
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "Reference to those discussions applying this theme."}
+   {:db/ident :theme.colors/primary
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set the primary color of a theme."}
+   {:db/ident :theme.colors/secondary
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set the secondary color of a theme."}
+   {:db/ident :theme.colors/background
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set the background color of a theme."}
+   {:db/ident :theme.images/logo
+    :db/valueType :db.type/uri
+    :db/cardinality :db.cardinality/one
+    :db/doc "The custom user logo."}
+   {:db/ident :theme.images/activation
+    :db/valueType :db.type/uri
+    :db/cardinality :db.cardinality/one
+    :db/doc "Background image for the activation card."}])
