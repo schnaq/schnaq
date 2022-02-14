@@ -87,7 +87,7 @@
                          :de "de"
                          :en "en"
                          :pl "pl"
-                         "de")]
+                         "en")]
      (.setAttribute (.-documentElement js/document) "lang" locale-string))))
 
 (rf/reg-event-fx
