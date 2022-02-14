@@ -37,7 +37,7 @@
   [:<>
    [:img.footer-schnaqqifant
     {:src (img-path :logo-white)}]
-   [:div.lead.font-italic.pb-1
+   [:div.lead.fst-italic.pb-1
     (labels :startpage/heading)]])
 
 (defn- footer-button
@@ -104,7 +104,7 @@
       [:section.px-2
        ;; Remove hardcode, when there are english versions around!
        [:h3.h5 "schnaq Lösungen"]
-       [:p [:a {:href "https://schnaq.com/blog/de/online-meetings-moderieren/"}
+       [:p [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-meetings-moderieren/"}
             "für Meetings"]]])))
 
 ;; -----------------------------------------------------------------------------
