@@ -138,3 +138,14 @@
    {:activation/discussion [:db/id
                             :discussion/share-hash
                             :discussion/title]}])
+
+(def theme
+  [:db/id
+   :theme/title
+   :theme/user
+   :theme/discussions
+   :theme.colors/primary
+   :theme.colors/secondary
+   :theme.colors/background
+   :theme.images/logo
+   :theme.images/activation])
