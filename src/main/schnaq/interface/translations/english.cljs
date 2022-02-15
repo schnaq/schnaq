@@ -343,7 +343,7 @@
    :schnaq.activation.create/start-button "Start activation"
    :schnaq.activation.create/reset-button "Reset Activation"
    :schnaq.activation/title "%ss total:"
-   :schnaq.activation/activation-button "Toot"
+   :schnaq.activation/activation-button "Torooo"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"

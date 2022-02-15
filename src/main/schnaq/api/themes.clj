@@ -1,6 +1,6 @@
 (ns schnaq.api.themes
   (:require [clojure.spec.alpha :as s]
-            [ring.util.http-response :refer [ok bad-request]]
+            [ring.util.http-response :refer [ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.specs :as specs]
@@ -16,9 +16,7 @@
   "Save newly configured theme."
   [{{:keys [sub]} :identity
     {theme :body} :parameters}]
-  (if-let [theme (themes-db/new-theme sub theme)]
-    (ok {:theme theme})
-    (bad-request (at/build-error-body :theme/title-taken "The title for the theme is already in use by you"))))
+  (ok {:theme (themes-db/new-theme sub theme)}))
 
 (def theme-routes
   [["" {:swagger {:tags ["themes"]}
