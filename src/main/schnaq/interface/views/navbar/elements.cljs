@@ -163,7 +163,8 @@
   []
   (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])
         share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [:div
+    [:a
+     {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
      [navbar-components/separated-button
       [:div.d-flex.text-white
        [motion/pulse-once [icon :comment/alt]
@@ -171,9 +172,7 @@
         [:schnaq.qa.new-question/pulse false]
         (:white colors)
         (:secondary colors)]
-
-       [:div.ms-2 number-of-questions]]
-      {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])}]]))
+       [:div.ms-2 number-of-questions]]]]))
 
 (rf/reg-event-db
  :schnaq.qa.new-question/pulse
