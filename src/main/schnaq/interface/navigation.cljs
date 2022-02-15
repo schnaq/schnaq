@@ -1,5 +1,6 @@
 (ns schnaq.interface.navigation
-  (:require [goog.string :as gstring]
+  (:require [goog.dom :as gdom]
+            [goog.string :as gstring]
             [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reitit.frontend.controllers :as reitit-front-controllers]
@@ -25,12 +26,13 @@
  (fn [route]
    (apply reitit-front-easy/push-state route)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  :navigation/navigated
- (fn [db [_ new-match]]
-   (let [old-match (:current-route db)
-         controllers (reitit-front-controllers/apply-controllers (:controllers old-match) new-match)]
-     (assoc db :current-route (assoc new-match :controllers controllers)))))
+ (fn [{:keys [db]} [_ new-match]]
+   {:db (let [old-match (:current-route db)
+              controllers (reitit-front-controllers/apply-controllers (:controllers old-match) new-match)]
+          (assoc db :current-route (assoc new-match :controllers controllers)))
+    :fx [[:navigation.navigated/write-hreflang]]}))
 
 (rf/reg-fx
  :navigation.redirect/follow!
@@ -71,3 +73,43 @@
          language-prefix (str (name @(rf/subscribe [:current-locale])))
          prefixed-path (gstring/format "/%s%s" language-prefix route-match)]
      prefixed-path)))
+
+(rf/reg-fx
+ :navigation.navigated/write-hreflang
+ (fn []
+   (let [origin (.-origin (new js/URL (oget js/window [:location :href])))
+         head (first (gdom/getElementsByTagName "head"))
+         all-links (gdom/getElementsByTagName "link" head)
+         path-format "%s%s"
+         existing-german-alternative (first (filter #(= "de" (.-hreflang %)) all-links))
+         german-alternative
+         (gdom/createDom "link" (clj->js {:rel "alternative"
+                                          :hreflang "de"
+                                          :href (gstring/format path-format origin (switch-language-href :de))}))
+         existing-english-alternative (first (filter #(= "en" (.-hreflang %)) all-links))
+         english-alternative
+         (gdom/createDom "link" (clj->js {:rel "alternative"
+                                          :hreflang "en"
+                                          :href (gstring/format path-format origin (switch-language-href :en))}))
+         existing-polish-alternative (first (filter #(= "pl" (.-hreflang %)) all-links))
+         polish-alternative
+         (gdom/createDom "link" (clj->js {:rel "alternative"
+                                          :hreflang "pl"
+                                          :href (gstring/format path-format origin (switch-language-href :pl))}))
+         existing-default-alternative (first (filter #(= "x-default" (.-hreflang %)) all-links))
+         default-alternative
+         (gdom/createDom "link" (clj->js {:rel "alternative"
+                                          :hreflang "x-default"
+                                          :href (gstring/format path-format origin (switch-language-href :en))}))]
+     (if existing-german-alternative
+       (gdom/replaceNode german-alternative existing-german-alternative)
+       (gdom/appendChild head german-alternative))
+     (if existing-english-alternative
+       (gdom/replaceNode english-alternative existing-english-alternative)
+       (gdom/appendChild head english-alternative))
+     (if existing-polish-alternative
+       (gdom/replaceNode polish-alternative existing-polish-alternative)
+       (gdom/appendChild head polish-alternative))
+     (if existing-default-alternative
+       (gdom/replaceNode default-alternative existing-default-alternative)
+       (gdom/appendChild head default-alternative)))))

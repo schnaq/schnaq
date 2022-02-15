@@ -23,15 +23,15 @@
       [:div.dropdown-menu {:aria-labelledby "schnaq-language-dropdown"}
        [:a.btn.dropdown-item
         {:href (navigation/switch-language-href :de)
-         :lang "de-DE" :hreflang "de-DE"}
+         :lang "de-DE" :hrefLang "de-DE"}
         "Deutsch"]
        [:a.btn.dropdown-item
         {:href (navigation/switch-language-href :en)
-         :lang "en-US" :hreflang "en-US"}
+         :lang "en-US" :hrefLang "en-US"}
         "English"]
        [:a.btn.dropdown-item
         {:href (navigation/switch-language-href :pl)
-         :lang "pl-PL" :hreflang "pl-PL"}
+         :lang "pl-PL" :hrefLang "pl-PL"}
         "Polski"]]])))
 
 (defn language-toggle-with-tooltip
