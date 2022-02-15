@@ -50,7 +50,7 @@
    (labels label)])
 
 (defn- drop-down-button-link [link label]
-  [:a.dropdown-item  {:href (navigation/href link)} (labels label)])
+  [:a.dropdown-item {:href (navigation/href link)} (labels label)])
 
 (defn product-dropdown-button
   "Product button containing all subpages in its dropdown content."
@@ -64,10 +64,10 @@
       (labels :productpage/button)]
      [:div.dropdown-menu
       {:aria-labelledby dropdown-id}
-      [drop-down-button-link :routes/product-page  :router/product]
-      [drop-down-button-link :routes/product-page-qa  :router/product-qa]
-      [drop-down-button-link :routes/product-page-poll  :router/product-poll]
-      [drop-down-button-link :routes/product-page-activation  :router/product-activation]]]))
+      [drop-down-button-link :routes/product-page :router/product]
+      [drop-down-button-link :routes/product-page-qa :router/product-qa]
+      [drop-down-button-link :routes/product-page-poll :router/product-poll]
+      [drop-down-button-link :routes/product-page-activation :router/product-activation]]]))
 
 (defn separated-button
   "The default navbar-button. Dropdown-content must have according classes."
