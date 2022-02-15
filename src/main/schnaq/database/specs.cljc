@@ -288,9 +288,11 @@
 (s/def :theme.colors/primary :color/hex)
 (s/def :theme.colors/secondary :color/hex)
 (s/def :theme.colors/background :color/hex)
-(s/def :theme.images/logo string?)
-(s/def :theme.images/activation string?)
+(s/def :theme.images/logo ::non-blank-string)
+(s/def :theme.images/activation ::non-blank-string)
+(s/def :theme.texts/activation ::non-blank-string)
 (s/def ::theme (s/keys :req [:theme/title :theme/user]
                        :opt [:theme.colors/primary :theme.colors/secondary
                              :theme.colors/background :theme.images/logo
-                             :theme.images/activation :theme/discussions]))
+                             :theme.images/activation :theme/discussions
+                             :theme.texts/activation]))

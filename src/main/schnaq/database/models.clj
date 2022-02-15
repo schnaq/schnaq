@@ -381,4 +381,8 @@
    {:db/ident :theme.images/activation
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "Background image for the activation card."}])
+    :db/doc "Background image for the activation card."}
+   {:db/ident :theme.texts/activation
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The user's activation message."}])
