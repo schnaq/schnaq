@@ -8,7 +8,7 @@
 
 (defn- save-theme-request [user-token theme]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.theme/add))
-       :body-params theme}
+       :body-params {:theme theme}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       toolbelt/accept-edn-response-header
