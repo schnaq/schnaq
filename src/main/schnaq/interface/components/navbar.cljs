@@ -4,7 +4,6 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (defn language-dropdown
@@ -23,12 +22,17 @@
        [:span.small " " @(rf/subscribe [:current-language])]]
       [:div.dropdown-menu {:aria-labelledby "schnaq-language-dropdown"}
        [:a.btn.dropdown-item
-        ;; TODO noch die hreflang richtig setzen
-        {:href (navigation/switch-language-href :de)} "Deutsch"]
+        {:href (navigation/switch-language-href :de)
+         :lang "de-DE" :hreflang "de-DE"}
+        "Deutsch"]
        [:a.btn.dropdown-item
-        {:href (navigation/switch-language-href :en)} "English"]
+        {:href (navigation/switch-language-href :en)
+         :lang "en-US" :hreflang "en-US"}
+        "English"]
        [:a.btn.dropdown-item
-        {:href (navigation/switch-language-href :pl)} "Polski"]]])))
+        {:href (navigation/switch-language-href :pl)
+         :lang "pl-PL" :hreflang "pl-PL"}
+        "Polski"]]])))
 
 (defn language-toggle-with-tooltip
   "Uses language-dropdown and adds a mouse-over label."

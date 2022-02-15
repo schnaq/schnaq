@@ -9,7 +9,6 @@
             [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.graph.settings :as graph-settings]
@@ -212,23 +211,3 @@
   ([classes]
    [:div.d-flex.align-items-center
     [um/user-dropdown-button classes]]))
-
-(defn collapsed-view-language-with-label-dropdown
-  "Display a language dropdown menu with a description label"
-  []
-  (let [dropdown-id "schnaq-collapsed-language-dropdown"]
-    [:<>
-     [:nav-link.dropdown-toggle
-      {:id dropdown-id
-       :href "#" :role "button" :data-bs-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}
-      (labels :nav.buttons/language-toggle) " "
-      [icon :language]]
-     [:div.dropdown-menu {:aria-labelledby dropdown-id}
-      ;; TODO hier aktiv die URL switchen
-      [:button.dropdown-item
-       {:on-click #(language/set-language :de)} "Deutsch"]
-      [:button.dropdown-item
-       {:on-click #(language/set-language :en)} "English"]
-      [:button.dropdown-item
-       {:on-click #(language/set-language :pl)} "Polski"]]]))

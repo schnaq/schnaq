@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.navbar.collapse-content
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.navbar :as navbar]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.discussion.share :as share-modal]
@@ -101,7 +102,7 @@
    [:div.fw-bold.mt-3 (labels :discussion.navbar/settings)]
    [:ul.list-group.list-group-flush
     [li-button (labels :sharing/tooltip) (fn [_] (share-modal/open-share-discussion))]
-    [:li.list-group-item.dropdown [nav-elements/collapsed-view-language-with-label-dropdown]]
+    [:li.list-group-item.dropdown [navbar/language-dropdown true {:class "p-0 text-dark"}]]
     [settings-li-button]]])
 
 (defn- external-content [collapse-content-id content]
@@ -136,6 +137,6 @@
      [li-link-button :router/pricing (navigation/href :routes/pricing)]
      [li-link-button :router/privacy (navigation/href :routes/privacy)]
      [li-link-button :nav/blog "https://schnaq.com/blog/"]
-     [:li.list-group-item.dropdown [nav-elements/collapsed-view-language-with-label-dropdown]]]]])
+     [:li.list-group-item.dropdown [navbar/language-dropdown true {:class "p-0 text-dark"}]]]]])
 
 
