@@ -1,7 +1,6 @@
 (ns schnaq.interface.components.navbar
   (:require [com.fulcrologic.guardrails.core :refer [>defn]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -51,7 +50,7 @@
    (labels label)])
 
 (defn- drop-down-button-link [link label]
-  [:a.dropdown-item  {:href (reitfe/href link)} (labels label)])
+  [:a.dropdown-item  {:href (navigation/href link)} (labels label)])
 
 (defn product-dropdown-button
   "Product button containing all subpages in its dropdown content."

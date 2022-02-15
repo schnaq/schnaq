@@ -34,7 +34,7 @@
 
 (defn find-out-more-link [link]
   [:div.mt-5
-   [:a.display-6 {:href (rfe/href link)}
+   [:a.display-6 {:href (navigation/href link)}
     (labels :productpage/learn-more)]])
 
 (defn available-soon
