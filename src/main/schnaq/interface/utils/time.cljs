@@ -8,8 +8,7 @@
 
 (def ^:private select-locale
   {:de df-locale/de
-   :en df-locale/en
-   :pl df-locale/pl})
+   :en df-locale/en})
 
 (>defn format-distance
   "Return a string containing a description when the timestamp occurred compared

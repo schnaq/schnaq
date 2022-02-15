@@ -28,11 +28,7 @@
        [:a.btn.dropdown-item
         {:href (navigation/switch-language-href :en)
          :lang "en-US" :hrefLang "en-US"}
-        "English"]
-       [:a.btn.dropdown-item
-        {:href (navigation/switch-language-href :pl)
-         :lang "pl-PL" :hrefLang "pl-PL"}
-        "Polski"]]])))
+        "English"]]])))
 
 (defn language-toggle-with-tooltip
   "Uses language-dropdown and adds a mouse-over label."

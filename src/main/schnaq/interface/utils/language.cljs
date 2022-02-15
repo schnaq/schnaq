@@ -15,7 +15,7 @@
       (str/split "-")
       first
       keyword
-      #{:en :de :pl}
+      #{:en :de}
       (or :en)))
 
 (defn init-language
@@ -47,8 +47,7 @@
  (fn [locale _]
    (case locale
      :de "Deutsch"
-     :en "English"
-     :pl "Polski")))
+     :en "English")))
 
 (rf/reg-fx
  ;; Changes the HTML lang attribute accordingly.
@@ -57,7 +56,6 @@
    (let [locale-string (case lang-short
                          :de "de"
                          :en "en"
-                         :pl "pl"
                          "en")]
      (.setAttribute (.-documentElement js/document) "lang" locale-string))))
 
