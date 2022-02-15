@@ -194,7 +194,7 @@
    :productpage.qa.answers/title "Answers at a glance"
    :productpage.qa.answers/subtitle "As a moderator, you can mark posts as reference answers. The corresponding question is then marked with a green border and the marked answer is automatically displayed. Overview for you and your audience!"
    :productpage.qa.input/title "Smart input for your participants"
-   :productpage.qa.input/subtitle "Similar questions are displayed during the input to avoid duplications."
+   :productpage.qa.input/subtitle "Similar questions are displayed while typing to avoid duplicates."
    :productpage.qa.relevant/title "See what's relevant."
    :productpage.qa.relevant/subtitle "Some questions are on the tip of several people's tongues. With one click, your participants can mark questions as relevant or irrelevant. This way, the most important questions are displayed at the top of the overview."
 
