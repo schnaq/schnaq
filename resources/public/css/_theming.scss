@@ -72,4 +72,15 @@
   .base-wrapper {
     background: var(--theming-background);
   }
+
+  // -----------------------------------------------------------------------------
+  // Borders
+
+  .border-primary {
+    border-color: var(--theming-primary) !important;
+  }
+
+  .border-secondary {
+    border-color: var(--theming-secondary) !important;
+  }
 }
