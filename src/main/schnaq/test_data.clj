@@ -265,6 +265,8 @@
     :statement/type :statement.type/attack
     :statement/discussions ["discussion/simple"]}])
 
+;; -----------------------------------------------------------------------------
+
 (def alex
   {:db/id "user.registered/alex"
    :user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
@@ -284,14 +286,34 @@
    :user.registered/email "k@ngar.oo"
    :user.registered/last-name "the"
    :user.registered/first-name "kangaroo"
-   :user.registered/groups ["test-group"]
+   :user.registered/groups [""]
    :user.registered/notification-mail-interval :notification-mail-interval/daily
    :user.registered/visited-schnaqs
    [#:discussion{:share-hash "cat-dog-hash"}
     #:discussion{:share-hash "simple-hash"}]})
 
+(def christian
+  {:db/id "user.registered/christian"
+   :user.registered/keycloak-id "00000000-0000-0000-0000-000000000000"
+   :user.registered/display-name "n2o"
+   :user.registered/email "christian@schnaq.com"
+   :user.registered/last-name "Meter"
+   :user.registered/first-name "Christian"
+   :user.registered/groups ["admin"]
+   :user.registered/notification-mail-interval :notification-mail-interval/daily})
+
+(def schnaqqi
+  {:db/id "user.registered/schnaqqi"
+   :user.registered/keycloak-id "11111111-1111-1111-1111-111111111111"
+   :user.registered/display-name "schnaqqi"
+   :user.registered/email "schnaqqi@schnaq.com"
+   :user.registered/last-name "Fant"
+   :user.registered/first-name "schnaqqi"
+   :user.registered/groups ["beta-tester"]
+   :user.registered/notification-mail-interval :notification-mail-interval/daily})
+
 (def registered-users
-  [alex kangaroo])
+  [alex christian kangaroo schnaqqi])
 
 (def polls
   [{:db/id "poll/single-choice"

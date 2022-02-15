@@ -33,7 +33,7 @@
                                    (mock-authorization-header %)))]
     (testing "Users must provide a valid JWT token in the request headers to
   access this route."
-      (is (= "schnaqqifant" (:body (response token-schnaqqifant-user))))
+      (is (= "schnaqqi" (:body (response token-schnaqqifant-user))))
       (is (= "n2o" (:body (response token-n2o-admin)))))
     (testing "Wrong tokens shall not pass."
       (is (= 401 (:status (response token-wrong-signature))))

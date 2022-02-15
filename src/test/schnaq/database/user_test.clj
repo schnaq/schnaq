@@ -67,7 +67,7 @@
 
 (deftest users-by-notification-interval-test
   (testing "Load users by their notification interval setting."
-    (is (= 1 (count (db/users-by-notification-interval :notification-mail-interval/daily))))
+    (is (= 3 (count (db/users-by-notification-interval :notification-mail-interval/daily))))
     (is (= 1 (count (db/users-by-notification-interval :notification-mail-interval/weekly))))
     (is (= 0 (count (db/users-by-notification-interval :notification-mail-interval/never))))))
 

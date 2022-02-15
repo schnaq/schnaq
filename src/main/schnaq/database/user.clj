@@ -255,10 +255,12 @@
   notification settings."
   [interval]
   [:user.registered/notification-mail-interval :ret (s/coll-of :discussion/share-hash)]
-  (set
-   (map :discussion/share-hash
-        (flatten
-         (map :user.registered/visited-schnaqs (users-by-notification-interval interval))))))
+  (->> (users-by-notification-interval interval)
+       (map :user.registered/visited-schnaqs)
+       flatten
+       (map :discussion/share-hash)
+       (remove nil?)
+       set))
 
 
 ;; -----------------------------------------------------------------------------
