@@ -1,6 +1,7 @@
 (ns schnaq.interface.components.navbar
   (:require [com.fulcrologic.guardrails.core :refer [>defn]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.language :as language]
@@ -42,6 +43,26 @@
   [keyword? any? :ret vector?]
   [:a.nav-link {:href href :role "button"}
    (labels label)])
+
+(defn- drop-down-button-link [link label]
+  [:a.dropdown-item  {:href (reitfe/href link)} (labels label)])
+
+(defn product-dropdown-button
+  "Poduct button containing all subpages in its dropdown content."
+  []
+  (let [dropdown-id "product-drop-down-id"]
+    [:div.dropdown
+     [:button.btn.text-white.dropdown-toggle
+      {:id dropdown-id
+       :href "#" :role "button" :data-bs-toggle "dropdown"
+       :aria-haspopup "true" :aria-expanded "false"}
+      (labels :productpage/button)]
+     [:div.dropdown-menu
+      {:aria-labelledby dropdown-id}
+      [drop-down-button-link :routes/product-page  :router/product]
+      [drop-down-button-link :routes/product-page-qa  :router/product-qa]
+      [drop-down-button-link :routes/product-page-poll  :router/product-poll]
+      [drop-down-button-link :routes/product-page-activation  :router/product-activation]]]))
 
 (defn separated-button
   "The default navbar-button. Dropdown-content must have according classes."

@@ -168,6 +168,7 @@
 
    ;; Product Pages
 
+   :productpage/button "Product"
    :productpage.overview/title "Events as interactive as they should be"
    :productpage.overview/subtitle "schnaq is the Swiss army knife for your event"
    :productpage.overview.qa/title "Your participants have questions, you have answers"

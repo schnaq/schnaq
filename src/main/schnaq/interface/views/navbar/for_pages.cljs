@@ -19,7 +19,7 @@
   [navbar-components/button :router/pricing (reitfe/href :routes/pricing)])
 
 (defn- product-button []
-  [navbar-components/button :router/product (reitfe/href :routes/product-page)])
+  [navbar-components/product-dropdown-button])
 
 (defn- privacy-button []
   [navbar-components/button :router/privacy (reitfe/href :routes/privacy)])

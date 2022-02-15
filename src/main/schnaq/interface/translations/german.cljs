@@ -168,6 +168,7 @@
 
    ;; Product Pages
 
+   :productpage/button "Produkt"
    :productpage.overview/title "Veranstaltungen so interaktiv wie sie sein sollen"
    :productpage.overview/subtitle "schnaq ist das Schweizer Taschenmesser für deine Veranstaltung"
    :productpage.overview/cta-button "Kostenlos registrieren!"
@@ -1007,7 +1008,7 @@
    :router/not-found-label "Not Found route redirect"
    :router/pricing "Preise"
    :router/privacy "Datenschutz"
-   :router/product "Produkt"
+   :router/product "Produkt Übersicht"
    :router/product-qa "Q&A"
    :router/product-poll "Umfragen"
    :router/product-activation "Aktivierung"
