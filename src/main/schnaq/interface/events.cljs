@@ -63,6 +63,26 @@
    (toolbelt/reset-form-fields! form-elements)))
 
 (rf/reg-event-fx
+ :body.class/add
+ (fn [_ [_ class]]
+   {:fx [[:body.class/add! class]]}))
+
+(rf/reg-fx
+ :body.class/add!
+ (fn [class]
+   (.add (.. js/document -body -classList) class)))
+
+(rf/reg-event-fx
+ :body.class/remove
+ (fn [_ [_ class]]
+   {:fx [[:body.class/remove! class]]}))
+
+(rf/reg-fx
+ :body.class/remove!
+ (fn [class]
+   (.remove (.. js/document -body -classList) class)))
+
+(rf/reg-event-fx
  :schnaq/select-current-from-backend
  (fn [_ [_ {:keys [schnaq]}]]
    {:fx [[:dispatch [:schnaq/select-current schnaq]]]}))
