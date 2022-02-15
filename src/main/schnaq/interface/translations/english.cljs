@@ -116,22 +116,62 @@
    :startpage.faq.why/answer "schnaq is for you, if you support a modern, open and equal work-culture.
         Our goal is to make communication and knowledge-sharing at the workplace as flexible and easy as possible.
         This way we heighten the potential of every person in the company, and thus of the company itself."
-
    :startpage/get-to-know "Get to know the team behind schnaq"
 
    ;; Product Pages
-
+   :productpage/title "Product Overview"
+   :productpage/button "Product"
    :productpage.overview/title "Events as interactive as they should be"
    :productpage.overview/subtitle "schnaq is the Swiss army knife for your event"
+   :productpage.overview/cta-button "Start now for free"
    :productpage.overview.qa/title "Your participants have questions, you have answers"
    :productpage.overview.qa/text "Answer questions once and use them again in your next event. Gain an instant overview and save time in the future."
    :productpage.overview.poll/title "Let your participants vote"
-   :productpage.overview.poll/text "Create polls and find out what your participants think! Decide for yourself whether single or multiple choice."
+   :productpage.overview.poll/text "Create polls and find out what your participants think! Decide for yourself whether to use single or multiple choice."
    :productpage.overview.activation/title "Activate your audience"
    :productpage.overview.activation/text "Get your participants actively involved in your event! Their concentration is fading? Increase their attention with a short action! Let them react at the touch of a button!"
    :productpage.overview.feedback/title "Your personal feedback channel"
    :productpage.overview.feedback/text "Get important insights in the analysis overview. Unlock feedback or take a look at the automatically generated word cloud."
    :productpage/cta "Modernise your next event with schnaq"
+   :productpage/learn-more "Learn more!"
+   :productpage/available-soon "Available soon"
+
+   ;; QA Feature
+   :productpage.qa/title "Live Q&A"
+   :productpage.qa/subtitle "Answering questions before, during and after the event"
+   :productpage.qa/cta-button "Start your Q&A now for free!"
+   :productpage.qa.focus/title "Focus your participants"
+   :productpage.qa.focus/subtitle "Your participants will receive a reduced view. If necessary, they can switch to the overview at any time."
+   :productpage.qa.overview/title "Keep the overview"
+   :productpage.qa.overview/subtitle "You can see all questions at a glance. Filter by unanswered questions or relevance to engage with your audience more effectively."
+   :productpage.qa.answers/title "Answers at a glance"
+   :productpage.qa.answers/subtitle "As a moderator, you can mark posts as reference answers. The corresponding question is then marked with a green border and the marked answer is automatically displayed. Overview for you and your audience!"
+   :productpage.qa.input/title "Smart input for your participants"
+   :productpage.qa.input/subtitle "Similar questions are displayed while typing to avoid duplicates."
+   :productpage.qa.relevant/title "See what's relevant."
+   :productpage.qa.relevant/subtitle "Some questions are on the tip of several people's tongues. With one click, your participants can mark questions as relevant or irrelevant. This way, the most important questions are displayed at the top of the overview."
+
+   ;; Poll Feature
+   :productpage.poll/title "Live Polls"
+   :productpage.poll/subtitle "Create polls as easy as never before"
+   :productpage.poll/cta-button "Create your polls for free now!"
+   :productpage.poll-vote/title "Let your audience vote!"
+   :productpage.poll-vote/subtitle "Find out what your audience thinks. With polls, your participants vote on predefined answers."
+   :productpage.poll.single/title "Single-Choice"
+   :productpage.poll.single/subtitle "If you want to find out the preferences of your participants, use single-choice answers. Here, the possible selection of response options is limited to one."
+   :productpage.poll.multiple/title "Multiple-Choice"
+   :productpage.poll.multiple/subtitle "If you want more than one answer to count, choose multiple-choice answers to give your participants the freedom to tick more than one answer."
+
+   ;; Activation Feature
+   :productpage.activation/title "Live Activation"
+   :productpage.activation/subtitle "Keep your participants on the ball!"
+   :productpage.activation/cta-button "Activate your audience now!"
+   :productpage.activation.torooo/title "Let's hear from your audience!"
+   :productpage.activation.torooo/subtitle "Get your audience actively involved in your event! Your participants can give you immediate feedback by clicking on the Torooo button. For example, how many languages they speak or how many series they have already watched this week."
+   :productpage.activation.raise-hands/title "Raising hands digitally"
+   :productpage.activation.raise-hands/subtitle "A Torooo is the digital equivalent of raising your hand. You can activate or cancel the activation at any time. When you ask a new question, you can easily reset the number of Torooos."
+   :productpage.activation.audience/title "This is what your audience sees"
+   :productpage.activation.audience/subtitle "As soon as you start, the first tile your audience sees is the activation view with the Torooo button. Your participants can give a Torooo at any time. So you can engage them whenever you need to!"
 
    ;; Login page
    :page.login/heading "Let's schnaq"
@@ -255,13 +295,13 @@
    :schnaq.activation.create/label "Present your participants with an activation input!"
    :schnaq.activation.create/start-button "Start activation"
    :schnaq.activation.create/reset-button "Reset Activation"
-   :schnaq.activation/title "Toots total:"
-   :schnaq.activation/activation-button "Toot"
+   :schnaq.activation/title "Torooo total:"
+   :schnaq.activation/activation-button "Torooo"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
-   :schnaq.create/heading "Start your schnaq."
-   :schnaq.create.qanda/subheading "With a schnaq, you can have optimized Q&As."
+   :schnaq.create/heading "Start your schnaq"
+   :schnaq.create.qanda/subheading "With a schnaq, you can have optimized Q&As"
    :schnaq.create/info "Add a simple and comprehensible title to your discussion."
    :schnaq.create.button/save "Start a new schnaq"
 
@@ -919,7 +959,10 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/not-found-label "Not found route redirect"
    :router/pricing "Pricing"
    :router/privacy "Privacy Policy"
-   :router/product "Product"
+   :router/product "Product Overview"
+   :router/product-qa "Q&A"
+   :router/product-poll "Polls"
+   :router/product-activation "Activation"
    :router/qanda "Q&A"
    :router/start-discussion "Start discussion"
    :router/startpage "Startpage"
