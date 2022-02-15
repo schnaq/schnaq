@@ -7,7 +7,7 @@
 (use-fixtures :once toolbelt/clean-database-fixture)
 
 (defn- save-theme-request [user-token theme]
-  (-> {:request-method :post :uri (:path (api/route-by-name :api.theme/new))
+  (-> {:request-method :post :uri (:path (api/route-by-name :api.theme/add))
        :body-params theme}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)

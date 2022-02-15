@@ -18,7 +18,7 @@
   "TODO: delete me"
   {:theme.images/logo "string"
    :theme.images/activation "string"
-   :theme/title "string"
+   :theme/title "stringi"
    :theme.colors/secondary "#123123"
    :theme.colors/background "#123123"
    :theme.colors/primary "#123123"})
@@ -36,7 +36,7 @@
 (>defn query-existing-theme
   "Query theme if exists."
   [keycloak-id {:theme/keys [title]}]
-  [:user.registered/keycloak-id ::dto/theme => (? ::specs/theme)]
+  [:user.registered/keycloak-id ::specs/theme => (? ::specs/theme)]
   (first
    (db/query '[:find [(pull ?theme pattern)]
                :in $ ?keycloak-id ?theme-title pattern
@@ -46,8 +46,7 @@
              keycloak-id title patterns/theme)))
 
 (>defn new-theme
-  "Saves the provided theme for a given user. Returns `nil` if there is already
-  a title"
+  "Saves the provided theme for a given user."
   [keycloak-id theme]
   [:user.registered/keycloak-id ::dto/theme => (? ::specs/theme)]
   (let [temp-id (str "new-theme-" keycloak-id)
@@ -60,5 +59,11 @@
                          :theme/title unique-title
                          :db/id temp-id)]
     (db/transact-and-pull-temp
-     [new-theme]
+     [(assoc new-theme :db/id temp-id)]
      temp-id patterns/theme)))
+
+(comment
+
+  (new-theme keycloak-id theme)
+
+  nil)

@@ -1,22 +1,28 @@
 (ns schnaq.api.themes
   (:require [clojure.spec.alpha :as s]
             [ring.util.http-response :refer [ok]]
-            [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.specs :as specs]
-            [schnaq.database.themes :as themes-db]
-            [taoensso.timbre :as log]))
+            [schnaq.database.themes :as themes-db]))
 
 (defn- personal
   "Return all themes for a specific user."
   [{{:keys [sub]} :identity}]
   (ok {:themes (themes-db/themes-by-keycloak-id sub)}))
 
-(defn- new-theme
+(defn- add-theme
   "Save newly configured theme."
   [{{:keys [sub]} :identity
-    {theme :body} :parameters}]
+    {{:keys [theme]} :body} :parameters}]
   (ok {:theme (themes-db/new-theme sub theme)}))
+
+(defn- edit-theme
+  "TODO"
+  [{{:keys [sub]} :identity
+    {{:keys [theme]} :body} :parameters}]
+  (ok {:theme {:theme/title "TODO"}}))
+
+;; -----------------------------------------------------------------------------
 
 (def theme-routes
   [["" {:swagger {:tags ["themes"]}
@@ -29,10 +35,16 @@
                    :responses {200 {:body {:themes (s/or :no-themes empty? :themes (s/coll-of ::specs/theme))}}
                                400 at/response-error-body}}]]
     ["/theme"
-     ["/new" {:post new-theme
-              :description (at/get-doc #'new-theme)
-              :name :api.theme/new
-              :parameters {:body ::dto/theme}
+     ["/add" {:post add-theme
+              :description (at/get-doc #'add-theme)
+              :name :api.theme/add
+              :parameters {:body {:theme ::specs/theme}}
               :responses {200 {:body {:theme ::specs/theme}}
-                          400 at/response-error-body}}]]]])
+                          400 at/response-error-body}}]
+     ["/edit" {:post edit-theme
+               :description (at/get-doc #'edit-theme)
+               :name :api.theme/edit
+               :parameters {:body {:theme ::specs/theme}}
+               :responses {200 {:body {:theme ::specs/theme}}
+                           400 at/response-error-body}}]]]])
 

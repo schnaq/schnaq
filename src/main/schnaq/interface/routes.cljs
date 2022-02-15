@@ -115,7 +115,9 @@
     ["/themes"
      {:name :routes.user.manage/themes
       :view themes/view
-      :controllers [{:start #(rf/dispatch [:theming/dummy])
+      :controllers [{:start (fn []
+                              (rf/dispatch [:theme/dummy])
+                              (rf/dispatch [:scheduler.after/login [:themes.load/personal]]))
                      :stop #(rf/dispatch [:schnaq.selected/dissoc])}]}]]
    ["admin"
     ["/center"

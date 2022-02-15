@@ -1,5 +1,5 @@
 (ns schnaq.database.specs
-  (:require #?(:clj  [clojure.spec.alpha :as s]
+  (:require #?(:clj [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]
             [schnaq.config.shared :as shared-config]))
@@ -291,8 +291,8 @@
 (s/def :theme.images/logo ::non-blank-string)
 (s/def :theme.images/activation ::non-blank-string)
 (s/def :theme.texts/activation ::non-blank-string)
-(s/def ::theme (s/keys :req [:theme/title :theme/user]
+(s/def ::theme (s/keys :req [:theme/title]
                        :opt [:theme.colors/primary :theme.colors/secondary
                              :theme.colors/background :theme.images/logo
                              :theme.images/activation :theme/discussions
-                             :theme.texts/activation]))
+                             :theme.texts/activation :theme/user :db/id]))
