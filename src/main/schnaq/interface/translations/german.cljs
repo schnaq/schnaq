@@ -167,9 +167,11 @@
    :startpage/get-to-know "Lerne das Team hinter schnaq kennen"
 
    ;; Product Pages
-
-   :productpage.overview/title "Veranstaltungen so interaktiv wie sie sein sollen"
+   :productpage/title "Produktübersicht"
+   :productpage/button "Produkt"
+   :productpage.overview/title "Veranstaltungen so interaktiv, wie sie sein sollen"
    :productpage.overview/subtitle "schnaq ist das Schweizer Taschenmesser für deine Veranstaltung"
+   :productpage.overview/cta-button "Kostenlos registrieren!"
    :productpage.overview.qa/title "Nach der Veranstaltung ist vor der Veranstaltung"
    :productpage.overview.qa/text "Beantworte Fragen einmal und verwende sie in deiner nächsten Veranstaltung wieder. Gewinne sofort Übersicht und spare Zeit in der Zukunft."
    :productpage.overview.poll/title "Lass deine Teilnehmer:innen abstimmen"
@@ -179,6 +181,45 @@
    :productpage.overview.feedback/title "Dein persönlicher Feedback-Kanal"
    :productpage.overview.feedback/text "Erhalte wichtige Erkenntnisse in der Analyseübersicht. Schalte Feedback frei oder wirf einen Blick auf die automatisch generierte Wortwolke."
    :productpage/cta "Modernisiere deine nächste Veranstaltung mit schnaq"
+   :productpage/learn-more "Erfahre mehr"
+   :productpage/available-soon "Bald verfügbar"
+
+   ;; QA Feature
+   :productpage.qa/title "Live Q&A"
+   :productpage.qa/subtitle "Fragen beantworten vor, während und nach der Veranstaltung"
+   :productpage.qa/cta-button "Jetzt kostenlos Q&A starten!"
+   :productpage.qa.focus/title "Fokussiere deine Teilnehmer:innen"
+   :productpage.qa.focus/subtitle "Deine Teilnehmer:innen erhalten eine reduzierte Ansicht. Bei Bedarf können sie jederzeit zur Übersicht wechseln."
+   :productpage.qa.overview/title "Behalte den Überblick"
+   :productpage.qa.overview/subtitle "Du siehst alle Fragen auf einen Blick. Filtere nach unbeantworteten Fragen oder Relevanz, um noch effizienter auf dein Publikum einzugehen."
+   :productpage.qa.answers/title "Antworten auf einen Blick"
+   :productpage.qa.answers/subtitle "Als Moderator:in kannst du Beiträge als Referenzantwort markieren. Die entsprechende Frage wird dann mit einem grünen Rand markiert und die markierte Antwort automatisch angezeigt. Übersicht für dich und dein Publikum!"
+   :productpage.qa.input/title "Smarte Eingabe für deine Teilnehmer:innen"
+   :productpage.qa.input/subtitle "Ähnliche Fragen werden während der Eingabe eingeblendet, um Dopplungen zu vermeiden"
+   :productpage.qa.relevant/title "Sieh, was relevant ist"
+   :productpage.qa.relevant/subtitle "Manche Fragen brennen mehreren auf der Zunge. Mit einem Klick können deine Teilnehmer:innen Fragen als relevant oder irrelevant markieren. So werden dir die wichtigsten Fragen ganz oben in der Übersicht angezeigt."
+
+   ;; Poll Feature
+   :productpage.poll/title "Live Umfragen"
+   :productpage.poll/subtitle "Umfragen erstellen so leicht wie nie zuvor"
+   :productpage.poll/cta-button "Jetzt kostenlos Umfragen erstellen!"
+   :productpage.poll-vote/title "Lass dein Publikum abstimmen!"
+   :productpage.poll-vote/subtitle "Finde heraus, was dein Publikum denkt. Mit Umfragen stimmen deine Teilnehmer:innen über vordefinierte Antworten ab."
+   :productpage.poll.single/title "Single-Choice"
+   :productpage.poll.single/subtitle "Wenn du Präferenzen deiner Teilnehmer:innen erfahren möchtest, nutze Single-Choice Antworten. Hier wird die mögliche Auswahl von Antwortoptionen auf eine begrenzt."
+   :productpage.poll.multiple/title "Multiple-Choice"
+   :productpage.poll.multiple/subtitle "Wenn du mehr als nur eine Antwort zählen lassen möchtest, wähle Multiple-Choice Antworten, um deinen Teilnehmer:innen die Freiheit zu bieten mehr als nur eine Antwort anzukreuzen."
+
+   ;; Activation Feature
+   :productpage.activation/title "Live Aktivierung"
+   :productpage.activation/subtitle "So bleiben deine Teilnehmer:innen am Ball und schalten mental nicht ab"
+   :productpage.activation/cta-button "Aktiviere jetzt dein Publikum!"
+   :productpage.activation.torooo/title "Lass etwas von deinem Publikum hören!"
+   :productpage.activation.torooo/subtitle "Binde dein Publikum aktiv in deine Veranstaltung ein! Deine Teilnehmer:innen können dir mit einem Klick auf den Törööö-Knopf sofort Feedback geben. Beispielsweise wie viele Sprachen sie sprechen oder wie viele Serien sie diese Woche bereits geguckt haben."
+   :productpage.activation.raise-hands/title "Handheben in digital"
+   :productpage.activation.raise-hands/subtitle "Ein Törööö ist das digitale Äquivalent zum Handheben. Du kannst die Aktivierung jederzeit freischalten oder beenden. Wenn du eine neue Frage stellst, kannst du die Anzahl der Törööös einfach zurücksetzen."
+   :productpage.activation.audience/title "Das sieht dein Publikum"
+   :productpage.activation.audience/subtitle "Sobald du startest, ist die erste Kachel, die dein Publikum sieht, die Aktivierungsansicht mitsamt Törööö-Knopf. Deine Teilnehmer:innen können jederzeit ein Törööö von sich geben. Damit kannst du sie jederzeit einbinden!"
 
    ;; Login Page
    :page.login/heading "Nicht warten, schnaqqen!"
@@ -965,7 +1006,10 @@
    :router/not-found-label "Not Found route redirect"
    :router/pricing "Preise"
    :router/privacy "Datenschutz"
-   :router/product "Produkt"
+   :router/product "Produktübersicht"
+   :router/product-qa "Q&A"
+   :router/product-poll "Umfragen"
+   :router/product-activation "Aktivierung"
    :router/qanda "Fragen & Antworten"
    :router/start-discussion "Starte Diskussion"
    :router/startpage "Startseite"

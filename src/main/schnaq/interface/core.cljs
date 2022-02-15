@@ -38,7 +38,6 @@
             [schnaq.interface.translations]
             [schnaq.interface.translations.english]
             [schnaq.interface.translations.german]
-            [schnaq.interface.translations.polish]
             [schnaq.interface.user]
             [schnaq.interface.utils.file-reader]
             [schnaq.interface.utils.language :as language]

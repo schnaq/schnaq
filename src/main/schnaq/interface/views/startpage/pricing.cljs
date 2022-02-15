@@ -3,10 +3,10 @@
             [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.loading :refer [spinner-icon]]
@@ -149,7 +149,7 @@
      [(labels :pricing.free-tier/for-free)])
     "text-primary")
    nil
-   [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (rfe/href :routes.schnaq/create)]])
+   [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (navigation/href :routes.schnaq/create)]])
 
 (defn- pro-tier-card
   "Display the pro tier card."
@@ -172,7 +172,7 @@
      (if pro-user?
        [:div.alert.alert-info.text-center
         [:p (labels :pricing.pro-tier/already-subscribed)]
-        [buttons/anchor (labels :pricing.pro-tier/go-to-settings) (rfe/href :routes.user.manage/account) "btn-outline-dark btn-sm"]]
+        [buttons/anchor (labels :pricing.pro-tier/go-to-settings) (navigation/href :routes.user.manage/account) "btn-outline-dark btn-sm"]]
        [:div.text-center.py-4
         [buttons/button
          (labels :pricing.pro-tier/call-to-action)

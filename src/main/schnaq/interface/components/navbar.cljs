@@ -2,8 +2,8 @@
   (:require [com.fulcrologic.guardrails.core :refer [>defn]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (defn language-dropdown
@@ -21,12 +21,14 @@
        [icon :language icon-classes {:size "lg"}]
        [:span.small " " @(rf/subscribe [:current-language])]]
       [:div.dropdown-menu {:aria-labelledby "schnaq-language-dropdown"}
-       [:button.dropdown-item
-        {:on-click #(language/set-language :de)} "Deutsch"]
-       [:button.dropdown-item
-        {:on-click #(language/set-language :en)} "English"]
-       [:button.dropdown-item
-        {:on-click #(language/set-language :pl)} "Polski"]]])))
+       [:a.btn.dropdown-item
+        {:href (navigation/switch-language-href :de)
+         :lang "de-DE" :hrefLang "de-DE"}
+        "Deutsch"]
+       [:a.btn.dropdown-item
+        {:href (navigation/switch-language-href :en)
+         :lang "en-US" :hrefLang "en-US"}
+        "English"]]])))
 
 (defn language-toggle-with-tooltip
   "Uses language-dropdown and adds a mouse-over label."
@@ -42,6 +44,26 @@
   [keyword? any? :ret vector?]
   [:a.nav-link {:href href :role "button"}
    (labels label)])
+
+(defn- drop-down-button-link [link label]
+  [:a.dropdown-item {:href (navigation/href link)} (labels label)])
+
+(defn product-dropdown-button
+  "Product button containing all subpages in its dropdown content."
+  []
+  (let [dropdown-id "product-drop-down-id"]
+    [:div.dropdown
+     [:button.btn.text-white.dropdown-toggle
+      {:id dropdown-id
+       :href "#" :role "button" :data-bs-toggle "dropdown"
+       :aria-haspopup "true" :aria-expanded "false"}
+      (labels :productpage/button)]
+     [:div.dropdown-menu
+      {:aria-labelledby dropdown-id}
+      [drop-down-button-link :routes/product-page :router/product]
+      [drop-down-button-link :routes/product-page-qa :router/product-qa]
+      [drop-down-button-link :routes/product-page-poll :router/product-poll]
+      [drop-down-button-link :routes/product-page-activation :router/product-activation]]]))
 
 (defn separated-button
   "The default navbar-button. Dropdown-content must have according classes."

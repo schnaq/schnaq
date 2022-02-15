@@ -4,8 +4,8 @@
             [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [oops.core :refer [oset! oget oget+]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [schnaq.interface.config :as config]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (defn height-to-scrollheight!
@@ -106,8 +106,8 @@
   (let [selected-hub @(rf/subscribe [:hub/selected])
         user-not-authenticated? (not @(rf/subscribe [:user/authenticated?]))]
     (if (or (nil? selected-hub) user-not-authenticated?)
-      (rfe/href :routes.schnaqs/personal)
-      (rfe/href :routes/hub {:keycloak-name selected-hub}))))
+      (navigation/href :routes.schnaqs/personal)
+      (navigation/href :routes/hub {:keycloak-name selected-hub}))))
 
 (defn current-overview-navigation-route
   "Builds :navigation event parameter to navigate to the last selected hub or all visited schnaqs.

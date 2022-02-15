@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.navbar.for-pages
   (:require [clojure.string :as str]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
             [schnaq.interface.views.navbar.elements :as elements]
@@ -19,13 +19,13 @@
   [navbar-components/button :nav/blog "https://schnaq.com/blog/"])
 
 (defn- pricing-button []
-  [navbar-components/button :router/pricing (reitfe/href :routes/pricing)])
+  [navbar-components/button :router/pricing (navigation/href :routes/pricing)])
 
 (defn- product-button []
-  [navbar-components/button :router/product (reitfe/href :routes/product-page)])
+  [navbar-components/product-dropdown-button])
 
 (defn- privacy-button []
-  [navbar-components/button :router/privacy (reitfe/href :routes/privacy)])
+  [navbar-components/button :router/privacy (navigation/href :routes/privacy)])
 
 ;; -----------------------------------------------------------------------------
 
@@ -62,7 +62,7 @@
   [:nav.navbar.navbar-expand-lg.py-3.navbar-transparent.bg-transparent.mb-4
    [:section
     {:class (if (str/blank? wrapper-classes) "container-fluid" wrapper-classes)}
-    [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
+    [:a.navbar-brand {:href (navigation/href :routes/startpage)}
      [:img.d-inline-block.align-middle.me-2
       {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
     ;; hamburger

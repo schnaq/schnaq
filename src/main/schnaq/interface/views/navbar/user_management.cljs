@@ -1,10 +1,10 @@
 (ns schnaq.interface.views.navbar.user-management
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.common :refer [pro-badge]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.navbar :as nav-component]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -73,16 +73,16 @@
          (labels :nav/admin)]]
        [:ul.dropdown-menu.dropdown-menu-right {:aria-labelledby (str ul-id)}
         [:li.dropdown-item
-         [:a.btn {:role "button" :href (reitfe/href :routes/admin-center)}
+         [:a.btn {:role "button" :href (navigation/href :routes/admin-center)}
           (labels :router/admin-center)]]
         [:li.dropdown-item
-         [:a.btn {:role "button" :href (reitfe/href :routes/feedbacks)}
+         [:a.btn {:role "button" :href (navigation/href :routes/feedbacks)}
           (labels :router/all-feedbacks)]]
         [:li.dropdown-item
-         [:a.btn {:role "button" :href (reitfe/href :routes/analytics)}
+         [:a.btn {:role "button" :href (navigation/href :routes/analytics)}
           (labels :router/analytics)]]
         [:li.dropdown-item
-         [:a.btn {:role "button" :href (reitfe/href :routes.admin/summaries)}
+         [:a.btn {:role "button" :href (navigation/href :routes.admin/summaries)}
           (labels :router/summaries)]]]])))
 
 (defn- profile-picture-in-nav
@@ -100,7 +100,7 @@
 
 (defn- login-dropdown-items []
   [:<>
-   [:a.dropdown-item {:href (reitfe/href :routes.user.manage/account)}
+   [:a.dropdown-item {:href (navigation/href :routes.user.manage/account)}
     (labels :user.profile/settings)]
    [:a.dropdown-item {:href "#"                             ;; For the :active states and pointer to behave
                       :on-click #(rf/dispatch [:keycloak/logout])}
