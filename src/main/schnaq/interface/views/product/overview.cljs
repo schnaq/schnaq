@@ -3,6 +3,9 @@
 
 (defn- product-tour []
   [elements/product-page
+   :productpage.overview/title
+   :productpage.overview/subtitle
+   :productpage.overview/cta-button
    [:<>
     [elements/feature-text-img-right
      :productpage.overview.qa/title
@@ -12,22 +15,93 @@
     [elements/feature-text-img-left
      :productpage.overview.poll/title
      :productpage.overview.poll/text
-     :productpage.overview/poll]
+     :productpage.overview/poll
+     [elements/find-out-more-link :routes/product-page-poll]]
     [elements/feature-text-img-right
      :productpage.overview.activation/title
      :productpage.overview.activation/text
-     :productpage.overview/activation]
+     :productpage.overview/activation
+     [elements/find-out-more-link :routes/product-page-activation]]
     [elements/feature-text-img-left
      :productpage.overview.feedback/title
      :productpage.overview.feedback/text
-     :productpage.overview/analysis]]])
+     :productpage.overview/analysis
+     [elements/available-soon]]]])
 
-(defn overview-view []
+(defn overview-view
+  "Product tour main page"
+  []
   [product-tour])
 
 (defn- product-qa []
   [elements/product-page
-   [:<>]])
+   :productpage.qa/title
+   :productpage.qa/subtitle
+   :productpage.qa/cta-button
+   [:<>
+    [elements/qa-feature-row]
+    [elements/feature-text-img-left
+     :productpage.qa.answers/title
+     :productpage.qa.answers/subtitle
+     :productpage.qa/answers]
+    [elements/feature-text-img-right
+     :productpage.qa.input/title
+     :productpage.qa.input/subtitle
+     :productpage.qa/input]
+    [elements/feature-text-img-left
+     :productpage.qa.relevant/title
+     :productpage.qa.relevant/subtitle
+     :productpage.qa/relevant]]])
 
-(defn qa-view []
+(defn qa-view
+  "Q&A product subpage"
+  []
   [product-qa])
+
+(defn- product-poll []
+  [elements/product-page
+   :productpage.poll/title
+   :productpage.poll/subtitle
+   :productpage.poll/cta-button
+   [:<>
+    [elements/feature-text-img-right
+     :productpage.poll-vote/title
+     :productpage.poll-vote/subtitle
+     :productpage.poll/select]
+    [elements/feature-text-img-left
+     :productpage.poll.single/title
+     :productpage.poll.single/subtitle
+     :productpage.poll/single]
+    [elements/feature-text-img-right
+     :productpage.poll.multiple/title
+     :productpage.poll.multiple/subtitle
+     :productpage.poll/multiple]]])
+
+(defn poll-view
+  "Poll product subpage"
+  []
+  [product-poll])
+
+(defn- product-activation []
+  [elements/product-page
+   :productpage.activation/title
+   :productpage.activation/subtitle
+   :productpage.activation/cta-button
+   [:<>
+    [elements/feature-text-img-right
+     :productpage.activation.torooo/title
+     :productpage.activation.torooo/subtitle
+     :productpage.activation/torooo]
+    [elements/feature-text-img-left
+     :productpage.activation.raise-hands/title
+     :productpage.activation.raise-hands/subtitle
+     :productpage.activation/raise-hands]
+    [elements/feature-text-img-right
+     :productpage.activation.audience/title
+     :productpage.activation.audience/subtitle
+     :productpage.activation/user-view]]])
+
+(defn activation-view
+  "Activation product subpage"
+  []
+  [product-activation])

@@ -180,8 +180,49 @@
    :productpage.overview.feedback/text "Uzyskaj ważne spostrzeżenia w przeglądzie analizy. Odblokuj informacje zwrotne lub spójrz na automatycznie wygenerowaną chmurę słów."
    :productpage/cta "Zmodernizuj swoje następne wydarzenie dzięki schnaq"
    :productpage/learn-more "Dowiedz się więcej"
+   :productpage/available-soon "Wkrótce dostępny"
+
+   ;; Produkt QA
+   :productpage.qa/title "Live Q&A"
+   :productpage.qa/subtitle "Odpowiadanie na pytania przed, w trakcie i po wydarzeniu"
+   :productpage.qa/cta-button "Rozpocznij Q&A teraz za darmo!"
+   :productpage.qa.focus/title "Skoncentruj swoich uczestników"
+   :productpage.qa.focus/subtitle "Twoi uczestnicy otrzymają obniżony widok. W razie potrzeby mogą w każdej chwili przejść do przeglądu."
+   :productpage.qa.overview/title "Zachowaj przegląd"
+   :productpage.qa.overview/subtitle "Możesz zobaczyć wszystkie pytania na pierwszy rzut oka. Filtruj według pytań bez odpowiedzi lub istotności, aby skuteczniej angażować odbiorców."
+   :productpage.qa.answers/title "Odpowiedzi w skrócie"
+   :productpage.qa.answers/subtitle "Jako moderator możesz oznaczać posty jako odpowiedzi referencyjne. Odpowiednie pytanie jest wtedy zaznaczone zieloną ramką, a zaznaczona odpowiedź jest automatycznie wyświetlana. Przegląd dla Ciebie i Twojej publiczności!"
+   :productpage.qa.input/title "Inteligentne dane wejściowe dla Twoich uczestników."
+   :productpage.qa.input/subtitle "Podobne pytania są wyświetlane podczas wprowadzania danych, aby uniknąć duplikacji."
+   :productpage.qa.relevant/title "Zobacz, co jest istotne."
+   :productpage.qa.relevant/subtitle "Niektóre pytania są na końcu języka kilku osób. Za pomocą jednego kliknięcia uczestnicy mogą oznaczyć pytania jako Istotne lub Nieistotne. W ten sposób najważniejsze pytania są wyświetlane na górze przeglądu."
+
+   ;; Poll Product
+   :productpage.poll/title "Live Polls"
+   :productpage.poll/subtitle "Twórz ankiety tak łatwo jak nigdy dotąd"
+   :productpage.poll/cta-button "Twórz ankiety za darmo już teraz!"
+   :productpage.poll-vote/title "Pozwól swoim widzom głosować!"
+   :productpage.poll-vote/subtitle "Dowiedz się, co myślą Twoi odbiorcy. W ankietach uczestnicy głosują na predefiniowane odpowiedzi."
+   :productpage.poll.single/title "Single-Choice"
+   :productpage.poll.single/subtitle "Jeśli chcesz poznać preferencje swoich uczestników, użyj odpowiedzi jednokrotnego wyboru. W tym przypadku możliwy wybór opcji odpowiedzi jest ograniczony do jednej."
+   :productpage.poll.multiple/title "Multiple-Choice"
+   :productpage.poll.multiple/subtitle "Jeśli chcesz, aby liczyła się więcej niż jedna odpowiedź, wybierz odpowiedzi wielokrotnego wyboru, aby dać uczestnikom swobodę zaznaczenia więcej niż jednej odpowiedzi."
+
+   ;; Activation Product
+   :productpage.activation/title "Aktywacja na żywo"
+   :productpage.activation/subtitle "Utrzymuj swoich uczestników przy piłce i nie wyłączaj się psychicznie"
+   :productpage.activation/cta-button "Aktywuj swoją publiczność już teraz!"
+   :productpage.activation.torooo/title "Posłuchajmy Twoich odbiorców!"
+   :productpage.activation.torooo/subtitle "Spraw, aby Twoi odbiorcy aktywnie uczestniczyli w Twoim wydarzeniu! Twoi uczestnicy mogą dać Ci natychmiastową informację zwrotną klikając na przycisk \"Törööö\". Na przykład, w ilu językach mówią lub ile seriali obejrzeli już w tym tygodniu."
+   :productpage.activation.raise-hands/title "Podnoszenie rąk w digitalu"
+   :productpage.activation.raise-hands/subtitle "Podniesienie ręki jest cyfrowym odpowiednikiem podniesienia ręki. Aktywację można aktywować lub anulować w dowolnym momencie. Kiedy zadajesz nowe pytanie, możesz łatwo zresetować liczbę Törööös."
+   :productpage.activation.audience/title "To jest to, co widzą Twoi odbiorcy."
+   :productpage.activation.audience/subtitle "Zaraz po uruchomieniu, pierwszym kafelkiem, który widzą Twoi odbiorcy jest widok aktywacji z przyciskiem Törööö. Twoi uczestnicy mogą w każdej chwili dać toot. Możesz więc zaangażować je w każdej chwili!"
+
 
    ;; Login Page
+
+
    :page.login/heading "Nie czekaj, pstryk!"
    :page.login/subheading "100% za darmo na zawsze"
    :page.login/login "Zaloguj się / Zarejestruj się"
@@ -960,6 +1001,8 @@
    :router/privacy "Ochrona danych"
    :router/product "produktu"
    :router/product-qa "PYTANIA I ODPOWIEDZI"
+   :router/product-poll "Polls"
+   :router/product-activation "Aktywacja"
    :router/qanda "PYTANIA I ODPOWIEDZI"
    :router/start-discussion "Rozpocznij dyskusję"
    :router/startpage "Strona główna"

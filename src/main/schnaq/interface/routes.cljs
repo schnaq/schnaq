@@ -78,7 +78,15 @@
     ["/qa"
      {:name :routes/product-page-qa
       :view product-overview/qa-view
-      :link-text (labels :router/product-qa)}]]
+      :link-text (labels :router/product-qa)}]
+    ["/poll"
+     {:name :routes/product-page-poll
+      :view product-overview/poll-view
+      :link-text (labels :router/product-poll)}]
+    ["/activation"
+     {:name :routes/product-page-activation
+      :view product-overview/activation-view
+      :link-text (labels :router/product-activation)}]]
    ["alphazulu"
     {:name :routes/alphazulu
      :view az/view}]
