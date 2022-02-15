@@ -327,6 +327,17 @@
                     :option/value "Ohne Vote"}]
     :poll/discussion "discussion/simple"}])
 
+(def themes
+  [{:db/id "theme/anti-social"
+    :theme/title "The anti-social network"
+    :theme/user "user.registered/kangaroo"
+    :theme.colors/primary "#123456"
+    :theme.colors/secondary "#7890ab"
+    :theme.colors/background "#cdef01"
+    :theme.images/logo "https://s3.schnaq.com/themes/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/the-anti-social-network/logo.png"
+    :theme.images/activation "https://s3.schnaq.com/themes/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/the-anti-social-network/activation.png"
+    :theme.texts/activation "🦘"}])
+
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
-          graph-discussion simple-discussion registered-users polls))
+          graph-discussion simple-discussion registered-users polls themes))
