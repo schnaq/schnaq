@@ -186,7 +186,7 @@
    ;; QA Product
    :productpage.qa/title "Live Q&A"
    :productpage.qa/subtitle "Answering questions before, during and after the event"
-   :productpage.qa/cta-button "Start Q&A now for free!"
+   :productpage.qa/cta-button "Start your Q&A now for free!"
    :productpage.qa.focus/title "Focus your participants"
    :productpage.qa.focus/subtitle "Your participants will receive a reduced view. If necessary, they can switch to the overview at any time."
    :productpage.qa.overview/title "Keep the overview"
@@ -196,12 +196,12 @@
    :productpage.qa.input/title "Smart input for your participants"
    :productpage.qa.input/subtitle "Similar questions are displayed during the input to avoid duplications."
    :productpage.qa.relevant/title "See what's relevant."
-   :productpage.qa.relevant/subtitle "Some questions are on the tip of several people's tongues. With one click, your participants can mark questions as Relevant or Irrelevant. This way, the most important questions are displayed at the top of the overview."
+   :productpage.qa.relevant/subtitle "Some questions are on the tip of several people's tongues. With one click, your participants can mark questions as relevant or irrelevant. This way, the most important questions are displayed at the top of the overview."
 
    ;; Poll Product
    :productpage.poll/title "Live Polls"
    :productpage.poll/subtitle "Create polls as easy as never before"
-   :productpage.poll/cta-button "Create surveys for free now!"
+   :productpage.poll/cta-button "Create your polls for free now!"
    :productpage.poll-vote/title "Let your audience vote!"
    :productpage.poll-vote/subtitle "Find out what your audience thinks. With polls, your participants vote on predefined answers."
    :productpage.poll.single/title "Single-Choice"
@@ -216,9 +216,9 @@
    :productpage.activation.torooo/title "Let's hear from your audience!"
    :productpage.activation.torooo/subtitle "Get your audience actively involved in your event! Your participants can give you immediate feedback by clicking on the Torooo button. For example, how many languages they speak or how many series they have already watched this week."
    :productpage.activation.raise-hands/title "Raising hands digitally"
-   :productpage.activation.raise-hands/subtitle "A raise-hand is the digital equivalent of raising your hand. You can activate or cancel the activation at any time. When you ask a new question, you can easily reset the number of Torooos."
+   :productpage.activation.raise-hands/subtitle "A Torooo is the digital equivalent of raising your hand. You can activate or cancel the activation at any time. When you ask a new question, you can easily reset the number of Torooos."
    :productpage.activation.audience/title "This is what your audience sees."
-   :productpage.activation.audience/subtitle "As soon as you start, the first tile your audience sees is the activation view with the Torooo button. Your participants can give a torooo at any time. So you can engage them at any time!"
+   :productpage.activation.audience/subtitle "As soon as you start, the first tile your audience sees is the activation view with the Torooo button. Your participants can give a Torooo at any time. So you can engage them whenever you need to!"
 
 
    ;; Login page
@@ -1009,7 +1009,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/not-found-label "Not found route redirect"
    :router/pricing "Pricing"
    :router/privacy "Privacy Policy"
-   :router/product "Product"
+   :router/product "Product Overview"
    :router/product-qa "Q&A"
    :router/product-poll "Polls"
    :router/product-activation "Activation"

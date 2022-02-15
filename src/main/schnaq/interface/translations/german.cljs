@@ -195,8 +195,8 @@
    :productpage.qa.answers/title "Antworten auf einen Blick"
    :productpage.qa.answers/subtitle "Als Moderator kannst du Beiträge als Referenzantwort markieren. Die entsprechende Frage wird dann mit einem grünen Rand markiert und die markierte Antwort automatisch angezeigt. Übersicht für dich und dein Publikum!"
    :productpage.qa.input/title "Smarte Eingabe für deine Teilnehmer:innen"
-   :productpage.qa.input/subtitle "Ähnliche Fragen werden während der Eingabe eingeblendet um Dopplungen zu vermeiden."
-   :productpage.qa.relevant/title "Sieh was relevant ist"
+   :productpage.qa.input/subtitle "Ähnliche Fragen werden während der Eingabe eingeblendet, um Dopplungen zu vermeiden"
+   :productpage.qa.relevant/title "Sieh, was relevant ist"
    :productpage.qa.relevant/subtitle "Manche Fragen brennen mehreren auf der Zunge. Mit einem Klick können deine Teilnehmer:innen Fragen als Relevant oder Irrelevant markieren. So werden dir die wichtigsten Fragen ganz oben in der Übersicht angezeigt."
 
    ;; Poll Product
