@@ -48,7 +48,7 @@
   [:a.dropdown-item  {:href (reitfe/href link)} (labels label)])
 
 (defn product-dropdown-button
-  "Poduct button containing all subpages in its dropdown content."
+  "Product button containing all subpages in its dropdown content."
   []
   (let [dropdown-id "product-drop-down-id"]
     [:div.dropdown
