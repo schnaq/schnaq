@@ -21,7 +21,7 @@
         image-resizer/image-resizer {:mvn/version "0.1.10"}
         jarohen/chime {:mvn/version "0.3.3"}
         keycloak-clojure/keycloak-clojure {:mvn/version "1.23.12"}
-        metosin/reitit {:mvn/version "0.5.15"}
+        metosin/reitit {:mvn/version "0.5.16"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
         org.clojure/clojure {:mvn/version "1.10.3"}
         org.clojure/clojurescript {:mvn/version "1.11.4"}

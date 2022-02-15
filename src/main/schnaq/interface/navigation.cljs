@@ -100,11 +100,6 @@
          (gdom/createDom "link" (clj->js {:rel "alternative"
                                           :hreflang "en"
                                           :href (gstring/format path-format origin (switch-language-href :en))}))
-         existing-polish-alternative (first (filter #(= "pl" (.-hreflang %)) all-links))
-         polish-alternative
-         (gdom/createDom "link" (clj->js {:rel "alternative"
-                                          :hreflang "pl"
-                                          :href (gstring/format path-format origin (switch-language-href :pl))}))
          existing-default-alternative (first (filter #(= "x-default" (.-hreflang %)) all-links))
          default-alternative
          (gdom/createDom "link" (clj->js {:rel "alternative"
@@ -116,9 +111,6 @@
      (if existing-english-alternative
        (gdom/replaceNode english-alternative existing-english-alternative)
        (gdom/appendChild head english-alternative))
-     (if existing-polish-alternative
-       (gdom/replaceNode polish-alternative existing-polish-alternative)
-       (gdom/appendChild head polish-alternative))
      (if existing-default-alternative
        (gdom/replaceNode default-alternative existing-default-alternative)
        (gdom/appendChild head default-alternative)))))
