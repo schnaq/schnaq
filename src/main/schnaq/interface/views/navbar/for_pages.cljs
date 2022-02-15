@@ -19,7 +19,7 @@
   [navbar-components/button :router/pricing (navigation/href :routes/pricing)])
 
 (defn- product-button []
-  [navbar-components/button :router/product (navigation/href :routes/product-page)])
+  [navbar-components/product-dropdown-button])
 
 (defn- privacy-button []
   [navbar-components/button :router/privacy (navigation/href :routes/privacy)])

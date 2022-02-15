@@ -30,7 +30,7 @@
             [schnaq.interface.views.hub.overview :as hubs]
             [schnaq.interface.views.hub.settings :as hub-settings]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.product.overview :as product-overview]
+            [schnaq.interface.views.product.pages :as product-overview]
             [schnaq.interface.views.qa.inputs :as qanda]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
@@ -55,7 +55,7 @@
 ;; want to function regularly.
 (def routes
   ["/"
-   {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
+   {:coercion reitit.coercion.spec/coercion} ;; Enable Spec coercion for all routes
    ["en/{*rest-url}"
     {:name :routes/force-english
      :controllers (language-controllers :en)}]
@@ -68,9 +68,22 @@
      :link-text (labels :router/startpage)
      :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
    ["product"
-    {:name :routes/product-page
-     :view product-overview/overview-view
-     :link-text (labels :router/product)}]
+    [""
+     {:name :routes/product-page
+      :view product-overview/overview-view
+      :link-text (labels :router/product)}]
+    ["/qa"
+     {:name :routes/product-page-qa
+      :view product-overview/qa-view
+      :link-text (labels :router/product-qa)}]
+    ["/poll"
+     {:name :routes/product-page-poll
+      :view product-overview/poll-view
+      :link-text (labels :router/product-poll)}]
+    ["/activation"
+     {:name :routes/product-page-activation
+      :view product-overview/activation-view
+      :link-text (labels :router/product-activation)}]]
    ["alphazulu"
     {:name :routes/alphazulu
      :view az/view}]
@@ -152,7 +165,7 @@
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/mark-all-as-seen (:share-hash path)]])
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
                      :stop #(rf/dispatch [:filters/clear])}]}
-     [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
+     ["" ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
                                (rf/dispatch [:discussion.history/clear])
@@ -175,7 +188,7 @@
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]
-     ["/"                                                   ;; Redirect trailing slash schnaq access to non-trailing slash
+     ["/" ;; Redirect trailing slash schnaq access to non-trailing slash
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:navigation/navigate :routes.schnaq/start path]))}]}]
