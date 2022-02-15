@@ -46,19 +46,24 @@
 
 (defn switch-language-href
   ;; TODO test
-  "Take the current path and return it with the desired locale."
-  [locale]
-  (let [current-url (new js/URL (oget js/window [:location :href]))
-        full-path (gstring/format "%s%s%s"
-                                  (.-pathname current-url)
-                                  (.-search current-url)
-                                  (.-hash current-url))
-        locale-clean-path (if (or (gstring/startsWith full-path "/en")
-                                  (gstring/startsWith full-path "/de")
-                                  (gstring/startsWith full-path "/pl"))
-                            (subs full-path 3)
-                            full-path)]
-    (gstring/format "/%s%s" (str (name locale)) locale-clean-path)))
+  "Take the current path and return it with the desired locale.
+  If no locale is provided the default local-less default path is returned."
+  ([]
+   (switch-language-href nil))
+  ([locale]
+   (let [current-url (new js/URL (oget js/window [:location :href]))
+         full-path (gstring/format "%s%s%s"
+                                   (.-pathname current-url)
+                                   (.-search current-url)
+                                   (.-hash current-url))
+         locale-clean-path (if (or (gstring/startsWith full-path "/en")
+                                   (gstring/startsWith full-path "/de")
+                                   (gstring/startsWith full-path "/pl"))
+                             (subs full-path 3)
+                             full-path)]
+     (if locale
+       (gstring/format "/%s%s" (str (name locale)) locale-clean-path)
+       locale-clean-path))))
 
 (defn href
   "A drop-in replacement for `reitit.frontend.easy/href` that is aware of schnaqs language path-prefix.
@@ -100,7 +105,7 @@
          default-alternative
          (gdom/createDom "link" (clj->js {:rel "alternative"
                                           :hreflang "x-default"
-                                          :href (gstring/format path-format origin (switch-language-href :en))}))]
+                                          :href (gstring/format path-format origin (switch-language-href))}))]
      (if existing-german-alternative
        (gdom/replaceNode german-alternative existing-german-alternative)
        (gdom/appendChild head german-alternative))
