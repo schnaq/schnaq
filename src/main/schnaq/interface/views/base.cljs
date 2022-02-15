@@ -1,9 +1,10 @@
 (ns schnaq.interface.views.base
   (:require [clojure.string :as str]
             [goog.string :as gstring]
-            [reitit.frontend.easy :as reitfe]
+            [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jw]
             [schnaq.interface.views.feedback.collect :as feedback]))
@@ -36,13 +37,13 @@
   [:<>
    [:img.footer-schnaqqifant
     {:src (img-path :logo-white)}]
-   [:div.lead.font-italic.pb-1
+   [:div.lead.fst-italic.pb-1
     (labels :startpage/heading)]])
 
 (defn- footer-button
   [route-name content-label]
   [:li.list-inline-item
-   [:a.btn.btn-sm.btn-outline-white {:href (reitfe/href route-name)}
+   [:a.btn.btn-sm.btn-outline-white {:href (navigation/href route-name)}
     (labels content-label)]])
 
 (defn- footer-nav []
@@ -95,17 +96,30 @@
     (labels :footer.registered/is-registered)
     "."]])
 
+(defn- product-use-cases
+  "Show schnaq use-cases for the users. Only in german."
+  []
+  (let [locale @(rf/subscribe [:current-locale])]
+    (when (= :de locale)
+      [:section.px-2
+       ;; Remove hardcode, when there are english versions around!
+       [:h3.h5 "schnaq Lösungen"]
+       [:p [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-meetings-moderieren/"}
+            "für Meetings"]]])))
+
 ;; -----------------------------------------------------------------------------
 
 (defn footer
   "Footer to display at the bottom the page."
   []
   [:footer
-   [:div.container
+   [:div.container-fluid.px-5
     [:div.row
      [:div.col-md-4.col-12
       [logo-and-slogan]]
-     [:div.col-md-8.col-12.text-md-end.pt-3.pt-md-0
+     [:div.col-md-4.col-12
+      [product-use-cases]]
+     [:div.col-md-4.col-12.text-md-end.pt-3.pt-md-0
       [footer-nav]]]
     [:div.row
      [:div.col-md-6.col-12

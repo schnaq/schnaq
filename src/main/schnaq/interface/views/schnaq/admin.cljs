@@ -3,9 +3,9 @@
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.file-download :as file-download]
             [schnaq.interface.utils.tooltip :as tooltip]))
@@ -17,7 +17,7 @@
     [tooltip/text
      (labels :schnaq.admin/tooltip)
      [:a.btn.btn-outline-muted
-      {:href (rfe/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
+      {:href (navigation/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
        :role :button}
       [icon :cog "mx-auto d-block" {:size "lg"}]
       [:span.small (labels :discussion.navbar/settings)]]]))

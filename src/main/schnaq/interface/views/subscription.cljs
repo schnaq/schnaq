@@ -1,13 +1,13 @@
 (ns schnaq.interface.views.subscription
-  (:require [reitit.frontend.easy :as rfe]
-            [schnaq.interface.components.buttons :as buttons]
+  (:require [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon-card]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- next-step [icon title body button-text route-name]
-  (let [href (rfe/href route-name)]
+  (let [href (navigation/href route-name)]
     [:article.pb-3.pe-3
      [:a {:href href} [icon-card icon "text-typography" {:size :lg}]]
      [:p.fw-bold.my-2 title]
@@ -47,7 +47,7 @@
     [:h3.pb-3 (labels :subscription.page.cancel/title)]
     [:p.lead (labels :subscription.page.cancel/lead)]
     [:p (labels :subscription.page.cancel/body)]
-    [buttons/anchor (labels :subscription.page.cancel/button) (rfe/href :routes/pricing)]]])
+    [buttons/anchor (labels :subscription.page.cancel/button) (navigation/href :routes/pricing)]]])
 
 ;; -----------------------------------------------------------------------------
 

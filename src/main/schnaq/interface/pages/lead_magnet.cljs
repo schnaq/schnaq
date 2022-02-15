@@ -1,8 +1,8 @@
 (ns schnaq.interface.pages.lead-magnet
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
@@ -49,7 +49,7 @@
     [:div.collapse {:id "collapse-more-newsletter"}
      [:p.small (labels :startpage.newsletter/policy-disclaimer)
       [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
-      [:a {:href (reitfe/href :routes/privacy-extended)}
+      [:a {:href (navigation/href :routes/privacy-extended)}
        (labels :privacy/note)] "."]]]
 
    [:input.mb-3

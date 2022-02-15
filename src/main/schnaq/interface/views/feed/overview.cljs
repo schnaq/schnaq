@@ -1,8 +1,8 @@
 (ns schnaq.interface.views.feed.overview
   (:require [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.time :as util-time]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -24,7 +24,7 @@
      [:h2 (labels :schnaqs.not-found/alert-lead)]
      [:p (labels :schnaqs.not-found/alert-body)]
      [:a.btn.btn-outline-light.mt-1
-      {:href (reitfe/href :routes.schnaq/create)}
+      {:href (navigation/href :routes.schnaq/create)}
       (labels :nav.schnaqs/create-schnaq)]]]])
 
 (defn sort-options
@@ -97,7 +97,7 @@
   [schnaq delete-from-hub?]
   [:article.schnaq-entry.d-flex
    [:a.d-flex.flex-row.flex-grow-1.text-reset.text-decoration-none
-    {:href (reitfe/href :routes.schnaq/start {:share-hash (:discussion/share-hash schnaq)})
+    {:href (navigation/href :routes.schnaq/start {:share-hash (:discussion/share-hash schnaq)})
      :on-click #(rf/dispatch [:schnaq/select-current schnaq])}
     [schnaq-header-image schnaq]
     [:div.ms-3.w-100.py-2
@@ -143,7 +143,7 @@
   ([text image-div button-class route route-params]
    [:a.btn.btn-link.text-start {:class button-class
                                 :role "button"
-                                :href (reitfe/href route route-params)}
+                                :href (navigation/href route route-params)}
     [:div.d-flex.flex-row
      image-div
      [:div.my-auto.ps-2 text]]]))
@@ -207,7 +207,7 @@
   [:section.panel-white.text-center
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
-     [outline-info-button :coc/heading (reitfe/href :routes/code-of-conduct)]]]])
+     [outline-info-button :coc/heading (navigation/href :routes/code-of-conduct)]]]])
 
 (defn- personal-discussions-view
   "Shows the page for an overview of schnaqs. Takes a subscription-key which

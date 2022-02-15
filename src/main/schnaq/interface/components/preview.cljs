@@ -1,6 +1,6 @@
 (ns schnaq.interface.components.preview
-  (:require [re-frame.core :as rf]
-            [schnaq.interface.components.images :refer [img-path]]
+  (:require [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]))
 
 (defn preview-image
@@ -8,7 +8,8 @@
   [img-key]
   [:div.preview-image
    [:img.img-fluid {:src (img-path img-key)}]
-   [:div.alert.alert-primary {:on-click #(rf/dispatch [:navigation/navigate :routes/pricing])}
-    [:p.mb-1 [:small.fw-bold
-              (labels :preview.image-overlay/title)]]
-    [:p.mb-0 [:small (labels :preview.image-overlay/body)]]]])
+   [:a {:href (navigation/href :routes/pricing)}
+    [:div.alert.alert-primary
+     [:p.mb-1 [:small.fw-bold
+               (labels :preview.image-overlay/title)]]
+     [:p.mb-0 [:small (labels :preview.image-overlay/body)]]]]])

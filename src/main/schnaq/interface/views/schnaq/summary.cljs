@@ -3,10 +3,10 @@
   (:require [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
@@ -92,8 +92,8 @@
                   share-hash (-> summary :summary/discussion :discussion/share-hash)
                   summary-id (:db/id summary)]
               [:tr {:key (str "row-" summary-id)}
-               [:td [:a {:href (rfe/href :routes.schnaq/start
-                                         {:share-hash share-hash})}
+               [:td [:a {:href (navigation/href :routes.schnaq/start
+                                                {:share-hash share-hash})}
                      (-> summary :summary/discussion :discussion/title)]]
                [:td requester]
                [:td (util-time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
@@ -125,8 +125,8 @@
          [:tbody
           (for [summary summaries]
             [:tr {:key (str "row-" (:db/id summary))}
-             [:td [:a {:href (rfe/href :routes.schnaq/start
-                                       {:share-hash (-> summary :summary/discussion :discussion/share-hash)})}
+             [:td [:a {:href (navigation/href :routes.schnaq/start
+                                              {:share-hash (-> summary :summary/discussion :discussion/share-hash)})}
                    (-> summary :summary/discussion :discussion/title)]]
              [:td (util-time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
              [:td (:summary/text summary)]
