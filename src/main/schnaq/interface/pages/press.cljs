@@ -1,7 +1,7 @@
 (ns schnaq.interface.pages.press
-  (:require [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.components.icons :refer [icon]]
+  (:require [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
@@ -39,9 +39,9 @@
   [:<>
    [:h4.pt-3 (labels :press-kit.about-us/heading)]
    [:p (labels :press-kit.about-us/body)]
-   [:a.btn.btn-primary {:href (reitfe/href :routes/about-us)}
+   [:a.btn.btn-primary {:href (navigation/href :routes/about-us)}
     (labels :footer.buttons/about-us)]
-   [:a.btn.btn-primary.ms-3 {:href (reitfe/href :routes/publications)}
+   [:a.btn.btn-primary.ms-3 {:href (navigation/href :routes/publications)}
     (labels :footer.buttons/publications)]])
 
 ;; -----------------------------------------------------------------------------

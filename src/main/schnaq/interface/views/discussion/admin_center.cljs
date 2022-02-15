@@ -6,10 +6,10 @@
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.http :as http]
@@ -437,7 +437,7 @@
        [:h4.mb-4 (labels :schnaqs/continue-with-schnaq-after-creation)]
        [:a.btn.button-primary.btn-lg.center-block.mb-5
         {:role "button"
-         :href (rfe/href :routes.schnaq/start {:share-hash share-hash})}
+         :href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
         (labels :schnaqs/continue-to-schnaq-button)]]]]))
 
 (defn admin-center-view []

@@ -1,8 +1,8 @@
 (ns schnaq.interface.views.discussion.badges
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -190,8 +190,8 @@
          new? (not (= old-statement-num statement-num))]
      [:div.d-flex.flex-row.align-items-center
       [:a.badge.rounded-pill.badge-transparent.badge-clickable.ms-3
-       {:href (rfe/href :routes.schnaq.select/statement {:share-hash share-hash
-                                                         :statement-id (:db/id statement)})
+       {:href (navigation/href :routes.schnaq.select/statement {:share-hash share-hash
+                                                                :statement-id (:db/id statement)})
         :role :button}
        (if new?
          [icon :comments "m-auto text-secondary"]

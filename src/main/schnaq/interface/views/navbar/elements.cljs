@@ -2,14 +2,13 @@
   (:require [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.navbar :as navbar-components]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.graph.settings :as graph-settings]
@@ -25,7 +24,7 @@
       [:small {:class label-class} (labels :discussion.navbar/title)]
       [:div.clickable-no-hover
        [:a.link-unstyled
-        {:href (reitfe/href :routes.schnaq/start {:share-hash share-hash})}
+        {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
         [:h1.h5.d-none.d-md-block {:class title-class} (toolbelt/truncate-to-n-chars title 25)]
         [:div.d-md-none {:class title-class} (toolbelt/truncate-to-n-chars title 22)]]]])))
 
@@ -42,7 +41,7 @@
   "Brand logo and title with dynamic resizing."
   [title additional-content]
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2.bg-white
-   [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes/startpage)}
+   [:a.schnaq-logo-container.d-flex.h-100 {:href (navigation/href :routes/startpage)}
     [schnaq-logo]]
    [:div.mx-0.mx-md-4
     title]
@@ -79,7 +78,7 @@
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [discussion-button-builder
      :graph.button/text :icon-graph-dark
-     (reitfe/href :routes/graph-view {:share-hash share-hash})]))
+     (navigation/href :routes/graph-view {:share-hash share-hash})]))
 
 (defn summary-button
   "Button to navigate to the summary view."
@@ -87,7 +86,7 @@
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [discussion-button-builder
      :summary.link.button/text :icon-summary-dark
-     (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})]))
+     (navigation/href :routes.schnaq/dashboard {:share-hash share-hash})]))
 
 (defn- standard-view-button
   "Button to navigate to the standard overview."
@@ -95,7 +94,7 @@
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [discussion-button-builder
      :discussion.button/text :icon-cards-dark
-     (reitfe/href :routes.schnaq/start {:share-hash share-hash})]))
+     (navigation/href :routes.schnaq/start {:share-hash share-hash})]))
 
 (defn- qanda-view-button
   "Button to navigate to the Q&A view."
@@ -103,7 +102,7 @@
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [discussion-button-builder
      :qanda.button/text :icon-qanda-dark
-     (reitfe/href :routes.schnaq/qanda {:share-hash share-hash})]))
+     (navigation/href :routes.schnaq/qanda {:share-hash share-hash})]))
 
 (defn dropdown-views
   "Displays a Dropdown menu button for the available views"
@@ -164,7 +163,8 @@
   []
   (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])
         share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [:div
+    [:a
+     {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
      [navbar-components/separated-button
       [:div.d-flex.text-white
        [motion/pulse-once [icon :comment/alt]
@@ -172,9 +172,7 @@
         [:schnaq.qa.new-question/pulse false]
         (:white colors)
         (:secondary colors)]
-
-       [:div.ms-2 number-of-questions]]
-      {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])}]]))
+       [:div.ms-2 number-of-questions]]]]))
 
 (rf/reg-event-db
  :schnaq.qa.new-question/pulse
@@ -212,22 +210,3 @@
   ([classes]
    [:div.d-flex.align-items-center
     [um/user-dropdown-button classes]]))
-
-(defn collapsed-view-language-with-label-dropdown
-  "Display a language dropdown menu with a description label"
-  []
-  (let [dropdown-id "schnaq-collapsed-language-dropdown"]
-    [:<>
-     [:nav-link.dropdown-toggle
-      {:id dropdown-id
-       :href "#" :role "button" :data-bs-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}
-      (labels :nav.buttons/language-toggle) " "
-      [icon :language]]
-     [:div.dropdown-menu {:aria-labelledby dropdown-id}
-      [:button.dropdown-item
-       {:on-click #(language/set-language :de)} "Deutsch"]
-      [:button.dropdown-item
-       {:on-click #(language/set-language :en)} "English"]
-      [:button.dropdown-item
-       {:on-click #(language/set-language :pl)} "Polski"]]]))

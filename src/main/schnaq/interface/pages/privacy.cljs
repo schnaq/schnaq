@@ -3,8 +3,8 @@
   (:require [cljs.pprint :refer [pprint]]
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage clear!]]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
@@ -70,7 +70,7 @@
   [:section.text-center.pb-5
    [:p.lead
     (gstring/format "%s " (labels :privacy.link-to-privacy/lead))
-    [:a.btn.btn-lg.btn-link {:href (reitfe/href :routes/privacy-extended)}
+    [:a.btn.btn-lg.btn-link {:href (navigation/href :routes/privacy-extended)}
      (labels :privacy/note)]
     "."]])
 

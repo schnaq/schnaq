@@ -1,8 +1,8 @@
 (ns schnaq.interface.views.navbar.for-discussions
   (:require [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.discussion.share :as share]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
@@ -63,7 +63,7 @@
        [:small.text-primary (labels :discussion.navbar/members)]
        [:h5.text-center user-count]]
       [:a.schnaq-logo-container.d-flex.h-100.text-decoration-none
-       {:href (reitfe/href :routes.schnaq/start)}
+       {:href (navigation/href :routes.schnaq/start)}
        [:small.text-white "powered by"]
        [:img.d-inline-block.align-middle.me-2
         {:src (img-path :logo-white) :alt "schnaq logo"

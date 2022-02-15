@@ -1,8 +1,8 @@
 (ns schnaq.interface.views.startpage.call-to-actions
-  (:require [reitit.frontend.easy :as rfe]
-            [schnaq.interface.components.buttons :as buttons]
+  (:require [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]))
 
 (defn- header-video
@@ -21,7 +21,7 @@
   [:section.mt-5.text-center
    [buttons/anchor-big
     (labels :schnaq.startpage.cta/button)
-    (rfe/href :routes.schnaq/create)
+    (navigation/href :routes.schnaq/create)
     "btn-secondary d-inline-block"]])
 
 (defn- social-proof-abtf

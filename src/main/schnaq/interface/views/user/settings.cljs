@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.user.settings
   (:require [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
@@ -22,8 +22,8 @@
         button-class (if (= current-route route) "feed-button-focused" "feed-button")]
     [:article
      [:a.btn.btn-link.text-start {:class button-class
-                                 :role "button"
-                                 :href (rfe/href route)}
+                                  :role "button"
+                                  :href (navigation/href route)}
       [:div.row.text-start
        [:div.col-1
         [icon icon-name "me-4 my-auto"]]

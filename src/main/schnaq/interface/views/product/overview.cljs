@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.product.overview
-  (:require [reitit.frontend.easy :as rfe]
-            [schnaq.interface.components.buttons :as buttons]
+  (:require [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.videos :refer [video]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
@@ -13,7 +13,7 @@
   [:section.mt-5
    [buttons/anchor-big
     (labels :schnaq.startpage.cta/button)
-    (rfe/href :routes.schnaq/create)
+    (navigation/href :routes.schnaq/create)
     "btn-dark d-inline-block"]])
 
 (defn product-above-the-fold
@@ -66,7 +66,7 @@
         [:div.mt-auto.me-3.d-lg-none cta-video]
         [:a.btn.btn-lg.btn-dark.my-auto.w-100
          {:role "button"
-          :href (rfe/href :routes.schnaq/create)}
+          :href (navigation/href :routes.schnaq/create)}
          (labels :schnaq.startpage.cta/button)]]]]]))
 
 (defn- product-tour []

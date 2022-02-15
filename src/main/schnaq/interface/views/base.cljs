@@ -2,9 +2,9 @@
   (:require [clojure.string :as str]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jw]
             [schnaq.interface.views.feedback.collect :as feedback]))
@@ -43,7 +43,7 @@
 (defn- footer-button
   [route-name content-label]
   [:li.list-inline-item
-   [:a.btn.btn-sm.btn-outline-white {:href (reitfe/href route-name)}
+   [:a.btn.btn-sm.btn-outline-white {:href (navigation/href route-name)}
     (labels content-label)]])
 
 (defn- footer-nav []

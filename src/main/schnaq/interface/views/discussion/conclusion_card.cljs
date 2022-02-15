@@ -3,12 +3,12 @@
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.schnaq :as sc]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -170,8 +170,8 @@
          [truncated-content/statement statement]]
         [:div.d-flex.flex-wrap.align-items-center
          [:a.btn.btn-sm.btn-outline-dark.me-3.px-1.py-0
-          {:href (reitfe/href :routes.schnaq.select/statement {:share-hash share-hash
-                                                               :statement-id (:db/id statement)})}
+          {:href (navigation/href :routes.schnaq.select/statement {:share-hash share-hash
+                                                                   :statement-id (:db/id statement)})}
           [icon :comments "my-auto me-1"]
           [:small (labels :statement/discuss)]]
          [up-down-vote statement]

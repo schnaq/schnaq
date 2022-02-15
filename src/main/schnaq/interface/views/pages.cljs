@@ -4,13 +4,13 @@
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.videos :refer [video]]
             [schnaq.interface.config :as config]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -83,7 +83,10 @@
         [:div.my-5 [bullet-points]]
         [:div.mt-3.text-center
          (labels :page.login.alert/text-1)
-         [buttons/anchor (labels :page.login.alert/button) (rfe/href :routes/pricing) "btn-sm btn-outline-white mx-2"]
+         [buttons/anchor
+          (labels :page.login.alert/button)
+          (navigation/href :routes/pricing)
+          "btn-sm btn-outline-white mx-2"]
          (labels :page.login.alert/text-2)]
         [:img.w-50.align-self-center.d-lg-none {:src (img-path :schnaqqifant/three-d-bubble)}]]]]]}])
 

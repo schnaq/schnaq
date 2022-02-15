@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.hub.common
   (:require [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.common :as common]))
 
@@ -24,7 +24,7 @@
   "Display a single hub."
   [{:hub/keys [keycloak-name name logo]}]
   [:article
-   [:a.btn.btn-link {:href (reitfe/href :routes/hub {:keycloak-name keycloak-name})}
+   [:a.btn.btn-link {:href (navigation/href :routes/hub {:keycloak-name keycloak-name})}
     [hub-logo-with-name logo name 32]]])
 
 (defn hub-list
