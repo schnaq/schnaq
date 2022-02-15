@@ -4,13 +4,18 @@
             [schnaq.api.dto-specs :as dto]
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
-            [schnaq.database.specs :as specs]
-            [schnaq.toolbelt :as tools]))
+            [schnaq.database.specs :as specs])
+  (:import java.util.UUID))
 
-(def ^:private keycloak-id "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18")
-(def ^:private beta-keycloak-id "8278b980-bf33-45c0-924c-5d7c8f64a564")
+(def ^:private keycloak-id
+  "TODO: delete me"
+  "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18")
+(def ^:private beta-keycloak-id
+  "TODO: delete me"
+  "8278b980-bf33-45c0-924c-5d7c8f64a564")
 
-(def theme
+(def ^:private theme
+  "TODO: delete me"
   {:theme.images/logo "string"
    :theme.images/activation "string"
    :theme/title "string"
@@ -45,24 +50,15 @@
   a title"
   [keycloak-id theme]
   [:user.registered/keycloak-id ::dto/theme => (? ::specs/theme)]
-  (when-not (query-existing-theme keycloak-id theme)
-    (let [temp-id (str "new-theme-" keycloak-id)
-          new-theme (assoc theme
-                           :theme/user [:user.registered/keycloak-id keycloak-id]
-                           :db/id temp-id)]
-      (db/transact-and-pull-temp
-       [new-theme]
-       temp-id patterns/theme))))
-
-(comment
-
-  (-> (themes-by-keycloak-id "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18")
-      first
-      :theme.images/logo)
-
-  (new-theme keycloak-id theme)
-  (new-theme beta-keycloak-id theme)
-
-  (themes-by-keycloak-id beta-keycloak-id)
-
-  nil)
+  (let [temp-id (str "new-theme-" keycloak-id)
+        theme-title-exists? (query-existing-theme keycloak-id theme)
+        unique-title (if theme-title-exists?
+                       (format "%s-%s" (:theme/title theme) (.toString (UUID/randomUUID)))
+                       (:theme/title theme))
+        new-theme (assoc theme
+                         :theme/user [:user.registered/keycloak-id keycloak-id]
+                         :theme/title unique-title
+                         :db/id temp-id)]
+    (db/transact-and-pull-temp
+     [new-theme]
+     temp-id patterns/theme)))

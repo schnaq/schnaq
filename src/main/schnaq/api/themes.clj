@@ -16,23 +16,9 @@
   "Save newly configured theme."
   [{{:keys [sub]} :identity
     {theme :body} :parameters}]
-  (prn (themes-db/themes-by-keycloak-id sub))
   (if-let [theme (themes-db/new-theme sub theme)]
     (ok {:theme theme})
     (bad-request (at/build-error-body :theme/title-taken "The title for the theme is already in use by you"))))
-
-(comment
-
-  (new-theme {:identity {:sub "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18"}
-              :parameters {:body
-                           {:theme.images/logo "string"
-                            :theme.images/activation "string"
-                            :theme/title "string"
-                            :theme.colors/secondary "#123123"
-                            :theme.colors/background "#123123"
-                            :theme.colors/primary "#123123"}}})
-
-  nil)
 
 (def theme-routes
   [["" {:swagger {:tags ["themes"]}

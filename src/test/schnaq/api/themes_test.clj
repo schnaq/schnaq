@@ -1,12 +1,7 @@
 (ns schnaq.api.themes-test
   (:require [clojure.test :refer [deftest is use-fixtures testing]]
             [schnaq.api :as api]
-            [schnaq.api.themes :as themes]
-            [schnaq.test-data :refer [kangaroo]]
-            [schnaq.test.toolbelt :as toolbelt]
-            [muuntaja.core :as m]))
-
-(def ^:private keycloak-id "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18")
+            [schnaq.test.toolbelt :as toolbelt]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
@@ -27,20 +22,10 @@
    :theme.colors/background "#7890ab"
    :theme.colors/primary "#cdef01"})
 
-(deftest save-test
-  (testing "Saving theme"
-    (testing "with new title succeeds."
+(deftest new-theme-test
+  (testing "Creating a new theme"
+    (testing "succeeds for eligible users."
       (is (= 200 (:status (save-theme-request toolbelt/token-n2o-admin sample-theme))))
-      (is (= "theme/title-taken"
-             (-> (save-theme-request toolbelt/token-schnaqqifant-user sample-theme)
-                 m/decode-response-body
-                 :error))))
-    (testing "fails if title theme already exists for user."
-      (is (= 400 (:status (save-theme-request toolbelt/token-n2o-admin sample-theme)))))))
-
-(comment
-
-  (-> (save-theme-request toolbelt/token-n2o-admin sample-theme)
-      m/decode-response-body)
-
-  nil)
+      (is (= 200 (:status (save-theme-request toolbelt/token-schnaqqifant-user sample-theme)))))
+    (testing "fails for non-pro users"
+      (is (= 403 (:status (save-theme-request toolbelt/token-wegi-no-beta-user sample-theme)))))))
