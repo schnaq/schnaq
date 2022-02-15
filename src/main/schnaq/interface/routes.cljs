@@ -30,7 +30,7 @@
             [schnaq.interface.views.hub.overview :as hubs]
             [schnaq.interface.views.hub.settings :as hub-settings]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.product.overview :as product-overview]
+            [schnaq.interface.views.product.pages :as product-overview]
             [schnaq.interface.views.qa.inputs :as qanda]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
