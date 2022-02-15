@@ -44,31 +44,35 @@
  (fn [_ [_ {:keys [redirect]}]]
    {:fx [[:navigation.redirect/follow! redirect]]}))
 
+(defn- replace-language-in-path
+  "Side effect free replacement of language prefix in paths."
+  [path locale]
+  (let [current-url (new js/URL path)
+        full-path (gstring/format "%s%s%s"
+                                  (.-pathname current-url)
+                                  (.-search current-url)
+                                  (.-hash current-url))
+        locale-clean-path (if (or (gstring/startsWith full-path "/en/")
+                                  (gstring/startsWith full-path "/de/")
+                                  (gstring/startsWith full-path "/pl/"))
+                            (subs full-path 3)
+                            full-path)]
+    (if locale
+      (gstring/format "/%s%s" (str (name locale)) locale-clean-path)
+      locale-clean-path)))
+
 (defn switch-language-href
-  ;; TODO test
   "Take the current path and return it with the desired locale.
-  If no locale is provided the default local-less default path is returned."
+  If no locale is provided the default local-less default path is returned.
+  Is not pure, since it always depends on current URL."
   ([]
-   (switch-language-href nil))
+   (replace-language-in-path (oget js/window [:location :href]) nil))
   ([locale]
-   (let [current-url (new js/URL (oget js/window [:location :href]))
-         full-path (gstring/format "%s%s%s"
-                                   (.-pathname current-url)
-                                   (.-search current-url)
-                                   (.-hash current-url))
-         locale-clean-path (if (or (gstring/startsWith full-path "/en")
-                                   (gstring/startsWith full-path "/de")
-                                   (gstring/startsWith full-path "/pl"))
-                             (subs full-path 3)
-                             full-path)]
-     (if locale
-       (gstring/format "/%s%s" (str (name locale)) locale-clean-path)
-       locale-clean-path))))
+   (replace-language-in-path (oget js/window [:location :href]) locale)))
 
 (defn href
   "A drop-in replacement for `reitit.frontend.easy/href` that is aware of schnaqs language path-prefix.
   Looks up the language set and always adds the prefix to the path."
-  ;; TODO test
   ([route-name]
    (href route-name nil nil))
   ([route-name params]
