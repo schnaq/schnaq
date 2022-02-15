@@ -10,7 +10,6 @@
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.integrations.wetog.routes :as wetog-routes]
             [schnaq.interface.pages.about-us :as about-us]
-            [schnaq.interface.pages.alphazulu :as az]
             [schnaq.interface.pages.lead-magnet :as lead-magnet]
             [schnaq.interface.pages.legal-note :as legal-note]
             [schnaq.interface.pages.press :as press]
@@ -71,9 +70,6 @@
     {:name :routes/product-page
      :view product-overview/overview-view
      :link-text (labels :router/product)}]
-   ["alphazulu"
-    {:name :routes/alphazulu
-     :view az/view}]
    ["login"
     {:name :routes/login
      :view pages/login-page
