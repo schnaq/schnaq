@@ -167,7 +167,7 @@
    :startpage/get-to-know "Lerne das Team hinter schnaq kennen"
 
    ;; Product Pages
-
+   :productpage/title "Produktübersicht"
    :productpage/button "Produkt"
    :productpage.overview/title "Veranstaltungen so interaktiv, wie sie sein sollen"
    :productpage.overview/subtitle "schnaq ist das Schweizer Taschenmesser für deine Veranstaltung"
@@ -184,7 +184,7 @@
    :productpage/learn-more "Erfahre mehr"
    :productpage/available-soon "Bald verfügbar"
 
-   ;; QA Product
+   ;; QA Feature
    :productpage.qa/title "Live Q&A"
    :productpage.qa/subtitle "Fragen beantworten vor, während und nach der Veranstaltung"
    :productpage.qa/cta-button "Jetzt kostenlos Q&A starten!"
@@ -199,7 +199,7 @@
    :productpage.qa.relevant/title "Sieh, was relevant ist"
    :productpage.qa.relevant/subtitle "Manche Fragen brennen mehreren auf der Zunge. Mit einem Klick können deine Teilnehmer:innen Fragen als relevant oder irrelevant markieren. So werden dir die wichtigsten Fragen ganz oben in der Übersicht angezeigt."
 
-   ;; Poll Product
+   ;; Poll Feature
    :productpage.poll/title "Live Umfragen"
    :productpage.poll/subtitle "Umfragen erstellen so leicht wie nie zuvor"
    :productpage.poll/cta-button "Jetzt kostenlos Umfragen erstellen!"
@@ -210,7 +210,7 @@
    :productpage.poll.multiple/title "Multiple-Choice"
    :productpage.poll.multiple/subtitle "Wenn du mehr als nur eine Antwort zählen lassen möchtest, wähle Multiple-Choice Antworten, um deinen Teilnehmer:innen die Freiheit zu bieten mehr als nur eine Antwort anzukreuzen."
 
-   ;; Activation Product
+   ;; Activation Feature
    :productpage.activation/title "Live Aktivierung"
    :productpage.activation/subtitle "So bleiben deine Teilnehmer:innen am Ball und schalten mental nicht ab"
    :productpage.activation/cta-button "Aktiviere jetzt dein Publikum!"
