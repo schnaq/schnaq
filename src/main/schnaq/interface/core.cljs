@@ -29,7 +29,6 @@
             [schnaq.interface.navigation]
             [schnaq.interface.notification.events]
             [schnaq.interface.pages.about-us]
-            [schnaq.interface.pages.alphazulu]
             [schnaq.interface.pages.lead-magnet]
             [schnaq.interface.pages.press]
             [schnaq.interface.pages.privacy]
