@@ -14,13 +14,15 @@
   "Save newly configured theme."
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
-  (ok {:theme (themes-db/new-theme sub theme)}))
+  (themes-db/new-theme sub theme)
+  (ok {:themes (themes-db/themes-by-keycloak-id sub)}))
 
 (defn- edit-theme
   "TODO"
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
-  (ok {:theme {:theme/title "TODO"}}))
+  (themes-db/edit-theme sub theme)
+  (ok {:themes (themes-db/themes-by-keycloak-id sub)}))
 
 ;; -----------------------------------------------------------------------------
 
@@ -39,12 +41,12 @@
               :description (at/get-doc #'add-theme)
               :name :api.theme/add
               :parameters {:body {:theme ::specs/theme}}
-              :responses {200 {:body {:theme ::specs/theme}}
+              :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}
                           400 at/response-error-body}}]
-     ["/edit" {:post edit-theme
+     ["/edit" {:put edit-theme
                :description (at/get-doc #'edit-theme)
                :name :api.theme/edit
                :parameters {:body {:theme ::specs/theme}}
-               :responses {200 {:body {:theme ::specs/theme}}
+               :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}
                            400 at/response-error-body}}]]]])
 

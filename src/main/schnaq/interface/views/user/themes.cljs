@@ -221,7 +221,7 @@
  :theme/edit
  ;; Send new theme to backend
  (fn [{:keys [db]} [_ form]]
-   {:fx [(http/xhrio-request db :post "/theme/edit"
+   {:fx [(http/xhrio-request db :put "/theme/edit"
                              [:theme.add/success]
                              {:theme (theme-from-form form)})]}))
 

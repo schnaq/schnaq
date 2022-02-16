@@ -1,7 +1,6 @@
 (ns schnaq.database.themes
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
-            [schnaq.api.dto-specs :as dto]
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs])
@@ -48,7 +47,7 @@
 (>defn new-theme
   "Saves the provided theme for a given user."
   [keycloak-id theme]
-  [:user.registered/keycloak-id ::dto/theme => (? ::specs/theme)]
+  [:user.registered/keycloak-id ::specs/theme => (? ::specs/theme)]
   (let [temp-id (str "new-theme-" keycloak-id)
         theme-title-exists? (query-existing-theme keycloak-id theme)
         unique-title (if theme-title-exists?
@@ -62,8 +61,16 @@
      [(assoc new-theme :db/id temp-id)]
      temp-id patterns/theme)))
 
+(>defn edit-theme
+  "Saves the provided theme for a given user."
+  [keycloak-id theme]
+  [:user.registered/keycloak-id ::specs/theme => ::specs/theme]
+  (db/transact [(assoc theme :theme/user [:user.registered/keycloak-id keycloak-id])])
+  (db/fast-pull (:db/id theme) patterns/theme))
+
 (comment
 
   (new-theme keycloak-id theme)
+  (edit-theme keycloak-id (assoc (assoc theme :theme/title "fooo") :db/id 17592186053934))
 
   nil)
