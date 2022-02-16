@@ -42,7 +42,7 @@
       [:div.collapse {:id "collapse-more-newsletter"}
        [:p.small (labels :startpage.newsletter/policy-disclaimer)
         [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
-        [:a {:href (navigation/href :routes/privacy-extended)}
+        [:a {:href (navigation/href :routes.privacy/complete)}
          (labels :privacy/note)] "."]]]
 
      [:input.mb-3
@@ -131,7 +131,6 @@
   [:div.overflow-hidden
    [pages/with-nav-and-header
     {:page/title (labels :startpage/heading)
-     :page/wrapper-classes "container container-85"
      :page/vertical-header? true
      :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
     [:div.wave-background

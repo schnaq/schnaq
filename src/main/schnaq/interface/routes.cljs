@@ -53,20 +53,19 @@
 ;; components inside do regularly. So just use components here that wrap the view you
 ;; want to function regularly.
 (def routes
-  ["/"
-   {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
-   ["en/{*rest-url}"
+  ["" {:coercion reitit.coercion.spec/coercion} ;; Enable Spec coercion for all routes
+   ["/en/{*rest-url}"
     {:name :routes/force-english
      :controllers (language-controllers :en)}]
-   ["de/{*rest-url}"
+   ["/de/{*rest-url}"
     {:name :routes/force-german
      :controllers (language-controllers :de)}]
-   [""
+   ["/"
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)
      :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
-   ["product"
+   ["/product"
     [""
      {:name :routes/product-page
       :view product-overview/overview-view
@@ -83,23 +82,23 @@
      {:name :routes/product-page-activation
       :view product-overview/activation-view
       :link-text (labels :router/product-activation)}]]
-   ["login"
+   ["/login"
     {:name :routes/login
      :view pages/login-page
      :link-text (labels :user/login)}]
-   ["hub/:keycloak-name"
+   ["/hub/:keycloak-name"
     {:parameters {:path {:keycloak-name string?}}
      :controllers [{:parameters {:path [:keycloak-name]}
                     :start (fn [{:keys [path]}]
                              (rf/dispatch [:scheduler.after/login [:hub/load (:keycloak-name path)]])
                              (rf/dispatch [:hub/select! (:keycloak-name path)]))}]}
-    ["/"
+    [""
      {:name :routes/hub
       :view hubs/hub-overview}]
     ["/edit"
      {:name :routes.hub/edit
       :view hub-settings/settings}]]
-   ["user"
+   ["/user"
     ["/account"
      {:name :routes.user.manage/account
       :view edit-account/view
@@ -111,7 +110,7 @@
       :view edit-notifications/view
       :link-text (labels :user/edit-notifications)
       :controllers [{:stop (fn [] (rf/dispatch [:user.settings.temporary/reset]))}]}]]
-   ["admin"
+   ["/admin"
     ["/center"
      {:name :routes/admin-center
       :view admin-center/center-overview-route
@@ -130,24 +129,24 @@
      {:name :routes.admin/summaries
       :view summary/admin-summaries-view
       :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:summaries/load-all]]))}]}]]
-   ["code-of-conduct"
+   ["/code-of-conduct"
     {:name :routes/code-of-conduct
      :view coc/view
      :link-text (labels :router/code-of-conduct)}]
-   ["press"
+   ["/press"
     {:name :routes/press
      :view press/view}]
-   ["publications"
+   ["/publications"
     {:name :routes/publications
      :view publications/view}]
-   ["schnaqs"
+   ["/schnaqs"
     {:name :routes.schnaqs/personal
      :view feed/page
      :link-text (labels :router/visited-schnaqs)
      :controllers [{:start (fn [_]
                              (rf/dispatch [:schnaqs.visited/load])
                              (rf/dispatch [:hub/select! nil]))}]}]
-   ["schnaq"
+   ["/schnaq"
     ["/create"
      {:name :routes.schnaq/create
       :view create/create-schnaq-view
@@ -161,7 +160,7 @@
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/mark-all-as-seen (:share-hash path)]])
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
                      :stop #(rf/dispatch [:filters/clear])}]}
-     [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
+     ["" ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
                                (rf/dispatch [:discussion.history/clear])
@@ -184,7 +183,7 @@
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]
-     ["/"                                                   ;; Redirect trailing slash schnaq access to non-trailing slash
+     ["/" ;; Redirect trailing slash schnaq access to non-trailing slash
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:navigation/navigate :routes.schnaq/start path]))}]}]
@@ -246,14 +245,14 @@
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/graph false])
                               (rf/dispatch [:notifications/reset]))}]}]]]
-   ["pricing"
+   ["/pricing"
     {:name :routes/pricing
      :view pricing-view/pricing-view
      :link-text (labels :router/pricing)
      :controllers [{:start (fn []
                              (rf/dispatch [:load-preview-statements])
                              (rf/dispatch [:pricing/get-prices]))}]}]
-   ["subscription"
+   ["/subscription"
     ["/success" {:name :routes.subscription/success
                  :view subscription-views/success-view}]
     ["/cancel" {:name :routes.subscription/cancel
@@ -264,36 +263,38 @@
       :controllers [{:parameters {:query [:price-id]}
                      :start (fn [parameters]
                               (rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session (get-in parameters [:query :price-id])]]))}]}]]
-   ["privacy"
+   ["/privacy"
     [""
-     {:name :routes/privacy
+     {:name :routes.privacy/complete
+      :view privacy-extended/view}]
+    ["/overview"
+     {:name :routes.privacy/simple
       :view privacy/view
       :link-text (labels :router/privacy)}]
-    ["/extended"
-     {:name :routes/privacy-extended
-      :view privacy-extended/view}]]
-   ["about"
+    ;; Legacy route.
+    ["/extended" {:controllers [{:start #(rf/dispatch [:navigation/navigate :routes.privacy/complete])}]}]]
+   ["/about"
     {:name :routes/about-us
      :view about-us/page}]
-   ["legal-note"
+   ["/legal-note"
     {:name :routes/legal-note
      :view legal-note/page}]
-   ["datenschutzkonform-arbeiten"
+   ["/datenschutzkonform-arbeiten"
     {:name :routes/lead-magnet
      :view lead-magnet/view}]
-   ["error"
+   ["/error"
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub
      :link-text (labels :router/not-found-label)
      :controllers [{:identity #(random-uuid)
                     :start #(js-wrap/replace-url "/404")}]}]
-   ["403"
-    {:name :routes/forbidden-page
-     :view error-views/forbidden-page}]
-   ["beta-tester-only"
+   ["/beta-tester-only"
     {:name :routes/beta-only
      :view error-views/only-beta-tester}]
-   ["404"
+   ["/403"
+    {:name :routes/forbidden-page
+     :view error-views/forbidden-page}]
+   ["/404"
     {:name :routes/true-404-view
      :view error-views/true-404-entrypoint
      :link-text (labels :router/true-404-view)}]])
@@ -313,7 +314,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-          #(js-wrap/scroll-to-id window-hash)))))
+               #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))

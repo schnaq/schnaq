@@ -113,7 +113,6 @@
   [:div.overflow-hidden
    [pages/with-nav-and-header
     {:page/title (labels :productpage/title)
-     :page/wrapper-classes "container container-85"
      :page/vertical-header? true
      :page/more-for-heading (with-meta [product-above-the-fold
                                         title

@@ -53,7 +53,7 @@
   []
   (let [dropdown-id "product-drop-down-id"]
     [:div.dropdown
-     [:button.btn.text-white.dropdown-toggle
+     [:button.btn.nav-link.dropdown-toggle
       {:id dropdown-id
        :role "button" :data-bs-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
