@@ -102,7 +102,7 @@
   [:<>
    [:a.dropdown-item {:href (navigation/href :routes.user.manage/account)}
     (labels :user.profile/settings)]
-   [:a.dropdown-item {:href "#"                             ;; For the :active states and pointer to behave
+   [:a.dropdown-item {:href "#" ;; For the :active states and pointer to behave
                       :on-click #(rf/dispatch [:keycloak/logout])}
     (labels :user/logout)]])
 
@@ -117,7 +117,7 @@
       {:class button-class
        :data-bs-toggle "dropdown"
        :aria-expanded "false"}
-      [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
+      [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby "profile-dropdown"}
        (if authenticated?
          [login-dropdown-items]
          [:<>
