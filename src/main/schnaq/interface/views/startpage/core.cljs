@@ -42,7 +42,7 @@
       [:div.collapse {:id "collapse-more-newsletter"}
        [:p.small (labels :startpage.newsletter/policy-disclaimer)
         [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
-        [:a {:href (navigation/href :routes/privacy-extended)}
+        [:a {:href (navigation/href :routes.privacy/complete)}
          (labels :privacy/note)] "."]]]
 
      [:input.mb-3

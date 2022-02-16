@@ -54,7 +54,7 @@
 ;; want to function regularly.
 (def routes
   ["/"
-   {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
+   {:coercion reitit.coercion.spec/coercion} ;; Enable Spec coercion for all routes
    ["en/{*rest-url}"
     {:name :routes/force-english
      :controllers (language-controllers :en)}]
@@ -161,7 +161,7 @@
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/mark-all-as-seen (:share-hash path)]])
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
                      :stop #(rf/dispatch [:filters/clear])}]}
-     [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
+     ["" ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
                                (rf/dispatch [:discussion.history/clear])
@@ -184,7 +184,7 @@
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]
-     ["/"                                                   ;; Redirect trailing slash schnaq access to non-trailing slash
+     ["/" ;; Redirect trailing slash schnaq access to non-trailing slash
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:navigation/navigate :routes.schnaq/start path]))}]}]
@@ -265,12 +265,13 @@
                      :start (fn [parameters]
                               (rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session (get-in parameters [:query :price-id])]]))}]}]]
    ["privacy"
-    [""
-     {:name :routes/privacy
+    ["/overview"
+     {:name :routes.privacy/simple
       :view privacy/view
       :link-text (labels :router/privacy)}]
-    ["/extended"
-     {:name :routes/privacy-extended
+    ["/extended" {:controllers [{:start #(rf/dispatch [:navigation/navigate :routes.privacy/complete])}]}]
+    [""
+     {:name :routes.privacy/complete
       :view privacy-extended/view}]]
    ["about"
     {:name :routes/about-us
@@ -313,7 +314,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-          #(js-wrap/scroll-to-id window-hash)))))
+               #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))

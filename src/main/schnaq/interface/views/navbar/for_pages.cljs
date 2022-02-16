@@ -25,7 +25,7 @@
   [navbar-components/product-dropdown-button])
 
 (defn- privacy-button []
-  [navbar-components/button :router/privacy (navigation/href :routes/privacy)])
+  [navbar-components/button :router/privacy (navigation/href :routes.privacy/simple)])
 
 ;; -----------------------------------------------------------------------------
 

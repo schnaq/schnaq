@@ -57,7 +57,7 @@
     [:li.list-inline-item
      [:button.btn.btn-sm.btn-outline-white {:on-click feedback/show-feedback-modal}
       (labels :feedbacks/button)]]
-    [footer-button :routes/privacy :router/privacy]
+    [footer-button :routes.privacy/complete :router/privacy]
     [footer-button :routes/legal-note :footer.buttons/legal-note]]])
 
 (defn- developed-in-nrw []
