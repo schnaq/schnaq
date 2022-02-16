@@ -91,7 +91,7 @@
   (let [username @(rf/subscribe [:user/display-name])
         authenticated? @(rf/subscribe [:user/authenticated?])
         icon-size 32]
-    [:<>
+    [:div.d-flex.flex-column
      [:div.mx-auto.rounded-2.overflow-hidden
       (if authenticated? [common/avatar icon-size] [common/identicon username icon-size])]
      [:p.small.text-nowrap.dropdown-toggle
