@@ -66,11 +66,11 @@
         ul-id "admin-dropdown"]
     (when admin?
       [:ul.navbar-nav.dropdown
-       [:a#admin-dropdown.nav-link
-        {:href "#" :role "button" :data-bs-toggle "dropdown" :id ul-id
+       [:button#admin-dropdown.nav-link.btn.dropdown-toggle
+        {:role "button" :data-bs-toggle "dropdown" :id ul-id
+         :class button-class
          :aria-haspopup "true" :aria-expanded "false"}
-        [:button.btn.dropdown-toggle.rounded-2 {:class button-class}
-         (labels :nav/admin)]]
+        (labels :nav/admin)]
        [:ul.dropdown-menu.dropdown-menu-end {:aria-labelledby (str ul-id)}
         [:li.dropdown-item
          [:a.btn {:role "button" :href (navigation/href :routes/admin-center)}
@@ -102,8 +102,9 @@
   [:<>
    [:a.dropdown-item {:href (navigation/href :routes.user.manage/account)}
     (labels :user.profile/settings)]
-   [:a.dropdown-item {:href "#" ;; For the :active states and pointer to behave
-                      :on-click #(rf/dispatch [:keycloak/logout])}
+   [:button.dropdown-item
+    {:role "button"
+     :on-click #(rf/dispatch [:keycloak/logout])}
     (labels :user/logout)]])
 
 (defn user-dropdown-button
@@ -122,13 +123,14 @@
          [login-dropdown-items]
          [:<>
           [namechange-menu-point]
-          [:a.btn.dropdown-item {:href "#"
-                                 :on-click #(rf/dispatch [:keycloak/login])}
+          [:button.btn.dropdown-item
+           {:role "button"
+            :on-click #(rf/dispatch [:keycloak/login])}
            (labels :user/register)]])]]]))
 
 (defn- register-button []
-  [:a.btn.btn-sm.btn-dark
-   {:href "#" :on-click #(rf/dispatch [:keycloak/login])}
+  [:button.btn.btn-sm.btn-dark
+   {:role "button" :on-click #(rf/dispatch [:keycloak/login])}
    (labels :nav/register)])
 
 (defn register-or-user-button
