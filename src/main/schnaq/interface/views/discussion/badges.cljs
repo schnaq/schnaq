@@ -108,9 +108,9 @@
                       (= user-id (:db/id author)))]
     (when editable?
       [:div.dropdown.ms-2
-       [:div.m-0.p-0
+       [:button.btn.btn-link.text-dark.m-0.p-0
         {:id dropdown-id
-         :href "#" :role "button" :data-bs-toggle "dropdown"
+         :role "button" :data-bs-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
         [icon :dots]]
        [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
@@ -150,9 +150,9 @@
 
 (defn- statement-dropdown-menu [dropdown-id dropdown-items]
   [:div.dropdown.ms-2
-   [:div.m-0.p-0
+   [:button.btn.btn-link.text-dark.m-0.p-0
     {:id dropdown-id
-     :href "#" :role "button" :data-bs-toggle "dropdown"
+     :role "button" :data-bs-toggle "dropdown"
      :aria-haspopup "true" :aria-expanded "false"}
     [icon :dots]]
    [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
