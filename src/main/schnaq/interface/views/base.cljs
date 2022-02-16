@@ -14,7 +14,7 @@
   [{:page/keys [heading subheading classes more-for-heading vertical-header? wrapper-classes]}]
   [:<>
    [:div
-    {:class (if (str/blank? wrapper-classes) "container" wrapper-classes)}
+    {:class (if (str/blank? wrapper-classes) "container container-85" wrapper-classes)}
     (if vertical-header?
       [:<> [:h1 heading] [:h2.display-6 subheading]]
       [:div.row.mt-5.mb-2
