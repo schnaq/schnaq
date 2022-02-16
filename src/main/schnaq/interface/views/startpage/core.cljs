@@ -131,7 +131,6 @@
   [:div.overflow-hidden
    [pages/with-nav-and-header
     {:page/title (labels :startpage/heading)
-     :page/wrapper-classes "container container-85"
      :page/vertical-header? true
      :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
     [:div.wave-background
