@@ -31,7 +31,7 @@
    [pricing-button]
    [privacy-button]
    [blog-link]
-   [:div.dropdown.ms-auto
+   [:div.nav-item.dropdown.ms-auto
     [navbar-components/language-dropdown false {}]]
    (when @(rf/subscribe [:user/administrator?])
      [um/admin-dropdown "btn-outline-secondary"])
