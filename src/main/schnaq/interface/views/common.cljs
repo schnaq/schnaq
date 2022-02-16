@@ -23,8 +23,8 @@
   [display-name size]
   (fn [image]
     (oset! image [:target :src]
-      (str "data:image/svg+xml;base64,"
-           (js/btoa (generate-identicon display-name size))))))
+           (str "data:image/svg+xml;base64,"
+                (js/btoa (generate-identicon display-name size))))))
 
 (>defn identicon
   "Generate unique identicon component."
@@ -61,7 +61,7 @@
   "Create an image based on the nickname and also print the nickname."
   [{:user.registered/keys [display-name] :as user} size]
   [map? number? :ret vector?]
-  [:div.row
+  [:div.d-flex
    [:div.me-4 [avatar user size]]
    [:h4.my-auto display-name]])
 

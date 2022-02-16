@@ -12,6 +12,9 @@
 ;; -----------------------------------------------------------------------------
 ;; Navbar Elements
 
+(defn- schnaqs-button []
+  [navbar-components/button :nav/schnaqs (toolbelt/current-overview-link)])
+
 (defn- blog-link []
   [navbar-components/button :nav/blog "https://schnaq.com/blog/"])
 
@@ -28,10 +31,11 @@
 
 (defn- navbar-user []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
+   [schnaqs-button]
    [pricing-button]
    [privacy-button]
    [blog-link]
-   [:div.dropdown.ms-auto
+   [:div.nav-item.dropdown.ms-auto
     [navbar-components/language-dropdown false {}]]
    (when @(rf/subscribe [:user/administrator?])
      [um/admin-dropdown "btn-outline-secondary"])

@@ -32,10 +32,10 @@
 
 (defn language-toggle-with-tooltip
   "Uses language-dropdown and adds a mouse-over label."
-  [show-label? options]
+  [side-by-side? options]
   [tooltip/text
    (labels :nav.buttons/language-toggle)
-   [:span [language-dropdown show-label? options]]])
+   [:span [language-dropdown side-by-side? options]]])
 
 (>defn button
   "Build a button for the navbar. Takes a label as a keyword and anything, which

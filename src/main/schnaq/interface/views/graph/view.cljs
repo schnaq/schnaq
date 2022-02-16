@@ -113,7 +113,7 @@
           (.on graph "doubleClick"
                (fn [properties]
                  (when-let [clicked-node-id (first (get (js->clj properties) "nodes"))] ;; If `clicked-node-id` is nil, the user clicked in an empty space instead of a node
-                   (if (= clicked-node-id share-hash)       ;; if true, the user clicked on the discussion title
+                   (if (= clicked-node-id share-hash) ;; if true, the user clicked on the discussion title
                      (rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])
                      (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
                                    (assoc route-params :statement-id clicked-node-id)])))))))
@@ -152,11 +152,10 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [(http/xhrio-request db :get "/discussion/graph" [:graph/set-current] {:share-hash share-hash})]})))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  :graph/set-current
- (fn [{:keys [db]} [_ graph-data]]
-   {:fx [[:dispatch [:spinner/active! false]]]
-    :db (assoc-in db [:graph :current] graph-data)}))
+ (fn [db [_ graph-data]]
+   (assoc-in db [:graph :current] graph-data)))
 
 (rf/reg-sub
  :graph/current

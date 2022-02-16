@@ -71,7 +71,7 @@
          :aria-haspopup "true" :aria-expanded "false"}
         [:button.btn.dropdown-toggle.rounded-2 {:class button-class}
          (labels :nav/admin)]]
-       [:ul.dropdown-menu.dropdown-menu-right {:aria-labelledby (str ul-id)}
+       [:ul.dropdown-menu.dropdown-menu-end {:aria-labelledby (str ul-id)}
         [:li.dropdown-item
          [:a.btn {:role "button" :href (navigation/href :routes/admin-center)}
           (labels :router/admin-center)]]
@@ -91,7 +91,7 @@
   (let [username @(rf/subscribe [:user/display-name])
         authenticated? @(rf/subscribe [:user/authenticated?])
         icon-size 32]
-    [:<>
+    [:div.d-flex.flex-column
      [:div.mx-auto.rounded-2.overflow-hidden
       (if authenticated? [common/avatar icon-size] [common/identicon username icon-size])]
      [:p.small.text-nowrap.dropdown-toggle
@@ -102,7 +102,7 @@
   [:<>
    [:a.dropdown-item {:href (navigation/href :routes.user.manage/account)}
     (labels :user.profile/settings)]
-   [:a.dropdown-item {:href "#"                             ;; For the :active states and pointer to behave
+   [:a.dropdown-item {:href "#" ;; For the :active states and pointer to behave
                       :on-click #(rf/dispatch [:keycloak/logout])}
     (labels :user/logout)]])
 
@@ -117,7 +117,7 @@
       {:class button-class
        :data-bs-toggle "dropdown"
        :aria-expanded "false"}
-      [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
+      [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby "profile-dropdown"}
        (if authenticated?
          [login-dropdown-items]
          [:<>
