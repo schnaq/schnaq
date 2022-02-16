@@ -968,7 +968,6 @@
    :router/true-404-view "404 Fehlerseite"
    :router/code-of-conduct "Verhaltensregeln"
    :router/summaries "Zusammenfassungen"
-   :router/alphazulu "ALPHAZULU"
 
    :admin.center.start/title "Admin-Center"
    :admin.center.start/heading "Admin-Center"
