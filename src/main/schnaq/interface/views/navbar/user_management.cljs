@@ -71,7 +71,7 @@
          :aria-haspopup "true" :aria-expanded "false"}
         [:button.btn.dropdown-toggle.rounded-2 {:class button-class}
          (labels :nav/admin)]]
-       [:ul.dropdown-menu.dropdown-menu-right {:aria-labelledby (str ul-id)}
+       [:ul.dropdown-menu.dropdown-menu-end {:aria-labelledby (str ul-id)}
         [:li.dropdown-item
          [:a.btn {:role "button" :href (navigation/href :routes/admin-center)}
           (labels :router/admin-center)]]

@@ -53,7 +53,7 @@
       {:id options-id :type "button" :data-bs-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
       [icon :dots-v]]
-     [:div.dropdown-menu.dropdown-menu-right {:id dropdown-id :aria-labelledby options-id}
+     [:div.dropdown-menu.dropdown-menu-end {:id dropdown-id :aria-labelledby options-id}
       [:button.dropdown-item {:type "button"
                               :title (labels :hub.remove.schnaq/tooltip)
                               :on-click (fn [_e] (when (js/confirm (labels :hub.remove.schnaq/prompt))
