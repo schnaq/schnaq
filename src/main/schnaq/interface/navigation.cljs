@@ -29,8 +29,9 @@
 
 (rf/reg-event-fx
  :navigation/navigate
- (fn [_cofx [_ & route]]
-   {:fx [[:navigation/navigate! route]]}))
+ (fn [{:keys [db]} [_ route & rest]]
+   {:fx [[:navigation/navigate!
+          (apply vector (route-utils/prefix-route-name-locale route (get db :locale :en)) rest)]]}))
 
 (rf/reg-fx
  :navigation/navigate!
