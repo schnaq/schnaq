@@ -105,8 +105,8 @@
             (toolbelt/truncate-to-n-chars-string (:theme/title theme) 32)
             #(rf/dispatch [:theme/select theme])
             (if (= (:db/id selected) (:db/id theme))
-              "btn-outline-secondary shadow w-100"
-              "btn-outline-dark w-100")]]
+              "btn-secondary w-100 h-100"
+              "btn-outline-dark w-100 h-100")]]
           {:key (str "theme-" (:db/id theme))}))
       [:div.col
        [buttons/button
@@ -114,7 +114,7 @@
         (fn []
           (rf/dispatch [:theme/reset])
           (rf/dispatch [:theme.selected/update :theme/title (str user-name "'s first theme")]))
-        "btn-outline-primary"]]]]))
+        "btn-outline-primary h-100"]]]]))
 
 (defn- configure-theme
   "TODO"
