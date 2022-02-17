@@ -72,6 +72,22 @@
     (db/transact [prepared-theme])
     (db/fast-pull (:db/id prepared-theme) patterns/theme)))
 
+(comment
+
+  #_(>defn edit-theme
+      "Saves the provided theme for a given user."
+      [keycloak-id theme]
+      [:user.registered/keycloak-id ::specs/theme => ::specs/theme]
+      (let [theme-id (Long/valueOf (:db/id theme))
+            prepared-theme (-> theme
+                               (assoc :theme/user [:user.registered/keycloak-id keycloak-id])
+                               (assoc :db/id theme-id))]
+        (db/transact-and-pull-temp
+         [prepared-theme]
+         theme-id patterns/theme)))
+
+  nil)
+
 (>defn delete-theme
   "Delete a theme."
   [keycloak-id theme-id]

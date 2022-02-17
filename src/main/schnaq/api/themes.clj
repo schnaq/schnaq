@@ -3,7 +3,8 @@
             [ring.util.http-response :refer [ok bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.specs :as specs]
-            [schnaq.database.themes :as themes-db]))
+            [schnaq.database.themes :as themes-db]
+            [taoensso.timbre :as log]))
 
 (defn- personal
   "Return all themes for a specific user."
@@ -33,32 +34,32 @@
 ;; -----------------------------------------------------------------------------
 
 (def theme-routes
-  [["" {:swagger {:tags ["themes"]}
-        :middleware [:user/authenticated?
-                     :user/pro-user?]}
+  [["/user" {:swagger {:tags ["themes"]}
+             :middleware [:user/authenticated?
+                          :user/pro-user?]}
     ["/themes"
-     ["/personal" {:get personal
-                   :description (at/get-doc #'personal)
-                   :name :api.themes/personal
-                   :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}
-                               400 at/response-error-body}}]]
+     {:get personal
+      :description (at/get-doc #'personal)
+      :name :api.themes/personal
+      :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}
+                  400 at/response-error-body}}]
     ["/theme"
-     {:post {:handler add-theme
-             :description (at/get-doc #'add-theme)
-             :name :api.theme/add
-             :parameters {:body {:theme ::specs/theme}}
-             :responses {200 {:body {:theme ::specs/theme}}
-                         400 at/response-error-body}}
-      :put {:handler edit-theme
-            :description (at/get-doc #'edit-theme)
-            :name :api.theme/edit
-            :parameters {:body {:theme ::specs/theme}}
-            :responses {200 {:body {:theme ::specs/theme}}
-                        400 at/response-error-body}}
-      :delete {:handler delete-theme
-               :description (at/get-doc #'delete-theme)
-               :name :api.theme/delete
-               :parameters {:body {:theme-id :db/id}}
-               :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}
-                           400 at/response-error-body}}}]]])
+     ["/add" {:post add-theme
+              :description (at/get-doc #'add-theme)
+              :name :api.theme/add
+              :parameters {:body {:theme ::specs/theme}}
+              :responses {200 {:body {:theme ::specs/theme}}
+                          400 at/response-error-body}}]
+     ["/edit" {:put edit-theme
+               :description (at/get-doc #'edit-theme)
+               :name :api.theme/edit
+               :parameters {:body {:theme ::specs/theme}}
+               :responses {200 {:body {:theme ::specs/theme}}
+                           400 at/response-error-body}}]
+     ["/delete" {:delete delete-theme
+                 :description (at/get-doc #'delete-theme)
+                 :name :api.theme/delete
+                 :parameters {:body {:theme-id :db/id}}
+                 :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}
+                             400 at/response-error-body}}]]]])
 
