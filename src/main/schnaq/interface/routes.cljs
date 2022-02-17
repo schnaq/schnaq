@@ -19,6 +19,7 @@
             [schnaq.interface.pages.publications :as publications]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.routing :as route-utils]
             [schnaq.interface.views.admin.control-center :as admin-center]
             [schnaq.interface.views.discussion.admin-center :as discussion-admin]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
@@ -59,7 +60,7 @@
   (walk/postwalk
    (fn [e]
      (if (and (map? e) (contains? e :name))
-       (update e :name #(keyword (str prefix "." (namespace %)) (name %)))
+       (update e :name #(route-utils/prefix-route-name-locale % prefix))
        e))
    routes))
 
@@ -316,13 +317,13 @@
        ["/en"
         {:name :routes/english-prefix
          :controllers (language-controllers :en)}]
-       (prefix-routes common-routes "en")))
+       (prefix-routes common-routes :en)))
      (vec
       (concat
        ["/de"
         {:name :routes/german-prefix
          :controllers (language-controllers :de)}]
-       (prefix-routes common-routes "de")))]
+       (prefix-routes common-routes :de)))]
     common-routes)))
 
 (def router

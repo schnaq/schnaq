@@ -4,7 +4,8 @@
             [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reitit.frontend.controllers :as reitit-front-controllers]
-            [reitit.frontend.easy :as reitit-front-easy]))
+            [reitit.frontend.easy :as reitit-front-easy]
+            [schnaq.interface.utils.routing :as route-utils]))
 
 (rf/reg-sub
  :navigation/current-route
@@ -88,10 +89,9 @@
   ([route-name params]
    (href route-name params nil))
   ([route-name params query]
-   (let [route-match (reitit-front-easy/href route-name params query)
-         language-prefix (str (name @(rf/subscribe [:current-locale])))
-         prefixed-path (gstring/format "/%s%s" language-prefix route-match)]
-     prefixed-path)))
+   (let [language-prefix @(rf/subscribe [:current-locale])
+         prefixed-route-name (route-utils/prefix-route-name-locale route-name language-prefix)]
+     (reitit-front-easy/href prefixed-route-name params query))))
 
 (rf/reg-fx
  :navigation.navigated/write-hreflang
