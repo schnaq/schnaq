@@ -273,7 +273,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-
 (defn- current-topic-badges [schnaq statement]
   (let [badges-start [badges/static-info-badges-discussion schnaq]
         badges-conclusion [badges/extra-discussion-info-badges statement true]
@@ -369,33 +368,33 @@
           [topic-or-search-content]
           [:ul.nav.nav-tabs
            [:li.nav-item
-            [:a.nav-link {:class (active-class :question)
-                          :href "#"
-                          :on-click #(on-click :question)}
+            [:button.nav-link {:class (active-class :question)
+                               :role "button"
+                               :on-click #(on-click :question)}
              [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
            (when top-level?
              (if pro-user?
                [:<>
                 [:li.nav-item
-                 [:a.nav-link
+                 [:button.nav-link
                   {:class (active-class :poll)
-                   :href "#"
+                   :role "button"
                    :on-click #(on-click :poll)}
                   poll-tab]]
                 [:li.nav-item
-                 [:a.nav-link
+                 [:button.nav-link
                   {:class (active-class :activation)
-                   :href "#"
+                   :role "button"
                    :on-click #(on-click :activation)}
                   activation-tab]]]
                [:<>
                 [:li.nav-item
-                 [:a.nav-link.text-muted
-                  {:href "#"}
+                 [:button.nav-link.text-muted
+                  {:role "button"}
                   [tooltip/text (labels disabled-tooltip-key) poll-tab]]]
                 [:li.nav-item
-                 [:a.nav-link.text-muted
-                  {:href "#"}
+                 [:button.nav-link.text-muted
+                  {:role "button"}
                   [tooltip/text (labels disabled-tooltip-key) activation-tab]]]]))]
           (case @selected-option
             :question [input-form-or-disabled-alert]
@@ -443,8 +442,8 @@
 (rf/reg-event-fx
  :discussion.statements/reload
  (fn [{:keys [db]} _]
-   (let [path (get-in db [:current-route :data :name])]
-     (case path
+   (let [route-name (navigation/canonical-route-name (get-in db [:current-route :data :name]))]
+     (case route-name
        :routes.schnaq.select/statement {:fx [[:dispatch [:discussion.query.statement/by-id]]]}
        :routes.schnaq/start {:fx [[:dispatch [:discussion.query.conclusions/starting]]]}
        {}))))

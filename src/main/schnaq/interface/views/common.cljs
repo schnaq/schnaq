@@ -51,7 +51,7 @@
      [:div.avatar-image.p-0
       (if profile-picture
         [:div.profile-pic-fill
-         {:style {:max-height (str size "px") :max-width (str size "px")}}
+         {:style {:height (str size "px") :width (str size "px")}}
          [:img.profile-pic-image {:src profile-picture
                                   :alt (str "Profile Picture of " display-name)
                                   :on-error (set-fallback-identicon display-name 50)}]]
@@ -61,7 +61,7 @@
   "Create an image based on the nickname and also print the nickname."
   [{:user.registered/keys [display-name] :as user} size]
   [map? number? :ret vector?]
-  [:div.row
+  [:div.d-flex
    [:div.me-4 [avatar user size]]
    [:h4.my-auto display-name]])
 

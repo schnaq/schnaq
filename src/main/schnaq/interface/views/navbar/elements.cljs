@@ -134,7 +134,7 @@
             (labels :discussion.navbar/views))]]
         {:id dropdown-id :data-bs-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
-        [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
+        [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
          [standard-view-button]
          [graph-button]
          [summary-button]

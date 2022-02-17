@@ -2,6 +2,7 @@
   "Handling visited schnaqs."
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]))
 
@@ -53,7 +54,7 @@
  (fn [{:keys [db]} [_ registered-visited-hashes]]
    (let [db-schnaqs (get-in db [:schnaqs :visited-hashes])
          merged-schnaqs (set (concat registered-visited-hashes db-schnaqs))
-         route-name (get-in db [:current-route :data :name])]
+         route-name (navigation/canonical-route-name (get-in db [:current-route :data :name]))]
      {:db (assoc-in db [:schnaqs :visited-hashes] merged-schnaqs)
       :fx [[:localstorage/assoc [:schnaqs/visited merged-schnaqs]]
            ;; reload visited schnaqs when we are inside the visited-schnaqs view, otherwise this happens with the controller

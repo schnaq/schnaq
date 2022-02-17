@@ -27,7 +27,7 @@
     [:h6.card-title name]
     [:p.card-subtitle.text-muted [:i title]]]])
 
-(def ^:private schnaq-unity
+(defn- schnaq-unity []
   [:section.py-5
    [:div.row.pt-3
     [:div.col-lg-5
@@ -36,7 +36,7 @@
      [:h2 (labels :about-us.unity/title)]
      (labels :about-us.unity/body)]]])
 
-(def ^:private our-values
+(defn- our-values []
   [:section.py-5
    [:h2.text-center (labels :about-us.value/title)]
    [:h4.text-center.text-muted.pb-5 (labels :about-us.value/subtitle)]
@@ -54,7 +54,7 @@
     [:div.col-lg-4
      [value-card :user/group :about-us.diversity/title :about-us.diversity/body]]]])
 
-(def ^:private schnaq-in-numbers
+(defn- schnaq-in-numbers []
   [:section.py-5
    [:h2.text-center.pb-3 (labels :about-us.numbers/title)]
    [:div.row
@@ -63,7 +63,7 @@
     [:div.col [number-cell (str marketing-num-statements "+") (labels :about-us.numbers/statements)]]
     [:div.col [number-cell "12.000+" (labels :about-us.numbers/loc)]]]])
 
-(def ^:private team-focus
+(defn- team-focus []
   [:section.py-5
    [:h2.text-center (labels :about-us.team/title)]
    [:div.row.row-cols-1.row-cols-md-3.pb-5.pt-4
@@ -82,7 +82,7 @@
     :page/subheading (labels :about-us.page/subheading)
     :page/vertical-header? true}
    [:div.container
-    schnaq-unity
-    our-values
-    schnaq-in-numbers
-    team-focus]])
+    [schnaq-unity]
+    [our-values]
+    [schnaq-in-numbers]
+    [team-focus]]])

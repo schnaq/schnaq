@@ -40,6 +40,11 @@
   @extend .my-2;
   @extend .w-100;
   @include rounded.rounded-2;
+  color: $primary !important;
+
+  &:hover {
+    color: $white !important;
+  }
 }
 
 .feed-button-create {

@@ -13,9 +13,9 @@
   ([side-by-side? options]
    (let [icon-classes (if side-by-side? "" "d-block mx-auto")]
      [:<>
-      [:a#schnaq-language-dropdown.nav-link.dropdown-toggle
+      [:button#schnaq-language-dropdown.btn.btn-link.nav-link.dropdown-toggle
        (merge
-        {:href "#" :role "button" :data-bs-toggle "dropdown"
+        {:role "button" :data-bs-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
         options)
        [icon :language icon-classes {:size "lg"}]
@@ -32,10 +32,10 @@
 
 (defn language-toggle-with-tooltip
   "Uses language-dropdown and adds a mouse-over label."
-  [show-label? options]
+  [side-by-side? options]
   [tooltip/text
    (labels :nav.buttons/language-toggle)
-   [:span [language-dropdown show-label? options]]])
+   [:span [language-dropdown side-by-side? options]]])
 
 (>defn button
   "Build a button for the navbar. Takes a label as a keyword and anything, which
@@ -53,9 +53,9 @@
   []
   (let [dropdown-id "product-drop-down-id"]
     [:div.dropdown
-     [:button.btn.text-white.dropdown-toggle
+     [:button.btn.nav-link.dropdown-toggle
       {:id dropdown-id
-       :href "#" :role "button" :data-bs-toggle "dropdown"
+       :role "button" :data-bs-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
       (labels :productpage/button)]
      [:div.dropdown-menu
@@ -87,7 +87,7 @@
    [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
     {:class navbar-bg-class}
     [:div.container-fluid
-     [:navbar-brand.p-0 {:href "#"} brand-content]
+     [:div.navbar-brand.p-0.btn brand-content]
      [:button.navbar-toggler.mx-2 {:type "button" :data-bs-toggle "collapse"
                                    :data-bs-target (str "#" collapse-content-id)
                                    :aria-controls collapse-content-id

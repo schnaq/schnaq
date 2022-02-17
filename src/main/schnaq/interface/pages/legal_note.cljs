@@ -21,7 +21,7 @@
 (defn- privacy []
   [:article.pb-3
    [:h2 (labels :legal-note.privacy/title)]
-   [:p [:a.btn.btn-link.ps-0 {:href (navigation/href :routes/privacy-extended)}
+   [:p [:a.btn.btn-link.ps-0 {:href (navigation/href :routes.privacy/complete)}
         (labels :legal-note.privacy/body)]]])
 
 ;; ----------------------------------------------------------------------------

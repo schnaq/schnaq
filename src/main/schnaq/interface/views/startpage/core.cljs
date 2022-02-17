@@ -36,13 +36,13 @@
       [:input#nochmal-nachfragen.form-check-input {:type "checkbox" :required true}]
       [:label.form-check-label {:for "nochmal-nachfragen"}
        (labels :startpage.newsletter/consent)]
-      [:a {:href "#data" :type "button" :data-bs-toggle "collapse" :data-bs-target "#collapse-more-newsletter"
-           :aria-expanded "false" :aria-controls "#collapse-more-newsletter" :data-reitit-handle-click false}
+      [:button {:role "button" :type "button" :data-bs-toggle "collapse" :data-bs-target "#collapse-more-newsletter"
+                :aria-expanded "false" :aria-controls "#collapse-more-newsletter" :data-reitit-handle-click false}
        (labels :startpage.newsletter/more-info-clicker)]
       [:div.collapse {:id "collapse-more-newsletter"}
        [:p.small (labels :startpage.newsletter/policy-disclaimer)
         [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
-        [:a {:href (navigation/href :routes/privacy-extended)}
+        [:a {:href (navigation/href :routes.privacy/complete)}
          (labels :privacy/note)] "."]]]
 
      [:input.mb-3
@@ -131,7 +131,6 @@
   [:div.overflow-hidden
    [pages/with-nav-and-header
     {:page/title (labels :startpage/heading)
-     :page/wrapper-classes "container container-85"
      :page/vertical-header? true
      :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
     [:div.wave-background

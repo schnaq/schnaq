@@ -108,12 +108,12 @@
                       (= user-id (:db/id author)))]
     (when editable?
       [:div.dropdown.ms-2
-       [:div.dropdown-toggle.m-0.p-0
+       [:button.btn.btn-link.text-dark.m-0.p-0
         {:id dropdown-id
-         :href "#" :role "button" :data-bs-toggle "dropdown"
+         :role "button" :data-bs-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
         [icon :dots]]
-       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
+       [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
         (when editable?
           [:dropdown-item
            [edit-dropdown-button-discussion id share-hash]])]])))
@@ -150,12 +150,12 @@
 
 (defn- statement-dropdown-menu [dropdown-id dropdown-items]
   [:div.dropdown.ms-2
-   [:div.dropdown-toggle.m-0.p-0
+   [:button.btn.btn-link.text-dark.m-0.p-0
     {:id dropdown-id
-     :href "#" :role "button" :data-bs-toggle "dropdown"
+     :role "button" :data-bs-toggle "dropdown"
      :aria-haspopup "true" :aria-expanded "false"}
     [icon :dots]]
-   [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
+   [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
     dropdown-items]])
 
 (defn edit-statement-dropdown-menu

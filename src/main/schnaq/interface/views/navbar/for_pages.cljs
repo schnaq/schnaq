@@ -25,7 +25,7 @@
   [navbar-components/product-dropdown-button])
 
 (defn- privacy-button []
-  [navbar-components/button :router/privacy (navigation/href :routes/privacy)])
+  [navbar-components/button :router/privacy (navigation/href :routes.privacy/simple)])
 
 ;; -----------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@
    [pricing-button]
    [privacy-button]
    [blog-link]
-   [:div.dropdown.ms-auto
+   [:div.nav-item.dropdown.ms-auto
     [navbar-components/language-dropdown false {}]]
    (when @(rf/subscribe [:user/administrator?])
      [um/admin-dropdown "btn-outline-secondary"])
@@ -61,7 +61,7 @@
   [wrapper-classes]
   [:nav.navbar.navbar-expand-lg.py-3.navbar-transparent.bg-transparent.mb-4
    [:section
-    {:class (if (str/blank? wrapper-classes) "container-fluid" wrapper-classes)}
+    {:class (if (str/blank? wrapper-classes) "container container-85" wrapper-classes)}
     [:a.navbar-brand {:href (navigation/href :routes/startpage)}
      [:img.d-inline-block.align-middle.me-2
       {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]

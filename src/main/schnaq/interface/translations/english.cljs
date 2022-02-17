@@ -970,7 +970,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/true-404-view "404 error page"
    :router/code-of-conduct "Code of Conduct"
    :router/summaries "Summaries"
-   :router/alphazulu "ALPHAZULU"
 
    :admin.center.start/title "Admin Center"
    :admin.center.start/heading "Admin Center"

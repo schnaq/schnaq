@@ -495,6 +495,7 @@
             :where [?discussion :discussion/share-hash ?share-hash]]
           custom-part
           '[[?statements :statement/content ?content]
+            (not [?statements :statement/deleted? true])
             [(schnaq.database.discussion/tokenize-string ?content) [?tokenized-content ...]]
             [(schnaq.database.discussion/levenshtein-max? ?distance ?search-tokens ?tokenized-content)]]))
 

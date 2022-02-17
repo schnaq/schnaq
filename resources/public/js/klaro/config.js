@@ -100,12 +100,12 @@ var klaroConfig = {
     // translations defined under the 'zz' language code act as default
     // translations.
     zz: {
-      privacyPolicyUrl: '/privacy/extended',
+      privacyPolicyUrl: '/privacy',
     },
     // If you erase the "consentModal" translations, Klaro will use the
     // bundled translations.
     de: {
-      privacyPolicyUrl: '/de/privacy/extended',
+      privacyPolicyUrl: '/de/privacy',
       acceptAll: 'Akzeptiere alle Cookies',
       acceptSelected: 'Auswahl speichern',
       decline: 'Nur essenzielle Cookies',
@@ -144,28 +144,6 @@ var klaroConfig = {
         livechat: 'Livechat',
         security: 'Security',
         styling: 'Styling',
-      },
-    },
-    pl: {
-      acceptAll: 'Zaakceptuj wszystkie ciasteczka',
-      acceptSelected: 'Zapisz wybór',
-      decline: 'Tylko niezbędne ciasteczka',
-      privacyPolicyUrl: '/pl/privacy/extended',
-      acceptSelected: 'Zapisz',
-      consentModal: {
-        title: "<img src='https://s3.schnaq.com/schnaq-common/logos/schnaqqifant.svg' width='75px' alt='schnaqqifant'> Cookies",
-        description: 'Używamy plików cookies :-) Niektóre dotyczą statystyk, inne podstawowych funkcji aplikacji.',
-      },
-      privacyPolicy: {
-        text: 'Więcej informacji: {privacyPolicy}'
-      },
-      purposes: {
-        advertising: 'Wyświetlacze reklamowe',
-        analytics: 'Analizy',
-        essential: 'Niezbędne',
-        livechat: 'Czat na żywo',
-        security: 'Bezpieczeństwo',
-        styling: 'Stylizacja',
       },
     },
   },

@@ -23,6 +23,12 @@
   }
 }
 
+// stylelint-disable selector-no-qualifying-type
+a.badge-clickable {
+  // stylelint-enable selector-no-qualifying-type
+  text-decoration: none !important;
+}
+
 .badge-primary-outline {
   background-color: transparent;
   border: solid 1px $primary;
