@@ -32,11 +32,7 @@
    (.getPropertyValue
     (js/getComputedStyle (.-body js/document))
     (theme-field->css-variable theme-field))))
-(comment
 
-  (keyword (name :theme.colors/primary))
-
-  nil)
 (>defn- set-root-color
   "Set global root css definition to document."
   [css-variable color]
@@ -84,29 +80,32 @@
   "Display all available themes."
   []
   (let [themes @(rf/subscribe [:themes/personal])
-        selected @(rf/subscribe [:theme/selected])]
+        selected @(rf/subscribe [:theme/selected])
+        user-name @(rf/subscribe [:user/display-name])]
     [:section.pb-5
      [:h4 "Deine Themen"]
+     [:p.lead "Wähle ein bestehendes Thema aus oder erzeuge ein neues."]
      [:div.row.row-cols-2.row-cols-xl-4.g-2.g-lg-3
       (for [theme themes]
         (with-meta
           [:div.col
            [buttons/button (:theme/title theme) #(rf/dispatch [:theme/select theme])
             (if (= (:db/id selected) (:db/id theme))
-              "btn-outline-secondary shadow"
-              "btn-outline-dark")]]
+              "btn-outline-secondary shadow w-100"
+              "btn-outline-dark w-100")]]
           {:key (str "theme-" (:db/id theme))}))
       [:div.col
        [buttons/button
-        "Neues Thema erstellen"
-        #(rf/dispatch [:theme/select nil])
+        "Neu erstellen"
+        (fn []
+          (rf/dispatch [:theme.selected/dissoc])
+          (rf/dispatch [:theme.selected/update :theme/title (str user-name "'s first theme")]))
         "btn-outline-primary"]]]]))
 
 (defn- configure-theme
   "TODO"
   []
-  (let [selected @(rf/subscribe [:theme/selected])
-        user @(rf/subscribe [:user/current])]
+  (when-let [selected @(rf/subscribe [:theme/selected])]
     [:form
      {:on-submit (fn [e]
                    (let [add-or-edit (if (:db/id selected) :theme/edit :theme/add)]
@@ -117,8 +116,7 @@
        {:id "theme-title"
         :placeholder "Give your theme a title"
         :required true
-        :value (or (:theme/title selected)
-                   (str (get-in user [:names :display]) "'s first theme"))
+        :value (:theme/title selected)
         :name "title"
         :on-change #(rf/dispatch [:theme.selected/update :theme/title
                                   (oget % [:target :value])])}]
@@ -214,25 +212,27 @@
  ;; Send new theme to backend
  (fn [{:keys [db]} [_ form]]
    {:fx [(http/xhrio-request db :post "/theme/add"
-                             [:theme.add/success]
-                             {:theme (theme-from-form form)})]}))
+                             [:theme.add-or-edit/success]
+                             {:theme (-> form
+                                         theme-from-form
+                                         (dissoc :db/id))})]}))
 
 (rf/reg-event-fx
  :theme/edit
  ;; Send new theme to backend
  (fn [{:keys [db]} [_ form]]
    {:fx [(http/xhrio-request db :put "/theme/edit"
-                             [:theme.add/success]
+                             [:theme.add-or-edit/success]
                              {:theme (theme-from-form form)})]}))
 
 (rf/reg-event-fx
- :theme.add/success
- (fn [{:keys [db]} [_ {:keys [theme]}]]
-   (prn theme)
+ :theme.add-or-edit/success
+ (fn [_ [_ response]]
    {:fx [[:dispatch [:notification/add
                      #:notification{:title "Thema erfolgreich gespeichert"
                                     :body "Dein Thema kann nun von dir in deinen schnaqs verwendet werden 🎉"
-                                    :context :success}]]]}))
+                                    :context :success}]]
+         [:dispatch [:themes.load.personal/success response]]]}))
 
 ;; -----------------------------------------------------------------------------
 
@@ -245,10 +245,19 @@
  :themes.load.personal/success
  ;; Load personal themes
  (fn [db [_ {:keys [themes]}]]
-   (prn "Loaded themes:" themes)
    (assoc-in db [:themes :all] themes)))
 
 (rf/reg-sub
  :themes/personal
  (fn [db]
    (get-in db [:themes :all])))
+
+(rf/reg-event-db
+ :themes/dissoc
+ (fn [db]
+   (dissoc db :themes)))
+
+(rf/reg-event-db
+ :theme.selected/dissoc
+ (fn [db]
+   (update db :themes dissoc :selected)))
