@@ -83,4 +83,9 @@
   .border-secondary {
     border-color: var(--theming-secondary) !important;
   }
+
+  .form-control:focus {
+    border-color: var(--theming-primary) !important;
+    box-shadow: none;
+  }
 }
