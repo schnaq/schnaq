@@ -3,7 +3,8 @@
             [ring.util.http-response :refer [ok]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.specs :as specs]
-            [schnaq.database.themes :as themes-db]))
+            [schnaq.database.themes :as themes-db]
+            [taoensso.timbre :as log]))
 
 (defn- personal
   "Return all themes for a specific user."
@@ -14,6 +15,7 @@
   "Save newly configured theme."
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
+  (log/info "Add theme" theme)
   (themes-db/new-theme sub theme)
   (ok {:themes (themes-db/themes-by-keycloak-id sub)}))
 
@@ -21,7 +23,16 @@
   "TODO"
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
+  (log/info "Edit theme" theme)
+  (log/info "From user" sub)
   (themes-db/edit-theme sub theme)
+  (ok {:themes (themes-db/themes-by-keycloak-id sub)}))
+
+(defn- delete-theme
+  "TODO"
+  [{{:keys [sub]} :identity
+    {{:keys [theme-id]} :body} :parameters}]
+  (themes-db/delete-theme sub theme-id)
   (ok {:themes (themes-db/themes-by-keycloak-id sub)}))
 
 ;; -----------------------------------------------------------------------------
@@ -34,7 +45,7 @@
      ["/personal" {:get personal
                    :description (at/get-doc #'personal)
                    :name :api.themes/personal
-                   :responses {200 {:body {:themes (s/or :no-themes empty? :themes (s/coll-of ::specs/theme))}}
+                   :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}
                                400 at/response-error-body}}]]
     ["/theme"
      ["/add" {:post add-theme
@@ -48,5 +59,11 @@
                :name :api.theme/edit
                :parameters {:body {:theme ::specs/theme}}
                :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}
-                           400 at/response-error-body}}]]]])
+                           400 at/response-error-body}}]
+     ["/delete" {:delete delete-theme
+                 :description (at/get-doc #'delete-theme)
+                 :name :api.theme/delete
+                 :parameters {:body {:theme-id :db/id}}
+                 :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}
+                             400 at/response-error-body}}]]]])
 
