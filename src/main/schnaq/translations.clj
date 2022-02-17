@@ -34,14 +34,4 @@ Telefon (optional): %s")
      "In einem schnaq sammelst du Wissen über ein Thema und es wird automatisch visualisiert. "
      "Probiere es direkt aus! Erstelle einen schnaq und diskutiere mit deinen Kolleg:innen!"
      "\n"
-     "Du kannst vorher natürlich auch erst dein Profil individualisieren.")
-    :lead-magnet/title "schnaq.com – Datenschutzkonform verteilt arbeiten Checkliste"
-    :lead-magnet/body
-    (str
-     "Schön, dass du den ersten Schritt getan hast um flexibel und sicher arbeiten zu können!"
-     "\n"
-     "Hier ist dein persönlicher Downloadlink: $DOWNLOAD_LINK"
-     "\n"
-     "Willst du mehr zu dem Thema erfahren? Schaue öfter mal in unserem Blog vorbei: https://schnaq.com/blog/"
-     "\n\n"
-     "Liebe Grüße\nDein schnaq-Team")}))
+     "Du kannst vorher natürlich auch erst dein Profil individualisieren.")}))

@@ -68,7 +68,6 @@
     :productpage.activation/torooo "https://s3.schnaq.com/schnaq-common/product-page/activation-torooo.jpg"
     :productpage.activation/raise-hands "https://s3.schnaq.com/schnaq-common/product-page/activation-raise-hand.jpg"
     :productpage.activation/user-view "https://s3.schnaq.com/schnaq-common/product-page/activation-user-view.jpg"
-    :schnaqqifant.300w/talk "https://s3.schnaq.com/schnaq-schnaqqifanten/talk300w.png"
     :schnaqqifant/admin "https://s3.schnaq.com/schnaq-schnaqqifanten/admin.png"
     :schnaqqifant/erase "https://s3.schnaq.com/schnaq-schnaqqifanten/erase.png"
     :schnaqqifant/flat "https://s3.schnaq.com/schnaq-schnaqqifanten/schnaqqi_flat_front.png"
@@ -122,5 +121,4 @@
     :value/cards "https://s3.schnaq.com/schnaq-common/icons/value/cards.svg"
     :value/share "https://s3.schnaq.com/schnaq-common/icons/value/share.svg"
     :value/shield "https://s3.schnaq.com/schnaq-common/icons/value/shield.svg"
-    :value/private "https://s3.schnaq.com/schnaq-common/icons/value/eye.svg"
-    :lead-magnet/cover "https://s3.schnaq.com/downloads/checkliste_cover.png"}))
+    :value/private "https://s3.schnaq.com/schnaq-common/icons/value/eye.svg"}))
