@@ -64,8 +64,7 @@
                                   (.-search current-url)
                                   (.-hash current-url))
         locale-clean-path (if (or (gstring/startsWith full-path "/en/")
-                                  (gstring/startsWith full-path "/de/")
-                                  (gstring/startsWith full-path "/pl/"))
+                                  (gstring/startsWith full-path "/de/"))
                             (subs full-path 3)
                             full-path)]
     (if locale
