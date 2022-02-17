@@ -4,14 +4,15 @@
             [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
-            [schnaq.interface.views.schnaq.activation :as activation]
-            [schnaq.interface.views.discussion.conclusion-card :refer [selection-card]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user.settings :as settings]
-            [schnaq.interface.views.navbar.elements :as elements]
             [schnaq.interface.components.buttons :as buttons]
-            [schnaq.interface.utils.http :as http]))
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.discussion.conclusion-card :refer [selection-card]]
+            [schnaq.interface.views.navbar.elements :as elements]
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.schnaq.activation :as activation]
+            [schnaq.interface.views.user.settings :as settings]))
 
 (s/def ::hex-color (s/and string? #(.startsWith % "#")))
 (s/def ::css-variable (s/and string? #(.startsWith % "--")))
@@ -89,7 +90,9 @@
       (for [theme themes]
         (with-meta
           [:div.col
-           [buttons/button (:theme/title theme) #(rf/dispatch [:theme/select theme])
+           [buttons/button
+            (toolbelt/truncate-to-n-chars-string (:theme/title theme) 32)
+            #(rf/dispatch [:theme/select theme])
             (if (= (:db/id selected) (:db/id theme))
               "btn-outline-secondary shadow w-100"
               "btn-outline-dark w-100")]]
@@ -106,34 +109,40 @@
   "TODO"
   []
   (when-let [selected @(rf/subscribe [:theme/selected])]
-    [:form
-     {:on-submit (fn [e]
-                   (let [add-or-edit (if (:db/id selected) :theme/edit :theme/add)]
-                     (js-wrap/prevent-default e)
-                     (rf/dispatch [add-or-edit (oget e [:target :elements])])))}
-     [:div.form-floating.mb-3
-      [:input.form-control
-       {:id "theme-title"
-        :placeholder "Give your theme a title"
-        :required true
-        :value (:theme/title selected)
-        :name "title"
-        :on-change #(rf/dispatch [:theme.selected/update :theme/title
-                                  (oget % [:target :value])])}]
-      [:label {:for "theme-title"} "Give your theme a title"]]
-     [:div.row
-      [:div.col-md-5
-       [:strong "Logo"]
-       [:p.text-muted "Coming Soon"]
-       [:strong "Vorschaubild"]
-       [:p.text-muted "Coming Soon"]]
-      [:div.col-md-7
-       [:strong "Farbeinstellungen"]
-       [color-picker :theme.colors/primary "Primäre Farbe"]
-       [color-picker :theme.colors/secondary "Sekundäre Farbe"]
-       [color-picker :theme.colors/background "Hintergrundfarbe"]]]
-     [:input {:type :hidden :name "theme-id" :value (or (:db/id selected) "")}]
-     [:button.btn.btn-outline-primary {:type :submit} "Speichern"]]))
+    [:<>
+     [:form
+      {:on-submit (fn [e]
+                    (js-wrap/prevent-default e)
+                    (let [add-or-edit (if (:db/id selected) :theme/edit :theme/add)]
+                      (rf/dispatch [add-or-edit (oget e [:target :elements])])))}
+      [:div.form-floating.mb-3
+       [:input.form-control
+        {:id "theme-title"
+         :placeholder "Give your theme a title"
+         :required true
+         :value (:theme/title selected)
+         :name "title"
+         :on-change #(rf/dispatch [:theme.selected/update :theme/title
+                                   (oget % [:target :value])])}]
+       [:label {:for "theme-title"} "Give your theme a title"]]
+      [:div.row
+       [:div.col-md-5
+        [:strong "Logo"]
+        [:p.text-muted "Coming Soon"]
+        [:strong "Vorschaubild"]
+        [:p.text-muted "Coming Soon"]]
+       [:div.col-md-7
+        [:strong "Farbeinstellungen"]
+        [color-picker :theme.colors/primary "Primäre Farbe"]
+        [color-picker :theme.colors/secondary "Sekundäre Farbe"]
+        [color-picker :theme.colors/background "Hintergrundfarbe"]]]
+      [:input {:type :hidden :name "theme-id" :value (or (:db/id selected) "")}]
+      [:button.btn.btn-outline-primary {:type :submit} "Speichern"]]
+     (when-let [theme-id (:db/id selected)]
+       [:button.float-end.btn.btn-sm.btn-link.text-danger
+        {:on-click #(when (js/confirm "Möchtest du das Thema wirklich löschen?")
+                      (rf/dispatch [:theme/delete theme-id]))}
+        "Löschen"])]))
 
 (defn theming
   "Main Theming view."
@@ -198,7 +207,7 @@
 ;; -----------------------------------------------------------------------------
 
 (defn- theme-from-form
-  "TODO"
+  "Extract theme information from form."
   [form]
   (let [get-field #(oget+ form [% :value])]
     {:db/id (get-field :theme-id)
@@ -227,12 +236,21 @@
 
 (rf/reg-event-fx
  :theme.add-or-edit/success
- (fn [_ [_ response]]
+ (fn [_ [_ {:keys [theme]}]]
    {:fx [[:dispatch [:notification/add
                      #:notification{:title "Thema erfolgreich gespeichert"
                                     :body "Dein Thema kann nun von dir in deinen schnaqs verwendet werden 🎉"
                                     :context :success}]]
-         [:dispatch [:themes.load.personal/success response]]]}))
+         [:dispatch [:theme/select theme]]
+         [:dispatch [:themes.load/personal]]]}))
+
+(rf/reg-event-fx
+ :theme/delete
+ (fn [{:keys [db]} [_ theme-id]]
+   {:fx [(http/xhrio-request db :delete "/theme/delete"
+                             [:themes.load.personal/success]
+                             {:theme-id theme-id})
+         [:dispatch [:theme.selected/dissoc]]]}))
 
 ;; -----------------------------------------------------------------------------
 

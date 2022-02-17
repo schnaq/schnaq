@@ -16,8 +16,7 @@
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
   (log/info "Add theme" theme)
-  (themes-db/new-theme sub theme)
-  (ok {:themes (themes-db/themes-by-keycloak-id sub)}))
+  (ok {:theme (themes-db/new-theme sub theme)}))
 
 (defn- edit-theme
   "TODO"
@@ -25,8 +24,7 @@
     {{:keys [theme]} :body} :parameters}]
   (log/info "Edit theme" theme)
   (log/info "From user" sub)
-  (themes-db/edit-theme sub theme)
-  (ok {:themes (themes-db/themes-by-keycloak-id sub)}))
+  (ok {:theme (themes-db/edit-theme sub theme)}))
 
 (defn- delete-theme
   "TODO"
@@ -52,13 +50,13 @@
               :description (at/get-doc #'add-theme)
               :name :api.theme/add
               :parameters {:body {:theme ::specs/theme}}
-              :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}
+              :responses {200 {:body {:theme ::specs/theme}}
                           400 at/response-error-body}}]
      ["/edit" {:put edit-theme
                :description (at/get-doc #'edit-theme)
                :name :api.theme/edit
                :parameters {:body {:theme ::specs/theme}}
-               :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}
+               :responses {200 {:body {:theme ::specs/theme}}
                            400 at/response-error-body}}]
      ["/delete" {:delete delete-theme
                  :description (at/get-doc #'delete-theme)
