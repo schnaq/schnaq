@@ -1,6 +1,6 @@
 (ns schnaq.api.themes
   (:require [clojure.spec.alpha :as s]
-            [ring.util.http-response :refer [ok]]
+            [ring.util.http-response :refer [ok bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.specs :as specs]
             [schnaq.database.themes :as themes-db]
@@ -30,8 +30,9 @@
   "TODO"
   [{{:keys [sub]} :identity
     {{:keys [theme-id]} :body} :parameters}]
-  (themes-db/delete-theme sub theme-id)
-  (ok {:themes (themes-db/themes-by-keycloak-id sub)}))
+  (if (themes-db/delete-theme sub theme-id)
+    (ok {:themes (themes-db/themes-by-keycloak-id sub)})
+    (bad-request (at/build-error-body :theme/not-deleted "Did not delete theme. Either the theme does not exist or the requesting user is not the author of the theme."))))
 
 ;; -----------------------------------------------------------------------------
 

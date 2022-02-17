@@ -79,11 +79,8 @@
   (let [theme-author (get-in
                       (db/fast-pull theme-id [{:theme/user [:user.registered/keycloak-id]}])
                       [:theme/user :user.registered/keycloak-id])]
-    (if (= keycloak-id theme-author)
-      (db/transact [[:db/retractEntity theme-id]])
-      (throw (ex-info "[Themes] Did not delete theme. Either the theme does not exist or the requesting user is not the author of the theme." {:requesting-user keycloak-id
-                                                                                                                                               :theme-author theme-author
-                                                                                                                                               :theme-id theme-id})))))
+    (when (= keycloak-id theme-author)
+      (db/transact [[:db/retractEntity theme-id]]))))
 
 (comment
 
