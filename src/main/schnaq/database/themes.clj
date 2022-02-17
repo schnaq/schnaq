@@ -76,9 +76,25 @@
   "Delete a theme."
   [keycloak-id theme-id]
   [:user.registered/keycloak-id :db/id => any?]
-  (db/transact [[:db/retractEntity theme-id]]))
+  (let [theme-author (get-in
+                      (db/fast-pull theme-id [{:theme/user [:user.registered/keycloak-id]}])
+                      [:theme/user :user.registered/keycloak-id])]
+    (if (= keycloak-id theme-author)
+      (db/transact [[:db/retractEntity theme-id]])
+      (throw (ex-info "[Themes] Did not delete theme. Either the theme does not exist or the requesting user is not the author of the theme." {:requesting-user keycloak-id
+                                                                                                                                               :theme-author theme-author
+                                                                                                                                               :theme-id theme-id})))))
 
 (comment
+
+  (get-in
+   (db/fast-pull 17592186056967 [{:theme/user [:user.registered/keycloak-id]}])
+   [:theme/user :user.registered/keycloak-id])
+
+  (-> 17592186056967
+      db/fast-pull
+      :theme/user
+      :db/id)
 
   (new-theme keycloak-id theme)
   (edit-theme keycloak-id (assoc (assoc theme :theme/title "fooo") :db/id 17592186053934))
