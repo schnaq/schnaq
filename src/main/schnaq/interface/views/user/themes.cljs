@@ -235,7 +235,7 @@
  :theme/add
  ;; Send new theme to backend
  (fn [{:keys [db]} [_ form]]
-   {:fx [(http/xhrio-request db :post "/theme/add"
+   {:fx [(http/xhrio-request db :post "/theme"
                              [:theme.add-or-edit/success]
                              {:theme (-> form
                                          theme-from-form
@@ -245,7 +245,7 @@
  :theme/edit
  ;; Send new theme to backend
  (fn [{:keys [db]} [_ form]]
-   {:fx [(http/xhrio-request db :put "/theme/edit"
+   {:fx [(http/xhrio-request db :put "/theme"
                              [:theme.add-or-edit/success]
                              {:theme (theme-from-form form)})]}))
 
@@ -262,7 +262,7 @@
 (rf/reg-event-fx
  :theme/delete
  (fn [{:keys [db]} [_ theme-id]]
-   {:fx [(http/xhrio-request db :delete "/theme/delete"
+   {:fx [(http/xhrio-request db :delete "/theme"
                              [:themes.load.personal/success]
                              {:theme-id theme-id})
          [:dispatch [:theme/reset]]]}))
