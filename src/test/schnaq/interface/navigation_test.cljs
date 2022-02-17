@@ -1,5 +1,5 @@
 (ns schnaq.interface.navigation-test
-  (:require [clojure.test :refer [deftest testing is]]
+  (:require [clojure.test :refer [deftest testing is are]]
             [schnaq.interface.navigation :as navigation]))
 
 (deftest replace-language-in-path-test
@@ -11,3 +11,12 @@
       (is (= "/de/test/clean" (replace-language-in-path "https://schnaq.com/en/test/clean" :de)))
       (is (= "/de/tu/test/clean" (replace-language-in-path "https://schnaq.com/tu/test/clean" :de)))
       (is (= "/es/test/clean" (replace-language-in-path "https://schnaq.com/de/test/clean" :es))))))
+
+(deftest canonical-route-name-test
+  (testing "Valid prefixes in namespace should be stripped off."
+    (are [route-name canonical-route-name] (= canonical-route-name
+                                              (navigation/canonical-route-name route-name))
+      :routes.schnaq/admin-center :routes.schnaq/admin-center
+      :de.routes.schnaq/admin-center :routes.schnaq/admin-center
+      :en.routes.schnaq/admin-center :routes.schnaq/admin-center
+      :foo.routes.schnaq/admin-center :foo.routes.schnaq/admin-center)))
