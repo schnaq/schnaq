@@ -11,16 +11,20 @@
  (fn [db]
    (:current-route db)))
 
+(defn canonical-route-name
+  "Returns the canonical route name without language prefix."
+  [route-name]
+  (let [current-ns (namespace route-name)]
+    (if (or (gstring/startsWith current-ns "en.")
+            (gstring/startsWith current-ns "de."))
+      (keyword (subs (str route-name) 4))
+      route-name)))
+
 (rf/reg-sub
  :navigation/current-route-name
  :<- [:navigation/current-route]
  (fn [current-route]
-   (let [route-name (get-in current-route [:data :name])
-         current-ns (namespace route-name)]
-     (if (or (gstring/startsWith current-ns "en.")
-             (gstring/startsWith current-ns "de."))
-       (keyword (subs (str route-name) 4))
-       route-name))))
+   (canonical-route-name (get-in current-route [:data :name]))))
 
 (rf/reg-event-fx
  :navigation/navigate
