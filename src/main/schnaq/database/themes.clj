@@ -75,11 +75,17 @@
 (>defn delete-theme
   "Delete a theme."
   [keycloak-id theme-id]
-  (db/transact [:db/retractEntity theme-id]))
+  [:user.registered/keycloak-id :db/id => any?]
+  (db/transact [[:db/retractEntity theme-id]]))
 
 (comment
 
   (new-theme keycloak-id theme)
   (edit-theme keycloak-id (assoc (assoc theme :theme/title "fooo") :db/id 17592186053934))
+
+  (run! #(delete-theme keycloak-id %)
+        (map :db/id (themes-by-keycloak-id keycloak-id)))
+
+  (delete-theme keycloak-id 17592186056687)
 
   nil)
