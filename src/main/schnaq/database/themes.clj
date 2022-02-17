@@ -1,6 +1,6 @@
 (ns schnaq.database.themes
   (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs])
@@ -33,7 +33,7 @@
                [?theme :theme/user ?user]]
              keycloak-id patterns/theme)))
 
-(>defn query-existing-theme
+(>defn- query-existing-theme
   "Query theme if exists."
   [keycloak-id {:theme/keys [title]}]
   [:user.registered/keycloak-id ::specs/theme => (? ::specs/theme)]
@@ -44,6 +44,15 @@
                [?theme :theme/user ?user]
                [?theme :theme/title ?theme-title]]
              keycloak-id title patterns/theme)))
+
+(>defn- user-is-theme-author?
+  "Verify that a user is the theme author."
+  [keycloak-id theme-id]
+  [:user.registered/keycloak-id :db/id => boolean?]
+  (let [theme-author (get-in
+                      (db/fast-pull theme-id [{:theme/user [:user.registered/keycloak-id]}])
+                      [:theme/user :user.registered/keycloak-id])]
+    (= keycloak-id theme-author)))
 
 (>defn new-theme
   "Saves the provided theme for a given user."
@@ -65,38 +74,20 @@
 (>defn edit-theme
   "Saves the provided theme for a given user."
   [keycloak-id theme]
-  [:user.registered/keycloak-id ::specs/theme => ::specs/theme]
-  (let [prepared-theme (-> theme
-                           (assoc :theme/user [:user.registered/keycloak-id keycloak-id])
-                           (update :db/id #(Long/valueOf %)))]
-    (db/transact [prepared-theme])
-    (db/fast-pull (:db/id prepared-theme) patterns/theme)))
-
-(comment
-
-  #_(>defn edit-theme
-      "Saves the provided theme for a given user."
-      [keycloak-id theme]
-      [:user.registered/keycloak-id ::specs/theme => ::specs/theme]
-      (let [theme-id (Long/valueOf (:db/id theme))
-            prepared-theme (-> theme
-                               (assoc :theme/user [:user.registered/keycloak-id keycloak-id])
-                               (assoc :db/id theme-id))]
-        (db/transact-and-pull-temp
-         [prepared-theme]
-         theme-id patterns/theme)))
-
-  nil)
+  [:user.registered/keycloak-id ::specs/theme => (? ::specs/theme)]
+  (when (user-is-theme-author? keycloak-id (:db/id theme))
+    (let [prepared-theme (-> theme
+                             (assoc :theme/user [:user.registered/keycloak-id keycloak-id])
+                             (update :db/id #(Long/valueOf %)))]
+      (db/transact [prepared-theme])
+      (db/fast-pull (:db/id prepared-theme) patterns/theme))))
 
 (>defn delete-theme
   "Delete a theme."
   [keycloak-id theme-id]
   [:user.registered/keycloak-id :db/id => any?]
-  (let [theme-author (get-in
-                      (db/fast-pull theme-id [{:theme/user [:user.registered/keycloak-id]}])
-                      [:theme/user :user.registered/keycloak-id])]
-    (when (= keycloak-id theme-author)
-      (db/transact [[:db/retractEntity theme-id]]))))
+  (when (user-is-theme-author? keycloak-id theme-id)
+    (db/transact [[:db/retractEntity theme-id]])))
 
 (comment
 

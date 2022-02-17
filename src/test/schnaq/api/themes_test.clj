@@ -1,9 +1,8 @@
 (ns schnaq.api.themes-test
   (:require [clojure.test :refer [deftest is use-fixtures testing]]
+            [muuntaja.core :as m]
             [schnaq.api :as api]
-            [schnaq.test.toolbelt :as toolbelt]
-            [schnaq.test-data :as test-data]
-            [muuntaja.core :as m]))
+            [schnaq.test.toolbelt :as toolbelt]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)

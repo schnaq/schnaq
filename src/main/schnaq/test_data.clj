@@ -10,19 +10,19 @@
 
 (def ^:private cat-or-dog-statements
   [{:db/id "statement/get-dog"
-    :statement/author "user/wegi"                           ; Use the tempid above
+    :statement/author "user/wegi" ; Use the tempid above
     :statement/content "we should get a dog"
     :statement/created-at #inst "2020-01-01"
     :statement/version 1
     :statement/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:db/id "statement/get-cat"
-    :statement/author "user/schredder"                      ; Use the tempid above
+    :statement/author "user/schredder" ; Use the tempid above
     :statement/content "we should get a cat"
     :statement/created-at #inst "2020-01-01"
     :statement/version 1
     :statement/discussions ["discussion/cat-or-dog"]}
    {:db/id "statement/get-both"
-    :statement/author "user/rambo"                          ; Use the tempid above
+    :statement/author "user/rambo" ; Use the tempid above
     :statement/content "we could get both, a dog and a cat"
     :statement/created-at #inst "2020-01-01"
     :statement/version 1
@@ -36,7 +36,7 @@
     :statement/version 1
     :statement/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:db/id "statement/walks"
-    :statement/author "user/schredder"                      ; Use the tempid above
+    :statement/author "user/schredder" ; Use the tempid above
     :statement/content
     "you have to take the dog for a walk every day, which is tedious"
     :statement/created-at #inst "2020-01-01"
@@ -349,16 +349,18 @@
                     :option/value "Ohne Vote"}]
     :poll/discussion "discussion/simple"}])
 
-(def themes
-  [{:db/id "theme/anti-social"
-    :theme/title "The anti-social network"
-    :theme/user "user.registered/kangaroo"
-    :theme.colors/primary "#123456"
-    :theme.colors/secondary "#7890ab"
-    :theme.colors/background "#cdef01"
-    :theme.images/logo "https://s3.schnaq.com/themes/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/the-anti-social-network/logo.png"
-    :theme.images/activation "https://s3.schnaq.com/themes/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/the-anti-social-network/activation.png"
-    :theme.texts/activation "🦘"}])
+(def theme-anti-social
+  {:db/id "theme/anti-social"
+   :theme/title "The anti-social network"
+   :theme/user "user.registered/kangaroo"
+   :theme.colors/primary "#123456"
+   :theme.colors/secondary "#7890ab"
+   :theme.colors/background "#cdef01"
+   :theme.images/logo "https://s3.schnaq.com/themes/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/the-anti-social-network/logo.png"
+   :theme.images/activation "https://s3.schnaq.com/themes/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/the-anti-social-network/activation.png"
+   :theme.texts/activation "🦘"})
+
+(def themes [theme-anti-social])
 
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
