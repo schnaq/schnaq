@@ -1,10 +1,11 @@
 (ns schnaq.interface.views.user.themes
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as str]
-            [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
+            [com.fulcrologic.guardrails.core :refer [>defn- =>]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -34,6 +35,12 @@
     (js/getComputedStyle (.-body js/document))
     (theme-field->css-variable theme-field))))
 
+(def ^:private default-colors
+  (let [pick #(color-from-root (keyword (name %)))]
+    {:primary (pick :primary)
+     :secondary (pick :secondary)
+     :background (pick :background)}))
+
 (>defn- set-root-color
   "Set global root css definition to document."
   [css-variable color]
@@ -62,18 +69,22 @@
                        (rf/dispatch [:theme.selected/color theme-field color])))}]]]))
 
 (defn- preview []
-  [:<>
-   [:h2 "Vorschau"]
-   [:section.theming-enabled
-    [:div.base-wrapper.p-3
-     [elements/navbar-title
-      [:h1.h6.fw-bold.my-auto.text-dark "Welcome to schnaq"]
-      nil false]
-     [activation/activation-card]
-     [:div.d-flex.flex-row
-      [buttons/button "primary button"]
-      [buttons/button "secondary button" (constantly "#") "btn-secondary ms-2"]]
-     [selection-card]]]])
+  (when @(rf/subscribe [:theme/selected])
+    [:<>
+     [:hr.my-5]
+     [:h2 "Vorschau"]
+     [:section.theming-enabled
+      [:div.base-wrapper.p-3
+       [elements/navbar-title
+        [:h1.h6.fw-bold.my-auto.text-dark "Welcome to schnaq"]
+        nil false]
+       [activation/activation-card]
+       [:div.d-flex.flex-row
+        [buttons/button "primary button"]
+        [buttons/button "secondary button" (constantly "#") "btn-secondary ms-2"]
+        [buttons/button "primary outlined button" (constantly "#") "btn-outline-primary ms-2"]
+        [buttons/button "secondary outlined button" (constantly "#") "btn-outline-secondary ms-2"]]
+       [selection-card]]]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -101,7 +112,7 @@
        [buttons/button
         "Neu erstellen"
         (fn []
-          (rf/dispatch [:theme.selected/dissoc])
+          (rf/dispatch [:theme/reset])
           (rf/dispatch [:theme.selected/update :theme/title (str user-name "'s first theme")]))
         "btn-outline-primary"]]]]))
 
@@ -151,9 +162,8 @@
    [:div.text-center
     [:p.lead.pb-3 "Stelle hier das Erscheinungsbild deiner schnaqs ein!"]]
    [loaded-themes]
-   [configure-theme]
-   [:hr.my-5]
-   #_[preview]])
+   [motion/fade-in-and-out [configure-theme]]
+   [motion/fade-in-and-out [preview]]])
 
 (defn view []
   [settings/user-view
@@ -167,7 +177,8 @@
 (rf/reg-fx
  :page.root/set-color
  (fn [[theme-field color]]
-   (set-root-color (theme-field->css-variable theme-field) color)))
+   (when color
+     (set-root-color (theme-field->css-variable theme-field) color))))
 
 (rf/reg-event-fx
  :theme.selected/color
@@ -185,17 +196,21 @@
  (fn [db]
    (get-in db [:themes :selected])))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  :theme/select
- (fn [db [_ theme]]
-   (assoc-in db [:themes :selected] theme)))
+ (fn [{:keys [db]} [_ theme]]
+   {:db (assoc-in db [:themes :selected] theme)
+    :fx [[:page.root/set-color [:primary (:theme.colors/primary theme)]]
+         [:page.root/set-color [:secondary (:theme.colors/secondary theme)]]
+         [:page.root/set-color [:background (:theme.colors/background theme)]]]}))
 
 (rf/reg-event-fx
  :theme/dummy
  ;; Add dummy data to the selected schnaq, e.g. for preview functions
  (fn [{:keys [db]}]
    (let [discussion #:discussion{:author {:user.registered/display-name "schnaqqi"}
-                                 :title "Welcome to schnaq"}
+                                 :title "Welcome to schnaq"
+                                 :states [:discussion.state/read-only]}
          conclusion #:statement{:content "Welcome to schnaq"
                                 :author {:user.registered/display-name "schnaqqi"}
                                 :created-at nil}]
@@ -250,7 +265,7 @@
    {:fx [(http/xhrio-request db :delete "/theme/delete"
                              [:themes.load.personal/success]
                              {:theme-id theme-id})
-         [:dispatch [:theme.selected/dissoc]]]}))
+         [:dispatch [:theme/reset]]]}))
 
 ;; -----------------------------------------------------------------------------
 
@@ -275,7 +290,10 @@
  (fn [db]
    (dissoc db :themes)))
 
-(rf/reg-event-db
- :theme.selected/dissoc
- (fn [db]
-   (update db :themes dissoc :selected)))
+(rf/reg-event-fx
+ :theme/reset
+ (fn [{:keys [db]}]
+   {:db (update db :themes dissoc :selected)
+    :fx [[:page.root/set-color [:primary (:primary default-colors)]]
+         [:page.root/set-color [:secondary (:secondary default-colors)]]
+         [:page.root/set-color [:background (:background default-colors)]]]}))
