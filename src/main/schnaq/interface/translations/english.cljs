@@ -1053,25 +1053,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :schnaq.search/input "Search for…"
    :schnaq.search/new-search-title "No results"
 
-   :lead-magnet.privacy/consent "I want to receive a checklist of tools which comply with german privacy laws as .pdf file in German via mail and register for the newsletter as well. The newsletter is currently available in German only."
-   :lead-magnet.form/button "Send me a copy!"
-   :lead-magnet/heading "German laws take privacy very seriously and so do we"
-   :lead-magnet/subheading "Our checklist for working remotely according to german privacy laws (in German only)"
-   :lead-magnet.cover/alt-text "cover of the checklist for working remotely according to german privacy laws"
-   :lead-magnet.form/label "We will send a download link via mail"
-   :lead-magnet.requested/part-1 "First step done to comply with german privacy laws when working remotely!"
-   :lead-magnet.requested/part-2 "You should receive the download link within a few minutes. Please check your spam folder in case you did not receive any mail."
-   :lead-magnet.cta/button "Take me to the checklist!"
-   :lead-magnet.explain.what/heading "What is the checklist for privacy sensitive remote work?"
-   :lead-magnet.explain.what/text "We checked current software for conformity with european GDPR regulations.
-        The results are summarized in this checklist. We included all categories of software that are helpful while working remotely.
-        This way you can take privacy into account while working from home, the office or in a hybrid fashion."
-   :lead-magnet.explain.how/heading "How does the checklist work?"
-   :lead-magnet.explain.how/text "The checklist is structured in categories. Every category, like e.g. chat-software, contains several alternatives.
-        Every alternative is marked with a color. Green shows that there are no privacy concerns. While red warns about
-        several major concerns. Orange signals a few minor problems, but an overall okay result.
-        Besides the color ranking we've included a few keywords which can be used for further research."
-
    :summary.link.button/text "Dashboard"
    :summary.user.request-succeeded/label "Summary requested, please wait."
    :summary.user/computation-time "The creation of the summary can take a few minutes."

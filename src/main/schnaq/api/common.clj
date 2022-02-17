@@ -77,6 +77,7 @@
                                           403 at/response-error-body}
                               :parameters {:body {:share-hash :discussion/share-hash
                                                   :edit-hash :discussion/edit-hash}}}]
+    ;; TODO
     ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
                                :description (at/get-doc #'subscribe-lead-magnet!)
                                :parameters {:body {:email string?}}

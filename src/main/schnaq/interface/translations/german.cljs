@@ -1053,25 +1053,6 @@
    :schnaq.search/input "Suche nach…"
    :schnaq.search/new-search-title "Keine Ergebnisse"
 
-   :lead-magnet.privacy/consent "Ich möchte die Checkliste für datenschutzkonformes Arbeiten als .pdf Datei per E-Mail erhalten und mich hiermit zum schnaq Newsletter anmelden, um in Zukunft regelmäßig Informationen von schnaq.com erhalten."
-   :lead-magnet.form/button "Schicke mir die Checkliste zu!"
-   :lead-magnet/heading "Datenschutzkonform verteilt arbeiten"
-   :lead-magnet/subheading "Eine handliche Checkliste, um in allen Bereichen gerüstet zu sein"
-   :lead-magnet.cover/alt-text "Das Cover von der Checkliste zum Datenschutzrechte verteilten Arbeiten"
-   :lead-magnet.form/label "Wir versenden den Downloadlink zum PDF per E-Mail"
-   :lead-magnet.requested/part-1 "Dein erster Schritt Richtung datenschutzkonformes Arbeiten ist getan!"
-   :lead-magnet.requested/part-2 "Du solltest den Downloadlink in einigen Minuten erhalten. Schaue auch im Spam-Ordner nach."
-   :lead-magnet.cta/button "Direkt zur Checkliste"
-   :lead-magnet.explain.what/heading "Was ist die Checkliste für datenschutzkonforme Remote-Arbeit?"
-   :lead-magnet.explain.what/text "Wir haben aktuelle Software für Remote-Arbeit auf die Beachtung des Datenschutzes (im speziellen DSGVO) untersucht.
-        Die Ergebnisse sind in einer Checkliste zusammengefasst. Enthalten sind dabei alle wichtigen Kategorien, die man für flexible Arbeit benötigt.
-        So kannst du, egal ob beim Homeoffice, bei der mobilen Arbeit oder bei deinem hybriden Arbeitsplatz, auf den Datenschutz achten."
-   :lead-magnet.explain.how/heading "Wie funktioniert die Checkliste?"
-   :lead-magnet.explain.how/text "Die Checkliste ist nach Kategorien aufgebaut. Zu jeder Kategorie, wie z.B. Chat-Plattformen, finden sich mehrere Alternativen.
-        Jede Alternative ist mit einer Ampelfarbe markiert. Grün zeigt dabei die Unbedenklichkeit zum Zeitpunkt unseres Tests. Während Rot vor
-        möglichen Problemen warnt. Orange hat schließlich oft kleinere Probleme, ist aber grundsätzlich in Ordnung.
-        Neben den Ampelfarben finden sich auch noch erklärende Stichpunkte zur weiteren Recherche."
-
    :summary.link.button/text "Analyse"
    :summary.user.request-succeeded/label "Zusammenfassung angefordert. Bitte warte kurz."
    :summary.user/computation-time "Die Erstellung der Zusammenfassung kann einige Minuten dauern."
