@@ -48,6 +48,17 @@
     }
   }
 
+  .btn-outline-secondary {
+    border-color: var(--theming-secondary) !important;
+    color: var(--theming-secondary) !important;
+
+    &:not(.disabled):not(.disabled).active,
+    &:hover {
+      background-color: var(--theming-secondary) !important;
+      color: #fff !important;
+    }
+  }
+
   // -----------------------------------------------------------------------------
   // Text Color
 
