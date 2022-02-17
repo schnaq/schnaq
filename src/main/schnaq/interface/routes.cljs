@@ -1,5 +1,6 @@
 (ns schnaq.interface.routes
-  (:require [oops.core :refer [oset!]]
+  (:require [clojure.walk :as walk]
+            [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [reitit.coercion.spec]
             [reitit.frontend :as reitit-front]
@@ -45,22 +46,25 @@
 (defn language-controllers
   "Returns controllers for the desired locale switch and redirect."
   [locale]
-  [{:parameters {:path [:rest-url]}
-    :start (fn [{:keys [path]}]
-             (rf/dispatch [:language/set-and-redirect locale (:rest-url path)]))}])
+  [{:start (fn []
+             (rf/dispatch [:set-locale locale]))}])
 
 ;; IMPORTANT: Routes called here as views do not hot-reload for some reason. Only
 ;; components inside do regularly. So just use components here that wrap the view you
 ;; want to function regularly.
-(def routes
-  ["" {:coercion reitit.coercion.spec/coercion} ;; Enable Spec coercion for all routes
-   ["/en/{*rest-url}"
-    {:name :routes/force-english
-     :controllers (language-controllers :en)}]
-   ["/de/{*rest-url}"
-    {:name :routes/force-german
-     :controllers (language-controllers :de)}]
-   ["/"
+
+(defn- prefix-routes
+  "Takes a vector of routes and prefixes any name with the provided prefix."
+  [routes prefix]
+  (walk/postwalk
+   (fn [e]
+     (if (and (map? e) (contains? e :name))
+       (update e :name #(keyword (str prefix "." (namespace %)) (name %)))
+       e))
+   routes))
+
+(def common-routes
+  [["/"
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)
@@ -152,7 +156,8 @@
       :view create/create-schnaq-view
       :link-text (labels :router/create-schnaq)}]
     ["/:share-hash"
-     {:parameters {:path {:share-hash string?}}
+     {:name :routes.schnaq.start/controller-init
+      :parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
@@ -160,7 +165,7 @@
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/mark-all-as-seen (:share-hash path)]])
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
                      :stop #(rf/dispatch [:filters/clear])}]}
-     ["" ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
+     [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
                                (rf/dispatch [:discussion.history/clear])
@@ -183,7 +188,7 @@
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]
-     ["/" ;; Redirect trailing slash schnaq access to non-trailing slash
+     ["/"                                                   ;; Redirect trailing slash schnaq access to non-trailing slash
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:navigation/navigate :routes.schnaq/start path]))}]}]
@@ -272,7 +277,9 @@
       :view privacy/view
       :link-text (labels :router/privacy)}]
     ;; Legacy route.
-    ["/extended" {:controllers [{:start #(rf/dispatch [:navigation/navigate :routes.privacy/complete])}]}]]
+    ["/extended"
+     {:name :routes.legacy/privacy-extended
+      :controllers [{:start #(rf/dispatch [:navigation/navigate :routes.privacy/complete])}]}]]
    ["/about"
     {:name :routes/about-us
      :view about-us/page}]
@@ -299,6 +306,25 @@
      :view error-views/true-404-entrypoint
      :link-text (labels :router/true-404-view)}]])
 
+(def routes
+  (vec
+   (concat
+    [""
+     {:coercion reitit.coercion.spec/coercion}              ;; Enable Spec coercion for all routes
+     (vec
+      (concat
+       ["/en"
+        {:name :routes/english-prefix
+         :controllers (language-controllers :en)}]
+       (prefix-routes common-routes "en")))
+     (vec
+      (concat
+       ["/de"
+        {:name :routes/german-prefix
+         :controllers (language-controllers :de)}]
+       (prefix-routes common-routes "de")))]
+    common-routes)))
+
 (def router
   (reitit-front/router
    (if shared-config/embedded?
@@ -314,7 +340,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-               #(js-wrap/scroll-to-id window-hash)))))
+          #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))

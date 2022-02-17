@@ -13,8 +13,14 @@
 
 (rf/reg-sub
  :navigation/current-route-name
- (fn [db]
-   (get-in db [:current-route :data :name])))
+ :<- [:navigation/current-route]
+ (fn [current-route]
+   (let [route-name (get-in current-route [:data :name])
+         current-ns (namespace route-name)]
+     (if (or (gstring/startsWith current-ns "en.")
+             (gstring/startsWith current-ns "de."))
+       (keyword (subs (str route-name) 4))
+       route-name))))
 
 (rf/reg-event-fx
  :navigation/navigate
