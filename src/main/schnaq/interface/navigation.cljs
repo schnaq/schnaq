@@ -1,5 +1,6 @@
 (ns schnaq.interface.navigation
-  (:require [goog.dom :as gdom]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn =>]]
+            [goog.dom :as gdom]
             [goog.string :as gstring]
             [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
@@ -12,9 +13,10 @@
  (fn [db]
    (:current-route db)))
 
-(defn canonical-route-name
+(>defn canonical-route-name
   "Returns the canonical route name without language prefix."
   [route-name]
+  [qualified-keyword? => qualified-keyword?]
   (let [current-ns (namespace route-name)]
     (if (or (gstring/startsWith current-ns "en.")
             (gstring/startsWith current-ns "de."))
