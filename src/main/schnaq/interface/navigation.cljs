@@ -1,25 +1,39 @@
 (ns schnaq.interface.navigation
-  (:require [goog.dom :as gdom]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn =>]]
+            [goog.dom :as gdom]
             [goog.string :as gstring]
             [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reitit.frontend.controllers :as reitit-front-controllers]
-            [reitit.frontend.easy :as reitit-front-easy]))
+            [reitit.frontend.easy :as reitit-front-easy]
+            [schnaq.interface.utils.routing :as route-utils]))
 
 (rf/reg-sub
  :navigation/current-route
  (fn [db]
    (:current-route db)))
 
+(>defn canonical-route-name
+  "Returns the canonical route name without language prefix."
+  [route-name]
+  [qualified-keyword? => qualified-keyword?]
+  (let [current-ns (namespace route-name)]
+    (if (or (gstring/startsWith current-ns "en.")
+            (gstring/startsWith current-ns "de."))
+      (keyword (subs (str route-name) 4))
+      route-name)))
+
 (rf/reg-sub
  :navigation/current-route-name
- (fn [db]
-   (get-in db [:current-route :data :name])))
+ :<- [:navigation/current-route]
+ (fn [current-route]
+   (canonical-route-name (get-in current-route [:data :name]))))
 
 (rf/reg-event-fx
  :navigation/navigate
- (fn [_cofx [_ & route]]
-   {:fx [[:navigation/navigate! route]]}))
+ (fn [{:keys [db]} [_ route & rest]]
+   {:fx [[:navigation/navigate!
+          (apply vector (route-utils/prefix-route-name-locale route (get db :locale :en)) rest)]]}))
 
 (rf/reg-fx
  :navigation/navigate!
@@ -53,8 +67,7 @@
                                   (.-search current-url)
                                   (.-hash current-url))
         locale-clean-path (if (or (gstring/startsWith full-path "/en/")
-                                  (gstring/startsWith full-path "/de/")
-                                  (gstring/startsWith full-path "/pl/"))
+                                  (gstring/startsWith full-path "/de/"))
                             (subs full-path 3)
                             full-path)]
     (if locale
@@ -78,10 +91,9 @@
   ([route-name params]
    (href route-name params nil))
   ([route-name params query]
-   (let [route-match (reitit-front-easy/href route-name params query)
-         language-prefix (str (name @(rf/subscribe [:current-locale])))
-         prefixed-path (gstring/format "/%s%s" language-prefix route-match)]
-     prefixed-path)))
+   (let [language-prefix @(rf/subscribe [:current-locale])
+         prefixed-route-name (route-utils/prefix-route-name-locale route-name language-prefix)]
+     (reitit-front-easy/href prefixed-route-name params query))))
 
 (rf/reg-fx
  :navigation.navigated/write-hreflang

@@ -454,8 +454,8 @@
 (rf/reg-event-fx
  :discussion.statements/reload
  (fn [{:keys [db]} _]
-   (let [path (get-in db [:current-route :data :name])]
-     (case path
+   (let [route-name (navigation/canonical-route-name (get-in db [:current-route :data :name]))]
+     (case route-name
        :routes.schnaq.select/statement {:fx [[:dispatch [:discussion.query.statement/by-id]]]}
        :routes.schnaq/start {:fx [[:dispatch [:discussion.query.conclusions/starting]]]}
        {}))))
