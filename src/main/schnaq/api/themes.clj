@@ -3,8 +3,7 @@
             [ring.util.http-response :refer [ok bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.specs :as specs]
-            [schnaq.database.themes :as themes-db]
-            [taoensso.timbre :as log]))
+            [schnaq.database.themes :as themes-db]))
 
 (defn- personal
   "Return all themes for a specific user."

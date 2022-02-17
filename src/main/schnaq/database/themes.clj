@@ -6,22 +6,6 @@
             [schnaq.database.specs :as specs])
   (:import java.util.UUID))
 
-(def ^:private keycloak-id
-  "TODO: delete me"
-  "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18")
-(def ^:private beta-keycloak-id
-  "TODO: delete me"
-  "8278b980-bf33-45c0-924c-5d7c8f64a564")
-
-(def ^:private theme
-  "TODO: delete me"
-  {:theme.images/logo "string"
-   :theme.images/activation "string"
-   :theme/title "stringi"
-   :theme.colors/secondary "#123123"
-   :theme.colors/background "#123123"
-   :theme.colors/primary "#123123"})
-
 (>defn themes-by-keycloak-id
   "Return all themes for a given user by it's `keycloak-id`."
   [keycloak-id]
@@ -88,24 +72,3 @@
   [:user.registered/keycloak-id :db/id => any?]
   (when (user-is-theme-author? keycloak-id theme-id)
     (db/transact [[:db/retractEntity theme-id]])))
-
-(comment
-
-  (get-in
-   (db/fast-pull 17592186056967 [{:theme/user [:user.registered/keycloak-id]}])
-   [:theme/user :user.registered/keycloak-id])
-
-  (-> 17592186056967
-      db/fast-pull
-      :theme/user
-      :db/id)
-
-  (new-theme keycloak-id theme)
-  (edit-theme keycloak-id (assoc (assoc theme :theme/title "fooo") :db/id 17592186053934))
-
-  (run! #(delete-theme keycloak-id %)
-        (map :db/id (themes-by-keycloak-id keycloak-id)))
-
-  (delete-theme keycloak-id 17592186056687)
-
-  nil)
