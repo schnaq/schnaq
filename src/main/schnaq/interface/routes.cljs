@@ -274,6 +274,16 @@
       :controllers [{:parameters {:query [:price-id]}
                      :start (fn [parameters]
                               (rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session (get-in parameters [:query :price-id])]]))}]}]]
+   ["/themes"
+    {:name :routes.user.manage/themes
+     :view themes/view
+     :controllers [{:start (fn []
+                             (rf/dispatch [:theme/dummy])
+                             (rf/dispatch [:scheduler.after/login [:themes.load/personal]]))
+                    :stop (fn []
+                            (rf/dispatch [:schnaq.selected/dissoc])
+                            (rf/dispatch [:themes/dissoc]))}]}]
+
    ["/privacy"
     [""
      {:name :routes.privacy/complete
@@ -316,7 +326,7 @@
   (vec
    (concat
     [""
-     {:coercion reitit.coercion.spec/coercion}              ;; Enable Spec coercion for all routes
+     {:coercion reitit.coercion.spec/coercion} ;; Enable Spec coercion for all routes
      (vec
       (concat
        ["/en"
