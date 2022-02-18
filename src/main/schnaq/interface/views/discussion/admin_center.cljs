@@ -19,6 +19,7 @@
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.user.themes :as themes]
             [schnaq.links :as links]))
 
 (defn- copy-link-form
@@ -380,7 +381,6 @@
   "List all possible discussion settings."
   []
   [:<>
-   [:h3 "Einstellungen"]
    [only-moderators-mark-setting]
    [enable-discussion-read-only]
    [disable-pro-con]])
@@ -391,6 +391,7 @@
   [:ret :re-frame/component]
   (if @(rf/subscribe [:user/pro-user?])
     [:<>
+     [themes/select-theme-for-schnaq]
      [header-image/image-url-input]
      [discussion-settings]]
     [:div.pt-1

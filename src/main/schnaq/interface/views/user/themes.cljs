@@ -88,33 +88,38 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn list-personal-themes
+  "Show all configured themes."
+  [dispatch-event]
+  (let [themes @(rf/subscribe [:themes/personal])
+        selected @(rf/subscribe [:theme/selected])]
+    [:div.row.row-cols-2.row-cols-xl-4.g-2.g-lg-3
+     (for [theme themes]
+       (with-meta
+         [:div.col
+          [buttons/button
+           (toolbelt/truncate-to-n-chars-string (:theme/title theme) 24)
+           #(rf/dispatch [dispatch-event theme])
+           (if (= (:db/id selected) (:db/id theme))
+             "btn-secondary w-100 h-100"
+             "btn-outline-dark w-100 h-100")]]
+         {:key (str "theme-" (:db/id theme))}))]))
+
 (defn- loaded-themes
   "Display all available themes."
   []
-  (let [themes @(rf/subscribe [:themes/personal])
-        selected @(rf/subscribe [:theme/selected])
-        user-name @(rf/subscribe [:user/display-name])]
+  (let [user-name @(rf/subscribe [:user/display-name])]
     [:section.pb-5
      [:h4 "Deine Themen"]
      [:p.lead "Wähle ein bestehendes Thema aus oder erzeuge ein neues."]
-     [:div.row.row-cols-2.row-cols-xl-4.g-2.g-lg-3
-      (for [theme themes]
-        (with-meta
-          [:div.col
-           [buttons/button
-            (toolbelt/truncate-to-n-chars-string (:theme/title theme) 24)
-            #(rf/dispatch [:theme/select theme])
-            (if (= (:db/id selected) (:db/id theme))
-              "btn-secondary w-100 h-100"
-              "btn-outline-dark w-100 h-100")]]
-          {:key (str "theme-" (:db/id theme))}))
-      [:div.col
-       [buttons/button
-        "Neu erstellen"
-        (fn []
-          (rf/dispatch [:theme/reset])
-          (rf/dispatch [:theme.selected/update :theme/title (str user-name "'s first theme")]))
-        "btn-outline-primary h-100"]]]]))
+     [list-personal-themes :theme/select]
+     [:div.pt-3
+      [buttons/button
+       "Neu erstellen"
+       (fn []
+         (rf/dispatch [:theme/reset])
+         (rf/dispatch [:theme.selected/update :theme/title (str user-name "'s first theme")]))
+       "btn-outline-primary h-100"]]]))
 
 (defn- configure-theme
   "TODO"
@@ -171,6 +176,32 @@
    [pages/settings-panel
     "Thema / Branding definieren"
     [theming]]])
+
+;; -----------------------------------------------------------------------------
+
+(defn select-theme-for-schnaq
+  "TODO"
+  []
+  [:section.mb-5
+   [:h4 "Stelle hier dein Farbschema für diesen schnaq ein"]
+   [list-personal-themes :theme.assign/discussion]])
+
+(rf/reg-event-fx
+ :theme.assign/discussion
+ (fn [{:keys [db]} [_ theme]]
+   {:fx [[:dispatch [:theme/select theme]]
+         (http/xhrio-request db :post "/user/theme/assign/discussion"
+                             [:theme.assign.discussion/success]
+                             {:theme theme
+                              :share-hash (get-in db [:schnaq :selected :share-hash])})]}))
+
+(rf/reg-event-fx
+ :theme.assign.discussion/success
+ (fn [_ [_ {:keys [theme]}]]
+   {:fx [[:dispatch [:notification/add
+                     #:notification{:title "Thema erfolgreich gespeichert"
+                                    :body "Dein Thema kann nun von dir in deinen schnaqs verwendet werden 🎉"
+                                    :context :success}]]]}))
 
 ;; -----------------------------------------------------------------------------
 

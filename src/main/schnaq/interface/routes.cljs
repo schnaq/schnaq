@@ -225,6 +225,7 @@
        :controllers [{:parameters {:path [:share-hash :edit-hash]}
                       :start (fn [{:keys [path]}]
                                (let [{:keys [share-hash edit-hash]} path]
+                                 (rf/dispatch [:scheduler.after/login [:themes.load/personal]])
                                  (rf/dispatch [:schnaq/check-admin-credentials share-hash edit-hash])
                                  (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash])
                                  (rf/dispatch [:schnaqs.save-admin-access/to-localstorage-and-db
