@@ -282,7 +282,7 @@
        :checked schnaq-read-only?
        :on-change (fn [e] (js-wrap/prevent-default e)
                     (rf/dispatch [dispatch]))}]
-     [:label.form-check-label.display-6.ps-1 {:for :enable-read-only?}
+     [:label.form-check-label.h5.ps-1 {:for :enable-read-only?}
       (labels :schnaq.admin.configurations.read-only/checkbox)]
      [:p (labels :schnaq.admin.configurations.read-only/explanation)]]))
 
@@ -299,7 +299,7 @@
        (fn [e]
          (js-wrap/prevent-default e)
          (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
-     [:label.form-check-label.display-6.ps-1 {:for :disable-pro-con-checkbox?}
+     [:label.form-check-label.h5.ps-1 {:for :disable-pro-con-checkbox?}
       (labels :schnaq.admin.configurations.disable-pro-con/label)]
      [:p (labels :schnaq.admin.configurations.disable-pro-con/explanation)]]))
 
@@ -316,7 +316,7 @@
        (fn [e]
          (js-wrap/prevent-default e)
          (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
-     [:label.form-check-label.display-6.ps-1 {:for :only-moderators-mark-checkbox}
+     [:label.form-check-label.h5.ps-1 {:for :only-moderators-mark-checkbox}
       (labels :schnaq.admin.configurations.mods-mark-only/label)]
      [:p (labels :schnaq.admin.configurations.mods-mark-only/explanation)]]))
 
@@ -380,6 +380,7 @@
   "List all possible discussion settings."
   []
   [:<>
+   [:h3 "Einstellungen"]
    [only-moderators-mark-setting]
    [enable-discussion-read-only]
    [disable-pro-con]])
@@ -388,15 +389,15 @@
   "Settings for the discussion."
   []
   [:ret :re-frame/component]
-  [:<>
-   [header-image/image-url-input]
-   (if @(rf/subscribe [:user/pro-user?])
-     [discussion-settings]
-     [:div.pt-1
-      [:hr]
-      [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
-      [:div.border.border-danger.p-3.mt-4
-       [discussion-settings]]])])
+  (if @(rf/subscribe [:user/pro-user?])
+    [:<>
+     [header-image/image-url-input]
+     [discussion-settings]]
+    [:div.pt-1
+     [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
+     [:div.border.border-danger.p-3.mt-4
+      [header-image/image-url-input]
+      [discussion-settings]]]))
 
 (defn- administrator-tabs
   "Share link and invite via mail in a tabbed view."
