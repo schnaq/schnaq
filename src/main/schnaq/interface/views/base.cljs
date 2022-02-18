@@ -104,7 +104,9 @@
        ;; Remove hardcode, when there are english versions around!
        [:h3.h5 "schnaq Lösungen"]
        [:p [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-meetings-moderieren/"}
-            "für Meetings"]]])))
+            "für Meetings"]]
+       [:p [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-diskussionsplattform/"}
+            "für Diskussionen"]]])))
 
 ;; -----------------------------------------------------------------------------
 
