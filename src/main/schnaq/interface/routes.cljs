@@ -282,7 +282,8 @@
                              (rf/dispatch [:scheduler.after/login [:themes.load/personal]]))
                     :stop (fn []
                             (rf/dispatch [:schnaq.selected/dissoc])
-                            (rf/dispatch [:themes/dissoc]))}]}]
+                            (rf/dispatch [:themes/dissoc])
+                            (rf/dispatch [:theme/reset]))}]}]
 
    ["/privacy"
     [""

@@ -20,7 +20,8 @@
   "Change the content of a theme"
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
-  (ok {:theme (themes-db/edit-theme sub theme)}))
+  (let [theme-converted-id (update theme :db/id #(Long/valueOf %))]
+    (ok {:theme (themes-db/edit-theme sub theme-converted-id)})))
 
 (defn- delete-theme
   "Delete a theme."

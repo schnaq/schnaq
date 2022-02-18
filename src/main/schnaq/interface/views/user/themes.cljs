@@ -102,7 +102,7 @@
         (with-meta
           [:div.col
            [buttons/button
-            (toolbelt/truncate-to-n-chars-string (:theme/title theme) 32)
+            (toolbelt/truncate-to-n-chars-string (:theme/title theme) 24)
             #(rf/dispatch [:theme/select theme])
             (if (= (:db/id selected) (:db/id theme))
               "btn-secondary w-100 h-100"

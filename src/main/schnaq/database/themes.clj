@@ -60,9 +60,7 @@
   [keycloak-id theme]
   [:user.registered/keycloak-id ::specs/theme => (? ::specs/theme)]
   (when (user-is-theme-author? keycloak-id (:db/id theme))
-    (let [prepared-theme (-> theme
-                             (assoc :theme/user [:user.registered/keycloak-id keycloak-id])
-                             (update :db/id #(Long/valueOf %)))]
+    (let [prepared-theme (assoc theme :theme/user [:user.registered/keycloak-id keycloak-id])]
       (db/transact [prepared-theme])
       (db/fast-pull (:db/id prepared-theme) patterns/theme))))
 
