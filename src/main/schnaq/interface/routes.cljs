@@ -46,8 +46,7 @@
 (defn language-controllers
   "Returns controllers for the desired locale switch and redirect."
   [locale]
-  [{:start (fn []
-             (rf/dispatch [:set-locale locale]))}])
+  [{:start #(rf/dispatch [:language/switch locale])}])
 
 ;; IMPORTANT: Routes called here as views do not hot-reload for some reason. Only
 ;; components inside do regularly. So just use components here that wrap the view you
@@ -165,7 +164,7 @@
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/mark-all-as-seen (:share-hash path)]])
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
                      :stop #(rf/dispatch [:filters/clear])}]}
-     [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
+     ["" ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
                                (rf/dispatch [:discussion.history/clear])
@@ -188,7 +187,7 @@
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]
-     ["/"                                                   ;; Redirect trailing slash schnaq access to non-trailing slash
+     ["/" ;; Redirect trailing slash schnaq access to non-trailing slash
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:navigation/navigate :routes.schnaq/start path]))}]}]
@@ -307,7 +306,7 @@
   (vec
    (concat
     [""
-     {:coercion reitit.coercion.spec/coercion}              ;; Enable Spec coercion for all routes
+     {:coercion reitit.coercion.spec/coercion} ;; Enable Spec coercion for all routes
      (vec
       (concat
        ["/en"
@@ -337,7 +336,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-          #(js-wrap/scroll-to-id window-hash)))))
+               #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))

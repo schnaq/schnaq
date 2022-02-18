@@ -66,14 +66,6 @@
     :fx [[:change-document-lang locale]]}))
 
 (rf/reg-fx
- ;; Changes location via js, lets reitit re-match the url after changing
- :change-location
- (fn [url]
-   (rf/dispatch
-    [:navigation/navigated
-     (reitit-frontend/match-by-path routes/router (str (-> js/window .-location .-origin) "/" url))])))
-
-(rf/reg-fx
  ;; Changes more than just the document locale, like changing the key in config and writing it to localstorage.
  ;; (But includes execution of set-locale)
  :switch-language
@@ -81,7 +73,6 @@
    (set-language locale)))
 
 (rf/reg-event-fx
- :language/set-and-redirect
- (fn [_ [_ locale redirect-url]]
-   {:fx [[:switch-language locale]
-         [:change-location redirect-url]]}))
+ :language/switch
+ (fn [_ [_ locale]]
+   {:fx [[:switch-language locale]]}))
