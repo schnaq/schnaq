@@ -155,7 +155,7 @@
    ;; Poll Feature
    :productpage.poll/title "Live Umfragen"
    :productpage.poll/subtitle "Umfragen erstellen so leicht wie nie zuvor"
-   :productpage.poll/cta-button "Jetzt kostenlos Umfragen erstellen!"
+   :productpage.poll/cta-button "Jetzt Umfragen erstellen!"
    :productpage.poll-vote/title "Lass dein Publikum abstimmen!"
    :productpage.poll-vote/subtitle "Finde heraus, was dein Publikum denkt. Mit Umfragen stimmen deine Teilnehmer:innen über vordefinierte Antworten ab."
    :productpage.poll.single/title "Single-Choice"
