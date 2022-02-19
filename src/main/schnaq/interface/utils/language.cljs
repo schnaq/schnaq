@@ -2,9 +2,7 @@
   (:require [clojure.string :as str]
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [reitit.frontend :as reitit-frontend]
             [schnaq.interface.config :as config]
-            [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.js-wrapper :as jq]))
 
 (defn- default-language
