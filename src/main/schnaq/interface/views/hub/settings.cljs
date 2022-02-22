@@ -8,7 +8,6 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.hub.common :as hub-common]
@@ -28,7 +27,7 @@
       (if temporary-logo
         ;; delete temporary button
         [:button.btn.btn-primary.change-profile-pic-button
-         {:on-click (fn [e] (js-wrap/prevent-default e)
+         {:on-click (fn [e] (.preventDefault e)
                       (rf/dispatch [:hub.logo/reset hub]))}
          [icon :cross]]
         ;; upload temporary button
@@ -56,7 +55,7 @@
       [:form
        {:on-submit (fn [e]
                      (let [new-hub-name (oget+ e [:target :elements input-id :value])]
-                       (js-wrap/prevent-default e)
+                       (.preventDefault e)
                        (rf/dispatch [:hub.logo/update])
                        (rf/dispatch [:hub.name/update new-hub-name])))}
        [:div.d-flex.flex-row
@@ -72,7 +71,7 @@
       [:form
        {:on-submit (fn [e]
                      (let [new-member-mail (oget+ e [:target :elements :add-member-input :value])]
-                       (js-wrap/prevent-default e)
+                       (.preventDefault e)
                        (rf/dispatch [:hub.members/add new-member-mail])))}
        [:div.d-flex.flex-row
         [common/form-input {:id :add-member-input

@@ -9,7 +9,6 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
@@ -204,7 +203,7 @@
         action-icon (if (cstring/blank? search-string) :search :times)]
     [:button.btn.button-muted.h-100
      {:on-click (fn [_e]
-                  (jq/clear-input clear-id)
+                  (toolbelt/clear-input clear-id)
                   (rf/dispatch [:schnaq.search.current/clear-search-string]))}
      [icon action-icon "m-auto"]]))
 
@@ -215,7 +214,7 @@
         route-name @(rf/subscribe [:navigation/current-route-name])
         selected-statement-id (get-in @(rf/subscribe [:navigation/current-route]) [:path-params :statement-id])]
     [:form.h-100
-     {:on-submit #(jq/prevent-default %)
+     {:on-submit #(.preventDefault %)
       :key (str route-name selected-statement-id)}
      [:div.input-group.search-bar.h-100.panel-white.p-0
       [:input.form-control.my-auto.search-bar-input.h-100

@@ -6,7 +6,6 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.notifications :refer [notify!]]
@@ -15,7 +14,7 @@
 (defn open-privacy-settings
   "Open privacy settings."
   []
-  [:button.btn.btn-outline-primary {:on-click (js-wrap/show-js-klaro)}
+  [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)}
    (labels :privacy/open-settings)])
 
 (defn- localstorage-explanation []

@@ -1,6 +1,5 @@
 (ns schnaq.interface.core
   (:require ["bootstrap"]
-            ["jquery"]
             ["popper.js"]
             [day8.re-frame.http-fx]
             [goog.dom :as gdom]

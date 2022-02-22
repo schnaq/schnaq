@@ -15,7 +15,7 @@
   (let [url (io/as-url frontend-url)
         host (.getHost url)
         port (.getPort url)]
-    (if (or (= 80 port) (= 443 port) (= -1 port))           ;; .getPort returns -1 if no port is explicitly configured, e.g. at https://schnaq.com
+    (if (or (= 80 port) (= 443 port) (= -1 port)) ;; .getPort returns -1 if no port is explicitly configured, e.g. at https://schnaq.com
       host
       (format "%s:%d" host port))))
 
@@ -51,8 +51,8 @@
    :sender-host (or (System/getenv "EMAIL_HOST") "smtp.ionos.de")
    :sender-password (System/getenv "EMAIL_PASSWORD")})
 
-(def mail-template "https://s3.schnaq.com/email/template/mail-template.html")
-(def mail-content-button-right-template "https://s3.schnaq.com/email/template/content-left-button-right-template.html")
+(def mail-template "https://s3.schnaq.com/email/templates/generic-mail.html")
+(def mail-content-button-right-template "https://s3.schnaq.com/email/templates/snippets/content-left-button-right.html")
 
 (def mattermost-webhook-url
   "URL to mattermost-webhook to post news to the chat."

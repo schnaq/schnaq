@@ -9,7 +9,7 @@
   Additional html content is not displayed in the text/plain version"
   [header title subtitle content additional-html-content additional-plain-content]
   (let [replace-fn #(cstring/replace %1 (first %2) (second %2))
-        format-map {"$$$Header$$$" header
+        format-map {"$$$HEADING$$$" header
                     "$$$CONTENT-TITLE$$$" title
                     "$$$CONTENT-SUB-TITLE$$$" subtitle
                     "$$$CONTENT-TEXT$$$" (cstring/replace content "\n" "<br>")
@@ -24,7 +24,7 @@
              (str "\n" content))
            (when (seq additional-plain-content)
              (str "\n\n" additional-plain-content))
-           "\n\n\nViele Grüße\n\nDein schnaq Team")}
+           "\n\n\nGreetings,\n\nyour schnaq team")}
      {:type "text/html; charset=utf-8" :content
       (reduce replace-fn (slurp config/mail-template) format-map)}]))
 

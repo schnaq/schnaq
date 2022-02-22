@@ -4,7 +4,6 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]))
@@ -55,7 +54,7 @@
       [:div.py-3
        [:form
         {:on-submit (fn [e]
-                      (jq/prevent-default e)
+                      (.preventDefault e)
                       (rf/dispatch [:schnaq.create/new
                                     (oget e [:currentTarget :elements])
                                     selected-hub]))}

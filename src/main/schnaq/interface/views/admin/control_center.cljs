@@ -3,7 +3,6 @@
             [re-frame.core :as rf]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-event-fx
@@ -17,7 +16,7 @@
   []
   [:form#private-schnaq-form.form
    {:on-submit (fn [e]
-                 (js-wrap/prevent-default e)
+                 (.preventDefault e)
                  (when (js/confirm (labels :admin.center.delete/confirmation))
                    (rf/dispatch [:admin.schnaq/delete
                                  (oget e [:target :elements :private-meeting-hash :value])])))}

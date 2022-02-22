@@ -1,14 +1,14 @@
 (ns schnaq.interface.integrations.wetog.events
   (:require [re-frame.core :as rf]
-            [schnaq.interface.utils.js-wrapper :as jsw]))
+            [schnaq.interface.utils.toolbelt :as tools]))
 
 (rf/reg-event-fx
  :wetog/initialize-from-data
  (fn [{:keys [db]} _]
    (let [integration-div "schnaq-integration"
-         share-hash (jsw/data-attribute integration-div "shareHash")
-         display-name (jsw/data-attribute integration-div "displayName")
-         jwt (jsw/data-attribute integration-div "jwt")
+         share-hash (tools/data-attribute integration-div "shareHash")
+         display-name (tools/data-attribute integration-div "displayName")
+         jwt (tools/data-attribute integration-div "jwt")
          authenticated? (string? (and jwt (not-empty jwt)))]
      {:db (-> db
               (assoc-in [:user :names :display] display-name)

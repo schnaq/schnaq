@@ -3,7 +3,6 @@
             [re-frame.core :as rf]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.input :as input]))
 
@@ -12,10 +11,10 @@
   [label html-id dispatch-fn edit-id pro-con-enabled? content statement-type change-statement-type]
   [:form.statement-card.py-2.px-3
    {:on-submit (fn [e]
-                 (jq/prevent-default e)
+                 (.preventDefault e)
                  (dispatch-fn e))
     :on-key-down (fn [e]
-                   (when (jq/ctrl-press e 13) (dispatch-fn e)))}
+                   (when (tools/ctrl-press? e 13) (dispatch-fn e)))}
    [:div.mb-3
     [:label.form-label {:for html-id} (labels label)]
     [:textarea.form-control {:name html-id
@@ -29,7 +28,7 @@
     [:div.d-flex.mb-3
      [:button.btn.btn-link
       {:on-click (fn [e]
-                   (jq/prevent-default e)
+                   (.preventDefault e)
                    (rf/dispatch [:statement.edit/deactivate-edit edit-id]))}
       (labels :statement.edit.button/cancel)]
      [:button.btn.btn-outline-dark.ms-1 {:type "submit"} (labels :statement.edit.button/submit)]]]])

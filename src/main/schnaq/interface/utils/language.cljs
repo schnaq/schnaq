@@ -2,14 +2,19 @@
   (:require [clojure.string :as str]
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :as config]
-            [schnaq.interface.utils.js-wrapper :as jq]))
+            [schnaq.interface.config :as config]))
+
+(defn- browser-language
+  "Returns the user's browser language"
+  []
+  (or (.-language js/navigator)
+      (.-userLanguage js/navigator)))
 
 (defn- default-language
   "Returns the keyword for the default browser language.
   If the default language is not supported by schnaq, english is chosen by default."
   []
-  (-> (jq/browser-language)
+  (-> (browser-language)
       (str/split "-")
       first
       keyword

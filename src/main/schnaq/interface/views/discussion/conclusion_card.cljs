@@ -11,7 +11,6 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
@@ -67,14 +66,14 @@
      [:div.me-2
       {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")
        :on-click (fn [e]
-                   (js-wrap/stop-propagation e)
+                   (.stopPropagation e)
                    (rf/dispatch [:discussion/toggle-upvote statement]))}
       [icon :arrow-up "vote-arrow m-auto"]]
      [:span.me-3 (logic/get-up-votes statement votes)]
      [:div.me-2
       {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")
        :on-click (fn [e]
-                   (js-wrap/stop-propagation e)
+                   (.stopPropagation e)
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
       [icon :arrow-down "vote-arrow m-auto"]]
      [:span (logic/get-down-votes statement votes)]]))

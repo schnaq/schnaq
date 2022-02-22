@@ -9,7 +9,6 @@
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.toolbelt :as tools]))
 
 (defn- results-graph
@@ -65,7 +64,7 @@
            [:section.statement-card
             [:form
              {:on-submit (fn [e]
-                           (jsw/prevent-default e)
+                           (.preventDefault e)
                            (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
              [:div.mx-4.my-2
               [:h6.pb-2.text-center (:poll/title poll)]
@@ -104,7 +103,7 @@
   (let [option-count @(rf/subscribe [:polls.create/option-count])]
     [:form.pt-2
      {:on-submit (fn [event]
-                   (jsw/prevent-default event)
+                   (.preventDefault event)
                    (rf/dispatch [:schnaq.poll/create-new
                                  (oget event [:target :elements])
                                  option-count]))}
