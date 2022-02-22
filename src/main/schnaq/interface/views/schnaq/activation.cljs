@@ -10,7 +10,7 @@
   []
   (let [activation @(rf/subscribe [:schnaq/activation])
         tmp-count @(rf/subscribe [:schnaq.activation/temp-counter])
-        new-elephants (- (:activation/count activation) tmp-count)]
+        new-elephants (min 33 (- (:activation/count activation) tmp-count))]
     [:<>
      ;; schnaqqis background
      (for [x (range 1 new-elephants 2)]
