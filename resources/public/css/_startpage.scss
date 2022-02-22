@@ -91,7 +91,7 @@ $header-opacity: 1;
   background-repeat: repeat;
   background-size: 100%;
 
-    @include media-breakpoint-up(lg) {
+  @include media-breakpoint-up(lg) {
     background-image: url('https://s3.schnaq.com/schnaq-common/background/background-product-lg.svg');
   }
 
