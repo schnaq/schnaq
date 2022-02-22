@@ -334,11 +334,13 @@
   "Returns all statements where `keycloak-id` is the author."
   [keycloak-id]
   [:user.registered/keycloak-id :ret (s/coll-of ::specs/statement)]
-  (query '[:find [(pull ?statements pattern) ...]
-           :in $ ?keycloak-id pattern
-           :where [?user :user.registered/keycloak-id ?keycloak-id]
-           [?statements :statement/author ?user]]
-         keycloak-id patterns/statement))
+  (->
+   (query '[:find [(pull ?statements pattern) ...]
+            :in $ ?keycloak-id pattern
+            :where [?user :user.registered/keycloak-id ?keycloak-id]
+            [?statements :statement/author ?user]]
+          keycloak-id patterns/statement)
+   toolbelt/pull-key-up))
 
 (>defn all-statements-from-others
   "Returns all statements belonging to a discussion which are not from a user."
