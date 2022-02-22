@@ -168,7 +168,7 @@
       [base/header options]]
      body
      (when wavy-footer?
-       [:div.wave-bottom-typography])]]])
+       [:div.mt-auto.wave-bottom-typography-page])]]])
 
 (>defn with-nav
   "Default page with header and curly wave."

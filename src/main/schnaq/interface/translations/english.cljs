@@ -301,13 +301,8 @@
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
    :schnaq.create/heading "Start your schnaq"
-   :schnaq.create.qanda/subheading "With a schnaq, you can have optimized Q&As"
    :schnaq.create/info "Add a simple and comprehensible title to your discussion."
    :schnaq.create.button/save "Start a new schnaq"
-
-   ;; Discussion Creation
-   :discussion.create.hub-exclusive-checkbox/title "Add schnaq to a Hub"
-   :discussion.create.hub-exclusive-checkbox/label "Add to Hub"
 
    ;; Discussion Dashboard
    :dashboard/posts "Posts"
