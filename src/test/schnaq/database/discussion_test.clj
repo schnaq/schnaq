@@ -323,6 +323,16 @@
     (testing "In the last minute, 18 new statements were added to the cat-dog discussion."
       (is (= 18 (:total (:new-statements (first (db/discussions-with-new-statements [discussion] (main-db/minutes-ago 1))))))))))
 
-#_(deftest all-statements-from-user-test
-  (db/add-starting-statement! "simple-hash" (user-db/private-user-by-keycloak-id (-> test-data/kangaroo :user.registered/keycloak-id user-db/private-user-by-keycloak-id)) "test" true)
-  (is (= 1 (db/all-statements-from-user "59456d4a-6950-47e8-88d8-a1a6a8de9276"))))
+(deftest all-statements-from-user-with-statements-test
+  (testing "Return statements for kangaroo succeeds."
+    (let [keycloak-id (:user.registered/keycloak-id test-data/kangaroo)]
+      (db/add-starting-statement! "simple-hash"
+                                  (:db/id (user-db/private-user-by-keycloak-id keycloak-id))
+                                  "test" true)
+      (is (= 1 (count (db/all-statements-from-user keycloak-id)))))))
+
+(deftest all-statements-from-user-without-statements-test
+  (testing "Return zero statements if user has no statements."
+      (is (zero? (count (db/all-statements-from-user 
+                         (:user.registered/keycloak-id test-data/alex)))))))
+
