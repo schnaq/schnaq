@@ -265,6 +265,13 @@
     :statement/type :statement.type/attack
     :statement/discussions ["discussion/simple"]}])
 
+(def deleted-discussions
+  [{:discussion/title "Deleted discussion"
+    :discussion/share-hash "public-share-hash-deleted"
+    :discussion/edit-hash "secret-public-hash-deleted"
+    :discussion/author "user/schredder"
+    :discussion/states [:discussion.state/deleted]}])
+
 (def alex
   {:db/id "user.registered/alex"
    :user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
@@ -329,4 +336,4 @@
 
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
-          graph-discussion simple-discussion registered-users polls))
+          deleted-discussions graph-discussion simple-discussion registered-users polls))

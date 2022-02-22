@@ -2,16 +2,14 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.test :refer [deftest testing use-fixtures is are]]
             [schnaq.database.discussion :as db]
-            [schnaq.database.discussion-test-data :as test-data]
             [schnaq.database.main :refer [fast-pull] :as main-db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
+            [schnaq.test-data :as test-data]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
-(use-fixtures :each
-  schnaq-toolbelt/init-test-delete-db-fixture
-  #(schnaq-toolbelt/init-test-delete-db-fixture % test-data/public-discussions))
+(use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (deftest delete-discussion-test
@@ -145,12 +143,12 @@
            (= valid (count (db/discussions-by-share-hashes share-hashes)))
         0 []
         0 ["razupaltuff"]
-        1 ["public-share-hash"]
-        1 ["public-share-hash" "razupaltuff"]
-        1 ["public-share-hash" "public-share-hash-deleted"]
-        2 ["public-share-hash" new-discussion-hash]
-        2 ["public-share-hash" new-discussion-hash "public-share-hash-deleted"]
-        2 ["public-share-hash" new-discussion-hash "public-share-hash-deleted" "razupaltuff"]))))
+        1 ["simple-hash"]
+        1 ["simple-hash" "razupaltuff"]
+        1 ["simple-hash" "public-share-hash-deleted"]
+        2 ["simple-hash" new-discussion-hash]
+        2 ["simple-hash" new-discussion-hash "public-share-hash-deleted"]
+        2 ["simple-hash" new-discussion-hash "public-share-hash-deleted" "razupaltuff"]))))
 
 (deftest change-pro-con-button-test
   (let [share-hash "the-hash"
@@ -324,3 +322,7 @@
       (is (zero? (count (db/discussions-with-new-statements [discussion] (main-db/now))))))
     (testing "In the last minute, 18 new statements were added to the cat-dog discussion."
       (is (= 18 (:total (:new-statements (first (db/discussions-with-new-statements [discussion] (main-db/minutes-ago 1))))))))))
+
+#_(deftest all-statements-from-user-test
+  (db/add-starting-statement! "simple-hash" (user-db/private-user-by-keycloak-id (-> test-data/kangaroo :user.registered/keycloak-id user-db/private-user-by-keycloak-id)) "test" true)
+  (is (= 1 (db/all-statements-from-user "59456d4a-6950-47e8-88d8-a1a6a8de9276"))))
