@@ -12,23 +12,25 @@
   "Selection if schnaq should be added to a hub."
   []
   (let [user-groups @(rf/subscribe [:user/groups])
-        hubs @(rf/subscribe [:hubs/all])]
+        hubs @(rf/subscribe [:hubs/all])
+        selected-hub @(rf/subscribe [:hub/selected])
+        checked? (not (nil? selected-hub))]
     (when (seq user-groups)
-      [:div.form-check
-       [:input.form-check-input.big-checkbox
-        {:type :checkbox
-         :id :hub-exclusive
-         :defaultChecked true}]
-       [:label.form-check-label.display-6.ps-1 {:for :hub-exclusive}
-        (labels :discussion.create.hub-exclusive-checkbox/title)]
-       [:p.small.form-text.text-muted.ms-2 (labels :schnaq.create.hub/help-text)]
-       [:select.form-control.form-select.mt-3
-        {:id :exclusive-hub-select
-         :style {:max-width "80%"}}
-        (for [group-id user-groups]
-          [:option {:value group-id
-                    :key group-id}
-           (get-in hubs [group-id :hub/name])])]])))
+      [:<>
+       [:div.form-check
+        [:input.form-check-input.big-checkbox
+         {:type :checkbox
+          :id :hub-exclusive
+          :defaultChecked checked?}]
+        [:select.form-control.form-select
+         {:id :exclusive-hub-select
+          :defaultValue selected-hub
+          :style {:max-width "80%"}}
+         (for [group-id user-groups]
+           [:option {:value group-id
+                     :key group-id}
+            (get-in hubs [group-id :hub/name])])]]
+       [:p.small.form-text.text-muted.ms-4 (labels :schnaq.create.hub/help-text)]])))
 
 (defn- create-schnaq-button []
   [:div.text-end
@@ -40,7 +42,7 @@
   (let [selected-hub @(rf/subscribe [:hub/selected])]
     [pages/with-nav-and-header
      {:page/heading (labels :schnaq.create/heading)
-      :page/subheading (labels :schnaq.create.qanda/subheading)
+      :page/vertical-header? true
       :page/title (labels :schnaq.create/title)
       :page/classes "base-wrapper bg-white"
       :condition/create-schnaq? true}
@@ -52,7 +54,7 @@
                       (rf/dispatch [:schnaq.create/new
                                     (oget e [:currentTarget :elements])
                                     selected-hub]))}
-        [:h4.mb-5 (labels :schnaq.create.input/title)]
+
         [:div.panel-grey.row.p-4
          [:div.col-12
           [common/form-input {:id :schnaq-title
@@ -61,11 +63,11 @@
         [:div.text-primary.p-3
          [icon :info " my-auto me-3"]
          [:span (labels :schnaq.create/info)]]
-        (when selected-hub
-          [:div.row.my-5
-           [:div.col-12.col-xl-6
-            [add-schnaq-to-hub]]])
-        [create-schnaq-button]]]]]))
+        [:div.row.my-5
+         [:div.col-12.col-md-8.col-lg-6
+          [add-schnaq-to-hub]]
+         [:div.col-12.col-md-4.col-lg-6
+          [create-schnaq-button]]]]]]]))
 
 (defn create-schnaq-view []
   [create-qanda-page])
@@ -79,7 +81,7 @@
                           (seq (get-in db [:user :groups] [])))
          nickname (tools/current-display-name db)
          discussion-title (oget form-elements [:schnaq-title :value])
-         exclusive? (when use-origin? (or (oget form-elements [:?hub-exclusive :checked]) (not (nil? selected-hub))))
+         exclusive? (when use-origin? (and (oget form-elements [:?hub-exclusive :checked]) (not (nil? selected-hub))))
          origin-hub (when use-origin? (or (oget form-elements [:?exclusive-hub-select :value]) selected-hub))
          payload (cond-> {:discussion-title discussion-title}
                    origin-hub (assoc :hub-exclusive? exclusive?

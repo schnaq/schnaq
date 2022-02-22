@@ -301,13 +301,8 @@
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"
    :schnaq.create/heading "Starte mit deinem schnaq."
-   :schnaq.create.qanda/subheading "Mit einem schnaq kannst du effizient Fragen sammeln und beantworten."
    :schnaq.create/info "Gib deinem Thema einen möglichst einfachen und verständlichen Titel."
    :schnaq.create.button/save "Schnaq starten"
-
-   ;; Discussion Creation
-   :discussion.create.hub-exclusive-checkbox/title "Schnaq zu einem Hub hinzufügen"
-   :discussion.create.hub-exclusive-checkbox/label "Dem Hub hinzufügen"
 
    ;; Discussion Dashboard
    :dashboard/posts "Beiträge"
@@ -656,8 +651,7 @@
    :sharing/tooltip "schnaq teilen"
    :sharing.modal/title "Teile deinen schnaq"
    :sharing.modal/lead "Lade dein ganzes Team mit ein, um diesen schnaq mit Wissen zu befüllen"
-   :sharing.modal/schnaqqi-help "Befülle den schnaq schonmal mit deinen Ideen. Deine Kolleg:innen finden so einen leichteren Einstieg."
-   :sharing.modal/qanda-help "Über die Q&A Ansicht können Teilnehmer Fragen zur Veranstaltung stellen. Entweder direkt per Link oder per Code auf www.schnaq.app!"
+   :sharing.modal/qanda-help "Lade deine Teilnehmer:innen ein! Entweder direkt per Link oder Code auf www.schnaq.app"
 
    ;; Discussion Language
    :discussion/create-argument-action "Beitrag hinzufügen"

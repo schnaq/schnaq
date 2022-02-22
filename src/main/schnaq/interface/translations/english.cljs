@@ -301,13 +301,8 @@
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
    :schnaq.create/heading "Start your schnaq"
-   :schnaq.create.qanda/subheading "With a schnaq, you can have optimized Q&As"
    :schnaq.create/info "Add a simple and comprehensible title to your discussion."
    :schnaq.create.button/save "Start a new schnaq"
-
-   ;; Discussion Creation
-   :discussion.create.hub-exclusive-checkbox/title "Add schnaq to a Hub"
-   :discussion.create.hub-exclusive-checkbox/label "Add to Hub"
 
    ;; Discussion Dashboard
    :dashboard/posts "Posts"
@@ -657,8 +652,7 @@
    :sharing/tooltip "Share your schnaq"
    :sharing.modal/title "Share your schnaq"
    :sharing.modal/lead "Invite your whole team to fill this schnaq with knowledge."
-   :sharing.modal/schnaqqi-help "Fill the schnaq with your ideas. Your colleagues will find it easier to get started."
-   :sharing.modal/qanda-help "Participants can ask questions via the Q&A view. Either directly by link or by code on www.schnaq.app!"
+   :sharing.modal/qanda-help "Invite your participants! Either directly by link or by code on www.schnaq.app"
 
    ;; Discussion Language
    :discussion/create-argument-action "Add Statement"
