@@ -27,8 +27,8 @@
       (user-deletion/delete-discussions-for-user alex-keycloak-id)
       (is (zero? (count (discussions)))))))
 
-(deftest delete-user-entity-test
+(deftest delete-user-identity-test
   (let [kangaroo-db-before (fast-pull [:user.registered/keycloak-id kangaroo-keycloak-id])
-        _ (user-deletion/delete-user-entity kangaroo-keycloak-id)
+        _ (user-deletion/delete-user-identity kangaroo-keycloak-id)
         kangaroo-db-after (fast-pull [:user.registered/keycloak-id kangaroo-keycloak-id])]
     (is (not= kangaroo-db-before kangaroo-db-after))))

@@ -1,8 +1,8 @@
 (ns schnaq.database.user-deletion
   (:require [com.fulcrologic.guardrails.core :refer [>defn =>]]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.main :as main-db]
-            [schnaq.config.shared :as shared-config]))
+            [schnaq.database.main :as main-db]))
 
 (>defn delete-all-statements-for-user
   "Deletes all statements for a user."
@@ -18,7 +18,7 @@
   (let [share-hashes (map :discussion/share-hash (discussion-db/discussions-from-user keycloak-id))]
     (run! discussion-db/delete-discussion share-hashes)))
 
-(>defn delete-user-entity
+(>defn delete-user-identity
   "Deletes a user's personal information. 
   Keeps db/id and keycloak-id, but retracts all other information and renames
   the user."

@@ -981,6 +981,8 @@
    :admin.center.delete.user.statements/button "Alle Statements löschen"
    :admin.center.delete.user.schnaqs/label "keycloak-id"
    :admin.center.delete.user.schnaqs/button "Alle schnaqs löschen"
+   :admin.center.delete.user.identity/label "keycloak-id"
+   :admin.center.delete.user.identity/button "Identität löschen"
 
    :badges.filters/label "Anzeige"
    :badges/sort "Sortierung"

@@ -67,6 +67,13 @@
    :admin.delete.user/schnaqs
    :admin.center.delete.user.schnaqs/label :admin.center.delete.user.schnaqs/button])
 
+(defn- delete-user-identity
+  "Delete a user's identity."
+  []
+  [input-form-builder "user-identity-deletion"
+   :admin.delete.user/identity
+   :admin.center.delete.user.identity/label :admin.center.delete.user.identity/button])
+
 (defn- center-overview
   "The startpage of the admin center."
   []
@@ -80,7 +87,8 @@
     [schnaq-deletion-form]
     [:h4.pt-3 (labels :admin.center.delete.user/heading)]
     [statements-deletion-form]
-    [all-schnaqs-deletion]]])
+    [all-schnaqs-deletion]
+    [delete-user-identity]]])
 
 ;; -----------------------------------------------------------------------------
 

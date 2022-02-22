@@ -979,9 +979,11 @@ Now we write down questions and discuss them and can still understand what we ha
    :admin.center.delete.schnaq/button "Delete schnaq"
    :admin.center.delete.user/heading "Users"
    :admin.center.delete.user.statements/label "keycloak-id"
-   :admin.center.delete.user.statements/button "Delete user's statements"
+   :admin.center.delete.user.statements/button "Delete statements"
    :admin.center.delete.user.schnaqs/label "keycloak-id"
    :admin.center.delete.user.schnaqs/button "Delete all schnaqs"
+   :admin.center.delete.user.identity/label "keycloak-id"
+   :admin.center.delete.user.identity/button "Delete identity"
 
    :badges.filters/label "Display"
    :badges/sort "Sorting"
