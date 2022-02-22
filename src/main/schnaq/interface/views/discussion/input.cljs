@@ -3,7 +3,6 @@
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.logic :as logic]))
 
@@ -18,7 +17,7 @@
      [:input.btn-check {:id uuid
                         :type "radio" :name "options" :autoComplete "off"
                         :title (labels tooltip)
-                        :on-click (fn [e] (jq/prevent-default e)
+                        :on-click (fn [e] (.preventDefault e)
                                     (rf/dispatch (conj set-event statement-type)))}]
      [:label.btn.btn-outline-dark
       (cond-> {:for uuid}
@@ -102,17 +101,17 @@
   "Form to collect the user's statements."
   []
   (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        when-starting (fn [e] (jq/prevent-default e)
+        when-starting (fn [e] (.preventDefault e)
                         (rf/dispatch [:discussion.add.statement/starting
                                       (oget e [:currentTarget :elements])]))
         when-deeper-in-discussion (fn [e]
-                                    (jq/prevent-default e)
+                                    (.preventDefault e)
                                     (logic/submit-new-premise (oget e [:currentTarget :elements])))
         event-to-send (if starting-route?
                         when-starting when-deeper-in-discussion)]
     [:form.my-md-2
      {:on-submit #(event-to-send %)
-      :on-key-down #(when (jq/ctrl-press % 13) (event-to-send %))}
+      :on-key-down #(when (toolbelt/ctrl-press? % 13) (event-to-send %))}
      [topic-input-area]]))
 
 (defn reply-in-statement-input-form
@@ -125,7 +124,7 @@
         statement-type @(rf/subscribe [:form/statement-type statement-id])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         answer-to-statement-event (fn [e]
-                                    (jq/prevent-default e)
+                                    (.preventDefault e)
                                     (logic/reply-to-statement
                                      statement
                                      statement-type
@@ -133,7 +132,7 @@
                                      (oget e [:currentTarget :elements])))]
     [:form.my-md-2
      {:on-submit #(answer-to-statement-event %)
-      :on-key-down #(when (jq/ctrl-press % 13)
+      :on-key-down #(when (toolbelt/ctrl-press? % 13)
                       (answer-to-statement-event %))}
      [textarea-for-statements
       form-name

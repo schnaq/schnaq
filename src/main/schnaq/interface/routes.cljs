@@ -17,8 +17,8 @@
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
             [schnaq.interface.pages.publications :as publications]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.routing :as route-utils]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.admin.control-center :as admin-center]
             [schnaq.interface.views.discussion.admin-center :as discussion-admin]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
@@ -164,7 +164,7 @@
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/mark-all-as-seen (:share-hash path)]])
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
                      :stop #(rf/dispatch [:filters/clear])}]}
-     ["" ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
+     [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
                                (rf/dispatch [:discussion.history/clear])
@@ -187,7 +187,7 @@
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]
-     ["/" ;; Redirect trailing slash schnaq access to non-trailing slash
+     ["/"                                                   ;; Redirect trailing slash schnaq access to non-trailing slash
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:navigation/navigate :routes.schnaq/start path]))}]}]
@@ -290,7 +290,7 @@
      :view error-views/not-found-view-stub
      :link-text (labels :router/not-found-label)
      :controllers [{:identity #(random-uuid)
-                    :start #(js-wrap/replace-url "/404")}]}]
+                    :start #(.replace (.-location js/window) "/404")}]}]
    ["/beta-tester-only"
     {:name :routes/beta-only
      :view error-views/only-beta-tester}]
@@ -306,7 +306,7 @@
   (vec
    (concat
     [""
-     {:coercion reitit.coercion.spec/coercion} ;; Enable Spec coercion for all routes
+     {:coercion reitit.coercion.spec/coercion}              ;; Enable Spec coercion for all routes
      (vec
       (concat
        ["/en"
@@ -336,7 +336,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-               #(js-wrap/scroll-to-id window-hash)))))
+          #(tools/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))

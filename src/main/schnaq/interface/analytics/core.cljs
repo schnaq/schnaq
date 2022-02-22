@@ -7,7 +7,6 @@
             [schnaq.interface.analytics.charts :as chart]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- analytics-card
@@ -61,7 +60,7 @@
   []
   [:form.row
    {:on-submit (fn [e]
-                 (js-wrap/prevent-default e)
+                 (.preventDefault e)
                  (rf/dispatch [:analytics/load-all-with-time (oget e [:target :elements :days-input :value])]))}
    [:div.col
     [:input#days-input.form-control.form-round-05.me-sm-2

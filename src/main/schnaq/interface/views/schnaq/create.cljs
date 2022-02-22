@@ -4,7 +4,6 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]))
@@ -19,10 +18,7 @@
        [:input.form-check-input.big-checkbox
         {:type :checkbox
          :id :hub-exclusive
-         :defaultChecked true
-         :on-change
-         #(when (oget % [:target :checked])
-            (jq/prop (jq/$ "#public-discussion") "checked" false))}]
+         :defaultChecked true}]
        [:label.form-check-label.display-6.ps-1 {:for :hub-exclusive}
         (labels :discussion.create.hub-exclusive-checkbox/title)]
        [:p.small.form-text.text-muted.ms-2 (labels :schnaq.create.hub/help-text)]
@@ -52,7 +48,7 @@
       [:div.py-3
        [:form
         {:on-submit (fn [e]
-                      (jq/prevent-default e)
+                      (.preventDefault e)
                       (rf/dispatch [:schnaq.create/new
                                     (oget e [:currentTarget :elements])
                                     selected-hub]))}

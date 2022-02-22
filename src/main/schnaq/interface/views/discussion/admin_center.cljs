@@ -13,7 +13,6 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.header-image :as header-image]
@@ -32,7 +31,7 @@
       [:form.form.create-meeting-form.d-flex
        {:id (str "meeting-link-form-" id-extra)
         :on-click (fn [e]
-                    (js-wrap/prevent-default e)
+                    (.preventDefault e)
                     (clipboard/copy-to-clipboard! display-content)
                     (notify! (labels :schnaq/link-copied-heading)
                              (labels :schnaq/link-copied-success)
@@ -75,7 +74,7 @@
      [:h4.mt-4 (labels :schnaq.admin/send-invites-heading)]
      [:form.form.text-start.mb-5
       {:on-submit (fn [e]
-                    (js-wrap/prevent-default e)
+                    (.preventDefault e)
                     (rf/dispatch [:discussion.admin/send-email-invites
                                   (oget e [:target :elements])]))}
       [:div.mb-3
@@ -250,7 +249,7 @@
    (let [input-id "admin-link-mail-address"]
      [:form.form.text-start.mb-5
       {:on-submit (fn [e]
-                    (js-wrap/prevent-default e)
+                    (.preventDefault e)
                     (rf/dispatch [:discussion.admin/send-admin-center-link
                                   (oget e [:target :elements])]))}
       [:div.mb-3
@@ -280,7 +279,7 @@
        :id :enable-read-only?
        :disabled (not pro-user?)
        :checked schnaq-read-only?
-       :on-change (fn [e] (js-wrap/prevent-default e)
+       :on-change (fn [e] (.preventDefault e)
                     (rf/dispatch [dispatch]))}]
      [:label.form-check-label.display-6.ps-1 {:for :enable-read-only?}
       (labels :schnaq.admin.configurations.read-only/checkbox)]
@@ -297,7 +296,7 @@
        :checked pro-con-disabled?
        :on-change
        (fn [e]
-         (js-wrap/prevent-default e)
+         (.preventDefault e)
          (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
      [:label.form-check-label.display-6.ps-1 {:for :disable-pro-con-checkbox?}
       (labels :schnaq.admin.configurations.disable-pro-con/label)]
@@ -314,7 +313,7 @@
        :checked mods-mark-only?
        :on-change
        (fn [e]
-         (js-wrap/prevent-default e)
+         (.preventDefault e)
          (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
      [:label.form-check-label.display-6.ps-1 {:for :only-moderators-mark-checkbox}
       (labels :schnaq.admin.configurations.mods-mark-only/label)]
