@@ -236,7 +236,7 @@
     :discussion/title "Simple Discussion"
     :discussion/created-at #inst "2019-01-01"
     :discussion/share-hash "simple-hash"
-    :discussion/author "user/wegi"
+    :discussion/author "user.registered/alex"
     :discussion/edit-hash "simple-hash-secret"
     :discussion/description "A very simple discussion"
     :discussion/states []

@@ -323,12 +323,12 @@
     (testing "In the last minute, 18 new statements were added to the cat-dog discussion."
       (is (= 18 (:total (:new-statements (first (db/discussions-with-new-statements [discussion] (main-db/minutes-ago 1))))))))))
 
-(deftest all-statements-from-user-with-statements-test
-  (testing "Return statements for kangaroo succeeds."
-    (is (= 1 (count (db/all-statements-from-user (:user.registered/keycloak-id test-data/kangaroo)))))))
+(deftest all-statements-from-user-test
+  (testing "Return statements for users if user has created some statements."
+    (is (= 1 (count (db/all-statements-from-user (:user.registered/keycloak-id test-data/kangaroo)))))
+    (is (zero? (count (db/all-statements-from-user (:user.registered/keycloak-id test-data/alex)))))))
 
-(deftest all-statements-from-user-without-statements-test
-  (testing "Return zero statements if user has no statements."
-      (is (zero? (count (db/all-statements-from-user 
-                         (:user.registered/keycloak-id test-data/alex)))))))
-
+(deftest discussions-from-user-test
+  (testing "If user has created discussions, return them."
+    (is (= 1 (count (db/discussions-from-user (:user.registered/keycloak-id test-data/alex)))))
+    (is (zero? (count (db/discussions-from-user (:user.registered/keycloak-id test-data/kangaroo)))))))

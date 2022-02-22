@@ -8,4 +8,3 @@
   [:user.registered/keycloak-id => any?]
   (let [statement-ids (map :db/id (discussion-db/all-statements-from-user keycloak-id))]
     (discussion-db/delete-statements! statement-ids)))
-

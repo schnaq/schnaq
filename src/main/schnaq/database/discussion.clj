@@ -4,7 +4,7 @@
             [clojure.data :as cdata]
             [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
-            [com.fulcrologic.guardrails.core :refer [>defn ? >defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn ? >defn- =>]]
             [datomic.api :as d]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
@@ -103,6 +103,20 @@
          (not-join [?discussions]
                    [?discussions :discussion/states :discussion.state/deleted])]
        share-hashes patterns/discussion-minimal)
+      toolbelt/pull-key-up))
+
+(>defn discussions-from-user
+  "Return all discussions created by a user."
+  [keycloak-id]
+  [:user.registered/keycloak-id => (s/coll-of ::specs/discussion)]
+  (-> (query
+       '[:find [(pull ?discussions pattern) ...]
+         :in $ ?keycloak-id pattern
+         :where [?user :user.registered/keycloak-id ?keycloak-id]
+         [?discussions :discussion/author ?user]
+         (not-join [?discussions]
+                   [?discussions :discussion/states :discussion.state/deleted])]
+       keycloak-id patterns/discussion-minimal)
       toolbelt/pull-key-up))
 
 (>defn children-for-statement
@@ -302,6 +316,8 @@
   (let [enable-transaction [[:db/add [:discussion/share-hash share-hash]
                              :discussion/title title]]]
     (main-db/transact enable-transaction)))
+
+;; -----------------------------------------------------------------------------
 
 (>defn all-statements
   "Returns all statements belonging to a discussion."
@@ -557,6 +573,9 @@
                             '[[?discussion :discussion/starting-statements ?statements]]
                             patterns/statement-with-children))
 
+;; -----------------------------------------------------------------------------
+;; Summaries
+
 (>defn- request-summary
   "Updates an existing summary request and returns the updated version."
   [summary-id requester]
@@ -604,6 +623,8 @@
                                  :summary/text new-text
                                  :summary/created-at (Date.)}])]
       (fast-pull summary patterns/summary-with-discussion (:db-after tx-result)))))
+
+;; -----------------------------------------------------------------------------
 
 (defn history-for-statement
   "Takes a statement entity and returns the statement-history."
