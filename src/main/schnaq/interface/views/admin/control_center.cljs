@@ -12,24 +12,23 @@
    {:fx [(http/xhrio-request db :delete "/admin/schnaq/delete" [:no-op]
                              {:share-hash share-hash} [:ajax.error/as-notification])]}))
 
-(defn- private-schnaq-deletion-form
-  "Easily delete any schnaq."
+(defn- schnaq-deletion-form
+  "Delete any schnaq."
   []
   [:form#private-schnaq-form.form
    {:on-submit (fn [e]
                  (js-wrap/prevent-default e)
                  (when (js/confirm (labels :admin.center.delete/confirmation))
                    (rf/dispatch [:admin.schnaq/delete
-                                 (oget e [:target :elements :private-meeting-hash :value])])))}
-   [:div.row.align-items-center
-    [:div.col-auto
-     [:label.form-label
-      {:for "private-schnaq-hash"} (labels :admin.center.delete.private/label)]]
-    [:div.col-auto
-     [:input.form-control
-      {:id "private-schnaq-hash"}]]
-    [:div.col-auto
-     [:button.btn.btn-secondary {:type "submit"} (labels :admin.center.delete.public/button)]]]])
+                                 (oget e [:target :elements :share-hash-deletion :value])])))}
+   [:div.input-group
+    [:div.form-floating
+     [:input#share-hash-deletion.form-control
+      {:name "share-hash-deletion"
+       :placeholder "delete-me"
+       :required true}]
+     [:label {:for "share-hash-deletion"} (labels :admin.center.delete.private/label)]]
+    [:button.input-group-text (labels :admin.center.delete.public/button)]]])
 
 (defn- center-overview
   "The startpage of the admin center."
@@ -42,7 +41,7 @@
    [:div.container
     [:h2 (labels :admin.center.delete/heading)]
     [:h4 (labels :admin.center.delete.private/heading)]
-    [private-schnaq-deletion-form]]])
+    [schnaq-deletion-form]]])
 
 (defn center-overview-route
   []

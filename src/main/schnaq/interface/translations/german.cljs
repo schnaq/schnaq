@@ -975,8 +975,8 @@
    :admin.center.delete/confirmation "Soll dieser schnaq wirklich gelöscht werden?"
    :admin.center.delete.public/button "Schnaq löschen"
    :admin.center.delete/heading "Löschen"
-   :admin.center.delete.private/label "Share-hash"
-   :admin.center.delete.private/heading "Private schnaqs"
+   :admin.center.delete.private/label "share-hash"
+   :admin.center.delete.private/heading "schnaqs"
 
    :badges.filters/label "Anzeige"
    :badges/sort "Sortierung"

@@ -976,8 +976,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :admin.center.delete/confirmation "Do you really want to delete this schnaq?"
    :admin.center.delete.public/button "Delete schnaq"
    :admin.center.delete/heading "Deletion"
-   :admin.center.delete.private/label "Share-hash"
-   :admin.center.delete.private/heading "Private schnaqs"
+   :admin.center.delete.private/label "share-hash"
+   :admin.center.delete.private/heading "schnaqs"
 
    :badges.filters/label "Display"
    :badges/sort "Sorting"
