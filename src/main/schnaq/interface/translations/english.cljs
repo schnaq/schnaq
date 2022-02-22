@@ -652,8 +652,7 @@
    :sharing/tooltip "Share your schnaq"
    :sharing.modal/title "Share your schnaq"
    :sharing.modal/lead "Invite your whole team to fill this schnaq with knowledge."
-   :sharing.modal/schnaqqi-help "Fill the schnaq with your ideas. Your colleagues will find it easier to get started."
-   :sharing.modal/qanda-help "Participants can ask questions via the Q&A view. Either directly by link or by code on www.schnaq.app!"
+   :sharing.modal/qanda-help "Invite your participants! Either directly by link or by code on www.schnaq.app"
 
    ;; Discussion Language
    :discussion/create-argument-action "Add Statement"
