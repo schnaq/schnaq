@@ -12,6 +12,12 @@
    {:fx [(http/xhrio-request db :delete "/admin/schnaq/delete" [:no-op]
                              {:share-hash share-hash} [:ajax.error/as-notification])]}))
 
+(rf/reg-event-fx
+ :admin.delete.user/statements
+ (fn [{:keys [db]} [_ keycloak-id]]
+   {:fx [(http/xhrio-request db :delete "/admin/user/statements" [:no-op]
+                             {:keycloak-id keycloak-id} [:ajax.error/as-notification])]}))
+
 (defn- input-form-builder
   "Build an input form for database manipulation."
   [input-id dispatch-event placeholder-text button-text]
@@ -50,7 +56,6 @@
   []
   [pages/with-nav-and-header
    {:condition/needs-administrator? true
-    :page/title (labels :admin.center.start/title)
     :page/heading (labels :admin.center.start/heading)
     :page/subheading (labels :admin.center.start/subheading)}
    [:div.container
