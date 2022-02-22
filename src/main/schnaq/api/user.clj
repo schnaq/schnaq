@@ -5,6 +5,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
+            [schnaq.database.user-deletion :as user-deletion]
             [schnaq.mail.emails :as mail]
             [schnaq.media :as media]
             [taoensso.timbre :as log]))
@@ -72,6 +73,15 @@
     (created "" {:user-id user-id})))
 
 ;; -----------------------------------------------------------------------------
+;; Deletion
+
+(defn delete-all-statements-for-user
+  "Delete all statements from a given user."
+  [{{{:keys [keycloak-id]} :body} :parameters}]
+  (user-deletion/delete-all-statements-for-user keycloak-id)
+  (ok {:deleted? true}))
+
+;; -----------------------------------------------------------------------------
 
 (s/def ::creation-secrets map?)
 (s/def ::visited-hashes (s/coll-of :discussion/share-hash))
@@ -83,37 +93,44 @@
                                         ::schnaq-creation-secrets]))
 
 (def user-routes
-  ["/user" {:swagger {:tags ["user"]}}
-   ["/anonymous/add" {:put add-anonymous-user
-                      :description (at/get-doc #'add-anonymous-user)
-                      :parameters {:body {:nickname :user/nickname}}
-                      :responses {201 {:body {:user-id :db/id}}}}]
-   ["" {:middleware [:user/authenticated?]}
-    ["/register" {:put register-user-if-they-not-exist
-                  :description (at/get-doc #'register-user-if-they-not-exist)
-                  :parameters {:body ::user-register}
-                  :responses {201 {:body {:registered-user ::specs/registered-user
-                                          :updated-statements? boolean?
-                                          :updated-schnaqs? boolean?}}
-                              200 {:body {:registered-user ::specs/registered-user
-                                          :updated-statements? boolean?
-                                          :updated-schnaqs? boolean?}}}}]
-    ["/picture" {:put change-profile-picture
-                 :description (at/get-doc #'change-profile-picture)
-                 :parameters {:body {:image ::specs/image}}
-                 :responses {200 {:body {:updated-user ::specs/registered-user}}
-                             400 at/response-error-body}}]
-    ["/name" {:put change-display-name
-              :description (at/get-doc #'change-display-name)
-              :parameters {:body {:display-name :user/nickname}}
-              :responses {200 {:body {:updated-user ::specs/registered-user}}}}]
-    ["/notification-mail-interval" {:put change-notification-mail-interval
-                                    :description (at/get-doc #'change-notification-mail-interval)
-                                    :parameters {:body {:notification-mail-interval keyword?}}
-                                    :responses {200 {:body {:updated-user ::specs/registered-user}}
-                                                400 at/response-error-body}}]
-    ["/mark-all-as-read" {:put mark-all-statements-as-read
-                          :description (at/get-doc #'mark-all-statements-as-read)
-                          :parameters {}
-                          :responses {200 {:body {:new-statements coll?}}
-                                      400 at/response-error-body}}]]])
+  [["/user" {:swagger {:tags ["user"]}}
+    ["/anonymous/add" {:put add-anonymous-user
+                       :description (at/get-doc #'add-anonymous-user)
+                       :parameters {:body {:nickname :user/nickname}}
+                       :responses {201 {:body {:user-id :db/id}}}}]
+    ["" {:middleware [:user/authenticated?]}
+     ["/register" {:put register-user-if-they-not-exist
+                   :description (at/get-doc #'register-user-if-they-not-exist)
+                   :parameters {:body ::user-register}
+                   :responses {201 {:body {:registered-user ::specs/registered-user
+                                           :updated-statements? boolean?
+                                           :updated-schnaqs? boolean?}}
+                               200 {:body {:registered-user ::specs/registered-user
+                                           :updated-statements? boolean?
+                                           :updated-schnaqs? boolean?}}}}]
+     ["/picture" {:put change-profile-picture
+                  :description (at/get-doc #'change-profile-picture)
+                  :parameters {:body {:image ::specs/image}}
+                  :responses {200 {:body {:updated-user ::specs/registered-user}}
+                              400 at/response-error-body}}]
+     ["/name" {:put change-display-name
+               :description (at/get-doc #'change-display-name)
+               :parameters {:body {:display-name :user/nickname}}
+               :responses {200 {:body {:updated-user ::specs/registered-user}}}}]
+     ["/notification-mail-interval" {:put change-notification-mail-interval
+                                     :description (at/get-doc #'change-notification-mail-interval)
+                                     :parameters {:body {:notification-mail-interval keyword?}}
+                                     :responses {200 {:body {:updated-user ::specs/registered-user}}
+                                                 400 at/response-error-body}}]
+     ["/mark-all-as-read" {:put mark-all-statements-as-read
+                           :description (at/get-doc #'mark-all-statements-as-read)
+                           :parameters {}
+                           :responses {200 {:body {:new-statements coll?}}
+                                       400 at/response-error-body}}]]]
+   ["/admin/user" {:swagger {:tags ["admin"]}
+                   :middleware [:user/authenticated? :user/admin?]}
+    ["/statements" {:delete delete-all-statements-for-user
+                    :description (at/get-doc #'delete-all-statements-for-user)
+                    :parameters {:body {:keycloak-id :user.registered/keycloak-id}}
+                    :responses {200 {:body {:deleted? boolean?}}
+                                400 at/response-error-body}}]]])
