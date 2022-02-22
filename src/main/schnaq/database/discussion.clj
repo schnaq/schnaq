@@ -456,7 +456,7 @@
 
 (>defn- build-secrets-map
   "Creates a secrets map for a collection of statements.
-  When there is no secret, the statement is skipped."
+  When there is no secret, the statement is skipped. When the author is not anonymous, the statement is also skipped."
   [statement-ids]
   [(? (s/coll-of :db/id)) :ret (? map?)]
   (when statement-ids
@@ -464,7 +464,9 @@
           (query
            '[:find ?statement ?secret
              :in $ [?statement ...]
-             :where [?statement :statement/creation-secret ?secret]]
+             :where [?statement :statement/creation-secret ?secret]
+             [?statement :statement/author ?author]
+             [(missing? $ ?author :user.registered/keycloak-id)]]
            statement-ids))))
 
 (>defn update-authors-from-secrets
