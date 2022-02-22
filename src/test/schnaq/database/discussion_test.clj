@@ -325,11 +325,7 @@
 
 (deftest all-statements-from-user-with-statements-test
   (testing "Return statements for kangaroo succeeds."
-    (let [keycloak-id (:user.registered/keycloak-id test-data/kangaroo)]
-      (db/add-starting-statement! "simple-hash"
-                                  (:db/id (user-db/private-user-by-keycloak-id keycloak-id))
-                                  "test" true)
-      (is (= 1 (count (db/all-statements-from-user keycloak-id)))))))
+    (is (= 1 (count (db/all-statements-from-user (:user.registered/keycloak-id test-data/kangaroo)))))))
 
 (deftest all-statements-from-user-without-statements-test
   (testing "Return zero statements if user has no statements."

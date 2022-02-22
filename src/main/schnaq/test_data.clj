@@ -257,7 +257,7 @@
     :statement/version 1
     :statement/discussions ["discussion/simple"]}
    {:db/id "statement/denken-tut-weh"
-    :statement/author "user/rambo"
+    :statement/author "user.registered/kangaroo"
     :statement/content "Denken sorgt nur für Kopfschmerzen. Lieber den Donaldo machen!"
     :statement/created-at #inst "2020-01-01"
     :statement/version 1
