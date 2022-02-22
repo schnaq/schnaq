@@ -325,7 +325,7 @@
                     :option/votes 1}]
     :poll/discussion "discussion/cat-or-dog"}
    {:db/id "poll/increment-test"
-    :poll/title "Incrementier die Votes!"
+    :poll/title "Inkrementiere die Votes!"
     :poll/type :poll.type/single-choice
     :poll/options [{:db/id "option/mit-vote"
                     :option/value "Mit Vote"
