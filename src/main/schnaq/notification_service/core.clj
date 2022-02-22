@@ -71,9 +71,9 @@
         personal-greeting (mail-builder/build-personal-greeting user)
         new-statements-greeting (mail-builder/build-number-unseen-statements total-new-statements)]
     (when-not (zero? total-new-statements)
-      (log/info (format "User %s has %d unread statements" keycloak-id total-new-statements))
-      (emails/send-mail "Neuigkeiten aus deinen schnaqs"
-                        "Neuigkeiten aus deinen schnaqs"
+      (log/info (format "User %s has %d unread posts" keycloak-id total-new-statements))
+      (emails/send-mail "News from your schnaqs"
+                        "News from your schnaqs"
                         personal-greeting
                         new-statements-greeting
                         ""
