@@ -6,7 +6,7 @@
             [goog.dom.dataset :as dataset]
             [oops.core :refer [oset! oget oget+]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :as config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
@@ -106,7 +106,7 @@
 (defn current-display-name
   "Central fn for extracting current display-name from db."
   [db]
-  (get-in db [:user :names :display] config/default-anonymous-display-name))
+  (get-in db [:user :names :display] shared-config/default-anonymous-display-name))
 
 (defn current-overview-link
   "Builds a href link to either the last selected hub or all visited schnaqs.

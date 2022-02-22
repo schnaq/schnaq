@@ -21,6 +21,8 @@
            (or (System/getenv "EMBEDDED") false))
    :cljs (goog-define embedded? false))
 
+(def default-anonymous-display-name "Anonymous")
+
 (defn s3-buckets
   "Returns bucket names"
   [bucket-name]

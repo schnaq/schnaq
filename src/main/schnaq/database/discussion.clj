@@ -4,7 +4,7 @@
             [clojure.data :as cdata]
             [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
-            [com.fulcrologic.guardrails.core :refer [>defn ? >defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn ? >defn- =>]]
             [datomic.api :as d]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
@@ -105,6 +105,20 @@
        share-hashes patterns/discussion-minimal)
       toolbelt/pull-key-up))
 
+(>defn discussions-from-user
+  "Return all discussions created by a user."
+  [keycloak-id]
+  [:user.registered/keycloak-id => (s/coll-of ::specs/discussion)]
+  (-> (query
+       '[:find [(pull ?discussions pattern) ...]
+         :in $ ?keycloak-id pattern
+         :where [?user :user.registered/keycloak-id ?keycloak-id]
+         [?discussions :discussion/author ?user]
+         (not-join [?discussions]
+                   [?discussions :discussion/states :discussion.state/deleted])]
+       keycloak-id patterns/discussion-minimal)
+      toolbelt/pull-key-up))
+
 (>defn children-for-statement
   "Returns all children for a statement. (Statements that have the input set as a parent)."
   [parent-id]
@@ -139,9 +153,9 @@
 (>defn delete-statements!
   "Deletes all statements, without explicitly checking anything."
   [statement-ids]
-  [(s/coll-of :db/id) :ret associative?]
+  [(s/coll-of :db/id) :ret (s/coll-of keyword?)]
   (log/info "Statement ids scheduled for deletion:" statement-ids)
-  (map delete-statement! statement-ids))
+  (doall (map delete-statement! statement-ids)))
 
 (defn- build-new-statement
   "Builds a new statement for transaction."
@@ -303,6 +317,8 @@
                              :discussion/title title]]]
     (main-db/transact enable-transaction)))
 
+;; -----------------------------------------------------------------------------
+
 (>defn all-statements
   "Returns all statements belonging to a discussion."
   [share-hash]
@@ -312,6 +328,18 @@
             :in $ % ?share-hash statement-pattern
             :where (all-statements ?share-hash ?statements)]
           rules share-hash patterns/statement)
+   toolbelt/pull-key-up))
+
+(>defn all-statements-from-user
+  "Returns all statements where `keycloak-id` is the author."
+  [keycloak-id]
+  [:user.registered/keycloak-id :ret (s/coll-of ::specs/statement)]
+  (->
+   (query '[:find [(pull ?statements pattern) ...]
+            :in $ ?keycloak-id pattern
+            :where [?user :user.registered/keycloak-id ?keycloak-id]
+            [?statements :statement/author ?user]]
+          keycloak-id patterns/statement)
    toolbelt/pull-key-up))
 
 (>defn all-statements-from-others
@@ -547,6 +575,9 @@
                             '[[?discussion :discussion/starting-statements ?statements]]
                             patterns/statement-with-children))
 
+;; -----------------------------------------------------------------------------
+;; Summaries
+
 (>defn- request-summary
   "Updates an existing summary request and returns the updated version."
   [summary-id requester]
@@ -594,6 +625,8 @@
                                  :summary/text new-text
                                  :summary/created-at (Date.)}])]
       (fast-pull summary patterns/summary-with-discussion (:db-after tx-result)))))
+
+;; -----------------------------------------------------------------------------
 
 (defn history-for-statement
   "Takes a statement entity and returns the statement-history."

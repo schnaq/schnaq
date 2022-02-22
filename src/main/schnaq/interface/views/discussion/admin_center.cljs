@@ -102,19 +102,6 @@
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
- :discussion.admin/delete-statements
- (fn [{:keys [db]} [_ form]]
-   (let [raw-statements (oget form ["statement-ids" :value])
-         statement-ids (map #(js/parseInt %) (string/split raw-statements #"\s+"))
-         {:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
-     {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
-                               [:discussion.admin/delete-statements-success form]
-                               {:statement-ids statement-ids
-                                :share-hash share-hash
-                                :edit-hash edit-hash}
-                               [:ajax.error/as-notification])]})))
-
-(rf/reg-event-fx
  :discussion.admin/make-read-only
  (fn [{:keys [db]} _]
    (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
@@ -143,16 +130,6 @@
  (fn [db _]
    (update-in db [:schnaq :selected :discussion/states]
               #(-> % set (disj :discussion.state/read-only) vec))))
-
-(rf/reg-event-fx
- ;; Deletion success from admin center
- :discussion.admin/delete-statements-success
- (fn [_ [_ form _return]]
-   {:fx [[:dispatch [:notification/add
-                     #:notification{:title (labels :schnaq.admin.notifications/statements-deleted-title)
-                                    :body (labels :schnaq.admin.notifications/statements-deleted-lead)
-                                    :context :success}]]
-         [:form/clear form]]}))
 
 (rf/reg-event-fx
  :discussion.delete/statement
