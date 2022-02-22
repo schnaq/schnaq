@@ -9,7 +9,6 @@
             [reagent.core :as reagent]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.modal :as modal]))
 
 (defonce screenshot-url (reagent/atom nil))
@@ -33,7 +32,7 @@
       [:form.form
        {:on-submit
         (fn [e]
-          (js-wrap/prevent-default e)
+          (.preventDefault e)
           (let [contact-name (oget e [:target :elements :contact-name])
                 contact-mail (oget e [:target :elements :contact-mail])
                 description (oget e [:target :elements :description])

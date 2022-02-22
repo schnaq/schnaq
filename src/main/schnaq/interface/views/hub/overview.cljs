@@ -8,7 +8,6 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.hub.common :as hub-common]
@@ -19,7 +18,7 @@
   []
   [:form.pb-3
    {:on-submit (fn [e]
-                 (js-wrap/prevent-default e)
+                 (.preventDefault e)
                  (rf/dispatch [:hub.schnaqs/add (oget e [:target :elements])]))}
    [:label.form-label.small (labels :hub.add.schnaq.input/label)]
    [:div.input-group

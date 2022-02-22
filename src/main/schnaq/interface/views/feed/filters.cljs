@@ -5,7 +5,6 @@
             [reagent.core :as r]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
@@ -137,7 +136,7 @@
        {:class (when active-filters? "btn-outline-secondary active")}
        (labels :badges.filters/button)]]
      {:hideOnClick :toggle
-      :appendTo js-wrap/document-body}]))
+      :appendTo js/document.body}]))
 
 (rf/reg-event-db
  :filters.discussion/activate

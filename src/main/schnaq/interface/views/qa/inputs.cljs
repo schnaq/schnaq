@@ -4,7 +4,6 @@
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.qa.search :refer [throttled-search] :as search]
@@ -15,12 +14,12 @@
   []
   (let [input-id "qanda-input"
         current-route @(rf/subscribe [:navigation/current-route-name])
-        submit-fn (fn [e] (jq/prevent-default e)
+        submit-fn (fn [e] (.preventDefault e)
                     (rf/dispatch [:discussion.add.statement/starting
                                   (oget e [:currentTarget :elements])])
                     (rf/dispatch [:schnaq.qa.new-question/pulse true]))]
     [:form {:on-submit #(submit-fn %)
-            :on-key-down #(when (jq/ctrl-press % 13) (submit-fn %))}
+            :on-key-down #(when (toolbelt/ctrl-press? % 13) (submit-fn %))}
      [:label.form-label.h5.mb-3 {:for input-id} (labels :qanda/add-question-label)]
      [:div.d-flex.flex-row.qanda-input-content.rounded-1
       [:div {:class "highlight-card-neutral"}]

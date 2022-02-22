@@ -9,7 +9,6 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.time :as util-time]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]))
@@ -99,7 +98,7 @@
                [:td (util-time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
                [:td [:form
                      {:on-submit (fn [e]
-                                   (jq/prevent-default e)
+                                   (.preventDefault e)
                                    (rf/dispatch
                                     [:summary.admin/send share-hash (str summary-id) (oget e [:currentTarget :elements])]))}
                      [:textarea.form-control {:name (str summary-id) :rows 3 :defaultValue (:summary/text summary)}]

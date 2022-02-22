@@ -6,7 +6,6 @@
             [schnaq.interface.components.navbar :as nav-component]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.common :as common]))
 
@@ -16,7 +15,7 @@
   (let [username @(rf/subscribe [:user/display-name])]
     [:form.dropdown-item
      {:on-submit
-      (fn [e] (js-wrap/prevent-default e)
+      (fn [e] (.preventDefault e)
         (rf/dispatch [:user/set-display-name
                       (oget e [:target :elements :name-input :value])]))}
      [:input#name-input.form-control.form-round-05
@@ -34,7 +33,7 @@
   []
   [:form.clickable
    {:on-click #(rf/dispatch [:user/show-display-name-input])
-    :on-submit #(js-wrap/prevent-default %)}
+    :on-submit #(.preventDefault %)}
    [:input.btn.dropdown-item {:type "submit"
                               :value (labels :user.button/change-name)}]])
 

@@ -4,7 +4,6 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.links :as links]))
 
 (def ^:private image-form-name "image-url")
@@ -18,7 +17,7 @@
   (let [input-id "admin-image-url"]
     [:form.form.text-start.mb-5
      {:on-submit (fn [e]
-                   (js-wrap/prevent-default e)
+                   (.preventDefault e)
                    (rf/dispatch [:schnaq.admin/set-header-image-url
                                  (oget e [:target :elements])]))}
      [:div.mb-2
