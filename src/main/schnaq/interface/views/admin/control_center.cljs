@@ -24,6 +24,11 @@
    {:fx [(http/xhrio-request db :delete "/admin/user/schnaqs" [:no-op]
                              {:keycloak-id keycloak-id} [:ajax.error/as-notification])]}))
 
+(rf/reg-event-fx
+ :admin.delete.user/identity
+ (fn [{:keys [db]} [_ keycloak-id]]
+   {:fx [(http/xhrio-request db :delete "/admin/user/identity" [:no-op]
+                             {:keycloak-id keycloak-id} [:ajax.error/as-notification])]}))
 
 ;; -----------------------------------------------------------------------------
 

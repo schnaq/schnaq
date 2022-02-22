@@ -75,16 +75,22 @@
 ;; -----------------------------------------------------------------------------
 ;; Deletion
 
-(defn delete-all-statements-for-user
+(defn- delete-all-statements-for-user
   "Delete all statements from a given user."
   [{{{:keys [keycloak-id]} :body} :parameters}]
   (user-deletion/delete-all-statements-for-user keycloak-id)
   (ok {:deleted? true}))
 
-(defn delete-all-discussions-for-user
+(defn- delete-all-discussions-for-user
   "Deletes all discussions where the user is the author."
   [{{{:keys [keycloak-id]} :body} :parameters}]
   (user-deletion/delete-discussions-for-user keycloak-id)
+  (ok {:deleted? true}))
+
+(defn- delete-user-identity
+  "Deletes a user's personal identity in our system."
+  [{{{:keys [keycloak-id]} :body} :parameters}]
+  (user-deletion/delete-user-identity keycloak-id)
   (ok {:deleted? true}))
 
 ;; -----------------------------------------------------------------------------
@@ -143,4 +149,8 @@
     ["/schnaqs" {:delete delete-all-discussions-for-user
                  :description (at/get-doc #'delete-all-discussions-for-user)
                  :parameters {:body {:keycloak-id :user.registered/keycloak-id}}
-                 :responses {200 {:body {:deleted? boolean?}}}}]]])
+                 :responses {200 {:body {:deleted? boolean?}}}}]
+    ["/identity" {:delete delete-user-identity
+                  :description (at/get-doc #'delete-user-identity)
+                  :parameters {:body {:keycloak-id :user.registered/keycloak-id}}
+                  :responses {200 {:body {:deleted? boolean?}}}}]]])
