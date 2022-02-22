@@ -969,7 +969,6 @@
    :router/code-of-conduct "Verhaltensregeln"
    :router/summaries "Zusammenfassungen"
 
-   :admin.center.start/title "Admin-Center"
    :admin.center.start/heading "Admin-Center"
    :admin.center.start/subheading "Administration von schnaqs als Superuser"
    :admin.center.delete/confirmation "Möchtest du das Löschen wirklich durchführen?"

@@ -970,7 +970,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/code-of-conduct "Code of Conduct"
    :router/summaries "Summaries"
 
-   :admin.center.start/title "Admin Center"
    :admin.center.start/heading "Admin Center"
    :admin.center.start/subheading "Administrate schnaqs as a superuser"
    :admin.center.delete/confirmation "Do you really want to delete this entity?"
