@@ -16,8 +16,8 @@
           (let [total (:total new-statements)
                 discussion-title (hiccup-util/escape-html title)
                 new-statements-text (if (= 1 total)
-                                      (str total " neuer Beitrag")
-                                      (str total " neue Beiträge"))]
+                                      (str total " new post")
+                                      (str total " new posts"))]
             (content-fn discussion-title new-statements-text share-hash)))
         (:discussions-with-new-statements user))))
 
@@ -29,7 +29,7 @@
    user
    (fn [title text discussion-hash]
      (template/mail-content-left-button-right
-      title text "Zum schnaq" (schnaq-links/get-share-link discussion-hash)))))
+      title text "Visit schnaq" (schnaq-links/get-share-link discussion-hash)))))
 
 (>defn build-new-statements-plain
   "New statements info as plain text. Preparation for a standard mail without 
@@ -44,14 +44,11 @@
 (defn build-personal-greeting
   "Takes the user's display name and creates a salutation."
   [{:user.registered/keys [display-name]}]
-  (format "Hallo %s," (hiccup-util/escape-html display-name)))
+  (format "Hello %s," (hiccup-util/escape-html display-name)))
 
 (>defn build-number-unseen-statements
   "Sum up all new statements over all discussions and put the sum in a text 
   body."
   [total-new-statements]
   [nat-int? :ret string?]
-  (let [statements-text (if (= 1 total-new-statements)
-                          "einen neuen Beitrag"
-                          (str total-new-statements " neue Beiträge"))]
-    (format "es gibt %s in deinen besuchten schnaqs!" statements-text)))
+  (format "you have %d new post(s) in your visited schnaqs!" total-new-statements))
