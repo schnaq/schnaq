@@ -81,6 +81,12 @@
   (user-deletion/delete-all-statements-for-user keycloak-id)
   (ok {:deleted? true}))
 
+(defn delete-all-discussions-for-user
+  "Deletes all discussions where the user is the author."
+  [{{{:keys [keycloak-id]} :body} :parameters}]
+  (user-deletion/delete-discussions-for-user keycloak-id)
+  (ok {:deleted? true}))
+
 ;; -----------------------------------------------------------------------------
 
 (s/def ::creation-secrets map?)
@@ -128,9 +134,13 @@
                            :responses {200 {:body {:new-statements coll?}}
                                        400 at/response-error-body}}]]]
    ["/admin/user" {:swagger {:tags ["admin"]}
-                   :middleware [:user/authenticated? :user/admin?]}
+                   :middleware [:user/authenticated? :user/admin?]
+                   :responses {400 at/response-error-body}}
     ["/statements" {:delete delete-all-statements-for-user
                     :description (at/get-doc #'delete-all-statements-for-user)
                     :parameters {:body {:keycloak-id :user.registered/keycloak-id}}
-                    :responses {200 {:body {:deleted? boolean?}}
-                                400 at/response-error-body}}]]])
+                    :responses {200 {:body {:deleted? boolean?}}}}]
+    ["/schnaqs" {:delete delete-all-discussions-for-user
+                 :description (at/get-doc #'delete-all-discussions-for-user)
+                 :parameters {:body {:keycloak-id :user.registered/keycloak-id}}
+                 :responses {200 {:body {:deleted? boolean?}}}}]]])
