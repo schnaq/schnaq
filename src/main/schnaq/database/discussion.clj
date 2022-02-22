@@ -139,7 +139,7 @@
 (>defn delete-statements!
   "Deletes all statements, without explicitly checking anything."
   [statement-ids]
-  [(s/coll-of :db/id) :ret associative?]
+  [(s/coll-of :db/id) :ret (s/coll-of keyword?)]
   (log/info "Statement ids scheduled for deletion:" statement-ids)
   (map delete-statement! statement-ids))
 
@@ -313,6 +313,24 @@
             :where (all-statements ?share-hash ?statements)]
           rules share-hash patterns/statement)
    toolbelt/pull-key-up))
+
+(>defn all-statements-from-user
+  "Returns all statements where `keycloak-id` is the author."
+  [keycloak-id]
+  [:user.registered/keycloak-id :ret (s/coll-of ::specs/statement)]
+  (query '[:find [(pull ?statements pattern) ...]
+           :in $ ?keycloak-id pattern
+           :where [?user :user.registered/keycloak-id ?keycloak-id]
+           [?statements :statement/author ?user]]
+         keycloak-id patterns/statement))
+
+(comment
+
+  (all-statements-from-user "8278b980-bf33-45c0-924c-5d7c8f64a564")
+  (delete-statements! 
+   (map :db/id (all-statements-from-user "8278b980-bf33-45c0-924c-5d7c8f64a564")))
+
+  nil)
 
 (>defn all-statements-from-others
   "Returns all statements belonging to a discussion which are not from a user."
