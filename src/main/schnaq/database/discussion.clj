@@ -710,7 +710,7 @@
 
 (>defn- build-schnaq-secrets-map
   "Creates a secrets map for a collection of statements.
-  When there is no secret, the statement is skipped."
+  When there is no secret, the statement is skipped. Also skip, when the author is not anonymous."
   [share-hashes]
   [(? (s/coll-of :db/id)) :ret (? map?)]
   (when share-hashes
@@ -719,7 +719,9 @@
            '[:find ?share-hash ?secret
              :in $ [?share-hash ...]
              :where [?schnaq :discussion/share-hash ?share-hash]
-             [?schnaq :discussion/creation-secret ?secret]]
+             [?schnaq :discussion/creation-secret ?secret]
+             [?schnaq :discussion/author ?author]
+             [(missing? $ ?author :user.registered/keycloak-id)]]
            share-hashes))))
 
 (>defn update-schnaq-authors
