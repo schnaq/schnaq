@@ -21,11 +21,7 @@
         [:input.form-check-input.big-checkbox
          {:type :checkbox
           :id :hub-exclusive
-          :defaultChecked checked?
-          :on-change
-          #(when (oget % [:target :checked])
-             (jq/prop (jq/$ "#public-discussion") "checked" false))}]
-        [:form-check-input {:for :hub-exclusive}]
+          :defaultChecked checked?}]
         [:select.form-control.form-select
          {:id :exclusive-hub-select
           :defaultValue selected-hub
@@ -85,7 +81,7 @@
                           (seq (get-in db [:user :groups] [])))
          nickname (tools/current-display-name db)
          discussion-title (oget form-elements [:schnaq-title :value])
-         exclusive? (when use-origin? (or (oget form-elements [:?hub-exclusive :checked]) (not (nil? selected-hub))))
+         exclusive? (when use-origin? (and (oget form-elements [:?hub-exclusive :checked]) (not (nil? selected-hub))))
          origin-hub (when use-origin? (or (oget form-elements [:?exclusive-hub-select :value]) selected-hub))
          payload (cond-> {:discussion-title discussion-title}
                    origin-hub (assoc :hub-exclusive? exclusive?
