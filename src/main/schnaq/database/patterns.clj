@@ -68,8 +68,19 @@
    :discussion.access/created-at
    :discussion.access/expires-at])
 
+(def theme
+  [:db/id
+   :theme/title
+   :theme/user
+   :theme/discussions
+   :theme.colors/primary
+   :theme.colors/secondary
+   :theme.colors/background
+   :theme.images/logo
+   :theme.images/activation])
+
 (def discussion
-  "Representation of a discussion. Oftentimes used in a Datalog pull pattern."
+  "Representation of a discussion."
   [:db/id
    :discussion/title
    :discussion/description
@@ -81,7 +92,8 @@
    :discussion/created-at
    {:discussion/author public-user}
    {[:discussion.access/_discussion :as :discussion/access]
-    access-code}])
+    access-code}
+   {:discussion/theme theme}])
 
 (def discussion-private
   "Holds sensitive information as well."
@@ -138,14 +150,3 @@
    {:activation/discussion [:db/id
                             :discussion/share-hash
                             :discussion/title]}])
-
-(def theme
-  [:db/id
-   :theme/title
-   :theme/user
-   :theme/discussions
-   :theme.colors/primary
-   :theme.colors/secondary
-   :theme.colors/background
-   :theme.images/logo
-   :theme.images/activation])

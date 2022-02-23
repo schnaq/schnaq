@@ -262,6 +262,11 @@
     :db/cardinality :db.cardinality/one
     :db/doc "Timestamp indicating when the access code becomes invalid."}
 
+   {:db/ident :discussion/theme
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The discussion's theme."}
+
    ;; hub
    {:db/ident :hub/name
     :db/valueType :db.type/string
@@ -358,10 +363,6 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "Reference to the creating user."}
-   {:db/ident :theme/discussions
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "Reference to those discussions applying this theme."}
    {:db/ident :theme.colors/primary
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one

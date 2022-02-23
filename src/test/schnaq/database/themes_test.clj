@@ -1,6 +1,7 @@
 (ns schnaq.database.themes-test
   (:require [clojure.spec.alpha :as s]
             [clojure.test :refer [deftest is use-fixtures testing]]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.themes :as sut]
             [schnaq.test-data :refer [kangaroo christian theme-anti-social]]
@@ -52,3 +53,10 @@
         (is (not (nil? (sut/delete-theme kangaroo-keycloak-id (:db/id theme))))))
       (testing "is not allowed for other users."
         (is (nil? (sut/delete-theme christian-keycloak-id (:db/id theme))))))))
+
+(deftest assign-theme-to-discussion-test
+  (testing "Themes should be assignable to discussions."
+    (let [theme-id (:db/id (first (sut/themes-by-keycloak-id kangaroo-keycloak-id)))
+          _assign-theme (sut/assign-theme-to-discussion "simple-hash" theme-id)]
+      (is (= theme-id (get-in (discussion-db/discussion-by-share-hash "simple-hash")
+                       [:discussion/theme :db/id]))))))

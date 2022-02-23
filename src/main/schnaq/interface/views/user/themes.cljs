@@ -7,7 +7,6 @@
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.conclusion-card :refer [selection-card]]
             [schnaq.interface.views.navbar.elements :as elements]
@@ -128,7 +127,7 @@
     [:<>
      [:form
       {:on-submit (fn [e]
-                    (js-wrap/prevent-default e)
+                    (.preventDefault e)
                     (let [add-or-edit (if (:db/id selected) :theme/edit :theme/add)]
                       (rf/dispatch [add-or-edit (oget e [:target :elements])])))}
       [:div.form-floating.mb-3
@@ -184,16 +183,17 @@
   []
   [:section.mb-5
    [:h4 "Stelle hier dein Farbschema für diesen schnaq ein"]
+   [:p "Sobald du ein Thema ausgewählt hast, wird es für diesen schnaq gespeichert. Deine Besucher:innen sehen dann beim nächsten Laden des schnaqs das neue Farbschema."]
    [list-personal-themes :theme.assign/discussion]])
 
 (rf/reg-event-fx
  :theme.assign/discussion
  (fn [{:keys [db]} [_ theme]]
    {:fx [[:dispatch [:theme/select theme]]
-         (http/xhrio-request db :post "/user/theme/assign/discussion"
+         (http/xhrio-request db :put "/user/theme/assign/discussion"
                              [:theme.assign.discussion/success]
                              {:theme theme
-                              :share-hash (get-in db [:schnaq :selected :share-hash])})]}))
+                              :share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-fx
  :theme.assign.discussion/success
