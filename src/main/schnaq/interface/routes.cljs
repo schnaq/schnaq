@@ -167,6 +167,7 @@
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
                      :stop (fn []
                              (rf/dispatch [:body.class/remove "theming-enabled"])
+                             (rf/dispatch [:theme/reset])
                              (rf/dispatch [:filters/clear])
                              (rf/dispatch [:schnaq.selected/dissoc]))}]}
      ["" ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.

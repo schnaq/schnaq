@@ -34,12 +34,6 @@
     (js/getComputedStyle (.-body js/document))
     (theme-field->css-variable theme-field))))
 
-(def ^:private default-colors
-  (let [pick #(color-from-root (keyword (name %)))]
-    {:primary (pick :primary)
-     :secondary (pick :secondary)
-     :background (pick :background)}))
-
 (>defn- set-root-color
   "Set global root css definition to document."
   [css-variable color]
@@ -47,6 +41,14 @@
   (.setProperty
    (.. js/document -documentElement -style)
    css-variable color))
+
+(>defn- remove-root-color
+  "Remove a global definition of a css var from the document."
+  [css-variable]
+  [::css-variable => nil?]
+  (.removeProperty
+   (.. js/document -documentElement -style)
+   css-variable))
 
 (>defn- color-picker
   "Color picker for the theme colors."
@@ -206,7 +208,6 @@
 (rf/reg-event-fx
  :theme.apply/from-discussion
  (fn [{:keys [db]}]
-   (prn "apply theme")
    (let [theme (get-in db [:schnaq :selected :discussion/theme])]
      {:fx [[:page.root/set-color [:primary (:theme.colors/primary theme)]]
            [:page.root/set-color [:secondary (:theme.colors/secondary theme)]]
@@ -219,6 +220,11 @@
  (fn [[theme-field color]]
    (when color
      (set-root-color (theme-field->css-variable theme-field) color))))
+
+(rf/reg-fx
+ :page.root/remove-color
+ (fn [theme-field]
+   (remove-root-color (theme-field->css-variable theme-field))))
 
 (rf/reg-event-fx
  :theme.selected/color
@@ -334,6 +340,6 @@
  :theme/reset
  (fn [{:keys [db]}]
    {:db (update db :themes dissoc :selected)
-    :fx [[:page.root/set-color [:primary (:primary default-colors)]]
-         [:page.root/set-color [:secondary (:secondary default-colors)]]
-         [:page.root/set-color [:background (:background default-colors)]]]}))
+    :fx [[:page.root/remove-color :primary]
+         [:page.root/remove-color :secondary]
+         [:page.root/remove-color :background]]}))
