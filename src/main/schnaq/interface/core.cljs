@@ -1,6 +1,5 @@
 (ns schnaq.interface.core
   (:require ["bootstrap"]
-            ["jquery"]
             ["popper.js"]
             [day8.re-frame.http-fx]
             [goog.dom :as gdom]
@@ -29,7 +28,6 @@
             [schnaq.interface.navigation]
             [schnaq.interface.notification.events]
             [schnaq.interface.pages.about-us]
-            [schnaq.interface.pages.lead-magnet]
             [schnaq.interface.pages.press]
             [schnaq.interface.pages.privacy]
             [schnaq.interface.routes :as routes]

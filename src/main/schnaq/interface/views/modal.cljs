@@ -2,8 +2,7 @@
   (:require [com.fulcrologic.guardrails.core :refer [>defn]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]))
+            [schnaq.interface.translations :refer [labels]]))
 
 (defn modal-panel
   [{:keys [child show? large?]}]
@@ -12,8 +11,8 @@
           :on-click (fn [event]
                       (rf/dispatch [:modal {:show? (not show?)
                                             :child nil}])
-                      (js-wrap/prevent-default event)
-                      (js-wrap/stop-propagation event))}]
+                      (.preventDefault event)
+                      (.stopPropagation event))}]
    (let [classes "modal-child modal-dialog modal-dialog-scrollable"]
      [:div {:class (if large? (str classes " modal-lg") classes)}
       child])])

@@ -101,7 +101,7 @@
   [:<>
    [:div.fw-bold.mt-3 (labels :discussion.navbar/settings)]
    [:ul.list-group.list-group-flush
-    [li-button (labels :sharing/tooltip) (fn [_] (share-modal/open-share-discussion))]
+    [li-button (labels :sharing/tooltip) (fn [_] (share-modal/open-share-schnaq))]
     [:li.list-group-item.dropdown [navbar/language-dropdown true {:class "p-0 text-dark"}]]
     [settings-li-button]]])
 

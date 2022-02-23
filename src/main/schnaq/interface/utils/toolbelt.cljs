@@ -2,9 +2,11 @@
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [com.fulcrologic.guardrails.core :refer [>defn ?]]
+            [goog.dom :as gdom]
+            [goog.dom.dataset :as dataset]
             [oops.core :refer [oset! oget oget+]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :as config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
@@ -97,7 +99,7 @@
 (defn current-display-name
   "Central fn for extracting current display-name from db."
   [db]
-  (get-in db [:user :names :display] config/default-anonymous-display-name))
+  (get-in db [:user :names :display] shared-config/default-anonymous-display-name))
 
 (defn current-overview-link
   "Builds a href link to either the last selected hub or all visited schnaqs.
@@ -124,3 +126,29 @@
   [checkboxes]
   (map #(js/parseInt (oget % :value))
        (filter #(oget % :checked) checkboxes)))
+
+(defn ctrl-press?
+  "Check for a ctrl + `keyCode` combination in `event`."
+  [event keyCode]
+  (and (.-ctrlKey event) (= keyCode (.-keyCode event))))
+
+(defn scroll-to-id
+  [id]
+  (let [clean-id (if (= \# (first id)) (subs id 1) id)
+        element (.getElementById js/document clean-id)
+        state (.-readyState js/document)]
+    (when (and element (= state "complete"))
+      (.scrollIntoView element))))
+
+(defn data-attribute
+  "Reads a dataset attribute from some element by id."
+  [element-id data-key]
+  (-> element-id
+      gdom/getElement
+      (dataset/get data-key)))
+
+(defn clear-input
+  "Clears an input field."
+  [id]
+  (when-let [element (js/document.getElementById id)]
+    (set! (.-value element) "")))

@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.user
   (:require [clojure.string :as clj-string]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [default-anonymous-display-name]]
+            [schnaq.config.shared :refer [default-anonymous-display-name]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.time :as util-time]

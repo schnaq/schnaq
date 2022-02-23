@@ -5,7 +5,6 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.modal :as modal]))
 
 (defn- anonymous-edit-modal
@@ -47,7 +46,7 @@
     [:button.dropdown-item
      {:tabIndex 60
       :on-click (fn [e]
-                  (js-wrap/stop-propagation e)
+                  (.stopPropagation e)
                   (if edit-hash (admin-delete-fn) (user-delete-fn)))
       :title (labels :discussion.badges/delete-statement)}
      [icon :trash "my-auto me-1"] " " (labels :discussion.badges/delete-statement)]))
@@ -58,7 +57,7 @@
   [:button.dropdown-item
    {:tabIndex 40
     :on-click (fn [e]
-                (js-wrap/stop-propagation e)
+                (.stopPropagation e)
                 (on-click-fn))
     :title (labels :discussion.badges/edit-statement)}
    [icon :edit "my-auto"] " " (labels :discussion.badges/edit-statement)])
@@ -124,7 +123,7 @@
         flag-statement-fn #(confirmation-fn (fn [] (rf/dispatch [:statement/flag (:db/id statement)])))]
     [:button.dropdown-item
      {:tabIndex 50
-      :on-click (fn [e] (js-wrap/stop-propagation e)
+      :on-click (fn [e] (.stopPropagation e)
                   (flag-statement-fn))
       :title (labels :discussion.badges/edit-statement)}
      [icon :flag "my-auto me-1"] " " (labels :statement/flag-statement)]))

@@ -11,15 +11,14 @@
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.integrations.wetog.routes :as wetog-routes]
             [schnaq.interface.pages.about-us :as about-us]
-            [schnaq.interface.pages.lead-magnet :as lead-magnet]
             [schnaq.interface.pages.legal-note :as legal-note]
             [schnaq.interface.pages.press :as press]
             [schnaq.interface.pages.privacy :as privacy]
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
             [schnaq.interface.pages.publications :as publications]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.routing :as route-utils]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.admin.control-center :as admin-center]
             [schnaq.interface.views.discussion.admin-center :as discussion-admin]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
@@ -48,8 +47,7 @@
 (defn language-controllers
   "Returns controllers for the desired locale switch and redirect."
   [locale]
-  [{:start (fn []
-             (rf/dispatch [:set-locale locale]))}])
+  [{:start #(rf/dispatch [:language/switch locale])}])
 
 ;; IMPORTANT: Routes called here as views do not hot-reload for some reason. Only
 ;; components inside do regularly. So just use components here that wrap the view you
@@ -304,15 +302,12 @@
    ["/legal-note"
     {:name :routes/legal-note
      :view legal-note/page}]
-   ["/datenschutzkonform-arbeiten"
-    {:name :routes/lead-magnet
-     :view lead-magnet/view}]
    ["/error"
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub
      :link-text (labels :router/not-found-label)
      :controllers [{:identity #(random-uuid)
-                    :start #(js-wrap/replace-url "/404")}]}]
+                    :start #(.replace (.-location js/window) "/404")}]}]
    ["/beta-tester-only"
     {:name :routes/beta-only
      :view error-views/only-beta-tester}]
@@ -358,7 +353,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-               #(js-wrap/scroll-to-id window-hash)))))
+          #(tools/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))

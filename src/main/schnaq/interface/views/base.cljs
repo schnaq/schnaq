@@ -6,7 +6,6 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as jw]
             [schnaq.interface.views.feedback.collect :as feedback]))
 
 (defn header
@@ -65,7 +64,7 @@
    [icon :terminal]
    " " (labels :footer.tagline/developed-with) " "
    [icon :flask "m-auto"]
-   (gstring/format " in NRW, Germany © schnaq %d" jw/get-date-year)])
+   (gstring/format " in NRW, Germany © schnaq %d" (.getFullYear (js/Date.)))])
 
 (defn- social-media []
   [:section
@@ -104,7 +103,9 @@
        ;; Remove hardcode, when there are english versions around!
        [:h3.h5 "schnaq Lösungen"]
        [:p [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-meetings-moderieren/"}
-            "für Meetings"]]])))
+            "für Meetings"]]
+       [:p [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-diskussionsplattform/"}
+            "für Diskussionen"]]])))
 
 ;; -----------------------------------------------------------------------------
 

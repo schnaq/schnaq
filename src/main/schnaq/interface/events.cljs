@@ -6,6 +6,7 @@
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.auth :as auth]
+            [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
@@ -14,7 +15,7 @@
  :hub.schnaqs/add
  (fn [{:keys [db]} [_ form]]
    (let [schnaq-input (oget form :schnaq-add-input :value)
-         share-hash (or @(rf/subscribe [:schnaq/share-hash])
+         share-hash (or (-> (routes/parse-route schnaq-input) :path-params :share-hash)
                         schnaq-input)
          keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
      {:fx [(http/xhrio-request db :post (gstring/format "/hub/%s/add" keycloak-name)

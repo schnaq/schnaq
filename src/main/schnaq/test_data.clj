@@ -236,7 +236,7 @@
     :discussion/title "Simple Discussion"
     :discussion/created-at #inst "2019-01-01"
     :discussion/share-hash "simple-hash"
-    :discussion/author "user/wegi"
+    :discussion/author "user.registered/alex"
     :discussion/edit-hash "simple-hash-secret"
     :discussion/description "A very simple discussion"
     :discussion/states []
@@ -257,7 +257,7 @@
     :statement/version 1
     :statement/discussions ["discussion/simple"]}
    {:db/id "statement/denken-tut-weh"
-    :statement/author "user/rambo"
+    :statement/author "user.registered/kangaroo"
     :statement/content "Denken sorgt nur für Kopfschmerzen. Lieber den Donaldo machen!"
     :statement/created-at #inst "2020-01-01"
     :statement/version 1
@@ -265,7 +265,12 @@
     :statement/type :statement.type/attack
     :statement/discussions ["discussion/simple"]}])
 
-;; -----------------------------------------------------------------------------
+(def deleted-discussions
+  [{:discussion/title "Deleted discussion"
+    :discussion/share-hash "public-share-hash-deleted"
+    :discussion/edit-hash "secret-public-hash-deleted"
+    :discussion/author "user/schredder"
+    :discussion/states [:discussion.state/deleted]}])
 
 (def alex
   {:db/id "user.registered/alex"
@@ -340,7 +345,7 @@
                     :option/votes 1}]
     :poll/discussion "discussion/cat-or-dog"}
    {:db/id "poll/increment-test"
-    :poll/title "Incrementier die Votes!"
+    :poll/title "Inkrementiere die Votes!"
     :poll/type :poll.type/single-choice
     :poll/options [{:db/id "option/mit-vote"
                     :option/value "Mit Vote"
@@ -364,4 +369,5 @@
 
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
-          graph-discussion simple-discussion registered-users polls themes))
+          deleted-discussions graph-discussion simple-discussion registered-users 
+          polls themes))

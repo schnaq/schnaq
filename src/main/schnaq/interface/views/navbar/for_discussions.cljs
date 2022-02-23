@@ -11,7 +11,7 @@
 
 (defn- interaction-elements []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
-   [share/share-qanda-button]
+   [share/share-schnaq-button]
    [nav-elements/navbar-download]
    [nav-elements/navbar-settings]
    [nav-elements/language-toggle]

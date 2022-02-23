@@ -155,7 +155,7 @@
    ;; Poll Feature
    :productpage.poll/title "Live Umfragen"
    :productpage.poll/subtitle "Umfragen erstellen so leicht wie nie zuvor"
-   :productpage.poll/cta-button "Jetzt kostenlos Umfragen erstellen!"
+   :productpage.poll/cta-button "Jetzt Umfragen erstellen!"
    :productpage.poll-vote/title "Lass dein Publikum abstimmen!"
    :productpage.poll-vote/subtitle "Finde heraus, was dein Publikum denkt. Mit Umfragen stimmen deine Teilnehmer:innen über vordefinierte Antworten ab."
    :productpage.poll.single/title "Single-Choice"
@@ -301,13 +301,8 @@
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"
    :schnaq.create/heading "Starte mit deinem schnaq."
-   :schnaq.create.qanda/subheading "Mit einem schnaq kannst du effizient Fragen sammeln und beantworten."
    :schnaq.create/info "Gib deinem Thema einen möglichst einfachen und verständlichen Titel."
    :schnaq.create.button/save "Schnaq starten"
-
-   ;; Discussion Creation
-   :discussion.create.hub-exclusive-checkbox/title "Schnaq zu einem Hub hinzufügen"
-   :discussion.create.hub-exclusive-checkbox/label "Dem Hub hinzufügen"
 
    ;; Discussion Dashboard
    :dashboard/posts "Beiträge"
@@ -656,8 +651,7 @@
    :sharing/tooltip "schnaq teilen"
    :sharing.modal/title "Teile deinen schnaq"
    :sharing.modal/lead "Lade dein ganzes Team mit ein, um diesen schnaq mit Wissen zu befüllen"
-   :sharing.modal/schnaqqi-help "Befülle den schnaq schonmal mit deinen Ideen. Deine Kolleg:innen finden so einen leichteren Einstieg."
-   :sharing.modal/qanda-help "Über die Q&A Ansicht können Teilnehmer Fragen zur Veranstaltung stellen. Entweder direkt per Link oder per Code auf www.schnaq.app!"
+   :sharing.modal/qanda-help "Lade deine Teilnehmer:innen ein! Entweder direkt per Link oder Code auf www.schnaq.app"
 
    ;; Discussion Language
    :discussion/create-argument-action "Beitrag hinzufügen"
@@ -970,14 +964,20 @@
    :router/code-of-conduct "Verhaltensregeln"
    :router/summaries "Zusammenfassungen"
 
-   :admin.center.start/title "Admin-Center"
    :admin.center.start/heading "Admin-Center"
    :admin.center.start/subheading "Administration von schnaqs als Superuser"
-   :admin.center.delete/confirmation "Soll dieser schnaq wirklich gelöscht werden?"
-   :admin.center.delete.public/button "Schnaq löschen"
+   :admin.center.delete/confirmation "Möchtest du das Löschen wirklich durchführen?"
    :admin.center.delete/heading "Löschen"
-   :admin.center.delete.private/label "Share-hash"
-   :admin.center.delete.private/heading "Private schnaqs"
+   :admin.center.delete.schnaq/label "share-hash"
+   :admin.center.delete.schnaq/heading "schnaqs"
+   :admin.center.delete.schnaq/button "schnaq löschen"
+   :admin.center.delete.user/heading "Benutzer:innen"
+   :admin.center.delete.user.statements/label "keycloak-id"
+   :admin.center.delete.user.statements/button "Alle Statements löschen"
+   :admin.center.delete.user.schnaqs/label "keycloak-id"
+   :admin.center.delete.user.schnaqs/button "Alle schnaqs löschen"
+   :admin.center.delete.user.identity/label "keycloak-id"
+   :admin.center.delete.user.identity/button "Identität löschen"
 
    :badges.filters/label "Anzeige"
    :badges/sort "Sortierung"
@@ -1053,25 +1053,6 @@
    :schnaq.search/results "Ergebnisse"
    :schnaq.search/input "Suche nach…"
    :schnaq.search/new-search-title "Keine Ergebnisse"
-
-   :lead-magnet.privacy/consent "Ich möchte die Checkliste für datenschutzkonformes Arbeiten als .pdf Datei per E-Mail erhalten und mich hiermit zum schnaq Newsletter anmelden, um in Zukunft regelmäßig Informationen von schnaq.com erhalten."
-   :lead-magnet.form/button "Schicke mir die Checkliste zu!"
-   :lead-magnet/heading "Datenschutzkonform verteilt arbeiten"
-   :lead-magnet/subheading "Eine handliche Checkliste, um in allen Bereichen gerüstet zu sein"
-   :lead-magnet.cover/alt-text "Das Cover von der Checkliste zum Datenschutzrechte verteilten Arbeiten"
-   :lead-magnet.form/label "Wir versenden den Downloadlink zum PDF per E-Mail"
-   :lead-magnet.requested/part-1 "Dein erster Schritt Richtung datenschutzkonformes Arbeiten ist getan!"
-   :lead-magnet.requested/part-2 "Du solltest den Downloadlink in einigen Minuten erhalten. Schaue auch im Spam-Ordner nach."
-   :lead-magnet.cta/button "Direkt zur Checkliste"
-   :lead-magnet.explain.what/heading "Was ist die Checkliste für datenschutzkonforme Remote-Arbeit?"
-   :lead-magnet.explain.what/text "Wir haben aktuelle Software für Remote-Arbeit auf die Beachtung des Datenschutzes (im speziellen DSGVO) untersucht.
-        Die Ergebnisse sind in einer Checkliste zusammengefasst. Enthalten sind dabei alle wichtigen Kategorien, die man für flexible Arbeit benötigt.
-        So kannst du, egal ob beim Homeoffice, bei der mobilen Arbeit oder bei deinem hybriden Arbeitsplatz, auf den Datenschutz achten."
-   :lead-magnet.explain.how/heading "Wie funktioniert die Checkliste?"
-   :lead-magnet.explain.how/text "Die Checkliste ist nach Kategorien aufgebaut. Zu jeder Kategorie, wie z.B. Chat-Plattformen, finden sich mehrere Alternativen.
-        Jede Alternative ist mit einer Ampelfarbe markiert. Grün zeigt dabei die Unbedenklichkeit zum Zeitpunkt unseres Tests. Während Rot vor
-        möglichen Problemen warnt. Orange hat schließlich oft kleinere Probleme, ist aber grundsätzlich in Ordnung.
-        Neben den Ampelfarben finden sich auch noch erklärende Stichpunkte zur weiteren Recherche."
 
    :summary.link.button/text "Analyse"
    :summary.user.request-succeeded/label "Zusammenfassung angefordert. Bitte warte kurz."

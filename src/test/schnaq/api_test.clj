@@ -7,6 +7,7 @@
             [schnaq.api.schnaq :as schnaq-api]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
+            [schnaq.test-data :as test-data]
             [schnaq.test.toolbelt :as schnaq-toolbelt]
             [schnaq.toolbelt :as toolbelt]))
 
@@ -115,7 +116,7 @@
         share-hash "simple-hash"
         edit-hash "simple-hash-secret"
         discussion (discussion-db/discussion-by-share-hash share-hash)
-        keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
+        keycloak-id (:user.registered/keycloak-id test-data/kangaroo)
         new-title "Neuer Titel"
         request #(-> (mock/request :put "/schnaq/edit/title")
                      (assoc-in [:identity :sub] %)

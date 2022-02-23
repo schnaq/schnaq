@@ -190,7 +190,7 @@
                   :user.registered/last-name family_name
                   :user.registered/groups groups
                   :user.registered/profile-picture avatar
-                  :user.registered/notification-mail-interval :notification-mail-interval/daily
+                  :user.registered/notification-mail-interval :notification-mail-interval/never
                   :user.registered/visited-schnaqs visited-schnaqs}]
     (if (:db/id existing-user)
       (do
@@ -262,10 +262,8 @@
        (remove nil?)
        set))
 
-
 ;; -----------------------------------------------------------------------------
 ;; Subscriptions
-
 
 (>defn subscribe-pro-tier
   "Confirm subscription of pro tier and persist it in the user."

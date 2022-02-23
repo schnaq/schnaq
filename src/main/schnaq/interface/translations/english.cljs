@@ -154,7 +154,7 @@
    ;; Poll Feature
    :productpage.poll/title "Live Polls"
    :productpage.poll/subtitle "Create polls as easy as never before"
-   :productpage.poll/cta-button "Create your polls for free now!"
+   :productpage.poll/cta-button "Create your polls now!"
    :productpage.poll-vote/title "Let your audience vote!"
    :productpage.poll-vote/subtitle "Find out what your audience thinks. With polls, your participants vote on predefined answers."
    :productpage.poll.single/title "Single-Choice"
@@ -301,13 +301,8 @@
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
    :schnaq.create/heading "Start your schnaq"
-   :schnaq.create.qanda/subheading "With a schnaq, you can have optimized Q&As"
    :schnaq.create/info "Add a simple and comprehensible title to your discussion."
    :schnaq.create.button/save "Start a new schnaq"
-
-   ;; Discussion Creation
-   :discussion.create.hub-exclusive-checkbox/title "Add schnaq to a Hub"
-   :discussion.create.hub-exclusive-checkbox/label "Add to Hub"
 
    ;; Discussion Dashboard
    :dashboard/posts "Posts"
@@ -657,8 +652,7 @@
    :sharing/tooltip "Share your schnaq"
    :sharing.modal/title "Share your schnaq"
    :sharing.modal/lead "Invite your whole team to fill this schnaq with knowledge."
-   :sharing.modal/schnaqqi-help "Fill the schnaq with your ideas. Your colleagues will find it easier to get started."
-   :sharing.modal/qanda-help "Participants can ask questions via the Q&A view. Either directly by link or by code on www.schnaq.app!"
+   :sharing.modal/qanda-help "Invite your participants! Either directly by link or by code on www.schnaq.app"
 
    ;; Discussion Language
    :discussion/create-argument-action "Add Statement"
@@ -971,14 +965,20 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/code-of-conduct "Code of Conduct"
    :router/summaries "Summaries"
 
-   :admin.center.start/title "Admin Center"
    :admin.center.start/heading "Admin Center"
    :admin.center.start/subheading "Administrate schnaqs as a superuser"
-   :admin.center.delete/confirmation "Do you really want to delete this schnaq?"
-   :admin.center.delete.public/button "Delete schnaq"
+   :admin.center.delete/confirmation "Do you really want to delete this entity?"
    :admin.center.delete/heading "Deletion"
-   :admin.center.delete.private/label "Share-hash"
-   :admin.center.delete.private/heading "Private schnaqs"
+   :admin.center.delete.schnaq/label "share-hash"
+   :admin.center.delete.schnaq/heading "schnaqs"
+   :admin.center.delete.schnaq/button "Delete schnaq"
+   :admin.center.delete.user/heading "Users"
+   :admin.center.delete.user.statements/label "keycloak-id"
+   :admin.center.delete.user.statements/button "Delete statements"
+   :admin.center.delete.user.schnaqs/label "keycloak-id"
+   :admin.center.delete.user.schnaqs/button "Delete all schnaqs"
+   :admin.center.delete.user.identity/label "keycloak-id"
+   :admin.center.delete.user.identity/button "Delete identity"
 
    :badges.filters/label "Display"
    :badges/sort "Sorting"
@@ -1053,25 +1053,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :schnaq.search/results "results"
    :schnaq.search/input "Search for…"
    :schnaq.search/new-search-title "No results"
-
-   :lead-magnet.privacy/consent "I want to receive a checklist of tools which comply with german privacy laws as .pdf file in German via mail and register for the newsletter as well. The newsletter is currently available in German only."
-   :lead-magnet.form/button "Send me a copy!"
-   :lead-magnet/heading "German laws take privacy very seriously and so do we"
-   :lead-magnet/subheading "Our checklist for working remotely according to german privacy laws (in German only)"
-   :lead-magnet.cover/alt-text "cover of the checklist for working remotely according to german privacy laws"
-   :lead-magnet.form/label "We will send a download link via mail"
-   :lead-magnet.requested/part-1 "First step done to comply with german privacy laws when working remotely!"
-   :lead-magnet.requested/part-2 "You should receive the download link within a few minutes. Please check your spam folder in case you did not receive any mail."
-   :lead-magnet.cta/button "Take me to the checklist!"
-   :lead-magnet.explain.what/heading "What is the checklist for privacy sensitive remote work?"
-   :lead-magnet.explain.what/text "We checked current software for conformity with european GDPR regulations.
-        The results are summarized in this checklist. We included all categories of software that are helpful while working remotely.
-        This way you can take privacy into account while working from home, the office or in a hybrid fashion."
-   :lead-magnet.explain.how/heading "How does the checklist work?"
-   :lead-magnet.explain.how/text "The checklist is structured in categories. Every category, like e.g. chat-software, contains several alternatives.
-        Every alternative is marked with a color. Green shows that there are no privacy concerns. While red warns about
-        several major concerns. Orange signals a few minor problems, but an overall okay result.
-        Besides the color ranking we've included a few keywords which can be used for further research."
 
    :summary.link.button/text "Dashboard"
    :summary.user.request-succeeded/label "Summary requested, please wait."

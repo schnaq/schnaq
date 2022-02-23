@@ -2,16 +2,19 @@
   (:require [clojure.string :as str]
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [reitit.frontend :as reitit-frontend]
-            [schnaq.interface.config :as config]
-            [schnaq.interface.routes :as routes]
-            [schnaq.interface.utils.js-wrapper :as jq]))
+            [schnaq.interface.config :as config]))
+
+(defn- browser-language
+  "Returns the user's browser language"
+  []
+  (or (.-language js/navigator)
+      (.-userLanguage js/navigator)))
 
 (defn- default-language
   "Returns the keyword for the default browser language.
   If the default language is not supported by schnaq, english is chosen by default."
   []
-  (-> (jq/browser-language)
+  (-> (browser-language)
       (str/split "-")
       first
       keyword
@@ -66,14 +69,6 @@
     :fx [[:change-document-lang locale]]}))
 
 (rf/reg-fx
- ;; Changes location via js, lets reitit re-match the url after changing
- :change-location
- (fn [url]
-   (rf/dispatch
-    [:navigation/navigated
-     (reitit-frontend/match-by-path routes/router (str (-> js/window .-location .-origin) "/" url))])))
-
-(rf/reg-fx
  ;; Changes more than just the document locale, like changing the key in config and writing it to localstorage.
  ;; (But includes execution of set-locale)
  :switch-language
@@ -81,7 +76,6 @@
    (set-language locale)))
 
 (rf/reg-event-fx
- :language/set-and-redirect
- (fn [_ [_ locale redirect-url]]
-   {:fx [[:switch-language locale]
-         [:change-location redirect-url]]}))
+ :language/switch
+ (fn [_ [_ locale]]
+   {:fx [[:switch-language locale]]}))

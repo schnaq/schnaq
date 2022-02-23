@@ -10,7 +10,7 @@
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.links :as links]))
 
-(defn- share-qanda-via-access-code []
+(defn- share-schnaq-via-access-code []
   (when @(rf/subscribe [:schnaq.selected/access-code])
     [:<>
      [:hr.my-4]
@@ -38,7 +38,6 @@
    [:div.d-flex.flex-row.flex-wrap.flex-md-nowrap.my-3.pb-3.my-1
     [:div.d-flex.me-1.me-lg-5.align-self-center (labels :share-link/via)]
     [:div.d-flex.flex-row.flex-grow-1.flex-wrap.flex-md-nowrap
-     ;[:div.input-group]
      [:input.form-control.border-0.text-gray.my-1
       {:value link
        :readOnly true}]
@@ -51,23 +50,7 @@
                             false))}
       (labels :share-link/copy)]]]])
 
-(defn- share-qanda-modal
-  "Modal showing sharing options."
-  []
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
-        share-link (links/get-link-to-ask-interface share-hash)]
-    [modal/modal-template
-     (labels :sharing.modal/title)
-     [:section
-      [share-qanda-via-access-code]
-      [share-via-link share-link]
-      [share-via-qr share-link]
-      [:div.mx-auto.py-5.mt-3
-       [common/schnaqqi-speech-bubble-blue
-        "100px"
-        (labels :sharing.modal/qanda-help)]]]]))
-
-(defn share-discussion-modal
+(defn- share-schnaq-modal
   "Modal showing sharing options."
   []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
@@ -75,32 +58,26 @@
     [modal/modal-template
      (labels :sharing.modal/title)
      [:section
+      [share-schnaq-via-access-code]
       [share-via-link share-link]
       [share-via-qr share-link]
       [:div.mx-auto.py-5.mt-3
        [common/schnaqqi-speech-bubble-blue
         "100px"
-        (labels :sharing.modal/schnaqqi-help)]]]]))
+        (labels :sharing.modal/qanda-help)]]]]))
 
-(defn open-share-qanda
+(defn open-share-schnaq
   "Open the share-schnaq dialog."
   []
   (rf/dispatch [:modal {:show? true
                         :large? true
-                        :child [share-qanda-modal]}]))
+                        :child [share-schnaq-modal]}]))
 
-(defn open-share-discussion
-  "Open the share-schnaq dialog."
-  []
-  (rf/dispatch [:modal {:show? true
-                        :large? true
-                        :child [share-discussion-modal]}]))
-
-(defn share-qanda-button
+(defn share-schnaq-button
   "Button to copy access link and acces code."
   []
   [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
    [:<>
     [icon :share "m-auto d-block" {:size "lg"}]
     [:span.small (labels :discussion.navbar/share)]]
-   open-share-qanda])
+   open-share-schnaq])
