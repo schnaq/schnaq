@@ -40,7 +40,7 @@
           edit-hash (extract-parameter-from-request request :edit-hash)]
       (if (validator/valid-credentials? share-hash edit-hash)
         (handler request)
-        (forbidden (at/build-error-body :credentials/invalid "Your share-hash and edit-hash do fit together."))))))
+        (forbidden (at/build-error-body :credentials/invalid "Your share-hash and edit-hash do not fit together."))))))
 
 (defn wrap-custom-schnaq-csrf-header
   "A handler, that checks for a custom schnaq-csrf header. This can only be present when sent from an allowed origin
