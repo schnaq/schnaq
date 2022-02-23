@@ -197,11 +197,20 @@
 
 (rf/reg-event-fx
  :theme.assign.discussion/success
- (fn [_ [_ {:keys [theme]}]]
+ (fn []
    {:fx [[:dispatch [:notification/add
                      #:notification{:title "Thema erfolgreich gespeichert"
                                     :body "Dein Thema kann nun von dir in deinen schnaqs verwendet werden 🎉"
                                     :context :success}]]]}))
+
+(rf/reg-event-fx
+ :theme.apply/from-discussion
+ (fn [{:keys [db]}]
+   (prn "apply theme")
+   (let [theme (get-in db [:schnaq :selected :discussion/theme])]
+     {:fx [[:page.root/set-color [:primary (:theme.colors/primary theme)]]
+           [:page.root/set-color [:secondary (:theme.colors/secondary theme)]]
+           [:page.root/set-color [:background (:theme.colors/background theme)]]]})))
 
 ;; -----------------------------------------------------------------------------
 
