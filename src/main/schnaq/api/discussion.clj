@@ -285,6 +285,22 @@
     (bad-request (at/build-error-body :vote-not-registered
                                       "Vote could not be registered"))))
 
+(defn- toggle-anon-vote-statement
+  "Toggle up- or downvote of anon statement."
+  [{:keys [share-hash statement-id inc-or-dec]} vote-type]
+  (if (and (not (nil? inc-or-dec))
+           (validator/valid-discussion-and-statement? statement-id share-hash))
+    (let [vote-function
+          (cond
+            (and (= inc-or-dec :inc) (= vote-type :upvote)) reaction-db/upvote-anonymous-statement!
+            (and (= inc-or-dec :dec) (= vote-type :upvote)) reaction-db/remove-anonymous-upvote!
+            (and (= inc-or-dec :inc) (= vote-type :downvote)) reaction-db/downvote-anonymous-statement!
+            (and (= inc-or-dec :dec) (= vote-type :downvote)) reaction-db/remove-anonymous-downvote!)]
+      (log/trace "Triggered Anonymous vote on Statement " statement-id)
+      (vote-function statement-id)
+      (ok {:operation :succeeded}))
+    (bad-request (at/build-error-body :vote-not-registered "Vote could not be registered"))))
+
 (defn- toggle-upvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement.
   `nickname` is optional and used for anonymous votes. If no `nickname` is
@@ -294,8 +310,7 @@
     (toggle-vote-statement
      (:body parameters) registered-user reaction-db/upvote-statement! reaction-db/remove-upvote!
      reaction-db/did-user-upvote-statement reaction-db/did-user-downvote-statement)
-    ;;TODO do the anonymous vote here
-    ))
+    (toggle-anon-vote-statement (:body parameters) :upvote)))
 
 (defn- toggle-downvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement.
@@ -306,8 +321,7 @@
     (toggle-vote-statement
      (:body parameters) registered-user reaction-db/downvote-statement! reaction-db/remove-downvote!
      reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement)
-    ;; TODO do the anonymous downvote here
-    ))
+    (toggle-anon-vote-statement (:body parameters) :downvote)))
 
 (defn- user-allowed-to-label?
   "Helper function checking, whether the user is allowed to use labels in the discussion."

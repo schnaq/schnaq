@@ -475,6 +475,7 @@
    {:db (-> db
             (update-in [:votes :own :up id] #(not (if (nil? %) upvoted? %)))
             (assoc-in [:votes :own :down id] false))
+    ;; TODO set the right flag, when anon
     :fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
                              {:statement-id id
                               :share-hash (-> db :schnaq :selected :discussion/share-hash)}
@@ -486,6 +487,7 @@
    {:db (-> db
             (assoc-in [:votes :own :up id] false)
             (update-in [:votes :own :down id] #(not (if (nil? %) downvoted? %))))
+    ;; TODO set the right flag, when anon
     :fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
                              {:statement-id id
                               :share-hash (-> db :schnaq :selected :discussion/share-hash)}

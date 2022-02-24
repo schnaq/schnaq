@@ -174,7 +174,7 @@
                 :statement/type :statement/parent :statement/discussions
                 :statement/labels :statement/cummulative-upvotes :statement/cummulative-downvotes]))
 
-(s/def :statement.vote/operation #{:removed :switched :added})
+(s/def :statement.vote/operation #{:removed :switched :added :succeeded})
 
 ;; Feedback
 (s/def :feedback/contact-name string?)
