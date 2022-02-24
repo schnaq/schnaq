@@ -357,6 +357,7 @@
   "List all possible discussion settings."
   []
   [:<>
+   [:h4 (labels :schnaq.admin.configurations/heading)]
    [only-moderators-mark-setting]
    [enable-discussion-read-only]
    [disable-pro-con]])
@@ -368,13 +369,15 @@
   (if @(rf/subscribe [:user/pro-user?])
     [:<>
      [themes/select-theme-for-schnaq]
-     [header-image/image-url-input]
-     [discussion-settings]]
+     [discussion-settings]
+     [:div.pt-4
+      [header-image/image-url-input]]]
     [:div.pt-1
      [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
      [:div.border.border-danger.p-3.mt-4
-      [header-image/image-url-input]
-      [discussion-settings]]]))
+      [discussion-settings]
+      [:div.pt-4
+       [header-image/image-url-input]]]]))
 
 (defn- administrator-tabs
   "Share link and invite via mail in a tabbed view."

@@ -241,6 +241,7 @@
    :schnaq.admin.notifications/statements-deleted-title "Statements deleted!"
    :schnaq.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
    :schnaq.admin.notifications/heading "Configuration"
+   :schnaq.admin.configurations/heading "Options"
    :schnaq.admin.configurations.read-only/checkbox "Set to read-only"
    :schnaq.admin.configurations.read-only/explanation "When checked, users can no longer add new posts to the discussion. Existing posts are still readable and can be analysed. You can change this option anytime."
    :schnaq.admin.configurations.disable-pro-con/label "Disable agree/disagree button"

@@ -241,6 +241,7 @@
    :schnaq.admin.notifications/statements-deleted-title "Nachrichten gelöscht!"
    :schnaq.admin.notifications/statements-deleted-lead "Deine gewählten Nachrichten wurden erfolgreich gelöscht."
    :schnaq.admin.notifications/heading "Einstellungen"
+   :schnaq.admin.configurations/heading "Optionen"
    :schnaq.admin.configurations.read-only/checkbox "Schreibschutz aktivieren"
    :schnaq.admin.configurations.read-only/explanation "Aktivieren, um keine neuen Beiträge zu erlauben. Bestehende Beiträge sind weiterhin sichtbar und können weiterhin analysiert werden. Diese Option kann jederzeit geändert werden."
    :schnaq.admin.configurations.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
