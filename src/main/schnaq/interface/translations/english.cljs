@@ -855,6 +855,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :themes.schnaq.unassign.notification/body "Your schnaq no longer has its own theme, but now uses the default colour settings again."
    :themes.save.notification/title "Theme saved successfully."
    :themes.save.notification/body "Your theme can now be used by you in your schnaqs."
+   :themes.pro-carrot/text "Would you like to use this feature? Then book a Pro account and enjoy your personal branding in your schnaqs"
 
    ;; Subscriptions
    :subscription.cancel/button "Cancel subscription"

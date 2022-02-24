@@ -856,6 +856,7 @@
    :themes.schnaq.unassign.notification/body "Dein schnaq hat nun kein eigenes Thema mehr, sondern verwendet nun wieder die Standard-Farbeinstellungen."
    :themes.save.notification/title "Thema erfolgreich gespeichert"
    :themes.save.notification/body "Dein Thema kann nun von dir in deinen schnaqs verwendet werden"
+   :themes.pro-carrot/text "Möchtest du dieses Feature verwenden? Dann buche doch einen Pro-Account und genieße dein persönliches Branding in deinen schnaqs"
 
    ;; Subscriptions
    :subscription.cancel/button "Abonnement beenden"

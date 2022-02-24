@@ -124,6 +124,21 @@
          (rf/dispatch [:theme.selected/update :theme/title (gstring/format (labels :themes.personal.creation/theme-placeholder) user-name)]))
        "btn-outline-primary h-100"]]]))
 
+(defn- save-button-or-carrot
+  "Activate save-button only for pro-users. Other users see an subscription 
+  information."
+  []
+  (let [pro-user? (not @(rf/subscribe [:user/pro-user?]))]
+    [:<>
+     [:button.btn.btn-outline-primary
+      {:type :submit
+       :disabled (not pro-user?)}
+      (labels :themes.personal.creation.buttons/save)]
+     (when-not pro-user?
+       [:div.text-info
+        (labels :themes.pro-carrot/text)
+        " 🚀"])]))
+
 (defn- configure-theme
   "Form to configure theme."
   []
@@ -156,7 +171,7 @@
         [color-picker :theme.colors/secondary (labels :themes.personal.creation.colors.secondary/title)]
         [color-picker :theme.colors/background (labels :themes.personal.creation.colors.background/title)]]]
       [:input {:type :hidden :name "theme-id" :value (or (:db/id selected) "")}]
-      [:button.btn.btn-outline-primary {:type :submit} (labels :themes.personal.creation.buttons/save)]]
+      [save-button-or-carrot]]
      (when-let [theme-id (:db/id selected)]
        [:button.float-end.btn.btn-sm.btn-link.text-danger
         {:on-click #(when (js/confirm (labels :themes.personal.creation.delete/confirmation))
