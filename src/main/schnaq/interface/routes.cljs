@@ -167,9 +167,8 @@
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
                      :stop (fn []
                              (rf/dispatch [:body.class/remove "theming-enabled"])
-                             (rf/dispatch [:theme/reset])
                              (rf/dispatch [:filters/clear])
-                             (rf/dispatch [:schnaq.selected/dissoc]))}]}
+                             (rf/dispatch [:theme/reset]))}]}
      ["" ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
@@ -279,7 +278,8 @@
      :view themes/view
      :controllers [{:start (fn []
                              (rf/dispatch [:theme/dummy])
-                             (rf/dispatch [:scheduler.after/login [:themes.load/personal]]))
+                             (rf/dispatch [:scheduler.after/login [:themes.load/personal]])
+                             (rf/dispatch [:schnaq.selected/dissoc]))
                     :stop (fn []
                             (rf/dispatch [:schnaq.selected/dissoc])
                             (rf/dispatch [:themes/dissoc])
