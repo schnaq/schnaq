@@ -282,7 +282,7 @@
     (let [user-id (extract-user nickname identity)
           vote (check-vote-fn statement-id user-id)
           counter-vote (counter-check-vote-fn statement-id user-id)]
-      (log/debug "Triggered Vote on Statement by " user-id)
+      (log/debug "Triggered Vote on Statement by" user-id)
       (if vote
         (do (remove-vote-fn statement-id user-id)
             (ok {:operation :removed}))
