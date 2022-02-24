@@ -277,9 +277,9 @@
     {:name :routes.user.manage/themes
      :view themes/view
      :controllers [{:start (fn []
+                             (rf/dispatch [:schnaq.selected/dissoc])
                              (rf/dispatch [:theme/dummy])
-                             (rf/dispatch [:scheduler.after/login [:themes.load/personal]])
-                             (rf/dispatch [:schnaq.selected/dissoc]))
+                             (rf/dispatch [:scheduler.after/login [:themes.load/personal]]))
                     :stop (fn []
                             (rf/dispatch [:schnaq.selected/dissoc])
                             (rf/dispatch [:themes/dissoc])
@@ -354,7 +354,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-          #(tools/scroll-to-id window-hash)))))
+               #(tools/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))

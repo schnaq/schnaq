@@ -2,6 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn- =>]]
+            [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
@@ -116,10 +117,10 @@
      [list-personal-themes :theme/select]
      [:div.pt-3
       [buttons/button
-       "Neu erstellen"
+       (labels :themes.personal.creation.buttons/create-new)
        (fn []
          (rf/dispatch [:theme/reset])
-         (rf/dispatch [:theme.selected/update :theme/title (str user-name "'s first theme")]))
+         (rf/dispatch [:theme.selected/update :theme/title (gstring/format (labels :themes.personal.creation/theme-placeholder) user-name)]))
        "btn-outline-primary h-100"]]]))
 
 (defn- configure-theme
@@ -279,7 +280,7 @@
  (fn [{:keys [db]}]
    (let [discussion #:discussion{:author {:user.registered/display-name "schnaqqi"}
                                  :title "Welcome to schnaq"
-                                 :states [:discussion.state/read-only]}
+                                 :states #{:discussion.state/read-only}}
          conclusion #:statement{:content "Welcome to schnaq"
                                 :author {:user.registered/display-name "schnaqqi"}
                                 :created-at nil}]
