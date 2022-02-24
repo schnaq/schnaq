@@ -102,10 +102,13 @@
       [:section.px-2
        ;; Remove hardcode, when there are english versions around!
        [:h3.h5 "schnaq Lösungen"]
-       [:p [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-meetings-moderieren/"}
-            "für Meetings"]]
-       [:p [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-diskussionsplattform/"}
-            "für Diskussionen"]]])))
+       [:p
+        [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-meetings-moderieren/"}
+         "für Meetings"] [:br]
+        [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-diskussionsplattform/"}
+         "für Diskussionen"] [:br]
+        [:a.btn.btn-link {:href "https://schnaq.com/blog/de/ama-ask-me-anything-fragerunden/"}
+         "für AMAs"]]])))
 
 ;; -----------------------------------------------------------------------------
 
