@@ -6,6 +6,7 @@
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.conclusion-card :refer [selection-card]]
@@ -45,7 +46,7 @@
 (>defn- remove-root-color
   "Remove a global definition of a css var from the document."
   [css-variable]
-  [::css-variable => nil?]
+  [::css-variable => any?]
   (.removeProperty
    (.. js/document -documentElement -style)
    css-variable))
@@ -111,8 +112,8 @@
   []
   (let [user-name @(rf/subscribe [:user/display-name])]
     [:section.pb-5
-     [:h4 "Deine Themen"]
-     [:p.lead "Wähle ein bestehendes Thema aus oder erzeuge ein neues."]
+     [:h2 "Deine Themen"]
+     [:p "Stelle hier die Farbgebung für deine schnaqs ein. Nachdem du hier dein Thema erstellt hast, kannst du in den Einstellungen deines schnaqs das Thema auswählen."]
      [list-personal-themes :theme/select]
      [:div.pt-3
       [buttons/button
@@ -123,7 +124,7 @@
        "btn-outline-primary h-100"]]]))
 
 (defn- configure-theme
-  "TODO"
+  "Form to configure theme."
   []
   (when-let [selected @(rf/subscribe [:theme/selected])]
     [:<>
@@ -135,13 +136,13 @@
       [:div.form-floating.mb-3
        [:input.form-control
         {:id "theme-title"
-         :placeholder "Give your theme a title"
+         :placeholder "Give your theme a unique title"
          :required true
          :value (:theme/title selected)
          :name "title"
          :on-change #(rf/dispatch [:theme.selected/update :theme/title
                                    (oget % [:target :value])])}]
-       [:label {:for "theme-title"} "Give your theme a title"]]
+       [:label {:for "theme-title"} "Give your theme a unique title"]]
       [:div.row
        [:div.col-md-5
         [:strong "Logo"]
@@ -161,12 +162,14 @@
                       (rf/dispatch [:theme/delete theme-id]))}
         "Löschen"])]))
 
+;; -----------------------------------------------------------------------------
+
 (defn theming
   "Main Theming view."
   []
   [:section
    [:div.text-center
-    [:p.lead.pb-3 "Stelle hier das Erscheinungsbild deiner schnaqs ein!"]]
+    [:p.lead.pb-3 "Gib schnaq deinen persönlichen Touch."]]
    [loaded-themes]
    [motion/fade-in-and-out [configure-theme]]
    [motion/fade-in-and-out [preview]]])
@@ -175,34 +178,54 @@
   [settings/user-view
    :user.settings/themes
    [pages/settings-panel
-    "Thema / Branding definieren"
+    (labels :user.settings/themes)
     [theming]]])
 
 ;; -----------------------------------------------------------------------------
+;; Theme assignment to schnaq
 
 (defn select-theme-for-schnaq
-  "TODO"
+  "Set a theme for a schnaq."
   []
-  [:section.mb-5
-   [:h4 "Stelle hier dein Farbschema für diesen schnaq ein"]
+  [:section
+   [:h4 "Thema festlegen"]
    [:p "Sobald du ein Thema ausgewählt hast, wird es für diesen schnaq gespeichert. Deine Besucher:innen sehen dann beim nächsten Laden des schnaqs das neue Farbschema."]
-   [list-personal-themes :theme.assign/discussion]])
+   [list-personal-themes :theme.discussion/assign]
+   [:div.d-flex.flex-row.pt-3
+    [buttons/button
+     "Themen bearbeiten"
+     #(rf/dispatch [:navigation/navigate :routes.user.manage/themes])
+     "btn-outline-info"]
+    [buttons/button
+     "Themenzuweisung entfernen"
+     (fn [_e]
+       (when (js/confirm "Sicher?")
+         (rf/dispatch [:theme.discussion/unassign])))
+     "btn-link btn-sm text-danger ms-3"]]])
 
 (rf/reg-event-fx
- :theme.assign/discussion
+ :theme.discussion/assign
  (fn [{:keys [db]} [_ theme]]
    {:fx [[:dispatch [:theme/select theme]]
-         (http/xhrio-request db :put "/user/theme/assign/discussion"
-                             [:theme.assign.discussion/success]
+         (http/xhrio-request db :put "/user/theme/discussion/assign"
+                             [:no-op]
                              {:theme theme
                               :share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-fx
- :theme.assign.discussion/success
- (fn []
+ :theme.discussion/unassign
+ (fn [{:keys [db]}]
+   {:fx [[:dispatch [:theme/reset]]
+         (http/xhrio-request db :delete "/user/theme/discussion/unassign"
+                             [:theme.discussion.unassign/success]
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
+
+(rf/reg-event-fx
+ :theme.discussion.unassign/success
+ (fn [_]
    {:fx [[:dispatch [:notification/add
-                     #:notification{:title "Thema erfolgreich gespeichert"
-                                    :body "Dein Thema kann nun von dir in deinen schnaqs verwendet werden 🎉"
+                     #:notification{:title "Zuweisung entfernt"
+                                    :body "Dein schnaq hat nun kein eigenes Thema mehr, sondern verwendet nun wieder die Standard-Farbeinstellungen."
                                     :context :success}]]]}))
 
 (rf/reg-event-fx
