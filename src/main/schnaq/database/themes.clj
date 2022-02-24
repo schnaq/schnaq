@@ -71,8 +71,14 @@
   (when (user-is-theme-author? keycloak-id theme-id)
     (db/transact [[:db/retractEntity theme-id]])))
 
-(>defn assign-theme-to-discussion
+(>defn assign-theme
   "Assigns a theme to a discussion."
   [share-hash theme-id]
   [:discussion/share-hash :db/id => any?]
   (db/transact [[:db/add [:discussion/share-hash share-hash] :discussion/theme theme-id]]))
+
+(>defn unassign-theme
+  "Unassign theme from discussion."
+  [share-hash]
+  [:discussion/share-hash => any?]
+  (db/transact [[:db/retract [:discussion/share-hash share-hash] :discussion/theme]]))

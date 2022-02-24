@@ -31,11 +31,17 @@
     (ok {:themes (themes-db/themes-by-keycloak-id sub)})
     (bad-request (at/build-error-body :theme/not-deleted "Did not delete theme. Either the theme does not exist or the requesting user is not the author of the theme."))))
 
-(defn- assign-theme-to-discussion
+(defn- assign-theme
   "Assign a theme to a discussion."
   [{{{:keys [theme share-hash]} :body} :parameters}]
-  (themes-db/assign-theme-to-discussion share-hash (:db/id theme))
+  (themes-db/assign-theme share-hash (:db/id theme))
   (ok {:assigned? true}))
+
+(defn- unassign-theme
+  "Unassign a discussion's theme."
+  [{{{:keys [share-hash]} :body} :parameters}]
+  (themes-db/unassign-theme share-hash)
+  (ok {:unassigned? true}))
 
 ;; -----------------------------------------------------------------------------
 
@@ -65,10 +71,16 @@
                  :name :api.theme/delete
                  :parameters {:body {:theme-id :db/id}}
                  :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}}}]
-     ["/assign/discussion" {:put assign-theme-to-discussion
-                            :description (at/get-doc #'assign-theme-to-discussion)
-                            :name :api.theme.assign/discussion
-                            :parameters {:body {:theme ::specs/theme
-                                                :share-hash :discussion/share-hash}}
-                            :responses {200 {:body {:assigned? boolean?}}}}]]]])
+     ["/discussion"
+      ["/assign" {:put assign-theme
+                  :description (at/get-doc #'assign-theme)
+                  :name :api.theme.discussion/assign
+                  :parameters {:body {:theme ::specs/theme
+                                      :share-hash :discussion/share-hash}}
+                  :responses {200 {:body {:assigned? boolean?}}}}]
+      ["/unassign" {:delete unassign-theme
+                    :description (at/get-doc #'unassign-theme)
+                    :name :api.theme.discussion/unassign
+                    :parameters {:body {:share-hash :discussion/share-hash}}
+                    :responses {200 {:body {:unassigned? boolean?}}}}]]]]])
 

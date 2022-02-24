@@ -54,9 +54,16 @@
       (testing "is not allowed for other users."
         (is (nil? (sut/delete-theme christian-keycloak-id (:db/id theme))))))))
 
-(deftest assign-theme-to-discussion-test
+(deftest assign-theme-test
   (testing "Themes should be assignable to discussions."
     (let [theme-id (:db/id (first (sut/themes-by-keycloak-id kangaroo-keycloak-id)))
-          _assign-theme (sut/assign-theme-to-discussion "simple-hash" theme-id)]
+          _assign-theme (sut/assign-theme "simple-hash" theme-id)]
       (is (= theme-id (get-in (discussion-db/discussion-by-share-hash "simple-hash")
                        [:discussion/theme :db/id]))))))
+
+(deftest unassign-theme-test
+  (testing "Assigned themes should also be unassignable."
+    (let [theme-id (:db/id (first (sut/themes-by-keycloak-id kangaroo-keycloak-id)))
+          _ (sut/assign-theme "simple-hash" theme-id)
+          _ (sut/unassign-theme "simple-hash")]
+      (is (nil? (:discussion/theme (discussion-db/discussion-by-share-hash "simple-hash")))))))
