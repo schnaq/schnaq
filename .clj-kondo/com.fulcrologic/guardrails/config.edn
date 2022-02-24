@@ -2,5 +2,6 @@
                         com.fulcrologic.guardrails.clj-kondo-hooks/>defn
                         com.fulcrologic.guardrails.core/>defn-
                         com.fulcrologic.guardrails.clj-kondo-hooks/>defn}}
- :linters {:clj-kondo.fulcro.>defn/invalid-gspec {:level :error}}
- :lint-as {com.fulcrologic.guardrails.core/>def   clojure.spec.alpha/def}}
+ :linters {:clj-kondo.fulcro.>defn/invalid-gspec {:level :error}
+           :unused-referred-var {:exclude {com.fulcrologic.guardrails.core [=>]}}}
+ :lint-as {com.fulcrologic.guardrails.core/>def clojure.spec.alpha/def}}
