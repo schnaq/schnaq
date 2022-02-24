@@ -73,8 +73,7 @@
 (defn- preview []
   (when @(rf/subscribe [:theme/selected])
     [:<>
-     [:hr.my-5]
-     [:h2 "Vorschau"]
+     [:h2 (labels :themes.personal.preview/heading)]
      [:section.theming-enabled
       [:div.base-wrapper.p-3
        [elements/navbar-title
@@ -112,8 +111,8 @@
   []
   (let [user-name @(rf/subscribe [:user/display-name])]
     [:section.pb-5
-     [:h2 "Deine Themen"]
-     [:p "Stelle hier die Farbgebung für deine schnaqs ein. Nachdem du hier dein Thema erstellt hast, kannst du in den Einstellungen deines schnaqs das Thema auswählen."]
+     [:h2 (labels :themes.personal.creation/heading)]
+     [:p (labels :themes.personal.creation/lead)]
      [list-personal-themes :theme/select]
      [:div.pt-3
       [buttons/button
@@ -136,31 +135,31 @@
       [:div.form-floating.mb-3
        [:input.form-control
         {:id "theme-title"
-         :placeholder "Give your theme a unique title"
+         :placeholder (labels :themes.personal.creation.title/label)
          :required true
          :value (:theme/title selected)
          :name "title"
          :on-change #(rf/dispatch [:theme.selected/update :theme/title
                                    (oget % [:target :value])])}]
-       [:label {:for "theme-title"} "Give your theme a unique title"]]
+       [:label {:for "theme-title"} (labels :themes.personal.creation.title/label)]]
       [:div.row
        [:div.col-md-5
-        [:strong "Logo"]
+        [:strong (labels :themes.personal.creation.logo/title)]
         [:p.text-muted "Coming Soon"]
-        [:strong "Vorschaubild"]
+        [:strong (labels :themes.personal.creation.activation.image/title)]
         [:p.text-muted "Coming Soon"]]
        [:div.col-md-7
-        [:strong "Farbeinstellungen"]
-        [color-picker :theme.colors/primary "Primäre Farbe"]
-        [color-picker :theme.colors/secondary "Sekundäre Farbe"]
-        [color-picker :theme.colors/background "Hintergrundfarbe"]]]
+        [:strong (labels :themes.personal.creation.colors/title)]
+        [color-picker :theme.colors/primary (labels :themes.personal.creation.colors.primary/title)]
+        [color-picker :theme.colors/secondary (labels :themes.personal.creation.colors.secondary/title)]
+        [color-picker :theme.colors/background (labels :themes.personal.creation.colors.background/title)]]]
       [:input {:type :hidden :name "theme-id" :value (or (:db/id selected) "")}]
-      [:button.btn.btn-outline-primary {:type :submit} "Speichern"]]
+      [:button.btn.btn-outline-primary {:type :submit} (labels :themes.personal.creation.buttons/save)]]
      (when-let [theme-id (:db/id selected)]
        [:button.float-end.btn.btn-sm.btn-link.text-danger
-        {:on-click #(when (js/confirm "Möchtest du das Thema wirklich löschen?")
+        {:on-click #(when (js/confirm (labels :themes.personal.creation.delete/confirmation))
                       (rf/dispatch [:theme/delete theme-id]))}
-        "Löschen"])]))
+        (labels :themes.personal.creation.buttons/delete)])]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -169,9 +168,10 @@
   []
   [:section
    [:div.text-center
-    [:p.lead.pb-3 "Gib schnaq deinen persönlichen Touch."]]
+    [:p.lead.pb-3 (labels :themes.personal/lead)]]
    [loaded-themes]
    [motion/fade-in-and-out [configure-theme]]
+   [:hr.my-5]
    [motion/fade-in-and-out [preview]]])
 
 (defn view []
@@ -188,18 +188,18 @@
   "Set a theme for a schnaq."
   []
   [:section
-   [:h4 "Thema festlegen"]
-   [:p "Sobald du ein Thema ausgewählt hast, wird es für diesen schnaq gespeichert. Deine Besucher:innen sehen dann beim nächsten Laden des schnaqs das neue Farbschema."]
+   [:h4 (labels :themes.schnaq.settings/heading)]
+   [:p (labels :themes.schnaq.settings/lead)]
    [list-personal-themes :theme.discussion/assign]
    [:div.d-flex.flex-row.pt-3
     [buttons/button
-     "Themen bearbeiten"
+     (labels :themes.schnaq.settings.buttons/edit)
      #(rf/dispatch [:navigation/navigate :routes.user.manage/themes])
      "btn-outline-info"]
     [buttons/button
-     "Themenzuweisung entfernen"
+     (labels :themes.schnaq.settings.buttons/unassign)
      (fn [_e]
-       (when (js/confirm "Sicher?")
+       (when (js/confirm (labels :themes.schnaq.settings.unassign/confirmation))
          (rf/dispatch [:theme.discussion/unassign])))
      "btn-link btn-sm text-danger ms-3"]]])
 
@@ -224,8 +224,8 @@
  :theme.discussion.unassign/success
  (fn [_]
    {:fx [[:dispatch [:notification/add
-                     #:notification{:title "Zuweisung entfernt"
-                                    :body "Dein schnaq hat nun kein eigenes Thema mehr, sondern verwendet nun wieder die Standard-Farbeinstellungen."
+                     #:notification{:title (labels :themes.schnaq.unassign.notification/title)
+                                    :body (labels :themes.schnaq.unassign.notification/body)
                                     :context :success}]]]}))
 
 (rf/reg-event-fx
@@ -305,25 +305,24 @@
  ;; Send new theme to backend
  (fn [{:keys [db]} [_ form]]
    {:fx [(http/xhrio-request db :post "/user/theme/add"
-                             [:theme.add-or-edit/success]
+                             [:theme.save/success]
                              {:theme (-> form
                                          theme-from-form
                                          (dissoc :db/id))})]}))
 
 (rf/reg-event-fx
  :theme/edit
- ;; Send new theme to backend
  (fn [{:keys [db]} [_ form]]
    {:fx [(http/xhrio-request db :put "/user/theme/edit"
-                             [:theme.add-or-edit/success]
+                             [:theme.save/success]
                              {:theme (theme-from-form form)})]}))
 
 (rf/reg-event-fx
- :theme.add-or-edit/success
+ :theme.save/success
  (fn [_ [_ {:keys [theme]}]]
    {:fx [[:dispatch [:notification/add
-                     #:notification{:title "Thema erfolgreich gespeichert"
-                                    :body "Dein Thema kann nun von dir in deinen schnaqs verwendet werden 🎉"
+                     #:notification{:title (labels :themes.save.notification/title)
+                                    :body [:<> (labels :themes.save.notification/body) " 🎉"]
                                     :context :success}]]
          [:dispatch [:theme/select theme]]
          [:dispatch [:themes.load/personal]]]}))
