@@ -809,7 +809,7 @@
    :user.settings/info "Persönliche Informationen"
    :user.settings/notifications "Benachrichtigungen"
    :user.settings/hubs "Hubs"
-   :user.settings/themes "Thema / Branding"
+   :user.settings/themes "Thema personalisieren"
    :user.settings/change-name "Namen ändern"
    :user.settings.button/change-account-information "Änderungen speichern"
    :user.settings.profile-picture-title/success "Profilbild erfolgreich gesetzt"

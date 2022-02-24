@@ -369,9 +369,10 @@
   (if @(rf/subscribe [:user/pro-user?])
     [:<>
      [themes/select-theme-for-schnaq]
+     [:hr.my-5]
      [discussion-settings]
-     [:div.pt-4
-      [header-image/image-url-input]]]
+     [:hr.my-5]
+     [header-image/image-url-input]]
     [:div.pt-1
      [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
      [:div.border.border-danger.p-3.mt-4
