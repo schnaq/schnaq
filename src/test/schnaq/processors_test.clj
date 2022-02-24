@@ -15,7 +15,8 @@
           upvotes-only (remove nil? (map :statement/upvotes enriched-data))
           downvotes-only (remove nil? (map :statement/downvotes enriched-data))]
       (is (= 18 (count enriched-data)))
-      (is (= 2 (count upvotes-only) (count downvotes-only))))))
+      ;; When there are cummulative votes, they should also yield a result
+      (is (= 3 (count upvotes-only) (count downvotes-only))))))
 
 (deftest add-meta-info-test
   (testing "Test if meta info was correctly added to schnaq"

@@ -31,7 +31,8 @@
   [any? :db/id :ret any?]
   (walk/postwalk
    #(if (and (instance? IEditableCollection %)
-             (or (contains? % :statement/downvotes) (contains? % :statement/upvotes)))
+             (or (contains? % :statement/downvotes) (contains? % :statement/upvotes)
+                 (contains? % :statement/cummulative-downvotes) (contains? % :statement/cummulative-upvotes)))
       (let [upvotes (map :db/id (:statement/upvotes %))
             downvotes (map :db/id (:statement/downvotes %))]
         (-> %

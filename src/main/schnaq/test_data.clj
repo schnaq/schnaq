@@ -34,14 +34,14 @@
     :statement/author "user/wegi"
     :statement/content "dogs can act as watchdogs"
     :statement/created-at #inst "2020-01-01"
+    :statement/cummulative-downvotes 3
     :statement/parent "statement/get-dog"
     :statement/type :statement.type/support
     :statement/version 1
     :statement/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:db/id "statement/walks"
     :statement/author "user/schredder"                      ; Use the tempid above
-    :statement/content
-    "you have to take the dog for a walk every day, which is tedious"
+    :statement/content "you have to take the dog for a walk every day, which is tedious"
     :statement/created-at #inst "2020-01-01"
     :statement/version 1
     :statement/parent "statement/get-dog"
