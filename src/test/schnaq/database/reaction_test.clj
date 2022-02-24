@@ -3,7 +3,6 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.reaction :as db]
-            [schnaq.database.user :as user-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -13,8 +12,9 @@
   (testing "Tests whether setting up and downvotes works properly."
     (let [share-hash "cat-dog-hash"
           some-statements (discussion-db/all-statements share-hash)
-          statement-1 (first (remove :statement/upvotes some-statements))
-          statement-2 (second some-statements)
+          statement-1 (first (remove :statement/downvotes
+                                     (remove :statement/upvotes some-statements)))
+          statement-2 (second (remove :statement/downvotes some-statements))
           statement-1-upvotes (count (:statement/upvotes statement-1))
           statement-1-downvotes (count (:statement/downvotes statement-1))
           statement-2-downvotes (count (:statement/downvotes statement-2))
@@ -31,13 +31,6 @@
         (is (= (+ 2 statement-1-upvotes) (-> statement-1-id fast-pull :statement/upvotes count)))
         (is (= (inc statement-2-downvotes) (-> statement-2-id fast-pull :statement/downvotes count)))
         (is (= statement-1-downvotes (-> statement-1-id fast-pull :statement/downvotes count))))
-      (testing "Add cummulative votes by anon users"
-        (db/upvote-statement! statement-1-id (user-db/add-user-if-not-exists "Test-1"))
-        (is (= (inc (:statement/cummulative-upvotes statement-1 0))
-               (-> statement-1-id (fast-pull [:statement/cummulative-upvotes]) :statement/cummulative-upvotes)))
-        (db/downvote-statement! statement-1-id (user-db/add-user-if-not-exists "Test-2"))
-        (is (= (inc (:statement/cummulative-downvotes statement-1 0))
-               (-> statement-1-id (fast-pull [:statement/cummulative-downvotes]) :statement/cummulative-downvotes))))
       (testing "No up- and downvote by the same registered user for the same statement"
         (db/downvote-statement! statement-1-id alex-user-id)
         (is (= (inc statement-1-upvotes) (-> statement-1-id fast-pull :statement/upvotes count)))
