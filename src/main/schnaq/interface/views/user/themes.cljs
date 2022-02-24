@@ -6,6 +6,7 @@
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
+            [schnaq.interface.components.common :refer [pro-badge]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
