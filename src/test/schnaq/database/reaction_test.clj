@@ -20,8 +20,8 @@
           statement-2-downvotes (count (:statement/downvotes statement-2))
           statement-1-id (:db/id statement-1)
           statement-2-id (:db/id statement-2)
-          alex-user-id (fast-pull [:user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"])
-          kangaroo-user-id (fast-pull [:user.registered/keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"])]
+          alex-user-id (:db/id (fast-pull [:user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"]))
+          kangaroo-user-id (:db/id (fast-pull [:user.registered/keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"]))]
       (testing "Non-cummulative votes should be triggered by registered users."
         (db/upvote-statement! statement-1-id alex-user-id)
         (is (db/did-user-upvote-statement statement-1-id alex-user-id))
@@ -33,11 +33,11 @@
         (is (= statement-1-downvotes (-> statement-1-id fast-pull :statement/downvotes count))))
       (testing "Add cummulative votes by anon users"
         (db/upvote-statement! statement-1-id (user-db/add-user-if-not-exists "Test-1"))
-        (is (= (inc (:statement/cummulative-upvotes statement-1))
-               (-> statement-1-id fast-pull :statement/cummulative-upvotes)))
+        (is (= (inc (:statement/cummulative-upvotes statement-1 0))
+               (-> statement-1-id (fast-pull [:statement/cummulative-upvotes]) :statement/cummulative-upvotes)))
         (db/downvote-statement! statement-1-id (user-db/add-user-if-not-exists "Test-2"))
-        (is (= (inc (:statement/cummulative-downvotes statement-1))
-               (-> statement-1-id fast-pull :statement/cummulative-downvotes))))
+        (is (= (inc (:statement/cummulative-downvotes statement-1 0))
+               (-> statement-1-id (fast-pull [:statement/cummulative-downvotes]) :statement/cummulative-downvotes))))
       (testing "No up- and downvote by the same registered user for the same statement"
         (db/downvote-statement! statement-1-id alex-user-id)
         (is (= (inc statement-1-upvotes) (-> statement-1-id fast-pull :statement/upvotes count)))
