@@ -56,7 +56,7 @@
   "Color picker for the theme colors."
   [theme-field label]
   [keyword? string? => :re-frame/component]
-  (let [color (get @(rf/subscribe [:theme/selected]) theme-field)
+  (let [color (get @(rf/subscribe [:schnaq.selected/theme]) theme-field)
         color-picker-id (str (name theme-field) "-color-picker")]
     [:div.row
      [:div.col
@@ -72,7 +72,7 @@
                        (rf/dispatch [:theme.selected/color theme-field color])))}]]]))
 
 (defn- preview []
-  (when @(rf/subscribe [:theme/selected])
+  (when @(rf/subscribe [:schnaq.selected/theme])
     [:<>
      [:h2 (labels :themes.personal.preview/heading)]
      [:section.theming-enabled
@@ -94,7 +94,7 @@
   "Show all configured themes."
   [dispatch-event]
   (let [themes @(rf/subscribe [:themes/personal])
-        selected @(rf/subscribe [:theme/selected])]
+        selected @(rf/subscribe [:schnaq.selected/theme])]
     [:div.row.row-cols-2.row-cols-xl-4.g-2.g-lg-3
      (for [theme themes]
        (with-meta
@@ -145,7 +145,7 @@
   "Change the activation phrase.
   Schnaqqi won't like this #sadtorooo."
   []
-  (let [selected @(rf/subscribe [:theme/selected])]
+  (let [selected @(rf/subscribe [:schnaq.selected/theme])]
     [:div.form-floating.mb-3
      [:input.form-control
       {:id "theme-activation-phrase"
@@ -160,7 +160,7 @@
 (defn- input-title
   "Select a theme's title."
   []
-  (let [selected @(rf/subscribe [:theme/selected])]
+  (let [selected @(rf/subscribe [:schnaq.selected/theme])]
     [:div.form-floating.mb-3
      [:input.form-control
       {:id "theme-title"
@@ -175,7 +175,7 @@
 (defn- configure-theme
   "Form to configure theme."
   []
-  (when-let [selected @(rf/subscribe [:theme/selected])]
+  (when-let [selected @(rf/subscribe [:schnaq.selected/theme])]
     [:<>
      [:form
       {:on-submit (fn [e]
@@ -293,24 +293,19 @@
 
 (rf/reg-event-fx
  :theme.selected/color
- (fn [{:keys [db]} [_ field color]]
-   {:db (assoc-in db [:themes :selected field] color)
-    :fx [[:page.root/set-color [field color]]]}))
+ (fn [_ [_ field color]]
+   {:fx [[:dispatch [:theme.selected/update field color]]
+         [:page.root/set-color [field color]]]}))
 
 (rf/reg-event-db
  :theme.selected/update
  (fn [db [_ field color]]
-   (assoc-in db [:themes :selected field] color)))
-
-(rf/reg-sub
- :theme/selected
- (fn [db]
-   (get-in db [:themes :selected])))
+   (assoc-in db [:schnaq :selected :discussion/theme field] color)))
 
 (rf/reg-event-fx
  :theme/select
  (fn [{:keys [db]} [_ theme]]
-   {:db (assoc-in db [:themes :selected] theme)
+   {:db (assoc-in db [:schnaq :selected :discussion/theme] theme)
     :fx [[:page.root/set-color [:primary (:theme.colors/primary theme)]]
          [:page.root/set-color [:secondary (:theme.colors/secondary theme)]]
          [:page.root/set-color [:background (:theme.colors/background theme)]]]}))
@@ -362,8 +357,9 @@
 
 (rf/reg-event-fx
  :theme.save/success
- (fn [_ [_ {:keys [theme]}]]
-   {:fx [[:dispatch [:notification/add
+ (fn [{:keys [db]} [_ {:keys [theme]}]]
+   {:db (assoc-in db [:schnaq :selected :discussion/theme] theme)
+    :fx [[:dispatch [:notification/add
                      #:notification{:title (labels :themes.save.notification/title)
                                     :body [:<> (labels :themes.save.notification/body) " 🎉"]
                                     :context :success}]]

@@ -137,6 +137,12 @@
  (fn [selected-schnaq _ _]
    (not (nil? (some #{:discussion.state/read-only} (:discussion/states selected-schnaq))))))
 
+(rf/reg-sub
+ :schnaq.selected/theme
+ :<- [:schnaq/selected]
+ (fn [selected-schnaq _ _]
+   (:discussion/theme selected-schnaq)))
+
 (rf/reg-event-db
  :schnaq.selected/dissoc
  ;; Remove currently selected schnaq

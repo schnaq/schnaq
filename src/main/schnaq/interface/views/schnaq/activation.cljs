@@ -54,20 +54,25 @@
 
 (defn- activation-view [background-class button-class col-class]
   (when-let [activation @(rf/subscribe [:schnaq/activation])]
-    [:div
-     {:class col-class}
-     [motion-comp/fade-in-and-out
-      [:section.statement-card.p-3.text-white
-       {:class background-class}
-       [:h4.mx-auto.mt-3 (gstring/format (labels :schnaq.activation/title) (labels :schnaq.activation/phrase))]
-       [:div.mx-auto.display-3 (:activation/count activation)]
-       [schnaqqi-walk]
-       [:div.text-center
-        [:button.btn.btn-lg.btn-secondary
-         {:class button-class
-          :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
-         (labels :schnaq.activation/phrase)]]]
-      motion-comp/card-fade-in-time]]))
+    (let [theme @(rf/subscribe [:schnaq.selected/theme])
+          activation-phrase (or (:theme.texts/activation theme)
+                                (labels :schnaq.activation/phrase))]
+      [:div {:class col-class}
+       [motion-comp/fade-in-and-out
+        [:section.statement-card.p-3.text-white
+         {:class background-class}
+         [:h4.mx-auto.mt-3
+          (gstring/format (labels :schnaq.activation/title)
+                          activation-phrase)]
+         [:div.mx-auto.display-3 (:activation/count activation)]
+         [schnaqqi-walk]
+         [:div.text-center
+          [:button.btn.btn-lg.btn-secondary
+           {:class button-class
+            :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
+           activation-phrase
+           "!"]]]
+        motion-comp/card-fade-in-time]])))
 
 (defn activation-event-view
   "Activation card for q-and-a view."
