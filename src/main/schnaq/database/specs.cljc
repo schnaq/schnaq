@@ -153,6 +153,7 @@
   (s/keys :req-un [:image/type :image/name :image/content]))
 
 ;; Statement
+;; TODO add cumulative votes
 (s/def :statement/type #{:statement.type/attack :statement.type/support :statement.type/neutral})
 (s/def :statement/parent (s/or :id :db/id :statement ::statement))
 (s/def :statement/content ::non-blank-string)
