@@ -60,3 +60,20 @@
     (testing "Incrementing a value that is not there adds an attribute with the value 1"
       (db/increment-number (:db/id option-without-vote-attr) :option/votes)
       (is (= 1 (:option/votes (db/fast-pull (:db/id option-without-vote-attr) '[:option/votes])))))))
+
+(deftest decrement-number-test
+  (let [poll (first (poll-db/polls "simple-hash"))
+        ;; Pattern adds default value of 0 where there is none
+        option-with-vote-attr (first (filter #(not= 0 (:option/votes %)) (:poll/options poll))) ;; votes = 1
+        option-without-vote-attr (first (filter #(zero? (:option/votes %)) (:poll/options poll)))]
+    (testing "Show whether decrementing a number that's there works"
+      (db/decrement-number (:db/id option-with-vote-attr) :option/votes)
+      (is (= 0 (:option/votes (db/fast-pull (:db/id option-with-vote-attr) '[:option/votes]))))
+      (db/decrement-number (:db/id option-with-vote-attr) :option/votes)
+      (is (= -1 (:option/votes (db/fast-pull (:db/id option-with-vote-attr) '[:option/votes])))))
+    (testing "Decrementing a value that is not there adds an attribute with the value -1"
+      (db/decrement-number (:db/id option-without-vote-attr) :option/votes)
+      (is (= -1 (:option/votes (db/fast-pull (:db/id option-without-vote-attr) '[:option/votes])))))
+    (testing "Do not allow decreasing lower than the minimum value"
+      (db/decrement-number (:db/id option-without-vote-attr) :option/votes 0)
+      (is (zero? (:option/votes (db/fast-pull (:db/id option-without-vote-attr) '[:option/votes])))))))
