@@ -40,3 +40,20 @@
         (db/remove-upvote! statement-1-id kangaroo-user-id)
         (is (= statement-1-upvotes (-> statement-1-id fast-pull :statement/upvotes count)))
         (is (= statement-1-downvotes (-> statement-1-id fast-pull :statement/downvotes count)))))))
+
+(deftest cummulative-votes-tests
+  (testing "Test cummulative vote manipulation"
+    (let [share-hash "cat-dog-hash"
+          some-statements (discussion-db/all-statements share-hash)
+          statement-1 (first some-statements)
+          statement-1-id (:db/id statement-1)
+          statement-1-upvotes (:statement/cummulative-upvotes statement-1 0)
+          statement-1-downvotes (:statement/cummulative-downvotes statement-1 0)]
+      (db/upvote-anonymous-statement! statement-1-id)
+      (is (= (inc statement-1-upvotes) (-> statement-1-id fast-pull :statement/cummulative-upvotes)))
+      (db/downvote-anonymous-statement! statement-1-id)
+      (is (= (inc statement-1-downvotes) (-> statement-1-id fast-pull :statement/cummulative-downvotes)))
+      (db/remove-anonymous-upvote! statement-1-id)
+      (is (= statement-1-upvotes (-> statement-1-id fast-pull :statement/cummulative-upvotes)))
+      (db/remove-anonymous-downvote! statement-1-id)
+      (is (= statement-1-upvotes (-> statement-1-id fast-pull :statement/cummulative-downvotes))))))
