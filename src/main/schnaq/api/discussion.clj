@@ -19,13 +19,6 @@
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
-(defn- extract-user
-  "Returns a user-id, either from nickname if anonymous user or from identity, if jwt token is present."
-  [nickname identity]
-  (let [nickname (user-db/user-by-nickname nickname)
-        registered-user (:db/id (db/fast-pull [:user.registered/keycloak-id (:sub identity)]))]
-    (or registered-user nickname)))
-
 (>defn- add-creation-secret
   "Add creation-secret to a collection of statements. Only add to matching target-id."
   [statements target-id]
@@ -276,17 +269,17 @@
 
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
-  [{:keys [share-hash statement-id nickname]} identity
+  ;; TODO dispatch here what da fuq happens. Bei anon user löse eine andere route aus. (Die auf die cummulatives geht)
+  [{:keys [share-hash statement-id nickname]} registered-user
    add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
   (if (validator/valid-discussion-and-statement? statement-id share-hash)
-    (let [user-id (extract-user nickname identity)
-          vote (check-vote-fn statement-id user-id)
-          counter-vote (counter-check-vote-fn statement-id user-id)]
-      (log/debug "Triggered Vote on Statement by " user-id)
+    (let [vote (check-vote-fn statement-id registered-user)
+          counter-vote (counter-check-vote-fn statement-id registered-user)]
+      (log/trace "Triggered Vote on Statement by registered user" registered-user)
       (if vote
-        (do (remove-vote-fn statement-id user-id)
+        (do (remove-vote-fn statement-id registered-user)
             (ok {:operation :removed}))
-        (do (add-vote-fn statement-id user-id)
+        (do (add-vote-fn statement-id registered-user)
             (if counter-vote
               (ok {:operation :switched})
               (ok {:operation :added})))))
@@ -298,18 +291,24 @@
   `nickname` is optional and used for anonymous votes. If no `nickname` is
   provided, request must contain a valid authentication token."
   [{:keys [parameters identity]}]
-  (toggle-vote-statement
-   (:body parameters) identity reaction-db/upvote-statement! reaction-db/remove-upvote!
-   reaction-db/did-user-upvote-statement reaction-db/did-user-downvote-statement))
+  (if-let [registered-user (:db/id (db/fast-pull [:user.registered/keycloak-id (:sub identity)]))]
+    (toggle-vote-statement
+     (:body parameters) registered-user reaction-db/upvote-statement! reaction-db/remove-upvote!
+     reaction-db/did-user-upvote-statement reaction-db/did-user-downvote-statement)
+    ;;TODO do the anonymous vote here
+    ))
 
 (defn- toggle-downvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement.
   `nickname` is optional and used for anonymous votes. If no `nickname` is
   provided, request must contain a valid authentication token."
   [{:keys [parameters identity]}]
-  (toggle-vote-statement
-   (:body parameters) identity reaction-db/downvote-statement! reaction-db/remove-downvote!
-   reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement))
+  (if-let [registered-user (:db/id (db/fast-pull [:user.registered/keycloak-id (:sub identity)]))]
+    (toggle-vote-statement
+     (:body parameters) registered-user reaction-db/downvote-statement! reaction-db/remove-downvote!
+     reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement)
+    ;; TODO do the anonymous downvote here
+    ))
 
 (defn- user-allowed-to-label?
   "Helper function checking, whether the user is allowed to use labels in the discussion."

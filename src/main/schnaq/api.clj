@@ -198,6 +198,7 @@
 
 (comment
   "Start the server from here"
+  ;; TODO build parallel infrastructure for anon votes in backend
   ;; TODO Change backend tests to take all the votes into account
   ;; TODO backend: allow anon accounts to vote: If localstorage entry - change vote, otherwise new
   ;; TODO Change frontend to allow anon accounts to vote as long as there is no entry in localstorage
