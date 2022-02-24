@@ -4,7 +4,7 @@
             [day8.re-frame.http-fx]
             [goog.dom :as gdom]
             [goog.string :as gstring]
-            [goog.string.format]                            ;; required for goog.string. We need to require it once in our project.
+            [goog.string.format] ;; required for goog.string. We need to require it once in our project.
             [re-frame.core :as rf]
             [reagent.dom]
             [schnaq.config.shared :as shared-config]
@@ -120,8 +120,8 @@
   []
   (let [init-routine (if shared-config/embedded? :initialize/wetog-integration :initialize/schnaq)]
     (routes/init-routes!)
-    (rf/dispatch-sync [init-routine])                       ;; put a value into application state
+    (rf/dispatch-sync [init-routine]) ;; put a value into application state
     (language/init-language)
-    (render)                                                ;; mount the application's ui into '<div id="app" />'
+    (render) ;; mount the application's ui into '<div id="app" />'
     (say-hello)
     (updates/init-periodic-updates)))

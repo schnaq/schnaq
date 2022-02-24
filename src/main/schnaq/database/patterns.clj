@@ -77,7 +77,8 @@
    :theme.colors/secondary
    :theme.colors/background
    :theme.images/logo
-   :theme.images/activation])
+   :theme.images/activation
+   :theme.texts/activation])
 
 (def discussion
   "Representation of a discussion."

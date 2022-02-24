@@ -6,7 +6,6 @@
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
-            [schnaq.interface.components.common :refer [pro-badge]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -121,14 +120,17 @@
        (labels :themes.personal.creation.buttons/create-new)
        (fn []
          (rf/dispatch [:theme/reset])
-         (rf/dispatch [:theme.selected/update :theme/title (gstring/format (labels :themes.personal.creation/theme-placeholder) user-name)]))
+         (rf/dispatch [:theme.selected/update :theme/title
+                       (gstring/format (labels :themes.personal.creation/theme-placeholder) user-name)]))
        "btn-outline-primary h-100"]]]))
+
+;; -----------------------------------------------------------------------------
 
 (defn- save-button-or-carrot
   "Activate save-button only for pro-users. Other users see an subscription 
   information."
   []
-  (let [pro-user? (not @(rf/subscribe [:user/pro-user?]))]
+  (let [pro-user? @(rf/subscribe [:user/pro-user?])]
     [:<>
      [:button.btn.btn-outline-primary
       {:type :submit
@@ -138,6 +140,37 @@
        [:div.text-info
         (labels :themes.pro-carrot/text)
         " 🚀"])]))
+
+(defn- input-activation-phrase
+  "Change the activation phrase.
+  Schnaqqi won't like this #sadtorooo."
+  []
+  (let [selected @(rf/subscribe [:theme/selected])]
+    [:div.form-floating.mb-3
+     [:input.form-control
+      {:id "theme-activation-phrase"
+       :placeholder (labels :schnaq.activation/phrase)
+       :value (:theme.texts/activation selected)
+       :name "activation-phrase"
+       :on-change #(rf/dispatch [:theme.selected/update :theme.texts/activation
+                                 (oget % [:target :value])])}]
+     [:label {:for "theme-activation-phrase"}
+      (labels :themes.personal.creation.texts/activation)]]))
+
+(defn- input-title
+  "Select a theme's title."
+  []
+  (let [selected @(rf/subscribe [:theme/selected])]
+    [:div.form-floating.mb-3
+     [:input.form-control
+      {:id "theme-title"
+       :placeholder (labels :themes.personal.creation.title/label)
+       :required true
+       :value (:theme/title selected)
+       :name "title"
+       :on-change #(rf/dispatch [:theme.selected/update :theme/title
+                                 (oget % [:target :value])])}]
+     [:label {:for "theme-title"} (labels :themes.personal.creation.title/label)]]))
 
 (defn- configure-theme
   "Form to configure theme."
@@ -149,18 +182,10 @@
                     (.preventDefault e)
                     (let [add-or-edit (if (:db/id selected) :theme/edit :theme/add)]
                       (rf/dispatch [add-or-edit (oget e [:target :elements])])))}
-      [:div.form-floating.mb-3
-       [:input.form-control
-        {:id "theme-title"
-         :placeholder (labels :themes.personal.creation.title/label)
-         :required true
-         :value (:theme/title selected)
-         :name "title"
-         :on-change #(rf/dispatch [:theme.selected/update :theme/title
-                                   (oget % [:target :value])])}]
-       [:label {:for "theme-title"} (labels :themes.personal.creation.title/label)]]
+      [input-title]
       [:div.row
        [:div.col-md-5
+        [input-activation-phrase]
         [:strong (labels :themes.personal.creation.logo/title)]
         [:p.text-muted "Coming Soon"]
         [:strong (labels :themes.personal.creation.activation.image/title)]
@@ -315,7 +340,8 @@
      :theme/title (get-field :theme-title)
      :theme.colors/primary (get-field :color-primary)
      :theme.colors/secondary (get-field :color-secondary)
-     :theme.colors/background (get-field :color-background)}))
+     :theme.colors/background (get-field :color-background)
+     :theme.texts/activation (get-field :activation-phrase)}))
 
 (rf/reg-event-fx
  :theme/add

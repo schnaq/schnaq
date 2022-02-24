@@ -59,14 +59,14 @@
      [motion-comp/fade-in-and-out
       [:section.statement-card.p-3.text-white
        {:class background-class}
-       [:h4.mx-auto.mt-3 (gstring/format (labels :schnaq.activation/title) (labels :schnaq.activation/activation-button))]
+       [:h4.mx-auto.mt-3 (gstring/format (labels :schnaq.activation/title) (labels :schnaq.activation/phrase))]
        [:div.mx-auto.display-3 (:activation/count activation)]
        [schnaqqi-walk]
        [:div.text-center
         [:button.btn.btn-lg.btn-secondary
          {:class button-class
           :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
-         (labels :schnaq.activation/activation-button)]]]
+         (labels :schnaq.activation/phrase)]]]
       motion-comp/card-fade-in-time]]))
 
 (defn activation-event-view

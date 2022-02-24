@@ -297,7 +297,7 @@
    :schnaq.activation.create/start-button "Aktivierung starten"
    :schnaq.activation.create/reset-button "Aktivierung zurücksetzen"
    :schnaq.activation/title "%ss gesamt:"
-   :schnaq.activation/activation-button "Törööö"
+   :schnaq.activation/phrase "Törööö"
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"
@@ -842,6 +842,7 @@
    :themes.personal.creation.colors.primary/title "Primärfarbe"
    :themes.personal.creation.colors.secondary/title "Sekundärfarbe"
    :themes.personal.creation.colors.background/title "Hintergrundfarbe"
+   :themes.personal.creation.texts/activation "Aktivierungstext"
    :themes.personal.creation.buttons/create-new "Neu erstellen"
    :themes.personal.creation.buttons/save "Speichern"
    :themes.personal.creation.buttons/delete "Löschen"
