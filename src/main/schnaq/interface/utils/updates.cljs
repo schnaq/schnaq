@@ -67,7 +67,7 @@
   called here once to start the endless loop."
   []
   (log/info "Preparing periodic updates of discussion entities...")
-  #_#_#_#_(loop-update-starting-conclusions!)
+  (loop-update-starting-conclusions!)
   (loop-update-graph!)
   (loop-update-polls!)
   (loop-update-activation!))
