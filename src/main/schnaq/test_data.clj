@@ -18,6 +18,8 @@
    {:db/id "statement/get-cat"
     :statement/author "user/schredder"                      ; Use the tempid above
     :statement/content "we should get a cat"
+    :statement/upvotes ["user.registered/alex"]
+    :statement/downvotes ["user.registered/kangaroo"]
     :statement/created-at #inst "2020-01-01"
     :statement/version 1
     :statement/discussions ["discussion/cat-or-dog"]}
@@ -25,6 +27,7 @@
     :statement/author "user/rambo"                          ; Use the tempid above
     :statement/content "we could get both, a dog and a cat"
     :statement/created-at #inst "2020-01-01"
+    :statement/upvotes ["user.registered/alex"]
     :statement/version 1
     :statement/discussions ["discussion/cat-or-dog"]}
    {:db/id "statement/watchdogs"

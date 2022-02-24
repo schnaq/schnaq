@@ -12,9 +12,14 @@
 (deftest up-and-downvotes-test
   (testing "Tests whether setting up and downvotes works properly."
     (let [share-hash "cat-dog-hash"
-          some-statement-ids (map :db/id (discussion-db/all-statements share-hash))
-          statement-1-id (first some-statement-ids)
-          statement-2-id (second some-statement-ids)
+          some-statements (discussion-db/all-statements share-hash)
+          statement-1 (first some-statements)
+          statement-2 (second some-statements)
+          statement-1-upvotes (count (:statement/upvotes statement-1))
+          statement-1-downvotes (count (:statement/downvotes statement-1))
+          statement-2-downvotes (count (:statement/downvotes statement-2))
+          statement-1-id (:db/id statement-1)
+          statement-2-id (:db/id statement-2)
           author-1-id (user-db/add-user-if-not-exists "Test-1")
           author-2-id (user-db/add-user-if-not-exists "Test-2")]
       (db/upvote-statement! statement-1-id author-1-id)
@@ -22,15 +27,15 @@
       (db/upvote-statement! statement-1-id author-2-id)
       (is (db/did-user-upvote-statement statement-1-id author-1-id))
       (is (db/did-user-downvote-statement statement-2-id author-1-id))
-      (is (= 2 (-> statement-1-id fast-pull :statement/upvotes count)))
-      (is (= 1 (-> statement-2-id fast-pull :statement/downvotes count)))
-      (is (zero? (-> statement-1-id fast-pull :statement/downvotes count)))
+      (is (= (+ 2 statement-1-upvotes) (-> statement-1-id fast-pull :statement/upvotes count)))
+      (is (= (inc statement-2-downvotes) (-> statement-2-id fast-pull :statement/downvotes count)))
+      (is (= statement-1-downvotes (-> statement-1-id fast-pull :statement/downvotes count)))
       ;; No up- and downvote for the same statement by the same user!
-      (db/downvote-statement! (first some-statement-ids) author-1-id)
-      (is (= 1 (-> statement-1-id fast-pull :statement/upvotes count)))
-      (is (= 1 (-> statement-1-id fast-pull :statement/downvotes count)))
+      (db/downvote-statement! statement-1-id author-1-id)
+      (is (= (inc statement-1-upvotes) (-> statement-1-id fast-pull :statement/upvotes count)))
+      (is (= (inc statement-1-downvotes) (-> statement-1-id fast-pull :statement/downvotes count)))
       ;; Remove the up and downvotes now
-      (db/remove-downvote! (first some-statement-ids) author-1-id)
-      (db/remove-upvote! (first some-statement-ids) author-2-id)
-      (is (zero? (-> statement-1-id fast-pull :statement/upvotes count)))
-      (is (zero? (-> statement-1-id fast-pull :statement/downvotes count))))))
+      (db/remove-downvote! statement-1-id author-1-id)
+      (db/remove-upvote! statement-1-id author-2-id)
+      (is (= statement-1-upvotes (-> statement-1-id fast-pull :statement/upvotes count)))
+      (is (= statement-1-downvotes (-> statement-1-id fast-pull :statement/downvotes count))))))
