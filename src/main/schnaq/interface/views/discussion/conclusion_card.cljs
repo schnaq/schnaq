@@ -477,7 +477,6 @@
             (assoc-in [:votes :own :down id] false))
     :fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
                              {:statement-id id
-                              :nickname (tools/current-display-name db)
                               :share-hash (-> db :schnaq :selected :discussion/share-hash)}
                              [:ajax.error/as-notification])]}))
 
@@ -489,7 +488,6 @@
             (update-in [:votes :own :down id] #(not (if (nil? %) downvoted? %))))
     :fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
                              {:statement-id id
-                              :nickname (tools/current-display-name db)
                               :share-hash (-> db :schnaq :selected :discussion/share-hash)}
                              [:ajax.error/as-notification])]}))
 

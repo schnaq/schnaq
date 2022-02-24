@@ -269,8 +269,7 @@
 
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
-  ;; TODO dispatch here what da fuq happens. Bei anon user löse eine andere route aus. (Die auf die cummulatives geht)
-  [{:keys [share-hash statement-id nickname]} registered-user
+  [{:keys [share-hash statement-id]} registered-user
    add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
   (if (validator/valid-discussion-and-statement? statement-id share-hash)
     (let [vote (check-vote-fn statement-id registered-user)
