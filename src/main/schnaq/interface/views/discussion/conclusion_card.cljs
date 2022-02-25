@@ -524,12 +524,23 @@
  :schnaq.vote/send-anonymous
  (fn [{:keys [db]} [_ statement up-or-down inc-or-dec]]
    {:fx [(http/xhrio-request db :post (gstring/format "/discussion/statement/vote/%s" (name up-or-down))
-                             ;;TODO generic success [:downvote-success statement]
-                             [:no-op]
+                             [:anonymous-vote-success statement up-or-down inc-or-dec]
                              {:statement-id (:db/id statement)
                               :share-hash (-> db :schnaq :selected :discussion/share-hash)
                               :inc-or-dec inc-or-dec}
                              [:ajax.error/as-notification])]}))
+
+;; TODO auch in den localstorage schreiben
+(rf/reg-event-db
+ :anonymous-vote-success
+ (fn [db [_ {:keys [db/id]} up-or-down inc-or-dec _response]]
+   (if (= :up up-or-down)
+     (if (= :inc inc-or-dec)
+       (update-in db [:votes :up id] inc)
+       (update-in db [:votes :up id] dec))
+     (if (= :inc inc-or-dec)
+       (update-in db [:votes :down id] inc)
+       (update-in db [:votes :down id] dec)))))
 
 (rf/reg-event-db
  :upvote-success
