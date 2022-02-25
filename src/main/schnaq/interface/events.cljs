@@ -51,7 +51,8 @@
          [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]
          [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
          [:dispatch [:load/last-added-schnaq]]
-         [:dispatch [:schnaq.polls/load-past-votes]]]}))
+         [:dispatch [:schnaq.polls/load-past-votes]]
+         [:dispatch [:schnaq.votes/load-from-localstorage]]]}))
 
 (rf/reg-event-fx
  :form/should-clear

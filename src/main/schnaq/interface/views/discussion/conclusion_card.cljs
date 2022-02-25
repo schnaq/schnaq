@@ -2,6 +2,7 @@
   (:require [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
+            [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.database.specs :as specs]
@@ -530,17 +531,23 @@
                               :inc-or-dec inc-or-dec}
                              [:ajax.error/as-notification])]}))
 
-;; TODO auch in den localstorage schreiben
-(rf/reg-event-db
+;; TODO eigener voting namespace
+(rf/reg-event-fx
  :anonymous-vote-success
- (fn [db [_ {:keys [db/id]} up-or-down inc-or-dec _response]]
-   (if (= :up up-or-down)
-     (if (= :inc inc-or-dec)
-       (update-in db [:votes :up id] inc)
-       (update-in db [:votes :up id] dec))
-     (if (= :inc inc-or-dec)
-       (update-in db [:votes :down id] inc)
-       (update-in db [:votes :down id] dec)))))
+ (fn [{:keys [db]} [_ {:keys [db/id]} up-or-down inc-or-dec _response]]
+   {:db (if (= :up up-or-down)
+          (if (= :inc inc-or-dec)
+            (update-in db [:votes :up id] inc)
+            (update-in db [:votes :up id] dec))
+          (if (= :inc inc-or-dec)
+            (update-in db [:votes :down id] inc)
+            (update-in db [:votes :down id] dec)))
+    :fx [[:localstorage/assoc [:device.reactions/votes (get-in db [:votes :device])]]]}))
+
+(rf/reg-event-fx
+ :schnaq.votes/load-from-localstorage
+ (fn [{:keys [db]} _]
+   {:db (assoc-in db [:votes :device] (:device.reactions/votes local-storage))}))
 
 (rf/reg-event-db
  :upvote-success
