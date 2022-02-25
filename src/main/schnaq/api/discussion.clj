@@ -19,13 +19,6 @@
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
-(defn- extract-user
-  "Returns a user-id, either from nickname if anonymous user or from identity, if jwt token is present."
-  [nickname identity]
-  (let [nickname (user-db/user-by-nickname nickname)
-        registered-user (:db/id (db/fast-pull [:user.registered/keycloak-id (:sub identity)]))]
-    (or registered-user nickname)))
-
 (>defn- add-creation-secret
   "Add creation-secret to a collection of statements. Only add to matching target-id."
   [statements target-id]
@@ -276,40 +269,58 @@
 
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
-  [{:keys [share-hash statement-id nickname]} identity
+  [{:keys [share-hash statement-id]} registered-user
    add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
   (if (validator/valid-discussion-and-statement? statement-id share-hash)
-    (let [user-id (extract-user nickname identity)
-          vote (check-vote-fn statement-id user-id)
-          counter-vote (counter-check-vote-fn statement-id user-id)]
-      (log/debug "Triggered Vote on Statement by" user-id)
+    (let [vote (check-vote-fn statement-id registered-user)
+          counter-vote (counter-check-vote-fn statement-id registered-user)]
+      (log/trace "Triggered Vote on Statement by registered user" registered-user)
       (if vote
-        (do (remove-vote-fn statement-id user-id)
+        (do (remove-vote-fn statement-id registered-user)
             (ok {:operation :removed}))
-        (do (add-vote-fn statement-id user-id)
+        (do (add-vote-fn statement-id registered-user)
             (if counter-vote
               (ok {:operation :switched})
               (ok {:operation :added})))))
-    (bad-request (at/build-error-body :vote-not-registered
-                                      "Vote could not be registered"))))
+    (bad-request (at/build-error-body :vote-not-registered "Vote could not be registered"))))
+
+(defn- toggle-anon-vote-statement
+  "Toggle up- or downvote of anon statement."
+  [{:keys [share-hash statement-id inc-or-dec]} vote-type]
+  (if (and (not (nil? inc-or-dec))
+           (validator/valid-discussion-and-statement? statement-id share-hash))
+    (let [vote-function
+          (cond
+            (and (= inc-or-dec :inc) (= vote-type :upvote)) reaction-db/upvote-anonymous-statement!
+            (and (= inc-or-dec :dec) (= vote-type :upvote)) reaction-db/remove-anonymous-upvote!
+            (and (= inc-or-dec :inc) (= vote-type :downvote)) reaction-db/downvote-anonymous-statement!
+            (and (= inc-or-dec :dec) (= vote-type :downvote)) reaction-db/remove-anonymous-downvote!)]
+      (log/trace "Triggered Anonymous vote on Statement " statement-id)
+      (vote-function statement-id)
+      (ok {:operation :succeeded}))
+    (bad-request (at/build-error-body :vote-not-registered "Anonymous vote could not be registered"))))
 
 (defn- toggle-upvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement.
   `nickname` is optional and used for anonymous votes. If no `nickname` is
   provided, request must contain a valid authentication token."
   [{:keys [parameters identity]}]
-  (toggle-vote-statement
-   (:body parameters) identity reaction-db/upvote-statement! reaction-db/remove-upvote!
-   reaction-db/did-user-upvote-statement reaction-db/did-user-downvote-statement))
+  (if-let [registered-user (:db/id (db/fast-pull [:user.registered/keycloak-id (:sub identity)]))]
+    (toggle-vote-statement
+     (:body parameters) registered-user reaction-db/upvote-statement! reaction-db/remove-upvote!
+     reaction-db/did-user-upvote-statement reaction-db/did-user-downvote-statement)
+    (toggle-anon-vote-statement (:body parameters) :upvote)))
 
 (defn- toggle-downvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement.
   `nickname` is optional and used for anonymous votes. If no `nickname` is
   provided, request must contain a valid authentication token."
   [{:keys [parameters identity]}]
-  (toggle-vote-statement
-   (:body parameters) identity reaction-db/downvote-statement! reaction-db/remove-downvote!
-   reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement))
+  (if-let [registered-user (:db/id (db/fast-pull [:user.registered/keycloak-id (:sub identity)]))]
+    (toggle-vote-statement
+     (:body parameters) registered-user reaction-db/downvote-statement! reaction-db/remove-downvote!
+     reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement)
+    (toggle-anon-vote-statement (:body parameters) :downvote)))
 
 (defn- user-allowed-to-label?
   "Helper function checking, whether the user is allowed to use labels in the discussion."
@@ -503,7 +514,7 @@
                                          :method keyword?}}
                              400 at/response-error-body
                              403 at/response-error-body}}]
-     ["/vote" {:parameters {:body {:nickname ::dto/maybe-nickname}}}
+     ["/vote" {:parameters {:body {:inc-or-dec ::dto/maybe-inc-or-dec}}}
       ["/down" {:post toggle-downvote-statement
                 :description (at/get-doc #'toggle-downvote-statement)
                 :name :api.discussion.statement.vote/down

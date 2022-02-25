@@ -126,11 +126,19 @@
    {:db/ident :statement/upvotes
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
-    :db/doc "A list of users that upvoted the statement."}
+    :db/doc "A list of registered users that upvoted the statement."}
    {:db/ident :statement/downvotes
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
-    :db/doc "A list of users that downvoted the statement."}
+    :db/doc "A list of registered users that downvoted the statement."}
+   {:db/ident :statement/cummulative-upvotes
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "The cummulative number of upvotes by anonymous users."}
+   {:db/ident :statement/cummulative-downvotes
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "The cummulative number of downvotes by anonymous users."}
    {:db/ident :statement/creation-secret
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one

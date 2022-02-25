@@ -16,9 +16,9 @@
                         :user ::specs/user
                         :registered-user ::specs/registered-user))
 
-(s/def ::maybe-nickname
+(s/def ::maybe-inc-or-dec
   (s/or :nil nil?
-        :nickname :user/nickname))
+        :inc-or-dec keyword?))
 
 ;; Statements
 (s/def ::statement

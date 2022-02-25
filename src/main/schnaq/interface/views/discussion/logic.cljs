@@ -1,35 +1,10 @@
 (ns schnaq.interface.views.discussion.logic
-  (:require [com.fulcrologic.guardrails.core :refer [>defn ?]]
-            [hodgepodge.core :refer [local-storage]]
+  (:require [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]))
-
-(>defn calculate-votes
-  "Calculates the votes without needing to reload."
-  [statement local-votes]
-  [map? map? :ret number?]
-  (let [up-vote-change (get-in local-votes [:up (:db/id statement)] 0)
-        down-vote-change (get-in local-votes [:down (:db/id statement)] 0)]
-    (-
-     (+ (:statement/upvotes statement) up-vote-change)
-     (+ (:statement/downvotes statement) down-vote-change))))
-
-(>defn get-up-votes
-  "Calculates the up-votes without needing to reload."
-  [statement local-votes]
-  [(? map?) (? map?) :ret number?]
-  (let [up-vote-change (get-in local-votes [:up (:db/id statement)] 0)]
-    (+ (:statement/upvotes statement) up-vote-change)))
-
-(>defn get-down-votes
-  "Calculates the down-votes without needing to reload."
-  [statement local-votes]
-  [(? map?) (? map?) :ret number?]
-  (let [down-vote-change (get-in local-votes [:down (:db/id statement)] 0)]
-    (+ (:statement/downvotes statement) down-vote-change)))
 
 (rf/reg-event-fx
  :discussion.reaction.statement/send
@@ -154,13 +129,13 @@
          new-conclusion (first (filter #(= (:db/id %) statement-id) (get-in db [:discussion :premises :current])))]
      ;; set new conclusion immediately if it's in db already, so loading times are reduced
      (cond->
-      {:fx [(http/xhrio-request
-             db :get "/discussion/statement/info"
-             [:discussion.query.statement/by-id-success]
-             {:statement-id statement-id
-              :share-hash share-hash
-              :display-name (tools/current-display-name db)}
-             [:discussion.redirect/to-root share-hash])]}
+       {:fx [(http/xhrio-request
+              db :get "/discussion/statement/info"
+              [:discussion.query.statement/by-id-success]
+              {:statement-id statement-id
+               :share-hash share-hash
+               :display-name (tools/current-display-name db)}
+              [:discussion.redirect/to-root share-hash])]}
        new-conclusion (update :db #(assoc-in db [:discussion :conclusion :selected] new-conclusion)
                               :fx conj [:discussion.history/push new-conclusion])))))
 

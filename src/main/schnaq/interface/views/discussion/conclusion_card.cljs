@@ -19,10 +19,10 @@
             [schnaq.interface.views.discussion.filters :as filters]
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.discussion.labels :as labels]
-            [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.discussion.truncated-content :as truncated-content]
             [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.schnaq.poll :as poll]
+            [schnaq.interface.views.schnaq.reactions :as reactions]
             [schnaq.interface.views.user :as user]))
 
 (defn- call-to-action-schnaq
@@ -54,33 +54,9 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn up-down-vote
-  "Add inline panel for up and down votes."
-  [statement]
-  (let [votes @(rf/subscribe [:local-votes])
-        [local-upvote? local-downvote?] @(rf/subscribe [:votes/upvoted-or-downvoted (:db/id statement)])
-        ;; Do not use or shortcut, since the value can be false and should be preferably selected over backend value
-        upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
-        downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)]
-    [:div.d-flex.flex-row.align-items-center
-     [:div.me-2
-      {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")
-       :on-click (fn [e]
-                   (.stopPropagation e)
-                   (rf/dispatch [:discussion/toggle-upvote statement]))}
-      [icon :arrow-up "vote-arrow m-auto"]]
-     [:span.me-3 (logic/get-up-votes statement votes)]
-     [:div.me-2
-      {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")
-       :on-click (fn [e]
-                   (.stopPropagation e)
-                   (rf/dispatch [:discussion/toggle-downvote statement]))}
-      [icon :arrow-down "vote-arrow m-auto"]]
-     [:span (logic/get-down-votes statement votes)]]))
-
 (defn- statement-information-row [statement]
   [:div.d-flex.flex-wrap.align-items-center
-   [up-down-vote statement]
+   [reactions/up-down-vote statement]
    [:div.ms-sm-0.ms-lg-auto
     [badges/extra-discussion-info-badges statement]]])
 
@@ -173,7 +149,7 @@
                                                                    :statement-id (:db/id statement)})}
           [icon :comments "my-auto me-1"]
           [:small (labels :statement/discuss)]]
-         [up-down-vote statement]
+         [reactions/up-down-vote statement]
          (when with-answer?
            [:div.d-flex.flex-row.align-items-center.ms-auto
             [mark-as-answer-button statement]])]]]]]))
@@ -255,7 +231,7 @@
                              #(= username (get-in % [:statement/author :user/nickname])))
         keyfn (case sort-method
                 :newest :statement/created-at
-                :popular #(logic/calculate-votes % local-votes))
+                :popular #(reactions/calculate-votes % local-votes))
         own-statements (sort-by keyfn > (filter selection-function statements))
         other-statements (sort-by keyfn > (remove selection-function statements))]
     (if (= "Anonymous" username)
@@ -308,7 +284,7 @@
                  :statement/created-at created-at}
         starting-route? @(rf/subscribe [:schnaq.routes/starting?])
         statement (if starting-route? content current-conclusion)
-        info-content [up-down-vote statement]]
+        info-content [reactions/up-down-vote statement]]
     [motion/move-in :left
      [:div.p-2
       [:div.d-flex.flex-wrap.mb-4
@@ -447,59 +423,7 @@
        :routes.schnaq/start {:fx [[:dispatch [:discussion.query.conclusions/starting]]]}
        {}))))
 
-(rf/reg-sub
- :local-votes
- (fn [db _]
-   (get db :votes)))
-
-(rf/reg-event-fx
- :discussion/toggle-upvote
- (fn [{:keys [db]} [_ {:keys [db/id meta/upvoted?] :as statement}]]
-   (when-let [share-hash (-> db :schnaq :selected :discussion/share-hash)]
-     {:db (-> db
-              (update-in [:votes :own :up id] #(not (if (nil? %) upvoted? %)))
-              (assoc-in [:votes :own :down id] false))
-      :fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
-                               {:statement-id id
-                                :nickname (tools/current-display-name db)
-                                :share-hash share-hash}
-                               [:ajax.error/as-notification])]})))
-
-(rf/reg-event-fx
- :discussion/toggle-downvote
- (fn [{:keys [db]} [_ {:keys [db/id meta/downvoted?] :as statement}]]
-   (when-let [share-hash (-> db :schnaq :selected :discussion/share-hash)]
-     {:db (-> db
-              (assoc-in [:votes :own :up id] false)
-              (update-in [:votes :own :down id] #(not (if (nil? %) downvoted? %))))
-      :fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
-                               {:statement-id id
-                                :nickname (tools/current-display-name db)
-                                :share-hash share-hash}
-                               [:ajax.error/as-notification])]})))
-
 (rf/reg-event-db
- :upvote-success
- (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
-   (case operation
-     :added (update-in db [:votes :up id] inc)
-     :removed (update-in db [:votes :up id] dec)
-     :switched (-> db
-                   (update-in [:votes :up id] inc)
-                   (update-in [:votes :down id] dec)))))
-
-(rf/reg-event-db
- :downvote-success
- (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
-   (case operation
-     :added (update-in db [:votes :down id] inc)
-     :removed (update-in db [:votes :down id] dec)
-     :switched (-> db
-                   (update-in [:votes :down id] inc)
-                   (update-in [:votes :up id] dec)))))
-
-(rf/reg-sub
- :votes/upvoted-or-downvoted
- (fn [db [_ statement-id]]
-   [(get-in db [:votes :own :up statement-id])
-    (get-in db [:votes :own :down statement-id])]))
+ :discussion.premises/set-current
+ (fn [db [_ {:keys [premises]}]]
+   (assoc-in db [:discussion :premises :current] premises)))

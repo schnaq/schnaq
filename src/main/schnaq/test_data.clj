@@ -18,6 +18,8 @@
    {:db/id "statement/get-cat"
     :statement/author "user/schredder" ; Use the tempid above
     :statement/content "we should get a cat"
+    :statement/upvotes ["user.registered/alex"]
+    :statement/downvotes ["user.registered/kangaroo"]
     :statement/created-at #inst "2020-01-01"
     :statement/version 1
     :statement/discussions ["discussion/cat-or-dog"]}
@@ -25,20 +27,21 @@
     :statement/author "user/rambo" ; Use the tempid above
     :statement/content "we could get both, a dog and a cat"
     :statement/created-at #inst "2020-01-01"
+    :statement/upvotes ["user.registered/alex"]
     :statement/version 1
     :statement/discussions ["discussion/cat-or-dog"]}
    {:db/id "statement/watchdogs"
     :statement/author "user/wegi"
     :statement/content "dogs can act as watchdogs"
     :statement/created-at #inst "2020-01-01"
+    :statement/cummulative-downvotes 3
     :statement/parent "statement/get-dog"
     :statement/type :statement.type/support
     :statement/version 1
     :statement/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:db/id "statement/walks"
-    :statement/author "user/schredder" ; Use the tempid above
-    :statement/content
-    "you have to take the dog for a walk every day, which is tedious"
+    :statement/author "user/schredder"                      ; Use the tempid above
+    :statement/content "you have to take the dog for a walk every day, which is tedious"
     :statement/created-at #inst "2020-01-01"
     :statement/version 1
     :statement/parent "statement/get-dog"

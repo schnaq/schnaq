@@ -25,18 +25,22 @@
 ;; Processing statements
 
 (>defn with-aggregated-votes
-  "Anonymize the votes by just counting the number of votes and adding whether the user has upvoted or not."
+  "Anonymize the votes by just counting the number of anon and registered votes
+  and adding whether the user has upvoted or not."
   [data user-id]
   [any? :db/id :ret any?]
   (walk/postwalk
    #(if (and (instance? IEditableCollection %)
-             (or (contains? % :statement/downvotes) (contains? % :statement/upvotes)))
+             (or (contains? % :statement/downvotes) (contains? % :statement/upvotes)
+                 (contains? % :statement/cummulative-downvotes) (contains? % :statement/cummulative-upvotes)))
       (let [upvotes (map :db/id (:statement/upvotes %))
             downvotes (map :db/id (:statement/downvotes %))]
-        (assoc % :statement/upvotes (count upvotes)
-               :statement/downvotes (count downvotes)
-               :meta/upvoted? (contains? (set upvotes) user-id)
-               :meta/downvoted? (contains? (set downvotes) user-id)))
+        (-> %
+            (assoc :statement/upvotes (+ (count upvotes) (:statement/cummulative-upvotes % 0))
+                   :statement/downvotes (+ (count downvotes) (:statement/cummulative-downvotes % 0))
+                   :meta/upvoted? (contains? (set upvotes) user-id)
+                   :meta/downvoted? (contains? (set downvotes) user-id))
+            (dissoc :statement/cummulative-upvotes :statement/cummulative-downvotes)))
       %)
    data))
 

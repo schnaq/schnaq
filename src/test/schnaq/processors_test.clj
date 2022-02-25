@@ -12,9 +12,11 @@
   (testing "Result should have all statements enriched with votes-metadata"
     (let [share-hash "cat-dog-hash"
           enriched-data (processors/with-aggregated-votes (discussion-db/all-statements share-hash) 123)
-          upvotes-only (map :statement/upvotes enriched-data)
-          downvotes-only (map :statement/downvotes enriched-data)]
-      (is (= (count enriched-data) (count upvotes-only) (count downvotes-only))))))
+          upvotes-only (remove nil? (map :statement/upvotes enriched-data))
+          downvotes-only (remove nil? (map :statement/downvotes enriched-data))]
+      (is (= 18 (count enriched-data)))
+      ;; When there are cummulative votes, they should also yield a result
+      (is (= 3 (count upvotes-only) (count downvotes-only))))))
 
 (deftest add-meta-info-test
   (testing "Test if meta info was correctly added to schnaq"
@@ -31,6 +33,6 @@
                    :statement/author {:db/id 17592186045540, :user.registered/keycloak-id "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18", :user.registered/display-name "n2o"}
                    :statement/version 1, :statement/created-at #inst "2021-10-12T10:50:43.312-00:00", :statement/content "möp",
                    :statement/children [{:statement/labels [":foo" ":check"]}
-                                       {:statement/labels [":ghost"]}]}]
+                                        {:statement/labels [":ghost"]}]}]
     (is (:meta/answered? (processors/with-answered?-info statement)))
     (is (not (:meta/answered? (processors/with-answered?-info (dissoc statement :statement/children)))))))
