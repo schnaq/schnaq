@@ -76,6 +76,7 @@
             [schnaq.interface.views.schnaq.admin]
             [schnaq.interface.views.schnaq.create]
             [schnaq.interface.views.schnaq.poll]
+            [schnaq.interface.views.schnaq.reactions]
             [schnaq.interface.views.schnaq.summary]
             [schnaq.interface.views.schnaq.visited]
             [schnaq.interface.views.startpage.core]

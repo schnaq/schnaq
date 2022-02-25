@@ -11,7 +11,7 @@
   (:require [clojure.set :as cset]
             [re-frame.core :as rf]
             [schnaq.interface.components.schnaq :as sc]
-            [schnaq.interface.views.discussion.logic :as discussion-logic]))
+            [schnaq.interface.views.schnaq.reactions :as reactions]))
 
 (defn filter-answered-statements
   "Show buttons to toggle between answered / unanswered statements."
@@ -76,7 +76,7 @@
           ;; The deref needs to happen here, because it cant happen in a lazy seq.
           ;; Derefing in the component does not update the filters, when votes change.
           votes @local-votes]
-      (fn [statements] (filter #(comp-fn (discussion-logic/calculate-votes % votes) votes-number) statements)))
+      (fn [statements] (filter #(comp-fn (reactions/calculate-votes % votes) votes-number) statements)))
     identity))
 
 (defn filter-statements

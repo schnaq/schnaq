@@ -156,6 +156,22 @@
          new-val (if old-val (inc old-val) 1)]
      @(transact [[:db/cas entity attribute old-val new-val]]))))
 
+(>defn decrement-number
+  "A generic transaction that atomically decrements a number, using compare-and-swap.
+  When there is no value, it is assumed to be 0.
+  Prevents race-conditions and updating the same value multiple times. Tries at most 20 times until cas works.
+  Returns the dereffed transaction."
+  ([entity attribute]
+   [:db/id keyword? :ret (? map?)]
+   (decrement-number entity attribute Long/MIN_VALUE))
+  ([entity attribute minimum-value]
+   [:db/id keyword? int? :ret (? map?)]
+   (toolbelt/try-times
+    20
+    (let [old-val (get (fast-pull entity [attribute]) attribute)
+          new-val (max (if old-val (dec old-val) -1) minimum-value)]
+      @(transact [[:db/cas entity attribute old-val new-val]])))))
+
 ;; -----------------------------------------------------------------------------
 ;; Feedback functions
 
