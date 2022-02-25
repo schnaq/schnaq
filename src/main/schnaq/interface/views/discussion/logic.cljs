@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.logic
-  (:require [com.fulcrologic.guardrails.core :refer [>defn ?]]
-            [hodgepodge.core :refer [local-storage]]
+  (:require [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.translations :refer [labels]]
