@@ -1,4 +1,5 @@
 {:lint-as {com.fulcrologic.guardrails.core/>defn clojure.core/defn
            com.fulcrologic.guardrails.core/>defn- clojure.core/defn}
  :linters {:single-key-in {:level :warning}
-           :unsorted-required-namespaces {:level :warning}}}
+           :unsorted-required-namespaces {:level :warning}
+           :unused-referred-var {:exclude {com.fulcrologic.guardrails.core [=>]}}}}
