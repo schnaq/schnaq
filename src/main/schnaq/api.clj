@@ -198,8 +198,6 @@
 
 (comment
   "Start the server from here"
-  ;; TODO Change frontend to allow anon accounts to vote as long as there is no entry in localstorage (take care of inc or dec)
-  ;; TODO Set localstorage flag, when voting in frontend as anon account
   (-main)
   (stop-server)
   :end)
