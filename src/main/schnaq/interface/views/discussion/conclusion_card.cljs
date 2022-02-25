@@ -501,21 +501,21 @@
 
 (rf/reg-event-fx
  :schnaq.vote/toggle-anonymous
- ;; TODO replace downvote and upvote success
- ;; TODO refactor to make it more readable
  (fn [{:keys [db]} [_ statement up-down]]
-   (let [last-vote (get-in db [:votes :device (:db/id statement)])]
-     (if (= :upvote up-down)
-       (case last-vote
-         :upvote {:fx [[:dispatch [:schnaq.vote/send-anonymous statement :up :dec]]]}
-         :downvote {:fx [[:dispatch [:schnaq.vote/send-anonymous statement :down :dec]]
-                         [:dispatch [:schnaq.vote/send-anonymous statement :up :inc]]]}
-         nil {:fx [[:dispatch [:schnaq.vote/send-anonymous statement :up :inc]]]})
-       (case last-vote
-         :upvote {:fx [[:dispatch [:schnaq.vote/send-anonymous statement :up :dec]]
-                       [:dispatch [:schnaq.vote/send-anonymous statement :down :inc]]]}
-         :downvote {:fx [[:dispatch [:schnaq.vote/send-anonymous statement :down :dec]]]}
-         nil {:fx [[:dispatch [:schnaq.vote/send-anonymous statement :down :inc]]]})))))
+   (let [last-vote (get-in db [:votes :device (:db/id statement)])
+         effects
+         (cond-> []
+           (and (= up-down :upvote)
+                (or (nil? last-vote) (= :downvote last-vote)))
+           (concat [:dispatch [:schnaq.vote/send-anonymous statement :up :inc]])
+           (= :upvote last-vote)
+           (concat [:dispatch [:schnaq.vote/send-anonymous statement :up :dec]])
+           (and (= up-down :downvote)
+                (or (nil? last-vote) (= :upvote last-vote)))
+           (concat [:dispatch [:schnaq.vote/send-anonymous statement :down :inc]])
+           (= :downvote last-vote)
+           (concat [:dispatch [:schnaq.vote/send-anonymous statement :down :dec]]))]
+     {:fx [(vec effects)]})))
 
 (rf/reg-event-fx
  :schnaq.vote/send-anonymous
