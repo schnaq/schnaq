@@ -38,28 +38,22 @@
 
 (deftest edit-theme-test
   (let [theme (first (sut/themes-by-keycloak-id kangaroo-keycloak-id))]
-    (testing "Editing themes"
-      (testing "is allowed for the theme creator."
-        (is (= "razupaltuff"
-               (:theme/title (sut/edit-theme kangaroo-keycloak-id
-                                             (assoc theme :theme/title "razupaltuff"))))))
-      (testing "is forbidden for user who are not the theme authors."
-        (is (nil? (sut/edit-theme christian-keycloak-id (assoc theme :theme/title "razupaltuff"))))))))
+    (testing "Editing themes is allowed for the theme creator."
+      (is (= "razupaltuff"
+             (:theme/title (sut/edit-theme kangaroo-keycloak-id
+                                           (assoc theme :theme/title "razupaltuff"))))))))
 
 (deftest delete-theme-test
   (let [theme (first (sut/themes-by-keycloak-id kangaroo-keycloak-id))]
-    (testing "Deleting themes"
-      (testing "is allowed for the theme authors."
-        (is (not (nil? (sut/delete-theme kangaroo-keycloak-id (:db/id theme))))))
-      (testing "is not allowed for other users."
-        (is (nil? (sut/delete-theme christian-keycloak-id (:db/id theme))))))))
+    (testing "Deleting themes is allowed for the theme authors."
+      (is (not (nil? (sut/delete-theme kangaroo-keycloak-id (:db/id theme))))))))
 
 (deftest assign-theme-test
   (testing "Themes should be assignable to discussions."
     (let [theme-id (:db/id (first (sut/themes-by-keycloak-id kangaroo-keycloak-id)))
           _assign-theme (sut/assign-theme "simple-hash" theme-id)]
       (is (= theme-id (get-in (discussion-db/discussion-by-share-hash "simple-hash")
-                       [:discussion/theme :db/id]))))))
+                              [:discussion/theme :db/id]))))))
 
 (deftest unassign-theme-test
   (testing "Assigned themes should also be unassignable."
