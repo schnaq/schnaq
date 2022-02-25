@@ -14,7 +14,8 @@
             [schnaq.interface.views.navbar.elements :as elements]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.activation :as activation]
-            [schnaq.interface.views.user.settings :as settings]))
+            [schnaq.interface.views.user.settings :as settings]
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (s/def ::hex-color (s/and string? #(.startsWith % "#")))
 (s/def ::css-variable (s/and string? #(.startsWith % "--")))
@@ -172,6 +173,15 @@
                                  (oget % [:target :value])])}]
      [:label {:for "theme-title"} (labels :themes.personal.creation.title/label)]]))
 
+(defn- input-image-image
+  "TODO"
+  []
+  [:div
+   [:label.form-label {:for "image-logo"}
+    (labels :themes.personal.creation.logo/title)]
+   [:input.form-control {:type :file
+                         :id "image-logo"}]])
+
 (defn- configure-theme
   "Form to configure theme."
   []
@@ -186,8 +196,7 @@
       [:div.row
        [:div.col-md-5
         [input-activation-phrase]
-        [:strong (labels :themes.personal.creation.logo/title)]
-        [:p.text-muted "Coming Soon"]
+        [input-image-image]
         [:strong (labels :themes.personal.creation.activation.image/title)]
         [:p.text-muted "Coming Soon"]]
        [:div.col-md-7
@@ -331,12 +340,14 @@
   "Extract theme information from form."
   [form]
   (let [get-field #(oget+ form [% :value])]
-    {:db/id (get-field :theme-id)
-     :theme/title (get-field :theme-title)
-     :theme.colors/primary (get-field :color-primary)
-     :theme.colors/secondary (get-field :color-secondary)
-     :theme.colors/background (get-field :color-background)
-     :theme.texts/activation (get-field :activation-phrase)}))
+    (shared-tools/clean-db-vals
+     {:db/id (get-field :theme-id)
+      :theme/title (get-field :theme-title)
+      :theme.colors/primary (get-field :color-primary)
+      :theme.colors/secondary (get-field :color-secondary)
+      :theme.colors/background (get-field :color-background)
+      :theme.texts/activation (get-field :activation-phrase)
+      :theme.images/logo (get-field :image-logo)})))
 
 (rf/reg-event-fx
  :theme/add
@@ -351,6 +362,7 @@
 (rf/reg-event-fx
  :theme/edit
  (fn [{:keys [db]} [_ form]]
+   (prn (theme-from-form form))
    {:fx [(http/xhrio-request db :put "/user/theme/edit"
                              [:theme.save/success]
                              {:theme (theme-from-form form)})]}))

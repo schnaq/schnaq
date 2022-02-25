@@ -3,7 +3,8 @@
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
-            [schnaq.database.specs :as specs])
+            [schnaq.database.specs :as specs]
+            [schnaq.shared-toolbelt :as shared-tools])
   (:import java.util.UUID))
 
 (>defn themes-by-keycloak-id
@@ -43,7 +44,7 @@
                          :theme/title unique-title
                          :db/id temp-id)]
     (db/transact-and-pull-temp
-     [new-theme]
+     [(shared-tools/clean-db-vals new-theme)]
      temp-id patterns/theme)))
 
 (>defn edit-theme
@@ -51,7 +52,7 @@
   [keycloak-id theme]
   [:user.registered/keycloak-id ::specs/theme => (? ::specs/theme)]
   (let [prepared-theme (assoc theme :theme/user [:user.registered/keycloak-id keycloak-id])]
-    (db/transact [prepared-theme])
+    (db/transact [(shared-tools/clean-db-vals prepared-theme)])
     (db/fast-pull (:db/id prepared-theme) patterns/theme)))
 
 (>defn delete-theme

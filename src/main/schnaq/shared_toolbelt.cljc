@@ -9,3 +9,12 @@
   [string? => string?]
   (let [tokens (map #(string/lower-case %) (string/split string #"\s"))]
     (string/join "-" (take (count tokens) tokens))))
+
+(>defn clean-db-vals
+  "Removes all entries from a map that have a value of nil or empty string."
+  [data]
+  [associative? :ret associative?]
+  (into {} (remove #(or (nil? (second %))
+                        (when (string? (second %))
+                          (string/blank? (second %))))
+                   data)))

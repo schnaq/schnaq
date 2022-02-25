@@ -55,9 +55,6 @@
   (let [theme-author (get-in
                       (db/fast-pull theme-id [{:theme/user [:user.registered/keycloak-id]}])
                       [:theme/user :user.registered/keycloak-id])]
-    (prn "theme author:" theme-author)
-    (prn "keycloak-id" keycloak-id)
-    (prn (= keycloak-id theme-author))
     (= keycloak-id theme-author)))
 
 (defn user-is-theme-author?-middleware

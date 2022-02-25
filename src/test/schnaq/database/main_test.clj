@@ -8,17 +8,6 @@
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
-(deftest clean-db-vals-test
-  (testing "Test whether nil values are properly cleaned from a map."
-    (let [no-change-map {:foo :bar
-                         :baz :bam}
-          time-map {:bar (db/now)}]
-      (is (= no-change-map (@#'db/clean-db-vals no-change-map)))
-      (is (= 2 (count (@#'db/clean-db-vals (merge no-change-map {:unwished-for nil})))))
-      (is (= {} (@#'db/clean-db-vals {})))
-      (is (= {} (@#'db/clean-db-vals {:foo ""})))
-      (is (= time-map (@#'db/clean-db-vals time-map))))))
-
 (deftest add-feedback-test
   (testing "Valid feedbacks should be stored."
     (let [feedback {:feedback/description "Very good stuff 👍 Would use again"
@@ -35,7 +24,7 @@
     (is (seq (discussion-db/all-discussions-by-title "Cat or Dog?")))))
 
 (deftest transact-and-pull-temp-test
-  (testing "Is the newly created object delivered corectly?"
+  (testing "Is the newly created object delivered correctly?"
     (is (= "Hi thar" (:discussion/title
                       (db/transact-and-pull-temp
                        [{:db/id "test"
