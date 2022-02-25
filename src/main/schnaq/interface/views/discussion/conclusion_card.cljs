@@ -6,6 +6,7 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.database.specs :as specs]
+            [schnaq.interface.auth :as auth]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -572,5 +573,8 @@
 (rf/reg-sub
  :votes/upvoted-or-downvoted
  (fn [db [_ statement-id]]
-   [(get-in db [:votes :own :up statement-id])
-    (get-in db [:votes :own :down statement-id])]))
+   (if (auth/user-authenticated? db)
+     [(get-in db [:votes :own :up statement-id])
+      (get-in db [:votes :own :down statement-id])]
+     [(= :upvote (get-in db [:votes :device statement-id]))
+      (= :downvote (get-in db [:votes :device statement-id]))])))
