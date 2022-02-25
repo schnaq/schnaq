@@ -22,7 +22,7 @@
   [{:keys [parameters]}]
   (let [{:keys [access-code]} (:query parameters)]
     (if-let [share-hash (get-in (ac/discussion-by-access-code access-code) [:discussion.access/discussion :discussion/share-hash])]
-      (ok {:location (links/get-link-to-ask-interface share-hash)})
+      (ok {:location (links/get-share-link share-hash)})
       at/access-code-invalid)))
 
 (defn- schnaq-by-hash
