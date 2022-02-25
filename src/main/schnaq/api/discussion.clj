@@ -282,12 +282,14 @@
             (if counter-vote
               (ok {:operation :switched})
               (ok {:operation :added})))))
-    (bad-request (at/build-error-body :vote-not-registered
-                                      "Vote could not be registered"))))
+    (bad-request (at/build-error-body :vote-not-registered "Vote could not be registered"))))
 
 (defn- toggle-anon-vote-statement
   "Toggle up- or downvote of anon statement."
   [{:keys [share-hash statement-id inc-or-dec]} vote-type]
+  (println inc-or-dec)
+  (println share-hash)
+  (println statement-id)
   (if (and (not (nil? inc-or-dec))
            (validator/valid-discussion-and-statement? statement-id share-hash))
     (let [vote-function
@@ -299,7 +301,7 @@
       (log/trace "Triggered Anonymous vote on Statement " statement-id)
       (vote-function statement-id)
       (ok {:operation :succeeded}))
-    (bad-request (at/build-error-body :vote-not-registered "Vote could not be registered"))))
+    (bad-request (at/build-error-body :vote-not-registered "Anonymous vote could not be registered"))))
 
 (defn- toggle-upvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement.
@@ -514,7 +516,7 @@
                                          :method keyword?}}
                              400 at/response-error-body
                              403 at/response-error-body}}]
-     ["/vote" {:parameters {:body {:nickname ::dto/maybe-nickname}}}
+     ["/vote" {:parameters {:body {:inc-or-dec ::dto/maybe-inc-or-dec}}}
       ["/down" {:post toggle-downvote-statement
                 :description (at/get-doc #'toggle-downvote-statement)
                 :name :api.discussion.statement.vote/down

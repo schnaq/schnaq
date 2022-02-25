@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.conclusion-card
   (:require [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [goog.string :as gstring]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.database.specs :as specs]
@@ -61,20 +62,25 @@
         [local-upvote? local-downvote?] @(rf/subscribe [:votes/upvoted-or-downvoted (:db/id statement)])
         ;; Do not use or shortcut, since the value can be false and should be preferably selected over backend value
         upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
-        downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)]
+        downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)
+        authenticated? @(rf/subscribe [:user/authenticated?])]
     [:div.d-flex.flex-row.align-items-center
      [:div.me-2
       {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")
        :on-click (fn [e]
                    (.stopPropagation e)
-                   (rf/dispatch [:discussion/toggle-upvote statement]))}
+                   (if authenticated?
+                     (rf/dispatch [:discussion/toggle-upvote statement])
+                     (rf/dispatch [:schnaq.vote/toggle-anonymous statement :upvote])))}
       [icon :arrow-up "vote-arrow m-auto"]]
      [:span.me-3 (logic/get-up-votes statement votes)]
      [:div.me-2
       {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")
        :on-click (fn [e]
                    (.stopPropagation e)
-                   (rf/dispatch [:discussion/toggle-downvote statement]))}
+                   (if authenticated?
+                     (rf/dispatch [:discussion/toggle-downvote statement])
+                     (rf/dispatch [:schnaq.vote/toggle-anonymous statement :downvote])))}
       [icon :arrow-down "vote-arrow m-auto"]]
      [:span (logic/get-down-votes statement votes)]]))
 
@@ -475,10 +481,10 @@
    {:db (-> db
             (update-in [:votes :own :up id] #(not (if (nil? %) upvoted? %)))
             (assoc-in [:votes :own :down id] false))
-    ;; TODO set the right flag, when anon
     :fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
                              {:statement-id id
-                              :share-hash (-> db :schnaq :selected :discussion/share-hash)}
+                              :share-hash (-> db :schnaq :selected :discussion/share-hash)
+                              :inc-or-dec nil}
                              [:ajax.error/as-notification])]}))
 
 (rf/reg-event-fx
@@ -487,10 +493,39 @@
    {:db (-> db
             (assoc-in [:votes :own :up id] false)
             (update-in [:votes :own :down id] #(not (if (nil? %) downvoted? %))))
-    ;; TODO set the right flag, when anon
     :fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
                              {:statement-id id
-                              :share-hash (-> db :schnaq :selected :discussion/share-hash)}
+                              :share-hash (-> db :schnaq :selected :discussion/share-hash)
+                              :inc-or-dec nil}
+                             [:ajax.error/as-notification])]}))
+
+(rf/reg-event-fx
+ :schnaq.vote/toggle-anonymous
+ ;; TODO replace downvote and upvote success
+ ;; TODO refactor to make it more readable
+ (fn [{:keys [db]} [_ statement up-down]]
+   (let [last-vote (get-in db [:votes :device (:db/id statement)])]
+     (if (= :upvote up-down)
+       (case last-vote
+         :upvote {:fx [[:dispatch [:schnaq.vote/send-anonymous statement :up :dec]]]}
+         :downvote {:fx [[:dispatch [:schnaq.vote/send-anonymous statement :down :dec]]
+                         [:dispatch [:schnaq.vote/send-anonymous statement :up :inc]]]}
+         nil {:fx [[:dispatch [:schnaq.vote/send-anonymous statement :up :inc]]]})
+       (case last-vote
+         :upvote {:fx [[:dispatch [:schnaq.vote/send-anonymous statement :up :dec]]
+                       [:dispatch [:schnaq.vote/send-anonymous statement :down :inc]]]}
+         :downvote {:fx [[:dispatch [:schnaq.vote/send-anonymous statement :down :dec]]]}
+         nil {:fx [[:dispatch [:schnaq.vote/send-anonymous statement :down :inc]]]})))))
+
+(rf/reg-event-fx
+ :schnaq.vote/send-anonymous
+ (fn [{:keys [db]} [_ statement up-or-down inc-or-dec]]
+   {:fx [(http/xhrio-request db :post (gstring/format "/discussion/statement/vote/%s" (name up-or-down))
+                             ;;TODO generic success [:downvote-success statement]
+                             [:no-op]
+                             {:statement-id (:db/id statement)
+                              :share-hash (-> db :schnaq :selected :discussion/share-hash)
+                              :inc-or-dec inc-or-dec}
                              [:ajax.error/as-notification])]}))
 
 (rf/reg-event-db
