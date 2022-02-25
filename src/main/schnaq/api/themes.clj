@@ -1,7 +1,10 @@
 (ns schnaq.api.themes
   (:require [clojure.spec.alpha :as s]
-            [ring.util.http-response :refer [ok bad-request]]
+            [com.fulcrologic.guardrails.core :refer [>defn- =>]]
+            [ring.util.http-response :refer [ok forbidden bad-request]]
+            [schnaq.api.middlewares :as middlewares]
             [schnaq.api.toolbelt :as at]
+            [schnaq.database.main :as db]
             [schnaq.database.specs :as specs]
             [schnaq.database.themes :as themes-db]))
 
@@ -45,6 +48,27 @@
 
 ;; -----------------------------------------------------------------------------
 
+(>defn- user-is-theme-author?
+  "Verify that a user is the theme author."
+  [keycloak-id theme-id]
+  [:user.registered/keycloak-id :db/id => boolean?]
+  (let [theme-author (get-in
+                      (db/fast-pull theme-id [{:theme/user [:user.registered/keycloak-id]}])
+                      [:theme/user :user.registered/keycloak-id])]
+    (= keycloak-id theme-author)))
+
+(defn user-is-theme-author?-middleware
+  "Verify that the user has the correct permissions to "
+  [handler]
+  (fn [request]
+    (let [keycloak-id (get-in request [:identity :sub])
+          theme-id (middlewares/extract-parameter-from-request request :theme-id)]
+      (if (user-is-theme-author? keycloak-id theme-id)
+        (handler request)
+        (forbidden (at/build-error-body :themes/not-the-author "You are not the author of this theme."))))))
+
+;; -----------------------------------------------------------------------------
+
 (def theme-routes
   [["/user" {:swagger {:tags ["themes"]}
              :middleware [:user/authenticated?
@@ -64,11 +88,13 @@
      ["/edit" {:put edit-theme
                :description (at/get-doc #'edit-theme)
                :name :api.theme/edit
+               :middleware [user-is-theme-author?-middleware]
                :parameters {:body {:theme ::specs/theme}}
                :responses {200 {:body {:theme ::specs/theme}}}}]
      ["/delete" {:delete delete-theme
                  :description (at/get-doc #'delete-theme)
                  :name :api.theme/delete
+                 :middleware [user-is-theme-author?-middleware]
                  :parameters {:body {:theme-id :db/id}}
                  :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}}}]
      ["/discussion"

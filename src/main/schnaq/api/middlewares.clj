@@ -6,7 +6,7 @@
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
-(defn- extract-parameter-from-request
+(defn extract-parameter-from-request
   "Look up parameter in request and return its value."
   [request parameter]
   (or (get-in request [:parameters :body parameter])

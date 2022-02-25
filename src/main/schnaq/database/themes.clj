@@ -29,15 +29,6 @@
                [?theme :theme/title ?theme-title]]
              keycloak-id title patterns/theme)))
 
-(>defn- user-is-theme-author?
-  "Verify that a user is the theme author."
-  [keycloak-id theme-id]
-  [:user.registered/keycloak-id :db/id => boolean?]
-  (let [theme-author (get-in
-                      (db/fast-pull theme-id [{:theme/user [:user.registered/keycloak-id]}])
-                      [:theme/user :user.registered/keycloak-id])]
-    (= keycloak-id theme-author)))
-
 (>defn new-theme
   "Saves the provided theme for a given user."
   [keycloak-id theme]
@@ -59,26 +50,24 @@
   "Saves the provided theme for a given user."
   [keycloak-id theme]
   [:user.registered/keycloak-id ::specs/theme => (? ::specs/theme)]
-  (when (user-is-theme-author? keycloak-id (:db/id theme))
-    (let [prepared-theme (assoc theme :theme/user [:user.registered/keycloak-id keycloak-id])]
-      (db/transact [prepared-theme])
-      (db/fast-pull (:db/id prepared-theme) patterns/theme))))
+  (let [prepared-theme (assoc theme :theme/user [:user.registered/keycloak-id keycloak-id])]
+    (db/transact [prepared-theme])
+    (db/fast-pull (:db/id prepared-theme) patterns/theme)))
 
 (>defn delete-theme
   "Delete a theme."
   [keycloak-id theme-id]
-  [:user.registered/keycloak-id :db/id => any?]
-  (when (user-is-theme-author? keycloak-id theme-id)
-    (db/transact [[:db/retractEntity theme-id]])))
+  [:user.registered/keycloak-id :db/id => future?]
+  (db/transact [[:db/retractEntity theme-id]]))
 
 (>defn assign-theme
   "Assigns a theme to a discussion."
   [share-hash theme-id]
-  [:discussion/share-hash :db/id => any?]
+  [:discussion/share-hash :db/id => future?]
   (db/transact [[:db/add [:discussion/share-hash share-hash] :discussion/theme theme-id]]))
 
 (>defn unassign-theme
   "Unassign theme from discussion."
   [share-hash]
-  [:discussion/share-hash => any?]
+  [:discussion/share-hash => future?]
   (db/transact [[:db/retract [:discussion/share-hash share-hash] :discussion/theme]]))
