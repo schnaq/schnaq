@@ -15,7 +15,7 @@
           upvotes-only (remove nil? (map :statement/upvotes enriched-data))
           downvotes-only (remove nil? (map :statement/downvotes enriched-data))]
       (is (= 18 (count enriched-data)))
-      ;; When there are cummulative votes, they should also yield a result
+      ;; When there are cumulative votes, they should also yield a result
       (is (= 3 (count upvotes-only) (count downvotes-only))))))
 
 (deftest add-meta-info-test

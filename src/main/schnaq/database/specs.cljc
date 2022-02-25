@@ -159,8 +159,8 @@
 (s/def :statement/version number?)
 (s/def :statement/author ::any-user)
 (s/def :statement/upvotes (s/or :count number? :upvote-users (s/coll-of ::user-or-reference)))
-(s/def :statement/cummulative-upvotes nat-int?)
-(s/def :statement/cummulative-downvotes nat-int?)
+(s/def :statement/cumulative-upvotes nat-int?)
+(s/def :statement/cumulative-downvotes nat-int?)
 (s/def :statement/downvotes (s/or :count number? :downvote-users (s/coll-of ::user-or-reference)))
 (s/def :statement/creation-secret ::non-blank-string)
 (s/def :statement/created-at inst?)
@@ -172,7 +172,7 @@
   (s/keys :req [:statement/content :statement/version :statement/author]
           :opt [:statement/creation-secret :statement/created-at
                 :statement/type :statement/parent :statement/discussions
-                :statement/labels :statement/cummulative-upvotes :statement/cummulative-downvotes]))
+                :statement/labels :statement/cumulative-upvotes :statement/cumulative-downvotes]))
 
 (s/def :statement.vote/operation #{:removed :switched :added :succeeded})
 
