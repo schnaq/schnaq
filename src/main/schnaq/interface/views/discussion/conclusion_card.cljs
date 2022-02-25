@@ -501,21 +501,24 @@
 
 (rf/reg-event-fx
  :schnaq.vote/toggle-anonymous
- (fn [{:keys [db]} [_ statement up-down]]
-   (let [last-vote (get-in db [:votes :device (:db/id statement)])
+ (fn [{:keys [db]} [_ statement current-click]]
+   (let [recorded-vote (get-in db [:votes :device (:db/id statement)])
          effects
          (cond-> []
-           (and (= up-down :upvote)
-                (or (nil? last-vote) (= :downvote last-vote)))
-           (concat [:dispatch [:schnaq.vote/send-anonymous statement :up :inc]])
-           (= :upvote last-vote)
-           (concat [:dispatch [:schnaq.vote/send-anonymous statement :up :dec]])
-           (and (= up-down :downvote)
-                (or (nil? last-vote) (= :upvote last-vote)))
-           (concat [:dispatch [:schnaq.vote/send-anonymous statement :down :inc]])
-           (= :downvote last-vote)
-           (concat [:dispatch [:schnaq.vote/send-anonymous statement :down :dec]]))]
-     {:fx [(vec effects)]})))
+           (and (= current-click :upvote) (not= :upvote recorded-vote))
+           (conj [:dispatch [:schnaq.vote/send-anonymous statement :up :inc]])
+           (= :upvote recorded-vote)
+           (conj [:dispatch [:schnaq.vote/send-anonymous statement :up :dec]])
+           (and (= current-click :downvote) (not= :downvote recorded-vote))
+           (conj [:dispatch [:schnaq.vote/send-anonymous statement :down :inc]])
+           (= :downvote recorded-vote)
+           (conj [:dispatch [:schnaq.vote/send-anonymous statement :down :dec]]))
+         new-vote (case recorded-vote
+                    nil current-click
+                    :downvote (if (= :upvote current-click) :upvote nil)
+                    :upvote (if (= :downvote current-click) :downvote nil))]
+     {:db (assoc-in db [:votes :device (:db/id statement)] new-vote)
+      :fx (vec effects)})))
 
 (rf/reg-event-fx
  :schnaq.vote/send-anonymous

@@ -287,9 +287,6 @@
 (defn- toggle-anon-vote-statement
   "Toggle up- or downvote of anon statement."
   [{:keys [share-hash statement-id inc-or-dec]} vote-type]
-  (println inc-or-dec)
-  (println share-hash)
-  (println statement-id)
   (if (and (not (nil? inc-or-dec))
            (validator/valid-discussion-and-statement? statement-id share-hash))
     (let [vote-function
