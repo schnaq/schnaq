@@ -46,7 +46,7 @@
 (deftest delete-theme-test
   (let [theme (first (sut/themes-by-keycloak-id kangaroo-keycloak-id))]
     (testing "Deleting themes is allowed for the theme authors."
-      (is (not (nil? (sut/delete-theme kangaroo-keycloak-id (:db/id theme))))))))
+      (is (not (nil? (sut/delete-theme (:db/id theme))))))))
 
 (deftest assign-theme-test
   (testing "Themes should be assignable to discussions."

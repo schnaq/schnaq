@@ -293,8 +293,8 @@
 (s/def :theme.images/logo ::non-blank-string)
 (s/def :theme.images/activation ::non-blank-string)
 (s/def :theme.texts/activation ::non-blank-string)
-(s/def ::theme (s/keys :req [:theme/title]
-                       :opt [:theme.colors/primary :theme.colors/secondary
+(s/def ::theme (s/keys :opt [:theme/title
+                             :theme.colors/primary :theme.colors/secondary
                              :theme.colors/background :theme.images/logo
                              :theme.images/activation :theme/discussions
                              :theme.texts/activation :theme/user :db/id]))

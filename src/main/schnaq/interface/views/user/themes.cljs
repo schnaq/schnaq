@@ -371,7 +371,7 @@
  (fn [{:keys [db]} [_ theme-id]]
    {:fx [(http/xhrio-request db :delete "/user/theme/delete"
                              [:themes.load.personal/success]
-                             {:theme-id theme-id})
+                             {:theme {:db/id theme-id}})
          [:dispatch [:theme/reset]]]}))
 
 ;; -----------------------------------------------------------------------------

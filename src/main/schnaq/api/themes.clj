@@ -30,7 +30,7 @@
   "Delete a theme."
   [{{:keys [sub]} :identity
     {{:keys [theme-id]} :body} :parameters}]
-  (if (themes-db/delete-theme sub theme-id)
+  (if (themes-db/delete-theme theme-id)
     (ok {:themes (themes-db/themes-by-keycloak-id sub)})
     (bad-request (at/build-error-body :theme/not-deleted "Did not delete theme. Either the theme does not exist or the requesting user is not the author of the theme."))))
 
@@ -55,6 +55,9 @@
   (let [theme-author (get-in
                       (db/fast-pull theme-id [{:theme/user [:user.registered/keycloak-id]}])
                       [:theme/user :user.registered/keycloak-id])]
+    (prn "theme author:" theme-author)
+    (prn "keycloak-id" keycloak-id)
+    (prn (= keycloak-id theme-author))
     (= keycloak-id theme-author)))
 
 (defn user-is-theme-author?-middleware
@@ -62,7 +65,7 @@
   [handler]
   (fn [request]
     (let [keycloak-id (get-in request [:identity :sub])
-          theme-id (middlewares/extract-parameter-from-request request :theme-id)]
+          theme-id (:db/id (middlewares/extract-parameter-from-request request :theme))]
       (if (user-is-theme-author? keycloak-id theme-id)
         (handler request)
         (forbidden (at/build-error-body :themes/not-the-author "You are not the author of this theme."))))))
@@ -95,7 +98,7 @@
                  :description (at/get-doc #'delete-theme)
                  :name :api.theme/delete
                  :middleware [user-is-theme-author?-middleware]
-                 :parameters {:body {:theme-id :db/id}}
+                 :parameters {:body {:theme ::specs/theme}}
                  :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}}}]
      ["/discussion"
       ["/assign" {:put assign-theme

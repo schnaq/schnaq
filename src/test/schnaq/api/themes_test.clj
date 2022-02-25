@@ -58,7 +58,7 @@
 
 (defn- delete-theme-request [user-token theme-id]
   (-> {:request-method :delete :uri (:path (api/route-by-name :api.theme/delete))
-       :body-params {:theme-id theme-id}}
+       :body-params {:theme {:db/id theme-id}}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       toolbelt/accept-edn-response-header
@@ -71,6 +71,6 @@
           someones-request (delete-theme-request toolbelt/token-schnaqqifant-user (:db/id theme))
           owner-request (delete-theme-request toolbelt/token-n2o-admin (:db/id theme))]
       (testing "is not allowed for other users."
-        (is (= 400 (:status someones-request))))
+        (is (= 403 (:status someones-request))))
       (testing "is allowed for the theme's owner."
         (is (= 200 (:status owner-request)))))))

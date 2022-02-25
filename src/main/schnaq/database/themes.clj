@@ -56,8 +56,8 @@
 
 (>defn delete-theme
   "Delete a theme."
-  [keycloak-id theme-id]
-  [:user.registered/keycloak-id :db/id => future?]
+  [theme-id]
+  [:db/id => future?]
   (db/transact [[:db/retractEntity theme-id]]))
 
 (>defn assign-theme
