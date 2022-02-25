@@ -62,9 +62,10 @@
   [handler]
   (fn [request]
     (let [keycloak-id (get-in request [:identity :sub])
-          theme-id (:db/id (middlewares/extract-parameter-from-request request :theme))]
+          request' (update-in request [:parameters :body :theme :db/id] #(Long/valueOf %))
+          theme-id (:db/id (middlewares/extract-parameter-from-request request' :theme))]
       (if (user-is-theme-author? keycloak-id theme-id)
-        (handler request)
+        (handler request')
         (forbidden (at/build-error-body :themes/not-the-author "You are not the author of this theme."))))))
 
 ;; -----------------------------------------------------------------------------

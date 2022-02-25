@@ -2,9 +2,9 @@
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [schnaq.database.main :refer [transact fast-pull query]]
-            [schnaq.shared-toolbelt :refer [clean-db-vals]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
+            [schnaq.shared-toolbelt :refer [clean-db-vals]]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log]))
 
