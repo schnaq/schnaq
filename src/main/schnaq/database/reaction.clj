@@ -26,7 +26,7 @@
 (defn upvote-anonymous-statement!
   "Increases the anonymous upvote-count."
   [statement-id]
-  (increment-number statement-id :statement/cummulative-upvotes))
+  (increment-number statement-id :statement/cumulative-upvotes))
 
 (>defn downvote-statement!
   "Downvotes a statement. Takes a user and a statement-id. The user has to exist, otherwise
@@ -38,7 +38,7 @@
 (defn downvote-anonymous-statement!
   "Increases the anonymous downvote-count."
   [statement-id]
-  (increment-number statement-id :statement/cummulative-downvotes))
+  (increment-number statement-id :statement/cumulative-downvotes))
 
 (>defn remove-upvote!
   "Removes an upvote of a user."
@@ -49,7 +49,7 @@
 (defn remove-anonymous-upvote!
   "Decreases the anonymous upvote-count."
   [statement-id]
-  (decrement-number statement-id :statement/cummulative-upvotes 0))
+  (decrement-number statement-id :statement/cumulative-upvotes 0))
 
 (>defn remove-downvote!
   "Removes a downvote of a user."
@@ -60,7 +60,7 @@
 (defn remove-anonymous-downvote!
   "Decreases the anonymous downvote-count."
   [statement-id]
-  (decrement-number statement-id :statement/cummulative-downvotes 0))
+  (decrement-number statement-id :statement/cumulative-downvotes 0))
 
 (>defn- generic-reaction-check
   "Checks whether a user already made some reaction."

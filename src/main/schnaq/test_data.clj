@@ -34,7 +34,7 @@
     :statement/author "user/wegi"
     :statement/content "dogs can act as watchdogs"
     :statement/created-at #inst "2020-01-01"
-    :statement/cummulative-downvotes 3
+    :statement/cumulative-downvotes 3
     :statement/parent "statement/get-dog"
     :statement/type :statement.type/support
     :statement/version 1
