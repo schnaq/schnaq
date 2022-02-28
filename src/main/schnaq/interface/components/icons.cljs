@@ -8,7 +8,7 @@
               faCog faComment faComments faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
               faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLocationArrow faLock faMagic
               faPaperPlane faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
-              faTimes faTimesCircle faTrashAlt faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus]]
+              faTimes faTimesCircle faTrashAlt faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
 (def ^:private icons
@@ -65,6 +65,7 @@
    :plus faPlus
    :question faQuestion
    :qrcode faQrcode
+   :reset faStepBackward
    :rocket faRocket
    :search faSearch
    :sliders-h faSlidersH

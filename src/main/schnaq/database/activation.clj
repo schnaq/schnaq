@@ -38,6 +38,12 @@
     activation
     (new-activation! share-hash)))
 
+(>defn delete-activation!
+  "Delete an activation."
+  [activation-id]
+  [:db/id :ret any?]
+  @(db/transact [[:db/retractEntity activation-id]]))
+
 (>defn reset-activation!
   "Reset activation by share hash and return activation entity."
   [share-hash]

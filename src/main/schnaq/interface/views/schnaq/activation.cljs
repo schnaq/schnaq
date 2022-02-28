@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.schnaq.activation
   (:require ["framer-motion" :refer [motion]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion-comp]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]))
@@ -51,6 +52,41 @@
    (when @(rf/subscribe [:schnaq.activation/walk?])
      [schnaqqi-walk-motion])])
 
+(defn- dropdown-reset []
+  [:button.dropdown-item
+   {:tabIndex 60
+    :on-click (fn [e]
+                (.stopPropagation e)
+                (rf/dispatch [:activation/reset]))
+    :title (labels :schnaq.activation/reset-button)}
+   [icon :reset "my-auto me-1"] " " (labels :schnaq.activation/reset-button)])
+
+(defn- dropdown-delete []
+  (let [activation @(rf/subscribe [:schnaq/activation])]
+    [:button.dropdown-item
+     {:tabIndex 70
+      :on-click (fn [e]
+                  (.stopPropagation e)
+                  (rf/dispatch [:activation/delete (:db/id activation)]))
+      :title (labels :schnaq.activation/delete-button)}
+     [icon :trash "my-auto me-1"] " " (labels :schnaq.activation/delete-button)]))
+
+(defn- activation-dropdown-menu
+  "Dropdown menu for activation containing reset and delete."
+  []
+  (let [current-edit-hash @(rf/subscribe [:schnaq.current/admin-access])
+        dropdown-id "activation-dropdown"]
+    (when current-edit-hash
+      [:div.dropdown.mx-2
+       [:button.btn.btn-link.text-white.m-0.p-0
+        {:id dropdown-id
+         :role "button" :data-bs-toggle "dropdown"
+         :aria-haspopup "true" :aria-expanded "false"}
+        [icon :dots]]
+       [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
+        [dropdown-reset]
+        [dropdown-delete]]])))
+
 (defn- activation-view [background-class button-class col-class]
   (when-let [activation @(rf/subscribe [:schnaq/activation])]
     [:div
@@ -58,7 +94,9 @@
      [motion-comp/fade-in-and-out
       [:section.statement-card.p-3.text-white
        {:class background-class}
-       [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
+       [:div.d-flex
+        [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
+        [activation-dropdown-menu]]
        [:div.mx-auto.display-3 (:activation/count activation)]
        [schnaqqi-walk]
        [:div.text-center
@@ -183,3 +221,17 @@
    {:fx [(http/xhrio-request db :put "/activation/increment"
                              [:schnaq.activation.load-from-backend/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
+
+(rf/reg-event-fx
+ :activation/delete
+ (fn [{:keys [db]} [_ activation-id]]
+   {:fx [(http/xhrio-request db :delete "/activation/delete"
+                             [:schnaq.activation.delete/success]
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
+                              :activation-id activation-id})]}))
+
+(rf/reg-event-db
+ :schnaq.activation.delete/success
+ (fn [db _]
+   (assoc-in db [:schnaq :current :activation] nil)))

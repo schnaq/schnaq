@@ -13,6 +13,13 @@
   (log/info "Starting activation for" share-hash)
   (ok {:activation (activation-db/start-activation! share-hash)}))
 
+(defn- delete-activation
+  "Delete an activation for a discussion."
+  [{{{:keys [activation-id]} :body} :parameters}]
+  (log/info "Deleting activation " activation-id)
+  (activation-db/delete-activation! activation-id)
+  (ok {:deleted? true}))
+
 (defn- get-activation
   "Get the current activation for a discussion."
   [{{{:keys [share-hash]} :query} :parameters}]
@@ -43,6 +50,17 @@
                               :edit-hash :discussion/edit-hash}}
           :responses {200 {:body {:activation ::specs/activation}}
                       400 at/response-error-body}}]
+     ["/delete" {:delete delete-activation
+                 :description (at/get-doc #'delete-activation)
+                 :middleware [:user/authenticated?
+                              :user/pro-user?
+                              :discussion/valid-credentials?]
+                 :name :activation/delete
+                 :parameters {:body {:share-hash :discussion/share-hash
+                                     :edit-hash :discussion/edit-hash
+                                     :activation-id :db/id}}
+                 :responses {200 {:body {:deleted? boolean?}}
+                             400 at/response-error-body}}]
      ["/by-share-hash" {:get get-activation
                         :description (at/get-doc #'get-activation)
                         :name :activation/get
