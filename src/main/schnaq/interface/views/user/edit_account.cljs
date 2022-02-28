@@ -8,10 +8,10 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.image-upload :as image]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user.image-upload :as image]
             [schnaq.interface.views.user.settings :as settings]
             [schnaq.interface.views.user.subscription :as user-subscription]))
 

@@ -8,12 +8,12 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.image-upload :as image]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.hub.overview :as hubs]
-            [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user.image-upload :as image]))
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- logo-input [input-id]
   (let [hub @(rf/subscribe [:hub/current])

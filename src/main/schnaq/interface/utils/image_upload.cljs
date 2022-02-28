@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.user.image-upload
+(ns schnaq.interface.utils.image-upload
   (:require [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -15,8 +15,8 @@
 
 (rf/reg-event-fx
  :file/store
- (fn [_ [_ picture-file db-path]]
-   {:fx [[:readfile {:files [picture-file]
+ (fn [_ [_ file db-path]]
+   {:fx [[:readfile {:files [file]
                      :on-success [:file.store/success db-path]
                      :on-error [:ajax.error/to-console]}]]}))
 

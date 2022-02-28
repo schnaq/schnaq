@@ -9,6 +9,7 @@
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.image-upload :as image]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.conclusion-card :refer [selection-card]]
             [schnaq.interface.views.navbar.elements :as elements]
@@ -180,7 +181,9 @@
    [:label.form-label {:for "image-logo"}
     (labels :themes.personal.creation.logo/title)]
    [:input.form-control {:type :file
-                         :id "image-logo"}]])
+                         :id "image-logo"
+                         :on-change (fn [event] (image/store-temporary-image
+                                                 event [:user :profile-picture :temporary]))}]])
 
 (defn- configure-theme
   "Form to configure theme."
