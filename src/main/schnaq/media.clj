@@ -7,7 +7,6 @@
             [image-resizer.format :as resizer-format]
             [ring.util.http-response :refer [created bad-request forbidden]]
             [schnaq.api.toolbelt :as at]
-            [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.main :as d]
             [schnaq.s3 :as s3]
@@ -84,10 +83,10 @@
 
 (defn upload-image!
   "Scale and upload an image to s3."
-  [file-name image-type image-content bucket-key]
+  [file-name image-type image-content image-height bucket-key]
   (if (shared-config/allowed-mime-types image-type)
     (if-let [{:keys [input-stream image-type content-type]}
-             (scale-image-to-height image-content config/profile-picture-height)]
+             (scale-image-to-height image-content image-height)]
       (if-let [image-name (create-UUID-file-name file-name image-type)]
         (let [absolute-url (s3/upload-stream bucket-key
                                              input-stream
@@ -98,9 +97,9 @@
                                           "Could not create file-name. Maybe you are not authenticated or you did not provide a file-type.")))
       (do
         (log/warn "Conversion of image failed.")
-        (bad-request (at/build-error-body :scaling "Could not scale image"))))
+        {:error :image.error/scaling
+         :message "Could not scale image."}))
     (do
       (log/warn "Invalid file type received.")
-      (bad-request (at/build-error-body
-                    :invalid-file-type
-                    (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types)))))))
+      {:error :image.error/invalid-file-type
+       :message (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types))})))
