@@ -59,8 +59,8 @@
   (or (System/getenv "MATTERMOST_WEBHOOK_URL")
       "***REMOVED***"))
 
-(def profile-picture-height
-  "Profile Picture height in pixels."
+(def profile-picture-width
+  "Profile Picture width in pixels."
   200)
 
 ;; -----------------------------------------------------------------------------

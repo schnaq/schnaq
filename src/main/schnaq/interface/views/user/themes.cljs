@@ -5,6 +5,7 @@
             [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
@@ -180,10 +181,13 @@
   [:div
    [:label.form-label {:for "image-logo"}
     (labels :themes.personal.creation.logo/title)]
-   [:input.form-control {:type :file
-                         :id "image-logo"
-                         :on-change (fn [event] (image/store-temporary-image
-                                                 event [:themes :temporary :logo]))}]])
+   [:input.form-control
+    {:type :file
+     :id "image-logo"
+     :on-change (fn [event]
+                  (image/store-temporary-image
+                   event [:themes :temporary :logo]))
+     :accept shared-config/allowed-mime-types}]])
 
 (defn- configure-theme
   "Form to configure theme."
