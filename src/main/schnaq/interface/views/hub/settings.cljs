@@ -36,7 +36,7 @@
          [:input {:id input-id
                   :accept (string/join "," shared-config/allowed-mime-types)
                   :type "file"
-                  :on-change (fn [event] (image/store-temporary-profile-picture
+                  :on-change (fn [event] (image/store-temporary-image
                                           event [:hubs keycloak-name :logo-temporary]))
                   :hidden true}]])]]))
 
