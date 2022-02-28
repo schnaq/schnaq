@@ -6,7 +6,8 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.database.main :as db]
             [schnaq.database.specs :as specs]
-            [schnaq.database.themes :as themes-db]))
+            [schnaq.database.themes :as themes-db]
+            [taoensso.timbre :as log]))
 
 (defn- personal
   "Return all themes for a specific user."
@@ -23,8 +24,16 @@
   "Change the content of a theme"
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
+  (log/info "Edit theme:" theme)
+  (def t theme)
   (let [theme-converted-id (update theme :db/id #(Long/valueOf %))]
     (ok {:theme (themes-db/edit-theme sub theme-converted-id)})))
+
+(comment
+
+  t
+
+  nil)
 
 (defn- delete-theme
   "Delete a theme."

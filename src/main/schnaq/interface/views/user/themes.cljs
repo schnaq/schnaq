@@ -9,7 +9,7 @@
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.image-upload :as image]
+            [schnaq.interface.utils.images :as image]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.conclusion-card :refer [selection-card]]
             [schnaq.interface.views.navbar.elements :as elements]
@@ -183,7 +183,7 @@
    [:input.form-control {:type :file
                          :id "image-logo"
                          :on-change (fn [event] (image/store-temporary-image
-                                                 event [:user :profile-picture :temporary]))}]])
+                                                 event [:themes :temporary :logo]))}]])
 
 (defn- configure-theme
   "Form to configure theme."
@@ -339,9 +339,9 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- theme-from-form
+(defn- theme-builder
   "Extract theme information from form."
-  [form]
+  [db form]
   (let [get-field #(oget+ form [% :value])]
     (shared-tools/clean-db-vals
      {:db/id (get-field :theme-id)
@@ -350,7 +350,7 @@
       :theme.colors/secondary (get-field :color-secondary)
       :theme.colors/background (get-field :color-background)
       :theme.texts/activation (get-field :activation-phrase)
-      :theme.images/logo (get-field :image-logo)})))
+      :theme.images.raw/logo (get-in db [:themes :temporary :logo])})))
 
 (rf/reg-event-fx
  :theme/add
@@ -359,16 +359,16 @@
    {:fx [(http/xhrio-request db :post "/user/theme/add"
                              [:theme.save/success]
                              {:theme (-> form
-                                         theme-from-form
+                                         (theme-builder db)
                                          (dissoc :db/id))})]}))
 
 (rf/reg-event-fx
  :theme/edit
  (fn [{:keys [db]} [_ form]]
-   (prn (theme-from-form form))
+   (prn (theme-builder db form))
    {:fx [(http/xhrio-request db :put "/user/theme/edit"
                              [:theme.save/success]
-                             {:theme (theme-from-form form)})]}))
+                             {:theme (theme-builder db form)})]}))
 
 (rf/reg-event-fx
  :theme.save/success

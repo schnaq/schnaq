@@ -8,7 +8,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.image-upload :as image]
+            [schnaq.interface.utils.images :as image]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.hub.common :as hub-common]
@@ -159,7 +159,7 @@
        {:fx [(http/xhrio-request db :put (gstring/format "/hub/%s/logo" keycloak-name)
                                  [:hub.logo/update-success]
                                  {:image temporary-hub-logo-url}
-                                 [:hub.logo/update-error])]}))))
+                                 [:image.store/error])]}))))
 
 (rf/reg-event-fx
  :hub.logo/update-success
@@ -170,17 +170,3 @@
                        #:notification{:title (labels :hub.settings.update-logo-title/success)
                                       :body (labels :hub.settings.update-logo-body/success)
                                       :context :success}]]]})))
-
-(rf/reg-event-fx
- :hub.logo/update-error
- (fn [{:keys [db]} [_ {:keys [response]}]]
-   (let [mime-types (string/join ", " shared-config/allowed-mime-types)
-         error-message (case (:error response)
-                         :scaling (labels :user.settings.profile-picture.errors/scaling)
-                         :invalid-file-type (gstring/format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types)
-                         (labels :user.settings.profile-picture.errors/default))]
-     {:db (assoc-in db [:user :profile-picture :temporary] nil)
-      :fx [[:dispatch [:notification/add
-                       #:notification{:title (labels :user.settings.profile-picture-title/error)
-                                      :body error-message
-                                      :context :danger}]]]})))

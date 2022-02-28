@@ -1,7 +1,9 @@
-(ns schnaq.interface.utils.image-upload
-  (:require [goog.string :as gstring]
+(ns schnaq.interface.utils.images
+  (:require [clojure.string :as str]
+            [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]))
 
@@ -11,17 +13,17 @@
   [event db-path]
   (when-not (empty? (oget event [:target :value]))
     (let [^js/File file (first (oget event [:target :files]))]
-      (rf/dispatch [:file/store file db-path]))))
+      (rf/dispatch [:image/store file db-path]))))
 
 (rf/reg-event-fx
- :file/store
+ :image/store
  (fn [_ [_ file db-path]]
    {:fx [[:readfile {:files [file]
-                     :on-success [:file.store/success db-path]
+                     :on-success [:image.store/success db-path]
                      :on-error [:ajax.error/to-console]}]]}))
 
 (rf/reg-event-fx
- :file.store/success
+ :image.store/success
  (fn [{:keys [db]} [_ db-path files]]
    (let [image (first files)
          actual-size (:size image)
@@ -34,3 +36,17 @@
                               :body (gstring/format (labels :user.settings.profile-picture-too-large/error)
                                                     actual-size config/max-allowed-profile-picture-size)
                               :context :danger}]]]}))))
+
+(rf/reg-event-fx
+ :image.store/error
+ (fn [{:keys [db]} [_ {:keys [response]}]]
+   (let [mime-types (str/join ", " shared-config/allowed-mime-types)
+         error-message (case (:error response)
+                         :scaling (labels :user.settings.profile-picture.errors/scaling)
+                         :invalid-file-type (gstring/format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types)
+                         (labels :user.settings.profile-picture.errors/default))]
+     {:db (assoc-in db [:user :profile-picture :temporary] nil)
+      :fx [[:dispatch [:notification/add
+                       #:notification{:title (labels :user.settings.profile-picture-title/error)
+                                      :body error-message
+                                      :context :danger}]]]})))

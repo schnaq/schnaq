@@ -94,7 +94,7 @@
                                              image-name
                                              {:content-type content-type})]
           {:image-url absolute-url})
-        (bad-request (at/build-error-body :error/could-not-create-file-name
+        (bad-request (at/build-error-body :image.error/could-not-create-file-name
                                           "Could not create file-name. Maybe you are not authenticated or you did not provide a file-type.")))
       (do
         (log/warn "Conversion of image failed.")
