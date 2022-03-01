@@ -231,4 +231,4 @@
 (rf/reg-event-db
  :schnaq.activation.delete/success
  (fn [db _]
-   (assoc-in db [:schnaq :current :activation] nil)))
+   (update-in db [:schnaq :current] dissoc :activation)))
