@@ -4,7 +4,8 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.tooltip :as tooltip]))
+            [schnaq.interface.utils.tooltip :as tooltip]
+            [schnaq.interface.components.common :as common-components]))
 
 (defn language-dropdown
   "Dropdown for bootstrap navbar to display the allowed languages."
@@ -94,6 +95,7 @@
                                    :aria-expanded "false"
                                    :aria-label "Toggle navigation"}
       [:span.navbar-toggler-icon]]
+     [:div.d-sm-none [common-components/theme-logo {:style {:max-width "150px"}}]]
      [:div.ms-auto.d-none.d-lg-block
       top-right-content]]]
    collapsible-content])

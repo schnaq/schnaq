@@ -46,7 +46,7 @@
                                              {:href (navigation/href :routes/startpage)})
      [schnaq-logo]]
     [:div.mx-0.mx-md-4 title]
-    [:span.d-none.d-md-inline [common-components/theme-logo]]]))
+    [:span.d-none.d-md-inline [common-components/theme-logo {:style {:max-width "200px"}}]]]))
 
 (defn navbar-qanda-title []
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2
@@ -54,7 +54,7 @@
     [schnaq-logo]]
    [:div.mx-1.mx-md-5.px-md-5.pt-2
     [clickable-title "text-white"]]
-   [:span.d-none.d-md-inline [common-components/theme-logo]]])
+   [:div.d-none.d-md-inline [common-components/theme-logo {:style {:max-width "200px"}}]]])
 
 ;; -----------------------------------------------------------------------------
 
