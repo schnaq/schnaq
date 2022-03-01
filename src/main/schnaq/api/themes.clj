@@ -9,6 +9,14 @@
             [schnaq.database.themes :as themes-db]
             [schnaq.media :as media]))
 
+(def ^:private image-max-width-logo
+  "Set the maximum image-width of the logo in pixels."
+  300)
+
+(def ^:private image-max-width-header
+  "Set the maximum image-width of the header in pixels."
+  600)
+
 (>defn- file-name
   "Create a theme-path in the bucket, prefixed with the keycloak-id."
   [keycloak-id theme-id image-name file-type]
@@ -25,6 +33,16 @@
      (file-name keycloak-id theme-id image-name type)
      type content image-width :user/media)))
 
+(>defn- prepare-images
+  "Adds the raw images to the theme, if provided."
+  [keycloak-id theme-id raw-logo raw-header]
+  [:user.registered/keycloak-id :db/id (? ::specs/image) (? ::specs/image) => any?]
+  (let [logo (upload-theme-image keycloak-id theme-id "logo" image-max-width-logo raw-logo)
+        header (upload-theme-image keycloak-id theme-id "header" image-max-width-header raw-header)]
+    (cond-> {}
+      (:image-url logo) (assoc :theme.images/logo (:image-url logo))
+      (:image-url header) (assoc :theme.images/header (:image-url header)))))
+
 ;; -----------------------------------------------------------------------------
 ;; Endpoints
 
@@ -37,19 +55,25 @@
   "Save newly configured theme."
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
-  (ok {:theme (themes-db/new-theme sub theme)}))
+  (let [new-theme (themes-db/new-theme sub theme)
+        images (prepare-images
+                sub (:db/id new-theme)
+                (:theme.images.raw/logo theme)
+                (:theme.images.raw/header theme))
+        imaged-theme (if-not (empty? images)
+                       (themes-db/edit-theme sub (assoc images :db/id (:db/id theme)))
+                       new-theme)]
+    (ok {:theme imaged-theme})))
 
 (defn- edit-theme
-  "Change the content of a theme"
+  "Change the content of a theme."
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
-  (let [logo (upload-theme-image sub (:db/id theme) "logo" 300 (:theme.images.raw/logo theme))
-        header (upload-theme-image sub (:db/id theme) "header" 500 (:theme.images.raw/header theme))
-        imaged-theme (cond-> theme
-                       (:image-url logo) (assoc :theme.images/logo (:image-url logo))
-                       (:image-url header) (assoc :theme.images/header (:image-url header))
-                       true (dissoc :theme.images.raw/logo :theme.images.raw/header))]
-    (ok {:theme (themes-db/edit-theme sub imaged-theme)})))
+  (let [images (prepare-images sub (:db/id theme) (:theme.images.raw/logo theme) (:theme.images.raw/header theme))
+        prepared-theme (-> theme
+                           (merge images)
+                           (dissoc :theme.images.raw/logo :theme.images.raw/header))]
+    (ok {:theme (themes-db/edit-theme sub prepared-theme)})))
 
 (defn- delete-theme
   "Delete a theme."
