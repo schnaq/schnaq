@@ -41,7 +41,7 @@
 (>defn delete-activation!
   "Delete an activation."
   [activation-id]
-  [:db/id :ret any?]
+  [:db/id :ret map?]
   @(db/transact [[:db/retractEntity activation-id]]))
 
 (>defn reset-activation!
