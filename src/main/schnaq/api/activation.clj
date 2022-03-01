@@ -16,7 +16,7 @@
 (defn- delete-activation
   "Delete an activation for a discussion."
   [{{{:keys [share-hash]} :body} :parameters}]
-  (log/info "Deleting activation for " share-hash)
+  (log/info "Deleting activation for" share-hash)
   (if-let [activation (activation-db/activation-by-share-hash share-hash)]
     (do (activation-db/delete-activation! (:db/id activation))
         (ok {:deleted? true}))
