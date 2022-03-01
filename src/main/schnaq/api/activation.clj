@@ -1,6 +1,6 @@
 (ns schnaq.api.activation
   (:require [clojure.spec.alpha :as s]
-            [ring.util.http-response :refer [ok]]
+            [ring.util.http-response :refer [ok bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.activation :as activation-db]
             [schnaq.database.specs :as specs]
@@ -15,10 +15,13 @@
 
 (defn- delete-activation
   "Delete an activation for a discussion."
-  [{{{:keys [activation-id]} :body} :parameters}]
-  (log/info "Deleting activation " activation-id)
-  (activation-db/delete-activation! activation-id)
-  (ok {:deleted? true}))
+  [{{{:keys [share-hash]} :body} :parameters}]
+  (log/info "Deleting activation for " share-hash)
+  (if-let [activation (activation-db/activation-by-share-hash share-hash)]
+    (do (activation-db/delete-activation! (:db/id activation))
+        (log/info "Deleted Activation: " activation)
+        (ok {:deleted? true}))
+    (bad-request (at/build-error-body :activation-not-found "No activation found to delete!"))))
 
 (defn- get-activation
   "Get the current activation for a discussion."
@@ -57,8 +60,7 @@
                               :discussion/valid-credentials?]
                  :name :activation/delete
                  :parameters {:body {:share-hash :discussion/share-hash
-                                     :edit-hash :discussion/edit-hash
-                                     :activation-id :db/id}}
+                                     :edit-hash :discussion/edit-hash}}
                  :responses {200 {:body {:deleted? boolean?}}
                              400 at/response-error-body}}]
      ["/by-share-hash" {:get get-activation

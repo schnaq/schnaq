@@ -62,14 +62,13 @@
    [icon :reset "my-auto me-1"] " " (labels :schnaq.activation/reset-button)])
 
 (defn- dropdown-delete []
-  (let [activation @(rf/subscribe [:schnaq/activation])]
-    [:button.dropdown-item
-     {:tabIndex 70
-      :on-click (fn [e]
-                  (.stopPropagation e)
-                  (rf/dispatch [:activation/delete (:db/id activation)]))
-      :title (labels :schnaq.activation/delete-button)}
-     [icon :trash "my-auto me-1"] " " (labels :schnaq.activation/delete-button)]))
+  [:button.dropdown-item
+   {:tabIndex 70
+    :on-click (fn [e]
+                (.stopPropagation e)
+                (rf/dispatch [:activation/delete]))
+    :title (labels :schnaq.activation/delete-button)}
+   [icon :trash "my-auto me-1"] " " (labels :schnaq.activation/delete-button)])
 
 (defn- activation-dropdown-menu
   "Dropdown menu for activation containing reset and delete."
@@ -224,12 +223,11 @@
 
 (rf/reg-event-fx
  :activation/delete
- (fn [{:keys [db]} [_ activation-id]]
+ (fn [{:keys [db]} _]
    {:fx [(http/xhrio-request db :delete "/activation/delete"
                              [:schnaq.activation.delete/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
-                              :activation-id activation-id})]}))
+                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
 
 (rf/reg-event-db
  :schnaq.activation.delete/success

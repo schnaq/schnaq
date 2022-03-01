@@ -295,6 +295,8 @@
    :schnaq.activation.create/label "Present your participants with an activation input!"
    :schnaq.activation.create/start-button "Start activation"
    :schnaq.activation.create/reset-button "Reset Activation"
+   :schnaq.activation/reset-button "Reset"
+   :schnaq.activation/delete-button "Delete"
    :schnaq.activation/title "Torooo total:"
    :schnaq.activation/activation-button "Torooo"
 
