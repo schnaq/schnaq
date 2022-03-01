@@ -54,28 +54,23 @@
 
 (defn- dropdown-reset []
   [:button.dropdown-item
-   {:tabIndex 60
-    :on-click (fn [e]
-                (.stopPropagation e)
-                (rf/dispatch [:activation/reset]))
+   {:on-click #(rf/dispatch [:activation/reset])
     :title (labels :schnaq.activation/reset-button)}
-   [icon :reset "my-auto me-1"] " " (labels :schnaq.activation/reset-button)])
+   [icon :reset "my-auto me-1"] (labels :schnaq.activation/reset-button)])
 
 (defn- dropdown-delete []
   [:button.dropdown-item
-   {:tabIndex 70
-    :on-click (fn [e]
-                (.stopPropagation e)
-                (rf/dispatch [:activation/delete]))
+   {:on-click #(rf/dispatch [:activation/delete])
     :title (labels :schnaq.activation/delete-button)}
-   [icon :trash "my-auto me-1"] " " (labels :schnaq.activation/delete-button)])
+   [icon :trash "my-auto me-1"] (labels :schnaq.activation/delete-button)])
 
 (defn- activation-dropdown-menu
   "Dropdown menu for activation containing reset and delete."
   []
   (let [current-edit-hash @(rf/subscribe [:schnaq.current/admin-access])
+        pro-user? @(rf/subscribe [:user/pro-user?])
         dropdown-id "activation-dropdown"]
-    (when current-edit-hash
+    (when (and pro-user? current-edit-hash)
       [:div.dropdown.mx-2
        [:button.btn.btn-link.text-white.m-0.p-0
         {:id dropdown-id
@@ -128,9 +123,13 @@
      [:div.text (labels :schnaq.activation.create/label)]
      [:div.text-center.pt-2
       (if activation
-        [:button.btn.btn-dark.w-75
-         {:on-click (fn [_e] (rf/dispatch [:activation/reset]))}
-         (labels :schnaq.activation.create/reset-button)]
+        [:<>
+         [:button.btn.btn-dark.w-75
+          {:on-click #(rf/dispatch [:activation/reset])}
+          (labels :schnaq.activation.create/reset-button)]
+         [:button.btn.btn-outline-dark.w-75.mt-1
+          {:on-click #(rf/dispatch [:activation/delete])}
+          (labels :schnaq.activation.create/delete-button)]]
         [:button.btn.btn-secondary.w-75
          {:on-click (fn [_e] (rf/dispatch [:activation/start]))}
          (labels :schnaq.activation.create/start-button)])]]))

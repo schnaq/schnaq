@@ -294,6 +294,7 @@
 
    :schnaq.activation.create/label "Präsentiere deinen Teilnehmer:innen eine Eingabe zur Aktivierung!"
    :schnaq.activation.create/start-button "Aktivierung starten"
+   :schnaq.activation.create/delete-button "Aktivierung löschen"
    :schnaq.activation.create/reset-button "Aktivierung zurücksetzen"
    :schnaq.activation/reset-button "Zurücksetzen"
    :schnaq.activation/delete-button "Löschen"
