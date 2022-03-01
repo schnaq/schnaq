@@ -291,14 +291,14 @@
 (s/def :theme.colors/secondary :color/hex)
 (s/def :theme.colors/background :color/hex)
 (s/def :theme.images/logo ::non-blank-string)
-(s/def :theme.images/activation ::non-blank-string)
+(s/def :theme.images/header ::non-blank-string)
 (s/def :theme.images.raw/logo ::image)
-(s/def :theme.images.raw/activation ::image)
+(s/def :theme.images.raw/header ::image)
 (s/def :theme.texts/activation ::non-blank-string)
 (s/def ::theme
   (s/keys :opt [:theme/title
                 :theme.colors/primary :theme.colors/secondary
                 :theme.colors/background :theme.images/logo
-                :theme.images/activation :theme/discussions
+                :theme.images/header :theme/discussions
                 :theme.texts/activation :theme/user :db/id
-                :theme.images.raw/logo :theme.images.raw/activation]))
+                :theme.images.raw/logo :theme.images.raw/header]))

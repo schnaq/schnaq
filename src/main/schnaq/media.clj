@@ -19,6 +19,11 @@
 (def ^:private error-img "Setting image failed")
 (def ^:private success-img "Setting image succeeded")
 
+(def mime-type->file-ending
+  {"image/jpeg" "jpg"
+   "image/png" "png"
+   "image/webp" "webp"})
+
 (defn- add-bucket-url-to-database [relative-file-path share-hash]
   @(d/transact [[:db/add [:discussion/share-hash share-hash]
                  :discussion/header-image-url relative-file-path]]))
@@ -56,7 +61,7 @@
       :error-forbidden-cdn (forbidden {:error error-cdn})
       (created "" {:message success-img}))))
 
-(>defn scale-image-to-width
+(>defn- scale-image-to-width
   "Scale image data url to a specified width and return a map containing input-stream, image-type and content-type"
   [image-data-url width]
   [string? number? :ret map?]

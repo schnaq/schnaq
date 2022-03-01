@@ -52,23 +52,23 @@
   [keycloak-id theme]
   [:user.registered/keycloak-id ::specs/theme => (? ::specs/theme)]
   (let [prepared-theme (assoc theme :theme/user [:user.registered/keycloak-id keycloak-id])]
-    (db/transact [(shared-tools/clean-db-vals prepared-theme)])
+    @(db/transact [(shared-tools/clean-db-vals prepared-theme)])
     (db/fast-pull (:db/id prepared-theme) patterns/theme)))
 
 (>defn delete-theme
   "Delete a theme."
   [theme-id]
-  [:db/id => future?]
-  (db/transact [[:db/retractEntity theme-id]]))
+  [:db/id => map?]
+  @(db/transact [[:db/retractEntity theme-id]]))
 
 (>defn assign-theme
   "Assigns a theme to a discussion."
   [share-hash theme-id]
-  [:discussion/share-hash :db/id => future?]
-  (db/transact [[:db/add [:discussion/share-hash share-hash] :discussion/theme theme-id]]))
+  [:discussion/share-hash :db/id => map?]
+  @(db/transact [[:db/add [:discussion/share-hash share-hash] :discussion/theme theme-id]]))
 
 (>defn unassign-theme
   "Unassign theme from discussion."
   [share-hash]
-  [:discussion/share-hash => future?]
-  (db/transact [[:db/retract [:discussion/share-hash share-hash] :discussion/theme]]))
+  [:discussion/share-hash => map?]
+  @(db/transact [[:db/retract [:discussion/share-hash share-hash] :discussion/theme]]))

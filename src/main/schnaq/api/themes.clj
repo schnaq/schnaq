@@ -1,13 +1,32 @@
 (ns schnaq.api.themes
   (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn- =>]]
+            [com.fulcrologic.guardrails.core :refer [>defn- => ?]]
             [ring.util.http-response :refer [ok forbidden bad-request]]
             [schnaq.api.middlewares :as middlewares]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.main :as db]
             [schnaq.database.specs :as specs]
             [schnaq.database.themes :as themes-db]
-            [taoensso.timbre :as log]))
+            [schnaq.media :as media]))
+
+(>defn- file-name
+  "Create a theme-path in the bucket, prefixed with the keycloak-id."
+  [keycloak-id theme-id image-name file-type]
+  [:user.registered/keycloak-id :db/id string? string? => string?]
+  (format "%s/themes/%s/%s.%s" keycloak-id theme-id
+          image-name (media/mime-type->file-ending file-type)))
+
+(>defn- upload-theme-image
+  "Takes an image and uploads it."
+  [keycloak-id theme-id image-name {:keys [content type]}]
+  [:user.registered/keycloak-id :db/id string? (? ::specs/image) => (? map?)]
+  (when content
+    (media/upload-image!
+     (file-name keycloak-id theme-id image-name type)
+     type content 300 :user/media)))
+
+;; -----------------------------------------------------------------------------
+;; Endpoints
 
 (defn- personal
   "Return all themes for a specific user."
@@ -24,16 +43,13 @@
   "Change the content of a theme"
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
-  (log/info "Edit theme:" theme)
-  (def t theme)
-  (let [theme-converted-id (update theme :db/id #(Long/valueOf %))]
-    (ok {:theme (themes-db/edit-theme sub theme-converted-id)})))
-
-(comment
-
-  t
-
-  nil)
+  (let [logo (upload-theme-image sub (:db/id theme) "logo" (:theme.images.raw/logo theme))
+        header (upload-theme-image sub (:db/id theme) "header" (:theme.images.raw/header theme))
+        imaged-theme (cond-> theme
+                       (:image-url logo) (assoc :theme.images/logo (:image-url logo))
+                       (:image-url header) (assoc :theme.images/header (:image-url header))
+                       true (dissoc :theme.images.raw/logo :theme.images.raw/header))]
+    (ok {:theme (themes-db/edit-theme sub imaged-theme)})))
 
 (defn- delete-theme
   "Delete a theme."

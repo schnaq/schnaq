@@ -387,10 +387,10 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "The custom user logo."}
-   {:db/ident :theme.images/activation
+   {:db/ident :theme.images/header
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "Background image for the activation card."}
+    :db/doc "Header image for listings and activations."}
    {:db/ident :theme.texts/activation
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one

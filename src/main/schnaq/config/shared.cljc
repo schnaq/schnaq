@@ -30,6 +30,7 @@
    {:hub/logo "schnaq-hub-logo"
     :schnaq/header-images "schnaq-header-images"
     :user/profile-pictures "schnaq-profile-pictures"
+    :user/media "user-media"
     :feedbacks/screenshots "schnaq-feedback-screenshots"}
    bucket-name))
 
@@ -39,9 +40,6 @@
 (def production?
   "Checks the configuration for the current environment."
   (= "production" environment))
-
-;; -----------------------------------------------------------------------------
-;; Profile Image Upload
 
 (def allowed-mime-types
   "Define a list of allowed mime-types."
