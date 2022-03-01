@@ -17,8 +17,7 @@
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.user.settings :as settings]
-            [schnaq.shared-toolbelt :as shared-tools]
-            [clojure.string :as string]))
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (s/def ::hex-color (s/and string? #(.startsWith % "#")))
 (s/def ::css-variable (s/and string? #(.startsWith % "--")))
@@ -190,8 +189,8 @@
                     (image/store-temporary-image
                      event [:themes :temporary field]))
        :accept shared-config/allowed-mime-types}]
-     [:small.text-muted (labels :input.file.image/allowed-types) ": " 
-      (string/join ", " (map #(second (string/split % #"/")) shared-config/allowed-mime-types))]]))
+     [:small.text-muted (labels :input.file.image/allowed-types) ": "
+      (str/join ", " (map #(second (str/split % #"/")) shared-config/allowed-mime-types))]]))
 
 (defn- configure-theme
   "Form to configure theme."
