@@ -97,3 +97,13 @@
      [:div.ms-auto.d-none.d-lg-block
       top-right-content]]]
    collapsible-content])
+
+(>defn button-with-icon
+  "Build a button for the navbar, with icon, text and tooltip."
+  [icon-key tooltip-text button-text on-click-fn]
+  [keyword? string? string? fn? => :re-frame/component]
+  [tooltip/tooltip-button "bottom" tooltip-text
+   [:<>
+    [icon icon-key "m-auto d-block" {:size "lg"}]
+    [:span.small.text-nowrap button-text]]
+   on-click-fn])

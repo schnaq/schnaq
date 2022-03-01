@@ -2,9 +2,8 @@
   (:require [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.tooltip :as tooltip]))
+            [schnaq.interface.components.navbar :as navbar-components]
+            [schnaq.interface.translations :refer [labels]]))
 
 (def graph-id "graph")
 
@@ -28,7 +27,7 @@
       (labels :graph.settings.gravity/label)]
      [:input.form-control-range.graph-settings-gravity.d-block
       {:id slider-id
-       :on-input set-gravity!                               ;; For browser compatibility, set both events
+       :on-input set-gravity! ;; For browser compatibility, set both events
        :on-change set-gravity!
        :min 0 :max 100
        :value (* 100 @(rf/subscribe [:graph.settings/gravity]))
@@ -52,8 +51,8 @@
 (defn open-settings
   "Open Settings for the graph."
   []
-  [tooltip/tooltip-button "bottom" (labels :graph.settings/title)
-   [:<>
-    [icon :sliders-h "d-block mx-auto" {:size "lg"}]
-    [:span.small (labels :discussion.navbar/settings)]]
+  [navbar-components/button-with-icon
+   :sliders-h
+   (labels :graph.settings/title)
+   (labels :discussion.navbar/settings)
    show-notification])
