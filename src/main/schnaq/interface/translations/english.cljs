@@ -816,7 +816,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :user.settings.profile-picture-title/success "Profile picture successfully uploaded"
    :user.settings.profile-picture-body/success "Your new profile picture was successfully set. You may have to reload the page to see it."
    :user.settings.profile-picture-title/error "Error while uploading profile picture"
-   :user.settings.profile-picture-too-large/error "Your profile picture size is %d bytes, it exceeds the maximum allowed size of %d bytes. Please upload a smaller picture."
+   :user.settings.profile-picture-too-large/error "Your profile picture size is %d mega bytes, it exceeds the maximum allowed size of %d mega bytes Please upload a smaller picture."
    :user.settings.profile-picture.errors/scaling "Your profile picture could not be converted. Maybe the image is corrupt. Please try a different image or contact us."
    :user.settings.profile-picture.errors/invalid-file-type "The image you provided has the wrong file type. Allowed file types: %s"
    :user.settings.profile-picture.errors/default "Something went wrong with the picture you're uploaded. Please try again."

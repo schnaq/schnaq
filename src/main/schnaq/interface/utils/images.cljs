@@ -26,7 +26,7 @@
  :image.store/success
  (fn [{:keys [db]} [_ db-path files]]
    (let [image (first files)
-         actual-size (:size image)
+         actual-size (-> (:size image) (/ 1024) (/ 1024))
          size-valid? (< actual-size config/max-allowed-profile-picture-size)]
      (if size-valid?
        {:db (assoc-in db db-path image)}
@@ -35,6 +35,7 @@
                #:notification{:title (labels :user.settings.profile-picture-title/error)
                               :body (gstring/format (labels :user.settings.profile-picture-too-large/error)
                                                     actual-size config/max-allowed-profile-picture-size)
+                              :stay-visible? true
                               :context :danger}]]]}))))
 
 (rf/reg-event-fx

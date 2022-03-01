@@ -817,7 +817,7 @@
    :user.settings.profile-picture-title/success "Profilbild erfolgreich gesetzt"
    :user.settings.profile-picture-body/success "Profilbild wurde hochgeladen und gespeichert. Ggf. Seite neuladen um aktualisiertes Bild zu sehen."
    :user.settings.profile-picture-title/error "Hochladen des Profilbildes fehlgeschlagen"
-   :user.settings.profile-picture-too-large/error "Dein Profilbild ist %d Bytes groß, die maximal erlaubte Größe ist %d Bytes. Bitte lade ein kleineres Bild hoch."
+   :user.settings.profile-picture-too-large/error "Dein Profilbild ist %d Megabyte groß, die maximal erlaubte Größe ist %d Megabyte. Bitte lade ein kleineres Bild hoch."
    :user.settings.profile-picture.errors/scaling "Dein Profilbild konnte nicht konvertiert werden. Vielleicht ist das Bild kaputt. Bitte probiere ein anderes Bild oder kontaktiere uns."
    :user.settings.profile-picture.errors/invalid-file-type "Dein Profilbild hat den falschen Dateitypen. Erlaubt sind: %s"
    :user.settings.profile-picture.errors/default "Etwas ist beim Hochladen des Bildes schief gelaufen. Bitte versuche es erneut."
