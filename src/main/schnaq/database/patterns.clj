@@ -109,7 +109,8 @@
    :discussion/share-hash
    :discussion/header-image-url
    :discussion/created-at
-   {:discussion/author public-user}])
+   {:discussion/author public-user}
+   {:discussion/theme theme}])
 
 (def access-code-with-discussion
   "Return the access-code and directly query the discussion."

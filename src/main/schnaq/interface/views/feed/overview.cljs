@@ -84,12 +84,14 @@
 (defn- schnaq-header-image [schnaq]
   (let [img-title (take 2 (:discussion/title schnaq))
         img-url (:discussion/header-image-url schnaq)
+        theme-header-image (get-in schnaq [:discussion/theme :theme.images/header])
+        image (or img-url theme-header-image)
         hubs @(rf/subscribe [:hubs/all])]
     [:div.d-flex.schnaq-header-image
-     {:style {:background-image (str "url('" (header-image/check-for-header-img img-url) "')")}}
+     {:style {:background-image (str "url('" (header-image/check-for-header-img image) "')")}}
      (when hubs
        [schnaq-hub-icon schnaq])
-     (when-not img-url
+     (when-not image
        [:div.display-4.m-auto.text-white img-title])]))
 
 (defn- schnaq-entry
