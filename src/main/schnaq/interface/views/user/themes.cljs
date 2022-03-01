@@ -378,7 +378,6 @@
 (rf/reg-event-fx
  :theme/edit
  (fn [{:keys [db]} [_ form]]
-   (prn (theme-builder db form))
    {:fx [(http/xhrio-request db :put "/user/theme/edit"
                              [:theme.save/success]
                              {:theme (theme-builder db form)})]}))

@@ -85,28 +85,6 @@
         [dropdown-reset]
         [dropdown-delete]]])))
 
-#_(let [theme @(rf/subscribe [:schnaq.selected/theme])
-        activation-phrase (or (:theme.texts/activation theme)
-                              (labels :schnaq.activation/phrase))
-        background-image-url (or (:theme.images/header theme) default-activation-background)]
-    [:div {:class col-class}
-     [motion-comp/fade-in-and-out
-      [:section.activation
-       {:class background-class
-        :style {:background-image (gstring/format "url('%s')" background-image-url)}}
-       [:h4.mx-auto.mt-3
-        (gstring/format (labels :schnaq.activation/title)
-                        activation-phrase)]
-       [:div.mx-auto.display-3 (:activation/count activation)]
-       [schnaqqi-walk]
-       [:div.text-center
-        [:button.btn.btn-lg.btn-secondary
-         {:class button-class
-          :on-click #(rf/dispatch [:activation/activate])}
-         activation-phrase
-         "!"]]]
-      motion-comp/card-fade-in-time]])
-
 (defn- activation-view [background-class button-class col-class]
   (when-let [activation @(rf/subscribe [:schnaq/activation])]
     (let [theme @(rf/subscribe [:schnaq.selected/theme])
@@ -117,7 +95,7 @@
        [motion-comp/fade-in-and-out
         [:section.activation
          {:class background-class
-          :style {:background-image (gstring/format "url('%s')" background-image-url)}}
+          :style (when-not (= "bg-transparent" background-class) {:background-image (gstring/format "url('%s')" background-image-url)})}
          [:div.d-flex
           [:h4.mx-auto.mt-3
            (gstring/format (labels :schnaq.activation/title)
