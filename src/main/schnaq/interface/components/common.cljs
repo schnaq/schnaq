@@ -21,5 +21,5 @@
   "Show the current logo configured in a theme."
   []
   (let [theme @(rf/subscribe [:schnaq.selected/theme])]
-    [:img.theme-logo.img-fluid.h-75.me-2
+    [:img.theme-logo.img-fluid.px-2
      {:src (:theme.images/logo theme)}]))

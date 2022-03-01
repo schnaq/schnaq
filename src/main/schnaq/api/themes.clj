@@ -11,11 +11,11 @@
 
 (def ^:private image-max-width-logo
   "Set the maximum image-width of the logo in pixels."
-  300)
+  500)
 
 (def ^:private image-max-width-header
   "Set the maximum image-width of the header in pixels."
-  600)
+  1000)
 
 (>defn- file-name
   "Create a theme-path in the bucket, prefixed with the keycloak-id."

@@ -2,8 +2,8 @@
   (:require [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.colors :refer [colors]]
+            [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -46,7 +46,7 @@
                                              {:href (navigation/href :routes/startpage)})
      [schnaq-logo]]
     [:div.mx-0.mx-md-4 title]
-    [common-components/theme-logo]]))
+    [:span.d-none.d-md-inline [common-components/theme-logo]]]))
 
 (defn navbar-qanda-title []
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2
@@ -54,7 +54,7 @@
     [schnaq-logo]]
    [:div.mx-1.mx-md-5.px-md-5.pt-2
     [clickable-title "text-white"]]
-   [common-components/theme-logo]])
+   [:span.d-none.d-md-inline [common-components/theme-logo]]])
 
 ;; -----------------------------------------------------------------------------
 
