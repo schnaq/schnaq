@@ -134,3 +134,29 @@
       (testing "Counter reset to 0"
         (is (= 0 (:activation/count
                   (activation-db/activation-by-share-hash test-share-hash))))))))
+
+;; -----------------------------------------------------------------------------
+
+(defn delete-activation-by-share-hash [share-hash edit-hash user-token]
+  (-> {:request-method :delete :uri (:path (api/route-by-name :activation/delete))
+       :body-params {:share-hash share-hash
+                     :edit-hash edit-hash}}
+      toolbelt/add-csrf-header
+      (toolbelt/mock-authorization-header user-token)
+      api/app
+      :status))
+
+(deftest delete-activation-test
+  (testing "Delete activation"
+    (let [share-hash "simple-hash"
+          edit-hash "simple-hash-secret"]
+      (testing "succeeds for beta and admin users."
+        (is (= 200 (delete-activation-by-share-hash
+                    share-hash
+                    edit-hash
+                    toolbelt/token-schnaqqifant-user))))
+      (testing "fails for normal users."
+        (is (= 403 (delete-activation-by-share-hash
+                    test-share-hash
+                    test-edit-hash
+                    toolbelt/token-wegi-no-beta-user)))))))
