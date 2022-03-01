@@ -19,7 +19,6 @@
   (log/info "Deleting activation for " share-hash)
   (if-let [activation (activation-db/activation-by-share-hash share-hash)]
     (do (activation-db/delete-activation! (:db/id activation))
-        (log/info "Deleted Activation: " activation)
         (ok {:deleted? true}))
     (bad-request (at/build-error-body :activation-not-found "No activation found to delete!"))))
 

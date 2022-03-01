@@ -33,3 +33,9 @@
           (let [_ (activation-db/reset-activation! share-hash)
                 activation-reset (activation-db/activation-by-share-hash share-hash)]
             (is (zero? (:activation/count activation-reset)))))))))
+
+(deftest delete-activation!-test
+  (testing "Delete activation by share-hash."
+    (let [activation (activation-db/activation-by-share-hash "simple-hash")]
+      (activation-db/delete-activation! (:db/id activation))
+      (is (nil? (activation-db/activation-by-share-hash "simple-hash"))))))
