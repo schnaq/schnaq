@@ -6,6 +6,9 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]))
 
+(def ^:private default-activation-background
+  "https://s3.schnaq.com/schnaq-common/background/layered_background_square.svg")
+
 (defn- schnaqqis
   "Walking schnaqqis with varying x and y positions."
   []
@@ -56,11 +59,13 @@
   (when-let [activation @(rf/subscribe [:schnaq/activation])]
     (let [theme @(rf/subscribe [:schnaq.selected/theme])
           activation-phrase (or (:theme.texts/activation theme)
-                                (labels :schnaq.activation/phrase))]
+                                (labels :schnaq.activation/phrase))
+          background-image-url (or (:theme.images/header theme) default-activation-background)]
       [:div {:class col-class}
        [motion-comp/fade-in-and-out
-        [:section.statement-card.p-3.text-white
-         {:class background-class}
+        [:section.activation
+         {:class background-class
+          :style {:background-image (gstring/format "url('%s')" background-image-url)}}
          [:h4.mx-auto.mt-3
           (gstring/format (labels :schnaq.activation/title)
                           activation-phrase)]
@@ -69,7 +74,7 @@
          [:div.text-center
           [:button.btn.btn-lg.btn-secondary
            {:class button-class
-            :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
+            :on-click #(rf/dispatch [:activation/activate])}
            activation-phrase
            "!"]]]
         motion-comp/card-fade-in-time]])))
@@ -85,7 +90,7 @@
   "Activation card for the discussion-view."
   []
   [activation-view
-   "activation-background overflow-hidden"
+   nil
    "w-75"
    "statement-column"])
 

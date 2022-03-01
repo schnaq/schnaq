@@ -1,7 +1,10 @@
 @use "rounded" as rounded;
 
-.activation-background {
-  background-image: url('https://s3.schnaq.com/schnaq-common/background/layered_background_square.svg');
+.activation {
+  @extend .overflow-hidden;
+  @extend .statement-card;
+  @extend .p-3;
+  @extend .text-white;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

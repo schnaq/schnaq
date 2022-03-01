@@ -18,12 +18,12 @@
 
 (>defn- upload-theme-image
   "Takes an image and uploads it."
-  [keycloak-id theme-id image-name {:keys [content type]}]
-  [:user.registered/keycloak-id :db/id string? (? ::specs/image) => (? map?)]
+  [keycloak-id theme-id image-name image-width {:keys [content type]}]
+  [:user.registered/keycloak-id :db/id string? nat-int? (? ::specs/image) => (? map?)]
   (when content
     (media/upload-image!
      (file-name keycloak-id theme-id image-name type)
-     type content 300 :user/media)))
+     type content image-width :user/media)))
 
 ;; -----------------------------------------------------------------------------
 ;; Endpoints
@@ -43,8 +43,8 @@
   "Change the content of a theme"
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
-  (let [logo (upload-theme-image sub (:db/id theme) "logo" (:theme.images.raw/logo theme))
-        header (upload-theme-image sub (:db/id theme) "header" (:theme.images.raw/header theme))
+  (let [logo (upload-theme-image sub (:db/id theme) "logo" 300 (:theme.images.raw/logo theme))
+        header (upload-theme-image sub (:db/id theme) "header" 500 (:theme.images.raw/header theme))
         imaged-theme (cond-> theme
                        (:image-url logo) (assoc :theme.images/logo (:image-url logo))
                        (:image-url header) (assoc :theme.images/header (:image-url header))
