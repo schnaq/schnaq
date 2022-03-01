@@ -16,9 +16,8 @@
 
 .theming-enabled {
   .theme-logo {
+    @extend .h-100;
     display: inline;
-    max-height: 150px;
-    max-width: 150px;
   }
 
   // -----------------------------------------------------------------------------

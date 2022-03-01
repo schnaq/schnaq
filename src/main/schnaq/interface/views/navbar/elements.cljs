@@ -46,7 +46,7 @@
                                              {:href (navigation/href :routes/startpage)})
      [schnaq-logo]]
     [:div.mx-0.mx-md-4 title]
-    [:div.d-none.d-md-inline.p-2
+    [:div.h-100.d-none.d-md-block.p-2
      [common-components/theme-logo]]]))
 
 (defn navbar-qanda-title []
