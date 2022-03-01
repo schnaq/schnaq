@@ -22,7 +22,7 @@
           statement-2-id (:db/id statement-2)
           alex-user-id (:db/id (fast-pull [:user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"]))
           kangaroo-user-id (:db/id (fast-pull [:user.registered/keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"]))]
-      (testing "Non-cummulative votes should be triggered by registered users."
+      (testing "Non-cumulative votes should be triggered by registered users."
         (db/upvote-statement! statement-1-id alex-user-id)
         (is (db/did-user-upvote-statement statement-1-id alex-user-id))
         (db/upvote-statement! statement-1-id kangaroo-user-id)
@@ -41,19 +41,19 @@
         (is (= statement-1-upvotes (-> statement-1-id fast-pull :statement/upvotes count)))
         (is (= statement-1-downvotes (-> statement-1-id fast-pull :statement/downvotes count)))))))
 
-(deftest cummulative-votes-tests
-  (testing "Test cummulative vote manipulation"
+(deftest cumulative-votes-tests
+  (testing "Test cumulative vote manipulation"
     (let [share-hash "cat-dog-hash"
           some-statements (discussion-db/all-statements share-hash)
           statement-1 (first some-statements)
           statement-1-id (:db/id statement-1)
-          statement-1-upvotes (:statement/cummulative-upvotes statement-1 0)
-          statement-1-downvotes (:statement/cummulative-downvotes statement-1 0)]
+          statement-1-upvotes (:statement/cumulative-upvotes statement-1 0)
+          statement-1-downvotes (:statement/cumulative-downvotes statement-1 0)]
       (db/upvote-anonymous-statement! statement-1-id)
-      (is (= (inc statement-1-upvotes) (-> statement-1-id fast-pull :statement/cummulative-upvotes)))
+      (is (= (inc statement-1-upvotes) (-> statement-1-id fast-pull :statement/cumulative-upvotes)))
       (db/downvote-anonymous-statement! statement-1-id)
-      (is (= (inc statement-1-downvotes) (-> statement-1-id fast-pull :statement/cummulative-downvotes)))
+      (is (= (inc statement-1-downvotes) (-> statement-1-id fast-pull :statement/cumulative-downvotes)))
       (db/remove-anonymous-upvote! statement-1-id)
-      (is (= statement-1-upvotes (-> statement-1-id fast-pull :statement/cummulative-upvotes)))
+      (is (= statement-1-upvotes (-> statement-1-id fast-pull :statement/cumulative-upvotes)))
       (db/remove-anonymous-downvote! statement-1-id)
-      (is (= statement-1-upvotes (-> statement-1-id fast-pull :statement/cummulative-downvotes))))))
+      (is (= statement-1-upvotes (-> statement-1-id fast-pull :statement/cumulative-downvotes))))))

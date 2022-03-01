@@ -34,13 +34,13 @@
     :statement/author "user/wegi"
     :statement/content "dogs can act as watchdogs"
     :statement/created-at #inst "2020-01-01"
-    :statement/cummulative-downvotes 3
+    :statement/cumulative-downvotes 3
     :statement/parent "statement/get-dog"
     :statement/type :statement.type/support
     :statement/version 1
     :statement/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:db/id "statement/walks"
-    :statement/author "user/schredder"                      ; Use the tempid above
+    :statement/author "user/schredder" ; Use the tempid above
     :statement/content "you have to take the dog for a walk every day, which is tedious"
     :statement/created-at #inst "2020-01-01"
     :statement/version 1
@@ -275,6 +275,11 @@
     :discussion/author "user/schredder"
     :discussion/states [:discussion.state/deleted]}])
 
+(def ^:private activations
+  [{:db/id "activation/for-simple-discussion"
+    :activation/count 42
+    :activation/discussion "discussion/simple"}])
+
 (def alex
   {:db/id "user.registered/alex"
    :user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
@@ -373,4 +378,4 @@
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
           deleted-discussions graph-discussion simple-discussion registered-users 
-          polls themes))
+          activations polls themes))

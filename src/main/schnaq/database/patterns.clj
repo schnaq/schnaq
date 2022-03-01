@@ -49,8 +49,8 @@
    :statement/labels
    :statement/upvotes
    :statement/downvotes
-   :statement/cummulative-downvotes
-   :statement/cummulative-upvotes
+   :statement/cumulative-downvotes
+   :statement/cumulative-upvotes
    {:statement/type [:db/ident]}
    {:statement/author public-user}])
 

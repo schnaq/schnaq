@@ -131,14 +131,14 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "A list of registered users that downvoted the statement."}
-   {:db/ident :statement/cummulative-upvotes
+   {:db/ident :statement/cumulative-upvotes
     :db/valueType :db.type/long
     :db/cardinality :db.cardinality/one
-    :db/doc "The cummulative number of upvotes by anonymous users."}
-   {:db/ident :statement/cummulative-downvotes
+    :db/doc "The cumulative number of upvotes by anonymous users."}
+   {:db/ident :statement/cumulative-downvotes
     :db/valueType :db.type/long
     :db/cardinality :db.cardinality/one
-    :db/doc "The cummulative number of downvotes by anonymous users."}
+    :db/doc "The cumulative number of downvotes by anonymous users."}
    {:db/ident :statement/creation-secret
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
@@ -350,7 +350,7 @@
    {:db/ident :option/votes
     :db/valueType :db.type/long
     :db/cardinality :db.cardinality/one
-    :db/doc "The cummulative number of votes for this option. Must be 0 or positive."}
+    :db/doc "The cmmulative number of votes for this option. Must be 0 or positive."}
 
    ;; Activation
    {:db/ident :activation/count

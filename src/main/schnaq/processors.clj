@@ -32,15 +32,15 @@
   (walk/postwalk
    #(if (and (instance? IEditableCollection %)
              (or (contains? % :statement/downvotes) (contains? % :statement/upvotes)
-                 (contains? % :statement/cummulative-downvotes) (contains? % :statement/cummulative-upvotes)))
+                 (contains? % :statement/cumulative-downvotes) (contains? % :statement/cumulative-upvotes)))
       (let [upvotes (map :db/id (:statement/upvotes %))
             downvotes (map :db/id (:statement/downvotes %))]
         (-> %
-            (assoc :statement/upvotes (+ (count upvotes) (:statement/cummulative-upvotes % 0))
-                   :statement/downvotes (+ (count downvotes) (:statement/cummulative-downvotes % 0))
+            (assoc :statement/upvotes (+ (count upvotes) (:statement/cumulative-upvotes % 0))
+                   :statement/downvotes (+ (count downvotes) (:statement/cumulative-downvotes % 0))
                    :meta/upvoted? (contains? (set upvotes) user-id)
                    :meta/downvoted? (contains? (set downvotes) user-id))
-            (dissoc :statement/cummulative-upvotes :statement/cummulative-downvotes)))
+            (dissoc :statement/cumulative-upvotes :statement/cumulative-downvotes)))
       %)
    data))
 
