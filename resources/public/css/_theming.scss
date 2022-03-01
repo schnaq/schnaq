@@ -10,10 +10,17 @@
   --theming-background: #{vars.$light-background};
 }
 
-// -----------------------------------------------------------------------------
-// Button
+.theme-logo {
+  display: none;
+}
 
 .theming-enabled {
+  .theme-logo {
+    display: inline;
+  }
+
+  // -----------------------------------------------------------------------------
+  // Button
   .btn-primary {
     background-color: var(--theming-primary) !important;
 

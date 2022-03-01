@@ -82,7 +82,7 @@
       [:div.base-wrapper.p-3
        [elements/navbar-title
         [:h1.h6.fw-bold.my-auto.text-dark "Welcome to schnaq"]
-        nil false]
+        false]
        [activation/activation-card]
        [:div.d-flex.flex-row
         [buttons/button "primary button"]
@@ -93,7 +93,7 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn list-personal-themes
+(defn- list-personal-themes
   "Show all configured themes."
   [dispatch-event]
   (let [themes @(rf/subscribe [:themes/personal])

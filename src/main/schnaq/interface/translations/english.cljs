@@ -314,7 +314,6 @@
    :dashboard/summary "Summary"
    :dashboard/top-posts "Top Posts"
 
-   :discussion.navbar/title "Title"
    :discussion.navbar/posts "Posts"
    :discussion.navbar/members "Members"
    :discussion.navbar/views "Views"

@@ -314,7 +314,6 @@
    :dashboard/summary "Kurzzusammenfassung"
    :dashboard/top-posts "Top Beiträge"
 
-   :discussion.navbar/title "Titel"
    :discussion.navbar/posts "Beiträge"
    :discussion.navbar/members "Mitglieder"
    :discussion.navbar/views "Ansichten"
