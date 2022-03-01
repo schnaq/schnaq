@@ -55,13 +55,14 @@
   "Save newly configured theme."
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
-  (let [new-theme (themes-db/new-theme sub theme)
+  (let [theme-no-raw-images (dissoc theme :theme.images.raw/logo :theme.images.raw/header)
+        new-theme (themes-db/new-theme sub theme-no-raw-images)
         images (prepare-images
                 sub (:db/id new-theme)
                 (:theme.images.raw/logo theme)
                 (:theme.images.raw/header theme))
         imaged-theme (if-not (empty? images)
-                       (themes-db/edit-theme sub (assoc images :db/id (:db/id theme)))
+                       (themes-db/edit-theme sub (assoc images :db/id (:db/id new-theme)))
                        new-theme)]
     (ok {:theme imaged-theme})))
 
@@ -78,8 +79,8 @@
 (defn- delete-theme
   "Delete a theme."
   [{{:keys [sub]} :identity
-    {{:keys [theme-id]} :body} :parameters}]
-  (if (themes-db/delete-theme theme-id)
+    {{:keys [theme]} :body} :parameters}]
+  (if (themes-db/delete-theme (:db/id theme))
     (ok {:themes (themes-db/themes-by-keycloak-id sub)})
     (bad-request (at/build-error-body :theme/not-deleted "Did not delete theme. Either the theme does not exist or the requesting user is not the author of the theme."))))
 

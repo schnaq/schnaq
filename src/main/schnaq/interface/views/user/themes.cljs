@@ -170,7 +170,7 @@
        :placeholder (labels :themes.personal.creation.title/label)
        :required true
        :value (:theme/title selected)
-       :name "title"
+       :name "theme-title"
        :on-change #(rf/dispatch [:theme.selected/update :theme/title
                                  (oget % [:target :value])])}]
      [:label {:for "theme-title"} (labels :themes.personal.creation.title/label)]]))
@@ -187,7 +187,7 @@
        :id input-id
        :on-change (fn [event]
                     (image/store-temporary-image
-                     event [:themes :temporary field]))
+                     event [:schnaq :selected :discussion/theme :temporary field]))
        :accept shared-config/allowed-mime-types}]
      [:small.text-muted (labels :input.file.image/allowed-types) ": "
       (str/join ", " (map #(second (str/split % #"/")) shared-config/allowed-mime-types))]]))
@@ -364,8 +364,8 @@
       :theme.colors/secondary (get-field :color-secondary)
       :theme.colors/background (get-field :color-background)
       :theme.texts/activation (get-field :activation-phrase)
-      :theme.images.raw/logo (get-in db [:themes :temporary :logo])
-      :theme.images.raw/header (get-in db [:themes :temporary :header])})))
+      :theme.images.raw/logo (get-in db [:schnaq :selected :discussion/theme :temporary :logo])
+      :theme.images.raw/header (get-in db [:schnaq :selected :discussion/theme :temporary :header])})))
 
 (rf/reg-event-fx
  :theme/add
@@ -373,8 +373,7 @@
  (fn [{:keys [db]} [_ form]]
    {:fx [(http/xhrio-request db :post "/user/theme/add"
                              [:theme.save/success]
-                             {:theme (-> form
-                                         (theme-builder db)
+                             {:theme (-> (theme-builder db form)
                                          (dissoc :db/id))})]}))
 
 (rf/reg-event-fx
@@ -429,7 +428,7 @@
 (rf/reg-event-fx
  :theme/reset
  (fn [{:keys [db]}]
-   {:db (update db :themes dissoc :selected)
+   {:db (update-in db [:schnaq :selected] dissoc :discussion/theme)
     :fx [[:page.root/remove-color :primary]
          [:page.root/remove-color :secondary]
          [:page.root/remove-color :background]]}))
