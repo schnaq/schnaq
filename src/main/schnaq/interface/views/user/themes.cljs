@@ -17,7 +17,8 @@
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.user.settings :as settings]
-            [schnaq.shared-toolbelt :as shared-tools]))
+            [schnaq.shared-toolbelt :as shared-tools]
+            [schnaq.interface.components.icons :refer [icon]]))
 
 (s/def ::hex-color (s/and string? #(.startsWith % "#")))
 (s/def ::css-variable (s/and string? #(.startsWith % "--")))
@@ -113,10 +114,13 @@
 (defn- loaded-themes
   "Display all available themes."
   []
-  (let [user-name @(rf/subscribe [:user/display-name])]
+  (let [user-name @(rf/subscribe [:user/display-name])
+        pro-user? @(rf/subscribe [:user/pro-user?])]
     [:section.pb-5
      [:h2 (labels :themes.personal.creation/heading)]
      [:p (labels :themes.personal.creation/lead)]
+     (when-not pro-user?
+       [:div.alert.alert-info (labels :themes.personal.creation/pro-hint)])
      [list-personal-themes :theme/select]
      [:div.pt-3
       [buttons/button
@@ -215,12 +219,16 @@
        [:div.col-md-8
         [input-image (labels :themes.personal.creation.images.logo/title) :logo]]
        [:div.col-md-4.pt-4
-        [:img.img-fluid {:src (:theme.images/logo selected)}]]]
+        [:img.img-fluid {:src (gstring/format "%s?%s" (:theme.images/logo selected) (.getTime (js/Date.)))
+                         :alt (labels :themes.personal.creation.images.logo/alt)}]]]
       [:div.row.pb-3
        [:div.col-md-8
-        [input-image (labels :themes.personal.creation.images.header/title) :header]]
+        [input-image (labels :themes.personal.creation.images.header/title) :header]
+        [:div.pt-3.small.text-info
+         [icon :info "me-1"] (labels :themes.personal.creation.images/info)]]
        [:div.col-md-4.pt-4
-        [:img.img-fluid {:src (:theme.images/header selected)}]]]
+        [:img.img-fluid {:src (gstring/format "%s?%s" (:theme.images/header selected) (.getTime (js/Date.)))
+                         :alt (labels :themes.personal.creation.images.header/title)}]]]
       [:input {:type :hidden :name "theme-id" :value (or (:db/id selected) "")}]
       [save-button-or-carrot]]
      (when-let [theme-id (:db/id selected)]
