@@ -95,7 +95,7 @@
                                    :aria-expanded "false"
                                    :aria-label "Toggle navigation"}
       [:span.navbar-toggler-icon]]
-     [:div.d-sm-none [common-components/theme-logo {:style {:max-width "150px"}}]]
+     [:div.d-sm-none [common-components/theme-logo {:style {:max-width "100px"}}]]
      [:div.ms-auto.d-none.d-lg-block
       top-right-content]]]
    collapsible-content])
