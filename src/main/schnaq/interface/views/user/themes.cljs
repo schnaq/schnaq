@@ -175,19 +175,20 @@
                                  (oget % [:target :value])])}]
      [:label {:for "theme-title"} (labels :themes.personal.creation.title/label)]]))
 
-(defn- input-image-image
-  "TODO"
-  []
-  [:div
-   [:label.form-label {:for "image-logo"}
-    (labels :themes.personal.creation.logo/title)]
-   [:input.form-control
-    {:type :file
-     :id "image-logo"
-     :on-change (fn [event]
-                  (image/store-temporary-image
-                   event [:themes :temporary :logo]))
-     :accept shared-config/allowed-mime-types}]])
+(>defn- input-image
+  "Input field to upload image."
+  [label field]
+  [string? keyword? => :re-frame/component]
+  (let [input-id (str "image-" (name field))]
+    [:div
+     [:label.form-label {:for input-id} label]
+     [:input.form-control
+      {:type :file
+       :id input-id
+       :on-change (fn [event]
+                    (image/store-temporary-image
+                     event [:themes :temporary field]))
+       :accept shared-config/allowed-mime-types}]]))
 
 (defn- configure-theme
   "Form to configure theme."
@@ -201,16 +202,23 @@
                       (rf/dispatch [add-or-edit (oget e [:target :elements])])))}
       [input-title]
       [:div.row
-       [:div.col-md-5
-        [input-activation-phrase]
-        [input-image-image]
-        [:strong (labels :themes.personal.creation.activation.image/title)]
-        [:p.text-muted "Coming Soon"]]
        [:div.col-md-7
         [:strong (labels :themes.personal.creation.colors/title)]
         [color-picker :theme.colors/primary (labels :themes.personal.creation.colors.primary/title)]
         [color-picker :theme.colors/secondary (labels :themes.personal.creation.colors.secondary/title)]
-        [color-picker :theme.colors/background (labels :themes.personal.creation.colors.background/title)]]]
+        [color-picker :theme.colors/background (labels :themes.personal.creation.colors.background/title)]]
+       [:div.col-md-5
+        [input-activation-phrase]]]
+      [:div.row.pb-3
+       [:div.col-md-8
+        [input-image (labels :themes.personal.creation.images.logo/title) :logo]]
+       [:div.col-md-4.pt-4
+        [:img.img-fluid {:src (:theme.images/logo selected)}]]]
+      [:div.row.pb-3
+       [:div.col-md-8
+        [input-image (labels :themes.personal.creation.images.header/title) :header]]
+       [:div.col-md-4.pt-4
+        [:img.img-fluid {:src (:theme.images/header selected)}]]]
       [:input {:type :hidden :name "theme-id" :value (or (:db/id selected) "")}]
       [save-button-or-carrot]]
      (when-let [theme-id (:db/id selected)]
@@ -354,7 +362,8 @@
       :theme.colors/secondary (get-field :color-secondary)
       :theme.colors/background (get-field :color-background)
       :theme.texts/activation (get-field :activation-phrase)
-      :theme.images.raw/logo (get-in db [:themes :temporary :logo])})))
+      :theme.images.raw/logo (get-in db [:themes :temporary :logo])
+      :theme.images.raw/header (get-in db [:themes :temporary :header])})))
 
 (rf/reg-event-fx
  :theme/add

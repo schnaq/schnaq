@@ -79,7 +79,7 @@
    :theme.colors/secondary
    :theme.colors/background
    :theme.images/logo
-   :theme.images/activation
+   :theme.images/header
    :theme.texts/activation])
 
 (def discussion
