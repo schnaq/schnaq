@@ -4,7 +4,7 @@
             [schnaq.database.main :refer [transact fast-pull query]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
-            [schnaq.shared-toolbelt :refer [clean-db-vals]]
+            [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log]))
 
@@ -143,7 +143,7 @@
                      :seen-statements/user [:user.registered/keycloak-id keycloak-id]
                      :seen-statements/visited-schnaq [:discussion/share-hash discussion-hash]
                      :seen-statements/visited-statements visited-statements}]
-    (transact [(clean-db-vals new-visited)])))
+    (transact [(remove-nil-values-from-map new-visited)])))
 
 (defn update-visited-statements
   "Updates the user's visited statements by adding the new ones."
@@ -201,7 +201,7 @@
         (when-not (nil? visited-statements)
           (update-visited-statements id visited-statements))
         [false existing-user])
-      (let [new-user-from-db (-> @(transact [(clean-db-vals new-user)])
+      (let [new-user-from-db (-> @(transact [(remove-nil-values-from-map new-user)])
                                  (get-in [:tempids temp-id])
                                  (fast-pull patterns/public-user))]
         (when-not (nil? visited-statements)

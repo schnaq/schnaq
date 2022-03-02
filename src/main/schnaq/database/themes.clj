@@ -44,7 +44,7 @@
                          :theme/title unique-title
                          :db/id temp-id)]
     (db/transact-and-pull-temp
-     [(shared-tools/clean-db-vals new-theme)]
+     [(shared-tools/remove-nil-values-from-map new-theme)]
      temp-id patterns/theme)))
 
 (>defn edit-theme
@@ -52,7 +52,7 @@
   [keycloak-id theme]
   [:user.registered/keycloak-id ::specs/theme => (? ::specs/theme)]
   (let [prepared-theme (assoc theme :theme/user [:user.registered/keycloak-id keycloak-id])]
-    @(db/transact [(shared-tools/clean-db-vals prepared-theme)])
+    @(db/transact [(shared-tools/remove-nil-values-from-map prepared-theme)])
     (db/fast-pull (:db/id theme) patterns/theme)))
 
 (>defn delete-theme

@@ -16,8 +16,8 @@
                          :baz :bam}
           time-map {:bar #?(:clj {:bar (java.util.Date.)}
                             :cljs {:bar (js/Date.)})}]
-      (is (= no-change-map (tools/clean-db-vals no-change-map)))
-      (is (= 2 (count (tools/clean-db-vals (merge no-change-map {:unwished-for nil})))))
-      (is (= {} (tools/clean-db-vals {})))
-      (is (= {} (tools/clean-db-vals {:foo ""})))
-      (is (= time-map (tools/clean-db-vals time-map))))))
+      (is (= no-change-map (tools/remove-nil-values-from-map no-change-map)))
+      (is (= 2 (count (tools/remove-nil-values-from-map (merge no-change-map {:unwished-for nil})))))
+      (is (= {} (tools/remove-nil-values-from-map {})))
+      (is (= {} (tools/remove-nil-values-from-map {:foo ""})))
+      (is (= time-map (tools/remove-nil-values-from-map time-map))))))

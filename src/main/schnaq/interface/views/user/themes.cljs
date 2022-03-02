@@ -366,7 +366,7 @@
   "Extract theme information from form."
   [db form]
   (let [get-field #(oget+ form [% :value])]
-    (shared-tools/clean-db-vals
+    (shared-tools/remove-nil-values-from-map
      {:db/id (get-field :theme-id)
       :theme/title (get-field :theme-title)
       :theme.colors/primary (get-field :color-primary)

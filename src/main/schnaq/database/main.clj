@@ -116,7 +116,7 @@
   entity."
   [entity spec]
   [associative? keyword? :ret int?]
-  (let [clean-entity (shared-tools/clean-db-vals entity)
+  (let [clean-entity (shared-tools/remove-nil-values-from-map entity)
         identifier (format "new-entity-%s"
                            (.toString (UUID/randomUUID)))]
     (when (s/valid? spec clean-entity)
