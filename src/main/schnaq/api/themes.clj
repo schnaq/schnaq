@@ -97,9 +97,8 @@
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
   (delete-images! (:db/id theme))
-  (if (themes-db/delete-theme (:db/id theme))
-    (ok {:themes (themes-db/themes-by-keycloak-id sub)})
-    (bad-request (at/build-error-body :theme/not-deleted "Did not delete theme. Either the theme does not exist or the requesting user is not the author of the theme."))))
+  (themes-db/delete-theme (:db/id theme))
+  (ok {:themes (themes-db/themes-by-keycloak-id sub)}))
 
 (defn- assign-theme
   "Assign a theme to a discussion."
