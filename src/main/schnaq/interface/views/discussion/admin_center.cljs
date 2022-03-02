@@ -368,7 +368,7 @@
   [:ret :re-frame/component]
   (if @(rf/subscribe [:user/pro-user?])
     [:<>
-     [themes/select-theme-for-schnaq]
+     [themes/assign-theme-to-schnaq]
      [:hr.my-5]
      [discussion-settings]
      [:hr.my-5]

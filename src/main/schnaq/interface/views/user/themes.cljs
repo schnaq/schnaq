@@ -5,20 +5,19 @@
             [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
+            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.images :as image]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.conclusion-card :refer [selection-card]]
             [schnaq.interface.views.navbar.elements :as elements]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.user.settings :as settings]
-            [schnaq.shared-toolbelt :as shared-tools]
-            [schnaq.interface.components.icons :refer [icon]]))
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (s/def ::hex-color (s/and string? #(.startsWith % "#")))
 (s/def ::css-variable (s/and string? #(.startsWith % "--")))
@@ -179,23 +178,6 @@
                                  (oget % [:target :value])])}]
      [:label {:for "theme-title"} (labels :themes.personal.creation.title/label)]]))
 
-(>defn- input-image
-  "Input field to upload image."
-  [label field]
-  [string? keyword? => :re-frame/component]
-  (let [input-id (str "image-" (name field))]
-    [:div
-     [:label.form-label {:for input-id} label]
-     [:input.form-control
-      {:type :file
-       :id input-id
-       :on-change (fn [event]
-                    (image/store-temporary-image
-                     event [:schnaq :selected :discussion/theme :temporary field]))
-       :accept shared-config/allowed-mime-types}]
-     [:small.text-muted (labels :input.file.image/allowed-types) ": "
-      (str/join ", " (map #(second (str/split % #"/")) shared-config/allowed-mime-types))]]))
-
 (defn- configure-theme
   "Form to configure theme."
   []
@@ -217,13 +199,19 @@
         [input-activation-phrase]]]
       [:div.row.pb-3
        [:div.col-md-8
-        [input-image (labels :themes.personal.creation.images.logo/title) :logo]]
+        [inputs/image
+         (labels :themes.personal.creation.images.logo/title)
+         "input-logo"
+         [:schnaq :selected :discussion/theme :temporary :logo]]]
        [:div.col-md-4.pt-4
         [:img.img-fluid {:src (gstring/format "%s?%s" (:theme.images/logo selected) (.getTime (js/Date.)))
                          :alt (labels :themes.personal.creation.images.logo/alt)}]]]
       [:div.row.pb-3
        [:div.col-md-8
-        [input-image (labels :themes.personal.creation.images.header/title) :header]
+        [inputs/image
+         (labels :themes.personal.creation.images.header/title)
+         "input-header"
+         [:schnaq :selected :discussion/theme :temporary :header]]
         [:div.pt-3.small.text-info
          [icon :info "me-1"] (labels :themes.personal.creation.images/info)]]
        [:div.col-md-4.pt-4
@@ -260,8 +248,8 @@
 ;; -----------------------------------------------------------------------------
 ;; Theme assignment to schnaq
 
-(defn select-theme-for-schnaq
-  "Set a theme for a schnaq."
+(defn assign-theme-to-schnaq
+  "Assigns a theme to a schnaq."
   []
   [:section
    [:h4 (labels :themes.schnaq.settings/heading)]

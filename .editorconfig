@@ -3,7 +3,7 @@ root = true
 [*]
 end_of_line = lf
 
-[*.{clj, cljs}]
+[*.{clj, cljs, cljc}]
 indent_style = space
 insert_final_newline = true
 

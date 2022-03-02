@@ -51,8 +51,6 @@
   "Saves the provided theme for a given user."
   [keycloak-id theme]
   [:user.registered/keycloak-id ::specs/theme => (? ::specs/theme)]
-  (prn "edit-theme")
-  (prn theme)
   (let [prepared-theme (assoc theme :theme/user [:user.registered/keycloak-id keycloak-id])]
     @(db/transact [(shared-tools/clean-db-vals prepared-theme)])
     (db/fast-pull (:db/id theme) patterns/theme)))
