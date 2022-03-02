@@ -138,14 +138,14 @@
   []
   (let [pro-user? @(rf/subscribe [:user/pro-user?])]
     [:<>
+     (when-not pro-user?
+       [:div.alert.alert-info
+        (labels :themes.pro-carrot/text)
+        " 🚀"])
      [:button.btn.btn-outline-primary
       {:type :submit
        :disabled (not pro-user?)}
-      (labels :themes.personal.creation.buttons/save)]
-     (when-not pro-user?
-       [:div.text-info
-        (labels :themes.pro-carrot/text)
-        " 🚀"])]))
+      (labels :themes.personal.creation.buttons/save)]]))
 
 (defn- input-activation-phrase
   "Change the activation phrase.
@@ -178,52 +178,63 @@
                                  (oget % [:target :value])])}]
      [:label {:for "theme-title"} (labels :themes.personal.creation.title/label)]]))
 
+(defn- image-upload-with-preview
+  "Add image inputs and provide a preview if image is present."
+  []
+  (let [{:theme.images/keys [logo header]} @(rf/subscribe [:schnaq.selected/theme])]
+    [:<>
+     [:div.row.pb-3
+      [:div.col-md-8
+       [inputs/image
+        (labels :themes.personal.creation.images.logo/title)
+        "input-logo"
+        [:schnaq :selected :discussion/theme :temporary :logo]]]
+      [:div.col-md-4.pt-4
+       (when logo
+         [:img.img-fluid {:src (gstring/format "%s?%s" logo (.getTime (js/Date.)))
+                          :alt (labels :themes.personal.creation.images.logo/alt)}])]]
+     [:div.row.pb-3
+      [:div.col-md-8
+       [inputs/image
+        (labels :themes.personal.creation.images.header/title)
+        "input-header"
+        [:schnaq :selected :discussion/theme :temporary :header]]
+       [:div.pt-3.small.text-info
+        [icon :info "me-1"] (labels :themes.personal.creation.images/info)]]
+      [:div.col-md-4.pt-4
+       (when header
+         [:img.img-fluid {:src (gstring/format "%s?%s" header (.getTime (js/Date.)))
+                          :alt (labels :themes.personal.creation.images.header/title)}])]]]))
+
 (defn- configure-theme
   "Form to configure theme."
   []
   (when-let [selected @(rf/subscribe [:schnaq.selected/theme])]
-    [:<>
-     [:form
-      {:on-submit (fn [e]
-                    (.preventDefault e)
-                    (let [add-or-edit (if (:db/id selected) :theme/edit :theme/add)]
-                      (rf/dispatch [add-or-edit (oget e [:target :elements])])))}
-      [input-title]
-      [:div.row
-       [:div.col-md-7
-        [:strong (labels :themes.personal.creation.colors/title)]
-        [color-picker :theme.colors/primary (labels :themes.personal.creation.colors.primary/title)]
-        [color-picker :theme.colors/secondary (labels :themes.personal.creation.colors.secondary/title)]
-        [color-picker :theme.colors/background (labels :themes.personal.creation.colors.background/title)]]
-       [:div.col-md-5
-        [input-activation-phrase]]]
-      [:div.row.pb-3
-       [:div.col-md-8
-        [inputs/image
-         (labels :themes.personal.creation.images.logo/title)
-         "input-logo"
-         [:schnaq :selected :discussion/theme :temporary :logo]]]
-       [:div.col-md-4.pt-4
-        [:img.img-fluid {:src (gstring/format "%s?%s" (:theme.images/logo selected) (.getTime (js/Date.)))
-                         :alt (labels :themes.personal.creation.images.logo/alt)}]]]
-      [:div.row.pb-3
-       [:div.col-md-8
-        [inputs/image
-         (labels :themes.personal.creation.images.header/title)
-         "input-header"
-         [:schnaq :selected :discussion/theme :temporary :header]]
-        [:div.pt-3.small.text-info
-         [icon :info "me-1"] (labels :themes.personal.creation.images/info)]]
-       [:div.col-md-4.pt-4
-        [:img.img-fluid {:src (gstring/format "%s?%s" (:theme.images/header selected) (.getTime (js/Date.)))
-                         :alt (labels :themes.personal.creation.images.header/title)}]]]
-      [:input {:type :hidden :name "theme-id" :value (or (:db/id selected) "")}]
-      [save-button-or-carrot]]
-     (when-let [theme-id (:db/id selected)]
-       [:button.float-end.btn.btn-sm.btn-link.text-danger
-        {:on-click #(when (js/confirm (labels :themes.personal.creation.delete/confirmation))
-                      (rf/dispatch [:theme/delete theme-id]))}
-        (labels :themes.personal.creation.buttons/delete)])]))
+    (let [pro-user? @(rf/subscribe [:user/pro-user?])
+          theme-id (:db/id selected)]
+      [:<>
+       [:form
+        {:on-submit (fn [e]
+                      (.preventDefault e)
+                      (let [add-or-edit (if theme-id :theme/edit :theme/add)]
+                        (rf/dispatch [add-or-edit (oget e [:target :elements])])))}
+        [input-title]
+        [:div.row
+         [:div.col-md-7
+          [:strong (labels :themes.personal.creation.colors/title)]
+          [color-picker :theme.colors/primary (labels :themes.personal.creation.colors.primary/title)]
+          [color-picker :theme.colors/secondary (labels :themes.personal.creation.colors.secondary/title)]
+          [color-picker :theme.colors/background (labels :themes.personal.creation.colors.background/title)]]
+         [:div.col-md-5
+          [input-activation-phrase]]]
+        [image-upload-with-preview]
+        [:input {:type :hidden :name "theme-id" :value (or theme-id "")}]
+        [save-button-or-carrot]]
+       (when (and theme-id pro-user?)
+         [:button.float-end.btn.btn-sm.btn-link.text-danger
+          {:on-click #(when (js/confirm (labels :themes.personal.creation.delete/confirmation))
+                        (rf/dispatch [:theme/delete theme-id]))}
+          (labels :themes.personal.creation.buttons/delete)])])))
 
 ;; -----------------------------------------------------------------------------
 
