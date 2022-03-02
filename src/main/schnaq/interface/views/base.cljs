@@ -64,7 +64,7 @@
    [icon :terminal]
    " " (labels :footer.tagline/developed-with) " "
    [icon :flask "m-auto"]
-   (gstring/format " in NRW, Germany © schnaq %d" (.getFullYear (js/Date.)))])
+   (gstring/format " in NRW, Germany © schnaq GmbH %d" (.getFullYear (js/Date.)))])
 
 (defn- social-media []
   [:section
