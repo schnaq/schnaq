@@ -110,6 +110,18 @@
         [:a.btn.btn-link {:href "https://schnaq.com/blog/de/ama-ask-me-anything-fragerunden/"}
          "für AMAs"]]])))
 
+(defn- alternatives
+  "Show schnaq use-cases for the users. Only in german."
+  []
+  (let [locale @(rf/subscribe [:current-locale])]
+    (when (= :en locale)
+      [:section.px-2
+       ;; Remove hardcode, when there are german versions around!
+       [:h3.h5 "schnaq vs."]
+       [:p
+        [:a.btn.btn-link {:href "https://schnaq.com/blog/en/best-alternative-to-slido/"}
+         "Alternative to Slido"] [:br]]])))
+
 ;; -----------------------------------------------------------------------------
 
 (defn footer
@@ -118,11 +130,13 @@
   [:footer
    [:div.container-fluid.px-5
     [:div.row
-     [:div.col-md-4.col-12
+     [:div.col-md-6.col-xl-3.col-12
       [logo-and-slogan]]
-     [:div.col-md-4.col-12
+     [:div.col-md-6.col-xl-3.col-12
+      [alternatives]]
+     [:div.col-md-6.col-xl-3.col-12
       [product-use-cases]]
-     [:div.col-md-4.col-12.text-md-end.pt-3.pt-md-0
+     [:div.col-md-6.col-xl-3.col-12.text-md-end.pt-3.pt-md-0
       [footer-nav]]]
     [:div.row
      [:div.col-md-6.col-12
