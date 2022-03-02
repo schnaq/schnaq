@@ -1,8 +1,8 @@
 (ns schnaq.s3
-  (:require [clojure.string :as string]
+  (:require [clojure.string :as str]
             [cognitect.aws.client.api :as aws]
             [cognitect.aws.credentials :as credentials]
-            [com.fulcrologic.guardrails.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn => ?]]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
             [taoensso.timbre :as log]))
@@ -11,7 +11,7 @@
   "Define a client to connect to our own s3 server. Despite the name, we are not
   using aws, just their libraries."
   (let [{:keys [access-key secret-key endpoint]} config/s3-credentials
-        hostname (second (string/split endpoint #"://"))]
+        hostname (second (str/split endpoint #"://"))]
     (aws/client {:api :s3
                  :region "eu-central-1"
                  :endpoint-override {:hostname hostname}
@@ -37,3 +37,15 @@
                          :Content-Type content-type}})
   (log/info "Uploaded file under the key" file-name "to bucket" (shared-config/s3-buckets bucket))
   (absolute-file-url bucket file-name))
+
+(>defn delete-file
+  "Delete a file in a bucket.
+    `filename` can also contain a path to the file, e.g. `foo/bar/baz.png`."
+  [bucket-key file-name]
+  [keyword? (? string?) => (? map?)]
+  (when file-name
+    (aws/invoke
+     s3-client
+     {:op :DeleteObject
+      :request {:Bucket (shared-config/s3-buckets bucket-key)
+                :Key file-name}})))
