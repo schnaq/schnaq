@@ -2,10 +2,10 @@
   (:require [clojure.test :refer [deftest is use-fixtures testing]]
             [muuntaja.core :as m]
             [schnaq.api :as api]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.database.themes :as themes-db]
             [schnaq.test-data :refer [theme-anti-social schnaqqi kangaroo]]
-            [schnaq.test.toolbelt :as toolbelt]
-            [schnaq.database.discussion :as discussion-db]))
+            [schnaq.test.toolbelt :as toolbelt]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
@@ -24,7 +24,7 @@
    :name "1x1.png",
    :type "image/png"})
 
-(def ^:private new-theme-with-images
+(def ^:private sample-theme-with-images
   "Remove all db-specific information and add raw images."
   (-> theme-anti-social
       (dissoc :db/id :theme/user :theme.images/logo :theme.images/header)
@@ -51,7 +51,7 @@
 
 (deftest new-theme-with-images-test
   (testing "Image upload when adding a new theme should succeed."
-    (let [response (m/decode-response-body (save-theme-request toolbelt/token-n2o-admin new-theme-with-images))]
+    (let [response (m/decode-response-body (save-theme-request toolbelt/token-n2o-admin sample-theme-with-images))]
       (is (-> response :theme :theme.images/logo string?))
       (is (-> response :theme :theme.images/header string?)))))
 
@@ -75,7 +75,7 @@
       (is (= 200 (:status response)))
       (is (= "changed" (-> response m/decode-response-body :theme :theme/title))))))
 
-(deftest new-theme-with-images-test
+(deftest edit-theme-with-images-test
   (testing "Image upload when adding a new theme should succeed."
     (let [theme (first (themes-db/themes-by-keycloak-id schnaqqi-keycloak-id))
           modified-theme (assoc theme
