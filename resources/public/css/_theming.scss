@@ -1,0 +1,110 @@
+// This namespace is to set the current branding of the page. We override in our
+// interface the defined variables, which are referenced by our bootstrap
+// overrides.
+
+@use "variables" as vars;
+
+:root {
+  --theming-primary: var(--bs-primary);
+  --theming-secondary: var(--bs-secondary);
+  --theming-background: #{vars.$light-background};
+}
+
+.theme-logo {
+  display: none;
+}
+
+.theming-enabled {
+  .theme-logo {
+    @extend .h-100;
+    display: inline;
+  }
+
+  // -----------------------------------------------------------------------------
+  // Button
+  .btn-primary {
+    background-color: var(--theming-primary) !important;
+
+    &:hover,
+    &:active,
+    &:visited {
+      background-color: var(--theming-primary) !important;
+    }
+  }
+
+  .btn-secondary {
+    background-color: var(--theming-secondary) !important;
+
+    &:hover,
+    &:active,
+    &:visited {
+      background-color: var(--theming-secondary) !important;
+    }
+  }
+
+  // -----------------------------------------------------------------------------
+  // Button Outlines
+
+  .btn-outline-primary {
+    border-color: var(--theming-primary) !important;
+    color: var(--theming-primary) !important;
+
+    &:not(.disabled):not(.disabled).active,
+    &:hover {
+      background-color: var(--theming-primary) !important;
+      color: #fff !important;
+    }
+  }
+
+  .btn-outline-secondary {
+    border-color: var(--theming-secondary) !important;
+    color: var(--theming-secondary) !important;
+
+    &:not(.disabled):not(.disabled).active,
+    &:hover {
+      background-color: var(--theming-secondary) !important;
+      color: #fff !important;
+    }
+  }
+
+  // -----------------------------------------------------------------------------
+  // Text Color
+
+  .text-primary {
+    color: var(--theming-primary) !important;
+  }
+
+  .text-secondary {
+    color: var(--theming-secondary) !important;
+  }
+
+  // -----------------------------------------------------------------------------
+  // Tabs
+
+  .nav-tabs .nav-link {
+    color: var(--theming-primary) !important;
+  }
+
+  // -----------------------------------------------------------------------------
+  // Background
+
+  .base-wrapper {
+    background: var(--theming-background);
+  }
+
+  // -----------------------------------------------------------------------------
+  // Borders
+
+  .border-primary {
+    border-color: var(--theming-primary) !important;
+  }
+
+  .border-secondary {
+    border-color: var(--theming-secondary) !important;
+  }
+
+  .form-control:focus {
+    border-color: var(--theming-primary) !important;
+    box-shadow: none;
+  }
+}

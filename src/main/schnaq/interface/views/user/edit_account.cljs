@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.user.edit-account
   (:require [clojure.string :as string]
-            [goog.string :as gstring]
             [oops.core :refer [oget+]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
@@ -8,10 +7,10 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.images :as image]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user.image-upload :as image]
             [schnaq.interface.views.user.settings :as settings]
             [schnaq.interface.views.user.subscription :as user-subscription]))
 
@@ -37,7 +36,7 @@
          [:input {:id input-id
                   :accept (string/join "," shared-config/allowed-mime-types)
                   :type "file"
-                  :on-change (fn [event] (image/store-temporary-profile-picture
+                  :on-change (fn [event] (image/store-temporary-image
                                           event [:user :profile-picture :temporary]))
                   :hidden true}]])]]))
 
@@ -102,7 +101,7 @@
      {:fx [(http/xhrio-request db :put "/user/picture"
                                [:user.profile-picture/update-success]
                                {:image new-profile-picture-url}
-                               [:user.profile-picture/update-error])]})))
+                               [:image.store/error])]})))
 
 (rf/reg-event-db
  :user.picture/reset
@@ -118,17 +117,3 @@
                      #:notification{:title (labels :user.settings.profile-picture-title/success)
                                     :body (labels :user.settings.profile-picture-body/success)
                                     :context :success}]]]}))
-
-(rf/reg-event-fx
- :user.profile-picture/update-error
- (fn [{:keys [db]} [_ {:keys [response]}]]
-   (let [mime-types (string/join ", " shared-config/allowed-mime-types)
-         error-message (case (:error response)
-                         :scaling (labels :user.settings.profile-picture.errors/scaling)
-                         :invalid-file-type (gstring/format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types)
-                         (labels :user.settings.profile-picture.errors/default))]
-     {:db (assoc-in db [:user :profile-picture :temporary] nil)
-      :fx [[:dispatch [:notification/add
-                       #:notification{:title (labels :user.settings.profile-picture-title/error)
-                                      :body error-message
-                                      :context :danger}]]]})))

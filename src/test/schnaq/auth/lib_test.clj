@@ -3,7 +3,7 @@
             [schnaq.auth.lib :as auth-lib]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.user :as user-db]
-            [schnaq.test-data :refer [kangaroo]]
+            [schnaq.test-data :refer [kangaroo christian]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -14,7 +14,7 @@
 
 (deftest has-role?-test
   (testing "Valid roles should be true."
-    (let [user-identity (schnaq-toolbelt/create-parsed-jwt "kangaroo" true)]
+    (let [user-identity (schnaq-toolbelt/jwt-from-test-user christian)]
       (is (not (auth-lib/has-role? user-identity #{"razupaltuff"})))
       (is (auth-lib/has-role? user-identity shared-config/admin-roles)))))
 

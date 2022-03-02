@@ -39,8 +39,8 @@
 ;; -----------------------------------------------------------------------------
 
 (def max-allowed-profile-picture-size
-  "Maximal allowed image size of profile picture in bytes."
-  5000000)
+  "Maximal allowed image size of profile picture in megabytes."
+  5)
 
 (def marketing-num-schnaqs 600)
 (def marketing-num-statements 4000)

@@ -4,7 +4,7 @@
   namespace."
   (:require [schnaq.database.specs :as specs]
             [spec-tools.core :as st]
-            #?(:clj  [clojure.spec.alpha :as s]
+            #?(:clj [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])))
 
 ;; Users
@@ -28,7 +28,6 @@
                 :statement/type]))
 
 (def statement-type (st/spec :statement/type {:type :keyword}))
-(s/def :statement/unqualified-types #{:attack :support :neutral})
 
 (def poll-type (st/spec :poll/type {:type :keyword}))
 (s/def ::poll

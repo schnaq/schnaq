@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.user.settings
   (:require [re-frame.core :as rf]
+            [schnaq.interface.components.common :refer [pro-badge]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -17,7 +18,7 @@
 
 (defn- settings-button
   "Create a button for the feed list."
-  [icon-name label route]
+  [icon-name text route]
   (let [current-route @(rf/subscribe [:navigation/current-route-name])
         button-class (if (= current-route route) "feed-button-focused" "feed-button")]
     [:article
@@ -27,8 +28,7 @@
       [:div.row.text-start
        [:div.col-1
         [icon icon-name "me-4 my-auto"]]
-       [:div.col
-        [:span (labels label)]]]]]))
+       [:div.col text]]]]))
 
 (defn- back-button []
   [tooltip/text
@@ -42,8 +42,9 @@
   [:section
    [back-button]
    [:hr.my-4]
-   [settings-button :edit :user.settings/info :routes.user.manage/account]
-   [settings-button :bell :user.settings/notifications :routes.user.manage/notifications]])
+   [settings-button :edit (labels :user.settings/info) :routes.user.manage/account]
+   [settings-button :bell (labels :user.settings/notifications) :routes.user.manage/notifications]
+   [settings-button :palette [:<> (labels :user.settings/themes) " " [pro-badge]] :routes.user.manage/themes]])
 
 (defn user-view [page-heading-label content]
   [pages/three-column-layout

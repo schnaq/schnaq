@@ -1,10 +1,9 @@
 (ns schnaq.interface.views.discussion.share
   (:require [re-frame.core :as rf]
-            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
-            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.notifications :refer [notify!]]
@@ -74,10 +73,10 @@
                         :child [share-schnaq-modal]}]))
 
 (defn share-schnaq-button
-  "Button to copy access link and acces code."
+  "Button to copy access link and access code."
   []
-  [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
-   [:<>
-    [icon :share "m-auto d-block" {:size "lg"}]
-    [:span.small (labels :discussion.navbar/share)]]
+  [navbar-components/button-with-icon
+   :share
+   (labels :sharing/tooltip)
+   (labels :discussion.navbar/share)
    open-share-schnaq])

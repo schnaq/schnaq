@@ -450,7 +450,7 @@
 (>defn add-admin-to-discussion
   "Adds an admin user to a discussion."
   [share-hash keycloak-id]
-  [:discussion/share-hash :user.registered/keycloak-id :ret associative?]
+  [:discussion/share-hash :user.registered/keycloak-id :ret future?]
   (transact [[:db/add [:discussion/share-hash share-hash] :discussion/admins
               [:user.registered/keycloak-id keycloak-id]]]))
 

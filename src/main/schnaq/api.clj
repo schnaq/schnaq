@@ -29,6 +29,7 @@
             [schnaq.api.schnaq :refer [schnaq-routes]]
             [schnaq.api.subscription.stripe :refer [stripe-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
+            [schnaq.api.themes :refer [theme-routes]]
             [schnaq.api.user :refer [user-routes]]
             [schnaq.auth :as auth]
             [schnaq.auth.middlewares :as auth-middlewares]
@@ -101,10 +102,11 @@
     feedback-routes
     hub-routes
     other-routes
+    poll-routes
     schnaq-routes
     stripe-routes
     summary-routes
-    poll-routes
+    theme-routes
     user-routes
 
     ["/swagger.json"
@@ -133,12 +135,12 @@
     :data {:coercion reitit.coercion.spec/coercion
            :muuntaja m/instance
            :middleware [swagger/swagger-feature
-                        parameters/parameters-middleware    ;; query-params & form-params
+                        parameters/parameters-middleware ;; query-params & form-params
                         middlewares/convert-body-middleware ;; must be called *before* muuntaja/format-middleware
                         muuntaja/format-middleware
                         middlewares/exception-printing-middleware
                         coercion/coerce-response-middleware ;; coercing response bodies
-                        coercion/coerce-request-middleware  ;; coercing request parameters
+                        coercion/coerce-request-middleware ;; coercing request parameters
                         multipart/multipart-middleware
                         auth-middlewares/replace-bearer-with-token
                         auth/wrap-jwt-authentication

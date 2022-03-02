@@ -1,10 +1,11 @@
 (ns schnaq.api.hub
   (:require [clojure.spec.alpha :as s]
             [keycloak.admin :as kc-admin]
-            [ring.util.http-response :refer [ok forbidden not-found internal-server-error]]
+            [ring.util.http-response :refer [ok bad-request forbidden not-found internal-server-error]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.auth :as auth]
+            [schnaq.config :as config]
             [schnaq.config.keycloak :as kc-config :refer [kc-client]]
             [schnaq.database.hub :as hub-db]
             [schnaq.database.main :refer [fast-pull transact]]
@@ -112,10 +113,11 @@
         image-content (get-in parameters [:body :image :content])]
     (log/info (format "User %s is trying to set logo of Hub %s to: %s" (:id identity) keycloak-name image-name))
     (if (auth/member-of-group? identity keycloak-name)
-      (let [{:keys [image-url] :as response} (media/upload-image! keycloak-name image-type image-content :hub/logo)]
+      (let [{:keys [image-url error message]}
+            (media/upload-image! keycloak-name image-type image-content config/profile-picture-width :hub/logo)]
         (if image-url
           (ok {:hub (hub-db/update-hub-logo-url keycloak-name image-url)})
-          response))
+          (bad-request (at/response-error-body error message))))
       forbidden-missing-permission)))
 
 ;; -----------------------------------------------------------------------------

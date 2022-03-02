@@ -161,7 +161,8 @@
     :discussion/edit-hash "cat-dog-edit-hash"
     :discussion/author "user/wegi"
     :discussion/created-at #inst "2019-01-01"
-    :discussion/starting-statements ["statement/get-dog" "statement/get-both" "statement/get-cat"]}
+    :discussion/starting-statements ["statement/get-dog" "statement/get-both" "statement/get-cat"]
+    :discussion/theme "theme/elephants"}
    {:db/id "discussion/tapir-or-ameisenbaer"
     :discussion/title "Tapir oder Ameisenbär?"
     :discussion/created-at #inst "2019-01-01"
@@ -299,14 +300,34 @@
    :user.registered/email "k@ngar.oo"
    :user.registered/last-name "the"
    :user.registered/first-name "kangaroo"
-   :user.registered/groups ["test-group"]
+   :user.registered/groups [""]
    :user.registered/notification-mail-interval :notification-mail-interval/daily
    :user.registered/visited-schnaqs
    [#:discussion{:share-hash "cat-dog-hash"}
     #:discussion{:share-hash "simple-hash"}]})
 
+(def christian
+  {:db/id "user.registered/christian"
+   :user.registered/keycloak-id "00000000-0000-0000-0000-000000000000"
+   :user.registered/display-name "n2o"
+   :user.registered/email "christian@schnaq.com"
+   :user.registered/last-name "Meter"
+   :user.registered/first-name "Christian"
+   :user.registered/groups ["admin"]
+   :user.registered/notification-mail-interval :notification-mail-interval/daily})
+
+(def schnaqqi
+  {:db/id "user.registered/schnaqqi"
+   :user.registered/keycloak-id "11111111-1111-1111-1111-111111111111"
+   :user.registered/display-name "schnaqqi"
+   :user.registered/email "schnaqqi@schnaq.com"
+   :user.registered/last-name "Fant"
+   :user.registered/first-name "schnaqqi"
+   :user.registered/groups ["beta-tester"]
+   :user.registered/notification-mail-interval :notification-mail-interval/daily})
+
 (def registered-users
-  [alex kangaroo])
+  [alex christian kangaroo schnaqqi])
 
 (def polls
   [{:db/id "poll/single-choice"
@@ -342,6 +363,32 @@
                     :option/value "Ohne Vote"}]
     :poll/discussion "discussion/simple"}])
 
+(def theme-anti-social
+  {:db/id "theme/anti-social"
+   :theme/title "The anti-social network"
+   :theme/user "user.registered/kangaroo"
+   :theme.colors/primary "#123456"
+   :theme.colors/secondary "#7890ab"
+   :theme.colors/background "#cdef01"
+   :theme.images/logo "https://s3.schnaq.com/user-media/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/themes/00000000000000/logo.png"
+   :theme.images/header "https://s3.schnaq.com/user-media/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/themes/00000000000000/header.png"
+   :theme.texts/activation "🦘"})
+
+(def theme-schnaqqi
+  {:db/id "theme/elephants"
+   :theme/title "More elephants!"
+   :theme/user "user.registered/schnaqqi"
+   :theme.colors/primary "#123456"
+   :theme.colors/secondary "#7890ab"
+   :theme.colors/background "#cdef01"
+   :theme.images/logo "https://s3.schnaq.com/user-media/11111111-1111-1111-1111-111111111111/themes/00000000000000/logo.png"
+   :theme.images/header "https://s3.schnaq.com/user-media/11111111-1111-1111-1111-111111111111/themes/00000000000000/header.png"
+   :theme.texts/activation "🦘"})
+
+(def ^:private themes
+  [theme-anti-social theme-schnaqqi])
+
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
-          deleted-discussions graph-discussion simple-discussion registered-users polls activations))
+          deleted-discussions graph-discussion simple-discussion registered-users
+          themes activations polls))

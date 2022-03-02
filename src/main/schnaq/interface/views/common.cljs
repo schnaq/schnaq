@@ -86,7 +86,7 @@
    (tab-builder tab-prefix first-tab second-tab nil nil))
   ([tab-prefix first-tab second-tab third-tab fourth-tab]
    (let [tab-prefix# (str "#" tab-prefix)]
-     [:<>
+     [:div.panel-white
       [:nav.nav-justified
        [:div.nav.nav-tabs {:role "tablist"}
         [:a.nav-item.nav-link.active {:data-bs-toggle "tab"

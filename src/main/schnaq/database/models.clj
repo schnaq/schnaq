@@ -270,6 +270,11 @@
     :db/cardinality :db.cardinality/one
     :db/doc "Timestamp indicating when the access code becomes invalid."}
 
+   {:db/ident :discussion/theme
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The discussion's theme."}
+
    ;; hub
    {:db/ident :hub/name
     :db/valueType :db.type/string
@@ -315,7 +320,6 @@
     :db/cardinality :db.cardinality/one
     :db/doc "The last requester (registered user) of a summary."}
 
-
    ;; Polls
    {:db/ident :poll/title
     :db/valueType :db.type/string
@@ -356,5 +360,38 @@
    {:db/ident :activation/discussion
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/doc "The discussion to which the activation belongs to."}])
+    :db/doc "The discussion to which the activation belongs to."}
 
+   ;; Themes
+   {:db/ident :theme/title
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Title of a theme."}
+   {:db/ident :theme/user
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "Reference to the creating user."}
+   {:db/ident :theme.colors/primary
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set the primary color of a theme."}
+   {:db/ident :theme.colors/secondary
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set the secondary color of a theme."}
+   {:db/ident :theme.colors/background
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set the background color of a theme."}
+   {:db/ident :theme.images/logo
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The custom user logo."}
+   {:db/ident :theme.images/header
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Header image for listings and activations."}
+   {:db/ident :theme.texts/activation
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The user's activation message."}])

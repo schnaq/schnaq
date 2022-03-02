@@ -4,23 +4,19 @@
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.navigation :as navigation]
+            [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.file-download :as file-download]
-            [schnaq.interface.utils.tooltip :as tooltip]))
+            [schnaq.interface.utils.file-download :as file-download]))
 
 (defn admin-center
   "Button to access admin menu."
   []
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/selected])]
-    [tooltip/text
+    [navbar-components/button-with-icon
+     :sliders-h
      (labels :schnaq.admin/tooltip)
-     [:a.btn.btn-outline-muted
-      {:href (navigation/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
-       :role :button}
-      [icon :cog "mx-auto d-block" {:size "lg"}]
-      [:span.small (labels :discussion.navbar/settings)]]]))
+     (labels :discussion.navbar/settings)
+     #(rf/dispatch [:navigation/navigate :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])]))
 
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."
@@ -36,16 +32,15 @@
 (defn graph-download-as-png
   "Download the current graph as a png file."
   [surrounding-div]
-  [tooltip/tooltip-button "bottom" (labels :graph.download/as-png)
-   [:<>
-    [icon :file-download "m-auto d-block" {:size "lg"}]
-    [:span.small (labels :discussion.navbar/download)]]
-   (fn []
-     (let [canvas (.querySelector js/document (gstring/format "%s div canvas" surrounding-div))
-           anchor (.createElement js/document "a")]
-       (oset! anchor [:href] (.toDataURL canvas "image/png"))
-       (oset! anchor [:download] "graph.png")
-       (.click anchor)))])
+  [navbar-components/button-with-icon
+   :file-download
+   (labels :graph.download/as-png)
+   (labels :discussion.navbar/download)
+   #(let [canvas (.querySelector js/document (gstring/format "%s div canvas" surrounding-div))
+          anchor (.createElement js/document "a")]
+      (oset! anchor [:href] (.toDataURL canvas "image/png"))
+      (oset! anchor [:download] "graph.png")
+      (.click anchor))])
 
 (defn txt-export
   "Request a txt-export of the discussion."
@@ -59,8 +54,8 @@
                       :handler (partial create-txt-download-handler title)
                       :error-handler show-error})]
     (when share-hash
-      [tooltip/tooltip-button "bottom" (labels :schnaq.export/as-text)
-       [:<>
-        [icon :file-download "mx-auto d-block" {:size "lg"}]
-        [:span.small (labels :discussion.navbar/download)]]
+      [navbar-components/button-with-icon
+       :file-download
+       (labels :schnaq.export/as-text)
+       (labels :discussion.navbar/download)
        #(request-fn)])))

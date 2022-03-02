@@ -9,11 +9,11 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.loading :refer [spinner-icon]]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.qa.inputs :as qanda]
-            [schnaq.links :as links]))
+            [schnaq.links :as links]
+            [schnaq.shared-toolbelt :as toolbelt]))
 
 (defn- label-builder
   "Extract vector from labels and drop the first element, which is always a

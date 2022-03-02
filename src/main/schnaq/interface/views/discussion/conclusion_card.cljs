@@ -10,9 +10,7 @@
             [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.markdown :as md]
-            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.edit :as edit]
@@ -415,18 +413,6 @@
        [call-to-share])]))
 
 (rf/reg-event-fx
- :discussion.select/conclusion
- (fn [{:keys [db]} [_ conclusion]]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-     {:db (assoc-in db [:discussion :conclusion :selected] conclusion)
-      :fx [(http/xhrio-request db :get "/discussion/statements/for-conclusion"
-                               [:discussion.premises/set-current]
-                               {:conclusion-id (:db/id conclusion)
-                                :share-hash share-hash
-                                :display-name (tools/current-display-name db)}
-                               [:ajax.error/as-notification])]})))
-
-(rf/reg-event-fx
  :discussion.statements/reload
  (fn [{:keys [db]} _]
    (let [route-name (navigation/canonical-route-name (get-in db [:current-route :data :name]))]
@@ -434,8 +420,3 @@
        :routes.schnaq.select/statement {:fx [[:dispatch [:discussion.query.statement/by-id]]]}
        :routes.schnaq/start {:fx [[:dispatch [:discussion.query.conclusions/starting]]]}
        {}))))
-
-(rf/reg-event-db
- :discussion.premises/set-current
- (fn [db [_ {:keys [premises]}]]
-   (assoc-in db [:discussion :premises :current] premises)))

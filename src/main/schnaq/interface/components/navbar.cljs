@@ -1,6 +1,7 @@
 (ns schnaq.interface.components.navbar
   (:require [com.fulcrologic.guardrails.core :refer [>defn]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -42,7 +43,7 @@
   can be passed to an anchor's href."
   [label href]
   [keyword? any? :ret vector?]
-  [:a.nav-link {:href href :role "button"}
+  [:a.nav-link.text-nowrap {:href href :role "button"}
    (labels label)])
 
 (defn- drop-down-button-link [link label]
@@ -94,6 +95,17 @@
                                    :aria-expanded "false"
                                    :aria-label "Toggle navigation"}
       [:span.navbar-toggler-icon]]
+     [:div.d-sm-none [common-components/theme-logo {:style {:max-width "100px"}}]]
      [:div.ms-auto.d-none.d-lg-block
       top-right-content]]]
    collapsible-content])
+
+(>defn button-with-icon
+  "Build a button for the navbar, with icon, text and tooltip."
+  [icon-key tooltip-text button-text on-click-fn]
+  [keyword? string? string? fn? => :re-frame/component]
+  [tooltip/tooltip-button "bottom" tooltip-text
+   [:<>
+    [icon icon-key "m-auto d-block" {:size "lg"}]
+    [:span.small.text-nowrap button-text]]
+   on-click-fn])

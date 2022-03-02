@@ -3,6 +3,7 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [schnaq.interface.components.colors :refer [colors]]
+            [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -17,16 +18,14 @@
 
 (defn- clickable-title
   ([]
-   [clickable-title "text-primary" "text-dark"])
-  ([label-class title-class]
+   [clickable-title "text-dark"])
+  ([title-class]
    (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])]
-     [:<>
-      [:small {:class label-class} (labels :discussion.navbar/title)]
-      [:div.clickable-no-hover
-       [:a.link-unstyled
-        {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
-        [:h1.h5.d-none.d-md-block {:class title-class} (toolbelt/truncate-to-n-chars title 25)]
-        [:div.d-md-none {:class title-class} (toolbelt/truncate-to-n-chars title 22)]]]])))
+     [:div.clickable-no-hover
+      [:a.link-unstyled
+       {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
+       [:h1.h6.d-none.d-md-block.text-wrap {:class title-class} (toolbelt/truncate-to-n-chars title 64)]
+       [:div.d-md-none {:class title-class} (toolbelt/truncate-to-n-chars title 32)]]])))
 
 (defn- schnaq-logo []
   [:<>
@@ -39,25 +38,25 @@
 
 (defn navbar-title
   "Brand logo and title with dynamic resizing."
-  [title additional-content]
-  [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2.bg-white
-   [:a.schnaq-logo-container.d-flex.h-100 {:href (navigation/href :routes/startpage)}
-    [schnaq-logo]]
-   [:div.mx-0.mx-md-4
-    title]
-   additional-content])
+  ([title]
+   [navbar-title title true])
+  ([title clickable-title?]
+   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2.bg-white
+    [:a.schnaq-logo-container.d-flex.h-100 (when clickable-title?
+                                             {:href (navigation/href :routes/startpage)})
+     [schnaq-logo]]
+    [:div.mx-0.mx-md-4.text-wrap title]
+    [:div.h-100.d-none.d-md-block.p-2
+     [common-components/theme-logo]]]))
 
 (defn navbar-qanda-title []
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2
    [:a.p-3.d-flex.h-100 {:href (toolbelt/current-overview-link)}
     [schnaq-logo]]
-   [:div.mx-1.mx-md-5.px-md-5.pt-2.flex-column
-    [clickable-title "text-white" "text-white"]]])
-
-(defn additional-label-counter [label count]
-  [:div.mx-4.ms-auto.d-none.d-xxl-block
-   [:small.text-primary label]
-   [:h5.text-center count]])
+   [:div.mx-1.mx-md-5.px-md-5.pt-2
+    [clickable-title "text-white"]]
+   [:div.d-none.d-md-inline
+    [common-components/theme-logo {:style {:max-width "150px"}}]]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -190,18 +189,11 @@
   [:div.dropdown
    [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn"}]])
 
-(defn title-and-infos
+(defn discussion-title
   "Display the schnaq title and info"
   []
-  (let [discussion @(rf/subscribe [:schnaq/selected])
-        meta-info (:meta-info discussion)
-        statement-count (:all-statements meta-info)
-        user-count (count (:authors meta-info))]
-    [navbar-title
-     [clickable-title]
-     [:<>
-      [additional-label-counter (labels :discussion.navbar/posts) statement-count]
-      [additional-label-counter (labels :discussion.navbar/members) user-count]]]))
+  [navbar-title
+   [clickable-title]])
 
 (defn user-button
   "Display the user settings button"

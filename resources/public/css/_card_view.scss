@@ -159,16 +159,19 @@
 .highlight-card-support {
   @extend .highlight-card;
   background: $positive;
+  background: var(--theming-primary);
 }
 
 .highlight-card-attack {
   @extend .highlight-card;
   background: $negative;
+  background: var(--theming-secondary);
 }
 
 .highlight-card-answered {
   @extend .highlight-card;
   background: $green;
+  color: rgb(224, 0, 20);
 }
 
 .search-bar {

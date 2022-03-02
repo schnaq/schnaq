@@ -1,6 +1,5 @@
 (ns schnaq.database.main
   (:require [clojure.spec.alpha :as s]
-            [clojure.string :as string]
             [clojure.walk :as walk]
             [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [datomic.api :as d]
@@ -8,6 +7,7 @@
             [schnaq.config :as config]
             [schnaq.database.models :as models]
             [schnaq.database.specs :as specs]
+            [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.test-data :as test-data]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
@@ -101,15 +101,6 @@
   [integer? :ret inst?]
   (-> (Instant/now) (.minus seconds ChronoUnit/SECONDS) Date/from))
 
-(>defn clean-db-vals
-  "Removes all entries from a map that have a value of nil or empty string."
-  [data]
-  [associative? :ret associative?]
-  (into {} (remove #(or (nil? (second %))
-                        (when (= String (type (second %)))
-                          (string/blank? (second %))))
-                   data)))
-
 (defn fast-pull
   "Pulls any entity with star-syntax and current db."
   ([id]
@@ -125,7 +116,7 @@
   entity."
   [entity spec]
   [associative? keyword? :ret int?]
-  (let [clean-entity (clean-db-vals entity)
+  (let [clean-entity (shared-tools/remove-nil-values-from-map entity)
         identifier (format "new-entity-%s"
                            (.toString (UUID/randomUUID)))]
     (when (s/valid? spec clean-entity)

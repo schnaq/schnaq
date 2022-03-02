@@ -9,7 +9,7 @@
 (>defn- vote-on-statement!
   "Up or Downvote a statement."
   [statement-id user-id vote-type]
-  [number? :db/id keyword? :ret any?]
+  [number? :db/id keyword? :ret future?]
   (let [[add-attribute remove-attribute] (if (= vote-type :upvote)
                                            [:statement/upvotes :statement/downvotes]
                                            [:statement/downvotes :statement/upvotes])]
@@ -20,7 +20,7 @@
   "Upvotes a statement. Takes a user and a statement-id. The user has to exist, otherwise
   nothing happens."
   [statement-id user-id]
-  [number? :db/id :ret any?]
+  [number? :db/id :ret future?]
   (vote-on-statement! statement-id user-id :upvote))
 
 (defn upvote-anonymous-statement!
@@ -32,7 +32,7 @@
   "Downvotes a statement. Takes a user and a statement-id. The user has to exist, otherwise
   nothing happens."
   [statement-id user-id]
-  [number? :db/id :ret any?]
+  [number? :db/id :ret future?]
   (vote-on-statement! statement-id user-id :downvote))
 
 (defn downvote-anonymous-statement!
@@ -43,7 +43,7 @@
 (>defn remove-upvote!
   "Removes an upvote of a user."
   [statement-id user-id]
-  [number? :db/id :ret any?]
+  [number? :db/id :ret future?]
   (transact [[:db/retract statement-id :statement/upvotes user-id]]))
 
 (defn remove-anonymous-upvote!
@@ -54,7 +54,7 @@
 (>defn remove-downvote!
   "Removes a downvote of a user."
   [statement-id user-id]
-  [number? :db/id :ret any?]
+  [number? :db/id :ret future?]
   (transact [[:db/retract statement-id :statement/downvotes user-id]]))
 
 (defn remove-anonymous-downvote!

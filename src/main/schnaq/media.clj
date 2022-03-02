@@ -6,8 +6,6 @@
             [image-resizer.core :as resizer-core]
             [image-resizer.format :as resizer-format]
             [ring.util.http-response :refer [created bad-request forbidden]]
-            [schnaq.api.toolbelt :as at]
-            [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.main :as d]
             [schnaq.s3 :as s3]
@@ -20,6 +18,11 @@
 (def ^:private error-cdn "prohibited cdn")
 (def ^:private error-img "Setting image failed")
 (def ^:private success-img "Setting image succeeded")
+
+(def mime-type->file-ending
+  {"image/jpeg" "jpg"
+   "image/png" "png"
+   "image/webp" "webp"})
 
 (defn- add-bucket-url-to-database [relative-file-path share-hash]
   @(d/transact [[:db/add [:discussion/share-hash share-hash]
@@ -58,16 +61,16 @@
       :error-forbidden-cdn (forbidden {:error error-cdn})
       (created "" {:message success-img}))))
 
-(>defn scale-image-to-height
-  "Scale image data url to a specified height and return a map containing input-stream, image-type and content-type"
-  [image-data-url height]
+(>defn- scale-image-to-width
+  "Scale image data url to a specified width and return a map containing input-stream, image-type and content-type"
+  [image-data-url width]
   [string? number? :ret map?]
   (try
     (let [[header image-without-header] (string/split image-data-url #",")
           image-bytes (.decode (Base64/getDecoder) image-without-header)
           image-type (second (re-find #"/([A-z]*);" header))
           content-type (second (re-find #":(([A-z]*)/[A-z]*);" header))
-          resized-image (resizer-core/resize-to-height (io/input-stream image-bytes) height)
+          resized-image (resizer-core/resize-to-width (io/input-stream image-bytes) width)
           input-stream (when image-type (resizer-format/as-stream resized-image image-type))]
       {:input-stream input-stream
        :image-type image-type
@@ -84,23 +87,27 @@
 
 (defn upload-image!
   "Scale and upload an image to s3."
-  [file-name image-type image-content bucket-key]
-  (if (shared-config/allowed-mime-types image-type)
-    (if-let [{:keys [input-stream image-type content-type]}
-             (scale-image-to-height image-content config/profile-picture-height)]
-      (if-let [image-name (create-UUID-file-name file-name image-type)]
-        (let [absolute-url (s3/upload-stream bucket-key
-                                             input-stream
-                                             image-name
-                                             {:content-type content-type})]
-          {:image-url absolute-url})
-        (bad-request (at/build-error-body :error/could-not-create-file-name
-                                          "Could not create file-name. Maybe you are not authenticated or you did not provide a file-type.")))
-      (do
-        (log/warn "Conversion of image failed.")
-        (bad-request (at/build-error-body :scaling "Could not scale image"))))
-    (do
-      (log/warn "Invalid file type received.")
-      (bad-request (at/build-error-body
-                    :invalid-file-type
-                    (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types)))))))
+  ([file-name image-type image-content target-image-width bucket-key]
+   (upload-image! file-name image-type image-content target-image-width bucket-key true))
+  ([file-name image-type image-content target-image-width bucket-key uuid-filename?]
+   (if (shared-config/allowed-mime-types image-type)
+     (if-let [{:keys [input-stream image-type content-type]}
+              (scale-image-to-width image-content target-image-width)]
+       (if-let [image-name (if uuid-filename?
+                             file-name
+                             (create-UUID-file-name file-name image-type))]
+         (let [absolute-url (s3/upload-stream bucket-key
+                                              input-stream
+                                              image-name
+                                              {:content-type content-type})]
+           {:image-url absolute-url})
+         {:error :image.error/could-not-create-file-name
+          :message "Could not create file-name. Maybe you are not authenticated or you did not provide a file-type."})
+       (do
+         (log/warn "Conversion of image failed.")
+         {:error :image.error/scaling
+          :message "Could not scale image."}))
+     (do
+       (log/warn "Invalid file type received.")
+       {:error :image.error/invalid-file-type
+        :message (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types))}))))

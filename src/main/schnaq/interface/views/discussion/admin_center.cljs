@@ -18,6 +18,7 @@
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.user.themes :as themes]
             [schnaq.links :as links]))
 
 (defn- copy-link-form
@@ -258,7 +259,7 @@
        :checked schnaq-read-only?
        :on-change (fn [e] (.preventDefault e)
                     (rf/dispatch [dispatch]))}]
-     [:label.form-check-label.display-6.ps-1 {:for :enable-read-only?}
+     [:label.form-check-label.h5.ps-1 {:for :enable-read-only?}
       (labels :schnaq.admin.configurations.read-only/checkbox)]
      [:p (labels :schnaq.admin.configurations.read-only/explanation)]]))
 
@@ -275,7 +276,7 @@
        (fn [e]
          (.preventDefault e)
          (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
-     [:label.form-check-label.display-6.ps-1 {:for :disable-pro-con-checkbox?}
+     [:label.form-check-label.h5.ps-1 {:for :disable-pro-con-checkbox?}
       (labels :schnaq.admin.configurations.disable-pro-con/label)]
      [:p (labels :schnaq.admin.configurations.disable-pro-con/explanation)]]))
 
@@ -292,7 +293,7 @@
        (fn [e]
          (.preventDefault e)
          (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
-     [:label.form-check-label.display-6.ps-1 {:for :only-moderators-mark-checkbox}
+     [:label.form-check-label.h5.ps-1 {:for :only-moderators-mark-checkbox}
       (labels :schnaq.admin.configurations.mods-mark-only/label)]
      [:p (labels :schnaq.admin.configurations.mods-mark-only/explanation)]]))
 
@@ -356,6 +357,7 @@
   "List all possible discussion settings."
   []
   [:<>
+   [:h4 (labels :schnaq.admin.configurations/heading)]
    [only-moderators-mark-setting]
    [enable-discussion-read-only]
    [disable-pro-con]])
@@ -364,15 +366,19 @@
   "Settings for the discussion."
   []
   [:ret :re-frame/component]
-  [:<>
-   [header-image/image-url-input]
-   (if @(rf/subscribe [:user/pro-user?])
+  (if @(rf/subscribe [:user/pro-user?])
+    [:<>
+     [themes/assign-theme-to-schnaq]
+     [:hr.my-5]
      [discussion-settings]
-     [:div.pt-1
-      [:hr]
-      [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
-      [:div.border.border-danger.p-3.mt-4
-       [discussion-settings]]])])
+     [:hr.my-5]
+     [header-image/image-url-input]]
+    [:div.pt-1
+     [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
+     [:div.border.border-danger.p-3.mt-4
+      [discussion-settings]
+      [:div.pt-4
+       [header-image/image-url-input]]]]))
 
 (defn- administrator-tabs
   "Share link and invite via mail in a tabbed view."

@@ -10,9 +10,9 @@
   [_]
   (ok {:text "🧙‍♂️"}))
 
-(defn- check-credentials!
-  "Checks whether share-hash and edit-hash match.
-  If the user is logged in and the credentials are valid, they are added as an admin."
+(defn- check-credentials-opt-add-as-admin!
+  "The middleware calling this function checks for the validity of the credentials.
+  If the user is logged in, add them as admin."
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash]} (:body parameters)
         keycloak-id (:sub identity)]
@@ -50,8 +50,8 @@
                   :description (at/get-doc #'export-as-argdown)}]
      ["/fulltext" {:get export-as-fulltext
                    :description (at/get-doc #'export-as-fulltext)}]]
-    ["/credentials/validate" {:post check-credentials!
-                              :description (at/get-doc #'check-credentials!)
+    ["/credentials/validate" {:post check-credentials-opt-add-as-admin!
+                              :description (at/get-doc #'check-credentials-opt-add-as-admin!)
                               :middleware [:discussion/valid-credentials?]
                               :responses {200 {:body {:valid-credentials? boolean?}}
                                           403 at/response-error-body}

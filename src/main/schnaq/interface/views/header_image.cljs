@@ -14,23 +14,26 @@
   (or url config/place-holder-header-img))
 
 (defn image-url-input []
-  (let [input-id "admin-image-url"]
+  (let [input-id "admin-image-url"
+        pro-user? @(rf/subscribe [:user/pro-user?])]
     [:form.form.text-start.mb-5
      {:on-submit (fn [e]
                    (.preventDefault e)
                    (rf/dispatch [:schnaq.admin/set-header-image-url
                                  (oget e [:target :elements])]))}
      [:div.mb-2
-      [:label.form-label {:for input-id} (labels :schnaq.header-image.url/label)]
+      [:label.form-label.h4 {:for input-id} (labels :schnaq.header-image.url/label)]
       [:input.form-control.m-1.rounded-3
        {:id input-id
         :name image-form-name
         :auto-complete "off"
         :required true
+        :disabled (not pro-user?)
         :placeholder (labels :schnaq.header-image.url/placeholder)}]
       [:small.form-text.text-muted.float-end
        (labels :schnaq.header-image.url/note)]]
      [:button.btn.btn-outline-primary
+      {:disabled (not pro-user?)}
       (labels :schnaq.header-image.url/button)]]))
 
 ;; events

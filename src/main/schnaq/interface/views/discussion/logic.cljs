@@ -11,15 +11,16 @@
  (fn [{:keys [db]} [_ statement-type new-premise]]
    (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
          share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-     {:fx [(http/xhrio-request
-            db :post "/discussion/react-to/statement"
-            [:discussion.reaction.statement/added]
-            {:share-hash share-hash
-             :conclusion-id statement-id
-             :premise new-premise
-             :statement-type statement-type
-             :display-name (tools/current-display-name db)}
-            [:ajax.error/as-notification])]})))
+     (when share-hash
+       {:fx [(http/xhrio-request
+              db :post "/discussion/react-to/statement"
+              [:discussion.reaction.statement/added]
+              {:share-hash share-hash
+               :conclusion-id statement-id
+               :premise new-premise
+               :statement-type statement-type
+               :display-name (tools/current-display-name db)}
+              [:ajax.error/as-notification])]}))))
 
 (rf/reg-event-fx
  :discussion.reaction.statement/added
@@ -35,15 +36,16 @@
  (fn [{:keys [db]} [_ statement statement-type new-premise]]
    (let [statement-id (:db/id statement)
          share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-     {:fx [(http/xhrio-request
-            db :post "/discussion/react-to/statement"
-            [:discussion.reply.statement/added statement]
-            {:share-hash share-hash
-             :conclusion-id statement-id
-             :premise new-premise
-             :statement-type statement-type
-             :display-name (tools/current-display-name db)}
-            [:ajax.error/as-notification])]})))
+     (when share-hash
+       {:fx [(http/xhrio-request
+              db :post "/discussion/react-to/statement"
+              [:discussion.reply.statement/added statement]
+              {:share-hash share-hash
+               :conclusion-id statement-id
+               :premise new-premise
+               :statement-type statement-type
+               :display-name (tools/current-display-name db)}
+              [:ajax.error/as-notification])]}))))
 
 (rf/reg-event-fx
  :discussion.reply.statement/added

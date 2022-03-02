@@ -1,9 +1,10 @@
 (ns schnaq.database.user
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
-            [schnaq.database.main :refer [transact fast-pull clean-db-vals query]]
+            [schnaq.database.main :refer [transact fast-pull query]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
+            [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log]))
 
@@ -135,14 +136,14 @@
 
 (>defn create-visited-statements-for-discussion
   [keycloak-id discussion-hash visited-statements]
-  [:user.registered/keycloak-id :discussion/share-hash (s/coll-of :db/id) :ret any?]
+  [:user.registered/keycloak-id :discussion/share-hash (s/coll-of :db/id) :ret future?]
   (let [queried-id (seen-statements-entity keycloak-id discussion-hash)
         temp-id (or queried-id (str "seen-statements-" keycloak-id "-" discussion-hash))
         new-visited {:db/id temp-id
                      :seen-statements/user [:user.registered/keycloak-id keycloak-id]
                      :seen-statements/visited-schnaq [:discussion/share-hash discussion-hash]
                      :seen-statements/visited-statements visited-statements}]
-    (transact [(clean-db-vals new-visited)])))
+    (transact [(remove-nil-values-from-map new-visited)])))
 
 (defn update-visited-statements
   "Updates the user's visited statements by adding the new ones."
@@ -200,7 +201,7 @@
         (when-not (nil? visited-statements)
           (update-visited-statements id visited-statements))
         [false existing-user])
-      (let [new-user-from-db (-> @(transact [(clean-db-vals new-user)])
+      (let [new-user-from-db (-> @(transact [(remove-nil-values-from-map new-user)])
                                  (get-in [:tempids temp-id])
                                  (fast-pull patterns/public-user))]
         (when-not (nil? visited-statements)
@@ -255,10 +256,12 @@
   notification settings."
   [interval]
   [:user.registered/notification-mail-interval :ret (s/coll-of :discussion/share-hash)]
-  (set
-   (map :discussion/share-hash
-        (flatten
-         (map :user.registered/visited-schnaqs (users-by-notification-interval interval))))))
+  (->> (users-by-notification-interval interval)
+       (map :user.registered/visited-schnaqs)
+       flatten
+       (map :discussion/share-hash)
+       (remove nil?)
+       set))
 
 ;; -----------------------------------------------------------------------------
 ;; Subscriptions

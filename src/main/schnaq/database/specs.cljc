@@ -1,5 +1,5 @@
 (ns schnaq.database.specs
-  (:require #?(:clj  [clojure.spec.alpha :as s]
+  (:require #?(:clj [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]
             [schnaq.config.shared :as shared-config]))
@@ -12,6 +12,7 @@
 ;; Common
 (s/def :db/id (s/or :transacted integer? :temporary any?))
 (s/def :db/txInstant inst?)
+(s/def :color/hex (s/and ::non-blank-string #(.startsWith % "#") #(= 7 (.length %))))
 
 ;; API
 (s/def :api.response/error keyword?)
@@ -281,3 +282,23 @@
 (s/def :ring/body-params map?)
 (s/def :ring/route-params map?)
 (s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
+
+;; Theming
+(s/def :theme/title ::non-blank-string)
+(s/def :theme/user :db/id)
+(s/def :theme/discussions (s/coll-of :db/id))
+(s/def :theme.colors/primary :color/hex)
+(s/def :theme.colors/secondary :color/hex)
+(s/def :theme.colors/background :color/hex)
+(s/def :theme.images/logo ::non-blank-string)
+(s/def :theme.images/header ::non-blank-string)
+(s/def :theme.images.raw/logo ::image)
+(s/def :theme.images.raw/header ::image)
+(s/def :theme.texts/activation ::non-blank-string)
+(s/def ::theme
+  (s/keys :opt [:theme/title
+                :theme.colors/primary :theme.colors/secondary
+                :theme.colors/background :theme.images/logo
+                :theme.images/header :theme/discussions
+                :theme.texts/activation :theme/user :db/id
+                :theme.images.raw/logo :theme.images.raw/header]))

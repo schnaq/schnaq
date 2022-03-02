@@ -6,7 +6,7 @@
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
-(defn- extract-parameter-from-request
+(defn extract-parameter-from-request
   "Look up parameter in request and return its value."
   [request parameter]
   (or (get-in request [:parameters :body parameter])
@@ -40,7 +40,7 @@
           edit-hash (extract-parameter-from-request request :edit-hash)]
       (if (validator/valid-credentials? share-hash edit-hash)
         (handler request)
-        (forbidden (at/build-error-body :credentials/invalid "Your share-hash and edit-hash do fit together."))))))
+        (forbidden (at/build-error-body :credentials/invalid "Your share-hash and edit-hash do not fit together."))))))
 
 (defn wrap-custom-schnaq-csrf-header
   "A handler, that checks for a custom schnaq-csrf header. This can only be present when sent from an allowed origin

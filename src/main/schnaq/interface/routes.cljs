@@ -38,7 +38,8 @@
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.subscription :as subscription-views]
             [schnaq.interface.views.user.edit-account :as edit-account]
-            [schnaq.interface.views.user.edit-notifications :as edit-notifications]))
+            [schnaq.interface.views.user.edit-notifications :as edit-notifications]
+            [schnaq.interface.views.user.themes :as themes]))
 
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
@@ -106,8 +107,8 @@
      {:name :routes.user.manage/account
       :view edit-account/view
       :link-text (labels :user/edit-account)
-      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:user.subscription/status]]))
-                     :stop (fn [] (rf/dispatch [:user.picture/reset]))}]}]
+      :controllers [{:start #(rf/dispatch [:scheduler.after/login [:user.subscription/status]])
+                     :stop #(rf/dispatch [:user.picture/reset])}]}]
     ["/notifications"
      {:name :routes.user.manage/notifications
       :view edit-notifications/view
@@ -159,12 +160,16 @@
       :parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
+                              (rf/dispatch [:body.class/add "theming-enabled"])
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
                               (rf/dispatch [:schnaq/add-visited! (:share-hash path)])
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/mark-all-as-seen (:share-hash path)]])
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
-                     :stop #(rf/dispatch [:filters/clear])}]}
-     [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
+                     :stop (fn []
+                             (rf/dispatch [:body.class/remove "theming-enabled"])
+                             (rf/dispatch [:filters/clear])
+                             (rf/dispatch [:theme/reset]))}]}
+     ["" ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
                                (rf/dispatch [:discussion.history/clear])
@@ -187,7 +192,7 @@
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]
-     ["/"                                                   ;; Redirect trailing slash schnaq access to non-trailing slash
+     ["/" ;; Redirect trailing slash schnaq access to non-trailing slash
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:navigation/navigate :routes.schnaq/start path]))}]}]
@@ -218,6 +223,7 @@
        :controllers [{:parameters {:path [:share-hash :edit-hash]}
                       :start (fn [{:keys [path]}]
                                (let [{:keys [share-hash edit-hash]} path]
+                                 (rf/dispatch [:scheduler.after/login [:themes.load/personal]])
                                  (rf/dispatch [:schnaq/check-admin-credentials share-hash edit-hash])
                                  (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash])
                                  (rf/dispatch [:schnaqs.save-admin-access/to-localstorage-and-db
@@ -267,6 +273,18 @@
       :controllers [{:parameters {:query [:price-id]}
                      :start (fn [parameters]
                               (rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session (get-in parameters [:query :price-id])]]))}]}]]
+   ["/themes"
+    {:name :routes.user.manage/themes
+     :view themes/view
+     :controllers [{:start (fn []
+                             (rf/dispatch [:schnaq.selected/dissoc])
+                             (rf/dispatch [:theme/dummy])
+                             (rf/dispatch [:scheduler.after/login [:themes.load/personal]]))
+                    :stop (fn []
+                            (rf/dispatch [:schnaq.selected/dissoc])
+                            (rf/dispatch [:themes/dissoc])
+                            (rf/dispatch [:theme/reset]))}]}]
+
    ["/privacy"
     [""
      {:name :routes.privacy/complete
@@ -306,7 +324,7 @@
   (vec
    (concat
     [""
-     {:coercion reitit.coercion.spec/coercion}              ;; Enable Spec coercion for all routes
+     {:coercion reitit.coercion.spec/coercion} ;; Enable Spec coercion for all routes
      (vec
       (concat
        ["/en"
@@ -336,7 +354,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-          #(tools/scroll-to-id window-hash)))))
+               #(tools/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))

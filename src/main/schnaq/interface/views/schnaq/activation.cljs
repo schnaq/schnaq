@@ -1,10 +1,14 @@
 (ns schnaq.interface.views.schnaq.activation
   (:require ["framer-motion" :refer [motion]]
+            [goog.string :as gstring]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion-comp]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]))
+
+(def ^:private default-activation-background
+  "https://s3.schnaq.com/schnaq-common/background/layered_background_square.svg")
 
 (defn- schnaqqis
   "Walking schnaqqis with varying x and y positions."
@@ -83,22 +87,29 @@
 
 (defn- activation-view [background-class button-class col-class]
   (when-let [activation @(rf/subscribe [:schnaq/activation])]
-    [:div
-     {:class col-class}
-     [motion-comp/fade-in-and-out
-      [:section.statement-card.p-3.text-white
-       {:class background-class}
-       [:div.d-flex
-        [:h4.mx-auto.mt-3 (labels :schnaq.activation/title)]
-        [activation-dropdown-menu]]
-       [:div.mx-auto.display-3 (:activation/count activation)]
-       [schnaqqi-walk]
-       [:div.text-center
-        [:button.btn.btn-lg.btn-secondary
-         {:class button-class
-          :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
-         (labels :schnaq.activation/activation-button)]]]
-      motion-comp/card-fade-in-time]]))
+    (let [theme @(rf/subscribe [:schnaq.selected/theme])
+          activation-phrase (or (:theme.texts/activation theme)
+                                (labels :schnaq.activation/phrase))
+          background-image-url (or (:theme.images/header theme) default-activation-background)]
+      [:div {:class col-class}
+       [motion-comp/fade-in-and-out
+        [:section.activation
+         {:class background-class
+          :style (when-not (= "bg-transparent" background-class) {:background-image (gstring/format "url('%s')" background-image-url)})}
+         [:div.d-flex
+          [:h4.mx-auto.mt-3
+           (gstring/format (labels :schnaq.activation/title)
+                           activation-phrase)]
+          [activation-dropdown-menu]]
+         [:div.mx-auto.display-3 (:activation/count activation)]
+         [schnaqqi-walk]
+         [:div.text-center
+          [:button.btn.btn-lg.btn-secondary
+           {:class button-class
+            :on-click (fn [_e] (rf/dispatch [:activation/activate]))}
+           activation-phrase
+           "!"]]]
+        motion-comp/card-fade-in-time]])))
 
 (defn activation-event-view
   "Activation card for q-and-a view."
@@ -111,7 +122,7 @@
   "Activation card for the discussion-view."
   []
   [activation-view
-   "activation-background overflow-hidden"
+   nil
    "w-75"
    "statement-column"])
 
@@ -216,9 +227,10 @@
 (rf/reg-event-fx
  :activation/activate
  (fn [{:keys [db]} _]
-   {:fx [(http/xhrio-request db :put "/activation/increment"
-                             [:schnaq.activation.load-from-backend/success]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
+   (when-let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :put "/activation/increment"
+                               [:schnaq.activation.load-from-backend/success]
+                               {:share-hash share-hash})]})))
 
 (rf/reg-event-fx
  :activation/delete

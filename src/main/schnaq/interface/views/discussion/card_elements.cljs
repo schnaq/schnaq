@@ -228,7 +228,7 @@
 
 (defn action-view []
   [:div.d-inline-block.text-dark.w-100.mb-3.mx-1.mx-md-0
-   [:div.d-flex.flex-row.flex-wrap
+   [:div.d-flex.flex-row.flex-wrap.panel-white.p-2
     [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2
      [back-button]]
     [:div.d-flex

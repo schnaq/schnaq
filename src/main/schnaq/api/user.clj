@@ -1,7 +1,8 @@
 (ns schnaq.api.user
   (:require [clojure.spec.alpha :as s]
-            [ring.util.http-response :refer [ok created]]
+            [ring.util.http-response :refer [ok bad-request created]]
             [schnaq.api.toolbelt :as at]
+            [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
@@ -40,10 +41,11 @@
         image-content (get-in parameters [:body :image :content])
         user-id (:id identity)]
     (log/info "User" user-id "trying to set profile picture to:" image-name)
-    (let [{:keys [image-url] :as response} (media/upload-image! user-id image-type image-content :user/profile-pictures)]
+    (let [{:keys [image-url error message]}
+          (media/upload-image! user-id image-type image-content config/profile-picture-width :user/profile-pictures)]
       (if image-url
         (ok {:updated-user (user-db/update-profile-picture-url user-id image-url)})
-        response))))
+        (bad-request (at/build-error-body error message))))))
 
 (defn- change-display-name
   "Change the display name of a registered user."

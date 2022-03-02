@@ -65,9 +65,30 @@
    (toolbelt/reset-form-fields! form-elements)))
 
 (rf/reg-event-fx
+ :body.class/add
+ (fn [_ [_ class]]
+   {:fx [[:body.class/add! class]]}))
+
+(rf/reg-fx
+ :body.class/add!
+ (fn [class]
+   (.add (.. js/document -body -classList) class)))
+
+(rf/reg-event-fx
+ :body.class/remove
+ (fn [_ [_ class]]
+   {:fx [[:body.class/remove! class]]}))
+
+(rf/reg-fx
+ :body.class/remove!
+ (fn [class]
+   (.remove (.. js/document -body -classList) class)))
+
+(rf/reg-event-fx
  :schnaq/select-current-from-backend
  (fn [_ [_ {:keys [schnaq]}]]
-   {:fx [[:dispatch [:schnaq/select-current schnaq]]]}))
+   {:fx [[:dispatch [:schnaq/select-current schnaq]]
+         [:dispatch [:theme.apply/from-discussion]]]}))
 
 (rf/reg-event-fx
  :schnaq/select-current
@@ -116,6 +137,18 @@
  :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
    (not (nil? (some #{:discussion.state/read-only} (:discussion/states selected-schnaq))))))
+
+(rf/reg-sub
+ :schnaq.selected/theme
+ :<- [:schnaq/selected]
+ (fn [selected-schnaq _ _]
+   (:discussion/theme selected-schnaq)))
+
+(rf/reg-event-db
+ :schnaq.selected/dissoc
+ ;; Remove currently selected schnaq
+ (fn [db]
+   (update db :schnaq dissoc :selected)))
 
 (rf/reg-event-fx
  :schnaq/load-by-share-hash
