@@ -1,5 +1,6 @@
 (ns schnaq.api.themes
   (:require [clojure.spec.alpha :as s]
+            [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn- => ?]]
             [ring.util.http-response :refer [ok forbidden bad-request]]
             [schnaq.api.middlewares :as middlewares]
@@ -7,7 +8,8 @@
             [schnaq.database.main :as db]
             [schnaq.database.specs :as specs]
             [schnaq.database.themes :as themes-db]
-            [schnaq.media :as media]))
+            [schnaq.media :as media]
+            [schnaq.s3 :as s3]))
 
 (def ^:private image-max-width-logo
   "Set the maximum image-width of the logo in pixels."
@@ -42,6 +44,20 @@
     (cond-> {}
       (:image-url logo) (assoc :theme.images/logo (:image-url logo))
       (:image-url header) (assoc :theme.images/header (:image-url header)))))
+
+(>defn- url->path-to-file
+  "Takes an url in our s3 store and returns the path to the theme file after the
+  bucket's name."
+  [url]
+  [string? => string?]
+  (->> (str/split url #"/") (drop 4) (str/join "/")))
+
+(defn- delete-images!
+  "Delete images of a theme."
+  [theme-id]
+  (let [{:theme.images/keys [logo header]} (themes-db/theme-by-id theme-id)]
+    (run! #(s3/delete-file :user/media (url->path-to-file %))
+          [logo header])))
 
 ;; -----------------------------------------------------------------------------
 ;; Endpoints
@@ -80,6 +96,7 @@
   "Delete a theme."
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
+  (delete-images! (:db/id theme))
   (if (themes-db/delete-theme (:db/id theme))
     (ok {:themes (themes-db/themes-by-keycloak-id sub)})
     (bad-request (at/build-error-body :theme/not-deleted "Did not delete theme. Either the theme does not exist or the requesting user is not the author of the theme."))))

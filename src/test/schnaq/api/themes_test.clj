@@ -2,6 +2,7 @@
   (:require [clojure.test :refer [deftest is use-fixtures testing]]
             [muuntaja.core :as m]
             [schnaq.api :as api]
+            [schnaq.api.themes :as themes-api]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.themes :as themes-db]
             [schnaq.test-data :refer [theme-anti-social schnaqqi kangaroo]]
@@ -174,3 +175,9 @@
     (testing "fails if user has no pro access."
       (let [response (unassign-theme-request toolbelt/token-kangaroo-normal-user "cat-dog-hash" "cat-dog-edit-hash")]
         (is (= 403 (:status response)))))))
+
+;; -----------------------------------------------------------------------------
+
+(deftest s3-url->path-to-file-test
+  (is (= "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/themes/00000000000000/logo.png"
+         (#'themes-api/url->path-to-file "https://s3.schnaq.com/user-media/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/themes/00000000000000/logo.png"))))

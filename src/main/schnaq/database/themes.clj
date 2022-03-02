@@ -18,6 +18,12 @@
                [?theme :theme/user ?user]]
              keycloak-id patterns/theme)))
 
+(>defn theme-by-id
+  "Return a theme by its id."
+  [theme-id]
+  [:db/id => ::specs/theme]
+  (db/fast-pull theme-id patterns/theme))
+
 (>defn- query-existing-theme
   "Query theme if exists."
   [keycloak-id {:theme/keys [title]}]
