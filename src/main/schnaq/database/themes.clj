@@ -11,12 +11,11 @@
   "Return all themes for a given user by it's `keycloak-id`."
   [keycloak-id]
   [:user.registered/keycloak-id => (s/coll-of ::specs/theme)]
-  (flatten
-   (db/query '[:find (pull ?theme pattern)
-               :in $ ?keycloak-id pattern
-               :where [?user :user.registered/keycloak-id ?keycloak-id]
-               [?theme :theme/user ?user]]
-             keycloak-id patterns/theme)))
+  (db/query '[:find [(pull ?theme pattern) ...]
+              :in $ ?keycloak-id pattern
+              :where [?user :user.registered/keycloak-id ?keycloak-id]
+              [?theme :theme/user ?user]]
+            keycloak-id patterns/theme))
 
 (>defn theme-by-id
   "Return a theme by its id."
