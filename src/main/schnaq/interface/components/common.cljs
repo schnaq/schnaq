@@ -20,9 +20,10 @@
 (defn theme-logo
   "Show the current logo configured in a theme."
   [attrs]
-  (let [theme @(rf/subscribe [:schnaq.selected/theme])]
-    [:img.theme-logo
-     (merge
-      {:src (:theme.images/logo theme)
-       :alt "Theme Logo"}
-      attrs)]))
+  (let [{:theme.images/keys [logo]} @(rf/subscribe [:schnaq.selected/theme])]
+    (when logo
+      [:img.theme-logo
+       (merge
+        {:src logo
+         :alt "Theme Logo"}
+        attrs)])))
