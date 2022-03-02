@@ -160,8 +160,8 @@
    :pricing.pro-tier/description
    (add-class-to-feature
     (concat
+     [(labels :pricing.features/from-previous)]
      [(gstring/format (labels :pricing.features/number-of-users) config/max-concurrent-users-pro-tier)]
-     (starter-features)
      (pro-features))
     "text-primary")
    (coming-soon)
@@ -191,12 +191,11 @@
    :pricing.enterprise-tier/description
    (add-class-to-feature
     (concat
+     [(labels :pricing.features/from-previous)]
      [(labels :pricing.features.number-of-users/unlimited)]
-     (starter-features)
-     (pro-features)
      (enterprise-features))
     "text-primary")
-   (coming-soon)
+   nil
    [cta-button (labels :pricing.enterprise-tier/call-to-action) "btn-primary" "mailto:info@schnaq.com"]])
 
 (defn- tier-cards []
@@ -243,9 +242,7 @@
   []
   [pricing-page])
 
-
 ;; -----------------------------------------------------------------------------
-
 
 (rf/reg-event-fx
  :subscription/create-checkout-session
