@@ -100,15 +100,14 @@
         selected @(rf/subscribe [:schnaq.selected/theme])]
     [:div.row.row-cols-2.row-cols-xl-4.g-2.g-lg-3
      (for [theme themes]
-       (with-meta
-         [:div.col
-          [buttons/button
-           (toolbelt/truncate-to-n-chars-string (:theme/title theme) 24)
-           #(rf/dispatch [dispatch-event theme])
-           (if (= (:db/id selected) (:db/id theme))
-             "btn-secondary w-100 h-100"
-             "btn-outline-dark w-100 h-100")]]
-         {:key (str "theme-" (:db/id theme))}))]))
+       [:div.col
+        {:key (str "theme-" (:db/id theme))}
+        [buttons/button
+         (toolbelt/truncate-to-n-chars-string (:theme/title theme) 24)
+         #(rf/dispatch [dispatch-event theme])
+         (if (= (:db/id selected) (:db/id theme))
+           "btn-secondary w-100 h-100"
+           "btn-outline-dark w-100 h-100")]])]))
 
 (defn- loaded-themes
   "Display all available themes."
