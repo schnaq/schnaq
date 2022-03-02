@@ -1,11 +1,11 @@
 (ns schnaq.interface.components.navbar
   (:require [com.fulcrologic.guardrails.core :refer [>defn]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.components.common :as common-components]))
+            [schnaq.interface.utils.tooltip :as tooltip]))
 
 (defn language-dropdown
   "Dropdown for bootstrap navbar to display the allowed languages."

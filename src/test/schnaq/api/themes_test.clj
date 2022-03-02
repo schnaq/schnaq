@@ -2,18 +2,27 @@
   (:require [clojure.test :refer [deftest is use-fixtures testing]]
             [muuntaja.core :as m]
             [schnaq.api :as api]
+            [schnaq.database.themes :as themes-db]
+            [schnaq.test-data :refer [theme-anti-social schnaqqi]]
             [schnaq.test.toolbelt :as toolbelt]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
 
 (def ^:private sample-theme
-  {:theme.images/logo "https://s3.schnaq.com/themes/d6d8a351-2074-46ff-aa9b-9c57ab6c6a18/awesome-title/logo.png"
-   :theme.images/activation "https://s3.schnaq.com/themes/d6d8a351-2074-46ff-aa9b-9c57ab6c6a18/awesome-title/activation.png"
-   :theme/title "Awesome title"
-   :theme.colors/secondary "#123456"
-   :theme.colors/background "#7890ab"
-   :theme.colors/primary "#cdef01"})
+  (dissoc theme-anti-social :db/id :theme/user))
+
+(def ^:private raw-image
+  {:content "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=",
+   :name "1x1.png",
+   :type "image/png"})
+
+(def ^:private new-theme-with-images
+  "Remove all db-specific information and add raw images."
+  (-> theme-anti-social
+      (dissoc :db/id :theme/user :theme.images/logo :theme.images/header)
+      (assoc :theme.images.raw/logo raw-image
+             :theme.images.raw/header raw-image)))
 
 ;; -----------------------------------------------------------------------------
 
@@ -33,6 +42,12 @@
     (testing "fails for non-pro users"
       (is (= 403 (:status (save-theme-request toolbelt/token-wegi-no-beta-user sample-theme)))))))
 
+(deftest new-theme-with-images-test
+  (testing "Image upload when adding a new theme should succeed."
+    (let [response (m/decode-response-body (save-theme-request toolbelt/token-n2o-admin new-theme-with-images))]
+      (is (-> response :theme :theme.images/logo string?))
+      (is (-> response :theme :theme.images/header string?)))))
+
 ;; -----------------------------------------------------------------------------
 
 (defn- edit-theme-request [user-token theme]
@@ -45,14 +60,24 @@
 
 (deftest edit-theme-test
   (testing "Editing a theme succeeds for eligible users."
-    (let [theme (-> (save-theme-request toolbelt/token-n2o-admin sample-theme)
-                    m/decode-response-body :theme)
+    (let [theme (first (themes-db/themes-by-keycloak-id (:user.registered/keycloak-id schnaqqi)))
           modified-theme (assoc theme
                                 :db/id (:db/id theme)
                                 :theme/title "changed")
-          request (edit-theme-request toolbelt/token-n2o-admin modified-theme)]
-      (is (= 200 (:status request)))
-      (is (= "changed" (-> request m/decode-response-body :theme :theme/title))))))
+          response (edit-theme-request toolbelt/token-schnaqqifant-user modified-theme)]
+      (is (= 200 (:status response)))
+      (is (= "changed" (-> response m/decode-response-body :theme :theme/title))))))
+
+(deftest new-theme-with-images-test
+  (testing "Image upload when adding a new theme should succeed."
+    (let [theme (first (themes-db/themes-by-keycloak-id (:user.registered/keycloak-id schnaqqi)))
+          modified-theme (assoc theme
+                                :db/id (:db/id theme)
+                                :theme.images.raw/logo raw-image
+                                :theme.images.raw/header raw-image)
+          response (m/decode-response-body (edit-theme-request toolbelt/token-schnaqqifant-user modified-theme))]
+      (is (-> response :theme :theme.images/logo string?))
+      (is (-> response :theme :theme.images/header string?)))))
 
 ;; -----------------------------------------------------------------------------
 

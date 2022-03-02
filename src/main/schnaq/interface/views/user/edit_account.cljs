@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.user.edit-account
   (:require [clojure.string :as string]
-            [goog.string :as gstring]
             [oops.core :refer [oget+]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
