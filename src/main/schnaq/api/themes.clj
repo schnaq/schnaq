@@ -2,7 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn- => ?]]
-            [ring.util.http-response :refer [ok forbidden bad-request]]
+            [ring.util.http-response :refer [ok forbidden]]
             [schnaq.api.middlewares :as middlewares]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.main :as db]
