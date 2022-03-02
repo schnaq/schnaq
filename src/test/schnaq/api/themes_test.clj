@@ -33,6 +33,23 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- personal-themes-request [user-token]
+  (-> {:request-method :get :uri (:path (api/route-by-name :api.themes/personal))}
+      toolbelt/add-csrf-header
+      (toolbelt/mock-authorization-header user-token)
+      api/app
+      m/decode-response-body
+      :themes
+      count))
+
+(deftest personal-themes-test
+  (testing "Querying personal theme returns collection of themes."
+    (is (= 1 (personal-themes-request toolbelt/token-schnaqqifant-user)))
+    (is (zero? (personal-themes-request toolbelt/token-n2o-admin)))
+    (is (zero? (personal-themes-request toolbelt/token-wegi-no-beta-user)))))
+
+;; -----------------------------------------------------------------------------
+
 (defn- save-theme-request [user-token theme]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.theme/add))
        :body-params {:theme theme}}
