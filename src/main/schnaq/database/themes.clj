@@ -27,13 +27,12 @@
   "Query theme if exists."
   [keycloak-id {:theme/keys [title]}]
   [:user.registered/keycloak-id ::specs/theme => (? ::specs/theme)]
-  (first
-   (db/query '[:find [(pull ?theme pattern)]
-               :in $ ?keycloak-id ?theme-title pattern
-               :where [?user :user.registered/keycloak-id ?keycloak-id]
-               [?theme :theme/user ?user]
-               [?theme :theme/title ?theme-title]]
-             keycloak-id title patterns/theme)))
+  (db/query '[:find (pull ?theme pattern) .
+              :in $ ?keycloak-id ?theme-title pattern
+              :where [?user :user.registered/keycloak-id ?keycloak-id]
+              [?theme :theme/user ?user]
+              [?theme :theme/title ?theme-title]]
+            keycloak-id title patterns/theme))
 
 (>defn new-theme
   "Saves the provided theme for a given user."
