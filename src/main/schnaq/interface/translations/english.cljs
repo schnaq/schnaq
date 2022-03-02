@@ -834,7 +834,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :themes.personal/lead "Give schnaq your personal touch."
    :themes.personal.creation/heading "Your themes"
    :themes.personal.creation/lead "Set the color scheme for your schnaqs here. After you have created your theme here, you can select the theme in your schnaq's settings."
-   :themes.personal.creation/pro-hint "This is a pro-Feature. You can play around with it and see the result in the preview section, but you can not save your theme."
+   :themes.personal.creation/pro-hint "This is a Pro plan feature. You can play around with it and see the result in the preview section, but you can not save your theme until you upgrade your plan."
    :themes.personal.creation.title/label "Give your theme a unique title"
    :themes.personal.creation/theme-placeholder "%s's personal theme"
    :themes.personal.creation.images.logo/title "Logo"
