@@ -86,9 +86,9 @@
        [activation/activation-card]
        [:div.d-flex.flex-row
         [buttons/button "primary button"]
-        [buttons/button "secondary button" (constantly "#") "btn-secondary ms-2"]
-        [buttons/button "primary outlined button" (constantly "#") "btn-outline-primary ms-2"]
-        [buttons/button "secondary outlined button" (constantly "#") "btn-outline-secondary ms-2"]]
+        [buttons/button "secondary button" nil "btn-secondary ms-2"]
+        [buttons/button "primary outlined button" nil "btn-outline-primary ms-2"]
+        [buttons/button "secondary outlined button" nil "btn-outline-secondary ms-2"]]
        [selection-card]]]]))
 
 ;; -----------------------------------------------------------------------------
