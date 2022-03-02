@@ -56,17 +56,6 @@
     (ok {:starting-conclusions (-> (starting-conclusions-with-processors share-hash author-id)
                                    (processors/with-new-post-info share-hash user-identity))})))
 
-(defn- get-statements-for-conclusion
-  "Return all premises and fitting undercut-premises for a given statement."
-  [{:keys [parameters identity]}]
-  (let [{:keys [conclusion-id display-name]} (:query parameters)
-        user-id (user-db/user-id display-name (:sub identity))
-        prepared-statements (-> conclusion-id
-                                discussion-db/children-for-statement
-                                (valid-statements-with-votes user-id)
-                                processors/with-sub-statement-count)]
-    (ok {:premises prepared-statements})))
-
 (defn- search-statements
   "Search through any valid discussion."
   [{:keys [parameters identity]}]
@@ -444,15 +433,6 @@
                                      :display-name ::specs/non-blank-string}}
                 :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}
                             404 at/response-error-body}}]
-    ["/for-conclusion" {:get get-statements-for-conclusion
-                        :description (at/get-doc #'get-statements-for-conclusion)
-                        :name :api.discussion.statements/for-conclusion
-                        :middleware [:discussion/valid-share-hash?]
-                        :parameters {:query {:share-hash :discussion/share-hash
-                                             :conclusion-id :db/id
-                                             :display-name ::specs/non-blank-string}}
-                        :responses {200 {:body {:premises (s/coll-of ::dto/statement)}}
-                                    404 at/response-error-body}}]
     ["/starting/add" {:post add-starting-statement!
                       :description (at/get-doc #'add-starting-statement!)
                       :name :api.discussion.statements.starting/add

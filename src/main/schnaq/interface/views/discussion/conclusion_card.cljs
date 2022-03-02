@@ -420,8 +420,3 @@
        :routes.schnaq.select/statement {:fx [[:dispatch [:discussion.query.statement/by-id]]]}
        :routes.schnaq/start {:fx [[:dispatch [:discussion.query.conclusions/starting]]]}
        {}))))
-
-(rf/reg-event-db
- :discussion.premises/set-current
- (fn [db [_ {:keys [premises]}]]
-   (assoc-in db [:discussion :premises :current] premises)))
