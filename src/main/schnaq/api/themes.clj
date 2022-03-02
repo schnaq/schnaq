@@ -148,15 +148,17 @@
                  :middleware [user-is-theme-author?-middleware]
                  :parameters {:body {:theme ::specs/theme}}
                  :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}}}]
-     ["/discussion"
+     ["/discussion" {:middleware [:discussion/valid-credentials?]}
       ["/assign" {:put assign-theme
                   :description (at/get-doc #'assign-theme)
                   :name :api.theme.discussion/assign
                   :parameters {:body {:theme ::specs/theme
-                                      :share-hash :discussion/share-hash}}
+                                      :share-hash :discussion/share-hash
+                                      :edit-hash :discussion/edit-hash}}
                   :responses {200 {:body {:assigned? boolean?}}}}]
       ["/unassign" {:delete unassign-theme
                     :description (at/get-doc #'unassign-theme)
                     :name :api.theme.discussion/unassign
-                    :parameters {:body {:share-hash :discussion/share-hash}}
+                    :parameters {:body {:share-hash :discussion/share-hash
+                                        :edit-hash :discussion/edit-hash}}
                     :responses {200 {:body {:unassigned? boolean?}}}}]]]]])

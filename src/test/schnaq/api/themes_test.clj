@@ -3,11 +3,18 @@
             [muuntaja.core :as m]
             [schnaq.api :as api]
             [schnaq.database.themes :as themes-db]
-            [schnaq.test-data :refer [theme-anti-social schnaqqi]]
-            [schnaq.test.toolbelt :as toolbelt]))
+            [schnaq.test-data :refer [theme-anti-social schnaqqi kangaroo]]
+            [schnaq.test.toolbelt :as toolbelt]
+            [schnaq.database.discussion :as discussion-db]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
+
+(def ^:private schnaqqi-keycloak-id
+  (:user.registered/keycloak-id schnaqqi))
+
+(def ^:private kangaroo-keycloak-id
+  (:user.registered/keycloak-id kangaroo))
 
 (def ^:private sample-theme
   (dissoc theme-anti-social :db/id :theme/user))
@@ -70,7 +77,7 @@
 
 (deftest new-theme-with-images-test
   (testing "Image upload when adding a new theme should succeed."
-    (let [theme (first (themes-db/themes-by-keycloak-id (:user.registered/keycloak-id schnaqqi)))
+    (let [theme (first (themes-db/themes-by-keycloak-id schnaqqi-keycloak-id))
           modified-theme (assoc theme
                                 :db/id (:db/id theme)
                                 :theme.images.raw/logo raw-image
@@ -99,3 +106,54 @@
         (is (= 403 (:status someones-request))))
       (testing "is allowed for the theme's owner."
         (is (= 200 (:status owner-request)))))))
+
+;; -----------------------------------------------------------------------------
+
+(defn- assign-theme-request [user-token theme-id share-hash edit-hash]
+  (-> {:request-method :put :uri (:path (api/route-by-name :api.theme.discussion/assign))
+       :body-params {:theme {:db/id theme-id}
+                     :share-hash share-hash
+                     :edit-hash edit-hash}}
+      toolbelt/add-csrf-header
+      (toolbelt/mock-authorization-header user-token)
+      toolbelt/accept-edn-response-header
+      api/app))
+
+(deftest assign-theme-test
+  (testing "Assigning a theme to a discussion"
+    (let [theme-id (-> (themes-db/themes-by-keycloak-id schnaqqi-keycloak-id) first :db/id)]
+      (testing "succeeds for users with valid credentials and pro-account."
+        (let [response (assign-theme-request toolbelt/token-schnaqqifant-user theme-id "simple-hash" "simple-hash-secret")]
+          (is (= 200 (:status response)))))
+      (testing "fails if wrong credentials are provided."
+        (let [response (assign-theme-request toolbelt/token-schnaqqifant-user theme-id "simple-hash" "wrong-edit-hash")]
+          (is (= 403 (:status response)))))
+      (testing "fails if user has no pro access."
+        (let [kangaroo-theme-id (-> (themes-db/themes-by-keycloak-id kangaroo-keycloak-id) first :db/id)
+              response (assign-theme-request toolbelt/token-kangaroo-normal-user kangaroo-theme-id "simple-hash" "simple-hash-secret")]
+          (is (= 403 (:status response))))))))
+
+;; -----------------------------------------------------------------------------
+
+(defn- unassign-theme-request [user-token share-hash edit-hash]
+  (-> {:request-method :delete :uri (:path (api/route-by-name :api.theme.discussion/unassign))
+       :body-params {:share-hash share-hash
+                     :edit-hash edit-hash}}
+      toolbelt/add-csrf-header
+      (toolbelt/mock-authorization-header user-token)
+      toolbelt/accept-edn-response-header
+      api/app))
+
+(deftest unassign-theme-test
+  (testing "Unassigning a theme from a discussion"
+    (testing "succeeds for users with valid credentials and pro-account."
+      (let [response (unassign-theme-request toolbelt/token-schnaqqifant-user "cat-dog-hash" "cat-dog-edit-hash")
+            discussion (discussion-db/discussion-by-share-hash "cat-dog-hash")]
+        (is (= 200 (:status response)))
+        (is (nil? (:discussion/theme discussion)))))
+    (testing "fails if wrong credentials are provided."
+      (let [response (unassign-theme-request toolbelt/token-schnaqqifant-user "cat-dog-hash" "razupaltuff")]
+        (is (= 403 (:status response)))))
+    (testing "fails if user has no pro access."
+      (let [response (unassign-theme-request toolbelt/token-kangaroo-normal-user "cat-dog-hash" "cat-dog-edit-hash")]
+        (is (= 403 (:status response)))))))

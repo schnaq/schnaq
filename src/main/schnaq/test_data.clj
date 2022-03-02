@@ -161,7 +161,8 @@
     :discussion/edit-hash "cat-dog-edit-hash"
     :discussion/author "user/wegi"
     :discussion/created-at #inst "2019-01-01"
-    :discussion/starting-statements ["statement/get-dog" "statement/get-both" "statement/get-cat"]}
+    :discussion/starting-statements ["statement/get-dog" "statement/get-both" "statement/get-cat"]
+    :discussion/theme "theme/elephants"}
    {:db/id "discussion/tapir-or-ameisenbaer"
     :discussion/title "Tapir oder Ameisenbär?"
     :discussion/created-at #inst "2019-01-01"
