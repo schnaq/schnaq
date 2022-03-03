@@ -47,7 +47,7 @@
      [schnaq-logo]]
     [:div.mx-0.mx-md-4.text-wrap title]
     [:div.h-100.d-none.d-md-block.p-2
-     [common-components/theme-logo]]]))
+     [common-components/theme-logo {:style {:max-height "100%"}}]]]))
 
 (defn navbar-qanda-title []
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2
