@@ -155,24 +155,14 @@
 (defn- sort-options
   "Displays the different sort options for card elements."
   []
-  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
-        button-title (case sort-method
-                       :newest (labels :badges.sort/newest)
-                       :popular (labels :badges.sort/popular)
-                       (labels :badges/sort))
-        dropdown-menu-id "dropdownSortButton"]
-    [:div.dropdown.h-100
-     [:button.btn.btn-sm.btn-primary.dropdown-toggle.h-100
-      {:id dropdown-menu-id :type "button" :data-bs-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}
-      button-title]
-     [:div.dropdown-menu {:aria-labelledby dropdown-menu-id}
-      [:button.dropdown-item
+  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
+    (if (= :popular sort-method)
+      [:button.btn.btn-sm.btn-primary.h-100
        {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
        (labels :badges.sort/newest)]
-      [:button.dropdown-item
+      [:button.btn.btn-sm.btn-primary.h-100
        {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
-       (labels :badges.sort/popular)]]]))
+       (labels :badges.sort/popular)])))
 
 ;; -----------------------------------------------------------------------------
 
