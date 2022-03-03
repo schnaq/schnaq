@@ -89,13 +89,14 @@
     {:class navbar-bg-class}
     [:div.container-fluid
      [:div.navbar-brand.p-0.btn brand-content]
-     [:button.navbar-toggler.mx-2 {:type "button" :data-bs-toggle "collapse"
-                                   :data-bs-target (str "#" collapse-content-id)
-                                   :aria-controls collapse-content-id
-                                   :aria-expanded "false"
-                                   :aria-label "Toggle navigation"}
+     [:button.navbar-toggler.mx-2.panel-white
+      {:type "button" :data-bs-toggle "collapse"
+       :data-bs-target (str "#" collapse-content-id)
+       :aria-controls collapse-content-id
+       :aria-expanded "false"
+       :aria-label "Toggle navigation"}
       [:span.navbar-toggler-icon]]
-     [:div.d-sm-none [common-components/theme-logo {:style {:max-width "100px"}}]]
+     [:div.d-md-none [common-components/theme-logo {:style {:max-width "100px"}}]]
      [:div.ms-auto.d-none.d-lg-block
       top-right-content]]]
    collapsible-content])
