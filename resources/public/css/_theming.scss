@@ -67,6 +67,16 @@
     }
   }
 
+  .btn-check:checked+.btn-outline-primary {
+    background-color: var(--theming-primary);
+    color: #fff !important;
+  }
+
+  .btn-check:checked+.btn-outline-secondary {
+    background-color: var(--theming-secondary);
+    color: #fff !important;
+  }
+
   // -----------------------------------------------------------------------------
   // Text Color
 
