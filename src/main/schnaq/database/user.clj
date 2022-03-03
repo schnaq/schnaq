@@ -205,7 +205,7 @@
                                  (get-in [:tempids temp-id])
                                  (fast-pull patterns/public-user))]
         (when-not (nil? visited-statements)
-          (update-visited-statements (:db/id new-user-from-db) visited-statements))
+          (update-visited-statements (:user.registered/keycloak-id new-user-from-db) visited-statements))
         [true new-user-from-db]))))
 
 (>defn- update-user-field
