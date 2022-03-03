@@ -67,22 +67,32 @@
     }
   }
 
+  .btn-check:checked+.btn-outline-primary {
+    background-color: var(--theming-primary);
+    color: #fff !important;
+  }
+
+  .btn-check:checked+.btn-outline-secondary {
+    background-color: var(--theming-secondary);
+    color: #fff !important;
+  }
+
   // -----------------------------------------------------------------------------
   // Text Color
 
   .text-primary {
-    color: var(--theming-primary) !important;
+    color: var(--theming-primary);
   }
 
   .text-secondary {
-    color: var(--theming-secondary) !important;
+    color: var(--theming-secondary);
   }
 
   // -----------------------------------------------------------------------------
   // Tabs
 
   .nav-tabs .nav-link {
-    color: var(--theming-primary) !important;
+    color: var(--theming-primary);
   }
 
   // -----------------------------------------------------------------------------
@@ -104,7 +114,7 @@
   }
 
   .form-control:focus {
-    border-color: var(--theming-primary) !important;
+    border-color: var(--theming-primary);
     box-shadow: none;
   }
 }
