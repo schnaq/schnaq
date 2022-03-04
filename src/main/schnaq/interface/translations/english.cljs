@@ -1018,7 +1018,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :admin.center.delete.user.identity/button "Delete identity"
 
    :badges.filters/label "Display"
-   :badges/sort "Sorting the posts"
+   :badges/sort "Sort the posts"
    :badges.sort/newest "Newest"
    :badges.sort/popular "Popular"
    :badges.sort/alphabetical "Alphabetical"
