@@ -108,7 +108,9 @@
         [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-diskussionsplattform/"}
          "für Diskussionen"] [:br]
         [:a.btn.btn-link {:href "https://schnaq.com/blog/de/ama-ask-me-anything-fragerunden/"}
-         "für AMAs"]]])))
+         "für AMAs"] [:br]
+        [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-workshop-moderation/"}
+         "für Online Workshops"]]])))
 
 (defn- alternatives
   "Show schnaq use-cases for the users. Only in german."
