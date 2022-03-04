@@ -1,7 +1,7 @@
 (ns schnaq.config.cleverreach)
 
 (def enabled?
-  "Toggle to user cleverreach mails."
+  "Toggle to use cleverreach mails."
   (or (System/getenv "CLEVERREACH_ENABLED") false))
 
 (def receiver-group
