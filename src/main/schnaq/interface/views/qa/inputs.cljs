@@ -65,7 +65,7 @@
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
     [pages/with-qanda-header
      {:page/heading (:discussion/title current-discussion)
-      :page/classes "layered-wave-background h-100 d-flex flex-column"}
+      :page/classes "layered-wave-background h-100 d-flex flex-column min-height-85"}
      [:<>
       [:div.container
        [activation/activation-event-view]]
