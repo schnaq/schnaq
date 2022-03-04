@@ -43,7 +43,7 @@
 (>defn- wrap-catch-exception
   "Do API call, catch exception and print result or error."
   [email success-log error-log fn]
-  [string? ::specs/email string? fn? => (? map?)]
+  [::specs/email string? string? fn? => (? map?)]
   (if cconfig/enabled?
     (try
       (let [response (fn)]
