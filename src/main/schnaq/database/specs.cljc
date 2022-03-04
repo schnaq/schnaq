@@ -13,6 +13,7 @@
 (s/def :db/id (s/or :transacted integer? :temporary any?))
 (s/def :db/txInstant inst?)
 (s/def :color/hex (s/and ::non-blank-string #(.startsWith % "#") #(= 7 (.length %))))
+(s/def ::email (s/and ::non-blank-string #(.contains % "@") #(.contains % ".")))
 
 ;; API
 (s/def :api.response/error keyword?)
