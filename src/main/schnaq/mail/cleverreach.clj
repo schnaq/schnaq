@@ -39,8 +39,8 @@
 
 (>defn- wrap-catch-exception
   "Do API call, catch exception and print result or error."
-  [fn email success-log error-log]
-  [fn? ::specs/email string? string? => map?]
+  [email success-log error-log fn]
+  [string? ::specs/email string? fn? => map?]
   (try
     (let [response (fn)]
       (log/debug (format success-log email cconfig/receiver-group))
@@ -58,6 +58,7 @@
   [email]
   [::specs/email => map?]
   (wrap-catch-exception
+   email "Added mail %s to group" "User could not be added to cleverreach."
    #(client/post
      (format "https://rest.cleverreach.com/v3/groups.json/%s/receivers?token=%s" cconfig/receiver-group access-token)
      {:body
@@ -67,16 +68,14 @@
                  :activated 0
                  :source "schnaq Backend"})
       :content-type :json
-      :accept :json})
-   email
-   "Added mail %s to group"
-   "User could not be added to cleverreach."))
+      :accept :json})))
 
 (>defn- send-double-opt-in!
   "Send double-opt-in mail to user."
   [email]
   [::specs/email => map?]
   (wrap-catch-exception
+   email "Double-opt-in mail send to %s." "Could not trigger opt-in mail."
    #(client/post
      (format "https://rest.cleverreach.com/v3/forms.json/%s/send/activate?token=%s" cconfig/double-opt-in-form access-token)
      {:body
@@ -86,38 +85,31 @@
                            :referer "https://schnaq.com"
                            :user_agent "schnaq/backend"}})
       :content-type :json
-      :accept :json})
-   email
-   "Double-opt-in mail send to %s."
-   "Could not trigger opt-in mail."))
+      :accept :json})))
 
 (>defn add-pro-tag!
   "Send pro-information of user to cleverreach. Adds a tag to the user's entry."
   [email]
   [::specs/email => map?]
   (wrap-catch-exception
+   email "Added pro tag to mail %s." "Could not add pro tag to mail."
    #(client/post
      (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags?token=%s" email access-token)
      {:body (m/encode "application/json" {:tags ["pro"]})
       :content-type :json
-      :accept :json})
-   email
-   "Added pro tag to mail %s."
-   "Could not add pro tag to mail."))
+      :accept :json})))
 
 (>defn remove-pro-tag!
   "Remove pro tag information from user."
   [email]
   [::specs/email => map?]
   (wrap-catch-exception
+   email "Removed pro tag from mail %s." "Could not remove pro tag from mail."
    #(client/delete
      ;; The tags, which should be removed, must be a single tag or a comma separated list of tags.
      (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags/pro?token=%s" email access-token)
      {:content-type :json
-      :accept :json})
-   email
-   "Removed pro tag from mail %s."
-   "Could not remove pro tag from mail."))
+      :accept :json})))
 
 ;; -----------------------------------------------------------------------------
 
