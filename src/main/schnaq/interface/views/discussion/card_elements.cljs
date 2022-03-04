@@ -156,12 +156,12 @@
   "Displays the different sort options for card elements."
   []
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
-    (if (= :popular sort-method)
-      [:button.btn.btn-sm.btn-primary.h-100
-       {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
-       (labels :badges.sort/newest)]
+    (if (= :newest sort-method)
       [:button.btn.btn-sm.btn-primary.h-100
        {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
+       (labels :badges.sort/newest)]
+      [:button.btn.btn-sm.btn-primary.h-100
+       {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
        (labels :badges.sort/popular)])))
 
 ;; -----------------------------------------------------------------------------
