@@ -1017,7 +1017,7 @@
    :admin.center.delete.user.identity/button "Identität löschen"
 
    :badges.filters/label "Anzeige"
-   :badges/sort "Sortierung"
+   :badges/sort "Sortierung der Beiträge"
    :badges.sort/newest "Neueste"
    :badges.sort/popular "Beliebt"
    :badges.sort/alphabetical "Alphabetisch"
