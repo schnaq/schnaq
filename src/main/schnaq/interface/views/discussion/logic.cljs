@@ -107,7 +107,7 @@
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         form-statement-type @(rf/subscribe [:form/statement-type :selected])
         statement-type (if pro-con-disabled?
-                         :neutral
+                         :statement.type/neutral
                          form-statement-type)]
     (rf/dispatch [:discussion.reaction.statement/send statement-type new-text])
     (rf/dispatch [:form/should-clear [new-text-element]])))
@@ -129,13 +129,13 @@
          new-conclusion (first (filter #(= (:db/id %) statement-id) (get-in db [:discussion :premises :current])))]
      ;; set new conclusion immediately if it's in db already, so loading times are reduced
      (cond->
-       {:fx [(http/xhrio-request
-              db :get "/discussion/statement/info"
-              [:discussion.query.statement/by-id-success]
-              {:statement-id statement-id
-               :share-hash share-hash
-               :display-name (tools/current-display-name db)}
-              [:discussion.redirect/to-root share-hash])]}
+      {:fx [(http/xhrio-request
+             db :get "/discussion/statement/info"
+             [:discussion.query.statement/by-id-success]
+             {:statement-id statement-id
+              :share-hash share-hash
+              :display-name (tools/current-display-name db)}
+             [:discussion.redirect/to-root share-hash])]}
        new-conclusion (update :db #(assoc-in db [:discussion :conclusion :selected] new-conclusion)
                               :fx conj [:discussion.history/push new-conclusion])))))
 
