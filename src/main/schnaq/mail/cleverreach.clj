@@ -37,13 +37,19 @@
 (def ^:private access-token
   (:access_token (get-access-token cconfig/client-id cconfig/client-secret)))
 
-(defn- routes
-  "Routes to the cleverreach api."
-  [route]
-  (get
-   {:group/add (format "https://rest.cleverreach.com/v3/groups.json/%s/receivers?token=%s" cconfig/receiver-group access-token)
-    :double-opt-in/send (format "https://rest.cleverreach.com/v3/forms.json/%s/send/activate?token=%s" cconfig/double-opt-in-form access-token)}
-   route))
+(>defn- wrap-catch-exception
+  "Do API call, catch exception and print result or error."
+  [fn email success-log error-log]
+  [fn? ::specs/email string? string? => map?]
+  (try
+    (let [response (fn)]
+      (log/debug (format success-log email cconfig/receiver-group))
+      response)
+    (catch Exception e
+      (let [error (ex-data e)]
+        (log/error (format "%s mail: %s, body: %s"
+                           error-log email (m/decode-response-body error)))
+        error))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -51,33 +57,28 @@
   "Add an email address to a group in Cleverreach, i.e. a list of receivers."
   [email]
   [::specs/email => map?]
-  (try
-    (let [response
-          (client/post
-           (routes :group/add)
-           {:body
-            (m/encode "application/json"
-                      {:email email
-                       :registered (quot (System/currentTimeMillis) 1000)
-                       :activated 0
-                       :source "schnaq Backend"})
-            :content-type :json
-            :accept :json})]
-      (log/debug (format "Added mail %s to group %d" email cconfig/receiver-group))
-      response)
-    (catch Exception e
-      (let [error (ex-data e)]
-        (log/error (format "User could not be added to cleverreach. mail: %s, body: %s"
-                           email (m/decode-response-body error)))
-        error))))
+  (wrap-catch-exception
+   #(client/post
+     (format "https://rest.cleverreach.com/v3/groups.json/%s/receivers?token=%s" cconfig/receiver-group access-token)
+     {:body
+      (m/encode "application/json"
+                {:email email
+                 :registered (quot (System/currentTimeMillis) 1000)
+                 :activated 0
+                 :source "schnaq Backend"})
+      :content-type :json
+      :accept :json})
+   email
+   "Added mail %s to group"
+   "User could not be added to cleverreach."))
 
 (>defn- send-double-opt-in!
   "Send double-opt-in mail to user."
   [email]
   [::specs/email => map?]
-  (try
-    (client/post
-     (routes :double-opt-in/send)
+  (wrap-catch-exception
+   #(client/post
+     (format "https://rest.cleverreach.com/v3/forms.json/%s/send/activate?token=%s" cconfig/double-opt-in-form access-token)
      {:body
       (m/encode "application/json"
                 {:email email
@@ -86,11 +87,37 @@
                            :user_agent "schnaq/backend"}})
       :content-type :json
       :accept :json})
-    (catch Exception e
-      (let [error (ex-data e)]
-        (log/error (format "Could not trigger opt-in mail. mail: %s, body: %s"
-                           email (m/decode-response-body error)))
-        error))))
+   email
+   "Double-opt-in mail send to %s."
+   "Could not trigger opt-in mail."))
+
+(>defn add-pro-tag!
+  "Send pro-information of user to cleverreach. Adds a tag to the user's entry."
+  [email]
+  [::specs/email => map?]
+  (wrap-catch-exception
+   #(client/post
+     (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags?token=%s" email access-token)
+     {:body (m/encode "application/json" {:tags ["pro"]})
+      :content-type :json
+      :accept :json})
+   email
+   "Added pro tag to mail %s."
+   "Could not add pro tag to mail."))
+
+(>defn remove-pro-tag!
+  "Remove pro tag information from user."
+  [email]
+  [::specs/email => map?]
+  (wrap-catch-exception
+   #(client/delete
+     ;; The tags, which should be removed, must be a single tag or a comma separated list of tags.
+     (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags/pro?token=%s" email access-token)
+     {:content-type :json
+      :accept :json})
+   email
+   "Removed pro tag from mail %s."
+   "Could not remove pro tag from mail."))
 
 ;; -----------------------------------------------------------------------------
 
