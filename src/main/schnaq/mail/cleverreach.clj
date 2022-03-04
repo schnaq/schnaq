@@ -60,8 +60,8 @@
 
 (>defn- email->group!
   "Add an email address to a group in Cleverreach, i.e. a list of receivers."
-  [email]
-  [::specs/email => (? map?)]
+  [email keycloak-id given-name family-name]
+  [::specs/email :user.registered/keycloak-id :identity/given_name :identity/family_name => (? map?)]
   (wrap-catch-exception
    email "Added mail %s to group" "User could not be added to cleverreach."
    #(client/post
@@ -71,7 +71,10 @@
                 {:email email
                  :registered (quot (System/currentTimeMillis) 1000)
                  :activated 0
-                 :source "schnaq Backend"})
+                 :source "schnaq Backend"
+                 :global_attributes {:firstname given-name
+                                     :lastname family-name
+                                     :keycloak_id keycloak-id}})
       :content-type :json
       :accept :json})))
 
@@ -118,7 +121,7 @@
 
 (>defn add-new-registered-mail-to-cleverreach
   "Add new mail address to cleverreach."
-  [email]
-  [::specs/email => (? map?)]
-  (email->group! email)
+  [{:keys [email sub given_name family_name]}]
+  [::specs/identity => (? map?)]
+  (email->group! email sub given_name family_name)
   (send-double-opt-in! email))
