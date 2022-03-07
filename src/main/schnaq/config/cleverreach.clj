@@ -1,8 +1,11 @@
-(ns schnaq.config.cleverreach)
+(ns schnaq.config.cleverreach
+  (:require [clojure.string :as str]))
 
 (def enabled?
   "Toggle to use cleverreach mails."
-  (or (System/getenv "CLEVERREACH_ENABLED") false))
+  (or (-> (System/getenv "CLEVERREACH_ENABLED")
+          str str/lower-case (= "true"))
+      false))
 
 (def receiver-group
   "Define the list of receivers. Defined in 
