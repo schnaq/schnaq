@@ -60,7 +60,7 @@
 
 (>defn user->group!
   "Add an email address to a group in Cleverreach, i.e. a list of receivers."
-  [{:keys [email sub given_name family_name]}]
+  [{:keys [email sub given_name family_name locale]}]
   [::specs/identity => (? map?)]
   (wrap-catch-exception
    email "Added mail %s to group" "User could not be added to cleverreach."
@@ -74,6 +74,7 @@
                  :source "schnaq Backend"
                  :global_attributes {:firstname given_name
                                      :lastname family_name
+                                     :locale locale
                                      :keycloak_id sub}})
       :content-type :json
       :accept :json})))

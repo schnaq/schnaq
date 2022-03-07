@@ -312,8 +312,9 @@
 (s/def :identity/preferred_username string?)
 (s/def :identity/email ::email)
 (s/def :identity/groups (s/coll-of string?))
+(s/def :identity/locale string?)
 (s/def ::identity
   (s/keys
    :req-un [:identity/sub :identity/given_name :identity/family_name
             :identity/preferred_username :identity/email]
-   :opt-un [:identity/groups]))
+   :opt-un [:identity/groups :identity/locale]))
