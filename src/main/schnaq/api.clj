@@ -72,8 +72,8 @@
   (log/info (format "[Stripe] Price ID schnaq pro yearly: %s" (:schnaq.pro/yearly prices)))
   (log/info (format "[Stripe] Webhook access key (truncated): %s..." (subs config/stripe-webhook-access-key 0 15)))
   (log/info (format "[Stripe] Secret key (truncated): %s..." (subs config/stripe-secret-api-key 0 15)))
-  (log/info (format "[CleverReach] Enabled? %b, Receiver group: %d, DOI-Form: %d, client-id: %s, client-secret: %s..."
-                    cconfig/enabled? cconfig/receiver-group cconfig/double-opt-in-form cconfig/client-id (subs cconfig/client-secret 0 10)))
+  (log/info (format "[CleverReach] Enabled? %b, Receiver group: %d, client-id: %s, client-secret: %s..."
+                    cconfig/enabled? cconfig/receiver-group cconfig/client-id (subs cconfig/client-secret 0 10)))
   (log/info "All systems ready to go"))
 
 (def ^:private description

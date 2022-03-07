@@ -11,7 +11,7 @@
 (def ^:private token-url "https://rest.cleverreach.com/oauth/token.php")
 
 (>defn get-access-token
-  "Query an access token. Necessary to browse CleverReache's API."
+  "Query an access token. Necessary to browse CleverReach's API."
   [client-id client-secret]
   [string? string? => (? map?)]
   (when cconfig/enabled?
@@ -58,10 +58,10 @@
 
 ;; -----------------------------------------------------------------------------
 
-(>defn- email->group!
+(>defn user->group!
   "Add an email address to a group in Cleverreach, i.e. a list of receivers."
-  [email keycloak-id given-name family-name]
-  [::specs/email :user.registered/keycloak-id :identity/given_name :identity/family_name => (? map?)]
+  [{:keys [email sub given_name family_name]}]
+  [::specs/identity => (? map?)]
   (wrap-catch-exception
    email "Added mail %s to group" "User could not be added to cleverreach."
    #(client/post
@@ -72,26 +72,9 @@
                  :registered (quot (System/currentTimeMillis) 1000)
                  :activated 0
                  :source "schnaq Backend"
-                 :global_attributes {:firstname given-name
-                                     :lastname family-name
-                                     :keycloak_id keycloak-id}})
-      :content-type :json
-      :accept :json})))
-
-(>defn- send-double-opt-in!
-  "Send double-opt-in mail to user."
-  [email]
-  [::specs/email => (? map?)]
-  (wrap-catch-exception
-   email "Double-opt-in mail sent to %s." "Could not trigger opt-in mail."
-   #(client/post
-     (format "https://rest.cleverreach.com/v3/forms.json/%s/send/activate?token=%s" cconfig/double-opt-in-form access-token)
-     {:body
-      (m/encode "application/json"
-                {:email email
-                 :doidata {:user_ip "0.0.0.0"
-                           :referer "https://schnaq.com"
-                           :user_agent "schnaq/backend"}})
+                 :global_attributes {:firstname given_name
+                                     :lastname family_name
+                                     :keycloak_id sub}})
       :content-type :json
       :accept :json})))
 
@@ -118,10 +101,3 @@
      (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags/pro?token=%s" email access-token)
      {:content-type :json
       :accept :json})))
-
-(>defn add-new-registered-mail-to-cleverreach
-  "Add new mail address to cleverreach."
-  [{:keys [email sub given_name family_name]}]
-  [::specs/identity => (? map?)]
-  (email->group! email sub given_name family_name)
-  (send-double-opt-in! email))
