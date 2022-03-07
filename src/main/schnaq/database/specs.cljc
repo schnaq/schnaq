@@ -303,3 +303,17 @@
                 :theme.images/header :theme/discussions
                 :theme.texts/activation :theme/user :db/id
                 :theme.images.raw/logo :theme.images.raw/header]))
+
+;; User's identity parsed from a JWT token
+;; There are plenty of more fields, but let's for now spec those we really need.
+(s/def :identity/sub :user.registered/keycloak-id)
+(s/def :identity/given_name string?)
+(s/def :identity/family_name string?)
+(s/def :identity/preferred_username string?)
+(s/def :identity/email ::email)
+(s/def :identity/groups (s/coll-of string?))
+(s/def ::identity
+  (s/keys
+   :req-un [:identity/sub :identity/given_name :identity/family_name
+            :identity/preferred_username :identity/email]
+   :opt-un [:identity/groups]))
