@@ -43,30 +43,31 @@
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
   [textarea-name placeholder send-button-label statement-type autofocus? small?]
-  (let [attitude (case statement-type
-                   :statement.type/support "support"
-                   :statement.type/attack "attack"
-                   :statement.type/neutral "neutral")
-        additional-form-class (when small? "form-control-sm")
-        additional-btn-class (when small? "btn-sm")
-        additional-highlight-class (when small? "highlight-card-reduced ")]
-    [:div.input-group
-     [:div {:class (str additional-highlight-class "highlight-card-reverse highlight-card-" attitude)}]
-     [:textarea.form-control.textarea-resize-none
-      {:class additional-form-class
-       :name textarea-name :wrap "soft" :rows 1
-       :auto-complete "off"
-       :autoFocus autofocus?
-       :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-       :required true
-       :data-dynamic-height true
-       :placeholder placeholder}]
-     [:button.btn.btn-outline-dark
-      {:class additional-btn-class
-       :type "submit" :title (labels :discussion/create-argument-action)}
-      [:div.d-flex.flex-row
-       [:div.d-none.d-lg-block.me-1 send-button-label]
-       [icon :plane "m-auto"]]]]))
+  (when-not @(rf/subscribe [:schnaq.selected/read-only?])
+    (let [attitude (case statement-type
+                     :statement.type/support "support"
+                     :statement.type/attack "attack"
+                     :statement.type/neutral "neutral")
+          additional-form-class (when small? "form-control-sm")
+          additional-btn-class (when small? "btn-sm")
+          additional-highlight-class (when small? "highlight-card-reduced ")]
+      [:div.input-group
+       [:div {:class (str additional-highlight-class "highlight-card-reverse highlight-card-" attitude)}]
+       [:textarea.form-control.textarea-resize-none
+        {:class additional-form-class
+         :name textarea-name :wrap "soft" :rows 1
+         :auto-complete "off"
+         :autoFocus autofocus?
+         :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
+         :required true
+         :data-dynamic-height true
+         :placeholder placeholder}]
+       [:button.btn.btn-outline-dark
+        {:class additional-btn-class
+         :type "submit" :title (labels :discussion/create-argument-action)}
+        [:div.d-flex.flex-row
+         [:div.d-none.d-lg-block.me-1 send-button-label]
+         [icon :plane "m-auto"]]]])))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
