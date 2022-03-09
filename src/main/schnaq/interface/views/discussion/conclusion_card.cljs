@@ -331,6 +331,7 @@
             activation-tab [:span [iconed-heading :magic :schnaq.input-type/activation]]
             pro-user? @(rf/subscribe [:user/pro-user?])
             admin? @(rf/subscribe [:schnaq.current/admin-access])
+            read-only? @(rf/subscribe [:schnaq.selected/read-only?])
             disabled-tooltip-key (cond
                                    (not pro-user?) :schnaq.input-type/pro-only
                                    (not admin?) :schnaq.input-type/not-admin
@@ -339,36 +340,37 @@
         [motion/fade-in-and-out
          [:section.selection-card
           [topic-or-search-content]
-          [:ul.nav.nav-tabs
-           [:li.nav-item
-            [:button.nav-link {:class (active-class :question)
-                               :role "button"
-                               :on-click #(on-click :question)}
-             [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
-           (when top-level?
-             (if pro-user?
-               [:<>
-                [:li.nav-item
-                 [:button.nav-link
-                  {:class (active-class :poll)
-                   :role "button"
-                   :on-click #(on-click :poll)}
-                  poll-tab]]
-                [:li.nav-item
-                 [:button.nav-link
-                  {:class (active-class :activation)
-                   :role "button"
-                   :on-click #(on-click :activation)}
-                  activation-tab]]]
-               [:<>
-                [:li.nav-item
-                 [:button.nav-link.text-muted
-                  {:role "button"}
-                  [tooltip/text (labels disabled-tooltip-key) poll-tab]]]
-                [:li.nav-item
-                 [:button.nav-link.text-muted
-                  {:role "button"}
-                  [tooltip/text (labels disabled-tooltip-key) activation-tab]]]]))]
+          (when-not read-only?
+            [:ul.nav.nav-tabs
+             [:li.nav-item
+              [:button.nav-link {:class (active-class :question)
+                                 :role "button"
+                                 :on-click #(on-click :question)}
+               [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
+             (when top-level?
+               (if pro-user?
+                 [:<>
+                  [:li.nav-item
+                   [:button.nav-link
+                    {:class (active-class :poll)
+                     :role "button"
+                     :on-click #(on-click :poll)}
+                    poll-tab]]
+                  [:li.nav-item
+                   [:button.nav-link
+                    {:class (active-class :activation)
+                     :role "button"
+                     :on-click #(on-click :activation)}
+                    activation-tab]]]
+                 [:<>
+                  [:li.nav-item
+                   [:button.nav-link.text-muted
+                    {:role "button"}
+                    [tooltip/text (labels disabled-tooltip-key) poll-tab]]]
+                  [:li.nav-item
+                   [:button.nav-link.text-muted
+                    {:role "button"}
+                    [tooltip/text (labels disabled-tooltip-key) activation-tab]]]]))])
           (case @selected-option
             :question [input-form-or-disabled-alert]
             :poll [poll/poll-form]

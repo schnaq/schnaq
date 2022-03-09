@@ -318,7 +318,7 @@
    :discussion.navbar/members "Members"
    :discussion.navbar/views "Views"
    :discussion.state/read-only-label "read-only"
-   :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
+   :discussion.state/read-only-warning "This schnaq is read-only. You can read the statements, but not write anything."
    :discussion.navbar/settings "Settings"
    :discussion.navbar/download "Export"
    :discussion.navbar/share "Share"

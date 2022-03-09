@@ -318,7 +318,7 @@
    :discussion.navbar/members "Mitglieder"
    :discussion.navbar/views "Ansichten"
    :discussion.state/read-only-label "schreibgeschützt"
-   :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
+   :discussion.state/read-only-warning "Dieser schnaq ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
    :discussion.navbar/settings "Einstellungen"
    :discussion.navbar/download "Exportieren"
    :discussion.navbar/share "Teilen"
