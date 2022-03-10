@@ -834,6 +834,7 @@ Now we write down questions and discuss them and can still understand what we ha
    ;; Welcome
    :welcome.free/heading "Welcome to schnaq"
    :welcome.free/subheading "These are now your available functions"
+   :welcome.free/pro-features "When you become a Pro user, you can also use the following features"
    :welcome.free.features.schnaq/title "Create a schnaq"
    :welcome.free.features.schnaq/lead "You can start right away. With your personal account you can create your own schnaqs and invite other people to join."
    :welcome.free.features.schnaq/button "Enjoy schnaq"
@@ -845,6 +846,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :welcome.free.features.notifications/button "Set notifications"
    :welcome.pro/heading "You are ready to go"
    :welcome.pro/subheading "From now on, all Pro features are available to you."
+   :welcome.pro/free-features "Of course, these features are still available to you"
    :welcome.pro.features.schnaq/title "Get started!"
    :welcome.pro.features.schnaq/lead "You can now get the full potential out of your schnaqs. You now have analytics, activation options, word clouds and much more."
    :welcome.pro.features.schnaq/button "Go to your schnaqs"

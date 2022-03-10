@@ -73,7 +73,7 @@
       [:div.col-md-6.col-lg-4 [feature-profile]]
       [:div.col-md-6.col-lg-4 [feature-notifications]]]
      [:div.row.pt-5.mt-md-5
-      [:h3 "Wenn du ein Pro-User wirst, kannst du auch folgende Features nutzen"]
+      [:h3 (labels :welcome.free/pro-features)]
       [:div.row.pt-3
        [:div.col-md-6.col-lg-4 [feature-themes]]
        [:div.col-md-6.col-lg-4 [feature-polls true]]
@@ -107,7 +107,7 @@
         (labels :welcome.pro.features.subscription/button)
         :routes.user.manage/account]]]
      [:div.row.pt-5.mt-md-5
-      [:h3 "Natürlich stehen dir diese Funktionen immer noch zur Verfügung"]
+      [:h3 (labels :welcome.pro/free-features)]
       [:div.row.pt-3
        [:div.col-md-6.col-lg-4 [feature-profile]]
        [:div.col-md-6.col-lg-4 [feature-notifications]]]]

@@ -835,6 +835,7 @@
    ;; Welcome user
    :welcome.free/heading "Willkommen bei schnaq"
    :welcome.free/subheading "Hier sind deine freigeschalteten Funktionen"
+   :welcome.free/pro-features "Wenn du ein Pro-User wirst, kannst du auch folgende Features nutzen"
    :welcome.free.features.schnaq/title "Erstelle einen schnaq"
    :welcome.free.features.schnaq/lead "Du kannst direkt loslegen. Mit deinem persönlichem Account kannst du eigene schnaqs erstellen und andere Menschen dazu einladen."
    :welcome.free.features.schnaq/button "Erlebe schnaq"
@@ -846,6 +847,7 @@
    :welcome.free.features.notifications/button "Benachrichtigungen einstellen"
    :welcome.pro/heading "Du bist startklar"
    :welcome.pro/subheading "Von nun an stehen dir alle Pro-Features zur Verfügung."
+   :welcome.pro/free-features "Natürlich stehen dir diese Funktionen immer noch zur Verfügung"
    :welcome.pro.features.schnaq/title "Lege los!"
    :welcome.pro.features.schnaq/lead "Du kannst nun das volle Potenzial aus deinen schnaqs schöpfen. Dir stehen nun Analysen, Aktivierungsoptionen, Wortwolken und vieles mehr zur Verfügung."
    :welcome.pro.features.schnaq/button "Zu deinen schnaqs"
