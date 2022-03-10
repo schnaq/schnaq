@@ -1,18 +1,10 @@
 (ns schnaq.interface.views.subscription
   (:require [schnaq.interface.components.buttons :as buttons]
-            [schnaq.interface.components.icons :refer [icon-card]]
+            [schnaq.interface.components.common :refer [next-step]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
-
-(defn- next-step [icon title body button-text route-name]
-  (let [href (navigation/href route-name)]
-    [:article.pb-3.pe-3
-     [:a {:href href} [icon-card icon "text-typography" {:size :lg}]]
-     [:p.fw-bold.my-2 title]
-     [:p body]
-     [buttons/anchor button-text href :btn-white]]))
 
 (defn- success
   "Celebrating and welcoming the new pro user."
