@@ -2,7 +2,7 @@
   ;; For further information check: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react
   ;; For two styles of the same icon see here: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react#faqs
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub faFontAwesomeFlag]]
-            ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faHourglass]]
+            ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faIdCard faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
              [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
               faCog faComment faComments faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
@@ -52,6 +52,7 @@
    :github faGithub
    :handshake faHandshake
    :hourglass/empty faHourglass
+   :id-card faIdCard
    :info faInfoCircle
    :info-question faQuestionCircle
    :instagram faInstagram
