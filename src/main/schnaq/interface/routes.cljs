@@ -116,8 +116,11 @@
       :link-text (labels :user/edit-notifications)
       :controllers [{:stop (fn [] (rf/dispatch [:user.settings.temporary/reset]))}]}]]
    ["/welcome"
-    {:name :routes/welcome
-     :view welcome/welcome-user-view}]
+    ["" {:name :routes.welcome/free
+         :view welcome/welcome-free-user-view}]
+    ["/pro"
+     {:name :routes.welcome/pro
+      :view welcome/welcome-pro-user-view}]]
    ["/admin"
     ["/center"
      {:name :routes/admin-center
@@ -267,8 +270,6 @@
                              (rf/dispatch [:load-preview-statements])
                              (rf/dispatch [:pricing/get-prices]))}]}]
    ["/subscription"
-    ["/success" {:name :routes.subscription/success
-                 :view subscription-views/success-view}]
     ["/cancel" {:name :routes.subscription/cancel
                 :view subscription-views/cancel-view}]
     ["/redirect/checkout"

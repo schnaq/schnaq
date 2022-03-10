@@ -830,6 +830,16 @@ Now we write down questions and discuss them and can still understand what we ha
    :user.notifications.mail-interval.success/title "Notification updated"
    :user.notifications.mail-interval.success/body "You will now receive notifications according to your settings:"
 
+   ;; Welcome
+   :welcome.pro/heading "You are ready to go"
+   :welcome.pro/subheading "From now on, all Pro features are available to you."
+   :welcome.pro.features.schnaq/title "Get started!"
+   :welcome.pro.features.schnaq/lead "You can now get the full potential out of your schnaqs. You now have analytics, activation options, word clouds and much more."
+   :welcome.pro.features.schnaq/button "Go to your schnaqs"
+   :welcome.pro.features.subscription/title "Manage your subscription"
+   :welcome.pro.features.subscription/lead "You can manage your subscription at any time in your settings. If you have any problems or questions, feel free to contact us!"
+   :welcome.pro.features.subscription/button "Go to settings"
+
    ;; Themes
    :themes.personal/lead "Give schnaq your personal touch."
    :themes.personal.creation/heading "Your themes"
@@ -884,14 +894,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :subscription.overview/next-invoice "Next billing"
    :subscription.overview/cancelled "Subscription cancelled"
    :subscription.overview/cancelled? "Cancelled?"
-   :subscription.page.success/heading "You are ready to go"
-   :subscription.page.success/subheading "From now on, all Pro features are available to you."
-   :subscription.page.success.next-1/title "Get started!"
-   :subscription.page.success.next-1/lead "You can now get the full potential out of your schnaqs. You now have analytics, activation options, word clouds and much more."
-   :subscription.page.success.next-1/button "Go to your schnaqs"
-   :subscription.page.success.next-2/title "Manage your subscription"
-   :subscription.page.success.next-2/lead "You can manage your subscription at any time in your settings. If you have any problems or questions, feel free to contact us!"
-   :subscription.page.success.next-2/button "Go to settings"
    :subscription.page.cancel/title "Too bad you didn't complete the process"
    :subscription.page.cancel/lead "You're missing out on the opportunity to realise the full potential from your interactions with your subscribers."
    :subscription.page.cancel/body "In the free plan, all basic features are still available to you. We would be very happy to hear from you why you do not want to use the Pro functions. Feel free to contact us 👍 Are you missing a function? Let us know at hello@schnaq.com - we'll find a solution!"
