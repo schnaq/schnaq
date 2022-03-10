@@ -831,6 +831,17 @@ Now we write down questions and discuss them and can still understand what we ha
    :user.notifications.mail-interval.success/body "You will now receive notifications according to your settings:"
 
    ;; Welcome
+   :welcome.free/heading "Welcome to schnaq"
+   :welcome.free/subheading "These are now your available functions"
+   :welcome.free.features.schnaq/title "Create a schnaq"
+   :welcome.free.features.schnaq/lead "You can start right away. With your personal account you can create your own schnaqs and invite other people to join."
+   :welcome.free.features.schnaq/button "Enjoy schnaq"
+   :welcome.free.features.profile/title "Update your profile"
+   :welcome.free.features.profile/lead "A professional appearance is important. Set up your profile, upload a picture and give yourself a name. This way, all participants will recognize you at a glance in schnaq."
+   :welcome.free.features.profile/button "Edit profile"
+   :welcome.free.features.notifications/title "Activate notifications"
+   :welcome.free.features.notifications/lead "Would you like to be notified by email when someone writes something in a schnaq? Then take a quick look at the notifications and choose your interval."
+   :welcome.free.features.notifications/button "Set notifications"
    :welcome.pro/heading "You are ready to go"
    :welcome.pro/subheading "From now on, all Pro features are available to you."
    :welcome.pro.features.schnaq/title "Get started!"
@@ -839,6 +850,15 @@ Now we write down questions and discuss them and can still understand what we ha
    :welcome.pro.features.subscription/title "Manage your subscription"
    :welcome.pro.features.subscription/lead "You can manage your subscription at any time in your settings. If you have any problems or questions, feel free to contact us!"
    :welcome.pro.features.subscription/button "Go to settings"
+   :welcome.pro.features.themes/title "Your personal appearance"
+   :welcome.pro.features.themes/lead "Give schnaq your personal touch! With your own themes, you can add your personal colors, logos and images so that they are displayed to participants."
+   :welcome.pro.features.themes/button "Create your own theme"
+   :welcome.pro.features.polls/title "Polls"
+   :welcome.pro.features.polls/lead "Want to present a poll to your audience? No problem, create your answer options and let everyone vote! Create the polls directly in your schnaq."
+   :welcome.pro.features.polls/button "Create a poll"
+   :welcome.pro.features.activation/title "Activations"
+   :welcome.pro.features.activation/lead "If you think your audience is no longer listening to you, then ask a question in the room and have everyone press the activation button at the appropriate point. Now directly adjustable in your schnaq."
+   :welcome.pro.features.activation/button "Activate my audience"
 
    ;; Themes
    :themes.personal/lead "Give schnaq your personal touch."

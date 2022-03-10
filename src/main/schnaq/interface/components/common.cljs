@@ -32,11 +32,15 @@
 
 (>defn next-step
   "Show next possible steps, with a heading, lead text and a CTA."
-  [icon title body button-text route-name]
-  [keyword? string? string? string? keyword? => :re-frame/component]
-  (let [href (navigation/href route-name)]
-    [:article.pb-3.pe-3
-     [:a {:href href} [icon-card icon "text-typography" {:size :lg}]]
-     [:p.fw-bold.my-2 title]
-     [:p body]
-     [buttons/anchor button-text href :btn-white]]))
+  ([icon title body button-text route-name]
+   [keyword? string? string? string? keyword? => :re-frame/component]
+   [next-step icon title body button-text route-name false])
+  ([icon title body button-text route-name disabled?]
+   [keyword? string? string? string? keyword? boolean? => :re-frame/component]
+   (let [href (navigation/href route-name)]
+     [:article.pb-3.pe-3
+      [:a {:href href} [icon-card icon "text-typography" {:size :lg}]]
+      [:p.fw-bold.my-2 title]
+      [:p body]
+      (when-not disabled?
+        [buttons/anchor button-text href :btn-white])])))
