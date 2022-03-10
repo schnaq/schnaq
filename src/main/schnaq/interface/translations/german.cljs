@@ -805,6 +805,7 @@
    :user/edit-account "Benutzerkonto verwalten"
    :user/edit-notifications "Benachrichtigungen verwalten"
    :user/edit-hubs "Hubs verwalten"
+   :user/features "Meine Features"
    :user.settings "Einstellungen"
    :user.keycloak-settings "Profileinstellungen"
    :user.settings/header "Nutzer:innendaten verwalten"
