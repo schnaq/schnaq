@@ -39,7 +39,8 @@
             [schnaq.interface.views.subscription :as subscription-views]
             [schnaq.interface.views.user.edit-account :as edit-account]
             [schnaq.interface.views.user.edit-notifications :as edit-notifications]
-            [schnaq.interface.views.user.themes :as themes]))
+            [schnaq.interface.views.user.themes :as themes]
+            [schnaq.interface.views.user.welcome :as welcome]))
 
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
@@ -114,6 +115,9 @@
       :view edit-notifications/view
       :link-text (labels :user/edit-notifications)
       :controllers [{:stop (fn [] (rf/dispatch [:user.settings.temporary/reset]))}]}]]
+   ["/welcome"
+    {:name :routes/welcome
+     :view welcome/welcome-user-view}]
    ["/admin"
     ["/center"
      {:name :routes/admin-center
