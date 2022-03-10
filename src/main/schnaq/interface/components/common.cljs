@@ -1,5 +1,5 @@
 (ns schnaq.interface.components.common
-  (:require [com.fulcrologic.guardrails.core :refer [>defn =>]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn => ?]]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon icon-card]]
@@ -36,7 +36,7 @@
    [keyword? string? string? string? keyword? => :re-frame/component]
    [next-step icon title body button-text route-name false])
   ([icon title body button-text route-name disabled?]
-   [keyword? string? string? string? keyword? boolean? => :re-frame/component]
+   [keyword? string? string? string? keyword? (? boolean?) => :re-frame/component]
    (let [href (navigation/href route-name)]
      [:article.pb-3.pe-3
       [:a {:href href} [icon-card icon "text-typography" {:size :lg}]]
