@@ -5,7 +5,7 @@
   "Toggle to use cleverreach mails."
   (or (-> (System/getenv "CLEVERREACH_ENABLED")
           str str/lower-case (= "true"))
-      false))
+      true))
 
 (def receiver-group
   "Define the list of receivers. Defined in 

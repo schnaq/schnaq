@@ -1,6 +1,7 @@
 (ns schnaq.mail.cleverreach
   (:require [clj-http.client :as client]
             [clojure.pprint :refer [pprint]]
+            [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- => ?]]
             [muuntaja.core :as m]
             [schnaq.config.cleverreach :as cconfig]
@@ -58,7 +59,7 @@
 
 ;; -----------------------------------------------------------------------------
 
-(>defn user->group!
+(>defn add-user-to-customer-group
   "Add an email address to a group in Cleverreach, i.e. a list of receivers."
   [{:keys [email sub given_name family_name locale]}]
   [::specs/identity => (? map?)]
@@ -69,6 +70,7 @@
      {:body
       (m/encode "application/json"
                 {:email email
+                 :tags ["customer-free"]
                  :registered (quot (System/currentTimeMillis) 1000)
                  :activated 0
                  :source "schnaq Backend"
@@ -79,26 +81,51 @@
       :content-type :json
       :accept :json})))
 
+(>defn add-tag!
+  "Adds a tag to the user's entry in cleverreach."
+  [email tags]
+  [::specs/email (s/and vector? (s/coll-of string?)) => (? map?)]
+  (wrap-catch-exception
+   email "Added tag to mail %s." "Could not add pro tag to mail."
+   #(client/post
+     (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags?token=%s" email access-token)
+     {:body (m/encode "application/json" {:tags tags
+                                          :group_id cconfig/receiver-group})
+      :content-type :json
+      :accept :json})))
+
 (>defn add-pro-tag!
   "Send pro-information of user to cleverreach. Adds a tag to the user's entry."
   [email]
   [::specs/email => (? map?)]
+  (add-tag! email ["customer-pro"]))
+
+(>defn add-free-tag!
+  "Send pro-information of user to cleverreach. Adds a tag to the user's entry."
+  [email]
+  [::specs/email => (? map?)]
+  (add-tag! email ["customer-free"]))
+
+(>defn remove-tag!
+  "Remove one tag information from user."
+  [email tag]
+  [::specs/email string? => (? map?)]
   (wrap-catch-exception
-   email "Added pro tag to mail %s." "Could not add pro tag to mail."
-   #(client/post
-     (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags?token=%s" email access-token)
-     {:body (m/encode "application/json" {:tags ["pro"]})
-      :content-type :json
+   email "Removed tag from mail %s." "Could not remove pro tag from mail."
+   #(client/delete
+     ;; The tags, which should be removed, must be a single tag or a comma separated list of tags.
+     (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags/%s?token=%s" email tag access-token)
+     {:content-type :json
       :accept :json})))
 
 (>defn remove-pro-tag!
   "Remove pro tag information from user."
   [email]
   [::specs/email => (? map?)]
-  (wrap-catch-exception
-   email "Removed pro tag from mail %s." "Could not remove pro tag from mail."
-   #(client/delete
-     ;; The tags, which should be removed, must be a single tag or a comma separated list of tags.
-     (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags/pro?token=%s" email access-token)
-     {:content-type :json
-      :accept :json})))
+  (remove-tag! email "customer-pro"))
+
+(>defn remove-free-tag!
+  "Remove free tag information from user."
+  [email]
+  [::specs/email => (? map?)]
+  (remove-tag! email "customer-free"))
