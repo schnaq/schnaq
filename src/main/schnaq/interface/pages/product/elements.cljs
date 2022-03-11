@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.product.elements
+(ns schnaq.interface.pages.product.elements
   (:require [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]

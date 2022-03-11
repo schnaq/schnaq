@@ -1,5 +1,5 @@
-(ns schnaq.interface.views.product.pages
-  (:require [schnaq.interface.views.product.elements :as elements]))
+(ns schnaq.interface.pages.product.pages
+  (:require [schnaq.interface.pages.product.elements :as elements]))
 
 (defn- product-tour []
   [elements/product-page
