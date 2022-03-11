@@ -1,5 +1,6 @@
 (ns schnaq.interface.pages.product.elements
   (:require [schnaq.interface.components.buttons :as buttons]
+            [schnaq.interface.components.common :as common]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.videos :refer [video]]
@@ -16,12 +17,23 @@
     (navigation/href :routes.schnaq/create)
     "btn-dark d-inline-block"]])
 
-(defn product-above-the-fold
+(defn- feature-level-pill
+  "Add a pill depending on the current level."
+  [feature-level]
+  [:span.h5.ms-2
+   (case feature-level
+     :feature/pro [:a {:href (navigation/href :routes/pricing)}
+                   [common/pro-badge "bg-secondary"]]
+     :feature/free [common/free-badge "bg-white"]
+     "")])
+
+(defn- product-above-the-fold
   "Displays a list of features with a call-to-action button to start a schnaq"
-  [title subtitle cta-button-label]
+  [title subtitle cta-button-label feature-level]
   [:section.row.mt-3 {:key "HeaderExtras-Bullet-Points-and-Animation"}
    [:div.col-lg-6.my-auto
-    [:h1 (labels title)]
+    [:h1 (labels title)
+     [feature-level-pill feature-level]]
     [:p.lead (labels subtitle)]
     [start-schnaq-button cta-button-label]]
    [:div.col-lg-6.pb-4
@@ -109,15 +121,16 @@
 
 (defn product-page
   "Product page skeleton with a title and subtitle next to an tablet as ATF."
-  [title subtitle cta-button-label content]
+  [title subtitle cta-button-label feature-level content]
   [:div.overflow-hidden
    [pages/with-nav-and-header
-    {:page/title (labels :productpage/title)
+    {:page/title (labels title)
      :page/vertical-header? true
      :page/more-for-heading (with-meta [product-above-the-fold
                                         title
                                         subtitle
-                                        cta-button-label]
+                                        cta-button-label
+                                        feature-level]
                               {:key "unique-cta-key"})}
     [:div.wave-background
      [:section.container.container-85
