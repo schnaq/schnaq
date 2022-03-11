@@ -44,8 +44,8 @@
 
    ;; Startpage
    :startpage/heading "Fragen sammeln leicht gemacht"
-   :startpage/subheading "Das live Q&A für deine Veranstaltung"
-   :startpage/hook "Hole die versteckten Fragen aus deinem Publikum raus."
+   :startpage/subheading "Veranstaltungen so interaktiv, wie sie sein sollen!"
+   :startpage/hook "Fragen sammeln, Publikum verstehen, Wissen teilen. Schnaq macht da weiter wo andere aufhören!"
    :schnaq.startpage.cta/button "Jetzt kostenfrei schnaq erstellen"
    :startpage.social-proof/teaser "Mit einem Klick gehörst du zu den hunderten Menschen, die schnaq nutzen 👋"
    :startpage.social-proof/companies "Mit denen haben wir schon geschnaqqt"

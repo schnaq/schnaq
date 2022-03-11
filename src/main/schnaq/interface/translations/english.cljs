@@ -44,8 +44,8 @@
 
    ;; Startpage
    :startpage/heading "Collecting questions made simple"
-   :startpage/subheading "The live Q&A for your event"
-   :startpage/hook "Discover the hidden questions of your audience."
+   :startpage/subheading "Events as interactive as they should be!"
+   :startpage/hook "Gather questions, understand your audience, share knowledge. Schnaq picks up where others leave off!"
    :schnaq.startpage.cta/button "Create a free schnaq now!"
    :startpage.social-proof/teaser "You are one click away from joining hundreds of other schnaq users 👋"
    :startpage.social-proof/companies "They're already used to schnaq"
