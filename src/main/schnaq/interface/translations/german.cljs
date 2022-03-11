@@ -123,7 +123,7 @@
    :productpage/title "Produktübersicht"
    :productpage/button "Produkt"
    :productpage.overview/title "Veranstaltungen so interaktiv, wie sie sein sollen"
-   :productpage.overview/subtitle "schnaq ist das Schweizer Taschenmesser für deine Veranstaltung"
+   :productpage.overview/subtitle "schnaq ist das Schweizer Taschenmesser für deine Veranstaltung."
    :productpage.overview/cta-button "Kostenlos registrieren!"
    :productpage.overview.qa/title "Nach der Veranstaltung ist vor der Veranstaltung"
    :productpage.overview.qa/text "Beantworte Fragen einmal und verwende sie in deiner nächsten Veranstaltung wieder. Gewinne sofort Übersicht und spare Zeit in der Zukunft."
@@ -139,7 +139,7 @@
 
    ;; QA Feature
    :productpage.qa/title "Live Q&A"
-   :productpage.qa/subtitle "Fragen beantworten vor, während und nach der Veranstaltung"
+   :productpage.qa/subtitle "Fragen beantworten vor, während und nach der Veranstaltung."
    :productpage.qa/cta-button "Jetzt kostenlos Q&A starten!"
    :productpage.qa.focus/title "Fokussiere deine Teilnehmer:innen"
    :productpage.qa.focus/subtitle "Deine Teilnehmer:innen erhalten eine reduzierte Ansicht. Bei Bedarf können sie jederzeit zur Übersicht wechseln."
@@ -154,7 +154,7 @@
 
    ;; Poll Feature
    :productpage.poll/title "Live Umfragen"
-   :productpage.poll/subtitle "Umfragen erstellen so leicht wie nie zuvor"
+   :productpage.poll/subtitle "Umfragen erstellen so leicht wie nie zuvor."
    :productpage.poll/cta-button "Jetzt Umfragen erstellen!"
    :productpage.poll-vote/title "Lass dein Publikum abstimmen!"
    :productpage.poll-vote/subtitle "Finde heraus, was dein Publikum denkt. Mit Umfragen stimmen deine Teilnehmer:innen über vordefinierte Antworten ab."
@@ -165,7 +165,7 @@
 
    ;; Activation Feature
    :productpage.activation/title "Live Aktivierung"
-   :productpage.activation/subtitle "So bleiben deine Teilnehmer:innen am Ball und schalten mental nicht ab"
+   :productpage.activation/subtitle "So bleiben deine Teilnehmer:innen am Ball und schalten mental nicht ab."
    :productpage.activation/cta-button "Aktiviere jetzt dein Publikum!"
    :productpage.activation.torooo/title "Lass etwas von deinem Publikum hören!"
    :productpage.activation.torooo/subtitle "Binde dein Publikum aktiv in deine Veranstaltung ein! Deine Teilnehmer:innen können dir mit einem Klick auf den Törööö-Knopf sofort Feedback geben. Beispielsweise wie viele Sprachen sie sprechen oder wie viele Serien sie diese Woche bereits geguckt haben."
