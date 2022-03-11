@@ -1,11 +1,12 @@
-(ns schnaq.interface.views.product.pages
-  (:require [schnaq.interface.views.product.elements :as elements]))
+(ns schnaq.interface.pages.product.pages
+  (:require [schnaq.interface.pages.product.elements :as elements]))
 
 (defn- product-tour []
   [elements/product-page
    :productpage.overview/title
    :productpage.overview/subtitle
    :productpage.overview/cta-button
+   nil
    [:<>
     [elements/feature-text-img-right
      :productpage.overview.qa/title
@@ -38,6 +39,7 @@
    :productpage.qa/title
    :productpage.qa/subtitle
    :productpage.qa/cta-button
+   :feature/free
    [:<>
     [elements/qa-feature-row]
     [elements/feature-text-img-left
@@ -54,7 +56,7 @@
      :productpage.qa/relevant]]])
 
 (defn qa-view
-  "Q&A product subpage"
+  "Q&A product sub page."
   []
   [product-qa])
 
@@ -63,6 +65,7 @@
    :productpage.poll/title
    :productpage.poll/subtitle
    :productpage.poll/cta-button
+   :feature/pro
    [:<>
     [elements/feature-text-img-right
      :productpage.poll-vote/title
@@ -78,7 +81,7 @@
      :productpage.poll/multiple]]])
 
 (defn poll-view
-  "Poll product subpage"
+  "Poll product sub page."
   []
   [product-poll])
 
@@ -87,6 +90,7 @@
    :productpage.activation/title
    :productpage.activation/subtitle
    :productpage.activation/cta-button
+   :feature/pro
    [:<>
     [elements/feature-text-img-right
      :productpage.activation.torooo/title
@@ -102,6 +106,6 @@
      :productpage.activation/user-view]]])
 
 (defn activation-view
-  "Activation product subpage"
+  "Activation product sub page."
   []
   [product-activation])

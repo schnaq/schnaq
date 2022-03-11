@@ -153,7 +153,7 @@
 
    ;; Poll Feature
    :productpage.poll/title "Live Polls"
-   :productpage.poll/subtitle "Create polls as easy as never before"
+   :productpage.poll/subtitle "Create polls as easy as never before."
    :productpage.poll/cta-button "Create your polls now!"
    :productpage.poll-vote/title "Let your audience vote!"
    :productpage.poll-vote/subtitle "Find out what your audience thinks. With polls, your participants vote on predefined answers."
