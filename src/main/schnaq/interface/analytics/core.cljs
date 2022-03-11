@@ -235,7 +235,8 @@
                                       :average-per-discussion (:average-statements-num statistics)
                                       :types (:statement-type-stats statistics)}
                          :active-users-nums (:active-users-num statistics)
-                         :labels (:labels-stats statistics)})))
+                         :labels (:labels-stats statistics)
+                         :users {:registered (:users statistics)}})))
 
 ;; #### Subs ####
 

@@ -245,13 +245,14 @@
                    :statistics.statement.length/average :statistics.statement.length/median]))
 (s/def :statistics/registered-users-num nat-int?)
 (s/def :statistics/labels-stats map?)
+(s/def :statistics/users (s/coll-of ::registered-user))
 
 (s/def ::statistics
   (s/keys :req-un [:statistics/discussions-sum :statistics/usernames-sum
                    :statistics/average-statements-num :statistics/statements-num
                    :statistics/active-users-num :statistics/statement-length-stats
                    :statistics/statement-type-stats :statistics/registered-users-num
-                   :statistics/labels-stats]))
+                   :statistics/labels-stats :statistics/users]))
 
 ;; Polls
 (s/def :poll/title ::non-blank-string)

@@ -1,7 +1,8 @@
 (ns schnaq.database.analytics
-  (:require [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
             [schnaq.database.main :as main-db]
-            [schnaq.database.patterns :as patterns])
+            [schnaq.database.patterns :as patterns]
+            [schnaq.toolbelt :as toolbelt])
   (:import (java.util Date)
            (java.time Instant)
            (java.text SimpleDateFormat)))
@@ -68,6 +69,19 @@
   ([since]
    [:statistics/since :ret :statistics/usernames-sum]
    (number-of-entities-since :user/nickname since)))
+
+(>defn users-created-since
+  "Return all users created since given days."
+  [since]
+  [:statistics/since => :statistics/users]
+  (toolbelt/pull-key-up
+   (main-db/query
+    '[:find [(pull ?users pattern) ...]
+      :in $ pattern ?since
+      :where [?users :user.registered/email _ ?tx]
+      [?tx :db/txInstant ?start-date]
+      [(< ?since ?start-date)]]
+    patterns/private-user (Date/from since))))
 
 (>defn number-or-registered-users
   "Returns the number of registered users in the database."
@@ -149,7 +163,8 @@
 
 (>defn statement-length-stats
   "Returns a map of stats about statement-length."
-  ([] [:ret :statistics/statement-length-stats]
+  ([]
+   [:ret :statistics/statement-length-stats]
    (statement-length-stats max-time-back))
   ([since]
    [:statistics/since :ret :statistics/statement-length-stats]
