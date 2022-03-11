@@ -15,9 +15,19 @@
     text]])
 
 (defn pro-badge
-  "Display a pro badge for pro users."
-  []
-  [:span.badge.rounded-pill.bg-primary "pro"])
+  "Display a pro badge."
+  ([]
+   [pro-badge "bg-primary"])
+  ([background]
+   [:span.badge.rounded-pill
+    {:class background} "pro"]))
+
+(defn free-badge
+  "Display a free badge."
+  ([] [free-badge "bg-white"])
+  ([background]
+   [:span.badge.rounded-pill
+    {:class background} "free"]))
 
 (defn theme-logo
   "Show the current logo configured in a theme."
