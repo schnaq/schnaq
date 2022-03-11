@@ -108,4 +108,4 @@
   [service message]
   [string? string? => map?]
   (when shared-config/production?
-    (post-in-mattermost! (format "[💥 %s] %s" service message) "meters-einode")))
+    (post-in-mattermost! (format "[💥 %s] %s" service message) "gitlabs-dirty-secrets")))
