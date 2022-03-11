@@ -63,11 +63,3 @@
  :user/id
  (fn [db _]
    (get-in db [:user :id])))
-
-(comment
-
-  (cond-> [[:localstorage/dissoc :discussion/creation-secrets]
-           [:localstorage/dissoc :discussion.schnaqs/creation-secrets]]
-    (= true true) (conj [:foo/bar 42]))
-
-  nil)
