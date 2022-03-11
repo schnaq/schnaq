@@ -860,7 +860,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :welcome.pro.features.polls/lead "Want to present a poll to your audience? No problem, create your answer options and let everyone vote! Create the polls directly in your schnaq."
    :welcome.pro.features.polls/button "Create a poll"
    :welcome.pro.features.activation/title "Activations"
-   :welcome.pro.features.activation/lead "If you think your audience is no longer listening to you, then ask a question in the room and have everyone press the activation button at the appropriate point. Now directly adjustable in your schnaq."
+   :welcome.pro.features.activation/lead "If you think your audience is no longer listening to you, then ask a question in the room and have everyone press the activation button at the appropriate point. Directly controllable from your schnaq."
    :welcome.pro.features.activation/button "Activate my audience"
 
    ;; Themes
