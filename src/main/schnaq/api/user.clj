@@ -29,7 +29,7 @@
                   :updated-statements? updated-statements?
                   :updated-schnaqs? updated-schnaqs?}]
     (if new-user?
-      (do (cleverreach/add-user-to-customer-group identity)
+      (do (cleverreach/add-user-to-customer-group! identity)
           (mail/send-welcome-mail (:email identity))
           (created "" (assoc response :new-user? true)))
       (ok response))))
