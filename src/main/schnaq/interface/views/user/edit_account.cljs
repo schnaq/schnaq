@@ -60,7 +60,7 @@
       [:div.row.pt-5
        [:div.col.text-start.my-3
         [:a.btn.btn-lg.btn-outline-secondary {:href config/keycloak-profile-page}
-         (labels :user.keycloak-settings)]]
+         (labels :user/profile-settings)]]
        [:div.col.text-end.my-3
         [:button.btn.btn-lg.btn-outline-primary {:type :submit}
          (labels :user.settings.button/change-account-information)]]]]]))

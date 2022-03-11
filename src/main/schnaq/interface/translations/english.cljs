@@ -225,7 +225,7 @@
    :schnaq/link-copied-success "The link was copied to your clipboard!"
    :schnaq/created-success-heading "Your schnaq was created!"
    :schnaq/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
-   :schnaqs/continue-with-schnaq-after-creation "Did you invite everybody? Lets go!"
+   :schnaqs/continue-with-schnaq-after-creation "Did you invite everybody? Let's go!"
    :schnaqs/continue-to-schnaq-button "To the schnaq"
 
    :schnaq.admin/addresses-label "Email addresses of the participants"
@@ -268,6 +268,7 @@
    :statement/flag-statement-confirmation "Do you really want to report this post to the administrators?"
    :statement.notifications/statement-flagged-title "Post has been reported!"
    :statement.notifications/statement-flagged-body "Thank you for reporting this post, we'll take care of it."
+   :statement.badges/more-posts "more posts"
 
    :schnaq.input-type/question "Question"
    :schnaq.input-type/answer "Answer"
@@ -805,8 +806,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :user/edit-notifications "Manage Notifications"
    :user/edit-hubs "Manage Hubs"
    :user/features "My Features"
-   :user.settings "Settings"
-   :user.keycloak-settings "Profile Settings"
+   :user/profile-settings "Profile Settings"
    :user.settings/header "Manage User Data"
    :user.settings/info "User Infos"
    :user.settings/notifications "Notifications"

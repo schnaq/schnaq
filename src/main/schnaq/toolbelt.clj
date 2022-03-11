@@ -5,7 +5,8 @@
             [clojure.walk :as walk]
             [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
             [muuntaja.core :as m]
-            [schnaq.config :as config])
+            [schnaq.config :as config]
+            [schnaq.config.shared :as shared-config])
   (:import (clojure.lang PersistentArrayMap)
            (java.time Instant LocalDateTime ZoneOffset)
            (java.time.temporal ChronoUnit TemporalUnit)))
@@ -100,3 +101,11 @@
       {:body (m/encode "application/json" body-ready)
        :content-type :json
        :accept :json}))))
+
+(>defn post-error-in-chat
+  "Takes the service's name and the error message to leave a message in our
+  mattermost."
+  [service message]
+  [string? string? => map?]
+  (when shared-config/production?
+    (post-in-mattermost! (format "[💥 %s] %s" service message) "gitlabs-dirty-secrets")))
