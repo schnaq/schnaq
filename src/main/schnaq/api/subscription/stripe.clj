@@ -34,11 +34,11 @@
      "client_reference_id" keycloak-id
      "customer_email" email
      "allow_promotion_codes" true
-     "automatic_tax" {"enabled" true} ;; Activate automatic tax collection
-     "tax_id_collection" {"enabled" true} ;; Collect tax id from registered companies
+     "automatic_tax" {"enabled" true}                       ;; Activate automatic tax collection
+     "tax_id_collection" {"enabled" true}                   ;; Collect tax id from registered companies
      "metadata" {"keycloak-id" keycloak-id}
      "subscription_data" {"metadata" {"keycloak-id" keycloak-id}}
-     "payment_method_types" ["card" "sepa_debit"] ;; Allowed payment methods
+     "payment_method_types" ["card" "sepa_debit"]           ;; Allowed payment methods
      "line_items" items}))
 
 (defn- create-checkout-session
@@ -82,6 +82,7 @@
         stripe-subscription-id (get-in event [:data :object :id])]
     (user-db/subscribe-pro-tier keycloak-id stripe-subscription-id stripe-customer-id)
     (cleverreach/add-pro-tag! (:user.registered/email (user-db/private-user-by-keycloak-id keycloak-id)))
+    (cleverreach/remove-free-tag! (:user.registered/email (user-db/private-user-by-keycloak-id keycloak-id)))
     (post-to-mattermost-if-in-production)
     (log/info "Subscription successfully created 🤑 User:" keycloak-id)))
 
@@ -89,6 +90,7 @@
   (let [keycloak-id (get-in event [:data :object :metadata :keycloak-id])]
     (user-db/unsubscribe-pro-tier keycloak-id)
     (cleverreach/remove-pro-tag! (:user.registered/email (user-db/private-user-by-keycloak-id keycloak-id)))
+    (cleverreach/add-free-tag! (:user.registered/email (user-db/private-user-by-keycloak-id keycloak-id)))
     (log/info "Subscription deleted for user" keycloak-id)))
 
 (defmethod stripe-event :default [event]
