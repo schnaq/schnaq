@@ -86,7 +86,7 @@
   [email tags]
   [::specs/email (s/and vector? (s/coll-of string?)) => (? map?)]
   (wrap-catch-exception
-   email "Added tag to mail %s." "Could not add pro tag to mail."
+   email "Added tag to mail %s." "Could not add tag to mail."
    #(client/post
      (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags?token=%s" email access-token)
      {:body (m/encode "application/json" {:tags tags
@@ -95,13 +95,13 @@
       :accept :json})))
 
 (>defn add-pro-tag!
-  "Send pro-information of user to cleverreach. Adds a tag to the user's entry."
+  "Adds a pro tag to the user's entry."
   [email]
   [::specs/email => (? map?)]
   (add-tag! email ["customer-pro"]))
 
 (>defn add-free-tag!
-  "Send pro-information of user to cleverreach. Adds a tag to the user's entry."
+  "Adds free tag to the user's entry."
   [email]
   [::specs/email => (? map?)]
   (add-tag! email ["customer-free"]))
@@ -111,7 +111,7 @@
   [email tag]
   [::specs/email string? => (? map?)]
   (wrap-catch-exception
-   email "Removed tag from mail %s." "Could not remove pro tag from mail."
+   email "Removed tag from mail %s." "Could not remove tag from mail."
    #(client/delete
      ;; The tags, which should be removed, must be a single tag or a comma separated list of tags.
      (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags/%s?token=%s" email tag access-token)
