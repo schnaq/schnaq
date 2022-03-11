@@ -206,10 +206,13 @@
     (labels label)]])
 
 (defn sidebar-info-links []
-  [:section.panel-white.text-center
-   [:div.btn-group {:role "group"}
-    [:div.btn-group-vertical
-     [outline-info-button :coc/heading (navigation/href :routes/code-of-conduct)]]]])
+  (let [pro-user? @(rf/subscribe [:user/pro-user?])]
+    [:section.panel-white.text-center
+     [:div.btn-group {:role "group"}
+      [:div.btn-group-vertical
+       [outline-info-button :user/features
+        (navigation/href (if pro-user? :routes.welcome/pro :routes.welcome/free))]
+       [outline-info-button :coc/heading (navigation/href :routes/code-of-conduct)]]]]))
 
 (defn- personal-discussions-view
   "Shows the page for an overview of schnaqs. Takes a subscription-key which

@@ -31,7 +31,7 @@
     (if new-user?
       (do (cleverreach/user->group! identity)
           (mail/send-welcome-mail (:email identity))
-          (created "" response))
+          (created "" (assoc response :new-user? true)))
       (ok response))))
 
 (defn- change-profile-picture
