@@ -1,11 +1,10 @@
 (ns schnaq.mail.cleverreach
   (:require [clj-http.client :as client]
-            [clojure.pprint :refer [pprint]]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- => ?]]
             [muuntaja.core :as m]
             [schnaq.config.cleverreach :as cconfig]
             [schnaq.database.specs :as specs]
-            [schnaq.mail.emails :as emails]
+            [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log]))
 
 (def ^:private token-url "https://rest.cleverreach.com/oauth/token.php")
@@ -29,10 +28,7 @@
       (catch Exception e
         (let [error (ex-data e)]
           (log/error "Could not retrieve access token:" error)
-          (emails/send-mail
-           "[💥 CleverReach] Konnte keinen access token abrufen"
-           (with-out-str (pprint error))
-           "christian@schnaq.com")
+          (toolbelt/post-error-in-chat "CleverReach" (format "Could not retrieve access token: `%s`" error))
           error)))))
 
 (def ^:private access-token
@@ -50,9 +46,10 @@
         (log/debug (format success-log email cconfig/receiver-group))
         response)
       (catch Exception e
-        (let [error (ex-data e)]
-          (log/error (format "%s mail: %s, body: %s"
-                             error-log email (m/decode-response-body error)))
+        (let [error (ex-data e)
+              formatted-error (format "%s mail: %s, body: `%s`" error-log email (m/decode-response-body error))]
+          (toolbelt/post-error-in-chat "CleverReach" formatted-error)
+          (log/error formatted-error)
           error)))
     (log/debug "Cleverreach is not enabled.")))
 
