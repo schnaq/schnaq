@@ -330,11 +330,11 @@
       (let [poll-tab [:span [iconed-heading :chart-pie :schnaq.input-type/poll]]
             activation-tab [:span [iconed-heading :magic :schnaq.input-type/activation]]
             pro-user? @(rf/subscribe [:user/pro-user?])
-            admin? @(rf/subscribe [:schnaq.current/admin-access])
+            admin-access? @(rf/subscribe [:schnaq.current/admin-access])
             read-only? @(rf/subscribe [:schnaq.selected/read-only?])
             disabled-tooltip-key (cond
                                    (not pro-user?) :schnaq.input-type/pro-only
-                                   (not admin?) :schnaq.input-type/not-admin
+                                   (not admin-access?) :schnaq.input-type/not-admin
                                    :else :schnaq.input-type/coming-soon)
             top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
         [motion/fade-in-and-out
@@ -348,7 +348,7 @@
                                  :on-click #(on-click :question)}
                [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
              (when top-level?
-               (if pro-user?
+               (if (and pro-user? admin-access?)
                  [:<>
                   [:li.nav-item
                    [:button.nav-link
