@@ -71,8 +71,6 @@
       (m/encode "application/json"
                 {:email email
                  :tags ["customer-free"]
-                 :registered (quot (System/currentTimeMillis) 1000)
-                 :activated 0
                  :source "schnaq Backend"
                  :global_attributes {:firstname given_name
                                      :lastname family_name
