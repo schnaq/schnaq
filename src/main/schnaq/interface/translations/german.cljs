@@ -739,8 +739,13 @@
    :analytics/statement-types-title "Argumenttypen"
    :analytics/labels-stats "Markierte Antworten"
    :analytics/fetch-data-button "Hole Daten"
+   :analytics.users/title "Neue registrierte Nutzer:innen"
+   :analytics.users/toggle-button "Zeige neue Nutzer:innen"
+   :analytics.users/copy-button "Kopieren"
+   :analytics.users.table/name "Name"
+   :analytics.users.table/email "E-Mail"
 
-   ;; Supporters
+;; Supporters
    :supporters/heading "Mit freundlicher Unterstützung von:"
    :startpage/team-schnaq "Wir arbeiten tagtäglich daran unseren Beitrag für einen besseren Wissensaustausch zu leisten, bei dem alle gehört werden."
    :startpage/team-schnaq-heading "Lerne das Team hinter schnaq kennen"

@@ -7,7 +7,10 @@
             [schnaq.interface.analytics.charts :as chart]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.utils.clipboard :as clipboard]
+            [clojure.string :as str]
+            [schnaq.interface.components.icons :refer [icon]]))
 
 (defn- analytics-card
   "A single card containing a metric and a title."
@@ -25,6 +28,34 @@
   (let [change (* 100 (/ (- changed-value initial-value) initial-value))]
     [:span {:class (if (< change 0) "text-warning" "text-success")}
      (gstring/format "%s %%" change)]))
+
+(defn- registered-users-table
+  "Show registered users."
+  []
+  (let [users @(rf/subscribe [:analytics/registered-users])]
+    [:div.card.w-100 {:style {:height "500px"
+                              :overflow :auto
+                              :display :inline-block}}
+     [:div.card-body
+      [:h5.card-title (labels :analytics.users/title)]
+      [:button.btn.btn-sm.btn-outline-primary.me-3
+       {:data-bs-toggle "collapse"
+        :data-bs-target "#registered-users-table"
+        :aria-expanded false
+        :aria-controls "registered-users-table"}
+       [icon :eye "me-1"] (labels :analytics.users/toggle-button)]
+      [:button.btn.btn-sm.btn-outline-primary
+       {:on-click #(clipboard/copy-to-clipboard! (str/join ", " (map :user.registered/email users)))}
+       (labels :analytics.users/copy-button)]
+      [:table#registered-users-table.table.table-striped.collapse.mt-3
+       [:thead
+        [:th (labels :analytics.users.table/name)]
+        [:th (labels :analytics.users.table/email)]]
+       [:tbody
+        (for [user users]
+          [:tr {:key (str "registered-users-table-" (:db/id user))}
+           [:td (:user.registered/display-name user)]
+           [:td (:user.registered/email user)]])]]]]))
 
 (defn- statements-stats
   "A single card containing statement-growth metrics."
@@ -98,7 +129,9 @@
        [:div.container-fluid
         [:div.row.mb-3
          [:div.col-12.col-lg-6
-          [statements-stats statements-num statements-series]]]
+          [statements-stats statements-num statements-series]]
+         [:div.col-12.col-lg-6
+          [registered-users-table]]]
         [:div.row.row-cols-1.row-cols-lg-3.g-3
          [analytics-card (labels :analytics/overall-discussions) discussions-num]
          [analytics-card (labels :analytics/user-numbers) usernames-num]
@@ -295,3 +328,8 @@
  :<- [:analytics/labels-stats]
  (fn [{:keys [check]} _]
    check))
+
+(rf/reg-sub
+ :analytics/registered-users
+ (fn [db]
+   (get-in db [:analytics :users :registered])))
