@@ -5,12 +5,11 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.analytics.charts :as chart]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.pages :as pages]
             [schnaq.interface.utils.clipboard :as clipboard]
-            [clojure.string :as str]
-            [schnaq.interface.components.icons :refer [icon]]))
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- analytics-card
   "A single card containing a metric and a title."
@@ -45,7 +44,7 @@
         :aria-controls "registered-users-table"}
        [icon :eye "me-1"] (labels :analytics.users/toggle-button)]
       [:button.btn.btn-sm.btn-outline-primary
-       {:on-click #(clipboard/copy-to-clipboard! (str/join ", " (map :user.registered/email users)))}
+       {:on-click #(clipboard/copy-to-clipboard! (string/join ", " (map :user.registered/email users)))}
        (labels :analytics.users/copy-button)]
       [:table#registered-users-table.table.table-striped.collapse.mt-3
        [:thead
