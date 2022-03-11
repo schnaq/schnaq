@@ -268,6 +268,7 @@
    :statement/flag-statement-confirmation "Do you really want to report this post to the administrators?"
    :statement.notifications/statement-flagged-title "Post has been reported!"
    :statement.notifications/statement-flagged-body "Thank you for reporting this post, we'll take care of it."
+   :statement.badges/more-posts "more posts"
 
    :schnaq.input-type/question "Question"
    :schnaq.input-type/answer "Answer"

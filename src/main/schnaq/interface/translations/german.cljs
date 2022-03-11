@@ -268,6 +268,7 @@
    :statement/flag-statement-confirmation "Möchtest du diesen Beitrag wirklich den Administrator:innen melden?"
    :statement.notifications/statement-flagged-title "Beitrag wurde gemeldet!"
    :statement.notifications/statement-flagged-body "Vielen Dank für deine Meldung, wir kümmern uns."
+   :statement.badges/more-posts "weitere Beiträge"
 
    :schnaq.input-type/question "Frage"
    :schnaq.input-type/answer "Antwort"
@@ -656,7 +657,7 @@
    :sharing.modal/lead "Lade dein ganzes Team mit ein, um diesen schnaq mit Wissen zu befüllen"
    :sharing.modal/qanda-help "Lade deine Teilnehmer:innen ein! Entweder direkt per Link oder Code auf www.schnaq.app"
 
-   ;; Discussion Language
+   ;; Discussion
    :discussion/create-argument-action "Beitrag hinzufügen"
    :discussion/add-premise-supporting "Ich möchte die Aussage unterstützen"
    :discussion/add-premise-against "Ich habe einen Grund dagegen"

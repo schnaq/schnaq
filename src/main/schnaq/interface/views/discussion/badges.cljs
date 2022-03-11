@@ -180,7 +180,7 @@
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
   ([statement]
-   (extra-discussion-info-badges statement false))
+   [extra-discussion-info-badges statement false])
   ([statement with-edit-dropdown?]
    (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
          share-hash @(rf/subscribe [:schnaq/share-hash])
@@ -193,9 +193,9 @@
                                                                 :statement-id (:db/id statement)})
         :role :button}
        (if new?
-         [icon :comments "m-auto text-secondary"]
-         [icon :comments "m-auto"])
-       " " statement-num]
+         [icon :comments "m-auto text-secondary me-1"]
+         [icon :comments "m-auto me-1"])
+       statement-num " " (labels :statement.badges/more-posts)]
       (when with-edit-dropdown?
         [:div.ms-2
          [edit-statement-dropdown-menu statement]])])))
@@ -233,8 +233,8 @@
         statement-count (:all-statements meta-info)]
     [:div.d-flex.flex-row.mb-0
      [:span.badge.rounded-pill.badge-transparent.me-2
-      [icon :comments "m-auto"]
-      " " statement-count]
+      [icon :comments "m-auto me-1"]
+      statement-count " " (labels :discussion.badges/posts)]
      [edit-discussion-dropdown-menu schnaq]]))
 
 (defn read-only-badge
