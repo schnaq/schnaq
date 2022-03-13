@@ -269,6 +269,7 @@
    :statement.notifications/statement-flagged-title "Post has been reported!"
    :statement.notifications/statement-flagged-body "Thank you for reporting this post, we'll take care of it."
    :statement.badges/more-posts "more posts"
+   :statement.badges/more-post "more post"
 
    :schnaq.input-type/question "Question"
    :schnaq.input-type/answer "Answer"
