@@ -269,6 +269,7 @@
    :statement.notifications/statement-flagged-title "Beitrag wurde gemeldet!"
    :statement.notifications/statement-flagged-body "Vielen Dank für deine Meldung, wir kümmern uns."
    :statement.badges/more-posts "weitere Beiträge"
+   :statement.badges/more-post "weiterer Beitrag"
 
    :schnaq.input-type/question "Frage"
    :schnaq.input-type/answer "Antwort"

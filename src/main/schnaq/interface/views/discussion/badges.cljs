@@ -195,7 +195,10 @@
        (if new?
          [icon :comments "m-auto text-secondary me-1"]
          [icon :comments "m-auto me-1"])
-       statement-num " " (labels :statement.badges/more-posts)]
+       statement-num " "
+       (if (= 1 statement-num)
+         (labels :statement.badges/more-post)
+         (labels :statement.badges/more-posts))]
       (when with-edit-dropdown?
         [:div.ms-2
          [edit-statement-dropdown-menu statement]])])))
