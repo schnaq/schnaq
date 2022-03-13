@@ -15,10 +15,10 @@
   "A single card containing a metric and a title."
   [title metric]
   (let [stats @(rf/subscribe [metric])]
-  [:div.col
-   [:div.card
-    [:div.card-body
-     [:h5.card-title title]
+    [:div.col
+     [:div.card
+      [:div.card-body
+       [:h5.card-title title]
        [:p.card-text.display-1 stats]
        [:p.card-text [:small.text-muted "Last updated ..."]]]]]))
 
@@ -50,7 +50,7 @@
       [:table#registered-users-table.table.table-striped.collapse.mt-3
        [:thead
         [:tr
-        [:th (labels :analytics.users.table/name)]
+         [:th (labels :analytics.users.table/name)]
          [:th (labels :analytics.users.table/email)]]]
        [:tbody
         (for [user users]
@@ -79,15 +79,15 @@
   [title metric]
   [string? keyword? :ret vector?]
   (let [content @(rf/subscribe [metric])]
-  [:div.col
-   [:div.card
-    [:div.card-body
-     [:h5.card-title title]
-     (for [[metric-name metric-value] content]
-       [:div {:key metric-name}
-        [:p.card-text [:strong (string/capitalize (name metric-name))]]
-        [:p.card-text.display-1 metric-value]
-        [:hr]])
+    [:div.col
+     [:div.card
+      [:div.card-body
+       [:h5.card-title title]
+       (for [[metric-name metric-value] content]
+         [:div {:key metric-name}
+          [:p.card-text [:strong (string/capitalize (name metric-name))]]
+          [:p.card-text.display-1 metric-value]
+          [:hr]])
        [:p.card-text [:small.text-muted "Last updated ..."]]]]]))
 
 (defn- analytics-controls
@@ -117,15 +117,15 @@
    {:condition/needs-administrator? true
     :page/heading (labels :analytics/heading)}
    [:<>
-       [:div.container.px-5.py-3
-        [analytics-controls]]
-       [:div.container-fluid
-        [:div.row.mb-3
-         [:div.col-12.col-lg-6
+    [:div.container.px-5.py-3
+     [analytics-controls]]
+    [:div.container-fluid
+     [:div.row.mb-3
+      [:div.col-12.col-lg-6
        [statements-stats]]
-         [:div.col-12.col-lg-6
-          [registered-users-table]]]
-        [:div.row.row-cols-1.row-cols-lg-3.g-3
+      [:div.col-12.col-lg-6
+       [registered-users-table]]]
+     [:div.row.row-cols-1.row-cols-lg-3.g-3
       [analytics-card (labels :analytics/overall-discussions) :analytics/number-of-discussions-overall]
       [analytics-card (labels :analytics/user-numbers) :analytics/number-of-usernames-anonymous]
       [analytics-card (labels :analytics/registered-users-numbers) :analytics/number-of-users-registered]
@@ -159,96 +159,6 @@
  :analytics/load-all-with-time
  (fn [{:keys [db]} [_ days]]
    (fetch-statistics db "/admin/analytics" :analytics/all-stats-loaded (js/parseInt days))))
-
-(rf/reg-event-fx
- :analytics/load-discussions-num
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/discussions" :analytics/discussions-num-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-usernames-num
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/usernames" :analytics/usernames-num-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-registered-users-num
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/registered-users" :analytics/registered-users-num-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-average-number-of-statements
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/statements-per-discussion" :analytics/statements-per-discussion-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-statements-num
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/statements" :analytics/statements-num-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-active-users
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/active-users" :analytics/active-users-num-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-statement-length-stats
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/statement-lengths" :analytics/statement-length-stats-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-statements-type-stats
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/statement-types" :analytics/statement-type-stats-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-labels-stats
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/labels" :analytics/labels-loaded)))
-
-(rf/reg-event-db
- :analytics/discussions-num-loaded
- (fn [db [_ {:keys [discussions-sum]}]]
-   (assoc-in db [:analytics :discussions-sum :overall] discussions-sum)))
-
-(rf/reg-event-db
- :analytics/usernames-num-loaded
- (fn [db [_ {:keys [usernames-sum]}]]
-   (assoc-in db [:analytics :users-num :anonymous] usernames-sum)))
-
-(rf/reg-event-db
- :analytics/registered-users-num-loaded
- (fn [db [_ {:keys [registered-users-num]}]]
-   (assoc-in db [:analytics :users-num :registered] registered-users-num)))
-
-(rf/reg-event-db
- :analytics/statements-num-loaded
- (fn [db [_ {:keys [statements-num]}]]
-   (assoc-in db [:analytics :statements :number] statements-num)))
-
-(rf/reg-event-db
- :analytics/active-users-num-loaded
- (fn [db [_ {:keys [active-users-num]}]]
-   (assoc-in db [:analytics :active-users-nums] active-users-num)))
-
-(rf/reg-event-db
- :analytics/statements-per-discussion-loaded
- (fn [db [_ {:keys [average-statements]}]]
-   (assoc-in db [:analytics :statements :average-per-discussion] (gstring/format "%.2f" average-statements))))
-
-(rf/reg-event-db
- :analytics/statement-length-stats-loaded
- (fn [db [_ {:keys [statement-length-stats]}]]
-   (assoc-in db [:analytics :statements :lengths] statement-length-stats)))
-
-(rf/reg-event-db
- :analytics/statement-type-stats-loaded
- (fn [db [_ {:keys [statement-type-stats]}]]
-   (assoc-in db [:analytics :statements :types] statement-type-stats)))
-
-(rf/reg-event-db
- :analytics/labels-loaded
- (fn [db [_ {:keys [labels-stats]}]]
-   (assoc-in db [:analytics :labels] labels-stats)))
 
 (rf/reg-event-db
  :analytics/all-stats-loaded
