@@ -14,12 +14,13 @@
 (defn- analytics-card
   "A single card containing a metric and a title."
   [title metric]
+  (let [stats @(rf/subscribe [metric])]
   [:div.col
    [:div.card
     [:div.card-body
      [:h5.card-title title]
-     [:p.card-text.display-1 metric]
-     [:p.card-text [:small.text-muted "Last updated ..."]]]]])
+       [:p.card-text.display-1 stats]
+       [:p.card-text [:small.text-muted "Last updated ..."]]]]]))
 
 (defn- percentage-change
   "Calculate the percentage change between two values. Color positive changes green and negative red."
@@ -48,8 +49,9 @@
        (labels :analytics.users/copy-button)]
       [:table#registered-users-table.table.table-striped.collapse.mt-3
        [:thead
+        [:tr
         [:th (labels :analytics.users.table/name)]
-        [:th (labels :analytics.users.table/email)]]
+         [:th (labels :analytics.users.table/email)]]]
        [:tbody
         (for [user users]
           [:tr {:key (str "registered-users-table-" (:db/id user))}
@@ -58,8 +60,10 @@
 
 (defn- statements-stats
   "A single card containing statement-growth metrics."
-  [statements-total statements-series]
-  (let [values (map second statements-series)
+  []
+  (let [statements-total @(rf/subscribe [:analytics/number-of-statements-overall])
+        statements-series @(rf/subscribe [:analytics/number-of-statements-series])
+        values (map second statements-series)
         penultimate (last (butlast values))
         ultimate (last values)]
     [:div.card
@@ -72,8 +76,9 @@
 (>defn- multi-arguments-card
   "A card containing multiple sub-metrics that are related. Uses the keys of a map
   to make sub-headings."
-  [title content]
-  [string? (? map?) :ret vector?]
+  [title metric]
+  [string? keyword? :ret vector?]
+  (let [content @(rf/subscribe [metric])]
   [:div.col
    [:div.card
     [:div.card-body
@@ -83,7 +88,7 @@
         [:p.card-text [:strong (string/capitalize (name metric-name))]]
         [:p.card-text.display-1 metric-value]
         [:hr]])
-     [:p.card-text [:small.text-muted "Last updated ..."]]]]])
+       [:p.card-text [:small.text-muted "Last updated ..."]]]]]))
 
 (defn- analytics-controls
   "The controls for the analytics view."
@@ -112,34 +117,23 @@
    {:condition/needs-administrator? true
     :page/heading (labels :analytics/heading)}
    [:<>
-    (let [discussions-num @(rf/subscribe [:analytics/number-of-discussions-overall])
-          usernames-num @(rf/subscribe [:analytics/number-of-usernames-anonymous])
-          registered-users @(rf/subscribe [:analytics/number-of-users-registered])
-          average-statements @(rf/subscribe [:analytics/number-of-average-statements])
-          statements-num @(rf/subscribe [:analytics/number-of-statements-overall])
-          statements-series @(rf/subscribe [:analytics/number-of-statements-series])
-          active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
-          statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
-          statement-types @(rf/subscribe [:analytics/statement-type-stats])
-          marked-answers @(rf/subscribe [:analytics/marked-answers])]
-      [:<>
        [:div.container.px-5.py-3
         [analytics-controls]]
        [:div.container-fluid
         [:div.row.mb-3
          [:div.col-12.col-lg-6
-          [statements-stats statements-num statements-series]]
+       [statements-stats]]
          [:div.col-12.col-lg-6
           [registered-users-table]]]
         [:div.row.row-cols-1.row-cols-lg-3.g-3
-         [analytics-card (labels :analytics/overall-discussions) discussions-num]
-         [analytics-card (labels :analytics/user-numbers) usernames-num]
-         [analytics-card (labels :analytics/registered-users-numbers) registered-users]
-         [analytics-card (labels :analytics/average-statements-title) average-statements]
-         [multi-arguments-card (labels :analytics/active-users-num-title) active-users-num]
-         [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
-         [multi-arguments-card (labels :analytics/statement-types-title) statement-types]
-         [analytics-card (labels :analytics/labels-stats) marked-answers]]]])]])
+      [analytics-card (labels :analytics/overall-discussions) :analytics/number-of-discussions-overall]
+      [analytics-card (labels :analytics/user-numbers) :analytics/number-of-usernames-anonymous]
+      [analytics-card (labels :analytics/registered-users-numbers) :analytics/number-of-users-registered]
+      [analytics-card (labels :analytics/average-statements-title) :analytics/number-of-average-statements]
+      [multi-arguments-card (labels :analytics/active-users-num-title) :analytics/number-of-active-users-overall]
+      [multi-arguments-card (labels :analytics/statement-lengths-title) :analytics/statement-lengths-stats]
+      [multi-arguments-card (labels :analytics/statement-types-title) :analytics/statement-type-stats]
+      [analytics-card (labels :analytics/labels-stats) :analytics/marked-answers]]]]])
 
 (defn analytics-dashboard-entrypoint []
   [analytics-dashboard-view])
