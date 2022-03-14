@@ -1,23 +1,26 @@
 (ns schnaq.interface.analytics.core
   (:require [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [>defn- ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.analytics.charts :as chart]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- analytics-card
   "A single card containing a metric and a title."
   [title metric]
-  [:div.col
-   [:div.card
-    [:div.card-body
-     [:h5.card-title title]
-     [:p.card-text.display-1 metric]
-     [:p.card-text [:small.text-muted "Last updated ..."]]]]])
+  (let [stats @(rf/subscribe [metric])]
+    [:div.col
+     [:div.card
+      [:div.card-body
+       [:h5.card-title title]
+       [:p.card-text.display-1 stats]
+       [:p.card-text [:small.text-muted "Last updated ..."]]]]]))
 
 (defn- percentage-change
   "Calculate the percentage change between two values. Color positive changes green and negative red."
@@ -26,10 +29,41 @@
     [:span {:class (if (< change 0) "text-warning" "text-success")}
      (gstring/format "%s %%" change)]))
 
+(defn- registered-users-table
+  "Show registered users."
+  []
+  (let [users @(rf/subscribe [:analytics/registered-users])]
+    [:div.card.w-100 {:style {:height "500px"
+                              :overflow :auto
+                              :display :inline-block}}
+     [:div.card-body
+      [:h5.card-title (labels :analytics.users/title)]
+      [:button.btn.btn-sm.btn-outline-primary.me-3
+       {:data-bs-toggle "collapse"
+        :data-bs-target "#registered-users-table"
+        :aria-expanded false
+        :aria-controls "registered-users-table"}
+       [icon :eye "me-1"] (labels :analytics.users/toggle-button)]
+      [:button.btn.btn-sm.btn-outline-primary
+       {:on-click #(clipboard/copy-to-clipboard! (string/join ", " (map :user.registered/email users)))}
+       (labels :analytics.users/copy-button)]
+      [:table#registered-users-table.table.table-striped.collapse.mt-3
+       [:thead
+        [:tr
+         [:th (labels :analytics.users.table/name)]
+         [:th (labels :analytics.users.table/email)]]]
+       [:tbody
+        (for [user users]
+          [:tr {:key (str "registered-users-table-" (:db/id user))}
+           [:td (:user.registered/display-name user)]
+           [:td (:user.registered/email user)]])]]]]))
+
 (defn- statements-stats
   "A single card containing statement-growth metrics."
-  [statements-total statements-series]
-  (let [values (map second statements-series)
+  []
+  (let [statements-total @(rf/subscribe [:analytics/number-of-statements-overall])
+        statements-series @(rf/subscribe [:analytics/number-of-statements-series])
+        values (map second statements-series)
         penultimate (last (butlast values))
         ultimate (last values)]
     [:div.card
@@ -42,18 +76,19 @@
 (>defn- multi-arguments-card
   "A card containing multiple sub-metrics that are related. Uses the keys of a map
   to make sub-headings."
-  [title content]
-  [string? (? map?) :ret vector?]
-  [:div.col
-   [:div.card
-    [:div.card-body
-     [:h5.card-title title]
-     (for [[metric-name metric-value] content]
-       [:div {:key metric-name}
-        [:p.card-text [:strong (string/capitalize (name metric-name))]]
-        [:p.card-text.display-1 metric-value]
-        [:hr]])
-     [:p.card-text [:small.text-muted "Last updated ..."]]]]])
+  [title metric]
+  [string? keyword? :ret vector?]
+  (let [content @(rf/subscribe [metric])]
+    [:div.col
+     [:div.card
+      [:div.card-body
+       [:h5.card-title title]
+       (for [[metric-name metric-value] content]
+         [:div {:key metric-name}
+          [:p.card-text [:strong (string/capitalize (name metric-name))]]
+          [:p.card-text.display-1 metric-value]
+          [:hr]])
+       [:p.card-text [:small.text-muted "Last updated ..."]]]]]))
 
 (defn- analytics-controls
   "The controls for the analytics view."
@@ -82,32 +117,23 @@
    {:condition/needs-administrator? true
     :page/heading (labels :analytics/heading)}
    [:<>
-    (let [discussions-num @(rf/subscribe [:analytics/number-of-discussions-overall])
-          usernames-num @(rf/subscribe [:analytics/number-of-usernames-anonymous])
-          registered-users @(rf/subscribe [:analytics/number-of-users-registered])
-          average-statements @(rf/subscribe [:analytics/number-of-average-statements])
-          statements-num @(rf/subscribe [:analytics/number-of-statements-overall])
-          statements-series @(rf/subscribe [:analytics/number-of-statements-series])
-          active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
-          statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
-          statement-types @(rf/subscribe [:analytics/statement-type-stats])
-          marked-answers @(rf/subscribe [:analytics/marked-answers])]
-      [:<>
-       [:div.container.px-5.py-3
-        [analytics-controls]]
-       [:div.container-fluid
-        [:div.row.mb-3
-         [:div.col-12.col-lg-6
-          [statements-stats statements-num statements-series]]]
-        [:div.row.row-cols-1.row-cols-lg-3.g-3
-         [analytics-card (labels :analytics/overall-discussions) discussions-num]
-         [analytics-card (labels :analytics/user-numbers) usernames-num]
-         [analytics-card (labels :analytics/registered-users-numbers) registered-users]
-         [analytics-card (labels :analytics/average-statements-title) average-statements]
-         [multi-arguments-card (labels :analytics/active-users-num-title) active-users-num]
-         [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
-         [multi-arguments-card (labels :analytics/statement-types-title) statement-types]
-         [analytics-card (labels :analytics/labels-stats) marked-answers]]]])]])
+    [:div.container.px-5.py-3
+     [analytics-controls]]
+    [:div.container-fluid
+     [:div.row.mb-3
+      [:div.col-12.col-lg-6
+       [statements-stats]]
+      [:div.col-12.col-lg-6
+       [registered-users-table]]]
+     [:div.row.row-cols-1.row-cols-lg-3.g-3
+      [analytics-card (labels :analytics/overall-discussions) :analytics/number-of-discussions-overall]
+      [analytics-card (labels :analytics/user-numbers) :analytics/number-of-usernames-anonymous]
+      [analytics-card (labels :analytics/registered-users-numbers) :analytics/number-of-users-registered]
+      [analytics-card (labels :analytics/average-statements-title) :analytics/number-of-average-statements]
+      [multi-arguments-card (labels :analytics/active-users-num-title) :analytics/number-of-active-users-overall]
+      [multi-arguments-card (labels :analytics/statement-lengths-title) :analytics/statement-lengths-stats]
+      [multi-arguments-card (labels :analytics/statement-types-title) :analytics/statement-type-stats]
+      [analytics-card (labels :analytics/labels-stats) :analytics/marked-answers]]]]])
 
 (defn analytics-dashboard-entrypoint []
   [analytics-dashboard-view])
@@ -134,96 +160,6 @@
  (fn [{:keys [db]} [_ days]]
    (fetch-statistics db "/admin/analytics" :analytics/all-stats-loaded (js/parseInt days))))
 
-(rf/reg-event-fx
- :analytics/load-discussions-num
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/discussions" :analytics/discussions-num-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-usernames-num
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/usernames" :analytics/usernames-num-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-registered-users-num
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/registered-users" :analytics/registered-users-num-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-average-number-of-statements
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/statements-per-discussion" :analytics/statements-per-discussion-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-statements-num
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/statements" :analytics/statements-num-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-active-users
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/active-users" :analytics/active-users-num-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-statement-length-stats
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/statement-lengths" :analytics/statement-length-stats-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-statements-type-stats
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/statement-types" :analytics/statement-type-stats-loaded)))
-
-(rf/reg-event-fx
- :analytics/load-labels-stats
- (fn [{:keys [db]} _]
-   (fetch-statistics db "/admin/analytics/labels" :analytics/labels-loaded)))
-
-(rf/reg-event-db
- :analytics/discussions-num-loaded
- (fn [db [_ {:keys [discussions-sum]}]]
-   (assoc-in db [:analytics :discussions-sum :overall] discussions-sum)))
-
-(rf/reg-event-db
- :analytics/usernames-num-loaded
- (fn [db [_ {:keys [usernames-sum]}]]
-   (assoc-in db [:analytics :users-num :anonymous] usernames-sum)))
-
-(rf/reg-event-db
- :analytics/registered-users-num-loaded
- (fn [db [_ {:keys [registered-users-num]}]]
-   (assoc-in db [:analytics :users-num :registered] registered-users-num)))
-
-(rf/reg-event-db
- :analytics/statements-num-loaded
- (fn [db [_ {:keys [statements-num]}]]
-   (assoc-in db [:analytics :statements :number] statements-num)))
-
-(rf/reg-event-db
- :analytics/active-users-num-loaded
- (fn [db [_ {:keys [active-users-num]}]]
-   (assoc-in db [:analytics :active-users-nums] active-users-num)))
-
-(rf/reg-event-db
- :analytics/statements-per-discussion-loaded
- (fn [db [_ {:keys [average-statements]}]]
-   (assoc-in db [:analytics :statements :average-per-discussion] (gstring/format "%.2f" average-statements))))
-
-(rf/reg-event-db
- :analytics/statement-length-stats-loaded
- (fn [db [_ {:keys [statement-length-stats]}]]
-   (assoc-in db [:analytics :statements :lengths] statement-length-stats)))
-
-(rf/reg-event-db
- :analytics/statement-type-stats-loaded
- (fn [db [_ {:keys [statement-type-stats]}]]
-   (assoc-in db [:analytics :statements :types] statement-type-stats)))
-
-(rf/reg-event-db
- :analytics/labels-loaded
- (fn [db [_ {:keys [labels-stats]}]]
-   (assoc-in db [:analytics :labels] labels-stats)))
-
 (rf/reg-event-db
  :analytics/all-stats-loaded
  (fn [db [_ {:keys [statistics]}]]
@@ -235,7 +171,8 @@
                                       :average-per-discussion (:average-statements-num statistics)
                                       :types (:statement-type-stats statistics)}
                          :active-users-nums (:active-users-num statistics)
-                         :labels (:labels-stats statistics)})))
+                         :labels (:labels-stats statistics)
+                         :users {:registered (:users statistics)}})))
 
 ;; #### Subs ####
 
@@ -294,3 +231,8 @@
  :<- [:analytics/labels-stats]
  (fn [{:keys [check]} _]
    check))
+
+(rf/reg-sub
+ :analytics/registered-users
+ (fn [db]
+   (get-in db [:analytics :users :registered])))

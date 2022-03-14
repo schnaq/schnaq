@@ -4,7 +4,8 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db]
             [schnaq.database.user :as user-db]
-            [schnaq.test.toolbelt :as schnaq-toolbelt])
+            [schnaq.test.toolbelt :as schnaq-toolbelt]
+            [schnaq.toolbelt :as toolbelt])
   (:import (java.time Instant)))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -82,3 +83,8 @@
       (is (= 7 (:attacks stats)))
       (is (= 15 (:supports stats)))
       (is (= 0 (:neutrals stats))))))
+
+(deftest users-created-since-test
+  (testing "Count registered users."
+    (is (zero? (count (db/users-created-since (Instant/now)))))
+    (is (= 4 (count (db/users-created-since (toolbelt/now-minus-days 7)))))))

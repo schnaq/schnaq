@@ -5,51 +5,6 @@
             [schnaq.database.specs :as specs]
             [schnaq.toolbelt :as toolbelt]))
 
-(defn- number-of-discussions
-  "Returns the number of all discussions."
-  [_]
-  (ok {:discussions-sum (analytics-db/number-of-discussions)}))
-
-(defn- number-of-usernames
-  "Returns the number of all anonymous usernames created."
-  [_]
-  (ok {:usernames-sum (analytics-db/number-of-usernames)}))
-
-(defn- number-of-registered-users
-  "Returns the number of registered users on the plattform."
-  [_]
-  (ok {:registered-users-num (analytics-db/number-or-registered-users)}))
-
-(defn- statements-per-discussion
-  "Returns the average numbers of statements per discussion."
-  [_]
-  (ok {:average-statements (float (analytics-db/average-number-of-statements))}))
-
-(defn- number-of-statements
-  "Returns the number of statements"
-  [_]
-  (ok {:statements-num (analytics-db/number-of-statements)}))
-
-(defn- number-of-active-users
-  "Returns the number of statements"
-  [_]
-  (ok {:active-users-num (analytics-db/number-of-active-discussion-users)}))
-
-(defn- statement-lengths-stats
-  "Returns statistics about the statement length."
-  [_]
-  (ok {:statement-length-stats (analytics-db/statement-length-stats)}))
-
-(defn- statement-type-stats
-  "Returns statistics about the statement length."
-  [_]
-  (ok {:statement-type-stats (analytics-db/statement-type-stats)}))
-
-(defn- labels-stats
-  "Returns statistics about the statement length."
-  [_]
-  (ok {:labels-stats (analytics-db/labels-stats)}))
-
 (defn- all-stats
   "Returns all statistics at once."
   [{:keys [parameters]}]
@@ -63,7 +18,8 @@
           :statement-length-stats (analytics-db/statement-length-stats timestamp-since)
           :statement-type-stats (analytics-db/statement-type-stats timestamp-since)
           :registered-users-num (analytics-db/number-or-registered-users timestamp-since)
-          :labels-stats (analytics-db/labels-stats timestamp-since)}})))
+          :labels-stats (analytics-db/labels-stats timestamp-since)
+          :users (analytics-db/users-created-since timestamp-since)}})))
 
 ;; -----------------------------------------------------------------------------
 
@@ -74,13 +30,4 @@
     :responses {401 at/response-error-body}}
    ["" {:get all-stats
         :parameters {:query {:days-since nat-int?}}
-        :responses {200 {:body {:statistics ::specs/statistics}}}}]
-   ["/active-users" {:get number-of-active-users}]
-   ["/statements-per-discussion" {:get statements-per-discussion}]
-   ["/statement-types" {:get statement-type-stats}]
-   ["/discussions" {:get number-of-discussions}]
-   ["/statement-lengths" {:get statement-lengths-stats}]
-   ["/statements" {:get number-of-statements}]
-   ["/usernames" {:get number-of-usernames}]
-   ["/registered-users" {:get number-of-registered-users}]
-   ["/labels" {:get labels-stats}]])
+        :responses {200 {:body {:statistics ::specs/statistics}}}}]])

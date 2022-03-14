@@ -738,6 +738,11 @@
    :analytics/statement-types-title "Argument types"
    :analytics/labels-stats "Marked Answers"
    :analytics/fetch-data-button "Retrieving data…"
+   :analytics.users/title "Newly registered users"
+   :analytics.users/toggle-button "Show new users"
+   :analytics.users/copy-button "Copy"
+   :analytics.users.table/name "Name"
+   :analytics.users.table/email "Email"
 
    ;; Supporters
    :supporters/heading "Supported by:"
