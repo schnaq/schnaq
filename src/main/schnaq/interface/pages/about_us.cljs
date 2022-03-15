@@ -80,6 +80,8 @@
   [pages/with-nav-and-header
    {:page/heading (labels :about-us.page/heading)
     :page/subheading (labels :about-us.page/subheading)
+    :page/title (labels :about-us.page/title)
+    :page/description (labels :about-us.page/description)
     :page/vertical-header? true}
    [:div.container
     [schnaq-unity]

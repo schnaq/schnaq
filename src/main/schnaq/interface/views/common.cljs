@@ -23,8 +23,8 @@
   [display-name size]
   (fn [image]
     (oset! image [:target :src]
-           (str "data:image/svg+xml;base64,"
-                (js/btoa (generate-identicon display-name size))))))
+      (str "data:image/svg+xml;base64,"
+           (js/btoa (generate-identicon display-name size))))))
 
 (>defn identicon
   "Generate unique identicon component."
@@ -139,10 +139,19 @@
   "Set a document's website title."
   [title]
   [(? string?) :ret any?]
-  (when-not shared-config/embedded?
-    (when title
-      (let [new-title (gstring/format "schnaq - %s" title)]
-        (oset! js/document [:title] new-title)))))
+  (when (and (not shared-config/embedded?) title)
+    (let [new-title (gstring/format "%s – schnaq" title)]
+      (oset! js/document [:title] new-title))))
+
+(>defn set-website-description!
+  "Set a document's website meta-description."
+  [description]
+  [(? string?) :ret any?]
+  (when (and (not shared-config/embedded?) description)
+    (when-let [selector (.querySelector js/document "meta[name='description']")]
+      (.setAttribute selector "content" description))
+    (when-let [og-selector (.querySelector js/document "meta[name='og:description']")]
+      (.setAttribute og-selector "content" description))))
 
 ;; -----------------------------------------------------------------------------
 ;; schnaqqi speak

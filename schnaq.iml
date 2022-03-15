@@ -83,7 +83,7 @@
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpasyncclient:4.1.4" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer.jvm:1.2.2" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-handler-proxy:4.1.51.Final" level="project" />
-    <orderEntry type="library" name="Deps: keycloak-clojure:1.25.2" level="project" />
+    <orderEntry type="library" name="Deps: keycloak-clojure:1.25.3" level="project" />
     <orderEntry type="library" name="Deps: jarohen/chime:0.3.3" level="project" />
     <orderEntry type="library" name="Deps: net.incongru.watchservice/barbary-watchservice:1.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.protobuf/protobuf-java-util:3.18.1" level="project" />
@@ -266,6 +266,7 @@
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-io:9.4.44.v20210927" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.reader:1.3.6" level="project" />
     <orderEntry type="library" name="Deps: org.tcrawley/dynapath:1.1.0" level="project" />
+    <orderEntry type="library" name="Deps: org.babashka/sci:0.3.2" level="project" />
     <orderEntry type="library" name="Deps: org.reactivestreams/reactive-streams:1.0.3" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-netty-shaded:1.41.0" level="project" />
     <orderEntry type="library" name="Deps: org.codehaus.janino/commons-compiler:3.0.12" level="project" />
@@ -320,7 +321,6 @@
     <orderEntry type="library" name="Deps: borkdude/sci.impl.reflector:0.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.sun.mail/jakarta.mail:1.6.5" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.44.v20210927" level="project" />
-    <orderEntry type="library" name="Deps: borkdude/sci:0.1.1-alpha.9" level="project" />
     <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.106.0" level="project" />
     <orderEntry type="library" name="Deps: io.opencensus/opencensus-api:0.28.0" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-auth:1.41.0" level="project" />

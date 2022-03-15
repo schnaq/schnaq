@@ -121,13 +121,14 @@
 
 (defn product-page
   "Product page skeleton with a title and subtitle next to an tablet as ATF."
-  [title subtitle cta-button-label feature-level content]
+  [heading subtitle title description cta-button-label feature-level content]
   [:div.overflow-hidden
    [pages/with-nav-and-header
-    {:page/title (labels title)
+    {:page/title title
+     :page/description description
      :page/vertical-header? true
      :page/more-for-heading (with-meta [product-above-the-fold
-                                        title
+                                        heading
                                         subtitle
                                         cta-button-label
                                         feature-level]
