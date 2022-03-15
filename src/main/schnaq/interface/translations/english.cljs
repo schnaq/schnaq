@@ -46,7 +46,7 @@
    :startpage/heading "Collecting questions made simple"
    :startpage/subheading "Events as interactive as they should be!"
    :startpage/title "The most secure software for increased audience engagement."
-   :startpage/description "The most secure audience interaction software for your live and virtual events. Interact with your audience through Live Q&A, Real time polling… Try it for free!"
+   :startpage/description "The most secure audience interaction software for your live and virtual events. Interact with your audience through Live Q&A, real time polling… Try it for free!"
    :startpage/hook "Gather questions, understand your audience, share knowledge. Schnaq picks up where others leave off!"
    :schnaq.startpage.cta/button "Create a free schnaq now!"
    :startpage.social-proof/teaser "You are one click away from joining hundreds of other schnaq users 👋"
@@ -626,8 +626,8 @@
 
    :about-us.page/heading "About Us"
    :about-us.page/subheading "Information about us"
-   :about-us.page/title "Schnaq Mission and Values - Learn more about schnaq's story."
-   :about-us.page/description "Schnaq – an audience interaction platform to facilitate live and virtual audience engagement through live q&a, realtime polling and live audience activation tools."
+   :about-us.page/title "Schnaq's Mission and Values - Learn more about schnaq's story."
+   :about-us.page/description "Schnaq – an audience interaction platform to facilitate live and virtual audience engagement through live Q&A, real time polling and live audience activation tools."
 
    ;; Legal Note
    :legal-note.page/heading "Legal Note"
