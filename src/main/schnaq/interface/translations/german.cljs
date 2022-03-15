@@ -292,9 +292,9 @@
    :schnaq.poll.create/submit-button "Umfrage erstellen"
    :schnaq.poll/votes "Stimmen"
    :schnaq.poll/vote! "Abstimmen"
+   :schnaq.poll/delete-button "Löschen"
 
    ;; Activation feature
-
    :schnaq.activation.create/label "Präsentiere deinen Teilnehmer:innen eine Eingabe zur Aktivierung!"
    :schnaq.activation.create/start-button "Aktivierung starten"
    :schnaq.activation.create/delete-button "Aktivierung löschen"
