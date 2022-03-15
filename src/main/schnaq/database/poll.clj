@@ -38,7 +38,7 @@
 (>defn delete-poll!
   "Delete a poll"
   [poll-id share-hash]
-  [:db/id :discussion/share-hash :ret map?]
+  [:db/id :discussion/share-hash :ret (? map?)]
   (when (poll-belongs-to-discussion? poll-id share-hash)
     @(db/transact [[:db/retractEntity poll-id]])))
 
