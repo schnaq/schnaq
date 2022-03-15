@@ -124,7 +124,8 @@
   [heading subtitle title description cta-button-label feature-level content]
   [:div.overflow-hidden
    [pages/with-nav-and-header
-    {:page/title (labels heading)
+    {:page/title title
+     :page/description description
      :page/vertical-header? true
      :page/more-for-heading (with-meta [product-above-the-fold
                                         heading
