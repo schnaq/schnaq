@@ -50,9 +50,9 @@
 
 (defn- delete-poll
   "Delete a poll."
-  [{{{:keys [poll-id]} :body} :parameters}]
+  [{{{:keys [poll-id share-hash]} :body} :parameters}]
   (log/debug "Poll deletion for" poll-id)
-  (poll-db/delete-poll! poll-id)
+  (poll-db/delete-poll! poll-id share-hash)
   (ok {:deleted? true}))
 
 ;; -----------------------------------------------------------------------------

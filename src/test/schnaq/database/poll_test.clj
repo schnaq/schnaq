@@ -79,6 +79,14 @@
   (testing "Deleting a poll from a discussion reduces the total amount of polls."
     (let [polls (db/polls "cat-dog-hash")
           poll-id (-> polls first :db/id)
-          _ (db/delete-poll! poll-id)
+          _ (db/delete-poll! poll-id "cat-dog-hash")
           polls-after (db/polls "cat-dog-hash")]
       (is (= (dec (count polls)) (count polls-after))))))
+
+(deftest delete-poll-wrong-hash!-test
+  (testing "Do not delete poll if share-hash is invalid."
+    (let [polls (db/polls "cat-dog-hash")
+          poll-id (-> polls first :db/id)
+          _ (db/delete-poll! poll-id "definitely-wrong")
+          polls-after (db/polls "cat-dog-hash")]
+      (is (= (count polls) (count polls-after))))))
