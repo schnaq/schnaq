@@ -2,8 +2,7 @@
   (:require [clojure.test :refer [use-fixtures is deftest testing]]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.poll :as db]
-            [schnaq.test.toolbelt :as schnaq-toolbelt]
-            [schnaq.database.main :as main-db]))
+            [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
