@@ -179,9 +179,9 @@
  (fn [{:keys [db]} [_ form-elements number-of-options]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          params {:title (oget form-elements :poll-topic :value)
-                 :poll-type (case (oget form-elements :radio-type-choice :value)
-                              "single" :poll.type/single-choice
-                              "multiple" :poll.type/multiple-choice)
+                 :poll-type (if (= "multiple" (oget form-elements :radio-type-choice :value))
+                              :poll.type/multiple-choice
+                              :poll.type/single-choice)
                  :options (mapv #(oget+ form-elements (str "poll-option-" %) :value)
                                 (range 1 (inc number-of-options)))
                  :share-hash share-hash
@@ -274,4 +274,6 @@
  (fn [{:keys [db]} [_ poll-id]]
    {:fx [(http/xhrio-request db :delete "/poll/delete"
                              [:no-op]
-                             {:poll-id poll-id})]}))
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
+                              :poll-id poll-id})]}))
