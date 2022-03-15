@@ -292,9 +292,9 @@
    :schnaq.poll.create/submit-button "Create Poll"
    :schnaq.poll/votes "Votes"
    :schnaq.poll/vote! "Vote"
+   :schnaq.poll/delete-button "Delete"
 
-   ;; Activation feature
-
+  ;; Activation feature
    :schnaq.activation.create/label "Present your participants with an activation input!"
    :schnaq.activation.create/start-button "Start Activation"
    :schnaq.activation.create/delete-button "Delete Activation"

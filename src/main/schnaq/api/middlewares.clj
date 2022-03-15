@@ -1,6 +1,6 @@
 (ns schnaq.api.middlewares
   (:require [reitit.ring.middleware.exception :as exception]
-            [ring.util.http-response :refer [forbidden not-found]]
+            [ring.util.http-response :refer [bad-request forbidden not-found]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
             [schnaq.validator :as validator]
@@ -38,9 +38,11 @@
   (fn [request]
     (let [share-hash (extract-parameter-from-request request :share-hash)
           edit-hash (extract-parameter-from-request request :edit-hash)]
-      (if (validator/valid-credentials? share-hash edit-hash)
-        (handler request)
-        (forbidden (at/build-error-body :credentials/invalid "Your share-hash and edit-hash do not fit together."))))))
+      (if (and share-hash edit-hash)
+        (if (validator/valid-credentials? share-hash edit-hash)
+          (handler request)
+          (forbidden (at/build-error-body :credentials/invalid "Your share-hash and edit-hash do not fit together.")))
+        (bad-request (at/build-error-body :parameters/missing (format "Share-hash oder edit-hash is missing, share-hash: %s, edit-hash: %s" share-hash edit-hash)))))))
 
 (defn wrap-custom-schnaq-csrf-header
   "A handler, that checks for a custom schnaq-csrf header. This can only be present when sent from an allowed origin

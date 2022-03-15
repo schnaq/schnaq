@@ -59,4 +59,3 @@
   (let [activation-id (:db/id (activation-by-share-hash share-hash))]
     (db/increment-number activation-id :activation/count)
     (db/fast-pull activation-id patterns/activation)))
-
