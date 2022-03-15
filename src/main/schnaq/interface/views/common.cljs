@@ -139,19 +139,17 @@
   "Set a document's website title."
   [title]
   [(? string?) :ret any?]
-  (when-not shared-config/embedded?
-    (when title
-      (let [new-title (gstring/format "%s – schnaq" title)]
-        (oset! js/document [:title] new-title)))))
+  (when (and (not shared-config/embedded?) title)
+    (let [new-title (gstring/format "%s – schnaq" title)]
+      (oset! js/document [:title] new-title))))
 
 (>defn set-website-description!
   "Set a document's website meta-description."
   [description]
   [(? string?) :ret any?]
-  (when-not shared-config/embedded?
-    (when description
-      (.setAttribute (.querySelector js/document "meta[name='description']") "content" description)
-      (.setAttribute (.querySelector js/document "meta[name='og:description']") "content" description))))
+  (when (and (not shared-config/embedded?) description)
+    (.setAttribute (.querySelector js/document "meta[name='description']") "content" description)
+    (.setAttribute (.querySelector js/document "meta[name='og:description']") "content" description)))
 
 ;; -----------------------------------------------------------------------------
 ;; schnaqqi speak
