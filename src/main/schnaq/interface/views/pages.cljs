@@ -156,9 +156,10 @@
 
 (>defn with-nav-and-header
   "Default page with header and curly wave."
-  [{:page/keys [title heading classes wavy-footer?] :as options} body]
+  [{:page/keys [title description heading classes wavy-footer?] :as options} body]
   [::page-options (? :re-frame/component) :ret :re-frame/component]
   (common/set-website-title! (or title heading))
+  (common/set-website-description! description)
   [scheduler/middleware
    [validate-conditions-middleware
     options
@@ -172,9 +173,10 @@
 
 (>defn with-nav
   "Default page with header and curly wave."
-  [{:page/keys [title heading] :as options} body]
+  [{:page/keys [title description heading] :as options} body]
   [::page-options (s/+ vector?) :ret vector?]
   (common/set-website-title! (or title heading))
+  (common/set-website-description! description)
   [scheduler/middleware
    [validate-conditions-middleware
     options
@@ -196,9 +198,10 @@
 
 (>defn- with-header
   "Page layout with discussion header."
-  [{:page/keys [title heading classes] :as options} body header]
+  [{:page/keys [title description heading classes] :as options} body header]
   [::page-options (s/+ vector?) vector? :ret vector?]
   (common/set-website-title! (or title heading))
+  (common/set-website-description! description)
   [scheduler/middleware
    [validate-conditions-middleware
     options
