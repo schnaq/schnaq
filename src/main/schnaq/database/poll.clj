@@ -1,7 +1,7 @@
 (ns schnaq.database.poll
   (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn ?]]
-            [schnaq.database.main :as db]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
+            [schnaq.database.main :as db :refer [query]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.toolbelt :as tools])
@@ -22,6 +22,26 @@
                                        :option/value val}) options)}]
       "newly-created-poll"
       patterns/poll))))
+
+(>defn- poll-belongs-to-discussion?
+  "Check if poll belongs to a discussion."
+  [poll-id share-hash]
+  [:db/id :discussion/share-hash => boolean?]
+  (some?
+   (query
+    '[:find ?discussion .
+      :in $ ?poll-id ?share-hash
+      :where [?poll-id :poll/title]
+      [?poll-id :poll/discussion ?discussion]
+      [?discussion :discussion/share-hash ?share-hash]]
+    poll-id share-hash)))
+
+(>defn delete-poll!
+  "Delete a poll"
+  [poll-id share-hash]
+  [:db/id :discussion/share-hash :ret (? map?)]
+  (when (poll-belongs-to-discussion? poll-id share-hash)
+    @(db/transact [[:db/retractEntity poll-id]])))
 
 (>defn polls
   "Return all polls which reference the discussion from the passed `share-hash`."

@@ -30,9 +30,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-              {:type (if single-choice? "radio" "checkbox")
-               :name :option-choice
-               :value id}
+             {:type (if single-choice? "radio" "checkbox")
+              :name :option-choice
+              :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -47,6 +47,31 @@
           [:span.float-end
            [:span.me-3 vote-number " " (labels :schnaq.poll/votes)]
            percentage]]]]))])
+
+(defn- dropdown-delete
+  "Delete button for a dropdown menu."
+  [poll-id]
+  [:button.dropdown-item
+   {:on-click #(rf/dispatch [:poll/delete poll-id])
+    :title (labels :schnaq.poll/delete-button)}
+   [icon :trash "my-auto me-1"]
+   (labels :schnaq.poll/delete-button)])
+
+(defn- dropdown-menu
+  "Dropdown menu for poll configuration."
+  [poll-id]
+  (let [current-edit-hash @(rf/subscribe [:schnaq.current/admin-access])
+        pro-user? @(rf/subscribe [:user/pro-user?])
+        dropdown-id "poll-dropdown"]
+    (when (and pro-user? current-edit-hash)
+      [:div.dropdown.mx-2
+       [:button.btn.btn-link.m-0.p-0.text-dark
+        {:id dropdown-id
+         :role "button" :data-bs-toggle "dropdown"
+         :aria-haspopup "true" :aria-expanded "false"}
+        [icon :dots]]
+       [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
+        [dropdown-delete poll-id]]])))
 
 (defn poll-list
   "Displays all polls of the current schnaq."
@@ -67,7 +92,9 @@
                            (.preventDefault e)
                            (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
              [:div.mx-4.my-2
-              [:h6.pb-2.text-center (:poll/title poll)]
+              [:div.d-flex
+               [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+               [dropdown-menu poll-id]]
               [results-graph (:poll/options poll)
                total-value (:poll/type poll) cast-votes]
               (when-not cast-votes
@@ -152,9 +179,9 @@
  (fn [{:keys [db]} [_ form-elements number-of-options]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          params {:title (oget form-elements :poll-topic :value)
-                 :poll-type (case (oget form-elements :radio-type-choice :value)
-                              "single" :poll.type/single-choice
-                              "multiple" :poll.type/multiple-choice)
+                 :poll-type (if (= "multiple" (oget form-elements :radio-type-choice :value))
+                              :poll.type/multiple-choice
+                              :poll.type/single-choice)
                  :options (mapv #(oget+ form-elements (str "poll-option-" %) :value)
                                 (range 1 (inc number-of-options)))
                  :share-hash share-hash
@@ -169,7 +196,7 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          single-choice? (= :poll.type/single-choice (:poll/type poll))
          poll-id (:db/id poll)
-         chosen-option (if single-choice?
+         chosen-option (if (and single-choice? (oget form-elements :option-choice))
                          (js/parseInt (oget form-elements :option-choice :value))
                          (tools/checked-values (oget form-elements :option-choice)))
          poll-update-fn (if single-choice?
@@ -227,9 +254,10 @@
 (rf/reg-event-fx
  :schnaq.polls/load-from-backend
  (fn [{:keys [db]} _]
-   {:fx [(http/xhrio-request db :get "/polls"
-                             [:schnaq.polls.load-from-backend/success]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
+   {:fx [(http/xhrio-request
+          db :get "/polls"
+          [:schnaq.polls.load-from-backend/success]
+          {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-db
  :schnaq.polls.load-from-backend/success
@@ -241,3 +269,16 @@
  ;; Load past votes from localstorage
  (fn [db _]
    (assoc-in db [:schnaq :polls :past-votes] (:poll/cast-votes local-storage))))
+
+(rf/reg-event-fx
+ :poll/delete
+ (fn [{:keys [db]} [_ poll-id]]
+   {:db (let [polls (get-in db [:schnaq :current :polls])]
+          (assoc-in db [:schnaq :current :polls]
+                    (remove #(= poll-id (:db/id %)) polls)))
+    :fx [(http/xhrio-request
+          db :delete "/poll/delete"
+          [:no-op]
+          {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+           :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
+           :poll-id poll-id})]}))
