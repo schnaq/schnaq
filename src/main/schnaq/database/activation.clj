@@ -36,7 +36,7 @@
   [:discussion/share-hash :ret (? ::specs/activation)]
   (if-let [activation (activation-by-share-hash share-hash)]
     activation
-  (new-activation! share-hash)))
+    (new-activation! share-hash)))
 
 (>defn delete-activation!
   "Delete an activation."

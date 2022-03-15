@@ -51,7 +51,6 @@
 (defn- delete-poll
   "Delete a poll."
   [{{{:keys [poll-id]} :body} :parameters}]
-  (log/error "WTF")
   (log/debug "Poll deletion for" poll-id)
   (poll-db/delete-poll! poll-id)
   (ok {:deleted? true}))
