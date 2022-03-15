@@ -23,6 +23,12 @@
       "newly-created-poll"
       patterns/poll))))
 
+(>defn delete-poll!
+  "Delete a poll"
+  [id]
+  [:db/id :ret map?]
+  @(db/transact [[:db/retractEntity id]]))
+
 (>defn polls
   "Return all polls which reference the discussion from the passed `share-hash`."
   [share-hash]

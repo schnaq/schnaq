@@ -2,7 +2,8 @@
   (:require [clojure.test :refer [use-fixtures is deftest testing]]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.poll :as db]
-            [schnaq.test.toolbelt :as schnaq-toolbelt]))
+            [schnaq.test.toolbelt :as schnaq-toolbelt]
+            [schnaq.database.main :as main-db]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
@@ -74,3 +75,11 @@
       (is (= 2 (:option/votes (fast-pull (:db/id option-0) '[:option/votes]))))
       (is (= 3 (:option/votes (fast-pull (:db/id option-1) '[:option/votes]))))
       (is (= 3 (:option/votes (fast-pull (:db/id option-2) '[:option/votes])))))))
+
+(deftest delete-poll!-test
+  (testing "Deleting a poll from a discussion reduces the total amount of polls."
+    (let [polls (db/polls "cat-dog-hash")
+          poll-id (-> polls first :db/id)
+          _ (db/delete-poll! poll-id)
+          polls-after (db/polls "cat-dog-hash")]
+      (is (= (dec (count polls)) (count polls-after))))))
