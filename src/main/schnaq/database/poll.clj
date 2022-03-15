@@ -32,6 +32,7 @@
     '[:find ?discussion .
       :in $ ?poll-id ?share-hash
       :where [?poll-id :poll/title]
+      [?poll-id :poll/discussion ?discussion]
       [?discussion :discussion/share-hash ?share-hash]]
     poll-id share-hash)))
 
