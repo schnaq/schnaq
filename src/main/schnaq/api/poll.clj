@@ -48,6 +48,16 @@
                    "for poll" poll-id "and share hash" share-hash)
         (bad-request (at/build-error-body :poll.vote/bad-parameters "This vote was not for a valid option or poll"))))))
 
+(defn- delete-poll
+  "Delete a poll."
+  [{{{:keys [poll-id]} :body} :parameters}]
+  (log/error "WTF")
+  (log/debug "Poll deletion for" poll-id)
+  (poll-db/delete-poll! poll-id)
+  (ok {:deleted? true}))
+
+;; -----------------------------------------------------------------------------
+
 (def poll-routes
   [["" {:swagger {:tags ["poll"]}}
     ["/poll"
@@ -72,7 +82,17 @@
                                                              :id-seq (s/coll-of :db/id))}
                                      :path {:poll-id :db/id}}
                         :responses {200 {:body {:voted? boolean?}}
-                                    400 at/response-error-body}}]]
+                                    400 at/response-error-body}}]
+     ["/delete" {:delete delete-poll
+                 :description (at/get-doc #'delete-poll)
+                 :name :poll/delete
+                 :parameters {:body {:poll-id :db/id
+                                     :share-hash :discussion/share-hash
+                                     :edit-hash :discussion/edit-hash}}
+                 :responses {200 {:body {:deleted? boolean?}}
+                             400 at/response-error-body}
+                 :middleware [:user/authenticated?
+                              :discussion/valid-credentials?]}]]
     ["/polls" {:get polls-for-discussion
                :description (at/get-doc #'polls-for-discussion)
                :name :poll/get

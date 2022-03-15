@@ -71,3 +71,22 @@
       (testing "Cast multiple votes for a multiple choice poll"
         (is (= 200 (-> option-ids multiple-request api/app :status)))
         (is (-> option-ids multiple-request api/app m/decode-response-body :voted?))))))
+
+;; -----------------------------------------------------------------------------
+
+(defn- delete-poll-request [poll-id user-token]
+  (-> {:request-method :delete :uri (:path (api/route-by-name :poll/delete))
+       :body-params {:poll-id poll-id
+                     :share-hash "cat-dog-hash"
+                     :edit-hash "cat-dog-edit-hash"}}
+      toolbelt/add-csrf-header
+      (toolbelt/mock-authorization-header user-token)
+      api/app
+      :status))
+
+(deftest delete-poll-test
+  (let [poll-id (-> (poll-db/polls "cat-dog-hash") first :db/id)]
+    (testing "Delete polls with valid credentials."
+      (is (= 200 (delete-poll-request poll-id toolbelt/token-n2o-admin)))
+      (is (= 200 (delete-poll-request poll-id toolbelt/token-schnaqqifant-user)))
+      (is (= 200 (delete-poll-request poll-id toolbelt/token-wegi-no-beta-user))))))
