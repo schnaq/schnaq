@@ -26,7 +26,7 @@
 (>defn- poll-belongs-to-discussion?
   "Check if poll belongs to a discussion."
   [poll-id share-hash]
-  [:db/id :discussion/share-hash => (? nat-int?)]
+  [:db/id :discussion/share-hash => boolean?]
   (some?
    (query
     '[:find ?discussion .
