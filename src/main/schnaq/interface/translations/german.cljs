@@ -45,6 +45,8 @@
    ;; Startpage
    :startpage/heading "Fragen sammeln leicht gemacht"
    :startpage/subheading "Veranstaltungen so interaktiv, wie sie sein sollen!"
+   :startpage/title "Die sicherste Software für Publikumsinteraktion!"
+   :startpage/description "Die sicherste Software für Interaktion mit deinem Publikum bei live und virtuellen Events. Interagiere mit dem Publikum durch F&A, Umfragen… Probiere es jetzt kostenfrei aus!"
    :startpage/hook "Fragen sammeln, Publikum verstehen, Wissen teilen. Schnaq macht da weiter, wo andere aufhören!"
    :schnaq.startpage.cta/button "Jetzt kostenfrei schnaq erstellen"
    :startpage.social-proof/teaser "Mit einem Klick gehörst du zu den hunderten Menschen, die schnaq nutzen 👋"
@@ -122,8 +124,10 @@
    ;; Product Pages
    :productpage/title "Produktübersicht"
    :productpage/button "Produkt"
-   :productpage.overview/title "Veranstaltungen so interaktiv, wie sie sein sollen"
+   :productpage.overview/heading "Veranstaltungen so interaktiv, wie sie sein sollen"
    :productpage.overview/subtitle "schnaq ist das Schweizer Taschenmesser für deine Veranstaltung."
+   :productpage.overview/title "Entdecke die mächtigen und einfach zu nutzenden Funktionen von schnaq."
+   :productpage.overview/description "Schnaq – deine Komplettlösung um dein Publikum während Workshops, Events undKonferenzen besser zu verstehen."
    :productpage.overview/cta-button "Kostenlos registrieren!"
    :productpage.overview.qa/title "Nach der Veranstaltung ist vor der Veranstaltung"
    :productpage.overview.qa/text "Beantworte Fragen einmal und verwende sie in deiner nächsten Veranstaltung wieder. Gewinne sofort Übersicht und spare Zeit in der Zukunft."
@@ -138,8 +142,10 @@
    :productpage/available-soon "Bald verfügbar"
 
    ;; QA Feature
-   :productpage.qa/title "Live Q&A"
+   :productpage.qa/heading "Live Q&A"
    :productpage.qa/subtitle "Fragen beantworten vor, während und nach der Veranstaltung."
+   :productpage.qa/title "Kostenfreie live Q&A software für optimale Publikumsinteraktion."
+   :productpage.qa/description "Durch live Q&A, hilft schnaq deinen Events, Konferenzen und Workshops die Interaktion um 78% zu steigern!"
    :productpage.qa/cta-button "Jetzt kostenlos Q&A starten!"
    :productpage.qa.focus/title "Fokussiere deine Teilnehmer:innen"
    :productpage.qa.focus/subtitle "Deine Teilnehmer:innen erhalten eine reduzierte Ansicht. Bei Bedarf können sie jederzeit zur Übersicht wechseln."
@@ -153,8 +159,10 @@
    :productpage.qa.relevant/subtitle "Manche Fragen brennen mehreren auf der Zunge. Mit einem Klick können deine Teilnehmer:innen Fragen als relevant oder irrelevant markieren. So werden dir die wichtigsten Fragen ganz oben in der Übersicht angezeigt."
 
    ;; Poll Feature
-   :productpage.poll/title "Live Umfragen"
+   :productpage.poll/heading "Live Umfragen"
    :productpage.poll/subtitle "Umfragen erstellen so leicht wie nie zuvor."
+   :productpage.poll/title "Echtzeit Umfragen. Beziehe dein Publikum ein wie niemals zuvor."
+   :productpage.poll/description "Egal ob Events, Workshops oder Konferenzen. Sorge für eine inklusive Erfahrung für alle im Publikum, mit schnaq's live Umfragen."
    :productpage.poll/cta-button "Jetzt Umfragen erstellen!"
    :productpage.poll-vote/title "Lass dein Publikum abstimmen!"
    :productpage.poll-vote/subtitle "Finde heraus, was dein Publikum denkt. Mit Umfragen stimmen deine Teilnehmer:innen über vordefinierte Antworten ab."
@@ -164,8 +172,10 @@
    :productpage.poll.multiple/subtitle "Wenn du mehr als nur eine Antwort zählen lassen möchtest, wähle Multiple-Choice Antworten, um deinen Teilnehmer:innen die Freiheit zu bieten mehr als nur eine Antwort anzukreuzen."
 
    ;; Activation Feature
-   :productpage.activation/title "Live Aktivierung"
+   :productpage.activation/heading "Live Aktivierung"
    :productpage.activation/subtitle "So bleiben deine Teilnehmer:innen am Ball und schalten mental nicht ab."
+   :productpage.activation/title "Einfachste Publikumsaktivierung – live und virtuell!"
+   :productpage.activation/description "Teilnahmslos zu Aktiv in einem Klick. Die schnaq-aktivierung erlaubt blitzschnelles Feedback und digitales Händeheben."
    :productpage.activation/cta-button "Aktiviere jetzt dein Publikum!"
    :productpage.activation.torooo/title "Lass etwas von deinem Publikum hören!"
    :productpage.activation.torooo/subtitle "Binde dein Publikum aktiv in deine Veranstaltung ein! Deine Teilnehmer:innen können dir mit einem Klick auf den Törööö-Knopf sofort Feedback geben. Beispielsweise wie viele Sprachen sie sprechen oder wie viele Serien sie diese Woche bereits geguckt haben."
@@ -746,7 +756,7 @@
    :analytics.users.table/name "Name"
    :analytics.users.table/email "E-Mail"
 
-;; Supporters
+   ;; Supporters
    :supporters/heading "Mit freundlicher Unterstützung von:"
    :startpage/team-schnaq "Wir arbeiten tagtäglich daran unseren Beitrag für einen besseren Wissensaustausch zu leisten, bei dem alle gehört werden."
    :startpage/team-schnaq-heading "Lerne das Team hinter schnaq kennen"

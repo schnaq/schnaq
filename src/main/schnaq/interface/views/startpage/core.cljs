@@ -130,7 +130,8 @@
 (defn- startpage-content []
   [:div.overflow-hidden
    [pages/with-nav-and-header
-    {:page/title (labels :startpage/heading)
+    {:page/title (labels :startpage/title)
+     :page/description (labels :startpage/description)
      :page/vertical-header? true
      :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
     [:div.wave-background

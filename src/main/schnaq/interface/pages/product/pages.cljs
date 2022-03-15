@@ -3,8 +3,10 @@
 
 (defn- product-tour []
   [elements/product-page
-   :productpage.overview/title
+   :productpage.overview/heading
    :productpage.overview/subtitle
+   :productpage.overview/title
+   :productpage.overview/description
    :productpage.overview/cta-button
    nil
    [:<>
@@ -36,8 +38,10 @@
 
 (defn- product-qa []
   [elements/product-page
-   :productpage.qa/title
+   :productpage.qa/heading
    :productpage.qa/subtitle
+   :productpage.qa/title
+   :productpage.qa/description
    :productpage.qa/cta-button
    :feature/free
    [:<>
@@ -62,8 +66,10 @@
 
 (defn- product-poll []
   [elements/product-page
-   :productpage.poll/title
+   :productpage.poll/heading
    :productpage.poll/subtitle
+   :productpage.poll/title
+   :productpage.poll/description
    :productpage.poll/cta-button
    :feature/pro
    [:<>
@@ -87,8 +93,10 @@
 
 (defn- product-activation []
   [elements/product-page
-   :productpage.activation/title
+   :productpage.activation/heading
    :productpage.activation/subtitle
+   :productpage.activation/title
+   :productpage.activation/description
    :productpage.activation/cta-button
    :feature/pro
    [:<>

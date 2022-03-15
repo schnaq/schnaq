@@ -148,8 +148,10 @@
   [description]
   [(? string?) :ret any?]
   (when (and (not shared-config/embedded?) description)
-    (.setAttribute (.querySelector js/document "meta[name='description']") "content" description)
-    (.setAttribute (.querySelector js/document "meta[name='og:description']") "content" description)))
+    (when-let [selector (.querySelector js/document "meta[name='description']")]
+      (.setAttribute selector "content" description))
+    (when-let [og-selector (.querySelector js/document "meta[name='og:description']")]
+      (.setAttribute og-selector "content" description))))
 
 ;; -----------------------------------------------------------------------------
 ;; schnaqqi speak

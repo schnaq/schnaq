@@ -45,6 +45,8 @@
    ;; Startpage
    :startpage/heading "Collecting questions made simple"
    :startpage/subheading "Events as interactive as they should be!"
+   :startpage/title "The most secure software for increased audience engagement."
+   :startpage/description "The most secure audience interaction software for your live and virtual events. Interact with your audience through Live Q&A, Real time polling… Try it for free!"
    :startpage/hook "Gather questions, understand your audience, share knowledge. Schnaq picks up where others leave off!"
    :schnaq.startpage.cta/button "Create a free schnaq now!"
    :startpage.social-proof/teaser "You are one click away from joining hundreds of other schnaq users 👋"
@@ -121,8 +123,10 @@
    ;; Product Pages
    :productpage/title "Product Overview"
    :productpage/button "Product"
-   :productpage.overview/title "Events as interactive as they should be"
+   :productpage.overview/heading "Events as interactive as they should be"
    :productpage.overview/subtitle "schnaq is the Swiss army knife for your event"
+   :productpage.overview/title "Discover the powerful and easy to use features of schnaq"
+   :productpage.overview/description "Schnaq – your one stop solution to better understand and engage your audience during workshops, events and conferences."
    :productpage.overview/cta-button "Start now for free"
    :productpage.overview.qa/title "Your participants have questions, you have answers"
    :productpage.overview.qa/text "Answer questions once and use them again in your next event. Gain an instant overview and save time in the future."
@@ -137,8 +141,10 @@
    :productpage/available-soon "Available soon"
 
    ;; QA Feature
-   :productpage.qa/title "Live Q&A"
+   :productpage.qa/heading "Live Q&A"
    :productpage.qa/subtitle "Answering questions before, during and after the event"
+   :productpage.qa/title "Free live Q&A software for better audience engagement"
+   :productpage.qa/description "Through live Q&A, schnaq helps events, conferences and workshops in increasing audience engagement by 78%!"
    :productpage.qa/cta-button "Start your Q&A now for free!"
    :productpage.qa.focus/title "Focus your participants"
    :productpage.qa.focus/subtitle "Your participants will receive a reduced view. If necessary, they can switch to the overview at any time."
@@ -152,8 +158,10 @@
    :productpage.qa.relevant/subtitle "Some questions are on the tip of several people's tongues. With one click, your participants can mark questions as relevant or irrelevant. This way, the most important questions are displayed at the top of the overview."
 
    ;; Poll Feature
-   :productpage.poll/title "Live Polls"
+   :productpage.poll/heading "Live Polls"
    :productpage.poll/subtitle "Create polls as easy as never before."
+   :productpage.poll/title "Real time polling platform. Engage your audience like never before."
+   :productpage.poll/description "Be it events, workshops or conferences. Provide an inclusive experience to all your audience with schnaq's Real-time polling feature."
    :productpage.poll/cta-button "Create your polls now!"
    :productpage.poll-vote/title "Let your audience vote!"
    :productpage.poll-vote/subtitle "Find out what your audience thinks. With polls, your participants vote on predefined answers."
@@ -163,8 +171,10 @@
    :productpage.poll.multiple/subtitle "If you want more than one answer to count, choose multiple-choice answers to give your participants the freedom to tick more than one answer."
 
    ;; Activation Feature
-   :productpage.activation/title "Live Activation"
+   :productpage.activation/heading "Live Activation"
    :productpage.activation/subtitle "Keep your participants on the ball!"
+   :productpage.activation/title "Easiest live & virtual audience activation tool."
+   :productpage.activation/description "Dormant to active audience transition is just one click away! Live audience activation tool let them quickly give feedback and digitally raise their hands."
    :productpage.activation/cta-button "Activate your audience now!"
    :productpage.activation.torooo/title "Let's hear from your audience!"
    :productpage.activation.torooo/subtitle "Get your audience actively involved in your event! Your participants can give you immediate feedback by clicking on the Torooo button. For example, how many languages they speak or how many series they have already watched this week."
