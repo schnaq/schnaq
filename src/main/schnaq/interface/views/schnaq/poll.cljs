@@ -196,7 +196,7 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          single-choice? (= :poll.type/single-choice (:poll/type poll))
          poll-id (:db/id poll)
-         chosen-option (if single-choice?
+         chosen-option (if (and single-choice? (oget form-elements :option-choice))
                          (js/parseInt (oget form-elements :option-choice :value))
                          (tools/checked-values (oget form-elements :option-choice)))
          poll-update-fn (if single-choice?
@@ -254,9 +254,10 @@
 (rf/reg-event-fx
  :schnaq.polls/load-from-backend
  (fn [{:keys [db]} _]
-   {:fx [(http/xhrio-request db :get "/polls"
-                             [:schnaq.polls.load-from-backend/success]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
+   {:fx [(http/xhrio-request
+          db :get "/polls"
+          [:schnaq.polls.load-from-backend/success]
+          {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-db
  :schnaq.polls.load-from-backend/success
@@ -272,8 +273,12 @@
 (rf/reg-event-fx
  :poll/delete
  (fn [{:keys [db]} [_ poll-id]]
-   {:fx [(http/xhrio-request db :delete "/poll/delete"
-                             [:no-op]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
-                              :poll-id poll-id})]}))
+   {:db (let [polls (get-in db [:schnaq :current :polls])]
+          (assoc-in db [:schnaq :current :polls]
+                    (remove #(= poll-id (:db/id %)) polls)))
+    :fx [(http/xhrio-request
+          db :delete "/poll/delete"
+          [:no-op]
+          {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+           :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
+           :poll-id poll-id})]}))
