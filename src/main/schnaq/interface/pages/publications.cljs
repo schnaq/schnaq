@@ -84,6 +84,8 @@
   [pages/with-nav-and-header
    {:page/heading (labels :publications/heading)
     :page/subheading [:<> (labels :publications/subheading) " " [icon :flask]]
+    :page/title (labels :publications/title)
+    :page/description (labels :publications/description)
     :page/vertical-header? true}
    [:div.container
     [publication-primer]

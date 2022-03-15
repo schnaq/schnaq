@@ -50,6 +50,8 @@
   [pages/with-nav-and-header
    {:page/heading (labels :press-kit/heading)
     :page/subheading (labels :press-kit/subheading)
+    :page/title (labels :press-kit/title)
+    :page/description (labels :press-kit/description)
     :page/vertical-header? true}
    [:div.container.chat-background
     [:section.w-75.mx-auto

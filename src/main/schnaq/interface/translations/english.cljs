@@ -357,6 +357,8 @@
    ;; Press Kit
    :press-kit/heading "Press & Media"
    :press-kit/subheading "We are happy to be available for interviews and articles!"
+   :press-kit/title "Press & Media."
+   :press-kit/description "From schnaq's press center you can get the latest schnaq logos, screenshots and images."
    :press-kit.intro/heading "Thank you for your interest in schnaq!"
    :press-kit.intro/lead "Please take a moment to read our brand guidelines. If you have any press enquiries or would like to write about us, please email presse@schnaq.com. We would love to talk to you!"
    :press-kit.spelling/heading "Correct Spelling and Pronunciation"
@@ -379,6 +381,8 @@
    ;; Publications
    :publications/heading "Publications and Articles"
    :publications/subheading "The Science behind schnaq"
+   :publications/title "Publications and Articles from Experts."
+   :publications/description "Publications contain schnaq news, publications, reports and mentions, which are centered around the audience response software."
    :publications.primer/heading "From Science into Practice"
    :publications.primer/body "The software we develop is based not only on experience, but also on many years of research in the fields of discussion and communication. Here you will find scientific articles, newspaper articles and other publications that originate from our team or have been produced in cooperation with our team."
 
@@ -622,6 +626,8 @@
 
    :about-us.page/heading "About Us"
    :about-us.page/subheading "Information about us"
+   :about-us.page/title "Schnaq Mission and Values - Learn more about schnaq's story."
+   :about-us.page/description "Schnaq – an audience interaction platform to facilitate live and virtual audience engagement through live q&a, realtime polling and live audience activation tools."
 
    ;; Legal Note
    :legal-note.page/heading "Legal Note"
@@ -969,6 +975,8 @@ Now we write down questions and discuss them and can still understand what we ha
 
    ;; Pricing Page
    :pricing/headline "Switch to schnaq"
+   :pricing/title "Pricing options fit for your needs."
+   :pricing/description "See the free and competitive pricing packages of schnaq. Choose the best plan that fits your need."
    :pricing.intro/heading "schnaq helps you gain more insights from your webinars."
    :pricing.free-tier/title "Free"
    :pricing.free-tier/subtitle "Forever"

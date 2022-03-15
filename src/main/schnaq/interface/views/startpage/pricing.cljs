@@ -227,6 +227,8 @@
   []
   [pages/with-nav-and-header
    {:page/heading (labels :pricing/headline)
+    :page/title (labels :pricing/title)
+    :page/description (labels :pricing/description)
     :page/vertical-header? true}
    [:<>
     [:div.container

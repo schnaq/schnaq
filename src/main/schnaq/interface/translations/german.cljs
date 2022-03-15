@@ -357,6 +357,8 @@
    ;; Press Kit
    :press-kit/heading "Presse & Medien"
    :press-kit/subheading "Wir stehen gerne für Interviews und Artikel zur Verfügung!"
+   :press-kit/title "Presse & Medien."
+   :press-kit/description "In schnaq's Presseseite findest du die neuesten Nachrichten, Bilder, Logos und Pressekits."
    :press-kit.intro/heading "Vielen Dank für Ihr Interesse an schnaq!"
    :press-kit.intro/lead "Bitte nehmen Sie sich einen Moment Zeit, um unsere Markenrichtlinien zu lesen. Wenn Sie Presseanfragen haben oder über uns schreiben möchten, senden Sie eine E-Mail an presse@schnaq.com. Wir würden uns sehr gerne mit Ihnen unterhalten!"
    :press-kit.spelling/heading "Richtige Schreibweise und Aussprache"
@@ -379,6 +381,8 @@
    ;; Publications
    :publications/heading "Publikationen und Artikel"
    :publications/subheading "Die Wissenschaft hinter schnaq"
+   :publications/title "Publikationen und Artikel von Experten."
+   :publications/description "Sieh dir schnaq Nachrichten, Publikationen, Berichte und Erwähnungen an, die sich um Audience Response Software drehen."
    :publications.primer/heading "Von der Wissenschaft in die Praxis"
    :publications.primer/body "Die Software, die wir entwickeln, basiert nicht nur auf Erfahrung, sondern auch auf langjähriger Forschung auf den Gebieten der Diskussion und Kommunikation. Hier finden Sie wissenschaftliche Artikel, Zeitungsbeiträge und weitere Publikationen, die von unserem Team stammen, oder in Kooperation mit unserem Team entstanden sind"
 
@@ -621,6 +625,8 @@
 
    :about-us.page/heading "Über uns"
    :about-us.page/subheading "Informationen zu uns"
+   :about-us.page/title "Schnaq's Mission und Werte – Lerne mehr über schnaq's Geschichte."
+   :about-us.page/description "Schnaq – eine Plattform für Publikumsinteraktion, die  live und virtuelle Events verbessert. Nutze Live Q&A, Umfragen, Wortwolken und viel mehr."
 
    ;; Legal Note
    :legal-note.page/heading "Impressum"
@@ -969,6 +975,8 @@
 
    ;; Pricing Page
    :pricing/headline "Wechsle zu schnaq"
+   :pricing/title "Preise, die zu jedem Zweck passen."
+   :pricing/description "Siehe dir die kostenfreien und erschwinglichen Pakete von schnaq an. Wähle das, was am besten zu dir passt."
    :pricing.intro/heading "schnaq hilft dir mehr Erkenntnisse aus deinen Webinaren zu gewinnen."
    :pricing.free-tier/title "Frei"
    :pricing.free-tier/subtitle "für immer"
