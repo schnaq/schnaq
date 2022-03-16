@@ -41,7 +41,7 @@
         downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)
         authenticated? @(rf/subscribe [:user/authenticated?])]
     [:div.d-flex.flex-row.align-items-center
-     [:div.me-2
+     [:div.me-1
       {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")
        :on-click (fn [e]
                    (.stopPropagation e)
@@ -49,8 +49,8 @@
                      (rf/dispatch [:discussion/toggle-upvote statement])
                      (rf/dispatch [:schnaq.vote/toggle-anonymous statement :upvote])))}
       [icon :arrow-up "vote-arrow m-auto"]]
-     [:span.me-3 (get-up-votes statement votes)]
-     [:div.me-2
+     [:span.me-2 (get-up-votes statement votes)]
+     [:div.me-1
       {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")
        :on-click (fn [e]
                    (.stopPropagation e)

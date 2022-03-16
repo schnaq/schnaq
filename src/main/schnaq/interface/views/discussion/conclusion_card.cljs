@@ -126,31 +126,38 @@
          [input/reply-in-statement-input-form statement]
          additional-content]]]])))
 
+(defn- discuss-answer-button [statement]
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
+        statement-num (:meta/sub-statement-count statement 0)]
+    [:a.btn.btn-sm.btn-outline-dark.me-3.px-1.py-0
+     {:href (navigation/href :routes.schnaq.select/statement {:share-hash share-hash
+                                                              :statement-id (:db/id statement)})}
+     [:div.d-flex.flex-wrap.align-items-center
+      [:small (labels :statement/discuss)]
+      [:small.ms-2
+       statement-num
+       [icon :comment/alt "ms-1"]]]]))
+
 (defn reduced-statement-card
   "A reduced statement-card focusing on the statement."
   [statement with-answer?]
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [motion/fade-in-and-out
-     [:article.statement-card.mt-1.border
-      [:div.d-flex.flex-row
-       [:div.me-2 {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
-       [:div.card-view.card-body.p-2
-        [:div.d-flex.justify-content-start.pt-2
-         [user/user-info statement 25 "w-100"]
-         [badges/edit-statement-dropdown-menu statement]]
-        [:div.my-3]
-        [:div.text-typography
-         [truncated-content/statement statement]]
-        [:div.d-flex.flex-wrap.align-items-center
-         [:a.btn.btn-sm.btn-outline-dark.me-3.px-1.py-0
-          {:href (navigation/href :routes.schnaq.select/statement {:share-hash share-hash
-                                                                   :statement-id (:db/id statement)})}
-          [icon :comments "my-auto me-1"]
-          [:small (labels :statement/discuss)]]
-         [reactions/up-down-vote statement]
-         (when with-answer?
-           [:div.d-flex.flex-row.align-items-center.ms-auto
-            [mark-as-answer-button statement]])]]]]]))
+  [motion/fade-in-and-out
+   [:article.statement-card.mt-1.border
+    [:div.d-flex.flex-row
+     [:div.me-2 {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
+     [:div.card-view.card-body.p-2
+      [:div.d-flex.justify-content-start.pt-2
+       [user/user-info statement 25 "w-100"]
+       [badges/edit-statement-dropdown-menu statement]]
+      [:div.my-3]
+      [:div.text-typography
+       [truncated-content/statement statement]]
+      [:div.d-flex.flex-wrap.align-items-center
+       [discuss-answer-button statement]
+       [reactions/up-down-vote statement]
+       (when with-answer?
+         [:div.d-flex.flex-row.align-items-center.ms-auto
+          [mark-as-answer-button statement]])]]]]])
 
 (defn reduced-or-edit-card
   "Wrap reduced statement card to make it editable."
