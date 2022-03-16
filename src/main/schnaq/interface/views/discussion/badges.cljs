@@ -4,8 +4,11 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.modal :as modal]))
+            [schnaq.interface.views.modal :as modal]
+            [schnaq.interface.views.notifications :refer [notify!]]
+            [schnaq.links :as schnaq-links]))
 
 (defn- anonymous-edit-modal
   "Show this modal to anonymous users trying to edit statements."
@@ -49,7 +52,23 @@
                   (.stopPropagation e)
                   (if edit-hash (admin-delete-fn) (user-delete-fn)))
       :title (labels :discussion.badges/delete-statement)}
-     [icon :trash "my-auto me-1"] " " (labels :discussion.badges/delete-statement)]))
+     [icon :trash "my-auto me-2"] (labels :discussion.badges/delete-statement)]))
+
+(defn- share-link-to-statement
+  "Copies a link to the statement to the clipboard"
+  [statement]
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
+        link (schnaq-links/get-link-to-statement share-hash (:db/id statement))]
+    [:button.dropdown-item
+     {:tabIndex 40
+      :on-click (fn []
+                  (clipboard/copy-to-clipboard! link)
+                  (notify! (labels :schnaq/link-copied-heading)
+                           (labels :schnaq/link-copied-success)
+                           :info
+                           false))
+      :title (labels :discussion.badges/share-statement)}
+     [icon :share "my-auto me-2"] (labels :discussion.badges/share-statement)]))
 
 (defn- edit-dropdown-button
   "Edit button to trigger custom functionality."
@@ -60,7 +79,7 @@
                 (.stopPropagation e)
                 (on-click-fn))
     :title (labels :discussion.badges/edit-statement)}
-   [icon :edit "my-auto"] " " (labels :discussion.badges/edit-statement)])
+   [icon :edit "my-auto me-1"] (labels :discussion.badges/edit-statement)])
 
 (defn- edit-dropdown-button-statement
   "Give the registered user the ability to edit their statement."
@@ -126,7 +145,7 @@
       :on-click (fn [e] (.stopPropagation e)
                   (flag-statement-fn))
       :title (labels :discussion.badges/edit-statement)}
-     [icon :flag "my-auto me-1"] " " (labels :statement/flag-statement)]))
+     [icon :flag "my-auto me-2"] (labels :statement/flag-statement)]))
 
 (rf/reg-event-fx
  :statement/flag
@@ -168,11 +187,13 @@
         editable? (editable? statement user-id creation-secrets)]
     [statement-dropdown-menu dropdown-id
      [:<>
+      [:dropdown-item
+       [share-link-to-statement statement]]
+      [:dropdown-item
+       [flag-dropdown-button-statement statement]]
       (when editable?
         [:dropdown-item
          [edit-dropdown-button-statement statement]])
-      [:dropdown-item
-       [flag-dropdown-button-statement statement]]
       (when deletable?
         [:dropdown-item
          [delete-dropdown-button statement current-edit-hash]])]]))
