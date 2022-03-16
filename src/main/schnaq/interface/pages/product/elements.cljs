@@ -79,12 +79,12 @@
 (defn qa-feature-row
   "First Q&A feature row with a phone and website mock-up."
   []
-  (let [subtitle-focus [:div.display-6.text-typography (labels :productpage.qa.focus/subtitle)]
+  (let [subtitle-focus [:div.display-6.text-typography (labels :productpage.qa.mobile/subtitle)]
         subtitle-overview [:div.display-6.text-typography (labels :productpage.qa.overview/subtitle)]]
     [:<>
      [:div.row.py-5.mt-5
       [:div.col-12.col-lg-6.px-5
-       [:div.display-4.text-primary.mb-5 (labels :productpage.qa.focus/title)]
+       [:div.display-4.text-primary.mb-5 (labels :productpage.qa.mobile/title)]
        [:div.d-lg-none subtitle-focus]]
       [:div.col-12.col-lg-6.px-5.mt-5.mt-lg-0
        [:div.display-4.text-primary.mb-5 (labels :productpage.qa.overview/title)]]
