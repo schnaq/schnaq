@@ -177,31 +177,35 @@
         [:dropdown-item
          [delete-dropdown-button statement current-edit-hash]])]]))
 
+(defn- show-number-of-replies [statement]
+  (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
+        share-hash @(rf/subscribe [:schnaq/share-hash])
+        old-statement-num (get old-statements-nums-map (:db/id statement) 0)
+        statement-num (:meta/sub-statement-count statement 0)
+        new? (not (= old-statement-num statement-num))]
+    [:a.badge.rounded-pill.badge-transparent.badge-clickable
+     {:href (navigation/href :routes.schnaq.select/statement {:share-hash share-hash
+                                                              :statement-id (:db/id statement)})
+      :role :button}
+     [:div.d-flex.flex-wrap.align-items-center
+      (if new?
+        [icon :comment/alt "m-auto text-secondary me-1"]
+        [icon :comment/alt "m-auto me-1"])
+      statement-num " "
+      (if (= 1 statement-num)
+        (labels :statement.badges/more-post)
+        (labels :statement.badges/more-posts))]]))
+
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
   ([statement]
    [extra-discussion-info-badges statement false])
   ([statement with-edit-dropdown?]
-   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
-         share-hash @(rf/subscribe [:schnaq/share-hash])
-         old-statement-num (get old-statements-nums-map (:db/id statement) 0)
-         statement-num (:meta/sub-statement-count statement 0)
-         new? (not (= old-statement-num statement-num))]
-     [:div.d-flex.flex-row.align-items-center
-      [:a.badge.rounded-pill.badge-transparent.badge-clickable.ms-3
-       {:href (navigation/href :routes.schnaq.select/statement {:share-hash share-hash
-                                                                :statement-id (:db/id statement)})
-        :role :button}
-       (if new?
-         [icon :comments "m-auto text-secondary me-1"]
-         [icon :comments "m-auto me-1"])
-       statement-num " "
-       (if (= 1 statement-num)
-         (labels :statement.badges/more-post)
-         (labels :statement.badges/more-posts))]
-      (when with-edit-dropdown?
-        [:div.ms-2
-         [edit-statement-dropdown-menu statement]])])))
+   [:div.d-flex.flex-row.align-items-center
+    [show-number-of-replies statement]
+    (when with-edit-dropdown?
+      [:div.ms-2
+       [edit-statement-dropdown-menu statement]])]))
 
 (defn comments-info-badge
   "Badge that display the comment count."
