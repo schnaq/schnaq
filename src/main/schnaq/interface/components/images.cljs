@@ -58,7 +58,7 @@
     :productpage.overview/activation "https://s3.schnaq.com/schnaq-common/product-page/activation.jpg"
     :productpage.overview/analysis "https://s3.schnaq.com/schnaq-common/product-page/analysis.jpg"
     :productpage.qa/overview "https://s3.schnaq.com/schnaq-common/product-page/qa-overview.jpg"
-    :productpage.qa/phone "https://s3.schnaq.com/schnaq-common/product-page/qa-phone.png"
+    :productpage.qa/phone "https://s3.schnaq.com/schnaq-common/product-page/schnaq-phone.png"
     :productpage.qa/answers "https://s3.schnaq.com/schnaq-common/product-page/qa-answers.jpg"
     :productpage.qa/input "https://s3.schnaq.com/schnaq-common/product-page/qa-input.jpg"
     :productpage.qa/relevant "https://s3.schnaq.com/schnaq-common/product-page/qa-relevant.jpg"
