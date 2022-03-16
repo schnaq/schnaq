@@ -691,6 +691,7 @@
    :discussion.notification/new-content-title "New statement!"
    :discussion.notification/new-content-body "Your statement was added successfully!"
    :discussion.badges/edit-statement "edit"
+   :discussion.badges/share-statement "copy link"
    :discussion.badges/statement-by "by"
    :discussion.badges/new "New"
    :discussion.button/text "Overview"

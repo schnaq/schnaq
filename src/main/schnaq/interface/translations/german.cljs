@@ -690,6 +690,7 @@
    :discussion.notification/new-content-title "Neuer Beitrag!"
    :discussion.notification/new-content-body "Dein Beitrag wurde erfolgreich gespeichert."
    :discussion.badges/edit-statement "editieren"
+   :discussion.badges/share-statement "Link kopieren"
    :discussion.badges/statement-by "von"
    :discussion.badges/new "Neu"
    :discussion.button/text "Übersicht"
