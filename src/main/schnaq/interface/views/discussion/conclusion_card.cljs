@@ -149,7 +149,6 @@
       [:div.d-flex.justify-content-start.pt-2
        [user/user-info statement 25 "w-100"]
        [badges/edit-statement-dropdown-menu statement]]
-      [:div.my-3]
       [:div.text-typography
        [truncated-content/statement statement]]
       [:div.d-flex.flex-wrap.align-items-center
