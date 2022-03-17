@@ -10,6 +10,7 @@
             [schnaq.notification-service.mail-builder :as mail-builder]
             [schnaq.notification-service.schedule :as schedule]
             [schnaq.notification-service.specs]
+            [schnaq.shared-toolbelt :as tools]
             [taoensso.timbre :as log]))
 
 (>defn- discussions-with-new-statements-in-interval
@@ -21,7 +22,7 @@
   (let [subscribed-discussions (discussion-db/discussions-by-share-hashes (user-db/subscribed-share-hashes interval))
         discussions (discussion-db/discussions-with-new-statements
                      subscribed-discussions timestamp)]
-    (into {} (map (juxt :discussion/share-hash identity) discussions))))
+    (tools/normalize :discussion/share-hash discussions)))
 
 (>defn- remove-discussions-with-no-other-users
   "Remove those discussions, where the user is the only author of newly created
