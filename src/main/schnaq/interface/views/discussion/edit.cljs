@@ -90,6 +90,7 @@
    (let [updated-statement (:updated-statement response)]
      {:db (-> db
               (update-in [:discussion :premises :current] #(tools/update-statement-in-list % updated-statement))
+              (assoc-in [:discussion :premises :current2 (:db/id updated-statement)] updated-statement)
               (update-in [:history :full-context] #(vec (tools/update-statement-in-list % updated-statement)))
               (update-in [:discussion :conclusion :selected] #(if (= (:db/id %) (:db/id updated-statement))
                                                                 updated-statement

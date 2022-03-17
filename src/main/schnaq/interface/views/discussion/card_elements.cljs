@@ -16,6 +16,7 @@
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.filters :as filters]
             [schnaq.interface.views.howto.elements :as how-to-elements]
+            [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.user :as user-utils]))
 
 (defn- back-button
@@ -139,6 +140,7 @@
          visited (map :db/id starting-conclusions)]
      {:db (-> db
               (assoc-in [:discussion :premises :current] starting-conclusions)
+              (assoc-in [:discussion :premises :current2] (shared-tools/normalize :db/id starting-conclusions))
               (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) visited))
       ;; hier die seen setzen
       :fx [[:dispatch [:votes.local/reset]]]})))

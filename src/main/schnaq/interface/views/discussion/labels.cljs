@@ -38,9 +38,10 @@
 (rf/reg-event-db
  :statement.labels.update/success
  (fn [db [_ response]]
-   (let [updated-statement (:statement response)]
+   (let [{:keys [db/id] :as updated-statement} (:statement response)]
      (-> db
          (update-in [:discussion :premises :current] #(tools/update-statement-in-list % updated-statement))
+         (assoc-in [:discussion :premises :current2 id] updated-statement)
          (update-in [:discussion :conclusion :selected] #(if (= (:db/id %) (:db/id updated-statement))
                                                            updated-statement
                                                            %))))))

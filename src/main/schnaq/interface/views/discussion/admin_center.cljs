@@ -170,10 +170,12 @@
      (if (= :deleted method)
        (-> db
            (update-in [:discussion :conclusion :selected] mark-starting-fn)
-           (update-in [:discussion :premises :current] delete-fn))
+           (update-in [:discussion :premises :current] delete-fn)
+           (update-in [:discussion :premises :current2 statement-id] dissoc))
        (-> db
            (update-in [:discussion :conclusion :selected] mark-starting-fn)
            (update-in [:discussion :premises :current] mark-fn)
+           (assoc-in [:discussion :premises :current2 statement-id :statement/content] config/deleted-statement-text)
            (update-in [:history :full-context] mark-fn))))))
 
 (rf/reg-event-fx
