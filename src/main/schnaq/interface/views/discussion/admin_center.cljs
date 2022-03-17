@@ -162,7 +162,6 @@
                             (assoc % :statement/content config/deleted-statement-text)
                             %)
                          coll))
-         delete-fn (fn [coll] (remove #(= statement-id (:db/id %)) coll))
          mark-starting-fn #(if (= (:db/id %) statement-id)
                              (assoc % :statement/content config/deleted-statement-text)
                              %)
@@ -170,12 +169,10 @@
      (if (= :deleted method)
        (-> db
            (update-in [:discussion :conclusion :selected] mark-starting-fn)
-           (update-in [:discussion :premises :current] delete-fn)
-           (update-in [:discussion :premises :current2 statement-id] dissoc))
+           (update-in [:discussion :premises :current] dissoc statement-id))
        (-> db
            (update-in [:discussion :conclusion :selected] mark-starting-fn)
-           (update-in [:discussion :premises :current] mark-fn)
-           (assoc-in [:discussion :premises :current2 statement-id :statement/content] config/deleted-statement-text)
+           (assoc-in [:discussion :premises :current statement-id :statement/content] config/deleted-statement-text)
            (update-in [:history :full-context] mark-fn))))))
 
 (rf/reg-event-fx
