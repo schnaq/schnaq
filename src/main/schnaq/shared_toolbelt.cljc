@@ -1,7 +1,8 @@
 (ns schnaq.shared-toolbelt
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [>defn =>]]))
+            [com.fulcrologic.guardrails.core :refer [>defn =>]]
+            [schnaq.database.specs :as specs]))
 
 (>defn slugify
   "Make a slug from a string. For example:
@@ -26,3 +27,9 @@
   [ident coll]
   [keyword? (s/coll-of map?) => map?]
   (into {} (map (juxt ident identity) coll)))
+
+(>defn answered?
+  "Check if a child exists, which has the label :check."
+  [{:keys [statement/children]}]
+  [map? :ret boolean?]
+  (string? ((set (flatten (map :statement/labels children))) ":check")))
