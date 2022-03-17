@@ -372,13 +372,14 @@
   [share-hash timestamp]
   [:discussion/share-hash inst? :ret (s/coll-of ::specs/statement)]
   (let [db (d/db (main-db/new-connection))]
-    (d/q '[:find [(pull ?statements pattern) ...]
-           :in $ $time-slot ?share-hash pattern
-           :where
-           [?discussion :discussion/share-hash ?share-hash]
-           [$time-slot ?statements :statement/discussions ?discussion]
-           (not [?statements :statement/deleted? true])]
-         db (d/since db timestamp) share-hash patterns/statement)))
+    (toolbelt/pull-key-up
+     (d/q '[:find [(pull ?statements pattern) ...]
+            :in $ $time-slot ?share-hash pattern
+            :where
+            [?discussion :discussion/share-hash ?share-hash]
+            [$time-slot ?statements :statement/discussions ?discussion]
+            (not [?statements :statement/deleted? true])]
+          db (d/since db timestamp) share-hash patterns/statement))))
 
 (>defn- new-statements+author->discussion
   "Check for new statements and the corresponding authors in the discussion."
