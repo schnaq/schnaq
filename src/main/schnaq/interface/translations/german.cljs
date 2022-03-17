@@ -597,7 +597,7 @@
     [:p
      "Handelsregister: HRB 95753" [:br]
      "Registergericht: Amtsgericht Düsseldorf"]
-    [:p "USt-InNr.: DE349912851"]
+    [:p "USt-IdNr.: DE349912851"]
     [:p "Vertreten durch die Geschäftsführung:" [:br]
      "Dr. Alexander Schneider, Dr. Christian Meter und Michael Birkhoff"]
     [:p "Rechtlich bindend ist die deutsche Fassung dieser Seite."]]
