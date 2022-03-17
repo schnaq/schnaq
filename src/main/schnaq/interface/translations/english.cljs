@@ -598,6 +598,7 @@
     [:p
      "Commercial Register (Handelsregister): HRB 95753" [:br]
      "Register court: Local Court (Amtsgericht) of Düsseldorf"]
+    [:p "VAT ID No.: DE349912851"]
     [:p "Represented by the management:" [:br]
      "Dr Alexander Schneider, Dr Christian Meter, and Michael Birkhoff"]
     [:p "Legally binding is the German version of this page."]]
