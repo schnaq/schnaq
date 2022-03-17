@@ -285,6 +285,7 @@
    :schnaq.input-type/answer "Answer"
    :schnaq.input-type/poll "Poll"
    :schnaq.input-type/activation "Activation"
+   :schnaq.input-type/word-cloud "Word Cloud"
    :schnaq.input-type/coming-soon "Coming Soon"
    :schnaq.input-type/not-admin "Only for moderators"
    :schnaq.input-type/pro-only "Only for pro users"

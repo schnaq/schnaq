@@ -21,6 +21,7 @@
             [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.schnaq.poll :as poll]
             [schnaq.interface.views.schnaq.reactions :as reactions]
+            [schnaq.interface.views.schnaq.wordcloud-card :as wordcloud-card]
             [schnaq.interface.views.user :as user]))
 
 (defn- call-to-action-schnaq
@@ -335,6 +336,7 @@
     (fn []
       (let [poll-tab [:span [iconed-heading :chart-pie :schnaq.input-type/poll]]
             activation-tab [:span [iconed-heading :magic :schnaq.input-type/activation]]
+            word-cloud-tab [:span [iconed-heading :cloud :schnaq.input-type/word-cloud]]
             pro-user? @(rf/subscribe [:user/pro-user?])
             admin-access? @(rf/subscribe [:schnaq.current/admin-access])
             read-only? @(rf/subscribe [:schnaq.selected/read-only?])
@@ -367,7 +369,13 @@
                     {:class (active-class :activation)
                      :role "button"
                      :on-click #(on-click :activation)}
-                    activation-tab]]]
+                    activation-tab]]
+                  [:li.nav-item
+                   [:button.nav-link
+                    {:class (active-class :word-cloud)
+                     :role "button"
+                     :on-click #(on-click :word-cloud)}
+                    word-cloud-tab]]]
                  [:<>
                   [:li.nav-item
                    [:button.nav-link.text-muted
@@ -380,7 +388,8 @@
           (case @selected-option
             :question [input-form-or-disabled-alert]
             :poll [poll/poll-form]
-            :activation [activation/activation-tab])]
+            :activation [activation/activation-tab]
+            :word-cloud [wordcloud-card/wordcloud-tab])]
          motion/card-fade-in-time]))))
 
 (defn- delay-fade-in-for-subsequent-content [index]
@@ -410,12 +419,14 @@
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
         activation (when top-level? [activation/activation-card])
         poll (when top-level? (poll/poll-list))
+        wordcloud (when top-level? (wordcloud-card/wordcloud-card))
         access-code @(rf/subscribe [:schnaq.selected/access-code])]
     [:div.row
      [:div.statement-column
       [selection-card]]
      activation
      poll
+     wordcloud
      statements
      (when-not (or search? (seq statements) (seq poll) (not access-code))
        [call-to-share])]))

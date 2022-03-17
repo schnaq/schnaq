@@ -285,6 +285,7 @@
    :schnaq.input-type/answer "Antwort"
    :schnaq.input-type/poll "Umfrage"
    :schnaq.input-type/activation "Aktivierung"
+   :schnaq.input-type/word-cloud "Wortwolke"
    :schnaq.input-type/coming-soon "Bald verfügbar"
    :schnaq.input-type/not-admin "Nur für Moderatoren"
    :schnaq.input-type/pro-only "Nur für Pro User"
@@ -313,6 +314,11 @@
    :schnaq.activation/delete-button "Löschen"
    :schnaq.activation/title "%ss gesamt:"
    :schnaq.activation/phrase "Törööö"
+
+   ;; Word Cloud feature
+   :schnaq.wordcloud/show "Wortwolke anzeigen"
+   :schnaq.wordcloud/hide "Wortwolke verbergen"
+   :schnaq.wordcloud/label "Zeige die häufigsten Wörter aus deinem schnaq als Wortwolke an."
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"
