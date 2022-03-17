@@ -47,7 +47,7 @@
 (rf/reg-sub
  :discussion.premises/current
  (fn [db _]
-   (if-let [premises (get-in db [:discussion :premises :current2])]
+   (if-let [premises (get-in db [:discussion :premises :current])]
      (map second premises)
      {})))
 

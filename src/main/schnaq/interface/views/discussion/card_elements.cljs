@@ -139,8 +139,7 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          visited (map :db/id starting-conclusions)]
      {:db (-> db
-              (assoc-in [:discussion :premises :current] starting-conclusions)
-              (assoc-in [:discussion :premises :current2] (shared-tools/normalize :db/id starting-conclusions))
+              (assoc-in [:discussion :premises :current] (shared-tools/normalize :db/id starting-conclusions))
               (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) visited))
       ;; hier die seen setzen
       :fx [[:dispatch [:votes.local/reset]]]})))

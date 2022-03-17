@@ -27,9 +27,7 @@
  :discussion.reaction.statement/added
  (fn [{:keys [db]} [_ response]]
    (let [new-statement (:new-statement response)]
-     {:db (-> db
-              (update-in [:discussion :premises :current] conj new-statement)
-              (assoc-in [:discussion :premises :current2 (:db/id new-statement)] new-statement))
+     {:db (assoc-in db [:discussion :premises :current (:db/id new-statement)] new-statement)
       :fx [[:dispatch [:notification/new-content]]
            [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
 
@@ -51,21 +49,11 @@
 
 (rf/reg-event-fx
  :discussion.reply.statement/added
- (fn [{:keys [db]} [_ parent-statement response]]
-   (let [new-statement (:new-statement response)
-         statement-id (:db/id parent-statement)
-         current-statements (get-in db [:discussion :premises :current])
-         add-answer-fn (fn [statement]
-                         (if (= statement-id (:db/id statement))
-                           (-> statement
-                               (update :meta/sub-statement-count inc)
-                               (update :statement/children #(conj % new-statement)))
-                           statement))
-         updated-statements (map add-answer-fn current-statements)]
+ (fn [{:keys [db]} [_ parent-statement {:keys [new-statement]}]]
+   (let [parent-statement-id (:db/id parent-statement)]
      {:db (-> db
-              (assoc-in [:discussion :premises :current] updated-statements)
-              (update-in [:discussion :premises :current2 statement-id :meta/sub-statement-count] inc)
-              (update-in [:discussion :premises :current2 statement-id :statement/children] conj new-statement))
+              (update-in [:discussion :premises :current parent-statement-id :meta/sub-statement-count] inc)
+              (update-in [:discussion :premises :current parent-statement-id :statement/children] conj new-statement))
       :fx [[:dispatch [:notification/new-content]]
            [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
 
@@ -157,8 +145,7 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:db (-> db
               (assoc-in [:discussion :conclusion :selected] conclusion)
-              (assoc-in [:discussion :premises :current] premises)
-              (assoc-in [:discussion :premises :current2] ;; WIP
+              (assoc-in [:discussion :premises :current]
                         (shared-tools/normalize :db/id premises))
               (assoc-in [:history :full-context] (vec history)))
       :fx [[:dispatch [:discussion.history/push conclusion]]

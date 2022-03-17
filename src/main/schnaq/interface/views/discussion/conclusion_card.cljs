@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [clojure.string :as cstring]
+  (:require [clojure.spec.alpha :as s]
+            [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -78,7 +78,7 @@
 (>defn- card-highlighting
   "Add card-highlighting to a statement card."
   [{:keys [meta/answered? statement/type]}]
-  [::specs/statement :ret string?]
+  [(s/keys :opt [:meta/answered? :statement/type]) :ret string?]
   (let [statement-type (when type (str "-" (name type)))]
     (if answered?
       "highlight-card-answered"
@@ -111,7 +111,7 @@
       [:div.d-flex.flex-row
        [:div {:class (card-highlighting statement)}]
        [:div.card-view.card-body.py-2.px-0
-        (when (:meta/new? statement)  ;; WIP
+        (when (:meta/new? statement) ;; WIP
           [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
            (labels :discussion.badges/new)])
         [:div.pt-2.d-flex.px-3
@@ -142,7 +142,6 @@
 (defn reduced-statement-card
   "A reduced statement-card focusing on the statement."
   [statement]
-  (println statement)
   [motion/fade-in-and-out
    [:article.statement-card.mt-1.border
     [:div.d-flex.flex-row
