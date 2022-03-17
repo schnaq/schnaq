@@ -1,5 +1,5 @@
 (ns schnaq.auth.lib
-  (:require [com.fulcrologic.guardrails.core :refer [>defn]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.user :as user-db]))
 
@@ -31,6 +31,8 @@
 (>defn pro-user?
   "Check that user has at least pro-access."
   [user-identity]
-  [map? :ret boolean?]
-  (or (beta-tester? user-identity)
-      (user-db/pro-subscription? (:sub user-identity))))
+  [(? map?) :ret boolean?]
+  (if user-identity
+    (or (beta-tester? user-identity)
+        (user-db/pro-subscription? (:sub user-identity)))
+    false))
