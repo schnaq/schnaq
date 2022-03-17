@@ -111,7 +111,7 @@
       [:div.d-flex.flex-row
        [:div {:class (card-highlighting statement)}]
        [:div.card-view.card-body.py-2.px-0
-        (when (:meta/new? statement)
+        (when (:meta/new? statement)  ;; WIP
           [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
            (labels :discussion.badges/new)])
         [:div.pt-2.d-flex.px-3
@@ -141,11 +141,13 @@
 
 (defn reduced-statement-card
   "A reduced statement-card focusing on the statement."
-  [statement with-answer?]
+  [statement]
+  (println statement)
   [motion/fade-in-and-out
    [:article.statement-card.mt-1.border
     [:div.d-flex.flex-row
-     [:div.me-2 {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
+     [:div.me-2.highlight-card-reduced
+      {:class (card-highlighting statement)}]
      [:div.card-view.card-body.p-2
       [:div.d-flex.justify-content-start.pt-2
        [user/user-info statement 25 "w-100"]
@@ -155,14 +157,13 @@
       [:div.d-flex.flex-wrap.align-items-center
        [discuss-answer-button statement]
        [reactions/up-down-vote statement]
-       (when with-answer?
-         [:div.d-flex.flex-row.align-items-center.ms-auto
-          [mark-as-answer-button statement]])]]]]])
+       [:div.d-flex.flex-row.align-items-center.ms-auto
+        [mark-as-answer-button statement]]]]]]])
 
 (defn reduced-or-edit-card
   "Wrap reduced statement card to make it editable."
-  [statement args]
-  [statement-card->editable-card statement [reduced-statement-card statement args]])
+  [statement]
+  [statement-card->editable-card statement [reduced-statement-card statement]])
 
 (defn- answers [statement]
   (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
@@ -170,7 +171,7 @@
       [:div.mt-2
        (for [answer answers]
          (with-meta
-           [reduced-or-edit-card answer :with-answer]
+           [reduced-or-edit-card answer]
            {:key (str "answer-" (:db/id answer))}))])))
 
 (defn- replies [statement]
@@ -182,13 +183,7 @@
                          [:<> [icon :collapse-down "my-auto me-2"]
                           (labels :qanda.button.hide/replies)])
         collapsible-id (str "collapse-Replies-" statement-id)
-        replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
-        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        authenticated? @(rf/subscribe [:user/authenticated?])
-        with-answer? (and starting-route?
-                          (or (not mods-mark-only?)
-                              (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
+        replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))]
     (when (not-empty replies)
       [:<>
        [:button.btn.btn-transparent.border-0
@@ -200,7 +195,7 @@
        [:div.collapse {:id collapsible-id}
         (for [reply replies]
           (with-meta
-            [reduced-or-edit-card reply with-answer?]
+            [reduced-or-edit-card reply]
             {:key (str "reply-" (:db/id reply))}))]])))
 
 (rf/reg-event-db
