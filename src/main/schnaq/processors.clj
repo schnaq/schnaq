@@ -6,7 +6,8 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
-            [schnaq.meta-info :as meta-info])
+            [schnaq.meta-info :as meta-info]
+            [schnaq.shared-toolbelt :as tools])
   (:import (clojure.lang IEditableCollection)))
 
 ;; -----------------------------------------------------------------------------
@@ -69,19 +70,13 @@
        data))
     data))
 
-(defn- answered?
-  "Check if a child exists, which has the label :check."
-  [statement]
-  [::specs/statement :ret boolean?]
-  (string? ((set (flatten (map :statement/labels (:statement/children statement)))) ":check")))
-
 (defn with-answered?-info
   "Mark a statement as answered if `answered?` is true."
   [data]
   (walk/postwalk
    (fn [statement]
      (if (s/valid? ::specs/statement statement)
-       (if (answered? statement)
+       (if (tools/answered? statement)
          (assoc statement :meta/answered? true)
          statement)
        statement))
