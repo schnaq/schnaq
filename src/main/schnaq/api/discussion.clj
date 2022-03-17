@@ -80,6 +80,7 @@
                                    toolbelt/pull-key-up))
             :premises (-> (discussion-db/children-for-statement statement-id)
                           processors/with-sub-statement-count
+                          processors/with-answered?-info
                           (processors/with-new-post-info share-hash user-identity))
             :history (discussion-db/history-for-statement statement-id)}
            author-id))
