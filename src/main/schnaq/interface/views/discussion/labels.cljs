@@ -34,18 +34,19 @@
         parent-in-current-premises? (not (nil? parent))
         new-db (update-in db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))]
     (if parent-in-current-premises?
-      (-> new-db
-          (assoc-in [:discussion :premises :current parent-id :meta/answered?]
-                    #(shared-tools/answered? parent))
-          (update-in [:discussion :premises :current parent-id :statement/children]
-                     #(tools/update-statement-in-list % updated-statement)))
+      (do
+        (-> new-db
+            (update-in [:discussion :premises :current parent-id :statement/children]
+                       #(tools/update-statement-in-list % updated-statement))
+            (update-in [:discussion :premises :current parent-id :meta/answered?]
+                       #(shared-tools/answered? parent))))
       (assoc-in new-db [:discussion :premises :current (:db/id updated-statement)] updated-statement))))
 
 (rf/reg-event-fx
  :statement.labels/remove
  (fn [{:keys [db]} [_ statement label]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         updated-statement (update statement :statement/labels (fn [labels] (-> labels set (disj label))))]
+         updated-statement (update statement :statement/labels (fn [labels] (-> labels set (disj label) vec)))]
      {:db (store-statement db updated-statement)
       :fx [(http/xhrio-request db :put "/discussion/statement/label/remove"
                                [:statement.labels.update/success]
@@ -66,7 +67,9 @@
  :statement.labels/add
  (fn [{:keys [db]} [_ statement label]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         updated-statement (update statement :statement/labels conj label)]
+         updated-statement (update statement :statement/labels conj label)
+         _ (prn "old labels" (:statement/labels statement))
+         _ (prn "new labels" (:statement/labels updated-statement))]
      {:db (store-statement db updated-statement)
       :fx [(http/xhrio-request db :put "/discussion/statement/label/add"
                                [:statement.labels.update/success]
