@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.startpage.preview-statements
   (:require [re-frame.core :as rf]
-            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.images :refer [img-path labels]]
             [schnaq.interface.config :as config]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -14,7 +14,8 @@
     (if statement
       [:div.rounded-1.shadow-lg
        [conclusion-card/answer-card statement]]
-      [:img.img-fluid {:src (img-path :startpage.example/statements)}])))
+      [:img.img-fluid {:src (img-path :startpage.example/statements)
+                       :alt (labels :startpage.example.statements/alt-text)}])))
 
 (rf/reg-sub
  :preview-statement

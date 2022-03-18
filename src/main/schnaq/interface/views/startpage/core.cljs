@@ -14,7 +14,8 @@
   []
   [:section#newsletter.row.pt-5.pb-5
    [:div.col-12.col-md-4.my-auto
-    [:img.img-fluid {:src (img-path :schnaqqifant/mail)}]]
+    [:img.img-fluid {:src (img-path :schnaqqifant/mail)
+                     :alt (labels :schnaqqifant.mail/alt-text)}]]
    [:div.col-12.col-md-8.my-auto
     [:h4.text-center (labels :startpage.newsletter/heading)]
     [:form
@@ -93,6 +94,7 @@
    [:div.row
     [:div.col-12.col-lg-6
      [:img.img-fluid.mb-2 {:src (img-path :startpage/team-schnaq)
+                           :alt "Alexander Schneider, Michael Birkhoff, Christian Meter"
                            :style {:max-width "400px"}}]
      [:h2 [:a {:href (navigation/href :routes/about-us)} (labels :startpage/team-schnaq-heading)]]]
     [:div.col-12.col-lg-6.my-lg-auto
@@ -108,7 +110,9 @@
    [:div.text-center
     [:div.display-6.mb-1 heading]
     [:img.img-fluid.mt-2.startpage-step-image
-     {:src (img-path image-key)}]]])
+     {:src (img-path image-key)
+      :alt ""
+      :role "presentation"}]]])
 
 (defn- three-steps-to-success
   "A short three step explanation how schnaq leads to success. Could be expanded with a before / after persona."

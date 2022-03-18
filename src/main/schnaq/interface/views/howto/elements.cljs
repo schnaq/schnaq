@@ -37,7 +37,9 @@
             {:on-click #(rf/dispatch [:how-to-visibility/to-localstorage hide-tag])}
             [icon :cross "m-auto"]]]
           [:div.rounded-1.shadow
-           [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
+           [:img.taskbar-background {:src (img-path :how-to/taskbar)
+                                     :alt ""
+                                     :role "presentation"}]
            [:video.video-scalable {:auto-play true :loop true :muted true :plays-inline true}
             [:source {:src (video video-key-webm) :type "video/webm"}]
             [:source {:src (video vide-key-webm) :type "video/mp4"}]]]]]]])))

@@ -123,6 +123,7 @@
    ;; Product Pages
    :productpage/title "Product Overview"
    :productpage/button "Product"
+   :productpage.overview/ipad-alt-text "An Tablet with schnaq on the screen"
    :productpage.overview/heading "Events as interactive as they should be"
    :productpage.overview/subtitle "schnaq is the Swiss army knife for your event"
    :productpage.overview/title "Discover the powerful and easy to use features of schnaq"
@@ -141,6 +142,7 @@
    :productpage/available-soon "Available soon"
 
    ;; QA Feature
+   :productpage.qa/phone-alt-text "A smartphone showing the Q&A feature of schnaq on it"
    :productpage.qa/heading "Live Q&A"
    :productpage.qa/subtitle "Answering questions before, during and after the event"
    :productpage.qa/title "Free live Q&A software for better audience engagement"
@@ -304,7 +306,7 @@
    :schnaq.poll/vote! "Vote"
    :schnaq.poll/delete-button "Delete"
 
-  ;; Activation feature
+   ;; Activation feature
    :schnaq.activation.create/label "Present your participants with an activation input!"
    :schnaq.activation.create/start-button "Start Activation"
    :schnaq.activation.create/delete-button "Delete Activation"
@@ -383,6 +385,7 @@
    :publications/subheading "The Science behind schnaq"
    :publications/title "Publications and Articles from Experts."
    :publications/description "Publications contain schnaq news, publications, reports and mentions, which are centered around the audience response software."
+   :publications.primer/alt-text "One person is presenting something schnaq related on a screen in front of three other people."
    :publications.primer/heading "From Science into Practice"
    :publications.primer/body "The software we develop is based not only on experience, but also on many years of research in the fields of discussion and communication. Here you will find scientific articles, newspaper articles and other publications that originate from our team or have been produced in cooperation with our team."
 
@@ -598,6 +601,7 @@
 
    ;; About us
    :about-us.unity/title "The Unit schnaq"
+   :about-us.team/alt-text "The four people that started schnaq as a project: Alexander Schneider, Philip Bernardy, Christian Meter, Michael Birkhoff."
    :about-us.unity/body [:<> [:p "schnaq brings digital discussions into the future. We offer companies the opportunity to conduct transparent decision-making processes in which the entire team can be heard, so that equal-opportunity and comprehensible discourse takes place. Our analytics help you understand which team member has not been heard enough and should be included. By sharing knowledge through discussions on our platform, we prevent knowledge silos and tacit company knowledge by making company knowledge available to all, be it written or later spoken communication."]
                          [:p "Our team is committed to ensuring that every voice can be heard!"]]
 
@@ -1161,4 +1165,24 @@ Now we write down questions and discuss them and can still understand what we ha
    :summary.admin/requested-at "Requested at"
    :summary.admin/summary "Summary"
    :summary.admin/submit "Submit"
-   :summary.admin/closed-at "Closed at"})
+   :summary.admin/closed-at "Closed at"
+
+   ;; Alt texts
+   :schnaqqifant/hippie-alt-text "Schnaqqi the schnaq mascot dressed as a hippie"
+   :schnaqqifant/police-alt-text "Schnaqqi the schnaq mascot dressed as a police elefant"
+   :schnaqqifant/stop-alt-text "Schnaqqi the schnaq mascot holds up a stop sign"
+   :schnaqqi/pointing-right "Schnaqqi the elefant pointing right with his trunk"
+   :schnaqqi.rocket/alt-text "Schnaqqi the elefant riding on a huge space-rocket"
+   :schnaqqifant/share-alt-text "Schnaqqi the schnaq mascot holds up a note with a code on it"
+   :schnaqqifant/talk-alt-text "Schnaqqi the schnaq mascot is talking to his friend Wilbert"
+   :schnaqqifant/admin-alt-text "Schnaqqi the schnaq mascot is dressed as a very serious administrator"
+   :schnaqqifant/erase-alt-text "Schnaqqi the schnaq mascot is holding up an eraser"
+   :schnaqqifant.mail/alt-text "Schnaqqi the schnaq mascot is dressed as a mailperson"
+   :schnaqqifant/three-d-head-alt-text "Schnaqqis Head in 3D looking at you"
+   :icon.search/alt-text "Search Icon"
+   :icon.posts/alt-text "Icon representing number of posts"
+   :icon.users/alt-text "Icon for number of users"
+   :navbar.icon.views/alt-text "Icon representing different views"
+   :testimonial-picture/alt-text "Picture of a schnaq user"
+   :startpage.information.anywhere/alt-text "A tablet with schnaq on it"
+   :startpage.example.statements/alt-text "Three statements in the schnaq look in cards"})

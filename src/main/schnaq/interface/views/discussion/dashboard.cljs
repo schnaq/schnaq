@@ -45,10 +45,11 @@
        [summary/summary-body current-schnaq]
        [preview/preview-image :preview/summary])]))
 
-(defn- count-information [icon number-of unit]
+(defn- count-information [icon icon-alt-text number-of unit]
   [:div.panel-white.px-5.mb-3
    [:div.row
-    [:div.col-5.col-xl-3.align-self-center [:img.dashboard-info-icon.ms-auto.w-100 {:src (img-path icon)}]]
+    [:div.col-5.col-xl-3.align-self-center [:img.dashboard-info-icon.ms-auto.w-100 {:src (img-path icon)
+                                                                                    :alt (labels icon-alt-text)}]]
     [:div.col [:div.display-5 number-of]]]
    [:div.row
     [:div.col.offset-xl-3.offset-5
@@ -60,8 +61,8 @@
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
     [:<>
-     [count-information :icon-posts statement-count :dashboard/posts]
-     [count-information :icon-users user-count :dashboard/members]]))
+     [count-information :icon-posts :icon.posts/alt-text statement-count :dashboard/posts]
+     [count-information :icon-users :icon.users/alt-text user-count :dashboard/members]]))
 
 (defn- wordcloud-view
   "Display a word cloud with common words of the discussion."

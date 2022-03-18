@@ -31,7 +31,8 @@
   [:section.py-5
    [:div.row.pt-3
     [:div.col-lg-5
-     [:img.img-fluid.shadow {:src (img-path :team/at-table-with-laptop)}]]
+     [:img.img-fluid.shadow {:src (img-path :team/at-table-with-laptop)
+                             :alt (labels :about-us.team/alt-text)}]]
     [:div.offset-lg-1.col-lg-6
      [:h2 (labels :about-us.unity/title)]
      (labels :about-us.unity/body)]]])

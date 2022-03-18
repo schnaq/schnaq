@@ -28,10 +28,14 @@
   "Social proof above the fold, showing other people use schnaq."
   []
   [:div.d-flex.mt-5.mb-5.mb-lg-0
-   [:img.rounded-circle.social-proof-img.me-2 {:src (img-path :testimonial-picture/bjorn)}]
-   [:img.rounded-circle.social-proof-img.me-2 {:src (img-path :testimonial-picture/frauke-kling)}]
-   [:img.rounded-circle.social-proof-img.me-2 {:src (img-path :testimonial-picture/lokay)}]
-   [:img.rounded-circle.social-proof-img.me-2 {:src (img-path :testimonial-picture/frank-stampa)}]
+   [:img.rounded-circle.social-proof-img.me-2 {:src (img-path :testimonial-picture/bjorn)
+                                               :alt (labels :testimonial-picture/alt-text)}]
+   [:img.rounded-circle.social-proof-img.me-2 {:src (img-path :testimonial-picture/frauke-kling)
+                                               :alt (labels :testimonial-picture/alt-text)}]
+   [:img.rounded-circle.social-proof-img.me-2 {:src (img-path :testimonial-picture/lokay)
+                                               :alt (labels :testimonial-picture/alt-text)}]
+   [:img.rounded-circle.social-proof-img.me-2 {:src (img-path :testimonial-picture/frank-stampa)
+                                               :alt (labels :testimonial-picture/alt-text)}]
    [icon :plus "my-auto me-2"]
    [:div.border-end.me-2.d-inline-block]
    [:p.small.my-auto (labels :startpage.social-proof/teaser)]])
