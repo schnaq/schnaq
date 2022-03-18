@@ -110,7 +110,7 @@
       [:div.d-flex.flex-row
        [:div {:class (card-highlighting statement)}]
        [:div.card-view.card-body.py-2.px-0
-        (when (:meta/new? statement) ;; WIP
+        (when (:meta/new? statement)
           [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
            (labels :discussion.badges/new)])
         [:div.pt-2.d-flex.px-3
