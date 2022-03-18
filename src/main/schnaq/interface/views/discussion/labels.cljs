@@ -23,18 +23,30 @@
      {:class (if hover? (str extra-class " label") extra-class)}
      [icon icon-name "m-auto"]]))
 
+(defn- store-statement
+  "Store updated statement in app-db.
+  Differentiates if the statement, to which the label is added / removed, is the
+  currently selected conclusion or it is a child of a statement inside the 
+  statement list."
+  [db updated-statement]
+  (let [parent-id (-> updated-statement :statement/parent :db/id)
+        parent (get-in db [:discussion :premises :current parent-id])
+        parent-in-current-premises? (not (nil? parent))
+        new-db (update-in db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))]
+    (if parent-in-current-premises?
+      (-> new-db
+          (assoc-in [:discussion :premises :current parent-id :meta/answered?]
+                    #(shared-tools/answered? parent))
+          (update-in [:discussion :premises :current parent-id :statement/children]
+                     #(tools/update-statement-in-list % updated-statement)))
+      (assoc-in new-db [:discussion :premises :current (:db/id updated-statement)] updated-statement))))
+
 (rf/reg-event-fx
  :statement.labels/remove
  (fn [{:keys [db]} [_ statement label]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         updated-statement (update statement :statement/labels (fn [labels] (-> labels set (disj label))))
-         parent-id (-> updated-statement :statement/parent :db/id)]
-     {:db (as-> db new-db
-            (update-in new-db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))
-            (update-in new-db [:discussion :premises :current parent-id :statement/children]
-                       #(tools/update-statement-in-list % updated-statement))
-            (update-in new-db [:discussion :premises :current parent-id :meta/answered?]
-                       #(shared-tools/answered? (get-in new-db [:discussion :premises :current parent-id]))))
+         updated-statement (update statement :statement/labels (fn [labels] (-> labels set (disj label))))]
+     {:db (store-statement db updated-statement)
       :fx [(http/xhrio-request db :put "/discussion/statement/label/remove"
                                [:statement.labels.update/success]
                                {:share-hash share-hash
@@ -54,13 +66,8 @@
  :statement.labels/add
  (fn [{:keys [db]} [_ statement label]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         updated-statement (update statement :statement/labels conj label)
-         parent-id (-> updated-statement :statement/parent :db/id)]
-     {:db (-> db
-              (update-in [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))
-              (assoc-in [:discussion :premises :current parent-id :meta/answered?] true)
-              (update-in [:discussion :premises :current parent-id :statement/children]
-                         #(tools/update-statement-in-list % updated-statement)))
+         updated-statement (update statement :statement/labels conj label)]
+     {:db (store-statement db updated-statement)
       :fx [(http/xhrio-request db :put "/discussion/statement/label/add"
                                [:statement.labels.update/success]
                                {:share-hash share-hash
