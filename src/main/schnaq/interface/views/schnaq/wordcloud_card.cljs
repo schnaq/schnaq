@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.schnaq.wordcloud-card
   (:require [re-frame.core :as rf]
-            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.wordcloud :as wordcloud]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.http :as http]))
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
 (defn wordcloud-tab
   "Wordcloud tab menu to hide and show a wordcloud."
@@ -21,28 +21,6 @@
          {:on-click (fn [_e] (rf/dispatch [:wordcloud/display? true]))}
          (labels :schnaq.wordcloud/show)])]]))
 
-(defn- dropdown-hide []
-  [:button.dropdown-item
-   {:on-click #(rf/dispatch [:wordcloud/display? false])
-    :title (labels :schnaq.wordcloud/hide)}
-   [icon :trash "my-auto me-1"] (labels :schnaq.wordcloud/hide)])
-
-(defn- wordcloud-dropdown-menu
-  "Dropdown menu for activation containing reset and delete."
-  []
-  (let [current-edit-hash @(rf/subscribe [:schnaq.current/admin-access])
-        pro-user? @(rf/subscribe [:user/pro-user?])
-        dropdown-id "activation-dropdown"]
-    (when (and pro-user? current-edit-hash)
-      [:div.dropdown.mx-2
-       [:button.btn.m-0.p-0
-        {:id dropdown-id
-         :role "button" :data-bs-toggle "dropdown"
-         :aria-haspopup "true" :aria-expanded "false"}
-        [icon :dots]]
-       [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
-        [dropdown-hide]]])))
-
 (defn wordcloud-card []
   (let [display-wordcloud? @(rf/subscribe [:schnaq/display-wordcloud?])]
     (when display-wordcloud?
@@ -51,7 +29,12 @@
         [:div.d-flex.mt-3
          [:h4.mx-auto.mt-3
           (labels :schnaq.wordcloud/title)]
-         [wordcloud-dropdown-menu]]
+         [dropdown-menu/moderator
+          "wordcloud-dropdown-id"
+          [dropdown-menu/item
+           :schnaq.wordcloud/hide
+           :trash
+           #(rf/dispatch [:wordcloud/display? false])]]]
         [wordcloud/wordcloud]]])))
 
 ;; subscriptions 
