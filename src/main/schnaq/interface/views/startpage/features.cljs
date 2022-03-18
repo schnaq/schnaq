@@ -28,7 +28,8 @@
   [:div.mb-5.py-lg-5
    [rows/row-builder-text-right
     [:img.shadow-lg.rounded-2
-     {:src (img-path :startpage.information/anywhere)}]
+     {:src (img-path :startpage.information/anywhere)
+      :alt (labels :startpage.information.anywhere/alt-text)}]
     [rows/build-text-box :startpage.information.anywhere]]])
 
 (defn- feature-box

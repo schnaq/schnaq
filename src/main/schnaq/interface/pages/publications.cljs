@@ -20,7 +20,8 @@
   [:section
    [:div.row.pb-5
     [:div.col-lg-4
-     [:img.img-fluid.shadow {:src (img-path :team/vision-mindmap-team)}]]
+     [:img.img-fluid.shadow {:src (img-path :team/vision-mindmap-team)
+                             :alt (labels :publications.primer/alt-text)}]]
     [:div.offset-lg-1.col-lg-7
      [:h2 (labels :publications.primer/heading)]
      [:p.lead (labels :publications.primer/body)]]]])

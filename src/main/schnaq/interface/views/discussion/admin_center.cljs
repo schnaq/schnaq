@@ -50,18 +50,19 @@
 
 (defn- img-text
   "Create one icon in a grid"
-  [path-to-img heading]
+  [path-to-img alt-key heading]
   [:<>
-   [:img {:src path-to-img}]
+   [:img {:src path-to-img
+          :alt (labels alt-key)}]
    [:h5 heading]])
 
 (defn- educate-element []
   [:div.row.mb-3
    [:div.col-12.col-md-6.share-link-icons
-    [img-text (img-path :schnaqqifant/share)
+    [img-text (img-path :schnaqqifant/share) :schnaqqifant/share-alt-text
      (labels :schnaq/educate-on-link-text)]]
    [:div.col-12.col-md-6.share-link-icons
-    [img-text (img-path :schnaqqifant/talk)
+    [img-text (img-path :schnaqqifant/talk) :schnaqqifant/talk-alt-text
      (labels :schnaq/educate-on-link-text-subtitle)]]])
 
 ;; -----------------------------------------------------------------------------
@@ -217,11 +218,11 @@
     ;; elephant admin
     [:div.col-md-6
      [:div.share-link-icons
-      [img-text (img-path :schnaqqifant/admin)
+      [img-text (img-path :schnaqqifant/admin) :schnaqqifant/admin-alt-text
        (labels :schnaq.admin.edit.link/admin)]]]
     ;; elephant edit
     [:div.col-md-6.share-link-icons
-     [img-text (img-path :schnaqqifant/erase)
+     [img-text (img-path :schnaqqifant/erase) :schnaqqifant/erase-alt-text
       (labels :schnaq.admin.edit.link/admin-privileges)]]]
    ;; admin mail input
    (let [input-id "admin-link-mail-address"]
@@ -415,7 +416,8 @@
       [:div.text-center
        [:div.pb-5.mt-3]
        ;; stop image and hint to copy the link
-       [:div.single-image [:img {:src (img-path :schnaqqifant/stop)}]]
+       [:div.single-image [:img {:src (img-path :schnaqqifant/stop)
+                                 :alt (labels :schnaqqifant/stop-alt-text)}]]
        [:h4.mb-4 (labels :schnaqs/continue-with-schnaq-after-creation)]
        [:a.btn.button-primary.btn-lg.center-block.mb-5
         {:role "button"

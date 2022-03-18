@@ -117,7 +117,7 @@
         [:div.dropdown-toggle
          {:class toggle-class}
          [:img.navbar-view-toggle.d-block
-          {:src (img-path icon-id) :alt "Icon representing different views"}]
+          {:src (img-path icon-id) :alt (labels :navbar.icon.views/alt-text)}]
          [:span.small
           (case current-route
             :routes.schnaq/start (labels :discussion.button/text)

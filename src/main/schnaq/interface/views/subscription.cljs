@@ -28,7 +28,8 @@
         (labels :subscription.page.success.next-2/lead)
         (labels :subscription.page.success.next-2/button)
         :routes.user.manage/account]]
-      [:img.pt-5 {:src (img-path :schnaqqifant/rocket)}]]]}])
+      [:img.pt-5 {:src (img-path :schnaqqifant/rocket)
+                  :alt (labels :schnaqqi.rocket/alt-text)}]]]}])
 
 (defn- cancel
   "Page if a user cancels the checkout process."
