@@ -143,7 +143,7 @@
    :productpage/available-soon "Bald verfügbar"
 
    ;; QA Feature
-   :productpage.qa/phone-alt-text "Ein smartphone mit dem schnaq Q&A feature auf dem Bildschirm"
+   :productpage.qa/phone-alt-text "Ein Smartphone mit dem schnaq Q&A Feature auf dem Bildschirm"
    :productpage.qa/heading "Live Q&A"
    :productpage.qa/subtitle "Fragen beantworten vor, während und nach der Veranstaltung."
    :productpage.qa/title "Kostenfreie live Q&A software für optimale Publikumsinteraktion."
