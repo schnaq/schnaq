@@ -76,7 +76,8 @@
   (let [hubs @(rf/subscribe [:hubs/all])
         logo-map (map (fn [[_keycloak-name hub]]
                         (when (hub/hub-contains-schnaq? hub schnaq)
-                          [:img.schnaq-header-hub-image {:src (:hub/logo hub)}])) hubs)
+                          [:img.schnaq-header-hub-image {:src (:hub/logo hub)
+                                                         :alt "Hub logo"}])) hubs)
         logo (first (filter some? logo-map))]
     (when logo
       logo)))

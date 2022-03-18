@@ -124,6 +124,7 @@
    ;; Product Pages
    :productpage/title "Produktübersicht"
    :productpage/button "Produkt"
+   :productpage.overview/ipad-alt-text "Ein Tablet mit schnaq auf dem Bildschirm"
    :productpage.overview/heading "Veranstaltungen so interaktiv, wie sie sein sollen"
    :productpage.overview/subtitle "schnaq ist das Schweizer Taschenmesser für deine Veranstaltung."
    :productpage.overview/title "Entdecke die mächtigen und einfach zu nutzenden Funktionen von schnaq."
@@ -142,6 +143,7 @@
    :productpage/available-soon "Bald verfügbar"
 
    ;; QA Feature
+   :productpage.qa/phone-alt-text "Ein smartphone mit dem schnaq Q&A feature auf dem Bildschirm"
    :productpage.qa/heading "Live Q&A"
    :productpage.qa/subtitle "Fragen beantworten vor, während und nach der Veranstaltung."
    :productpage.qa/title "Kostenfreie live Q&A software für optimale Publikumsinteraktion."
@@ -390,6 +392,7 @@
    :publications/subheading "Die Wissenschaft hinter schnaq"
    :publications/title "Publikationen und Artikel von Experten."
    :publications/description "Sieh dir schnaq Nachrichten, Publikationen, Berichte und Erwähnungen an, die sich um Audience Response Software drehen."
+   :publications.primer/alt-text "Eine Person hält eine schnaq Präsentation vor drei anderen Personen."
    :publications.primer/heading "Von der Wissenschaft in die Praxis"
    :publications.primer/body "Die Software, die wir entwickeln, basiert nicht nur auf Erfahrung, sondern auch auf langjähriger Forschung auf den Gebieten der Diskussion und Kommunikation. Hier finden Sie wissenschaftliche Artikel, Zeitungsbeiträge und weitere Publikationen, die von unserem Team stammen, oder in Kooperation mit unserem Team entstanden sind"
 
@@ -604,6 +607,7 @@
 
    ;; About us
    :about-us.unity/title "Die Einheit schnaq"
+   :about-us.team/alt-text "Die vier Personen, die schnaq als Projekt starteten: Alexander Schneider, Philip Bernardy, Christian Meter, Michael Birkhoff."
    :about-us.unity/body [:<> [:p "schnaq bringt digitale Diskussionen in die Zukunft. Wir bieten Unternehmen die Möglichkeit transparente Entscheidungsprozesse durchzuführen, in denen das gesamte Team gehört werden kann, sodass chancengleiche und nachvollziehbare Diskurse stattfinden. Unsere Analysen helfen Ihnen zu verstehen, welches Teammitglied zu wenig gehört wurde und mit einbezogen werden sollte. Durch das Teilen von Wissen über Diskussionen auf unserer Plattform, verhindern wir Wissenssilos und implizites Firmenwissen, indem wir das Firmenwissen für alle verfügbar machen, sei es geschriebene oder später auch gesprochene Kommunikation."]
                          [:p "Unser Team steht dafür ein, dass jede Stimme gehört werden kann!"]]
 
@@ -1168,4 +1172,24 @@
    :summary.admin/requested-at "Angefragt am"
    :summary.admin/summary "Zusammenfassung"
    :summary.admin/submit "Abschicken"
-   :summary.admin/closed-at "Geschlossen am"})
+   :summary.admin/closed-at "Geschlossen am"
+
+   ;; Alt texts
+   :schnaqqifant/hippie-alt-text "Schnaqqi das schnaq Maskottchen als Hippie verkleidet"
+   :schnaqqifant/police-alt-text "Schnaqqi das schnaq Maskottchen als Polizist verkleidet"
+   :schnaqqifant/stop-alt-text "Schnaqqi das schnaq Maskottchen hält ein Stop-Schild hoch"
+   :schnaqqi/pointing-right "Schnaqqi der Elefant zeigt nach rechts mit dem Rüssel"
+   :schnaqqi.rocket/alt-text "Schnaqqi der Elefant reitet auf einem großen Raumschiff"
+   :schnaqqifant/share-alt-text "Schnaqqi das schnaq Maskottchen hält einen Zettel mit einem Code hoch"
+   :schnaqqifant/talk-alt-text "Schnaqqi das schnaq Maskottchen redet mit seinem Freund-Elefant Wilbert"
+   :schnaqqifant/admin-alt-text "Schnaqqi das schnaq Maskottchen ist als seriöser Administrator verkleidet"
+   :schnaqqifant/erase-alt-text "Schnaqqi das schnaq Maskottchen hält einen Radiergummi hoch"
+   :schnaqqifant.mail/alt-text "Schnaqqi das schnaq Maskottchen ist als Briefträger verkleidet"
+   :schnaqqifant/three-d-head-alt-text "Schnaqqis Kopf in 3D wie er dich anschaut"
+   :icon.search/alt-text "Such-Symbol"
+   :icon.posts/alt-text "Symbol für Anzahl Beiträge"
+   :icon.users/alt-text "Symbol für Anzahl Nutzer:innen"
+   :navbar.icon.views/alt-text "Icon für verschiedene Ansichten"
+   :testimonial-picture/alt-text "Bild einer:eines schnaq Nutzer:in"
+   :startpage.information.anywhere/alt-text "Ein Tablet mit schnaq drauf"
+   :startpage.example.statements/alt-text "Drei Beiträge schnaq-typisch im Kartenformat"})

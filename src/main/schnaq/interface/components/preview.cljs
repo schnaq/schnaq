@@ -7,7 +7,7 @@
   "Show an image with a text displayed on it that the user needs to buy schnaq."
   [img-key]
   [:div.preview-image
-   [:img.img-fluid {:src (img-path img-key)}]
+   [:img.img-fluid {:src (img-path img-key) :alt "Blurred backgroundimage"}]
    [:a {:href (navigation/href :routes/pricing)}
     [:div.alert.alert-primary
      [:p.mb-1 [:small.fw-bold

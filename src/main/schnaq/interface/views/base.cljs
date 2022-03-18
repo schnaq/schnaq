@@ -35,7 +35,8 @@
 (defn- logo-and-slogan []
   [:<>
    [:img.footer-schnaqqifant
-    {:src (img-path :logo-white)}]
+    {:src (img-path :logo-white)
+     :alt "schnaq logo"}]
    [:div.lead.fst-italic.pb-1
     (labels :startpage/heading)]])
 
@@ -84,7 +85,8 @@
    [:small (labels :footer.sponsors/heading)]
    [:article
     [:a {:href "https://www.hetzner.com/cloud" :target :_blank}
-     [:img {:src (img-path :logos/hetzner)}]]]])
+     [:img {:src (img-path :logos/hetzner)
+            :alt "Logo of Hetzner"}]]]])
 
 (defn- registered-trademark []
   [:section

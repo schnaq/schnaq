@@ -88,7 +88,8 @@
           (navigation/href :routes/pricing)
           "btn-sm btn-outline-white mx-2"]
          (labels :page.login.alert/text-2)]
-        [:img.w-50.align-self-center.d-lg-none {:src (img-path :schnaqqifant/three-d-bubble)}]]]]]}])
+        [:img.w-50.align-self-center.d-lg-none {:src (img-path :schnaqqifant/three-d-bubble)
+                                                :alt (labels :schnaqqi/pointing-right)}]]]]]}])
 
 (defn- please-login
   "Default page indicating that it is necessary to login."

@@ -78,7 +78,8 @@
        [:div.col-md-6.col-lg-4 [feature-themes]]
        [:div.col-md-6.col-lg-4 [feature-polls true]]
        [:div.col-md-6.col-lg-4 [feature-activation true]]]]
-     [:img.pt-5 {:src (img-path :schnaqqifant/rocket)}]]}])
+     [:img.pt-5 {:src (img-path :schnaqqifant/rocket)
+                 :alt (labels :schnaqqi.rocket/alt-text)}]]}])
 
 (defn- welcome-pro-user
   "Celebrating and welcoming the new pro user."
@@ -111,7 +112,8 @@
       [:div.row.pt-3
        [:div.col-md-6.col-lg-4 [feature-profile]]
        [:div.col-md-6.col-lg-4 [feature-notifications]]]]
-     [:img.pt-5 {:src (img-path :schnaqqifant/rocket)}]]}])
+     [:img.pt-5 {:src (img-path :schnaqqifant/rocket)
+                 :alt (labels :schnaqqi.rocket/alt-text)}]]}])
 
 ;; -----------------------------------------------------------------------------
 
