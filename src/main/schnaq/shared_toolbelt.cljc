@@ -1,8 +1,7 @@
 (ns schnaq.shared-toolbelt
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [>defn =>]]
-            [schnaq.database.specs :as specs]))
+            [com.fulcrologic.guardrails.core :refer [>defn =>]]))
 
 (>defn slugify
   "Make a slug from a string. For example:
