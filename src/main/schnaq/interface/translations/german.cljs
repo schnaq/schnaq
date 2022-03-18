@@ -1175,16 +1175,16 @@
    :summary.admin/closed-at "Geschlossen am"
 
    ;; Alt texts
-   :schnaqqifant/hippie-alt-text "Schnaqqi das schnaq Maskottchen als Hippie verkleidet"
-   :schnaqqifant/police-alt-text "Schnaqqi das schnaq Maskottchen als Polizist verkleidet"
-   :schnaqqifant/stop-alt-text "Schnaqqi das schnaq Maskottchen hält ein Stop-Schild hoch"
-   :schnaqqi/pointing-right "Schnaqqi der Elefant zeigt nach rechts mit dem Rüssel"
-   :schnaqqi.rocket/alt-text "Schnaqqi der Elefant reitet auf einem großen Raumschiff"
-   :schnaqqifant/share-alt-text "Schnaqqi das schnaq Maskottchen hält einen Zettel mit einem Code hoch"
-   :schnaqqifant/talk-alt-text "Schnaqqi das schnaq Maskottchen redet mit seinem Freund-Elefant Wilbert"
-   :schnaqqifant/admin-alt-text "Schnaqqi das schnaq Maskottchen ist als seriöser Administrator verkleidet"
-   :schnaqqifant/erase-alt-text "Schnaqqi das schnaq Maskottchen hält einen Radiergummi hoch"
-   :schnaqqifant.mail/alt-text "Schnaqqi das schnaq Maskottchen ist als Briefträger verkleidet"
+   :schnaqqifant/hippie-alt-text "Schnaqqi, das schnaq Maskottchen, als Hippie verkleidet"
+   :schnaqqifant/police-alt-text "Schnaqqi, das schnaq Maskottchen, als Polizist verkleidet"
+   :schnaqqifant/stop-alt-text "Schnaqqi, das schnaq Maskottchen, hält ein Stop-Schild hoch"
+   :schnaqqi/pointing-right "Schnaqqi, der Elefant, zeigt nach rechts mit dem Rüssel"
+   :schnaqqi.rocket/alt-text "Schnaqqi, der Elefant, reitet auf einem großen Raumschiff"
+   :schnaqqifant/share-alt-text "Schnaqqi, das schnaq Maskottchen, hält einen Zettel mit einem Code hoch"
+   :schnaqqifant/talk-alt-text "Schnaqqi, das schnaq Maskottchen, redet mit seinem Freund-Elefant Wilbert"
+   :schnaqqifant/admin-alt-text "Schnaqqi, das schnaq Maskottchen, ist als seriöser Administrator verkleidet"
+   :schnaqqifant/erase-alt-text "Schnaqqi, das schnaq Maskottchen, hält einen Radiergummi hoch"
+   :schnaqqifant.mail/alt-text "Schnaqqi, das schnaq Maskottchen, ist als Briefträger verkleidet"
    :schnaqqifant/three-d-head-alt-text "Schnaqqis Kopf in 3D wie er dich anschaut"
    :icon.search/alt-text "Such-Symbol"
    :icon.posts/alt-text "Symbol für Anzahl Beiträge"
@@ -1192,4 +1192,4 @@
    :navbar.icon.views/alt-text "Icon für verschiedene Ansichten"
    :testimonial-picture/alt-text "Bild einer:eines schnaq Nutzer:in"
    :startpage.information.anywhere/alt-text "Ein Tablet mit schnaq drauf"
-   :startpage.example.statements/alt-text "Drei Beiträge schnaq-typisch im Kartenformat"})
+   :startpage.example.statements/alt-text "Drei Beiträge, schnaq-typisch im Kartenformat"})
