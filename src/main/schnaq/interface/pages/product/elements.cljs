@@ -57,9 +57,10 @@
 
 (defn- feature-image [image]
   [:div
-   [:img.taskbar-background {:src (img-path :how-to/taskbar)
-                             :role "presentation"
-                             :alt ""}]
+   [:img.taskbar-background
+    {:src (img-path :how-to/taskbar)
+     :role "presentation"
+     :alt "Taskbar background"}]
    [motion/zoom-image
     {:class "product-page-feature-image my-auto"
      :src (img-path image)}]])
