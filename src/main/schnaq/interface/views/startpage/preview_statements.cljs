@@ -1,7 +1,8 @@
 (ns schnaq.interface.views.startpage.preview-statements
   (:require [re-frame.core :as rf]
-            [schnaq.interface.components.images :refer [img-path labels]]
+            [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.conclusion-card :as conclusion-card]))
