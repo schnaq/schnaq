@@ -2,10 +2,10 @@
   (:require ["framer-motion" :refer [motion]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion-comp]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.http :as http]))
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
 (def ^:private default-activation-background
   "https://s3.schnaq.com/schnaq-common/background/layered_background_square.svg")
@@ -56,34 +56,19 @@
    (when @(rf/subscribe [:schnaq.activation/walk?])
      [schnaqqi-walk-motion])])
 
-(defn- dropdown-reset []
-  [:button.dropdown-item
-   {:on-click #(rf/dispatch [:activation/reset])
-    :title (labels :schnaq.activation/reset-button)}
-   [icon :reset "my-auto me-1"] (labels :schnaq.activation/reset-button)])
-
-(defn- dropdown-delete []
-  [:button.dropdown-item
-   {:on-click #(rf/dispatch [:activation/delete])
-    :title (labels :schnaq.activation/delete-button)}
-   [icon :trash "my-auto me-1"] (labels :schnaq.activation/delete-button)])
-
 (defn- activation-dropdown-menu
   "Dropdown menu for activation containing reset and delete."
   []
-  (let [current-edit-hash @(rf/subscribe [:schnaq.current/admin-access])
-        pro-user? @(rf/subscribe [:user/pro-user?])
-        dropdown-id "activation-dropdown"]
-    (when (and pro-user? current-edit-hash)
-      [:div.dropdown.mx-2
-       [:button.btn.btn-link.text-white.m-0.p-0
-        {:id dropdown-id
-         :role "button" :data-bs-toggle "dropdown"
-         :aria-haspopup "true" :aria-expanded "false"}
-        [icon :dots]]
-       [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
-        [dropdown-reset]
-        [dropdown-delete]]])))
+  [dropdown-menu/moderator
+   "activation-dropdown-id"
+   "text-white"
+   [:<>
+    [dropdown-menu/item :reset
+     :schnaq.activation/reset-button
+     #(rf/dispatch [:activation/reset])]
+    [dropdown-menu/item :trash
+     :schnaq.activation/delete-button
+     #(rf/dispatch [:activation/delete])]]])
 
 (defn- activation-view [background-class button-class col-class]
   (when-let [activation @(rf/subscribe [:schnaq/activation])]

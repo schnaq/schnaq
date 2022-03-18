@@ -9,7 +9,8 @@
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.toolbelt :as tools]))
+            [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
 (defn- results-graph
   "A graph displaying the results of the poll."
@@ -48,30 +49,14 @@
            [:span.me-3 vote-number " " (labels :schnaq.poll/votes)]
            percentage]]]]))])
 
-(defn- dropdown-delete
-  "Delete button for a dropdown menu."
-  [poll-id]
-  [:button.dropdown-item
-   {:on-click #(rf/dispatch [:poll/delete poll-id])
-    :title (labels :schnaq.poll/delete-button)}
-   [icon :trash "my-auto me-1"]
-   (labels :schnaq.poll/delete-button)])
-
 (defn- dropdown-menu
   "Dropdown menu for poll configuration."
   [poll-id]
-  (let [current-edit-hash @(rf/subscribe [:schnaq.current/admin-access])
-        pro-user? @(rf/subscribe [:user/pro-user?])
-        dropdown-id "poll-dropdown"]
-    (when (and pro-user? current-edit-hash)
-      [:div.dropdown.mx-2
-       [:button.btn.btn-link.m-0.p-0.text-dark
-        {:id dropdown-id
-         :role "button" :data-bs-toggle "dropdown"
-         :aria-haspopup "true" :aria-expanded "false"}
-        [icon :dots]]
-       [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
-        [dropdown-delete poll-id]]])))
+  [dropdown-menu/moderator
+   (str "poll-dropdown-id-" poll-id)
+   [dropdown-menu/item :trash
+    :schnaq.poll/delete-button
+    #(rf/dispatch [:poll/delete poll-id])]])
 
 (defn poll-list
   "Displays all polls of the current schnaq."

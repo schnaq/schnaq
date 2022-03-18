@@ -31,9 +31,8 @@
           (labels :schnaq.wordcloud/title)]
          [dropdown-menu/moderator
           "wordcloud-dropdown-id"
-          [dropdown-menu/item
+          [dropdown-menu/item :trash
            :schnaq.wordcloud/hide
-           :trash
            #(rf/dispatch [:wordcloud/display? false])]]]
         [wordcloud/wordcloud]]])))
 
