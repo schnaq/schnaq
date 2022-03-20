@@ -137,7 +137,6 @@
         analytics-admin? @(rf/subscribe [:user/analytics-admin?])
         beta-tester? @(rf/subscribe [:user/beta-tester?])]
     (cond
-      admin? page                                           ;; You can do anything if you're an admin
       (and create-schnaq? (not authenticated?)) [register-cta]
       (and (or needs-authentication? needs-administrator? needs-beta-tester? needs-analytics-admin?)
            (not authenticated?)) [please-login]
