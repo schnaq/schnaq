@@ -37,8 +37,7 @@
    [blog-link]
    [:div.nav-item.dropdown.ms-auto
     [navbar-components/language-dropdown false {}]]
-   (when @(rf/subscribe [:user/administrator?])
-     [um/admin-dropdown "btn-outline-secondary"])
+   [um/admin-dropdown "btn-outline-secondary"]
    [:div.mx-1.d-none.d-md-block
     [:div.d-flex.flex-row.align-items-center
      [um/register-or-user-button "btn-link"]]]])
