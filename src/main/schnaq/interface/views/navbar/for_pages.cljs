@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.navbar.for-pages
   (:require [clojure.string :as str]
-            [re-frame.core :as rf]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.navigation :as navigation]
