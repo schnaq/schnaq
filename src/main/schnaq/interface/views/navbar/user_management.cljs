@@ -62,8 +62,9 @@
   "Show Admin pages when user is authenticated and has admin role."
   [button-class]
   (let [admin? @(rf/subscribe [:user/administrator?])
+        analytics-admin? @(rf/subscribe [:user/analytics-admin?])
         ul-id "admin-dropdown"]
-    (when admin?
+    (when (or admin? analytics-admin?)
       [:ul.navbar-nav.dropdown
        [:button#admin-dropdown.nav-link.btn.dropdown-toggle
         {:role "button" :data-bs-toggle "dropdown" :id ul-id
@@ -71,18 +72,21 @@
          :aria-haspopup "true" :aria-expanded "false"}
         (labels :nav/admin)]
        [:ul.dropdown-menu.dropdown-menu-end {:aria-labelledby (str ul-id)}
-        [:li.dropdown-item
-         [:a.btn {:role "button" :href (navigation/href :routes/admin-center)}
-          (labels :router/admin-center)]]
-        [:li.dropdown-item
-         [:a.btn {:role "button" :href (navigation/href :routes/feedbacks)}
-          (labels :router/all-feedbacks)]]
+        (when admin?
+          [:li.dropdown-item
+           [:a.btn {:role "button" :href (navigation/href :routes/admin-center)}
+            (labels :router/admin-center)]])
+        (when admin?
+          [:li.dropdown-item
+           [:a.btn {:role "button" :href (navigation/href :routes/feedbacks)}
+            (labels :router/all-feedbacks)]])
         [:li.dropdown-item
          [:a.btn {:role "button" :href (navigation/href :routes/analytics)}
           (labels :router/analytics)]]
-        [:li.dropdown-item
-         [:a.btn {:role "button" :href (navigation/href :routes.admin/summaries)}
-          (labels :router/summaries)]]]])))
+        (when admin?
+          [:li.dropdown-item
+           [:a.btn {:role "button" :href (navigation/href :routes.admin/summaries)}
+            (labels :router/summaries)]])]])))
 
 (defn- profile-picture-in-nav
   "Show profile picture-element in the navbar."

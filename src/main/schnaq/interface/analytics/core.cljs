@@ -114,7 +114,7 @@
   "The dashboard displaying all analytics."
   []
   [pages/with-nav-and-header
-   {:condition/needs-administrator? true
+   {:condition/needs-analytics-admin? true
     :page/heading (labels :analytics/heading)}
    [:<>
     [:div.container.px-5.py-3

@@ -128,17 +128,22 @@
 
 (>defn- validate-conditions-middleware
   "Takes the conditions and returns either the page or redirects to other views."
-  [{:condition/keys [needs-authentication? needs-administrator? needs-beta-tester? create-schnaq?]} page]
+  [{:condition/keys
+    [needs-authentication? needs-administrator? needs-beta-tester? create-schnaq? needs-analytics-admin?]}
+   page]
   [::page-options (s/+ vector?) :ret vector?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         admin? @(rf/subscribe [:user/administrator?])
+        analytics-admin? @(rf/subscribe [:user/analytics-admin?])
         beta-tester? @(rf/subscribe [:user/beta-tester?])]
     (cond
+      admin? page                                           ;; You can do anything if you're an admin
       (and create-schnaq? (not authenticated?)) [register-cta]
-      (and (or needs-authentication? needs-administrator? needs-beta-tester?)
+      (and (or needs-authentication? needs-administrator? needs-beta-tester? needs-analytics-admin?)
            (not authenticated?)) [please-login]
       (and needs-administrator? (not admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
       (and needs-beta-tester? (not beta-tester?)) [beta-only]
+      (and needs-analytics-admin? (not analytics-admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
       :else page)))
 
 ;; -----------------------------------------------------------------------------

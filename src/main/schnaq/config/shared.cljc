@@ -48,8 +48,11 @@
 (def admin-roles
   #{"admin"})
 
+(def analytics-roles
+  #{"analytics-admin"})
+
 (def beta-tester-roles
-  (cset/union admin-roles #{"beta-tester"}))
+  (cset/union admin-roles analytics-roles #{"beta-tester"}))
 
 (def allowed-labels
   "A set of allowed labels for statements. They correspond to fa symbols"
