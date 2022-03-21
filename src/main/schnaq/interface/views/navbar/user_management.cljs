@@ -64,7 +64,8 @@
   (let [admin? @(rf/subscribe [:user/administrator?])
         analytics-admin? @(rf/subscribe [:user/analytics-admin?])
         ul-id "admin-dropdown"]
-    (when (or admin? analytics-admin?)
+    ;; Analytics-Admin also is true when user is super-admin
+    (when analytics-admin?
       [:ul.navbar-nav.dropdown
        [:button#admin-dropdown.nav-link.btn.dropdown-toggle
         {:role "button" :data-bs-toggle "dropdown" :id ul-id
