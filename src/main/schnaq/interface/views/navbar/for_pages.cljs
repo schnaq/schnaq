@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.navbar.for-pages
   (:require [clojure.string :as str]
-            [re-frame.core :as rf]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.navigation :as navigation]
@@ -37,8 +36,7 @@
    [blog-link]
    [:div.nav-item.dropdown.ms-auto
     [navbar-components/language-dropdown false {}]]
-   (when @(rf/subscribe [:user/administrator?])
-     [um/admin-dropdown "btn-outline-secondary"])
+   [um/admin-dropdown "btn-outline-secondary"]
    [:div.mx-1.d-none.d-md-block
     [:div.d-flex.flex-row.align-items-center
      [um/register-or-user-button "btn-link"]]]])
