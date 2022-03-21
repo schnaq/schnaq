@@ -138,12 +138,12 @@
     :data {:coercion reitit.coercion.spec/coercion
            :muuntaja m/instance
            :middleware [swagger/swagger-feature
-                        parameters/parameters-middleware ;; query-params & form-params
+                        parameters/parameters-middleware    ;; query-params & form-params
                         middlewares/convert-body-middleware ;; must be called *before* muuntaja/format-middleware
                         muuntaja/format-middleware
                         middlewares/exception-printing-middleware
                         coercion/coerce-response-middleware ;; coercing response bodies
-                        coercion/coerce-request-middleware ;; coercing request parameters
+                        coercion/coerce-request-middleware  ;; coercing request parameters
                         multipart/multipart-middleware
                         auth-middlewares/replace-bearer-with-token
                         auth/wrap-jwt-authentication
@@ -151,6 +151,7 @@
                         middlewares/wrap-custom-schnaq-csrf-header]}
     ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
                            :user/admin? auth-middlewares/admin?-middleware
+                           :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
                            :user/pro-user? auth-middlewares/pro-user?-middleware
                            :app/valid-code? auth-middlewares/valid-app-code?-middleware
