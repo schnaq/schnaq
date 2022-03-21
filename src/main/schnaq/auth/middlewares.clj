@@ -32,6 +32,14 @@
       (handler request)
       (forbidden (at/build-error-body :auth/not-an-admin "You are not an admin.")))))
 
+(defn analytics-admin?-middleware
+  "Check if user has analytics-admin or higher role."
+  [handler]
+  (fn [request]
+    (if (auth-lib/has-role? (:identity request) shared-config/analytics-roles)
+      (handler request)
+      (forbidden (at/build-error-body :auth/not-an-admin "You are not allowed to see analytics.")))))
+
 (defn beta-tester?-middleware
   "Check if is eligible for our beta-testers program."
   [handler]
