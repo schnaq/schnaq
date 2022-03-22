@@ -73,7 +73,7 @@
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-http:9.4.44.v20210927" level="project" />
     <orderEntry type="library" name="Deps: day8.re-frame/http-fx:0.2.4" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-util:9.4.44.v20210927" level="project" />
-    <orderEntry type="library" name="Deps: com.taoensso/encore:3.12.1" level="project" />
+    <orderEntry type="library" name="Deps: com.taoensso/encore:3.21.0" level="project" />
     <orderEntry type="library" name="Deps: com.lucasbradstreet/cljs-uuid-utils:1.0.2" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.spec.javax.xml.bind/jboss-jaxb-api_2.3_spec:2.0.0.Final" level="project" />
     <orderEntry type="library" name="Deps: org.slf4j/jcl-over-slf4j:1.7.30" level="project" />
@@ -109,7 +109,7 @@
     <orderEntry type="library" name="Deps: com.cognitect/transit-cljs:0.8.269" level="project" />
     <orderEntry type="library" name="Deps: org.keycloak/keycloak-common:16.1.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/google-closure-library:0.0-20211011-0726fdeb" level="project" />
-    <orderEntry type="library" name="Deps: io.aviso/pretty:0.1.37" level="project" />
+    <orderEntry type="library" name="Deps: io.aviso/pretty:1.1.1" level="project" />
     <orderEntry type="library" name="Deps: com.github.fge/msg-simple:1.1" level="project" />
     <orderEntry type="library" name="Deps: com.h2database/h2:1.3.171" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-codec-socks:4.1.51.Final" level="project" />
@@ -225,7 +225,7 @@
     <orderEntry type="library" name="Deps: org.jboss.threads/jboss-threads:3.1.0.Final" level="project" />
     <orderEntry type="library" name="Deps: com.google.j2objc/j2objc-annotations:1.3" level="project" />
     <orderEntry type="library" name="Deps: cljc.java-time:0.1.1" level="project" />
-    <orderEntry type="library" name="Deps: com.taoensso/timbre:5.1.2" level="project" />
+    <orderEntry type="library" name="Deps: com.taoensso/timbre:5.2.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.cloud/google-cloud-secretmanager:2.0.4" level="project" />
     <orderEntry type="library" name="Deps: com.google.api.grpc/proto-google-common-protos:2.6.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.api.grpc/proto-google-cloud-secretmanager-v1beta1:2.0.4" level="project" />
