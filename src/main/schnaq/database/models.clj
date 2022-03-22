@@ -251,6 +251,12 @@
     :db/doc "Q&A mode."}
    {:db/ident :discussion.mode/discussion
     :db/doc "Discussion mode."}
+   {:db/ident :discussion.visible/entities
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "Visible Elements in discussion overview"}
+
+   {:db/ident :discussion.visible.entities/wordcloud}
 
    {:db/ident :discussion.access/code
     :db/valueType :db.type/long

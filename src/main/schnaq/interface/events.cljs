@@ -88,7 +88,8 @@
  :schnaq/select-current-from-backend
  (fn [_ [_ {:keys [schnaq]}]]
    {:fx [[:dispatch [:schnaq/select-current schnaq]]
-         [:dispatch [:theme.apply/from-discussion]]]}))
+         [:dispatch [:theme.apply/from-discussion]]
+         [:dispatch [:schnaq.wordcloud/for-selected-discussion]]]}))
 
 (rf/reg-event-fx
  :schnaq/select-current

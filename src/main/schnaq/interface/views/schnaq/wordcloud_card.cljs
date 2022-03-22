@@ -8,7 +8,7 @@
 (defn wordcloud-tab
   "Wordcloud tab menu to hide and show a wordcloud."
   []
-  (let [display-wordcloud? @(rf/subscribe [:schnaq/display-wordcloud?])]
+  (let [display-wordcloud? @(rf/subscribe [:schnaq/show-wordcloud?])]
     [:div.pt-2
      [:div.text (labels :schnaq.wordcloud/label)]
      [:div.text-center.pt-2
@@ -22,7 +22,7 @@
          (labels :schnaq.wordcloud/show)])]]))
 
 (defn wordcloud-card []
-  (let [display-wordcloud? @(rf/subscribe [:schnaq/display-wordcloud?])]
+  (let [display-wordcloud? @(rf/subscribe [:schnaq/show-wordcloud?])]
     (when display-wordcloud?
       [:div.statement-column
        [:section.statement-card
@@ -36,10 +36,11 @@
            #(rf/dispatch [:wordcloud/display? false])]]]
         [wordcloud/wordcloud]]])))
 
-;; subscriptions 
+;; -----------------------------------------------------------------------------
+;;
 
 (rf/reg-sub
- :schnaq/display-wordcloud?
+ :schnaq/show-wordcloud?
  ;; Checks if the wordcloud shall be displayed.
  (fn [db _]
    (get-in db [:schnaq :current :display-wordcloud?] false)))
@@ -56,12 +57,25 @@
 (rf/reg-event-fx
  :schnaq.toggle-wordcloud/success
  (fn [{:keys [db]} [_ {:keys [display-wordcloud?]}]]
-   (print "Display word cloud: " display-wordcloud?)
    {:db (assoc-in db [:schnaq :current :display-wordcloud?] display-wordcloud?)
     :fx [[:dispatch [:schnaq.wordcloud/calculate]]]}))
 
 (rf/reg-event-fx
  :schnaq.wordcloud/calculate
  (fn [{:keys [db]} [_ _]]
-   (when (get-in db [:schnaq :current :display-wordcloud?])
+   (when (get-in db [:schnaq :current :display-wordcloud?] false)
      {:fx [[:dispatch [:wordcloud/for-current-discussion]]]})))
+
+(defn- show-wordcloud-for-selected?
+  "Check in app db at selected schnaq whether to display a word cloud."
+  [db]
+  (some
+   #(= % :discussion.visible.entities/wordcloud)
+   (get-in db [:schnaq :selected :discussion.visible/entities])))
+
+(rf/reg-event-fx
+ :schnaq.wordcloud/for-selected-discussion
+ (fn [{:keys [db]} [_ _]]
+   {:db (assoc-in db [:schnaq :current :display-wordcloud?]
+                  (show-wordcloud-for-selected? db))
+    :fx [[:dispatch [:schnaq.wordcloud/calculate]]]}))
