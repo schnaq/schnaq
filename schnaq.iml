@@ -47,7 +47,7 @@
     <orderEntry type="library" name="Deps: metosin/muuntaja:0.6.8" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-common:4.1.51.Final" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.module/jackson-module-jaxb-annotations:2.12.1" level="project" />
-    <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.63.998" level="project" />
+    <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.64.1010" level="project" />
     <orderEntry type="library" name="Deps: jakarta.validation/jakarta.validation-api:2.0.2" level="project" />
     <orderEntry type="library" name="Deps: edn-query-language/eql:0.0.9" level="project" />
     <orderEntry type="library" name="Deps: io.undertow/undertow-core:2.2.4.Final" level="project" />
@@ -321,7 +321,7 @@
     <orderEntry type="library" name="Deps: borkdude/sci.impl.reflector:0.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.sun.mail/jakarta.mail:1.6.5" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.44.v20210927" level="project" />
-    <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.106.0" level="project" />
+    <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.107.0" level="project" />
     <orderEntry type="library" name="Deps: io.opencensus/opencensus-api:0.28.0" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-auth:1.41.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpmime:4.5.13" level="project" />
@@ -347,7 +347,7 @@
     <orderEntry type="library" name="Deps: org.clojure/data.codec:0.1.0" level="project" />
     <orderEntry type="library" name="Deps: javax.xml.bind/jaxb-api:2.3.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/sieppari:0.0.0-alpha13" level="project" />
-    <orderEntry type="library" name="Deps: com.google.code.gson/gson:2.8.9" level="project" />
+    <orderEntry type="library" name="Deps: com.google.code.gson/gson:2.9.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-interceptors:0.5.17" level="project" />
     <orderEntry type="library" name="Deps: http-kit:2.5.3" level="project" />
   </component>

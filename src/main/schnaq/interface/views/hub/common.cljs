@@ -10,7 +10,8 @@
   (if logo
     [:span.profile-pic-fill
      {:style {:height (str size "px") :width (str size "px")}}
-     [:img.profile-pic-image {:src logo}]]
+     [:img.profile-pic-image {:src logo
+                              :alt "Hub Logo"}]]
     [common/identicon display-name size]))
 
 (defn hub-logo-with-name

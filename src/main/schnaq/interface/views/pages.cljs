@@ -88,7 +88,8 @@
           (navigation/href :routes/pricing)
           "btn-sm btn-outline-white mx-2"]
          (labels :page.login.alert/text-2)]
-        [:img.w-50.align-self-center.d-lg-none {:src (img-path :schnaqqifant/three-d-bubble)}]]]]]}])
+        [:img.w-50.align-self-center.d-lg-none {:src (img-path :schnaqqifant/three-d-bubble)
+                                                :alt (labels :schnaqqi/pointing-right)}]]]]]}])
 
 (defn- please-login
   "Default page indicating that it is necessary to login."
@@ -127,17 +128,21 @@
 
 (>defn- validate-conditions-middleware
   "Takes the conditions and returns either the page or redirects to other views."
-  [{:condition/keys [needs-authentication? needs-administrator? needs-beta-tester? create-schnaq?]} page]
+  [{:condition/keys
+    [needs-authentication? needs-administrator? needs-beta-tester? create-schnaq? needs-analytics-admin?]}
+   page]
   [::page-options (s/+ vector?) :ret vector?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         admin? @(rf/subscribe [:user/administrator?])
+        analytics-admin? @(rf/subscribe [:user/analytics-admin?])
         beta-tester? @(rf/subscribe [:user/beta-tester?])]
     (cond
       (and create-schnaq? (not authenticated?)) [register-cta]
-      (and (or needs-authentication? needs-administrator? needs-beta-tester?)
+      (and (or needs-authentication? needs-administrator? needs-beta-tester? needs-analytics-admin?)
            (not authenticated?)) [please-login]
       (and needs-administrator? (not admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
       (and needs-beta-tester? (not beta-tester?)) [beta-only]
+      (and needs-analytics-admin? (not analytics-admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
       :else page)))
 
 ;; -----------------------------------------------------------------------------

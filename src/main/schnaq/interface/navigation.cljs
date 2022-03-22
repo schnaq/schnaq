@@ -40,13 +40,25 @@
  (fn [route]
    (apply reitit-front-easy/push-state route)))
 
+(rf/reg-fx
+ :navigation.navigated/push-matomo-tracker
+ (fn []
+   (let [matomo js/window._paq]
+     (.push matomo #js ["setCustomUrl" (oget js/window :location :href)])
+     (.push matomo #js ["setDocumentTitle" (oget js/window :document :title)])
+     (.push matomo #js ["trackPageView"]))))
+
 (rf/reg-event-fx
  :navigation/navigated
  (fn [{:keys [db]} [_ new-match]]
    {:db (let [old-match (:current-route db)
               controllers (reitit-front-controllers/apply-controllers (:controllers old-match) new-match)]
-          (assoc db :current-route (assoc new-match :controllers controllers)))
-    :fx [[:navigation.navigated/write-hreflang]]}))
+          (assoc db
+                 :current-route (assoc new-match :controllers controllers)
+                 ;; Set this variable after first load, so we do not submit matomo tracking twice on hard reload
+                 :hard-reload-done? true))
+    :fx [[:navigation.navigated/write-hreflang]
+         (when (:hard-reload-done? db) [:navigation.navigated/push-matomo-tracker])]}))
 
 (rf/reg-fx
  :navigation.redirect/follow!

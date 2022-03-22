@@ -30,7 +30,8 @@
    [:article.call-to-contribute.m-3
     [:div.alert.alert-light.text-light.row.layered-wave-background.p-md-5.rounded-1
      [:div.col-2.py-md-5.d-flex
-      [:img.w-75.align-self-center {:src (img-path :schnaqqifant/three-d-head)}]]
+      [:img.w-75.align-self-center {:src (img-path :schnaqqifant/three-d-head)
+                                    :alt (labels :schnaqqifant/three-d-head-alt-text)}]]
      [:div.col-10.py-md-5
       body]]]])
 
@@ -301,11 +302,13 @@
       [:div.d-inline-block
        [:h2 (labels :schnaq.search/heading)]
        [:div.row.mx-0.mt-4.mb-3
-        [:img.dashboard-info-icon-sm {:src (img-path :icon-search)}]
+        [:img.dashboard-info-icon-sm {:src (img-path :icon-search)
+                                      :alt (labels :icon.search/alt-text)}]
         [:div.text.display-6.my-auto.mx-3
          search-string]]]
       [:div.row.m-0
-       [:img.dashboard-info-icon-sm {:src (img-path :icon-posts)}]
+       [:img.dashboard-info-icon-sm {:src (img-path :icon-posts)
+                                     :alt (labels :icon.posts/alt-text)}]
        (if (empty? search-results)
          [:p.mx-3 (labels :schnaq.search/new-search-title)]
          [:p.mx-3 (str (count search-results) " " (labels :schnaq.search/results))])]]]))

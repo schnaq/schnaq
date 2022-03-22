@@ -205,6 +205,13 @@
      (string? (some shared-config/admin-roles roles)))))
 
 (rf/reg-sub
+ :user/analytics-admin?
+ ;; Users that are allowed to see all analytics.
+ (fn [db _]
+   (let [roles (get-in db [:user :roles])]
+     (string? (some shared-config/analytics-roles roles)))))
+
+(rf/reg-sub
  :user/beta-tester?
  (fn [db _]
    (let [roles (get-in db [:user :roles])]

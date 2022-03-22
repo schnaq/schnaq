@@ -11,8 +11,8 @@
     [pages/with-nav-and-header
      header
      [:section.container
-      [rows/image-left :schnaqqifant/hippie :coc.users]
-      [rows/image-right :schnaqqifant/police :coc.content]]]))
+      [rows/image-left :schnaqqifant/hippie :schnaqqifant/hippie-alt-text :coc.users]
+      [rows/image-right :schnaqqifant/police :schnaqqifant/police-alt-text :coc.content]]]))
 
 (defn view
   "A view containing the code of conduct"

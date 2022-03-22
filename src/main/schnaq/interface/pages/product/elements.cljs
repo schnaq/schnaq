@@ -37,7 +37,8 @@
     [:p.lead (labels subtitle)]
     [start-schnaq-button cta-button-label]]
    [:div.col-lg-6.pb-4
-    [:img.product-page-ipad {:src (img-path :productpage.overview/ipad)}]]])
+    [:img.product-page-ipad {:src (img-path :productpage.overview/ipad)
+                             :alt (labels :productpage.overview/ipad-alt-text)}]]])
 
 (defn- feature-text [title text]
   [:<>
@@ -56,7 +57,10 @@
 
 (defn- feature-image [image]
   [:div
-   [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
+   [:img.taskbar-background
+    {:src (img-path :how-to/taskbar)
+     :role "presentation"
+     :alt "Taskbar background"}]
    [motion/zoom-image
     {:class "product-page-feature-image my-auto"
      :src (img-path image)}]])
@@ -96,7 +100,8 @@
      [:div.row.mt-3.px-5
       [:div.col-3.d-flex
        [:div.align-self-end
-        [:img.product-page-qa-phone {:src (img-path :productpage.qa/phone)}]]]
+        [:img.product-page-qa-phone {:src (img-path :productpage.qa/phone)
+                                     :alt (labels :productpage.qa/phone-alt-text)}]]]
       [:div.col-9
        [feature-image :productpage.qa/overview]]]]))
 
@@ -124,8 +129,8 @@
   [heading subtitle title description cta-button-label feature-level content]
   [:div.overflow-hidden
    [pages/with-nav-and-header
-    {:page/title title
-     :page/description description
+    {:page/title (labels title)
+     :page/description (labels description)
      :page/vertical-header? true
      :page/more-for-heading (with-meta [product-above-the-fold
                                         heading
