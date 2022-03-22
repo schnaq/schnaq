@@ -49,7 +49,7 @@
  (fn [db _]
    (if-let [premises (get-in db [:discussion :premises :current])]
      (map second premises)
-     {})))
+     '())))
 
 (rf/reg-sub
  :discussion.conclusion/selected
