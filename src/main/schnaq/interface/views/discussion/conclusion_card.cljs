@@ -69,9 +69,8 @@
         checked? (statement-labels label)
         authenticated? @(rf/subscribe [:user/authenticated?])
         mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        show-button? (and (not @(rf/subscribe [:schnaq.routes/starting?]))
-                          (or (not mods-mark-only?)
-                              (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
+        show-button? (or (not mods-mark-only?)
+                         (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash])))]
     (when show-button?
       [:section.w-100
        [:button.btn.btn-sm.btn-link.text-dark.pe-0
@@ -117,7 +116,8 @@
       [:div.pt-2.d-flex.px-3
        [:div.me-auto [user/user-info statement 32 "w-100"]]
        [:div.d-flex.flex-row.align-items-center.ms-auto
-        [mark-as-answer-button statement]
+        (when-not @(rf/subscribe [:schnaq.routes/starting?])
+          [mark-as-answer-button statement])
         [badges/edit-statement-dropdown-menu statement]]]
       [:div.my-4]
       [:div.text-typography.px-3
