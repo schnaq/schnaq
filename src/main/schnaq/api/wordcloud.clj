@@ -3,7 +3,7 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.database.visible-entity :as visible-entity]))
 
-(defn- display-word-cloud
+(defn- toggle-wordcloud
   "Toggle word cloud display for a schnaq."
   [{{{:keys [share-hash display-wordcloud?]} :body} :parameters}]
   (if display-wordcloud?
@@ -13,8 +13,8 @@
 
 (def wordcloud-routes
   [["/wordcloud" {:swagger {:tags ["wordcloud"]}}
-    ["/discussion" {:put display-word-cloud
-                    :description (at/get-doc #'display-word-cloud)
+    ["/discussion" {:put toggle-wordcloud
+                    :description (at/get-doc #'toggle-wordcloud)
                     :middleware [:user/authenticated?
                                  :user/pro-user?
                                  :discussion/valid-credentials?]

@@ -20,7 +20,7 @@
       api/app
       :status))
 
-(deftest display-word-cloud-test
+(deftest toggle-wordcloud-test
   (testing "Non Pro User can't toggle wordcloud."
     (is (= 403 (toggle-wordcloud-request
                 toolbelt/token-wegi-no-beta-user
@@ -38,4 +38,9 @@
                 toolbelt/token-n2o-admin
                 test-share-hash
                 test-edit-hash
-                true)))))
+                true)))
+    (is (= 200 (toggle-wordcloud-request
+                toolbelt/token-n2o-admin
+                test-share-hash
+                test-edit-hash
+                false)))))
