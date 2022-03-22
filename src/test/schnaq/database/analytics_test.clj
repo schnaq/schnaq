@@ -88,3 +88,17 @@
   (testing "Count registered users."
     (is (zero? (count (db/users-created-since (Instant/now)))))
     (is (= 4 (count (db/users-created-since (toolbelt/now-minus-days 7)))))))
+
+(deftest number-of-pro-users-test
+  (testing "The number of pro users can be determined by subscription type"
+    (let [stripe-id "123132"]
+      (is (zero? (db/number-of-pro-users)))
+      (main-db/transact [{:user.registered.subscription/stripe-id stripe-id
+                          :user.registered.subscription/stripe-customer-id "whatever"
+                          :user.registered.subscription/type :user.registered.subscription.type/pro}])
+      (is (= 1 (db/number-of-pro-users)))
+      (let [sub-id (main-db/query '[:find ?subscription .
+                                    :in $
+                                    :where [?subscription :user.registered.subscription/stripe-id "123132"]])]
+        (main-db/transact [[:db/retract sub-id :user.registered.subscription/type]]))
+      (is (zero? (db/number-of-pro-users))))))

@@ -92,6 +92,25 @@
    [:statistics/since :ret :statistics/registered-users-num]
    (number-of-entities-since :user.registered/display-name since)))
 
+(>defn number-of-pro-users
+  "Returns the number of pro users in the database."
+  ([]
+   [:ret :statistics/registered-users-num]
+   (number-of-entities-with-value-since :user.registered.subscription/type :user.registered.subscription.type/pro))
+  ([since]
+   [:statistics/since :ret :statistics/registered-users-num]
+   (number-of-entities-with-value-since
+    :user.registered.subscription/type :user.registered.subscription.type/pro since)))
+
+(comment
+  (main-db/transact [{:user.registered.subscription/stripe-id "123132"
+                      :user.registered.subscription/stripe-customer-id "whatever"
+                      :user.registered.subscription/type :user.registered.subscription.type/pro}])
+  (main-db/fast-pull 17592186047186)
+  (main-db/transact [[:db/retract 17592186047186 :user.registered.subscription/type]])
+  (number-of-pro-users)
+  )
+
 (defn- date-to-day
   "Get only the date, without time from java.util.date"
   [date]
