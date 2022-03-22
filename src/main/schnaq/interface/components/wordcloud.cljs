@@ -64,10 +64,15 @@
 (defn wordcloud
   "Create a wordcloud based on the data in the db."
   []
+  (if-let [words @(rf/subscribe [:wordcloud/words])]
+    [:> ReactWordcloud {:words words :options options}]
+    [:div.text-center.py-3 [spinner-icon]]))
+
+(defn wordcloud-preview
+  "If user is pro-user display a wordcloud and if not show a preview instead."
+  []
   (if @(rf/subscribe [:user/pro-user?])
-    (if-let [words @(rf/subscribe [:wordcloud/words])]
-      [:> ReactWordcloud {:words words :options options}]
-      [:div.text-center.py-3 [spinner-icon]])
+    [wordcloud]
     [preview/preview-image :preview/wordcloud]))
 
 ;; -----------------------------------------------------------------------------

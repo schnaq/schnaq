@@ -31,6 +31,7 @@
             [schnaq.api.summaries :refer [summary-routes]]
             [schnaq.api.themes :refer [theme-routes]]
             [schnaq.api.user :refer [user-routes]]
+            [schnaq.api.wordcloud :refer [wordcloud-routes]]
             [schnaq.auth :as auth]
             [schnaq.auth.middlewares :as auth-middlewares]
             [schnaq.config :as config]
@@ -111,6 +112,7 @@
     summary-routes
     theme-routes
     user-routes
+    wordcloud-routes
 
     ["/swagger.json"
      {:get {:no-doc true

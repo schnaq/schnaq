@@ -96,6 +96,7 @@
    {:discussion/author public-user}
    {[:discussion.access/_discussion :as :discussion/access]
     access-code}
+   {:discussion.visible/entities [:db/ident]}
    {:discussion/theme theme}])
 
 (def discussion-private
@@ -110,6 +111,7 @@
    :discussion/header-image-url
    :discussion/created-at
    {:discussion/author public-user}
+   {:discussion.visible/entities [:db/ident]}
    {:discussion/theme theme}])
 
 (def access-code-with-discussion

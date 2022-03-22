@@ -286,6 +286,7 @@
    :schnaq.input-type/answer "Answer"
    :schnaq.input-type/poll "Poll"
    :schnaq.input-type/activation "Activation"
+   :schnaq.input-type/word-cloud "Word Cloud"
    :schnaq.input-type/coming-soon "Coming Soon"
    :schnaq.input-type/not-admin "Only for moderators"
    :schnaq.input-type/pro-only "Only for pro users"
@@ -314,6 +315,12 @@
    :schnaq.activation/delete-button "Delete"
    :schnaq.activation/title "%ss total:"
    :schnaq.activation/phrase "Torooo"
+
+   ;; Word Cloud feature
+   :schnaq.wordcloud/show "Show Word Cloud"
+   :schnaq.wordcloud/hide "Hide Word Cloud"
+   :schnaq.wordcloud/title "Word Cloud"
+   :schnaq.wordcloud/label "Show the most common words from your schnaq as a word cloud."
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"

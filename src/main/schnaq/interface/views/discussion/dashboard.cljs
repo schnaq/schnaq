@@ -3,7 +3,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.preview :as preview]
-            [schnaq.interface.components.wordcloud :refer [wordcloud]]
+            [schnaq.interface.components.wordcloud :refer [wordcloud-preview]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.markdown :as md]
@@ -70,7 +70,7 @@
   [:section.panel-white.mb-3
    [:h3 (labels :dashboard.wordcloud/title)]
    [:small.text-muted (labels :dashboard.wordcloud/subtitle)]
-   [wordcloud]])
+   [wordcloud-preview]])
 
 (defn- dashboard-view []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
