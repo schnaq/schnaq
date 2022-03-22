@@ -13,28 +13,28 @@
      [:div.text (labels :schnaq.wordcloud/label)]
      [:div.text-center.pt-2
       (if display-wordcloud?
-        [:<>
-         [:button.btn.btn-dark.w-75
-          {:on-click #(rf/dispatch [:wordcloud/display? false])}
-          (labels :schnaq.wordcloud/hide)]]
+        [:button.btn.btn-dark.w-75
+         {:on-click #(rf/dispatch [:wordcloud/display? false])}
+         (labels :schnaq.wordcloud/hide)]
         [:button.btn.btn-secondary.w-75
          {:on-click (fn [_e] (rf/dispatch [:wordcloud/display? true]))}
          (labels :schnaq.wordcloud/show)])]]))
 
-(defn wordcloud-card []
-  (let [display-wordcloud? @(rf/subscribe [:schnaq/show-wordcloud?])]
-    (when display-wordcloud?
-      [:div.statement-column
-       [:section.statement-card
-        [:div.d-flex.mt-3
-         [:h4.mx-auto.mt-3
-          (labels :schnaq.wordcloud/title)]
-         [dropdown-menu/moderator
-          "wordcloud-dropdown-id"
-          [dropdown-menu/item :trash
-           :schnaq.wordcloud/hide
-           #(rf/dispatch [:wordcloud/display? false])]]]
-        [wordcloud/wordcloud]]])))
+(defn wordcloud-card
+  "Displays a wordcloud in a card."
+  []
+  (when-let [display-wordcloud? @(rf/subscribe [:schnaq/show-wordcloud?])]
+    [:div.statement-column
+     [:section.statement-card
+      [:div.d-flex.mt-3
+       [:h4.mx-auto.mt-3
+        (labels :schnaq.wordcloud/title)]
+       [dropdown-menu/moderator
+        "wordcloud-dropdown-id"
+        [dropdown-menu/item :trash
+         :schnaq.wordcloud/hide
+         #(rf/dispatch [:wordcloud/display? false])]]]
+      [wordcloud/wordcloud]]]))
 
 ;; -----------------------------------------------------------------------------
 ;;
