@@ -9,7 +9,7 @@
   "Adds a new starting-statement and returns the newly created id."
   [share-hash visible-id]
   [:discussion/share-hash :db/id :ret map?]
-  (log/info "Adding visible element: " visible-id)
+  (log/info "Adding visible element:" visible-id)
   (let [discussion-id (:db/id (discussion-db/discussion-by-share-hash share-hash))]
     @(transact [[:db/add discussion-id :discussion.visible/entities visible-id]])))
 
@@ -23,11 +23,10 @@
   "Get the visible entities for a discussion."
   [share-hash]
   [:discussion/share-hash :ret vector?]
-  (first
-   (toolbelt/pull-key-up
-    (query
-     '[:find (pull ?visible-entities [*])
-       :in $ ?share-hash
-       :where [?discussion :discussion/share-hash ?share-hash]
-       [?discussion :discussion.visible/entities ?visible-entities]]
-     share-hash))))
+  (toolbelt/pull-key-up
+   (query
+    '[:find [(pull ?visible-entities [*]) ...]
+      :in $ ?share-hash
+      :where [?discussion :discussion/share-hash ?share-hash]
+      [?discussion :discussion.visible/entities ?visible-entities]]
+    share-hash)))
