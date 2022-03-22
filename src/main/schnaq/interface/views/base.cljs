@@ -38,7 +38,7 @@
     {:src (img-path :logo-white)
      :alt "schnaq logo"}]
    [:div.lead.fst-italic.pb-1
-    (labels :startpage/heading)]])
+    (labels :startpage/slogan)]])
 
 (defn- footer-button
   [route-name content-label]

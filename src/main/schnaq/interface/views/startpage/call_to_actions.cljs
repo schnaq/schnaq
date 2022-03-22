@@ -45,7 +45,7 @@
   []
   [:section.row.mt-3 {:key "HeaderExtras-Bullet-Points-and-Animation"}
    [:div.col-lg-6.col-xxxl-7.py-lg-4.pe-lg-5.my-auto
-    [:h1 (labels :startpage/subheading)]
+    [:h1 (labels :startpage/slogan)]
     [:p.lead (labels :startpage/hook)]
     [start-schnaq-button]
     [social-proof-abtf]]

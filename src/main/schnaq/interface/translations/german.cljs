@@ -43,8 +43,7 @@
    :startpage.above-the-fold/mp4 "https://s3.schnaq.com/startpage/videos/above_the_fold.mp4"
 
    ;; Startpage
-   :startpage/heading "Fragen sammeln leicht gemacht"
-   :startpage/subheading "Veranstaltungen so interaktiv, wie sie sein sollen!"
+   :startpage/slogan "Veranstaltungen so interaktiv, wie sie sein sollen!"
    :startpage/title "Die sicherste Software für Publikumsinteraktion!"
    :startpage/description "Die sicherste Software für Interaktion mit deinem Publikum bei live und virtuellen Events. Interagiere mit dem Publikum durch Q&A, Umfragen… Probiere es jetzt kostenfrei aus!"
    :startpage/hook "Fragen sammeln, Publikum verstehen, Wissen teilen. Schnaq macht da weiter, wo andere aufhören!"
