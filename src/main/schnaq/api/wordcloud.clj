@@ -1,8 +1,7 @@
 (ns schnaq.api.wordcloud
   (:require [ring.util.http-response :refer [ok]]
             [schnaq.api.toolbelt :as at]
-            [schnaq.database.visible-entity :as visible-entity]
-            [taoensso.timbre :as log]))
+            [schnaq.database.visible-entity :as visible-entity]))
 
 (defn- display-word-cloud
   "Toggle word cloud display for a schnaq."
