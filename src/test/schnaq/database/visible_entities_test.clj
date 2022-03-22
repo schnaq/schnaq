@@ -17,7 +17,7 @@
                      (visible-entities-db/get-entities test-share-hash))))))
 
 (deftest retract-entity-test
-  (testing "Retract a visible entity to a discussion."
+  (testing "Retract a visible entity from a discussion."
     (visible-entities-db/retract-entity! test-share-hash-visible-entities
                                          :discussion.visible.entities/wordcloud)
     (is (nil? (some #(= % :discussion.visible.entities/wordcloud)
