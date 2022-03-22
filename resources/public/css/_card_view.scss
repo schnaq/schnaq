@@ -128,9 +128,11 @@
   @extend .shadow;
 }
 
-#selection-tab .nav-link { 
-  font-size: medium;
-  padding: 0.5rem;
+.selection-tab {
+  .nav-link {
+    font-size: medium;
+    padding: 0.5rem;
+  }
 }
 
 .highlight-card {

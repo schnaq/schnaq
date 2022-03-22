@@ -341,7 +341,7 @@
            [:div.card-view.card-body
             [topic-or-search-content]
             (when-not read-only?
-              [:ul#selection-tab.nav.nav-tabs
+              [:ul.selection-tab.nav.nav-tabs
                [:li.nav-item
                 [:button.nav-link {:class (active-class :question)
                                    :role "button"
