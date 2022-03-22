@@ -23,7 +23,7 @@
         keycloak-clojure/keycloak-clojure {:mvn/version "1.25.3"}
         metosin/reitit {:mvn/version "0.5.17"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
-        org.clojure/clojure {:mvn/version "1.10.3"}
+        org.clojure/clojure {:mvn/version "1.11.0"}
         org.clojure/clojurescript {:mvn/version "1.11.4"}
         org.clojure/core.async {:mvn/version "1.5.648"}
         org.clojure/test.check {:mvn/version "1.1.1"}
