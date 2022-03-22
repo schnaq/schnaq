@@ -128,6 +128,11 @@
   @extend .shadow;
 }
 
+#selection-tab .nav-link { 
+  padding: 0.5rem;
+  font-size: medium;
+}
+
 .highlight-card {
   border-radius: 0 1rem 1rem 0;
   margin: 0.75rem 0;

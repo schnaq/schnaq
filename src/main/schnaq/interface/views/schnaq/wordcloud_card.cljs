@@ -23,7 +23,7 @@
 (defn wordcloud-card
   "Displays a wordcloud in a card."
   []
-  (when-let [display-wordcloud? @(rf/subscribe [:schnaq/show-wordcloud?])]
+  (when @(rf/subscribe [:schnaq/show-wordcloud?])
     [:div.statement-column
      [:section.statement-card
       [:div.d-flex.mt-3

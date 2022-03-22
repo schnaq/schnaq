@@ -340,7 +340,7 @@
            [:div.card-view.card-body
             [topic-or-search-content]
             (when-not read-only?
-              [:ul.nav.nav-tabs
+              [:ul#selection-tab.nav.nav-tabs
                [:li.nav-item
                 [:button.nav-link {:class (active-class :question)
                                    :role "button"
@@ -360,7 +360,13 @@
                       {:class (active-class :activation)
                        :role "button"
                        :on-click #(on-click :activation)}
-                      activation-tab]]]
+                      activation-tab]]
+                    [:li.nav-item
+                     [:button.nav-link
+                      {:class (active-class :word-cloud)
+                       :role "button"
+                       :on-click #(on-click :word-cloud)}
+                      word-cloud-tab]]]
                    [:<>
                     [:li.nav-item
                      [:button.nav-link.text-muted
@@ -371,11 +377,9 @@
                       {:role "button"}
                       [tooltip/text (labels disabled-tooltip-key) activation-tab]]]
                     [:li.nav-item
-                     [:button.nav-link
-                      {:class (active-class :word-cloud)
-                       :role "button"
-                       :on-click #(on-click :word-cloud)}
-                      word-cloud-tab]]]))])
+                     [:button.nav-link.text-muted
+                      {:role "button"}
+                      [tooltip/text (labels disabled-tooltip-key) word-cloud-tab]]]]))])
             (case @selected-option
               :question [input-form-or-disabled-alert]
               :poll [poll/poll-form]
