@@ -105,7 +105,7 @@
     (is (= 1 (db/number-of-pro-users)))))
 
 (deftest number-of-pro-user-unsubscribe-test
-  (testing "Adding a pro user returns one pro user."
+  (testing "Add a pro user and remove it afterwards, results in zero pro users."
     (user-db/subscribe-pro-tier kangaroo-keycloak-id "subscription-id" "cus_kangaroo")
     (user-db/unsubscribe-pro-tier kangaroo-keycloak-id)
     (is (zero? (db/number-of-pro-users)))))
