@@ -22,7 +22,8 @@
             [schnaq.interface.views.schnaq.poll :as poll]
             [schnaq.interface.views.schnaq.reactions :as reactions]
             [schnaq.interface.views.schnaq.wordcloud-card :as wordcloud-card]
-            [schnaq.interface.views.user :as user]))
+            [schnaq.interface.views.user :as user]
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (defn- call-to-action-schnaq
   "If no contributions are available, add a call to action to engage the users."
@@ -330,52 +331,56 @@
                                    (not pro-user?) :schnaq.input-type/pro-only
                                    (not admin-access?) :schnaq.input-type/not-admin
                                    :else :schnaq.input-type/coming-soon)
-            top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
+            top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+            answered? (shared-tools/answered? {:statement/children @(rf/subscribe [:discussion.premises/current])})]
         [motion/fade-in-and-out
          [:section.selection-card
-          [topic-or-search-content]
-          (when-not read-only?
-            [:ul.nav.nav-tabs
-             [:li.nav-item
-              [:button.nav-link {:class (active-class :question)
-                                 :role "button"
-                                 :on-click #(on-click :question)}
-               [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
-             (when top-level?
-               (if (and pro-user? admin-access?)
-                 [:<>
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :poll)
-                     :role "button"
-                     :on-click #(on-click :poll)}
-                    poll-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :activation)
-                     :role "button"
-                     :on-click #(on-click :activation)}
-                    activation-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :word-cloud)
-                     :role "button"
-                     :on-click #(on-click :word-cloud)}
-                    word-cloud-tab]]]
-                 [:<>
-                  [:li.nav-item
-                   [:button.nav-link.text-muted
-                    {:role "button"}
-                    [tooltip/text (labels disabled-tooltip-key) poll-tab]]]
-                  [:li.nav-item
-                   [:button.nav-link.text-muted
-                    {:role "button"}
-                    [tooltip/text (labels disabled-tooltip-key) activation-tab]]]]))])
-          (case @selected-option
-            :question [input-form-or-disabled-alert]
-            :poll [poll/poll-form]
-            :activation [activation/activation-tab]
-            :word-cloud [wordcloud-card/wordcloud-tab])]
+          [:div.d-flex.flex-row
+           (when answered? [:div.highlight-card-answered])
+           [:div.card-view.card-body
+            [topic-or-search-content]
+            (when-not read-only?
+              [:ul.nav.nav-tabs
+               [:li.nav-item
+                [:button.nav-link {:class (active-class :question)
+                                   :role "button"
+                                   :on-click #(on-click :question)}
+                 [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
+               (when top-level?
+                 (if (and pro-user? admin-access?)
+                   [:<>
+                    [:li.nav-item
+                     [:button.nav-link
+                      {:class (active-class :poll)
+                       :role "button"
+                       :on-click #(on-click :poll)}
+                      poll-tab]]
+                    [:li.nav-item
+                     [:button.nav-link
+                      {:class (active-class :activation)
+                       :role "button"
+                       :on-click #(on-click :activation)}
+                      activation-tab]]]
+                   [:<>
+                    [:li.nav-item
+                     [:button.nav-link.text-muted
+                      {:role "button"}
+                      [tooltip/text (labels disabled-tooltip-key) poll-tab]]]
+                    [:li.nav-item
+                     [:button.nav-link.text-muted
+                      {:role "button"}
+                      [tooltip/text (labels disabled-tooltip-key) activation-tab]]]
+                    [:li.nav-item
+                     [:button.nav-link
+                      {:class (active-class :word-cloud)
+                       :role "button"
+                       :on-click #(on-click :word-cloud)}
+                      word-cloud-tab]]]))])
+            (case @selected-option
+              :question [input-form-or-disabled-alert]
+              :poll [poll/poll-form]
+              :activation [activation/activation-tab]
+              :word-cloud [wordcloud-card/wordcloud-tab])]]]
          motion/card-fade-in-time]))))
 
 (defn- delay-fade-in-for-subsequent-content [index]

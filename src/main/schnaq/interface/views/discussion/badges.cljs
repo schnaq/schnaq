@@ -230,13 +230,14 @@
 
 (defn static-info-badges
   "Badges that display schnaq info."
-  [schnaq]
-  (let [meta-info (:meta-info schnaq)
+  []
+  (let [schnaq @(rf/subscribe [:schnaq/selected])
+        meta-info (:meta-info schnaq)
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
     [:p.mb-0
      [:span.badge.rounded-pill.badge-transparent.me-2
-      [icon :comments "m-auto"]
+      [icon :comment/alt "m-auto"]
       " " statement-count]
      [:span.badge.rounded-pill.badge-transparent.me-2
       {:tabIndex 20
@@ -250,7 +251,7 @@
         statement-count (:all-statements meta-info)]
     [:div.d-flex.flex-row.mb-0
      [:span.badge.rounded-pill.badge-transparent.me-2
-      [icon :comments "m-auto me-1"]
+      [icon :comment/alt "m-auto me-1"]
       statement-count " " (labels :discussion.badges/posts)]
      [edit-discussion-dropdown-menu schnaq]]))
 
