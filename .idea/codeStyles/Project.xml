@@ -23,7 +23,9 @@
   :clojure.spec.alpha/fdef :only-indent
   :clojure.spec.alpha/with-gen :only-indent
   :clojure.test/are :only-indent
+  :cursive.formatting/align-conditionals false
   :cursive.formatting/align-maps false
+  :cursive.formatting/comment-align-column 0
   :cursive.formatting/one-space-lists true
   :devcards.core/defcard-rg :only-indent
   :devcards.core/deftest :only-indent
