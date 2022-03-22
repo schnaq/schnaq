@@ -754,6 +754,7 @@
    :analytics/overall-discussions "Schnaqs erstellt"
    :analytics/user-numbers "Usernamen angelegt"
    :analytics/registered-users-numbers "Registrierte Nutzer:innen"
+   :analytics/pro-users-numbers "Pro Kund:innen"
    :analytics/average-statements-title "Durchschnittliche Zahl an Beiträgen pro schnaq"
    :analytics/statements-num-title "Anzahl Statements"
    :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
