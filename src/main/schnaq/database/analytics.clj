@@ -213,7 +213,7 @@
    [:ret :statistics/statement-type-stats]
    (labels-stats max-time-back))
   ([since]
-   [:statistics/since :ret :statistics/statement-type-stats]
+   [:statistics/since :ret :statistics/labels-stats]
    {:check (number-of-entities-with-value-since :statement/labels ":check" since)
     :question (number-of-entities-with-value-since :statement/labels ":question" since)
     :times (number-of-entities-with-value-since :statement/labels ":times" since)
