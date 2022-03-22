@@ -30,17 +30,15 @@
   statement list."
   [db updated-statement]
   (let [parent-id (-> updated-statement :statement/parent :db/id)
-        parent (get-in db [:discussion :premises :current parent-id])
-        parent-in-current-premises? (not (nil? parent))
-        new-db (update-in db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))]
+        parent-in-current-premises? (not (nil? (get-in db [:discussion :premises :current parent-id])))
+        db-search-cleared (update-in db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))]
     (if parent-in-current-premises?
-      (do
-        (-> new-db
-            (update-in [:discussion :premises :current parent-id :statement/children]
-                       #(tools/update-statement-in-list % updated-statement))
-            (update-in [:discussion :premises :current parent-id :meta/answered?]
-                       #(shared-tools/answered? parent))))
-      (assoc-in new-db [:discussion :premises :current (:db/id updated-statement)] updated-statement))))
+      (let [db-updated-children (update-in db-search-cleared [:discussion :premises :current parent-id :statement/children]
+                                           #(tools/update-statement-in-list % updated-statement))
+            current-parent (get-in db-updated-children [:discussion :premises :current parent-id])]
+        (update-in db-updated-children [:discussion :premises :current parent-id :meta/answered?]
+                   #(shared-tools/answered? current-parent)))
+      (assoc-in db-search-cleared [:discussion :premises :current (:db/id updated-statement)] updated-statement))))
 
 (rf/reg-event-fx
  :statement.labels/remove
@@ -67,9 +65,7 @@
  :statement.labels/add
  (fn [{:keys [db]} [_ statement label]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         updated-statement (update statement :statement/labels conj label)
-         _ (prn "old labels" (:statement/labels statement))
-         _ (prn "new labels" (:statement/labels updated-statement))]
+         updated-statement (update statement :statement/labels conj label)]
      {:db (store-statement db updated-statement)
       :fx [(http/xhrio-request db :put "/discussion/statement/label/add"
                                [:statement.labels.update/success]

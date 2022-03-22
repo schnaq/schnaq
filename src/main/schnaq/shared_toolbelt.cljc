@@ -31,14 +31,4 @@
   "Check if a child exists, which has the label :check."
   [{:keys [statement/children]}]
   [map? :ret boolean?]
-  (prn "answered?")
-  (prn (map :statement/labels children))
-  (let [res (string? ((set (flatten (map :statement/labels children))) ":check"))]
-    (prn "answered?" res)
-    res))
-
-(comment
-
-  (string? ((set (flatten '(#{":check"}))) ":check"))
-
-  nil)
+  (string? ((set (flatten (map :statement/labels children))) ":check")))
