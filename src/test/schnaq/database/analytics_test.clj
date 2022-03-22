@@ -4,6 +4,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db]
             [schnaq.database.user :as user-db]
+            [schnaq.test-data :refer [kangaroo]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]
             [schnaq.toolbelt :as toolbelt])
   (:import (java.time Instant)))
@@ -89,16 +90,22 @@
     (is (zero? (count (db/users-created-since (Instant/now)))))
     (is (= 4 (count (db/users-created-since (toolbelt/now-minus-days 7)))))))
 
-(deftest number-of-pro-users-test
-  (testing "The number of pro users can be determined by subscription type"
-    (let [stripe-id "123132"]
-      (is (zero? (db/number-of-pro-users)))
-      (main-db/transact [{:user.registered.subscription/stripe-id stripe-id
-                          :user.registered.subscription/stripe-customer-id "whatever"
-                          :user.registered.subscription/type :user.registered.subscription.type/pro}])
-      (is (= 1 (db/number-of-pro-users)))
-      (let [sub-id (main-db/query '[:find ?subscription .
-                                    :in $
-                                    :where [?subscription :user.registered.subscription/stripe-id "123132"]])]
-        (main-db/transact [[:db/retract sub-id :user.registered.subscription/type]]))
-      (is (zero? (db/number-of-pro-users))))))
+;; -----------------------------------------------------------------------------
+
+(def ^:private kangaroo-keycloak-id
+  (:user.registered/keycloak-id kangaroo))
+
+(deftest number-of-pro-user-zero-test
+  (testing "Number of pro users is zero in the beginning."
+    (is (zero? (db/number-of-pro-users)))))
+
+(deftest number-of-pro-user-one-pro-user-test
+  (testing "Adding a pro user returns one pro user."
+    (user-db/subscribe-pro-tier kangaroo-keycloak-id "subscription-id" "cus_kangaroo")
+    (is (= 1 (db/number-of-pro-users)))))
+
+(deftest number-of-pro-user-unsubscribe-test
+  (testing "Adding a pro user returns one pro user."
+    (user-db/subscribe-pro-tier kangaroo-keycloak-id "subscription-id" "cus_kangaroo")
+    (user-db/unsubscribe-pro-tier kangaroo-keycloak-id)
+    (is (zero? (db/number-of-pro-users)))))
