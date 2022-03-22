@@ -186,7 +186,6 @@
                                (rf/dispatch [:schnaq.activation/load-from-backend])
                                (rf/dispatch [:updates.periodic/polls true])
                                (rf/dispatch [:updates.periodic/activation true])
-                               (rf/dispatch [:schnaq.wordcloud/calculate])
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/starting-conclusions false])
