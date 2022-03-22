@@ -198,7 +198,7 @@
         [:dropdown-item
          [delete-dropdown-button statement current-edit-hash]])]]))
 
-(defn- show-number-of-replies [statement]
+(defn show-number-of-replies [statement]
   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
         share-hash @(rf/subscribe [:schnaq/share-hash])
         old-statement-num (get old-statements-nums-map (:db/id statement) 0)
@@ -217,17 +217,6 @@
         (labels :statement.badges/more-post)
         (labels :statement.badges/more-posts))]]))
 
-(defn extra-discussion-info-badges
-  "Badges that display additional discussion info."
-  ([statement]
-   [extra-discussion-info-badges statement false])
-  ([statement with-edit-dropdown?]
-   [:div.d-flex.flex-row.align-items-center
-    [show-number-of-replies statement]
-    (when with-edit-dropdown?
-      [:div.ms-2
-       [edit-statement-dropdown-menu statement]])]))
-
 (defn comments-info-badge
   "Badge that display the comment count."
   [schnaq]
@@ -241,13 +230,14 @@
 
 (defn static-info-badges
   "Badges that display schnaq info."
-  [schnaq]
-  (let [meta-info (:meta-info schnaq)
+  []
+  (let [schnaq @(rf/subscribe [:schnaq/selected])
+        meta-info (:meta-info schnaq)
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
     [:p.mb-0
      [:span.badge.rounded-pill.badge-transparent.me-2
-      [icon :comments "m-auto"]
+      [icon :comment/alt "m-auto"]
       " " statement-count]
      [:span.badge.rounded-pill.badge-transparent.me-2
       {:tabIndex 20
@@ -261,7 +251,7 @@
         statement-count (:all-statements meta-info)]
     [:div.d-flex.flex-row.mb-0
      [:span.badge.rounded-pill.badge-transparent.me-2
-      [icon :comments "m-auto me-1"]
+      [icon :comment/alt "m-auto me-1"]
       statement-count " " (labels :discussion.badges/posts)]
      [edit-discussion-dropdown-menu schnaq]]))
 

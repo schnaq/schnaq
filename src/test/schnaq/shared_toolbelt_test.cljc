@@ -1,6 +1,7 @@
 (ns schnaq.shared-toolbelt-test
   (:require [clojure.test :refer [deftest is are testing]]
-            [schnaq.shared-toolbelt :as tools]))
+            [schnaq.shared-toolbelt :as tools]
+            [schnaq.test-data :refer [kangaroo christian]]))
 
 (deftest slugify-test
   (testing "Slugs should contain no whitespace or other special characters."
@@ -21,3 +22,10 @@
       (is (= {} (tools/remove-nil-values-from-map {})))
       (is (= {} (tools/remove-nil-values-from-map {:foo ""})))
       (is (= time-map (tools/remove-nil-values-from-map time-map))))))
+
+(deftest normalize-test
+  (testing "Normalize data for better access through a map."
+    (let [normalized (tools/normalize :db/id [kangaroo christian])]
+      (is (= christian (get normalized (:db/id christian))))
+      (is (= kangaroo (get normalized (:db/id kangaroo))))
+      (is (nil? (get normalized "razupaltuff"))))))

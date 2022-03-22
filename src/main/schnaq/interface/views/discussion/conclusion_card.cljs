@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [clojure.string :as cstring]
+  (:require [clojure.spec.alpha :as s]
+            [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -21,7 +21,8 @@
             [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.schnaq.poll :as poll]
             [schnaq.interface.views.schnaq.reactions :as reactions]
-            [schnaq.interface.views.user :as user]))
+            [schnaq.interface.views.user :as user]
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (defn- call-to-action-schnaq
   "If no contributions are available, add a call to action to engage the users."
@@ -57,28 +58,33 @@
   [:div.d-flex.flex-wrap.align-items-center
    [reactions/up-down-vote statement]
    [:div.ms-sm-0.ms-lg-auto
-    [badges/extra-discussion-info-badges statement]]])
+    [badges/show-number-of-replies statement]]])
 
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
   [statement]
   (let [statement-labels (set (:statement/labels statement))
         label ":check"
-        checked? (statement-labels label)]
-    [:section.w-100
-     [:button.btn.btn-sm.btn-link.text-dark.pe-0
-      {:on-click #(if checked?
-                    (rf/dispatch [:statement.labels/remove statement label])
-                    (rf/dispatch [:statement.labels/add statement label]))}
-      [:small.pe-2 (if checked?
-                     (labels :qanda.button.mark/as-unanswered)
-                     (labels :qanda.button.mark/as-answer))]
-      [labels/build-label (if checked? label ":unchecked")]]]))
+        checked? (statement-labels label)
+        authenticated? @(rf/subscribe [:user/authenticated?])
+        mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
+        show-button? (or (not mods-mark-only?)
+                         (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash])))]
+    (when show-button?
+      [:section.w-100
+       [:button.btn.btn-sm.btn-link.text-dark.pe-0
+        {:on-click #(if checked?
+                      (rf/dispatch [:statement.labels/remove statement label])
+                      (rf/dispatch [:statement.labels/add statement label]))}
+        [:small.pe-2 (if checked?
+                       (labels :qanda.button.mark/as-unanswered)
+                       (labels :qanda.button.mark/as-answer))]
+        [labels/build-label (if checked? label ":unchecked")]]])))
 
 (>defn- card-highlighting
   "Add card-highlighting to a statement card."
   [{:keys [meta/answered? statement/type]}]
-  [::specs/statement :ret string?]
+  [(s/keys :opt [:meta/answered? :statement/type]) :ret string?]
   (let [statement-type (when type (str "-" (name type)))]
     (if answered?
       "highlight-card-answered"
@@ -99,33 +105,25 @@
   ([statement]
    [statement-card statement nil])
   ([statement additional-content]
-   (let [current-route @(rf/subscribe [:navigation/current-route-name])
-         history-length (count @(rf/subscribe [:discussion-history]))
-         mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-         authenticated? @(rf/subscribe [:user/authenticated?])
-         show-answer? (and (= 1 history-length)
-                           (= :routes.schnaq.select/statement current-route) ;; history-length == 1 => a reply to a question
-                           (or (not mods-mark-only?)
-                               (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
-     [:article.statement-card
-      [:div.d-flex.flex-row
-       [:div {:class (card-highlighting statement)}]
-       [:div.card-view.card-body.py-2.px-0
-        (when (:meta/new? statement)
-          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
-           (labels :discussion.badges/new)])
-        [:div.pt-2.d-flex.px-3
-         [:div.me-auto [user/user-info statement 32 "w-100"]]
-         [:div.d-flex.flex-row.align-items-center.ms-auto
-          (when show-answer? [mark-as-answer-button statement])
-          [badges/edit-statement-dropdown-menu statement]]]
-        [:div.my-4]
-        [:div.text-typography.px-3
-         [truncated-content/statement statement]
-         [statement-information-row statement]]
-        [:div.mx-3
-         [input/reply-in-statement-input-form statement]
-         additional-content]]]])))
+   [:article.statement-card
+    [:div.d-flex.flex-row
+     [:div {:class (card-highlighting statement)}]
+     [:div.card-view.card-body.py-2.px-0
+      (when (:meta/new? statement)
+        [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
+         (labels :discussion.badges/new)])
+      [:div.pt-2.d-flex.px-3
+       [:div.me-auto [user/user-info statement 32 "w-100"]]
+       [:div.d-flex.flex-row.align-items-center.ms-auto
+        [mark-as-answer-button statement]
+        [badges/edit-statement-dropdown-menu statement]]]
+      [:div.my-4]
+      [:div.text-typography.px-3
+       [truncated-content/statement statement]
+       [statement-information-row statement]]
+      [:div.mx-3
+       [input/reply-in-statement-input-form statement]
+       additional-content]]]]))
 
 (defn- discuss-answer-button [statement]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
@@ -141,11 +139,12 @@
 
 (defn reduced-statement-card
   "A reduced statement-card focusing on the statement."
-  [statement with-answer?]
+  [statement]
   [motion/fade-in-and-out
    [:article.statement-card.mt-1.border
     [:div.d-flex.flex-row
-     [:div.me-2 {:class (str "highlight-card-reduced highlight-card-" (name (or (:statement/type statement) :neutral)))}]
+     [:div.me-2.highlight-card-reduced
+      {:class (card-highlighting statement)}]
      [:div.card-view.card-body.p-2
       [:div.d-flex.justify-content-start.pt-2
        [user/user-info statement 25 "w-100"]
@@ -155,14 +154,13 @@
       [:div.d-flex.flex-wrap.align-items-center
        [discuss-answer-button statement]
        [reactions/up-down-vote statement]
-       (when with-answer?
-         [:div.d-flex.flex-row.align-items-center.ms-auto
-          [mark-as-answer-button statement]])]]]]])
+       [:div.d-flex.flex-row.align-items-center.ms-auto
+        [mark-as-answer-button statement]]]]]]])
 
 (defn reduced-or-edit-card
   "Wrap reduced statement card to make it editable."
-  [statement args]
-  [statement-card->editable-card statement [reduced-statement-card statement args]])
+  [statement]
+  [statement-card->editable-card statement [reduced-statement-card statement]])
 
 (defn- answers [statement]
   (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
@@ -170,7 +168,7 @@
       [:div.mt-2
        (for [answer answers]
          (with-meta
-           [reduced-or-edit-card answer :with-answer]
+           [reduced-or-edit-card answer]
            {:key (str "answer-" (:db/id answer))}))])))
 
 (defn- replies [statement]
@@ -182,13 +180,7 @@
                          [:<> [icon :collapse-down "my-auto me-2"]
                           (labels :qanda.button.hide/replies)])
         collapsible-id (str "collapse-Replies-" statement-id)
-        replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
-        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        authenticated? @(rf/subscribe [:user/authenticated?])
-        with-answer? (and starting-route?
-                          (or (not mods-mark-only?)
-                              (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
+        replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))]
     (when (not-empty replies)
       [:<>
        [:button.btn.btn-transparent.border-0
@@ -200,7 +192,7 @@
        [:div.collapse {:id collapsible-id}
         (for [reply replies]
           (with-meta
-            [reduced-or-edit-card reply with-answer?]
+            [reduced-or-edit-card reply]
             {:key (str "reply-" (:db/id reply))}))]])))
 
 (rf/reg-event-db
@@ -253,12 +245,18 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- current-topic-badges [schnaq statement]
-  (let [badges-start [badges/static-info-badges-discussion schnaq]
-        badges-conclusion [badges/extra-discussion-info-badges statement true]
-        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        badges (if starting-route? badges-start badges-conclusion)]
-    [:div.ms-auto badges]))
+(defn- current-topic-badges
+  "Badges which are shown if a statement is selected."
+  [schnaq statement]
+  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])]
+    [:div.ms-auto
+     (if starting-route?
+       [badges/static-info-badges-discussion schnaq]
+       [:<>
+        [:div.d-flex.flex-row
+         [badges/show-number-of-replies statement]
+         [reactions/up-down-vote statement]
+         [badges/edit-statement-dropdown-menu]]])]))
 
 (defn- title-view [statement]
   (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
@@ -270,16 +268,6 @@
         [edit/edit-card-statement statement])
       [:h2.h6 title])))
 
-(defn- title-and-input-element
-  "Element containing Title and textarea input"
-  [statement]
-  (let [statement-labels (set (:statement/labels statement))]
-    [:<>
-     [title-view statement]
-     (for [label statement-labels]
-       [:span.pe-1 {:key (str "show-label-" (:db/id statement) label)}
-        [labels/build-label label]])]))
-
 (defn- topic-bubble-view []
   (let [{:discussion/keys [title author created-at] :as schnaq} @(rf/subscribe [:schnaq/selected])
         current-conclusion @(rf/subscribe [:discussion.conclusion/selected])
@@ -288,17 +276,13 @@
                  :statement/author author
                  :statement/created-at created-at}
         starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        statement (if starting-route? content current-conclusion)
-        info-content [reactions/up-down-vote statement]]
+        statement (if starting-route? content current-conclusion)]
     [motion/move-in :left
      [:div.p-2
       [:div.d-flex.flex-wrap.mb-4
        [user/user-info statement 32 nil]
-       [:div.d-flex.flex-row.ms-auto
-        (when-not starting-route?
-          [:div.me-auto info-content])
-        [current-topic-badges schnaq statement]]]
-      [title-and-input-element statement]]]))
+       [current-topic-badges schnaq statement]]
+      [title-view statement]]]))
 
 (defn- search-info []
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
@@ -345,45 +329,49 @@
                                    (not pro-user?) :schnaq.input-type/pro-only
                                    (not admin-access?) :schnaq.input-type/not-admin
                                    :else :schnaq.input-type/coming-soon)
-            top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
+            top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+            answered? (shared-tools/answered? {:statement/children @(rf/subscribe [:discussion.premises/current])})]
         [motion/fade-in-and-out
          [:section.selection-card
-          [topic-or-search-content]
-          (when-not read-only?
-            [:ul.nav.nav-tabs
-             [:li.nav-item
-              [:button.nav-link {:class (active-class :question)
-                                 :role "button"
-                                 :on-click #(on-click :question)}
-               [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
-             (when top-level?
-               (if (and pro-user? admin-access?)
-                 [:<>
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :poll)
-                     :role "button"
-                     :on-click #(on-click :poll)}
-                    poll-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :activation)
-                     :role "button"
-                     :on-click #(on-click :activation)}
-                    activation-tab]]]
-                 [:<>
-                  [:li.nav-item
-                   [:button.nav-link.text-muted
-                    {:role "button"}
-                    [tooltip/text (labels disabled-tooltip-key) poll-tab]]]
-                  [:li.nav-item
-                   [:button.nav-link.text-muted
-                    {:role "button"}
-                    [tooltip/text (labels disabled-tooltip-key) activation-tab]]]]))])
-          (case @selected-option
-            :question [input-form-or-disabled-alert]
-            :poll [poll/poll-form]
-            :activation [activation/activation-tab])]
+          [:div.d-flex.flex-row
+           (when answered? [:div.highlight-card-answered])
+           [:div.card-view.card-body
+            [topic-or-search-content]
+            (when-not read-only?
+              [:ul.nav.nav-tabs
+               [:li.nav-item
+                [:button.nav-link {:class (active-class :question)
+                                   :role "button"
+                                   :on-click #(on-click :question)}
+                 [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
+               (when top-level?
+                 (if (and pro-user? admin-access?)
+                   [:<>
+                    [:li.nav-item
+                     [:button.nav-link
+                      {:class (active-class :poll)
+                       :role "button"
+                       :on-click #(on-click :poll)}
+                      poll-tab]]
+                    [:li.nav-item
+                     [:button.nav-link
+                      {:class (active-class :activation)
+                       :role "button"
+                       :on-click #(on-click :activation)}
+                      activation-tab]]]
+                   [:<>
+                    [:li.nav-item
+                     [:button.nav-link.text-muted
+                      {:role "button"}
+                      [tooltip/text (labels disabled-tooltip-key) poll-tab]]]
+                    [:li.nav-item
+                     [:button.nav-link.text-muted
+                      {:role "button"}
+                      [tooltip/text (labels disabled-tooltip-key) activation-tab]]]]))])
+            (case @selected-option
+              :question [input-form-or-disabled-alert]
+              :poll [poll/poll-form]
+              :activation [activation/activation-tab])]]]
          motion/card-fade-in-time]))))
 
 (defn- delay-fade-in-for-subsequent-content [index]

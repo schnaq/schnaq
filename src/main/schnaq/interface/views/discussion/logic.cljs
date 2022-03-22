@@ -4,7 +4,8 @@
             [re-frame.core :as rf]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.toolbelt :as tools]))
+            [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (rf/reg-event-fx
  :discussion.reaction.statement/send
@@ -26,8 +27,7 @@
  :discussion.reaction.statement/added
  (fn [{:keys [db]} [_ response]]
    (let [new-statement (:new-statement response)]
-     {:db (update-in db [:discussion :premises :current]
-                     conj new-statement)
+     {:db (assoc-in db [:discussion :premises :current (:db/id new-statement)] new-statement)
       :fx [[:dispatch [:notification/new-content]]
            [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
 
@@ -49,18 +49,11 @@
 
 (rf/reg-event-fx
  :discussion.reply.statement/added
- (fn [{:keys [db]} [_ parent-statement response]]
-   (let [new-statement (:new-statement response)
-         statement-id (:db/id parent-statement)
-         current-statements (get-in db [:discussion :premises :current])
-         add-answer-fn (fn [statement]
-                         (if (= statement-id (:db/id statement))
-                           (-> statement
-                               (update :meta/sub-statement-count inc)
-                               (update :statement/children #(conj % new-statement)))
-                           statement))
-         updated-statements (map add-answer-fn current-statements)]
-     {:db (assoc-in db [:discussion :premises :current] updated-statements)
+ (fn [{:keys [db]} [_ parent-statement {:keys [new-statement]}]]
+   (let [parent-statement-id (:db/id parent-statement)]
+     {:db (-> db
+              (update-in [:discussion :premises :current parent-statement-id :meta/sub-statement-count] inc)
+              (update-in [:discussion :premises :current parent-statement-id :statement/children] conj new-statement))
       :fx [[:dispatch [:notification/new-content]]
            [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
 
@@ -126,6 +119,7 @@
  (fn [{:keys [db]} _]
    (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         ;; Hier direkt das Statement aus der DB holen wenn es da ist
          new-conclusion (first (filter #(= (:db/id %) statement-id) (get-in db [:discussion :premises :current])))]
      ;; set new conclusion immediately if it's in db already, so loading times are reduced
      (cond->
@@ -151,7 +145,8 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:db (-> db
               (assoc-in [:discussion :conclusion :selected] conclusion)
-              (assoc-in [:discussion :premises :current] premises)
+              (assoc-in [:discussion :premises :current]
+                        (shared-tools/normalize :db/id premises))
               (assoc-in [:history :full-context] (vec history)))
       :fx [[:dispatch [:discussion.history/push conclusion]]
            [:dispatch [:visited/set-visited-statements conclusion]]

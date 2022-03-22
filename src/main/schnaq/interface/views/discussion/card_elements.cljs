@@ -16,6 +16,7 @@
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.filters :as filters]
             [schnaq.interface.views.howto.elements :as how-to-elements]
+            [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.user :as user-utils]))
 
 (defn- back-button
@@ -56,7 +57,7 @@
        [:div.text-center
         [:h6 title]
         [:p.text-muted.mb-0 (labels :history.home/text)]
-        [badges/static-info-badges schnaq]]
+        [badges/static-info-badges]]
        {:placement :right}]]]))
 
 (defn history-view
@@ -138,7 +139,7 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          visited (map :db/id starting-conclusions)]
      {:db (-> db
-              (assoc-in [:discussion :premises :current] starting-conclusions)
+              (assoc-in [:discussion :premises :current] (shared-tools/normalize :db/id starting-conclusions))
               (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) visited))
       ;; hier die seen setzen
       :fx [[:dispatch [:votes.local/reset]]]})))
