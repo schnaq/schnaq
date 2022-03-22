@@ -58,7 +58,7 @@
   [:div.d-flex.flex-wrap.align-items-center
    [reactions/up-down-vote statement]
    [:div.ms-sm-0.ms-lg-auto
-    [badges/extra-discussion-info-badges statement]]])
+    [badges/show-number-of-replies statement]]])
 
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
@@ -86,7 +86,7 @@
   [{:keys [meta/answered? statement/type]}]
   [(s/keys :opt [:meta/answered? :statement/type]) :ret string?]
   (let [statement-type (when type (str "-" (name type)))]
-    (if answered?
+    (if answered? ;; WIP
       "highlight-card-answered"
       (str "highlight-card" statement-type))))
 
@@ -245,12 +245,18 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- current-topic-badges [schnaq statement]
-  (let [badges-start [badges/static-info-badges-discussion schnaq]
-        badges-conclusion [badges/extra-discussion-info-badges statement true]
-        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        badges (if starting-route? badges-start badges-conclusion)]
-    [:div.ms-auto badges]))
+(defn- current-topic-badges
+  "Badges which are shown if a statement is selected."
+  [schnaq statement]
+  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])]
+    [:div.ms-auto
+     (if starting-route?
+       [badges/static-info-badges-discussion schnaq]
+       [:<>
+        [:div.d-flex.flex-row
+         [badges/show-number-of-replies statement]
+         [reactions/up-down-vote statement]
+         [badges/edit-statement-dropdown-menu]]])]))
 
 (defn- title-view [statement]
   (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
@@ -270,16 +276,12 @@
                  :statement/author author
                  :statement/created-at created-at}
         starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        statement (if starting-route? content current-conclusion)
-        info-content [reactions/up-down-vote statement]]
+        statement (if starting-route? content current-conclusion)]
     [motion/move-in :left
      [:div.p-2
       [:div.d-flex.flex-wrap.mb-4
        [user/user-info statement 32 nil]
-       [:div.d-flex.flex-row.ms-auto
-        (when-not starting-route?
-          [:div.me-auto info-content])
-        [current-topic-badges schnaq statement]]]
+       [current-topic-badges schnaq statement]]
       [title-view statement]]]))
 
 (defn- search-info []
