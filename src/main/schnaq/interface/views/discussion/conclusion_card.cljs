@@ -86,7 +86,7 @@
   [{:keys [meta/answered? statement/type]}]
   [(s/keys :opt [:meta/answered? :statement/type]) :ret string?]
   (let [statement-type (when type (str "-" (name type)))]
-    (if answered? ;; WIP
+    (if answered?
       "highlight-card-answered"
       (str "highlight-card" statement-type))))
 
