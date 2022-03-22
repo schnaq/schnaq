@@ -57,7 +57,7 @@
        [:div.text-center
         [:h6 title]
         [:p.text-muted.mb-0 (labels :history.home/text)]
-        [badges/static-info-badges schnaq]]
+        [badges/static-info-badges]]
        {:placement :right}]]]))
 
 (defn history-view
