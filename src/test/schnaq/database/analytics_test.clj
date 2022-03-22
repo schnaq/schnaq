@@ -4,6 +4,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db]
             [schnaq.database.user :as user-db]
+            [schnaq.test-data :refer [kangaroo]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]
             [schnaq.toolbelt :as toolbelt])
   (:import (java.time Instant)))
@@ -88,3 +89,23 @@
   (testing "Count registered users."
     (is (zero? (count (db/users-created-since (Instant/now)))))
     (is (= 4 (count (db/users-created-since (toolbelt/now-minus-days 7)))))))
+
+;; -----------------------------------------------------------------------------
+
+(def ^:private kangaroo-keycloak-id
+  (:user.registered/keycloak-id kangaroo))
+
+(deftest number-of-pro-user-zero-test
+  (testing "Number of pro users is zero in the beginning."
+    (is (zero? (db/number-of-pro-users)))))
+
+(deftest number-of-pro-user-one-pro-user-test
+  (testing "Adding a pro user returns one pro user."
+    (user-db/subscribe-pro-tier kangaroo-keycloak-id "subscription-id" "cus_kangaroo")
+    (is (= 1 (db/number-of-pro-users)))))
+
+(deftest number-of-pro-user-unsubscribe-test
+  (testing "Add a pro user and remove it afterwards, results in zero pro users."
+    (user-db/subscribe-pro-tier kangaroo-keycloak-id "subscription-id" "cus_kangaroo")
+    (user-db/unsubscribe-pro-tier kangaroo-keycloak-id)
+    (is (zero? (db/number-of-pro-users)))))

@@ -759,6 +759,7 @@
    :analytics/overall-discussions "schnaqs created"
    :analytics/user-numbers "Usernames created"
    :analytics/registered-users-numbers "Registered Users"
+   :analytics/pro-users-numbers "Pro Subscribers"
    :analytics/average-statements-title "Average number of statements / schnaq"
    :analytics/statements-num-title "# of statements"
    :analytics/active-users-num-title "Active users"

@@ -92,6 +92,16 @@
    [:statistics/since :ret :statistics/registered-users-num]
    (number-of-entities-since :user.registered/display-name since)))
 
+(>defn number-of-pro-users
+  "Returns the number of pro users in the database."
+  ([]
+   [:ret :statistics/registered-users-num]
+   (number-of-entities-with-value-since :user.registered.subscription/type :user.registered.subscription.type/pro))
+  ([since]
+   [:statistics/since :ret :statistics/registered-users-num]
+   (number-of-entities-with-value-since
+    :user.registered.subscription/type :user.registered.subscription.type/pro since)))
+
 (defn- date-to-day
   "Get only the date, without time from java.util.date"
   [date]
@@ -203,7 +213,7 @@
    [:ret :statistics/statement-type-stats]
    (labels-stats max-time-back))
   ([since]
-   [:statistics/since :ret :statistics/statement-type-stats]
+   [:statistics/since :ret :statistics/labels-stats]
    {:check (number-of-entities-with-value-since :statement/labels ":check" since)
     :question (number-of-entities-with-value-since :statement/labels ":question" since)
     :times (number-of-entities-with-value-since :statement/labels ":times" since)

@@ -129,6 +129,7 @@
       [analytics-card (labels :analytics/overall-discussions) :analytics/number-of-discussions-overall]
       [analytics-card (labels :analytics/user-numbers) :analytics/number-of-usernames-anonymous]
       [analytics-card (labels :analytics/registered-users-numbers) :analytics/number-of-users-registered]
+      [analytics-card (labels :analytics/pro-users-numbers) :analytics/number-of-users-pro]
       [analytics-card (labels :analytics/average-statements-title) :analytics/number-of-average-statements]
       [multi-arguments-card (labels :analytics/active-users-num-title) :analytics/number-of-active-users-overall]
       [multi-arguments-card (labels :analytics/statement-lengths-title) :analytics/statement-lengths-stats]
@@ -165,7 +166,8 @@
  (fn [db [_ {:keys [statistics]}]]
    (assoc db :analytics {:discussions-sum {:overall (:discussions-sum statistics)}
                          :users-num {:anonymous (:usernames-sum statistics)
-                                     :registered (:registered-users-num statistics)}
+                                     :registered (:registered-users-num statistics)
+                                     :pro (:pro-users-num statistics)}
                          :statements {:number (:statements-num statistics)
                                       :lengths (:statement-length-stats statistics)
                                       :average-per-discussion (:average-statements-num statistics)
@@ -190,6 +192,11 @@
  :analytics/number-of-users-registered
  (fn [db _]
    (get-in db [:analytics :users-num :registered])))
+
+(rf/reg-sub
+ :analytics/number-of-users-pro
+ (fn [db _]
+   (get-in db [:analytics :users-num :pro])))
 
 (rf/reg-sub
  :analytics/number-of-average-statements

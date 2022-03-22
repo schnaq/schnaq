@@ -18,6 +18,7 @@
           :statement-length-stats (analytics-db/statement-length-stats timestamp-since)
           :statement-type-stats (analytics-db/statement-type-stats timestamp-since)
           :registered-users-num (analytics-db/number-or-registered-users timestamp-since)
+          :pro-users-num (analytics-db/number-of-pro-users timestamp-since)
           :labels-stats (analytics-db/labels-stats timestamp-since)
           :users (analytics-db/users-created-since timestamp-since)}})))
 
