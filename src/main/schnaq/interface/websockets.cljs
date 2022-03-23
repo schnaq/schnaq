@@ -49,8 +49,9 @@
 (defstate socket
   :start (sente/make-channel-socket!
           "/ws"
-          "razupaltuff" #_(.-value (.getElementById js/document "token"))
-          {:type :auto
+          nil
+          {:host "localhost:3000"
+           :type :auto
            :wrap-recv-evs? false}))
 
 (defstate channel-router

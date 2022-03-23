@@ -1,10 +1,15 @@
 (ns schnaq.websockets
-  (:require [mount.core :refer [defstate] :as mount]
+  (:require [clojure.spec.alpha :as s]
+            [com.fulcrologic.guardrails.core :refer [?]]
+            [ring.util.http-response :refer [ok]]
+            [mount.core :refer [defstate] :as mount]
+            [reitit.ring.middleware.parameters :as rrmp]
             [ring.middleware.keyword-params :as keyword-params]
             [ring.middleware.params :as middleware.params]
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
-            [taoensso.timbre :as log]))
+            [taoensso.timbre :as log]
+            [schnaq.api.middlewares :as middlewares]))
 
 (defstate socket
   :start (sente/make-channel-socket!
@@ -61,11 +66,24 @@
 
   nil)
 
+(s/def ::client-id string?)
+
+(defn foo-middleware
+  "something"
+  [handler]
+  (fn [request]
+    (let [client-id (middlewares/extract-parameter-from-request request :client-id)]
+      (handler (assoc-in request [:params :client-id] client-id)))))
+
+(defn f
+  "TODO"
+  [request]
+  (def reqqi request)
+  (ok))
+
 (defn websocket-routes []
   ["/ws"
    {:swagger {:tags ["websockets"]}
-    :middleware [keyword-params/wrap-keyword-params
-                 middleware.params/wrap-params]
-    :parameters {:query {:client-id string?}}
-    :get {:handler (:ajax-get-or-ws-handshake-fn socket)}
+    :get {:handler f #_(:ajax-get-or-ws-handshake-fn socket)
+          :parameters {:query (s/keys :opt-un [::client-id])}}
     :post {:handler (:ajax-post-fn socket)}}])

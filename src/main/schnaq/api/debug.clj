@@ -1,15 +1,20 @@
 (ns schnaq.api.debug
-  (:require [ring.util.http-response :refer [ok]]
+  (:require [clojure.spec.alpha :as s]
+            [ring.util.http-response :refer [ok]]
             [schnaq.config.shared :as shared-config]))
 
 (defn- reveal-information [request]
+  (def foodebug request)
   (ok {:headers (:headers request)
        :identity (:identity request)}))
 
 ;; -----------------------------------------------------------------------------
 
+(s/def ::debug string?)
+
 (def debug-routes
   [(when-not shared-config/production?
-     ["/debug" {:swagger {:tags ["debug"]}}
+     ["/debug" {:swagger {:tags ["debug"]}
+                :parameters {:query (s/keys :opt-un [::debug])}}
       ["" {:get reveal-information
            :post reveal-information}]])])

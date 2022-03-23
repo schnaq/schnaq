@@ -42,8 +42,8 @@
             [schnaq.config.summy :as summy-config]
             [schnaq.core :as schnaq-core]
             [schnaq.toolbelt :as toolbelt]
-            [taoensso.timbre :as log]
-            [schnaq.websockets :refer [websocket-routes]])
+            [schnaq.websockets :refer [websocket-routes]]
+            [taoensso.timbre :as log])
   (:gen-class))
 
 ;; -----------------------------------------------------------------------------
