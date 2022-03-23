@@ -3,9 +3,7 @@
             [com.fulcrologic.guardrails.core :refer [?]]
             [ring.util.http-response :refer [ok]]
             [mount.core :refer [defstate] :as mount]
-            [reitit.ring.middleware.parameters :as rrmp]
             [ring.middleware.keyword-params :as keyword-params]
-            [ring.middleware.params :as middleware.params]
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
             [taoensso.timbre :as log]
@@ -14,8 +12,9 @@
 (defstate socket
   :start (sente/make-channel-socket!
           (get-sch-adapter)
-          {:user-id-fn (fn [ring-req]
-                         (get-in ring-req [:params :client-id]))}))
+          {:csrf-token-fn nil
+           :user-id-fn (fn [ring-req]
+                         (get-in ring-req [:parameters :query :client-id]))}))
 
 (defn send! [uid message]
   (println "Sending message: " message)
@@ -68,22 +67,10 @@
 
 (s/def ::client-id string?)
 
-(defn foo-middleware
-  "something"
-  [handler]
-  (fn [request]
-    (let [client-id (middlewares/extract-parameter-from-request request :client-id)]
-      (handler (assoc-in request [:params :client-id] client-id)))))
-
-(defn f
-  "TODO"
-  [request]
-  (def reqqi request)
-  (ok))
-
 (defn websocket-routes []
   ["/ws"
    {:swagger {:tags ["websockets"]}
-    :get {:handler f #_(:ajax-get-or-ws-handshake-fn socket)
+    :middleware [keyword-params/wrap-keyword-params]
+    :get {:handler (:ajax-get-or-ws-handshake-fn socket)
           :parameters {:query (s/keys :opt-un [::client-id])}}
     :post {:handler (:ajax-post-fn socket)}}])

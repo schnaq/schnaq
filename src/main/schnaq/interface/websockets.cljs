@@ -82,7 +82,7 @@
 
 (defn init! []
   (mount/start)
-  (connect! "ws://localhost:3000/ws" handle-response!))
+  #_(connect! "ws://localhost:3000/ws" handle-response!))
 
 (comment
 
