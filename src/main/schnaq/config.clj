@@ -46,6 +46,12 @@
 
 (def deleted-statement-text "[deleted]")
 
+(def notification-blacklist
+  "Define for which share-hashes we do not send notification mails."
+  #{"e8f54922-0d88-4953-8f43-ddc819d7f201" ;; production schnaq FAQs
+    "6586e787-8704-4b4b-9221-5821d15626b5" ;; staging schnaq FAQs
+    })
+
 (def email
   {:sender-address (or (System/getenv "EMAIL_SENDER_ADDRESS") "info@schnaq.com")
    :sender-host (or (System/getenv "EMAIL_HOST") "smtp.ionos.de")
