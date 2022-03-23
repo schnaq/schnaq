@@ -2,6 +2,7 @@
   (:require [clojure.core.async :refer [go-loop <!]]
             [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn- =>]]
+            [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db]
             [schnaq.database.specs :as specs]
@@ -55,9 +56,10 @@
   [timestamp interval]
   [inst? :user.registered/notification-mail-interval => (s/coll-of :notification-service/user-with-changed-discussions)]
   (let [users (user-db/users-by-notification-interval interval)
-        changed-discussions (discussions-with-new-statements-in-interval timestamp interval)]
+        changed-discussions (discussions-with-new-statements-in-interval timestamp interval)
+        discussions-not-on-blacklist (apply dissoc changed-discussions config/notification-blacklist)]
     (->> users
-         (map (partial assoc-discussions-with-new-statements changed-discussions))
+         (map (partial assoc-discussions-with-new-statements discussions-not-on-blacklist))
          (remove #(empty? (:discussions-with-new-statements %))))))
 
 ;; -----------------------------------------------------------------------------
