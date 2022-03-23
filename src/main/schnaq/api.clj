@@ -42,7 +42,8 @@
             [schnaq.config.summy :as summy-config]
             [schnaq.core :as schnaq-core]
             [schnaq.toolbelt :as toolbelt]
-            [taoensso.timbre :as log])
+            [taoensso.timbre :as log]
+            [schnaq.websockets :refer [websocket-routes]])
   (:gen-class))
 
 ;; -----------------------------------------------------------------------------
@@ -112,6 +113,7 @@
     summary-routes
     theme-routes
     user-routes
+    (websocket-routes)
     wordcloud-routes
 
     ["/swagger.json"
@@ -140,12 +142,12 @@
     :data {:coercion reitit.coercion.spec/coercion
            :muuntaja m/instance
            :middleware [swagger/swagger-feature
-                        parameters/parameters-middleware    ;; query-params & form-params
+                        parameters/parameters-middleware ;; query-params & form-params
                         middlewares/convert-body-middleware ;; must be called *before* muuntaja/format-middleware
                         muuntaja/format-middleware
                         middlewares/exception-printing-middleware
                         coercion/coerce-response-middleware ;; coercing response bodies
-                        coercion/coerce-request-middleware  ;; coercing request parameters
+                        coercion/coerce-request-middleware ;; coercing request parameters
                         multipart/multipart-middleware
                         auth-middlewares/replace-bearer-with-token
                         auth/wrap-jwt-authentication
@@ -188,6 +190,20 @@
 
 (def allowed-http-verbs
   #{:get :put :post :delete :options})
+
+#_(defstate api
+    :start
+    (let [origins (if shared-config/production? allowed-origins (conj allowed-origins #".*"))]
+      (say-hello)
+      (schnaq-core/-main)
+      (server/run-server
+       (wrap-cors #'app
+                  :access-control-allow-origin origins
+                  :access-control-allow-methods allowed-http-verbs)
+       {:port shared-config/api-port})
+      (log/info (format "Running web-server at %s" shared-config/api-url))
+      (log/info (format "Allowed Origin: %s" origins)))
+    :stop (when api (api :timeout 100)))
 
 (defn -main
   "This is our main entry point for the REST API Server."
