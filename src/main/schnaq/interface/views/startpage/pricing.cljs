@@ -200,7 +200,7 @@
     [:a.btn.btn-primary
      {:href "mailto:info@schnaq.com"
       :on-click (fn [_e]
-                  (.push (js/window._paq) #js ["trackEvent", "Lead", "Mail-Request", "Enterprise-Plan", 50]))}
+                  (.push js/window._paq #js ["trackEvent", "Lead", "Mail-Request", "Enterprise-Plan", 50]))}
      (labels :pricing.enterprise-tier/call-to-action)]]])
 
 (defn- tier-cards []
