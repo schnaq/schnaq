@@ -4,7 +4,6 @@
             [schnaq.config.shared :as shared-config]))
 
 (defn- reveal-information [request]
-  (def foodebug request)
   (ok {:headers (:headers request)
        :identity (:identity request)}))
 

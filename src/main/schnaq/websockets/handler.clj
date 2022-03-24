@@ -10,6 +10,8 @@
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
             [taoensso.timbre :as log]))
 
+(declare socket) ;; To avoid clj-kondo false positive
+
 ;; Prepare incoming websocket connection
 (defstate socket
   :start (sente/make-channel-socket!

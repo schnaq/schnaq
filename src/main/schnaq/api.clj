@@ -170,7 +170,7 @@
   [route-name]
   (r/match-by-name (router) route-name))
 
-(defn- app []
+(defn app [_request]
   (ring/ring-handler
    (router)
    (ring/routes
@@ -216,7 +216,7 @@
     (schnaq-core/-main)
     (reset! current-server
             (server/run-server
-             (wrap-cors (app)
+             (wrap-cors #'app
                         :access-control-allow-origin origins
                         :access-control-allow-methods allowed-http-verbs)
              {:port shared-config/api-port}))

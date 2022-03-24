@@ -3,19 +3,12 @@
             [re-frame.core :as rf]
             [taoensso.sente :as sente]))
 
-(defmulti handle-message (fn [{:keys [id]} _] id))
-
-(defmethod handle-message :message/add
-  [_ msg-add-event]
-  (rf/dispatch msg-add-event))
-
-(defmethod handle-message :message/creation-errors
-  [_ [_ response]]
-  (rf/dispatch
-   [:form/set-server-errors (:errors response)]))
+(declare socket)
 
 ;; ---------------------------------------------------------------------------
 ;; Default Handlers
+
+(defmulti handle-message (fn [{:keys [id]} _] id))
 
 (defmethod handle-message :chsk/handshake
   [{:keys [event]} _]
