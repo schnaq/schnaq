@@ -65,4 +65,5 @@
 
   (send! [:update/polls "harhar"])
   (mount/start)
+  (mount/stop)
   nil)

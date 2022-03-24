@@ -1,11 +1,13 @@
 (ns schnaq.websockets
   (:require [clojure.spec.alpha :as s]
+            [com.fulcrologic.guardrails.core :refer [>defn =>]]
             [mount.core :refer [defstate] :as mount]
             [ring.middleware.keyword-params :as keyword-params]
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
             [taoensso.timbre :as log]))
 
+;; Prepare incoming websocket connection
 (defstate socket
   :start (sente/make-channel-socket!
           (get-sch-adapter)
@@ -13,22 +15,15 @@
            :user-id-fn (fn [ring-req]
                          (get-in ring-req [:parameters :query :client-id]))}))
 
-(defn send! [uid message]
+(>defn send!
+  "Send a single message to a client referenced by its uid."
+  [uid message]
+  [:ws.message/uid :ws.message/?data => any?]
   (println "Sending message:" message)
   ((:send-fn socket) uid message))
 
-(comment
-  (mount/start)
-  (mount/stop)
-
-  @(:connected-uids socket)
-
-  (send! (first (:any @(:connected-uids socket)))
-         [:message/add "huhu"])
-
-  nil)
-
 ;; -----------------------------------------------------------------------------
+;; React to events received from websocket clients
 
 (defmulti handle-message (fn [{:keys [id]}] id))
 (defmethod handle-message :chsk/ws-ping [_message])
@@ -38,21 +33,24 @@
   {:error (str "Unrecognized websocket event type:" (pr-str id))
    :id id})
 
-(defn receive-message! [{:keys [id ?reply-fn]
-                         :as message}]
-  (log/debug "Got message with id:" id)
+(defn receive-message!
+  "Process the message in `handle-message` and send a response if `?reply-fn` is
+  specified."
+  [{:keys [?reply-fn]
+    :as message}]
   (let [reply-fn (or ?reply-fn (fn [_]))]
     (when-some [response (handle-message message)]
       (reply-fn response))))
 
-;; -----------------------------------------------------------------------------
-
+;; Receive and dispatch incoming websocket messages
 (defstate channel-router
   :start (sente/start-chsk-router!
           (:ch-recv socket)
           #'receive-message!)
   :stop (when-let [stop-fn channel-router]
           (stop-fn)))
+
+;; -----------------------------------------------------------------------------
 
 (s/def ::client-id string?)
 
@@ -65,3 +63,14 @@
           :name :api.ws/get}
     :post {:handler (:ajax-post-fn socket)
            :name :api.ws/post}}])
+
+(comment
+  (mount/start)
+  (mount/stop)
+
+  @(:connected-uids socket)
+
+  (send! (first (:any @(:connected-uids socket)))
+         [:message/add "huhu"])
+
+  nil)

@@ -319,3 +319,23 @@
    :req-un [:identity/sub :identity/given_name :identity/family_name
             :identity/preferred_username :identity/email]
    :opt-un [:identity/groups :identity/locale]))
+
+;; -----------------------------------------------------------------------------
+;; Websockets
+(s/def :ws.message/?reply-fn fn?) ;; Optional callable function after event succeeds
+(s/def :ws.message/?data any?) ;; payload from the event
+(s/def :ws.message/ch-recv any?) ;; an async channel
+(s/def :ws.message/client-id string?) ;; uuid
+(s/def :ws.message/connected-uids any?) ;; atom with keys :ws, :ajax, :any
+(s/def :ws.message/uid string?) ;; uuid
+(s/def :ws.message/event vector?) ;; complete event with id, ?data and ?reply-fn
+(s/def :ws.message/id keyword?) ;; event-id
+(s/def :ws.message/send-buffers any?) ;; event-id
+(s/def :ws.message/ring-req map?) ;; complete ring request
+(s/def :ws.message/send-fn fn?) ;; fn to be called from the websocket library
+(s/def ::websocket-message
+  (s/keys
+   :req-un [:ws.message/ch-recv :ws.message/client-id :ws.message/connected-uids
+            :ws.message/uid :ws.message/event :ws.message/id
+            :ws.message/send-buffers :ws.message/ring-req :ws.message/send-fn]
+   :opt-un [:ws.message/?reply-fn :ws.message/?data]))
