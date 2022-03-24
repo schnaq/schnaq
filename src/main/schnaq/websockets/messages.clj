@@ -18,3 +18,10 @@
        {:starting-conclusions starting-conclusions
         :polls polls
         :activation activation}))))
+
+(defmethod handle-message :discussion.graph/update [{:keys [?data]}]
+  (when ?data
+    (let [parameters {:parameters {:query ?data}}
+          {{:keys [graph]} :body} (discussion-api/graph-for-discussion parameters)]
+      (log/debug "Update graph" ?data)
+      {:graph graph})))

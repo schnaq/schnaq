@@ -44,6 +44,7 @@
             [schnaq.core :as schnaq-core]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.websockets.handler :refer [websocket-routes]]
+            [schnaq.websockets.messages]
             [taoensso.timbre :as log])
   (:gen-class))
 

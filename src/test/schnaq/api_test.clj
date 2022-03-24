@@ -29,7 +29,7 @@
 
 (deftest graph-data-for-agenda-test
   (testing "Check if graph data is correct"
-    (let [graph-data-for-agenda @#'discussion-api/graph-data-for-agenda
+    (let [graph-data-for-agenda @#'discussion-api/graph-for-discussion
           graph-request (fn [share-hash] (graph-data-for-agenda {:parameters {:query {:share-hash share-hash}}}))
           share-hash "cat-dog-hash"
           valid-response (graph-request "cat-dog-hash")]

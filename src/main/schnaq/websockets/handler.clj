@@ -40,7 +40,7 @@
   [id ?data])
 
 (defmethod handle-message :default [{:keys [id]}]
-  (log/info "Received unrecognized websocket event type:" id)
+  (log/debug "Received unrecognized websocket event type:" id)
   {:error (str "Unrecognized websocket event type:" (pr-str id))
    :id id})
 

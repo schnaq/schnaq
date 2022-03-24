@@ -17,10 +17,10 @@
      :controllers [{:parameters {:path [:share-hash]}
                     :start (fn []
                              (rf/dispatch [:discussion.history/clear])
-                             (rf/dispatch [:updates.periodic/starting-conclusions true])
+                             (rf/dispatch [:updates.periodic.discussion/starting true])
                              (rf/dispatch [:discussion.query.conclusions/starting]))
                     :stop (fn []
-                            (rf/dispatch [:updates.periodic/starting-conclusions false])
+                            (rf/dispatch [:updates.periodic.discussion/starting false])
                             (rf/dispatch [:statement.edit/reset-edits])
                             (rf/dispatch [:toggle-replies/clear!])
                             (rf/dispatch [:toggle-statement-content/clear!]))}]}]

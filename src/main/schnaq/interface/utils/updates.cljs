@@ -18,21 +18,17 @@
 ;; -----------------------------------------------------------------------------
 ;; Looping functions
 
-(defn- update-graph
-  "Call events to update the graph."
-  []
-  (rf/dispatch [:graph/load-data-for-discussion]))
-
 (defn- loop-update-graph!
   "Define loop to periodically update graph."
   []
-  (loop-builder :updates.periodic/graph? update-graph))
+  (loop-builder :updates.periodic/graph?
+                #(rf/dispatch [:updates.periodic.discussion.graph/request])))
 
 (defn- loop-periodic-discussion-start!
   "Define loop to periodically update polls."
   []
   (loop-builder :updates.periodic.discussion/starting?
-                #(rf/dispatch [:ws.discussion.starting/update])))
+                #(rf/dispatch [:updates.periodic.discussion.starting/request])))
 
 ;; -----------------------------------------------------------------------------
 ;; Init
@@ -42,10 +38,7 @@
   called here once to start the endless loop."
   []
   (loop-periodic-discussion-start!)
-  #_#_#_#_(loop-update-starting-conclusions!)
-        (loop-update-graph!)
-      (loop-update-polls!)
-    (loop-update-activation!))
+  (loop-update-graph!))
 
 ;; -----------------------------------------------------------------------------
 
@@ -70,7 +63,7 @@
    (assoc-in db [:updates/periodic :graph] trigger?)))
 
 (rf/reg-event-fx
- :ws.discussion.starting/update
+ :updates.periodic.discussion.starting/request
  (fn [{:keys [db]}]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [[:ws/send [:discussion.starting/update
@@ -81,8 +74,20 @@
                         (rf/dispatch [:schnaq.polls.load-from-backend/success response])
                         (rf/dispatch [:discussion.query.conclusions/set-starting response]))]]]})))
 
+(rf/reg-event-fx
+ :updates.periodic.discussion.graph/request
+ (fn [{:keys [db]}]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [[:ws/send [:discussion.graph/update
+                      {:share-hash share-hash
+                       :display-name (toolbelt/current-display-name db)}
+                      (fn [response]
+                        (rf/dispatch [:schnaq.activation.load-from-backend/success response])
+                        (rf/dispatch [:schnaq.polls.load-from-backend/success response])
+                        (rf/dispatch [:discussion.query.conclusions/set-starting response]))]]]})))
+
 (comment
 
-  (rf/dispatch [:ws.discussion.starting/update])
+  (rf/dispatch [:updates.periodic.discussion.starting/request])
 
   nil)
