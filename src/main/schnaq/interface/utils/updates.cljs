@@ -3,8 +3,7 @@
   (:require [cljs.core.async :refer [go <! timeout]]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [periodic-update-time]]
-            [taoensso.timbre :as log]))
+            [schnaq.interface.config :refer [periodic-update-time]]))
 
 (>defn- loop-builder
   "Build looping functions for several update methods and subscriptions."
@@ -59,6 +58,12 @@
   []
   (loop-builder :updates.periodic/activation? update-activation))
 
+(defn- loop-periodic-discussion-start!
+  "Define loop to periodically update polls."
+  []
+  (loop-builder :updates.periodic.discussion/starting?
+                #(rf/dispatch [:ws.discussion.starting/update])))
+
 ;; -----------------------------------------------------------------------------
 ;; Init
 
@@ -66,44 +71,54 @@
   "Initializing function to start the loops. Each looping function must be
   called here once to start the endless loop."
   []
-  (log/info "Preparing periodic updates of discussion entities...")
-  (loop-update-starting-conclusions!)
-  (loop-update-graph!)
-  (loop-update-polls!)
-  (loop-update-activation!))
+  (loop-periodic-discussion-start!)
+  #_#_#_#_(loop-update-starting-conclusions!)
+        (loop-update-graph!)
+      (loop-update-polls!)
+    (loop-update-activation!))
 
 ;; -----------------------------------------------------------------------------
 ;; Events
 
+;; (rf/reg-sub
+;;  :updates.periodic/starting-conclusions?
+;;  (fn [db _]
+;;    (get-in db [:updates/periodic :conclusions/starting?] false)))
+
+;; (rf/reg-event-db
+;;  :updates.periodic/starting-conclusions
+;;  (fn [db [_ trigger?]]
+;;    (assoc-in db [:updates/periodic :conclusions/starting?] trigger?)))
+
+;; (rf/reg-sub
+;;  :updates.periodic/polls?
+;;  (fn [db _]
+;;    (get-in db [:updates/periodic :polls] false)))
+
+;; (rf/reg-event-db
+;;  :updates.periodic/polls
+;;  (fn [db [_ trigger?]]
+;;    (assoc-in db [:updates/periodic :polls] trigger?)))
+
+;; (rf/reg-sub
+;;  :updates.periodic/activation?
+;;  (fn [db _]
+;;    (get-in db [:updates/periodic :activation] false)))
+
+;; (rf/reg-event-db
+;;  :updates.periodic/activation
+;;  (fn [db [_ trigger?]]
+;;    (assoc-in db [:updates/periodic :activation] trigger?)))
+
 (rf/reg-sub
- :updates.periodic/starting-conclusions?
+ :updates.periodic.discussion/starting?
  (fn [db _]
-   (get-in db [:updates/periodic :conclusions/starting?] false)))
+   (get-in db [:updates/periodic :discussion/starting] false)))
 
 (rf/reg-event-db
- :updates.periodic/starting-conclusions
+ :updates.periodic.discussion/starting
  (fn [db [_ trigger?]]
-   (assoc-in db [:updates/periodic :conclusions/starting?] trigger?)))
-
-(rf/reg-sub
- :updates.periodic/polls?
- (fn [db _]
-   (get-in db [:updates/periodic :polls] false)))
-
-(rf/reg-event-db
- :updates.periodic/polls
- (fn [db [_ trigger?]]
-   (assoc-in db [:updates/periodic :polls] trigger?)))
-
-(rf/reg-sub
- :updates.periodic/activation?
- (fn [db _]
-   (get-in db [:updates/periodic :activation] false)))
-
-(rf/reg-event-db
- :updates.periodic/activation
- (fn [db [_ trigger?]]
-   (assoc-in db [:updates/periodic :activation] trigger?)))
+   (assoc-in db [:updates/periodic :discussion/starting] trigger?)))
 
 (rf/reg-sub
  :updates.periodic/graph?

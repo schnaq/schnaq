@@ -47,7 +47,7 @@
   ([share-hash user-id secret-statement-id]
    (add-creation-secret (starting-conclusions-with-processors share-hash user-id) secret-statement-id)))
 
-(defn- get-starting-conclusions
+(defn get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash display-name]} (:query parameters)

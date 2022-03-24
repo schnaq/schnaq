@@ -24,7 +24,7 @@
         (log/info "Created a poll for discussion" discussion-id "of type" poll-type)
         (ok {:new-poll poll-created})))))
 
-(defn- polls-for-discussion
+(defn polls-for-discussion
   "Returns all polls belonging to the `share-hash` in the payload."
   [{:keys [parameters]}]
   (let [share-hash (get-in parameters [:query :share-hash])]
