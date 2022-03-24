@@ -1,13 +1,11 @@
-(ns schnaq.websockets
+(ns schnaq.websockets.handler
+  "Create a websocket-backend, where clients can connect to for real-time
+  messaging."
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn =>]]
             [mount.core :refer [defstate] :as mount]
             [ring.middleware.keyword-params :as keyword-params]
-            [schnaq.api.activation :as activation-api]
-            [schnaq.api.discussion :as discussion-api]
-            [schnaq.api.poll :as poll-api]
             [schnaq.database.specs]
-            [schnaq.shared-toolbelt :as shared-tools]
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
             [taoensso.timbre :as log]))
@@ -40,18 +38,6 @@
 (defmethod handle-message :chsk/debug [{:keys [id ?data]}]
   (log/debug "Received a debug message" id ?data)
   [id ?data])
-
-(defmethod handle-message :discussion.starting/update [{:keys [?data]}]
-  (when ?data
-    (let [parameters {:parameters {:query ?data}}
-          {{:keys [starting-conclusions]} :body} (discussion-api/get-starting-conclusions parameters)
-          {{:keys [polls]} :body} (poll-api/polls-for-discussion parameters)
-          {{:keys [activation]} :body} (activation-api/get-activation parameters)]
-      (log/debug "Update discussion" ?data)
-      (shared-tools/remove-nil-values-from-map
-       {:starting-conclusions starting-conclusions
-        :polls polls
-        :activation activation}))))
 
 (defmethod handle-message :default [{:keys [id]}]
   (log/info "Received unrecognized websocket event type:" id)
