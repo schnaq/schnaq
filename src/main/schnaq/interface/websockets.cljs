@@ -44,6 +44,7 @@
           nil
           {:host "localhost:3000"
            :type :auto
+           :headers {"x-schnaq-csrf" "this content does not matter"}
            :wrap-recv-evs? false}))
 
 (defstate channel-router
@@ -60,6 +61,7 @@
                     {:message (first args)}))))
 
 (comment
+  @socket
 
   (send! [:update/polls "harhar"])
   (mount/start)

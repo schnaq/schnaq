@@ -88,7 +88,7 @@
             [schnaq.interface.views.user.subscription]
             [schnaq.interface.views.user.themes]
             [schnaq.interface.views.user.welcome]
-            [schnaq.interface.websockets :as ws]
+            [schnaq.interface.websockets]
             [taoensso.timbre :as log]))
 ;; NOTE: If you use subs and events in another module, you need to require it
 ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
