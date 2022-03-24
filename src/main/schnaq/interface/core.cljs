@@ -5,6 +5,7 @@
             [goog.dom :as gdom]
             [goog.string :as gstring]
             [goog.string.format] ;; required for goog.string. We need to require it once in our project.
+            [mount.core :as mount]
             [re-frame.core :as rf]
             [reagent.dom]
             [schnaq.config.shared :as shared-config]
@@ -123,7 +124,7 @@
   "Entrypoint into the application."
   []
   (let [init-routine (if shared-config/embedded? :initialize/wetog-integration :initialize/schnaq)]
-    (ws/init!)
+    (mount/start)
     (routes/init-routes!)
     (rf/dispatch-sync [init-routine]) ;; put a value into application state
     (language/init-language)

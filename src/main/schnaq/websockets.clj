@@ -1,13 +1,10 @@
 (ns schnaq.websockets
   (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [?]]
-            [ring.util.http-response :refer [ok]]
             [mount.core :refer [defstate] :as mount]
             [ring.middleware.keyword-params :as keyword-params]
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
-            [taoensso.timbre :as log]
-            [schnaq.api.middlewares :as middlewares]))
+            [taoensso.timbre :as log]))
 
 (defstate socket
   :start (sente/make-channel-socket!
@@ -17,38 +14,36 @@
                          (get-in ring-req [:parameters :query :client-id]))}))
 
 (defn send! [uid message]
-  (println "Sending message: " message)
+  (println "Sending message:" message)
   ((:send-fn socket) uid message))
+
+(comment
+  (mount/start)
+  (mount/stop)
+
+  @(:connected-uids socket)
+
+  (send! (first (:any @(:connected-uids socket)))
+         [:message/add "huhu"])
+
+  nil)
 
 ;; -----------------------------------------------------------------------------
 
-(defmulti handle-message (fn [{:keys [id]}]
-                           id))
-(defmethod handle-message :default
-  [{:keys [id]}]
-  (log/debug "Received unrecognized websocket event type: " id))
+(defmulti handle-message (fn [{:keys [id]}] id))
+(defmethod handle-message :chsk/ws-ping [])
+(defmethod handle-message :chsk/uidport-open [])
+(defmethod handle-message :default [{:keys [id]}]
+  (log/info "Received unrecognized websocket event type:" id)
+  {:error (str "Unrecognized websocket event type:" (pr-str id))
+   :id id})
 
-(defmethod handle-message :message/create!
-  [{:keys [?data uid] :as message}]
-  (let [response (try
-                   #_(msg/save-message! ?data)
-                   (assoc ?data :timestamp (java.util.Date.))
-                   (catch Exception e
-                     (let [{id :guestbook/error-id
-                            errors :errors} (ex-data e)]
-                       (case id
-                         :validation
-                         {:errors errors}
-                         {:errors
-                          {:server-error ["Failed to save message!"]}}))))]
-    (if (:errors response)
-      (send! uid [:message/creation-errors response])
-      (doseq [uid (:any @(:connected-uids socket))]
-        (send! uid [:message/add response])))))
-
-(defn receive-message! [{:keys [id] :as message}]
-  (log/debug "Got message with id: " id)
-  (handle-message message))
+(defn receive-message! [{:keys [id ?reply-fn]
+                         :as message}]
+  (log/debug "Got message with id:" id)
+  (let [reply-fn (or ?reply-fn (fn [_]))]
+    (when-some [response (handle-message message)]
+      (reply-fn response))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -59,18 +54,14 @@
   :stop (when-let [stop-fn channel-router]
           (stop-fn)))
 
-(comment
-
-  (mount/start)
-
-  nil)
-
 (s/def ::client-id string?)
 
 (defn websocket-routes []
   ["/ws"
    {:swagger {:tags ["websockets"]}
     :middleware [keyword-params/wrap-keyword-params]
+    :parameters {:query (s/keys :opt-un [::client-id])}
     :get {:handler (:ajax-get-or-ws-handshake-fn socket)
-          :parameters {:query (s/keys :opt-un [::client-id])}}
-    :post {:handler (:ajax-post-fn socket)}}])
+          :name :api.ws/get}
+    :post {:handler (:ajax-post-fn socket)
+           :name :api.ws/post}}])

@@ -29,7 +29,7 @@
   "Collection of route-names, where the middleware does not check for our csrf
   header. Commonly used for incoming requests from external services, like
   stripe."
-  #{:api.stripe/webhook})
+  #{:api.stripe/webhook :api.ws/post})
 
 (def app-codes
   "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."

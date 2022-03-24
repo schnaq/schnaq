@@ -1,5 +1,6 @@
 (ns schnaq.api
   (:require [expound.alpha :as expound]
+            [mount.core :as mount]
             [muuntaja.core :as m]
             [org.httpkit.server :as server]
             [reitit.coercion.spec]
@@ -97,7 +98,7 @@
   You can choose the format of your response by specifying the corresponding header. `json`, `edn`, `transit+json` and `transit+msgpack` are currently supported. For example:
   `curl https://api.staging.schnaq.com/ping -H \"Accept: application/edn\"`")
 
-(def router
+(defn- router []
   (ring/router
    [activation-routes
     analytics-routes
@@ -166,11 +167,11 @@
 (defn route-by-name
   "Return a route by its name."
   [route-name]
-  (r/match-by-name router route-name))
+  (r/match-by-name (router) route-name))
 
-(def app
+(defn- app []
   (ring/ring-handler
-   router
+   (router)
    (ring/routes
     (swagger-ui/create-swagger-ui-handler
      {:path "/"
@@ -210,10 +211,11 @@
   [& _args]
   (let [origins (if shared-config/production? allowed-origins (conj allowed-origins #".*"))]
     (say-hello)
+    (mount/start)
     (schnaq-core/-main)
     (reset! current-server
             (server/run-server
-             (wrap-cors #'app
+             (wrap-cors (app)
                         :access-control-allow-origin origins
                         :access-control-allow-methods allowed-http-verbs)
              {:port shared-config/api-port}))
