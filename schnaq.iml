@@ -19,7 +19,7 @@
     <orderEntry type="library" name="Deps: org.bouncycastle/bcprov-jdk15on:1.68" level="project" />
     <orderEntry type="library" name="Deps: buddy/buddy-core:1.4.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.json:2.4.0" level="project" />
-    <orderEntry type="library" name="Deps: org.clojure/clojure:1.10.3" level="project" />
+    <orderEntry type="library" name="Deps: org.clojure/clojure:1.11.0" level="project" />
     <orderEntry type="library" name="Deps: thheller/shadow-cljsjs:0.0.22" level="project" />
     <orderEntry type="library" name="Deps: com.wsscode/pathom:2.2.31" level="project" />
     <orderEntry type="library" name="Deps: joda-time:2.8.1" level="project" />
@@ -39,7 +39,7 @@
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.5" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.logging:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: metosin/ring-http-response:0.9.3" level="project" />
-    <orderEntry type="library" name="Deps: org.clojure/core.specs.alpha:0.2.56" level="project" />
+    <orderEntry type="library" name="Deps: org.clojure/core.specs.alpha:0.2.62" level="project" />
     <orderEntry type="library" name="Deps: org.tukaani/xz:1.8" level="project" />
     <orderEntry type="library" name="Deps: javax.annotation/javax.annotation-api:1.3.2" level="project" />
     <orderEntry type="library" name="Deps: com.google.auto.value/auto-value-annotations:1.8.2" level="project" />
@@ -225,7 +225,7 @@
     <orderEntry type="library" name="Deps: org.jboss.threads/jboss-threads:3.1.0.Final" level="project" />
     <orderEntry type="library" name="Deps: com.google.j2objc/j2objc-annotations:1.3" level="project" />
     <orderEntry type="library" name="Deps: cljc.java-time:0.1.1" level="project" />
-    <orderEntry type="library" name="Deps: com.taoensso/timbre:5.2.0" level="project" />
+    <orderEntry type="library" name="Deps: com.taoensso/timbre:5.2.1" level="project" />
     <orderEntry type="library" name="Deps: com.google.cloud/google-cloud-secretmanager:2.0.4" level="project" />
     <orderEntry type="library" name="Deps: com.google.api.grpc/proto-google-common-protos:2.6.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.api.grpc/proto-google-cloud-secretmanager-v1beta1:2.0.4" level="project" />
@@ -321,7 +321,7 @@
     <orderEntry type="library" name="Deps: borkdude/sci.impl.reflector:0.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.sun.mail/jakarta.mail:1.6.5" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.44.v20210927" level="project" />
-    <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.107.0" level="project" />
+    <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.108.0" level="project" />
     <orderEntry type="library" name="Deps: io.opencensus/opencensus-api:0.28.0" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-auth:1.41.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpmime:4.5.13" level="project" />
