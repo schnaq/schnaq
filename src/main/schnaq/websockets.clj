@@ -28,6 +28,14 @@
 (defmulti handle-message (fn [{:keys [id]}] id))
 (defmethod handle-message :chsk/ws-ping [_message])
 (defmethod handle-message :chsk/uidport-open [_message])
+
+(defmethod handle-message :chsk/debug [{:keys [id ?data] :as message}]
+  (log/debug "Received a debug message" id ?data)
+  [id ?data])
+
+(defmethod handle-message :update/discussion [{:keys [?data]}]
+  (log/debug "Update discussion" ?data))
+
 (defmethod handle-message :default [{:keys [id]}]
   (log/info "Received unrecognized websocket event type:" id)
   {:error (str "Unrecognized websocket event type:" (pr-str id))

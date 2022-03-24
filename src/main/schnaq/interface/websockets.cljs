@@ -32,11 +32,10 @@
 ;; ---------------------------------------------------------------------------
 ;; Router
 
-(defn receive-message!
-  [{:keys [id event] :as ws-message}]
-  (do
-    (.log js/console "Event Received:" (pr-str event))
-    (handle-message ws-message event)))
+(defn- receive-message!
+  "Prepare message retrieval. Pass to multifunction."
+  [{:keys [event] :as ws-message}]
+  (handle-message ws-message event))
 
 (defstate socket
   :start (sente/make-channel-socket!
@@ -63,7 +62,10 @@
 (comment
   @socket
 
-  (send! [:update/polls "harhar"])
+  (send! [:chsk/debug "harhar"] 1000
+         (fn [response]
+           (.log js/console (pr-str response))))
+
   (mount/start)
   (mount/stop)
   nil)
