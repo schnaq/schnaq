@@ -61,17 +61,20 @@
 
 ;; -----------------------------------------------------------------------------
 
+(def ^:private websocket-timeout
+  1000)
+
 (rf/reg-fx
  :ws/send
  (fn [[event ?data ?reply-fn]]
    (send! [event ?data]
-          1000
+          websocket-timeout
           ?reply-fn)))
 
 (comment
   @socket
 
-  (send! [:chsk/debug "harhar"] 1000
+  (send! [:chsk/debug "harhar"] websocket-timeout
          (fn [response]
            (.log js/console (pr-str response))))
 
