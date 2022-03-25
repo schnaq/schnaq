@@ -7,12 +7,15 @@
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
 
+(def ^:private test-app
+  (api/app))
+
 (defn- schnaq-by-hash-as-admin-request [share-hash edit-hash]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.schnaq/by-hash-as-admin))
        :body-params {:share-hash share-hash
                      :edit-hash edit-hash}}
       toolbelt/add-csrf-header
-      api/app))
+      test-app))
 
 (deftest schnaq-by-hash-as-admin-test
   (let [share-hash "graph-hash"
@@ -29,7 +32,7 @@
        :body-params {:share-hashes share-hashes
                      :display-name "Anonymous"}}
       toolbelt/add-csrf-header
-      api/app))
+      test-app))
 
 (deftest schnaqs-by-hashes-test
   (let [share-hash1 "cat-dog-hash"
@@ -59,13 +62,13 @@
        :body-params payload}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header toolbelt/token-schnaqqifant-user)
-      api/app))
+      test-app))
 
 (deftest add-schnaq-as-authenticated-user-test
   (testing "schnaq creation. Takes an authenticated user and creates schnaqs."
     (let [minimal-request {:discussion-title "huhu"}]
       (are [status payload]
-        (= status (:status (add-authenticated-schnaq-request payload)))
+           (= status (:status (add-authenticated-schnaq-request payload)))
         400 {}
         400 {:nickname "penguin"}
         400 {:razupaltuff "kangaroo"}
@@ -80,7 +83,7 @@
   (-> {:request-method :post :uri (:path (api/route-by-name :api.schnaq/add))
        :body-params {:discussion-title "huhu"}}
       toolbelt/add-csrf-header
-      api/app))
+      test-app))
 
 (deftest add-schnaq-permission-test
   (testing "Only authenticated users are allowed to create schnaqs."
