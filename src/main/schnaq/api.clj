@@ -1,6 +1,6 @@
 (ns schnaq.api
   (:require [expound.alpha :as expound]
-            [mount.core :as mount]
+            [mount.core :as mount :refer [defstate]]
             [muuntaja.core :as m]
             [org.httpkit.server :as server]
             [reitit.coercion.spec]
@@ -41,24 +41,14 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.config.stripe :refer [prices]]
             [schnaq.config.summy :as summy-config]
-            [schnaq.core :as schnaq-core]
             [schnaq.toolbelt :as toolbelt]
-            [schnaq.websockets.handler :refer [websocket-routes]]
+            [schnaq.websockets.handler :refer [websocket-routes] :as ws]
             [schnaq.websockets.messages]
             [taoensso.timbre :as log])
   (:gen-class))
 
 ;; -----------------------------------------------------------------------------
 ;; General
-
-(defonce current-server (atom nil))
-
-(defn- stop-server []
-  (when-not (nil? @current-server)
-    ;; graceful shutdown: wait 100ms for existing requests to be finished
-    ;; :timeout is optional, when no timeout, stop immediately
-    (@current-server :timeout 100)
-    (reset! current-server nil)))
 
 (defn- say-hello
   "Print some debug information to the console when the system is loaded."
@@ -77,8 +67,7 @@
   (log/info (format "[Stripe] Webhook access key (truncated): %s..." (subs config/stripe-webhook-access-key 0 15)))
   (log/info (format "[Stripe] Secret key (truncated): %s..." (subs config/stripe-secret-api-key 0 15)))
   (log/info (format "[CleverReach] Enabled? %b, Receiver group: %d, client-id: %s, client-secret: %s..."
-                    cconfig/enabled? cconfig/receiver-group cconfig/client-id (subs cconfig/client-secret 0 10)))
-  (log/info "All systems ready to go"))
+                    cconfig/enabled? cconfig/receiver-group cconfig/client-id (subs cconfig/client-secret 0 10))))
 
 (def ^:private description
   "This is the main Backend for schnaq.
@@ -115,7 +104,7 @@
     summary-routes
     theme-routes
     user-routes
-    (websocket-routes)
+    (when ws/socket (websocket-routes))
     wordcloud-routes
 
     ["/swagger.json"
@@ -193,38 +182,27 @@
 (def allowed-http-verbs
   #{:get :put :post :delete :options})
 
-#_(defstate api
-    :start
-    (let [origins (if shared-config/production? allowed-origins (conj allowed-origins #".*"))]
-      (say-hello)
-      (schnaq-core/-main)
-      (server/run-server
-       (wrap-cors #'app
-                  :access-control-allow-origin origins
-                  :access-control-allow-methods allowed-http-verbs)
-       {:port shared-config/api-port})
-      (log/info (format "Running web-server at %s" shared-config/api-url))
-      (log/info (format "Allowed Origin: %s" origins)))
-    :stop (when api (api :timeout 100)))
+(defstate api
+  :start
+  (let [origins (if shared-config/production? allowed-origins (conj allowed-origins #".*"))]
+    (say-hello)
+    (log/info (format "Starting web-server at %s" shared-config/api-url))
+    (log/info (format "Allowed Origins: %s" origins))
+    (server/run-server
+     (wrap-cors (app nil)
+                :access-control-allow-origin origins
+                :access-control-allow-methods allowed-http-verbs)
+     {:port shared-config/api-port}))
+  :stop (when api (api :timeout 1000)))
 
 (defn -main
   "This is our main entry point for the REST API Server."
   [& _args]
-  (let [origins (if shared-config/production? allowed-origins (conj allowed-origins #".*"))]
-    (say-hello)
-    (mount/start)
-    (schnaq-core/-main)
-    (reset! current-server
-            (server/run-server
-             (wrap-cors #'app
-                        :access-control-allow-origin origins
-                        :access-control-allow-methods allowed-http-verbs)
-             {:port shared-config/api-port}))
-    (log/info (format "Running web-server at %s" shared-config/api-url))
-    (log/info (format "Allowed Origin: %s" origins))))
+  (log/info (mount/start)))
 
 (comment
   "Start the server from here"
   (-main)
-  (stop-server)
+  (mount/start)
+  (mount/stop)
   :end)
