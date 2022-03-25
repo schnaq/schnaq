@@ -1,7 +1,9 @@
 (ns schnaq.interface.websockets
   (:require [mount.core :refer [defstate] :as mount]
             [re-frame.core :as rf]
-            [taoensso.sente :as sente]))
+            [schnaq.config.shared :as shared-config]
+            [taoensso.sente :as sente]
+            [taoensso.timbre :as log]))
 
 (declare socket)
 
@@ -11,16 +13,15 @@
 (defmulti handle-message (fn [{:keys [id]} _] id))
 
 (defmethod handle-message :chsk/handshake
-  [{:keys [event]} _]
-  (.log js/console "Connection Established:" (pr-str event)))
+  [_ _]
+  (log/info "Websocket connection established"))
 
-(defmethod handle-message :chsk/state
-  [{:keys [event]} _]
-  (.log js/console "State Changed:" (pr-str event)))
+;; State changed event
+(defmethod handle-message :chsk/state [_ _])
 
 (defmethod handle-message :default
   [{:keys [event]} _]
-  (.warn js/console "Unknown websocket message:" (pr-str event)))
+  (log/debug "Unknown websocket message:" (pr-str event)))
 
 ;; ---------------------------------------------------------------------------
 ;; Router
@@ -34,7 +35,7 @@
   :start (sente/make-channel-socket!
           "/ws"
           nil
-          {:host "localhost:3000"
+          {:host (.-host (js/URL. shared-config/api-url))
            :type :auto
            :headers {"x-schnaq-csrf" "this content does not matter"}
            :wrap-recv-evs? false}))
