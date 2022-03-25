@@ -3,7 +3,7 @@
             [muuntaja.core :as m]
             [schnaq.api :as api]
             [schnaq.database.poll :as poll-db]
-            [schnaq.test.toolbelt :as toolbelt]))
+            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
@@ -14,9 +14,9 @@
           request (fn [share-hash] {:request-method :get
                                     :uri "/polls"
                                     :query-params {:share-hash share-hash}})]
-      (is (= 200 (-> functioning-hash request api/app :status)))
-      (is (= 2 (count (-> functioning-hash request api/app m/decode-response-body :polls))))
-      (is (empty? (-> "some-dingus-hash" request api/app m/decode-response-body :polls))))))
+      (is (= 200 (-> functioning-hash request test-app :status)))
+      (is (= 2 (count (-> functioning-hash request test-app m/decode-response-body :polls))))
+      (is (empty? (-> "some-dingus-hash" request test-app m/decode-response-body :polls))))))
 
 (deftest new-poll-test
   (let [share-hash "cat-dog-hash"
@@ -31,17 +31,17 @@
                       toolbelt/add-csrf-header
                       (toolbelt/mock-authorization-header user-token)))]
     (testing "Non logged in user can not create a poll."
-      (is (= 401 (-> toolbelt/token-timed-out request api/app :status))))
+      (is (= 401 (-> toolbelt/token-timed-out request test-app :status))))
     (testing "Logged in user without pro cannot create a poll."
-      (is (= 403 (-> toolbelt/token-wegi-no-beta-user request api/app :status))))
+      (is (= 403 (-> toolbelt/token-wegi-no-beta-user request test-app :status))))
     (testing "Pro user, that has wrong admin credentials cannot create poll."
       (is (= 403 (-> toolbelt/token-schnaqqifant-user request (assoc-in [:body-params :edit-hash] "wrong-edit")
-                     api/app :status))))
+                     test-app :status))))
     (testing "User with correct pro status, credentials and admin, has provided no options."
       (is (= 400 (-> toolbelt/token-schnaqqifant-user request (assoc-in [:body-params :options] [])
-                     api/app :status))))
+                     test-app :status))))
     (testing "Adding a poll is allowed for the pro user with correct params."
-      (is (= 200 (-> toolbelt/token-schnaqqifant-user request api/app :status)))
+      (is (= 200 (-> toolbelt/token-schnaqqifant-user request test-app :status)))
       (is (= 3 (count (poll-db/polls share-hash)))))))
 
 (deftest cast-vote-test
@@ -65,12 +65,12 @@
                                   :body-params {:share-hash multiple-hash
                                                 :option-id option-ids}}
                                  toolbelt/add-csrf-header))]
-      (is (= 200 (-> option-id request api/app :status)))
-      (is (-> option-id request api/app m/decode-response-body :voted?))
-      (is (= 400 (-> 1 request api/app :status)))
+      (is (= 200 (-> option-id request test-app :status)))
+      (is (-> option-id request test-app m/decode-response-body :voted?))
+      (is (= 400 (-> 1 request test-app :status)))
       (testing "Cast multiple votes for a multiple choice poll"
-        (is (= 200 (-> option-ids multiple-request api/app :status)))
-        (is (-> option-ids multiple-request api/app m/decode-response-body :voted?))))))
+        (is (= 200 (-> option-ids multiple-request test-app :status)))
+        (is (-> option-ids multiple-request test-app m/decode-response-body :voted?))))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -81,7 +81,7 @@
                      :edit-hash "cat-dog-edit-hash"}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
-      api/app
+      test-app
       :status))
 
 (deftest delete-poll-test

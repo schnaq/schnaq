@@ -8,7 +8,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
             [schnaq.test-data :as test-data]
-            [schnaq.test.toolbelt :as schnaq-toolbelt]
+            [schnaq.test.toolbelt :as schnaq-toolbelt :refer [test-app]]
             [schnaq.toolbelt :as toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -22,10 +22,10 @@
                                  :body-params {:share-hash share-hash :edit-hash edit-hash}}))
           share-hash "simple-hash"
           edit-hash "simple-hash-secret"]
-      (is (= 200 (-> (credential-request share-hash edit-hash) api/app :status)))
-      (is (= 403 (-> (credential-request "invalid" edit-hash) api/app :status)))
-      (is (= 403 (-> (credential-request share-hash "invalid") api/app :status)))
-      (is (= 403 (-> (credential-request "invalid" "invalid") api/app :status))))))
+      (is (= 200 (-> (credential-request share-hash edit-hash) test-app :status)))
+      (is (= 403 (-> (credential-request "invalid" edit-hash) test-app :status)))
+      (is (= 403 (-> (credential-request share-hash "invalid") test-app :status)))
+      (is (= 403 (-> (credential-request "invalid" "invalid") test-app :status))))))
 
 (deftest graph-data-for-agenda-test
   (testing "Check if graph data is correct"
@@ -41,10 +41,10 @@
         (is (not (nil? (-> valid-response :body :graph :nodes))))
         (is (not (nil? (-> valid-response :body :graph :edges)))))
       (testing "Check with complete app"
-        (is (= 200 (:status (api/app {:request-method :get :uri "/discussion/graph"
-                                      :query-params {:share-hash share-hash}}))))
-        (is (= 404 (:status (api/app {:request-method :get :uri "/discussion/graph"
-                                      :query-params {:share-hash "bad-hash"}}))))))))
+        (is (= 200 (:status (test-app {:request-method :get :uri "/discussion/graph"
+                                       :query-params {:share-hash share-hash}}))))
+        (is (= 404 (:status (test-app {:request-method :get :uri "/discussion/graph"
+                                       :query-params {:share-hash "bad-hash"}}))))))))
 
 (deftest api-cors-test
   (testing "CORS settings for main API."

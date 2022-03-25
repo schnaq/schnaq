@@ -2,13 +2,10 @@
   (:require [clojure.test :refer [deftest is are testing use-fixtures]]
             [muuntaja.core :as m]
             [schnaq.api :as api]
-            [schnaq.test.toolbelt :as toolbelt]))
+            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
-
-(def ^:private test-app
-  (api/app))
 
 (defn- schnaq-by-hash-as-admin-request [share-hash edit-hash]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.schnaq/by-hash-as-admin))

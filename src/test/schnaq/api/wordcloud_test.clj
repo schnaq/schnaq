@@ -1,7 +1,7 @@
 (ns schnaq.api.wordcloud-test
   (:require [clojure.test :refer [deftest is use-fixtures testing]]
             [schnaq.api :as api]
-            [schnaq.test.toolbelt :as toolbelt]))
+            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
@@ -17,7 +17,7 @@
                      :edit-hash edit-hash}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
-      api/app
+      test-app
       :status))
 
 (deftest toggle-wordcloud-test
