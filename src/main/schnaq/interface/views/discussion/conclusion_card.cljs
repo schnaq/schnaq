@@ -307,7 +307,7 @@
 
 (defn- topic-or-search-content []
   (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
-    [:div.overflow-hidden.mb-4
+    [:div.mb-4
      (if search-inactive?
        [topic-bubble-view]
        [search-info])]))

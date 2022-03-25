@@ -115,9 +115,16 @@
          (or anonymous-owner?
              (= user-id (:db/id (:statement/author statement)))))))
 
-(defn- edit-discussion-dropdown-menu [{:keys [db/id
-                                              discussion/share-hash
-                                              discussion/author]}]
+(defn- dropdown-dots
+  "Three dot menu which triggers a dropdown."
+  [dropdown-id]
+  [:button.btn.btn-link.text-dark.m-0.p-0
+   {:id dropdown-id
+    :role "button" :data-bs-toggle "dropdown"
+    :aria-haspopup "true" :aria-expanded "false"}
+   [icon :dots]])
+
+(defn- edit-discussion-dropdown-menu [{:keys [db/id discussion/share-hash discussion/author]}]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
         creation-secrets @(rf/subscribe [:schnaq.discussion/creation-secrets])
         user-id @(rf/subscribe [:user/id])
@@ -126,11 +133,7 @@
                       (= user-id (:db/id author)))]
     (when editable?
       [:div.dropdown.ms-2
-       [:button.btn.btn-link.text-dark.m-0.p-0
-        {:id dropdown-id
-         :role "button" :data-bs-toggle "dropdown"
-         :aria-haspopup "true" :aria-expanded "false"}
-        [icon :dots]]
+       [dropdown-dots]
        [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
         (when editable?
           [:dropdown-item
@@ -168,11 +171,7 @@
 
 (defn- statement-dropdown-menu [dropdown-id dropdown-items]
   [:div.dropdown.ms-2
-   [:button.btn.btn-link.text-dark.m-0.p-0
-    {:id dropdown-id
-     :role "button" :data-bs-toggle "dropdown"
-     :aria-haspopup "true" :aria-expanded "false"}
-    [icon :dots]]
+   [dropdown-dots dropdown-id]
    [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
     dropdown-items]])
 
