@@ -24,7 +24,7 @@
   "Send a single message to a client referenced by its uid."
   [uid message]
   [:ws.message/uid :ws.message/?data => any?]
-  (println "Sending message:" message)
+  (log/debug "Sending message:" message)
   ((:send-fn socket) uid message))
 
 ;; -----------------------------------------------------------------------------
@@ -84,5 +84,8 @@
 
   (send! (first (:any @(:connected-uids socket)))
          [:message/add "huhu"])
+
+  (log/set-level! :debug)
+  (log/set-level! :info)
 
   nil)
