@@ -196,7 +196,12 @@
      (enterprise-features))
     "text-primary")
    nil
-   [cta-button (labels :pricing.enterprise-tier/call-to-action) "btn-primary" "mailto:info@schnaq.com"]])
+   [:div.text-center.py-4
+    [:a.btn.btn-primary
+     {:href "mailto:info@schnaq.com"
+      :on-click (fn [_e]
+                  (.push js/window._paq #js ["trackEvent", "Lead", "Mail-Request", "Enterprise-Plan", 50]))}
+     (labels :pricing.enterprise-tier/call-to-action)]]])
 
 (defn- tier-cards []
   (let [classes "col-12 col-lg-4"]
