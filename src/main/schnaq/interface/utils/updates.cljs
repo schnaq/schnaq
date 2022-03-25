@@ -82,9 +82,7 @@
                       {:share-hash share-hash
                        :display-name (toolbelt/current-display-name db)}
                       (fn [response]
-                        (rf/dispatch [:schnaq.activation.load-from-backend/success response])
-                        (rf/dispatch [:schnaq.polls.load-from-backend/success response])
-                        (rf/dispatch [:discussion.query.conclusions/set-starting response]))]]]})))
+                        (rf/dispatch [:graph/set-current response]))]]]})))
 
 (comment
 
