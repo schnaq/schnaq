@@ -1,9 +1,8 @@
 (ns schnaq.api.hub-test
   (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [ring.mock.request :as mock]
-            [schnaq.api :as api]
             [schnaq.database.hub-test-data :as hub-test-data]
-            [schnaq.test.toolbelt :as toolbelt]))
+            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]))
 
 (use-fixtures :each
   toolbelt/init-test-delete-db-fixture
@@ -15,5 +14,5 @@
         request #(-> (mock/request :get (format "/hub/%s" keycloak-name))
                      (assoc-in [:identity :groups] [%]))]
     (testing "Only request with valid group memberships should be allowed."
-      (is (= 200 (-> "test-keycloak" request api/app :status)))
-      (is (= 403 (-> "some-other-invalid-group" request api/app :status))))))
+      (is (= 200 (-> "test-keycloak" request test-app :status)))
+      (is (= 403 (-> "some-other-invalid-group" request test-app :status))))))

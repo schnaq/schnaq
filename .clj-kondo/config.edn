@@ -1,5 +1,6 @@
 {:lint-as {com.fulcrologic.guardrails.core/>defn clojure.core/defn
-           com.fulcrologic.guardrails.core/>defn- clojure.core/defn}
+           com.fulcrologic.guardrails.core/>defn- clojure.core/defn
+           mount.core/defstate clj-kondo.lint-as/def-catch-all}
  :linters {:single-key-in {:level :warning}
            :unsorted-required-namespaces {:level :warning}
            :unused-referred-var {:exclude {com.fulcrologic.guardrails.core [=>]}}}}

@@ -1,8 +1,7 @@
 (ns schnaq.api.discussion-test
   (:require [clojure.test :refer [deftest is testing use-fixtures]]
-            [schnaq.api :as api]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.test.toolbelt :as toolbelt]))
+            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
@@ -19,5 +18,5 @@
                      (toolbelt/mock-authorization-header %))]
     (testing "Only request with valid role shall be accepted."
       @(discussion-db/mods-mark-only! share-hash true)
-      (is (= 200 (-> toolbelt/token-schnaqqifant-user request api/app :status)))
-      (is (= 403 (-> toolbelt/token-wegi-no-beta-user request api/app :status))))))
+      (is (= 200 (-> toolbelt/token-schnaqqifant-user request test-app :status)))
+      (is (= 403 (-> toolbelt/token-wegi-no-beta-user request test-app :status))))))

@@ -1,7 +1,6 @@
 (ns schnaq.api.analytics-test
   (:require [clojure.test :refer [use-fixtures deftest is testing]]
-            [schnaq.api :as api]
-            [schnaq.test.toolbelt :as toolbelt :refer [token-schnaqqifant-user token-n2o-admin]]))
+            [schnaq.test.toolbelt :as toolbelt :refer [token-schnaqqifant-user token-n2o-admin test-app]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
@@ -9,7 +8,7 @@
 (defn- response-status-main-route [token]
   (-> {:request-method :get :uri "/admin/analytics" :query-params {:days-since 7}}
       (toolbelt/mock-authorization-header token)
-      api/app
+      test-app
       :status))
 
 (deftest permission-test

@@ -6,7 +6,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.themes :as themes-db]
             [schnaq.test-data :refer [theme-anti-social schnaqqi kangaroo]]
-            [schnaq.test.toolbelt :as toolbelt]))
+            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
@@ -38,7 +38,7 @@
   (-> {:request-method :get :uri (:path (api/route-by-name :api.themes/personal))}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
-      api/app
+      test-app
       m/decode-response-body
       :themes
       count))
@@ -57,7 +57,7 @@
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       toolbelt/accept-edn-response-header
-      api/app))
+      test-app))
 
 (deftest new-theme-test
   (testing "Creating a new theme"
@@ -81,7 +81,7 @@
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       toolbelt/accept-edn-response-header
-      api/app))
+      test-app))
 
 (deftest edit-theme-test
   (testing "Editing a theme succeeds for eligible users."
@@ -112,7 +112,7 @@
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       toolbelt/accept-edn-response-header
-      api/app))
+      test-app))
 
 (deftest delete-theme-test
   (testing "Deleting a theme"
@@ -135,7 +135,7 @@
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       toolbelt/accept-edn-response-header
-      api/app))
+      test-app))
 
 (deftest assign-theme-test
   (testing "Assigning a theme to a discussion"
@@ -160,7 +160,7 @@
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       toolbelt/accept-edn-response-header
-      api/app))
+      test-app))
 
 (deftest unassign-theme-test
   (testing "Unassigning a theme from a discussion"

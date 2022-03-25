@@ -180,17 +180,13 @@
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
                                (rf/dispatch [:discussion.history/clear])
-                               (rf/dispatch [:updates.periodic/starting-conclusions true])
+                               (rf/dispatch [:updates.periodic.discussion/starting true])
                                (rf/dispatch [:discussion.query.conclusions/starting])
                                (rf/dispatch [:schnaq.polls/load-from-backend])
                                (rf/dispatch [:schnaq.activation/load-from-backend])
-                               (rf/dispatch [:updates.periodic/polls true])
-                               (rf/dispatch [:updates.periodic/activation true])
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
-                              (rf/dispatch [:updates.periodic/starting-conclusions false])
-                              (rf/dispatch [:updates.periodic/polls false])
-                              (rf/dispatch [:updates.periodic/activation false])
+                              (rf/dispatch [:updates.periodic.discussion/starting false])
                               (rf/dispatch [:schnaq.activation/dissoc])
                               (rf/dispatch [:statement.edit/reset-edits])
                               (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
@@ -209,9 +205,9 @@
        :link-text (labels :router/qanda)
        :controllers [{:start (fn []
                                (rf/dispatch [:schnaq.activation/load-from-backend])
-                               (rf/dispatch [:updates.periodic/activation true]))
+                               (rf/dispatch [:updates.periodic.discussion/starting true]))
                       :stop (fn []
-                              (rf/dispatch [:updates.periodic/activation false])
+                              (rf/dispatch [:updates.periodic.discussion/starting false])
                               (rf/dispatch [:schnaq.qa.search.results/reset]))}]}]
      ["/dashboard"
       {:name :routes.schnaq/dashboard

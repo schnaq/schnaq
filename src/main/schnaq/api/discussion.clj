@@ -47,7 +47,7 @@
   ([share-hash user-id secret-statement-id]
    (add-creation-secret (starting-conclusions-with-processors share-hash user-id) secret-statement-id)))
 
-(defn- get-starting-conclusions
+(defn get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash display-name]} (:query parameters)
@@ -207,7 +207,7 @@
                      user-id)}))
       (validator/deny-access at/invalid-rights-message))))
 
-(defn- graph-data-for-agenda
+(defn graph-for-discussion
   "Delivers the graph-data needed to draw the graph in the frontend."
   [{:keys [parameters]}]
   (let [share-hash (get-in parameters [:query :share-hash])
@@ -364,8 +364,8 @@
                              :parameters {:query {:share-hash :discussion/share-hash
                                                   :display-name ::specs/non-blank-string}}
                              :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}}}]
-   ["/graph" {:get graph-data-for-agenda
-              :description (at/get-doc #'graph-data-for-agenda)
+   ["/graph" {:get graph-for-discussion
+              :description (at/get-doc #'graph-for-discussion)
               :name :api.discussion/graph
               :middleware [:discussion/valid-share-hash?]
               :parameters {:query {:share-hash :discussion/share-hash}}

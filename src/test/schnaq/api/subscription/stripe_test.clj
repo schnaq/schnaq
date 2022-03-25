@@ -5,7 +5,7 @@
             [schnaq.config.stripe :refer [prices]]
             [schnaq.database.user :as user-db]
             [schnaq.test-data :refer [kangaroo]]
-            [schnaq.test.toolbelt :as toolbelt :refer [token-n2o-admin]]))
+            [schnaq.test.toolbelt :as toolbelt :refer [token-n2o-admin test-app]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
@@ -16,7 +16,7 @@
        :body-params body-params}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header token-n2o-admin)
-      api/app))
+      test-app))
 
 (deftest cancel-subscription-test
   (testing "Test users have no valid subscription and can't cancel it."

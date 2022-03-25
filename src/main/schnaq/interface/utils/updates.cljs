@@ -4,7 +4,7 @@
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [periodic-update-time]]
-            [taoensso.timbre :as log]))
+            [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (>defn- loop-builder
   "Build looping functions for several update methods and subscriptions."
@@ -18,46 +18,17 @@
 ;; -----------------------------------------------------------------------------
 ;; Looping functions
 
-(defn- update-starting-conclusions
-  "Function to trigger updates of starting-conclusions."
-  []
-  (rf/dispatch [:discussion.query.conclusions/starting]))
-
-(defn- loop-update-starting-conclusions!
-  "Periodically request starting conclusions."
-  []
-  (loop-builder
-   :updates.periodic/starting-conclusions? update-starting-conclusions))
-
-(defn- update-graph
-  "Call events to update the graph."
-  []
-  (rf/dispatch [:graph/load-data-for-discussion]))
-
 (defn- loop-update-graph!
   "Define loop to periodically update graph."
   []
-  (loop-builder :updates.periodic/graph? update-graph))
+  (loop-builder :updates.periodic/graph?
+                #(rf/dispatch [:updates.periodic.discussion.graph/request])))
 
-(defn- update-polls
-  "Call events to update polls."
-  []
-  (rf/dispatch [:schnaq.polls/load-from-backend]))
-
-(defn- loop-update-polls!
+(defn- loop-periodic-discussion-start!
   "Define loop to periodically update polls."
   []
-  (loop-builder :updates.periodic/polls? update-polls))
-
-(defn- update-activation
-  "Call events to update activation."
-  []
-  (rf/dispatch [:schnaq.activation/load-from-backend]))
-
-(defn- loop-update-activation!
-  "Define loop to periodically update polls."
-  []
-  (loop-builder :updates.periodic/activation? update-activation))
+  (loop-builder :updates.periodic.discussion/starting?
+                #(rf/dispatch [:updates.periodic.discussion.starting/request])))
 
 ;; -----------------------------------------------------------------------------
 ;; Init
@@ -66,44 +37,20 @@
   "Initializing function to start the loops. Each looping function must be
   called here once to start the endless loop."
   []
-  (log/info "Preparing periodic updates of discussion entities...")
-  (loop-update-starting-conclusions!)
-  (loop-update-graph!)
-  (loop-update-polls!)
-  (loop-update-activation!))
+  (loop-periodic-discussion-start!)
+  (loop-update-graph!))
 
 ;; -----------------------------------------------------------------------------
-;; Events
 
 (rf/reg-sub
- :updates.periodic/starting-conclusions?
+ :updates.periodic.discussion/starting?
  (fn [db _]
-   (get-in db [:updates/periodic :conclusions/starting?] false)))
+   (get-in db [:updates/periodic :discussion/starting] false)))
 
 (rf/reg-event-db
- :updates.periodic/starting-conclusions
+ :updates.periodic.discussion/starting
  (fn [db [_ trigger?]]
-   (assoc-in db [:updates/periodic :conclusions/starting?] trigger?)))
-
-(rf/reg-sub
- :updates.periodic/polls?
- (fn [db _]
-   (get-in db [:updates/periodic :polls] false)))
-
-(rf/reg-event-db
- :updates.periodic/polls
- (fn [db [_ trigger?]]
-   (assoc-in db [:updates/periodic :polls] trigger?)))
-
-(rf/reg-sub
- :updates.periodic/activation?
- (fn [db _]
-   (get-in db [:updates/periodic :activation] false)))
-
-(rf/reg-event-db
- :updates.periodic/activation
- (fn [db [_ trigger?]]
-   (assoc-in db [:updates/periodic :activation] trigger?)))
+   (assoc-in db [:updates/periodic :discussion/starting] trigger?)))
 
 (rf/reg-sub
  :updates.periodic/graph?
@@ -114,3 +61,31 @@
  :updates.periodic/graph
  (fn [db [_ trigger?]]
    (assoc-in db [:updates/periodic :graph] trigger?)))
+
+(rf/reg-event-fx
+ :updates.periodic.discussion.starting/request
+ (fn [{:keys [db]}]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [[:ws/send [:discussion.starting/update
+                      {:share-hash share-hash
+                       :display-name (toolbelt/current-display-name db)}
+                      (fn [response]
+                        (rf/dispatch [:schnaq.activation.load-from-backend/success response])
+                        (rf/dispatch [:schnaq.polls.load-from-backend/success response])
+                        (rf/dispatch [:discussion.query.conclusions/set-starting response]))]]]})))
+
+(rf/reg-event-fx
+ :updates.periodic.discussion.graph/request
+ (fn [{:keys [db]}]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [[:ws/send [:discussion.graph/update
+                      {:share-hash share-hash
+                       :display-name (toolbelt/current-display-name db)}
+                      (fn [response]
+                        (rf/dispatch [:graph/set-current response]))]]]})))
+
+(comment
+
+  (rf/dispatch [:updates.periodic.discussion.starting/request])
+
+  nil)

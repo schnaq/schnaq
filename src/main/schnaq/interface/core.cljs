@@ -5,6 +5,7 @@
             [goog.dom :as gdom]
             [goog.string :as gstring]
             [goog.string.format] ;; required for goog.string. We need to require it once in our project.
+            [mount.core :as mount]
             [re-frame.core :as rf]
             [reagent.dom]
             [schnaq.config.shared :as shared-config]
@@ -87,6 +88,7 @@
             [schnaq.interface.views.user.subscription]
             [schnaq.interface.views.user.themes]
             [schnaq.interface.views.user.welcome]
+            [schnaq.interface.websockets]
             [taoensso.timbre :as log]))
 ;; NOTE: If you use subs and events in another module, you need to require it
 ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
@@ -122,6 +124,7 @@
   "Entrypoint into the application."
   []
   (let [init-routine (if shared-config/embedded? :initialize/wetog-integration :initialize/schnaq)]
+    (mount/start)
     (routes/init-routes!)
     (rf/dispatch-sync [init-routine]) ;; put a value into application state
     (language/init-language)

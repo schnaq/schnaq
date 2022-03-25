@@ -22,7 +22,7 @@
         (ok {:deleted? true}))
     (bad-request (at/build-error-body :activation-not-found "No activation found to delete!"))))
 
-(defn- get-activation
+(defn get-activation
   "Get the current activation for a discussion."
   [{{{:keys [share-hash]} :query} :parameters}]
   (ok {:activation (activation-db/activation-by-share-hash share-hash)}))

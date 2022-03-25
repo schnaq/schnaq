@@ -5,6 +5,7 @@
             [datomic.api :as datomic]
             [expound.alpha :as expound]
             [ring.mock.request :as mock]
+            [schnaq.api :as api]
             [schnaq.auth.jwt :as sjwt]
             [schnaq.config :as config]
             [schnaq.database.main :as database]
@@ -108,3 +109,11 @@
   [request]
   [map? :ret map?]
   (mock/header request "Accept" "application/edn"))
+
+;; -----------------------------------------------------------------------------
+
+(def test-app
+  "Initialize a test-application.
+  This can be used to make real requests to the api, but without
+  side-effect-services, like the websockets."
+  (api/app))

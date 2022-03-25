@@ -11,6 +11,7 @@
         com.draines/postal {:mvn/version "2.0.5"}
         com.fulcrologic/guardrails {:mvn/version "1.1.11"}
         com.stripe/stripe-java {:mvn/version "20.108.0"}
+        com.taoensso/sente {:mvn/version "1.16.2"}
         com.taoensso/tempura {:mvn/version "1.2.1"}
         com.taoensso/timbre {:mvn/version "5.2.1"}
         compojure/compojure {:mvn/version "1.6.2"}
@@ -23,6 +24,7 @@
         keycloak-clojure/keycloak-clojure {:mvn/version "1.25.3"}
         metosin/reitit {:mvn/version "0.5.17"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
+        mount/mount {:mvn/version "0.1.16"}
         org.clojure/clojure {:mvn/version "1.11.0"}
         org.clojure/clojurescript {:mvn/version "1.11.4"}
         org.clojure/core.async {:mvn/version "1.5.648"}

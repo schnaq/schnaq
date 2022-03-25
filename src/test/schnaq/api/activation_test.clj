@@ -5,13 +5,13 @@
             [schnaq.api :as api]
             [schnaq.database.activation :as activation-db]
             [schnaq.database.specs :as specs]
-            [schnaq.test.toolbelt :as toolbelt]))
+            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
 
-(def test-share-hash "cat-dog-hash")
-(def test-edit-hash "cat-dog-edit-hash")
+(def ^:private test-share-hash "cat-dog-hash")
+(def ^:private test-edit-hash "cat-dog-edit-hash")
 
 (defn- start-activation-request [share-hash edit-hash user-token]
   (-> {:request-method :put :uri (:path (api/route-by-name :activation/start))
@@ -19,7 +19,7 @@
                      :edit-hash edit-hash}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
-      api/app
+      test-app
       :status))
 
 (deftest start-activation-test
@@ -55,7 +55,7 @@
 (defn- get-activation-request [share-hash]
   (-> {:request-method :get :uri (:path (api/route-by-name :activation/get))
        :query-params {:share-hash share-hash}}
-      api/app))
+      test-app))
 
 (deftest get-activation-no-activation-available-test
   (testing "If no activation is active, the request should be empty."
@@ -80,7 +80,7 @@
   (-> {:request-method :put :uri (:path (api/route-by-name :activation/increment))
        :body-params {:share-hash share-hash}}
       toolbelt/add-csrf-header
-      api/app
+      test-app
       :status))
 
 (deftest increment-activation-test
@@ -103,7 +103,7 @@
                      :edit-hash edit-hash}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
-      api/app
+      test-app
       :status))
 
 (deftest reset-activation-test
@@ -143,7 +143,7 @@
                      :edit-hash edit-hash}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
-      api/app
+      test-app
       :status))
 
 (deftest delete-activation-test

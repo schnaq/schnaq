@@ -247,7 +247,8 @@
 (rf/reg-event-db
  :schnaq.polls.load-from-backend/success
  (fn [db [_ response]]
-   (assoc-in db [:schnaq :current :polls] (:polls response))))
+   (when-let [polls (:polls response)]
+     (assoc-in db [:schnaq :current :polls] polls))))
 
 (rf/reg-event-db
  :schnaq.polls/load-past-votes
