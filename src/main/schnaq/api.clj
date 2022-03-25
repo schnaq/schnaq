@@ -88,87 +88,95 @@
   You can choose the format of your response by specifying the corresponding header. `json`, `edn`, `transit+json` and `transit+msgpack` are currently supported. For example:
   `curl https://api.staging.schnaq.com/ping -H \"Accept: application/edn\"`")
 
-(defn- router []
-  (ring/router
-   [activation-routes
-    analytics-routes
-    debug-routes
-    discussion-routes
-    email-routes
-    feedback-routes
-    hub-routes
-    other-routes
-    poll-routes
-    schnaq-routes
-    stripe-routes
-    summary-routes
-    theme-routes
-    user-routes
-    (when ws/socket (websocket-routes))
-    wordcloud-routes
+(defn- router
+  "Create a router with all routes.
+  Websockets are stateful, so this is a special case, which can be excluded."
+  ([] (router false))
+  ([with-websockets?]
+   (ring/router
+    [activation-routes
+     analytics-routes
+     debug-routes
+     discussion-routes
+     email-routes
+     feedback-routes
+     hub-routes
+     other-routes
+     poll-routes
+     schnaq-routes
+     stripe-routes
+     summary-routes
+     theme-routes
+     user-routes
+     (when with-websockets? (websocket-routes))
+     wordcloud-routes
 
-    ["/swagger.json"
-     {:get {:no-doc true
-            :swagger {:info {:title "schnaq API"
-                             :basePath "/"
-                             :version "1.0.0"
-                             :description description}
-                      :securityDefinitions {:keycloak {:type "oauth2"
-                                                       :flow "implicit"
-                                                       :name "Authorization"
-                                                       :description "Use `swagger` as the client-id."
-                                                       :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}
-                                            :schnaq-csrf-header {:type "apiKey"
-                                                                 :in "header"
-                                                                 :name "X-Schnaq-CSRF"
-                                                                 :description "Use any value, the header needs to be set, that's it."
-                                                                 :example "Elephants like security"
-                                                                 :default "Phanty"}}
-                      :security [{:keycloak []
-                                  :schnaq-csrf-header []}]}
-            :handler (swagger/create-swagger-handler)}}]]
-   {:exception pretty/exception
-    :validate rrs/validate
-    ::rs/explain expound/expound-str
-    :data {:coercion reitit.coercion.spec/coercion
-           :muuntaja m/instance
-           :middleware [swagger/swagger-feature
-                        parameters/parameters-middleware ;; query-params & form-params
-                        middlewares/convert-body-middleware ;; must be called *before* muuntaja/format-middleware
-                        muuntaja/format-middleware
-                        middlewares/exception-printing-middleware
-                        coercion/coerce-response-middleware ;; coercing response bodies
-                        coercion/coerce-request-middleware ;; coercing request parameters
-                        multipart/multipart-middleware
-                        auth-middlewares/replace-bearer-with-token
-                        auth/wrap-jwt-authentication
-                        auth-middlewares/update-jwt-middleware
-                        middlewares/wrap-custom-schnaq-csrf-header]}
-    ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
-                           :user/admin? auth-middlewares/admin?-middleware
-                           :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
-                           :user/beta-tester? auth-middlewares/beta-tester?-middleware
-                           :user/pro-user? auth-middlewares/pro-user?-middleware
-                           :app/valid-code? auth-middlewares/valid-app-code?-middleware
-                           :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
-                           :discussion/valid-statement? middlewares/valid-statement?-middleware
-                           :discussion/valid-credentials? middlewares/valid-credentials?-middleware}}))
+     ["/swagger.json"
+      {:get {:no-doc true
+             :swagger {:info {:title "schnaq API"
+                              :basePath "/"
+                              :version "1.0.0"
+                              :description description}
+                       :securityDefinitions {:keycloak {:type "oauth2"
+                                                        :flow "implicit"
+                                                        :name "Authorization"
+                                                        :description "Use `swagger` as the client-id."
+                                                        :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}
+                                             :schnaq-csrf-header {:type "apiKey"
+                                                                  :in "header"
+                                                                  :name "X-Schnaq-CSRF"
+                                                                  :description "Use any value, the header needs to be set, that's it."
+                                                                  :example "Elephants like security"
+                                                                  :default "Phanty"}}
+                       :security [{:keycloak []
+                                   :schnaq-csrf-header []}]}
+             :handler (swagger/create-swagger-handler)}}]]
+    {:exception pretty/exception
+     :validate rrs/validate
+     ::rs/explain expound/expound-str
+     :data {:coercion reitit.coercion.spec/coercion
+            :muuntaja m/instance
+            :middleware [swagger/swagger-feature
+                         parameters/parameters-middleware ;; query-params & form-params
+                         middlewares/convert-body-middleware ;; must be called *before* muuntaja/format-middleware
+                         muuntaja/format-middleware
+                         middlewares/exception-printing-middleware
+                         coercion/coerce-response-middleware ;; coercing response bodies
+                         coercion/coerce-request-middleware ;; coercing request parameters
+                         multipart/multipart-middleware
+                         auth-middlewares/replace-bearer-with-token
+                         auth/wrap-jwt-authentication
+                         auth-middlewares/update-jwt-middleware
+                         middlewares/wrap-custom-schnaq-csrf-header]}
+     ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
+                            :user/admin? auth-middlewares/admin?-middleware
+                            :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
+                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
+                            :user/pro-user? auth-middlewares/pro-user?-middleware
+                            :app/valid-code? auth-middlewares/valid-app-code?-middleware
+                            :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
+                            :discussion/valid-statement? middlewares/valid-statement?-middleware
+                            :discussion/valid-credentials? middlewares/valid-credentials?-middleware}})))
 
 (defn route-by-name
   "Return a route by its name."
-  [route-name]
-  (r/match-by-name (router) route-name))
+  ([route-name]
+   (route-by-name route-name false))
+  ([route-name with-websockets?]
+   (r/match-by-name (router with-websockets?) route-name)))
 
-(defn app [_request]
-  (ring/ring-handler
-   (router)
-   (ring/routes
-    (swagger-ui/create-swagger-ui-handler
-     {:path "/"
-      :config {:validatorUrl nil
-               :operationsSorter "alpha"}})
-    (ring/redirect-trailing-slash-handler {:method :strip})
-    (ring/create-default-handler))))
+(defn app
+  ([] (app false))
+  ([with-websockets?]
+   (ring/ring-handler
+    (router with-websockets?)
+    (ring/routes
+     (swagger-ui/create-swagger-ui-handler
+      {:path "/"
+       :config {:validatorUrl nil
+                :operationsSorter "alpha"}})
+     (ring/redirect-trailing-slash-handler {:method :strip})
+     (ring/create-default-handler)))))
 
 (def allowed-origins
   "Calculate valid origins based on the environment configuration and the
@@ -189,7 +197,7 @@
     (log/info (format "Starting web-server at %s" shared-config/api-url))
     (log/info (format "Allowed Origins: %s" origins))
     (server/run-server
-     (wrap-cors (app nil)
+     (wrap-cors (app true)
                 :access-control-allow-origin origins
                 :access-control-allow-methods allowed-http-verbs)
      {:port shared-config/api-port}))

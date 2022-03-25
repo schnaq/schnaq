@@ -15,5 +15,7 @@
   [(when-not shared-config/production?
      ["/debug" {:swagger {:tags ["debug"]}
                 :parameters {:query (s/keys :opt-un [::debug])}}
-      ["" {:get reveal-information
-           :post reveal-information}]])])
+      ["" {:get {:handler reveal-information
+                 :name :api.debug/get}
+           :post {:handler reveal-information
+                  :name :api.debug/post}}]])])
