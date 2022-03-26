@@ -254,11 +254,10 @@
     [:div.ms-auto
      (if starting-route?
        [badges/static-info-badges-discussion schnaq]
-       [:<>
-        [:div.d-flex.flex-row
-         [badges/show-number-of-replies statement]
-         [reactions/up-down-vote statement]
-         [badges/edit-statement-dropdown-menu]]])]))
+       [:div.d-flex.flex-row
+        [badges/show-number-of-replies statement]
+        [reactions/up-down-vote statement]
+        [badges/edit-statement-dropdown-menu statement]])]))
 
 (defn- title-view [statement]
   (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
