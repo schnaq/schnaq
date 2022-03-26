@@ -1,8 +1,13 @@
 (ns schnaq.export
-  (:require [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
-            [schnaq.database.discussion :as db]
-            [schnaq.database.specs :as specs]))
+  #?(:clj (:require [clojure.spec.alpha :as s]
+                    [clojure.string :as string]
+                    [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
+                    [schnaq.database.specs :as specs])
+     :cljs (:require [clojure.spec.alpha :as s]
+                     [clojure.string :as string]
+                     [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
+                     [goog.string :refer [format]]
+                     [schnaq.database.specs :as specs])))
 
 (def ^:private punctuations
   "Check for these punctuations in a string."
@@ -47,33 +52,31 @@
 
 (>defn generate-argdown
   "Generates a textual representation of the discussion in an argdown-format."
-  [share-hash]
-  [:discussion/share-hash :ret string?]
-  (let [statements (db/all-statements share-hash)]
-    (loop [queue (remove :statement/parent statements)
-           text ""
-           level 0]
-      (if (empty? queue)
+  [statements]
+  [(s/coll-of ::specs/statement) :ret string?]
+  (loop [queue (remove :statement/parent statements)
+         text ""
+         level 0]
+    (if (empty? queue)
         ;; We're done here, give the finished text back
-        text
+      text
         ;; Otherwise, either toss the :level-down-marker, or do the recursive algo
-        (if (= :level-down-marker (first queue))
-          (recur (rest queue) text (dec level))
-          (let [current-statement (first queue)
-                updated-text (next-line text level current-statement)
-                statements-to-add (filter #(= (get-in % [:statement/parent :db/id])
-                                              (:db/id current-statement))
-                                          statements)]
-            (if (empty? statements-to-add)
-              (recur (rest queue) updated-text level)
-              (recur (concat statements-to-add [:level-down-marker] (rest queue)) updated-text (inc level)))))))))
+      (if (= :level-down-marker (first queue))
+        (recur (rest queue) text (dec level))
+        (let [current-statement (first queue)
+              updated-text (next-line text level current-statement)
+              statements-to-add (filter #(= (get-in % [:statement/parent :db/id])
+                                            (:db/id current-statement))
+                                        statements)]
+          (if (empty? statements-to-add)
+            (recur (rest queue) updated-text level)
+            (recur (concat statements-to-add [:level-down-marker] (rest queue)) updated-text (inc level))))))))
 
 (>defn generate-fulltext
   "Export a discussion as a fulltext."
-  [share-hash]
-  [:discussion/share-hash :ret string?]
-  (let [statements (db/all-statements share-hash)
-        punctuated-statements (map add-punctuation-to-statement statements)]
+  [statements]
+  [(s/coll-of ::specs/statement) :ret string?]
+  (let [punctuated-statements (map add-punctuation-to-statement statements)]
     (loop [queue (interleave (remove :statement/parent punctuated-statements)
                              (repeat :break-marker))
            text ""
