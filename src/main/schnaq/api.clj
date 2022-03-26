@@ -41,6 +41,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.config.stripe :refer [prices]]
             [schnaq.config.summy :as summy-config]
+            [schnaq.core] ;; Keep this import to activate database etc.
             [schnaq.toolbelt :as toolbelt]
             [schnaq.websockets.handler :refer [websocket-routes] :as ws]
             [schnaq.websockets.messages]
