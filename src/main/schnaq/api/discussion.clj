@@ -1,7 +1,7 @@
 (ns schnaq.api.discussion
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
-            [ring.util.http-response :refer [ok created bad-request forbidden]]
+            [ring.util.http-response :refer [bad-request created forbidden ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.auth.lib :as auth-lib]
