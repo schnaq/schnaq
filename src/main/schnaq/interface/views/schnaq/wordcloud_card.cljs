@@ -11,22 +11,22 @@
 (defn wordcloud-tab
   "Wordcloud tab menu to hide and show a wordcloud."
   []
-  (let [display-wordcloud? @(rf/subscribe [:schnaq/show-wordcloud?])]
+  (let [display-wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])]
     [:div.pt-2
      [:div.text (labels :schnaq.wordcloud/label)]
      [:div.text-center.pt-2
       (if display-wordcloud?
         [:button.btn.btn-dark.w-75
-         {:on-click #(rf/dispatch [:wordcloud/display? false])}
+         {:on-click #(rf/dispatch [:schnaq.wordcloud/toggle false])}
          (labels :schnaq.wordcloud/hide)]
         [:button.btn.btn-secondary.w-75
-         {:on-click (fn [_e] (rf/dispatch [:wordcloud/display? true]))}
+         {:on-click (fn [_e] (rf/dispatch [:schnaq.wordcloud/toggle true]))}
          (labels :schnaq.wordcloud/show)])]]))
 
 (defn wordcloud-card
   "Displays a wordcloud in a card."
   []
-  (when @(rf/subscribe [:schnaq/show-wordcloud?])
+  (when @(rf/subscribe [:schnaq.wordcloud/show?])
     [motion/fade-in-and-out
      [:div.statement-column
       [:section.statement-card
@@ -37,19 +37,19 @@
          "wordcloud-dropdown-id"
          [dropdown-menu/item :trash
           :schnaq.wordcloud/hide
-          #(rf/dispatch [:wordcloud/display? false])]]]
+          #(rf/dispatch [:schnaq.wordcloud/toggle false])]]]
        [wordcloud/wordcloud]]]]))
 
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-sub
- :schnaq/show-wordcloud?
+ :schnaq.wordcloud/show?
  ;; Checks if the wordcloud shall be displayed.
  (fn [db _]
    (get-in db [:schnaq :current :display-wordcloud?] false)))
 
 (rf/reg-event-fx
- :wordcloud/display?
+ :schnaq.wordcloud/toggle
  (fn [{:keys [db]} [_ display-wordcloud?]]
    {:fx [(http/xhrio-request db :put "/wordcloud/discussion"
                              [:schnaq.wordcloud.toggle/success]
@@ -60,7 +60,9 @@
 (rf/reg-event-fx
  :schnaq.wordcloud.toggle/success
  (fn [{:keys [db]} [_ {:keys [display-wordcloud?]}]]
-   {:db (assoc-in db [:schnaq :current :display-wordcloud?] display-wordcloud?)
+   {:db (-> db
+            (assoc-in [:schnaq :current :display-wordcloud?] display-wordcloud?)
+            (update-in [:schnaq :selected :discussion.visible/entities] conj :discussion.visible.entities/wordcloud))
     :fx [[:dispatch [:schnaq.wordcloud/calculate]]]}))
 
 (rf/reg-event-fx
