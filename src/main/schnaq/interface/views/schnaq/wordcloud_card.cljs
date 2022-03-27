@@ -27,8 +27,8 @@
   "Displays a wordcloud in a card."
   []
   (when @(rf/subscribe [:schnaq.wordcloud/show?])
-    [motion/fade-in-and-out
-     [:div.statement-column
+    [:div.statement-column
+     [motion/fade-in-and-out
       [:section.statement-card
        [:div.d-flex.mt-3
         [:h4.mx-auto.mt-3

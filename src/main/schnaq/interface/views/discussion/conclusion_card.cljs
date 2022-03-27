@@ -414,7 +414,7 @@
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
         activation (when top-level? [activation/activation-card])
         poll (when top-level? (poll/poll-list))
-        wordcloud (when top-level? (wordcloud-card/wordcloud-card))
+        wordcloud (when top-level? [wordcloud-card/wordcloud-card])
         access-code @(rf/subscribe [:schnaq.selected/access-code])]
     [:div.row
      [:div.statement-column
