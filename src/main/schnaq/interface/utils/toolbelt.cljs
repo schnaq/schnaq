@@ -1,12 +1,13 @@
 (ns schnaq.interface.utils.toolbelt
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [>defn ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
             [goog.dom :as gdom]
             [goog.dom.dataset :as dataset]
             [oops.core :refer [oset! oget oget+]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
+            [schnaq.database.specs :as specs]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
@@ -152,3 +153,11 @@
   [id]
   (when-let [element (js/document.getElementById id)]
     (set! (.-value element) "")))
+
+(>defn convert-premises
+  "Take normalized premises and convert them to a collection."
+  [db]
+  [map? => (s/coll-of ::specs/statement)]
+  (if-let [premises (get-in db [:discussion :premises :current])]
+    (map second premises)
+    '()))
