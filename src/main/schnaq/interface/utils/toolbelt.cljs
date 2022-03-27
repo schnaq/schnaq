@@ -161,3 +161,13 @@
   (if-let [premises (get-in db [:discussion :premises :current])]
     (map second premises)
     '()))
+
+(>defn set-wordcloud-in-current-schnaq
+  "Check in app db at selected schnaq whether to display a word cloud."
+  [db]
+  [map? => map?]
+  (let [show-wordcloud?
+        (some
+         #(= % :discussion.visible.entities/wordcloud)
+         (get-in db [:schnaq :selected :discussion.visible/entities]))]
+    (assoc-in db [:schnaq :current :display-wordcloud?] show-wordcloud?)))

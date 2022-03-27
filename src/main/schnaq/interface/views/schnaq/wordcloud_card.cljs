@@ -68,21 +68,13 @@
 (rf/reg-event-fx
  :schnaq.wordcloud/calculate
  (fn [{:keys [db]} [_ _]]
-   (when (get-in db [:schnaq :current :display-wordcloud?] false)
+   (when (get-in db [:schnaq :current :display-wordcloud?])
      {:fx [[:dispatch [:schnaq.wordcloud/for-selected-discussion]]]})))
-
-(defn- show-wordcloud-for-selected?
-  "Check in app db at selected schnaq whether to display a word cloud."
-  [db]
-  (some
-   #(= % :discussion.visible.entities/wordcloud)
-   (get-in db [:schnaq :selected :discussion.visible/entities])))
 
 (rf/reg-event-fx
  :schnaq.wordcloud/for-selected-discussion
  (fn [{:keys [db]} [_ _]]
-   {:db (assoc-in db [:schnaq :current :display-wordcloud?]
-                  (show-wordcloud-for-selected? db))
+   {:db (tools/set-wordcloud-in-current-schnaq db)
     :fx [[:dispatch [:schnaq.wordcloud/from-current-premises]]]}))
 
 (rf/reg-event-fx
