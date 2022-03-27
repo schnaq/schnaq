@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.schnaq.wordcloud-card
   (:require [re-frame.core :as rf]
             [schnaq.export :as export]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.wordcloud :as wordcloud]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -26,17 +27,18 @@
   "Displays a wordcloud in a card."
   []
   (when @(rf/subscribe [:schnaq/show-wordcloud?])
-    [:div.statement-column
-     [:section.statement-card
-      [:div.d-flex.mt-3
-       [:h4.mx-auto.mt-3
-        (labels :schnaq.wordcloud/title)]
-       [dropdown-menu/moderator
-        "wordcloud-dropdown-id"
-        [dropdown-menu/item :trash
-         :schnaq.wordcloud/hide
-         #(rf/dispatch [:wordcloud/display? false])]]]
-      [wordcloud/wordcloud]]]))
+    [motion/fade-in-and-out
+     [:div.statement-column
+      [:section.statement-card
+       [:div.d-flex.mt-3
+        [:h4.mx-auto.mt-3
+         (labels :schnaq.wordcloud/title)]
+        [dropdown-menu/moderator
+         "wordcloud-dropdown-id"
+         [dropdown-menu/item :trash
+          :schnaq.wordcloud/hide
+          #(rf/dispatch [:wordcloud/display? false])]]]
+       [wordcloud/wordcloud]]]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -85,6 +87,6 @@
  :schnaq.wordcloud/from-current-premises
  (fn [{:keys [db]}]
    (let [premises (tools/convert-premises db)
-         premises-with-children (concat premises (flatten (map :statement/children premises)))]
+         premises-with-children (remove nil? (concat premises (flatten (map :statement/children premises))))]
      {:fx [[:dispatch [:wordcloud/store-words
                        {:string-representation (export/generate-fulltext premises-with-children)}]]]})))
