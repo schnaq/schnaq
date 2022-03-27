@@ -425,12 +425,3 @@
      statements
      (when-not (or search? (seq statements) (seq poll) (not access-code))
        [call-to-share])]))
-
-(rf/reg-event-fx
- :discussion.statements/reload
- (fn [{:keys [db]} _]
-   (let [route-name (navigation/canonical-route-name (get-in db [:current-route :data :name]))]
-     (case route-name
-       :routes.schnaq.select/statement {:fx [[:dispatch [:discussion.query.statement/by-id]]]}
-       :routes.schnaq/start {:fx [[:dispatch [:discussion.query.conclusions/starting]]]}
-       {}))))
