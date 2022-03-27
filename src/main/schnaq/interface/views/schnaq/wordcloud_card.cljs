@@ -1,8 +1,10 @@
 (ns schnaq.interface.views.schnaq.wordcloud-card
   (:require [re-frame.core :as rf]
+            [schnaq.export :as export]
             [schnaq.interface.components.wordcloud :as wordcloud]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
 (defn wordcloud-tab
@@ -37,7 +39,6 @@
       [wordcloud/wordcloud]]]))
 
 ;; -----------------------------------------------------------------------------
-;;
 
 (rf/reg-sub
  :schnaq/show-wordcloud?
@@ -49,13 +50,13 @@
  :wordcloud/display?
  (fn [{:keys [db]} [_ display-wordcloud?]]
    {:fx [(http/xhrio-request db :put "/wordcloud/discussion"
-                             [:schnaq.toggle-wordcloud/success]
+                             [:schnaq.wordcloud.toggle/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
                               :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
                               :display-wordcloud? display-wordcloud?})]}))
 
 (rf/reg-event-fx
- :schnaq.toggle-wordcloud/success
+ :schnaq.wordcloud.toggle/success
  (fn [{:keys [db]} [_ {:keys [display-wordcloud?]}]]
    {:db (assoc-in db [:schnaq :current :display-wordcloud?] display-wordcloud?)
     :fx [[:dispatch [:schnaq.wordcloud/calculate]]]}))
@@ -64,7 +65,7 @@
  :schnaq.wordcloud/calculate
  (fn [{:keys [db]} [_ _]]
    (when (get-in db [:schnaq :current :display-wordcloud?] false)
-     {:fx [[:dispatch [:wordcloud/for-current-discussion]]]})))
+     {:fx [[:dispatch [:schnaq.wordcloud/for-selected-discussion]]]})))
 
 (defn- show-wordcloud-for-selected?
   "Check in app db at selected schnaq whether to display a word cloud."
@@ -78,4 +79,11 @@
  (fn [{:keys [db]} [_ _]]
    {:db (assoc-in db [:schnaq :current :display-wordcloud?]
                   (show-wordcloud-for-selected? db))
-    :fx [[:dispatch [:schnaq.wordcloud/calculate]]]}))
+    :fx [[:dispatch [:schnaq.wordcloud/from-current-premises]]]}))
+
+(rf/reg-event-fx
+ :schnaq.wordcloud/from-current-premises
+ (fn [{:keys [db]}]
+   (let [premises (tools/convert-premises db)]
+     {:fx [[:dispatch [:wordcloud/store-words
+                       {:string-representation (export/generate-fulltext premises)}]]]})))
