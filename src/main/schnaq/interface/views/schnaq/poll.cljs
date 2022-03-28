@@ -63,9 +63,9 @@
     [:select.form-select
      {:on-change (fn [event]
                    (rf/dispatch [:schnaq.ranking/add-selected-options!
-                                  (:db/id poll)
-                                  index
-                                  (oget event :target :value)]))}
+                                 (:db/id poll)
+                                 index
+                                 (oget event :target :value)]))}
      (for [voting-option (remove used-selects (:poll/options poll))]
        (let [option-id (:db/id voting-option)]
          [:option
@@ -80,9 +80,10 @@
     [dropdown-menu poll-id]]
    [:form
     [ranking-select poll 1]
-    (for [voted-rankings-index (keys @(rf/subscribe [:schnaq.ranking/selected-options poll-id]))]
+    (for [voted-rankings-index (keys @(rf/subscribe [:schnaq.ranking/selected-options poll-id]))
+          :while (< voted-rankings-index (count (:poll/options poll)))]
       (with-meta
-        [ranking-select poll]
+        [ranking-select poll (inc voted-rankings-index)]
         {:key (str (:poll/id poll) voted-rankings-index)}))]])
 
 (defn ranking-card [poll-id poll]
