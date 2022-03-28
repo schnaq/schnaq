@@ -195,6 +195,7 @@
     <orderEntry type="library" name="Deps: org.javassist/javassist:3.18.1-GA" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.xnio/xnio-nio:3.8.0.Final" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/java.classpath:1.0.0" level="project" />
+    <orderEntry type="library" name="Deps: com.taoensso/sente:1.16.2" level="project" />
     <orderEntry type="library" name="Deps: ns-tracker:0.4.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.api.grpc/proto-google-cloud-secretmanager-v1:2.0.4" level="project" />
     <orderEntry type="library" name="Deps: clout:2.2.1" level="project" />
@@ -261,6 +262,7 @@
     <orderEntry type="library" name="Deps: net.java.dev.jna/jna:5.7.0" level="project" />
     <orderEntry type="library" name="Deps: cheshire:5.10.0" level="project" />
     <orderEntry type="library" name="Deps: tigris:0.1.2" level="project" />
+    <orderEntry type="library" name="Deps: org.java-websocket/Java-WebSocket:1.5.1" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-client:9.4.44.v20210927" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-sieppari:0.5.17" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-io:9.4.44.v20210927" level="project" />
@@ -279,6 +281,7 @@
     <orderEntry type="library" name="Deps: potemkin:0.4.5" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-http:0.5.17" level="project" />
     <orderEntry type="library" name="Deps: nrepl:0.9.0" level="project" />
+    <orderEntry type="library" name="Deps: mount:0.1.16" level="project" />
     <orderEntry type="library" name="Deps: buddy/buddy-auth:2.1.0" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-resolver:4.1.51.Final" level="project" />
     <orderEntry type="library" name="Deps: binaryage/oops:0.7.2" level="project" />
@@ -321,7 +324,7 @@
     <orderEntry type="library" name="Deps: borkdude/sci.impl.reflector:0.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.sun.mail/jakarta.mail:1.6.5" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.44.v20210927" level="project" />
-    <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.108.0" level="project" />
+    <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.109.0" level="project" />
     <orderEntry type="library" name="Deps: io.opencensus/opencensus-api:0.28.0" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-auth:1.41.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpmime:4.5.13" level="project" />
