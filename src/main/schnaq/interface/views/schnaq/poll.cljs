@@ -334,6 +334,20 @@
  (fn [db _]
    (get-in db [:schnaq :current :polls] [])))
 
+(rf/reg-event-fx
+ :schnaq.poll/load-from-query
+ (fn [{:keys [db]} _]
+   {:fx [(http/xhrio-request
+          db :get "/poll"
+          [:schnaq.poll.load-from-query/success]
+          {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+           :poll-id (get-in db [:current-route :parameters :path :entity-id])})]}))
+
+(rf/reg-event-db
+ :schnaq.poll.load-from-query/success
+ (fn [db [_ {:keys [poll]}]]
+   (assoc-in db [:present :poll] poll)))
+
 (rf/reg-sub
  :schnaq/vote-cast
  ;; Show whether and what a user has already voted for a certain poll
