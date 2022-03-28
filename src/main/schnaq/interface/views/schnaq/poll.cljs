@@ -72,16 +72,16 @@
           {:key (str "poll-result-" poll-id)}
           [motion/fade-in-and-out
            [:section.statement-card
-            [:form
-             {:on-submit (fn [e]
-                           (.preventDefault e)
-                           (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
              [:div.mx-4.my-2
               [:div.d-flex
                [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
                [dropdown-menu poll-id]]
               [results-graph (:poll/options poll)
                total-value (:poll/type poll) cast-votes]
+             [:form
+              {:on-submit (fn [e]
+                            (.preventDefault e)
+                            (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
               (when-not cast-votes
                 [:div.text-center
                  [:button.btn.btn-primary.btn-sm
