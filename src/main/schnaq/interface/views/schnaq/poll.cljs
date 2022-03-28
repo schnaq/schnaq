@@ -81,11 +81,11 @@
              [:div.d-flex
               [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
               [dropdown-menu poll-id]]
-             [results-graph poll cast-votes]
              [:form
               {:on-submit (fn [e]
                             (.preventDefault e)
                             (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
+              [results-graph poll cast-votes]
               (when-not cast-votes
                 [:div.text-center
                  [:button.btn.btn-primary.btn-sm
