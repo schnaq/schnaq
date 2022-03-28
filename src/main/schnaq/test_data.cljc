@@ -369,7 +369,7 @@
                    {:db/id "option/ohne-vote"
                     :option/value "Ohne Vote"}]
     :poll/discussion "discussion/simple"}
-   {:db/id "poll/multiple-choice"
+   {:db/id "poll/ranking-choice"
     :poll/title "Ganz allein mit mehreren"
     :poll/type :poll.type/ranking
     :poll/options [{:db/id "option/milche2"

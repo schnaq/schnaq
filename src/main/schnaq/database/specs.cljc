@@ -261,9 +261,8 @@
                               :discussion ::discussion))
 (s/def :option/value ::non-blank-string)
 (s/def :option/votes nat-int?)
-(s/def :option/rank nat-int?) ;; This is not a database-value, but used for ranking type polls
 (s/def ::option (s/keys :req [:option/value]
-                        :opt [:option/votes :option/rank]))
+                        :opt [:option/votes]))
 (s/def :poll/options (s/coll-of ::option))
 (s/def ::poll
   (s/keys :req [:poll/title :poll/options :poll/type :poll/discussion]))

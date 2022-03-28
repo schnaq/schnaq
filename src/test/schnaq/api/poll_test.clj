@@ -15,7 +15,7 @@
                                     :uri "/polls"
                                     :query-params {:share-hash share-hash}})]
       (is (= 200 (-> functioning-hash request test-app :status)))
-      (is (= 2 (count (-> functioning-hash request test-app m/decode-response-body :polls))))
+      (is (= 3 (count (-> functioning-hash request test-app m/decode-response-body :polls))))
       (is (empty? (-> "some-dingus-hash" request test-app m/decode-response-body :polls))))))
 
 (deftest new-poll-test
@@ -42,7 +42,7 @@
                      test-app :status))))
     (testing "Adding a poll is allowed for the pro user with correct params."
       (is (= 200 (-> toolbelt/token-schnaqqifant-user request test-app :status)))
-      (is (= 3 (count (poll-db/polls share-hash)))))))
+      (is (= 4 (count (poll-db/polls share-hash)))))))
 
 (deftest cast-vote-test
   (testing "Casting a vote works always, as long as poll-id, option-id and discussion share-hash match."
