@@ -143,7 +143,8 @@
                 (assoc-in [:discussion :premises :current] (shared-tools/normalize :db/id starting-conclusions))
                 (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) visited))
       ;; hier die seen setzen
-        :fx [[:dispatch [:votes.local/reset]]]}))))
+        :fx [[:dispatch [:votes.local/reset]]
+             [:dispatch [:schnaq.wordcloud/calculate]]]}))))
 
 (rf/reg-event-db
  :votes.local/reset

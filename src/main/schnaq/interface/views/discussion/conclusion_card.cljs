@@ -414,7 +414,7 @@
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
         activation (when top-level? [activation/activation-card])
         poll (when top-level? (poll/poll-list))
-        wordcloud (when top-level? (wordcloud-card/wordcloud-card))
+        wordcloud (when top-level? [wordcloud-card/wordcloud-card])
         access-code @(rf/subscribe [:schnaq.selected/access-code])]
     [:div.row
      [:div.statement-column
@@ -425,12 +425,3 @@
      statements
      (when-not (or search? (seq statements) (seq poll) (not access-code))
        [call-to-share])]))
-
-(rf/reg-event-fx
- :discussion.statements/reload
- (fn [{:keys [db]} _]
-   (let [route-name (navigation/canonical-route-name (get-in db [:current-route :data :name]))]
-     (case route-name
-       :routes.schnaq.select/statement {:fx [[:dispatch [:discussion.query.statement/by-id]]]}
-       :routes.schnaq/start {:fx [[:dispatch [:discussion.query.conclusions/starting]]]}
-       {}))))

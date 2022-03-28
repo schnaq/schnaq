@@ -46,10 +46,7 @@
 
 (rf/reg-sub
  :discussion.premises/current
- (fn [db _]
-   (if-let [premises (get-in db [:discussion :premises :current])]
-     (map second premises)
-     '())))
+ (fn [db _] (tools/convert-premises db)))
 
 (rf/reg-sub
  :discussion.conclusion/selected

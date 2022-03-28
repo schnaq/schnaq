@@ -31,14 +31,15 @@
   "Request a bart summary at summy."
   [share-hash]
   (let [url (summy-config/urls :summary/bart)
-        respond-url (respond-to-route :summary/from-summy)]
+        respond-url (respond-to-route :summary/from-summy)
+        statements (discussion-db/all-statements share-hash)]
     (log/info (format "Requesting bart-summary, endpoint: %s, share-hash: %s, respond_url: %s" url share-hash respond-url))
     (client/post url
                  {:body (m/encode "application/json"
                                   {:respond_url (respond-to-route :summary/from-summy)
                                    :share_hash share-hash
                                    :app_code summy-config/app-code
-                                   :content (export/generate-fulltext share-hash)})
+                                   :content (export/generate-fulltext statements)})
                   :as :json
                   :content-type :json})))
 

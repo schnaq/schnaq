@@ -170,8 +170,7 @@
                               (rf/dispatch [:body.class/add "theming-enabled"])
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
                               (rf/dispatch [:schnaq/add-visited! (:share-hash path)])
-                              (rf/dispatch [:scheduler.after/login [:discussion.statements/mark-all-as-seen (:share-hash path)]])
-                              (rf/dispatch [:scheduler.after/login [:discussion.statements/reload]]))
+                              (rf/dispatch [:scheduler.after/login [:discussion.statements/mark-all-as-seen (:share-hash path)]]))
                      :stop (fn []
                              (rf/dispatch [:body.class/remove "theming-enabled"])
                              (rf/dispatch [:filters/clear])

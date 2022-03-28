@@ -22,17 +22,17 @@
 
 (defn- export-as-argdown
   "Exports the complete discussion in an argdown-formatted file."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash]} (:query parameters)]
+  [{{{:keys [share-hash]} :query} :parameters}]
+  (let [statements (discussion-db/all-statements share-hash)]
     (log/info "User is generating an argdown export for discussion" share-hash)
-    (ok {:string-representation (export/generate-argdown share-hash)})))
+    (ok {:string-representation (export/generate-argdown statements)})))
 
 (defn- export-as-fulltext
   "Exports the complete discussion as an fulltext file."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash]} (:query parameters)]
+  [{{{:keys [share-hash]} :query} :parameters}]
+  (let [statements (discussion-db/all-statements share-hash)]
     (log/info "User is generating a fulltext export for discussion" share-hash)
-    (ok {:string-representation (export/generate-fulltext share-hash)})))
+    (ok {:string-representation (export/generate-fulltext statements)})))
 
 ;; -----------------------------------------------------------------------------
 

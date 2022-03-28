@@ -3,6 +3,7 @@
             [schnaq.api.discussion :as discussion-api]
             [schnaq.api.poll :as poll-api]
             [schnaq.database.specs]
+            [schnaq.database.visible-entity :as visible-entity]
             [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.websockets.handler :refer [handle-message]]))
 
@@ -15,7 +16,8 @@
       (shared-tools/remove-nil-values-from-map
        {:starting-conclusions starting-conclusions
         :polls polls
-        :activation activation}))))
+        :activation activation
+        :visible-entities (visible-entity/get-entities (:share-hash ?data))}))))
 
 (defmethod handle-message :discussion.graph/update [{:keys [?data]}]
   (when ?data
