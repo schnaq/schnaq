@@ -256,13 +256,14 @@
 
 ;; Polls
 (s/def :poll/title ::non-blank-string)
-(s/def :poll/type #{:poll.type/multiple-choice :poll.type/single-choice})
+(s/def :poll/type #{:poll.type/multiple-choice :poll.type/single-choice :poll.type/ranking})
 (s/def :poll/discussion (s/or :id :db/id
                               :discussion ::discussion))
 (s/def :option/value ::non-blank-string)
 (s/def :option/votes nat-int?)
+(s/def :option/rank nat-int?) ;; This is not a database-value, but used for ranking type polls
 (s/def ::option (s/keys :req [:option/value]
-                        :opt [:option/votes]))
+                        :opt [:option/votes :option/rank]))
 (s/def :poll/options (s/coll-of ::option))
 (s/def ::poll
   (s/keys :req [:poll/title :poll/options :poll/type :poll/discussion]))
