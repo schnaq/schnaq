@@ -164,6 +164,7 @@
  (fn [{:keys [db]} [_ form-elements number-of-options]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          params {:title (oget form-elements :poll-topic :value)
+                 ;; TODO heed poll type here
                  :poll-type (if (= "multiple" (oget form-elements :radio-type-choice :value))
                               :poll.type/multiple-choice
                               :poll.type/single-choice)
