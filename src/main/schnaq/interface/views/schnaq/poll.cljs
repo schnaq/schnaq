@@ -12,17 +12,17 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
-(defn- results-graph
+(defn results-graph
   "A graph displaying the results of the poll."
-  [options total-value poll-type cast-votes]
+  [{:poll/keys [options type]} cast-votes]
   [:section.row
    (for [index (range (count options))]
      (let [{:keys [option/votes db/id option/value]} (get options index)
-           vote-number votes
-           percentage (if (zero? total-value)
+           total-votes (apply + (map :option/votes options))
+           percentage (if (zero? total-votes)
                         "0%"
-                        (str (.toFixed (* 100 (/ vote-number total-value)) 2) "%"))
-           single-choice? (= :poll.type/single-choice poll-type)
+                        (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))
+           single-choice? (= :poll.type/single-choice type)
            votes-set (if single-choice? #{cast-votes} (set cast-votes))
            option-voted? (votes-set id)]
        [:<>
@@ -31,9 +31,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-              {:type (if single-choice? "radio" "checkbox")
-               :name :option-choice
-               :value id}
+             {:type (if single-choice? "radio" "checkbox")
+              :name :option-choice
+              :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -46,7 +46,7 @@
           {:class (when option-voted? "font-italic")}
           value
           [:span.float-end
-           [:span.me-3 vote-number " " (labels :schnaq.poll/votes)]
+           [:span.me-3 votes " " (labels :schnaq.poll/votes)]
            percentage]]]]))])
 
 (defn- dropdown-menu
@@ -58,36 +58,71 @@
     :schnaq.poll/delete-button
     #(rf/dispatch [:poll/delete poll-id])]])
 
+(defn ranking-select [poll index]
+  [:select.form-select
+   {:on-change (fn [event]
+                 @(rf/dispatch [:schnaq.ranking/add-selected-options!
+                                (:db/id poll)
+                                index
+                                (oget event :target :value)]))}
+   (for [voting-option (:poll/options poll)]
+     (let [option-id (:db/id voting-option)]
+       [:option
+        {:value option-id
+         :key option-id}
+        (:option/value voting-option)]))])
+
+(defn ranking-input [poll-id poll]
+  [:<>
+   [:div.d-flex
+    [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+    [dropdown-menu poll-id]]
+   [:form
+    [ranking-select poll 1]
+    (for [voted-rankings-index (keys @(rf/subscribe [:schnaq.ranking/selected-options poll-id]))]
+      (with-meta
+        [ranking-select poll]
+        {:key (str (:poll/id poll) voted-rankings-index)}))]])
+
+(defn ranking-card [poll-id poll]
+  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast poll-id])]
+    [:section.statement-card
+     [:div.mx-4.my-2
+      (if cast-votes
+        [results-graph poll cast-votes]
+        [ranking-input poll-id poll])]]))
+
+(defn poll-card [poll-id poll]
+  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast poll-id])]
+    [:section.statement-card
+     [:div.mx-4.my-2
+      [:div.d-flex
+       [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+       [dropdown-menu poll-id]]
+      [:form
+       {:on-submit (fn [e]
+                     (.preventDefault e)
+                     (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
+       [results-graph poll cast-votes]
+       (when-not cast-votes
+         [:div.text-center
+          [:button.btn.btn-primary.btn-sm
+           {:type :submit}
+           (labels :schnaq.poll/vote!)]])]]]))
+
 (defn poll-list
   "Displays all polls of the current schnaq."
   []
   (let [polls @(rf/subscribe [:schnaq/polls])]
-    ;; This doall is needed, for the reactive deref inside to work
-    (doall
-     (for [poll polls]
-       (let [total-value (apply + (map :option/votes (:poll/options poll)))
-             poll-id (:db/id poll)
-             cast-votes @(rf/subscribe [:schnaq/vote-cast poll-id])]
-         [:div.statement-column
-          {:key (str "poll-result-" poll-id)}
-          [motion/fade-in-and-out
-           [:section.statement-card
-             [:div.mx-4.my-2
-              [:div.d-flex
-               [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-               [dropdown-menu poll-id]]
-              [results-graph (:poll/options poll)
-               total-value (:poll/type poll) cast-votes]
-             [:form
-              {:on-submit (fn [e]
-                            (.preventDefault e)
-                            (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
-              (when-not cast-votes
-                [:div.text-center
-                 [:button.btn.btn-primary.btn-sm
-                  {:type :submit}
-                  (labels :schnaq.poll/vote!)]])]]]
-           motion/card-fade-in-time]])))))
+    (for [poll polls]
+      (let [poll-id (:db/id poll)]
+        [:div.statement-column
+         {:key (str "poll-result-" poll-id)}
+         [motion/fade-in-and-out
+          (if (= :poll.type/ranking (:poll/type poll))
+            [ranking-card poll-id poll]
+            [poll-card poll-id poll])
+          motion/card-fade-in-time]]))))
 
 (defn- poll-option
   "Returns a single option component. Can contain a button for removal of said component."
@@ -287,3 +322,13 @@
           {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
            :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
            :poll-id poll-id})]}))
+
+(rf/reg-sub
+ :schnaq.ranking/selected-options
+ (fn [db [_ poll-id]]
+   (get-in db [:schnaq :current :rankings :selected-options poll-id])))
+
+(rf/reg-event-db
+ :schnaq.ranking/add-selected-options!
+ (fn [db [_ poll-id index option]]
+   (assoc-in db [:schnaq :current :rankings :selected-options poll-id index] option)))
