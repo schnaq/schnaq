@@ -69,7 +69,7 @@
       (gstring/format (labels :schnaq.ranking/choose-place) index)]
      [:select.form-select.form-control
       {:id form-id
-       :key (str (:db/id poll) "-" index "-" (selected-options index))
+       :key (str (:db/id poll) "-" index "-" (when selected-options (selected-options index)))
        :on-change (fn [event]
                     (rf/dispatch [:schnaq.ranking/add-selected-options!
                                   (:db/id poll)
@@ -107,11 +107,10 @@
         [:div.d-flex.justify-content-end
          [:a.btn.btn-transparent
           {:role "button"
-           ;; TODO löscht das letzte ding Oh noes
            :on-click #(rf/dispatch [:schnaq.ranking/delete-vote poll-id (apply max (keys selected-options))])}
           [icon :backspace] " " (labels :schnaq.rankings/delete-last-choice)]])
       [:button.btn.btn-dark.mt-3.mx-auto.d-block
-       {:class (if selected-options "" "disabled")}
+       {:disabled (not (and selected-options (seq selected-options)))}
        (labels :schnaq.poll/vote!)]]]))
 
 (defn ranking-card [poll]
