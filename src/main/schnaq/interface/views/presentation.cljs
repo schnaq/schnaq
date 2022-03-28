@@ -4,6 +4,7 @@
             [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.schnaq.poll :as poll]))
 
 (def ^:private direct-link "schnaq.com/hubbattle")
@@ -40,12 +41,14 @@
      [schnaq-logo {:style {:width "200px"}
                    :class "pb-3"}]
      [:h1.pb-3 title]
-     (if admin-access?
-       [:section.row
-        [:div.col-12.col-md-3 [share-options]]
-        [:div.offset-1.col-md-8 [poll/results-graph poll]]]
-       [:section.w-75.mx-auto
-        [poll/results-graph poll]])
+     (if poll
+       (if admin-access?
+         [:section.row
+          [:div.col-12.col-md-3 [share-options]]
+          [:div.offset-1.col-md-8 [poll/results-graph poll]]]
+         [:section.w-75.mx-auto
+          [poll/results-graph poll]])
+       [:div.text-center [loading/spinner-icon]])
      [footer]]))
 
 ;; -----------------------------------------------------------------------------
