@@ -60,4 +60,14 @@
                :ecLevel "Q"
                :size size
                :qrStyle "dots"
-               :eyeRadius 5}]))
+               :eyeRadius 5}])
+  ([link size options]
+   [:> QRCode (merge {:value link
+                      :fgColor (colors :positive/default)
+                      :bgColor (colors :white)
+                      :logoImage (img-path :logo.square.schnaqqi/blue)
+                      :ecLevel "Q"
+                      :size size
+                      :qrStyle "dots"
+                      :eyeRadius 5}
+                     options)]))
