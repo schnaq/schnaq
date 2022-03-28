@@ -37,10 +37,11 @@
   []
   (let [{:poll/keys [title] :as poll} @(rf/subscribe [:present/poll])
         admin-access? @(rf/subscribe [:schnaq/edit-hash])]
-    [:div.container.pt-4 {:style {:min-height "100vh"}}
-     [schnaq-logo {:style {:width "200px"}
-                   :class "pb-3"}]
-     [:h1.pb-3 title]
+    [:div.container.pt-5 {:style {:min-height "100vh"}}
+     [:div.d-flex.flex-row.pb-5
+      [:h1 title]
+      [schnaq-logo {:style {:width "200px"}
+                    :class "pb-3 ms-auto"}]]
      (if poll
        (if admin-access?
          [:section.row
