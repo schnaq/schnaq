@@ -368,7 +368,19 @@
                     :option/votes 1}
                    {:db/id "option/ohne-vote"
                     :option/value "Ohne Vote"}]
-    :poll/discussion "discussion/simple"}])
+    :poll/discussion "discussion/simple"}
+   {:db/id "poll/ranking-choice"
+    :poll/title "Ganz allein mit mehreren"
+    :poll/type :poll.type/ranking
+    :poll/options [{:db/id "option/milche2"
+                    :option/value "Milche"}
+                   {:db/id "option/eise2"
+                    :option/value "Eise"
+                    :option/votes 2}
+                   {:db/id "option/wassers2"
+                    :option/value "Wassers"
+                    :option/votes 1}]
+    :poll/discussion "discussion/cat-or-dog"}])
 
 (def theme-anti-social
   {:db/id "theme/anti-social"

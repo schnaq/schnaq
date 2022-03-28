@@ -1,7 +1,7 @@
 (ns schnaq.database.poll
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
-            [schnaq.database.main :as db :refer [query]]
+            [schnaq.database.main :as db :refer [query fast-pull]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.toolbelt :as tools])
@@ -70,21 +70,41 @@
               option-id poll-id share-hash)]
     (db/increment-number matching-option :option/votes)))
 
-(defn vote-multiple!
+(defn- match-options
+  "Check whether share-hash and poll-id match and return all option-ids that match as well."
+  [share-hash poll-id option-ids]
+  (db/query
+   '[:find [?options ...]
+     :in $ [?options ...] ?poll ?share-hash
+     :where [?poll :poll/options ?options]
+     [?poll :poll/discussion ?discussion]
+     [?discussion :discussion/share-hash ?share-hash]]
+   option-ids poll-id share-hash))
+
+(>defn vote-multiple!
   "Casts a vote for a multiple options.
   Share-hash, poll-id and option-ids must be known to prove one is not randomly incrementing values.
   Returns nil if all combinations are invalid and the transaction with the valid votes otherwise."
   [option-ids poll-id share-hash]
-  [(s/coll-of :db/id) :db/id :discussion/share-hash :ret (? map?)]
-  (let [matching-options
-        (db/query
-         '[:find [?options ...]
-           :in $ [?options ...] ?poll ?share-hash
-           :where [?poll :poll/options ?options]
-           [?poll :poll/discussion ?discussion]
-           [?discussion :discussion/share-hash ?share-hash]]
-         option-ids poll-id share-hash)
+  [(s/coll-of :db/id) :db/id :discussion/share-hash :ret (? (s/coll-of map?))]
+  (let [matching-options (match-options share-hash poll-id option-ids)
         transaction-results (doall (map #(db/increment-number % :option/votes) matching-options))
         clean-results (remove nil? transaction-results)]
     (when (seq clean-results)
       clean-results)))
+
+(>defn vote-ranking!
+  "Check whether the rank distribution is correct. (Not more options than allowed)
+  Then votes accordingly. When there are 8 options the first rank gets 8 votes, etc."
+  [option-id-tuples poll-id share-hash]
+  [(s/coll-of :db/id) :db/id :discussion/share-hash :ret (? (s/coll-of map?))]
+  (let [option-num (count (:poll/options (fast-pull poll-id [:poll/options])))]
+    ;; Check that every rank is there only once and none too big
+    (if (>= option-num (count option-id-tuples))
+      (let [matching-options (set (match-options share-hash poll-id option-id-tuples))
+            ;; Taking the results here directly destroys the order, so we filter in order
+            matching-ordered-options (filter matching-options option-id-tuples)]
+        (doall
+         (for [[option-id increment-num] (partition 2 (interleave matching-ordered-options (range option-num 0 -1)))]
+           (db/increment-number option-id :option/votes increment-num))))
+      false)))

@@ -31,9 +31,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-             {:type (if single-choice? "radio" "checkbox")
-              :name :option-choice
-              :value id}
+              {:type (if single-choice? "radio" "checkbox")
+               :name :option-choice
+               :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -72,16 +72,16 @@
           {:key (str "poll-result-" poll-id)}
           [motion/fade-in-and-out
            [:section.statement-card
-            [:form
-             {:on-submit (fn [e]
-                           (.preventDefault e)
-                           (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
              [:div.mx-4.my-2
               [:div.d-flex
                [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
                [dropdown-menu poll-id]]
               [results-graph (:poll/options poll)
                total-value (:poll/type poll) cast-votes]
+             [:form
+              {:on-submit (fn [e]
+                            (.preventDefault e)
+                            (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
               (when-not cast-votes
                 [:div.text-center
                  [:button.btn.btn-primary.btn-sm
@@ -156,6 +156,13 @@
         :value :multiple}]
       [:label.form-check-label
        {:for :radio-multiple-choice} (labels :schnaq.poll.create/multiple-choice-label)]]
+     [:div.form-check.form-check-inline
+      [:input#radio-ranking-choice.form-check-input
+       {:type "radio"
+        :name :radio-type-choice
+        :value :ranking}]
+      [:label.form-check-label
+       {:for :radio-ranking-choice} (labels :schnaq.poll.create/ranking-label)]]
      [:div.text-center.pt-2
       [:button.btn.btn-primary.w-75 {:type "submit"} (labels :schnaq.poll.create/submit-button)]]]))
 
@@ -164,9 +171,10 @@
  (fn [{:keys [db]} [_ form-elements number-of-options]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          params {:title (oget form-elements :poll-topic :value)
-                 :poll-type (if (= "multiple" (oget form-elements :radio-type-choice :value))
-                              :poll.type/multiple-choice
-                              :poll.type/single-choice)
+                 :poll-type (case (oget form-elements :radio-type-choice :value)
+                              "multiple" :poll.type/multiple-choice
+                              "single" :poll.type/single-choice
+                              "ranking" :poll.type/ranking)
                  :options (mapv #(oget+ form-elements (str "poll-option-" %) :value)
                                 (range 1 (inc number-of-options)))
                  :share-hash share-hash
@@ -181,16 +189,27 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          single-choice? (= :poll.type/single-choice (:poll/type poll))
          poll-id (:db/id poll)
+         ;; TODO explicitly target single and multiple choice here, when the voting for rankings is in
          chosen-option (if (and single-choice? (oget form-elements :option-choice))
                          (js/parseInt (oget form-elements :option-choice :value))
                          (tools/checked-values (oget form-elements :option-choice)))
-         poll-update-fn (if single-choice?
+         poll-update-fn (case (:poll/type poll)
+                          :poll.type/single-choice
                           #(if (= chosen-option (:db/id %))
                              (update % :option/votes inc)
                              %)
+                          :poll.type/multiple-choice
                           #(if (contains? (set chosen-option) (:db/id %))
                              (update % :option/votes inc)
-                             %))
+                             %)
+                          :poll.type/ranking
+                          #(let [weighted-options
+                                 (->> (range (count (:poll/options poll)) 0 -1)
+                                      (interleave chosen-option)
+                                      (apply hash-map))]
+                             (if (contains? (set chosen-option) (:db/id %))
+                               (update % :option/votes + (weighted-options (:db/id %)))
+                               %)))
          poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
               (update-in [:schnaq :current :polls]
