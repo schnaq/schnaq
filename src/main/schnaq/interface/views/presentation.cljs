@@ -1,23 +1,52 @@
 (ns schnaq.interface.views.presentation
   (:require [re-frame.core :as rf]
-            [schnaq.interface.components.common :refer [schnaq-logo]]))
+            [schnaq.interface.components.common :refer [schnaq-logo]]
+            [schnaq.interface.components.schnaq :as sc]
+            [schnaq.interface.navigation :as navigation]
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.views.schnaq.poll :as poll]))
 
-(rf/reg-event-fx
- :view/present
- (fn []
-   {}))
+(def ^:private direct-link "schnaq.com/hubbattle")
+
+(defn- footer
+  "Add footer links."
+  []
+  [:div.text-center
+   [:hr.w-50.mx-auto]
+   [:a.btn.btn-sm.btn-link.text-dark
+    {:href (navigation/href :routes/legal-note)}
+    (labels :footer.buttons/legal-note)]
+   [:a.btn.btn-sm.btn-link.text-dark
+    {:href (navigation/href :routes.privacy/complete)}
+    (labels :router/privacy)]])
+
+(defn- share-options
+  "Show share-options, e.g. link and QR code."
+  []
+  [:section.text-center
+   [:div.display-6.text-center.pb-3.pt-5
+    "Gehe auf "
+    [:a {:href (str "https://" direct-link)}
+     [:u.fw-bolder direct-link]]
+    " und nimm am Ranking teil!"]
+   [sc/qr-code (str "https://" direct-link) 250 {:bgColor "transparent"}]])
 
 (defn- fullscreen
   "Full screen view of a component."
   []
-  (let [{:poll/keys [title]} @(rf/subscribe [:present/poll])]
-    [:div.container.pt-3
-     [:div.display-6.text-center.pb-3
-      "Gehe auf "
-      [:u.fw-bolder "schnaq.com/hubbattle"]
-      " und nimm am Ranking teil!"]
-     [schnaq-logo {:style {:width "200px"}}]
-     [:h1.pt-3 title]]))
+  (let [{:poll/keys [title] :as poll} @(rf/subscribe [:present/poll])
+        admin-access? @(rf/subscribe [:schnaq/edit-hash])]
+    [:div.container.pt-4
+     [schnaq-logo {:style {:width "200px"}
+                   :class "pb-3"}]
+     [:h1.pb-3 title]
+     (if admin-access?
+       [:section.row
+        [:div.col-12.col-md-3 [share-options]]
+        [:div.offset-1.col-md-8 [poll/results-graph poll]]]
+       [:section.w-75.mx-auto
+        [poll/results-graph poll]])
+     [footer]]))
 
 ;; -----------------------------------------------------------------------------
 
