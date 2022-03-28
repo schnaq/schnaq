@@ -23,18 +23,25 @@
       "newly-created-poll"
       patterns/poll))))
 
+(>defn- poll-from-discussion
+  "Get valid poll from a discussion. Returns `nil` if the poll or discussion
+  is invalid."
+  [share-hash poll-id]
+  [:discussion/share-hash :db/id => (? ::specs/poll)]
+  (tools/pull-key-up
+   (query
+    '[:find (pull ?poll-id pattern) .
+      :in $ ?poll-id ?share-hash pattern
+      :where [?poll-id :poll/title]
+      [?poll-id :poll/discussion ?discussion]
+      [?discussion :discussion/share-hash ?share-hash]]
+    poll-id share-hash patterns/poll)))
+
 (>defn- poll-belongs-to-discussion?
   "Check if poll belongs to a discussion."
   [poll-id share-hash]
   [:db/id :discussion/share-hash => boolean?]
-  (some?
-   (query
-    '[:find ?discussion .
-      :in $ ?poll-id ?share-hash
-      :where [?poll-id :poll/title]
-      [?poll-id :poll/discussion ?discussion]
-      [?discussion :discussion/share-hash ?share-hash]]
-    poll-id share-hash)))
+  (some? (poll-from-discussion share-hash poll-id)))
 
 (>defn delete-poll!
   "Delete a poll"
