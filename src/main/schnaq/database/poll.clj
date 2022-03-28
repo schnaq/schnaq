@@ -23,7 +23,7 @@
       "newly-created-poll"
       patterns/poll))))
 
-(>defn- poll-from-discussion
+(>defn poll-from-discussion
   "Get valid poll from a discussion. Returns `nil` if the poll or discussion
   is invalid."
   [share-hash poll-id]
