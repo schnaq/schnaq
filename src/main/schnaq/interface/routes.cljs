@@ -253,7 +253,8 @@
        :view presentation/view
        :controllers [{:parameters {:path [:share-hash :entity-id]}
                       :start (fn []
-                               (rf/dispatch [:page.fullscreen/toggle true]))
+                               (rf/dispatch [:page.fullscreen/toggle true])
+                               (rf/dispatch [:schnaq.poll/load-from-query]))
                       :stop (fn [])}]}]
      ["/graph"
       {:name :routes/graph-view
