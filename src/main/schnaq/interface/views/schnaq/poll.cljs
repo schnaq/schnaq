@@ -93,12 +93,17 @@
       [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
       [dropdown-menu poll-id]]
      [:form
+      {:on-submit (fn [event]
+                    (.preventDefault event)
+                    (rf/dispatch [:schnaq.ranking/cast-vote poll (map second (sort-by first selected-options))]))}
       [ranking-select poll 1]
       (for [voted-rankings-index (keys selected-options)
             :while (< voted-rankings-index (count (:poll/options poll)))]
         (with-meta
           [ranking-select poll (inc voted-rankings-index)]
-          {:key (str poll-id voted-rankings-index)}))]]))
+          {:key (str poll-id voted-rankings-index)}))
+      [:button.btn.btn-dark
+       (labels :schnaq.poll/vote!)]]]))
 
 (defn ranking-card [poll]
   (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
@@ -272,6 +277,30 @@
                                [:schnaq.poll.cast-vote/success]
                                {:share-hash share-hash
                                 :option-id chosen-option}
+                               [:schnaq.poll.cast-vote/failure poll-id])]})))
+
+(rf/reg-event-fx
+ :schnaq.ranking/cast-vote
+ (fn [{:keys [db]} [_ poll rankings]]
+   (let [poll-id (:db/id poll)
+         share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         poll-update-fn #(let [weighted-options
+                               (->> (range (count (:poll/options poll)) 0 -1)
+                                    (interleave rankings)
+                                    (apply hash-map))]
+                           (if (contains? (set rankings) (:db/id %))
+                             (update % :option/votes + (weighted-options (:db/id %)))
+                             %))
+         poll (update poll :poll/options #(mapv poll-update-fn %))]
+     {:db (-> db
+              (update-in [:schnaq :current :polls]
+                         (fn [polls]
+                           (map #(if (= poll-id (:db/id %)) poll %) polls)))
+              (assoc-in [:schnaq :polls :past-votes poll-id] rankings))
+      :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
+                               [:schnaq.poll.cast-vote/success]
+                               {:share-hash share-hash
+                                :option-id rankings}
                                [:schnaq.poll.cast-vote/failure poll-id])]})))
 
 (rf/reg-event-fx
