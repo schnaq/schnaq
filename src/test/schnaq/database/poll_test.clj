@@ -25,7 +25,7 @@
     (let [polls (db/polls "cat-dog-hash")
           single (first (filter #(= :poll.type/single-choice (:poll/type %)) polls))
           multiple (first (filter #(= :poll.type/multiple-choice (:poll/type %)) polls))]
-      (is (= 2 (count polls)))
+      (is (= 3 (count polls)))
       (is (= 3 (count (:poll/options single)) (count (:poll/options multiple))))
       (is (= "Ganz allein" (:poll/title single)))
       (is (= "Ganz allein mit mehreren" (:poll/title multiple)))
