@@ -64,7 +64,7 @@
                           (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))]
          [:div {:key (str "ranking-option-" id)}
           [tooltip/text
-           (str votes " " (labels :schnaq.poll/votes))
+           (str votes " " (labels :schnaq.poll.ranking/points))
            [:div.percentage-bar.rounded-1
             {:style {:background-color (colors/get-graph-color (get old-indices id))
                      :width percentage
