@@ -31,9 +31,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-             {:type (if single-choice? "radio" "checkbox")
-              :name :option-choice
-              :value id}
+              {:type (if single-choice? "radio" "checkbox")
+               :name :option-choice
+               :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -102,7 +102,8 @@
         (with-meta
           [ranking-select poll (inc voted-rankings-index)]
           {:key (str poll-id voted-rankings-index)}))
-      [:button.btn.btn-dark
+      [:button.btn.btn-dark.mt-3.mx-auto.d-block
+       {:class (if selected-options "" "disabled")}
        (labels :schnaq.poll/vote!)]]]))
 
 (defn ranking-card [poll]
@@ -246,7 +247,6 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          single-choice? (= :poll.type/single-choice (:poll/type poll))
          poll-id (:db/id poll)
-         ;; TODO explicitly target single and multiple choice here, when the voting for rankings is in
          chosen-option (if (and single-choice? (oget form-elements :option-choice))
                          (js/parseInt (oget form-elements :option-choice :value))
                          (tools/checked-values (oget form-elements :option-choice)))
@@ -258,15 +258,7 @@
                           :poll.type/multiple-choice
                           #(if (contains? (set chosen-option) (:db/id %))
                              (update % :option/votes inc)
-                             %)
-                          :poll.type/ranking
-                          #(let [weighted-options
-                                 (->> (range (count (:poll/options poll)) 0 -1)
-                                      (interleave chosen-option)
-                                      (apply hash-map))]
-                             (if (contains? (set chosen-option) (:db/id %))
-                               (update % :option/votes + (weighted-options (:db/id %)))
-                               %)))
+                             %))
          poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
               (update-in [:schnaq :current :polls]
