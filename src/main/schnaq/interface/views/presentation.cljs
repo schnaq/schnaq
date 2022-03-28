@@ -48,8 +48,8 @@
           [:div.col-12.col-md-3 [share-options]]
           [:div.offset-1.col-md-8 [poll/ranking-results poll]]]
          [:section
-          [:div.d-md-none.w-100 [poll/input-or-results poll]]
-          [:div.d-none.d-md-block.w-50.mx-auto [poll/input-or-results poll]]])
+          [:div.d-xl-none.w-100 [poll/input-or-results poll]]
+          [:div.d-none.d-xl-block.w-50.mx-auto [poll/input-or-results poll]]])
        [:div.text-center [loading/spinner-icon]])
      [footer]]))
 
