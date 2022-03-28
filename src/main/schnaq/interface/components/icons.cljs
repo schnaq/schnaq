@@ -7,7 +7,7 @@
              [faBackspace faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
               faCloud faCog faComment faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
               faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLocationArrow faLock faMagic faPalette
-              faPaperPlane faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
+              faPaperPlane faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
               faTimes faTimesCircle faTrashAlt faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
@@ -65,6 +65,7 @@
    :minus faMinus
    :palette faPalette
    :plane faPaperPlane
+   :play/circle faPlayCircle
    :plus faPlus
    :question faQuestion
    :qrcode faQrcode
