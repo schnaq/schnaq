@@ -90,3 +90,17 @@
           _ (db/delete-poll! poll-id "definitely-wrong")
           polls-after (db/polls "cat-dog-hash")]
       (is (= (count polls) (count polls-after))))))
+
+(deftest vote-ranking!-test
+  (testing "Check whether vote for ranking type polls work correctly."
+    (let [share-hash "cat-dog-hash"
+          poll (first (filter #(= :poll.type/ranking (:poll/type %)) (db/polls share-hash)))
+          options (:poll/options poll)
+          option-0 (first (filter #(zero? (:option/votes %)) options))
+          option-1 (first (filter #(= 1 (:option/votes %)) options))
+          option-2 (first (filter #(= 2 (:option/votes %)) options))
+          all-option-ids [(:db/id option-0) (:db/id option-1) (:db/id option-2)]]
+      (db/vote-ranking! all-option-ids (:db/id poll) share-hash)
+      (is (= 3 (:option/votes (fast-pull (:db/id option-0) '[:option/votes]))))
+      (is (= 3 (:option/votes (fast-pull (:db/id option-1) '[:option/votes]))))
+      (is (= 3 (:option/votes (fast-pull (:db/id option-2) '[:option/votes])))))))
