@@ -31,9 +31,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-             {:type (if single-choice? "radio" "checkbox")
-              :name :option-choice
-              :value id}
+              {:type (if single-choice? "radio" "checkbox")
+               :name :option-choice
+               :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -156,6 +156,13 @@
         :value :multiple}]
       [:label.form-check-label
        {:for :radio-multiple-choice} (labels :schnaq.poll.create/multiple-choice-label)]]
+     [:div.form-check.form-check-inline
+      [:input#radio-ranking-choice.form-check-input
+       {:type "radio"
+        :name :radio-type-choice
+        :value :ranking}]
+      [:label.form-check-label
+       {:for :radio-ranking-choice} (labels :schnaq.poll.create/ranking-label)]]
      [:div.text-center.pt-2
       [:button.btn.btn-primary.w-75 {:type "submit"} (labels :schnaq.poll.create/submit-button)]]]))
 
@@ -164,10 +171,10 @@
  (fn [{:keys [db]} [_ form-elements number-of-options]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          params {:title (oget form-elements :poll-topic :value)
-                 ;; TODO heed poll type here
-                 :poll-type (if (= "multiple" (oget form-elements :radio-type-choice :value))
-                              :poll.type/multiple-choice
-                              :poll.type/single-choice)
+                 :poll-type (case (oget form-elements :radio-type-choice :value)
+                              "multiple" :poll.type/multiple-choice
+                              "single" :poll.type/single-choice
+                              "ranking" :poll.type/ranking)
                  :options (mapv #(oget+ form-elements (str "poll-option-" %) :value)
                                 (range 1 (inc number-of-options)))
                  :share-hash share-hash
