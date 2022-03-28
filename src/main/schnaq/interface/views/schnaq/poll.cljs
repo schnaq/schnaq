@@ -118,37 +118,38 @@
 (defn ranking-input [poll]
   (let [poll-id (:db/id poll)
         selected-options @(rf/subscribe [:schnaq.ranking/selected-options poll-id])]
-    [:<>
-     [:div.d-flex
-      [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-      [dropdown-menu poll-id]]
-     [:form
-      {:on-submit (fn [event]
-                    (.preventDefault event)
-                    (rf/dispatch [:schnaq.ranking/cast-vote poll (map second (sort-by first selected-options))]))}
-      [ranking-select poll 1]
-      (for [voted-rankings-index (keys selected-options)
-            :while (< voted-rankings-index (count (:poll/options poll)))]
-        (with-meta
-          [ranking-select poll (inc voted-rankings-index)]
-          {:key (str poll-id voted-rankings-index)}))
-      (when-not (empty? selected-options)
-        [:div.d-flex.justify-content-end
-         [:a.btn.btn-transparent
-          {:role "button"
-           :on-click #(rf/dispatch [:schnaq.ranking/delete-vote poll-id (apply max (keys selected-options))])}
-          [icon :backspace] " " (labels :schnaq.rankings/delete-last-choice)]])
-      [:button.btn.btn-dark.mt-3.mx-auto.d-block
-       {:disabled (not (and selected-options (seq selected-options)))}
-       (labels :schnaq.poll/vote!)]]]))
+    [:form
+     {:on-submit (fn [event]
+                   (.preventDefault event)
+                   (rf/dispatch [:schnaq.ranking/cast-vote poll (map second (sort-by first selected-options))]))}
+     [ranking-select poll 1]
+     (for [voted-rankings-index (keys selected-options)
+           :while (< voted-rankings-index (count (:poll/options poll)))]
+       (with-meta
+         [ranking-select poll (inc voted-rankings-index)]
+         {:key (str poll-id voted-rankings-index)}))
+     (when-not (empty? selected-options)
+       [:div.d-flex.justify-content-end
+        [:a.btn.btn-transparent
+         {:role "button"
+          :on-click #(rf/dispatch [:schnaq.ranking/delete-vote poll-id (apply max (keys selected-options))])}
+         [icon :backspace] " " (labels :schnaq.rankings/delete-last-choice)]])
+     [:button.btn.btn-dark.mt-3.mx-auto.d-block
+      {:disabled (not (and selected-options (seq selected-options)))}
+      (labels :schnaq.poll/vote!)]]))
 
 (defn ranking-card [poll]
   (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
     [:section.statement-card
      [:div.mx-4.my-2
-      (if cast-votes
-        [results-graph poll cast-votes]
-        [ranking-input poll])]]))
+      [:<>
+       [:div.d-flex
+        [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+        [dropdown-menu (:db/id poll)]]
+       (if cast-votes
+         [ranking-results poll cast-votes]
+
+         [ranking-input poll])]]]))
 
 (defn poll-card [poll]
   (let [poll-id (:db/id poll)
