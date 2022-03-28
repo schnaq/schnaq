@@ -97,6 +97,7 @@
      [:select.form-select.form-control
       {:id form-id
        :key (str (:db/id poll) "-" index "-" (when selected-options (selected-options index)))
+       :defaultValue (when selected-options (selected-options index))
        :on-change (fn [event]
                     (rf/dispatch [:schnaq.ranking/add-selected-options!
                                   (:db/id poll)
