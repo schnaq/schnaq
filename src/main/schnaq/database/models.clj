@@ -343,6 +343,8 @@
     :db/doc "A typical single-choice poll, where only one vote per person is allowed."}
    {:db/ident :poll.type/multiple-choice
     :db/doc "A multiple choice poll, where participants may choose multiple answers."}
+   {:db/ident :poll.type/ranking
+    :db/doc "A type of poll where the options are ranked. The first option gets the most points and the last option the least."}
    {:db/ident :poll/options
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many

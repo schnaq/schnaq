@@ -303,6 +303,7 @@
    :schnaq.poll.create/remove-button "Remove Option"
    :schnaq.poll.create/single-choice-label "Single Choice"
    :schnaq.poll.create/multiple-choice-label "Multiple Choice"
+   :schnaq.poll.create/ranking-label "Ranking"
    :schnaq.poll.create/submit-button "Create Poll"
    :schnaq.poll/votes "Votes"
    :schnaq.poll/vote! "Vote"

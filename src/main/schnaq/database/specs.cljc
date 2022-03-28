@@ -256,7 +256,7 @@
 
 ;; Polls
 (s/def :poll/title ::non-blank-string)
-(s/def :poll/type #{:poll.type/multiple-choice :poll.type/single-choice})
+(s/def :poll/type #{:poll.type/multiple-choice :poll.type/single-choice :poll.type/ranking})
 (s/def :poll/discussion (s/or :id :db/id
                               :discussion ::discussion))
 (s/def :option/value ::non-blank-string)
