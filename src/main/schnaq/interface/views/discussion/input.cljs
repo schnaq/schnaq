@@ -40,6 +40,12 @@
       :discussion.add.button/attack :discussion/add-premise-supporting
       get-subscription set-event]]))
 
+(rf/reg-event-db
+ :schnaq.question.input/current
+ (fn [db [_ current-input]]
+   (assoc-in db [:schnaq :question :input] current-input)
+   (println current-input)))
+
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
   [textarea-name placeholder send-button-label statement-type autofocus? small?]
@@ -54,14 +60,16 @@
       [:div.input-group
        [:div {:class (str additional-highlight-class "highlight-card-reverse highlight-card-" attitude)}]
        [:textarea.form-control.textarea-resize-none
-        {:class additional-form-class
+        {:id "main-question-input"
+         :class additional-form-class
          :name textarea-name :wrap "soft" :rows 1
          :auto-complete "off"
          :autoFocus autofocus?
          :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
          :required true
          :data-dynamic-height true
-         :placeholder placeholder}]
+         :placeholder placeholder
+         :on-key-up #(rf/dispatch [:schnaq.question.input/current (oget % [:?target :value])])}]
        [:button.btn.btn-outline-dark
         {:class additional-btn-class
          :type "submit" :title (labels :discussion/create-argument-action)}
