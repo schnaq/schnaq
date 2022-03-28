@@ -12,17 +12,17 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
-(defn- results-graph
+(defn results-graph
   "A graph displaying the results of the poll."
-  [options total-value poll-type cast-votes]
+  [{:poll/keys [options type]} cast-votes]
   [:section.row
    (for [index (range (count options))]
      (let [{:keys [option/votes db/id option/value]} (get options index)
-           vote-number votes
-           percentage (if (zero? total-value)
+           total-votes (apply + (map :option/votes options))
+           percentage (if (zero? total-votes)
                         "0%"
-                        (str (.toFixed (* 100 (/ vote-number total-value)) 2) "%"))
-           single-choice? (= :poll.type/single-choice poll-type)
+                        (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))
+           single-choice? (= :poll.type/single-choice type)
            votes-set (if single-choice? #{cast-votes} (set cast-votes))
            option-voted? (votes-set id)]
        [:<>
@@ -46,7 +46,7 @@
           {:class (when option-voted? "font-italic")}
           value
           [:span.float-end
-           [:span.me-3 vote-number " " (labels :schnaq.poll/votes)]
+           [:span.me-3 votes " " (labels :schnaq.poll/votes)]
            percentage]]]]))])
 
 (defn- dropdown-menu
@@ -71,8 +71,7 @@
     ;; This doall is needed, for the reactive deref inside to work
     (doall
      (for [poll polls]
-       (let [total-value (apply + (map :option/votes (:poll/options poll)))
-             poll-id (:db/id poll)
+       (let [poll-id (:db/id poll)
              cast-votes @(rf/subscribe [:schnaq/vote-cast poll-id])]
          [:div.statement-column
           {:key (str "poll-result-" poll-id)}
@@ -82,12 +81,11 @@
              [:div.d-flex
               [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
               [dropdown-menu poll-id]]
-             [results-graph (:poll/options poll)
-              total-value (:poll/type poll) cast-votes]
              [:form
               {:on-submit (fn [e]
                             (.preventDefault e)
                             (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
+              [results-graph poll cast-votes]
               (when-not cast-votes
                 [:div.text-center
                  [:button.btn.btn-primary.btn-sm
