@@ -57,7 +57,7 @@
   (poll-db/delete-poll! poll-id share-hash)
   (ok {:deleted? true}))
 
-(defn- get-poll
+(defn get-poll
   "Query a poll."
   [{{{:keys [share-hash poll-id]} :query} :parameters}]
   (if-let [poll (poll-db/poll-from-discussion share-hash poll-id)]

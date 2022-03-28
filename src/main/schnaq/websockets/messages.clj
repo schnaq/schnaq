@@ -24,3 +24,9 @@
     (let [parameters {:parameters {:query ?data}}
           {{:keys [graph]} :body} (discussion-api/graph-for-discussion parameters)]
       {:graph graph})))
+
+(defmethod handle-message :schnaq.poll/update [{:keys [?data]}]
+  (when ?data
+    (let [parameters {:parameters {:query ?data}}
+          {{:keys [poll]} :body} (poll-api/get-poll parameters)]
+      {:poll poll})))
