@@ -306,6 +306,7 @@
    :schnaq.poll/votes "Stimmen"
    :schnaq.poll/vote! "Abstimmen"
    :schnaq.poll/delete-button "Löschen"
+   :schnaq.ranking/choose-place "Wähle Platz %s"
 
    ;; Activation feature
    :schnaq.activation.create/label "Präsentiere deinen Teilnehmer:innen eine Eingabe zur Aktivierung!"
