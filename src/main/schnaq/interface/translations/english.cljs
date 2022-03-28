@@ -4,6 +4,8 @@
 (def labels
   {:error/export-failed "Export failed. Please try again later."
 
+   :view/present "Present"
+
    :nav/schnaqs "schnaqs"
    :nav.schnaqs/show-all "All schnaqs"
    :nav.schnaqs/show-all-public "All public schnaqs"

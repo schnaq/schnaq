@@ -52,11 +52,16 @@
 (defn- dropdown-menu
   "Dropdown menu for poll configuration."
   [poll-id]
-  [dropdown-menu/moderator
-   (str "poll-dropdown-id-" poll-id)
-   [dropdown-menu/item :trash
-    :schnaq.poll/delete-button
-    #(rf/dispatch [:poll/delete poll-id])]])
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+    [dropdown-menu/moderator
+     (str "poll-dropdown-id-" poll-id)
+     [:<>
+      [dropdown-menu/item :play/circle
+       :view/present
+       #(rf/dispatch [:present/component share-hash poll-id])]
+      [dropdown-menu/item :trash
+       :schnaq.poll/delete-button
+       #(rf/dispatch [:poll/delete poll-id])]]]))
 
 (defn poll-list
   "Displays all polls of the current schnaq."
