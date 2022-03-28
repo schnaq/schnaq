@@ -58,7 +58,8 @@
      [:<>
       [dropdown-menu/item :play/circle
        :view/present
-       #(rf/dispatch [:present/component share-hash poll-id])]
+       #(rf/dispatch [:navigation/navigate :routes.present/entity
+                      {:share-hash share-hash :entity-id poll-id}])]
       [dropdown-menu/item :trash
        :schnaq.poll/delete-button
        #(rf/dispatch [:poll/delete poll-id])]]]))
@@ -77,12 +78,12 @@
           {:key (str "poll-result-" poll-id)}
           [motion/fade-in-and-out
            [:section.statement-card
-             [:div.mx-4.my-2
-              [:div.d-flex
-               [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-               [dropdown-menu poll-id]]
-              [results-graph (:poll/options poll)
-               total-value (:poll/type poll) cast-votes]
+            [:div.mx-4.my-2
+             [:div.d-flex
+              [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+              [dropdown-menu poll-id]]
+             [results-graph (:poll/options poll)
+              total-value (:poll/type poll) cast-votes]
              [:form
               {:on-submit (fn [e]
                             (.preventDefault e)
