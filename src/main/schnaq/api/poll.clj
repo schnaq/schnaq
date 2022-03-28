@@ -34,11 +34,13 @@
   "Lets the user cast a vote."
   [{:keys [parameters]}]
   (let [{:keys [share-hash option-id]} (:body parameters)
+        ;; For multiple or ranking option-id is a collection
         poll-id (get-in parameters [:path :poll-id])
         poll-type (-> (fast-pull poll-id '[{:poll/type [:db/ident]}]) :poll/type :db/ident)
         voting-fn (case poll-type
                     :poll.type/single-choice poll-db/vote!
-                    :poll.type/multiple-choice poll-db/vote-multiple!)]
+                    :poll.type/multiple-choice poll-db/vote-multiple!
+                    :poll.type/ranking poll-db/vote-ranking!)]
     (if (voting-fn option-id poll-id share-hash)
       (do
         (log/info "Vote cast for option(s)" option-id)

@@ -140,7 +140,7 @@
   Prevents race-conditions and updating the same value multiple times. Tries at most 20 times until cas works.
   Returns the dereffed transaction."
   ([entity attribute]
-   [:db/id keyword?]
+   [:db/id keyword? :ret (? map?)]
    (increment-number entity attribute 1))
   ([entity attribute increment-value]
    [:db/id keyword? nat-int? :ret (? map?)]
