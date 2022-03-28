@@ -90,3 +90,15 @@
           _ (db/delete-poll! poll-id "definitely-wrong")
           polls-after (db/polls "cat-dog-hash")]
       (is (= (count polls) (count polls-after))))))
+
+(deftest poll-from-discussion-test
+  (let [polls (db/polls "cat-dog-hash")
+        poll-id (:db/id (first polls))
+        poll (db/poll-from-discussion "cat-dog-hash" poll-id)]
+    (is (= poll-id (:db/id poll)))))
+
+(deftest poll-from-discussion-false-test
+  (let [polls (db/polls "cat-dog-hash")
+        poll-id (:db/id (first polls))
+        poll (db/poll-from-discussion "cat-dog-hash" (inc poll-id))]
+    (is (nil? (:db/id poll)))))
