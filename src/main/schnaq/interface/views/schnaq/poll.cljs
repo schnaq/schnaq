@@ -1,8 +1,10 @@
 (ns schnaq.interface.views.schnaq.poll
-  (:require [goog.string :as gstring]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
+            [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
+            [schnaq.database.specs :as specs]
             [schnaq.interface.components.colors :as colors]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
@@ -86,7 +88,10 @@
        :schnaq.poll/delete-button
        #(rf/dispatch [:poll/delete poll-id])]]]))
 
-(defn ranking-select [poll index]
+(>defn- ranking-select
+  "Show a select input to choose from the current poll options."
+  [poll index]
+  [::specs/poll nat-int? => :re-frame/component]
   (let [selected-options @(rf/subscribe [:schnaq.ranking/selected-options (:db/id poll)])
         selected (get selected-options index)
         used-selects (disj (set (vals selected-options)) selected)
@@ -115,7 +120,10 @@
               :key option-id}
              (:option/value voting-option)])))]]))
 
-(defn ranking-input [poll]
+(>defn- ranking-input
+  "Create a form with multiple selection fields to choose from the poll options."
+  [poll]
+  [::specs/poll => :re-frame/component]
   (let [poll-id (:db/id poll)
         selected-options @(rf/subscribe [:schnaq.ranking/selected-options poll-id])]
     [:form
@@ -138,20 +146,30 @@
       {:disabled (not (and selected-options (seq selected-options)))}
       (labels :schnaq.poll/vote!)]]))
 
-(defn ranking-card [poll]
-  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
-    [:section.statement-card
-     [:div.mx-4.my-2
-      [:<>
-       [:div.d-flex
-        [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-        [dropdown-menu (:db/id poll)]]
-       (if cast-votes
-         [ranking-results poll cast-votes]
+(>defn input-or-results
+  "Toggle if there should be an input or the results of the ranking."
+  [poll]
+  [::specs/poll => :re-frame/component]
+  (if-let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
+    [ranking-results poll cast-votes]
+    [ranking-input poll]))
 
-         [ranking-input poll])]]]))
+(>defn ranking-card
+  "Show a ranking card."
+  [poll]
+  [::specs/poll => :re-frame/component]
+  [:section.statement-card
+   [:div.mx-4.my-2
+    [:<>
+     [:div.d-flex
+      [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+      [dropdown-menu (:db/id poll)]]
+     [input-or-results poll]]]])
 
-(defn poll-card [poll]
+(>defn- poll-card
+  "Show a poll card, where users can cast their votes."
+  [poll]
+  [::specs/poll => :re-frame/component]
   (let [poll-id (:db/id poll)
         cast-votes @(rf/subscribe [:schnaq/vote-cast poll-id])]
     [:section.statement-card
