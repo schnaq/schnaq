@@ -55,33 +55,48 @@
   (poll-db/delete-poll! poll-id share-hash)
   (ok {:deleted? true}))
 
+(defn- get-poll
+  "Query a poll."
+  [{{{:keys [share-hash poll-id]} :query} :parameters}]
+  (if-let [poll (poll-db/poll-from-discussion share-hash poll-id)]
+    (ok {:poll poll})
+    (bad-request
+     (at/build-error-body :poll.get/invalid-params
+                          (format "Could not find poll-id %d for %s" poll-id share-hash)))))
+
 ;; -----------------------------------------------------------------------------
 
 (def poll-routes
   [["" {:swagger {:tags ["poll"]}}
     ["/poll"
-     ["" {:post new-poll
-          :description (at/get-doc #'new-poll)
-          :middleware [:user/authenticated?
-                       :user/pro-user?
-                       :discussion/valid-credentials?]
-          :name :poll/create
-          :parameters {:body {:title :poll/title
-                              :poll-type dto/poll-type
-                              :options (s/coll-of ::specs/non-blank-string)
-                              :share-hash :discussion/share-hash
-                              :edit-hash :discussion/edit-hash}}
-          :responses {200 {:body {:new-poll ::dto/poll}}
-                      400 at/response-error-body}}]
-     ["/:poll-id/vote" {:put cast-vote
-                        :description (at/get-doc #'cast-vote)
-                        :name :poll/vote!
-                        :parameters {:body {:share-hash :discussion/share-hash
-                                            :option-id (s/or :id :db/id
-                                                             :id-seq (s/coll-of :db/id))}
-                                     :path {:poll-id :db/id}}
-                        :responses {200 {:body {:voted? boolean?}}
-                                    400 at/response-error-body}}]
+     ["" {:name :api/poll
+          :post {:handler new-poll
+                 :description (at/get-doc #'new-poll)
+                 :middleware [:user/authenticated?
+                              :user/pro-user?
+                              :discussion/valid-credentials?]
+                 :parameters {:body {:title :poll/title
+                                     :poll-type dto/poll-type
+                                     :options (s/coll-of ::specs/non-blank-string)
+                                     :share-hash :discussion/share-hash
+                                     :edit-hash :discussion/edit-hash}}
+                 :responses {200 {:body {:new-poll ::dto/poll}}
+                             400 at/response-error-body}}
+          :get {:handler get-poll
+                :description (at/get-doc #'get-poll)
+                :parameters {:query {:share-hash :discussion/share-hash
+                                     :poll-id :db/id}}
+                :responses {200 {:body {:poll ::specs/poll}}}}}]
+     ["/:poll-id" {:parameters {:path {:poll-id :db/id}}
+                   :responses {400 at/response-error-body}}
+      ["/vote"
+       {:put cast-vote
+        :description (at/get-doc #'cast-vote)
+        :name :poll/vote!
+        :parameters {:body {:share-hash :discussion/share-hash
+                            :option-id (s/or :id :db/id
+                                             :id-seq (s/coll-of :db/id))}}
+        :responses {200 {:body {:voted? boolean?}}}}]]
      ["/delete" {:delete delete-poll
                  :description (at/get-doc #'delete-poll)
                  :name :poll/delete
@@ -94,6 +109,6 @@
                               :discussion/valid-credentials?]}]]
     ["/polls" {:get polls-for-discussion
                :description (at/get-doc #'polls-for-discussion)
-               :name :poll/get
+               :name :polls/get
                :parameters {:query {:share-hash :discussion/share-hash}}
                :responses {200 {:body {:polls (s/coll-of ::dto/poll)}}}}]]])
