@@ -36,7 +36,7 @@
   []
   (let [{:poll/keys [title] :as poll} @(rf/subscribe [:present/poll])
         admin-access? @(rf/subscribe [:schnaq/edit-hash])]
-    [:div.container.pt-4
+    [:div.container.pt-4 {:style {:min-height "100vh"}}
      [schnaq-logo {:style {:width "200px"}
                    :class "pb-3"}]
      [:h1.pb-3 title]
