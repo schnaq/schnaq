@@ -40,12 +40,21 @@
       :discussion.add.button/attack :discussion/add-premise-supporting
       get-subscription set-event]]))
 
+;; TODO pack das in den entsprechenden Namespace, falls hier nicht richtig. Sub drunter auch
 (rf/reg-event-db
- :schnaq.question.input/current
+ :schnaq.question.input/set-current
  (fn [db [_ current-input]]
-   (assoc-in db [:schnaq :question :input] current-input)
-   (println current-input)))
+   (assoc-in db [:schnaq :question :input] current-input)))
 
+(rf/reg-sub
+ :schnaq.question.input/current
+ (fn [db _]
+   (get-in db [:schnaq :question :input] "")))
+
+;; TODO beachte auf welcher Ebene gerade getippt wird
+;; TODO next: zeige / sortiere nur Inhalte die das Keyword beinhalten
+;; TODO? : Maybe hamming distance
+;; TODO? : Maybe synonyme? (Aber ohne Spracherkennung schwierig)
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
   [textarea-name placeholder send-button-label statement-type autofocus? small?]
@@ -69,7 +78,7 @@
          :required true
          :data-dynamic-height true
          :placeholder placeholder
-         :on-key-up #(rf/dispatch [:schnaq.question.input/current (oget % [:?target :value])])}]
+         :on-key-up #(rf/dispatch [:schnaq.question.input/set-current (oget % [:?target :value])])}]
        [:button.btn.btn-outline-dark
         {:class additional-btn-class
          :type "submit" :title (labels :discussion/create-argument-action)}
