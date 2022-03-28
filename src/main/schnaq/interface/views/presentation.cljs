@@ -45,9 +45,9 @@
        (if admin-access?
          [:section.row
           [:div.col-12.col-md-3 [share-options]]
-          [:div.offset-1.col-md-8 [poll/results-graph poll]]]
+          [:div.offset-1.col-md-8 [poll/ranking-results poll]]]
          [:section.w-75.mx-auto
-          [poll/results-graph poll]])
+          [poll/ranking-results poll]])
        [:div.text-center [loading/spinner-icon]])
      [footer]]))
 
