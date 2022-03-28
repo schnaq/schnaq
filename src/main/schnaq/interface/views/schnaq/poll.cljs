@@ -31,9 +31,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-             {:type (if single-choice? "radio" "checkbox")
-              :name :option-choice
-              :value id}
+              {:type (if single-choice? "radio" "checkbox")
+               :name :option-choice
+               :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -59,18 +59,19 @@
     #(rf/dispatch [:poll/delete poll-id])]])
 
 (defn ranking-select [poll index]
-  [:select.form-select
-   {:on-change (fn [event]
-                 @(rf/dispatch [:schnaq.ranking/add-selected-options!
-                                (:db/id poll)
-                                index
-                                (oget event :target :value)]))}
-   (for [voting-option (:poll/options poll)]
-     (let [option-id (:db/id voting-option)]
-       [:option
-        {:value option-id
-         :key option-id}
-        (:option/value voting-option)]))])
+  (let [used-selects (set (vals @(rf/subscribe [:schnaq.ranking/selected-options (:db/id poll)])))]
+    [:select.form-select
+     {:on-change (fn [event]
+                   (rf/dispatch [:schnaq.ranking/add-selected-options!
+                                  (:db/id poll)
+                                  index
+                                  (oget event :target :value)]))}
+     (for [voting-option (remove used-selects (:poll/options poll))]
+       (let [option-id (:db/id voting-option)]
+         [:option
+          {:value option-id
+           :key option-id}
+          (:option/value voting-option)]))]))
 
 (defn ranking-input [poll-id poll]
   [:<>
