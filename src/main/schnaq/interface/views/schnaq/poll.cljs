@@ -65,37 +65,41 @@
                    (rf/dispatch [:schnaq.ranking/add-selected-options!
                                  (:db/id poll)
                                  index
-                                 (oget event :target :value)]))}
-     (for [voting-option (remove used-selects (:poll/options poll))]
+                                 (js/parseInt (oget event :target :value))]))}
+     (for [voting-option (:poll/options poll)]
        (let [option-id (:db/id voting-option)]
-         [:option
-          {:value option-id
-           :key option-id}
-          (:option/value voting-option)]))]))
+         (when-not (contains? used-selects option-id)
+           [:option
+            {:value option-id
+             :key option-id}
+            (:option/value voting-option)])))]))
 
-(defn ranking-input [poll-id poll]
-  [:<>
-   [:div.d-flex
-    [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-    [dropdown-menu poll-id]]
-   [:form
-    [ranking-select poll 1]
-    (for [voted-rankings-index (keys @(rf/subscribe [:schnaq.ranking/selected-options poll-id]))
-          :while (< voted-rankings-index (count (:poll/options poll)))]
-      (with-meta
-        [ranking-select poll (inc voted-rankings-index)]
-        {:key (str (:poll/id poll) voted-rankings-index)}))]])
+(defn ranking-input [poll]
+  (let [poll-id (:db/id poll)
+        selected-options @(rf/subscribe [:schnaq.ranking/selected-options poll-id])]
+    [:<>
+     [:div.d-flex
+      [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+      [dropdown-menu poll-id]]
+     [:form
+      [ranking-select poll 1]
+      (for [voted-rankings-index (keys selected-options)
+            :while (< voted-rankings-index (count (:poll/options poll)))]
+        (with-meta
+          [ranking-select poll (inc voted-rankings-index)]
+          {:key (str poll-id voted-rankings-index)}))]]))
 
-(defn ranking-card [poll-id poll]
-  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast poll-id])]
+(defn ranking-card [poll]
+  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
     [:section.statement-card
      [:div.mx-4.my-2
       (if cast-votes
         [results-graph poll cast-votes]
-        [ranking-input poll-id poll])]]))
+        [ranking-input poll])]]))
 
-(defn poll-card [poll-id poll]
-  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast poll-id])]
+(defn poll-card [poll]
+  (let [poll-id (:db/id poll)
+        cast-votes @(rf/subscribe [:schnaq/vote-cast poll-id])]
     [:section.statement-card
      [:div.mx-4.my-2
       [:div.d-flex
@@ -122,8 +126,8 @@
          {:key (str "poll-result-" poll-id)}
          [motion/fade-in-and-out
           (if (= :poll.type/ranking (:poll/type poll))
-            [ranking-card poll-id poll]
-            [poll-card poll-id poll])
+            [ranking-card poll]
+            [poll-card poll])
           motion/card-fade-in-time]]))))
 
 (defn- poll-option
