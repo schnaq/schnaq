@@ -81,7 +81,7 @@
              [:div.d-flex
               [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
               [dropdown-menu poll-id]]
-             [results-graph (:poll/options poll) cast-votes]
+             [results-graph poll cast-votes]
              [:form
               {:on-submit (fn [e]
                             (.preventDefault e)
