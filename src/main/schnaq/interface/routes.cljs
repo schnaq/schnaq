@@ -31,6 +31,7 @@
             [schnaq.interface.views.hub.overview :as hubs]
             [schnaq.interface.views.hub.settings :as hub-settings]
             [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.presentation :as presentation]
             [schnaq.interface.views.qa.inputs :as qanda]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
@@ -246,6 +247,14 @@
                               (rf/dispatch [:statement.edit/reset-edits])
                               (rf/dispatch [:toggle-replies/clear!])
                               (rf/dispatch [:toggle-statement-content/clear!]))}]}]
+     ["/present/:entity-id"
+      {:name :routes.present/entity
+       :parameters {:path {:entity-id int?}}
+       :view presentation/view
+       :controllers [{:parameters {:path [:share-hash :entity-id]}
+                      :start (fn []
+                               (rf/dispatch [:page.fullscreen/toggle true]))
+                      :stop (fn [])}]}]
      ["/graph"
       {:name :routes/graph-view
        :view graph-view/graph-view-entrypoint

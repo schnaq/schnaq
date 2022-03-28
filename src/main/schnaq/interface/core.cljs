@@ -71,6 +71,7 @@
             [schnaq.interface.views.navbar.user-management]
             [schnaq.interface.views.notifications]
             [schnaq.interface.views.pages]
+            [schnaq.interface.views.presentation]
             [schnaq.interface.views.qa.inputs]
             [schnaq.interface.views.qa.search]
             [schnaq.interface.views.schnaq.activation]
