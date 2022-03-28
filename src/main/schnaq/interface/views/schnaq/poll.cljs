@@ -189,16 +189,27 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          single-choice? (= :poll.type/single-choice (:poll/type poll))
          poll-id (:db/id poll)
+         ;; TODO explicitly target single and multiple choice here, when the voting for rankings is in
          chosen-option (if (and single-choice? (oget form-elements :option-choice))
                          (js/parseInt (oget form-elements :option-choice :value))
                          (tools/checked-values (oget form-elements :option-choice)))
-         poll-update-fn (if single-choice?
+         poll-update-fn (case (:poll/type poll)
+                          :poll.type/single-choice
                           #(if (= chosen-option (:db/id %))
                              (update % :option/votes inc)
                              %)
+                          :poll.type/multiple-choice
                           #(if (contains? (set chosen-option) (:db/id %))
                              (update % :option/votes inc)
-                             %))
+                             %)
+                          :poll.type/ranking
+                          #(let [weighted-options
+                                 (->> (range (count (:poll/options poll)) 0 -1)
+                                      (interleave chosen-option)
+                                      (apply hash-map))]
+                             (if (contains? (set chosen-option) (:db/id %))
+                               (update % :option/votes + (weighted-options (:db/id %)))
+                               %)))
          poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
               (update-in [:schnaq :current :polls]
