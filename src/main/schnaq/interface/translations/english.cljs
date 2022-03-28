@@ -307,6 +307,7 @@
    :schnaq.poll.create/submit-button "Create Poll"
    :schnaq.poll/votes "Votes"
    :schnaq.poll/vote! "Vote"
+   :schnaq.poll.ranking/points "Points"
    :schnaq.poll/delete-button "Delete"
    :schnaq.ranking/choose-place "Choose Rank %s"
    :schnaq.rankings/delete-last-choice "Delete last choice"
