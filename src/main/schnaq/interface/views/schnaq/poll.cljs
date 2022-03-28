@@ -31,9 +31,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-              {:type (if single-choice? "radio" "checkbox")
-               :name :option-choice
-               :value id}
+             {:type (if single-choice? "radio" "checkbox")
+              :name :option-choice
+              :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -77,11 +77,11 @@
           {:key (str "poll-result-" poll-id)}
           [motion/fade-in-and-out
            [:section.statement-card
-             [:div.mx-4.my-2
-              [:div.d-flex
-               [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-               [dropdown-menu poll-id]]
-              [results-graph (:poll/options poll) cast-votes]
+            [:div.mx-4.my-2
+             [:div.d-flex
+              [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+              [dropdown-menu poll-id]]
+             [results-graph (:poll/options poll) cast-votes]
              [:form
               {:on-submit (fn [e]
                             (.preventDefault e)
