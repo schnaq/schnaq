@@ -21,9 +21,22 @@
   [base/footer])
 
 (defn root []
-  (let [language @(rf/subscribe [:current-locale])]
+  (let [language @(rf/subscribe [:current-locale])
+        fullscreen? @(rf/subscribe [:page/fullscreen?])]
     [:main#root.text-break {:key language}
      [base-page language]
-     (when-not (or shared-config/embedded? config/in-iframe?)
+     (when-not (or fullscreen? shared-config/embedded? config/in-iframe?)
        [footer])
      [notifications/view]]))
+
+;; -----------------------------------------------------------------------------
+
+(rf/reg-sub
+ :page/fullscreen?
+ (fn [db]
+   (get-in db [:page :fullscreen?])))
+
+(rf/reg-event-db
+ :page.fullscreen/toggle
+ (fn [db [_ toggle]]
+   (assoc-in db [:page :fullscreen?] toggle)))

@@ -90,3 +90,22 @@
       (is (= 200 (delete-poll-request poll-id toolbelt/token-n2o-admin)))
       (is (= 200 (delete-poll-request poll-id toolbelt/token-schnaqqifant-user)))
       (is (= 200 (delete-poll-request poll-id toolbelt/token-wegi-no-beta-user))))))
+
+;; -----------------------------------------------------------------------------
+
+(defn- get-poll-request [share-hash poll-id]
+  (-> {:request-method :get :uri (:path (api/route-by-name :api/poll))
+       :query-params {:poll-id poll-id
+                      :share-hash share-hash}}
+      test-app
+      :status))
+
+(deftest get-poll-test
+  (let [share-hash "cat-dog-hash"
+        poll-id (-> (poll-db/polls share-hash) first :db/id)]
+    (testing "Valid share-hash and poll-id returns poll."
+      (is (= 200 (get-poll-request share-hash poll-id))))
+    (testing "Invalid poll-id returns bad request."
+      (is (= 400 (get-poll-request share-hash (inc poll-id)))))
+    (testing "Wrong share-hash returns bad request."
+      (is (= 400 (get-poll-request "something different" poll-id))))))
