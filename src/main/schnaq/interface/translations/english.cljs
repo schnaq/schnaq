@@ -307,6 +307,7 @@
    :schnaq.poll/vote! "Vote"
    :schnaq.poll/delete-button "Delete"
    :schnaq.ranking/choose-place "Choose Rank %s"
+   :schnaq.rankings/delete-last-choice "Delete last choice"
 
    ;; Activation feature
    :schnaq.activation.create/label "Present your participants with an activation input!"
