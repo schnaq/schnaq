@@ -18,6 +18,7 @@
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.discussion.truncated-content :as truncated-content]
+            [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.schnaq.poll :as poll]
             [schnaq.interface.views.schnaq.reactions :as reactions]
@@ -396,15 +397,18 @@
         local-votes @(rf/subscribe [:local-votes])
         user @(rf/subscribe [:user/current])
         shown-premises @(rf/subscribe [:discussion.statements/show])
+        loading-statements? @(rf/subscribe [:loading/statements?])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
         filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))]
-    (for [index (range (count filtered-conclusions))
-          :let [statement (nth filtered-conclusions index)]]
-      [:div.statement-column
-       {:key (:db/id statement)}
-       [motion/fade-in-and-out
-        [statement-card->editable-card statement [answer-card statement]]
-        (delay-fade-in-for-subsequent-content index)]])))
+    (if loading-statements?
+      [loading/loading-card]
+      (for [index (range (count filtered-conclusions))
+            :let [statement (nth filtered-conclusions index)]]
+        [:div.statement-column
+         {:key (:db/id statement)}
+         [motion/fade-in-and-out
+          [statement-card->editable-card statement [answer-card statement]]
+          (delay-fade-in-for-subsequent-content index)]]))))
 
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."
