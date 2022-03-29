@@ -13,8 +13,8 @@
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
-            [schnaq.toolbelt :as toolbelt]
             [schnaq.shared-toolbelt :as shared-tools]
+            [schnaq.toolbelt :as toolbelt]
             [schnaq.user :as user]
             [taoensso.timbre :as log])
   (:import (java.util UUID Date)))
