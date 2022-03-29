@@ -81,9 +81,9 @@
     {:name :routes/hubbattle
      :controllers [{:start (fn []
                              (rf/dispatch [:navigation/navigate :routes.present/entity
-                                           {:share-hash "ad508972-5e33-4b9b-b446-d5a33c81ab8d"
-                                            :entity-id 17592186063829}]))}]}]
-  ;; ##########################################################################
+                                           {:share-hash "c2cf1305-74ef-482f-9efd-5e70f98f765e"
+                                            :entity-id 17592186128013}]))}]}]
+   ;; ##########################################################################
    ["/product"
     [""
      {:name :routes/product-page
@@ -380,7 +380,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-               #(tools/scroll-to-id window-hash)))))
+          #(tools/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
