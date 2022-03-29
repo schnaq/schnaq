@@ -34,9 +34,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-              {:type (if single-choice? "radio" "checkbox")
-               :name :option-choice
-               :value id}
+             {:type (if single-choice? "radio" "checkbox")
+              :name :option-choice
+              :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -404,7 +404,8 @@
 (rf/reg-event-db
  :schnaq.poll.load-from-query/success
  (fn [db [_ {:keys [poll]}]]
-   (assoc-in db [:present :poll] poll)))
+   (when poll
+     (assoc-in db [:present :poll] poll))))
 
 (rf/reg-sub
  :schnaq/vote-cast
