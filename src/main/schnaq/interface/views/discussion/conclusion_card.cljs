@@ -416,16 +416,19 @@
   (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (statements-list)
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
+        schnaq-loading? @(rf/subscribe [:loading/schnaq?])
         activation (when top-level? [activation/activation-card])
         poll (when top-level? (poll/poll-list))
         wordcloud (when top-level? [wordcloud-card/wordcloud-card])
         access-code @(rf/subscribe [:schnaq.selected/access-code])]
-    [:div.row
-     [:div.statement-column
-      [selection-card]]
-     activation
-     poll
-     wordcloud
-     statements
-     (when-not (or search? (seq statements) (seq poll) (not access-code))
-       [call-to-share])]))
+    (if schnaq-loading?
+      [loading/loading-card]
+      [:div.row
+       [:div.statement-column
+        [selection-card]]
+       activation
+       poll
+       wordcloud
+       statements
+       (when-not (or search? (seq statements) (seq poll) (not access-code))
+         [call-to-share])])))
