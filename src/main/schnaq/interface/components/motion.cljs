@@ -95,12 +95,11 @@
 
 (defn spring-transition
   "Lets the elements bounce, when they transition"
-  [component]
+  [component animation-attributes]
   [:> (.-div motion)
-   {:animate {:scale 1.1}
-    :staggerChildren 0.5
+   {:animate animation-attributes
     :transition {:type "spring"
-                 :bounce 0.4
+                 :bounce 0.3
                  :duration 1}}
    component])
 
