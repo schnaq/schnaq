@@ -187,6 +187,7 @@
                               (rf/dispatch [:scheduler.after/login [:discussion.statements/mark-all-as-seen (:share-hash path)]]))
                      :stop (fn []
                              (rf/dispatch [:body.class/remove "theming-enabled"])
+                             (rf/dispatch [:discussion.current/dissoc])
                              (rf/dispatch [:filters/clear])
                              (rf/dispatch [:theme/reset]))}]}
      ["" ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.

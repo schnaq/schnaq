@@ -158,3 +158,12 @@
  :discussion.premises.current/dissoc
  (fn [db]
    (update-in db [:discussion :premises] dissoc :current)))
+
+(rf/reg-event-fx
+ :discussion.current/dissoc
+ (fn [{:keys [db]}]
+   {:db (-> db
+            (update :schnaq dissoc :selected)
+            (update :schnaq dissoc :current)
+            (dissoc :wordcloud))
+    :fx [[:dispatch [:discussion.premises.current/dissoc]]]}))
