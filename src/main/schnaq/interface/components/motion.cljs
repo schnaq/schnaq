@@ -7,6 +7,21 @@
   "Set a common setting for fading in the cards, e.g. statement cards."
   0.25)
 
+(defn animated-list
+  "A motion list wrapper"
+  [component]
+  [:> (.-ul motion)
+   {:layout true
+    :style {:list-style-type "none"}}
+   component])
+
+(defn animated-list-item
+  "A motion list item wrapper"
+  [component]
+  [:> (.-li motion)
+   {:layout true}
+   component])
+
 (defn zoom-image
   "Create an image, which zooms in and out on click.
 
@@ -76,6 +91,17 @@
    {:type "spring"
     :bounce 0.4
     :duration 1}
+   component])
+
+(defn spring-transition
+  "Lets the elements bounce, when they transition"
+  [component]
+  [:> (.-div motion)
+   {:animate {:scale 1.1}
+    :staggerChildren 0.5
+    :transition {:type "spring"
+                 :bounce 0.4
+                 :duration 1}}
    component])
 
 (defn pulse-once

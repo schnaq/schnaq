@@ -34,9 +34,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-             {:type (if single-choice? "radio" "checkbox")
-              :name :option-choice
-              :value id}
+              {:type (if single-choice? "radio" "checkbox")
+               :name :option-choice
+               :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -52,26 +52,35 @@
            [:span.me-3 votes " " (labels :schnaq.poll/votes)]
            percentage]]]]))])
 
+(defn ranking-item
+  "A single graph-bar in ranking results"
+  [sorted-options old-indices index]
+  (let [{:keys [option/votes db/id option/value]} (nth sorted-options index)
+        total-votes (apply + (map :option/votes sorted-options))
+        percentage (if (zero? total-votes)
+                     "0%"
+                     (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))]
+    [motion/animated-list-item
+     [:div
+      [tooltip/text
+       (str votes " " (labels :schnaq.poll.ranking/points))
+       [:div.percentage-bar.rounded-1
+        {:style {:background-color (colors/get-graph-color (get old-indices id))
+                 :width percentage
+                 :height "40px"}}]]
+      [:p.small.ms-1.mb-1 value]]]))
+
 (defn ranking-results
   "Show ranking results in a graph."
   [{:poll/keys [options]}]
   [:section.row
    (let [sorted-options (reverse (sort-by :option/votes options))
          old-indices (into {} (map-indexed (fn [idx option] [(:db/id option) idx]) options))]
-     (for [index (range (count sorted-options))]
-       (let [{:keys [option/votes db/id option/value]} (nth sorted-options index)
-             total-votes (apply + (map :option/votes sorted-options))
-             percentage (if (zero? total-votes)
-                          "0%"
-                          (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))]
-         [:div {:key (str "ranking-option-" id)}
-          [tooltip/text
-           (str votes " " (labels :schnaq.poll.ranking/points))
-           [:div.percentage-bar.rounded-1
-            {:style {:background-color (colors/get-graph-color (get old-indices id))
-                     :width percentage
-                     :height "40px"}}]]
-          [:p.small.ms-1.mb-1 value]])))])
+     [motion/animated-list
+      (for [index (range (count sorted-options))]
+        (with-meta
+          [ranking-item sorted-options old-indices index]
+          {:key (str "ranking-option-" (:db/id (nth sorted-options index)))}))])])
 
 (defn- dropdown-menu
   "Dropdown menu for poll configuration."

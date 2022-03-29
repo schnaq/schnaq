@@ -25,7 +25,7 @@
   "Show share-options, e.g. link and QR code."
   []
   [:section.text-center
-   [:div.display-6.text-center.pb-3.pt-5
+   [:div.display-6.text-center.pb-3
     "Gehe auf "
     [:a {:href (str "https://" direct-link)}
      [:u.fw-bolder direct-link]]
