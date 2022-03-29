@@ -94,7 +94,8 @@
      [:<>
       [dropdown-menu/item :play/circle
        :view/present
-       #(rf/dispatch [:present/component share-hash poll-id])]
+       #(rf/dispatch [:navigation/navigate :routes.present/entity
+                      {:share-hash share-hash :entity-id poll-id}])]
       [dropdown-menu/item :trash
        :schnaq.poll/delete-button
        #(rf/dispatch [:poll/delete poll-id])]]]))
