@@ -4,6 +4,8 @@
 (def labels
   {:error/export-failed "Export failed. Please try again later."
 
+   :view/present "Present"
+
    :nav/schnaqs "schnaqs"
    :nav.schnaqs/show-all "All schnaqs"
    :nav.schnaqs/show-all-public "All public schnaqs"
@@ -305,7 +307,10 @@
    :schnaq.poll.create/submit-button "Create Poll"
    :schnaq.poll/votes "Votes"
    :schnaq.poll/vote! "Vote"
+   :schnaq.poll.ranking/points "Points"
    :schnaq.poll/delete-button "Delete"
+   :schnaq.ranking/choose-place "Choose Rank %s"
+   :schnaq.rankings/delete-last-choice "Delete last choice"
 
    ;; Activation feature
    :schnaq.activation.create/label "Present your participants with an activation input!"

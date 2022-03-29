@@ -4,6 +4,8 @@
 (def labels
   {:error/export-failed "Export hat nicht geklappt, versuche es später erneut."
 
+   :view/present "Präsentieren"
+
    :nav/schnaqs "schnaqs"
    :nav.schnaqs/show-all "Alle schnaqs"
    :nav.schnaqs/show-all-public "Alle öffentlichen schnaqs"
@@ -305,7 +307,10 @@
    :schnaq.poll.create/submit-button "Umfrage erstellen"
    :schnaq.poll/votes "Stimmen"
    :schnaq.poll/vote! "Abstimmen"
+   :schnaq.poll.ranking/points "Punkte"
    :schnaq.poll/delete-button "Löschen"
+   :schnaq.ranking/choose-place "Wähle Platz %s"
+   :schnaq.rankings/delete-last-choice "Letzte Wahl löschen"
 
    ;; Activation feature
    :schnaq.activation.create/label "Präsentiere deinen Teilnehmer:innen eine Eingabe zur Aktivierung!"

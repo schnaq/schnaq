@@ -31,6 +31,7 @@
             [schnaq.interface.views.hub.overview :as hubs]
             [schnaq.interface.views.hub.settings :as hub-settings]
             [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.presentation :as presentation]
             [schnaq.interface.views.qa.inputs :as qanda]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
@@ -70,6 +71,19 @@
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)
      :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
+
+   ;; ##########################################################################
+   ;; HUBBATTLE
+   ;; 
+   ;; Edit share-hash and entity id is the id to the poll
+   ;;
+   ["/hubbattle"
+    {:name :routes/hubbattle
+     :controllers [{:start (fn []
+                             (rf/dispatch [:navigation/navigate :routes.present/entity
+                                           {:share-hash "ad508972-5e33-4b9b-b446-d5a33c81ab8d"
+                                            :entity-id 17592186063829}]))}]}]
+  ;; ##########################################################################
    ["/product"
     [""
      {:name :routes/product-page
@@ -246,6 +260,18 @@
                               (rf/dispatch [:statement.edit/reset-edits])
                               (rf/dispatch [:toggle-replies/clear!])
                               (rf/dispatch [:toggle-statement-content/clear!]))}]}]
+     ["/present/:entity-id"
+      {:name :routes.present/entity
+       :parameters {:path {:entity-id int?}}
+       :view presentation/view
+       :controllers [{:parameters {:path [:share-hash :entity-id]}
+                      :start (fn []
+                               (rf/dispatch [:updates.periodic.present/poll true])
+                               (rf/dispatch [:page.fullscreen/toggle true])
+                               (rf/dispatch [:schnaq.poll/load-from-query]))
+                      :stop (fn []
+                              (rf/dispatch [:updates.periodic.present/poll false])
+                              (rf/dispatch [:page.fullscreen/toggle false]))}]}]
      ["/graph"
       {:name :routes/graph-view
        :view graph-view/graph-view-entrypoint

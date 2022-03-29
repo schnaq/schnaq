@@ -1,8 +1,10 @@
 (ns schnaq.interface.views.schnaq.poll
-  (:require [goog.string :as gstring]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
+            [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
+            [schnaq.database.specs :as specs]
             [schnaq.interface.components.colors :as colors]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
@@ -10,19 +12,20 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
-(defn- results-graph
+(defn results-graph
   "A graph displaying the results of the poll."
-  [options total-value poll-type cast-votes]
+  [{:poll/keys [options type]} cast-votes]
   [:section.row
    (for [index (range (count options))]
      (let [{:keys [option/votes db/id option/value]} (get options index)
-           vote-number votes
-           percentage (if (zero? total-value)
+           total-votes (apply + (map :option/votes options))
+           percentage (if (zero? total-votes)
                         "0%"
-                        (str (.toFixed (* 100 (/ vote-number total-value)) 2) "%"))
-           single-choice? (= :poll.type/single-choice poll-type)
+                        (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))
+           single-choice? (= :poll.type/single-choice type)
            votes-set (if single-choice? #{cast-votes} (set cast-votes))
            option-voted? (votes-set id)]
        [:<>
@@ -31,9 +34,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-              {:type (if single-choice? "radio" "checkbox")
-               :name :option-choice
-               :value id}
+             {:type (if single-choice? "radio" "checkbox")
+              :name :option-choice
+              :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -46,48 +49,158 @@
           {:class (when option-voted? "font-italic")}
           value
           [:span.float-end
-           [:span.me-3 vote-number " " (labels :schnaq.poll/votes)]
+           [:span.me-3 votes " " (labels :schnaq.poll/votes)]
            percentage]]]]))])
+
+(defn ranking-results
+  "Show ranking results in a graph."
+  [{:poll/keys [options]}]
+  [:section.row
+   (let [sorted-options (reverse (sort-by :option/votes options))
+         old-indices (into {} (map-indexed (fn [idx option] [(:db/id option) idx]) options))]
+     (for [index (range (count sorted-options))]
+       (let [{:keys [option/votes db/id option/value]} (nth sorted-options index)
+             total-votes (apply + (map :option/votes sorted-options))
+             percentage (if (zero? total-votes)
+                          "0%"
+                          (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))]
+         [:div {:key (str "ranking-option-" id)}
+          [tooltip/text
+           (str votes " " (labels :schnaq.poll.ranking/points))
+           [:div.percentage-bar.rounded-1
+            {:style {:background-color (colors/get-graph-color (get old-indices id))
+                     :width percentage
+                     :height "40px"}}]]
+          [:p.small.ms-1.mb-1 value]])))])
 
 (defn- dropdown-menu
   "Dropdown menu for poll configuration."
   [poll-id]
-  [dropdown-menu/moderator
-   (str "poll-dropdown-id-" poll-id)
-   [dropdown-menu/item :trash
-    :schnaq.poll/delete-button
-    #(rf/dispatch [:poll/delete poll-id])]])
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+    [dropdown-menu/moderator
+     (str "poll-dropdown-id-" poll-id)
+     [:<>
+      [dropdown-menu/item :play/circle
+       :view/present
+       #(rf/dispatch [:navigation/navigate :routes.present/entity
+                      {:share-hash share-hash :entity-id poll-id}])]
+      [dropdown-menu/item :trash
+       :schnaq.poll/delete-button
+       #(rf/dispatch [:poll/delete poll-id])]]]))
+
+(>defn- ranking-select
+  "Show a select input to choose from the current poll options."
+  [poll index]
+  [::specs/poll nat-int? => :re-frame/component]
+  (let [selected-options @(rf/subscribe [:schnaq.ranking/selected-options (:db/id poll)])
+        selected (get selected-options index)
+        used-selects (disj (set (vals selected-options)) selected)
+        form-id (str "select-field" (:db/id poll) index)]
+    [:<>
+     [:label.h5.mt-3
+      {:for form-id}
+      (gstring/format (labels :schnaq.ranking/choose-place) index)]
+     [:select.form-select.form-control
+      {:id form-id
+       :key (str (:db/id poll) "-" index "-" (when selected-options (selected-options index)))
+       :defaultValue (when selected-options (selected-options index))
+       :on-change (fn [event]
+                    (rf/dispatch [:schnaq.ranking/add-selected-options!
+                                  (:db/id poll)
+                                  index
+                                  (js/parseInt (oget event :target :value))]))}
+      (when-not selected
+        [:option
+         {:value :not-selected} "-"])
+      (for [voting-option (:poll/options poll)]
+        (let [option-id (:db/id voting-option)]
+          (when-not (contains? used-selects option-id)
+            [:option
+             {:value option-id
+              :key option-id}
+             (:option/value voting-option)])))]]))
+
+(>defn- ranking-input
+  "Create a form with multiple selection fields to choose from the poll options."
+  [poll]
+  [::specs/poll => :re-frame/component]
+  (let [poll-id (:db/id poll)
+        selected-options @(rf/subscribe [:schnaq.ranking/selected-options poll-id])]
+    [:form
+     {:on-submit (fn [event]
+                   (.preventDefault event)
+                   (rf/dispatch [:schnaq.ranking/cast-vote poll (map second (sort-by first selected-options))]))}
+     [ranking-select poll 1]
+     (for [voted-rankings-index (keys selected-options)
+           :while (< voted-rankings-index (count (:poll/options poll)))]
+       (with-meta
+         [ranking-select poll (inc voted-rankings-index)]
+         {:key (str poll-id voted-rankings-index)}))
+     (when-not (empty? selected-options)
+       [:div.d-flex.justify-content-end
+        [:a.btn.btn-transparent
+         {:role "button"
+          :on-click #(rf/dispatch [:schnaq.ranking/delete-vote poll-id (apply max (keys selected-options))])}
+         [icon :backspace] " " (labels :schnaq.rankings/delete-last-choice)]])
+     [:button.btn.btn-dark.mt-3.mx-auto.d-block
+      {:disabled (not (and selected-options (seq selected-options)))}
+      (labels :schnaq.poll/vote!)]]))
+
+(>defn input-or-results
+  "Toggle if there should be an input or the results of the ranking."
+  [poll]
+  [::specs/poll => :re-frame/component]
+  (if-let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
+    [ranking-results poll cast-votes]
+    [ranking-input poll]))
+
+(>defn ranking-card
+  "Show a ranking card."
+  [poll]
+  [::specs/poll => :re-frame/component]
+  [:section.statement-card
+   [:div.mx-4.my-2
+    [:<>
+     [:div.d-flex
+      [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+      [dropdown-menu (:db/id poll)]]
+     [input-or-results poll]]]])
+
+(>defn- poll-card
+  "Show a poll card, where users can cast their votes."
+  [poll]
+  [::specs/poll => :re-frame/component]
+  (let [poll-id (:db/id poll)
+        cast-votes @(rf/subscribe [:schnaq/vote-cast poll-id])]
+    [:section.statement-card
+     [:div.mx-4.my-2
+      [:div.d-flex
+       [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+       [dropdown-menu poll-id]]
+      [:form
+       {:on-submit (fn [e]
+                     (.preventDefault e)
+                     (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
+       [results-graph poll cast-votes]
+       (when-not cast-votes
+         [:div.text-center
+          [:button.btn.btn-primary.btn-sm
+           {:type :submit}
+           (labels :schnaq.poll/vote!)]])]]]))
 
 (defn poll-list
   "Displays all polls of the current schnaq."
   []
   (let [polls @(rf/subscribe [:schnaq/polls])]
-    ;; This doall is needed, for the reactive deref inside to work
-    (doall
-     (for [poll polls]
-       (let [total-value (apply + (map :option/votes (:poll/options poll)))
-             poll-id (:db/id poll)
-             cast-votes @(rf/subscribe [:schnaq/vote-cast poll-id])]
-         [:div.statement-column
-          {:key (str "poll-result-" poll-id)}
-          [motion/fade-in-and-out
-           [:section.statement-card
-             [:div.mx-4.my-2
-              [:div.d-flex
-               [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-               [dropdown-menu poll-id]]
-              [results-graph (:poll/options poll)
-               total-value (:poll/type poll) cast-votes]
-             [:form
-              {:on-submit (fn [e]
-                            (.preventDefault e)
-                            (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
-              (when-not cast-votes
-                [:div.text-center
-                 [:button.btn.btn-primary.btn-sm
-                  {:type :submit}
-                  (labels :schnaq.poll/vote!)]])]]]
-           motion/card-fade-in-time]])))))
+    (for [poll polls]
+      (let [poll-id (:db/id poll)]
+        [:div.statement-column
+         {:key (str "poll-result-" poll-id)}
+         [motion/fade-in-and-out
+          (if (= :poll.type/ranking (:poll/type poll))
+            [ranking-card poll]
+            [poll-card poll])
+          motion/card-fade-in-time]]))))
 
 (defn- poll-option
   "Returns a single option component. Can contain a button for removal of said component."
@@ -189,7 +302,6 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          single-choice? (= :poll.type/single-choice (:poll/type poll))
          poll-id (:db/id poll)
-         ;; TODO explicitly target single and multiple choice here, when the voting for rankings is in
          chosen-option (if (and single-choice? (oget form-elements :option-choice))
                          (js/parseInt (oget form-elements :option-choice :value))
                          (tools/checked-values (oget form-elements :option-choice)))
@@ -201,15 +313,7 @@
                           :poll.type/multiple-choice
                           #(if (contains? (set chosen-option) (:db/id %))
                              (update % :option/votes inc)
-                             %)
-                          :poll.type/ranking
-                          #(let [weighted-options
-                                 (->> (range (count (:poll/options poll)) 0 -1)
-                                      (interleave chosen-option)
-                                      (apply hash-map))]
-                             (if (contains? (set chosen-option) (:db/id %))
-                               (update % :option/votes + (weighted-options (:db/id %)))
-                               %)))
+                             %))
          poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
               (update-in [:schnaq :current :polls]
@@ -220,6 +324,30 @@
                                [:schnaq.poll.cast-vote/success]
                                {:share-hash share-hash
                                 :option-id chosen-option}
+                               [:schnaq.poll.cast-vote/failure poll-id])]})))
+
+(rf/reg-event-fx
+ :schnaq.ranking/cast-vote
+ (fn [{:keys [db]} [_ poll rankings]]
+   (let [poll-id (:db/id poll)
+         share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         poll-update-fn #(let [weighted-options
+                               (->> (range (count (:poll/options poll)) 0 -1)
+                                    (interleave rankings)
+                                    (apply hash-map))]
+                           (if (contains? (set rankings) (:db/id %))
+                             (update % :option/votes + (weighted-options (:db/id %)))
+                             %))
+         poll (update poll :poll/options #(mapv poll-update-fn %))]
+     {:db (-> db
+              (update-in [:schnaq :current :polls]
+                         (fn [polls]
+                           (map #(if (= poll-id (:db/id %)) poll %) polls)))
+              (assoc-in [:schnaq :polls :past-votes poll-id] rankings))
+      :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
+                               [:schnaq.poll.cast-vote/success]
+                               {:share-hash share-hash
+                                :option-id rankings}
                                [:schnaq.poll.cast-vote/failure poll-id])]})))
 
 (rf/reg-event-fx
@@ -248,6 +376,20 @@
  ;; Returns all polls of the selected schnaq.
  (fn [db _]
    (get-in db [:schnaq :current :polls] [])))
+
+(rf/reg-event-fx
+ :schnaq.poll/load-from-query
+ (fn [{:keys [db]} _]
+   {:fx [(http/xhrio-request
+          db :get "/poll"
+          [:schnaq.poll.load-from-query/success]
+          {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+           :poll-id (get-in db [:current-route :parameters :path :entity-id])})]}))
+
+(rf/reg-event-db
+ :schnaq.poll.load-from-query/success
+ (fn [db [_ {:keys [poll]}]]
+   (assoc-in db [:present :poll] poll)))
 
 (rf/reg-sub
  :schnaq/vote-cast
@@ -287,3 +429,18 @@
           {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
            :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
            :poll-id poll-id})]}))
+
+(rf/reg-sub
+ :schnaq.ranking/selected-options
+ (fn [db [_ poll-id]]
+   (get-in db [:schnaq :current :rankings :selected-options poll-id])))
+
+(rf/reg-event-db
+ :schnaq.ranking/add-selected-options!
+ (fn [db [_ poll-id index option]]
+   (assoc-in db [:schnaq :current :rankings :selected-options poll-id index] option)))
+
+(rf/reg-event-db
+ :schnaq.ranking/delete-vote
+ (fn [db [_ poll-id index]]
+   (update-in db [:schnaq :current :rankings :selected-options poll-id] dissoc index)))

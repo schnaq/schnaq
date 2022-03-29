@@ -30,6 +30,12 @@
   (loop-builder :updates.periodic.discussion/starting?
                 #(rf/dispatch [:updates.periodic.discussion.starting/request])))
 
+(defn- loop-periodic-poll!
+  "Define loop to periodically update polls."
+  []
+  (loop-builder :updates.periodic.present/poll?
+                #(rf/dispatch [:updates.periodic.present.poll/request])))
+
 ;; -----------------------------------------------------------------------------
 ;; Init
 
@@ -38,7 +44,8 @@
   called here once to start the endless loop."
   []
   (loop-periodic-discussion-start!)
-  (loop-update-graph!))
+  (loop-update-graph!)
+  (loop-periodic-poll!))
 
 ;; -----------------------------------------------------------------------------
 
@@ -51,6 +58,16 @@
  :updates.periodic.discussion/starting
  (fn [db [_ trigger?]]
    (assoc-in db [:updates/periodic :discussion/starting] trigger?)))
+
+(rf/reg-sub
+ :updates.periodic.present/poll?
+ (fn [db _]
+   (get-in db [:updates/periodic :present/poll] false)))
+
+(rf/reg-event-db
+ :updates.periodic.present/poll
+ (fn [db [_ trigger?]]
+   (assoc-in db [:updates/periodic :present/poll] trigger?)))
 
 (rf/reg-sub
  :updates.periodic/graph?
@@ -91,6 +108,17 @@
                        :display-name (toolbelt/current-display-name db)}
                       (fn [response]
                         (rf/dispatch [:graph/set-current response]))]]]})))
+
+(rf/reg-event-fx
+ :updates.periodic.present.poll/request
+ (fn [{:keys [db]}]
+   (let [share-hash (get-in db [:current-route :parameters :path :share-hash])
+         poll-id (get-in db [:current-route :parameters :path :entity-id])]
+     {:fx [[:ws/send [:schnaq.poll/update
+                      {:share-hash share-hash
+                       :poll-id poll-id}
+                      (fn [response]
+                        (rf/dispatch [:schnaq.poll.load-from-query/success response]))]]]})))
 
 (comment
 

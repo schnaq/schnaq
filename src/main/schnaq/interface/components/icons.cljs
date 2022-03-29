@@ -4,10 +4,10 @@
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub faFontAwesomeFlag]]
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faIdCard faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
+             [faBackspace faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
               faCloud faCog faComment faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
               faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLocationArrow faLock faMagic faPalette
-              faPaperPlane faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
+              faPaperPlane faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
               faTimes faTimesCircle faTrashAlt faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
@@ -16,6 +16,7 @@
    :arrow-left faArrowLeft
    :arrow-right faArrowRight
    :arrow-up faArrowUp
+   :backspace faBackspace
    :bell faBell
    :building faBuilding
    :calendar faCalendar
@@ -64,6 +65,7 @@
    :minus faMinus
    :palette faPalette
    :plane faPaperPlane
+   :play/circle faPlayCircle
    :plus faPlus
    :question faQuestion
    :qrcode faQrcode

@@ -1,8 +1,9 @@
 (ns schnaq.interface.components.common
-  (:require [com.fulcrologic.guardrails.core :refer [>defn => ?]]
+  (:require [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon icon-card]]
+            [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.navigation :as navigation]))
 
 (>defn hint-text
@@ -54,3 +55,12 @@
       [:p body]
       (when-not disabled?
         [buttons/anchor button-text href :btn-white])])))
+
+(>defn schnaq-logo
+  "Display a schnaq logo"
+  [attrs]
+  [map? => :re-frame/component]
+  [:img (merge
+         {:src (img-path :logo)
+          :alt "schnaq logo"}
+         attrs)])
