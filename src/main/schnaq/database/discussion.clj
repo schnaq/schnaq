@@ -14,10 +14,10 @@
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.toolbelt :as toolbelt]
+            [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.user :as user]
             [taoensso.timbre :as log])
-  (:import (java.lang Character)
-           (java.util UUID Date)))
+  (:import (java.util UUID Date)))
 
 (def ^:private rules
   "Discussion rules for common use in db queries."
@@ -488,24 +488,6 @@
            (cstring/lower-case string-1)
            (cstring/lower-case string-2))))
 
-(defn- alphanumeric?
-  "Checks whether some char is a Letter or a Digit."
-  [char-to-test]
-  (or
-   (Character/isLetter ^char char-to-test)
-   (Character/isDigit ^char char-to-test)))
-
-(defn tokenize-string
-  "Tokenizes a string into single tokens for the purpose of searching."
-  [content]
-  (->> (cstring/split content #"\s")
-       (remove cstring/blank?)
-       ;; Remove punctuation when generating token
-       (map #(cond
-               (not (alphanumeric? (first %))) (subs % 1)
-               (not (alphanumeric? (last %))) (subs % 0 (dec (count %)))
-               :else %))))
-
 (defn- add-synonyms-to-list
   "Go through a list and add all synonyms that can be found in our dictionary.\n
   As of 2021/12 it works for german. We have no language detection."
@@ -527,7 +509,7 @@
           custom-part
           '[[?statements :statement/content ?content]
             (not [?statements :statement/deleted? true])
-            [(schnaq.database.discussion/tokenize-string ?content) [?tokenized-content ...]]
+            [(schnaq.shared-toolbelt/tokenize-string ?content) [?tokenized-content ...]]
             [(schnaq.database.discussion/levenshtein-max? ?distance ?search-tokens ?tokenized-content)]]))
 
 (>defn- search-similar-with-n-levenshtein
@@ -549,7 +531,7 @@
   "A generic search for statements. Provide which statements you want to search. (quoted vector)"
   [share-hash search-string custom-part pattern]
   [:discussion/share-hash ::specs/non-blank-string (s/coll-of vector?) vector? :ret (s/coll-of ::specs/statement)]
-  (let [search-tokens (tokenize-string search-string)
+  (let [search-tokens (shared-tools/tokenize-string search-string)
         two-and-less-tokens (filter #(>= 2 (count %)) search-tokens)
         three-four-tokens (filter #(or (= 3 (count %))
                                        (= 4 (count %))) search-tokens)
