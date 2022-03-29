@@ -151,3 +151,8 @@
       :fx [[:dispatch [:discussion.history/push conclusion]]
            [:dispatch [:visited/set-visited-statements conclusion]]
            [:dispatch [:notification/set-visited-statements share-hash conclusion premises]]]})))
+
+(rf/reg-event-db
+ :discussion.premises.current/dissoc
+ (fn [db]
+   (update-in db [:discussion :premises] dissoc :current)))

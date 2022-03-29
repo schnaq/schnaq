@@ -192,6 +192,7 @@
      ["" ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
+                               (rf/dispatch [:discussion.premises.current/dissoc])
                                (rf/dispatch [:discussion.history/clear])
                                (rf/dispatch [:updates.periodic.discussion/starting true])
                                (rf/dispatch [:discussion.query.conclusions/starting])
@@ -199,6 +200,7 @@
                                (rf/dispatch [:schnaq.activation/load-from-backend])
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
+                              (rf/dispatch [:discussion.premises.current/dissoc])
                               (rf/dispatch [:updates.periodic.discussion/starting false])
                               (rf/dispatch [:schnaq.activation/dissoc])
                               (rf/dispatch [:statement.edit/reset-edits])
@@ -380,7 +382,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-          #(tools/scroll-to-id window-hash)))))
+               #(tools/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
