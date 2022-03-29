@@ -27,7 +27,7 @@
   [:section.text-center
    [:div.display-6.text-center.pb-3
     "Gehe auf "
-    [:a {:href (str "https://" direct-link)}
+    [:a.text-nowrap {:href (str "https://" direct-link)}
      [:u.fw-bolder direct-link]]
     " und nimm am Ranking teil!"]
    [sc/qr-code (str "https://" direct-link) 250 {:bgColor "transparent"}]])
