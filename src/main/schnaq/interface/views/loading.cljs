@@ -27,20 +27,25 @@
   []
   [:div.statement-column
    [motion/fade-in-and-out
-    [:div.statement-card
+    [:div.statement-card.p-2
      [loading-placeholder]]
     1]])
 
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-db
- :loading/statements
- (fn [db [_ toggle]]
+ :loading/toggle
+ (fn [db [_ [field toggle]]]
    (if toggle
-     (assoc-in db [:loading :statements?] true)
-     (update db :loading dissoc :statements?))))
+     (assoc-in db [:loading field] true)
+     (update db :loading dissoc field))))
 
 (rf/reg-sub
  :loading/statements?
  (fn [db]
    (get-in db [:loading :statements?])))
+
+(rf/reg-sub
+ :loading/schnaq?
+ (fn [db]
+   (get-in db [:loading :schnaq?])))
