@@ -430,5 +430,7 @@
        poll
        wordcloud
        statements
-       (when-not (or search? (seq statements) (seq poll) (not access-code))
+       (when
+        (and top-level?
+             (not (or search? (seq statements) (seq poll) (not access-code))))
          [call-to-share])])))
