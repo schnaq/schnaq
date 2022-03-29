@@ -350,11 +350,15 @@
                            (if (contains? (set rankings) (:db/id %))
                              (update % :option/votes + (weighted-options (:db/id %)))
                              %))
-         poll (update poll :poll/options #(mapv poll-update-fn %))]
+         updated-poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
               (update-in [:schnaq :current :polls]
                          (fn [polls]
-                           (map #(if (= poll-id (:db/id %)) poll %) polls)))
+                           (map #(if (= poll-id (:db/id %)) updated-poll %) polls)))
+              (update-in [:present :poll]
+                         #(if (= (:db/id updated-poll) (:db/id %))
+                            updated-poll
+                            %))
               (assoc-in [:schnaq :polls :past-votes poll-id] rankings))
       :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
                                [:schnaq.poll.cast-vote/success]
