@@ -52,7 +52,6 @@
  (fn [db _]
    (shared-tools/tokenize-string (get-in db [:schnaq :question :input] ""))))
 
-;; TODO? : Beachte auch die kinderstatements
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
   [textarea-name placeholder send-button-label statement-type autofocus? small?]
