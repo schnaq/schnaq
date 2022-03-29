@@ -34,9 +34,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-             {:type (if single-choice? "radio" "checkbox")
-              :name :option-choice
-              :value id}
+              {:type (if single-choice? "radio" "checkbox")
+               :name :option-choice
+               :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -59,11 +59,16 @@
         total-votes (apply + (map :option/votes sorted-options))
         percentage (if (zero? total-votes)
                      "0%"
-                     (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))]
+                     (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))
+        presentation-mode? (= :routes.present/entity @(rf/subscribe [:navigation/current-route-name]))]
     [motion/animated-list-item
      [:div.row
-      [:div.col-1 [:p.my-auto.mt-2.h4 (str (inc index)) "."]]
-      [:div.col-11
+      [:div
+       {:class (if presentation-mode? "col-1" "col-2")}
+       [:p.my-auto.mt-2.h4
+        (str (inc index)) "."]]
+      [:div
+       {:class (if presentation-mode? "col-11" "col-10")}
        [motion/spring-transition
         [tooltip/text
          (str votes " " (labels :schnaq.poll.ranking/points))
