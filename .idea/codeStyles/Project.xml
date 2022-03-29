@@ -14,8 +14,8 @@
   :clojure.core/as-&gt; :only-indent
   :clojure.core/assoc 1000
   :clojure.core/comment :only-indent
-  :clojure.core/cond-&gt; :only-indent
-  :clojure.core/cond-&gt;&gt; :only-indent
+  :clojure.core/cond-&gt; 1
+  :clojure.core/cond-&gt;&gt; 1
   :clojure.core/defonce :only-indent
   :clojure.core/future :only-indent
   :clojure.core.async/thread :only-indent

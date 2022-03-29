@@ -394,12 +394,15 @@
   (let [active-filters @(rf/subscribe [:filters/active])
         sort-method @(rf/subscribe [:discussion.statements/sort-method])
         local-votes @(rf/subscribe [:local-votes])
+        current-input @(rf/subscribe [:schnaq.question.input/current])
         user @(rf/subscribe [:user/current])
         shown-premises @(rf/subscribe [:discussion.statements/show])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
-        filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))]
-    (for [index (range (count filtered-conclusions))
-          :let [statement (nth filtered-conclusions index)]]
+        filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))
+        input-filtered-statements
+        (sort-by #(cstring/includes? (:statement/content %) current-input) > filtered-conclusions)]
+    (for [index (range (count input-filtered-statements))
+          :let [statement (nth input-filtered-statements index)]]
       [:div.statement-column
        {:key (:db/id statement)}
        [motion/fade-in-and-out

@@ -51,8 +51,8 @@
  (fn [db _]
    (get-in db [:schnaq :question :input] "")))
 
-;; TODO beachte auf welcher Ebene gerade getippt wird
-;; TODO next: zeige / sortiere nur Inhalte die das Keyword beinhalten
+;; TODO nutze tokens
+;; TODO? : Beachte auch die kinderstatements
 ;; TODO? : Maybe hamming distance
 ;; TODO? : Maybe synonyme? (Aber ohne Spracherkennung schwierig)
 (defn- textarea-for-statements
