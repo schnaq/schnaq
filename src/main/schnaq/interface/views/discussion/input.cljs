@@ -51,60 +51,67 @@
  (fn [db _]
    (shared-tools/tokenize-string (get-in db [:schnaq :question :input] ""))))
 
-(defn- textarea-for-statements
-  "Input, where users provide (starting) conclusions."
-  [textarea-name placeholder send-button-label statement-type autofocus? small?]
+(defn- textarea-highlighting
+  "Add highlighting to textarea based on the selected attitude."
+  [field]
+  (let [attitude (case @(rf/subscribe [:form/statement-type field])
+                   :statement.type/support "support"
+                   :statement.type/attack "attack"
+                   "neutral")]
+    [:div.highlight-card-reduced.highlight-card-reverse
+     {:class (str "highlight-card-" attitude)}]))
+
+(defn- premise-card-textarea
+  "Input, where users provide premises."
+  [{:keys [db/id]}]
   (when-not @(rf/subscribe [:schnaq.selected/read-only?])
-    (let [attitude (case statement-type
-                     :statement.type/support "support"
-                     :statement.type/attack "attack"
-                     :statement.type/neutral "neutral")
-          additional-form-class (when small? "form-control-sm")
-          additional-btn-class (when small? "btn-sm")
-          additional-highlight-class (when small? "highlight-card-reduced ")]
+    [:div.input-group
+     [textarea-highlighting id]
+     [:textarea.form-control.form-control-sm.textarea-resize-none
+      {:name "statement" :wrap "soft" :rows 1
+       :auto-complete "off"
+       :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
+       :required true
+       :data-dynamic-height true
+       :placeholder (labels :statement.reply/placeholder)}]
+     [:button.btn.btn-sm.btn-outline-dark
+      {:type "submit" :title (labels :discussion/create-argument-action)}
+      [:div.d-flex.flex-row
+       [:div.d-none.d-lg-block.me-1 (labels :statement/reply)]
+       [icon :plane "m-auto"]]]]))
+
+(defn- conclusion-card-textarea
+  "Input, where users provide (starting) conclusions."
+  []
+  (let [top-level? @(rf/subscribe [:schnaq.routes/starting?])
+        [placeholder button] (if top-level?
+                               [(labels :statement.ask/placeholder) (labels :statement/ask)]
+                               [(labels :statement.reply/placeholder) (labels :statement/reply)])]
+    (when-not @(rf/subscribe [:schnaq.selected/read-only?])
       [:div.input-group
-       [:div {:class (str additional-highlight-class "highlight-card-reverse highlight-card-" attitude)}]
+       [textarea-highlighting :selected]
        [:textarea.form-control.textarea-resize-none
-        {:id "main-question-input"
-         :class additional-form-class
-         :name textarea-name :wrap "soft" :rows 1
+        {:name "statement" :wrap "soft" :rows 1
          :auto-complete "off"
-         :autoFocus autofocus?
+         :autoFocus true
          :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
          :required true
          :data-dynamic-height true
          :placeholder placeholder
          :on-key-up #(rf/dispatch [:schnaq.question.input/set-current (oget % [:?target :value])])}]
        [:button.btn.btn-outline-dark
-        {:class additional-btn-class
-         :type "submit" :title (labels :discussion/create-argument-action)}
+        {:type "submit" :title (labels :discussion/create-argument-action)}
         [:div.d-flex.flex-row
-         [:div.d-none.d-lg-block.me-1 send-button-label]
+         [:div.d-none.d-lg-block.me-1 button]
          [icon :plane "m-auto"]]]])))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
   []
   (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        textarea-name (if starting-route? "statement-text" "premise-text")
-        pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        statement-type (if starting-route?
-                         :statement.type/neutral
-                         @(rf/subscribe [:form/statement-type :selected]))
-        send-button-label (if starting-route?
-                            (labels :statement/ask)
-                            (labels :statement/reply))
-        placeholder (if starting-route?
-                      (labels :statement.ask/placeholder)
-                      (labels :statement.reply/placeholder))]
+        pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])]
     [:<>
-     [textarea-for-statements
-      textarea-name
-      placeholder
-      send-button-label
-      statement-type
-      true
-      false]
+     [conclusion-card-textarea]
      (when-not (or starting-route? pro-con-disabled?)
        [:div.mt-3
         [statement-type-choose-button
@@ -132,29 +139,20 @@
   "Input form inside a statement card. This form is used to directly reply to a statement inside its own card."
   [statement]
   (let [statement-id (:db/id statement)
-        form-name (str "answer-to-statement-" statement-id)
-        placeholder (labels :statement.reply/placeholder)
-        send-button-label (labels :statement/reply)
         statement-type @(rf/subscribe [:form/statement-type statement-id])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        answer-to-statement-event (fn [e]
-                                    (.preventDefault e)
-                                    (logic/reply-to-statement
-                                     statement
-                                     statement-type
-                                     form-name
-                                     (oget e [:currentTarget :elements])))]
+        answer-to-statement-event
+        (fn [e]
+          (.preventDefault e)
+          (logic/reply-to-statement
+           statement
+           statement-type
+           (oget e [:currentTarget :elements])))]
     [:form.my-md-2
      {:on-submit #(answer-to-statement-event %)
       :on-key-down #(when (toolbelt/ctrl-press? % 13)
                       (answer-to-statement-event %))}
-     [textarea-for-statements
-      form-name
-      placeholder
-      send-button-label
-      statement-type
-      false
-      true]
+     [premise-card-textarea statement]
      (when-not pro-con-disabled?
        [statement-type-choose-button
         [:form/statement-type statement-id]
