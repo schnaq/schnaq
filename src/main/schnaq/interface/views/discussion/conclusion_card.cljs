@@ -409,7 +409,7 @@
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
         filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))
         input-filtered-statements
-        (sort-by #(cstring/includes? (:statement/content %) current-input) > filtered-conclusions)]
+        (sort-by #(score-hit current-input-tokens (:statement/content %)) > filtered-conclusions)]
     (for [index (range (count input-filtered-statements))
           :let [statement (nth input-filtered-statements index)]]
       [:div.statement-column

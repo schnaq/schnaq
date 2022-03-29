@@ -52,7 +52,6 @@
  (fn [db _]
    (shared-tools/tokenize-string (get-in db [:schnaq :question :input] ""))))
 
-;; TODO nutze tokens
 ;; TODO? : Beachte auch die kinderstatements
 ;; TODO? : Maybe hamming distance
 ;; TODO? : Maybe synonyme? (Aber ohne Spracherkennung schwierig)
