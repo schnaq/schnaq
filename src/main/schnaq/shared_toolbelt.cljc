@@ -2,7 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [com.fulcrologic.guardrails.core :refer [>defn =>]])
-  (:import (java.lang Character)))
+  #?(:clj (:import (java.lang Character))))
 
 (>defn slugify
   "Make a slug from a string. For example:
