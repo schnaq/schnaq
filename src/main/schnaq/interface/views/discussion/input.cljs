@@ -41,7 +41,6 @@
       :discussion.add.button/attack :discussion/add-premise-supporting
       get-subscription set-event]]))
 
-;; TODO pack das in den entsprechenden Namespace, falls hier nicht richtig. Sub drunter auch
 (rf/reg-event-db
  :schnaq.question.input/set-current
  (fn [db [_ current-input]]
