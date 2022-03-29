@@ -389,7 +389,7 @@
          motion/card-fade-in-time]))))
 
 (defn- delay-fade-in-for-subsequent-content [index]
-  (+ (/ (inc index) 10) motion/card-fade-in-time))
+  (+ (/ (inc index) 20) motion/card-fade-in-time))
 
 (defn- some-levenshtein
   "Takes a list of strings and is truthy if the target-string matches any of the tokens

@@ -54,7 +54,8 @@
    [fade-in-and-out component 0.5])
   ([component delay]
    [:> (.-div motion)
-    {:initial {:opacity 0}
+    {:layout true
+     :initial {:opacity 0}
      :animate {:opacity 1}
      :transition {:delay delay}
      :exit {:opacity 0}}
