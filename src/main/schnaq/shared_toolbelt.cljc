@@ -1,7 +1,8 @@
 (ns schnaq.shared-toolbelt
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [>defn =>]]))
+            [com.fulcrologic.guardrails.core :refer [>defn =>]])
+  #?(:clj (:import (java.lang Character))))
 
 (>defn slugify
   "Make a slug from a string. For example:
@@ -32,3 +33,22 @@
   [{:keys [statement/children]}]
   [map? :ret boolean?]
   (string? ((set (flatten (map :statement/labels children))) ":check")))
+
+(defn- alphanumeric?
+  "Checks whether some char is a Letter or a Digit."
+  [char-to-test]
+  #?(:clj (or
+           (Character/isLetter ^char char-to-test)
+           (Character/isDigit ^char char-to-test))
+     :cljs (.test (new js/RegExp "^[a-z0-9]+$") char-to-test)))
+
+(defn tokenize-string
+  "Tokenizes a string into single tokens for the purpose of searching."
+  [content]
+  (->> (string/split content #"\s")
+       (remove string/blank?)
+       ;; Remove punctuation when generating token
+       (map #(cond
+               (not (alphanumeric? (first %))) (subs % 1)
+               (not (alphanumeric? (last %))) (subs % 0 (dec (count %)))
+               :else %))))

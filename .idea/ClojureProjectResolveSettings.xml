@@ -12,6 +12,7 @@
     <item key="clojure.core/defonce" resolves-as="clojure.core/def" />
     <item key="&gt;defn-" resolves-as="cljs.core/defn" />
     <item key="com.fulcrologic.guardrails.core/&gt;defn-" resolves-as="clojure.core/defn" />
+    <item key="mount.core/defstate" resolves-as="clojure.core/defn" />
     <item key="&gt;defn" resolves-as="cljs.core/defn" />
     <currentScheme>PROJECT</currentScheme>
   </component>

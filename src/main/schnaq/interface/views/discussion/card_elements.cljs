@@ -100,7 +100,7 @@
  :discussion.add.statement/starting
  (fn [{:keys [db]} [_ form]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         statement-text (oget form [:statement-text :value])]
+         statement-text (oget form [:statement :value])]
      {:db (update-in db [:schnaq :selected :meta-info :all-statements] inc)
       :fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
                                [:discussion.add.statement/starting-success form]

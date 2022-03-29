@@ -24,7 +24,7 @@
      [:div.d-flex.flex-row.qanda-input-content.rounded-1
       [:div {:class "highlight-card-neutral"}]
       [:textarea.form-control.discussion-text-input-area.m-1.w-100.mb-0
-       {:name "statement-text" :wrap "soft" :rows 1 :id input-id
+       {:name "statement" :wrap "soft" :rows 1 :id input-id
         :auto-complete "off" :autoFocus (= :routes.schnaq/qanda current-route)
         :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
         :required true :data-dynamic-height true
