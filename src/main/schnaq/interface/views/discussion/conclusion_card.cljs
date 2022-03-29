@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [clojure.spec.alpha :as s]
+  (:require [clj-fuzzy.metrics :as clj-fuzzy]
+            [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
@@ -390,14 +391,21 @@
 (defn- delay-fade-in-for-subsequent-content [index]
   (+ (/ (inc index) 10) motion/card-fade-in-time))
 
-(defn score-hit
+(defn- some-levenshtein
+  "Takes a list of strings and is truthy if the target-string matches any of the tokens
+  without breaking the max levenshtein-distance."
+  [target-string tokens]
+  (some #(> 2 (clj-fuzzy/levenshtein target-string %)) tokens))
+
+(defn- score-hit
   "Returns a numerical score how many tokens of `token-list` are a match for the
   supplied `string`."
   [token-list string]
-  (->> token-list
-       (map #(cstring/includes? string %))
-       (filter true?)
-       count))
+  (let [string-tokens (shared-tools/tokenize-string string)]
+    (->> token-list
+         (map #(some-levenshtein % string-tokens))
+         (filter true?)
+         count)))
 
 (defn- statements-list []
   (let [active-filters @(rf/subscribe [:filters/active])
