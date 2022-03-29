@@ -4,7 +4,8 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.discussion.logic :as logic]))
+            [schnaq.interface.views.discussion.logic :as logic]
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (defn- statement-type-button
   "Button to select the attitude of a statement. Current attitude is subscribed via get-subscription.
@@ -49,7 +50,7 @@
 (rf/reg-sub
  :schnaq.question.input/current
  (fn [db _]
-   (get-in db [:schnaq :question :input] "")))
+   (shared-tools/tokenize-string (get-in db [:schnaq :question :input] ""))))
 
 ;; TODO nutze tokens
 ;; TODO? : Beachte auch die kinderstatements

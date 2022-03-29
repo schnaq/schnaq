@@ -390,11 +390,20 @@
 (defn- delay-fade-in-for-subsequent-content [index]
   (+ (/ (inc index) 10) motion/card-fade-in-time))
 
+(defn score-hit
+  "Returns a numerical score how many tokens of `token-list` are a match for the
+  supplied `string`."
+  [token-list string]
+  (->> token-list
+       (map #(cstring/includes? string %))
+       (filter true?)
+       count))
+
 (defn- statements-list []
   (let [active-filters @(rf/subscribe [:filters/active])
         sort-method @(rf/subscribe [:discussion.statements/sort-method])
         local-votes @(rf/subscribe [:local-votes])
-        current-input @(rf/subscribe [:schnaq.question.input/current])
+        current-input-tokens @(rf/subscribe [:schnaq.question.input/current])
         user @(rf/subscribe [:user/current])
         shown-premises @(rf/subscribe [:discussion.statements/show])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
