@@ -62,12 +62,13 @@
                      (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))]
     [motion/animated-list-item
      [:div
-      [tooltip/text
-       (str votes " " (labels :schnaq.poll.ranking/points))
-       [:div.percentage-bar.rounded-1
-        {:style {:background-color (colors/get-graph-color (get old-indices id))
-                 :width percentage
-                 :height "40px"}}]]
+      [motion/spring-transition
+       [tooltip/text
+        (str votes " " (labels :schnaq.poll.ranking/points))
+        [:div.percentage-bar.rounded-1
+         {:style {:background-color (colors/get-graph-color (get old-indices id))
+                  :height "40px"}}]]
+       {:width percentage}]
       [:p.small.ms-1.mb-1 value]]]))
 
 (defn ranking-results
