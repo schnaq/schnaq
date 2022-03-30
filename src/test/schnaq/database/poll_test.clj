@@ -113,6 +113,10 @@
           option-2 (first (filter #(= 2 (:option/votes %)) options))
           all-option-ids [(:db/id option-0) (:db/id option-1) (:db/id option-2)]]
       (db/vote-ranking! all-option-ids (:db/id poll) share-hash)
-      (is (= 3 (:option/votes (fast-pull (:db/id option-0) '[:option/votes]))))
-      (is (= 3 (:option/votes (fast-pull (:db/id option-1) '[:option/votes]))))
-      (is (= 3 (:option/votes (fast-pull (:db/id option-2) '[:option/votes])))))))
+      #_(is (= 3 (:option/votes (fast-pull (:db/id option-0) '[:option/votes]))))
+      #_(is (= 3 (:option/votes (fast-pull (:db/id option-1) '[:option/votes]))))
+      #_(is (= 3 (:option/votes (fast-pull (:db/id option-2) '[:option/votes]))))
+      ;; Digihub-Tests below. Exchange for tests above after Hubbattle
+      (is (= 12 (:option/votes (fast-pull (:db/id option-0) '[:option/votes]))))
+      (is (= 9 (:option/votes (fast-pull (:db/id option-1) '[:option/votes]))))
+      (is (= 7 (:option/votes (fast-pull (:db/id option-2) '[:option/votes])))))))

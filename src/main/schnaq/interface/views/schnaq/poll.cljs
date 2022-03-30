@@ -149,7 +149,9 @@
                    (rf/dispatch [:schnaq.ranking/cast-vote poll (map second (sort-by first selected-options))]))}
      [ranking-select poll 1]
      (for [voted-rankings-index (keys selected-options)
-           :while (< voted-rankings-index (count (:poll/options poll)))]
+           :while (and
+                   (< voted-rankings-index 5)
+                   (< voted-rankings-index (count (:poll/options poll))))]
        (with-meta
          [ranking-select poll (inc voted-rankings-index)]
          {:key (str poll-id voted-rankings-index)}))
@@ -349,7 +351,9 @@
    (let [poll-id (:db/id poll)
          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          poll-update-fn #(let [weighted-options
-                               (->> (range (count (:poll/options poll)) 0 -1)
+                               (->> [12 8 5 3 1]
+                                    #_(range (count (:poll/options poll)) 0 -1)
+                                    ;; Digihub extra, put back after event
                                     (interleave rankings)
                                     (apply hash-map))]
                            (if (contains? (set rankings) (:db/id %))
