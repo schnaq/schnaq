@@ -3,10 +3,8 @@
             [ring.util.http-response :refer [bad-request forbidden not-found]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
-            [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.validator :as validator]
-            [taoensso.timbre :as log]
-            [taoensso.tufte :as tufte]))
+            [taoensso.timbre :as log]))
 
 (defn extract-parameter-from-request
   "Look up parameter in request and return its value."
