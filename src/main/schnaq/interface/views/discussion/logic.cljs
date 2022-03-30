@@ -123,7 +123,8 @@
          new-conclusion (first (filter #(= (:db/id %) statement-id) (get-in db [:discussion :premises :current])))]
      ;; set new conclusion immediately if it's in db already, so loading times are reduced
      (cond->
-      {:fx [(http/xhrio-request
+      {:fx [[:dispatch [:loading/toggle [:statements? true]]]
+            (http/xhrio-request
              db :get "/discussion/statement/info"
              [:discussion.query.statement/by-id-success]
              {:statement-id statement-id
@@ -148,6 +149,22 @@
               (assoc-in [:discussion :premises :current]
                         (shared-tools/normalize :db/id premises))
               (assoc-in [:history :full-context] (vec history)))
-      :fx [[:dispatch [:discussion.history/push conclusion]]
+      :fx [[:dispatch [:loading/toggle [:statements? false]]]
+           [:dispatch [:discussion.history/push conclusion]]
            [:dispatch [:visited/set-visited-statements conclusion]]
            [:dispatch [:notification/set-visited-statements share-hash conclusion premises]]]})))
+
+(rf/reg-event-db
+ :discussion.premises.current/dissoc
+ (fn [db]
+   (update-in db [:discussion :premises] dissoc :current)))
+
+(rf/reg-event-fx
+ :discussion.current/dissoc
+ (fn [{:keys [db]}]
+   {:db (-> db
+            (update :schnaq dissoc :selected)
+            (update :schnaq dissoc :current)
+            (dissoc :wordcloud)
+            (update :discussion dissoc :conclusion))
+    :fx [[:dispatch [:discussion.premises.current/dissoc]]]}))

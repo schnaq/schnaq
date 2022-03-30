@@ -87,7 +87,8 @@
 (rf/reg-event-fx
  :schnaq/select-current-from-backend
  (fn [_ [_ {:keys [schnaq]}]]
-   {:fx [[:dispatch [:schnaq/select-current schnaq]]
+   {:fx [[:dispatch [:loading/toggle [:schnaq? false]]]
+         [:dispatch [:schnaq/select-current schnaq]]
          [:dispatch [:theme.apply/from-discussion]]
          [:dispatch [:schnaq.wordcloud/for-selected-discussion]]]}))
 
@@ -159,7 +160,8 @@
                           {:share-hash share-hash
                            :display-name (toolbelt/current-display-name db)})]
      {:db (assoc-in db [:schnaq :selected :discussion/share-hash] share-hash)
-      :fx [(if api-url
+      :fx [[:dispatch [:loading/toggle [:schnaq? true]]]
+           (if api-url
              (request [:ajax.error/to-console] api-url)
              (request))]})))
 
