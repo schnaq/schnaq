@@ -351,7 +351,9 @@
    (let [poll-id (:db/id poll)
          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          poll-update-fn #(let [weighted-options
-                               (->> (range (count (:poll/options poll)) 0 -1)
+                               (->> [12 8 5 3 1]
+                                    #_(range (count (:poll/options poll)) 0 -1)
+                                    ;; Digihub extra, put back after event
                                     (interleave rankings)
                                     (apply hash-map))]
                            (if (contains? (set rankings) (:db/id %))
