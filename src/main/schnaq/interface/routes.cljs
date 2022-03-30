@@ -82,7 +82,7 @@
      :controllers [{:start (fn []
                              (rf/dispatch [:navigation/navigate :routes.present/entity
                                            {:share-hash "c2cf1305-74ef-482f-9efd-5e70f98f765e"
-                                            :entity-id 17592186128013}]))}]}]
+                                            :entity-id 17592186128043}]))}]}]
    ;; ##########################################################################
    ["/product"
     [""

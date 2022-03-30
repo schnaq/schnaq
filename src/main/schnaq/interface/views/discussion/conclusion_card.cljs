@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [clojure.spec.alpha :as s]
+  (:require [clj-fuzzy.metrics :as clj-fuzzy]
+            [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
@@ -389,21 +390,40 @@
          motion/card-fade-in-time]))))
 
 (defn- delay-fade-in-for-subsequent-content [index]
-  (+ (/ (inc index) 10) motion/card-fade-in-time))
+  (+ (/ (inc index) 20) motion/card-fade-in-time))
+
+(defn- some-levenshtein
+  "Takes a list of strings and is truthy if the target-string matches any of the tokens
+  without breaking the max levenshtein-distance."
+  [target-string tokens]
+  (some #(> 2 (clj-fuzzy/levenshtein target-string %)) tokens))
+
+(defn- score-hit
+  "Returns a numerical score how many tokens of `token-list` are a match for the
+  supplied `string`."
+  [token-list string]
+  (let [string-tokens (shared-tools/tokenize-string string)]
+    (->> token-list
+         (map #(some-levenshtein % string-tokens))
+         (filter true?)
+         count)))
 
 (defn- statements-list []
   (let [active-filters @(rf/subscribe [:filters/active])
         sort-method @(rf/subscribe [:discussion.statements/sort-method])
         local-votes @(rf/subscribe [:local-votes])
+        current-input-tokens @(rf/subscribe [:schnaq.question.input/current])
         user @(rf/subscribe [:user/current])
         shown-premises @(rf/subscribe [:discussion.statements/show])
         loading-statements? @(rf/subscribe [:loading/statements?])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
-        filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))]
+        filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))
+        input-filtered-statements
+        (sort-by #(score-hit current-input-tokens (:statement/content %)) > filtered-conclusions)]
     (if loading-statements?
       [loading/loading-card]
-      (for [index (range (count filtered-conclusions))
-            :let [statement (nth filtered-conclusions index)]]
+      (for [index (range (count input-filtered-statements))
+            :let [statement (nth input-filtered-statements index)]]
         [:div.statement-column
          {:key (:db/id statement)}
          [motion/fade-in-and-out

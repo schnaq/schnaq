@@ -95,7 +95,7 @@
 (defn submit-new-premise
   "Submits a newly created child statement as an attack, support or neutral statement."
   [form]
-  (let [new-text-element (oget form [:premise-text])
+  (let [new-text-element (oget form [:statement])
         new-text (oget new-text-element [:value])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         form-statement-type @(rf/subscribe [:form/statement-type :selected])
@@ -108,8 +108,8 @@
 (defn reply-to-statement
   "Reply directly to a statement via a submitted form.
   Updates :statement/children and :meta/sub-statement-count afterwards in app-db."
-  [statement-to-reply-to attitude form-name form]
-  (let [new-text-element (oget+ form [form-name])
+  [statement-to-reply-to attitude form]
+  (let [new-text-element (oget+ form [:statement])
         new-text (oget new-text-element [:value])]
     (rf/dispatch [:discussion.reply.statement/send statement-to-reply-to attitude new-text])
     (rf/dispatch [:form/should-clear [new-text-element]])))
