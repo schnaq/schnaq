@@ -1,7 +1,7 @@
 (ns schnaq.shared-toolbelt
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [>defn =>]])
+            [com.fulcrologic.guardrails.core :refer [=> >defn]])
   #?(:clj (:import (java.lang Character))))
 
 (>defn slugify
@@ -9,7 +9,11 @@
   `(slugify \"This is sparta\") => this-is-sparta`"
   [string]
   [string? => string?]
-  (let [tokens (map #(string/lower-case %) (string/split string #"\s"))]
+  (let [reduced-string (-> string
+                           (string/replace #"/|\." " ")
+                           string/trim
+                           (string/split #"\s"))
+        tokens (map string/lower-case reduced-string)]
     (string/join "-" (take (count tokens) tokens))))
 
 (>defn remove-nil-values-from-map
