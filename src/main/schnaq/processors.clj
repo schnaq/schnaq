@@ -84,12 +84,14 @@
 
 (defn with-sub-statement-count
   "Add sub-statement-count to valid statements, if necessary."
-  [data]
-  (walk/postwalk
-   (fn [statement]
-     (if (s/valid? ::specs/statement statement)
-       (if-let [sub-discussions-num (get (discussion-db/sub-statement-count [(:db/id statement)]) (:db/id statement))]
-         (assoc statement :meta/sub-statement-count sub-discussions-num)
-         statement)
-       statement))
-   data))
+  [data share-hash]
+  (let [statements (discussion-db/all-statements share-hash)
+        sub-counts (discussion-db/sub-statement-count (map :db/id statements))]
+    (walk/postwalk
+     (fn [statement]
+       (if (s/valid? ::specs/statement statement)
+         (if-let [sub-discussions-num (sub-counts (:db/id statement))]
+           (assoc statement :meta/sub-statement-count sub-discussions-num)
+           statement)
+         statement))
+     data)))

@@ -92,6 +92,7 @@
     <orderEntry type="library" name="Deps: com.google.android/annotations:4.1.1.4" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/kaocha-cloverage:1.0.75" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-codec:4.1.51.Final" level="project" />
+    <orderEntry type="library" name="Deps: com.taoensso/tufte:2.2.0" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.resteasy/resteasy-jaxb-provider:3.13.2.Final" level="project" />
     <orderEntry type="library" name="Deps: org.codehaus.jettison/jettison:1.4.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.macro:0.1.5" level="project" />

@@ -1,7 +1,7 @@
 (ns schnaq.shared-toolbelt
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [>defn =>]])
+            [com.fulcrologic.guardrails.core :refer [=> >defn]])
   #?(:clj (:import (java.lang Character))))
 
 (>defn slugify
