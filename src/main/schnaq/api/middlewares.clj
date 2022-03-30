@@ -106,23 +106,3 @@
                         (log/error "ERROR" (pr-str (:uri request)))
                         (.printStackTrace e)
                         (handler e request))})))
-
-;; -----------------------------------------------------------------------------
-;; Profiling
-
-(defn profiling-middleware
-  [handler]
-  (fn [request]
-    (let [api-name (or
-                    (->> request :reitit.core/match :data :name)
-                    (->> request :reitit.core/match :template shared-tools/slugify (format "unnamed-api-call/%s") keyword))]
-      (tufte/p api-name (handler request)))))
-
-(comment
-
-  (def accs
-    (tufte/add-accumulating-handler! {:ns-pattern "*"}))
-
-  @accs
-
-  nil)

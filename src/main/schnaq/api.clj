@@ -27,6 +27,7 @@
             [schnaq.api.hub :refer [hub-routes]]
             [schnaq.api.middlewares :as middlewares]
             [schnaq.api.poll :refer [poll-routes]]
+            [schnaq.api.profiling :as profiling]
             [schnaq.api.schnaq :refer [schnaq-routes]]
             [schnaq.api.subscription.stripe :refer [stripe-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
@@ -149,8 +150,7 @@
                          auth/wrap-jwt-authentication
                          auth-middlewares/update-jwt-middleware
                          middlewares/wrap-custom-schnaq-csrf-header
-                         (when-not shared-config/production?
-                           middlewares/profiling-middleware)]}
+                         profiling/profiling-middleware]}
      ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
                             :user/admin? auth-middlewares/admin?-middleware
                             :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
