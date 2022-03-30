@@ -3,8 +3,10 @@
             [ring.util.http-response :refer [bad-request forbidden not-found]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
+            [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.validator :as validator]
-            [taoensso.timbre :as log]))
+            [taoensso.timbre :as log]
+            [taoensso.tufte :as tufte]))
 
 (defn extract-parameter-from-request
   "Look up parameter in request and return its value."
@@ -104,3 +106,23 @@
                         (log/error "ERROR" (pr-str (:uri request)))
                         (.printStackTrace e)
                         (handler e request))})))
+
+;; -----------------------------------------------------------------------------
+;; Profiling
+
+(defn profiling-middleware
+  [handler]
+  (fn [request]
+    (let [api-name (or
+                    (->> request :reitit.core/match :data :name)
+                    (->> request :reitit.core/match :template shared-tools/slugify (format "unnamed-api-call/%s") keyword))]
+      (tufte/p api-name (handler request)))))
+
+(comment
+
+  (def accs
+    (tufte/add-accumulating-handler! {:ns-pattern "*"}))
+
+  @accs
+
+  nil)

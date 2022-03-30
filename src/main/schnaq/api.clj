@@ -148,7 +148,9 @@
                          auth-middlewares/replace-bearer-with-token
                          auth/wrap-jwt-authentication
                          auth-middlewares/update-jwt-middleware
-                         middlewares/wrap-custom-schnaq-csrf-header]}
+                         middlewares/wrap-custom-schnaq-csrf-header
+                         (when-not shared-config/production?
+                           middlewares/profiling-middleware)]}
      ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
                             :user/admin? auth-middlewares/admin?-middleware
                             :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
