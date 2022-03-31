@@ -75,15 +75,6 @@
   (run! (partial send-mail title content) recipients)
   {:failed-sendings @failed-sendings})
 
-(>defn send-welcome-mail
-  "Sends a welcome e-mail to a recipient. The mail template is stored in s3."
-  [recipient]
-  [string? :ret any?]
-  (send-mail-with-custom-body
-   (email-templates :welcome/title)
-   recipient
-   (template/welcome)))
-
 (>defn send-flagged-post
   "Send a mail containing the content and link to the flagged statement "
   [discussion statement recipients]

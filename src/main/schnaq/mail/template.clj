@@ -37,12 +37,3 @@
                     "$$$BUTTON-TEXT$$$" button-text
                     "$$$BUTTON-LINK$$$" button-link}]
     (reduce replace-fn (slurp config/mail-content-button-right-template) format-map)))
-
-(defn welcome
-  "Welcome Mail Template."
-  []
-  [:alternative
-   {:type "text/plain; charset=utf-8" :content
-    (email-templates :welcome/body)}
-   {:type "text/html; charset=utf-8" :content
-    (slurp "https://s3.schnaq.com/welcome-mail/welcome_template.html")}])
