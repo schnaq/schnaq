@@ -1,7 +1,6 @@
 (ns schnaq.mail.template
   (:require [clojure.string :as cstring]
-            [schnaq.config :as config]
-            [schnaq.translations :refer [email-templates]]))
+            [schnaq.config :as config]))
 
 (defn mail
   "Basic html mail template with a schnaq logo and passed heading.

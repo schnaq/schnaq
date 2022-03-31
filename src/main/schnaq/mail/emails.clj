@@ -7,7 +7,6 @@
             [schnaq.database.specs :as specs]
             [schnaq.links :as schnaq-links]
             [schnaq.mail.template :as template]
-            [schnaq.translations :refer [email-templates]]
             [taoensso.timbre :as log]))
 
 (def ^:private conn {:host (:sender-host config/email)
