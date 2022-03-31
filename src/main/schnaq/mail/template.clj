@@ -1,7 +1,6 @@
 (ns schnaq.mail.template
   (:require [clojure.string :as cstring]
-            [schnaq.config :as config]
-            [schnaq.translations :refer [email-templates]]))
+            [schnaq.config :as config]))
 
 (defn mail
   "Basic html mail template with a schnaq logo and passed heading.
@@ -37,12 +36,3 @@
                     "$$$BUTTON-TEXT$$$" button-text
                     "$$$BUTTON-LINK$$$" button-link}]
     (reduce replace-fn (slurp config/mail-content-button-right-template) format-map)))
-
-(defn welcome
-  "Welcome Mail Template."
-  []
-  [:alternative
-   {:type "text/plain; charset=utf-8" :content
-    (email-templates :welcome/body)}
-   {:type "text/html; charset=utf-8" :content
-    (slurp "https://s3.schnaq.com/welcome-mail/welcome_template.html")}])

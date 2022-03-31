@@ -8,7 +8,6 @@
             [schnaq.database.user :as user-db]
             [schnaq.database.user-deletion :as user-deletion]
             [schnaq.mail.cleverreach :as cleverreach]
-            [schnaq.mail.emails :as mail]
             [schnaq.media :as media]
             [taoensso.timbre :as log]))
 
@@ -30,7 +29,6 @@
                   :updated-schnaqs? updated-schnaqs?}]
     (if new-user?
       (do (cleverreach/add-user-to-customer-group! identity)
-          (mail/send-welcome-mail (:email identity))
           (created "" (assoc response :new-user? true)))
       (ok response))))
 
