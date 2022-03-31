@@ -163,6 +163,10 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/many
     :db/doc "A label that is assigned to the statement."}
+   {:db/ident :statement/locked?
+    :db/valueType :db.type/boolean
+    :db/cardinality :db.cardinality/one
+    :db/doc "Indicates whether the statement should be locked (= not allow child-statements)."}
 
    ;; Statement Types
    {:db/ident :statement.type/support}
