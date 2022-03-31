@@ -9,6 +9,8 @@
       "kangaroo" "kangaroo"
       "kangaroo" "Kangaroo"
       "penguin-books" "Penguin Books"
+      "kangaroo" "/kangaroo"
+      "anti-social-network" "/anti-social.network"
       "" "")))
 
 (deftest clean-db-vals-test

@@ -9,7 +9,11 @@
   `(slugify \"This is sparta\") => this-is-sparta`"
   [string]
   [string? => string?]
-  (let [tokens (map #(string/lower-case %) (string/split string #"\s"))]
+  (let [reduced-string (-> string
+                           (string/replace #"/|\." " ")
+                           string/trim
+                           (string/split #"\s"))
+        tokens (map string/lower-case reduced-string)]
     (string/join "-" (take (count tokens) tokens))))
 
 (>defn remove-nil-values-from-map
