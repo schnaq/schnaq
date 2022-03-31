@@ -90,7 +90,7 @@
     (walk/postwalk
      (fn [statement]
        (if (s/valid? ::specs/statement statement)
-         (if-let [sub-discussions-num (sub-counts (:db/id statement))]
+         (if-let [sub-discussions-num (get sub-counts (:db/id statement))]
            (assoc statement :meta/sub-statement-count sub-discussions-num)
            statement)
          statement))
