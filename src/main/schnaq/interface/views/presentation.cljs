@@ -25,10 +25,9 @@
   []
   [:section.text-center
    [:div.display-6.text-center.pb-3
-    "Gehe auf "
-    #_[:a.text-nowrap {:href (str "https://" direct-link)}
-       [:u.fw-bolder direct-link]]
-    " und nimm am Ranking teil!"]
+    (labels :presentation.access/code)
+    [:span.h1 [sc/access-code]]]
+   [:p.mb-0 (labels :presentation.access/qr-alternative)]
    [sc/qr-code (oget js/window :location :href) 250 {:bgColor "transparent"}]])
 
 (defn- fullscreen
