@@ -105,21 +105,12 @@
   Then votes accordingly. When there are 8 options the first rank gets 8 votes, etc."
   [option-id-tuples poll-id share-hash]
   [(s/coll-of :db/id) :db/id :discussion/share-hash :ret (? (s/coll-of map?))]
-  (let [option-num (count (:poll/options (fast-pull poll-id [:poll/options])))
-        esc-points [12 8 5 3 1]]
-    (if (and
-         (< (count option-id-tuples) 6) ;; Digihub: Only top 5
-         (>= option-num (count option-id-tuples)))
+  (let [option-num (count (:poll/options (fast-pull poll-id [:poll/options])))]
+    (if (>= option-num (count option-id-tuples))
       (let [matching-options (set (match-options share-hash poll-id option-id-tuples))
             ;; Taking the results here directly destroys the order, so we filter in order
             matching-ordered-options (filter matching-options option-id-tuples)]
         (doall
-         ;; This is the digihub ESC points version
-         (for [index (range (count matching-ordered-options))
-               :let [option-id (nth matching-ordered-options index)
-                     points (nth esc-points index)]]
-           (db/increment-number option-id :option/votes points))
-         ;; Add following after digihub version is out again
-         #_(for [[option-id increment-num] (partition 2 (interleave matching-ordered-options (range option-num 0 -1)))]
-             (db/increment-number option-id :option/votes increment-num))))
+         (for [[option-id increment-num] (partition 2 (interleave matching-ordered-options (range option-num 0 -1)))]
+           (db/increment-number option-id :option/votes increment-num))))
       false)))

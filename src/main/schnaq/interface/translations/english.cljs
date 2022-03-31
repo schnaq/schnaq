@@ -421,6 +421,10 @@
    :publications.kind/paper "Paper (english)"
    :publications.kind/short-paper "Shortpaper (english)"
 
+   ;; Presentation View
+   :presentation.access/code [:p "Go to " [:a.text-nowrap {:href "https://schnaq.app"} "schnaq.app"] " and use code: "]
+   :presentation.access/qr-alternative "Or scan the QR-Code"
+
    ;; Privacy Page
    :privacy/heading "What happens to your data?"
    :privacy/subheading "We lead you through it step by step!"
