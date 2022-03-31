@@ -93,7 +93,10 @@
 (rf/reg-event-db
  :wordcloud/store-words
  (fn [db [_ {:keys [string-representation]}]]
-   (assoc-in db [:wordcloud :words] (convert-fulltext string-representation))))
+   (let [old-words (get-in db [:wordcloud :words])
+         new-words (convert-fulltext string-representation)]
+     (when (not= old-words new-words)
+       (assoc-in db [:wordcloud :words] new-words)))))
 
 (rf/reg-sub
  :wordcloud/words
