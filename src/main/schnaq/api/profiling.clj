@@ -52,6 +52,6 @@
 
   (print-profiling-results)
 
-  (post-profiling-to-mattermost "meters-einode")
+  (post-profiling-to-mattermost "gitlabs-dirty-secrets")
 
   nil)
