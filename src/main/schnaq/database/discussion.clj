@@ -4,12 +4,12 @@
             [clojure.data :as cdata]
             [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
-            [com.fulcrologic.guardrails.core :refer [>defn ? >defn- =>]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
             [datomic.api :as d]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.access-codes :as ac]
-            [schnaq.database.main :refer [transact query fast-pull] :as main-db]
+            [schnaq.database.main :refer [fast-pull query transact] :as main-db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
@@ -39,7 +39,7 @@
       [?discussion :discussion/starting-statements ?statements]]
     share-hash patterns/statement-with-children)))
 
-(defn transitive-child-rules
+(defn- transitive-child-rules
   "Returns a set of rules for finding transitive children entities of a given
   node up to depth of `depth`.
   For example, calling this function with a depth of 10 would return a
@@ -58,6 +58,9 @@
                (list (sib-sym (dec i)) '?parent '?middlelink)
                (list (sib-sym (dec i)) '?middlelink '?child)]]))))
 
+(def ^:private transitive-7
+  (transitive-child-rules 7))
+
 (defn sub-statement-count
   "Takes a list of statement-ids and returns a map {id meta-info-map} for the statements."
   [statement-ids]
@@ -71,8 +74,8 @@
                  ;; goes, the more complicated and slower the query gets. 10 is too slow
                  ;; for our purposes, but 5 is maybe not deep enough for the typical discussion
                  ;; 7 offers a good speed while being deep enough for most discussions.
-                 (transitive-child-7 ?statement-ids ?children)]
-               (transitive-child-rules 7) statement-ids))))
+                 (transitive-child-5 ?statement-ids ?children)]
+               transitive-7 statement-ids))))
 
 (defn- pull-discussion
   "Pull a discussion from a database."

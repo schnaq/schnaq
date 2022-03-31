@@ -1,7 +1,7 @@
 (ns schnaq.test.toolbelt
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as stest]
-            [com.fulcrologic.guardrails.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [datomic.api :as datomic]
             [expound.alpha :as expound]
             [ring.mock.request :as mock]
@@ -95,8 +95,10 @@
 (>defn mock-authorization-header
   "Add authorization token header to a request."
   [request token]
-  [map? string? :ret map?]
-  (mock/header request "Authorization" (format "Token %s" token)))
+  [map? (? string?) :ret map?]
+  (if token
+    (mock/header request "Authorization" (format "Token %s" token))
+    request))
 
 (>defn add-csrf-header
   "Adds the authorization header to a request map."
