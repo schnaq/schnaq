@@ -162,22 +162,24 @@
 
 (defn- build-new-statement
   "Builds a new statement for transaction."
-  ([user-id content discussion-id]
-   (build-new-statement user-id content discussion-id (str "conclusion-" content)))
-  ([user-id content discussion-id temp-id]
+  ([user-id content discussion-id locked?]
+   (build-new-statement user-id content discussion-id locked? (str "conclusion-" content)))
+  ([user-id content discussion-id locked? temp-id]
    {:db/id temp-id
     :statement/author user-id
     :statement/content content
     :statement/version 1
     :statement/created-at (Date.)
+    :statement/locked? locked?
     :statement/discussions [discussion-id]}))
 
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
-  [share-hash user-id statement-content registered-user?]
-  [:discussion/share-hash :db/id :statement/content any? :ret :db/id]
+  [share-hash user-id statement-content registered-user? & {:keys [locked?]}]
+  [:discussion/share-hash :db/id :statement/content any? (s/* any?) :ret :db/id]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
-        minimum-statement (build-new-statement user-id statement-content discussion-id)
+        locked? (if (nil? locked?) false true)
+        minimum-statement (build-new-statement user-id statement-content discussion-id locked?)
         new-statement (if registered-user?
                         minimum-statement
                         (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))

@@ -49,6 +49,7 @@
    :statement/labels
    :statement/upvotes
    :statement/downvotes
+   :statement/locked?
    :statement/cumulative-downvotes
    :statement/cumulative-upvotes
    {:statement/type [:db/ident]}

@@ -98,6 +98,7 @@
 
 (rf/reg-event-fx
  :discussion.add.statement/starting
+ ;; TODO add opportunistic updates for locked cards
  (fn [{:keys [db]} [_ form]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          statement-text (oget form [:statement :value])]
@@ -106,7 +107,8 @@
                                [:discussion.add.statement/starting-success form]
                                {:statement statement-text
                                 :share-hash share-hash
-                                :display-name (toolbelt/current-display-name db)}
+                                :display-name (toolbelt/current-display-name db)
+                                :locked? (oget form ["lock-card?" :checked])}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
@@ -142,7 +144,7 @@
        {:db (-> db
                 (assoc-in [:discussion :premises :current] (shared-tools/normalize :db/id starting-conclusions))
                 (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) visited))
-      ;; hier die seen setzen
+        ;; hier die seen setzen
         :fx [[:dispatch [:votes.local/reset]]
              [:dispatch [:schnaq.wordcloud/calculate]]]}))))
 

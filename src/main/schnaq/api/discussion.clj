@@ -182,11 +182,12 @@
 (defn- add-starting-statement!
   "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash statement display-name]} (:body parameters)
+  (let [{:keys [share-hash statement display-name locked?]} (:body parameters)
         keycloak-id (:sub identity)
         user-id (user-db/user-id display-name keycloak-id)]
     (if (validator/valid-writeable-discussion? share-hash)
-      (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement keycloak-id)]
+      (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement keycloak-id
+                                                                   {:locked? locked?})]
         (log/info "Starting statement added for discussion" share-hash)
         (created "" {:starting-conclusions (starting-conclusions-with-processors share-hash user-id new-starting-id)}))
       (validator/deny-access at/invalid-rights-message))))
@@ -440,7 +441,8 @@
                       :name :api.discussion.statements.starting/add
                       :parameters {:body {:share-hash :discussion/share-hash
                                           :statement :statement/content
-                                          :display-name ::specs/non-blank-string}}
+                                          :display-name ::specs/non-blank-string
+                                          :locked? :statement/locked?}}
                       :responses {201 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
                                   403 at/response-error-body}}]
     ["/update-seen" {:put update-seen-statements!
