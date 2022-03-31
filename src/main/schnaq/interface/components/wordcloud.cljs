@@ -47,6 +47,7 @@
 (def ^:private options
   {:colors (vals (dissoc colors :white))
    :enableTooltip true
+   :enableOptimizations true
    :deterministic true
    :fontFamily "Poppins"
    :fontSizes [20 60]
