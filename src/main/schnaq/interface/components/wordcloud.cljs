@@ -64,7 +64,10 @@
 (defn wordcloud
   "Create a wordcloud based on the data in the db."
   []
-  (if-let [words @(rf/subscribe [:wordcloud/words])]
+  (if-let [words (->> @(rf/subscribe [:wordcloud/words])
+                      (sort-by :value)
+                      reverse
+                      (take 50))]
     [:> ReactWordcloud {:words words :options options}]
     [:div.text-center.py-3 [spinner-icon]]))
 
