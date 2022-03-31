@@ -35,7 +35,7 @@
                        (discussion-db/discussion-by-share-hash-private share-hash)
                        (discussion-db/discussion-by-share-hash share-hash))
                      processors/add-meta-info-to-schnaq
-                     processors/with-sub-statement-count
+                     (processors/with-sub-statement-count share-hash)
                      (processors/with-new-post-info share-hash keycloak-id)
                      processors/hide-deleted-statement-content
                      (processors/with-aggregated-votes user-id))})))
@@ -158,7 +158,7 @@
   (let [{:keys [share-hash search-string display-name]} (:query parameters)
         user-id (user-db/user-id display-name (:sub identity))]
     (ok {:matching-statements (-> (discussion-db/search-similar-questions share-hash search-string)
-                                  processors/with-sub-statement-count
+                                  (processors/with-sub-statement-count share-hash)
                                   processors/with-answered?-info
                                   (discussion-api/valid-statements-with-votes user-id))})))
 

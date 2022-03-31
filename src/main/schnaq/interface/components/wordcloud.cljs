@@ -47,6 +47,7 @@
 (def ^:private options
   {:colors (vals (dissoc colors :white))
    :enableTooltip true
+   :enableOptimizations true
    :deterministic true
    :fontFamily "Poppins"
    :fontSizes [20 60]
@@ -64,7 +65,10 @@
 (defn wordcloud
   "Create a wordcloud based on the data in the db."
   []
-  (if-let [words @(rf/subscribe [:wordcloud/words])]
+  (if-let [words (->> @(rf/subscribe [:wordcloud/words])
+                      (sort-by :value)
+                      reverse
+                      (take 50))]
     [:> ReactWordcloud {:words words :options options}]
     [:div.text-center.py-3 [spinner-icon]]))
 
@@ -89,7 +93,10 @@
 (rf/reg-event-db
  :wordcloud/store-words
  (fn [db [_ {:keys [string-representation]}]]
-   (assoc-in db [:wordcloud :words] (convert-fulltext string-representation))))
+   (let [old-words (get-in db [:wordcloud :words])
+         new-words (convert-fulltext string-representation)]
+     (when (not= old-words new-words)
+       (assoc-in db [:wordcloud :words] new-words)))))
 
 (rf/reg-sub
  :wordcloud/words

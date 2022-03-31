@@ -1,13 +1,12 @@
 (ns schnaq.interface.views.presentation
-  (:require [re-frame.core :as rf]
+  (:require [oops.core :refer [oget]]
+            [re-frame.core :as rf]
             [schnaq.interface.components.common :refer [schnaq-logo]]
             [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.schnaq.poll :as poll]))
-
-(def ^:private direct-link "schnaq.com/hubbattle")
 
 (defn- footer
   "Add footer links."
@@ -26,11 +25,10 @@
   []
   [:section.text-center
    [:div.display-6.text-center.pb-3
-    "Gehe auf "
-    [:a.text-nowrap {:href (str "https://" direct-link)}
-     [:u.fw-bolder direct-link]]
-    " und nimm am Ranking teil!"]
-   [sc/qr-code (str "https://" direct-link) 250 {:bgColor "transparent"}]])
+    (labels :presentation.access/code)
+    [:span.h1 [sc/access-code]]]
+   [:p.mb-0 (labels :presentation.access/qr-alternative)]
+   [sc/qr-code (oget js/window :location :href) 250 {:bgColor "transparent"}]])
 
 (defn- fullscreen
   "Full screen view of a component."
