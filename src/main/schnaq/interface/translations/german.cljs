@@ -422,7 +422,7 @@
    :publications.kind/short-paper "Shortpaper (englisch)"
 
    ;; Presentation View
-   :presentation.access/code [:p "Gehe auf " [:a.text-nowrap {:href "https://schnaq.app"} "schnaq.app"] " und nutze Code: "]
+   :presentation.access/code [:p "Gehe auf " [:a.text-nowrap {:href "https://schnaq.app"} "schnaq.app"] " und nutze den Code: "]
    :presentation.access/qr-alternative "Oder scanne den QR-Code"
 
    ;; Privacy Page
