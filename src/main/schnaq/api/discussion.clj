@@ -182,9 +182,11 @@
 (defn- add-starting-statement!
   "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash statement display-name locked?]} (:body parameters)
+  (let [{:keys [share-hash edit-hash statement display-name locked?]} (:body parameters)
         keycloak-id (:sub identity)
-        user-id (user-db/user-id display-name keycloak-id)]
+        user-id (user-db/user-id display-name keycloak-id)
+        ;; Only Moderators can lock
+        locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
     (if (validator/valid-writeable-discussion? share-hash)
       (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement keycloak-id
                                                                    {:locked? locked?})]
@@ -197,9 +199,11 @@
   statement you want to react to. `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`.
   `nickname` is required if the user is not logged in."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash conclusion-id premise statement-type locked? display-name]} (:body parameters)
+  (let [{:keys [share-hash edit-hash conclusion-id premise statement-type locked? display-name]} (:body parameters)
         keycloak-id (:sub identity)
-        user-id (user-db/user-id display-name keycloak-id)]
+        user-id (user-db/user-id display-name keycloak-id)
+        ;; Only Moderators can lock
+        locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (created ""

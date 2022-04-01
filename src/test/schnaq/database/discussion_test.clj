@@ -63,11 +63,17 @@
   (testing "Add a new locked statement to a discussion"
     (let [share-hash "simple-hash"
           user-id (user-db/user-by-nickname "Wegi")
+          registered-user-id (:db/id (first (user-db/all-registered-users)))
           starting-conclusion (first (db/starting-statements share-hash))
-          new-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
-                                             "This is a new locked attack" :statement.type/attack true
-                                             :locked? true)]
-      (is (:statement/locked? new-attack)))))
+          new-non-locked-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
+                                                        ;; TODO rework registered-user? as keyword (bei starting-statement auch)
+                                                        "This is a new unlocked attack" :statement.type/attack false
+                                                        :locked? true)
+          new-locked-attack (db/react-to-statement! share-hash registered-user-id (:db/id starting-conclusion)
+                                                    "This is a new locked attack" :statement.type/attack true
+                                                    :locked? true)]
+      (is (not (:statement/locked? new-non-locked-attack)))
+      (is (:statement/locked? new-locked-attack)))))
 
 (deftest statements-by-content-test
   (testing "Statements are identified by identical content."
@@ -93,13 +99,19 @@
   (testing "Test the creation of a valid locked statement-entity from strings"
     (let [statement "Wow look at this"
           user-id (user-db/add-user-if-not-exists "Test-person")
+          registered-user-id (:db/id (first (user-db/all-registered-users)))
           meeting-hash "graph-hash"
-          new-starting (fast-pull
-                        (db/add-starting-statement! meeting-hash user-id statement false
-                                                    :locked? true)
-                        patterns/statement)]
-      (testing "Must be locked"
-        (is (:statement/locked? new-starting))))))
+          new-unlocked-starting (fast-pull
+                                 (db/add-starting-statement! meeting-hash user-id statement false
+                                                             :locked? true)
+                                 patterns/statement)
+          new-locked-starting (fast-pull
+                               (db/add-starting-statement! meeting-hash registered-user-id statement true
+                                                           :locked? true)
+                               patterns/statement)]
+      (testing "Must be locked if done by registered user"
+        (is (not (:statement/locked? new-unlocked-starting)))
+        (is (:statement/locked? new-locked-starting))))))
 
 (deftest starting-statements-test
   (testing "Should return all starting-statements from a discussion."

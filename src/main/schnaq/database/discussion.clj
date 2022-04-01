@@ -178,7 +178,8 @@
   [share-hash user-id statement-content registered-user? & {:keys [locked?]}]
   [:discussion/share-hash :db/id :statement/content any? (s/* any?) :ret :db/id]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
-        locked? (if (nil? locked?) false locked?)
+        ;; Only registered users are allowed to lock their cards
+        locked? (if registered-user? (boolean locked?) false)
         minimum-statement (build-new-statement user-id statement-content discussion-id locked?)
         new-statement (if registered-user?
                         minimum-statement
@@ -258,7 +259,8 @@
   "Create a new statement reacting to another statement. Returns the newly created statement."
   [share-hash user-id statement-id reacting-string reaction registered-user? & {:keys [locked?]}]
   [:discussion/share-hash :db/id :db/id :statement/content keyword? any? (s/* any?) :ret ::specs/statement]
-  (let [locked? (if (nil? locked?) false locked?)
+  (let [;; Only registered users are allowed to lock their cards
+        locked? (if registered-user? (boolean locked?) false)
         result (new-child-statement! [:discussion/share-hash share-hash] statement-id reacting-string
                                      reaction user-id registered-user? locked?)
         db-after (:db-after result)

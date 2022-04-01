@@ -101,8 +101,7 @@
        [:div.d-flex.flex-row
         [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
         [icon :plane "m-auto"]]]]
-     (when (and @(rf/subscribe [:schnaq.current/admin-access])
-                @(rf/subscribe [:user/pro-user?]))
+     (when @(rf/subscribe [:schnaq.current/admin-access])
        [:div.form-check.pt-2
         [:input.form-check-input
          {:type "checkbox"

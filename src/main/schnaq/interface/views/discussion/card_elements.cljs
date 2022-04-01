@@ -101,12 +101,14 @@
  ;; TODO add opportunistic updates for locked cards
  (fn [{:keys [db]} [_ form]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
          statement-text (oget form [:statement :value])]
      {:db (update-in db [:schnaq :selected :meta-info :all-statements] inc)
       :fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
                                [:discussion.add.statement/starting-success form]
                                {:statement statement-text
                                 :share-hash share-hash
+                                :edit-hash edit-hash
                                 :display-name (toolbelt/current-display-name db)
                                 :locked? (boolean (oget form ["?lock-card?" :checked]))}
                                [:ajax.error/as-notification])]})))
