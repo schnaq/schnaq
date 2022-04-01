@@ -73,45 +73,41 @@
        :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
        :required true
        :data-dynamic-height true
-       :placeholder (labels :statement.reply/placeholder)}]
+       :placeholder (labels :statement.new/placeholder)}]
      [:button.btn.btn-sm.btn-outline-dark
       {:type "submit" :title (labels :discussion/create-argument-action)}
       [:div.d-flex.flex-row
-       [:div.d-none.d-lg-block.me-1 (labels :statement/reply)]
+       [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
        [icon :plane "m-auto"]]]]))
 
 (defn- conclusion-card-textarea
   "Input, where users provide (starting) conclusions."
   []
-  (let [top-level? @(rf/subscribe [:schnaq.routes/starting?])
-        [placeholder button] (if top-level?
-                               [(labels :statement.ask/placeholder) (labels :statement/ask)]
-                               [(labels :statement.reply/placeholder) (labels :statement/reply)])]
-    (when-not @(rf/subscribe [:schnaq.selected/read-only?])
-      [:<>
-       [:div.input-group
-        [textarea-highlighting :selected]
-        [:textarea.form-control.textarea-resize-none
-         {:name "statement" :wrap "soft" :rows 1
-          :auto-complete "off"
-          :autoFocus true
-          :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-          :required true
-          :data-dynamic-height true
-          :placeholder placeholder
-          :on-key-up #(rf/dispatch [:schnaq.question.input/set-current (oget % [:?target :value])])}]
-        [:button.btn.btn-outline-dark
-         {:type "submit" :title (labels :discussion/create-argument-action)}
-         [:div.d-flex.flex-row
-          [:div.d-none.d-lg-block.me-1 button]
-          [icon :plane "m-auto"]]]]
-       [:div.form-check.pt-2
-        [:input.form-check-input
-         {:type "checkbox"
-          :name "lock-card?"}]
-        [:label.form-check-label
-         {:for "lock-card?"}
-         "Antworten auf Aussage deaktivieren"]]])))
+  (when-not @(rf/subscribe [:schnaq.selected/read-only?])
+    [:<>
+     [:div.input-group
+      [textarea-highlighting :selected]
+      [:textarea.form-control.textarea-resize-none
+       {:name "statement" :wrap "soft" :rows 1
+        :auto-complete "off"
+        :autoFocus true
+        :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
+        :required true
+        :data-dynamic-height true
+        :placeholder (labels :statement.new/placeholder)
+        :on-key-up #(rf/dispatch [:schnaq.question.input/set-current (oget % [:?target :value])])}]
+      [:button.btn.btn-outline-dark
+       {:type "submit" :title (labels :discussion/create-argument-action)}
+       [:div.d-flex.flex-row
+        [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
+        [icon :plane "m-auto"]]]]
+     [:div.form-check.pt-2
+      [:input.form-check-input
+       {:type "checkbox"
+        :name "lock-card?"}]
+      [:label.form-check-label
+       {:for "lock-card?"}
+       (labels :discussion/lock-statement)]]]))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
@@ -133,7 +129,6 @@
         when-starting (fn [e]
                         (.preventDefault e)
                         (rf/dispatch [:discussion.add.statement/starting (oget e [:currentTarget :elements])]))
-        ;; TODO update deeper reaction case for locked statements
         when-deeper-in-discussion (fn [e]
                                     (.preventDefault e)
                                     (logic/submit-new-premise (oget e [:currentTarget :elements])))

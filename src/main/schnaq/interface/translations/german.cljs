@@ -267,10 +267,8 @@
    :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."
 
    :statement/discuss "Diskutieren"
-   :statement/reply "Antworten"
-   :statement.reply/placeholder "Deine Antwort"
-   :statement/ask "Fragen"
-   :statement.ask/placeholder "Deine Frage"
+   :statement/new "Post"
+   :statement.new/placeholder "Dein Beitrag"
    :statement.edit.send.failure/title "Änderung nicht gespeichert"
    :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."
    :statement.edit/label "Beitrag bearbeiten"
@@ -697,6 +695,7 @@
 
    ;; Discussion
    :discussion/create-argument-action "Beitrag hinzufügen"
+   :discussion/lock-statement "Aussage ohne Antwortmöglichkeit erstellen"
    :discussion/add-premise-supporting "Ich möchte die Aussage unterstützen"
    :discussion/add-premise-against "Ich habe einen Grund dagegen"
    :discussion/add-premise-neutral "Ich möchte etwas ergänzen"
