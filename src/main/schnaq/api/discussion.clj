@@ -197,7 +197,7 @@
   statement you want to react to. `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`.
   `nickname` is required if the user is not logged in."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash conclusion-id premise statement-type display-name]} (:body parameters)
+  (let [{:keys [share-hash conclusion-id premise statement-type locked? display-name]} (:body parameters)
         keycloak-id (:sub identity)
         user-id (user-db/user-id display-name keycloak-id)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
@@ -205,7 +205,8 @@
           (created ""
                    {:new-statement
                     (valid-statements-with-votes
-                     (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id)
+                     (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id
+                                                        :locked? locked?)
                      user-id)}))
       (validator/deny-access at/invalid-rights-message))))
 
@@ -412,6 +413,7 @@
                                                :conclusion-id :db/id
                                                :premise :statement/content
                                                :statement-type dto/statement-type
+                                               :locked? :statement/locked?
                                                :display-name ::specs/non-blank-string}}
                            :responses {201 {:body {:new-statement ::dto/statement}}
                                        403 at/response-error-body}}]

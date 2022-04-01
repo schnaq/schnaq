@@ -178,7 +178,7 @@
   [share-hash user-id statement-content registered-user? & {:keys [locked?]}]
   [:discussion/share-hash :db/id :statement/content any? (s/* any?) :ret :db/id]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
-        locked? (if (nil? locked?) false true)
+        locked? (if (nil? locked?) false locked?)
         minimum-statement (build-new-statement user-id statement-content discussion-id locked?)
         new-statement (if registered-user?
                         minimum-statement
@@ -240,8 +240,8 @@
 
 (>defn- new-child-statement!
   "Creates a new child statement, that references a parent."
-  [discussion-id parent-id new-content statement-type user-id registered-user?]
-  [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id any? :ret associative?]
+  [discussion-id parent-id new-content statement-type user-id registered-user? locked?]
+  [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id any? boolean? :ret associative?]
   @(transact
     [(cond-> {:db/id (str "new-child-" new-content)
               :statement/author user-id
@@ -249,16 +249,18 @@
               :statement/version 1
               :statement/created-at (Date.)
               :statement/parent parent-id
+              :statement/locked? locked?
               :statement/discussions [discussion-id]
               :statement/type statement-type}
        (not registered-user?) (assoc :statement/creation-secret (.toString (UUID/randomUUID))))]))
 
 (>defn react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created statement."
-  [share-hash user-id statement-id reacting-string reaction registered-user?]
-  [:discussion/share-hash :db/id :db/id :statement/content keyword? any? :ret ::specs/statement]
-  (let [result (new-child-statement! [:discussion/share-hash share-hash] statement-id reacting-string
-                                     reaction user-id registered-user?)
+  [share-hash user-id statement-id reacting-string reaction registered-user? & {:keys [locked?]}]
+  [:discussion/share-hash :db/id :db/id :statement/content keyword? any? (s/* any?) :ret ::specs/statement]
+  (let [locked? (if (nil? locked?) false locked?)
+        result (new-child-statement! [:discussion/share-hash share-hash] statement-id reacting-string
+                                     reaction user-id registered-user? locked?)
         db-after (:db-after result)
         new-child-id (get-in result [:tempids (str "new-child-" reacting-string)])]
     (toolbelt/pull-key-up

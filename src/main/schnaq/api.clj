@@ -219,6 +219,7 @@
   :end)
 
 ;; TODO beim erstellen Karten (als mod) direkt locken können
+;; TODO nur als mod locken und unlocken können
 ;; TODO karten nachträglich (als mod) locken und unlocken können
 ;; TODO Für gelockte karten keine Eingabefelder und Subdiskussionen erlauben
 ;; TODO Im backend keine Kinder für gelockte Karten akzeptieren
