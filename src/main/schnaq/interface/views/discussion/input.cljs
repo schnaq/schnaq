@@ -4,6 +4,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.discussion.card-elements :as card-elements]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.shared-toolbelt :as shared-tools]))
 
@@ -135,10 +136,13 @@
                                     (logic/submit-new-premise (oget e [:currentTarget :elements])))
         event-to-send (if starting-route?
                         when-starting when-deeper-in-discussion)]
-    [:form.my-md-2
-     {:on-submit #(event-to-send %)
-      :on-key-down #(when (toolbelt/ctrl-press? % 13) (event-to-send %))}
-     [topic-input-area]]))
+    (if (:statement/locked? @(rf/subscribe [:discussion.conclusion/selected]))
+      [:div.pt-3.ps-1
+       [card-elements/locked-statement-icon]]
+      [:form.my-md-2
+       {:on-submit #(event-to-send %)
+        :on-key-down #(when (toolbelt/ctrl-press? % 13) (event-to-send %))}
+       [topic-input-area]])))
 
 (defn reply-in-statement-input-form
   "Input form inside a statement card. This form is used to directly reply to a statement inside its own card."

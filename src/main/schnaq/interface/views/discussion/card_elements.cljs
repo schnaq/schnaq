@@ -13,7 +13,6 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
-            [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.filters :as filters]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.shared-toolbelt :as shared-tools]
@@ -184,7 +183,7 @@
  (fn [db _]
    (get-in db [:discussion :statements :sort-method] :newest)))
 
-(defn- show-how-to []
+(defn show-how-to []
   [:div.py-5
    (if @(rf/subscribe [:schnaq.routes/starting?])
      [how-to-elements/quick-how-to-schnaq]
@@ -238,20 +237,12 @@
     [:div.ms-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
      [search-bar]]]])
 
-(defn discussion-view
-  "Displays a history  and input field on the left and conclusions in its center"
+(defn locked-statement-icon
+  "Indicator that a statement is locked."
   []
-  [:div.container-fluid.px-0.px-md-3
-   [:div.row
-    [:div.col-md-12.col-xxl-8.py-0.pt-md-3
-     [:div.d-none.d-md-block [action-view]]]]
-   [:div.d-md-none [action-view]]
-   [cards/conclusion-cards-list]
-   [:div.d-md-none [history-view]]
-   [:div.mx-auto
-    {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
-    [show-how-to]]
-   [:div.d-none.d-md-block [history-view]]])
+  [tooltip/text
+   (labels :statement.locked/tooltip)
+   [:span [icon :lock "text-primary"]]])
 
 (rf/reg-sub
  :schnaq.search.current/search-string

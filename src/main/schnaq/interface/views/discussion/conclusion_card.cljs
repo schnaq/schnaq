@@ -14,6 +14,7 @@
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.badges :as badges]
+            [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.filters :as filters]
             [schnaq.interface.views.discussion.input :as input]
@@ -62,9 +63,7 @@
    [reactions/up-down-vote statement]
    [:div.ms-sm-0.ms-lg-auto
     (if (:statement/locked? statement)
-      [tooltip/text
-       (labels :statement.locked/tooltip)
-       [:span [icon :lock "text-primary"]]]
+      [elements/locked-statement-icon]
       [badges/show-number-of-replies statement])]])
 
 (defn- mark-as-answer-button
