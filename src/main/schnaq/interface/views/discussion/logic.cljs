@@ -103,7 +103,8 @@
         statement-type (if pro-con-disabled?
                          :statement.type/neutral
                          form-statement-type)]
-    (rf/dispatch [:discussion.reaction.statement/send statement-type new-text (oget form ["lock-card?" :checked])])
+    (rf/dispatch [:discussion.reaction.statement/send statement-type new-text
+                  (boolean (oget form ["?lock-card?" :checked]))])
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
 (defn reply-to-statement

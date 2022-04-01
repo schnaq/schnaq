@@ -108,7 +108,7 @@
                                {:statement statement-text
                                 :share-hash share-hash
                                 :display-name (toolbelt/current-display-name db)
-                                :locked? (oget form ["lock-card?" :checked])}
+                                :locked? (boolean (oget form ["?lock-card?" :checked]))}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx

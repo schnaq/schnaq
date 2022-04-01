@@ -101,13 +101,15 @@
        [:div.d-flex.flex-row
         [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
         [icon :plane "m-auto"]]]]
-     [:div.form-check.pt-2
-      [:input.form-check-input
-       {:type "checkbox"
-        :name "lock-card?"}]
-      [:label.form-check-label
-       {:for "lock-card?"}
-       (labels :discussion/lock-statement)]]]))
+     (when (and @(rf/subscribe [:schnaq.current/admin-access])
+                @(rf/subscribe [:user/pro-user?]))
+       [:div.form-check.pt-2
+        [:input.form-check-input
+         {:type "checkbox"
+          :name "lock-card?"}]
+        [:label.form-check-label
+         {:for "lock-card?"}
+         (labels :discussion/lock-statement)]])]))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
