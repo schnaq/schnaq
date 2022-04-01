@@ -7,24 +7,36 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.shared-toolbelt :as shared-tools]))
 
+(defn- react-to-statement-call!
+  "A call to the route for adding a rection to a statement."
+  [db statement-id premise-text statement-type locked? on-success-fx]
+  (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+        edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])]
+    (when share-hash
+      (http/xhrio-request
+       db :post "/discussion/react-to/statement"
+       on-success-fx
+       {:share-hash share-hash
+        :edit-hash edit-hash
+        :conclusion-id statement-id
+        :premise premise-text
+        :statement-type statement-type
+        :locked? locked?
+        :display-name (tools/current-display-name db)}
+       [:ajax.error/as-notification]))))
+
 (rf/reg-event-fx
  :discussion.reaction.statement/send
  (fn [{:keys [db]} [_ statement-type new-premise locked?]]
-   (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
-         share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])]
-     (when share-hash
-       {:fx [(http/xhrio-request
-              db :post "/discussion/react-to/statement"
-              [:discussion.reaction.statement/added]
-              {:share-hash share-hash
-               :edit-hash edit-hash
-               :conclusion-id statement-id
-               :premise new-premise
-               :statement-type statement-type
-               :locked? locked?
-               :display-name (tools/current-display-name db)}
-              [:ajax.error/as-notification])]}))))
+   (let [statement-id (get-in db [:current-route :parameters :path :statement-id])]
+     {:fx [(react-to-statement-call! db statement-id new-premise statement-type locked?
+                                     [:discussion.reaction.statement/added])]})))
+
+(rf/reg-event-fx
+ :discussion.reply.statement/send
+ (fn [{:keys [db]} [_ statement statement-type new-premise]]
+   {:fx [(react-to-statement-call! db (:db/id statement) new-premise statement-type false
+                                   [:discussion.reply.statement/added statement])]}))
 
 (rf/reg-event-fx
  :discussion.reaction.statement/added
@@ -33,23 +45,6 @@
      {:db (assoc-in db [:discussion :premises :current (:db/id new-statement)] new-statement)
       :fx [[:dispatch [:notification/new-content]]
            [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
-
-(rf/reg-event-fx
- :discussion.reply.statement/send
- ;; TODO dafuq is this and why separate?
- (fn [{:keys [db]} [_ statement statement-type new-premise]]
-   (let [statement-id (:db/id statement)
-         share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-     (when share-hash
-       {:fx [(http/xhrio-request
-              db :post "/discussion/react-to/statement"
-              [:discussion.reply.statement/added statement]
-              {:share-hash share-hash
-               :conclusion-id statement-id
-               :premise new-premise
-               :statement-type statement-type
-               :display-name (tools/current-display-name db)}
-              [:ajax.error/as-notification])]}))))
 
 (rf/reg-event-fx
  :discussion.reply.statement/added
