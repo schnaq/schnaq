@@ -147,8 +147,19 @@
      {:tabIndex 50
       :on-click (fn [e] (.stopPropagation e)
                   (flag-statement-fn))
-      :title (labels :discussion.badges/edit-statement)}
+      :title (labels :discussion.badges/flag-statement)}
      [icon :flag "my-auto me-2"] (labels :statement/flag-statement)]))
+
+(defn- lock-unlock-statement-dropdown-button [statement]
+  (let [to-lock? (not (:statement/locked? statement))
+        label (labels (if to-lock? :discussion.badges/lock-statement :discussion.badges/unlock-statement))]
+    [:button.dropdown-item
+     {:tabIndex 55
+      :on-click (fn [e] (.stopPropagation e)
+                  ;; TODO call the route
+                  (js/alert (str "yes I will set the lock state to: " to-lock?)))
+      :title label}
+     [icon (if to-lock? :lock :lock/open) "my-auto me-2"] label]))
 
 (rf/reg-event-fx
  :statement/flag
@@ -190,6 +201,9 @@
        [share-link-to-statement statement]]
       [:dropdown-item
        [flag-dropdown-button-statement statement]]
+      (when (and current-edit-hash @(rf/subscribe [:user/authenticated?]))
+        [:dropdown-item
+         [lock-unlock-statement-dropdown-button statement]])
       (when editable?
         [:dropdown-item
          [edit-dropdown-button-statement statement]])
