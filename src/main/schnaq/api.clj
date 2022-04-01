@@ -218,6 +218,6 @@
   (mount/stop)
   :end)
 
-;; TODO karten nachträglich (als mod) locken und unlocken können
 ;; TODO Für gelockte karten keine Eingabefelder und Subdiskussionen erlauben
 ;; TODO Im backend keine Kinder für gelockte Karten akzeptieren
+;; TODO karten nachträglich (als mod) locken und unlocken können

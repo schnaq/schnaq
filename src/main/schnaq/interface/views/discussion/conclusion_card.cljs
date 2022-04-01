@@ -61,7 +61,11 @@
   [:div.d-flex.flex-wrap.align-items-center
    [reactions/up-down-vote statement]
    [:div.ms-sm-0.ms-lg-auto
-    [badges/show-number-of-replies statement]]])
+    (if (:statement/locked? statement)
+      [tooltip/text
+       (labels :statement.locked/tooltip)
+       [:span [icon :lock "text-primary"]]]
+      [badges/show-number-of-replies statement])]])
 
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."

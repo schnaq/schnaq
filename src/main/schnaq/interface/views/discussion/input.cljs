@@ -150,15 +150,16 @@
         (fn [e]
           (.preventDefault e)
           (logic/reply-to-statement statement statement-type (oget e [:currentTarget :elements])))]
-    [:form.my-md-2
-     {:on-submit #(answer-to-statement-event %)
-      :on-key-down #(when (toolbelt/ctrl-press? % 13)
-                      (answer-to-statement-event %))}
-     [premise-card-textarea statement]
-     (when-not pro-con-disabled?
-       [statement-type-choose-button
-        [:form/statement-type statement-id]
-        [:form/statement-type! statement-id] true])]))
+    (when-not (:statement/locked? statement)
+      [:form.my-md-2
+       {:on-submit #(answer-to-statement-event %)
+        :on-key-down #(when (toolbelt/ctrl-press? % 13)
+                        (answer-to-statement-event %))}
+       [premise-card-textarea statement]
+       (when-not pro-con-disabled?
+         [statement-type-choose-button
+          [:form/statement-type statement-id]
+          [:form/statement-type! statement-id] true])])))
 
 (rf/reg-event-db
  ;; Assoc statement-type with statement-id as key. The current topic is assigned via :selected
