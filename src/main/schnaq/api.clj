@@ -151,15 +151,16 @@
                          auth-middlewares/update-jwt-middleware
                          middlewares/wrap-custom-schnaq-csrf-header
                          profiling/profiling-middleware]}
-     ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
-                            :user/admin? auth-middlewares/admin?-middleware
-                            :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
-                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
-                            :user/pro-user? auth-middlewares/pro-user?-middleware
-                            :app/valid-code? auth-middlewares/valid-app-code?-middleware
+     ::middleware/registry {:app/valid-code? auth-middlewares/valid-app-code?-middleware
+                            :discussion/parent-unlocked? middlewares/parent-unlocked?-middleware
+                            :discussion/valid-credentials? middlewares/valid-credentials?-middleware
                             :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
                             :discussion/valid-statement? middlewares/valid-statement?-middleware
-                            :discussion/valid-credentials? middlewares/valid-credentials?-middleware}})))
+                            :user/admin? auth-middlewares/admin?-middleware
+                            :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
+                            :user/authenticated? auth-middlewares/authenticated?-middleware
+                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
+                            :user/pro-user? auth-middlewares/pro-user?-middleware}})))
 
 (defn route-by-name
   "Return a route by its name."
@@ -218,6 +219,4 @@
   (mount/stop)
   :end)
 
-;; TODO Für gelockte karten keine Eingabefelder und Subdiskussionen erlauben
-;; TODO Im backend keine Kinder für gelockte Karten akzeptieren
 ;; TODO karten nachträglich (als mod) locken und unlocken können

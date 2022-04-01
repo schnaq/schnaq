@@ -1,6 +1,6 @@
 (ns schnaq.validator
   (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [ring.util.http-response :refer [forbidden]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.discussion :as db]
@@ -41,7 +41,7 @@
 (>defn valid-credentials?
   "Validate if share-hash and edit-hash match"
   [share-hash edit-hash]
-  [:discussion/share-hash :discussion/edit-hash :ret boolean?]
+  [(? :discussion/share-hash) (? :discussion/edit-hash) :ret boolean?]
   (let [complete-discussion (db/discussion-by-share-hash-private share-hash)]
     (and (= edit-hash (:discussion/edit-hash complete-discussion))
          (not (db/discussion-deleted? share-hash)))))

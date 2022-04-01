@@ -413,6 +413,7 @@
    ["/react-to/statement" {:post react-to-any-statement!
                            :description (at/get-doc #'react-to-any-statement!)
                            :name :api.discussion.react-to/statement
+                           :middleware [:discussion/parent-unlocked?]
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
                                                :premise :statement/content
