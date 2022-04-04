@@ -55,11 +55,10 @@
   <script name="matomo" type="text/javascript">
     var _paq = window._paq = window._paq || [];
     _paq.push(['setCookieDomain', '*.schnaq.com']);
-    _paq.push(['setDoNotTrack', true]);
-    // _paq.push(['requireConsent']);  // Require user to opt in - currently resolved via Klaro!
-    _paq.push(['requireCookieConsent']); // Cookieless-Mode
+    _paq.push(['requireCookieConsent']); // Require user to opt in - currently resolved via Klaro!
+    _paq.push(['setCookieConsentGiven']); // Matomo is obligatory, klaro informs about this.
     _paq.push(['trackPageView']);
-    _paq.push(['enableLinkTracking']);
+    _paq.push(['enableLinkTracking']); // Enable download and outlink tracking
     (function () {
       var u = '//analytics.schnaq.com/';
       _paq.push(['setTrackerUrl', u + 'matomo.php']);
