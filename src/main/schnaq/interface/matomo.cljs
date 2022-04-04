@@ -20,3 +20,8 @@
     (.push matomo #js ["setCustomUrl" (oget js/window :location :href)])
     (.push matomo #js ["setDocumentTitle" (oget js/window :document :title)])
     (.push matomo #js ["trackPageView"])))
+
+(defn set-user-id
+  "Sets the user-id so users that use different devices can be recognized."
+  [user-id]
+  (.push js/window._paq #js ["setUserId" user-id]))
