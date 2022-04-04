@@ -2,6 +2,7 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.card-elements :as card-elements]
@@ -76,7 +77,9 @@
        :data-dynamic-height true
        :placeholder (labels :statement.new/placeholder)}]
      [:button.btn.btn-sm.btn-outline-dark
-      {:type "submit" :title (labels :discussion/create-argument-action)}
+      {:type "submit"
+       :title (labels :discussion/create-argument-action)
+       :on-click #(matomo/track-event "Active User", "Action", "Submit Post")}
       [:div.d-flex.flex-row
        [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
        [icon :plane "m-auto"]]]]))
@@ -98,7 +101,9 @@
         :placeholder (labels :statement.new/placeholder)
         :on-key-up #(rf/dispatch [:schnaq.question.input/set-current (oget % [:?target :value])])}]
       [:button.btn.btn-outline-dark
-       {:type "submit" :title (labels :discussion/create-argument-action)}
+       {:type "submit"
+        :title (labels :discussion/create-argument-action)
+        :on-click #(matomo/track-event "Active User", "Action", "Submit Post")}
        [:div.d-flex.flex-row
         [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
         [icon :plane "m-auto"]]]]
