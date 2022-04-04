@@ -162,22 +162,25 @@
 
 (defn- build-new-statement
   "Builds a new statement for transaction."
-  ([user-id content discussion-id]
-   (build-new-statement user-id content discussion-id (str "conclusion-" content)))
-  ([user-id content discussion-id temp-id]
+  ([user-id content discussion-id locked?]
+   (build-new-statement user-id content discussion-id locked? (str "conclusion-" content)))
+  ([user-id content discussion-id locked? temp-id]
    {:db/id temp-id
     :statement/author user-id
     :statement/content content
     :statement/version 1
     :statement/created-at (Date.)
+    :statement/locked? locked?
     :statement/discussions [discussion-id]}))
 
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
-  [share-hash user-id statement-content registered-user?]
-  [:discussion/share-hash :db/id :statement/content any? :ret :db/id]
+  [share-hash user-id statement-content & {:keys [locked? registered-user?]}]
+  [:discussion/share-hash :db/id :statement/content (s/* any?) :ret :db/id]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
-        minimum-statement (build-new-statement user-id statement-content discussion-id)
+        ;; Only registered users are allowed to lock their cards
+        locked? (if registered-user? (boolean locked?) false)
+        minimum-statement (build-new-statement user-id statement-content discussion-id locked?)
         new-statement (if registered-user?
                         minimum-statement
                         (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))
@@ -238,8 +241,8 @@
 
 (>defn- new-child-statement!
   "Creates a new child statement, that references a parent."
-  [discussion-id parent-id new-content statement-type user-id registered-user?]
-  [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id any? :ret associative?]
+  [discussion-id parent-id new-content statement-type user-id registered-user? locked?]
+  [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id any? boolean? :ret associative?]
   @(transact
     [(cond-> {:db/id (str "new-child-" new-content)
               :statement/author user-id
@@ -247,16 +250,19 @@
               :statement/version 1
               :statement/created-at (Date.)
               :statement/parent parent-id
+              :statement/locked? locked?
               :statement/discussions [discussion-id]
               :statement/type statement-type}
        (not registered-user?) (assoc :statement/creation-secret (.toString (UUID/randomUUID))))]))
 
 (>defn react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created statement."
-  [share-hash user-id statement-id reacting-string reaction registered-user?]
-  [:discussion/share-hash :db/id :db/id :statement/content keyword? any? :ret ::specs/statement]
-  (let [result (new-child-statement! [:discussion/share-hash share-hash] statement-id reacting-string
-                                     reaction user-id registered-user?)
+  [share-hash user-id statement-id reacting-string reaction & {:keys [locked? registered-user?]}]
+  [:discussion/share-hash :db/id :db/id :statement/content keyword? (s/* any?) :ret ::specs/statement]
+  (let [;; Only registered users are allowed to lock their cards
+        locked? (if registered-user? (boolean locked?) false)
+        result (new-child-statement! [:discussion/share-hash share-hash] statement-id reacting-string
+                                     reaction user-id registered-user? locked?)
         db-after (:db-after result)
         new-child-id (get-in result [:tempids (str "new-child-" reacting-string)])]
     (toolbelt/pull-key-up
@@ -720,3 +726,9 @@
     (when valid-secrets
       @(transact
         (mapv #(vector :db/add [:discussion/share-hash %] :discussion/author author-id) (keys valid-secrets))))))
+
+(>defn toggle-statement-lock
+  "Lock or unlock a statement."
+  [statement-id lock?]
+  [:db/id boolean? :ret any?]
+  @(transact [[:db/add statement-id :statement/locked? lock?]]))

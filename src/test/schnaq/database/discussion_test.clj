@@ -38,9 +38,10 @@
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
           new-support (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
-                                              "This is a new support" :statement.type/support true)
+                                              "This is a new support" :statement.type/support
+                                              :registered-user? true)
           another-new-reaction (db/react-to-statement! share-hash user-id (:db/id new-support)
-                                                       "this is a secret support" :statement.type/support false)]
+                                                       "this is a secret support" :statement.type/support)]
       (is (= "This is a new support" (:statement/content new-support)))
       (is (= (:db/id starting-conclusion) (:db/id (:statement/parent new-support))))
       (is (= :statement.type/support (:statement/type new-support)))
@@ -53,10 +54,28 @@
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
           new-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
-                                             "This is a new attack" :statement.type/attack true)]
+                                             "This is a new attack" :statement.type/attack
+                                             :registered-user? true)]
       (is (= "This is a new attack" (:statement/content new-attack)))
       (is (= (:db/id starting-conclusion) (:db/id (:statement/parent new-attack))))
-      (is (= :statement.type/attack (:statement/type new-attack))))))
+      (is (= :statement.type/attack (:statement/type new-attack)))
+      (is (not (:statement/locked? new-attack))))))
+
+(deftest locked-statement!-test
+  (testing "Add a new locked statement to a discussion"
+    (let [share-hash "simple-hash"
+          user-id (user-db/user-by-nickname "Wegi")
+          registered-user-id (:db/id (first (user-db/all-registered-users)))
+          starting-conclusion (first (db/starting-statements share-hash))
+          new-non-locked-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
+                                                        "This is a new unlocked attack" :statement.type/attack
+                                                        :locked? true)
+          new-locked-attack (db/react-to-statement! share-hash registered-user-id (:db/id starting-conclusion)
+                                                    "This is a new locked attack" :statement.type/attack
+                                                    :registered-user? true
+                                                    :locked? true)]
+      (is (not (:statement/locked? new-non-locked-attack)))
+      (is (:statement/locked? new-locked-attack)))))
 
 (deftest statements-by-content-test
   (testing "Statements are identified by identical content."
@@ -69,10 +88,33 @@
     (let [statement "Wow look at this"
           user-id (user-db/add-user-if-not-exists "Test-person")
           meeting-hash "graph-hash"
-          _ (db/add-starting-statement! meeting-hash user-id statement false)
+          new-starting (fast-pull
+                        (db/add-starting-statement! meeting-hash user-id statement)
+                        patterns/statement)
           starting-statements (db/starting-statements meeting-hash)]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
-        (is (= 3 (count starting-statements)))))))
+        (is (= 3 (count starting-statements))))
+      (testing "Must be unlocked"
+        (is (not (:statement/locked? new-starting)))))))
+
+(deftest add-locked-starting-statement-test
+  (testing "Test the creation of a valid locked statement-entity from strings"
+    (let [statement "Wow look at this"
+          user-id (user-db/add-user-if-not-exists "Test-person")
+          registered-user-id (:db/id (first (user-db/all-registered-users)))
+          meeting-hash "graph-hash"
+          new-unlocked-starting (fast-pull
+                                 (db/add-starting-statement! meeting-hash user-id statement
+                                                             :locked? true)
+                                 patterns/statement)
+          new-locked-starting (fast-pull
+                               (db/add-starting-statement! meeting-hash registered-user-id statement
+                                                           :registered-user? true
+                                                           :locked? true)
+                               patterns/statement)]
+      (testing "Must be locked if done by registered user"
+        (is (not (:statement/locked? new-unlocked-starting)))
+        (is (:statement/locked? new-locked-starting))))))
 
 (deftest starting-statements-test
   (testing "Should return all starting-statements from a discussion."
@@ -117,8 +159,8 @@
                                 :discussion/edit-hash (str "secret-" share-hash)
                                 :discussion/author (user-db/add-user-if-not-exists "Wegi")})
           christian-id (user-db/user-by-nickname "Christian")
-          first-id (db/add-starting-statement! share-hash christian-id "this is sparta" false)
-          second-id (db/add-starting-statement! share-hash christian-id "this is kreta" false)]
+          first-id (db/add-starting-statement! share-hash christian-id "this is sparta")
+          second-id (db/add-starting-statement! share-hash christian-id "this is kreta")]
       (is (db/check-valid-statement-id-for-discussion first-id "Wegi-ist-der-schönste"))
       (is (db/check-valid-statement-id-for-discussion second-id "Wegi-ist-der-schönste")))))
 
@@ -140,7 +182,7 @@
         _ (db/new-discussion new-public-discussion)]
     (testing "Valid discussions should be returned."
       (are [valid share-hashes]
-           (= valid (count (db/discussions-by-share-hashes share-hashes)))
+        (= valid (count (db/discussions-by-share-hashes share-hashes)))
         0 []
         0 ["razupaltuff"]
         1 ["simple-hash"]
@@ -180,7 +222,7 @@
           modified-type :statement.type/neutral
           new-user (user-db/add-user-if-not-exists "Wugiperson")
           new-statement-id (db/add-starting-statement! (:discussion/share-hash cat-dog-discussion)
-                                                       new-user initial-content false)
+                                                       new-user initial-content)
           statement (fast-pull new-statement-id patterns/statement)]
       (is (= initial-content (:statement/content statement)))
       (let [modified-statement (db/change-statement-text-and-type statement modified-type modified-content)]
@@ -294,7 +336,7 @@
         share-hash "cat-dog-hash"
         anonymous-user-id (user-db/add-user-if-not-exists "Anonymous")
         new-statements-before (get (db/new-statements-by-discussion-hash test-user) share-hash)
-        _ (db/add-starting-statement! "cat-dog-hash" anonymous-user-id "New Post!" false)
+        _ (db/add-starting-statement! "cat-dog-hash" anonymous-user-id "New Post!")
         new-statements-after (get (db/new-statements-by-discussion-hash test-user) share-hash)]
     (testing "Adding a new statement from a different user results in an unseen statement for the test-user."
       (is (not= new-statements-after new-statements-before))

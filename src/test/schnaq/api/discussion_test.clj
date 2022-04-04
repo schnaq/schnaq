@@ -39,3 +39,22 @@
     (is (not (zero? (count (:starting-conclusions (get-starting-conclusions-request toolbelt/token-wegi-no-beta-user "cat-dog-hash"))))))
     (is (not (zero? (count (:starting-conclusions (get-starting-conclusions-request nil "cat-dog-hash"))))))
     (is (string? (:message (get-starting-conclusions-request nil ":shrug:"))))))
+
+(defn- react-to-conclusions-request [statement-id]
+  (-> {:request-method :post :uri (:path (api/route-by-name :api.discussion.react-to/statement))
+       :body-params {:share-hash "cat-dog-hash"
+                     :edit-hash "cat-dog-edit-hash"
+                     :conclusion-id statement-id
+                     :premise "test"
+                     :statement-type :statement.type/attack
+                     :locked? false
+                     :display-name "Wugiman"}}
+      toolbelt/add-csrf-header
+      test-app))
+
+(deftest react-to-any-statement!-test
+  (let [starting-statements (discussion-db/starting-statements "cat-dog-hash")
+        locked-statement (first (filter :statement/locked? starting-statements))
+        unlocked-statement (first (remove :statement/locked? starting-statements))]
+    (is (= 201 (:status (react-to-conclusions-request (:db/id unlocked-statement)))))
+    (is (= 403 (:status (react-to-conclusions-request (:db/id locked-statement)))))))

@@ -44,7 +44,7 @@
             [schnaq.config.summy :as summy-config]
             [schnaq.core] ;; Keep this import to activate database etc.
             [schnaq.toolbelt :as toolbelt]
-            [schnaq.websockets.handler :refer [websocket-routes] :as ws]
+            [schnaq.websockets.handler :refer [websocket-routes]]
             [schnaq.websockets.messages]
             [taoensso.timbre :as log])
   (:gen-class))
@@ -151,15 +151,16 @@
                          auth-middlewares/update-jwt-middleware
                          middlewares/wrap-custom-schnaq-csrf-header
                          profiling/profiling-middleware]}
-     ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
-                            :user/admin? auth-middlewares/admin?-middleware
-                            :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
-                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
-                            :user/pro-user? auth-middlewares/pro-user?-middleware
-                            :app/valid-code? auth-middlewares/valid-app-code?-middleware
+     ::middleware/registry {:app/valid-code? auth-middlewares/valid-app-code?-middleware
+                            :discussion/parent-unlocked? middlewares/parent-unlocked?-middleware
+                            :discussion/valid-credentials? middlewares/valid-credentials?-middleware
                             :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
                             :discussion/valid-statement? middlewares/valid-statement?-middleware
-                            :discussion/valid-credentials? middlewares/valid-credentials?-middleware}})))
+                            :user/admin? auth-middlewares/admin?-middleware
+                            :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
+                            :user/authenticated? auth-middlewares/authenticated?-middleware
+                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
+                            :user/pro-user? auth-middlewares/pro-user?-middleware}})))
 
 (defn route-by-name
   "Return a route by its name."

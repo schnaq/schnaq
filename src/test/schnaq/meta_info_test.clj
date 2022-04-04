@@ -18,7 +18,7 @@
           ;; add starting statement
           statement "Clojure can melt steelbeams"
           user-id (user-db/add-user "New Person")
-          _ (discussion-db/add-starting-statement! share-hash user-id statement false)
+          _ (discussion-db/add-starting-statement! share-hash user-id statement)
           ;; new meta infos
           new-meta-infos (#'meta-info/discussion-meta-info share-hash author)]
       (testing "Test if total count is correct"

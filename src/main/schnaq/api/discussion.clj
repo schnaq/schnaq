@@ -182,11 +182,15 @@
 (defn- add-starting-statement!
   "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash statement display-name]} (:body parameters)
+  (let [{:keys [share-hash edit-hash statement display-name locked?]} (:body parameters)
         keycloak-id (:sub identity)
-        user-id (user-db/user-id display-name keycloak-id)]
+        user-id (user-db/user-id display-name keycloak-id)
+        ;; Only Moderators can lock
+        locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
     (if (validator/valid-writeable-discussion? share-hash)
-      (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement keycloak-id)]
+      (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement
+                                                                   :registered-user? keycloak-id
+                                                                   :locked? locked?)]
         (log/info "Starting statement added for discussion" share-hash)
         (created "" {:starting-conclusions (starting-conclusions-with-processors share-hash user-id new-starting-id)}))
       (validator/deny-access at/invalid-rights-message))))
@@ -196,15 +200,19 @@
   statement you want to react to. `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`.
   `nickname` is required if the user is not logged in."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash conclusion-id premise statement-type display-name]} (:body parameters)
+  (let [{:keys [share-hash edit-hash conclusion-id premise statement-type locked? display-name]} (:body parameters)
         keycloak-id (:sub identity)
-        user-id (user-db/user-id display-name keycloak-id)]
+        user-id (user-db/user-id display-name keycloak-id)
+        ;; Only Moderators can lock
+        locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (created ""
                    {:new-statement
                     (valid-statements-with-votes
-                     (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id)
+                     (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type
+                                                        :registered-user? keycloak-id
+                                                        :locked? locked?)
                      user-id)}))
       (validator/deny-access at/invalid-rights-message))))
 
@@ -354,6 +362,16 @@
                           first)})
       (forbidden (at/build-error-body :permission/forbidden "You are not allowed to edit labels")))))
 
+(defn- toggle-statement-lock
+  "Lock or unlock a statement. (Makes it read-only)"
+  [{:keys [parameters]}]
+  (let [{:keys [statement-id share-hash lock?]} (:body parameters)]
+    (if (validator/valid-discussion-and-statement? statement-id share-hash)
+      (if (discussion-db/toggle-statement-lock statement-id lock?)
+        (ok {:locked? lock?})
+        (bad-request (at/build-error-body :statement.lock/error "Something went wrong while locking, try again.")))
+      (bad-request (at/build-error-body :statement/invalid "The statement you are trying to lock is not valid.")))))
+
 ;; -----------------------------------------------------------------------------
 
 (def discussion-routes
@@ -407,10 +425,14 @@
    ["/react-to/statement" {:post react-to-any-statement!
                            :description (at/get-doc #'react-to-any-statement!)
                            :name :api.discussion.react-to/statement
+                           :middleware [:discussion/parent-unlocked?]
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
                                                :premise :statement/content
+                                               :edit-hash (s/or :edit-hash :discussion/edit-hash
+                                                                :nil nil?)
                                                :statement-type dto/statement-type
+                                               :locked? :statement/locked?
                                                :display-name ::specs/non-blank-string}}
                            :responses {201 {:body {:new-statement ::dto/statement}}
                                        403 at/response-error-body}}]
@@ -439,8 +461,11 @@
                       :description (at/get-doc #'add-starting-statement!)
                       :name :api.discussion.statements.starting/add
                       :parameters {:body {:share-hash :discussion/share-hash
+                                          :edit-hash (s/or :edit-hash :discussion/edit-hash
+                                                           :nil nil?)
                                           :statement :statement/content
-                                          :display-name ::specs/non-blank-string}}
+                                          :display-name ::specs/non-blank-string
+                                          :locked? :statement/locked?}}
                       :responses {201 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
                                   403 at/response-error-body}}]
     ["/update-seen" {:put update-seen-statements!
@@ -471,6 +496,13 @@
                           404 at/response-error-body}}]
     ["" {:parameters {:body {:statement-id :db/id
                              :share-hash :discussion/share-hash}}}
+     ["/lock/toggle" {:post toggle-statement-lock
+                      :description (at/get-doc #'toggle-statement-lock)
+                      :name :api.discussion.statements/lock
+                      :middleware [:user/authenticated? :discussion/valid-credentials?]
+                      :parameters {:body {:edit-hash :discussion/edit-hash
+                                          :lock? boolean?}}
+                      :responses {200 {:body {:locked? boolean?}}}}]
      ["/edit" {:put edit-statement!
                :description (at/get-doc #'edit-statement!)
                :name :api.discussion.statement/edit

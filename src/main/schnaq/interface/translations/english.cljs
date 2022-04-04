@@ -267,10 +267,8 @@
    :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."
 
    :statement/discuss "Discuss"
-   :statement/reply "Reply"
-   :statement.reply/placeholder "Your answer"
-   :statement/ask "Ask"
-   :statement.ask/placeholder "Your question"
+   :statement/new "Absenden"
+   :statement.new/placeholder "Your statement"
    :statement.edit.send.failure/title "Edit could not be made"
    :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."
    :statement.edit/label "Edit statement"
@@ -283,6 +281,7 @@
    :statement.notifications/statement-flagged-body "Thank you for reporting this post, we'll take care of it."
    :statement.badges/more-posts "more posts"
    :statement.badges/more-post "more post"
+   :statement.locked/tooltip "This statement is locked"
 
    :schnaq.input-type/question "Question"
    :schnaq.input-type/answer "Answer"
@@ -698,6 +697,7 @@
 
    ;; Discussion Language
    :discussion/create-argument-action "Add Statement"
+   :discussion/lock-statement "Don't allow replies to this statement"
    :discussion/add-premise-supporting "I want to support the statement"
    :discussion/add-premise-against "I disagree…"
    :discussion/add-premise-neutral "I want to add something"
@@ -712,6 +712,9 @@
    :discussion.notification/new-content-title "New statement!"
    :discussion.notification/new-content-body "Your statement was added successfully!"
    :discussion.badges/edit-statement "edit"
+   :discussion.badges/flag-statement "report"
+   :discussion.badges/lock-statement "lock"
+   :discussion.badges/unlock-statement "unlock"
    :discussion.badges/share-statement "copy link"
    :discussion.badges/statement-by "by"
    :discussion.badges/new "New"

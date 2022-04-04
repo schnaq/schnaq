@@ -3,6 +3,8 @@
             [ring.util.http-response :refer [bad-request forbidden not-found]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
+            [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.patterns :as patterns]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
@@ -43,6 +45,16 @@
           (handler request)
           (forbidden (at/build-error-body :credentials/invalid "Your share-hash and edit-hash do not fit together.")))
         (bad-request (at/build-error-body :parameters/missing (format "Share-hash oder edit-hash is missing, share-hash: %s, edit-hash: %s" share-hash edit-hash)))))))
+
+(defn parent-unlocked?-middleware
+  "Verify that the parent statement is unlocked and can be written to."
+  [handler]
+  (fn [request]
+    (let [parent-id (extract-parameter-from-request request :conclusion-id)
+          parent (when parent-id (fast-pull parent-id patterns/statement))]
+      (if (:statement/locked? parent)
+        (forbidden (at/build-error-body :statement/locked "This statement is locked and can not be reacted to."))
+        (handler request)))))
 
 (defn wrap-custom-schnaq-csrf-header
   "A handler, that checks for a custom schnaq-csrf header. This can only be present when sent from an allowed origin

@@ -267,10 +267,8 @@
    :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."
 
    :statement/discuss "Diskutieren"
-   :statement/reply "Antworten"
-   :statement.reply/placeholder "Deine Antwort"
-   :statement/ask "Fragen"
-   :statement.ask/placeholder "Deine Frage"
+   :statement/new "Post"
+   :statement.new/placeholder "Dein Beitrag"
    :statement.edit.send.failure/title "Änderung nicht gespeichert"
    :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."
    :statement.edit/label "Beitrag bearbeiten"
@@ -283,6 +281,7 @@
    :statement.notifications/statement-flagged-body "Vielen Dank für deine Meldung, wir kümmern uns."
    :statement.badges/more-posts "weitere Beiträge"
    :statement.badges/more-post "weiterer Beitrag"
+   :statement.locked/tooltip "Dieser Beitrag kann nicht beantwortet werden"
 
    :schnaq.input-type/question "Frage"
    :schnaq.input-type/answer "Antwort"
@@ -697,6 +696,7 @@
 
    ;; Discussion
    :discussion/create-argument-action "Beitrag hinzufügen"
+   :discussion/lock-statement "Aussage ohne Antwortmöglichkeit erstellen"
    :discussion/add-premise-supporting "Ich möchte die Aussage unterstützen"
    :discussion/add-premise-against "Ich habe einen Grund dagegen"
    :discussion/add-premise-neutral "Ich möchte etwas ergänzen"
@@ -711,6 +711,9 @@
    :discussion.notification/new-content-title "Neuer Beitrag!"
    :discussion.notification/new-content-body "Dein Beitrag wurde erfolgreich gespeichert."
    :discussion.badges/edit-statement "editieren"
+   :discussion.badges/flag-statement "melden"
+   :discussion.badges/lock-statement "Schreibschutz aktivieren"
+   :discussion.badges/unlock-statement "beschreibbar machen"
    :discussion.badges/share-statement "Link kopieren"
    :discussion.badges/statement-by "von"
    :discussion.badges/new "Neu"

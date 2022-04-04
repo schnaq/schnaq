@@ -168,13 +168,14 @@
 (s/def :statement/created-at inst?)
 (s/def :statement/label shared-config/allowed-labels)
 (s/def :statement/labels (s/coll-of :statement/label))
+(s/def :statement/locked? boolean?)
 (s/def :statement/discussions (s/or :ids (s/coll-of :db/id)
                                     :discussions (s/coll-of ::discussion)))
 (s/def ::statement
   (s/keys :req [:statement/content :statement/version :statement/author]
           :opt [:statement/creation-secret :statement/created-at
                 :statement/type :statement/parent :statement/discussions
-                :statement/labels :statement/cumulative-upvotes :statement/cumulative-downvotes]))
+                :statement/labels :statement/cumulative-upvotes :statement/cumulative-downvotes :statement/locked?]))
 
 (s/def :statement.vote/operation #{:removed :switched :added :succeeded})
 

@@ -147,8 +147,29 @@
      {:tabIndex 50
       :on-click (fn [e] (.stopPropagation e)
                   (flag-statement-fn))
-      :title (labels :discussion.badges/edit-statement)}
+      :title (labels :discussion.badges/flag-statement)}
      [icon :flag "my-auto me-2"] (labels :statement/flag-statement)]))
+
+(defn- lock-unlock-statement-dropdown-button [statement]
+  (let [to-lock? (not (:statement/locked? statement))
+        label (labels (if to-lock? :discussion.badges/lock-statement :discussion.badges/unlock-statement))]
+    [:button.dropdown-item
+     {:tabIndex 55
+      :on-click (fn [e] (.stopPropagation e)
+                  (rf/dispatch [:statement.lock/toggle (:db/id statement) to-lock?]))
+      :title label}
+     [icon (if to-lock? :lock :lock/open) "my-auto me-2"] label]))
+
+(rf/reg-event-fx
+ :statement.lock/toggle
+ (fn [{:keys [db]} [_ statement-id lock?]]
+   {:db (assoc-in db [:discussion :premises :current statement-id :statement/locked?] lock?)
+    :fx [(http/xhrio-request db :post "/discussion/statement/lock/toggle"
+                             [:no-op]
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
+                              :statement-id statement-id
+                              :lock? lock?})]}))
 
 (rf/reg-event-fx
  :statement/flag
@@ -190,6 +211,9 @@
        [share-link-to-statement statement]]
       [:dropdown-item
        [flag-dropdown-button-statement statement]]
+      (when (and current-edit-hash @(rf/subscribe [:user/authenticated?]))
+        [:dropdown-item
+         [lock-unlock-statement-dropdown-button statement]])
       (when editable?
         [:dropdown-item
          [edit-dropdown-button-statement statement]])

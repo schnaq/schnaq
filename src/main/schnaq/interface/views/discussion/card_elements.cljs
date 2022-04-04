@@ -13,7 +13,6 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
-            [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.filters :as filters]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.shared-toolbelt :as shared-tools]
@@ -100,13 +99,25 @@
  :discussion.add.statement/starting
  (fn [{:keys [db]} [_ form]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         statement-text (oget form [:statement :value])]
-     {:db (update-in db [:schnaq :selected :meta-info :all-statements] inc)
+         edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
+         statement-text (oget form [:statement :value])
+         locked? (boolean (oget form ["?lock-card?" :checked]))
+         username (get-in db [:user :names :display])
+         rand-id (rand-int 9999999)]
+     {:db (-> db
+              (update-in [:schnaq :selected :meta-info :all-statements] inc)
+              (assoc-in [:discussion :premises :current rand-id] {:db/id rand-id
+                                                                  :statement/author {:user/nickname username}
+                                                                  :statement/version 1
+                                                                  :statement/content statement-text
+                                                                  :statement/locked? locked?}))
       :fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
                                [:discussion.add.statement/starting-success form]
                                {:statement statement-text
                                 :share-hash share-hash
-                                :display-name (toolbelt/current-display-name db)}
+                                :edit-hash edit-hash
+                                :display-name (toolbelt/current-display-name db)
+                                :locked? locked?}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
@@ -142,7 +153,7 @@
        {:db (-> db
                 (assoc-in [:discussion :premises :current] (shared-tools/normalize :db/id starting-conclusions))
                 (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) visited))
-      ;; hier die seen setzen
+        ;; hier die seen setzen
         :fx [[:dispatch [:votes.local/reset]]
              [:dispatch [:schnaq.wordcloud/calculate]]]}))))
 
@@ -180,7 +191,7 @@
  (fn [db _]
    (get-in db [:discussion :statements :sort-method] :newest)))
 
-(defn- show-how-to []
+(defn show-how-to []
   [:div.py-5
    (if @(rf/subscribe [:schnaq.routes/starting?])
      [how-to-elements/quick-how-to-schnaq]
@@ -234,20 +245,12 @@
     [:div.ms-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
      [search-bar]]]])
 
-(defn discussion-view
-  "Displays a history  and input field on the left and conclusions in its center"
+(defn locked-statement-icon
+  "Indicator that a statement is locked."
   []
-  [:div.container-fluid.px-0.px-md-3
-   [:div.row
-    [:div.col-md-12.col-xxl-8.py-0.pt-md-3
-     [:div.d-none.d-md-block [action-view]]]]
-   [:div.d-md-none [action-view]]
-   [cards/conclusion-cards-list]
-   [:div.d-md-none [history-view]]
-   [:div.mx-auto
-    {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
-    [show-how-to]]
-   [:div.d-none.d-md-block [history-view]]])
+  [tooltip/text
+   (labels :statement.locked/tooltip)
+   [:span [icon :lock "text-primary"]]])
 
 (rf/reg-sub
  :schnaq.search.current/search-string

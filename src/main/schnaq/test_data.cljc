@@ -13,6 +13,7 @@
     :statement/author "user/wegi" ; Use the tempid above
     :statement/content "we should get a dog"
     :statement/created-at #inst "2020-01-01"
+    :statement/locked? true
     :statement/version 1
     :statement/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:db/id "statement/get-cat"

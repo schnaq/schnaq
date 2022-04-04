@@ -6,7 +6,8 @@
             ["@fortawesome/free-solid-svg-icons" :refer
              [faBackspace faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
               faCloud faCog faComment faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
-              faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLocationArrow faLock faMagic faPalette
+              faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage
+              faLocationArrow faLock faLockOpen faMagic faPalette
               faPaperPlane faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
               faTimes faTimesCircle faTrashAlt faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
@@ -61,6 +62,7 @@
    :linkedin faLinkedin
    :location-arrow faLocationArrow
    :lock faLock
+   :lock/open faLockOpen
    :magic faMagic
    :minus faMinus
    :palette faPalette

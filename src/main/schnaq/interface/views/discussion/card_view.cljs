@@ -1,10 +1,12 @@
 (ns schnaq.interface.views.discussion.card-view
   (:require [clojure.string :as cstring]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.card-elements :as elements]
+            [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-event-fx
@@ -26,12 +28,27 @@
    (assoc-in db [:search :schnaq :current :result] matching-statements)))
 
 (defn- discussion-view
-  "The first step after starting a discussion."
+  "Displays a history  and input field on the left and conclusions in its center"
+  []
+  [:div.container-fluid.px-0.px-md-3
+   [:div.row
+    [:div.col-md-12.col-xxl-8.py-0.pt-md-3
+     [:div.d-none.d-md-block [elements/action-view]]]]
+   [:div.d-md-none [elements/action-view]]
+   [cards/conclusion-cards-list]
+   [:div.d-md-none [elements/history-view]]
+   [:div.mx-auto
+    {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
+    [elements/show-how-to]]
+   [:div.d-none.d-md-block [elements/history-view]]])
+
+(defn- start-view
+  "The first step after starting a schnaq."
   []
   (let [schnaq @(rf/subscribe [:schnaq/selected])
         title (:discussion/title schnaq)]
     (common/set-website-title! title)
-    [elements/discussion-view (:discussion/share-hash schnaq)]))
+    [discussion-view (:discussion/share-hash schnaq)]))
 
 (rf/reg-sub
  :discussion.statements/show
@@ -53,13 +70,13 @@
  (fn [db _]
    (get-in db [:discussion :conclusion :selected])))
 
-;; -----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
 
 (defn derive-view []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
-     [discussion-view]]))
+     [start-view]]))
 
 (defn view []
   [derive-view])

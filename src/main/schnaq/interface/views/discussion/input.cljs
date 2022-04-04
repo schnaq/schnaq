@@ -4,6 +4,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.discussion.card-elements :as card-elements]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.shared-toolbelt :as shared-tools]))
 
@@ -73,37 +74,42 @@
        :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
        :required true
        :data-dynamic-height true
-       :placeholder (labels :statement.reply/placeholder)}]
+       :placeholder (labels :statement.new/placeholder)}]
      [:button.btn.btn-sm.btn-outline-dark
       {:type "submit" :title (labels :discussion/create-argument-action)}
       [:div.d-flex.flex-row
-       [:div.d-none.d-lg-block.me-1 (labels :statement/reply)]
+       [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
        [icon :plane "m-auto"]]]]))
 
 (defn- conclusion-card-textarea
   "Input, where users provide (starting) conclusions."
   []
-  (let [top-level? @(rf/subscribe [:schnaq.routes/starting?])
-        [placeholder button] (if top-level?
-                               [(labels :statement.ask/placeholder) (labels :statement/ask)]
-                               [(labels :statement.reply/placeholder) (labels :statement/reply)])]
-    (when-not @(rf/subscribe [:schnaq.selected/read-only?])
-      [:div.input-group
-       [textarea-highlighting :selected]
-       [:textarea.form-control.textarea-resize-none
-        {:name "statement" :wrap "soft" :rows 1
-         :auto-complete "off"
-         :autoFocus true
-         :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-         :required true
-         :data-dynamic-height true
-         :placeholder placeholder
-         :on-key-up #(rf/dispatch [:schnaq.question.input/set-current (oget % [:?target :value])])}]
-       [:button.btn.btn-outline-dark
-        {:type "submit" :title (labels :discussion/create-argument-action)}
-        [:div.d-flex.flex-row
-         [:div.d-none.d-lg-block.me-1 button]
-         [icon :plane "m-auto"]]]])))
+  (when-not @(rf/subscribe [:schnaq.selected/read-only?])
+    [:<>
+     [:div.input-group
+      [textarea-highlighting :selected]
+      [:textarea.form-control.textarea-resize-none
+       {:name "statement" :wrap "soft" :rows 1
+        :auto-complete "off"
+        :autoFocus true
+        :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
+        :required true
+        :data-dynamic-height true
+        :placeholder (labels :statement.new/placeholder)
+        :on-key-up #(rf/dispatch [:schnaq.question.input/set-current (oget % [:?target :value])])}]
+      [:button.btn.btn-outline-dark
+       {:type "submit" :title (labels :discussion/create-argument-action)}
+       [:div.d-flex.flex-row
+        [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
+        [icon :plane "m-auto"]]]]
+     (when @(rf/subscribe [:schnaq.current/admin-access])
+       [:div.form-check.pt-2
+        [:input.form-check-input
+         {:type "checkbox"
+          :name "lock-card?"}]
+        [:label.form-check-label
+         {:for "lock-card?"}
+         (labels :discussion/lock-statement)]])]))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
@@ -122,18 +128,21 @@
   "Form to collect the user's statements."
   []
   (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        when-starting (fn [e] (.preventDefault e)
-                        (rf/dispatch [:discussion.add.statement/starting
-                                      (oget e [:currentTarget :elements])]))
+        when-starting (fn [e]
+                        (.preventDefault e)
+                        (rf/dispatch [:discussion.add.statement/starting (oget e [:currentTarget :elements])]))
         when-deeper-in-discussion (fn [e]
                                     (.preventDefault e)
                                     (logic/submit-new-premise (oget e [:currentTarget :elements])))
         event-to-send (if starting-route?
                         when-starting when-deeper-in-discussion)]
-    [:form.my-md-2
-     {:on-submit #(event-to-send %)
-      :on-key-down #(when (toolbelt/ctrl-press? % 13) (event-to-send %))}
-     [topic-input-area]]))
+    (if (:statement/locked? @(rf/subscribe [:discussion.conclusion/selected]))
+      [:div.pt-3.ps-1
+       [card-elements/locked-statement-icon]]
+      [:form.my-md-2
+       {:on-submit #(event-to-send %)
+        :on-key-down #(when (toolbelt/ctrl-press? % 13) (event-to-send %))}
+       [topic-input-area]])))
 
 (defn reply-in-statement-input-form
   "Input form inside a statement card. This form is used to directly reply to a statement inside its own card."
@@ -144,19 +153,17 @@
         answer-to-statement-event
         (fn [e]
           (.preventDefault e)
-          (logic/reply-to-statement
-           statement
-           statement-type
-           (oget e [:currentTarget :elements])))]
-    [:form.my-md-2
-     {:on-submit #(answer-to-statement-event %)
-      :on-key-down #(when (toolbelt/ctrl-press? % 13)
-                      (answer-to-statement-event %))}
-     [premise-card-textarea statement]
-     (when-not pro-con-disabled?
-       [statement-type-choose-button
-        [:form/statement-type statement-id]
-        [:form/statement-type! statement-id] true])]))
+          (logic/reply-to-statement statement statement-type (oget e [:currentTarget :elements])))]
+    (when-not (:statement/locked? statement)
+      [:form.my-md-2
+       {:on-submit #(answer-to-statement-event %)
+        :on-key-down #(when (toolbelt/ctrl-press? % 13)
+                        (answer-to-statement-event %))}
+       [premise-card-textarea statement]
+       (when-not pro-con-disabled?
+         [statement-type-choose-button
+          [:form/statement-type statement-id]
+          [:form/statement-type! statement-id] true])])))
 
 (rf/reg-event-db
  ;; Assoc statement-type with statement-id as key. The current topic is assigned via :selected
