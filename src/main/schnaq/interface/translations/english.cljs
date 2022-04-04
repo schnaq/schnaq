@@ -517,7 +517,7 @@
    :privacy.extended.matomo/body
    [:<>
     [:h4 "Description and scope of data processing"]
-    [:p "We use the open source software tool Matomo (formerly PIWIK) on our website to analyse the use of our internet presence. For example, we are interested in which pages are accessed how often and whether smartphones, tablets or computers with large screens are used. The software does not set a cookie and does not create a profile of visitors. If individual pages of our website are accessed, the following data is stored:"]
+    [:p "We use the open source software tool Matomo (formerly PIWIK) on our website to analyze the use of our internet presence. For example, we are interested in which pages are accessed how often and whether smartphones, tablets or computers with large screens are used. If individual pages of our website are accessed, the following data is stored:"]
     [:ol
      [:li "Two bytes of the IP address of the calling system"]
      [:li "The accessed web page"]
@@ -526,10 +526,11 @@
      [:li "The time spent on the website"]
      [:li "The frequency of access to the website"]]
     [:p "Matomo is set so that the IP addresses are not stored in full, but two bytes of the IP address are masked (example: 192.168.xxx.xxx). In this way, an assignment of the shortened IP address to the calling computer is no longer possible."]
-    [:p "Matomo is used exclusively on schnaq servers. Personal data of the users is only stored there. The data is not passed on to third parties."]
+    [:p "Matomo is used exclusively for schnaq services and on our own schnaq servers. Personal data of the users is only stored there. Personal data is and will never get passed on to third parties."]
+    [:p "Your anonymized data will be stored for 180 days and then automatically deleted from our servers."]
     [:h4 "Purpose of data processing"]
     [:p "The processing of anonymized user data enables us to analyze the use of our website. By evaluating the data obtained, we are able to compile information about the use of the individual components of our website. This helps us to continuously improve our services and their user-friendliness. By anonymizing the IP address, the interest of the user in the protection of his personal data is sufficiently taken into account."]
-    [:p "No profiles are created that would give us a deeper insight into the usage behavior of individual users. The evaluation is exclusively anonymized and aggregated so that no conclusion can be drawn about individual persons."]
+    [:p "The evaluation is exclusively anonymized, pseudonymized and aggregated so that no conclusion can be drawn about individual persons."]
     [:p "The use of Matomo on our homepage is based on the legal basis of Art. 6 para. 1 lit. f GDPR."]]
    :privacy.extended.cleverreach/title "Newsletters and Infomails with CleverReach"
    :privacy.extended.cleverreach/body

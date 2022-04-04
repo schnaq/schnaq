@@ -516,7 +516,7 @@
    :privacy.extended.matomo/body
    [:<>
     [:h4 "Beschreibung und Umfang der Datenverarbeitung"]
-    [:p "Wir nutzen auf unserer Website das Open-Source-Software-Tool Matomo (ehemals PIWIK) zur Analyse der Nutzung unseres Internet-Auftritts. Uns interessiert zum Beispiel, welche Seiten wie häufig aufgerufen werden und ob dabei Smartphones, Tablets oder Rechner mit großen Bildschirmen eingesetzt werden. Die Software setzt keinen Cookie und erstellt kein Profil der Besucher:innen. Werden Einzelseiten unserer Website aufgerufen, so werden folgende Daten gespeichert:"]
+    [:p "Wir nutzen auf unserer Website das Open-Source-Software-Tool Matomo (ehemals PIWIK) zur Analyse der Nutzung unseres Internet-Auftritts. Uns interessiert zum Beispiel, welche Seiten wie häufig aufgerufen werden und ob dabei Smartphones, Tablets oder Rechner mit großen Bildschirmen eingesetzt werden. Werden Einzelseiten unserer Website aufgerufen, so werden folgende Daten gespeichert:"]
     [:ol
      [:li "Zwei Bytes der IP-Adresse des aufrufenden Systems"]
      [:li "Die aufgerufene Webseite"]
@@ -525,10 +525,11 @@
      [:li "Die Verweildauer auf der Webseite"]
      [:li "Die Häufigkeit des Aufrufs der Webseite"]]
     [:p "Matomo ist so eingestellt, dass die IP-Adressen nicht vollständig gespeichert werden, sondern zwei Bytes der IP-Adresse maskiert werden (Bsp.: 192.168.xxx.xxx). Auf diese Weise ist eine Zuordnung der gekürzten IP-Adresse zum aufrufenden Rechner nicht mehr möglich."]
-    [:p "Matomo kommt ausschließlich auf Servern von schnaq zum Einsatz. Eine Speicherung der personenbezogenen Daten der Nutzer:innen findet nur dort statt. Eine Weitergabe der Daten an Dritte erfolgt nicht."]
+    [:p "Matomo kommt ausschließlich in Diensten von schnaq zum Einsatz und wird auf unseren eigenen Servern betrieben. Eine Speicherung der personenbezogenen Daten der Nutzer:innen findet nur dort statt. Eine Weitergabe der personenbezogenen Daten an Dritte erfolgt niemals."]
+    [:p "Deine anonymisierten Daten werden 180 Tage gespeichert und dann automatisch von unseren Servern gelöscht."]
     [:h4 "Zweck der Datenverarbeitung"]
-    [:p "Die Verarbeitung der anonymisierten Daten der Nutzer:innen ermöglicht uns eine Analyse der Nutzung unserer Webseite. Wir sind in durch die Auswertung der gewonnen Daten in der Lage, Informationen über die Nutzung der einzelnen Komponenten unserer Webseite zusammenzustellen. Dies hilft uns dabei unsere Dienste und deren Nutzer:innenfreundlichkeit stetig zu verbessern. Durch die Anonymisierung der IP-Adresse wird dem Interesse der:die Nutzer:in an deren Schutz personenbezogener Daten hinreichend Rechnung getragen."]
-    [:p "Es werden keine Profile erstellt, die uns einen tieferen Einblick in das Nutzungsverhalten der einzelnen Nutzer:innen geben würden. Die Auswertung erfolgt ausschließlich anonymisiert und aggregiert, dass kein Schluss auf einzelne Personen zu ziehen ist."]
+    [:p "Die Verarbeitung der anonymisierten Daten der Nutzer:innen ermöglicht uns eine Analyse der Nutzung unserer Webseite. Wir sind durch die Auswertung der gewonnen Daten in der Lage, Informationen über die Nutzung der einzelnen Komponenten unserer Webseite zusammenzustellen. Dies hilft uns dabei unsere Dienste und deren Nutzer:innenfreundlichkeit stetig zu verbessern. Durch die Anonymisierung der IP-Adresse wird dem Interesse der Nutzerin / des Nutzers an deren Schutz personenbezogener Daten hinreichend Rechnung getragen."]
+    [:p "Die Auswertung erfolgt ausschließlich anonymisiert, pseudonymisiert und aggregiert, sodass kein Rückschluss auf einzelne Personen mehr möglich ist."]
     [:p "Der Einsatz von Matomo auf unserer Homepage erfolgt auf Rechtsgrundlage des Art. 6 Abs. 1 lit. f DSGVO."]]
    :privacy.extended.cleverreach/title "Newsletter und Infomails mit CleverReach"
    :privacy.extended.cleverreach/body
