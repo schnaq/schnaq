@@ -188,8 +188,9 @@
         ;; Only Moderators can lock
         locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
     (if (validator/valid-writeable-discussion? share-hash)
-      (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement keycloak-id
-                                                                   {:locked? locked?})]
+      (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement
+                                                                   :registered-user? keycloak-id
+                                                                   :locked? locked?)]
         (log/info "Starting statement added for discussion" share-hash)
         (created "" {:starting-conclusions (starting-conclusions-with-processors share-hash user-id new-starting-id)}))
       (validator/deny-access at/invalid-rights-message))))
@@ -209,7 +210,8 @@
           (created ""
                    {:new-statement
                     (valid-statements-with-votes
-                     (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id
+                     (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type
+                                                        :registered-user? keycloak-id
                                                         :locked? locked?)
                      user-id)}))
       (validator/deny-access at/invalid-rights-message))))

@@ -175,7 +175,7 @@
 
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
-  [share-hash user-id statement-content registered-user? & {:keys [locked?]}]
+  [share-hash user-id statement-content & {:keys [locked? registered-user?]}]
   [:discussion/share-hash :db/id :statement/content any? (s/* any?) :ret :db/id]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
         ;; Only registered users are allowed to lock their cards
@@ -257,7 +257,7 @@
 
 (>defn react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created statement."
-  [share-hash user-id statement-id reacting-string reaction registered-user? & {:keys [locked?]}]
+  [share-hash user-id statement-id reacting-string reaction & {:keys [locked? registered-user?]}]
   [:discussion/share-hash :db/id :db/id :statement/content keyword? any? (s/* any?) :ret ::specs/statement]
   (let [;; Only registered users are allowed to lock their cards
         locked? (if registered-user? (boolean locked?) false)

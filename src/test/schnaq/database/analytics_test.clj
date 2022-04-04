@@ -47,7 +47,7 @@
                                      :discussion/edit-hash "ahsdasd"
                                      :discussion/share-hash share-hash
                                      :discussion/author user-id})
-      (discussion-db/add-starting-statement! share-hash user-id "test" false)
+      (discussion-db/add-starting-statement! share-hash user-id "test")
       (is (= 29 (:overall (db/number-of-statements))))))
   (testing "The statements in the series should be grouped accordingly"
     (is (= 27 (get (:series (db/number-of-statements)) "2020-W01")))
@@ -65,7 +65,7 @@
     (let [woggler-id (user-db/add-user-if-not-exists "wooooggler")]
       (is (= 4 (:overall (db/number-of-active-discussion-users))))
       (main-db/transact
-       [(discussion-db/add-starting-statement! "cat-dog-hash" woggler-id "Alles doof" false)]))
+       [(discussion-db/add-starting-statement! "cat-dog-hash" woggler-id "Alles doof")]))
     (is (= 5 (:overall (db/number-of-active-discussion-users))))
     (is (= 1 (:overall/registered (db/number-of-active-discussion-users))))))
 
