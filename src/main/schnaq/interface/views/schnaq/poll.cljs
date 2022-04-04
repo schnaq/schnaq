@@ -162,7 +162,7 @@
          [icon :backspace] " " (labels :schnaq.rankings/delete-last-choice)]])
      [:button.btn.btn-dark.mt-3.mx-auto.d-block
       {:disabled (not (and selected-options (seq selected-options)))
-       :on-click (matomo/track-event "Active User", "Action", "Vote on Poll")}
+       :on-click #(matomo/track-event "Active User", "Action", "Vote on Poll")}
       (labels :schnaq.poll/vote!)]]))
 
 (>defn input-or-results
@@ -297,7 +297,10 @@
       [:label.form-check-label
        {:for :radio-ranking-choice} (labels :schnaq.poll.create/ranking-label)]]
      [:div.text-center.pt-2
-      [:button.btn.btn-primary.w-75 {:type "submit"} (labels :schnaq.poll.create/submit-button)]]]))
+      [:button.btn.btn-primary.w-75
+       {:type "submit"
+        :on-click #(matomo/track-event "Active User", "Action", "Create Poll")}
+       (labels :schnaq.poll.create/submit-button)]]]))
 
 (rf/reg-event-fx
  :schnaq.poll/create-new
