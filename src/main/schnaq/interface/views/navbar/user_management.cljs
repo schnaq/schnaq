@@ -37,7 +37,7 @@
     :on-submit #(.preventDefault %)}
    [:input.btn.dropdown-item {:type "submit"
                               :value (labels :user.button/change-name)
-                              :on-click #(matomo/track-event "Active User", "Preparation Action", "Create User-Name")}]])
+                              :on-click #(matomo/track-event "Active User", "Secondary Action", "Create User-Name")}]])
 
 (defn- namechange-menu-point
   "A bar containing all user related utilities and information."

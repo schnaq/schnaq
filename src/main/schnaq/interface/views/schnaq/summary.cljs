@@ -49,7 +49,7 @@
         {:disabled true}
         {:on-click (fn [_e]
                      (rf/dispatch [:schnaq.summary/request share-hash])
-                     (matomo/track-event "Active User", "Preparation Action", "Request Summary"))})
+                     (matomo/track-event "Active User", "Secondary Action", "Request Summary"))})
       button-text]
      [abort-summary share-hash]
      [common-components/hint-text

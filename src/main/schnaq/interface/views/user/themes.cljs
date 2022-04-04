@@ -128,7 +128,7 @@
          (rf/dispatch [:theme/reset])
          (rf/dispatch [:theme.selected/update :theme/title
                        (gstring/format (labels :themes.personal.creation/theme-placeholder) user-name)])
-         (matomo/track-event "Active User", "Preparation Action", "Design New Theme"))
+         (matomo/track-event "Active User", "Secondary Action", "Design New Theme"))
        "btn-outline-primary h-100"]]]))
 
 ;; -----------------------------------------------------------------------------
