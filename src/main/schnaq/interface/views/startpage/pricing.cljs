@@ -200,7 +200,7 @@
    [:div.text-center.py-4
     [:a.btn.btn-primary
      {:href "mailto:info@schnaq.com"
-      :on-click (fn [_e] (matomo/track-event "Lead" "Mail-Request" "Enterprise-Plan" 50))}
+      :on-click #(matomo/track-event "Lead" "Mail-Request" "Enterprise-Plan" 50)}
      (labels :pricing.enterprise-tier/call-to-action)]]])
 
 (defn- tier-cards []
