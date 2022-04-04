@@ -427,6 +427,8 @@
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
                                                :premise :statement/content
+                                               :edit-hash (s/or :edit-hash :discussion/edit-hash
+                                                                :nil nil?)
                                                :statement-type dto/statement-type
                                                :locked? :statement/locked?
                                                :display-name ::specs/non-blank-string}}
@@ -457,6 +459,8 @@
                       :description (at/get-doc #'add-starting-statement!)
                       :name :api.discussion.statements.starting/add
                       :parameters {:body {:share-hash :discussion/share-hash
+                                          :edit-hash (s/or :edit-hash :discussion/edit-hash
+                                                           :nil nil?)
                                           :statement :statement/content
                                           :display-name ::specs/non-blank-string
                                           :locked? :statement/locked?}}
