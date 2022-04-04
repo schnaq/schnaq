@@ -9,6 +9,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -126,7 +127,8 @@
        (fn []
          (rf/dispatch [:theme/reset])
          (rf/dispatch [:theme.selected/update :theme/title
-                       (gstring/format (labels :themes.personal.creation/theme-placeholder) user-name)]))
+                       (gstring/format (labels :themes.personal.creation/theme-placeholder) user-name)])
+         (matomo/track-event "Active User", "Preparation Action", "Design New Theme"))
        "btn-outline-primary h-100"]]]))
 
 ;; -----------------------------------------------------------------------------
