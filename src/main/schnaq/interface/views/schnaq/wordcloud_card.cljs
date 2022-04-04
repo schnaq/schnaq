@@ -3,6 +3,7 @@
             [schnaq.export :as export]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.wordcloud :as wordcloud]
+            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -20,7 +21,9 @@
          {:on-click #(rf/dispatch [:schnaq.wordcloud/toggle false])}
          (labels :schnaq.wordcloud/hide)]
         [:button.btn.btn-secondary.w-75
-         {:on-click (fn [_e] (rf/dispatch [:schnaq.wordcloud/toggle true]))}
+         {:on-click (fn [_e]
+                      (rf/dispatch [:schnaq.wordcloud/toggle true])
+                      (matomo/track-event "Active User", "Action", "Create Wordcloud"))}
          (labels :schnaq.wordcloud/show)])]]))
 
 (defn wordcloud-card
