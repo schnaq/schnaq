@@ -97,19 +97,27 @@
 
 (rf/reg-event-fx
  :discussion.add.statement/starting
- ;; TODO add opportunistic updates for locked cards
  (fn [{:keys [db]} [_ form]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
-         statement-text (oget form [:statement :value])]
-     {:db (update-in db [:schnaq :selected :meta-info :all-statements] inc)
+         statement-text (oget form [:statement :value])
+         locked? (boolean (oget form ["?lock-card?" :checked]))
+         username (get-in db [:user :names :display])
+         rand-id (rand-int 9999999)]
+     {:db (-> db
+              (update-in [:schnaq :selected :meta-info :all-statements] inc)
+              (assoc-in [:discussion :premises :current rand-id] {:db/id rand-id
+                                                                  :statement/author {:user/nickname username}
+                                                                  :statement/version 1
+                                                                  :statement/content statement-text
+                                                                  :statement/locked? locked?}))
       :fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
                                [:discussion.add.statement/starting-success form]
                                {:statement statement-text
                                 :share-hash share-hash
                                 :edit-hash edit-hash
                                 :display-name (toolbelt/current-display-name db)
-                                :locked? (boolean (oget form ["?lock-card?" :checked]))}
+                                :locked? locked?}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
