@@ -9,6 +9,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -160,7 +161,8 @@
           :on-click #(rf/dispatch [:schnaq.ranking/delete-vote poll-id (apply max (keys selected-options))])}
          [icon :backspace] " " (labels :schnaq.rankings/delete-last-choice)]])
      [:button.btn.btn-dark.mt-3.mx-auto.d-block
-      {:disabled (not (and selected-options (seq selected-options)))}
+      {:disabled (not (and selected-options (seq selected-options)))
+       :on-click (matomo/track-event "Active User", "Action", "Vote on Poll")}
       (labels :schnaq.poll/vote!)]]))
 
 (>defn input-or-results
@@ -202,7 +204,8 @@
        (when-not cast-votes
          [:div.text-center
           [:button.btn.btn-primary.btn-sm
-           {:type :submit}
+           {:type :submit
+            :on-click #(matomo/track-event "Active User", "Action", "Vote on Poll")}
            (labels :schnaq.poll/vote!)]])]]]))
 
 (defn poll-list
