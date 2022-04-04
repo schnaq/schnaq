@@ -712,7 +712,7 @@
    :discussion.notification/new-content-body "Dein Beitrag wurde erfolgreich gespeichert."
    :discussion.badges/edit-statement "editieren"
    :discussion.badges/flag-statement "melden"
-   :discussion.badges/lock-statement "schreibschutz aktivieren"
+   :discussion.badges/lock-statement "Schreibschutz aktivieren"
    :discussion.badges/unlock-statement "beschreibbar machen"
    :discussion.badges/share-statement "Link kopieren"
    :discussion.badges/statement-by "von"
