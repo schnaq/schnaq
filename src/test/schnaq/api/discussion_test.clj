@@ -43,6 +43,7 @@
 (defn- react-to-conclusions-request [statement-id]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.discussion.react-to/statement))
        :body-params {:share-hash "cat-dog-hash"
+                     :edit-hash "cat-dog-edit-hash"
                      :conclusion-id statement-id
                      :premise "test"
                      :statement-type :statement.type/attack
