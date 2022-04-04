@@ -360,6 +360,14 @@
                           first)})
       (forbidden (at/build-error-body :permission/forbidden "You are not allowed to edit labels")))))
 
+(defn- toggle-statement-lock
+  "Lock or unlock a statement. (Makes it read-only)"
+  [{:keys [parameters]}]
+  (let [{:keys [statement-id share-hash lock?]} (:body parameters)]
+    (if (validator/valid-discussion-and-statement? statement-id share-hash)
+      (discussion-db/toggle-statement-lock statement-id lock?)
+      (bad-request (at/build-error-body :statement/invalid "The statement you are trying to lock is not valid.")))))
+
 ;; -----------------------------------------------------------------------------
 
 (def discussion-routes
@@ -466,7 +474,16 @@
                           :name :api.discussion.statements/all-seen
                           :middleware [:user/authenticated?]
                           :parameters {:body {:share-hash :discussion/share-hash}}
-                          :responses {200 {:body {:share-hash :discussion/share-hash}}}}]]
+                          :responses {200 {:body {:share-hash :discussion/share-hash}}}}]
+    ["/lock/toggle" {:post toggle-statement-lock
+                     :description (at/get-doc #'toggle-statement-lock)
+                     :name :api.discussion.statements/lock
+                     :middleware [:user/authenticated? :discussion/valid-credentials?]
+                     :parameters {:body {:share-hash :discussion/share-hash
+                                         :edit-hash :discussion/edit-hash
+                                         :statement-id :db/id
+                                         :lock? boolean?}}
+                     :responses {200 {:body {:locked? boolean?}}}}]]
    ["/statement"
     ["/info" {:get get-statement-info
               :description (at/get-doc #'get-statement-info)

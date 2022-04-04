@@ -726,3 +726,9 @@
     (when valid-secrets
       @(transact
         (mapv #(vector :db/add [:discussion/share-hash %] :discussion/author author-id) (keys valid-secrets))))))
+
+(>defn toggle-statement-lock
+  "Lock or unlock a statement."
+  [statement-id lock?]
+  [:db/id boolean? :ret any?]
+  @(transact [:db/add statement-id :statement/locked? lock?]))

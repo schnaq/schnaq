@@ -44,7 +44,7 @@
             [schnaq.config.summy :as summy-config]
             [schnaq.core] ;; Keep this import to activate database etc.
             [schnaq.toolbelt :as toolbelt]
-            [schnaq.websockets.handler :refer [websocket-routes] :as ws]
+            [schnaq.websockets.handler :refer [websocket-routes]]
             [schnaq.websockets.messages]
             [taoensso.timbre :as log])
   (:gen-class))
@@ -219,4 +219,4 @@
   (mount/stop)
   :end)
 
-;; TODO karten nachträglich (als mod) locken und unlocken können
+;; TODO karten nachträglich (als mod) locken und unlocken können - backend + frontend wire
