@@ -8,6 +8,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
+            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.modal :as modal]
             [taoensso.timbre :as log]))
@@ -112,8 +113,9 @@
  (fn [keycloak]
    (-> keycloak
        (.loadUserProfile)
-       (.then #(rf/dispatch [:keycloak/store-groups
-                             (js->clj % :keywordize-keys true)]))
+       (.then #(let [keycloak-fields (js->clj % :keywordize-keys true)]
+                 (rf/dispatch [:keycloak/store-groups keycloak-fields])
+                 (matomo/set-user-id (:id keycloak-fields))))
        (.catch #(rf/dispatch [:modal {:show? true :child [request-login-modal]}])))))
 
 (rf/reg-event-db

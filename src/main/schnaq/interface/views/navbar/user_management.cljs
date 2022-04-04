@@ -4,6 +4,7 @@
             [schnaq.interface.components.common :refer [pro-badge]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.navbar :as nav-component]
+            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -35,7 +36,8 @@
    {:on-click #(rf/dispatch [:user/show-display-name-input])
     :on-submit #(.preventDefault %)}
    [:input.btn.dropdown-item {:type "submit"
-                              :value (labels :user.button/change-name)}]])
+                              :value (labels :user.button/change-name)
+                              :on-click #(matomo/track-event "Active User", "Secondary Action", "Create User-Name")}]])
 
 (defn- namechange-menu-point
   "A bar containing all user related utilities and information."

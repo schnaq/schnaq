@@ -2,6 +2,7 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -35,6 +36,7 @@
 (defn- create-schnaq-button []
   [:div.text-end
    [:button.btn.btn-dark.p-3.rounded-1
+    {:on-click #(matomo/track-event "Active User", "Action", "Create Schnaq")}
     (labels :schnaq.create.button/save)
     [icon :arrow-right "ms-2"]]])
 

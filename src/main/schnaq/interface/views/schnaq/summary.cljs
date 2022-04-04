@@ -6,6 +6,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -46,7 +47,9 @@
      [:button.btn.btn-dark.mb-2
       (if (some #{request-status} calculation-states)
         {:disabled true}
-        {:on-click #(rf/dispatch [:schnaq.summary/request share-hash])})
+        {:on-click (fn [_e]
+                     (rf/dispatch [:schnaq.summary/request share-hash])
+                     (matomo/track-event "Active User", "Secondary Action", "Request Summary"))})
       button-text]
      [abort-summary share-hash]
      [common-components/hint-text
@@ -209,7 +212,7 @@
  (fn [db [_ share-hash result]]
    (let [{:summary/keys [created-at requested-at text] :as summary} (:summary result)]
      (cond-> (assoc-in db [:schnaq :summary :result share-hash] summary)
-       (or (and requested-at (not text))                    ;; Requested, but not finished
+       (or (and requested-at (not text)) ;; Requested, but not finished
            (and created-at requested-at (> requested-at created-at))) ; Requested update
        (assoc-in [:schnaq :summary :status share-hash] :request-succeeded)))))
 
@@ -234,7 +237,7 @@
  (fn [summaries _ _]
    (sort-by
     :summary/requested-at
-    (remove #(and (:summary/text %)                         ;; No summary provided yet
+    (remove #(and (:summary/text %) ;; No summary provided yet
                   (< (:summary/requested-at %) (:summary/created-at %))) ;; Update requested after last summary
             summaries))))
 

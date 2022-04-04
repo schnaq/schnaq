@@ -3,6 +3,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.pages :as pages]
@@ -31,7 +32,9 @@
         :placeholder (labels :qanda/add-question)
         :on-key-up #(throttled-search %)}]]
      [:button.btn.btn-lg.btn-secondary.w-100.shadow-sm.mt-3.rounded-1
-      {:type "submit" :title (labels :qanda.button/submit)}
+      {:type "submit"
+       :title (labels :qanda.button/submit)
+       :on-click #(matomo/track-event "Active User", "Action", "Submit Question")}
       [:div.d-inline-block
        [:div.d-flex.flex-row.justify-content-center
         [:div.me-3 (labels :qanda.button/submit)]

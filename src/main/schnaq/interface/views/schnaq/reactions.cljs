@@ -5,6 +5,7 @@
             [re-frame.core :as rf]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.utils.http :as http]))
 
 (>defn calculate-votes
@@ -47,7 +48,8 @@
                    (.stopPropagation e)
                    (if authenticated?
                      (rf/dispatch [:discussion/toggle-upvote statement])
-                     (rf/dispatch [:schnaq.vote/toggle-anonymous statement :upvote])))}
+                     (rf/dispatch [:schnaq.vote/toggle-anonymous statement :upvote]))
+                   (matomo/track-event "Active User", "Action", "Vote: Upvote"))}
       [icon :arrow-up "vote-arrow m-auto"]]
      [:span.me-2 (get-up-votes statement votes)]
      [:div.me-1
@@ -56,7 +58,8 @@
                    (.stopPropagation e)
                    (if authenticated?
                      (rf/dispatch [:discussion/toggle-downvote statement])
-                     (rf/dispatch [:schnaq.vote/toggle-anonymous statement :downvote])))}
+                     (rf/dispatch [:schnaq.vote/toggle-anonymous statement :downvote]))
+                   (matomo/track-event "Active User", "Action", "Vote: Downvote"))}
       [icon :arrow-down "vote-arrow m-auto"]]
      [:span (get-down-votes statement votes)]]))
 

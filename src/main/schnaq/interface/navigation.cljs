@@ -6,6 +6,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.controllers :as reitit-front-controllers]
             [reitit.frontend.easy :as reitit-front-easy]
+            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.utils.routing :as route-utils]))
 
 (rf/reg-sub
@@ -42,11 +43,7 @@
 
 (rf/reg-fx
  :navigation.navigated/push-matomo-tracker
- (fn []
-   (let [matomo js/window._paq]
-     (.push matomo #js ["setCustomUrl" (oget js/window :location :href)])
-     (.push matomo #js ["setDocumentTitle" (oget js/window :document :title)])
-     (.push matomo #js ["trackPageView"]))))
+ (fn [] (matomo/track-current-page)))
 
 (rf/reg-event-fx
  :navigation/navigated
