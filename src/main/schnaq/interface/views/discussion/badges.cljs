@@ -156,10 +156,20 @@
     [:button.dropdown-item
      {:tabIndex 55
       :on-click (fn [e] (.stopPropagation e)
-                  ;; TODO call the route
-                  (js/alert (str "yes I will set the lock state to: " to-lock?)))
+                  (rf/dispatch [:statement.lock/toggle (:db/id statement) to-lock?]))
       :title label}
      [icon (if to-lock? :lock :lock/open) "my-auto me-2"] label]))
+
+(rf/reg-event-fx
+ :statement.lock/toggle
+ (fn [{:keys [db]} [_ statement-id lock?]]
+   {:db (assoc-in db [:discussion :premises :current statement-id :statement/locked?] lock?)
+    :fx [(http/xhrio-request db :post "/discussion/statement/lock/toggle"
+                             [:no-op]
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
+                              :statement-id statement-id
+                              :lock? lock?})]}))
 
 (rf/reg-event-fx
  :statement/flag

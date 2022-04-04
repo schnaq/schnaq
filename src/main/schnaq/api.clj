@@ -218,5 +218,3 @@
   (mount/start)
   (mount/stop)
   :end)
-
-;; TODO karten nachträglich (als mod) locken und unlocken können - backend + frontend wire

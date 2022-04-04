@@ -365,7 +365,9 @@
   [{:keys [parameters]}]
   (let [{:keys [statement-id share-hash lock?]} (:body parameters)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
-      (discussion-db/toggle-statement-lock statement-id lock?)
+      (if (discussion-db/toggle-statement-lock statement-id lock?)
+        (ok {:locked? lock?})
+        (bad-request (at/build-error-body :statement.lock/error "Something went wrong while locking, try again.")))
       (bad-request (at/build-error-body :statement/invalid "The statement you are trying to lock is not valid.")))))
 
 ;; -----------------------------------------------------------------------------
@@ -474,16 +476,7 @@
                           :name :api.discussion.statements/all-seen
                           :middleware [:user/authenticated?]
                           :parameters {:body {:share-hash :discussion/share-hash}}
-                          :responses {200 {:body {:share-hash :discussion/share-hash}}}}]
-    ["/lock/toggle" {:post toggle-statement-lock
-                     :description (at/get-doc #'toggle-statement-lock)
-                     :name :api.discussion.statements/lock
-                     :middleware [:user/authenticated? :discussion/valid-credentials?]
-                     :parameters {:body {:share-hash :discussion/share-hash
-                                         :edit-hash :discussion/edit-hash
-                                         :statement-id :db/id
-                                         :lock? boolean?}}
-                     :responses {200 {:body {:locked? boolean?}}}}]]
+                          :responses {200 {:body {:share-hash :discussion/share-hash}}}}]]
    ["/statement"
     ["/info" {:get get-statement-info
               :description (at/get-doc #'get-statement-info)
@@ -497,6 +490,13 @@
                           404 at/response-error-body}}]
     ["" {:parameters {:body {:statement-id :db/id
                              :share-hash :discussion/share-hash}}}
+     ["/lock/toggle" {:post toggle-statement-lock
+                      :description (at/get-doc #'toggle-statement-lock)
+                      :name :api.discussion.statements/lock
+                      :middleware [:user/authenticated? :discussion/valid-credentials?]
+                      :parameters {:body {:edit-hash :discussion/edit-hash
+                                          :lock? boolean?}}
+                      :responses {200 {:body {:locked? boolean?}}}}]
      ["/edit" {:put edit-statement!
                :description (at/get-doc #'edit-statement!)
                :name :api.discussion.statement/edit

@@ -731,4 +731,4 @@
   "Lock or unlock a statement."
   [statement-id lock?]
   [:db/id boolean? :ret any?]
-  @(transact [:db/add statement-id :statement/locked? lock?]))
+  @(transact [[:db/add statement-id :statement/locked? lock?]]))
