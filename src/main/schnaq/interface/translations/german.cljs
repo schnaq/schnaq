@@ -1070,6 +1070,7 @@
    :router/product-qa "Q&A"
    :router/product-poll "Umfragen"
    :router/product-activation "Aktivierung"
+   :router/product-theming "Design gestalten"
    :router/qanda "Fragen & Antworten"
    :router/start-discussion "Starte Diskussion"
    :router/startpage "Startseite"

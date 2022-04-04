@@ -186,6 +186,13 @@
    :productpage.activation.audience/title "This is what your audience sees"
    :productpage.activation.audience/subtitle "As soon as you start, the first tile your audience sees is the activation view with the Torooo button. Your participants can give a Torooo at any time. So you can engage them whenever you need to!"
 
+   ;; Theming Feature
+   :productpage.theming/heading "Theming"
+   :productpage.theming/subtitle "Put your brand front, right and center!"
+   :productpage.theming/title "Audience activation with your brand in the focus."
+   :productpage.theming/description "With schnaq theming, you can create your own design with a few clicks. No programming or extra tools needed. Keep your audience in the design, they know."
+   :productpage.theming/cta-button "Create your own theme in 15 seconds!"
+
    ;; Login page
    :page.login/heading "Let's schnaq"
    :page.login/subheading "100% free forever"
@@ -1071,6 +1078,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/product-qa "Q&A"
    :router/product-poll "Polls"
    :router/product-activation "Activation"
+   :router/product-theming "Theming"
    :router/qanda "Q&A"
    :router/start-discussion "Start discussion"
    :router/startpage "Startpage"

@@ -117,3 +117,30 @@
   "Activation product sub page."
   []
   [product-activation])
+
+(defn- product-theming []
+  [elements/product-page
+   :productpage.theming/heading
+   :productpage.theming/subtitle
+   :productpage.theming/title
+   :productpage.theming/description
+   :productpage.theming/cta-button
+   :feature/pro
+   [:<>
+    [elements/feature-text-img-right
+     :productpage.activation.torooo/title
+     :productpage.activation.torooo/subtitle
+     :productpage.activation/torooo]
+    [elements/feature-text-img-left
+     :productpage.activation.raise-hands/title
+     :productpage.activation.raise-hands/subtitle
+     :productpage.activation/raise-hands]
+    [elements/feature-text-img-right
+     :productpage.activation.audience/title
+     :productpage.activation.audience/subtitle
+     :productpage.activation/user-view]]])
+
+(defn theming-view
+  "Theming product sub page"
+  []
+  [product-theming])
