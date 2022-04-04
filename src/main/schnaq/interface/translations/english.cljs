@@ -192,6 +192,9 @@
    :productpage.theming/title "Audience activation with your brand in the focus."
    :productpage.theming/description "With schnaq theming, you can create your own design with a few clicks. No programming or extra tools needed. Keep your audience in the design, they know."
    :productpage.theming/cta-button "Create your own theme in 15 seconds!"
+   :productpage.theming.brand-identity/title "Preserve your brand throughout your event!"
+   :productpage.theming.brand-identity/subtitle "Your brand is an important part of who your company is. Preserve the colors, the presentation and flair of your brand with custom themes. You can pick any colors and images in a few seconds. All your schnaqs will reflect your brand instantly."
+
 
    ;; Login page
    :page.login/heading "Let's schnaq"

@@ -68,6 +68,7 @@
     :productpage.activation/torooo "https://s3.schnaq.com/schnaq-common/product-page/activation-torooo.jpg"
     :productpage.activation/raise-hands "https://s3.schnaq.com/schnaq-common/product-page/activation-raise-hand.jpg"
     :productpage.activation/user-view "https://s3.schnaq.com/schnaq-common/product-page/activation-user-view.jpg"
+    :productpage.theming/brand-identity "https://s3.schnaq.com/schnaq-common/product-page/brand_identity.webp"
     :schnaqqifant/admin "https://s3.schnaq.com/schnaq-schnaqqifanten/admin.png"
     :schnaqqifant/erase "https://s3.schnaq.com/schnaq-schnaqqifanten/erase.png"
     :schnaqqifant/flat "https://s3.schnaq.com/schnaq-schnaqqifanten/schnaqqi_flat_front.png"

@@ -128,9 +128,9 @@
    :feature/pro
    [:<>
     [elements/feature-text-img-right
-     :productpage.activation.torooo/title
-     :productpage.activation.torooo/subtitle
-     :productpage.activation/torooo]
+     :productpage.theming.brand-identity/title
+     :productpage.theming.brand-identity/subtitle
+     :productpage.theming/brand-identity]
     [elements/feature-text-img-left
      :productpage.activation.raise-hands/title
      :productpage.activation.raise-hands/subtitle
