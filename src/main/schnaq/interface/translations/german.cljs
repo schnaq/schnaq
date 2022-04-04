@@ -526,6 +526,7 @@
      [:li "Die Häufigkeit des Aufrufs der Webseite"]]
     [:p "Matomo ist so eingestellt, dass die IP-Adressen nicht vollständig gespeichert werden, sondern zwei Bytes der IP-Adresse maskiert werden (Bsp.: 192.168.xxx.xxx). Auf diese Weise ist eine Zuordnung der gekürzten IP-Adresse zum aufrufenden Rechner nicht mehr möglich."]
     [:p "Matomo kommt ausschließlich in Diensten von schnaq zum Einsatz und wird auf unseren eigenen Servern betrieben. Eine Speicherung der personenbezogenen Daten der Nutzer:innen findet nur dort statt. Eine Weitergabe der personenbezogenen Daten an Dritte erfolgt niemals."]
+    [:p "Deine anonymisierten Daten werden 180 Tage gespeichert und dann automatisch von unseren Servern gelöscht."]
     [:h4 "Zweck der Datenverarbeitung"]
     [:p "Die Verarbeitung der anonymisierten Daten der Nutzer:innen ermöglicht uns eine Analyse der Nutzung unserer Webseite. Wir sind durch die Auswertung der gewonnen Daten in der Lage, Informationen über die Nutzung der einzelnen Komponenten unserer Webseite zusammenzustellen. Dies hilft uns dabei unsere Dienste und deren Nutzer:innenfreundlichkeit stetig zu verbessern. Durch die Anonymisierung der IP-Adresse wird dem Interesse der Nutzerin / des Nutzers an deren Schutz personenbezogener Daten hinreichend Rechnung getragen."]
     [:p "Die Auswertung erfolgt ausschließlich anonymisiert, pseudonymisiert und aggregiert, sodass kein Rückschluss auf einzelne Personen mehr möglich ist."]

@@ -527,6 +527,7 @@
      [:li "The frequency of access to the website"]]
     [:p "Matomo is set so that the IP addresses are not stored in full, but two bytes of the IP address are masked (example: 192.168.xxx.xxx). In this way, an assignment of the shortened IP address to the calling computer is no longer possible."]
     [:p "Matomo is used exclusively for schnaq services and on our own schnaq servers. Personal data of the users is only stored there. Personal data is and will never get passed on to third parties."]
+    [:p "Your anonymized data will be stored for 180 days and then automatically deleted from our servers."]
     [:h4 "Purpose of data processing"]
     [:p "The processing of anonymized user data enables us to analyze the use of our website. By evaluating the data obtained, we are able to compile information about the use of the individual components of our website. This helps us to continuously improve our services and their user-friendliness. By anonymizing the IP address, the interest of the user in the protection of his personal data is sufficiently taken into account."]
     [:p "The evaluation is exclusively anonymized, pseudonymized and aggregated so that no conclusion can be drawn about individual persons."]
