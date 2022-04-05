@@ -171,6 +171,27 @@
                               :statement-id statement-id
                               :lock? lock?})]}))
 
+(defn- toggle-pin-statement-dropdown-button [statement]
+  (let [to-pin? (not (:statement/pinned? statement))
+        label (labels (if to-pin? :discussion.badges/pin-statement :discussion.badges/unpin-statement))]
+    [:button.dropdown-item
+     {:tabIndex 56
+      :on-click (fn [e] (.stopPropagation e)
+                  (rf/dispatch [:statement.pin/toggle (:db/id statement) to-pin?]))
+      :title label}
+     [icon :pin "my-auto me-2"] label]))
+
+(rf/reg-event-fx
+ :statement.pin/toggle
+ (fn [{:keys [db]} [_ statement-id pin?]]
+   {:db (assoc-in db [:discussion :premises :current statement-id :statement/pinned?] pin?)
+    :fx [(http/xhrio-request db :post "/discussion/statement/pin/toggle"
+                             [:no-op]
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
+                              :statement-id statement-id
+                              :pin? pin?})]}))
+
 (rf/reg-event-fx
  :statement/flag
  (fn [{:keys [db]} [_ statement-id]]
@@ -214,6 +235,9 @@
       (when (and current-edit-hash @(rf/subscribe [:user/authenticated?]))
         [:dropdown-item
          [lock-unlock-statement-dropdown-button statement]])
+      (when (and current-edit-hash @(rf/subscribe [:user/pro-user?]))
+        [:dropdown-item
+         [toggle-pin-statement-dropdown-button statement]])
       (when editable?
         [:dropdown-item
          [edit-dropdown-button-statement statement]])

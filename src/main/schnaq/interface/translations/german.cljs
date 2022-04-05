@@ -727,6 +727,8 @@
    :discussion.badges/flag-statement "melden"
    :discussion.badges/lock-statement "Schreibschutz aktivieren"
    :discussion.badges/unlock-statement "beschreibbar machen"
+   :discussion.badges/pin-statement "Anheften"
+   :discussion.badges/unpin-statement "Anheften entfernen"
    :discussion.badges/share-statement "Link kopieren"
    :discussion.badges/statement-by "von"
    :discussion.badges/new "Neu"

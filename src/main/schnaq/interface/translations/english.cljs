@@ -728,6 +728,8 @@
    :discussion.badges/flag-statement "report"
    :discussion.badges/lock-statement "lock"
    :discussion.badges/unlock-statement "unlock"
+   :discussion.badges/pin-statement "pin"
+   :discussion.badges/unpin-statement "unpin"
    :discussion.badges/share-statement "copy link"
    :discussion.badges/statement-by "by"
    :discussion.badges/new "New"
