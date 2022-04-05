@@ -89,13 +89,6 @@
    :startpage.newsletter/heading "Melde dich für den schnaq Newsletter an und erhalte regelmäßig Updates, Tipps und mehr!"
    :startpage.newsletter/button "Exklusive Informationen anfordern!"
    :startpage.newsletter/address-placeholder "E-Mail Adresse"
-   :startpage.newsletter/consent "Ich möchte mich hiermit zum schnaq Newsletter anmelden, und in Zukunft regelmäßig Informationen von schnaq.com erhalten."
-   :startpage.newsletter/more-info-clicker "Datenverarbeitung"
-   :startpage.newsletter/policy-disclaimer "schnaq erhebt, verarbeitet und nutzt Ihre oben angegebenen personenbezogenen Daten zur
-        Bearbeitung Ihres Anliegens. Jederzeit kannst du dich von dem Newsletter abmelden, indem du auf
-        den in der E-Mail zur Verfügung gestellten Link klicken. Alternativ kannst du uns auch eine E-Mail
-        schreiben und wir kümmern uns dann um Ihr Anliegen."
-   :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, findest du in unserer"
 
    :startpage.faq/title "Häufig gestellte Fragen"
    :startpage.faq/subtitle "(so könnte es bei dir aussehen)"
