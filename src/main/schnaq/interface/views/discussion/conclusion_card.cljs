@@ -59,12 +59,15 @@
 ;; -----------------------------------------------------------------------------
 
 (defn- statement-information-row [statement]
-  [:div.d-flex.flex-wrap.align-items-center
-   [reactions/up-down-vote statement]
-   [:div.ms-sm-0.ms-lg-auto
-    (if (:statement/locked? statement)
-      [elements/locked-statement-icon]
-      [badges/show-number-of-replies statement])]])
+  (let [statement-id (:db/id statement)]
+    [:div.d-flex.flex-wrap.align-items-center
+     [reactions/up-down-vote statement]
+     [:div.ms-sm-0.ms-lg-auto
+      (if (:statement/locked? statement)
+        [elements/locked-statement-icon statement-id]
+        [badges/show-number-of-replies statement])
+      (when (:statement/pinned? statement)
+        [elements/pinned-statement-icon statement-id])]]))
 
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
@@ -421,12 +424,15 @@
         loading-statements? @(rf/subscribe [:loading/statements?])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
         filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))
+        grouped-statements (group-by #(true? (:statement/pinned? %)) filtered-conclusions)
+        pinned-statements (get grouped-statements true)
         input-filtered-statements
-        (sort-by #(score-hit current-input-tokens (:statement/content %)) > filtered-conclusions)]
+        (sort-by #(score-hit current-input-tokens (:statement/content %)) > (get grouped-statements false))
+        sorted-statements (concat pinned-statements input-filtered-statements)]
     (if loading-statements?
       [loading/loading-card]
-      (for [index (range (count input-filtered-statements))
-            :let [statement (nth input-filtered-statements index)]]
+      (for [index (range (count sorted-statements))
+            :let [statement (nth sorted-statements index)]]
         [:div.statement-column
          {:key (:db/id statement)}
          [motion/fade-in-and-out

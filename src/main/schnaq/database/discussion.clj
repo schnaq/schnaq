@@ -732,3 +732,9 @@
   [statement-id lock?]
   [:db/id boolean? :ret any?]
   @(transact [[:db/add statement-id :statement/locked? lock?]]))
+
+(>defn toggle-pinned-statement
+  "Pin or unpin a statement."
+  [statement-id pin?]
+  [:db/id boolean? :ret any?]
+  @(transact [[:db/add statement-id :statement/pinned? pin?]]))

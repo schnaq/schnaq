@@ -372,6 +372,16 @@
         (bad-request (at/build-error-body :statement.lock/error "Something went wrong while locking, try again.")))
       (bad-request (at/build-error-body :statement/invalid "The statement you are trying to lock is not valid.")))))
 
+(defn- toggle-pinned-statement
+  "Pin or unpin a statement."
+  [{:keys [parameters]}]
+  (let [{:keys [statement-id share-hash pin?]} (:body parameters)]
+    (if (validator/valid-discussion-and-statement? statement-id share-hash)
+      (if (discussion-db/toggle-pinned-statement statement-id pin?)
+        (ok {:pinned? pin?})
+        (bad-request (at/build-error-body :statement.lock/error "Something went wrong while pinning, try again.")))
+      (bad-request (at/build-error-body :statement/invalid "The statement you are trying to pin is not valid.")))))
+
 ;; -----------------------------------------------------------------------------
 
 (def discussion-routes
@@ -503,6 +513,13 @@
                       :parameters {:body {:edit-hash :discussion/edit-hash
                                           :lock? boolean?}}
                       :responses {200 {:body {:locked? boolean?}}}}]
+     ["/pin/toggle" {:post toggle-pinned-statement
+                     :description (at/get-doc #'toggle-pinned-statement)
+                     :name :api.discussion.statements/pin
+                     :middleware [:user/authenticated? :user/pro-user? :discussion/valid-credentials?]
+                     :parameters {:body {:edit-hash :discussion/edit-hash
+                                         :pin? boolean?}}
+                     :responses {200 {:body {:pinned? boolean?}}}}]
      ["/edit" {:put edit-statement!
                :description (at/get-doc #'edit-statement!)
                :name :api.discussion.statement/edit

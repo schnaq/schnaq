@@ -288,6 +288,7 @@
    :statement.badges/more-posts "more posts"
    :statement.badges/more-post "more post"
    :statement.locked/tooltip "This statement is locked"
+   :statement.pinned/tooltip "This statement is pinned"
 
    :schnaq.input-type/question "Question"
    :schnaq.input-type/answer "Answer"
@@ -722,6 +723,8 @@
    :discussion.badges/flag-statement "report"
    :discussion.badges/lock-statement "lock"
    :discussion.badges/unlock-statement "unlock"
+   :discussion.badges/pin-statement "pin"
+   :discussion.badges/unpin-statement "unpin"
    :discussion.badges/share-statement "copy link"
    :discussion.badges/statement-by "by"
    :discussion.badges/new "New"

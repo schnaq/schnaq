@@ -58,3 +58,16 @@
         unlocked-statement (first (remove :statement/locked? starting-statements))]
     (is (= 201 (:status (react-to-conclusions-request (:db/id unlocked-statement)))))
     (is (= 403 (:status (react-to-conclusions-request (:db/id locked-statement)))))))
+
+(deftest toggle-pinned-statement-test
+  (let [statement-id (:db/id (first (discussion-db/starting-statements "cat-dog-hash")))
+        request #(-> {:request-method :post :uri (:path (api/route-by-name :api.discussion.statements/pin))
+                      :body-params {:share-hash "cat-dog-hash"
+                                    :edit-hash "cat-dog-edit-hash"
+                                    :statement-id statement-id
+                                    :pin? true}}
+                     toolbelt/add-csrf-header
+                     (toolbelt/mock-authorization-header %)
+                     test-app)]
+    (is (= 200 (:status (request toolbelt/token-schnaqqifant-user))))
+    (is (= 403 (:status (request toolbelt/token-wegi-no-beta-user))))))
