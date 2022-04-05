@@ -139,7 +139,7 @@
    :productpage.overview.activation/text "Binde deine Teilnehmer:innen aktiv in deine Veranstaltung mit ein! Schwindet die Konzentration? Steigere die Aufmerksamkeit mit einer kurzen Aktion! Lass sie per Knopfdruck reagieren."
    :productpage.overview.feedback/title "Dein persönlicher Feedback-Kanal"
    :productpage.overview.feedback/text "Erhalte wichtige Erkenntnisse in der Analyseübersicht. Schalte Feedback frei oder wirf einen Blick auf die automatisch generierte Wortwolke."
-   :productpage/cta "Modernisiere deine nächste Veranstaltung mit schnaq"
+   :productpage/cta "Probiere es aus und verbessere deine nächste Veranstaltung mit schnaq"
    :productpage/learn-more "Erfahre mehr"
    :productpage/available-soon "Bald verfügbar"
 

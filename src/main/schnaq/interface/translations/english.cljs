@@ -138,7 +138,7 @@
    :productpage.overview.activation/text "Get your participants actively involved in your event! Their concentration is fading? Increase their attention with a short action! Let them react at the touch of a button!"
    :productpage.overview.feedback/title "Your personal feedback channel"
    :productpage.overview.feedback/text "Get important insights in the analysis overview. Unlock feedback or take a look at the automatically generated word cloud."
-   :productpage/cta "Modernise your next event with schnaq"
+   :productpage/cta "Try it out and elevate your next event with schnaq"
    :productpage/learn-more "Learn more!"
    :productpage/available-soon "Available soon"
 
