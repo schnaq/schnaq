@@ -90,12 +90,6 @@
    :startpage.newsletter/heading "Sign up for the schnaq newsletter and get regular updates, tips and more!"
    :startpage.newsletter/button "Give me exclusive previews!"
    :startpage.newsletter/address-placeholder "E-Mail Address"
-   :startpage.newsletter/consent "I want to subscribe to the schnaq newsletter, and regularly receive information about schnaq.com."
-   :startpage.newsletter/more-info-clicker "Data Processing"
-   :startpage.newsletter/policy-disclaimer "Schnaq saves, processes and saves the personal information you enter above to
-        subscribe you to the newsletter. You can unsubscribe at any time, by clicking the appropriate link in the emails you will receive.
-        Alternatively you can write us an email, and we will unsubscribe you personally."
-   :startpage.newsletter/privacy-policy-lead "More information about the handling of your personal data can be found in our"
 
    :startpage.faq/title "Frequently Asked Questions"
    :startpage.faq/subtitle "(this is what it could look like for you)"

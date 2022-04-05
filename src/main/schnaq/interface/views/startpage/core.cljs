@@ -10,7 +10,8 @@
             [schnaq.interface.views.startpage.features :as startpage-features]
             [schnaq.interface.views.startpage.testimonials :as testimonials]))
 
-(defn- mailchimp-form
+(defn- cleverreach-form
+  "A form to subscribe to the schnaq newsletter with cleverreach."
   []
   [:section#newsletter.row.pt-5.pb-5
    [:div.col-12.col-md-4.my-auto
@@ -19,36 +20,14 @@
    [:div.col-12.col-md-8.my-auto
     [:h4.text-center (labels :startpage.newsletter/heading)]
     [:form
-     {:target "_blank" :name "mc-embedded-subscribe-form" :method "post" :action
-      "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
-
-     [:input.mb-3
-      {:required true
-       :placeholder (labels :startpage.newsletter/address-placeholder)
-       :name "EMAIL" :defaultValue "" :type "email"
-       :class "form-control"}]
-
-     [:div.this-is-just-for-bots-do-not-fill-this-out
-      {:aria-hidden "true" :style {:position "absolute" :left "-5000px"}}
-      [:input {:defaultValue "" :tabIndex "-1" :type "text"
-               :name "b_adbf5722068bcbcc4c7c14a72_407d47335d"}]]
-
-     [:div.form-check.mb-3
-      [:input#nochmal-nachfragen.form-check-input {:type "checkbox" :required true}]
-      [:label.form-check-label {:for "nochmal-nachfragen"}
-       (labels :startpage.newsletter/consent)]
-      [:button.btn.btn-link {:role "button" :type "button" :data-bs-toggle "collapse" :data-bs-target "#collapse-more-newsletter"
-                             :aria-expanded "false" :aria-controls "#collapse-more-newsletter" :data-reitit-handle-click false}
-       (labels :startpage.newsletter/more-info-clicker)]
-      [:div.collapse {:id "collapse-more-newsletter"}
-       [:p.small (labels :startpage.newsletter/policy-disclaimer)
-        [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
-        [:a {:href (navigation/href :routes.privacy/complete)}
-         (labels :privacy/note)] "."]]]
-
-     [:input.mb-3
-      {:name "subscribe" :value (labels :startpage.newsletter/button) :type "submit" :readOnly true
-       :class "btn btn-primary d-block mx-auto"}]]]])
+     {:action "https://seu2.cleverreach.com/f/314219-322401/wcs/" :method "post" :target "_blank"}
+     [:div.cr_body.cr_page.cr_font.formbox
+      [:div.form-floating.mb-3
+       [:input#text7214965.form-control {:type "email" :placeholder "name@example.com"}]
+       [:label {:for "text7214965"} (labels :startpage.newsletter/address-placeholder)]]
+      [:button.btn.btn-primary.d-block.mx-auto {:type "submit"}
+       (labels :startpage.newsletter/button)]
+      [:noscript [:a {:href "http://www.cleverreach.de"} "www.CleverReach.de"]]]]]])
 
 (defn- early-adopters
   "Present early-adopters section to catch up interest."
@@ -144,7 +123,7 @@
       [:h2.text-center.mt-4 (labels :startpage.social-proof/companies)]
       [testimonials/testimonial-companies]
       [early-adopters]
-      [mailchimp-form]
+      [cleverreach-form]
       [team-and-supporters]]
      [:div.wave-bottom-typography]]]])
 
