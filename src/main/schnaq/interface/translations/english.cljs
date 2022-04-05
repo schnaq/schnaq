@@ -194,7 +194,10 @@
    :productpage.theming/cta-button "Create your own theme in 15 seconds!"
    :productpage.theming.brand-identity/title "Preserve your brand throughout your event!"
    :productpage.theming.brand-identity/subtitle "Your brand is an important part of who your company is. Preserve the colors, the presentation and flair of your brand with custom themes. You can pick any colors and images in a few seconds. All your schnaqs will reflect your brand instantly."
-
+   :productpage.theming.easy/title "Design with just a few clicks"
+   :productpage.theming.easy/subtitle "You don't need to know programming or design to create your own theme. Just select the colors in the easy-to-use color picker. Upload any images you want as backgrounds and logos. And you are good to go!"
+   :productpage.theming.apply/title "Show it to your audience"
+   :productpage.theming.apply/subtitle "Create as many themes representing you as you want. Show them off with a single click. Everybody in your audience sees exactly what you want them to see."
 
    ;; Login page
    :page.login/heading "Let's schnaq"

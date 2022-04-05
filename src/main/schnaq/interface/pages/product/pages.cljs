@@ -132,13 +132,13 @@
      :productpage.theming.brand-identity/subtitle
      :productpage.theming/brand-identity]
     [elements/feature-text-img-left
-     :productpage.activation.raise-hands/title
-     :productpage.activation.raise-hands/subtitle
-     :productpage.activation/raise-hands]
+     :productpage.theming.easy/title
+     :productpage.theming.easy/subtitle
+     :productpage.theming/easy]
     [elements/feature-text-img-right
-     :productpage.activation.audience/title
-     :productpage.activation.audience/subtitle
-     :productpage.activation/user-view]]])
+     :productpage.theming.apply/title
+     :productpage.theming.apply/subtitle
+     :productpage.theming/apply]]])
 
 (defn theming-view
   "Theming product sub page"
