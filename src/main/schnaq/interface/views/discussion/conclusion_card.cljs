@@ -424,12 +424,15 @@
         loading-statements? @(rf/subscribe [:loading/statements?])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
         filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))
+        grouped-statements (group-by #(true? (:statement/pinned? %)) filtered-conclusions)
+        pinned-statements (get grouped-statements true)
         input-filtered-statements
-        (sort-by #(score-hit current-input-tokens (:statement/content %)) > filtered-conclusions)]
+        (sort-by #(score-hit current-input-tokens (:statement/content %)) > (get grouped-statements false))
+        sorted-statements (concat pinned-statements input-filtered-statements)]
     (if loading-statements?
       [loading/loading-card]
-      (for [index (range (count input-filtered-statements))
-            :let [statement (nth input-filtered-statements index)]]
+      (for [index (range (count sorted-statements))
+            :let [statement (nth sorted-statements index)]]
         [:div.statement-column
          {:key (:db/id statement)}
          [motion/fade-in-and-out
