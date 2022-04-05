@@ -38,7 +38,7 @@
         admin-access? @(rf/subscribe [:schnaq/edit-hash])]
     [pages/fullscreen
      {:page/title title}
-     [:div.container.pt-5 {:style {:min-height "100vh"}}
+     [:div.container.pt-5
       [:div.d-flex.flex-row.pb-5
        [:h1 title]
        [schnaq-logo {:style {:width "200px"}

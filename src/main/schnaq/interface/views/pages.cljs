@@ -235,4 +235,5 @@
   [::page-options :re-frame/component => :re-frame/component]
   (common/set-website-title! (or title heading))
   (common/set-website-description! description)
-  body)
+  [:div {:style {:min-height "100vh"}}
+   body])
