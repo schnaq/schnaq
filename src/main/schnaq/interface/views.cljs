@@ -19,15 +19,3 @@
     [:main#root.text-break {:key language}
      [base-page language]
      [notifications/view]]))
-
-;; -----------------------------------------------------------------------------
-
-(rf/reg-sub
- :page/fullscreen?
- (fn [db]
-   (get-in db [:page :fullscreen?])))
-
-(rf/reg-event-db
- :page.fullscreen/toggle
- (fn [db [_ toggle]]
-   (assoc-in db [:page :fullscreen?] toggle)))

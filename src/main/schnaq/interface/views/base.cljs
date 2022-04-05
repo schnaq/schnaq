@@ -133,23 +133,22 @@
 (defn footer
   "Footer to display at the bottom the page."
   []
-  (let [fullscreen? @(rf/subscribe [:page/fullscreen?])]
-    (when-not (or fullscreen? shared-config/embedded? config/in-iframe?)
-      [:footer
-       [:div.container-fluid.px-5
-        [:div.row
-         [:div.col-md-6.col-xl-3.col-12
-          [logo-and-slogan]]
-         [:div.col-md-6.col-xl-3.col-12
-          [alternatives]]
-         [:div.col-md-6.col-xl-3.col-12
-          [product-use-cases]]
-         [:div.col-md-6.col-xl-3.col-12.text-md-end.pt-3.pt-md-0
-          [footer-nav]]]
-        [:div.row
-         [:div.col-md-6.col-12
-          [developed-in-nrw]
-          [registered-trademark]]
-         [:div.col-md-6.col-12.text-md-end.pt-3.pt-md-0
-          [social-media]
-          [sponsors]]]]])))
+  (when-not (or shared-config/embedded? config/in-iframe?)
+    [:footer
+     [:div.container-fluid.px-5
+      [:div.row
+       [:div.col-md-6.col-xl-3.col-12
+        [logo-and-slogan]]
+       [:div.col-md-6.col-xl-3.col-12
+        [alternatives]]
+       [:div.col-md-6.col-xl-3.col-12
+        [product-use-cases]]
+       [:div.col-md-6.col-xl-3.col-12.text-md-end.pt-3.pt-md-0
+        [footer-nav]]]
+      [:div.row
+       [:div.col-md-6.col-12
+        [developed-in-nrw]
+        [registered-trademark]]
+       [:div.col-md-6.col-12.text-md-end.pt-3.pt-md-0
+        [social-media]
+        [sponsors]]]]]))

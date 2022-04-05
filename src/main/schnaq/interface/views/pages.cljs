@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.pages
   "Defining page-layouts."
   (:require [cljs.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
@@ -227,3 +227,11 @@
   [options body]
   [::page-options (s/+ vector?) :ret vector?]
   [with-header options body [discussion-navbar/qanda-header]])
+
+(>defn fullscreen
+  "Page layout with no header and no footer."
+  [{:page/keys [title description heading]} body]
+  [::page-options :re-frame/component => :re-frame/component]
+  (common/set-website-title! (or title heading))
+  (common/set-website-description! description)
+  body)
