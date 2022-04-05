@@ -247,10 +247,16 @@
 
 (defn locked-statement-icon
   "Indicator that a statement is locked."
-  []
-  [tooltip/text
-   (labels :statement.locked/tooltip)
-   [:span [icon :lock "text-primary"]]])
+  ([]
+   [locked-statement-icon nil])
+  ([statement-id]
+   [tooltip/text
+    (labels :statement.locked/tooltip)
+    [:span
+     (when (and statement-id @(rf/subscribe [:user/authenticated?]) @(rf/subscribe [:schnaq.current/admin-access]))
+       {:class "clickable"
+        :on-click #(rf/dispatch [:statement.lock/toggle statement-id false])})
+     [icon :lock "text-primary"]]]))
 
 (rf/reg-sub
  :schnaq.search.current/search-string

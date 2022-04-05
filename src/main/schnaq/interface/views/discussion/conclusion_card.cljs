@@ -63,7 +63,7 @@
    [reactions/up-down-vote statement]
    [:div.ms-sm-0.ms-lg-auto
     (if (:statement/locked? statement)
-      [elements/locked-statement-icon]
+      [elements/locked-statement-icon (:db/id statement)]
       [badges/show-number-of-replies statement])]])
 
 (defn- mark-as-answer-button
