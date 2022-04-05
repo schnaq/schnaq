@@ -26,10 +26,14 @@
      :productpage.overview/activation
      [elements/find-out-more-link :routes/product-page-activation]]
     [elements/feature-text-img-left
+     :productpage.theming.brand-identity/title
+     :productpage.theming.brand-identity/subtitle
+     :productpage.theming/brand-identity
+     [elements/find-out-more-link :routes.product-page/theming]]
+    [elements/feature-text-img-right
      :productpage.overview.feedback/title
      :productpage.overview.feedback/text
-     :productpage.overview/analysis
-     [elements/available-soon]]]])
+     :productpage.overview/analysis]]])
 
 (defn overview-view
   "Product tour main page"
@@ -117,3 +121,30 @@
   "Activation product sub page."
   []
   [product-activation])
+
+(defn- product-theming []
+  [elements/product-page
+   :productpage.theming/heading
+   :productpage.theming/subtitle
+   :productpage.theming/title
+   :productpage.theming/description
+   :productpage.theming/cta-button
+   :feature/pro
+   [:<>
+    [elements/feature-text-img-right
+     :productpage.theming.brand-identity/title
+     :productpage.theming.brand-identity/subtitle
+     :productpage.theming/brand-identity]
+    [elements/feature-text-img-left
+     :productpage.theming.easy/title
+     :productpage.theming.easy/subtitle
+     :productpage.theming/easy]
+    [elements/feature-text-img-right
+     :productpage.theming.apply/title
+     :productpage.theming.apply/subtitle
+     :productpage.theming/apply]]])
+
+(defn theming-view
+  "Theming product sub page"
+  []
+  [product-theming])

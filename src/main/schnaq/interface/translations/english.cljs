@@ -138,9 +138,8 @@
    :productpage.overview.activation/text "Get your participants actively involved in your event! Their concentration is fading? Increase their attention with a short action! Let them react at the touch of a button!"
    :productpage.overview.feedback/title "Your personal feedback channel"
    :productpage.overview.feedback/text "Get important insights in the analysis overview. Unlock feedback or take a look at the automatically generated word cloud."
-   :productpage/cta "Modernise your next event with schnaq"
+   :productpage/cta "Try it out and elevate your next event with schnaq"
    :productpage/learn-more "Learn more!"
-   :productpage/available-soon "Available soon"
 
    ;; QA Feature
    :productpage.qa/phone-alt-text "A smartphone showing the Q&A feature of schnaq on it"
@@ -185,6 +184,19 @@
    :productpage.activation.raise-hands/subtitle "A Torooo is the digital equivalent of raising your hand. You can activate or cancel the activation at any time. When you ask a new question, you can easily reset the number of Torooos."
    :productpage.activation.audience/title "This is what your audience sees"
    :productpage.activation.audience/subtitle "As soon as you start, the first tile your audience sees is the activation view with the Torooo button. Your participants can give a Torooo at any time. So you can engage them whenever you need to!"
+
+   ;; Theming Feature
+   :productpage.theming/heading "Theming"
+   :productpage.theming/subtitle "Put your brand front, right and center!"
+   :productpage.theming/title "Audience activation with your brand in the focus."
+   :productpage.theming/description "With schnaq theming, you can create your own design with a few clicks. No programming or extra tools needed. Keep your audience in the design, they know."
+   :productpage.theming/cta-button "Create your own theme in 15 seconds!"
+   :productpage.theming.brand-identity/title "Preserve your brand throughout your event!"
+   :productpage.theming.brand-identity/subtitle "Your brand is an important part of who your company is. Preserve the colors, the presentation and flair of your brand with custom themes. You can pick any colors and images in a few seconds. All your schnaqs will reflect your brand instantly."
+   :productpage.theming.easy/title "Design with just a few clicks"
+   :productpage.theming.easy/subtitle "You don't need to know programming or design to create your own theme. Just select the colors in the easy-to-use color picker. Upload any images you want as backgrounds and logos. And you are good to go!"
+   :productpage.theming.apply/title "Show it to your audience"
+   :productpage.theming.apply/subtitle "Create as many themes representing you as you want. Show them off with a single click. Everybody in your audience sees exactly what you want them to see."
 
    ;; Login page
    :page.login/heading "Let's schnaq"
@@ -1071,6 +1083,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/product-qa "Q&A"
    :router/product-poll "Polls"
    :router/product-activation "Activation"
+   :router/product-theming "Theming"
    :router/qanda "Q&A"
    :router/start-discussion "Start discussion"
    :router/startpage "Startpage"

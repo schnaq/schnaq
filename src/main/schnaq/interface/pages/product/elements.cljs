@@ -50,11 +50,6 @@
    [:a.display-6.btn.btn-link {:href (navigation/href link)}
     (labels :productpage/learn-more)]])
 
-(defn available-soon
-  "Displays an 'available soon' text."
-  []
-  [:div.display-6.text-muted.mt-5 (labels :productpage/available-soon)])
-
 (defn- feature-image [image]
   [:div
    [:img.taskbar-background

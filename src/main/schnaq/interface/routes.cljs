@@ -100,7 +100,11 @@
     ["/activation"
      {:name :routes/product-page-activation
       :view product-overview/activation-view
-      :link-text (labels :router/product-activation)}]]
+      :link-text (labels :router/product-activation)}]
+    ["/theming"
+     {:name :routes.product-page/theming
+      :view product-overview/theming-view
+      :link-text (labels :router/product-theming)}]]
    ["/login"
     {:name :routes/login
      :view pages/login-page
