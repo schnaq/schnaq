@@ -174,7 +174,8 @@
       [base/header options]]
      body
      (when wavy-footer?
-       [:div.wave-bottom-typography])]]])
+       [:div.wave-bottom-typography])
+     [base/footer]]]])
 
 (>defn with-nav
   "Default page with header and curly wave."
@@ -187,7 +188,8 @@
     options
     [:<>
      [navbar-pages/navbar (or title heading)]
-     body]]])
+     body
+     [base/footer]]]])
 
 (>defn three-column-layout
   "Use three column layout to display page."
