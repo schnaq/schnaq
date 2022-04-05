@@ -916,7 +916,7 @@
    :welcome.pro.features.subscription/lead "In deinen Einstellungen kannst du jederzeit das Abonnement verwalten. Solltest du Probleme oder Fragen haben, so kontaktiere uns gerne!"
    :welcome.pro.features.subscription/button "Zu den Einstellungen"
    :welcome.pro.features.themes/title "Dein persönlicher Auftritt"
-   :welcome.pro.features.themes/lead "Gib schnaq deine persönliche Note! Mit den eigenen Themen kannst du deine persönlichen Farben, Logos und Bilder einfügen, sodass sie den Teilnehmenden angezeigt werden."
+   :welcome.pro.features.themes/lead "Gib schnaq deine persönliche Note! Mit den eigenen Designs kannst du deine persönlichen Farben, Logos und Bilder einfügen, sodass sie den Teilnehmenden angezeigt werden."
    :welcome.pro.features.themes/button "Gestalte dein eigenes Design"
    :welcome.pro.features.polls/title "Kurzumfragen"
    :welcome.pro.features.polls/lead "Mal eben deinem Publikum eine Umfrage präsentieren? Kein Problem, erstelle deine Antwortmöglichkeiten und lasse alle abstimmen! Erstelle die Umfragen direkt in deinem schnaq."
@@ -927,7 +927,7 @@
 
    ;; Themes
    :themes.personal/lead "Gib schnaq deinen persönlichen Touch."
-   :themes.personal.creation/heading "Deine Themen"
+   :themes.personal.creation/heading "Deine Designs"
    :themes.personal.creation/lead "Stelle hier die Farbgebung für deine schnaqs ein. Nachdem du hier deine Designvorlage erstellt hast, kannst du in den Einstellungen deines schnaqs das Design auswählen."
    :themes.personal.creation/pro-hint "Dies ist ein Pro-Feature. Du kannst damit herumspielen und das Ergebnis im Vorschaubereich sehen, aber du kannst deine Designvorlage nicht speichern."
    :themes.personal.creation.title/label "Gib deinem Design einen eindeutigen Titel"
@@ -949,8 +949,8 @@
    :themes.personal.preview/heading "Vorschau"
    :themes.schnaq.settings/heading "Design festlegen"
    :themes.schnaq.settings/lead "Sobald du ein Design ausgewählt hast, wird es für diesen schnaq gespeichert. Deine Besucher:innen sehen dann beim nächsten Laden des schnaqs das neue Farbschema."
-   :themes.schnaq.settings.buttons/edit "Themen bearbeiten"
-   :themes.schnaq.settings.buttons/unassign "Themenzuweisung entfernen"
+   :themes.schnaq.settings.buttons/edit "Designs bearbeiten"
+   :themes.schnaq.settings.buttons/unassign "Designzuweisung entfernen"
    :themes.schnaq.settings.unassign/confirmation "Möchtest du das Design für diesen schnaq zurücksetzen?"
    :themes.schnaq.unassign.notification/title "Zuweisung entfernt"
    :themes.schnaq.unassign.notification/body "Dein schnaq hat nun kein eigenes Design mehr, sondern verwendet nun wieder die Standard-Farbeinstellungen."
