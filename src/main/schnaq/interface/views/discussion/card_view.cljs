@@ -4,7 +4,6 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
-            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.pages :as pages]))
@@ -42,14 +41,6 @@
     [elements/show-how-to]]
    [:div.d-none.d-md-block [elements/history-view]]])
 
-(defn- start-view
-  "The first step after starting a schnaq."
-  []
-  (let [schnaq @(rf/subscribe [:schnaq/selected])
-        title (:discussion/title schnaq)]
-    (common/set-website-title! title)
-    [discussion-view (:discussion/share-hash schnaq)]))
-
 (rf/reg-sub
  :discussion.statements/show
  ;; The statements which should be shown in the discussion view right now.
@@ -76,7 +67,7 @@
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
-     [start-view]]))
+     [discussion-view]]))
 
 (defn view []
   [derive-view])

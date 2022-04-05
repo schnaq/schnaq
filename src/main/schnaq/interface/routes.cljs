@@ -274,11 +274,9 @@
        :controllers [{:parameters {:path [:share-hash :entity-id]}
                       :start (fn []
                                (rf/dispatch [:updates.periodic.present/poll true])
-                               (rf/dispatch [:page.fullscreen/toggle true])
                                (rf/dispatch [:schnaq.poll/load-from-query]))
                       :stop (fn []
-                              (rf/dispatch [:updates.periodic.present/poll false])
-                              (rf/dispatch [:page.fullscreen/toggle false]))}]}]
+                              (rf/dispatch [:updates.periodic.present/poll false]))}]}]
      ["/graph"
       {:name :routes/graph-view
        :view graph-view/graph-view-entrypoint
