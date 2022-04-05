@@ -244,7 +244,7 @@
    ;; Create schnaq
    :schnaq.create.input/title "Worüber möchtest du diskutieren?"
    :schnaq.create.qanda.input/title "Worum sollen sich die Fragen drehen?"
-   :schnaq.create.input/placeholder "Thema festlegen"
+   :schnaq.create.input/placeholder "Design festlegen"
    :schnaq.create.hub/help-text "Füge deinen schnaq direkt einem Hub hinzu."
    :schnaq/copy-link-tooltip "Hier klicken, um Link zu kopieren"
    :schnaq/link-copied-heading "Link kopiert"
@@ -342,7 +342,7 @@
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"
    :schnaq.create/heading "Starte mit deinem schnaq."
-   :schnaq.create/info "Gib deinem Thema einen möglichst einfachen und verständlichen Titel."
+   :schnaq.create/info "Gib deinem schnaq einen möglichst einfachen und verständlichen Titel."
    :schnaq.create.button/save "Schnaq starten"
 
    ;; Discussion Dashboard
@@ -873,7 +873,7 @@
    :user.settings/info "Persönliche Informationen"
    :user.settings/notifications "Benachrichtigungen"
    :user.settings/hubs "Hubs"
-   :user.settings/themes "Thema personalisieren"
+   :user.settings/themes "Design personalisieren"
    :user.settings/change-name "Namen ändern"
    :user.settings.button/change-account-information "Änderungen speichern"
    :user.settings.profile-picture-title/success "Profilbild erfolgreich gesetzt"
@@ -917,7 +917,7 @@
    :welcome.pro.features.subscription/button "Zu den Einstellungen"
    :welcome.pro.features.themes/title "Dein persönlicher Auftritt"
    :welcome.pro.features.themes/lead "Gib schnaq deine persönliche Note! Mit den eigenen Themen kannst du deine persönlichen Farben, Logos und Bilder einfügen, sodass sie den Teilnehmenden angezeigt werden."
-   :welcome.pro.features.themes/button "Gestalte dein eigenes Thema"
+   :welcome.pro.features.themes/button "Gestalte dein eigenes Design"
    :welcome.pro.features.polls/title "Kurzumfragen"
    :welcome.pro.features.polls/lead "Mal eben deinem Publikum eine Umfrage präsentieren? Kein Problem, erstelle deine Antwortmöglichkeiten und lasse alle abstimmen! Erstelle die Umfragen direkt in deinem schnaq."
    :welcome.pro.features.polls/button "Kurzumfragen erstellen"
@@ -928,14 +928,14 @@
    ;; Themes
    :themes.personal/lead "Gib schnaq deinen persönlichen Touch."
    :themes.personal.creation/heading "Deine Themen"
-   :themes.personal.creation/lead "Stelle hier die Farbgebung für deine schnaqs ein. Nachdem du hier dein Thema erstellt hast, kannst du in den Einstellungen deines schnaqs das Thema auswählen."
-   :themes.personal.creation/pro-hint "Dies ist ein Pro-Feature. Du kannst damit herumspielen und das Ergebnis im Vorschaubereich sehen, aber du kannst dein Thema nicht speichern."
-   :themes.personal.creation.title/label "Gib deinem Thema einen eindeutigen Titel"
-   :themes.personal.creation/theme-placeholder "%s's persönliches Thema"
+   :themes.personal.creation/lead "Stelle hier die Farbgebung für deine schnaqs ein. Nachdem du hier deine Designvorlage erstellt hast, kannst du in den Einstellungen deines schnaqs das Design auswählen."
+   :themes.personal.creation/pro-hint "Dies ist ein Pro-Feature. Du kannst damit herumspielen und das Ergebnis im Vorschaubereich sehen, aber du kannst deine Designvorlage nicht speichern."
+   :themes.personal.creation.title/label "Gib deinem Design einen eindeutigen Titel"
+   :themes.personal.creation/theme-placeholder "%s's persönliches Design"
    :themes.personal.creation.images.logo/title "Logo"
-   :themes.personal.creation.images.logo/alt "Logo des aktuellen Themas"
+   :themes.personal.creation.images.logo/alt "Logo des aktuellen Designs"
    :themes.personal.creation.images.header/title "Vorschau- und Aktivierungsbild"
-   :themes.personal.creation.images.header/alt "Vorschaubild des Themas"
+   :themes.personal.creation.images.header/alt "Vorschaubild des Designs"
    :themes.personal.creation.images/info "Dein Browser speichert die Bilder zwischen. Daher kann es nötig sein, dass du die Seite neu laden musst, um die Bilder sehen zu können."
    :themes.personal.creation.colors/title "Farbeinstellungen"
    :themes.personal.creation.colors.primary/title "Primärfarbe"
@@ -945,17 +945,17 @@
    :themes.personal.creation.buttons/create-new "Neu erstellen"
    :themes.personal.creation.buttons/save "Speichern"
    :themes.personal.creation.buttons/delete "Löschen"
-   :themes.personal.creation.delete/confirmation "Möchtest du das Thema wirklich löschen?"
+   :themes.personal.creation.delete/confirmation "Möchtest du die Designvorlage wirklich löschen?"
    :themes.personal.preview/heading "Vorschau"
-   :themes.schnaq.settings/heading "Thema festlegen"
-   :themes.schnaq.settings/lead "Sobald du ein Thema ausgewählt hast, wird es für diesen schnaq gespeichert. Deine Besucher:innen sehen dann beim nächsten Laden des schnaqs das neue Farbschema."
+   :themes.schnaq.settings/heading "Design festlegen"
+   :themes.schnaq.settings/lead "Sobald du ein Design ausgewählt hast, wird es für diesen schnaq gespeichert. Deine Besucher:innen sehen dann beim nächsten Laden des schnaqs das neue Farbschema."
    :themes.schnaq.settings.buttons/edit "Themen bearbeiten"
    :themes.schnaq.settings.buttons/unassign "Themenzuweisung entfernen"
-   :themes.schnaq.settings.unassign/confirmation "Möchtest du das Thema für diesen schnaq zurücksetzen?"
+   :themes.schnaq.settings.unassign/confirmation "Möchtest du das Design für diesen schnaq zurücksetzen?"
    :themes.schnaq.unassign.notification/title "Zuweisung entfernt"
-   :themes.schnaq.unassign.notification/body "Dein schnaq hat nun kein eigenes Thema mehr, sondern verwendet nun wieder die Standard-Farbeinstellungen."
-   :themes.save.notification/title "Thema erfolgreich gespeichert"
-   :themes.save.notification/body "Dein Thema kann nun von dir in deinen schnaqs verwendet werden"
+   :themes.schnaq.unassign.notification/body "Dein schnaq hat nun kein eigenes Design mehr, sondern verwendet nun wieder die Standard-Farbeinstellungen."
+   :themes.save.notification/title "Designvorlage erfolgreich gespeichert"
+   :themes.save.notification/body "Dein Design kann nun von dir in deinen schnaqs verwendet werden"
    :themes.pro-carrot/text "Möchtest du dieses Feature verwenden? Dann buche doch einen Pro-Account und genieße dein persönliches Branding in deinen schnaqs"
 
    ;; Subscriptions
@@ -1040,7 +1040,7 @@
    :pricing.features.number-of-users/unlimited "Unbeschränktes Publikum"
    :pricing.features/from-previous "Alles vom vorherigen Plan"
    :pricing.features/free ["In Deutschland gehostet" "Unendlich viele schnaqs" "Diskussionen erstellen" "Fragen und Antworten Modus" "Automatische Mindmap" "Teilbar per Link, QR-Code und Zahlencode" "Text- und Bild-Export" "E-Mail Support"]
-   :pricing.features/pro ["Zuschauerumfragen" "Schnaq Schnellaktivierung" "Persönliches Thema / Branding" "Persönlicher Bereich" "Analyse-Dashboard" "K.I. Zusammenfassungen" "Moderationsoptionen" "Support Priorität"]
+   :pricing.features/pro ["Zuschauerumfragen" "Schnaq Schnellaktivierung" "Persönliches Design / Branding" "Persönlicher Bereich" "Analyse-Dashboard" "K.I. Zusammenfassungen" "Moderationsoptionen" "Support Priorität"]
    :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling" "On-Premise" "24/7 Telefonsupport"]
    :pricing.features/upcoming ["K.I. Stimmungsanalyse" "Integrationen"]
    :pricing.schnaq.pro.monthly/payment-method "monatliche Zahlweise"
