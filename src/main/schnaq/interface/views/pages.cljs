@@ -214,7 +214,8 @@
     options
     [:div {:class classes}
      (if shared-config/embedded? [discussion-navbar/embeddable-header] header)
-     body]]])
+     body
+     [base/footer]]]])
 
 (>defn with-discussion-header
   "Page layout with discussion header."
