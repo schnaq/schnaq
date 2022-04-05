@@ -167,6 +167,10 @@
     :db/valueType :db.type/boolean
     :db/cardinality :db.cardinality/one
     :db/doc "Indicates whether the statement should be locked (= not allow child-statements)."}
+   {:db/ident :statement/pinned?
+    :db/valueType :db.type/boolean
+    :db/cardinality :db.cardinality/one
+    :db/doc "Indicates whether the statement is pinned (at the top of the schnaq)."}
 
    ;; Statement Types
    {:db/ident :statement.type/support}

@@ -50,6 +50,7 @@
    :statement/upvotes
    :statement/downvotes
    :statement/locked?
+   :statement/pinned?
    :statement/cumulative-downvotes
    :statement/cumulative-upvotes
    {:statement/type [:db/ident]}
