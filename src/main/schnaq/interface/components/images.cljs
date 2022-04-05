@@ -38,6 +38,7 @@
     :logos/hck "https://s3.schnaq.com/schnaq-common/testimonials/hck.webp"
     :logos/hetzner "https://s3.schnaq.com/schnaq-common/logos/logo-hetzner.svg"
     :logos/hhu "https://s3.schnaq.com/schnaq-common/testimonials/hhu_logo.webp"
+    :logos/muetze "https://s3.schnaq.com/schnaq-common/logos/Muetze-nrw.webp"
     :logos/ignition "https://s3.schnaq.com/schnaq-common/logos/ignition_logo.webp"
     :logos/leetdesk "https://s3.schnaq.com/schnaq-common/testimonials/leetdesk_logo.webp"
     :logos/lokay "https://s3.schnaq.com/schnaq-common/testimonials/lokay_logo.webp"

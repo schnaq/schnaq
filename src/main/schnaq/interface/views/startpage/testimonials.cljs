@@ -10,11 +10,13 @@
      :alt (gstring/format "A company logo of %s" (labels company-name))}]])
 
 (defn testimonial-companies []
-  [:div.d-flex.flex-wrap.mb-5
-   [company-logo :logos/doctronic :testimonials.doctronic/company]
-   [company-logo :logos/franky :testimonials.franky/company]
-   [company-logo :logos/metro :testimonials.metro/company]
+  [:div.d-flex.flex-wrap.mb-5.justify-content-center
+   [company-logo :logos/digihub :testimonials.digihub/company]
    [company-logo :logos/hhu :testimonials.hhu/company]
+   [company-logo :logos/metro :testimonials.metro/company]
+   [company-logo :logos/franky :testimonials.franky/company]
+   [company-logo :logos/muetze :testimonials.muetze/company]
+   [company-logo :logos/doctronic :testimonials.doctronic/company]
    [company-logo :logos/leetdesk :testimonials.leetdesk/company]])
 
 (defn highlights
