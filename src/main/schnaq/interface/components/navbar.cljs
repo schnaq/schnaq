@@ -62,8 +62,10 @@
      [:div.dropdown-menu
       {:aria-labelledby dropdown-id}
       [drop-down-button-link :routes/product-page :router/product]
+      [:hr.m-1.mx-auto.p-0.w-75]
       [drop-down-button-link :routes/product-page-qa :router/product-qa]
       [drop-down-button-link :routes/product-page-poll :router/product-poll]
+      [drop-down-button-link :routes.product-page/theming :router/product-theming]
       [drop-down-button-link :routes/product-page-activation :router/product-activation]]]))
 
 (defn separated-button
