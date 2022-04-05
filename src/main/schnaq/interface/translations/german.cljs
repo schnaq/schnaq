@@ -141,7 +141,6 @@
    :productpage.overview.feedback/text "Erhalte wichtige Erkenntnisse in der Analyseübersicht. Schalte Feedback frei oder wirf einen Blick auf die automatisch generierte Wortwolke."
    :productpage/cta "Probiere es aus und verbessere deine nächste Veranstaltung mit schnaq"
    :productpage/learn-more "Erfahre mehr"
-   :productpage/available-soon "Bald verfügbar"
 
    ;; QA Feature
    :productpage.qa/phone-alt-text "Ein Smartphone mit dem schnaq Q&A Feature auf dem Bildschirm"

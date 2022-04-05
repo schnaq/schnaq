@@ -26,10 +26,14 @@
      :productpage.overview/activation
      [elements/find-out-more-link :routes/product-page-activation]]
     [elements/feature-text-img-left
+     :productpage.theming.brand-identity/title
+     :productpage.theming.brand-identity/subtitle
+     :productpage.theming/brand-identity
+     [elements/find-out-more-link :routes.product-page/theming]]
+    [elements/feature-text-img-right
      :productpage.overview.feedback/title
      :productpage.overview.feedback/text
-     :productpage.overview/analysis
-     [elements/available-soon]]]])
+     :productpage.overview/analysis]]])
 
 (defn overview-view
   "Product tour main page"

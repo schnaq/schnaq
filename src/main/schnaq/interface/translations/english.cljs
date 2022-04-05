@@ -140,7 +140,6 @@
    :productpage.overview.feedback/text "Get important insights in the analysis overview. Unlock feedback or take a look at the automatically generated word cloud."
    :productpage/cta "Try it out and elevate your next event with schnaq"
    :productpage/learn-more "Learn more!"
-   :productpage/available-soon "Available soon"
 
    ;; QA Feature
    :productpage.qa/phone-alt-text "A smartphone showing the Q&A feature of schnaq on it"
