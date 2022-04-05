@@ -834,6 +834,9 @@
    :testimonials.metro/quote "As an asyncronous work evangelist, I really appreciate schnaq for breaking down information silos and making it available to all employees in a transparent and clear way."
    :testimonials.metro/author "Dr. Tobias Schröder, Product Manager"
 
+   :testimonials.muetze/company "Landesverband der Mütterzentren NRW"
+   :testimonials.digihub/company "Digital Innovation Hub Düsseldorf/Rheinland GmbH"
+
    :testimonials.eugenbialon/company "EugenBialonArchitekt GmbH"
    :testimonials.eugenbialon/quote "In an architect's office, there are several parallel projects with a large number of players involved. Schnaq supports us in cross-project information management, whether in the office, in the home office or on the construction site!"
    :testimonials.eugenbialon/author "Dipl.-Ing. Eugen Bialon, Managing Partner and Architect, EugenBialonArchitekt GmbH"

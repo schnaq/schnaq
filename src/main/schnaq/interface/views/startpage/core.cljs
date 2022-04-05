@@ -67,12 +67,7 @@
     [:a {:href "https://ignitiondus.de"}
      [:img.w-50
       {:src (img-path :logos/ignition)
-       :alt "ignition logo"}]]]
-   [:div.text-center
-    [:a {:href "https://www.digihub.de/"}
-     [:img.w-50.pt-md-4
-      {:src (img-path :logos/digihub)
-       :alt "digihub logo"}]]]])
+       :alt "ignition logo"}]]]])
 
 (defn- faq
   "Handle some still open questions from the user."
