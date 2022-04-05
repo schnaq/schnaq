@@ -252,11 +252,22 @@
   ([statement-id]
    [tooltip/text
     (labels :statement.locked/tooltip)
-    [:span
+    [:span.badge.rounded-pill
      (when (and statement-id @(rf/subscribe [:user/authenticated?]) @(rf/subscribe [:schnaq.current/admin-access]))
        {:class "clickable"
         :on-click #(rf/dispatch [:statement.lock/toggle statement-id false])})
      [icon :lock "text-primary"]]]))
+
+(defn pinned-statement-icon
+  "Indicator that a statement is pinned. Click it to unpin, if moderator and beta-user."
+  [statement-id]
+  [tooltip/text
+   (labels :statement.pinned/tooltip)
+   [:span.badge.rounded-pill
+    (when (and statement-id @(rf/subscribe [:user/pro-user?]) @(rf/subscribe [:schnaq.current/admin-access]))
+      {:class "clickable"
+       :on-click #(rf/dispatch [:statement.pin/toggle statement-id false])})
+    [icon :pin "text-primary"]]])
 
 (rf/reg-sub
  :schnaq.search.current/search-string

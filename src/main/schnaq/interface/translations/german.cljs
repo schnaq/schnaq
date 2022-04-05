@@ -294,6 +294,7 @@
    :statement.badges/more-posts "weitere Beiträge"
    :statement.badges/more-post "weiterer Beitrag"
    :statement.locked/tooltip "Dieser Beitrag kann nicht beantwortet werden"
+   :statement.pinned/tooltip "Dieser Beitrag ist angepinnt"
 
    :schnaq.input-type/question "Frage"
    :schnaq.input-type/answer "Antwort"

@@ -59,12 +59,15 @@
 ;; -----------------------------------------------------------------------------
 
 (defn- statement-information-row [statement]
-  [:div.d-flex.flex-wrap.align-items-center
-   [reactions/up-down-vote statement]
-   [:div.ms-sm-0.ms-lg-auto
-    (if (:statement/locked? statement)
-      [elements/locked-statement-icon (:db/id statement)]
-      [badges/show-number-of-replies statement])]])
+  (let [statement-id (:db/id statement)]
+    [:div.d-flex.flex-wrap.align-items-center
+     [reactions/up-down-vote statement]
+     [:div.ms-sm-0.ms-lg-auto
+      (if (:statement/locked? statement)
+        [elements/locked-statement-icon statement-id]
+        [badges/show-number-of-replies statement])
+      (when (:statement/pinned? statement)
+        [elements/pinned-statement-icon statement-id])]]))
 
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
