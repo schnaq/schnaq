@@ -187,6 +187,19 @@
    :productpage.activation.audience/title "Das sieht dein Publikum"
    :productpage.activation.audience/subtitle "Sobald du startest, ist die erste Kachel, die dein Publikum sieht, die Aktivierungsansicht mitsamt Törööö-Knopf. Deine Teilnehmer:innen können jederzeit ein Törööö von sich geben. Damit kannst du sie jederzeit einbinden!"
 
+   ;; Theming Feature
+   :productpage.theming/heading "Designvorlagen"
+   :productpage.theming/subtitle "Stelle deine Marke in den Mittelpunkt!"
+   :productpage.theming/title "Publikumsinteraktion mit deiner Marke im Fokus."
+   :productpage.theming/description "Mit schnaq Designvorlagen kannst du dein eigenes Design in wenigen Klicks erstellen. Du benötigst keine Programmierung, oder extra Werkzeuge. Behalte dein Publikum in ihrer gewohnten visuellen Umgebung."
+   :productpage.theming/cta-button "Erstelle dein eigenes Design in 15 Sekunden!"
+   :productpage.theming.brand-identity/title "Bewahre deine Marke während jedem schnaq Event!"
+   :productpage.theming.brand-identity/subtitle "Deine Marke ist ein wichtiger Teil deines Unternehmens. Bewahre die Farben, die Präsentation und den Flair deiner Marke mit den Designvorlagen. Stelle die richtigen Farben und Bilder innerhalb von Sekunden ein. Alle deine schnaqs Spiegeln deine Marke sofort wieder."
+   :productpage.theming.easy/title "Design mit wenigen Klicks"
+   :productpage.theming.easy/subtitle "Du musst kein Experte in Programmierung oder Design sein um deine Marke einzustellen. Wähle einfach die passenden Farben im einfach zu benutzenden Farbwähler. Lade deine Wunschbilder als Hintergründe und als Logos hoch. Fertig ist dein eigenes Design!"
+   :productpage.theming.apply/title "Zeige es deinem Publikum!"
+   :productpage.theming.apply/subtitle "Erstelle so viele Designvorlagen, die dich repräsentieren, wie du willst. Zeige das passende Design in jedem schnaq mit einem Klick. Alle im Publikum sehen exakt das, was du sie sehen lassen möchtest."
+
    ;; Login Page
    :page.login/heading "Nicht warten, schnaqqen!"
    :page.login/subheading "100% kostenlos für immer"
