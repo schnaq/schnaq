@@ -69,6 +69,12 @@
    (get-in db [:schnaq :statements])))
 
 (rf/reg-sub
+ :schnaq/statement
+ :<- [:schnaq/statements]
+ (fn [statements [_ statement-id]]
+   (get statements statement-id {})))
+
+(rf/reg-sub
  :schnaq.statements/current-level
  ;; A set of statements at the current "level" of discussion / questions
  (fn [db _]

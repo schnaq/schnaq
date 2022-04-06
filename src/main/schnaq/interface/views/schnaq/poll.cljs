@@ -209,8 +209,6 @@
   "Show a poll card, where users can cast their votes."
   [poll]
   [::specs/poll => :re-frame/component]
-  ;; TODO NEXT: Polls are broken
-  (println poll)
   [:section.statement-card
    [:div.mx-4.my-2
     [:div.d-flex

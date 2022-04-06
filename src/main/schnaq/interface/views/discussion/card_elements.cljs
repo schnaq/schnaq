@@ -58,41 +58,47 @@
         [badges/static-info-badges]]
        {:placement :right}]]]))
 
+(defn history-card
+  "A single history-card comprising the history together"
+  [index statement-id]
+  (let [max-word-count 20
+        statement @(rf/subscribe [:schnaq/statement statement-id])
+        nickname (user-utils/statement-author statement)
+        user (:statement/author statement)
+        statement-content (:statement/content statement)
+        tooltip-text (gstring/format "%s %s" (labels :tooltip/history-statement) nickname)
+        history-content [:div
+                         [:div.d-flex.flex-row
+                          [:h6 (labels :history.statement/user) " " (toolbelt/truncate-to-n-chars nickname 20)]
+                          [:div.ms-auto [common/avatar user 22]]]
+                         (toolbelt/truncate-to-n-words statement-content max-word-count)]]
+    [:article
+     [:div.history-thread-line]
+     [:div.d-inline-block.d-md-block.text-dark.w-100
+      (let [attitude (name (or (:statement/type statement) :neutral))]
+        [:div.card-history.clickable.w-100
+         {:on-click #(rf/dispatch [:discussion.history/time-travel index])}
+         [:div.d-flex.flex-row
+          [:div {:class (str "highlight-card-" attitude)}]
+          [:div.history-card-content
+           (if (zero? index)
+             history-content
+             [tooltip/text tooltip-text history-content {:placement :right}])]]])]]))
+
 (defn history-view
   "History view displayed in the left column in the desktop view."
   []
-  (let [history @(rf/subscribe [:discussion-history])
-        indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)
+  (let [history-ids @(rf/subscribe [:discussion-history])
+        indexed-history (map-indexed #(vector (- (count history-ids) %1 1) %2) history-ids)
         has-history? (seq indexed-history)]
     (when has-history?
       [:section.history-wrapper
        [:h5.p-2.text-center (labels :history/title)]
        [discussion-start-button]
        ;; history
-       (for [[index statement] indexed-history]
-         (let [max-word-count 20
-               nickname (user-utils/statement-author statement)
-               user (:statement/author statement)
-               statement-content (-> statement :statement/content)
-               tooltip-text (gstring/format "%s %s" (labels :tooltip/history-statement) nickname)
-               history-content [:div
-                                [:div.d-flex.flex-row
-                                 [:h6 (labels :history.statement/user) " " (toolbelt/truncate-to-n-chars nickname 20)]
-                                 [:div.ms-auto [common/avatar user 22]]]
-                                (toolbelt/truncate-to-n-words statement-content max-word-count)]]
-           [:article {:key (str "history-container-" (:db/id statement))}
-            [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
-            [:div.d-inline-block.d-md-block.text-dark.w-100
-             {:key (str "history-" (:db/id statement))}
-             (let [attitude (name (or (:statement/type statement) :neutral))]
-               [:div.card-history.clickable.w-100
-                {:on-click #(rf/dispatch [:discussion.history/time-travel index])}
-                [:div.d-flex.flex-row
-                 [:div {:class (str "highlight-card-" attitude)}]
-                 [:div.history-card-content
-                  (if (zero? index)
-                    history-content
-                    [tooltip/text tooltip-text history-content {:placement :right}])]]])]]))])))
+       (for [[index statement-id] indexed-history]
+         (with-meta [history-card index statement-id]
+           {:key (str "history-" statement-id)}))])))
 
 (rf/reg-event-fx
  :discussion.add.statement/starting

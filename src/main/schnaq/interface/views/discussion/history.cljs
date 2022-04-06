@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.history
-  (:require [re-frame.core :as rf]
-            [schnaq.shared-toolbelt :as stools]))
+  (:require [re-frame.core :as rf]))
 
 (defn- rewind-history
   "Rewinds a history until the last time statement-id was current."
@@ -42,10 +41,9 @@
                [:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]]}
          {:db (assoc-in db [:history :full-context] after-time-travel)
           :fx [[:dispatch [:navigation/navigate :routes.schnaq.select/statement
-                           {:share-hash share-hash :statement-id (:db/id (last after-time-travel))}]]]})))))
+                           {:share-hash share-hash :statement-id (last after-time-travel)}]]]})))))
 
 (rf/reg-sub
  :discussion-history
  (fn [db _]
-   (let [history-ids (get-in db [:history :full-context] [])]
-     (stools/select-values (get-in db [:schnaq :statements] history-ids)))))
+   (get-in db [:history :full-context] [])))
