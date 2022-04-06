@@ -349,6 +349,10 @@
               (update-in [:schnaq :current :polls]
                          (fn [polls]
                            (map #(if (= poll-id (:db/id %)) poll %) polls)))
+              (update-in [:present :poll]
+                         #(if (= (:db/id poll) (:db/id %))
+                            poll
+                            %))
               (assoc-in [:schnaq :polls :past-votes poll-id] chosen-option))
       :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
                                [:schnaq.poll.cast-vote/success]
