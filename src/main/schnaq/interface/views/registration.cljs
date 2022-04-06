@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.registration
-  (:require [com.fulcrologic.guardrails.core :refer [>defn- ? =>]]
+  (:require [com.fulcrologic.guardrails.core :refer [=> >defn- ?]]
             [goog.string :refer [format]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -8,6 +8,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.navigation :as navigation]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- social-logins
@@ -23,8 +24,8 @@
       [buttons/button "LinkedIn" identity "btn-outline-dark me-2" styles]
       [buttons/button "GitHub" identity "btn-outline-dark" styles]]]))
 
-(defn- next-button [on-click-fn]
-  [buttons/button "Weiter" nil "btn-primary w-100 mt-3"])
+(defn- next-button [label on-click-fn]
+  [buttons/button label on-click-fn "btn-primary w-100 mt-3"])
 
 (>defn- registration-card
   "Wrapper to build a common registration card for the complete registration
@@ -44,6 +45,9 @@
 
 ;; -----------------------------------------------------------------------------
 
+(def toc
+  [:p "Ich habe die Datenschutzerklärung gelesen und willige ein, dass meine Daten verarbeitet werden dürfen."])
+
 (defn- registration-step-1
   "First step in the registration process."
   []
@@ -53,10 +57,22 @@
    [:<>
     [social-logins]
     [:p.text-muted.mb-1.pt-4 "Oder nutze deine Mail:"]
-    [:form {:on-submit (fn [e] (.preventDefault e)
-                         (rf/dispatch [:registration.go-to/step-2 (oget e [:target :elements :email :value])]))}
-     [inputs/floating "register-email" "Gib hier deine E-Mail-Adresse ein" :email "email" {:required true}]
-     [next-button]]]
+    [:form {:on-submit
+            (fn [e] (.preventDefault e)
+              (let [form (oget e [:target :elements])
+                    email (oget form [:email :value])
+                    password (oget form [:password :value])
+                    opt-in (oget form [:opt-in :checked])]
+                (if-not (and email password opt-in)
+                  (rf/dispatch [:registration/register [email password]])
+                  (rf/dispatch [:notification/add
+                                #:notification{:title "Bitte alle Felder ausfüllen"
+                                               :body "Mindestens eins deiner Felder wurde nicht ausgefüllt. Bitte kontrolliere deine Eingabe."
+                                               :context :warning}]))))}
+     [inputs/floating "Gib hier deine E-Mail-Adresse ein" :email "registration-email" "email" {:required true :class "mb-2"}]
+     [inputs/floating "Bitte vergib nun ein sicheres Passwort" :password "registration-password" "password" {:required true :class "mb-2"}]
+     [inputs/checkbox [:small toc] "registration-opt-in" "opt-in" {:required true}]
+     [next-button "Kostenfrei registrieren"]]]
    [:div.text-center
     [:span "Du hast bereits einen Account?"]
     [buttons/button "Melde dich an" identity "btn-link" {:id "registration-first-step"}]]])
@@ -99,7 +115,7 @@
    [:<>
     [:p.text-muted.mb-1 "Wähle alles passende aus"]
     [survey]
-    [next-button]]])
+    [next-button "Weiter"]]])
 
 (defn registration-step-2-view
   "Wrapped view for usage in routes."
@@ -115,3 +131,23 @@
  (fn [{:keys [db]} [_ email]]
    {:db (assoc-in db [:registration :email] email)
     :fx [[:dispatch [:navigation/navigate :routes.user.register/step-2]]]}))
+
+(rf/reg-event-fx
+ :user.by-email/exists
+ (fn [{:keys [db]} [_ email]]
+   {:fx [(http/xhrio-request db :get "/user/by-email"
+                             [:user.by-email.exists/success]
+                             {:email email})]}))
+
+(rf/reg-event-fx
+ :user.by-email.exists/success
+ (fn [{:keys [db]} [_ {:keys [exists?]}]]
+   (if exists?
+     {}
+     {})))
+
+(comment
+
+  (rf/dispatch [:user.by-email/exists "cmeter@googlemail.com"])
+
+  nil)
