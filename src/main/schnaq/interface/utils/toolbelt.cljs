@@ -7,7 +7,6 @@
             [oops.core :refer [oset! oget oget+]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
-            [schnaq.database.specs :as specs]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.tooltip :as tooltip]))
 

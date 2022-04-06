@@ -65,7 +65,7 @@
  ;; TODO rename this bullshit sub
  :discussion.premises/current
  (fn [db _]
-   (vals (get-in db [:schnaq :normalized :statements]))))
+   (vals (get-in db [:schnaq :statements]))))
 
 (rf/reg-sub
  :discussion.conclusion/selected
