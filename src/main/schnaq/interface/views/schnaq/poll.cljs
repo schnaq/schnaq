@@ -73,7 +73,7 @@
      [:div.row
       [:div
        {:class (if presentation-mode? "col-1" "col-2")}
-       [:p.my-auto.mt-2.h4
+       [:p.my-auto.mt-2.h5
         (str (inc index)) "."]]
       [:div
        {:class (if presentation-mode? "col-11" "col-10")}
