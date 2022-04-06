@@ -30,15 +30,26 @@
   statement list."
   [db updated-statement]
   (let [parent-id (-> updated-statement :statement/parent :db/id)
-        parent-in-current-premises? (not (nil? (get-in db [:discussion :premises :current parent-id])))
+        parent-in-current-premises? (not (or (nil? (get-in db [:discussion :premises :current parent-id]))
+                                             (nil? (get-in db [:schnaq :qa :search :results parent-id]))))
         db-search-cleared (update-in db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))]
     (if parent-in-current-premises?
-      (let [db-updated-children (update-in db-search-cleared [:discussion :premises :current parent-id :statement/children]
-                                           #(tools/update-statement-in-list % updated-statement))
-            current-parent (get-in db-updated-children [:discussion :premises :current parent-id])]
-        (update-in db-updated-children [:discussion :premises :current parent-id :meta/answered?]
-                   #(shared-tools/answered? current-parent)))
-      (assoc-in db-search-cleared [:discussion :premises :current (:db/id updated-statement)] updated-statement))))
+      (let [db-updated-children
+            (-> db-search-cleared
+                (update-in [:discussion :premises :current parent-id :statement/children]
+                           #(tools/update-statement-in-list % updated-statement))
+                (update-in [:schnaq :qa :search :results parent-id :statement/children]
+                           #(tools/update-statement-in-list % updated-statement)))
+            current-parent (get-in db-updated-children [:discussion :premises :current parent-id])
+            current-qa-parent (get-in db-updated-children [:schnaq :qa :search :results parent-id])]
+        (-> db-updated-children
+            (update-in [:discussion :premises :current parent-id :meta/answered?]
+                       #(shared-tools/answered? current-parent))
+            (update-in [:schnaq :qa :search :results parent-id :meta/answered?]
+                       #(shared-tools/answered? current-qa-parent))))
+      (-> db-search-cleared
+          (assoc-in [:discussion :premises :current (:db/id updated-statement)] updated-statement)
+          (assoc-in [:schnaq :qa :search :results (:db/id updated-statement)] updated-statement)))))
 
 (rf/reg-event-fx
  :statement.labels/remove
@@ -56,10 +67,12 @@
 (rf/reg-event-db
  :statement.labels.update/success
  (fn [db [_ {:keys [statement]}]]
-   (update-in db [:discussion :conclusion :selected]
-              #(if (= (:db/id %) (:db/id statement))
-                 statement
-                 %))))
+   (let [update-fn #(if (= (:db/id %) (:db/id statement))
+                      statement
+                      %)]
+     (-> db
+         (update-in [:discussion :conclusion :selected] update-fn)
+         (update-in [:schnaq :qa :search :results] update-fn)))))
 
 (rf/reg-event-fx
  :statement.labels/add
