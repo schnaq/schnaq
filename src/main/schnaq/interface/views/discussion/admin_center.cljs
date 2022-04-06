@@ -169,11 +169,12 @@
          method (or (:method return-value) (first (:methods return-value)))]
      (if (= :deleted method)
        (-> db
+           ;; TODO [:discussion :conclusion :selected] sollte nur einen marker enthalten
            (update-in [:discussion :conclusion :selected] mark-starting-fn)
-           (update-in [:discussion :premises :current] dissoc statement-id))
+           (update-in [:schnaq :statements] dissoc statement-id))
        (-> db
            (update-in [:discussion :conclusion :selected] mark-starting-fn)
-           (assoc-in [:discussion :premises :current statement-id :statement/content] config/deleted-statement-text)
+           (assoc-in [:schnaq :statements statement-id :statement/content] config/deleted-statement-text)
            (update-in [:history :full-context] mark-fn))))))
 
 (rf/reg-event-fx

@@ -30,25 +30,27 @@
   statement list."
   [db updated-statement]
   (let [parent-id (-> updated-statement :statement/parent :db/id)
-        parent-in-current-premises? (or (not (nil? (get-in db [:discussion :premises :current parent-id])))
+        parent-in-current-premises? (or (not (nil? (get-in db [:schnaq :statements parent-id])))
+                                        ;; TODO [:schnaq :qa :search :results parent-id] sollte auch in :schnaq :statements liegen
                                         (not (nil? (get-in db [:schnaq :qa :search :results parent-id]))))
+        ;; TODO [:search :schnaq :current :result] sollte nur eine liste von ids sein
         db-search-cleared (update-in db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))]
     (if parent-in-current-premises?
       (let [db-updated-children
             (-> db-search-cleared
-                (update-in [:discussion :premises :current parent-id :statement/children]
+                (update-in [:schnaq :statements parent-id :statement/children]
                            #(tools/update-statement-in-list % updated-statement))
                 (update-in [:schnaq :qa :search :results parent-id :statement/children]
                            #(tools/update-statement-in-list % updated-statement)))
-            current-parent (get-in db-updated-children [:discussion :premises :current parent-id])
+            current-parent (get-in db-updated-children [:schnaq :statements parent-id])
             current-qa-parent (get-in db-updated-children [:schnaq :qa :search :results parent-id])]
         (-> db-updated-children
-            (update-in [:discussion :premises :current parent-id :meta/answered?]
+            (update-in [:schnaq :statements parent-id :meta/answered?]
                        #(shared-tools/answered? current-parent))
             (update-in [:schnaq :qa :search :results parent-id :meta/answered?]
                        #(shared-tools/answered? current-qa-parent))))
       (-> db-search-cleared
-          (assoc-in [:discussion :premises :current (:db/id updated-statement)] updated-statement)
+          (assoc-in [:schnaq :statements (:db/id updated-statement)] updated-statement)
           (assoc-in [:schnaq :qa :search :results (:db/id updated-statement)] updated-statement)))))
 
 (rf/reg-event-fx

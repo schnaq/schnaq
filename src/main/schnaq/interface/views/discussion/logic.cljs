@@ -42,7 +42,7 @@
  :discussion.reaction.statement/added
  (fn [{:keys [db]} [_ response]]
    (let [new-statement (:new-statement response)]
-     {:db (assoc-in db [:discussion :premises :current (:db/id new-statement)] new-statement)
+     {:db (assoc-in db [:schnaq :statements (:db/id new-statement)] new-statement)
       :fx [[:dispatch [:notification/new-content]]
            [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
 
@@ -51,8 +51,8 @@
  (fn [{:keys [db]} [_ parent-statement {:keys [new-statement]}]]
    (let [parent-statement-id (:db/id parent-statement)]
      {:db (-> db
-              (update-in [:discussion :premises :current parent-statement-id :meta/sub-statement-count] inc)
-              (update-in [:discussion :premises :current parent-statement-id :statement/children] conj new-statement)
+              (update-in [:schnaq :statements parent-statement-id :meta/sub-statement-count] inc)
+              (update-in [:schnaq :statements parent-statement-id :statement/children] conj new-statement)
               (update-in [:schnaq :qa :search :results parent-statement-id :statement/children] conj new-statement)
               (update-in [:schnaq :qa :search :results parent-statement-id :meta/sub-statement-count] inc))
       :fx [[:dispatch [:notification/new-content]]
@@ -122,7 +122,7 @@
    (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          ;; Hier direkt das Statement aus der DB holen wenn es da ist
-         new-conclusion (first (filter #(= (:db/id %) statement-id) (get-in db [:discussion :premises :current])))]
+         new-conclusion (get-in db [:schnaq :statements statement-id])]
      ;; set new conclusion immediately if it's in db already, so loading times are reduced
      (cond->
        {:fx [[:dispatch [:loading/toggle [:statements? true]]]
@@ -148,8 +148,7 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:db (-> db
               (assoc-in [:discussion :conclusion :selected] conclusion)
-              (assoc-in [:discussion :premises :current]
-                        (shared-tools/normalize :db/id premises))
+              (assoc-in [:schnaq :statements] (shared-tools/normalize :db/id premises))
               (assoc-in [:history :full-context] (vec history)))
       :fx [[:dispatch [:loading/toggle [:statements? false]]]
            [:dispatch [:discussion.history/push conclusion]]

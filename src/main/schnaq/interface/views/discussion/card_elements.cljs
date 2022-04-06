@@ -106,11 +106,11 @@
          rand-id (rand-int 9999999)]
      {:db (-> db
               (update-in [:schnaq :selected :meta-info :all-statements] inc)
-              (assoc-in [:discussion :premises :current rand-id] {:db/id rand-id
-                                                                  :statement/author {:user/nickname username}
-                                                                  :statement/version 1
-                                                                  :statement/content statement-text
-                                                                  :statement/locked? locked?}))
+              (assoc-in [:schnaq :statements rand-id] {:db/id rand-id
+                                                       :statement/author {:user/nickname username}
+                                                       :statement/version 1
+                                                       :statement/content statement-text
+                                                       :statement/locked? locked?}))
       :fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
                                [:discussion.add.statement/starting-success form]
                                {:statement statement-text
@@ -146,12 +146,13 @@
 
 (rf/reg-event-fx
  :discussion.query.conclusions/set-starting
+ ;; TODO kann das genereller sein? Setzen von bekannten statements zB
  (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
    (when starting-conclusions
      (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
            visited (map :db/id starting-conclusions)]
        {:db (-> db
-                (assoc-in [:discussion :premises :current] (shared-tools/normalize :db/id starting-conclusions))
+                (assoc-in [:schnaq :statements] (shared-tools/normalize :db/id starting-conclusions))
                 (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) visited))
         ;; hier die seen setzen
         :fx [[:dispatch [:votes.local/reset]]
