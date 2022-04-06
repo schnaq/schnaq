@@ -62,4 +62,4 @@
  :present/poll
  (fn [db]
    (when-let [poll-id (get-in db [:present :poll])]
-     (get-in db [:schnaq :normalized :polls poll-id]))))
+     (get-in db [:schnaq :polls poll-id]))))
