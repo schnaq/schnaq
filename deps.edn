@@ -5,7 +5,7 @@
         clj-http/clj-http {:mvn/version "3.12.3"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}
         com.cognitect.aws/api {:mvn/version "0.8.539"}
-        com.cognitect.aws/endpoints {:mvn/version "1.1.12.186"}
+        com.cognitect.aws/endpoints {:mvn/version "1.1.12.192"}
         com.cognitect.aws/s3 {:mvn/version "821.2.1083.0"}
         com.datomic/datomic-pro {:mvn/version "1.0.6344"}
         com.draines/postal {:mvn/version "2.0.5"}
@@ -23,10 +23,10 @@
         image-resizer/image-resizer {:mvn/version "0.1.10"}
         jarohen/chime {:mvn/version "0.3.3"}
         keycloak-clojure/keycloak-clojure {:mvn/version "1.25.3"}
-        metosin/reitit {:mvn/version "0.5.17"}
+        metosin/reitit {:mvn/version "0.5.18"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
         mount/mount {:mvn/version "0.1.16"}
-        org.clojure/clojure {:mvn/version "1.11.0"}
+        org.clojure/clojure {:mvn/version "1.11.1"}
         org.clojure/clojurescript {:mvn/version "1.11.4"}
         org.clojure/core.async {:mvn/version "1.5.648"}
         org.clojure/test.check {:mvn/version "1.1.1"}
@@ -73,7 +73,7 @@
 
            :frontend
            {:extra-deps {binaryage/devtools {:mvn/version "1.0.5"}
-                         day8.re-frame/re-frame-10x {:mvn/version "1.2.4"}
+                         day8.re-frame/re-frame-10x {:mvn/version "1.2.5"}
                          day8.re-frame/test {:mvn/version "0.1.5"}}
             :main-opts ["-m" "shadow.cljs.devtools.cli"
                         "watch" ":app"]
