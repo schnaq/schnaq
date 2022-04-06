@@ -1,8 +1,10 @@
 (ns schnaq.api.user
   (:require [clojure.spec.alpha :as s]
+            [keycloak.admin :as kc-admin]
             [ring.util.http-response :refer [ok bad-request created]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
+            [schnaq.config.keycloak :as kc-config :refer [kc-client]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
@@ -31,6 +33,24 @@
       (do (cleverreach/add-user-to-customer-group! identity)
           (created "" (assoc response :new-user? true)))
       (ok response))))
+
+(defn- user-registration
+  "TODO"
+  [{{{:keys [email password]} :body} :parameters}]
+  :body)
+
+(comment
+
+  (def user
+    (let [password "123456"
+          email "meter+new@mailbox.org"]
+      (kc-admin/create-user! kc-client kc-config/realm {:email email :password password})))
+
+  :foo
+
+  nil)
+
+;; -----------------------------------------------------------------------------
 
 (defn- change-profile-picture
   "Change the profile picture of a user.
