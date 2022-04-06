@@ -30,8 +30,8 @@
   statement list."
   [db updated-statement]
   (let [parent-id (-> updated-statement :statement/parent :db/id)
-        parent-in-current-premises? (not (or (nil? (get-in db [:discussion :premises :current parent-id]))
-                                             (nil? (get-in db [:schnaq :qa :search :results parent-id]))))
+        parent-in-current-premises? (or (not (nil? (get-in db [:discussion :premises :current parent-id])))
+                                        (not (nil? (get-in db [:schnaq :qa :search :results parent-id]))))
         db-search-cleared (update-in db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))]
     (if parent-in-current-premises?
       (let [db-updated-children
