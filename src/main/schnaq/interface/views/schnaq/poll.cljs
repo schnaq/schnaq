@@ -350,7 +350,7 @@
          updated-poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
               (assoc-in [:schnaq :polls poll-id] updated-poll)
-              (assoc-in [:schnaq :polls :past-votes poll-id] chosen-option))
+              (assoc-in [:polls :past-votes poll-id] chosen-option))
       :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
                                [:schnaq.poll.cast-vote/success]
                                {:share-hash share-hash
@@ -372,7 +372,7 @@
          updated-poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
               (assoc-in [:schnaq :polls poll-id] updated-poll)
-              (assoc-in [:schnaq :polls :past-votes poll-id] rankings))
+              (assoc-in [:polls :past-votes poll-id] rankings))
       :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
                                [:schnaq.poll.cast-vote/success]
                                {:share-hash share-hash
@@ -382,12 +382,12 @@
 (rf/reg-event-fx
  :schnaq.poll.cast-vote/success
  (fn [{:keys [db]} _]
-   {:fx [[:localstorage/assoc [:poll/cast-votes (get-in db [:schnaq :polls :past-votes])]]]}))
+   {:fx [[:localstorage/assoc [:poll/cast-votes (get-in db [:polls :past-votes])]]]}))
 
 (rf/reg-event-db
  :schnaq.poll.cast-vote/failure
  (fn [db [_ poll-id]]
-   (update-in db [:schnaq :polls :past-votes] dissoc poll-id)))
+   (update-in db [:polls :past-votes] dissoc poll-id)))
 
 (rf/reg-event-fx
  :schnaq.poll.create-new/success
@@ -423,7 +423,7 @@
  :schnaq/vote-cast
  ;; Show whether and what a user has already voted for a certain poll
  (fn [db [_ poll-id]]
-   (get-in db [:schnaq :polls :past-votes poll-id])))
+   (get-in db [:polls :past-votes poll-id])))
 
 (rf/reg-event-fx
  :schnaq.polls/load-from-backend
@@ -443,7 +443,7 @@
  :schnaq.polls/load-past-votes
  ;; Load past votes from localstorage
  (fn [db _]
-   (assoc-in db [:schnaq :polls :past-votes] (:poll/cast-votes local-storage))))
+   (assoc-in db [:polls :past-votes] (:poll/cast-votes local-storage))))
 
 (rf/reg-event-fx
  :poll/delete
