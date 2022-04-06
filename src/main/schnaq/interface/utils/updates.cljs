@@ -25,10 +25,16 @@
                 #(rf/dispatch [:updates.periodic.discussion.graph/request])))
 
 (defn- loop-periodic-discussion-start!
-  "Define loop to periodically update polls."
+  "Define loop to periodically update discussions."
   []
   (loop-builder :updates.periodic.discussion/starting?
                 #(rf/dispatch [:updates.periodic.discussion.starting/request])))
+
+(defn- loop-periodic-activation-start!
+  "Define loop to periodically update activations."
+  []
+  (loop-builder :updates.periodic/activation?
+                #(rf/dispatch [:updates.periodic.activation/request])))
 
 (defn- loop-periodic-poll!
   "Define loop to periodically update polls."
@@ -45,6 +51,7 @@
   []
   (loop-periodic-discussion-start!)
   (loop-update-graph!)
+  (loop-periodic-activation-start!)
   (loop-periodic-poll!))
 
 ;; -----------------------------------------------------------------------------
@@ -58,6 +65,16 @@
  :updates.periodic.discussion/starting
  (fn [db [_ trigger?]]
    (assoc-in db [:updates/periodic :discussion/starting] trigger?)))
+
+(rf/reg-sub
+ :updates.periodic/activation?
+ (fn [db _]
+   (get-in db [:updates/periodic :activation] false)))
+
+(rf/reg-event-db
+ :updates.periodic/activation
+ (fn [db [_ trigger?]]
+   (assoc-in db [:updates/periodic :activation] trigger?)))
 
 (rf/reg-sub
  :updates.periodic.present/poll?
@@ -92,6 +109,15 @@
                         (rf/dispatch [:discussion.query.conclusions/set-starting response])
                         (rf/dispatch [:discussion.visible.entities/store response]))]]]})))
 
+(rf/reg-event-fx
+ :updates.periodic.activation/request
+ (fn [{:keys [db]}]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [[:ws/send [:discussion.activation/update
+                      {:share-hash share-hash}
+                      (fn [response]
+                        (rf/dispatch [:schnaq.activation.load-from-backend/success (:body response)]))]]]})))
+
 (rf/reg-event-db
  :discussion.visible.entities/store
  (fn [db [_ {:keys [visible-entities]}]]
@@ -122,6 +148,6 @@
 
 (comment
 
-  (rf/dispatch [:updates.periodic.discussion.starting/request])
+ (rf/dispatch [:updates.periodic.discussion.starting/request])
 
-  nil)
+ nil)

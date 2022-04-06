@@ -19,6 +19,11 @@
         :activation activation
         :visible-entities (visible-entity/get-entities (:share-hash ?data))}))))
 
+(defmethod handle-message :discussion.activation/update [{:keys [?data]}]
+  (when ?data
+    (shared-tools/remove-nil-values-from-map
+     (activation-api/get-activation {:parameters {:query ?data}}))))
+
 (defmethod handle-message :discussion.graph/update [{:keys [?data]}]
   (when ?data
     (let [parameters {:parameters {:query ?data}}

@@ -225,9 +225,9 @@
        :link-text (labels :router/qanda)
        :controllers [{:start (fn []
                                (rf/dispatch [:schnaq.activation/load-from-backend])
-                               (rf/dispatch [:updates.periodic.discussion/starting true]))
+                               (rf/dispatch [:updates.periodic/activation true]))
                       :stop (fn []
-                              (rf/dispatch [:updates.periodic.discussion/starting false])
+                              (rf/dispatch [:updates.periodic/activation false])
                               (rf/dispatch [:schnaq.qa.search.results/reset]))}]}]
      ["/dashboard"
       {:name :routes.schnaq/dashboard
@@ -387,7 +387,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-               #(tools/scroll-to-id window-hash)))))
+          #(tools/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
