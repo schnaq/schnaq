@@ -347,7 +347,7 @@
                              %))
          updated-poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
-              (assoc-in [:schnaq :normalized :polls poll-id] updated-poll)
+              (assoc-in [:schnaq :polls poll-id] updated-poll)
               (assoc-in [:schnaq :polls :past-votes poll-id] chosen-option))
       :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
                                [:schnaq.poll.cast-vote/success]
@@ -369,7 +369,7 @@
                              %))
          updated-poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
-              (assoc-in [:schnaq :normalized :polls poll-id] updated-poll)
+              (assoc-in [:schnaq :polls poll-id] updated-poll)
               (assoc-in [:schnaq :polls :past-votes poll-id] rankings))
       :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
                                [:schnaq.poll.cast-vote/success]
@@ -390,7 +390,7 @@
 (rf/reg-event-fx
  :schnaq.poll.create-new/success
  (fn [{:keys [db]} [_ form-elements {:keys [new-poll]}]]
-   {:db (assoc-in db [:schnaq :normalized :polls (:db/id new-poll)] new-poll)
+   {:db (assoc-in db [:schnaq :polls (:db/id new-poll)] new-poll)
     :fx [[:form/clear form-elements]
          [:dispatch [:polls.create/reset-option-count]]]}))
 
@@ -398,7 +398,7 @@
  :schnaq/polls
  ;; Returns all polls of the selected schnaq.
  (fn [db _]
-   (vals (get-in db [:schnaq :normalized :polls] {}))))
+   (vals (get-in db [:schnaq :polls] {}))))
 
 (rf/reg-event-fx
  :schnaq.poll/load-from-query
@@ -414,7 +414,7 @@
  (fn [db [_ {:keys [poll]}]]
    (when-let [poll-id (:db/id poll)]
      (-> db
-         (assoc-in [:schnaq :normalized :polls poll-id] poll)
+         (assoc-in [:schnaq :polls poll-id] poll)
          (assoc-in [:present :poll] poll-id)))))
 
 (rf/reg-sub
@@ -435,7 +435,7 @@
  :schnaq.polls.load-from-backend/success
  (fn [db [_ response]]
    (when-let [polls (:polls response)]
-     (assoc-in db [:schnaq :normalized :polls] (shared-tools/normalize :db/id polls)))))
+     (assoc-in db [:schnaq :polls] (shared-tools/normalize :db/id polls)))))
 
 (rf/reg-event-db
  :schnaq.polls/load-past-votes
@@ -446,7 +446,7 @@
 (rf/reg-event-fx
  :poll/delete
  (fn [{:keys [db]} [_ poll-id]]
-   {:db (update-in db [:schnaq :normalized :polls] dissoc poll-id)
+   {:db (update-in db [:schnaq :polls] dissoc poll-id)
     :fx [(http/xhrio-request
           db :delete "/poll/delete"
           [:no-op]
