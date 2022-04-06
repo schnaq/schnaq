@@ -53,7 +53,7 @@
 (rf/reg-sub
  :discussion.statements/show
  ;; The statements which should be shown in the discussion view right now.
- :<- [:discussion.premises/current]
+ :<- [:schnaq/statements]
  :<- [:schnaq.search.current/result]
  :<- [:schnaq.search.current/search-string]
  (fn [[premises search-results search-string] _]
@@ -62,8 +62,7 @@
      search-results)))
 
 (rf/reg-sub
- ;; TODO rename this bullshit sub
- :discussion.premises/current
+ :schnaq/statements
  (fn [db _]
    (vals (get-in db [:schnaq :statements]))))
 

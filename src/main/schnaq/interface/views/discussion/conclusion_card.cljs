@@ -337,7 +337,7 @@
                                    (not admin-access?) :schnaq.input-type/not-admin
                                    :else :schnaq.input-type/coming-soon)
             top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-            answered? (shared-tools/answered? {:statement/children @(rf/subscribe [:discussion.premises/current])})]
+            answered? (shared-tools/answered? {:statement/children @(rf/subscribe [:schnaq/statements])})]
         [motion/fade-in-and-out
          [:section.selection-card
           [:div.d-flex.flex-row
