@@ -317,7 +317,7 @@
                             (rf/dispatch [:themes/dissoc])
                             (rf/dispatch [:theme/reset]))}]}]
    ["/register"
-    ["" {:name :routes/register
+    ["" {:name :routes.user/register
          :view start-registration-view}]]
    ["/privacy"
     [""

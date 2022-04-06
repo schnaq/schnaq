@@ -59,7 +59,7 @@
 (>defn schnaq-logo
   "Display a schnaq logo"
   [attrs]
-  [map? => :re-frame/component]
+  [(? map?) => :re-frame/component]
   [:img (merge
          {:src (img-path :logo)
           :alt "schnaq logo"}

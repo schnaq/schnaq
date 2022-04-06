@@ -36,3 +36,11 @@
       attrs)]
     [:small.text-muted (labels :input.file.image/allowed-types) ": "
      (str/join ", " (map #(second (str/split % #"/")) shared-config/allowed-mime-types))]]))
+
+(>defn input-floating
+  "Create a floating input field."
+  [id placeholder input-type input-name]
+  [string? string? (s/or :keyword keyword? :string string?) string? => :re-frame/component]
+  [:div.form-floating
+   [:input.form-control {:id id :type input-type :placeholder placeholder :name input-name}]
+   [:label {:for id} placeholder]])
