@@ -16,6 +16,17 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
+(defn- percentage-bar
+  "An springy-animated percentage bar for graphs"
+  [votes percentage color-index]
+  [motion/spring-transition
+   [tooltip/text
+    (str votes " " (labels :schnaq.poll.ranking/points))
+    [:div.percentage-bar.rounded-1
+     {:style {:background-color (colors/get-graph-color color-index)
+              :height "35px"}}]]
+   {:width percentage}])
+
 (defn results-graph
   "A graph displaying the results of the poll."
   [{:poll/keys [options type]} cast-votes]
@@ -41,11 +52,7 @@
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
-         [:div.percentage-bar.rounded-1
-          {:class (when option-voted? "percentage-bar-highlight")
-           :style {:background-color (colors/get-graph-color index)
-                   :width percentage
-                   :height "30px"}}]
+         [percentage-bar votes percentage index]
          [:p.small.ms-1
           {:class (when option-voted? "font-italic")}
           value
@@ -70,13 +77,7 @@
         (str (inc index)) "."]]
       [:div
        {:class (if presentation-mode? "col-11" "col-10")}
-       [motion/spring-transition
-        [tooltip/text
-         (str votes " " (labels :schnaq.poll.ranking/points))
-         [:div.percentage-bar.rounded-1
-          {:style {:background-color (colors/get-graph-color (get old-indices id))
-                   :height "40px"}}]]
-        {:width percentage}]
+       [percentage-bar votes percentage (get old-indices id)]
        [:p.small.ms-1.mb-1 value]]]]))
 
 (defn ranking-results
@@ -165,7 +166,7 @@
        :on-click #(matomo/track-event "Active User", "Action", "Vote on Poll")}
       (labels :schnaq.poll/vote!)]]))
 
-(defn poll-content
+(defn- poll-content
   "The content of a single or multiple choice poll. Can be either only the results or results and ability to vote."
   [poll]
   (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
