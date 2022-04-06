@@ -526,7 +526,7 @@
   One of the bound params needs to be `?statements`.\n `custom-part needs to be a quoted vector."
   [share-hash search-tokens distance custom-part pattern]
   [:discussion/share-hash (s/coll-of ::specs/non-blank-string) int? (s/coll-of vector?) vector?
-   :ret (s/coll-of ::specs/statement)]
+   :ret (s/coll-of (s/tuple ::specs/statement nat-int?))]
   (let [tokens-with-synonyms (add-synonyms-to-list search-tokens)]
     ;; Für Synonyme wird ebenfalls eine Distanz berechnet. Wenn dabei zu viel Müll rauskommt, sollte
     ;; das geändert werden.
