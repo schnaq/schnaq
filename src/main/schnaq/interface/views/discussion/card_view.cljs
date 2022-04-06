@@ -76,8 +76,11 @@
 
 (rf/reg-sub
  :discussion.conclusion/selected
+ ;; TODO rename
  (fn [db _]
-   (get-in db [:discussion :conclusion :selected])))
+   ;; TODO ändere pfad. Sollte eher sowas sein wie fokus statement oder so
+   (let [focus-id (get-in db [:discussion :conclusion :selected])]
+     (get-in db [:schnaq :statements focus-id]))))
 
 ;; ----------------------------------------------------------------------------
 

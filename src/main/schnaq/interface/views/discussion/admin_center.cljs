@@ -163,17 +163,10 @@
                             (assoc % :statement/content config/deleted-statement-text)
                             %)
                          coll))
-         mark-starting-fn #(if (= (:db/id %) statement-id)
-                             (assoc % :statement/content config/deleted-statement-text)
-                             %)
          method (or (:method return-value) (first (:methods return-value)))]
      (if (= :deleted method)
+       (update-in db [:schnaq :statement-slice :current-level] disj statement-id)
        (-> db
-           ;; TODO [:discussion :conclusion :selected] sollte nur einen marker enthalten
-           (update-in [:discussion :conclusion :selected] mark-starting-fn)
-           (update-in [:schnaq :statement-slice :current-level] disj statement-id))
-       (-> db
-           (update-in [:discussion :conclusion :selected] mark-starting-fn)
            (assoc-in [:schnaq :statements statement-id :statement/content] config/deleted-statement-text)
            (update-in [:history :full-context] mark-fn))))))
 

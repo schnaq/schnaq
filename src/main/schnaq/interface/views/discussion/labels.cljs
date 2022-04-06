@@ -68,13 +68,12 @@
 
 (rf/reg-event-db
  :statement.labels.update/success
+ ;; TODO change this with a generic update-statement fn
  (fn [db [_ {:keys [statement]}]]
    (let [update-fn #(if (= (:db/id %) (:db/id statement))
                       statement
                       %)]
-     (-> db
-         (update-in [:discussion :conclusion :selected] update-fn)
-         (update-in [:schnaq :qa :search :results] update-fn)))))
+     (update-in db [:schnaq :qa :search :results] update-fn))))
 
 (rf/reg-event-fx
  :statement.labels/add

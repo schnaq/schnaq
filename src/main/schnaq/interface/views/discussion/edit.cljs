@@ -90,11 +90,7 @@
    {:db (-> db
             (assoc-in [:schnaq :statements (:db/id updated-statement)] updated-statement)
             ;; TODO history = Liste von ids
-            (update-in [:history :full-context] #(vec (tools/update-statement-in-list % updated-statement)))
-            ;; TODO conclusion selected = id
-            (update-in [:discussion :conclusion :selected] #(if (= (:db/id %) (:db/id updated-statement))
-                                                              updated-statement
-                                                              %)))
+            (update-in [:history :full-context] #(vec (tools/update-statement-in-list % updated-statement))))
     :fx [[:form/clear form]
          [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]}))
 
