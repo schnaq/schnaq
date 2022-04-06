@@ -165,13 +165,31 @@
        :on-click #(matomo/track-event "Active User", "Action", "Vote on Poll")}
       (labels :schnaq.poll/vote!)]]))
 
+(defn poll-content
+  "The content of a single or multiple choice poll. Can be either only the results or results and ability to vote."
+  [poll]
+  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
+    [:form
+     {:on-submit (fn [e]
+                   (.preventDefault e)
+                   (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
+     [results-graph poll cast-votes]
+     (when-not cast-votes
+       [:div.text-center
+        [:button.btn.btn-primary.btn-sm
+         {:type :submit
+          :on-click #(matomo/track-event "Active User", "Action", "Vote on Poll")}
+         (labels :schnaq.poll/vote!)]])]))
+
 (>defn input-or-results
-  "Toggle if there should be an input or the results of the ranking."
+  "Toggle if there should be an input or the results of the poll."
   [poll]
   [::specs/poll => :re-frame/component]
-  (if-let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
-    [ranking-results poll cast-votes]
-    [ranking-input poll]))
+  (if (= :poll.type/ranking (:poll/type poll))
+    (if-let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
+      [ranking-results poll cast-votes]
+      [ranking-input poll])
+    [poll-content poll]))
 
 (>defn ranking-card
   "Show a ranking card."
@@ -189,24 +207,12 @@
   "Show a poll card, where users can cast their votes."
   [poll]
   [::specs/poll => :re-frame/component]
-  (let [poll-id (:db/id poll)
-        cast-votes @(rf/subscribe [:schnaq/vote-cast poll-id])]
-    [:section.statement-card
-     [:div.mx-4.my-2
-      [:div.d-flex
-       [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-       [dropdown-menu poll-id]]
-      [:form
-       {:on-submit (fn [e]
-                     (.preventDefault e)
-                     (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
-       [results-graph poll cast-votes]
-       (when-not cast-votes
-         [:div.text-center
-          [:button.btn.btn-primary.btn-sm
-           {:type :submit
-            :on-click #(matomo/track-event "Active User", "Action", "Vote on Poll")}
-           (labels :schnaq.poll/vote!)]])]]]))
+  [:section.statement-card
+   [:div.mx-4.my-2
+    [:div.d-flex
+     [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+     [dropdown-menu (:db/id poll)]]
+    [poll-content poll]]])
 
 (defn poll-list
   "Displays all polls of the current schnaq."
