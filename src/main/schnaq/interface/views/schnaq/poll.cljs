@@ -16,6 +16,17 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
+(defn- percentage-bar
+  "An springy-animated percentage bar for graphs"
+  [votes percentage color-index]
+  [motion/spring-transition
+   [tooltip/text
+    (str votes " " (labels :schnaq.poll.ranking/points))
+    [:div.percentage-bar.rounded-1
+     {:style {:background-color (colors/get-graph-color color-index)
+              :height "35px"}}]]
+   {:width percentage}])
+
 (defn results-graph
   "A graph displaying the results of the poll."
   [{:poll/keys [options type]} cast-votes]
@@ -41,11 +52,7 @@
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
-         [:div.percentage-bar.rounded-1
-          {:class (when option-voted? "percentage-bar-highlight")
-           :style {:background-color (colors/get-graph-color index)
-                   :width percentage
-                   :height "30px"}}]
+         [percentage-bar votes percentage index]
          [:p.small.ms-1
           {:class (when option-voted? "font-italic")}
           value
@@ -66,17 +73,11 @@
      [:div.row
       [:div
        {:class (if presentation-mode? "col-1" "col-2")}
-       [:p.my-auto.mt-2.h4
+       [:p.my-auto.mt-2.h5
         (str (inc index)) "."]]
       [:div
        {:class (if presentation-mode? "col-11" "col-10")}
-       [motion/spring-transition
-        [tooltip/text
-         (str votes " " (labels :schnaq.poll.ranking/points))
-         [:div.percentage-bar.rounded-1
-          {:style {:background-color (colors/get-graph-color (get old-indices id))
-                   :height "40px"}}]]
-        {:width percentage}]
+       [percentage-bar votes percentage (get old-indices id)]
        [:p.small.ms-1.mb-1 value]]]]))
 
 (defn ranking-results
@@ -165,13 +166,31 @@
        :on-click #(matomo/track-event "Active User", "Action", "Vote on Poll")}
       (labels :schnaq.poll/vote!)]]))
 
+(defn- poll-content
+  "The content of a single or multiple choice poll. Can be either only the results or results and ability to vote."
+  [poll]
+  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
+    [:form
+     {:on-submit (fn [e]
+                   (.preventDefault e)
+                   (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
+     [results-graph poll cast-votes]
+     (when-not cast-votes
+       [:div.text-center
+        [:button.btn.btn-primary.btn-sm
+         {:type :submit
+          :on-click #(matomo/track-event "Active User", "Action", "Vote on Poll")}
+         (labels :schnaq.poll/vote!)]])]))
+
 (>defn input-or-results
-  "Toggle if there should be an input or the results of the ranking."
+  "Toggle if there should be an input or the results of the poll."
   [poll]
   [::specs/poll => :re-frame/component]
-  (if-let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
-    [ranking-results poll cast-votes]
-    [ranking-input poll]))
+  (if (= :poll.type/ranking (:poll/type poll))
+    (if-let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
+      [ranking-results poll cast-votes]
+      [ranking-input poll])
+    [poll-content poll]))
 
 (>defn ranking-card
   "Show a ranking card."
@@ -189,24 +208,12 @@
   "Show a poll card, where users can cast their votes."
   [poll]
   [::specs/poll => :re-frame/component]
-  (let [poll-id (:db/id poll)
-        cast-votes @(rf/subscribe [:schnaq/vote-cast poll-id])]
-    [:section.statement-card
-     [:div.mx-4.my-2
-      [:div.d-flex
-       [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-       [dropdown-menu poll-id]]
-      [:form
-       {:on-submit (fn [e]
-                     (.preventDefault e)
-                     (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
-       [results-graph poll cast-votes]
-       (when-not cast-votes
-         [:div.text-center
-          [:button.btn.btn-primary.btn-sm
-           {:type :submit
-            :on-click #(matomo/track-event "Active User", "Action", "Vote on Poll")}
-           (labels :schnaq.poll/vote!)]])]]]))
+  [:section.statement-card
+   [:div.mx-4.my-2
+    [:div.d-flex
+     [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+     [dropdown-menu (:db/id poll)]]
+    [poll-content poll]]])
 
 (defn poll-list
   "Displays all polls of the current schnaq."
@@ -342,6 +349,10 @@
               (update-in [:schnaq :current :polls]
                          (fn [polls]
                            (map #(if (= poll-id (:db/id %)) poll %) polls)))
+              (update-in [:present :poll]
+                         #(if (= (:db/id poll) (:db/id %))
+                            poll
+                            %))
               (assoc-in [:schnaq :polls :past-votes poll-id] chosen-option))
       :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
                                [:schnaq.poll.cast-vote/success]
