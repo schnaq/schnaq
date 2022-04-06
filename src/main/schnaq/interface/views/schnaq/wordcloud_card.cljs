@@ -7,7 +7,8 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
-            [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
+            [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
+            [schnaq.shared-toolbelt :as stools]))
 
 (defn wordcloud-tab
   "Wordcloud tab menu to hide and show a wordcloud."
@@ -83,7 +84,9 @@
 (rf/reg-event-fx
  :schnaq.wordcloud/from-current-premises
  (fn [{:keys [db]}]
-   (let [premises (vals (get-in db [:schnaq :statements]))
+   (let [all-premises (get-in db [:schnaq :statements])
+         current-premise-ids (get-in db [:schnaq :statement-slice :current-level])
+         premises (stools/select-values all-premises current-premise-ids)
          premises-with-children (remove nil? (concat premises (flatten (map :statement/children premises))))]
      {:fx [[:dispatch [:wordcloud/store-words
                        {:string-representation (export/generate-fulltext premises-with-children)}]]]})))

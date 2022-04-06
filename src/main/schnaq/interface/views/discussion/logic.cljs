@@ -40,11 +40,12 @@
 
 (rf/reg-event-fx
  :discussion.reaction.statement/added
- (fn [{:keys [db]} [_ response]]
-   (let [new-statement (:new-statement response)]
-     {:db (assoc-in db [:schnaq :statements (:db/id new-statement)] new-statement)
-      :fx [[:dispatch [:notification/new-content]]
-           [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
+ (fn [{:keys [db]} [_ {:keys [new-statement]}]]
+   {:db (-> db
+            (assoc-in [:schnaq :statements (:db/id new-statement)] new-statement)
+            (update-in [:schnaq :statement-slice :current-level] (comp set conj) (:db/id new-statement)))
+    :fx [[:dispatch [:notification/new-content]]
+         [:dispatch [:discussion.statements/add-creation-secret new-statement]]]}))
 
 (rf/reg-event-fx
  :discussion.reply.statement/added
@@ -148,7 +149,8 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:db (-> db
               (assoc-in [:discussion :conclusion :selected] conclusion)
-              (assoc-in [:schnaq :statements] (shared-tools/normalize :db/id premises))
+              (update-in [:schnaq :statements] merge (shared-tools/normalize :db/id premises))
+              (assoc-in [:schnaq :statement-slice :current-level] (map :db/id premises))
               (assoc-in [:history :full-context] (vec history)))
       :fx [[:dispatch [:loading/toggle [:statements? false]]]
            [:dispatch [:discussion.history/push conclusion]]

@@ -171,7 +171,7 @@
        (-> db
            ;; TODO [:discussion :conclusion :selected] sollte nur einen marker enthalten
            (update-in [:discussion :conclusion :selected] mark-starting-fn)
-           (update-in [:schnaq :statements] dissoc statement-id))
+           (update-in [:schnaq :statement-slice :current-level] disj statement-id))
        (-> db
            (update-in [:discussion :conclusion :selected] mark-starting-fn)
            (assoc-in [:schnaq :statements statement-id :statement/content] config/deleted-statement-text)

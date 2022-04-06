@@ -56,3 +56,5 @@
                (not (alphanumeric? (first %))) (subs % 1)
                (not (alphanumeric? (last %))) (subs % 0 (dec (count %)))
                :else %))))
+
+(def select-values (comp vals select-keys))

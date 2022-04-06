@@ -110,7 +110,8 @@
                                                        :statement/author {:user/nickname username}
                                                        :statement/version 1
                                                        :statement/content statement-text
-                                                       :statement/locked? locked?}))
+                                                       :statement/locked? locked?})
+              (update-in [:schnaq :statement-slice :current-level] (comp set conj) rand-int))
       :fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
                                [:discussion.add.statement/starting-success form]
                                {:statement statement-text
@@ -150,10 +151,11 @@
  (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
    (when starting-conclusions
      (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-           visited (map :db/id starting-conclusions)]
+           statement-ids (map :db/id starting-conclusions)]
        {:db (-> db
-                (assoc-in [:schnaq :statements] (shared-tools/normalize :db/id starting-conclusions))
-                (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) visited))
+                (update-in [:schnaq :statements] merge (shared-tools/normalize :db/id starting-conclusions))
+                (assoc-in [:schnaq :statement-slice :current-level] statement-ids)
+                (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) statement-ids))
         ;; hier die seen setzen
         :fx [[:dispatch [:votes.local/reset]]
              [:dispatch [:schnaq.wordcloud/calculate]]]}))))

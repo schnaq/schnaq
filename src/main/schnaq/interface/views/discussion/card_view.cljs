@@ -7,7 +7,8 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.shared-toolbelt :as stools]))
 
 (rf/reg-event-fx
  :discussion.statements/search
@@ -54,17 +55,24 @@
  :discussion.statements/show
  ;; The statements which should be shown in the discussion view right now.
  :<- [:schnaq/statements]
+ :<- [:schnaq.statements/current-level]
  :<- [:schnaq.search.current/result]
  :<- [:schnaq.search.current/search-string]
- (fn [[premises search-results search-string] _]
+ (fn [[statements level-statements search-results search-string] _]
    (if (cstring/blank? search-string)
-     premises
+     (stools/select-values statements level-statements)
      search-results)))
 
 (rf/reg-sub
  :schnaq/statements
  (fn [db _]
-   (vals (get-in db [:schnaq :statements]))))
+   (get-in db [:schnaq :statements])))
+
+(rf/reg-sub
+ :schnaq.statements/current-level
+ ;; A set of statements at the current "level" of discussion / questions
+ (fn [db _]
+   (get-in db [:schnaq :statement-slice :current-level] #{})))
 
 (rf/reg-sub
  :discussion.conclusion/selected
