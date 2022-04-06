@@ -87,10 +87,7 @@
 (rf/reg-event-fx
  :statement.edit.send/success
  (fn [{:keys [db]} [_ form {:keys [updated-statement]}]]
-   {:db (-> db
-            (assoc-in [:schnaq :statements (:db/id updated-statement)] updated-statement)
-            ;; TODO history = Liste von ids
-            (update-in [:history :full-context] #(vec (tools/update-statement-in-list % updated-statement))))
+   {:db (assoc-in db [:schnaq :statements (:db/id updated-statement)] updated-statement)
     :fx [[:form/clear form]
          [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]}))
 

@@ -1,11 +1,12 @@
 (ns schnaq.interface.views.discussion.history
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [schnaq.shared-toolbelt :as stools]))
 
 (defn- rewind-history
   "Rewinds a history until the last time statement-id was current."
   [history statement-id]
   (loop [history history]
-    (if (or (= (:db/id (last history)) statement-id)
+    (if (or (= (last history) statement-id)
             (empty? history))
       (vec history)
       (recur (butlast history)))))
@@ -14,12 +15,11 @@
  :discussion.history/push
  ;; IMPORTANT: Since we do not control what happens at the browser back button, pushing anything
  ;; that is already present in the history, will rewind the history to said place.
- (fn [db [_ statement]]
-   (let [all-entries (-> db :history :full-context)
-         history-ids (into #{} (map :db/id all-entries))]
-     (if (and statement (contains? history-ids (:db/id statement)))
-       (assoc-in db [:history :full-context] (rewind-history all-entries (:db/id statement)))
-       (update-in db [:history :full-context] conj statement)))))
+ (fn [db [_ {:keys [db/id]}]]
+   (let [all-entries (get-in db [:history :full-context])]
+     (if (contains? (set all-entries) id)
+       (assoc-in db [:history :full-context] (rewind-history all-entries id))
+       (update-in db [:history :full-context] conj id)))))
 
 (rf/reg-event-db
  :discussion.history/clear
@@ -47,4 +47,5 @@
 (rf/reg-sub
  :discussion-history
  (fn [db _]
-   (get-in db [:history :full-context] [])))
+   (let [history-ids (get-in db [:history :full-context] [])]
+     (stools/select-values (get-in db [:schnaq :statements] history-ids)))))

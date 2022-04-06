@@ -21,8 +21,7 @@
 (defn- back-button
   "Return to your schnaqs Button"
   []
-  (let [history @(rf/subscribe [:discussion-history])
-        has-history? (seq history)
+  (let [has-history? (seq @(rf/subscribe [:discussion-history]))
         back-feed (toolbelt/current-overview-navigation-route)
         back-history [:discussion.history/time-travel 1]
         back-label (if has-history?

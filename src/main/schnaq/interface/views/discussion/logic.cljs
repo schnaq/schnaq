@@ -147,11 +147,15 @@
  :discussion.query.statement/by-id-success
  (fn [{:keys [db]} [_ {:keys [conclusion premises history]}]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     (println history)
+     (println "--------")
+     (println conclusion)
+     (println premises)
      {:db (-> db
               (assoc-in [:discussion :conclusion :selected] (:db/id conclusion))
-              (update-in [:schnaq :statements] merge (shared-tools/normalize :db/id (conj premises conclusion)))
+              (update-in [:schnaq :statements] merge (shared-tools/normalize :db/id (conj (concat premises history) conclusion)))
               (assoc-in [:schnaq :statement-slice :current-level] (map :db/id premises))
-              (assoc-in [:history :full-context] (vec history)))
+              (assoc-in [:history :full-context] (vec (map :db/id history))))
       :fx [[:dispatch [:loading/toggle [:statements? false]]]
            [:dispatch [:discussion.history/push conclusion]]
            [:dispatch [:visited/set-visited-statements conclusion]]
