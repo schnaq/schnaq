@@ -14,7 +14,8 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
+            [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (defn- percentage-bar
   "An springy-animated percentage bar for graphs"
@@ -344,15 +345,9 @@
                           #(if (contains? (set chosen-option) (:db/id %))
                              (update % :option/votes inc)
                              %))
-         poll (update poll :poll/options #(mapv poll-update-fn %))]
+         updated-poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
-              (update-in [:schnaq :current :polls]
-                         (fn [polls]
-                           (map #(if (= poll-id (:db/id %)) poll %) polls)))
-              (update-in [:present :poll]
-                         #(if (= (:db/id poll) (:db/id %))
-                            poll
-                            %))
+              (assoc-in [:schnaq :polls poll-id] updated-poll)
               (assoc-in [:schnaq :polls :past-votes poll-id] chosen-option))
       :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
                                [:schnaq.poll.cast-vote/success]
@@ -374,13 +369,7 @@
                              %))
          updated-poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
-              (update-in [:schnaq :current :polls]
-                         (fn [polls]
-                           (map #(if (= poll-id (:db/id %)) updated-poll %) polls)))
-              (update-in [:present :poll]
-                         #(if (= (:db/id updated-poll) (:db/id %))
-                            updated-poll
-                            %))
+              (assoc-in [:schnaq :polls poll-id] updated-poll)
               (assoc-in [:schnaq :polls :past-votes poll-id] rankings))
       :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
                                [:schnaq.poll.cast-vote/success]
@@ -400,12 +389,8 @@
 
 (rf/reg-event-fx
  :schnaq.poll.create-new/success
- (fn [{:keys [db]} [_ form-elements response]]
-   {:db (update-in db [:schnaq :current :polls]
-                   #(if (nil? %1)
-                      [%2]
-                      (conj %1 %2))
-                   (:new-poll response))
+ (fn [{:keys [db]} [_ form-elements {:keys [new-poll]}]]
+   {:db (assoc-in db [:schnaq :polls (:db/id new-poll)] new-poll)
     :fx [[:form/clear form-elements]
          [:dispatch [:polls.create/reset-option-count]]]}))
 
@@ -413,7 +398,7 @@
  :schnaq/polls
  ;; Returns all polls of the selected schnaq.
  (fn [db _]
-   (get-in db [:schnaq :current :polls] [])))
+   (vals (get-in db [:schnaq :polls] {}))))
 
 (rf/reg-event-fx
  :schnaq.poll/load-from-query
@@ -427,8 +412,10 @@
 (rf/reg-event-db
  :schnaq.poll.load-from-query/success
  (fn [db [_ {:keys [poll]}]]
-   (when poll
-     (assoc-in db [:present :poll] poll))))
+   (when-let [poll-id (:db/id poll)]
+     (-> db
+         (assoc-in [:schnaq :polls poll-id] poll)
+         (assoc-in [:present :poll] poll-id)))))
 
 (rf/reg-sub
  :schnaq/vote-cast
@@ -448,7 +435,7 @@
  :schnaq.polls.load-from-backend/success
  (fn [db [_ response]]
    (when-let [polls (:polls response)]
-     (assoc-in db [:schnaq :current :polls] polls))))
+     (assoc-in db [:schnaq :polls] (shared-tools/normalize :db/id polls)))))
 
 (rf/reg-event-db
  :schnaq.polls/load-past-votes
@@ -459,9 +446,7 @@
 (rf/reg-event-fx
  :poll/delete
  (fn [{:keys [db]} [_ poll-id]]
-   {:db (let [polls (get-in db [:schnaq :current :polls])]
-          (assoc-in db [:schnaq :current :polls]
-                    (remove #(= poll-id (:db/id %)) polls)))
+   {:db (update-in db [:schnaq :polls] dissoc poll-id)
     :fx [(http/xhrio-request
           db :delete "/poll/delete"
           [:no-op]
