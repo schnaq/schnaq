@@ -130,7 +130,8 @@
 
 .common-card {
   @extend .statement-card;
-  @extend .p-3;
+  @extend .px-3;
+  @extend .py-4;
   @extend .shadow;
 }
 

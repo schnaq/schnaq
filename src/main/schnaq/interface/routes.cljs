@@ -33,7 +33,7 @@
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.presentation :as presentation]
             [schnaq.interface.views.qa.inputs :as qanda]
-            [schnaq.interface.views.registration :refer [start-registration-view]]
+            [schnaq.interface.views.registration :as registration]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.startpage.core :as startpage-views]
@@ -318,7 +318,9 @@
                             (rf/dispatch [:theme/reset]))}]}]
    ["/register"
     ["" {:name :routes.user/register
-         :view start-registration-view}]]
+         :view registration/registration-step-1-view}]
+    ["/step-2" {:name :routes.user.register/step-2
+                :view registration/registration-step-2-view}]]
    ["/privacy"
     [""
      {:name :routes.privacy/complete

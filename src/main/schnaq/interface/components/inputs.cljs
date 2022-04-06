@@ -2,7 +2,7 @@
   "A number of schnaq-typical inputs."
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as str]
-            [com.fulcrologic.guardrails.core :refer [>defn =>]]
+            [com.fulcrologic.guardrails.core :refer [>defn => ?]]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.images :as image]))
@@ -37,10 +37,10 @@
     [:small.text-muted (labels :input.file.image/allowed-types) ": "
      (str/join ", " (map #(second (str/split % #"/")) shared-config/allowed-mime-types))]]))
 
-(>defn input-floating
+(>defn floating
   "Create a floating input field."
-  [id placeholder input-type input-name]
-  [string? string? (s/or :keyword keyword? :string string?) string? => :re-frame/component]
+  [id placeholder input-type input-name attrs]
+  [string? string? (s/or :keyword keyword? :string string?) string? (? map?) => :re-frame/component]
   [:div.form-floating
-   [:input.form-control {:id id :type input-type :placeholder placeholder :name input-name}]
+   [:input.form-control (merge {:id id :type input-type :placeholder placeholder :name input-name} attrs)]
    [:label {:for id} placeholder]])
