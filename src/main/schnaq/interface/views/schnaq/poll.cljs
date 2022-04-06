@@ -348,11 +348,6 @@
          updated-poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
               (assoc-in [:schnaq :normalized :polls poll-id] updated-poll)
-              ;; TODO change :present :poll to just reference a poll in the central db
-              (update-in [:present :poll]
-                         #(if (= (:db/id updated-poll) (:db/id %))
-                            updated-poll
-                            %))
               (assoc-in [:schnaq :polls :past-votes poll-id] chosen-option))
       :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
                                [:schnaq.poll.cast-vote/success]
@@ -375,10 +370,6 @@
          updated-poll (update poll :poll/options #(mapv poll-update-fn %))]
      {:db (-> db
               (assoc-in [:schnaq :normalized :polls poll-id] updated-poll)
-              (update-in [:present :poll]
-                         #(if (= (:db/id updated-poll) (:db/id %))
-                            updated-poll
-                            %))
               (assoc-in [:schnaq :polls :past-votes poll-id] rankings))
       :fx [(http/xhrio-request db :put (gstring/format "/poll/%s/vote" poll-id)
                                [:schnaq.poll.cast-vote/success]
@@ -405,7 +396,6 @@
 
 (rf/reg-sub
  :schnaq/polls
- ;; TODO hier nur normalisierte Daten
  ;; Returns all polls of the selected schnaq.
  (fn [db _]
    (vals (get-in db [:schnaq :normalized :polls] {}))))
@@ -422,8 +412,10 @@
 (rf/reg-event-db
  :schnaq.poll.load-from-query/success
  (fn [db [_ {:keys [poll]}]]
-   (when poll
-     (assoc-in db [:present :poll] poll))))
+   (when-let [poll-id (:db/id poll)]
+     (-> db
+         (assoc-in [:schnaq :normalized :polls poll-id] poll)
+         (assoc-in [:present :poll] poll-id)))))
 
 (rf/reg-sub
  :schnaq/vote-cast

@@ -61,4 +61,5 @@
 (rf/reg-sub
  :present/poll
  (fn [db]
-   (get-in db [:present :poll])))
+   (when-let [poll-id (get-in db [:present :poll])]
+     (get-in db [:schnaq :normalized :polls poll-id]))))
