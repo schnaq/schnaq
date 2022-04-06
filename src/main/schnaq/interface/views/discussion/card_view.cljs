@@ -62,8 +62,10 @@
      search-results)))
 
 (rf/reg-sub
+ ;; TODO rename this bullshit sub
  :discussion.premises/current
- (fn [db _] (tools/convert-premises db)))
+ (fn [db _]
+   (vals (get-in db [:schnaq :normalized :statements]))))
 
 (rf/reg-sub
  :discussion.conclusion/selected

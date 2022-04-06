@@ -154,14 +154,6 @@
   (when-let [element (js/document.getElementById id)]
     (set! (.-value element) "")))
 
-(>defn convert-premises
-  "Take normalized premises and convert them to a collection."
-  [db]
-  [map? => (s/coll-of ::specs/statement)]
-  (if-let [premises (get-in db [:discussion :premises :current])]
-    (map second premises)
-    '()))
-
 (>defn set-wordcloud-in-current-schnaq
   "Check in app db at selected schnaq whether to display a word cloud."
   [db]

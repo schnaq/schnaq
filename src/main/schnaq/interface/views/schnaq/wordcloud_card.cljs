@@ -83,7 +83,7 @@
 (rf/reg-event-fx
  :schnaq.wordcloud/from-current-premises
  (fn [{:keys [db]}]
-   (let [premises (tools/convert-premises db)
+   (let [premises (vals (get-in db [:schnaq :normalized :statements]))
          premises-with-children (remove nil? (concat premises (flatten (map :statement/children premises))))]
      {:fx [[:dispatch [:wordcloud/store-words
                        {:string-representation (export/generate-fulltext premises-with-children)}]]]})))
