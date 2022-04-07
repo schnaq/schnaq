@@ -273,6 +273,7 @@
    :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."
 
    :statement/discuss "Discuss"
+   :statement/replies "Replies"
    :statement/new "Absenden"
    :statement.new/placeholder "Your statement"
    :statement.edit.send.failure/title "Edit could not be made"

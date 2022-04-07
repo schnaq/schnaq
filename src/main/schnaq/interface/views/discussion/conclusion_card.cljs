@@ -137,12 +137,15 @@
 
 (defn- discuss-answer-button [statement]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
-        statement-num (:meta/sub-statement-count statement 0)]
+        statement-num (:meta/sub-statement-count statement 0)
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        locked? (:statement/locked? statement)
+        button-label (if (or read-only? locked?) :statement/replies :statement/discuss)]
     [:a.btn.btn-sm.btn-outline-dark.me-3.px-1.py-0
      {:href (navigation/href :routes.schnaq.select/statement {:share-hash share-hash
                                                               :statement-id (:db/id statement)})}
      [:div.d-flex.flex-wrap.align-items-center
-      [:small (labels :statement/discuss)]
+      [:small (labels button-label)]
       [:small.ms-2
        statement-num
        [icon :comment/alt "ms-1"]]]]))

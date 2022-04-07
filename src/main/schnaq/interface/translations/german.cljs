@@ -272,6 +272,7 @@
    :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."
 
    :statement/discuss "Diskutieren"
+   :statement/replies "Antworten"
    :statement/new "Post"
    :statement.new/placeholder "Dein Beitrag"
    :statement.edit.send.failure/title "Änderung nicht gespeichert"
