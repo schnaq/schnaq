@@ -66,23 +66,22 @@
 (defn- premise-card-textarea
   "Input, where users provide premises."
   [{:keys [db/id]}]
-  (when-not @(rf/subscribe [:schnaq.selected/read-only?])
-    [:div.input-group
-     [textarea-highlighting id]
-     [:textarea.form-control.form-control-sm.textarea-resize-none
-      {:name "statement" :wrap "soft" :rows 1
-       :auto-complete "off"
-       :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-       :required true
-       :data-dynamic-height true
-       :placeholder (labels :statement.new/placeholder)}]
-     [:button.btn.btn-sm.btn-outline-dark
-      {:type "submit"
-       :title (labels :discussion/create-argument-action)
-       :on-click #(matomo/track-event "Active User", "Action", "Submit Post")}
-      [:div.d-flex.flex-row
-       [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
-       [icon :plane "m-auto"]]]]))
+  [:div.input-group
+   [textarea-highlighting id]
+   [:textarea.form-control.form-control-sm.textarea-resize-none
+    {:name "statement" :wrap "soft" :rows 1
+     :auto-complete "off"
+     :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
+     :required true
+     :data-dynamic-height true
+     :placeholder (labels :statement.new/placeholder)}]
+   [:button.btn.btn-sm.btn-outline-dark
+    {:type "submit"
+     :title (labels :discussion/create-argument-action)
+     :on-click #(matomo/track-event "Active User", "Action", "Submit Post")}
+    [:div.d-flex.flex-row
+     [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
+     [icon :plane "m-auto"]]]])
 
 (defn- conclusion-card-textarea
   "Input, where users provide (starting) conclusions."
@@ -155,11 +154,13 @@
   (let [statement-id (:db/id statement)
         statement-type @(rf/subscribe [:form/statement-type statement-id])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        locked? (:statement/locked? statement)
         answer-to-statement-event
         (fn [e]
           (.preventDefault e)
           (logic/reply-to-statement statement statement-type (oget e [:currentTarget :elements])))]
-    (when-not (:statement/locked? statement)
+    (when-not (or locked? read-only?)
       [:form.my-md-2
        {:on-submit #(answer-to-statement-event %)
         :on-key-down #(when (toolbelt/ctrl-press? % 13)
