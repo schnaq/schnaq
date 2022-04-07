@@ -1,6 +1,7 @@
 (ns schnaq.interface.user
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
+            [schnaq.interface.auth :as auth]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.http :as http]))
 
@@ -14,8 +15,8 @@
 (rf/reg-event-fx
  ;; Registers a user in the backend. Sets the returned user in the db
  :user/register
- (fn [{:keys [db]} [_ result]]
-   (when result
+ (fn [{:keys [db]}]
+   (when (auth/user-authenticated? db)
      (let [creation-secrets (get-in db [:discussion :statements :creation-secrets])
            schnaq-creation-secrets (get-in db [:discussion :schnaqs :creation-secrets])
            visited-hashes (get-in db [:schnaqs :visited-hashes])
