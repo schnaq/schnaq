@@ -13,7 +13,8 @@
    :nav.schnaqs/last-added "Last created schnaq"
    :nav/blog "Blog"
    :nav/admin "Admin"
-   :nav/register "Sign up for free"
+   :nav/register "Try for free"
+   :nav/login "Sign in"
    :nav.buttons/language-toggle "Change language"
 
    ;; Call to contribute

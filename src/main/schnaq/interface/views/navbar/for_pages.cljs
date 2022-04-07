@@ -39,7 +39,7 @@
    [um/admin-dropdown "btn-outline-secondary"]
    [:div.mx-1.d-none.d-md-block
     [:div.d-flex.flex-row.align-items-center
-     [um/register-or-user-button "btn-link"]]]])
+     [um/register-or-user-button true]]]])
 
 (defn navbar
   "Overview header for a discussion."
@@ -80,4 +80,4 @@
       [:li.nav-item.dropdown
        [navbar-components/language-dropdown]]]
      [um/admin-dropdown "btn-outline-secondary"]
-     [um/register-or-user-button "btn-outline-light btn-transparent"]]]])
+     [um/register-or-user-button false]]]])
