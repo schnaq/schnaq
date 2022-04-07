@@ -318,9 +318,8 @@
 (s/def :identity/locale string?)
 (s/def ::identity
   (s/keys
-   :req-un [:identity/sub :identity/given_name :identity/family_name
-            :identity/preferred_username :identity/email]
-   :opt-un [:identity/groups :identity/locale]))
+   :req-un [:identity/sub :identity/preferred_username :identity/email]
+   :opt-un [:identity/given_name :identity/family_name :identity/groups :identity/locale]))
 
 ;; -----------------------------------------------------------------------------
 ;; Websockets
