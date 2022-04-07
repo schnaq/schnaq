@@ -69,10 +69,10 @@
                 {:email email
                  :tags ["customer-free"]
                  :source "schnaq Backend"
-                 :global_attributes {:firstname given_name
-                                     :lastname family_name
-                                     :locale locale
-                                     :keycloak_id sub}})
+                 :global_attributes (cond-> {:locale locale
+                                             :keycloak_id sub}
+                                      given_name (assoc :firstname given_name)
+                                      family_name (assoc :lastname family_name))})
       :content-type :json
       :accept :json})))
 
