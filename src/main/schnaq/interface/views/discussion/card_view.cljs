@@ -26,7 +26,9 @@
 (rf/reg-event-db
  :discussion.statements.search/success
  (fn [db [_ {:keys [matching-statements]}]]
-   (assoc-in db [:search :schnaq :current :result] matching-statements)))
+   (-> db
+       (assoc-in [:search :schnaq :current :result] (map :db/id matching-statements))
+       (update-in [:schnaq :statements] merge (stools/normalize :db/id matching-statements)))))
 
 (defn- discussion-view
   "Displays a history  and input field on the left and conclusions in its center"
@@ -61,7 +63,7 @@
  (fn [[statements level-statements search-results search-string] _]
    (if (cstring/blank? search-string)
      (stools/select-values statements level-statements)
-     search-results)))
+     (stools/select-values statements search-results))))
 
 (rf/reg-sub
  :schnaq/statements

@@ -32,12 +32,10 @@
   (let [parent-id (-> updated-statement :statement/parent :db/id)
         parent-in-current-premises? (or (not (nil? (get-in db [:schnaq :statements parent-id])))
                                         ;; TODO [:schnaq :qa :search :results parent-id] sollte auch in :schnaq :statements liegen
-                                        (not (nil? (get-in db [:schnaq :qa :search :results parent-id]))))
-        ;; TODO [:search :schnaq :current :result] sollte nur eine liste von ids sein
-        db-search-cleared (update-in db [:search :schnaq :current :result] #(tools/update-statement-in-list % updated-statement))]
+                                        (not (nil? (get-in db [:schnaq :qa :search :results parent-id]))))]
     (if parent-in-current-premises?
       (let [db-updated-children
-            (-> db-search-cleared
+            (-> db
                 (update-in [:schnaq :statements parent-id :statement/children]
                            #(tools/update-statement-in-list % updated-statement))
                 (update-in [:schnaq :qa :search :results parent-id :statement/children]
@@ -49,7 +47,7 @@
                        #(shared-tools/answered? current-parent))
             (update-in [:schnaq :qa :search :results parent-id :meta/answered?]
                        #(shared-tools/answered? current-qa-parent))))
-      (-> db-search-cleared
+      (-> db
           (assoc-in [:schnaq :statements (:db/id updated-statement)] updated-statement)
           (assoc-in [:schnaq :qa :search :results (:db/id updated-statement)] updated-statement)))))
 
