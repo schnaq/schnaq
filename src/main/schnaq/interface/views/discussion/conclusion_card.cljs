@@ -190,18 +190,19 @@
   (let [collapsed? (r/atom true)]
     (fn []
       (let [replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
+            rotation (if @collapsed? 0 180)
+            button-icon [motion/rotate rotation [icon :collapse-down "my-auto"]]
             button-content (if @collapsed?
-                             [:<> [icon :collapse-up "my-auto me-2"]
-                              (labels :qanda.button.show/replies)]
-                             [:<> [icon :collapse-down "my-auto me-2"]
-                              (labels :qanda.button.hide/replies)])]
+                             (labels :qanda.button.show/replies)
+                             (labels :qanda.button.hide/replies))]
         (when (not-empty replies)
           [:<>
-           [:button.btn.btn-transparent.border-0
+           [:button.btn.btn-transparent.btn-no-outline
             {:type "button" :aria-expanded "false"
              :on-click (fn [_] (swap! collapsed? not))}
-            button-content]
-           [:div.collapse {:class (when-not @collapsed? "show")}
+            [:span.me-2 button-content] button-icon]
+           [motion/collapse-in-out
+            @collapsed?
             (for [reply replies]
               (with-meta
                 [reduced-or-edit-card reply]

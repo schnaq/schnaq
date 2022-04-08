@@ -102,3 +102,13 @@
     background: transparent;
   }
 }
+
+.btn-no-outline {
+  border: 0;
+
+  &:active,
+  &:focus {
+    box-shadow: none;
+    outline: none;
+  }
+}
