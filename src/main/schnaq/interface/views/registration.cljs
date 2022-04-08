@@ -3,6 +3,7 @@
             [goog.string :refer [format]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.common :refer [schnaq-logo]]
             [schnaq.interface.components.icons :refer [icon]]
@@ -33,7 +34,7 @@
 (>defn- registration-card
   "Wrapper to build a common registration card for the complete registration
   process."
-  [heading body footer {:keys [step class]}]
+  [heading body footer {:keys [step class wide?]}]
   [string? :re-frame/component (? :re-frame/component) map? => :re-frame/component]
   [:section.mx-auto.pt-5 {:class (or class "col-11 col-md-6")}
    [:div.common-card
@@ -41,14 +42,16 @@
      [:a {:href (navigation/href :routes/startpage)}
       [schnaq-logo]]
      [:p.text-center.text-muted (format (labels :registration.steps/heading) step)]]
-    [:section.w-75.mx-auto
+    [:section.mx-auto.px-3 {:class (when-not wide? "w-75")}
      [:h1.h4.text-center.py-3 heading]
      body]]
    footer])
 
 ;; -----------------------------------------------------------------------------
 
-(def toc
+(defn- toc
+  "Accept terms."
+  []
   [:p
    (labels :registration.inputs/toc-1)
    [buttons/anchor (labels :privacy/note) (navigation/href :routes.privacy/complete) "btn-sm btn-link"]
@@ -58,7 +61,7 @@
   "First step in the registration process."
   []
   [registration-card
-   (labels :registration.step-1/heading)
+   (labels :registration.register/heading)
    [:<>
     [social-logins]
     [:p.text-muted.mb-1.pt-4 (labels :registration.email/lead) ":"]
@@ -74,15 +77,16 @@
                                 #:notification{:title "Bitte alle Felder ausfüllen"
                                                :body "Mindestens eins deiner Felder wurde nicht ausgefüllt. Bitte kontrolliere deine Eingabe."
                                                :context :warning}]))))}
-     [inputs/floating (labels :registration.step-1.input/email) :email "registration-email" "email" {:required true :class "mb-2"}]
-     [inputs/floating (labels :registration.step-1.input/password) :password "registration-password" "password" {:required true :class "mb-2" :minLength 8}]
-     [inputs/checkbox [:small toc] "registration-opt-in" "opt-in" {:required true}]
+     [inputs/floating (labels :registration.register.input/email) :email "registration-email" "email" {:required true :class "mb-2"}]
+     [inputs/floating (format (labels :registration.register.input/password) shared-config/password-minimum-length)
+      :password "registration-password" "password" {:required true :class "mb-2" :minLength 8}]
+     [inputs/checkbox [:small [toc]] "registration-opt-in" "opt-in" {:required true}]
      [next-button
-      (labels :registration.step-1.input/submit-button)
+      (labels :registration.register.input/submit-button)
       {:id "registration-first-step"}]]]
    [:div.text-center
-    (labels :registration.step-1.footer/login-available)
-    [buttons/button (labels :registration.step-1.footer/login) identity "btn-link"]]
+    (labels :registration.register.footer/login-available)
+    [buttons/button (labels :registration.register.footer/login) identity "btn-link"]]
    {:step 1}])
 
 (defn registration-step-1-view
@@ -106,28 +110,28 @@
   []
   [:section
    [:div.d-flex.flex-row.pb-2
-    [checkbox "education" (labels :registration.step-2.survey/option-education) :graduation-cap]
-    [checkbox "coachings" (labels :registration.step-2.survey/option-coachings) :university]
-    [checkbox "seminars" (labels :registration.step-2.survey/option-seminars) :rocket]]
+    [checkbox "education" (labels :registration.survey.options/education) :graduation-cap]
+    [checkbox "coachings" (labels :registration.survey.options/coachings) :university]
+    [checkbox "seminars" (labels :registration.survey.options/seminars) :rocket]]
    [:div.d-flex.flex-row
-    [checkbox "fairs" (labels :registration.step-2.survey/option-fairs) :briefcase]
-    [checkbox "meetings" (labels :registration.step-2.survey/option-meetings) :laptop]
-    [checkbox "other" (labels :registration.step-2.survey/option-other) :magic]]])
+    [checkbox "fairs" (labels :registration.survey.options/fairs) :briefcase]
+    [checkbox "meetings" (labels :registration.survey.options/meetings) :laptop]
+    [checkbox "other" (labels :registration.survey.options/other) :magic]]])
 
 (defn- registration-step-2
   "First step in the registration process."
   []
   [registration-card
-   (labels :registration.step-2/heading)
+   (labels :registration.survey/heading)
    [:<>
-    [:p.text-muted.mb-1 (labels :registration.step-2/select-all)]
+    [:p.text-muted.mb-1 (labels :registration.survey/select-all)]
     [:form
      {:on-submit
       (fn [e] (.preventDefault e)
         (let [form (oget e [:target :elements])]
           (rf/dispatch [:registration/store-survey-selection form])))}
      [survey]
-     [next-button (labels :registration.step-2.input/submit-button)
+     [next-button (labels :registration.survey.input/submit-button)
       {:id "registration-second-step"}]]]
    nil
    {:step 2}])
@@ -152,7 +156,7 @@
   "Small tier cards, as a preview on the features."
   [title subtitle price button features additional-classes]
   [string? string? :re-frame/component :re-frame/component :re-frame/component (? string?) => :re-frame/component]
-  [:article.col-12.col-md-4.px-1.pb-2
+  [:article.col-12.col-xl-4.px-1.pb-2
    [:div.card.shadow-sm {:class additional-classes}
     [:div.card-body
      [:div {:style {:min-height "12rem"}}
@@ -197,13 +201,13 @@
    [pricing-view/price-tag-pro-tier "display-6"]
    [pro-tier-cta-button]
    [:<>
-    [:strong "Alle Free-Features, plus:"]
+    [:strong (labels :registration.pricing.pro/all-from-free)]
     [:ul.fa-ul.list-group.list-group-flush
      [list-item (format (labels :pricing.features/number-of-users) config/max-concurrent-users-pro-tier)]
-     [list-item "Umfragen"]
-     [list-item "Schnellaktivierungen"]
-     [list-item "Moderationsoptionen"]
-     [list-item "Persönliches Design"]]]
+     [list-item (labels :registration.pricing.pro/polls)]
+     [list-item (labels :registration.pricing.pro/activations)]
+     [list-item (labels :registration.pricing.pro/mods)]
+     [list-item (labels :registration.pricing.pro/themes)]]]
    "border-primary shadow"])
 
 (defn- enterprise-tier-card
@@ -215,7 +219,7 @@
    [:span.display-6 (labels :pricing.enterprise-tier/on-request)]
    [pricing-view/enterprise-cta-button]
    [:<>
-    [:strong "Alle Pro-Features, plus:"]
+    [:strong (labels :registration.pricing.enterprise/all-from-pro)]
     [:ul.fa-ul.list-group.list-group-flush
      [list-item (labels :pricing.features.number-of-users/unlimited)]
      (for [label (take 3 (rest (labels :pricing.features/enterprise)))]
@@ -239,7 +243,8 @@
       (navigation/href :routes/pricing) "btn-link"]]]
    nil
    {:step 3
-    :class "col-12 col-md-8"}])
+    :class "col-12 col-md-8"
+    :wide? true}])
 
 (defn registration-step-3-view
   "Wrapped view for usage in routes."

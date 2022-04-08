@@ -75,3 +75,10 @@
 (def time-settings
   {:pattern "HH:mm dd.MM.yyy"
    :timezone "Europe/Berlin"})
+
+;; -----------------------------------------------------------------------------
+;; User settings
+
+(def password-minimum-length
+  "Define the minimum length of a password, count characters."
+  8)
