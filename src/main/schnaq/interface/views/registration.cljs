@@ -62,6 +62,26 @@
    [buttons/anchor (labels :privacy/note) (navigation/href :routes.privacy/complete) "btn-sm btn-link"]
    (labels :registration.inputs/toc-2)])
 
+(defn- errors-in-form
+  "Validate the user registration form."
+  [email password opt-in]
+  (let [valid-email? (not-empty email)
+        valid-password? (and (not-empty password) (>= (count password) shared-config/password-minimum-length))]
+    (when-not (and valid-email? valid-password? opt-in)
+      [:section
+       (labels :registration.register.validation/lead)
+       [:ul
+        (when-not valid-email?
+          [:li (labels :registration.register.validation/email) ": " email])
+        (when-not valid-password?
+          [:li
+           (format
+            (labels :registration.register.validation/password)
+            shared-config/password-minimum-length
+            (count password))])
+        (when-not opt-in
+          [:li (labels :registration.register.validation/opt-in)])]])))
+
 (defn- registration-step-1
   "First step in the registration process."
   []
@@ -77,13 +97,14 @@
               (let [form (oget e [:target :elements])
                     email (oget form [:email :value])
                     password (oget form [:password :value])
-                    opt-in (oget form [:opt-in :checked])]
-                (if (and email password opt-in)
-                  (rf/dispatch [:registration/register [email password]])
+                    opt-in (oget form [:opt-in :checked])
+                    errors (errors-in-form email password opt-in)]
+                (if errors
                   (rf/dispatch [:notification/add
-                                #:notification{:title "Bitte alle Felder ausfüllen"
-                                               :body "Mindestens eins deiner Felder wurde nicht ausgefüllt. Bitte kontrolliere deine Eingabe."
-                                               :context :warning}]))))}
+                                #:notification{:title (labels :registration.register.validation/notification-title)
+                                               :body [errors]
+                                               :context :warning}])
+                  (rf/dispatch [:registration/register [email password]]))))}
      [inputs/floating (labels :registration.register.input/email) :email "registration-email" "email" {:required true :class "mb-2"}]
      [inputs/floating (format (labels :registration.register.input/password) shared-config/password-minimum-length)
       :password "registration-password" "password" {:required true :class "mb-2" :minLength 8}]
@@ -308,12 +329,3 @@
  :registration.store-survey-selection/success
  (fn [{:keys [db]}]
    {:fx [[:dispatch [:navigation/navigate :routes.user.register/step-3]]]}))
-
-(comment
-  (rf/dispatch [:registration/register ["meter+new13@mailbox.org" "123456"]])
-
-  (.log js/console (get-in @re-frame.db/app-db [:user :keycloak]))
-
-  (get-in @re-frame.db/app-db [:user :keycloak])
-
-  nil)
