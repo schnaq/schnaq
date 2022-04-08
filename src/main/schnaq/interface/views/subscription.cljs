@@ -35,7 +35,7 @@
   "Page if a user cancels the checkout process."
   []
   [pages/with-nav-and-header
-   {:page/heading "Vorgang abgebrochen"}
+   {:page/heading (labels :subscription.page.cancel/heading)}
    [:section.container
     [:h3.pb-3 (labels :subscription.page.cancel/title)]
     [:p.lead (labels :subscription.page.cancel/lead)]

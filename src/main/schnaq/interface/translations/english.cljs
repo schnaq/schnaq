@@ -979,6 +979,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :subscription.overview/next-invoice "Next billing"
    :subscription.overview/cancelled "Subscription cancelled"
    :subscription.overview/cancelled? "Cancelled?"
+   :subscription.page.cancel/heading "Cancelled"
    :subscription.page.cancel/title "Too bad you didn't complete the process"
    :subscription.page.cancel/lead "You're missing out on the opportunity to realise the full potential from your interactions with your subscribers."
    :subscription.page.cancel/body "In the free plan, all basic features are still available to you. We would be very happy to hear from you why you do not want to use the Pro functions. Feel free to contact us 👍 Are you missing a function? Let us know at hello@schnaq.com - we'll find a solution!"

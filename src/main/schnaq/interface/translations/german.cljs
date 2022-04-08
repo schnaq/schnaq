@@ -978,6 +978,7 @@
    :subscription.overview/stops-at "Abonnement endet"
    :subscription.overview/next-invoice "Nächste Abrechnung"
    :subscription.overview/cancelled? "Gekündigt?"
+   :subscription.page.cancel/heading "Vorgang abgebrochen"
    :subscription.page.cancel/title "Schade, dass du den Vorgang nicht abgeschlossen hast"
    :subscription.page.cancel/lead "Dir entgeht damit die Möglichkeit das volle Potenzial aus den Interaktionen mit deinen Teilnehmer:innen auszuschöpfen."
    :subscription.page.cancel/body "Im kostenfreien Plan stehen dir weiterhin alle Basisfunktionen zur Verfügung. Wir würden uns sehr freuen von dir zu hören, warum du doch nicht die Pro-Funktionen verwenden möchtest. Kontaktiere uns dazu gerne unter hello@schnaq.com 👍 Fehlt dir vielleicht eine Funktion? Lass es uns wissen – wir finden eine Lösung!"
