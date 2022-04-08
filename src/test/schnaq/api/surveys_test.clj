@@ -17,5 +17,5 @@
 (deftest using-schnaq-for-test
   (is (= 200 (using-schnaq-for-request toolbelt/token-kangaroo-normal-user
                                        [:surveys.using-schnaq-for.topics/meetings])))
-  (is (= 401 (using-schnaq-for-request nil
+  (is (= 200 (using-schnaq-for-request nil
                                        [:surveys.using-schnaq-for.topics/meetings]))))
