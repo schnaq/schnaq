@@ -23,29 +23,31 @@
      {:class (if hover? (str extra-class " label") extra-class)}
      [icon icon-name "m-auto"]]))
 
-(defn- store-statement
-  "Store updated statement in app-db.
-  Differentiates if the statement, to which the label is added / removed, is the
-  currently selected conclusion or it is a child of a statement inside the 
-  statement list."
+(defn- store-label-change
+  "Differentiates if the statement, to which the label is added / removed, is the currently shown as a parent
+  or a child."
+  ;; TODO UPHILL: children in statements einfach reinknüllen und mit ids arbeiten?
   [db updated-statement]
-  (let [parent-id (-> updated-statement :statement/parent :db/id)]
-    ;; TODO recheck this logic here. We are not checking premises anymore but global store of truth
-    (if (not (nil? (get-in db [:schnaq :statements parent-id])))
-      (let [db-updated-children
-            (update-in db [:schnaq :statements parent-id :statement/children]
-                       #(tools/update-statement-in-list % updated-statement))
-            current-parent (get-in db-updated-children [:schnaq :statements parent-id])]
-        (update-in db-updated-children [:schnaq :statements parent-id :meta/answered?]
-                   #(shared-tools/answered? current-parent)))
-      (assoc-in db [:schnaq :statements (:db/id updated-statement)] updated-statement))))
+  (let [parent-id (-> updated-statement :statement/parent :db/id)
+        parent-statement (get-in db [:schnaq :statements parent-id])
+        statement-in-store (get-in db [:schnaq :statements (:db/id updated-statement)])
+        statement-answered? (shared-tools/answered?
+                             {:statement/children (tools/update-statement-in-list
+                                                   (:statement/children parent-statement) updated-statement)})]
+    (cond-> db
+      ;; Statement is there as a child update it as such.
+      parent-statement (update-in [:schnaq :statements parent-id :statement/children]
+                                  #(tools/update-statement-in-list % updated-statement))
+      parent-statement (assoc-in [:schnaq :statements parent-id :meta/answered?] statement-answered?)
+      ;; If the statement is itself in the store update it as well
+      statement-in-store (assoc-in [:schnaq :statements (:db/id updated-statement)] updated-statement))))
 
 (rf/reg-event-fx
  :statement.labels/remove
  (fn [{:keys [db]} [_ statement label]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          updated-statement (update statement :statement/labels (fn [labels] (-> labels set (disj label) vec)))]
-     {:db (store-statement db updated-statement)
+     {:db (store-label-change db updated-statement)
       :fx [(http/xhrio-request db :put "/discussion/statement/label/remove"
                                [:statement.labels.update/success]
                                {:share-hash share-hash
@@ -64,7 +66,7 @@
  (fn [{:keys [db]} [_ statement label]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          updated-statement (update statement :statement/labels conj label)]
-     {:db (store-statement db updated-statement)
+     {:db (store-label-change db updated-statement)
       :fx [(http/xhrio-request db :put "/discussion/statement/label/add"
                                [:statement.labels.update/success]
                                {:share-hash share-hash
