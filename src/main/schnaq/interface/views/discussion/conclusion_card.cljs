@@ -185,43 +185,26 @@
            {:key (str "answer-" (:db/id answer))}))])))
 
 (defn- replies [statement]
-  (let [statement-id (:db/id statement)
-        collapsed? @(rf/subscribe [:toggle-replies/is-collapsed? statement-id])
-        button-content (if collapsed?
-                         [:<> [icon :collapse-up "my-auto me-2"]
-                          (labels :qanda.button.show/replies)]
-                         [:<> [icon :collapse-down "my-auto me-2"]
-                          (labels :qanda.button.hide/replies)])
-        collapsible-id (str "collapse-Replies-" statement-id)
-        replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))]
-    (when (not-empty replies)
-      [:<>
-       [:button.btn.btn-transparent.border-0
-        {:type "button" :data-bs-toggle "collapse" :aria-expanded "false"
-         :data-bs-target (str "#" collapsible-id)
-         :on-click #(rf/dispatch [:toggle-replies/is-collapsed! statement-id (not collapsed?)])
-         :aria-controls collapsible-id}
-        button-content]
-       [:div.collapse {:id collapsible-id}
-        (for [reply replies]
-          (with-meta
-            [reduced-or-edit-card reply]
-            {:key (str "reply-" (:db/id reply))}))]])))
-
-(rf/reg-event-db
- :toggle-replies/is-collapsed!
- (fn [db [_ statement-id collapsed?]]
-   (assoc-in db [:statements :toggled-replies statement-id] collapsed?)))
-
-(rf/reg-event-db
- :toggle-replies/clear!
- (fn [db _]
-   (assoc-in db [:statements :toggled-replies] {})))
-
-(rf/reg-sub
- :toggle-replies/is-collapsed?
- (fn [db [_ statement-id]]
-   (get-in db [:statements :toggled-replies statement-id] true)))
+  (let [collapsed? (reagent/atom true)]
+    (fn []
+      (let [replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
+            rotation (if @collapsed? 0 180)
+            button-icon [motion/rotate rotation [icon :collapse-down "my-auto"]]
+            button-content (if @collapsed?
+                             (labels :qanda.button.show/replies)
+                             (labels :qanda.button.hide/replies))]
+        (when (not-empty replies)
+          [:<>
+           [:button.btn.btn-transparent.btn-no-outline
+            {:type "button" :aria-expanded "false"
+             :on-click (fn [_] (swap! collapsed? not))}
+            [:span.me-2 button-content] button-icon]
+           [motion/collapse-in-out
+            @collapsed?
+            (for [reply replies]
+              (with-meta
+                [reduced-or-edit-card reply]
+                {:key (str "reply-" (:db/id reply))}))]])))))
 
 (defn answer-card
   "Display the answer directly inside the statement itself."

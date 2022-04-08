@@ -93,6 +93,29 @@
     :duration 1}
    component])
 
+(defn collapse-in-out
+  "A collapse animation with transitions for overflow hidden and visible."
+  [collapsed? component]
+  [:> (.-div motion)
+   {:initial {:height "0"
+              :overflow "hidden"}
+    :animate (if collapsed?
+               {:height "0"
+                :overflow "hidden"}
+               {:height "100%"
+                :transition-end {:overflow "visible"}})
+    :transition {:duration 0.3}}
+   component])
+
+(defn rotate
+  "A basic rotation animation. Has an inline-block display attribute."
+  [rotation component]
+  [:> (.-div motion)
+   {:style {:display "inline-block"}
+    :animate {:rotate rotation}
+    :transition {:duration 0.3}}
+   component])
+
 (defn spring-transition
   "Lets the elements bounce, when they transition"
   [component animation-attributes]
