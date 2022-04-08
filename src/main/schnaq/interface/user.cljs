@@ -30,7 +30,7 @@
 
 (rf/reg-event-fx
  :user.register/success
- (fn [{:keys [db]} [_ {:keys [registered-user updated-statements? updated-schnaqs? new-user?]}]]
+ (fn [{:keys [db]} [_ {:keys [registered-user updated-statements? updated-schnaqs?]}]]
    (let [{:user.registered/keys [display-name first-name last-name email profile-picture visited-schnaqs keycloak-id notification-mail-interval]} registered-user
          subscription-type (:user.registered.subscription/type registered-user)
          current-route-name (navigation/canonical-route-name (get-in db [:current-route :data :name]))
@@ -52,8 +52,6 @@
       :fx [[:localstorage/dissoc :discussion/creation-secrets]
            [:localstorage/dissoc :discussion.schnaqs/creation-secrets]
            [:dispatch [:schnaqs.visited/merge-registered-users-visits visited-hashes]]
-           (when new-user?
-             [:dispatch [:navigation/navigate :routes.welcome/free]])
            (when (and updated-statements? (= current-route-name :routes.schnaq.select/statement))
              ;; The starting-statement view is updated automatically anyway
              [:dispatch [:discussion.query.statement/by-id]])
