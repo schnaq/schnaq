@@ -5,7 +5,6 @@
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [reagent.core :as r]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -186,7 +185,7 @@
            {:key (str "answer-" (:db/id answer))}))])))
 
 (defn- replies [statement]
-  (let [collapsed? (r/atom true)]
+  (let [collapsed? (reagent/atom true)]
     (fn []
       (let [replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
             rotation (if @collapsed? 0 180)
