@@ -83,6 +83,22 @@
     :db/cardinality :db.cardinality/many
     :db/doc "The statements that are known to the registered user, i.e. visited statements."}
 
+   ;; Surveys
+   {:db/ident :surveys.using-schnaq-for/user
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The keycloak id of a registered user."}
+   {:db/ident :surveys.using-schnaq-for/topics
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "Reference the selections of the user."}
+   {:db/ident :surveys.using-schnaq-for.topics/education}
+   {:db/ident :surveys.using-schnaq-for.topics/coachings}
+   {:db/ident :surveys.using-schnaq-for.topics/seminars}
+   {:db/ident :surveys.using-schnaq-for.topics/fairs}
+   {:db/ident :surveys.using-schnaq-for.topics/meetings}
+   {:db/ident :surveys.using-schnaq-for.topics/other}
+
    ;; Feedback
    {:db/ident :feedback/contact-name
     :db/valueType :db.type/string
