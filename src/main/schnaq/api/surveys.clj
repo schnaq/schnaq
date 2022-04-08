@@ -19,7 +19,6 @@
      ["/using-schnaq-for"
       {:post using-schnaq-for
        :description (at/get-doc #'using-schnaq-for)
-       :middleware [:user/authenticated?]
        :name :api.surveys.participate/using-schnaq-for
        :parameters {:body {:topics :surveys.using-schnaq-for/topics}}
        :responses {200 {:body {:participated? boolean?}}}}]]]])
