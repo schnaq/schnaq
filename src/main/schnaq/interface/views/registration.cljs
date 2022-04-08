@@ -15,6 +15,9 @@
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.pricing :as pricing-view]))
 
+(def ^:private show-social-logins?
+  false)
+
 (defn- social-logins
   "Show social login buttons for direct access."
   []
@@ -63,8 +66,10 @@
   [registration-card
    (labels :registration.register/heading)
    [:<>
-    [social-logins]
-    [:p.text-muted.mb-1.pt-4 (labels :registration.email/lead) ":"]
+    (when show-social-logins?
+      [:<>
+       [social-logins]
+       [:p.text-muted.mb-1.pt-4 (labels :registration.email/lead) ":"]])
     [:form {:on-submit
             (fn [e] (.preventDefault e)
               (let [form (oget e [:target :elements])
