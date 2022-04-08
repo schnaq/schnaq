@@ -11,7 +11,7 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.conclusion-card :as card]
-            [schnaq.shared-toolbelt :as shared-tools]))
+            [schnaq.shared-toolbelt :as stools]))
 
 (s/def :background/schema #{:dark :light})
 
@@ -34,17 +34,20 @@
 (rf/reg-event-db
  :schnaq.qa.search/success
  (fn [db [_ {:keys [matching-statements]}]]
-   (assoc-in db [:schnaq :qa :search :results] (shared-tools/normalize :db/id matching-statements))))
+   (-> db
+       (update-in [:schnaq :statements] merge (stools/normalize :db/id matching-statements))
+       (assoc-in [:schnaq :qa :search :results] (map :db/id matching-statements)))))
 
 (rf/reg-sub
  :schnaq.qa.search/results
  (fn [db _]
-   (vals (get-in db [:schnaq :qa :search :results] {}))))
+   (let [all-statements (get-in db [:schnaq :statements])]
+     (stools/select-values all-statements (get-in db [:schnaq :qa :search :results] [])))))
 
 (rf/reg-event-db
  :schnaq.qa.search.results/reset
  (fn [db _]
-   (assoc-in db [:schnaq :qa :search :results] {})))
+   (assoc-in db [:schnaq :qa :search :results] [])))
 
 (>defn results-list
   "A list of statement results that came out of search.

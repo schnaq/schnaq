@@ -29,27 +29,16 @@
   currently selected conclusion or it is a child of a statement inside the 
   statement list."
   [db updated-statement]
-  (let [parent-id (-> updated-statement :statement/parent :db/id)
-        parent-in-current-premises? (or (not (nil? (get-in db [:schnaq :statements parent-id])))
-                                        ;; TODO [:schnaq :qa :search :results parent-id] sollte auch in :schnaq :statements liegen
-                                        (not (nil? (get-in db [:schnaq :qa :search :results parent-id]))))]
-    (if parent-in-current-premises?
+  (let [parent-id (-> updated-statement :statement/parent :db/id)]
+    ;; TODO recheck this logic here. We are not checking premises anymore but global store of truth
+    (if (not (nil? (get-in db [:schnaq :statements parent-id])))
       (let [db-updated-children
-            (-> db
-                (update-in [:schnaq :statements parent-id :statement/children]
-                           #(tools/update-statement-in-list % updated-statement))
-                (update-in [:schnaq :qa :search :results parent-id :statement/children]
-                           #(tools/update-statement-in-list % updated-statement)))
-            current-parent (get-in db-updated-children [:schnaq :statements parent-id])
-            current-qa-parent (get-in db-updated-children [:schnaq :qa :search :results parent-id])]
-        (-> db-updated-children
-            (update-in [:schnaq :statements parent-id :meta/answered?]
-                       #(shared-tools/answered? current-parent))
-            (update-in [:schnaq :qa :search :results parent-id :meta/answered?]
-                       #(shared-tools/answered? current-qa-parent))))
-      (-> db
-          (assoc-in [:schnaq :statements (:db/id updated-statement)] updated-statement)
-          (assoc-in [:schnaq :qa :search :results (:db/id updated-statement)] updated-statement)))))
+            (update-in db [:schnaq :statements parent-id :statement/children]
+                       #(tools/update-statement-in-list % updated-statement))
+            current-parent (get-in db-updated-children [:schnaq :statements parent-id])]
+        (update-in db-updated-children [:schnaq :statements parent-id :meta/answered?]
+                   #(shared-tools/answered? current-parent)))
+      (assoc-in db [:schnaq :statements (:db/id updated-statement)] updated-statement))))
 
 (rf/reg-event-fx
  :statement.labels/remove
@@ -68,10 +57,7 @@
  :statement.labels.update/success
  ;; TODO change this with a generic update-statement fn
  (fn [db [_ {:keys [statement]}]]
-   (let [update-fn #(if (= (:db/id %) (:db/id statement))
-                      statement
-                      %)]
-     (update-in db [:schnaq :qa :search :results] update-fn))))
+   (update-in db [:schnaq :statements (:db/id statement)] statement)))
 
 (rf/reg-event-fx
  :statement.labels/add

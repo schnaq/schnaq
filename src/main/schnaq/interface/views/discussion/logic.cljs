@@ -53,9 +53,7 @@
    (let [parent-statement-id (:db/id parent-statement)]
      {:db (-> db
               (update-in [:schnaq :statements parent-statement-id :meta/sub-statement-count] inc)
-              (update-in [:schnaq :statements parent-statement-id :statement/children] conj new-statement)
-              (update-in [:schnaq :qa :search :results parent-statement-id :statement/children] conj new-statement)
-              (update-in [:schnaq :qa :search :results parent-statement-id :meta/sub-statement-count] inc))
+              (update-in [:schnaq :statements parent-statement-id :statement/children] conj new-statement))
       :fx [[:dispatch [:notification/new-content]]
            [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
 
