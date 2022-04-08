@@ -253,7 +253,9 @@
   add statements."
   []
   (if @(rf/subscribe [:schnaq.selected/read-only?])
-    [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
+    [:<>
+     [icon :lock "mx-2 text-primary"]
+     [:span.small.text-muted (labels :discussion.state/read-only-warning)]]
     [input/input-form]))
 
 ;; -----------------------------------------------------------------------------
