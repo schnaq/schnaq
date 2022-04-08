@@ -114,7 +114,7 @@
       {:id "registration-first-step"}]]]
    [:div.text-center
     (labels :registration.register.footer/login-available)
-    [buttons/button (labels :registration.register.footer/login) identity "btn-link"]]
+    [buttons/button (labels :registration.register.footer/login) #(rf/dispatch [:keycloak/login]) "btn-link"]]
    {:step 1}])
 
 (defn registration-step-1-view

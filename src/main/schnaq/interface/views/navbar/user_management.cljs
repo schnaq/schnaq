@@ -138,14 +138,14 @@
 (defn- login-button
   "Show a login button."
   [on-light-background?]
-  [buttons/anchor (labels :nav/login) (navigation/href :routes.user/register)
+  [buttons/button (labels :nav/login) #(rf/dispatch [:keycloak/login])
    (if on-light-background? "btn-outline-dark" "btn-outline-white")])
 
 (defn- register-button
   "Show registration button."
-  []
+  [on-light-background?]
   [buttons/anchor (labels :nav/register) (navigation/href :routes.user/register)
-   "btn-secondary ms-2"])
+   (if on-light-background? "btn-outline-secondary ms-2" "btn-dark ms-2")])
 
 (defn register-or-user-button
   "If not authenticated, show register button else show user menu."
