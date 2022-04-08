@@ -48,17 +48,11 @@
          updated-statement (update statement :statement/labels (fn [labels] (-> labels set (disj label) vec)))]
      {:db (store-label-change db updated-statement)
       :fx [(http/xhrio-request db :put "/discussion/statement/label/remove"
-                               [:statement.labels.update/success]
+                               [:statement/update]
                                {:share-hash share-hash
                                 :statement-id (:db/id statement)
                                 :label label
                                 :display-name (tools/current-display-name db)})]})))
-
-(rf/reg-event-db
- :statement.labels.update/success
- ;; TODO change this with a generic update-statement fn
- (fn [db [_ {:keys [statement]}]]
-   (assoc-in db [:schnaq :statements (:db/id statement)] statement)))
 
 (rf/reg-event-fx
  :statement.labels/add
@@ -67,7 +61,7 @@
          updated-statement (update statement :statement/labels conj label)]
      {:db (store-label-change db updated-statement)
       :fx [(http/xhrio-request db :put "/discussion/statement/label/add"
-                               [:statement.labels.update/success]
+                               [:statement/update]
                                {:share-hash share-hash
                                 :statement-id (:db/id statement)
                                 :label label

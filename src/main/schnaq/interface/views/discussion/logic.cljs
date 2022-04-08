@@ -170,3 +170,8 @@
             (dissoc :wordcloud)
             (update :discussion dissoc :conclusion))
     :fx [[:dispatch [:discussion.premises.current/dissoc]]]}))
+
+(rf/reg-event-db
+ :statement/update
+ (fn [db [_ {:keys [statement]}]]
+   (assoc-in db [:schnaq :statements (:db/id statement)] statement)))
