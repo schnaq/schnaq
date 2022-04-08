@@ -277,7 +277,7 @@
     <orderEntry type="library" name="Deps: buddy/buddy-auth:2.1.0" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-resolver:4.1.51.Final" level="project" />
     <orderEntry type="library" name="Deps: binaryage/oops:0.7.2" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/s3:821.2.1083.0" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/s3:822.2.1109.0" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/js-joda-timezone:2.0.1-0" level="project" />
     <orderEntry type="library" name="Deps: clj-stacktrace:0.2.8" level="project" />
     <orderEntry type="library" name="Deps: org.slf4j/slf4j-api:2.0.0-alpha1" level="project" />
