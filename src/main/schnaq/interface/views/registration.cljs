@@ -157,12 +157,62 @@
      [:hr]
      [:small features]]]])
 
-(defn- pro-tier-cta-button []
+(defn- pro-tier-cta-button
+  "Button to open the checkout page."
+  []
   (let [yearly? @(rf/subscribe [:pricing.interval/yearly?])
         price-id (:id @(rf/subscribe [(if yearly? :pricing.pro/yearly :pricing.pro/monthly)]))]
     [buttons/button "Pro abonnieren"
      #(rf/dispatch [:subscription/create-checkout-session price-id])
      "btn-secondary"]))
+
+(defn- free-tier-card
+  "Show a free tier card."
+  []
+  [tier-card
+   (labels :pricing.free-tier/title)
+   (labels :pricing.free-tier/subtitle)
+   [:span.display-6 "0 €"]
+   [buttons/anchor "Fortsetzen mit Free" (navigation/href :routes.welcome/free) "btn-primary"]
+   [:ul.fa-ul.list-group.list-group-flush
+    [list-item (format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]
+    [list-item "Dynamisches Q&A"]
+    [list-item "Teilbar per QR Code"]]])
+
+(defn- pro-tier-card
+  "Show the pro tier card."
+  []
+  [tier-card
+   (labels :pricing.pro-tier/title)
+   (labels :pricing.pro-tier/subtitle)
+   [pricing-view/price-tag-pro-tier "display-6"]
+   [pro-tier-cta-button]
+   [:<>
+    [:strong "Alle Free-Features, plus:"]
+    [:ul.fa-ul.list-group.list-group-flush
+     [list-item (format (labels :pricing.features/number-of-users) config/max-concurrent-users-pro-tier)]
+     [list-item "Umfragen"]
+     [list-item "Schnellaktivierungen"]
+     [list-item "Moderationsoptionen"]
+     [list-item "Persönliches Design"]]]
+   "border-primary shadow"])
+
+(defn- enterprise-tier-card
+  "Show the enterprise tier card."
+  []
+  [tier-card
+   (labels :pricing.enterprise-tier/title)
+   (labels :pricing.enterprise-tier/subtitle)
+   [:span.display-6 (labels :pricing.enterprise-tier/on-request)]
+   [pricing-view/enterprise-cta-button]
+   [:<>
+    [:strong "Alle Pro-Features, plus:"]
+    [:ul.fa-ul.list-group.list-group-flush
+     [list-item (labels :pricing.features.number-of-users/unlimited)]
+     (for [label (take 3 (rest (labels :pricing.features/enterprise)))]
+       (with-meta
+         [list-item label]
+         {:key (str "list-item-" label)}))]]])
 
 (defn- registration-step-3
   "First step in the registration process."
@@ -171,42 +221,9 @@
    "Wählen deinen Plan"
    [:<>
     [:div.row
-     [tier-card
-      (labels :pricing.free-tier/title)
-      (labels :pricing.free-tier/subtitle)
-      [:span.display-6 "0 €"]
-      [buttons/anchor "Fortsetzen mit Free" (navigation/href :routes.welcome/free) "btn-primary"]
-      [:ul.fa-ul.list-group.list-group-flush
-       [list-item (format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]
-       [list-item "Dynamisches Q&A"]
-       [list-item "Teilbar per QR Code"]]]
-     [tier-card
-      (labels :pricing.pro-tier/title)
-      (labels :pricing.pro-tier/subtitle)
-      [pricing-view/price-tag-pro-tier "display-6"]
-      [pro-tier-cta-button]
-      [:<>
-       [:strong "Alle Free-Features, plus:"]
-       [:ul.fa-ul.list-group.list-group-flush
-        [list-item (format (labels :pricing.features/number-of-users) config/max-concurrent-users-pro-tier)]
-        [list-item "Umfragen"]
-        [list-item "Schnellaktivierungen"]
-        [list-item "Moderationsoptionen"]
-        [list-item "Persönliches Design"]]]
-      "border-primary shadow"]
-     [tier-card
-      (labels :pricing.enterprise-tier/title)
-      (labels :pricing.enterprise-tier/subtitle)
-      [:span.display-6 (labels :pricing.enterprise-tier/on-request)]
-      [pricing-view/enterprise-cta-button]
-      [:<>
-       [:strong "Alle Pro-Features, plus:"]
-       [:ul.fa-ul.list-group.list-group-flush
-        [list-item (labels :pricing.features.number-of-users/unlimited)]
-        (for [label (take 3 (rest (labels :pricing.features/enterprise)))]
-          (with-meta
-            [list-item label]
-            {:key (str "list-item-" label)}))]]]]
+     [free-tier-card]
+     [pro-tier-card]
+     [enterprise-tier-card]]
     [:div.text-center
      [buttons/anchor "Compare plans" (navigation/href :routes/pricing) "btn-link"]]]
    nil
