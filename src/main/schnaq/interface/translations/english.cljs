@@ -273,6 +273,7 @@
    :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."
 
    :statement/discuss "Discuss"
+   :statement/replies "Replies"
    :statement/new "Absenden"
    :statement.new/placeholder "Your statement"
    :statement.edit.send.failure/title "Edit could not be made"
@@ -350,7 +351,7 @@
    :discussion.navbar/members "Members"
    :discussion.navbar/views "Views"
    :discussion.state/read-only-label "read-only"
-   :discussion.state/read-only-warning "This schnaq is read-only. You can read the statements, but not write anything."
+   :discussion.state/read-only-warning "This schnaq is read-only. You can read, but not write."
    :discussion.navbar/settings "Settings"
    :discussion.navbar/download "Export"
    :discussion.navbar/share "Share"

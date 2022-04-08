@@ -237,7 +237,7 @@
    ;; Create schnaq
    :schnaq.create.input/title "Worüber möchtest du diskutieren?"
    :schnaq.create.qanda.input/title "Worum sollen sich die Fragen drehen?"
-   :schnaq.create.input/placeholder "Design festlegen"
+   :schnaq.create.input/placeholder "Titel festlegen"
    :schnaq.create.hub/help-text "Füge deinen schnaq direkt einem Hub hinzu."
    :schnaq/copy-link-tooltip "Hier klicken, um Link zu kopieren"
    :schnaq/link-copied-heading "Link kopiert"
@@ -272,6 +272,7 @@
    :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."
 
    :statement/discuss "Diskutieren"
+   :statement/replies "Antworten"
    :statement/new "Post"
    :statement.new/placeholder "Dein Beitrag"
    :statement.edit.send.failure/title "Änderung nicht gespeichert"
@@ -349,7 +350,7 @@
    :discussion.navbar/members "Mitglieder"
    :discussion.navbar/views "Ansichten"
    :discussion.state/read-only-label "schreibgeschützt"
-   :discussion.state/read-only-warning "Dieser schnaq ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
+   :discussion.state/read-only-warning "Dieser schnaq ist schreibgeschützt. Du kannst hier nur lesen."
    :discussion.navbar/settings "Einstellungen"
    :discussion.navbar/download "Exportieren"
    :discussion.navbar/share "Teilen"
