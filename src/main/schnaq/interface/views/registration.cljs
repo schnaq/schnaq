@@ -19,7 +19,7 @@
   []
   (let [styles {:style {:width "50%"}}]
     [:section
-     [:p.text-muted.mb-1 "Fortsetzen mit:"]
+     [:p.text-muted.mb-1 (labels :registration.social-logins/lead) ":"]
      [:div.d-flex.flex-row.pb-2
       [buttons/button "Xign.me" identity "btn-outline-dark me-2" styles]
       [buttons/button "Google" identity "btn-outline-dark" styles]]
@@ -27,8 +27,8 @@
       [buttons/button "LinkedIn" identity "btn-outline-dark me-2" styles]
       [buttons/button "GitHub" identity "btn-outline-dark" styles]]]))
 
-(defn- next-button [label on-click-fn]
-  [buttons/button label on-click-fn "btn-primary w-100 mt-3"])
+(defn- next-button [label attrs]
+  [buttons/button label nil "btn-primary w-100 mt-3" attrs])
 
 (>defn- registration-card
   "Wrapper to build a common registration card for the complete registration
@@ -40,7 +40,7 @@
     [:div.col-6.col-md-4.mx-auto
      [:a {:href (navigation/href :routes/startpage)}
       [schnaq-logo]]
-     [:p.text-center.text-muted (format "Schritt %d von 3" step)]]
+     [:p.text-center.text-muted (format (labels :registration.steps/heading) step)]]
     [:section.w-75.mx-auto
      [:h1.h4.text-center.py-3 heading]
      body]]
@@ -49,16 +49,19 @@
 ;; -----------------------------------------------------------------------------
 
 (def toc
-  [:p "Ich habe die Datenschutzerklärung gelesen und willige ein, dass meine Daten verarbeitet werden dürfen."])
+  [:p
+   (labels :registration.inputs/toc-1)
+   [buttons/anchor (labels :privacy/note) (navigation/href :routes.privacy/complete) "btn-sm btn-link"]
+   (labels :registration.inputs/toc-2)])
 
 (defn- registration-step-1
   "First step in the registration process."
   []
   [registration-card
-   "Registrieren und schnaqqen"
+   (labels :registration.step-1/heading)
    [:<>
     [social-logins]
-    [:p.text-muted.mb-1.pt-4 "Oder nutze deine Mail:"]
+    [:p.text-muted.mb-1.pt-4 (labels :registration.email/lead) ":"]
     [:form {:on-submit
             (fn [e] (.preventDefault e)
               (let [form (oget e [:target :elements])
@@ -71,20 +74,22 @@
                                 #:notification{:title "Bitte alle Felder ausfüllen"
                                                :body "Mindestens eins deiner Felder wurde nicht ausgefüllt. Bitte kontrolliere deine Eingabe."
                                                :context :warning}]))))}
-     [inputs/floating "Gib hier deine E-Mail-Adresse ein" :email "registration-email" "email" {:required true :class "mb-2"}]
-     [inputs/floating "Bitte vergib nun ein sicheres Passwort" :password "registration-password" "password" {:required true :class "mb-2" :minLength 8}]
+     [inputs/floating (labels :registration.step-1.input/email) :email "registration-email" "email" {:required true :class "mb-2"}]
+     [inputs/floating (labels :registration.step-1.input/password) :password "registration-password" "password" {:required true :class "mb-2" :minLength 8}]
      [inputs/checkbox [:small toc] "registration-opt-in" "opt-in" {:required true}]
-     [next-button "Kostenfrei registrieren"]]]
+     [next-button
+      (labels :registration.step-1.input/submit-button)
+      {:id "registration-first-step"}]]]
    [:div.text-center
-    [:span "Du hast bereits einen Account?"]
-    [buttons/button "Melde dich an" identity "btn-link" {:id "registration-first-step"}]]
+    (labels :registration.step-1.footer/login-available)
+    [buttons/button (labels :registration.step-1.footer/login) identity "btn-link"]]
    {:step 1}])
 
 (defn registration-step-1-view
   "Wrapped view for usage in routes."
   []
   [pages/fullscreen
-   {:page/title "Willkommen bei der Accounterstellung"}
+   {:page/title (labels :registration/heading)}
    [registration-step-1]])
 
 ;; -----------------------------------------------------------------------------
@@ -101,28 +106,29 @@
   []
   [:section
    [:div.d-flex.flex-row.pb-2
-    [checkbox "education" "Lehre" :graduation-cap]
-    [checkbox "coachings" "Coachings" :university]
-    [checkbox "seminars" "Seminare" :rocket]]
+    [checkbox "education" (labels :registration.step-2.survey/option-education) :graduation-cap]
+    [checkbox "coachings" (labels :registration.step-2.survey/option-coachings) :university]
+    [checkbox "seminars" (labels :registration.step-2.survey/option-seminars) :rocket]]
    [:div.d-flex.flex-row
-    [checkbox "fairs" "Messen" :briefcase]
-    [checkbox "meetings" "(Online) Meetings" :laptop]
-    [checkbox "other" "Anderes" :magic]]])
+    [checkbox "fairs" (labels :registration.step-2.survey/option-fairs) :briefcase]
+    [checkbox "meetings" (labels :registration.step-2.survey/option-meetings) :laptop]
+    [checkbox "other" (labels :registration.step-2.survey/option-other) :magic]]])
 
 (defn- registration-step-2
   "First step in the registration process."
   []
   [registration-card
-   "Wobei wird schnaq dich unterstützen?"
+   (labels :registration.step-2/heading)
    [:<>
-    [:p.text-muted.mb-1 "Wähle alles passende aus"]
+    [:p.text-muted.mb-1 (labels :registration.step-2/select-all)]
     [:form
      {:on-submit
       (fn [e] (.preventDefault e)
         (let [form (oget e [:target :elements])]
           (rf/dispatch [:registration/store-survey-selection form])))}
      [survey]
-     [next-button "Weiter"]]]
+     [next-button (labels :registration.step-2.input/submit-button)
+      {:id "registration-second-step"}]]]
    nil
    {:step 2}])
 
@@ -130,7 +136,7 @@
   "Wrapped view for usage in routes."
   []
   [pages/fullscreen
-   {:page/title "Willkommen bei der Accounterstellung"}
+   {:page/title (labels :registration/heading)}
    [registration-step-2]])
 
 ;; -----------------------------------------------------------------------------
@@ -162,7 +168,7 @@
   []
   (let [yearly? @(rf/subscribe [:pricing.interval/yearly?])
         price-id (:id @(rf/subscribe [(if yearly? :pricing.pro/yearly :pricing.pro/monthly)]))]
-    [buttons/button "Pro abonnieren"
+    [buttons/button (labels :registration.pricing/subscribe-pro)
      #(rf/dispatch [:subscription/create-checkout-session price-id])
      "btn-secondary"]))
 
@@ -173,11 +179,14 @@
    (labels :pricing.free-tier/title)
    (labels :pricing.free-tier/subtitle)
    [:span.display-6 "0 €"]
-   [buttons/anchor "Fortsetzen mit Free" (navigation/href :routes.welcome/free) "btn-primary"]
+   [buttons/anchor
+    (labels :registration.pricing/start-with-free)
+    (navigation/href :routes.welcome/free)
+    "btn-primary"]
    [:ul.fa-ul.list-group.list-group-flush
     [list-item (format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]
-    [list-item "Dynamisches Q&A"]
-    [list-item "Teilbar per QR Code"]]])
+    [list-item (labels :registration.pricing.free/dynamic-qa)]
+    [list-item (labels :registration.pricing.free/shareable)]]])
 
 (defn- pro-tier-card
   "Show the pro tier card."
@@ -218,14 +227,16 @@
   "First step in the registration process."
   []
   [registration-card
-   "Wählen deinen Plan"
+   (labels :registration.pricing/heading)
    [:<>
     [:div.row
      [free-tier-card]
      [pro-tier-card]
      [enterprise-tier-card]]
     [:div.text-center
-     [buttons/anchor "Compare plans" (navigation/href :routes/pricing) "btn-link"]]]
+     [buttons/anchor
+      (labels :registration.pricing/compare-plans)
+      (navigation/href :routes/pricing) "btn-link"]]]
    nil
    {:step 3
     :class "col-12 col-md-8"}])
@@ -234,7 +245,7 @@
   "Wrapped view for usage in routes."
   []
   [pages/fullscreen
-   {:page/title "Willkommen bei der Accounterstellung"}
+   {:page/title (labels :registration/heading)}
    [registration-step-3]])
 
 ;; -----------------------------------------------------------------------------

@@ -1201,7 +1201,37 @@
    :summary.admin/submit "Abschicken"
    :summary.admin/closed-at "Geschlossen am"
 
-   ;; Alt texts
+   ;; Registration
+   :registration/heading "Willkommen bei der Accounterstellung"
+   :registration.social-logins/lead "Fortsetzen mit"
+   :registration.steps/heading "Schritt %d von 3"
+   :registration.inputs/toc-1 "Ich habe die"
+   :registration.inputs/toc-2 "gelesen und willige ein, dass meine Daten verarbeitet werden dürfen."
+   :registration.email/lead "Oder nutze deine Mail"
+   :registration.step-1/heading "Registrieren und schnaqqen"
+   :registration.step-1.input/email "Gib hier deine E-Mail-Adresse ein"
+   :registration.step-1.input/password "Bitte vergib ein mindestens %d-Zeichen langes Passwort"
+   :registration.step-1.input/submit-button "Kostenfrei registrieren"
+   :registration.step-1.footer/login-available "Du hast bereits einen Account?"
+   :registration.step-1.footer/login "Melde dich an"
+   :registration.step-2/heading "Wobei wird schnaq dich unterstützen?"
+   :registration.step-2/select-all "Wähle alles passende aus"
+   :registration.step-2.survey/option-education "Lehre"
+   :registration.step-2.survey/option-coachings "Coachings"
+   :registration.step-2.survey/option-seminars "Seminare"
+   :registration.step-2.survey/option-fairs "Messen"
+   :registration.step-2.survey/option-meetings "(Online) Meetings"
+   :registration.step-2.survey/option-other "Anderes"
+   :registration.step-2.input/submit-button "Weiter"
+
+   :registration.pricing/heading "Wählen deinen Plan"
+   :registration.pricing/compare-plans "Pläne vergleichen"
+   :registration.pricing/subscribe-pro "Pro abonnieren"
+   :registration.pricing/start-with-free "Fortsetzen mit Free"
+   :registration.pricing.free/dynamic-qa "Dynamisches Q&A"
+   :registration.pricing.free/shareable "Teilbar per QR Code und Link"
+
+;; Alt texts
    :schnaqqifant/hippie-alt-text "Schnaqqi, das schnaq Maskottchen, als Hippie verkleidet"
    :schnaqqifant/police-alt-text "Schnaqqi, das schnaq Maskottchen, als Polizist verkleidet"
    :schnaqqifant/stop-alt-text "Schnaqqi, das schnaq Maskottchen, hält ein Stop-Schild hoch"
