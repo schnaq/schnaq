@@ -8,6 +8,7 @@
             [schnaq.interface.components.common :refer [schnaq-logo]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
+            [schnaq.interface.components.navbar :refer [language-dropdown]]
             [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -39,8 +40,9 @@
   process."
   [heading body footer {:keys [step class wide?]}]
   [string? :re-frame/component (? :re-frame/component) map? => :re-frame/component]
-  [:section.mx-auto.pt-5 {:class (or class "col-11 col-md-6")}
+  [:section.mx-auto.pt-5.position-relative {:class (or class "col-11 col-md-6")}
    [:div.common-card
+    [:div.position-absolute.top-0.end-0 [language-dropdown]]
     [:div.col-6.col-md-4.mx-auto
      [:a {:href (navigation/href :routes/startpage)}
       [schnaq-logo]]
