@@ -31,6 +31,7 @@
             [schnaq.api.schnaq :refer [schnaq-routes]]
             [schnaq.api.subscription.stripe :refer [stripe-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
+            [schnaq.api.surveys :refer [survey-routes]]
             [schnaq.api.themes :refer [theme-routes]]
             [schnaq.api.user :refer [user-routes]]
             [schnaq.api.wordcloud :refer [wordcloud-routes]]
@@ -108,6 +109,7 @@
      schnaq-routes
      stripe-routes
      summary-routes
+     survey-routes
      theme-routes
      user-routes
      (when with-websockets? (websocket-routes))
