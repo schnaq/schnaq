@@ -32,7 +32,7 @@
       [buttons/button "GitHub" identity "btn-outline-dark" styles]]]))
 
 (defn- next-button [label attrs]
-  [buttons/button label nil "btn-primary w-100 mt-3" attrs])
+  [buttons/button label nil "btn-primary btn-lg w-100 mt-5" attrs])
 
 (>defn- registration-card
   "Wrapper to build a common registration card for the complete registration
@@ -46,7 +46,7 @@
       [schnaq-logo]]
      [:p.text-center.text-muted (format (labels :registration.steps/heading) step)]]
     [:section.mx-auto.px-3 {:class (when-not wide? "w-75")}
-     [:h1.h4.text-center.py-3 heading]
+     [:h1.h4.text-center.py-3.py-5 heading]
      body]]
    footer])
 
