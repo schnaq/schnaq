@@ -360,7 +360,7 @@
                                 :created-at nil}]
      {:db (-> db
               (assoc-in [:schnaq :selected] discussion)
-              (assoc-in [:discussion :conclusion :selected] dummy-conclusion-id)
+              (assoc-in [:statements :focus] dummy-conclusion-id)
               (assoc-in [:schnaq :statements dummy-conclusion-id] conclusion))
       :fx [[:dispatch [:schnaq.activation/temp-counter 0]]]})))
 

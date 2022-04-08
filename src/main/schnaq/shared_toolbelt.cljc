@@ -33,7 +33,6 @@
   (into {} (map (juxt ident identity) coll)))
 
 (>defn answered?
-  ;; TODO check ob man das in der form noch braucht
   "Check if a child exists, which has the label :check."
   [{:keys [statement/children]}]
   [map? :ret boolean?]

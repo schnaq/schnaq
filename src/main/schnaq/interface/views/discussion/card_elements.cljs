@@ -152,7 +152,6 @@
 
 (rf/reg-event-fx
  :discussion.query.conclusions/set-starting
- ;; TODO kann das genereller sein? Setzen von bekannten statements zB
  (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
    (when starting-conclusions
      (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])

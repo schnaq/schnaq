@@ -132,7 +132,7 @@
                :share-hash share-hash
                :display-name (tools/current-display-name db)}
               [:discussion.redirect/to-root share-hash])]}
-       new-conclusion (update :db #(assoc-in db [:discussion :conclusion :selected] (:db/id new-conclusion))
+       new-conclusion (update :db #(assoc-in db [:statements :focus] (:db/id new-conclusion))
                               :fx conj [:discussion.history/push new-conclusion])))))
 
 (rf/reg-event-fx
@@ -146,7 +146,7 @@
  (fn [{:keys [db]} [_ {:keys [conclusion premises history]}]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:db (-> db
-              (assoc-in [:discussion :conclusion :selected] (:db/id conclusion))
+              (assoc-in [:statements :focus] (:db/id conclusion))
               (update-in [:schnaq :statements]
                          merge (shared-tools/normalize :db/id (conj (concat premises history) conclusion)))
               (assoc-in [:schnaq :statement-slice :current-level] (map :db/id premises))

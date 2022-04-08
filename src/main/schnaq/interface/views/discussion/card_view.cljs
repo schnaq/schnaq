@@ -83,11 +83,9 @@
    (get-in db [:schnaq :statement-slice :current-level] #{})))
 
 (rf/reg-sub
- :discussion.conclusion/selected
- ;; TODO rename
+ :schnaq.statements/focus
  (fn [db _]
-   ;; TODO ändere pfad. Sollte eher sowas sein wie fokus statement oder so
-   (let [focus-id (get-in db [:discussion :conclusion :selected])]
+   (let [focus-id (get-in db [:statements :focus])]
      (get-in db [:schnaq :statements focus-id]))))
 
 ;; ----------------------------------------------------------------------------

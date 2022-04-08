@@ -276,13 +276,12 @@
 
 (defn- topic-bubble-view []
   (let [{:discussion/keys [title author created-at] :as schnaq} @(rf/subscribe [:schnaq/selected])
-        current-conclusion @(rf/subscribe [:discussion.conclusion/selected])
         content {:db/id (:db/id schnaq)
                  :statement/content title
                  :statement/author author
                  :statement/created-at created-at}
         starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        statement (if starting-route? content current-conclusion)]
+        statement (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))]
     [motion/move-in :left
      [:div.p-2
       [:div.d-flex.flex-wrap.mb-4
