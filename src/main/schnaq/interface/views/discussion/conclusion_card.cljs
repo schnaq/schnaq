@@ -5,6 +5,8 @@
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
+            [reagent.core :as r]
+            [reagent.dom :as rdom]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -184,29 +186,50 @@
            [reduced-or-edit-card answer]
            {:key (str "answer-" (:db/id answer))}))])))
 
+(defn- collapsible-replies-foo
+  "Form 3 component with listeners to collapsed replies."
+  [statement-id collapsible-id replies]
+  (reagent/create-class
+   {:display-name (str "Collapsible Replies" collapsible-id)
+    :component-did-mount
+    (fn [this]
+      (let [this-dom (rdom/dom-node this)
+            toggle-collapse (fn [collapsed?]
+                              (fn [_e]
+                                (rf/dispatch [:toggle-replies/is-collapsed! statement-id collapsed?])))]
+        (.addEventListener this-dom "show.bs.collapse" (toggle-collapse false))
+        (.addEventListener this-dom "hide.bs.collapse" (toggle-collapse true))))
+    :component-will-unmount
+    (fn [_this]
+      (rf/dispatch [:toggle-replies/is-collapsed! statement-id true]))
+    :reagent-render
+    (fn [_]
+      [:div.collapse {:id collapsible-id}
+       (for [reply replies]
+         (with-meta
+           [reduced-or-edit-card reply]
+           {:key (str "reply-" (:db/id reply))}))])}))
+
 (defn- replies [statement]
-  (let [statement-id (:db/id statement)
-        collapsed? @(rf/subscribe [:toggle-replies/is-collapsed? statement-id])
-        button-content (if collapsed?
-                         [:<> [icon :collapse-up "my-auto me-2"]
-                          (labels :qanda.button.show/replies)]
-                         [:<> [icon :collapse-down "my-auto me-2"]
-                          (labels :qanda.button.hide/replies)])
-        collapsible-id (str "collapse-Replies-" statement-id)
-        replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))]
-    (when (not-empty replies)
-      [:<>
-       [:button.btn.btn-transparent.border-0
-        {:type "button" :data-bs-toggle "collapse" :aria-expanded "false"
-         :data-bs-target (str "#" collapsible-id)
-         :on-click #(rf/dispatch [:toggle-replies/is-collapsed! statement-id (not collapsed?)])
-         :aria-controls collapsible-id}
-        button-content]
-       [:div.collapse {:id collapsible-id}
-        (for [reply replies]
-          (with-meta
-            [reduced-or-edit-card reply]
-            {:key (str "reply-" (:db/id reply))}))]])))
+  (let [collapsed? (r/atom true)]
+    (fn []
+      (let [replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
+            button-content (if @collapsed?
+                             [:<> [icon :collapse-up "my-auto me-2"]
+                              (labels :qanda.button.show/replies)]
+                             [:<> [icon :collapse-down "my-auto me-2"]
+                              (labels :qanda.button.hide/replies)])]
+        (when (not-empty replies)
+          [:<>
+           [:button.btn.btn-transparent.border-0
+            {:type "button" :aria-expanded "false"
+             :on-click (fn [_] (swap! collapsed? not))}
+            button-content]
+           [:div.collapse {:class (when-not @collapsed? "show")}
+            (for [reply replies]
+              (with-meta
+                [reduced-or-edit-card reply]
+                {:key (str "reply-" (:db/id reply))}))]])))))
 
 (rf/reg-event-db
  :toggle-replies/is-collapsed!
