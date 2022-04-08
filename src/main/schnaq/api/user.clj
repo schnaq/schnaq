@@ -1,7 +1,7 @@
 (ns schnaq.api.user
   (:require [clj-http.client :as client]
             [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn- => ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn- =>]]
             [keycloak.admin :as kc-admin]
             [muuntaja.core :as m]
             [ring.util.http-response :refer [bad-request created ok]]

@@ -348,5 +348,5 @@
 
 (rf/reg-event-fx
  :registration.store-survey-selection/success
- (fn [{:keys [db]}]
+ (fn []
    {:fx [[:dispatch [:navigation/navigate :routes.user.register/step-3]]]}))
