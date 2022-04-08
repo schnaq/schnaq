@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.registration
-  (:require [ajax.core :as ajax]
-            [com.fulcrologic.guardrails.core :refer [=> >defn- ?]]
+  (:require [com.fulcrologic.guardrails.core :refer [=> >defn- ?]]
             [goog.string :refer [format]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -115,8 +114,13 @@
    "Wobei wird schnaq dich unterstützen?"
    [:<>
     [:p.text-muted.mb-1 "Wähle alles passende aus"]
-    [survey]
-    [next-button "Weiter"]]])
+    [:form
+     {:on-submit
+      (fn [e] (.preventDefault e)
+        (let [form (oget e [:target :elements])]
+          (rf/dispatch [:registration/store-survey-selection form])))}
+     [survey]
+     [next-button "Weiter"]]]])
 
 (defn registration-step-2-view
   "Wrapped view for usage in routes."
@@ -124,6 +128,31 @@
   [pages/fullscreen
    {:page/title "Registrierung"}
    [registration-step-2]])
+
+;; -----------------------------------------------------------------------------
+
+(defn- registration-step-3
+  "First step in the registration process."
+  []
+  [registration-card
+   3
+   "Wobei wird schnaq dich unterstützen?"
+   [:<>
+    [:p.text-muted.mb-1 "Wähle alles passende aus"]
+    [:form
+     {:on-submit
+      (fn [e] (.preventDefault e)
+        (let [form (oget e [:target :elements])]
+          (rf/dispatch [:registration/store-survey-selection form])))}
+     [survey]
+     [next-button "Weiter"]]]])
+
+(defn registration-step-3-view
+  "Wrapped view for usage in routes."
+  []
+  [pages/fullscreen
+   {:page/title "Registrierung"}
+   [registration-step-3]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -149,8 +178,33 @@
                                      (:access_token tokens)
                                      (:refresh_token tokens)]]]}))
 
+(rf/reg-event-fx
+ :registration/store-survey-selection
+ (fn [{:keys [db]} [_ form]]
+   (let [education (oget form [:education :checked])
+         coachings (oget form [:coachings :checked])
+         seminars (oget form [:seminars :checked])
+         fairs (oget form [:fairs :checked])
+         meetings (oget form [:meetings :checked])
+         other (oget form [:other :checked])
+         topics (cond-> []
+                  education (conj :surveys.using-schnaq-for.topics/education)
+                  coachings (conj :surveys.using-schnaq-for.topics/coachings)
+                  seminars (conj :surveys.using-schnaq-for.topics/seminars)
+                  fairs (conj :surveys.using-schnaq-for.topics/fairs)
+                  meetings (conj :surveys.using-schnaq-for.topics/meetings)
+                  other (conj :surveys.using-schnaq-for.topics/other))]
+     {:fx [(http/xhrio-request db :post "/surveys/participate/using-schnaq-for"
+                               [:registration.store-survey-selection/success]
+                               {:topics topics})]})))
+
+(rf/reg-event-fx
+ :registration.store-survey-selection/success
+ (fn [{:keys [db]}]
+   {:fx [[:dispatch [:navigation/navigate :routes.user.register/step-3]]]}))
+
 (comment
-  (rf/dispatch [:registration/register ["meter+new12@mailbox.org" "123456"]])
+  (rf/dispatch [:registration/register ["meter+new13@mailbox.org" "123456"]])
 
   (.log js/console (get-in @re-frame.db/app-db [:user :keycloak]))
 

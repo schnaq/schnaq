@@ -353,5 +353,6 @@
                :surveys.using-schnaq-for.topics/meetings
                :surveys.using-schnaq-for.topics/other}))
 (s/def :surveys/using-schnaq-for
-  (s/keys :req-un [:surveys.using-schnaq-for/user
-                   :surveys.using-schnaq-for/topics]))
+  (s/keys :req [:surveys.using-schnaq-for/user
+                :surveys.using-schnaq-for/topics]
+          :opt [:db/id]))

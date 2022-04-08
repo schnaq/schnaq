@@ -320,7 +320,9 @@
     ["" {:name :routes.user/register
          :view registration/registration-step-1-view}]
     ["/step-2" {:name :routes.user.register/step-2
-                :view registration/registration-step-2-view}]]
+                :view registration/registration-step-2-view}]
+    ["/step-3" {:name :routes.user.register/step-3
+                :view registration/registration-step-3-view}]]
    ["/privacy"
     [""
      {:name :routes.privacy/complete
