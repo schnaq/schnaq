@@ -310,7 +310,9 @@
                 :view registration/registration-step-2-view}]
     ["/step-3" {:name :routes.user.register/step-3
                 :view registration/registration-step-3-view
-                :controllers [{:start #(rf/dispatch [:pricing/get-prices])}]}]]
+                :controllers [{:start #(rf/dispatch [:pricing/get-prices])}]}]
+    ["/mail-exists" {:name :routes.user.register/mail-exists
+                     :view registration/registration-mail-exists-view}]]
    ["/privacy"
     [""
      {:name :routes.privacy/complete

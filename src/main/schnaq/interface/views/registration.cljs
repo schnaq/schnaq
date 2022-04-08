@@ -39,7 +39,7 @@
   "Wrapper to build a common registration card for the complete registration
   process."
   [heading body footer {:keys [step class wide?]}]
-  [string? :re-frame/component (? :re-frame/component) map? => :re-frame/component]
+  [string? :re-frame/component (? :re-frame/component) (? map?) => :re-frame/component]
   [:section.mx-auto.pt-5.position-relative {:class (or class "col-11 col-md-6")}
    [:div.common-card
     [:div.position-absolute.top-0.end-0 [language-dropdown]]
@@ -283,6 +283,25 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- registration-mail-exists
+  "Ask existing users to login."
+  []
+  [registration-card
+   (labels :registration.mail-exists/heading)
+   [:section.text-center
+    [:p.lead (labels :registration.mail-exists/lead)]
+    [buttons/button (labels :registration.mail-exists/login)
+     #(rf/dispatch [:keycloak/login
+                    (format "%s//%s"
+                            (oget js/window [:location :protocol])
+                            (oget js/window [:location :host]))])]
+    [:div#spacing.pb-5]]])
+
+(defn registration-mail-exists-view []
+  [registration-mail-exists])
+
+;; -----------------------------------------------------------------------------
+
 (rf/reg-event-fx
  :registration.go-to/step-2
  (fn [{:keys [db]} [_ email]]
@@ -300,10 +319,12 @@
 
 (rf/reg-event-fx
  :registration.register/success
- (fn [{:keys [db]} [_ {:keys [tokens]}]]
-   {:fx [[:keycloak.init/with-token [(get-in db [:user :keycloak])
-                                     (:access_token tokens)
-                                     (:refresh_token tokens)]]]}))
+ (fn [{:keys [db]} [_ {:keys [tokens new?]}]]
+   (if new?
+     {:fx [[:keycloak.init/with-token [(get-in db [:user :keycloak])
+                                       (:access_token tokens)
+                                       (:refresh_token tokens)]]]}
+     {:fx [[:dispatch [:navigation/navigate :routes.user.register/mail-exists]]]})))
 
 (rf/reg-event-fx
  :registration/store-survey-selection

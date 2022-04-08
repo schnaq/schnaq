@@ -1242,6 +1242,9 @@ Now we write down questions and discuss them and can still understand what we ha
    :registration.pricing.pro/mods "Moderation Options"
    :registration.pricing.pro/themes "Personal Design"
    :registration.pricing.enterprise/all-from-pro "All Pro Features, plus:"
+   :registration.mail-exists/heading "This mail address is already taken"
+   :registration.mail-exists/lead "Would you like to log in?"
+   :registration.mail-exists/login "Login"
 
    ;; Alt texts
    :schnaqqifant/hippie-alt-text "Schnaqqi the schnaq mascot dressed as a hippie"

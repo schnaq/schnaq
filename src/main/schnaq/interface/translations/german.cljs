@@ -1241,6 +1241,9 @@
    :registration.pricing.pro/mods "Moderationsoptionen"
    :registration.pricing.pro/themes "Persönliches Design"
    :registration.pricing.enterprise/all-from-pro "Alle Pro-Features, plus:"
+   :registration.mail-exists/heading "Diese Mailadresse ist schon vergeben"
+   :registration.mail-exists/lead "Möchtest du dich vielleicht einloggen?"
+   :registration.mail-exists/login "Anmelden"
 
 ;; Alt texts
    :schnaqqifant/hippie-alt-text "Schnaqqi, das schnaq Maskottchen, als Hippie verkleidet"
