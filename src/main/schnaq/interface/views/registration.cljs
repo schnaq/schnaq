@@ -64,7 +64,7 @@
                     email (oget form [:email :value])
                     password (oget form [:password :value])
                     opt-in (oget form [:opt-in :checked])]
-                (if-not (and email password opt-in)
+                (if (and email password opt-in)
                   (rf/dispatch [:registration/register [email password]])
                   (rf/dispatch [:notification/add
                                 #:notification{:title "Bitte alle Felder ausfüllen"
@@ -134,61 +134,25 @@
     :fx [[:dispatch [:navigation/navigate :routes.user.register/step-2]]]}))
 
 (rf/reg-event-fx
- :user.by-email/exists
- (fn [{:keys [db]} [_ email]]
-   {:fx [(http/xhrio-request db :get "/user/by-email"
-                             [:user.by-email.exists/success]
-                             {:email email})]}))
+ :registration/register
+ (fn [{:keys [db]} [_ [email password]]]
+   {:fx [[:dispatch [:registration.go-to/step-2 email]]
+         (http/xhrio-request db :post "/user/registration/new"
+                             [:registration.register/success]
+                             {:email email
+                              :password password})]}))
 
 (rf/reg-event-fx
- :user.by-email.exists/success
- (fn [{:keys [db]} [_ {:keys [exists?]}]]
-   (if exists?
-     {}
-     {})))
-
-(rf/reg-event-fx
- :test/register
- (fn [{:keys [db]} [_ email]]
-   {:fx [[:http-xhrio {:method :post
-                       :uri "https://auth.schnaq.com/auth/realms/development/protocol/openid-connect/token"
-                       :format (ajax/json-request-format)
-                       :params {:grant_type "password"
-                                :client_id "development"
-                                :username "meter+new@mailbox.org"
-                                :password "123456"}
-                       #_#_:headers headers
-                       :response-format (ajax/json-response-format)
-                       :on-success [:test.register/success]
-                       :on-failure [:test.register/success]}]]}))
-
-(rf/reg-event-fx
- :test.register/success
- (fn [{:keys [db]} [_ response]]
-   (prn response)
-   {}))
+ :registration.register/success
+ (fn [{:keys [db]} [_ {:keys [tokens]}]]
+   {:fx [[:keycloak.init/with-token [(get-in db [:user :keycloak])
+                                     (:access_token tokens)
+                                     (:refresh_token tokens)]]]}))
 
 (comment
-  (rf/dispatch [:test/register])
-
-  (let [kc (get-in @re-frame.db/app-db [:user :keycloak])]
-    (-> kc
-        (.init #js {:token "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJvOVVZRWlWZlV6cENnTTdRWjlLeXBSOGpfTVAtM21wWG1OU0pGc0YtVmFBIn0.eyJleHAiOjE2NDkyNTUwODksImlhdCI6MTY0OTI1NDc4OSwianRpIjoiZWNmMWU1ZmQtMDkzNy00YmZhLTliODItMGE0YjdhNDY0YTA2IiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnNjaG5hcS5jb20vYXV0aC9yZWFsbXMvZGV2ZWxvcG1lbnQiLCJhdWQiOlsiZGV2ZWxvcG1lbnQtYmFja2VuZCIsImFjY291bnQiXSwic3ViIjoiNzJiMmExZjMtZmRlMi00OTBmLWEzMGYtOTQ3MWY5Nzg4OTUxIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZGV2ZWxvcG1lbnQiLCJzZXNzaW9uX3N0YXRlIjoiNDlmNTlmYTQtNThjMS00MGFlLWJiY2QtNDExYTAyYWI2YzIxIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0Ojg3MDAiLCJodHRwczovL2NoZWNrb3V0LnN0cmlwZS5jb20iLCJodHRwOi8vbG9jYWxob3N0OjMwMDAiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwiZGVmYXVsdC1yb2xlcy1kZXZlbG9wbWVudCIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiZGV2ZWxvcG1lbnQtYmFja2VuZCI6eyJyb2xlcyI6WyJhZG1pbiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiNDlmNTlmYTQtNThjMS00MGFlLWJiY2QtNDExYTAyYWI2YzIxIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImdyb3VwcyI6W10sInByZWZlcnJlZF91c2VybmFtZSI6Im1ldGVyK25ld0BtYWlsYm94Lm9yZyIsImVtYWlsIjoibWV0ZXIrbmV3QG1haWxib3gub3JnIn0.WtUiK2-Vr9ikwKs_4S336Wr2t33PViOeU6BWL1xTwHsK8aqA6W0j2oYBwiVvimi5Gbq6x82KGgShjrH9L0y9NydPbiro5pIKlCGGXzTr57EQiLlkOXbpsN9M7RrGbY-VeZvwy3jeJYEgRzq18oTeGytKTcZ2JkgvY3oURGkYBqzMKOVCud8LWOZjka1dL4uNI26J0SrY5tMT4UyqYsCnK1q9giHOcpE9ZWoBVJBHzvGXC4PdeukZgpoe7IyD8mTXh9Ki6WpM6Hogo0XOBHIwitRFBmj9BPZ3ctOfxyFYalNf9LfgWYVP6Re5--MGapCCca9EFtcijWcHJLl1-AVwcw"
-                    :refreshToken "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkNTg5NjQwNC1mM2QzLTQ5Y2UtYmZhYy01Zjg4MTI5MzNlNDUifQ.eyJleHAiOjE2NDkyNTY1ODksImlhdCI6MTY0OTI1NDc4OSwianRpIjoiYjMwN2RjODEtYjViZS00ZWI0LWE5YzktMmM5ZmExZDA1OGU3IiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnNjaG5hcS5jb20vYXV0aC9yZWFsbXMvZGV2ZWxvcG1lbnQiLCJhdWQiOiJodHRwczovL2F1dGguc2NobmFxLmNvbS9hdXRoL3JlYWxtcy9kZXZlbG9wbWVudCIsInN1YiI6IjcyYjJhMWYzLWZkZTItNDkwZi1hMzBmLTk0NzFmOTc4ODk1MSIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJkZXZlbG9wbWVudCIsInNlc3Npb25fc3RhdGUiOiI0OWY1OWZhNC01OGMxLTQwYWUtYmJjZC00MTFhMDJhYjZjMjEiLCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJzaWQiOiI0OWY1OWZhNC01OGMxLTQwYWUtYmJjZC00MTFhMDJhYjZjMjEifQ.XqtTs8k7s4pdsVHwf6g1iovdBhAHbhpkyJqc320iJP0"})
-        (.then (fn [result]
-                 (rf/dispatch [:auth/after-successful-login])
-                 (rf/dispatch [:user/authenticated! result])
-                 (rf/dispatch [:keycloak/load-user-profile])
-                 (rf/dispatch [:keycloak.roles/extract])
-                 (rf/dispatch [:keycloak/check-token-validity])
-                 (rf/dispatch [:user/register result])
-                 (rf/dispatch [:hubs.personal/load])))
-        (.catch (fn [_]
-                  (rf/dispatch [:user/authenticated! false])))))
+  (rf/dispatch [:registration/register ["meter+new12@mailbox.org" "123456"]])
 
   (.log js/console (get-in @re-frame.db/app-db [:user :keycloak]))
-
-  (rf/dispatch [:user.by-email/exists "cmeter@googlemail.com"])
 
   (get-in @re-frame.db/app-db [:user :keycloak])
 
