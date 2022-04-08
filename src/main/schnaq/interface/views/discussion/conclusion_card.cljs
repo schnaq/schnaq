@@ -6,7 +6,6 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.core :as r]
-            [reagent.dom :as rdom]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
