@@ -72,19 +72,6 @@
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)
      :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
-
-   ;; ##########################################################################
-   ;; HUBBATTLE
-   ;; 
-   ;; Edit share-hash and entity id is the id to the poll
-   ;;
-   ["/hubbattle"
-    {:name :routes/hubbattle
-     :controllers [{:start (fn []
-                             (rf/dispatch [:navigation/navigate :routes.present/entity
-                                           {:share-hash "c2cf1305-74ef-482f-9efd-5e70f98f765e"
-                                            :entity-id 17592186128043}]))}]}]
-   ;; ##########################################################################
    ["/product"
     [""
      {:name :routes/product-page
