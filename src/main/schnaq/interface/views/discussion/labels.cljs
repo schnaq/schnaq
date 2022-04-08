@@ -39,7 +39,7 @@
                                   #(tools/update-statement-in-list % updated-statement))
       parent-statement (assoc-in [:schnaq :statements parent-id :meta/answered?] statement-answered?)
       ;; If the statement is itself in the store update it as well
-      statement-in-store (update-in [:schnaq :statements (:db/id updated-statement)] updated-statement))))
+      statement-in-store (assoc-in [:schnaq :statements (:db/id updated-statement)] updated-statement))))
 
 (rf/reg-event-fx
  :statement.labels/remove
