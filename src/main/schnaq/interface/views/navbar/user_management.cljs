@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.navbar.user-management
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.common :refer [pro-badge]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.navbar :as nav-component]
@@ -116,12 +117,12 @@
 (defn user-dropdown-button
   "The default user dropdown. It displays the avatar and a name with a droppable menu.
   The menu depends on the login-state of the user. Must be used as a child of a .dropdown."
-  [button-class]
+  [on-white-background?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     [:div.dropdown
      [nav-component/separated-button
       [profile-picture-in-nav]
-      {:class button-class
+      {:class (if on-white-background? "btn-link" "btn-outline-light btn-transparent")
        :data-bs-toggle "dropdown"
        :aria-expanded "false"}
       [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby "profile-dropdown"}
@@ -134,15 +135,21 @@
             :on-click #(rf/dispatch [:keycloak/login])}
            (labels :user/register)]])]]]))
 
-(defn- register-button []
-  [:button.btn.btn-sm.btn-dark
-   {:role "button" :on-click #(rf/dispatch [:keycloak/login])}
-   (labels :nav/register)])
+(defn- login-button
+  "Show a login button."
+  [on-light-background?]
+  [buttons/button (labels :nav/login) #(rf/dispatch [:keycloak/login])
+   (if on-light-background? "btn-outline-dark" "btn-outline-white")])
+
+(defn- register-button
+  "Show registration button."
+  [on-light-background?]
+  [buttons/anchor (labels :nav/register) (navigation/href :routes.user/register)
+   (if on-light-background? "btn-outline-secondary ms-2" "btn-dark ms-2")])
 
 (defn register-or-user-button
-  "If not authenticated, show register button else show user menu"
-  [button-class]
-  (let [authenticated? @(rf/subscribe [:user/authenticated?])]
-    (if authenticated?
-      [user-dropdown-button button-class]
-      [register-button])))
+  "If not authenticated, show register button else show user menu."
+  [on-light-background?]
+  (if @(rf/subscribe [:user/authenticated?])
+    [user-dropdown-button on-light-background?]
+    [:<> [login-button on-light-background?] [register-button on-light-background?]]))

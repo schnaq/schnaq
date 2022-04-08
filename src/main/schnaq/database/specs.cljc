@@ -318,9 +318,8 @@
 (s/def :identity/locale string?)
 (s/def ::identity
   (s/keys
-   :req-un [:identity/sub :identity/given_name :identity/family_name
-            :identity/preferred_username :identity/email]
-   :opt-un [:identity/groups :identity/locale]))
+   :req-un [:identity/sub :identity/preferred_username :identity/email]
+   :opt-un [:identity/given_name :identity/family_name :identity/groups :identity/locale]))
 
 ;; -----------------------------------------------------------------------------
 ;; Websockets
@@ -341,3 +340,19 @@
             :ws.message/uid :ws.message/event :ws.message/id
             :ws.message/send-buffers :ws.message/ring-req :ws.message/send-fn]
    :opt-un [:ws.message/?reply-fn :ws.message/?data]))
+
+;; -----------------------------------------------------------------------------
+;; Surveys
+
+(s/def :surveys.using-schnaq-for/user ::user-or-reference)
+(s/def :surveys.using-schnaq-for/topics
+  (s/coll-of #{:surveys.using-schnaq-for.topics/education
+               :surveys.using-schnaq-for.topics/coachings
+               :surveys.using-schnaq-for.topics/seminars
+               :surveys.using-schnaq-for.topics/fairs
+               :surveys.using-schnaq-for.topics/meetings
+               :surveys.using-schnaq-for.topics/other}))
+(s/def :surveys/using-schnaq-for
+  (s/keys :req [:surveys.using-schnaq-for/user
+                :surveys.using-schnaq-for/topics]
+          :opt [:db/id]))

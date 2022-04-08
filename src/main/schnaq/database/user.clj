@@ -27,9 +27,11 @@
 (>defn user-by-email
   "Returns the registered user by email."
   [user-email]
-  [:user.registered/email :ret ::specs/registered-user]
-  (fast-pull [:user.registered/email user-email]
-             patterns/public-user))
+  [:user.registered/email :ret (? ::specs/registered-user)]
+  (let [user (fast-pull [:user.registered/email user-email]
+                        patterns/public-user)]
+    (when (:db/id user)
+      user)))
 
 (>defn private-user-by-keycloak-id
   "Returns the registered user by email."

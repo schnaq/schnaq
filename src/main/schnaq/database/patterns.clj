@@ -158,3 +158,8 @@
    {:activation/discussion [:db/id
                             :discussion/share-hash
                             :discussion/title]}])
+
+(def survey-using-schnaq-for
+  [:db/id
+   :surveys.using-schnaq-for/user
+   {:surveys.using-schnaq-for/topics [:db/ident]}])

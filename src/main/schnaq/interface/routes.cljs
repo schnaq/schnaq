@@ -33,6 +33,7 @@
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.presentation :as presentation]
             [schnaq.interface.views.qa.inputs :as qanda]
+            [schnaq.interface.views.registration :as registration]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.startpage.core :as startpage-views]
@@ -71,19 +72,6 @@
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)
      :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
-
-   ;; ##########################################################################
-   ;; HUBBATTLE
-   ;; 
-   ;; Edit share-hash and entity id is the id to the poll
-   ;;
-   ["/hubbattle"
-    {:name :routes/hubbattle
-     :controllers [{:start (fn []
-                             (rf/dispatch [:navigation/navigate :routes.present/entity
-                                           {:share-hash "c2cf1305-74ef-482f-9efd-5e70f98f765e"
-                                            :entity-id 17592186128043}]))}]}]
-   ;; ##########################################################################
    ["/product"
     [""
      {:name :routes/product-page
@@ -315,7 +303,16 @@
                             (rf/dispatch [:schnaq.selected/dissoc])
                             (rf/dispatch [:themes/dissoc])
                             (rf/dispatch [:theme/reset]))}]}]
-
+   ["/register"
+    ["" {:name :routes.user/register
+         :view registration/registration-step-1-view}]
+    ["/step-2" {:name :routes.user.register/step-2
+                :view registration/registration-step-2-view}]
+    ["/step-3" {:name :routes.user.register/step-3
+                :view registration/registration-step-3-view
+                :controllers [{:start #(rf/dispatch [:pricing/get-prices])}]}]
+    ["/mail-exists" {:name :routes.user.register/mail-exists
+                     :view registration/registration-mail-exists-view}]]
    ["/privacy"
     [""
      {:name :routes.privacy/complete

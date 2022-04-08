@@ -57,6 +57,16 @@
      {:db (assoc-in db [:user :keycloak] keycloak)
       :fx [[:keycloak/silent-check keycloak]]})))
 
+(rf/reg-event-fx
+ :keycloak.init/after-login
+ (fn [_ [_ authenticated?]]
+   {:fx [[:dispatch [:user/authenticated! authenticated?]]
+         [:dispatch [:keycloak/load-user-profile]]
+         [:dispatch [:keycloak.roles/extract]]
+         [:dispatch [:keycloak/check-token-validity]]
+         [:dispatch [:user/register]]
+         [:dispatch [:hubs.personal/load]]]}))
+
 (rf/reg-fx
  :keycloak/silent-check
  (fn [keycloak]
@@ -65,16 +75,21 @@
                   :checkLoginIframe false
                   :silentCheckSsoRedirectUri (str (-> js/window .-location .-origin) "/silent-check-sso.html")})
        (.then (fn [result]
-                (rf/dispatch [:auth/after-successful-login])
-                (rf/dispatch [:user/authenticated! result])
-                (rf/dispatch [:keycloak/load-user-profile])
-                (rf/dispatch [:keycloak.roles/extract])
-                (rf/dispatch [:keycloak/check-token-validity])
-                (rf/dispatch [:user/register result])
-                (rf/dispatch [:hubs.personal/load])))
+                (rf/dispatch [:keycloak.init/after-login result])))
        (.catch (fn [_]
                  (rf/dispatch [:user/authenticated! false])
                  (error-to-console "Silent check with keycloak failed."))))))
+
+(rf/reg-fx
+ :keycloak.init/with-token
+ (fn [[keycloak access-token refresh-token]]
+   (-> keycloak
+       (.init #js {:token access-token
+                   :refreshToken refresh-token})
+       (.then (fn [authenticated?]
+                (rf/dispatch [:keycloak.init/after-login authenticated?])))
+       (.catch (fn [_]
+                 (rf/dispatch [:user/authenticated! false]))))))
 
 ;; -----------------------------------------------------------------------------
 ;; Login request to the keycloak instance.
@@ -102,11 +117,6 @@
    (let [keycloak (get-in db [:user :keycloak])]
      (when (and keycloak (user-authenticated? db))
        {:fx [[:keycloak/load-user-profile-request keycloak]]}))))
-
-(rf/reg-event-fx
- :auth/after-successful-login
- (fn [_ _]
-   {:fx [[:dispatch [:modal {:show? false :child nil}]]]}))
 
 (rf/reg-fx
  :keycloak/load-user-profile-request

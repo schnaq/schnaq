@@ -74,6 +74,7 @@
             [schnaq.interface.views.presentation]
             [schnaq.interface.views.qa.inputs]
             [schnaq.interface.views.qa.search]
+            [schnaq.interface.views.registration]
             [schnaq.interface.views.schnaq.activation]
             [schnaq.interface.views.schnaq.admin]
             [schnaq.interface.views.schnaq.create]

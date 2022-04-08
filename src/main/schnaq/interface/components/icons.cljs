@@ -4,12 +4,12 @@
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub faFontAwesomeFlag]]
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faIdCard faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faBackspace faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
+             [faBackspace faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
               faCloud faCog faComment faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
-              faFileDownload faFlask faGem faGhost faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage
+              faFileDownload faFlask faGem faGhost faGraduationCap faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
               faLocationArrow faLock faLockOpen faMagic faPalette faMapPin
               faPaperPlane faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
-              faTimes faTimesCircle faTrashAlt faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward]]
+              faTimes faTimesCircle faTrashAlt faUniversity faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
 (def ^:private icons
@@ -19,6 +19,7 @@
    :arrow-up faArrowUp
    :backspace faBackspace
    :bell faBell
+   :briefcase faBriefcase
    :building faBuilding
    :calendar faCalendar
    :calendar-alt faCalendarAlt
@@ -50,6 +51,7 @@
    :flask faFlask
    :gem faGem
    :ghost faGhost
+   :graduation-cap faGraduationCap
    :graph faProjectDiagram
    :github faGithub
    :handshake faHandshake
@@ -59,6 +61,7 @@
    :info-question faQuestionCircle
    :instagram faInstagram
    :language faLanguage
+   :laptop faLaptop
    :linkedin faLinkedin
    :location-arrow faLocationArrow
    :lock faLock
@@ -86,6 +89,7 @@
    :times-circle faTimesCircle
    :trash faTrashAlt
    :twitter faTwitter
+   :university faUniversity
    :user/group faUsers
    :user/lock faUserLock
    :user/ninja faUserNinja

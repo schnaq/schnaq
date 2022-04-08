@@ -67,15 +67,15 @@
      [:div {:class (when-not yearly? "text-muted")}
       (labels :pricing.schnaq.pro.yearly/payment-method) [discount-for-choosing-yearly]]]))
 
-(defn- price-tag-pro-tier
+(defn price-tag-pro-tier
   "Price tag for pro tier."
-  []
+  [price-class]
   (let [pro-price @(rf/subscribe [:pricing/pro-tier])
         yearly? @(rf/subscribe [:pricing.interval/yearly?])
         formatted-price (if (js/Number.isInteger pro-price) "%d €" "%.2f €")]
     (if (and pro-price (not (zero? pro-price)))
       [:<>
-       [:span.display-5 (gstring/format formatted-price pro-price)]
+       [:span {:class price-class} (gstring/format formatted-price pro-price)]
        [:span (labels :pricing.units/per-month)]
        [:p
         (labels :pricing.notes/with-vat)
@@ -83,7 +83,7 @@
         (labels (if yearly? :pricing.schnaq.pro.yearly/cancel-period :pricing.schnaq.pro.monthly/cancel-period))]]
       [spinner-icon])))
 
-(defn- price-tag-free-tier
+(defn price-tag-free-tier
   "Price tag for free tier."
   []
   [:<>
@@ -152,12 +152,25 @@
    nil
    [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (navigation/href :routes.schnaq/create)]])
 
+(defn pro-tier-cta-button
+  "Show button to checkout pro."
+  []
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])
+        yearly? @(rf/subscribe [:pricing.interval/yearly?])
+        price-id (:id @(rf/subscribe [(if yearly? :pricing.pro/yearly :pricing.pro/monthly)]))]
+    [buttons/button
+     (labels :pricing.pro-tier/call-to-action)
+     #(if authenticated?
+        (rf/dispatch [:subscription/create-checkout-session price-id])
+        (rf/dispatch [:keycloak/login (links/checkout-link price-id)]))
+     "btn-secondary btn-lg"]))
+
 (defn- pro-tier-card
   "Display the pro tier card."
   []
   [tier-card
    :pricing.pro-tier/title :pricing.pro-tier/subtitle :crown
-   [price-tag-pro-tier]
+   [price-tag-pro-tier "display-5"]
    :pricing.pro-tier/description
    (add-class-to-feature
     (concat
@@ -166,22 +179,21 @@
      (pro-features))
     "text-primary")
    (coming-soon)
-   (let [authenticated? @(rf/subscribe [:user/authenticated?])
-         pro-user? @(rf/subscribe [:user/pro-user?])
-         yearly? @(rf/subscribe [:pricing.interval/yearly?])
-         price-id (:id @(rf/subscribe [(if yearly? :pricing.pro/yearly :pricing.pro/monthly)]))]
-     (if pro-user?
-       [:div.alert.alert-info.text-center
-        [:p (labels :pricing.pro-tier/already-subscribed)]
-        [buttons/anchor (labels :pricing.pro-tier/go-to-settings) (navigation/href :routes.user.manage/account) "btn-outline-dark btn-sm"]]
-       [:div.text-center.py-4
-        [buttons/button
-         (labels :pricing.pro-tier/call-to-action)
-         #(if authenticated?
-            (rf/dispatch [:subscription/create-checkout-session price-id])
-            (rf/dispatch [:keycloak/login (links/checkout-link price-id)]))
-         "btn-secondary btn-lg"]]))
+   (if @(rf/subscribe [:user/pro-user?])
+     [:div.alert.alert-info.text-center
+      [:p (labels :pricing.pro-tier/already-subscribed)]
+      [buttons/anchor (labels :pricing.pro-tier/go-to-settings) (navigation/href :routes.user.manage/account) "btn-outline-dark btn-sm"]]
+     [:div.text-center.py-4
+      [pro-tier-cta-button]])
    {:class "border-primary shadow-lg"}])
+
+(defn enterprise-cta-button
+  "Show enterprise inquiry button."
+  []
+  [:a.btn.btn-primary
+   {:href "mailto:info@schnaq.com"
+    :on-click #(matomo/track-event "Lead" "Mail-Request" "Enterprise-Plan" 50)}
+   (labels :pricing.enterprise-tier/call-to-action)])
 
 (defn- enterprise-tier-card
   "Show the enterprise tier card."
@@ -197,11 +209,7 @@
      (enterprise-features))
     "text-primary")
    nil
-   [:div.text-center.py-4
-    [:a.btn.btn-primary
-     {:href "mailto:info@schnaq.com"
-      :on-click #(matomo/track-event "Lead" "Mail-Request" "Enterprise-Plan" 50)}
-     (labels :pricing.enterprise-tier/call-to-action)]]])
+   [:div.text-center.py-4 [enterprise-cta-button]]])
 
 (defn- tier-cards []
   (let [classes "col-12 col-lg-4"]

@@ -128,6 +128,13 @@
   @extend .shadow;
 }
 
+.common-card {
+  @extend .statement-card;
+  @extend .px-3;
+  @extend .py-4;
+  @extend .shadow;
+}
+
 .selection-tab {
   .nav-link {
     font-size: medium;
