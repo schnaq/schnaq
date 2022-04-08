@@ -134,7 +134,7 @@
   "Footer to display at the bottom the page."
   []
   (when-not (or shared-config/embedded? config/in-iframe?)
-    [:footer
+    [:footer.mt-5
      [:div.container-fluid.px-5
       [:div.row
        [:div.col-md-6.col-xl-3.col-12
