@@ -186,30 +186,6 @@
            [reduced-or-edit-card answer]
            {:key (str "answer-" (:db/id answer))}))])))
 
-(defn- collapsible-replies-foo
-  "Form 3 component with listeners to collapsed replies."
-  [statement-id collapsible-id replies]
-  (reagent/create-class
-   {:display-name (str "Collapsible Replies" collapsible-id)
-    :component-did-mount
-    (fn [this]
-      (let [this-dom (rdom/dom-node this)
-            toggle-collapse (fn [collapsed?]
-                              (fn [_e]
-                                (rf/dispatch [:toggle-replies/is-collapsed! statement-id collapsed?])))]
-        (.addEventListener this-dom "show.bs.collapse" (toggle-collapse false))
-        (.addEventListener this-dom "hide.bs.collapse" (toggle-collapse true))))
-    :component-will-unmount
-    (fn [_this]
-      (rf/dispatch [:toggle-replies/is-collapsed! statement-id true]))
-    :reagent-render
-    (fn [_]
-      [:div.collapse {:id collapsible-id}
-       (for [reply replies]
-         (with-meta
-           [reduced-or-edit-card reply]
-           {:key (str "reply-" (:db/id reply))}))])}))
-
 (defn- replies [statement]
   (let [collapsed? (r/atom true)]
     (fn []
@@ -230,21 +206,6 @@
               (with-meta
                 [reduced-or-edit-card reply]
                 {:key (str "reply-" (:db/id reply))}))]])))))
-
-(rf/reg-event-db
- :toggle-replies/is-collapsed!
- (fn [db [_ statement-id collapsed?]]
-   (assoc-in db [:statements :toggled-replies statement-id] collapsed?)))
-
-(rf/reg-event-db
- :toggle-replies/clear!
- (fn [db _]
-   (assoc-in db [:statements :toggled-replies] {})))
-
-(rf/reg-sub
- :toggle-replies/is-collapsed?
- (fn [db [_ statement-id]]
-   (get-in db [:statements :toggled-replies statement-id] true)))
 
 (defn answer-card
   "Display the answer directly inside the statement itself."
