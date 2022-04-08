@@ -26,7 +26,6 @@
 (defn- store-label-change
   "Differentiates if the statement, to which the label is added / removed, is the currently shown as a parent
   or a child."
-  ;; TODO UPHILL: children in statements einfach reinknüllen und mit ids arbeiten?
   [db updated-statement]
   (let [parent-id (-> updated-statement :statement/parent :db/id)
         parent-statement (get-in db [:schnaq :statements parent-id])
@@ -40,7 +39,7 @@
                                   #(tools/update-statement-in-list % updated-statement))
       parent-statement (assoc-in [:schnaq :statements parent-id :meta/answered?] statement-answered?)
       ;; If the statement is itself in the store update it as well
-      statement-in-store (assoc-in [:schnaq :statements (:db/id updated-statement)] updated-statement))))
+      statement-in-store (update-in [:schnaq :statements (:db/id updated-statement)] updated-statement))))
 
 (rf/reg-event-fx
  :statement.labels/remove
@@ -59,7 +58,7 @@
  :statement.labels.update/success
  ;; TODO change this with a generic update-statement fn
  (fn [db [_ {:keys [statement]}]]
-   (update-in db [:schnaq :statements (:db/id statement)] statement)))
+   (assoc-in db [:schnaq :statements (:db/id statement)] statement)))
 
 (rf/reg-event-fx
  :statement.labels/add
