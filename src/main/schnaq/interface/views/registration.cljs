@@ -72,7 +72,7 @@
                                                :body "Mindestens eins deiner Felder wurde nicht ausgefüllt. Bitte kontrolliere deine Eingabe."
                                                :context :warning}]))))}
      [inputs/floating "Gib hier deine E-Mail-Adresse ein" :email "registration-email" "email" {:required true :class "mb-2"}]
-     [inputs/floating "Bitte vergib nun ein sicheres Passwort" :password "registration-password" "password" {:required true :class "mb-2"}]
+     [inputs/floating "Bitte vergib nun ein sicheres Passwort" :password "registration-password" "password" {:required true :class "mb-2" :minLength 8}]
      [inputs/checkbox [:small toc] "registration-opt-in" "opt-in" {:required true}]
      [next-button "Kostenfrei registrieren"]]]
    [:div.text-center
@@ -84,7 +84,7 @@
   "Wrapped view for usage in routes."
   []
   [pages/fullscreen
-   {:page/title "Registrierung"}
+   {:page/title "Willkommen bei der Accounterstellung"}
    [registration-step-1]])
 
 ;; -----------------------------------------------------------------------------
@@ -130,7 +130,7 @@
   "Wrapped view for usage in routes."
   []
   [pages/fullscreen
-   {:page/title "Registrierung"}
+   {:page/title "Willkommen bei der Accounterstellung"}
    [registration-step-2]])
 
 ;; -----------------------------------------------------------------------------
@@ -234,7 +234,7 @@
   "Wrapped view for usage in routes."
   []
   [pages/fullscreen
-   {:page/title "Registrierung"}
+   {:page/title "Willkommen bei der Accounterstellung"}
    [registration-step-3]])
 
 ;; -----------------------------------------------------------------------------
