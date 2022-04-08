@@ -7,9 +7,12 @@
             [schnaq.interface.components.common :refer [schnaq-logo]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
+            [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.startpage.pricing :as pricing-view]))
 
 (defn- social-logins
   "Show social login buttons for direct access."
@@ -30,9 +33,9 @@
 (>defn- registration-card
   "Wrapper to build a common registration card for the complete registration
   process."
-  [step heading body footer]
-  [number? string? :re-frame/component (? :re-frame/component) => :re-frame/component]
-  [:section.col-11.col-md-6.mx-auto.pt-5
+  [heading body footer {:keys [step class]}]
+  [string? :re-frame/component (? :re-frame/component) map? => :re-frame/component]
+  [:section.mx-auto.pt-5 {:class (or class "col-11 col-md-6")}
    [:div.common-card
     [:div.col-6.col-md-4.mx-auto
      [:a {:href (navigation/href :routes/startpage)}
@@ -52,7 +55,6 @@
   "First step in the registration process."
   []
   [registration-card
-   1
    "Registrieren und schnaqqen"
    [:<>
     [social-logins]
@@ -75,7 +77,8 @@
      [next-button "Kostenfrei registrieren"]]]
    [:div.text-center
     [:span "Du hast bereits einen Account?"]
-    [buttons/button "Melde dich an" identity "btn-link" {:id "registration-first-step"}]]])
+    [buttons/button "Melde dich an" identity "btn-link" {:id "registration-first-step"}]]
+   {:step 1}])
 
 (defn registration-step-1-view
   "Wrapped view for usage in routes."
@@ -110,7 +113,6 @@
   "First step in the registration process."
   []
   [registration-card
-   2
    "Wobei wird schnaq dich unterstützen?"
    [:<>
     [:p.text-muted.mb-1 "Wähle alles passende aus"]
@@ -120,7 +122,9 @@
         (let [form (oget e [:target :elements])]
           (rf/dispatch [:registration/store-survey-selection form])))}
      [survey]
-     [next-button "Weiter"]]]])
+     [next-button "Weiter"]]]
+   nil
+   {:step 2}])
 
 (defn registration-step-2-view
   "Wrapped view for usage in routes."
@@ -131,21 +135,83 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- list-item
+  "Style a list item in the feature list."
+  [content]
+  [:li.list-group-item.border-0.p-0
+   [:span.fa-li [icon :check/normal "text-primary me-2" {:size :xs}]]
+   content])
+
+(>defn- tier-card
+  "Small tier cards, as a preview on the features."
+  [title subtitle price button features additional-classes]
+  [string? string? :re-frame/component :re-frame/component :re-frame/component (? string?) => :re-frame/component]
+  [:article.col-12.col-md-4.px-1.pb-2
+   [:div.card.shadow-sm {:class additional-classes}
+    [:div.card-body
+     [:div {:style {:min-height "12rem"}}
+      [:p.h5.card-title title]
+      [:p.h6.card-subtitle.mb-3.text-muted subtitle]
+      [:div.text-center.py-3 price]]
+     [:div.text-center button]
+     [:hr]
+     [:small features]]]])
+
+(defn- pro-tier-cta-button []
+  (let [yearly? @(rf/subscribe [:pricing.interval/yearly?])
+        price-id (:id @(rf/subscribe [(if yearly? :pricing.pro/yearly :pricing.pro/monthly)]))]
+    [buttons/button "Pro abonnieren"
+     #(rf/dispatch [:subscription/create-checkout-session price-id])
+     "btn-secondary"]))
+
 (defn- registration-step-3
   "First step in the registration process."
   []
   [registration-card
-   3
-   "Wobei wird schnaq dich unterstützen?"
+   "Wählen deinen Plan"
    [:<>
-    [:p.text-muted.mb-1 "Wähle alles passende aus"]
-    [:form
-     {:on-submit
-      (fn [e] (.preventDefault e)
-        (let [form (oget e [:target :elements])]
-          (rf/dispatch [:registration/store-survey-selection form])))}
-     [survey]
-     [next-button "Weiter"]]]])
+    [:div.row
+     [tier-card
+      (labels :pricing.free-tier/title)
+      (labels :pricing.free-tier/subtitle)
+      [:span.display-6 "0 €"]
+      [buttons/anchor "Fortsetzen mit Free" (navigation/href :routes.welcome/free) "btn-primary"]
+      [:ul.fa-ul.list-group.list-group-flush
+       [list-item (format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]
+       [list-item "Dynamisches Q&A"]
+       [list-item "Teilbar per QR Code"]]]
+     [tier-card
+      (labels :pricing.pro-tier/title)
+      (labels :pricing.pro-tier/subtitle)
+      [pricing-view/price-tag-pro-tier "display-6"]
+      [pro-tier-cta-button]
+      [:<>
+       [:strong "Alle Free-Features, plus:"]
+       [:ul.fa-ul.list-group.list-group-flush
+        [list-item (format (labels :pricing.features/number-of-users) config/max-concurrent-users-pro-tier)]
+        [list-item "Umfragen"]
+        [list-item "Schnellaktivierungen"]
+        [list-item "Moderationsoptionen"]
+        [list-item "Persönliches Design"]]]
+      "border-primary shadow"]
+     [tier-card
+      (labels :pricing.enterprise-tier/title)
+      (labels :pricing.enterprise-tier/subtitle)
+      [:span.display-6 (labels :pricing.enterprise-tier/on-request)]
+      [pricing-view/enterprise-cta-button]
+      [:<>
+       [:strong "Alle Pro-Features, plus:"]
+       [:ul.fa-ul.list-group.list-group-flush
+        [list-item (labels :pricing.features.number-of-users/unlimited)]
+        (for [label (take 3 (rest (labels :pricing.features/enterprise)))]
+          (with-meta
+            [list-item label]
+            {:key (str "list-item-" label)}))]]]]
+    [:div.text-center
+     [buttons/anchor "Compare plans" (navigation/href :routes/pricing) "btn-link"]]]
+   nil
+   {:step 3
+    :class "col-12 col-md-8"}])
 
 (defn registration-step-3-view
   "Wrapped view for usage in routes."
