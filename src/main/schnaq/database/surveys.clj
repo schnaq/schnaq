@@ -26,15 +26,3 @@
       :where [?surveys :surveys.using-schnaq-for/user]]
     patterns/survey-using-schnaq-for)
    toolbelt/pull-key-up))
-
-(def keycloak-id "adb1296a-6398-4384-a946-d8075293ba27")
-(def topics [:surveys.using-schnaq-for.topics/coachings :surveys.using-schnaq-for.topics/meetings])
-
-(comment
-
-  (using-schnaq-for-results)
-
-  (db/transact [{:surveys.using-schnaq-for/user [:user.registered/keycloak-id keycloak-id]
-                 :surveys.using-schnaq-for/topics topics}])
-
-  nil)
