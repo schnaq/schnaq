@@ -374,3 +374,11 @@
   (testing "If user has created discussions, return them."
     (is (= 1 (count (db/discussions-from-user (:user.registered/keycloak-id test-data/alex)))))
     (is (zero? (count (db/discussions-from-user (:user.registered/keycloak-id test-data/kangaroo)))))))
+
+(deftest children-from-statements-test
+  (testing "Find all children for a set of statements."
+    (let [startings (db/starting-statements "cat-dog-hash")
+          children (db/children-from-statements startings)]
+      (println startings)
+      (is (= 6 (count children)))
+      (is (= 6 (count (filter :statement/content children)))))))

@@ -74,11 +74,7 @@
         author-id (user-db/user-id display-name user-identity)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (let [conclusion [(db/fast-pull statement-id patterns/statement)]
-            premises (discussion-db/children-for-statement statement-id)
-            child-ids (->> (concat conclusion premises)
-                           (map :statement/children)
-                           flatten
-                           (map :db/id))]
+            premises (discussion-db/children-for-statement statement-id)]
         (ok (valid-statements-with-votes
              {:conclusion (first (-> conclusion
                                      (processors/with-sub-statement-count share-hash)
@@ -90,7 +86,7 @@
                             processors/with-answered?-info
                             (processors/with-new-post-info share-hash user-identity))
               :history (discussion-db/history-for-statement statement-id)
-              :children (discussion-db/statements-by-id child-ids)}
+              :children (discussion-db/children-from-statements (concat conclusion premises))}
              author-id)))
       at/not-found-hash-invalid)))
 

@@ -49,6 +49,15 @@
      :in $ [?child-ids ...] pattern]
    children-ids patterns/statement))
 
+(>defn children-from-statements
+  "Takes a collection of statements and returns all their children in a flat collection."
+  [statements]
+  [(s/coll-of ::specs/statement) => (s/coll-of ::specs/statement)]
+  (->> statements
+       (map :statement/children)
+       flatten
+       statements-by-id))
+
 (defn- transitive-child-rules
   "Returns a set of rules for finding transitive children entities of a given
   node up to depth of `depth`.
