@@ -2,8 +2,7 @@
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.toolbelt :as tools]
-            [schnaq.shared-toolbelt :as shared-tools]))
+            [schnaq.interface.utils.toolbelt :as tools]))
 
 (defn build-label
   "Takes a label and builds the necessary html."
@@ -29,15 +28,12 @@
   [db updated-statement]
   (let [parent-id (-> updated-statement :statement/parent :db/id)
         parent-statement (get-in db [:schnaq :statements parent-id])
-        statement-in-store (get-in db [:schnaq :statements (:db/id updated-statement)])
-        statement-answered? (shared-tools/answered?
-                             {:statement/children (tools/update-statement-in-list
-                                                   (:statement/children parent-statement) updated-statement)})]
+        statement-in-store (get-in db [:schnaq :statements (:db/id updated-statement)])]
     (cond-> db
       ;; Statement is there as a child update it as such.
+      ;; TODO children are just references. Do no such thing
       parent-statement (update-in [:schnaq :statements parent-id :statement/children]
                                   #(tools/update-statement-in-list % updated-statement))
-      parent-statement (assoc-in [:schnaq :statements parent-id :meta/answered?] statement-answered?)
       ;; If the statement is itself in the store update it as well
       statement-in-store (assoc-in [:schnaq :statements (:db/id updated-statement)] updated-statement))))
 
