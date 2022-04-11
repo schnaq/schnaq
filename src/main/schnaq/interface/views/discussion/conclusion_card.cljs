@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.conclusion-card
   (:require [clj-fuzzy.metrics :as clj-fuzzy]
-            [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [re-frame.core :as rf]
