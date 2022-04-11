@@ -158,9 +158,9 @@
            [:dispatch [:notification/set-visited-statements share-hash conclusion premises]]]})))
 
 (rf/reg-event-db
- :discussion.premises.current/dissoc
+ :schnaq.statements.current/dissoc
  (fn [db]
-   (update-in db [:discussion :premises] dissoc :current)))
+   (update-in db [:schnaq :statement-slice] dissoc :current-level)))
 
 (rf/reg-event-fx
  :discussion.current/dissoc
@@ -170,7 +170,7 @@
             (update :schnaq dissoc :current)
             (dissoc :wordcloud)
             (update :discussion dissoc :conclusion))
-    :fx [[:dispatch [:discussion.premises.current/dissoc]]]}))
+    :fx [[:dispatch [:schnaq.statements.current/dissoc]]]}))
 
 (rf/reg-event-db
  :statement/update
