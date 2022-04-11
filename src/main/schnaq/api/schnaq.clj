@@ -156,11 +156,13 @@
   "Search through any valid discussion."
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash search-string display-name]} (:query parameters)
-        user-id (user-db/user-id display-name (:sub identity))]
-    (ok {:matching-statements (-> (discussion-db/search-similar-questions share-hash search-string)
+        user-id (user-db/user-id display-name (:sub identity))
+        matching-statements (discussion-db/search-similar-questions share-hash search-string)]
+    (ok {:matching-statements (-> matching-statements
                                   (processors/with-sub-statement-count share-hash)
                                   processors/with-answered?-info
-                                  (discussion-api/valid-statements-with-votes user-id))})))
+                                  (discussion-api/valid-statements-with-votes user-id))
+         :children (discussion-db/children-from-statements matching-statements)})))
 
 ;; -----------------------------------------------------------------------------
 

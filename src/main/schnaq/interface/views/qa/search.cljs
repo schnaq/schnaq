@@ -33,9 +33,10 @@
                                   :display-name (tools/current-display-name db)})]}))))
 (rf/reg-event-db
  :schnaq.qa.search/success
- (fn [db [_ {:keys [matching-statements]}]]
+ (fn [db [_ {:keys [matching-statements children]}]]
    (-> db
-       (update-in [:schnaq :statements] merge (stools/normalize :db/id matching-statements))
+       (update-in [:schnaq :statements] merge
+                  (stools/normalize :db/id (concat matching-statements children)))
        (assoc-in [:schnaq :qa :search :results] (map :db/id matching-statements)))))
 
 (rf/reg-sub

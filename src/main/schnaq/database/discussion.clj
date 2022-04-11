@@ -583,7 +583,6 @@
 (>defn search-similar-questions
   "Search starting Conclusions (Questions in QA) and try to provide answers if there are any."
   [share-hash search-string]
-  ;; TODO in allen Elternfunktionen children querien
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
   (generic-statement-search share-hash search-string
                             '[[?discussion :discussion/starting-statements ?statements]]
