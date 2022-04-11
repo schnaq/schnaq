@@ -18,7 +18,7 @@
 
 (def openid-endpoint
   "OpenID Endpoint to authenticate using oauth2."
-  (format "%sauth/realms/%s/protocol/openid-connect/auth" server realm))
+  (format "%sauth/realms/%s/protocol/openid-connect" server realm))
 
 (def ^:private backend-admin-id
   (or (System/getenv "KEYCLOAK_ADMIN_ID") "info@schnaq.com"))
