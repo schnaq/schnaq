@@ -184,9 +184,9 @@
            [reduced-or-edit-card answer]
            {:key (str "answer-" (:db/id answer))}))])))
 
-(defn- replies [statement]
+(defn- replies [_statement]
   (let [collapsed? (reagent/atom true)]
-    (fn []
+    (fn [statement]
       (let [replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
             rotation (if @collapsed? 0 180)
             button-icon [motion/rotate rotation [icon :collapse-down "my-auto"]]
