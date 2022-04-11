@@ -97,7 +97,7 @@
    [card-highlighting statement nil])
   ([statement additional-classes]
    [::specs/statement (? string?) :ret vector?]
-   (let [answered? @(rf/subscribe [:statements/answers (:db/id statement)])
+   (let [answered? (seq @(rf/subscribe [:statements/answers (:db/id statement)]))
          statement-type (when (:statement/type statement)
                           (str "-" (name (:statement/type statement))))
          highlight-class (if answered?

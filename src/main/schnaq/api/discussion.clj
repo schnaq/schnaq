@@ -201,7 +201,7 @@
         (log/info "Starting statement added for discussion" share-hash)
         (created "" {:starting-conclusion new-starting}))
       (validator/deny-access at/invalid-rights-message))))
-;; TODO gucken ob ein kind marked ist, muss an referenzen angepasst werden (rand von karte)
+
 ;; TODO check alle :statement/children referenzen
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement. `conclusion-id` is the
