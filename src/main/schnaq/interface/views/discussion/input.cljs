@@ -140,7 +140,7 @@
                                     (logic/submit-new-premise (oget e [:currentTarget :elements])))
         event-to-send (if starting-route?
                         when-starting when-deeper-in-discussion)]
-    (if (:statement/locked? @(rf/subscribe [:discussion.conclusion/selected]))
+    (if (:statement/locked? @(rf/subscribe [:schnaq.statements/focus]))
       [:div.pt-3.ps-1
        [card-elements/locked-statement-icon]]
       [:form.my-md-2

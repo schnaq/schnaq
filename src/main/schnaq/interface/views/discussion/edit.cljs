@@ -86,16 +86,10 @@
 
 (rf/reg-event-fx
  :statement.edit.send/success
- (fn [{:keys [db]} [_ form response]]
-   (let [updated-statement (:updated-statement response)]
-     {:db (-> db
-              (assoc-in [:discussion :premises :current (:db/id updated-statement)] updated-statement)
-              (update-in [:history :full-context] #(vec (tools/update-statement-in-list % updated-statement)))
-              (update-in [:discussion :conclusion :selected] #(if (= (:db/id %) (:db/id updated-statement))
-                                                                updated-statement
-                                                                %)))
-      :fx [[:form/clear form]
-           [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]})))
+ (fn [{:keys [db]} [_ form {:keys [updated-statement]}]]
+   {:db (assoc-in db [:schnaq :statements (:db/id updated-statement)] updated-statement)
+    :fx [[:form/clear form]
+         [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]}))
 
 (rf/reg-event-fx
  :statement.edit.send/failure

@@ -6,7 +6,8 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.shared-toolbelt :as stools]))
 
 (rf/reg-event-fx
  :discussion.statements/search
@@ -24,7 +25,9 @@
 (rf/reg-event-db
  :discussion.statements.search/success
  (fn [db [_ {:keys [matching-statements]}]]
-   (assoc-in db [:search :schnaq :current :result] matching-statements)))
+   (-> db
+       (assoc-in [:search :schnaq :current :result] (map :db/id matching-statements))
+       (update-in [:schnaq :statements] merge (stools/normalize :db/id matching-statements)))))
 
 (defn- discussion-view
   "Displays a history  and input field on the left and conclusions in its center"
@@ -44,22 +47,37 @@
 (rf/reg-sub
  :discussion.statements/show
  ;; The statements which should be shown in the discussion view right now.
- :<- [:discussion.premises/current]
+ :<- [:schnaq/statements]
+ :<- [:schnaq.statements/current-level]
  :<- [:schnaq.search.current/result]
  :<- [:schnaq.search.current/search-string]
- (fn [[premises search-results search-string] _]
+ (fn [[statements level-statements search-results search-string] _]
    (if (cstring/blank? search-string)
-     premises
-     search-results)))
+     (stools/select-values statements level-statements)
+     (stools/select-values statements search-results))))
 
 (rf/reg-sub
- :discussion.premises/current
- (fn [db _] (tools/convert-premises db)))
-
-(rf/reg-sub
- :discussion.conclusion/selected
+ :schnaq/statements
  (fn [db _]
-   (get-in db [:discussion :conclusion :selected])))
+   (get-in db [:schnaq :statements])))
+
+(rf/reg-sub
+ :schnaq/statement
+ :<- [:schnaq/statements]
+ (fn [statements [_ statement-id]]
+   (get statements statement-id {})))
+
+(rf/reg-sub
+ :schnaq.statements/current-level
+ ;; A set of statements at the current "level" of discussion / questions
+ (fn [db _]
+   (get-in db [:schnaq :statement-slice :current-level] #{})))
+
+(rf/reg-sub
+ :schnaq.statements/focus
+ (fn [db _]
+   (let [focus-id (get-in db [:statements :focus])]
+     (get-in db [:schnaq :statements focus-id]))))
 
 ;; ----------------------------------------------------------------------------
 

@@ -158,23 +158,14 @@
  ;; Delete a statement-id from conclusions-list, history and carousels
  :discussion.delete/purge-stores
  (fn [db [_ statement-id return-value]]
-   (let [mark-fn (fn [coll]
-                   (mapv #(if (= statement-id (:db/id %))
-                            (assoc % :statement/content config/deleted-statement-text)
-                            %)
-                         coll))
-         mark-starting-fn #(if (= (:db/id %) statement-id)
-                             (assoc % :statement/content config/deleted-statement-text)
-                             %)
-         method (or (:method return-value) (first (:methods return-value)))]
+   (let [method (or (:method return-value) (first (:methods return-value)))]
      (if (= :deleted method)
        (-> db
-           (update-in [:discussion :conclusion :selected] mark-starting-fn)
-           (update-in [:discussion :premises :current] dissoc statement-id))
-       (-> db
-           (update-in [:discussion :conclusion :selected] mark-starting-fn)
-           (assoc-in [:discussion :premises :current statement-id :statement/content] config/deleted-statement-text)
-           (update-in [:history :full-context] mark-fn))))))
+           (update-in [:schnaq :statement-slice :current-level] disj statement-id)
+           ;; If it is fully deleted and not only changed in text, we know the following:
+           ;; It has to be at the end of history and can be savely removed.
+           (update-in [:history :full-context] (comp vec butlast)))
+       (assoc-in db [:schnaq :statements statement-id :statement/content] config/deleted-statement-text)))))
 
 (rf/reg-event-fx
  :discussion.admin/send-email-invites

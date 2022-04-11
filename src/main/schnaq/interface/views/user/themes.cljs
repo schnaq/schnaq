@@ -353,12 +353,15 @@
    (let [discussion #:discussion{:author {:user.registered/display-name "schnaqqi"}
                                  :title "Welcome to schnaq"
                                  :states #{:discussion.state/read-only}}
-         conclusion #:statement{:content "Welcome to schnaq"
+         dummy-conclusion-id :dummy-conclusion
+         conclusion #:statement{:db/id dummy-conclusion-id
+                                :content "Welcome to schnaq"
                                 :author {:user.registered/display-name "schnaqqi"}
                                 :created-at nil}]
      {:db (-> db
               (assoc-in [:schnaq :selected] discussion)
-              (assoc-in [:discussion :conclusion :selected] conclusion))
+              (assoc-in [:statements :focus] dummy-conclusion-id)
+              (assoc-in [:schnaq :statements dummy-conclusion-id] conclusion))
       :fx [[:dispatch [:schnaq.activation/temp-counter 0]]]})))
 
 ;; -----------------------------------------------------------------------------

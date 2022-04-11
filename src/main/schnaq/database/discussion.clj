@@ -641,8 +641,8 @@
    (if (shared-config/allowed-labels label)
      (->> @(transact [[:db/add statement-id :statement/labels label]])
           :db-after
-          (fast-pull statement-id patterns/statement))
-     (fast-pull statement-id patterns/statement))))
+          (fast-pull statement-id patterns/statement-with-children))
+     (fast-pull statement-id patterns/statement-with-children))))
 
 (>defn remove-label
   "Deletes a label if it is in the statement-set. Otherwise, nothing changes."
@@ -651,7 +651,7 @@
   (toolbelt/pull-key-up
    (->> @(transact [[:db/retract statement-id :statement/labels label]])
         :db-after
-        (fast-pull statement-id patterns/statement))))
+        (fast-pull statement-id patterns/statement-with-children))))
 
 ;; -----------------------------------------------------------------------------
 

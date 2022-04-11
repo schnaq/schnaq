@@ -40,21 +40,20 @@
 
 (rf/reg-event-fx
  :discussion.reaction.statement/added
- (fn [{:keys [db]} [_ response]]
-   (let [new-statement (:new-statement response)]
-     {:db (assoc-in db [:discussion :premises :current (:db/id new-statement)] new-statement)
-      :fx [[:dispatch [:notification/new-content]]
-           [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
+ (fn [{:keys [db]} [_ {:keys [new-statement]}]]
+   {:db (-> db
+            (assoc-in [:schnaq :statements (:db/id new-statement)] new-statement)
+            (update-in [:schnaq :statement-slice :current-level] (comp set conj) (:db/id new-statement)))
+    :fx [[:dispatch [:notification/new-content]]
+         [:dispatch [:discussion.statements/add-creation-secret new-statement]]]}))
 
 (rf/reg-event-fx
  :discussion.reply.statement/added
  (fn [{:keys [db]} [_ parent-statement {:keys [new-statement]}]]
    (let [parent-statement-id (:db/id parent-statement)]
      {:db (-> db
-              (update-in [:discussion :premises :current parent-statement-id :meta/sub-statement-count] inc)
-              (update-in [:discussion :premises :current parent-statement-id :statement/children] conj new-statement)
-              (update-in [:schnaq :qa :search :results parent-statement-id :statement/children] conj new-statement)
-              (update-in [:schnaq :qa :search :results parent-statement-id :meta/sub-statement-count] inc))
+              (update-in [:schnaq :statements parent-statement-id :meta/sub-statement-count] inc)
+              (update-in [:schnaq :statements parent-statement-id :statement/children] conj new-statement))
       :fx [[:dispatch [:notification/new-content]]
            [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
 
@@ -122,7 +121,7 @@
    (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          ;; Hier direkt das Statement aus der DB holen wenn es da ist
-         new-conclusion (first (filter #(= (:db/id %) statement-id) (get-in db [:discussion :premises :current])))]
+         new-conclusion (get-in db [:schnaq :statements statement-id])]
      ;; set new conclusion immediately if it's in db already, so loading times are reduced
      (cond->
        {:fx [[:dispatch [:loading/toggle [:statements? true]]]
@@ -133,7 +132,7 @@
                :share-hash share-hash
                :display-name (tools/current-display-name db)}
               [:discussion.redirect/to-root share-hash])]}
-       new-conclusion (update :db #(assoc-in db [:discussion :conclusion :selected] new-conclusion)
+       new-conclusion (update :db #(assoc-in db [:statements :focus] (:db/id new-conclusion))
                               :fx conj [:discussion.history/push new-conclusion])))))
 
 (rf/reg-event-fx
@@ -147,10 +146,11 @@
  (fn [{:keys [db]} [_ {:keys [conclusion premises history]}]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:db (-> db
-              (assoc-in [:discussion :conclusion :selected] conclusion)
-              (assoc-in [:discussion :premises :current]
-                        (shared-tools/normalize :db/id premises))
-              (assoc-in [:history :full-context] (vec history)))
+              (assoc-in [:statements :focus] (:db/id conclusion))
+              (update-in [:schnaq :statements]
+                         merge (shared-tools/normalize :db/id (conj (concat premises history) conclusion)))
+              (assoc-in [:schnaq :statement-slice :current-level] (map :db/id premises))
+              (assoc-in [:history :full-context] (vec (map :db/id history))))
       :fx [[:dispatch [:loading/toggle [:statements? false]]]
            [:dispatch [:discussion.history/push conclusion]]
            [:dispatch [:visited/set-visited-statements conclusion]]
@@ -170,3 +170,8 @@
             (dissoc :wordcloud)
             (update :discussion dissoc :conclusion))
     :fx [[:dispatch [:discussion.premises.current/dissoc]]]}))
+
+(rf/reg-event-db
+ :statement/update
+ (fn [db [_ {:keys [statement]}]]
+   (assoc-in db [:schnaq :statements (:db/id statement)] statement)))

@@ -5,7 +5,7 @@
   "Rewinds a history until the last time statement-id was current."
   [history statement-id]
   (loop [history history]
-    (if (or (= (:db/id (last history)) statement-id)
+    (if (or (= (last history) statement-id)
             (empty? history))
       (vec history)
       (recur (butlast history)))))
@@ -14,12 +14,11 @@
  :discussion.history/push
  ;; IMPORTANT: Since we do not control what happens at the browser back button, pushing anything
  ;; that is already present in the history, will rewind the history to said place.
- (fn [db [_ statement]]
-   (let [all-entries (-> db :history :full-context)
-         history-ids (into #{} (map :db/id all-entries))]
-     (if (and statement (contains? history-ids (:db/id statement)))
-       (assoc-in db [:history :full-context] (rewind-history all-entries (:db/id statement)))
-       (update-in db [:history :full-context] conj statement)))))
+ (fn [db [_ {:keys [db/id]}]]
+   (let [all-entries (get-in db [:history :full-context])]
+     (if (contains? (set all-entries) id)
+       (assoc-in db [:history :full-context] (rewind-history all-entries id))
+       (update-in db [:history :full-context] conj id)))))
 
 (rf/reg-event-db
  :discussion.history/clear
@@ -42,7 +41,7 @@
                [:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]]}
          {:db (assoc-in db [:history :full-context] after-time-travel)
           :fx [[:dispatch [:navigation/navigate :routes.schnaq.select/statement
-                           {:share-hash share-hash :statement-id (:db/id (last after-time-travel))}]]]})))))
+                           {:share-hash share-hash :statement-id (last after-time-travel)}]]]})))))
 
 (rf/reg-sub
  :discussion-history
