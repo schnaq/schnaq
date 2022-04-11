@@ -160,7 +160,6 @@
         matching-statements (discussion-db/search-similar-questions share-hash search-string)]
     (ok {:matching-statements (-> matching-statements
                                   (processors/with-sub-statement-count share-hash)
-                                  processors/with-answered?-info
                                   (discussion-api/valid-statements-with-votes user-id))
          :children (discussion-db/children-from-statements matching-statements)})))
 

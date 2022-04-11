@@ -42,8 +42,7 @@
    (-> share-hash
        discussion-db/starting-statements
        (valid-statements-with-votes user-id)
-       (processors/with-sub-statement-count share-hash)
-       processors/with-answered?-info))
+       (processors/with-sub-statement-count share-hash)))
   ([share-hash user-id secret-statement-id]
    (add-creation-secret (starting-conclusions-with-processors share-hash user-id) secret-statement-id)))
 
@@ -71,7 +70,6 @@
   [statement share-hash user-identity]
   (first (-> [statement]
              (processors/with-sub-statement-count share-hash)
-             processors/with-answered?-info
              (processors/with-new-post-info share-hash user-identity)
              toolbelt/pull-key-up)))
 
@@ -88,7 +86,6 @@
              {:conclusion (process-single-statement conclusion share-hash user-identity)
               :premises (-> premises
                             (processors/with-sub-statement-count share-hash)
-                            processors/with-answered?-info
                             (processors/with-new-post-info share-hash user-identity))
               :history (discussion-db/history-for-statement statement-id)
               :children (discussion-db/children-from-statements (conj premises conclusion))}
@@ -204,7 +201,7 @@
         (log/info "Starting statement added for discussion" share-hash)
         (created "" {:starting-conclusion new-starting}))
       (validator/deny-access at/invalid-rights-message))))
-;; TODO gucken ob ein kind marked ist, muss an referenzen angepasst werden
+;; TODO gucken ob ein kind marked ist, muss an referenzen angepasst werden (rand von karte)
 ;; TODO check alle :statement/children referenzen
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement. `conclusion-id` is the
