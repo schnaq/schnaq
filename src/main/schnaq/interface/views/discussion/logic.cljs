@@ -143,12 +143,12 @@
 
 (rf/reg-event-fx
  :discussion.query.statement/by-id-success
- (fn [{:keys [db]} [_ {:keys [conclusion premises history]}]]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+ (fn [{:keys [db]} [_ {:keys [conclusion premises history children]}]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         statements (shared-tools/normalize :db/id (conj (concat premises history children) conclusion))]
      {:db (-> db
               (assoc-in [:statements :focus] (:db/id conclusion))
-              (update-in [:schnaq :statements]
-                         merge (shared-tools/normalize :db/id (conj (concat premises history) conclusion)))
+              (update-in [:schnaq :statements] merge statements)
               (assoc-in [:schnaq :statement-slice :current-level] (map :db/id premises))
               (assoc-in [:history :full-context] (vec (map :db/id history))))
       :fx [[:dispatch [:loading/toggle [:statements? false]]]

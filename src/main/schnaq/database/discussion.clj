@@ -40,6 +40,15 @@
       [?discussion :discussion/starting-statements ?statements]]
     share-hash patterns/statement)))
 
+(>defn statements-by-id
+  "Returns fully queried statements from a list of id inputs."
+  [children-ids]
+  [(s/coll-of :db/id) => (s/coll-of ::specs/statement)]
+  (query
+   '[:find [(pull ?child-ids pattern) ...]
+     :in $ [?child-ids ...] pattern]
+   children-ids patterns/statement))
+
 (defn- transitive-child-rules
   "Returns a set of rules for finding transitive children entities of a given
   node up to depth of `depth`.
@@ -126,7 +135,6 @@
 (>defn children-for-statement
   "Returns all children for a statement. (Statements that have the input set as a parent)."
   [parent-id]
-  ;; TODO in allen Elternfunktionen children querien
   [:db/id :ret (s/coll-of ::specs/statement)]
   (-> (query '[:find [(pull ?children statement-pattern) ...]
                :in $ ?parent statement-pattern
