@@ -414,7 +414,6 @@
         answers @(rf/subscribe [:statements/answers (:db/id statement)])
         item-component
         [:div.statement-column
-         {:key (:db/id statement)}
          [motion/fade-in-and-out
           [statement-card->editable-card statement [answer-card statement]]
           (delay-fade-in-for-subsequent-content index)]]]
@@ -441,7 +440,9 @@
       [loading/loading-card]
       (for [index (range (count sorted-statements))
             :let [statement (nth sorted-statements index)]]
-        [statement-list-item statement index]))))
+        (with-meta
+          [statement-list-item statement index]
+          {:key (:db/id statement)})))))
 
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."
