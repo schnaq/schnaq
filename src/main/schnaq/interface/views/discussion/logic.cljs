@@ -5,7 +5,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
-            [schnaq.shared-toolbelt :as shared-tools]))
+            [schnaq.shared-toolbelt :as stools]))
 
 (defn- react-to-statement-call!
   "A call to the route for adding a rection to a statement."
@@ -145,7 +145,7 @@
  :discussion.query.statement/by-id-success
  (fn [{:keys [db]} [_ {:keys [conclusion premises history children]}]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         statements (shared-tools/normalize :db/id (conj (concat premises history children) conclusion))]
+         statements (stools/normalize :db/id (conj (concat premises history children) conclusion))]
      {:db (-> db
               (assoc-in [:statements :focus] (:db/id conclusion))
               (update-in [:schnaq :statements] merge statements)
@@ -175,3 +175,19 @@
  :statement/update
  (fn [db [_ {:keys [statement]}]]
    (assoc-in db [:schnaq :statements (:db/id statement)] statement)))
+
+(rf/reg-sub
+ :statements/replies
+ (fn [db [_ parent-id]]
+   (let [statements (get-in db [:schnaq :statements])
+         parent (get statements parent-id)]
+     (filter #(not-any? #{":check"} (:statement/labels %))
+             (stools/select-values statements (:statement/children parent))))))
+
+(rf/reg-sub
+ :statements/answers
+ (fn [db [_ parent-id]]
+   (let [statements (get-in db [:schnaq :statements])
+         parent (get statements parent-id)]
+     (filter #(some #{":check"} (:statement/labels %))
+             (stools/select-values statements (:statement/children parent))))))

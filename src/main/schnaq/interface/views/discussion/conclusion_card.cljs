@@ -176,7 +176,7 @@
   [statement-card->editable-card statement [reduced-statement-card statement]])
 
 (defn- answers [statement]
-  (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
+  (let [answers @(rf/subscribe [:statements/answers (:db/id statement)])]
     (when (seq answers)
       [:div.mt-2
        (for [answer answers]
@@ -187,7 +187,7 @@
 (defn- replies [_statement]
   (let [collapsed? (reagent/atom true)]
     (fn [statement]
-      (let [replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
+      (let [replies @(rf/subscribe [:statements/replies (:db/id statement)])
             rotation (if @collapsed? 0 180)
             button-icon [motion/rotate rotation [icon :collapse-down "my-auto"]]
             button-content (if @collapsed?
