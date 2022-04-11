@@ -104,7 +104,7 @@
                            "highlight-card-answered"
                            (str "highlight-card" statement-type))]
      [:div {:class (str highlight-class " " additional-classes)}])))
-;; TODO card.cljc error in console
+
 (defn- statement-card->editable-card
   "Wrap `statement-card-component`. Check if this statement is currently being
   edited, show edit-card if true."
