@@ -32,12 +32,6 @@
   [keyword? (s/coll-of map?) => map?]
   (into {} (map (juxt ident identity) coll)))
 
-(>defn answered?
-  "Check if a child exists, which has the label :check."
-  [{:keys [statement/children]}]
-  [map? :ret boolean?]
-  (string? ((set (flatten (map :statement/labels children))) ":check")))
-
 (defn- alphanumeric?
   "Checks whether some char is a Letter or a Digit."
   [char-to-test]
