@@ -202,7 +202,6 @@
         (created "" {:starting-conclusion new-starting}))
       (validator/deny-access at/invalid-rights-message))))
 
-;; TODO check alle :statement/children referenzen
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement. `conclusion-id` is the
   statement you want to react to. `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`.
