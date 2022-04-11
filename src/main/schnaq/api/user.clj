@@ -42,7 +42,7 @@
            (client/post (format "%s/token" kc-config/openid-endpoint)
                         {:headers {:content-type "application/x-www-form-urlencoded"}
                          :form-params {:grant_type "password"
-                                       :client_id "development"
+                                       :client_id kc-config/client-id
                                        :username email
                                        :password password}
                          :as :json}))]
