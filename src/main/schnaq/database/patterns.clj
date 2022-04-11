@@ -60,10 +60,6 @@
 (def statement-with-secret
   (conj statement :statement/creation-secret))
 
-(def statement-with-children
-  (conj statement
-        {[:statement/_parent :as :statement/children] statement}))
-
 ;; -----------------------------------------------------------------------------
 
 (def access-code

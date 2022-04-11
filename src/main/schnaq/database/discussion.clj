@@ -29,6 +29,7 @@
 
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."
+  ;; TODO in allen Elternfunktionen kinder separat querien
   [share-hash]
   [:db/id :ret (s/coll-of ::specs/statement)]
   (toolbelt/pull-key-up
@@ -37,7 +38,7 @@
       :in $ ?share-hash pattern
       :where [?discussion :discussion/share-hash ?share-hash]
       [?discussion :discussion/starting-statements ?statements]]
-    share-hash patterns/statement-with-children)))
+    share-hash patterns/statement)))
 
 (defn- transitive-child-rules
   "Returns a set of rules for finding transitive children entities of a given
@@ -125,11 +126,12 @@
 (>defn children-for-statement
   "Returns all children for a statement. (Statements that have the input set as a parent)."
   [parent-id]
+  ;; TODO in allen Elternfunktionen children querien
   [:db/id :ret (s/coll-of ::specs/statement)]
   (-> (query '[:find [(pull ?children statement-pattern) ...]
                :in $ ?parent statement-pattern
                :where [?children :statement/parent ?parent]]
-             parent-id patterns/statement-with-children)
+             parent-id patterns/statement)
       toolbelt/pull-key-up))
 
 (defn delete-statement!
@@ -564,10 +566,11 @@
 (>defn search-similar-questions
   "Search starting Conclusions (Questions in QA) and try to provide answers if there are any."
   [share-hash search-string]
+  ;; TODO in allen Elternfunktionen children querien
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
   (generic-statement-search share-hash search-string
                             '[[?discussion :discussion/starting-statements ?statements]]
-                            patterns/statement-with-children))
+                            patterns/statement))
 
 ;; -----------------------------------------------------------------------------
 ;; Summaries
@@ -637,21 +640,23 @@
   "Adds a label to a statement. If label is already applied, nothing changes."
   [statement-id label]
   [:db/id :statement/label :ret ::specs/statement]
+  ;; TODO in allen Elternfunktionen children querien. Vielleicht unnötig
   (toolbelt/pull-key-up
    (if (shared-config/allowed-labels label)
      (->> @(transact [[:db/add statement-id :statement/labels label]])
           :db-after
-          (fast-pull statement-id patterns/statement-with-children))
-     (fast-pull statement-id patterns/statement-with-children))))
+          (fast-pull statement-id patterns/statement))
+     (fast-pull statement-id patterns/statement))))
 
 (>defn remove-label
   "Deletes a label if it is in the statement-set. Otherwise, nothing changes."
   [statement-id label]
   [:db/id :statement/label :ret ::specs/statement]
+  ;; TODO in allen Elternfunktionen children querien. Vielleicht unnötig
   (toolbelt/pull-key-up
    (->> @(transact [[:db/retract statement-id :statement/labels label]])
         :db-after
-        (fast-pull statement-id patterns/statement-with-children))))
+        (fast-pull statement-id patterns/statement))))
 
 ;; -----------------------------------------------------------------------------
 

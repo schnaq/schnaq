@@ -73,18 +73,20 @@
         user-identity (:sub identity)
         author-id (user-db/user-id display-name user-identity)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
-      (ok (valid-statements-with-votes
-           {:conclusion (first (-> [(db/fast-pull statement-id patterns/statement-with-children)]
-                                   (processors/with-sub-statement-count share-hash)
-                                   processors/with-answered?-info
-                                   (processors/with-new-post-info share-hash user-identity)
-                                   toolbelt/pull-key-up))
-            :premises (-> (discussion-db/children-for-statement statement-id)
-                          (processors/with-sub-statement-count share-hash)
-                          processors/with-answered?-info
-                          (processors/with-new-post-info share-hash user-identity))
-            :history (discussion-db/history-for-statement statement-id)}
-           author-id))
+      (let [conclusion [(db/fast-pull statement-id patterns/statement)]]
+        (ok (valid-statements-with-votes
+             ;; TODO hier alle kinder-ids holen und dann children querien
+             {:conclusion (first (-> conclusion
+                                     (processors/with-sub-statement-count share-hash)
+                                     processors/with-answered?-info
+                                     (processors/with-new-post-info share-hash user-identity)
+                                     toolbelt/pull-key-up))
+              :premises (-> (discussion-db/children-for-statement statement-id)
+                            (processors/with-sub-statement-count share-hash)
+                            processors/with-answered?-info
+                            (processors/with-new-post-info share-hash user-identity))
+              :history (discussion-db/history-for-statement statement-id)}
+             author-id)))
       at/not-found-hash-invalid)))
 
 (defn- update-seen-statements!
