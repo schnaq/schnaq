@@ -43,10 +43,11 @@
   "Returns fully queried statements from a list of id inputs."
   [children-ids]
   [(s/coll-of :db/id) => (s/coll-of ::specs/statement)]
-  (query
-   '[:find [(pull ?child-ids pattern) ...]
-     :in $ [?child-ids ...] pattern]
-   children-ids patterns/statement))
+  (toolbelt/pull-key-up
+   (query
+    '[:find [(pull ?child-ids pattern) ...]
+      :in $ [?child-ids ...] pattern]
+    children-ids patterns/statement)))
 
 (>defn children-from-statements
   "Takes a collection of statements and returns all their children in a flat collection."
@@ -55,6 +56,7 @@
   (->> statements
        (map :statement/children)
        flatten
+       (remove nil?)
        statements-by-id))
 
 (defn- transitive-child-rules
@@ -194,7 +196,7 @@
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
   [share-hash user-id statement-content & {:keys [locked? registered-user?]}]
-  [:discussion/share-hash :db/id :statement/content (s/* any?) :ret :db/id]
+  [:discussion/share-hash :db/id :statement/content (s/* any?) :ret ::specs/statement]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
         ;; Only registered users are allowed to lock their cards
         locked? (if registered-user? (boolean locked?) false)
@@ -202,10 +204,12 @@
         new-statement (if registered-user?
                         minimum-statement
                         (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))
-        temporary-id (:db/id new-statement)]
-    (get-in @(transact [new-statement
-                        [:db/add discussion-id :discussion/starting-statements temporary-id]])
-            [:tempids temporary-id])))
+        temporary-id (:db/id new-statement)
+        tx-result @(transact [new-statement [:db/add discussion-id :discussion/starting-statements temporary-id]])
+        new-db (:db-after tx-result)
+        new-id (get-in tx-result [:tempids temporary-id])
+        pattern (if registered-user? patterns/statement patterns/statement-with-secret)]
+    (fast-pull new-id pattern new-db)))
 
 (>defn all-discussions-by-title
   "Query all discussions based on the title. Could possible be multiple
@@ -655,7 +659,6 @@
   "Adds a label to a statement. If label is already applied, nothing changes."
   [statement-id label]
   [:db/id :statement/label :ret ::specs/statement]
-  ;; TODO in allen Elternfunktionen children querien. Vielleicht unnötig
   (toolbelt/pull-key-up
    (if (shared-config/allowed-labels label)
      (->> @(transact [[:db/add statement-id :statement/labels label]])
@@ -667,7 +670,6 @@
   "Deletes a label if it is in the statement-set. Otherwise, nothing changes."
   [statement-id label]
   [:db/id :statement/label :ret ::specs/statement]
-  ;; TODO in allen Elternfunktionen children querien. Vielleicht unnötig
   (toolbelt/pull-key-up
    (->> @(transact [[:db/retract statement-id :statement/labels label]])
         :db-after

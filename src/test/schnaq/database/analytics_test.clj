@@ -2,7 +2,6 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.analytics :as db]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.main :as main-db]
             [schnaq.database.user :as user-db]
             [schnaq.test-data :refer [kangaroo]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]
@@ -61,13 +60,12 @@
 
 (deftest number-of-active-users-test
   (testing "Test whether the active users are returned correctly."
-    (is (= 4 (:overall (db/number-of-active-discussion-users))))
-    (let [woggler-id (user-db/add-user-if-not-exists "wooooggler")]
-      (is (= 4 (:overall (db/number-of-active-discussion-users))))
-      (main-db/transact
-       [(discussion-db/add-starting-statement! "cat-dog-hash" woggler-id "Alles doof")]))
-    (is (= 5 (:overall (db/number-of-active-discussion-users))))
-    (is (= 1 (:overall/registered (db/number-of-active-discussion-users))))))
+    (let [initial-overall-active-users (:overall (db/number-of-active-discussion-users))
+          woggler-id (user-db/add-user-if-not-exists "wooooggler")]
+      (discussion-db/add-starting-statement! "cat-dog-hash" woggler-id "Alles doof")
+      (is (= 4 initial-overall-active-users))
+      (is (= 5 (:overall (db/number-of-active-discussion-users))))
+      (is (= 1 (:overall/registered (db/number-of-active-discussion-users)))))))
 
 (deftest statement-length-stats-test
   (testing "Testing the function that returns lengths of statements statistics"

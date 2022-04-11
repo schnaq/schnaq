@@ -3,7 +3,6 @@
             [clojure.test :refer [deftest testing use-fixtures is are]]
             [schnaq.database.discussion :as db]
             [schnaq.database.main :refer [fast-pull] :as main-db]
-            [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.test-data :as test-data]
@@ -88,9 +87,7 @@
     (let [statement "Wow look at this"
           user-id (user-db/add-user-if-not-exists "Test-person")
           meeting-hash "graph-hash"
-          new-starting (fast-pull
-                        (db/add-starting-statement! meeting-hash user-id statement)
-                        patterns/statement)
+          new-starting (db/add-starting-statement! meeting-hash user-id statement)
           starting-statements (db/starting-statements meeting-hash)]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
         (is (= 3 (count starting-statements))))
@@ -103,15 +100,11 @@
           user-id (user-db/add-user-if-not-exists "Test-person")
           registered-user-id (:db/id (first (user-db/all-registered-users)))
           meeting-hash "graph-hash"
-          new-unlocked-starting (fast-pull
-                                 (db/add-starting-statement! meeting-hash user-id statement
-                                                             :locked? true)
-                                 patterns/statement)
-          new-locked-starting (fast-pull
-                               (db/add-starting-statement! meeting-hash registered-user-id statement
-                                                           :registered-user? true
-                                                           :locked? true)
-                               patterns/statement)]
+          new-unlocked-starting (db/add-starting-statement! meeting-hash user-id statement
+                                                            :locked? true)
+          new-locked-starting (db/add-starting-statement! meeting-hash registered-user-id statement
+                                                          :registered-user? true
+                                                          :locked? true)]
       (testing "Must be locked if done by registered user"
         (is (not (:statement/locked? new-unlocked-starting)))
         (is (:statement/locked? new-locked-starting))))))
@@ -159,8 +152,8 @@
                                 :discussion/edit-hash (str "secret-" share-hash)
                                 :discussion/author (user-db/add-user-if-not-exists "Wegi")})
           christian-id (user-db/user-by-nickname "Christian")
-          first-id (db/add-starting-statement! share-hash christian-id "this is sparta")
-          second-id (db/add-starting-statement! share-hash christian-id "this is kreta")]
+          first-id (:db/id (db/add-starting-statement! share-hash christian-id "this is sparta"))
+          second-id (:db/id (db/add-starting-statement! share-hash christian-id "this is kreta"))]
       (is (db/check-valid-statement-id-for-discussion first-id "Wegi-ist-der-schönste"))
       (is (db/check-valid-statement-id-for-discussion second-id "Wegi-ist-der-schönste")))))
 
@@ -221,9 +214,8 @@
           modified-content "Whats up in dis here house?"
           modified-type :statement.type/neutral
           new-user (user-db/add-user-if-not-exists "Wugiperson")
-          new-statement-id (db/add-starting-statement! (:discussion/share-hash cat-dog-discussion)
-                                                       new-user initial-content)
-          statement (fast-pull new-statement-id patterns/statement)]
+          statement (db/add-starting-statement! (:discussion/share-hash cat-dog-discussion)
+                                                new-user initial-content)]
       (is (= initial-content (:statement/content statement)))
       (let [modified-statement (db/change-statement-text-and-type statement modified-type modified-content)]
         (is (= modified-content (:statement/content modified-statement)))

@@ -66,6 +66,15 @@
                                   (processors/with-sub-statement-count share-hash)
                                   (valid-statements-with-votes user-id))})))
 
+(defn- process-single-statement
+  "Processes a single statement."
+  [statement share-hash user-identity]
+  (first (-> [statement]
+             (processors/with-sub-statement-count share-hash)
+             processors/with-answered?-info
+             (processors/with-new-post-info share-hash user-identity)
+             toolbelt/pull-key-up)))
+
 (defn- get-statement-info
   "Return premises, conclusion and the history for a given statement id."
   [{:keys [parameters identity]}]
@@ -73,20 +82,16 @@
         user-identity (:sub identity)
         author-id (user-db/user-id display-name user-identity)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
-      (let [conclusion [(db/fast-pull statement-id patterns/statement)]
+      (let [conclusion (db/fast-pull statement-id patterns/statement)
             premises (discussion-db/children-for-statement statement-id)]
         (ok (valid-statements-with-votes
-             {:conclusion (first (-> conclusion
-                                     (processors/with-sub-statement-count share-hash)
-                                     processors/with-answered?-info
-                                     (processors/with-new-post-info share-hash user-identity)
-                                     toolbelt/pull-key-up))
+             {:conclusion (process-single-statement conclusion share-hash user-identity)
               :premises (-> premises
                             (processors/with-sub-statement-count share-hash)
                             processors/with-answered?-info
                             (processors/with-new-post-info share-hash user-identity))
               :history (discussion-db/history-for-statement statement-id)
-              :children (discussion-db/children-from-statements (concat conclusion premises))}
+              :children (discussion-db/children-from-statements (conj premises conclusion))}
              author-id)))
       at/not-found-hash-invalid)))
 
@@ -191,16 +196,16 @@
         ;; Only Moderators can lock
         locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
     (if (validator/valid-writeable-discussion? share-hash)
-      (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement
-                                                                   :registered-user? keycloak-id
-                                                                   :locked? locked?)
-            starting (starting-conclusions-with-processors share-hash user-id new-starting-id)]
+      (let [new-starting (process-single-statement
+                          (discussion-db/add-starting-statement! share-hash user-id statement
+                                                                 :registered-user? keycloak-id
+                                                                 :locked? locked?)
+                          share-hash keycloak-id)]
         (log/info "Starting statement added for discussion" share-hash)
-        ;; TODO only return the newest starting conclusion and not the whole list
-        (created "" {:starting-conclusions starting
-                     :children (discussion-db/children-from-statements starting)}))
+        (created "" {:starting-conclusion new-starting}))
       (validator/deny-access at/invalid-rights-message))))
-
+;; TODO gucken ob ein kind marked ist, muss an referenzen angepasst werden
+;; TODO check alle :statement/children referenzen
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement. `conclusion-id` is the
   statement you want to react to. `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`.
@@ -482,7 +487,7 @@
                                           :statement :statement/content
                                           :display-name ::specs/non-blank-string
                                           :locked? :statement/locked?}}
-                      :responses {201 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
+                      :responses {201 {:body {:starting-conclusion ::dto/statement}}
                                   403 at/response-error-body}}]
     ["/update-seen" {:put update-seen-statements!
                      :description (at/get-doc #'update-seen-statements!)
