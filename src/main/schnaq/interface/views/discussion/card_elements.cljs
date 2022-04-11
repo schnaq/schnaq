@@ -152,12 +152,13 @@
 
 (rf/reg-event-fx
  :discussion.query.conclusions/set-starting
- (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
+ (fn [{:keys [db]} [_ {:keys [starting-conclusions children]}]]
    (when starting-conclusions
      (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
            statement-ids (map :db/id starting-conclusions)]
        {:db (-> db
-                (update-in [:schnaq :statements] merge (shared-tools/normalize :db/id starting-conclusions))
+                (update-in [:schnaq :statements] merge
+                           (shared-tools/normalize :db/id (concat starting-conclusions children)))
                 (assoc-in [:schnaq :statement-slice :current-level] statement-ids)
                 (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) statement-ids))
         ;; hier die seen setzen
