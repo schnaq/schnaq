@@ -379,6 +379,5 @@
   (testing "Find all children for a set of statements."
     (let [startings (db/starting-statements "cat-dog-hash")
           children (db/children-from-statements startings)]
-      (println startings)
       (is (= 6 (count children)))
       (is (= 6 (count (filter :statement/content children)))))))

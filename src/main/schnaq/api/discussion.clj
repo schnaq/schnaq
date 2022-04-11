@@ -52,10 +52,10 @@
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash display-name]} (:query parameters)
         user-identity (:sub identity)
-        author-id (user-db/user-id display-name user-identity)]
-    (ok {:starting-conclusions
-         (-> (starting-conclusions-with-processors share-hash author-id)
-             (processors/with-new-post-info share-hash user-identity))})))
+        author-id (user-db/user-id display-name user-identity)
+        startings (starting-conclusions-with-processors share-hash author-id)]
+    (ok {:starting-conclusions (processors/with-new-post-info startings share-hash user-identity)
+         :children (discussion-db/children-from-statements startings)})))
 
 (defn- search-statements
   "Search through any valid discussion."
@@ -193,9 +193,12 @@
     (if (validator/valid-writeable-discussion? share-hash)
       (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement
                                                                    :registered-user? keycloak-id
-                                                                   :locked? locked?)]
+                                                                   :locked? locked?)
+            starting (starting-conclusions-with-processors share-hash user-id new-starting-id)]
         (log/info "Starting statement added for discussion" share-hash)
-        (created "" {:starting-conclusions (starting-conclusions-with-processors share-hash user-id new-starting-id)}))
+        ;; TODO only return the newest starting conclusion and not the whole list
+        (created "" {:starting-conclusions starting
+                     :children (discussion-db/children-from-statements starting)}))
       (validator/deny-access at/invalid-rights-message))))
 
 (defn- react-to-any-statement!

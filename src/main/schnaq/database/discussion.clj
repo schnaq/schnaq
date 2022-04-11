@@ -26,10 +26,9 @@
      [?discussion :discussion/share-hash ?share-hash]
      [?statements :statement/discussions ?discussion]
      (not [?statements :statement/deleted? true])]])
-
+;; TODO kinderkarten sollten ihr zeug aus der db holen
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."
-  ;; TODO in allen Elternfunktionen kinder separat querien
   [share-hash]
   [:db/id :ret (s/coll-of ::specs/statement)]
   (toolbelt/pull-key-up
