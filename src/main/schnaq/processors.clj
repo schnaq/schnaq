@@ -6,8 +6,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
-            [schnaq.meta-info :as meta-info]
-            [schnaq.shared-toolbelt :as tools])
+            [schnaq.meta-info :as meta-info])
   (:import (clojure.lang IEditableCollection)))
 
 ;; -----------------------------------------------------------------------------
@@ -69,18 +68,6 @@
            statement))
        data))
     data))
-
-(defn with-answered?-info
-  "Mark a statement as answered if `answered?` is true."
-  [data]
-  (walk/postwalk
-   (fn [statement]
-     (if (s/valid? ::specs/statement statement)
-       (if (tools/answered? statement)
-         (assoc statement :meta/answered? true)
-         statement)
-       statement))
-   data))
 
 (defn with-sub-statement-count
   "Add sub-statement-count to valid statements, if necessary."

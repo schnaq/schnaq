@@ -5,7 +5,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
-            [schnaq.shared-toolbelt :as shared-tools]))
+            [schnaq.shared-toolbelt :as stools]))
 
 (defn- react-to-statement-call!
   "A call to the route for adding a rection to a statement."
@@ -53,7 +53,8 @@
    (let [parent-statement-id (:db/id parent-statement)]
      {:db (-> db
               (update-in [:schnaq :statements parent-statement-id :meta/sub-statement-count] inc)
-              (update-in [:schnaq :statements parent-statement-id :statement/children] conj new-statement))
+              (update-in [:schnaq :statements parent-statement-id :statement/children] conj (:db/id new-statement))
+              (assoc-in [:schnaq :statements (:db/id new-statement)] new-statement))
       :fx [[:dispatch [:notification/new-content]]
            [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
 
@@ -143,12 +144,12 @@
 
 (rf/reg-event-fx
  :discussion.query.statement/by-id-success
- (fn [{:keys [db]} [_ {:keys [conclusion premises history]}]]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+ (fn [{:keys [db]} [_ {:keys [conclusion premises history children]}]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         statements (stools/normalize :db/id (conj (concat premises history children) conclusion))]
      {:db (-> db
               (assoc-in [:statements :focus] (:db/id conclusion))
-              (update-in [:schnaq :statements]
-                         merge (shared-tools/normalize :db/id (conj (concat premises history) conclusion)))
+              (update-in [:schnaq :statements] merge statements)
               (assoc-in [:schnaq :statement-slice :current-level] (map :db/id premises))
               (assoc-in [:history :full-context] (vec (map :db/id history))))
       :fx [[:dispatch [:loading/toggle [:statements? false]]]
@@ -157,9 +158,9 @@
            [:dispatch [:notification/set-visited-statements share-hash conclusion premises]]]})))
 
 (rf/reg-event-db
- :discussion.premises.current/dissoc
+ :schnaq.statements.current/dissoc
  (fn [db]
-   (update-in db [:discussion :premises] dissoc :current)))
+   (update-in db [:schnaq :statement-slice] dissoc :current-level)))
 
 (rf/reg-event-fx
  :discussion.current/dissoc
@@ -169,9 +170,25 @@
             (update :schnaq dissoc :current)
             (dissoc :wordcloud)
             (update :discussion dissoc :conclusion))
-    :fx [[:dispatch [:discussion.premises.current/dissoc]]]}))
+    :fx [[:dispatch [:schnaq.statements.current/dissoc]]]}))
 
 (rf/reg-event-db
  :statement/update
  (fn [db [_ {:keys [statement]}]]
    (assoc-in db [:schnaq :statements (:db/id statement)] statement)))
+
+(rf/reg-sub
+ :statements/replies
+ (fn [db [_ parent-id]]
+   (let [statements (get-in db [:schnaq :statements])
+         parent (get statements parent-id)]
+     (filter #(not-any? #{":check"} (:statement/labels %))
+             (stools/select-values statements (:statement/children parent))))))
+
+(rf/reg-sub
+ :statements/answers
+ (fn [db [_ parent-id]]
+   (let [statements (get-in db [:schnaq :statements])
+         parent (get statements parent-id)]
+     (filter #(some #{":check"} (:statement/labels %))
+             (stools/select-values statements (:statement/children parent))))))

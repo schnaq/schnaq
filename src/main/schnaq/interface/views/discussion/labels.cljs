@@ -2,8 +2,7 @@
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.toolbelt :as tools]
-            [schnaq.shared-toolbelt :as shared-tools]))
+            [schnaq.interface.utils.toolbelt :as tools]))
 
 (defn build-label
   "Takes a label and builds the necessary html."
@@ -23,30 +22,12 @@
      {:class (if hover? (str extra-class " label") extra-class)}
      [icon icon-name "m-auto"]]))
 
-(defn- store-label-change
-  "Differentiates if the statement, to which the label is added / removed, is the currently shown as a parent
-  or a child."
-  [db updated-statement]
-  (let [parent-id (-> updated-statement :statement/parent :db/id)
-        parent-statement (get-in db [:schnaq :statements parent-id])
-        statement-in-store (get-in db [:schnaq :statements (:db/id updated-statement)])
-        statement-answered? (shared-tools/answered?
-                             {:statement/children (tools/update-statement-in-list
-                                                   (:statement/children parent-statement) updated-statement)})]
-    (cond-> db
-      ;; Statement is there as a child update it as such.
-      parent-statement (update-in [:schnaq :statements parent-id :statement/children]
-                                  #(tools/update-statement-in-list % updated-statement))
-      parent-statement (assoc-in [:schnaq :statements parent-id :meta/answered?] statement-answered?)
-      ;; If the statement is itself in the store update it as well
-      statement-in-store (assoc-in [:schnaq :statements (:db/id updated-statement)] updated-statement))))
-
 (rf/reg-event-fx
  :statement.labels/remove
  (fn [{:keys [db]} [_ statement label]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          updated-statement (update statement :statement/labels (fn [labels] (-> labels set (disj label) vec)))]
-     {:db (store-label-change db updated-statement)
+     {:db (assoc-in db [:schnaq :statements (:db/id updated-statement)] updated-statement)
       :fx [(http/xhrio-request db :put "/discussion/statement/label/remove"
                                [:statement/update]
                                {:share-hash share-hash
@@ -59,7 +40,7 @@
  (fn [{:keys [db]} [_ statement label]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          updated-statement (update statement :statement/labels conj label)]
-     {:db (store-label-change db updated-statement)
+     {:db (assoc-in db [:schnaq :statements (:db/id updated-statement)] updated-statement)
       :fx [(http/xhrio-request db :put "/discussion/statement/label/add"
                                [:statement/update]
                                {:share-hash share-hash

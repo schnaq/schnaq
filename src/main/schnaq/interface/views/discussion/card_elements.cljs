@@ -128,17 +128,23 @@
 
 (rf/reg-event-fx
  :discussion.add.statement/starting-success
- (fn [_ [_ form new-starting-statements]]
-   (let [starting-conclusions (:starting-conclusions new-starting-statements)
-         statement-with-creation-secret (first (filter :statement/creation-secret
-                                                       starting-conclusions))]
-     {:fx [[:dispatch [:notification/add
+ (fn [{:keys [db]} [_ form new-starting-statements]]
+   (let [starting-conclusion (:starting-conclusion new-starting-statements)
+         starting-id (:db/id starting-conclusion)
+         statement-with-creation-secret? (:statement/creation-secret starting-conclusion)
+         share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:db (-> db
+              (assoc-in [:schnaq :statements starting-id] starting-conclusion)
+              (update-in [:schnaq :statement-slice :current-level] conj starting-id)
+              (update-in [:visited :statement-ids share-hash] #(set (conj %1 %2)) starting-id))
+      :fx [[:dispatch [:notification/add
                        #:notification{:title (labels :discussion.notification/new-content-title)
                                       :body (labels :discussion.notification/new-content-body)
                                       :context :success}]]
-           [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
-           (when statement-with-creation-secret
-             [:dispatch [:discussion.statements/add-creation-secret statement-with-creation-secret]])
+           [:dispatch [:votes.local/reset]]
+           [:dispatch [:schnaq.wordcloud/calculate]]
+           (when statement-with-creation-secret?
+             [:dispatch [:discussion.statements/add-creation-secret starting-conclusion]])
            [:form/clear form]]})))
 
 (rf/reg-event-fx
@@ -152,12 +158,13 @@
 
 (rf/reg-event-fx
  :discussion.query.conclusions/set-starting
- (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
+ (fn [{:keys [db]} [_ {:keys [starting-conclusions children]}]]
    (when starting-conclusions
      (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
            statement-ids (map :db/id starting-conclusions)]
        {:db (-> db
-                (update-in [:schnaq :statements] merge (shared-tools/normalize :db/id starting-conclusions))
+                (update-in [:schnaq :statements] merge
+                           (shared-tools/normalize :db/id (concat starting-conclusions children)))
                 (assoc-in [:schnaq :statement-slice :current-level] statement-ids)
                 (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) statement-ids))
         ;; hier die seen setzen

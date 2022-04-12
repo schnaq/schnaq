@@ -53,15 +53,12 @@
    :statement/pinned?
    :statement/cumulative-downvotes
    :statement/cumulative-upvotes
+   [:statement/_parent :as :statement/children :xform 'schnaq.database.xforms/maps->ids]
    {:statement/type [:db/ident]}
    {:statement/author public-user}])
 
 (def statement-with-secret
   (conj statement :statement/creation-secret))
-
-(def statement-with-children
-  (conj statement
-        {[:statement/_parent :as :statement/children] statement}))
 
 ;; -----------------------------------------------------------------------------
 

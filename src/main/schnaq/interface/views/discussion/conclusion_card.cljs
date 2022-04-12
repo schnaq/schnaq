@@ -1,10 +1,10 @@
 (ns schnaq.interface.views.discussion.conclusion-card
   (:require [clj-fuzzy.metrics :as clj-fuzzy]
-            [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
+            [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -16,7 +16,6 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.edit :as edit]
-            [schnaq.interface.views.discussion.filters :as filters]
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.discussion.truncated-content :as truncated-content]
@@ -92,12 +91,18 @@
 
 (>defn- card-highlighting
   "Add card-highlighting to a statement card."
-  [{:keys [meta/answered? statement/type]}]
-  [(s/keys :opt [:meta/answered? :statement/type]) :ret string?]
-  (let [statement-type (when type (str "-" (name type)))]
-    (if answered?
-      "highlight-card-answered"
-      (str "highlight-card" statement-type))))
+  ([statement]
+   [::specs/statement :ret vector?]
+   [card-highlighting statement nil])
+  ([statement additional-classes]
+   [::specs/statement (? string?) :ret vector?]
+   (let [answered? (seq @(rf/subscribe [:statements/answers (:db/id statement)]))
+         statement-type (when (:statement/type statement)
+                          (str "-" (name (:statement/type statement))))
+         highlight-class (if answered?
+                           "highlight-card-answered"
+                           (str "highlight-card" statement-type))]
+     [:div {:class (str highlight-class " " additional-classes)}])))
 
 (defn- statement-card->editable-card
   "Wrap `statement-card-component`. Check if this statement is currently being
@@ -116,7 +121,7 @@
   ([statement additional-content]
    [:article.statement-card
     [:div.d-flex.flex-row
-     [:div {:class (card-highlighting statement)}]
+     [card-highlighting statement]
      [:div.card-view.card-body.py-2.px-0
       (when (:meta/new? statement)
         [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
@@ -156,8 +161,7 @@
   [motion/fade-in-and-out
    [:article.statement-card.mt-1.border
     [:div.d-flex.flex-row
-     [:div.me-2.highlight-card-reduced
-      {:class (card-highlighting statement)}]
+     [card-highlighting statement "me-2 highlight-card-reduced"]
      [:div.card-view.card-body.p-2
       [:div.d-flex.justify-content-start.pt-2
        [user/user-info statement 25 "w-100"]
@@ -176,7 +180,7 @@
   [statement-card->editable-card statement [reduced-statement-card statement]])
 
 (defn- answers [statement]
-  (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/children statement))]
+  (let [answers @(rf/subscribe [:statements/answers (:db/id statement)])]
     (when (seq answers)
       [:div.mt-2
        (for [answer answers]
@@ -187,7 +191,7 @@
 (defn- replies [_statement]
   (let [collapsed? (reagent/atom true)]
     (fn [statement]
-      (let [replies (filter #(not-any? #{":check"} (:statement/labels %)) (:statement/children statement))
+      (let [replies @(rf/subscribe [:statements/replies (:db/id statement)])
             rotation (if @collapsed? 0 180)
             button-icon [motion/rotate rotation [icon :collapse-down "my-auto"]]
             button-content (if @collapsed?
@@ -327,7 +331,8 @@
                                    (not admin-access?) :schnaq.input-type/not-admin
                                    :else :schnaq.input-type/coming-soon)
             top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-            answered? (shared-tools/answered? {:statement/children @(rf/subscribe [:discussion.statements/show])})]
+            focus-statement @(rf/subscribe [:schnaq.statements/focus])
+            answered? (seq @(rf/subscribe [:statements/answers (:db/id focus-statement)]))]
         [motion/fade-in-and-out
          [:section.selection-card
           [:div.d-flex.flex-row
@@ -401,17 +406,32 @@
          (filter true?)
          count)))
 
+(defn statement-list-item
+  "The highest part of a statement-list. Knows when to show itself and when not."
+  [statement index]
+  (let [active-filters? @(rf/subscribe [:filters/active?])
+        answered-only? @(rf/subscribe [:filters/answered?])
+        answers @(rf/subscribe [:statements/answers (:db/id statement)])
+        item-component
+        [:div.statement-column
+         [motion/fade-in-and-out
+          [statement-card->editable-card statement [answer-card statement]]
+          (delay-fade-in-for-subsequent-content index)]]]
+    (if active-filters?
+      (when (or (and answered-only? (seq answers))
+                (and (not answered-only?) (empty? answers)))
+        item-component)
+      item-component)))
+
 (defn- statements-list []
-  (let [active-filters @(rf/subscribe [:filters/active])
-        sort-method @(rf/subscribe [:discussion.statements/sort-method])
+  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
         local-votes @(rf/subscribe [:local-votes])
         current-input-tokens @(rf/subscribe [:schnaq.question.input/current])
         user @(rf/subscribe [:user/current])
         shown-premises @(rf/subscribe [:discussion.statements/show])
         loading-statements? @(rf/subscribe [:loading/statements?])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
-        filtered-conclusions (filters/filter-statements sorted-conclusions active-filters @(rf/subscribe [:local-votes]))
-        grouped-statements (group-by #(true? (:statement/pinned? %)) filtered-conclusions)
+        grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)
         pinned-statements (get grouped-statements true)
         input-filtered-statements
         (sort-by #(score-hit current-input-tokens (:statement/content %)) > (get grouped-statements false))
@@ -420,11 +440,9 @@
       [loading/loading-card]
       (for [index (range (count sorted-statements))
             :let [statement (nth sorted-statements index)]]
-        [:div.statement-column
-         {:key (:db/id statement)}
-         [motion/fade-in-and-out
-          [statement-card->editable-card statement [answer-card statement]]
-          (delay-fade-in-for-subsequent-content index)]]))))
+        (with-meta
+          [statement-list-item statement index]
+          {:key (:db/id statement)})))))
 
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."

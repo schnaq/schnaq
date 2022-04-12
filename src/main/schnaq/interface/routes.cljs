@@ -185,7 +185,7 @@
      ["" ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []
-                               (rf/dispatch [:discussion.premises.current/dissoc])
+                               (rf/dispatch [:schnaq.statements.current/dissoc])
                                (rf/dispatch [:discussion.history/clear])
                                (rf/dispatch [:updates.periodic.discussion/starting true])
                                (rf/dispatch [:discussion.query.conclusions/starting])
@@ -193,12 +193,11 @@
                                (rf/dispatch [:schnaq.activation/load-from-backend])
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
-                              (rf/dispatch [:discussion.premises.current/dissoc])
+                              (rf/dispatch [:schnaq.statements.current/dissoc])
                               (rf/dispatch [:updates.periodic.discussion/starting false])
                               (rf/dispatch [:schnaq.activation/dissoc])
                               (rf/dispatch [:statement.edit/reset-edits])
                               (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
-                              (rf/dispatch [:toggle-replies/clear!])
                               (rf/dispatch [:toggle-statement-content/clear!]))}]
        :name :routes.schnaq/start
        :view discussion-card-view/view
@@ -253,7 +252,6 @@
                               (rf/dispatch [:visited.statement-ids/to-localstorage-and-merge-with-app-db])
                               (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
                               (rf/dispatch [:statement.edit/reset-edits])
-                              (rf/dispatch [:toggle-replies/clear!])
                               (rf/dispatch [:toggle-statement-content/clear!]))}]}]
      ["/present/:entity-id"
       {:name :routes.present/entity

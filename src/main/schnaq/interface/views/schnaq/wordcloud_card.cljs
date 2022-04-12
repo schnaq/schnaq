@@ -87,6 +87,7 @@
    (let [all-premises (get-in db [:schnaq :statements])
          current-premise-ids (get-in db [:schnaq :statement-slice :current-level])
          premises (stools/select-values all-premises current-premise-ids)
-         premises-with-children (remove nil? (concat premises (flatten (map :statement/children premises))))]
+         children-ids (flatten (map :statement/children premises))
+         premises-with-children (remove nil? (concat premises (stools/select-values all-premises children-ids)))]
      {:fx [[:dispatch [:wordcloud/store-words
                        {:string-representation (export/generate-fulltext premises-with-children)}]]]})))

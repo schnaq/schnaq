@@ -37,10 +37,10 @@
           ;; add starting statements
           content-1 "Startargument 1"
           content-2 "Startargument 2"
-          statement-1 (discussion-db/add-starting-statement! share-hash user-id content-1
-                                                             :registered-user? true)
-          statement-2 (discussion-db/add-starting-statement! share-hash user-id content-2
-                                                             :registered-user? true)
+          statement-1 (:db/id (discussion-db/add-starting-statement! share-hash user-id content-1
+                                                                     :registered-user? true))
+          statement-2 (:db/id (discussion-db/add-starting-statement! share-hash user-id content-2
+                                                                     :registered-user? true))
           statements #{statement-1 statement-2}]
       (testing (str "Add visited statements to user [" user-name "] and discussion [" discussion-title "]")
         (user-db/create-visited-statements-for-discussion keycloak-user-id share-hash statements)
@@ -75,14 +75,14 @@
           content-2 "Auch gesehen"
           content-3 "Ich bin auch gesehen worden!"
           content-new "Noch nicht gesehen"
-          statement-1 (discussion-db/add-starting-statement! share-hash user-id-1 content-1
-                                                             :registered-user? true)
-          statement-2 (discussion-db/add-starting-statement! share-hash user-id-1 content-2
-                                                             :registered-user? true)
-          statement-3 (discussion-db/add-starting-statement! share-hash user-id-1 content-3
-                                                             :registered-user? true)
-          statement-new (discussion-db/add-starting-statement! share-hash user-id-1 content-new
-                                                               :registered-user? true)
+          statement-1 (:db/id (discussion-db/add-starting-statement! share-hash user-id-1 content-1
+                                                                     :registered-user? true))
+          statement-2 (:db/id (discussion-db/add-starting-statement! share-hash user-id-1 content-2
+                                                                     :registered-user? true))
+          statement-3 (:db/id (discussion-db/add-starting-statement! share-hash user-id-1 content-3
+                                                                     :registered-user? true))
+          statement-new (:db/id (discussion-db/add-starting-statement! share-hash user-id-1 content-new
+                                                                       :registered-user? true))
           seen-statements #{statement-1 statement-2 statement-3}
           ;; pull all statements
           all-statements (mapv #(fast-pull % patterns/statement)
@@ -117,16 +117,16 @@
         content-3 "I'm sorry, I have a cold. I wish to make a complaint!"
         content-new-1 "We're closin' for lunch."
         content-new-2 "Never mind that, my lad. I wish to complain about this parrot what I purchased not half an hour ago from this very boutique."
-        statement-1 (discussion-db/add-starting-statement! share-hash user-id content-1
-                                                           :registered-user? true)
-        statement-2 (discussion-db/add-starting-statement! share-hash user-id content-2
-                                                           :registered-user? true)
-        statement-3 (discussion-db/add-starting-statement! share-hash user-id content-3
-                                                           :registered-user? true)
-        statement-4 (discussion-db/add-starting-statement! share-hash user-id content-new-1
-                                                           :registered-user? true)
-        statement-5 (discussion-db/add-starting-statement! share-hash user-id content-new-2
-                                                           :registered-user? true)
+        statement-1 (:db/id (discussion-db/add-starting-statement! share-hash user-id content-1
+                                                                   :registered-user? true))
+        statement-2 (:db/id (discussion-db/add-starting-statement! share-hash user-id content-2
+                                                                   :registered-user? true))
+        statement-3 (:db/id (discussion-db/add-starting-statement! share-hash user-id content-3
+                                                                   :registered-user? true))
+        statement-4 (:db/id (discussion-db/add-starting-statement! share-hash user-id content-new-1
+                                                                   :registered-user? true))
+        statement-5 (:db/id (discussion-db/add-starting-statement! share-hash user-id content-new-2
+                                                                   :registered-user? true))
         ;; pull all statements
         all-statements (mapv #(fast-pull % patterns/statement)
                              [statement-1 statement-2 statement-3 statement-4 statement-5])

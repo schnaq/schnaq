@@ -184,7 +184,7 @@
 (rf/reg-event-fx
  :statement.pin/toggle
  (fn [{:keys [db]} [_ statement-id pin?]]
-   {:db (assoc-in db [:discussion :premises :current statement-id :statement/pinned?] pin?)
+   {:db (assoc-in db [:schnaq :statements statement-id :statement/pinned?] pin?)
     :fx [(http/xhrio-request db :post "/discussion/statement/pin/toggle"
                              [:no-op]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
