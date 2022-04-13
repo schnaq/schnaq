@@ -5,17 +5,17 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
-            [schnaq.interface.views.discussion.conclusion-card :as conclusion-card]))
+            [schnaq.interface.views.discussion.conclusion-card :as conclusion-card]
+            [schnaq.shared-toolbelt :as stools]))
 
 (defn display-example-statements
   "Displays interactive example statements from the discussion specified in the config.
   When no statements are found displays a static image instead"
   []
-  (let [statement @(rf/subscribe [:preview-statement])]
-    ;; TODO? hier nur eine id
-    (if statement
+  (let [statement-id @(rf/subscribe [:preview-statement])]
+    (if statement-id
       [:div.rounded-1.shadow-lg
-       [conclusion-card/statement-card (:db/id statement)]]
+       [conclusion-card/statement-card statement-id]]
       [:img.img-fluid {:src (img-path :startpage.example/statements)
                        :alt (labels :startpage.example.statements/alt-text)}])))
 
@@ -38,8 +38,10 @@
 
 (rf/reg-event-fx
  :preview-statements/success
- (fn [{:keys [db]} [_ {:keys [conclusion]}]]
-   {:db (assoc db :preview-statements conclusion)}))
+ (fn [{:keys [db]} [_ {:keys [conclusion children]}]]
+   {:db (-> db
+            (assoc :preview-statements (:db/id conclusion))
+            (update-in [:schnaq :statements] merge (stools/normalize :db/id (conj children conclusion))))}))
 
 (rf/reg-event-fx
  :load-preview-statements
