@@ -73,7 +73,8 @@
           (labels :qanda.search/similar-results-explanation-2)]]]
        [:div.row
         (for [result search-results]
+          ;; TODO? hier nur ids
           [:div.statement-column
            {:key (str (:db/id result) "-search-result")}
            [motion/move-in-spring :bottom
-            [card/statement-card result]]])]])))
+            [card/statement-card (:db/id result)]]])]])))

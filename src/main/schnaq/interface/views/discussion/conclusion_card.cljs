@@ -185,7 +185,6 @@
                 {:key (str "reply-" (:db/id reply))}))]])))))
 
 (defn statement-card
-  ;; TODO h: Hier nur eine id
   "Display a full interactive statement. Takes `additional-content`, e.g. the
   answer of a question."
   [statement-id]

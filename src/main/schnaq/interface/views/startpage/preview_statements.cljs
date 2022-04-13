@@ -12,9 +12,10 @@
   When no statements are found displays a static image instead"
   []
   (let [statement @(rf/subscribe [:preview-statement])]
+    ;; TODO? hier nur eine id
     (if statement
       [:div.rounded-1.shadow-lg
-       [conclusion-card/statement-card statement]]
+       [conclusion-card/statement-card (:db/id statement)]]
       [:img.img-fluid {:src (img-path :startpage.example/statements)
                        :alt (labels :startpage.example.statements/alt-text)}])))
 
