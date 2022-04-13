@@ -12,7 +12,7 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.conclusion-card :as card]
             [schnaq.shared-toolbelt :as stools]))
-;; TODO lock label fertig
+
 ;; TODO marker in unteren ebenen
 (s/def :background/schema #{:dark :light})
 

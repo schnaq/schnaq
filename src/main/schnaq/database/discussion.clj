@@ -57,7 +57,8 @@
        (map :statement/children)
        flatten
        (remove nil?)
-       statements-by-id))
+       statements-by-id
+       toolbelt/pull-key-up))
 
 (defn- transitive-child-rules
   "Returns a set of rules for finding transitive children entities of a given
