@@ -28,11 +28,11 @@
 (goog-define keycloak-realm "development")
 (goog-define keycloak-client "development")
 (def keycloak-profile-page
-  (gstring/format "%s/auth/realms/%s/account/#/personal-info" shared-config/keycloak-host keycloak-realm))
+  (gstring/format "%s/realms/%s/account/#/personal-info" shared-config/keycloak-host keycloak-realm))
 
 (def keycloak
   "Keycloak configuration, which is sent to the server via keycloak-js."
-  {:url (gstring/format "%s/auth/" shared-config/keycloak-host)
+  {:url (gstring/format "%s/" shared-config/keycloak-host)
    :realm keycloak-realm
    :clientId keycloak-client})
 
