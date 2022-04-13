@@ -6,6 +6,7 @@
     <item key="compojure.core/defroutes" resolves-as="clojure.core/def" />
     <item key="org.httpkit.client/defreq" resolves-as="clojure.core/declare" />
     <item key="clojure.test/are" resolves-as="clojure.core/def" />
+    <item key="cljs.spec.alpha/def" resolves-as="clojure.core/def" />
     <item key="cljs.core/defonce" resolves-as="clojure.core/def" />
     <item key="com.fulcrologic.guardrails.core/&gt;defn" resolves-as="clojure.core/defn" />
     <item key="nubank.workspaces.core/defcard" resolves-as="clojure.core/def" />

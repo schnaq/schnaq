@@ -76,4 +76,4 @@
           [:div.statement-column
            {:key (str (:db/id result) "-search-result")}
            [motion/move-in-spring :bottom
-            [card/answer-card result]]])]])))
+            [card/statement-card result]]])]])))

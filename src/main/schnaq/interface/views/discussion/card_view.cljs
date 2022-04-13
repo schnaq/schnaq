@@ -65,7 +65,7 @@
  :schnaq/statement
  :<- [:schnaq/statements]
  (fn [statements [_ statement-id]]
-   (get statements statement-id {})))
+   (get statements statement-id)))
 
 (rf/reg-sub
  :schnaq.statements/current-level

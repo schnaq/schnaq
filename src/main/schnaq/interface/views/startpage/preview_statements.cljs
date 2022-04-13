@@ -14,7 +14,7 @@
   (let [statement @(rf/subscribe [:preview-statement])]
     (if statement
       [:div.rounded-1.shadow-lg
-       [conclusion-card/answer-card statement]]
+       [conclusion-card/statement-card statement]]
       [:img.img-fluid {:src (img-path :startpage.example/statements)
                        :alt (labels :startpage.example.statements/alt-text)}])))
 
