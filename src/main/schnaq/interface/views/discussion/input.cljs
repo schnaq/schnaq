@@ -110,7 +110,8 @@
        [:div.form-check.pt-2
         [:input.form-check-input
          {:type "checkbox"
-          :name "lock-card?"}]
+          :name "lock-card?"
+          :id "lock-card?"}]
         [:label.form-check-label
          {:for "lock-card?"}
          (labels :discussion/lock-statement)]])]))
