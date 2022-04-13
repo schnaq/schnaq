@@ -423,18 +423,24 @@
         item-component)
       item-component)))
 
+(rf/reg-sub
+ :schnaq.statements/filtered-sorted-visible
+ :<- [:discussion.statements/sort-method]
+ :<- [:local-votes]
+ :<- [:discussion.statements/show]
+ :<- [:user/current]
+ :<- [:schnaq.question.input/current]
+ (fn [[sort-method local-votes shown-statements user current-input-tokens] _]
+   (let [sorted-conclusions (sort-statements user shown-statements sort-method local-votes)
+         grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)
+         input-filtered-statements
+         (sort-by #(score-hit current-input-tokens (:statement/content %)) > (get grouped-statements false))
+         pinned-statements (get grouped-statements true)
+         sorted-filtered-statements (concat pinned-statements input-filtered-statements)]
+     sorted-filtered-statements)))
+
 (defn- statements-list []
-  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
-        local-votes @(rf/subscribe [:local-votes])
-        current-input-tokens @(rf/subscribe [:schnaq.question.input/current])
-        user @(rf/subscribe [:user/current])
-        shown-premises @(rf/subscribe [:discussion.statements/show])
-        sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
-        grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)
-        pinned-statements (get grouped-statements true)
-        input-filtered-statements
-        (sort-by #(score-hit current-input-tokens (:statement/content %)) > (get grouped-statements false))
-        sorted-statements (concat pinned-statements input-filtered-statements)]
+  (let [sorted-statements @(rf/subscribe [:schnaq.statements/filtered-sorted-visible])]
     (for [index (range (count sorted-statements))
           :let [statement (nth sorted-statements index)]]
       (with-meta
