@@ -31,7 +31,7 @@
 
 (def kc-client
   "Client to interact with our keycloak instance."
-  (-> (client-conf {:auth-server-url (format "%s" server)
+  (-> (client-conf {:auth-server-url server
                     :realm realm
                     :client-id "admin-cli"})
       (keycloak-client backend-admin-id backend-admin-secret)))
