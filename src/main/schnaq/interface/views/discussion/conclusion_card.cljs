@@ -26,7 +26,7 @@
             [schnaq.interface.views.schnaq.wordcloud-card :as wordcloud-card]
             [schnaq.interface.views.user :as user]
             [schnaq.shared-toolbelt :as shared-tools]))
-;; TODO: Statement löschen knallt auf konsole
+
 (defn- call-to-action-schnaq
   "If no contributions are available, add a call to action to engage the users."
   [body]

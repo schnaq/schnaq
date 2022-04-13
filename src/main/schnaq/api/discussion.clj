@@ -87,7 +87,9 @@
               :premises (-> premises
                             (processors/with-sub-statement-count share-hash)
                             (processors/with-new-post-info share-hash user-identity))
-              :history (discussion-db/history-for-statement statement-id)
+              :history (-> (discussion-db/history-for-statement statement-id)
+                           (processors/with-sub-statement-count share-hash)
+                           (processors/with-new-post-info share-hash user-identity))
               :children (discussion-db/children-from-statements (conj premises conclusion))}
              author-id)))
       at/not-found-hash-invalid)))

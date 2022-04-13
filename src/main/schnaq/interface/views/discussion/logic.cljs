@@ -37,7 +37,6 @@
  (fn [{:keys [db]} [_ statement-id statement-type new-premise]]
    {:fx [(react-to-statement-call! db statement-id new-premise statement-type false
                                    [:discussion.reply.statement/added statement-id])]}))
-;; TODO x weitere Beiträge counter ist immer 0 in tieferen ebenen bei focus statement
 
 (defn- add-reaction-success
   "Generic return value for event where a statement reaction was added."
