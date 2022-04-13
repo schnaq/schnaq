@@ -34,7 +34,6 @@
      [:button.btn.btn-outline-dark.ms-1 {:type "submit"} (labels :statement.edit.button/submit)]]]])
 
 (defn edit-card-statement
-  ;; TODO h: Hier  nur eine id
   "Editable statement input."
   [statement-id]
   (let [statement @(rf/subscribe [:schnaq/statement statement-id])

@@ -107,7 +107,6 @@
 (defn- statement-card->editable-card
   "Wrap `statement-card-component`. Check if this statement is currently being
   edited, show edit-card if true."
-  ;; TODO h: hier nur eine id
   [statement-id statement-card-component]
   (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? statement-id])]
     (if currently-edited?
@@ -151,7 +150,8 @@
 (defn- reduced-or-edit-card
   "Wrap reduced statement card to make it editable."
   [statement]
-  [statement-card->editable-card statement [reduced-statement-card statement]])
+  ;; ?TODO: pass nur ids hier
+  [statement-card->editable-card (:db/id statement) [reduced-statement-card statement]])
 
 (defn- answers [statement-id]
   (let [answers @(rf/subscribe [:statements/answers statement-id])]
@@ -254,13 +254,14 @@
         [badges/edit-statement-dropdown-menu statement]])]))
 
 (defn- title-view [statement]
+  ;; TODO? hier nur eine id?
   (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
         title [md/as-markdown (:statement/content statement)]
         edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if edit-active?
       (if starting-route?
         [edit/edit-card-discussion statement]
-        [edit/edit-card-statement statement])
+        [edit/edit-card-statement (:db/id statement)])
       [:h2.h6 title])))
 
 (defn- topic-bubble-view []
