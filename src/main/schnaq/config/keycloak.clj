@@ -22,7 +22,7 @@
 
 (def openid-endpoint
   "OpenID Endpoint to authenticate using oauth2."
-  (format "%sauth/realms/%s/protocol/openid-connect" server realm))
+  (format "%srealms/%s/protocol/openid-connect" server realm))
 
 (def ^:private backend-admin-id
   (or (System/getenv "KEYCLOAK_ADMIN_ID") "info@schnaq.com"))
@@ -31,7 +31,7 @@
 
 (def kc-client
   "Client to interact with our keycloak instance."
-  (-> (client-conf {:auth-server-url (format "%sauth/" server)
+  (-> (client-conf {:auth-server-url server
                     :realm realm
                     :client-id "admin-cli"})
       (keycloak-client backend-admin-id backend-admin-secret)))
