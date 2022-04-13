@@ -429,20 +429,17 @@
         current-input-tokens @(rf/subscribe [:schnaq.question.input/current])
         user @(rf/subscribe [:user/current])
         shown-premises @(rf/subscribe [:discussion.statements/show])
-        loading-statements? @(rf/subscribe [:loading/statements?])
         sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
         grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)
         pinned-statements (get grouped-statements true)
         input-filtered-statements
         (sort-by #(score-hit current-input-tokens (:statement/content %)) > (get grouped-statements false))
         sorted-statements (concat pinned-statements input-filtered-statements)]
-    (if loading-statements?
-      [loading/loading-card]
-      (for [index (range (count sorted-statements))
-            :let [statement (nth sorted-statements index)]]
-        (with-meta
-          [statement-list-item statement index]
-          {:key (:db/id statement)})))))
+    (for [index (range (count sorted-statements))
+          :let [statement (nth sorted-statements index)]]
+      (with-meta
+        [statement-list-item statement index]
+        {:key (:db/id statement)}))))
 
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."
