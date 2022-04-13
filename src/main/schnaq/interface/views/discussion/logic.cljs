@@ -179,16 +179,24 @@
 
 (rf/reg-sub
  :statements/replies
- (fn [db [_ parent-id]]
-   (let [statements (get-in db [:schnaq :statements])
-         parent (get statements parent-id)]
+ :<- [:schnaq/statements]
+ ;; Returns a list of reply ids
+ (fn [statements [_ parent-id]]
+   (let [parent (get statements parent-id)]
      (filter #(not-any? #{":check"} (:statement/labels %))
-             (stools/select-values statements (:statement/children parent))))))
+             (stools/select-values statements (:statement/children parent)))
+     (->> (:statement/children parent)
+          (stools/select-values statements)
+          (filter #(not-any? #{":check"} (:statement/labels %)))
+          (map :db/id)))))
 
 (rf/reg-sub
  :statements/answers
- (fn [db [_ parent-id]]
-   (let [statements (get-in db [:schnaq :statements])
-         parent (get statements parent-id)]
-     (filter #(some #{":check"} (:statement/labels %))
-             (stools/select-values statements (:statement/children parent))))))
+ :<- [:schnaq/statements]
+ ;; Returns a list of answer ids
+ (fn [statements [_ parent-id]]
+   (let [parent (get statements parent-id)]
+     (->> (:statement/children parent)
+          (stools/select-values statements)
+          (filter #(some #{":check"} (:statement/labels %)))
+          (map :db/id)))))

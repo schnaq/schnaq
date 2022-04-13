@@ -26,7 +26,7 @@
             [schnaq.interface.views.schnaq.wordcloud-card :as wordcloud-card]
             [schnaq.interface.views.user :as user]
             [schnaq.shared-toolbelt :as shared-tools]))
-
+;; TODO: Statement löschen knallt auf konsole
 (defn- call-to-action-schnaq
   "If no contributions are available, add a call to action to engage the users."
   [body]
@@ -130,48 +130,48 @@
 
 (defn reduced-statement-card
   "A reduced statement-card focusing on the statement."
-  [statement]
-  [motion/fade-in-and-out
-   [:article.statement-card.mt-1.border
-    [:div.d-flex.flex-row
-     [card-highlighting statement "me-2 highlight-card-reduced"]
-     [:div.card-view.card-body.p-2
-      [:div.d-flex.justify-content-start.pt-2
-       [user/user-info statement 25 "w-100"]
-       [badges/edit-statement-dropdown-menu statement]]
-      [:div.text-typography
-       [truncated-content/statement statement]]
-      [:div.d-flex.flex-wrap.align-items-center
-       [discuss-answer-button statement]
-       [reactions/up-down-vote statement]
-       [:div.d-flex.flex-row.align-items-center.ms-auto
-        [mark-as-answer-button statement]]]]]]])
+  [statement-id]
+  (let [statement @(rf/subscribe [:schnaq/statement statement-id])]
+    [motion/fade-in-and-out
+     [:article.statement-card.mt-1.border
+      [:div.d-flex.flex-row
+       [card-highlighting statement "me-2 highlight-card-reduced"]
+       [:div.card-view.card-body.p-2
+        [:div.d-flex.justify-content-start.pt-2
+         [user/user-info statement 25 "w-100"]
+         [badges/edit-statement-dropdown-menu statement]]
+        [:div.text-typography
+         [truncated-content/statement statement]]
+        [:div.d-flex.flex-wrap.align-items-center
+         [discuss-answer-button statement]
+         [reactions/up-down-vote statement]
+         [:div.d-flex.flex-row.align-items-center.ms-auto
+          [mark-as-answer-button statement]]]]]]]))
 
 (defn- reduced-or-edit-card
   "Wrap reduced statement card to make it editable."
-  [statement]
-  ;; ?TODO: pass nur ids hier
-  [statement-card->editable-card (:db/id statement) [reduced-statement-card statement]])
+  [statement-id]
+  [statement-card->editable-card statement-id [reduced-statement-card statement-id]])
 
 (defn- answers [statement-id]
-  (let [answers @(rf/subscribe [:statements/answers statement-id])]
-    (when (seq answers)
+  (let [answers-ids @(rf/subscribe [:statements/answers statement-id])]
+    (when (seq answers-ids)
       [:div.mt-2
-       (for [answer answers]
+       (for [answer-id answers-ids]
          (with-meta
-           [reduced-or-edit-card answer]
-           {:key (str "answer-" (:db/id answer))}))])))
+           [reduced-or-edit-card answer-id]
+           {:key (str "answer-" answer-id)}))])))
 
 (defn- replies [_statement-id]
   (let [collapsed? (reagent/atom true)]
     (fn [statement-id]
-      (let [replies @(rf/subscribe [:statements/replies statement-id])
+      (let [reply-ids @(rf/subscribe [:statements/replies statement-id])
             rotation (if @collapsed? 0 180)
             button-icon [motion/rotate rotation [icon :collapse-down "my-auto"]]
             button-content (if @collapsed?
                              (labels :qanda.button.show/replies)
                              (labels :qanda.button.hide/replies))]
-        (when (not-empty replies)
+        (when (not-empty reply-ids)
           [:<>
            [:button.btn.btn-transparent.btn-no-outline
             {:type "button" :aria-expanded "false"
@@ -179,10 +179,10 @@
             [:span.me-2 button-content] button-icon]
            [motion/collapse-in-out
             @collapsed?
-            (for [reply replies]
+            (for [reply-id reply-ids]
               (with-meta
-                [reduced-or-edit-card reply]
-                {:key (str "reply-" (:db/id reply))}))]])))))
+                [reduced-or-edit-card reply-id]
+                {:key (str "reply-" reply-id)}))]])))))
 
 (defn statement-card
   "Display a full interactive statement. Takes `additional-content`, e.g. the
