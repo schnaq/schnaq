@@ -160,7 +160,7 @@
         answer-to-statement-event
         (fn [e]
           (.preventDefault e)
-          (logic/reply-to-statement statement statement-type (oget e [:currentTarget :elements])))]
+          (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))]
     (when-not (or locked? read-only?)
       [:form.my-md-2
        {:on-submit #(answer-to-statement-event %)

@@ -30,33 +30,35 @@
  (fn [{:keys [db]} [_ statement-type new-premise locked?]]
    (let [statement-id (get-in db [:current-route :parameters :path :statement-id])]
      {:fx [(react-to-statement-call! db statement-id new-premise statement-type locked?
-                                     [:discussion.reaction.statement/added])]})))
+                                     [:discussion.reaction.statement/added statement-id])]})))
 
 (rf/reg-event-fx
  :discussion.reply.statement/send
- (fn [{:keys [db]} [_ statement statement-type new-premise]]
-   {:fx [(react-to-statement-call! db (:db/id statement) new-premise statement-type false
-                                   [:discussion.reply.statement/added statement])]}))
+ (fn [{:keys [db]} [_ statement-id statement-type new-premise]]
+   {:fx [(react-to-statement-call! db statement-id new-premise statement-type false
+                                   [:discussion.reply.statement/added statement-id])]}))
+;; TODO x weitere Beiträge counter ist immer 0 in tieferen ebenen bei focus statement
+
+(defn- add-reaction-success
+  "Generic return value for event where a statement reaction was added."
+  [db parent-statement-id new-statement]
+  {:db (-> db
+           (update-in [:schnaq :statements parent-statement-id :meta/sub-statement-count] inc)
+           (update-in [:schnaq :statements parent-statement-id :statement/children] conj (:db/id new-statement))
+           (assoc-in [:schnaq :statements (:db/id new-statement)] new-statement))
+   :fx [[:dispatch [:notification/new-content]]
+        [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})
 
 (rf/reg-event-fx
  :discussion.reaction.statement/added
- (fn [{:keys [db]} [_ {:keys [new-statement]}]]
-   {:db (-> db
-            (assoc-in [:schnaq :statements (:db/id new-statement)] new-statement)
-            (update-in [:schnaq :statement-slice :current-level] (comp set conj) (:db/id new-statement)))
-    :fx [[:dispatch [:notification/new-content]]
-         [:dispatch [:discussion.statements/add-creation-secret new-statement]]]}))
+ (fn [{:keys [db]} [_ parent-id {:keys [new-statement]}]]
+   (update (add-reaction-success db parent-id new-statement)
+           :db #(update-in % [:schnaq :statement-slice :current-level] (comp set conj) (:db/id new-statement)))))
 
 (rf/reg-event-fx
  :discussion.reply.statement/added
- (fn [{:keys [db]} [_ parent-statement {:keys [new-statement]}]]
-   (let [parent-statement-id (:db/id parent-statement)]
-     {:db (-> db
-              (update-in [:schnaq :statements parent-statement-id :meta/sub-statement-count] inc)
-              (update-in [:schnaq :statements parent-statement-id :statement/children] conj (:db/id new-statement))
-              (assoc-in [:schnaq :statements (:db/id new-statement)] new-statement))
-      :fx [[:dispatch [:notification/new-content]]
-           [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
+ (fn [{:keys [db]} [_ parent-statement-id {:keys [new-statement]}]]
+   (add-reaction-success db parent-statement-id new-statement)))
 
 (rf/reg-event-fx
  :discussion.statements/add-creation-secret
@@ -110,10 +112,10 @@
 (defn reply-to-statement
   "Reply directly to a statement via a submitted form.
   Updates :statement/children and :meta/sub-statement-count afterwards in app-db."
-  [statement-to-reply-to attitude form]
+  [parent-id attitude form]
   (let [new-text-element (oget+ form [:statement])
         new-text (oget new-text-element [:value])]
-    (rf/dispatch [:discussion.reply.statement/send statement-to-reply-to attitude new-text])
+    (rf/dispatch [:discussion.reply.statement/send parent-id attitude new-text])
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
 (rf/reg-event-fx

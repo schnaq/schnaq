@@ -13,7 +13,6 @@
             [schnaq.interface.views.discussion.conclusion-card :as card]
             [schnaq.shared-toolbelt :as stools]))
 
-;; TODO marker in unteren ebenen
 (s/def :background/schema #{:dark :light})
 
 (def throttled-search
