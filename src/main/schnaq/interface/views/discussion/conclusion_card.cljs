@@ -253,7 +253,6 @@
         [badges/edit-statement-dropdown-menu statement]])]))
 
 (defn- title-view [statement]
-  ;; TODO? hier nur eine id?
   (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
         title [md/as-markdown (:statement/content statement)]
         edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
@@ -270,13 +269,13 @@
                  :statement/author author
                  :statement/created-at created-at}
         starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        statement (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))]
+        statement-or-topic (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))]
     [motion/move-in :left
      [:div.p-2
       [:div.d-flex.flex-wrap.mb-4
-       [user/user-info statement 32 nil]
-       [current-topic-badges schnaq statement]]
-      [title-view statement]]]))
+       [user/user-info statement-or-topic 32 nil]
+       [current-topic-badges schnaq statement-or-topic]]
+      [title-view statement-or-topic]]]))
 
 (defn- search-info []
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])

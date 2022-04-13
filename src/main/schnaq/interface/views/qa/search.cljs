@@ -43,8 +43,7 @@
 (rf/reg-sub
  :schnaq.qa.search/results
  (fn [db _]
-   (let [all-statements (get-in db [:schnaq :statements])]
-     (stools/select-values all-statements (get-in db [:schnaq :qa :search :results] [])))))
+   (get-in db [:schnaq :qa :search :results])))
 
 (rf/reg-event-db
  :schnaq.qa.search.results/reset
@@ -73,9 +72,8 @@
           " "
           (labels :qanda.search/similar-results-explanation-2)]]]
        [:div.row
-        (for [result search-results]
-          ;; TODO? hier nur ids
+        (for [result-id search-results]
           [:div.statement-column
-           {:key (str (:db/id result) "-search-result")}
+           {:key (str result-id "-search-result")}
            [motion/move-in-spring :bottom
-            [card/statement-card (:db/id result)]]])]])))
+            [card/statement-card result-id]]])]])))
