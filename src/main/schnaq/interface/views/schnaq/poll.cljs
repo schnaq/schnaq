@@ -193,17 +193,16 @@
       [ranking-input poll])
     [poll-content poll]))
 
-(>defn ranking-card
+(>defn- ranking-card
   "Show a ranking card."
   [poll]
   [::specs/poll => :re-frame/component]
   [:section.statement-card
    [:div.mx-4.my-2
-    [:<>
-     [:div.d-flex
-      [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-      [dropdown-menu (:db/id poll)]]
-     [input-or-results poll]]]])
+    [:div.d-flex
+     [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+     [dropdown-menu (:db/id poll)]]
+    [input-or-results poll]]])
 
 (>defn- poll-card
   "Show a poll card, where users can cast their votes."
@@ -219,16 +218,14 @@
 (defn poll-list
   "Displays all polls of the current schnaq."
   []
-  (let [polls @(rf/subscribe [:schnaq/polls])]
-    (for [poll polls]
-      (let [poll-id (:db/id poll)]
-        [:div.statement-column
-         {:key (str "poll-result-" poll-id)}
-         [motion/fade-in-and-out
-          (if (= :poll.type/ranking (:poll/type poll))
-            [ranking-card poll]
-            [poll-card poll])
-          motion/card-fade-in-time]]))))
+  (for [poll @(rf/subscribe [:schnaq/polls])]
+    [:div.statement-column
+     {:key (str "poll-result-" (:db/id poll))}
+     [motion/fade-in-and-out
+      (if (= :poll.type/ranking (:poll/type poll))
+        [ranking-card poll]
+        [poll-card poll])
+      motion/card-fade-in-time]]))
 
 (defn- poll-option
   "Returns a single option component. Can contain a button for removal of said component."
