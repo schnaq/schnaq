@@ -1,6 +1,7 @@
 (ns schnaq.interface.user
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.http :as http]))
@@ -65,8 +66,9 @@
 (rf/reg-event-fx
  :user.currency/store
  (fn [{:keys [db]} [_ currency]]
-   {:db (assoc-in db [:user :currency] currency)
-    :fx [[:localstorage/assoc [:user/currency currency]]]}))
+   (when (shared-config/currencies currency)
+     {:db (assoc-in db [:user :currency] currency)
+      :fx [[:localstorage/assoc [:user/currency currency]]]})))
 
 (rf/reg-event-fx
  :user.currency/from-localstorage

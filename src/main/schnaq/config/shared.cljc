@@ -77,8 +77,8 @@
    :timezone "Europe/Berlin"})
 
 ;; -----------------------------------------------------------------------------
-;; User settings
+;; Stripe
 
-(def password-minimum-length
-  "Define the minimum length of a password, count characters."
-  8)
+(def currencies
+  "Define the accepted currencies."
+  #{:eur :usd})
