@@ -44,10 +44,11 @@
   "Price tag for pro tier."
   [price-class]
   (let [pro-price @(rf/subscribe [:pricing/pro-tier])
-        formatted-price (if (js/Number.isInteger pro-price) "%d €" "%.2f €")]
+        currency-symbol @(rf/subscribe [:user.currency/symbol])
+        formatted-price (if (js/Number.isInteger pro-price) "%d %s" "%.2f %s")]
     (if (and pro-price (not (zero? pro-price)))
       [:<>
-       [:span {:class price-class} (gstring/format formatted-price pro-price)]
+       [:span {:class price-class} (gstring/format formatted-price pro-price currency-symbol)]
        [:span (labels :pricing.units/per-month)]
        [:p
         (labels :pricing.notes/with-vat)
@@ -58,9 +59,10 @@
 (defn price-tag-free-tier
   "Price tag for free tier."
   []
-  [:<>
-   [:span.display-5 "0 €"]
-   [:span (labels :pricing.units/per-month)]])
+  (let [currency-symbol @(rf/subscribe [:user.currency/symbol])]
+    [:<>
+     [:span.display-5 (gstring/format "0 %s" currency-symbol)]
+     [:span (labels :pricing.units/per-month)]]))
 
 (defn- intro
   "Welcome new users to the pricing page."

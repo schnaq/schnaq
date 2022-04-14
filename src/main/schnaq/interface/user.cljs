@@ -73,3 +73,16 @@
  (fn [{:keys [db]} _]
    (when-let [currency (:user/currency local-storage)]
      {:db (assoc-in db [:user :currency] currency)})))
+
+(rf/reg-sub
+ :user/currency
+ (fn [db]
+   (get-in db [:user :currency])))
+
+(rf/reg-sub
+ :user.currency/symbol
+ :<- [:user/currency]
+ (fn [currency]
+   (if (= :usd currency)
+     "$"
+     "€")))

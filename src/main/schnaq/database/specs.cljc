@@ -31,6 +31,7 @@
   (s/or :valid (s/keys :req-un [:stripe.price/id :stripe.price/cost :stripe.price/interval])
         :request-failed :api.response/error-body))
 (s/def :stripe/kw-to-price (s/map-of keyword? :stripe/price))
+(s/def :stripe/prices (s/map-of keyword? :stripe/kw-to-price))
 
 (s/def :stripe.subscription/id (s/and string? #(.startsWith % "sub_")))
 (s/def :stripe.subscription/status #{:incomplete :incomplete_expired :trialing :active :past_due :canceled :unpaid})
