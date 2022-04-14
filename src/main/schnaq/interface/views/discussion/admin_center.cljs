@@ -159,11 +159,14 @@
  :discussion.delete/purge-stores
  (fn [db [_ statement-id return-value]]
    (let [method (or (:method return-value) (first (:methods return-value)))
-         history (get-in db [:history :full-context])]
+         history (get-in db [:history :full-context])
+         parent-id (get-in db [:schnaq :statements statement-id :statement/parent :db/id])]
      (if (= :deleted method)
        (cond-> (update-in db [:schnaq :statements] dissoc statement-id)
          (= statement-id (last history))
-         (update-in [:history :full-context] (comp vec butlast)))
+         (update-in [:history :full-context] (comp vec butlast))
+         parent-id
+         (update-in [:schnaq :statements parent-id :meta/sub-statement-count] dec))
        (assoc-in db [:schnaq :statements statement-id :statement/content] config/deleted-statement-text)))))
 
 (rf/reg-event-fx
