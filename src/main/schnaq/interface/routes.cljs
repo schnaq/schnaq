@@ -10,6 +10,7 @@
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.integrations.wetog.routes :as wetog-routes]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.legal-note :as legal-note]
             [schnaq.interface.pages.press :as press]
@@ -42,7 +43,8 @@
             [schnaq.interface.views.user.edit-account :as edit-account]
             [schnaq.interface.views.user.edit-notifications :as edit-notifications]
             [schnaq.interface.views.user.themes :as themes]
-            [schnaq.interface.views.user.welcome :as welcome]))
+            [schnaq.interface.views.user.welcome :as welcome]
+            [schnaq.links :as links]))
 
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
@@ -303,7 +305,7 @@
                             (rf/dispatch [:theme/reset]))}]}]
    ["/register"
     ["" {:name :routes.user/register
-         :view registration/registration-step-1-view}]
+         :controllers [{:start #(rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))])}]}]
     ["/step-2" {:name :routes.user.register/step-2
                 :view registration/registration-step-2-view}]
     ["/step-3" {:name :routes.user.register/step-3
@@ -380,7 +382,7 @@
       (if (empty? window-hash)
         (.scrollTo js/window 0 0)
         (oset! js/document "onreadystatechange"
-          #(tools/scroll-to-id window-hash)))))
+               #(tools/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
