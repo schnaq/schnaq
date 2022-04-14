@@ -161,7 +161,7 @@
    (let [method (or (:method return-value) (first (:methods return-value)))]
      (if (= :deleted method)
        (-> db
-           (update-in [:schnaq :statement-slice :current-level] disj statement-id)
+           (update-in [:schnaq :statements] dissoc statement-id)
            ;; If it is fully deleted and not only changed in text, we know the following:
            ;; It has to be at the end of history and can be savely removed.
            (update-in [:history :full-context] (comp vec butlast)))
