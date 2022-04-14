@@ -174,9 +174,7 @@
 (rf/reg-event-db
  :votes.local/reset
  (fn [db _]
-   (update db :votes
-           dissoc :up
-           dissoc :down)))
+   (dissoc db :votes)))
 
 ;; -----------------------------------------------------------------------------
 
