@@ -167,7 +167,9 @@
  (fn [keycloak]
    (-> keycloak
        (.logout)
-       (.then #(rf/dispatch [:user/authenticated! false]))
+       (.then (fn [_]
+                (rf/dispatch [:user/authenticated! false])
+                (matomo/reset-user-id)))
        (.catch
         #(error-to-console
           "Logout not successful. Request could not be fulfilled.")))))

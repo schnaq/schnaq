@@ -25,3 +25,12 @@
   "Sets the user-id so users that use different devices can be recognized."
   [user-id]
   (.push js/window._paq #js ["setUserId" user-id]))
+
+(defn reset-user-id
+  "After the user logged out, remove the user-id from matomo."
+  []
+  (let [matomo js/window._paq]
+    (.push matomo #js ["resetUserId"])
+    (.push matomo #js ["appendToTrackingUrl" "new_visit=1"])
+    (.push matomo #js ["trackPageView"])
+    (.push matomo #js ["appendToTrackingUrl" ""])))
