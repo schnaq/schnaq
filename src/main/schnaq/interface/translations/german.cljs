@@ -1205,22 +1205,8 @@
 
    ;; Registration
    :registration/heading "Willkommen bei der Accounterstellung"
-   :registration.social-logins/lead "Fortsetzen mit"
    :registration.steps/heading "Schritt %d von 3"
-   :registration.inputs/toc-1 "Ich habe die"
-   :registration.inputs/toc-2 "gelesen und willige ein, dass meine Daten verarbeitet werden dürfen."
    :registration.email/lead "Oder nutze deine Mail"
-   :registration.register/heading "Registrieren und schnaqqen"
-   :registration.register.input/email "E-Mail-Adresse"
-   :registration.register.input/password "Passwort (mind. %d-Zeichen)"
-   :registration.register.input/submit-button "Kostenfrei registrieren"
-   :registration.register.footer/login-available "Du hast bereits einen Account?"
-   :registration.register.footer/login "Melde dich an"
-   :registration.register.validation/lead "Es sind leider folgende Fehler aufgetreten:"
-   :registration.register.validation/notification-title "Bitte überprüfe deine Eingabe"
-   :registration.register.validation/email "Deine Mailadresse ist leider nicht gültig"
-   :registration.register.validation/password "Dein Passwort ist leider nicht gültig. Es muss aus mindestens %d Zeichen bestehen, hat aber nur %d Zeichen."
-   :registration.register.validation/opt-in "Bitte akzeptiere unsere Datenschutzerklärung"
    :registration.survey/heading "Wobei wird schnaq dich unterstützen?"
    :registration.survey/select-all "Wähle alles passende aus"
    :registration.survey.options/education "Lehre"
@@ -1242,9 +1228,6 @@
    :registration.pricing.pro/mods "Moderationsoptionen"
    :registration.pricing.pro/themes "Persönliches Design"
    :registration.pricing.enterprise/all-from-pro "Alle Pro-Features, plus:"
-   :registration.mail-exists/heading "Diese Mailadresse ist schon vergeben"
-   :registration.mail-exists/lead "Möchtest du dich vielleicht einloggen?"
-   :registration.mail-exists/login "Anmelden"
 
 ;; Alt texts
    :schnaqqifant/hippie-alt-text "Schnaqqi, das schnaq Maskottchen, als Hippie verkleidet"

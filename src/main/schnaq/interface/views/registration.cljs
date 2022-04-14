@@ -3,11 +3,9 @@
             [goog.string :refer [format]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.common :refer [schnaq-logo]]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.navbar :refer [language-dropdown]]
             [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
@@ -15,22 +13,6 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.pricing :as pricing-view]))
-
-(def ^:private show-social-logins?
-  false)
-
-(defn- social-logins
-  "Show social login buttons for direct access."
-  []
-  (let [styles {:style {:width "50%"}}]
-    [:section
-     [:p.text-muted.mb-1 (labels :registration.social-logins/lead) ":"]
-     [:div.d-flex.flex-row.pb-2
-      [buttons/button "Xign.me" identity "btn-outline-dark me-2" styles]
-      [buttons/button "Google" identity "btn-outline-dark" styles]]
-     [:div.d-flex.flex-row
-      [buttons/button "LinkedIn" identity "btn-outline-dark me-2" styles]
-      [buttons/button "GitHub" identity "btn-outline-dark" styles]]]))
 
 (defn- next-button [label attrs]
   [buttons/button label nil "btn-primary btn-lg w-100 mt-5" attrs])
@@ -51,78 +33,6 @@
      [:h1.h4.text-center.py-3.py-5 heading]
      body]]
    footer])
-
-;; -----------------------------------------------------------------------------
-
-(defn- toc
-  "Accept terms."
-  []
-  [:p
-   (labels :registration.inputs/toc-1)
-   [buttons/anchor (labels :privacy/note) (navigation/href :routes.privacy/complete) "btn-sm btn-link"]
-   (labels :registration.inputs/toc-2)])
-
-(defn- errors-in-form
-  "Validate the user registration form."
-  [email password opt-in]
-  (let [valid-email? (not-empty email)
-        valid-password? (and (not-empty password) (>= (count password) shared-config/password-minimum-length))]
-    (when-not (and valid-email? valid-password? opt-in)
-      [:section
-       (labels :registration.register.validation/lead)
-       [:ul
-        (when-not valid-email?
-          [:li (labels :registration.register.validation/email) ": " email])
-        (when-not valid-password?
-          [:li
-           (format
-            (labels :registration.register.validation/password)
-            shared-config/password-minimum-length
-            (count password))])
-        (when-not opt-in
-          [:li (labels :registration.register.validation/opt-in)])]])))
-
-(defn- registration-step-1
-  "First step in the registration process."
-  []
-  [registration-card
-   (labels :registration.register/heading)
-   [:<>
-    (when show-social-logins?
-      [:<>
-       [social-logins]
-       [:p.text-muted.mb-1.pt-4 (labels :registration.email/lead) ":"]])
-    [:form {:on-submit
-            (fn [e] (.preventDefault e)
-              (let [form (oget e [:target :elements])
-                    email (oget form [:email :value])
-                    password (oget form [:password :value])
-                    opt-in (oget form [:opt-in :checked])
-                    errors (errors-in-form email password opt-in)]
-                (if errors
-                  (rf/dispatch [:notification/add
-                                #:notification{:title (labels :registration.register.validation/notification-title)
-                                               :body [errors]
-                                               :context :warning}])
-                  (rf/dispatch [:registration/register [email password]]))))}
-     [inputs/floating (labels :registration.register.input/email) :email "registration-email" "email" {:required true :class "mb-2"}]
-     [inputs/floating (format (labels :registration.register.input/password) shared-config/password-minimum-length)
-      :password "registration-password" "password" {:required true :class "mb-2" :minLength 8}]
-     [inputs/checkbox [:small [toc]] "registration-opt-in" "opt-in" {:required true}]
-     [next-button
-      (labels :registration.register.input/submit-button)
-      {:id "registration-first-step"}]]]
-   [:div.text-center
-    (labels :registration.register.footer/login-available)
-    [buttons/button (labels :registration.register.footer/login) #(rf/dispatch [:keycloak/login]) "btn-link"]]
-   {:step 1}])
-
-(defn registration-step-1-view
-  "Wrapped view for usage in routes."
-  []
-  [pages/fullscreen
-   {:page/title (labels :registration/heading)}
-   [registration-step-1]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -282,49 +192,6 @@
    [registration-step-3]])
 
 ;; -----------------------------------------------------------------------------
-
-(defn- registration-mail-exists
-  "Ask existing users to login."
-  []
-  [registration-card
-   (labels :registration.mail-exists/heading)
-   [:section.text-center
-    [:p.lead (labels :registration.mail-exists/lead)]
-    [buttons/button (labels :registration.mail-exists/login)
-     #(rf/dispatch [:keycloak/login
-                    (format "%s//%s"
-                            (oget js/window [:location :protocol])
-                            (oget js/window [:location :host]))])]
-    [:div#spacing.pb-5]]])
-
-(defn registration-mail-exists-view []
-  [registration-mail-exists])
-
-;; -----------------------------------------------------------------------------
-
-(rf/reg-event-fx
- :registration.go-to/step-2
- (fn [{:keys [db]} [_ email]]
-   {:db (assoc-in db [:registration :email] email)
-    :fx [[:dispatch [:navigation/navigate :routes.user.register/step-2]]]}))
-
-(rf/reg-event-fx
- :registration/register
- (fn [{:keys [db]} [_ [email password]]]
-   {:fx [[:dispatch [:registration.go-to/step-2 email]]
-         (http/xhrio-request db :post "/user/registration/new"
-                             [:registration.register/success]
-                             {:email email
-                              :password password})]}))
-
-(rf/reg-event-fx
- :registration.register/success
- (fn [{:keys [db]} [_ {:keys [tokens new?]}]]
-   (if new?
-     {:fx [[:keycloak.init/with-token [(get-in db [:user :keycloak])
-                                       (:access_token tokens)
-                                       (:refresh_token tokens)]]]}
-     {:fx [[:dispatch [:navigation/navigate :routes.user.register/mail-exists]]]})))
 
 (rf/reg-event-fx
  :registration/store-survey-selection

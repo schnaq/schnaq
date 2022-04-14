@@ -1206,22 +1206,8 @@ Now we write down questions and discuss them and can still understand what we ha
 
     ;; Registration
    :registration/heading "Welcome to the account creation"
-   :registration.social-logins/lead "Continue with"
    :registration.steps/heading "Step %d of 3"
-   :registration.inputs/toc-1 "I have read the"
-   :registration.inputs/toc-2 "and consent to my data being processed."
    :registration.email/lead "Or use your email"
-   :registration.register/heading "Register and create a new account"
-   :registration.register.input/email "Email Address"
-   :registration.register.input/password "Password (at least %d characters)"
-   :registration.register.input/submit-button "Register for free"
-   :registration.register.footer/login-available "You already have an account?"
-   :registration.register.footer/login "Log in"
-   :registration.register.validation/lead "Unfortunately, the following errors occurred:"
-   :registration.register.validation/notification-title "Please check your entry"
-   :registration.register.validation/email "Sorry, your email address is not valid"
-   :registration.register.validation/password "Your password is not valid. It must be at least %d characters long, but it only has %d characters."
-   :registration.register.validation/opt-in "Please accept our privacy policy"
    :registration.survey/heading "What will schnaq support you with?"
    :registration.survey/select-all "Select anything that fits"
    :registration.survey.options/education "Teach"
@@ -1243,9 +1229,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :registration.pricing.pro/mods "Moderation Options"
    :registration.pricing.pro/themes "Personal Design"
    :registration.pricing.enterprise/all-from-pro "All Pro Features, plus:"
-   :registration.mail-exists/heading "This mail address is already taken"
-   :registration.mail-exists/lead "Would you like to log in?"
-   :registration.mail-exists/login "Login"
 
    ;; Alt texts
    :schnaqqifant/hippie-alt-text "Schnaqqi the schnaq mascot dressed as a hippie"
