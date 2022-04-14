@@ -8,9 +8,8 @@
 (rf/reg-event-fx
  :username/from-localstorage
  (fn [{:keys [db]} _]
-   (let [username (:username local-storage)]
-     (when username
-       {:db (assoc-in db [:user :names :display] username)}))))
+   (when-let [username (:username local-storage)]
+     {:db (assoc-in db [:user :names :display] username)})))
 
 (rf/reg-event-fx
  ;; Registers a user in the backend. Sets the returned user in the db
@@ -62,3 +61,15 @@
  :user/id
  (fn [db _]
    (get-in db [:user :id])))
+
+(rf/reg-event-fx
+ :user.currency/store
+ (fn [{:keys [db]} [_ currency]]
+   {:db (assoc-in db [:user :currency] currency)
+    :fx [[:localstorage/assoc [:user/currency currency]]]}))
+
+(rf/reg-event-fx
+ :user.currency/from-localstorage
+ (fn [{:keys [db]} _]
+   (when-let [currency (:user/currency local-storage)]
+     {:db (assoc-in db [:user :currency] currency)})))
