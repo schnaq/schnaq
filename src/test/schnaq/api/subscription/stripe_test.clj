@@ -43,10 +43,11 @@
 
 (deftest get-product-prices-test
   (let [get-product-prices #'stripe/get-product-prices
-        monthly-price-id (:schnaq.pro/monthly prices)
-        yearly-price-id (:schnaq.pro/yearly prices)]
+        yearly-price-id-eur (get-in prices [:eur :schnaq.pro/yearly])
+        yearly-price-id-usd (get-in prices [:usd :schnaq.pro/yearly])
+        response (get-product-prices {})]
     (testing "Price retrieval should query prices from stripe."
-      (is (= monthly-price-id (get-in (get-product-prices {})
-                                      [:body :prices :schnaq.pro/monthly :id])))
-      (is (= yearly-price-id (get-in (get-product-prices {})
-                                     [:body :prices :schnaq.pro/yearly :id]))))))
+      (is (= yearly-price-id-eur (get-in response
+                                         [:body :prices :eur :schnaq.pro/yearly :id])))
+      (is (= yearly-price-id-usd (get-in response
+                                         [:body :prices :usd :schnaq.pro/yearly :id]))))))
