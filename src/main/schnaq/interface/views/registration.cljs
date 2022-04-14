@@ -108,8 +108,7 @@
 (defn- pro-tier-cta-button
   "Button to open the checkout page."
   []
-  (let [yearly? @(rf/subscribe [:pricing.interval/yearly?])
-        price-id (:id @(rf/subscribe [(if yearly? :pricing.pro/yearly :pricing.pro/monthly)]))]
+  (let [price-id (:id @(rf/subscribe [:pricing.pro/yearly]))]
     [buttons/button (labels :registration.pricing/subscribe-pro)
      #(rf/dispatch [:subscription/create-checkout-session price-id])
      "btn-secondary"]))
