@@ -35,16 +35,30 @@
       processors/hide-deleted-statement-content
       (processors/with-aggregated-votes user-id)))
 
+(defn default-statement-processors
+  "Take all the default statement processors and apply them to the data."
+  [data share-hash user-identity author-id]
+  (-> data
+      (processors/with-sub-statement-count share-hash)
+      (processors/with-new-post-info share-hash user-identity)
+      (valid-statements-with-votes author-id)))
+
+(defn- process-single-statement
+  "Processes a single statement."
+  [statement share-hash user-identity author-id]
+  (first (-> [statement]
+             (default-statement-processors share-hash user-identity author-id)
+             toolbelt/pull-key-up)))
+
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied.
   Optionally a statement-id can be passed to enrich the statement with its creation-secret."
-  ([share-hash user-id]
+  ([share-hash user-identity author-id]
    (-> share-hash
        discussion-db/starting-statements
-       (valid-statements-with-votes user-id)
-       (processors/with-sub-statement-count share-hash)))
-  ([share-hash user-id secret-statement-id]
-   (add-creation-secret (starting-conclusions-with-processors share-hash user-id) secret-statement-id)))
+       (default-statement-processors share-hash user-identity author-id)))
+  ([share-hash user-identity author-id secret-statement-id]
+   (add-creation-secret (starting-conclusions-with-processors share-hash user-identity author-id) secret-statement-id)))
 
 (defn get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
@@ -52,9 +66,10 @@
   (let [{:keys [share-hash display-name]} (:query parameters)
         user-identity (:sub identity)
         author-id (user-db/user-id display-name user-identity)
-        startings (starting-conclusions-with-processors share-hash author-id)]
+        startings (starting-conclusions-with-processors share-hash user-identity author-id)]
     (ok {:starting-conclusions (processors/with-new-post-info startings share-hash user-identity)
-         :children (discussion-db/children-from-statements startings)})))
+         :children (default-statement-processors
+                    (discussion-db/children-from-statements startings) share-hash user-identity author-id)})))
 
 (defn- search-statements
   "Search through any valid discussion."
@@ -65,14 +80,6 @@
                                   (processors/with-sub-statement-count share-hash)
                                   (valid-statements-with-votes user-id))})))
 
-(defn- process-single-statement
-  "Processes a single statement."
-  [statement share-hash user-identity]
-  (first (-> [statement]
-             (processors/with-sub-statement-count share-hash)
-             (processors/with-new-post-info share-hash user-identity)
-             toolbelt/pull-key-up)))
-
 (defn- get-statement-info
   "Return premises, conclusion and the history for a given statement id."
   [{:keys [parameters identity]}]
@@ -80,18 +87,16 @@
         user-identity (:sub identity)
         author-id (user-db/user-id display-name user-identity)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
-      (let [conclusion (db/fast-pull statement-id patterns/statement)
+      (let [conclusion (toolbelt/pull-key-up (db/fast-pull statement-id patterns/statement))
             premises (discussion-db/children-for-statement statement-id)]
-        (ok (valid-statements-with-votes
-             {:conclusion (process-single-statement conclusion share-hash user-identity)
-              :premises (-> premises
-                            (processors/with-sub-statement-count share-hash)
-                            (processors/with-new-post-info share-hash user-identity))
-              :history (-> (discussion-db/history-for-statement statement-id)
-                           (processors/with-sub-statement-count share-hash)
-                           (processors/with-new-post-info share-hash user-identity))
-              :children (discussion-db/children-from-statements (conj premises conclusion))}
-             author-id)))
+        (ok {:conclusion (process-single-statement conclusion share-hash user-identity author-id)
+             :premises (-> premises
+                           (default-statement-processors share-hash user-identity author-id))
+             :history (-> (discussion-db/history-for-statement statement-id)
+                          (default-statement-processors share-hash user-identity author-id))
+             :children (default-statement-processors
+                        (discussion-db/children-from-statements (conj premises conclusion))
+                        share-hash user-identity author-id)}))
       at/not-found-hash-invalid)))
 
 (defn- update-seen-statements!
@@ -199,7 +204,7 @@
                           (discussion-db/add-starting-statement! share-hash user-id statement
                                                                  :registered-user? keycloak-id
                                                                  :locked? locked?)
-                          share-hash keycloak-id)]
+                          share-hash keycloak-id user-id)]
         (log/info "Starting statement added for discussion" share-hash)
         (created "" {:starting-conclusion new-starting}))
       (validator/deny-access at/invalid-rights-message))))
