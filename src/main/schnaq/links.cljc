@@ -8,14 +8,22 @@
                      [reitit.frontend.easy :as reitfe]
                      [schnaq.database.specs :as specs])))
 
+(>defn relative-to-absolute-url
+  "Convert a relative url to an absolute url. Points to the currently configured
+  frontend as a default."
+  [path]
+  [string? => string?]
+  #?(:cljs (let [location (oget js/window :location)]
+             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))
+     :clj (format "%s%s" config/frontend-url path)))
+
 (>defn get-share-link
   "Takes a share hash and returns a link to the schnaq."
   [share-hash]
   [(? :discussion/share-hash) :ret (? string?)]
   #?(:clj (format "%s/schnaq/%s" config/frontend-url share-hash)
-     :cljs (let [path (reitfe/href :routes.schnaq/start {:share-hash share-hash})
-                 location (oget js/window :location)]
-             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
+     :cljs (let [path (reitfe/href :routes.schnaq/start {:share-hash share-hash})]
+             (relative-to-absolute-url path))))
 
 (>defn get-link-to-statement
   [share-hash statement-id]
@@ -29,18 +37,16 @@
   [:discussion/share-hash :discussion/edit-hash :ret string?]
   #?(:clj (format "%s/schnaq/%s/manage/%s" config/frontend-url share-hash edit-hash)
      :cljs (let [path (reitfe/href :routes.schnaq/admin-center {:share-hash share-hash
-                                                                :edit-hash edit-hash})
-                 location (oget js/window :location)]
-             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
+                                                                :edit-hash edit-hash})]
+             (relative-to-absolute-url path))))
 
 (>defn get-summary-link
   "Takes a share-hash and returns the link to the summary view."
   [share-hash]
   [:discussion/share-hash :ret string?]
   #?(:clj (format "%s/schnaq/%s/dashboard" config/frontend-url share-hash)
-     :cljs (let [path (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})
-                 location (oget js/window :location)]
-             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
+     :cljs (let [path (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})]
+             (relative-to-absolute-url path))))
 
 (>defn add-links-to-discussion
   "Takes a discussion and adds a share-link to the structure."
@@ -54,16 +60,6 @@
   "Get link to checkout page. This should be called after the login of a user."
   [price-id]
   [:stripe.price/id :ret string?]
-  #?(:cljs (let [path (reitfe/href :routes.subscription.redirect/checkout {} {:price-id price-id})
-                 location (oget js/window :location)]
-             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))
+  #?(:cljs (let [path (reitfe/href :routes.subscription.redirect/checkout {} {:price-id price-id})]
+             (relative-to-absolute-url path))
      :clj (throw (ex-info "Not implemented" {:price-id price-id}))))
-
-(>defn relative-to-absolute-url
-  "Convert a relative url to an absolute url. Points to the currently configured
-  frontend as a default."
-  [path]
-  [string? => string?]
-  #?(:cljs (let [location (oget js/window :location)]
-             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))
-     :clj (format "%s%s" config/frontend-url path)))
