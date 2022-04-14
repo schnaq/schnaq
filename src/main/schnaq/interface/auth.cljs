@@ -109,6 +109,22 @@
        (.catch #(rf/dispatch [:modal {:show? true :child [request-login-modal]}])))))
 
 ;; -----------------------------------------------------------------------------
+
+(rf/reg-event-fx
+ :keycloak/register
+ (fn [{:keys [db]} [_ redirect-uri]]
+   (let [keycloak (get-in db [:user :keycloak])]
+     (when keycloak
+       {:fx [[:keycloak/register-request [keycloak redirect-uri]]]}))))
+
+(rf/reg-fx
+ :keycloak/register-request
+ (fn [[keycloak redirect-uri]]
+   (-> keycloak
+       (.register #js {:redirectUri redirect-uri})
+       (.catch #(rf/dispatch [:modal {:show? true :child [request-login-modal]}])))))
+
+;; -----------------------------------------------------------------------------
 ;; If login / init was successful, ask in keycloak for the user's information.
 
 (rf/reg-event-fx
