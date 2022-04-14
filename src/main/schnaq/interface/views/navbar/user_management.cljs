@@ -9,7 +9,8 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.views.common :as common]
+            [schnaq.links :as links]))
 
 (defn- name-input
   "An input, where the user can set their name. Happens automatically by typing."
@@ -144,7 +145,8 @@
 (defn- register-button
   "Show registration button."
   [on-light-background?]
-  [buttons/anchor (labels :nav/register) (navigation/href :routes.user/register)
+  [buttons/button (labels :nav/register)
+   #(rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))])
    (if on-light-background? "btn-outline-secondary ms-2" "btn-dark ms-2")])
 
 (defn register-or-user-button
