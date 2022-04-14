@@ -116,18 +116,19 @@
 (defn- free-tier-card
   "Show a free tier card."
   []
-  [tier-card
-   (labels :pricing.free-tier/title)
-   (labels :pricing.free-tier/subtitle)
-   [:span.display-6 "0 €"]
-   [buttons/anchor
-    (labels :registration.pricing/start-with-free)
-    (navigation/href :routes.welcome/free)
-    "btn-primary"]
-   [:ul.fa-ul.list-group.list-group-flush
-    [list-item (format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]
-    [list-item (labels :registration.pricing.free/dynamic-qa)]
-    [list-item (labels :registration.pricing.free/shareable)]]])
+  (let [currency-symbol @(rf/subscribe [:user.currency/symbol])]
+    [tier-card
+     (labels :pricing.free-tier/title)
+     (labels :pricing.free-tier/subtitle)
+     [:span.display-6 (format "0 %s" currency-symbol)]
+     [buttons/anchor
+      (labels :registration.pricing/start-with-free)
+      (navigation/href :routes.welcome/free)
+      "btn-primary"]
+     [:ul.fa-ul.list-group.list-group-flush
+      [list-item (format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]
+      [list-item (labels :registration.pricing.free/dynamic-qa)]
+      [list-item (labels :registration.pricing.free/shareable)]]]))
 
 (defn- pro-tier-card
   "Show the pro tier card."
