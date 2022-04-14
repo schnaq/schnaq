@@ -2,6 +2,8 @@
   (:require [schnaq.api.activation :as activation-api]
             [schnaq.api.discussion :as discussion-api]
             [schnaq.api.poll :as poll-api]
+            [schnaq.auth.jwt :as jwt]
+            [schnaq.config.keycloak :as kc]
             [schnaq.database.specs]
             [schnaq.database.visible-entity :as visible-entity]
             [schnaq.shared-toolbelt :as shared-tools]
@@ -9,7 +11,8 @@
 
 (defmethod handle-message :discussion.starting/update [{:keys [?data]}]
   (when ?data
-    (let [parameters {:parameters {:query ?data}}
+    (let [parameters {:parameters {:query ?data}
+                      :identity (jwt/validate-signed-jwt (get ?data :jwt) kc/keycloak-public-key)}
           {{:keys [starting-conclusions]} :body} (discussion-api/get-starting-conclusions parameters)
           {{:keys [polls]} :body} (poll-api/polls-for-discussion parameters)
           {{:keys [activation]} :body} (activation-api/get-activation parameters)]

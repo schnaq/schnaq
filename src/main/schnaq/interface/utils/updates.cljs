@@ -102,7 +102,8 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [[:ws/send [:discussion.starting/update
                       {:share-hash share-hash
-                       :display-name (toolbelt/current-display-name db)}
+                       :display-name (toolbelt/current-display-name db)
+                       :jwt (.-token (get-in db [:user :keycloak]))}
                       (fn [response]
                         (rf/dispatch [:schnaq.activation.load-from-backend/success response])
                         (rf/dispatch [:schnaq.polls.load-from-backend/success response])
