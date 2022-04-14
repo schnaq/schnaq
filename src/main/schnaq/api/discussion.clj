@@ -80,7 +80,7 @@
         user-identity (:sub identity)
         author-id (user-db/user-id display-name user-identity)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
-      (let [conclusion (db/fast-pull statement-id patterns/statement)
+      (let [conclusion (toolbelt/pull-key-up (db/fast-pull statement-id patterns/statement))
             premises (discussion-db/children-for-statement statement-id)]
         (ok (valid-statements-with-votes
              {:conclusion (process-single-statement conclusion share-hash user-identity)
