@@ -1,6 +1,7 @@
 (ns schnaq.interface.matomo
   "Helper functions to easily track matomo state changes."
-  (:require [oops.core :refer [oget]]))
+  (:require [oops.core :refer [oget]]
+            [re-frame.core :as rf]))
 
 (defn track-event
   "Creates an event and tracks it to matomo."
@@ -25,3 +26,17 @@
   "Sets the user-id so users that use different devices can be recognized."
   [user-id]
   (.push js/window._paq #js ["setUserId" user-id]))
+
+(defn reset-user-id
+  "After the user logged out, remove the user-id from matomo."
+  []
+  (let [matomo js/window._paq]
+    (.push matomo #js ["resetUserId"])
+    (.push matomo #js ["appendToTrackingUrl" "new_visit=1"])
+    (.push matomo #js ["trackPageView"])
+    (.push matomo #js ["appendToTrackingUrl" ""])))
+
+(rf/reg-fx
+ :matomo/track-event
+ (fn [[category subcategory]]
+   (track-event category subcategory)))

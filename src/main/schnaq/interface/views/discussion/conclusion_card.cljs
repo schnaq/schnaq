@@ -92,10 +92,10 @@
 (>defn- card-highlighting
   "Add card-highlighting to a statement card."
   ([statement]
-   [::specs/statement :ret vector?]
+   [(? ::specs/statement) :ret vector?]
    [card-highlighting statement nil])
   ([statement additional-classes]
-   [::specs/statement (? string?) :ret vector?]
+   [(? ::specs/statement) (? string?) :ret vector?]
    (let [answered? (seq @(rf/subscribe [:statements/answers (:db/id statement)]))
          statement-type (when (:statement/type statement)
                           (str "-" (name (:statement/type statement))))
