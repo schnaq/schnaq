@@ -16,10 +16,11 @@
   "Convert a relative url to an absolute url. Points to the currently configured
   frontend as a default."
   [path]
-  [::path => string?]
-  #?(:cljs (let [location (oget js/window :location)]
-             (format "%s//%s%s" (oget location :protocol) (oget location :host) path))
-     :clj (format "%s%s" config/frontend-url path)))
+  [(? ::path) => (? string?)]
+  (when path
+    #?(:cljs (let [location (oget js/window :location)]
+               (format "%s//%s%s" (oget location :protocol) (oget location :host) path))
+       :clj (format "%s%s" config/frontend-url path))))
 
 (>defn get-share-link
   "Takes a share hash and returns a link to the schnaq."
