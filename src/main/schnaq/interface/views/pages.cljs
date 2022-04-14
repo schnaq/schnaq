@@ -60,7 +60,7 @@
 
 (defn- login-page-base
   "Basic login page for either registration or sign in."
-  [heading subheading button-label]
+  [heading subheading]
   [with-nav-and-header
    {:page/heading (labels heading)
     :page/subheading (labels subheading)
@@ -77,9 +77,15 @@
       [:div.col-12.col-lg-5.col-xl-6
        [:div.my-5.my-lg-3.pt-lg-5
         [:div.text-center
-         [:button.btn.btn-lg.btn-dark.mb-3
-          {:on-click #(rf/dispatch [:keycloak/login])}
-          [:div.display-5 (labels button-label)]]]
+         [:div
+          [:button.btn.btn-lg.btn-dark.mb-3
+           {:on-click #(rf/dispatch [:keycloak/register])}
+           [:div.display-5 (labels :page.register/register)]]]
+         (labels :page.login/or)
+         [:div
+          [:button.btn.btn-lg.btn-outline-white.mt-3
+           {:on-click #(rf/dispatch [:keycloak/login])}
+           (labels :page.login/login)]]]
         [:div.my-5 [bullet-points]]
         [:div.mt-3.text-center
          (labels :page.login.alert/text-1)
@@ -96,16 +102,14 @@
   []
   [login-page-base
    :page.login/heading
-   :page.login/subheading
-   :page.login/login])
+   :page.login/subheading])
 
 (defn- register-cta
   "Default page indicating a first time user creates a schnaq."
   []
   [login-page-base
    :page.register/heading
-   :page.login/subheading
-   :page.register/register])
+   :page.login/subheading])
 
 (defn- beta-only
   "Default page indicating, that only beta users are allowed."
