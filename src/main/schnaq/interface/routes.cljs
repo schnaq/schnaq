@@ -305,7 +305,10 @@
                             (rf/dispatch [:theme/reset]))}]}]
    ["/register"
     ["" {:name :routes.user/register
-         :controllers [{:start #(rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))])}]}]
+         :controllers [{:parameters {:query [:currency]}
+                        :start (fn [parameters]
+                                 (rf/dispatch [:user.currency/store (keyword (get-in parameters [:query :currency]))])
+                                 (rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))]))}]}]
     ["/step-2" {:name :routes.user.register/step-2
                 :view registration/registration-step-2-view}]
     ["/step-3" {:name :routes.user.register/step-3

@@ -42,6 +42,7 @@
  :initialize/schnaq
  (fn [_ _]
    {:fx [[:dispatch [:username/from-localstorage]]
+         [:dispatch [:user.currency/from-localstorage]]
          [:dispatch [:re-frame-10x/hide-on-mobile]]
          [:dispatch [:how-to-visibility/from-localstorage-to-app-db]]
          [:dispatch [:keycloak/init]]

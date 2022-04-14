@@ -22,11 +22,6 @@
          [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-sub
- :schnaqs.visited/all-hashes
- (fn [db _]
-   (get-in db [:schnaqs :visited-hashes])))
-
-(rf/reg-sub
  :schnaqs.visited/all
  (fn [db _]
    (get-in db [:schnaqs :visited])))
