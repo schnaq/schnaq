@@ -31,9 +31,8 @@
   [statement edit-hash user-id creation-secrets]
   (when-not (:statement/deleted? statement)
     (let [anonymous-owner? (contains? creation-secrets (:db/id statement))
-          registered-owner? (= user-id (:db/id (:statement/author statement)))
-          administrator? @(rf/subscribe [:user/administrator?])]
-      (or edit-hash anonymous-owner? registered-owner? administrator?))))
+          registered-owner? (= user-id (:db/id (:statement/author statement)))]
+      (or edit-hash anonymous-owner? registered-owner?))))
 
 (defn- delete-dropdown-button
   "Give admin and author the ability to delete a statement."
@@ -222,6 +221,7 @@
   [{:keys [db/id] :as statement}]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
         current-edit-hash @(rf/subscribe [:schnaq.current/admin-access])
+        admin? @(rf/subscribe [:user/administrator?])
         user-id @(rf/subscribe [:user/id])
         creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
         deletable? (deletable? statement current-edit-hash user-id creation-secrets)
@@ -241,7 +241,7 @@
       (when editable?
         [:dropdown-item
          [edit-dropdown-button-statement statement]])
-      (when deletable?
+      (when (or admin? deletable?)
         [:dropdown-item
          [delete-dropdown-button statement current-edit-hash]])]]))
 
