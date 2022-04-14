@@ -1,6 +1,7 @@
 (ns schnaq.interface.matomo
   "Helper functions to easily track matomo state changes."
-  (:require [oops.core :refer [oget]]))
+  (:require [oops.core :refer [oget]]
+            [re-frame.core :as rf]))
 
 (defn track-event
   "Creates an event and tracks it to matomo."
@@ -34,3 +35,8 @@
     (.push matomo #js ["appendToTrackingUrl" "new_visit=1"])
     (.push matomo #js ["trackPageView"])
     (.push matomo #js ["appendToTrackingUrl" ""])))
+
+(rf/reg-fx
+ :matomo/track-event
+ (fn [[category subcategory]]
+   (track-event category subcategory)))
