@@ -1,20 +1,24 @@
 (ns schnaq.links
-  #?(:clj (:require [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
+  #?(:clj (:require [clojure.spec.alpha :as s]
+                    [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
                     [schnaq.config :as config]
                     [schnaq.database.specs :as specs])
-     :cljs (:require [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
-                     [goog.string :as gstring]
+     :cljs (:require [cljs.spec.alpha :as s]
+                     [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
+                     [goog.string :refer [format]]
                      [oops.core :refer [oget]]
                      [reitit.frontend.easy :as reitfe]
                      [schnaq.database.specs :as specs])))
+
+(s/def ::path (s/and string? #(.startsWith % "/")))
 
 (>defn relative-to-absolute-url
   "Convert a relative url to an absolute url. Points to the currently configured
   frontend as a default."
   [path]
-  [string? => string?]
+  [::path => string?]
   #?(:cljs (let [location (oget js/window :location)]
-             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))
+             (format "%s//%s%s" (oget location :protocol) (oget location :host) path))
      :clj (format "%s%s" config/frontend-url path)))
 
 (>defn get-share-link
@@ -26,10 +30,11 @@
              (relative-to-absolute-url path))))
 
 (>defn get-link-to-statement
+  "Generate a direct url to the statement."
   [share-hash statement-id]
   [(? :discussion/share-hash) (? :db/id) :ret (? string?)]
   (when (and share-hash statement-id)
-    (str (get-share-link share-hash) "/statement/" statement-id)))
+    (format "%s/statement/%s" (get-share-link share-hash) statement-id)))
 
 (>defn get-admin-link
   "Building a URL to the admin-center of a schnaq."
