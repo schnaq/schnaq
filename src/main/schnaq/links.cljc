@@ -1,8 +1,8 @@
 (ns schnaq.links
-  #?(:clj (:require [com.fulcrologic.guardrails.core :refer [>defn ?]]
+  #?(:clj (:require [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
                     [schnaq.config :as config]
                     [schnaq.database.specs :as specs])
-     :cljs (:require [com.fulcrologic.guardrails.core :refer [>defn ?]]
+     :cljs (:require [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
                      [goog.string :as gstring]
                      [oops.core :refer [oget]]
                      [reitit.frontend.easy :as reitfe]
@@ -58,3 +58,12 @@
                  location (oget js/window :location)]
              (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))
      :clj (throw (ex-info "Not implemented" {:price-id price-id}))))
+
+(>defn relative-to-absolute-url
+  "Convert a relative url to an absolute url. Points to the currently configured
+  frontend as a default."
+  [path]
+  [string? => string?]
+  #?(:cljs (let [location (oget js/window :location)]
+             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))
+     :clj (format "%s%s" config/frontend-url path)))
