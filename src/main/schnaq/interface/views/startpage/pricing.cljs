@@ -40,55 +40,29 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- discount-for-choosing-yearly
-  "Calculating the discount if user chooses the yearly subscription."
-  []
-  (let [yearly? @(rf/subscribe [:pricing.interval/yearly?])
-        price-monthly (:cost @(rf/subscribe [:pricing.pro/monthly]))
-        price-yearly (:cost @(rf/subscribe [:pricing.pro/yearly]))
-        discount (- (* (/ (/ price-yearly 12) price-monthly) 100) 100)]
-    (when (and price-monthly price-yearly)
-      [:span.badge.rounded-pill.bg-success.mx-1
-       {:class (when-not yearly? "text-muted")}
-       (gstring/format "%.0f %" discount)])))
-
-(defn- toggle-payment-period
-  "Show toggle to switch between monthly and yearly payment."
-  []
-  (let [yearly? @(rf/subscribe [:pricing.interval/yearly?])]
-    [:div.d-flex.flex-row.pb-3
-     [:div.pe-2 {:class (when yearly? "text-muted")}
-      (labels :pricing.schnaq.pro.monthly/payment-method)]
-     [:div.form-check.form-switch
-      [:input#subscription-switch.form-check-input
-       {:type :checkbox :checked yearly?
-        :on-change #(rf/dispatch [:pricing.interval/toggle-yearly])}]
-      [:label.form-check-label {:for "subscription-switch"}]]
-     [:div {:class (when-not yearly? "text-muted")}
-      (labels :pricing.schnaq.pro.yearly/payment-method) [discount-for-choosing-yearly]]]))
-
 (defn price-tag-pro-tier
   "Price tag for pro tier."
   [price-class]
   (let [pro-price @(rf/subscribe [:pricing/pro-tier])
-        yearly? @(rf/subscribe [:pricing.interval/yearly?])
-        formatted-price (if (js/Number.isInteger pro-price) "%d €" "%.2f €")]
+        currency-symbol @(rf/subscribe [:user.currency/symbol])
+        formatted-price (if (js/Number.isInteger pro-price) "%d %s" "%.2f %s")]
     (if (and pro-price (not (zero? pro-price)))
       [:<>
-       [:span {:class price-class} (gstring/format formatted-price pro-price)]
+       [:span {:class price-class} (gstring/format formatted-price pro-price currency-symbol)]
        [:span (labels :pricing.units/per-month)]
        [:p
         (labels :pricing.notes/with-vat)
         ", "
-        (labels (if yearly? :pricing.schnaq.pro.yearly/cancel-period :pricing.schnaq.pro.monthly/cancel-period))]]
+        (labels :pricing.schnaq.pro.yearly/cancel-period)]]
       [spinner-icon])))
 
 (defn price-tag-free-tier
   "Price tag for free tier."
   []
-  [:<>
-   [:span.display-5 "0 €"]
-   [:span (labels :pricing.units/per-month)]])
+  (let [currency-symbol @(rf/subscribe [:user.currency/symbol])]
+    [:<>
+     [:span.display-5 (gstring/format "0 %s" currency-symbol)]
+     [:span (labels :pricing.units/per-month)]]))
 
 (defn- intro
   "Welcome new users to the pricing page."
@@ -156,8 +130,7 @@
   "Show button to checkout pro."
   []
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
-        yearly? @(rf/subscribe [:pricing.interval/yearly?])
-        price-id (:id @(rf/subscribe [(if yearly? :pricing.pro/yearly :pricing.pro/monthly)]))]
+        price-id (:id @(rf/subscribe [:pricing.pro/yearly]))]
     [buttons/button
      (labels :pricing.pro-tier/call-to-action)
      #(if authenticated?
@@ -246,7 +219,6 @@
    [:<>
     [:div.container
      [intro]
-     [toggle-payment-period]
      [tier-cards]
      [subscription-information]]
     [:div.container-fluid.pt-5
@@ -278,34 +250,13 @@
    (update db :pricing merge prices)))
 
 (rf/reg-sub
- :pricing.pro/monthly
- (fn [db]
-   (get-in db [:pricing :schnaq.pro/monthly])))
-
-(rf/reg-sub
  :pricing.pro/yearly
- (fn [db]
-   (get-in db [:pricing :schnaq.pro/yearly])))
+ (fn [db [_ currency]]
+   (let [cur (or currency (get-in db [:user :currency] :eur))]
+     (get-in db [:pricing cur :schnaq.pro/yearly]))))
 
 (rf/reg-sub
  :pricing/pro-tier
- :<- [:pricing.interval/yearly?]
  :<- [:pricing.pro/yearly]
- :<- [:pricing.pro/monthly]
- (fn [[yearly? price-yearly price-monthly]]
-   (if yearly?
-     (/ (:cost price-yearly) 12)
-     (:cost price-monthly))))
-
-(rf/reg-event-db
- :pricing.interval/toggle-yearly
- (fn [db]
-   (let [yearly-path [:pricing :yearly?]]
-     (if (nil? (get-in db yearly-path))
-       (assoc-in db yearly-path false)
-       (update-in db yearly-path not)))))
-
-(rf/reg-sub
- :pricing.interval/yearly?
- (fn [db]
-   (get-in db [:pricing :yearly?] true)))
+ (fn [price-yearly]
+   (/ (:cost price-yearly) 12)))

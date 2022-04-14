@@ -1,7 +1,8 @@
 (ns schnaq.api.subscription.stripe
   (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn- =>]]
-            [ring.util.http-response :refer [ok bad-request]]
+            [clojure.walk :as walk]
+            [com.fulcrologic.guardrails.core :refer [=> >defn-]]
+            [ring.util.http-response :refer [bad-request ok]]
             [schnaq.api.subscription.stripe-lib :as stripe-lib]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
@@ -54,10 +55,11 @@
 (defn- get-product-prices
   "Query all product prices stored in the stripe config."
   [_request]
-  (let [price-id-with-costs (->> (seq prices)
-                                 (map (fn [[k price-id]]
-                                        [k (stripe-lib/retrieve-price price-id)]))
-                                 (into {}))]
+  (let [price-id-with-costs (walk/postwalk
+                             #(if (s/valid? :stripe.price/id %)
+                                (stripe-lib/retrieve-price %)
+                                %)
+                             prices)]
     (ok {:prices price-id-with-costs})))
 
 (defn- post-to-mattermost-if-in-production
@@ -135,7 +137,7 @@
       {:get get-product-prices
        :name :api.stripe/get-product-price
        :description (at/get-doc #'get-product-prices)
-       :responses {200 {:body {:prices :stripe/kw-to-price}}
+       :responses {200 {:body {:prices :stripe/prices}}
                    403 at/response-error-body}}]
      ["/subscription" {:middleware [:user/authenticated?]}
       ["/status"
