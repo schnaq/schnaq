@@ -65,8 +65,7 @@
   (log/info (format "Frontend URL: %s, host: %s" config/frontend-url config/frontend-host))
   (log/info (if (:sender-password config/email) "E-Mail configured" "E-Mail not configured"))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm))
-  (log/info (format "[Stripe] Price ID schnaq pro monthly: %s" (:schnaq.pro/monthly prices)))
-  (log/info (format "[Stripe] Price ID schnaq pro yearly: %s" (:schnaq.pro/yearly prices)))
+  (log/info (format "[Stripe] Price IDs schnaq pro: %s" (flatten (map vals (map second prices)))))
   (log/info (format "[Stripe] Webhook access key (truncated): %s..." (subs config/stripe-webhook-access-key 0 15)))
   (log/info (format "[Stripe] Secret key (truncated): %s..." (subs config/stripe-secret-api-key 0 15)))
   (log/info (format "[CleverReach] Enabled? %b, Receiver group: %d, client-id: %s, client-secret: %s..."
