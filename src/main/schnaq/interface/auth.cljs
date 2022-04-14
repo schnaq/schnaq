@@ -80,17 +80,6 @@
                  (rf/dispatch [:user/authenticated! false])
                  (error-to-console "Silent check with keycloak failed."))))))
 
-(rf/reg-fx
- :keycloak.init/with-token
- (fn [[keycloak access-token refresh-token]]
-   (-> keycloak
-       (.init #js {:token access-token
-                   :refreshToken refresh-token})
-       (.then (fn [authenticated?]
-                (rf/dispatch [:keycloak.init/after-login authenticated?])))
-       (.catch (fn [_]
-                 (rf/dispatch [:user/authenticated! false]))))))
-
 ;; -----------------------------------------------------------------------------
 ;; Login request to the keycloak instance.
 
