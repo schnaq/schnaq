@@ -179,7 +179,8 @@
       (labels :registration.pricing/compare-plans)
       (navigation/href :routes/pricing) "btn-link"]]]
    nil
-   {:step 3}])
+   {:step 3
+    :wide? true}])
 
 (defn registration-step-3-view
   "Wrapped view for usage in routes."
