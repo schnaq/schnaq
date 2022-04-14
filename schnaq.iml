@@ -57,7 +57,7 @@
     <orderEntry type="library" name="Deps: cli-matic:0.4.3" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.cli:1.0.206" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-transport-native-kqueue$osx-x86_64:4.1.51.Final" level="project" />
-    <orderEntry type="library" name="Deps: org.keycloak/keycloak-core:16.1.0" level="project" />
+    <orderEntry type="library" name="Deps: org.keycloak/keycloak-core:16.1.1" level="project" />
     <orderEntry type="library" name="Deps: com.google.api.grpc/proto-google-iam-v1:1.1.6" level="project" />
     <orderEntry type="library" name="Deps: mvxcvi/puget:1.1.2" level="project" />
     <orderEntry type="library" name="Deps: compojure:1.6.2" level="project" />
@@ -79,12 +79,12 @@
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpasyncclient:4.1.4" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer.jvm:1.2.2" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-handler-proxy:4.1.51.Final" level="project" />
-    <orderEntry type="library" name="Deps: keycloak-clojure:1.25.3" level="project" />
+    <orderEntry type="library" name="Deps: keycloak-clojure:1.26.0" level="project" />
     <orderEntry type="library" name="Deps: jarohen/chime:0.3.3" level="project" />
     <orderEntry type="library" name="Deps: net.incongru.watchservice/barbary-watchservice:1.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.protobuf/protobuf-java-util:3.18.1" level="project" />
     <orderEntry type="library" name="Deps: org.wildfly.common/wildfly-common:1.5.2.Final" level="project" />
-    <orderEntry type="library" name="Deps: org.keycloak/keycloak-admin-client:16.1.0" level="project" />
+    <orderEntry type="library" name="Deps: org.keycloak/keycloak-admin-client:16.1.1" level="project" />
     <orderEntry type="library" name="Deps: com.google.android/annotations:4.1.1.4" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/kaocha-cloverage:1.0.75" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-codec:4.1.51.Final" level="project" />
@@ -104,7 +104,7 @@
     <orderEntry type="library" name="Deps: clj-fuzzy:0.4.1" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-alts:1.41.0" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-cljs:0.8.269" level="project" />
-    <orderEntry type="library" name="Deps: org.keycloak/keycloak-common:16.1.0" level="project" />
+    <orderEntry type="library" name="Deps: org.keycloak/keycloak-common:16.1.1" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/google-closure-library:0.0-20211011-0726fdeb" level="project" />
     <orderEntry type="library" name="Deps: io.aviso/pretty:1.1.1" level="project" />
     <orderEntry type="library" name="Deps: com.github.fge/msg-simple:1.1" level="project" />
@@ -124,7 +124,7 @@
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpcore-nio:4.4.10" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-jetty-adapter:1.9.5" level="project" />
     <orderEntry type="library" name="Deps: com.stuartsierra/component:0.4.0" level="project" />
-    <orderEntry type="library" name="Deps: org.keycloak/keycloak-adapter-spi:16.1.0" level="project" />
+    <orderEntry type="library" name="Deps: org.keycloak/keycloak-adapter-spi:16.1.1" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/js-joda:1.10.1-0" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-handler:4.1.51.Final" level="project" />
     <orderEntry type="library" name="Deps: org.flatland/ordered:1.5.7" level="project" />
@@ -175,7 +175,7 @@
     <orderEntry type="library" name="Deps: clojurewerkz/scrypt:1.2.0" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/truss:1.6.0" level="project" />
     <orderEntry type="library" name="Deps: funcool/cuerdas:2.0.3" level="project" />
-    <orderEntry type="library" name="Deps: org.keycloak/keycloak-adapter-core:16.1.0" level="project" />
+    <orderEntry type="library" name="Deps: org.keycloak/keycloak-adapter-core:16.1.1" level="project" />
     <orderEntry type="library" name="Deps: com.github.fge/json-patch:1.9" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/google-closure-library-third-party:0.0-20211011-0726fdeb" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-annotations:2.13.2" level="project" />
@@ -303,7 +303,7 @@
     <orderEntry type="library" name="Deps: hawk:0.2.11" level="project" />
     <orderEntry type="library" name="Deps: tech.droit/clj-diff:1.0.1" level="project" />
     <orderEntry type="library" name="Deps: camel-snake-kebab:0.4.2" level="project" />
-    <orderEntry type="library" name="Deps: org.keycloak/keycloak-authz-client:16.1.0" level="project" />
+    <orderEntry type="library" name="Deps: org.keycloak/keycloak-authz-client:16.1.1" level="project" />
     <orderEntry type="library" name="Deps: ring:1.9.5" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-grpclb:1.41.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.priority-map:1.1.0" level="project" />
@@ -316,7 +316,7 @@
     <orderEntry type="library" name="Deps: borkdude/sci.impl.reflector:0.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.sun.mail/jakarta.mail:1.6.5" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.44.v20210927" level="project" />
-    <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.113.0" level="project" />
+    <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.114.0" level="project" />
     <orderEntry type="library" name="Deps: io.opencensus/opencensus-api:0.28.0" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-auth:1.41.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpmime:4.5.13" level="project" />
