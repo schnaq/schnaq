@@ -154,6 +154,7 @@
               (assoc-in [:schnaq :statement-slice :current-level] (map :db/id premises))
               (assoc-in [:history :full-context] (vec (map :db/id history))))
       :fx [[:dispatch [:loading/toggle [:statements? false]]]
+           [:dispatch [:votes.local/reset]]
            [:dispatch [:discussion.history/push conclusion]]
            [:dispatch [:visited/set-visited-statements conclusion]]
            [:dispatch [:notification/set-visited-statements share-hash conclusion premises]]]})))
