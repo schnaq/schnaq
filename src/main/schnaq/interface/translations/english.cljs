@@ -196,7 +196,8 @@
    ;; Login page
    :page.login/heading "Let's schnaq"
    :page.login/subheading "100% free forever"
-   :page.login/login "Sign In / Sign Up"
+   :page.login/login "Sign In"
+   :page.login/or "or"
    :page.login.alert/text-1 "Check out all benefits of a registered user"
    :page.login.alert/button "here"
    :page.login.alert/text-2 ""

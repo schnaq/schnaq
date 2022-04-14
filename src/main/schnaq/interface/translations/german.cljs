@@ -196,7 +196,8 @@
    ;; Login Page
    :page.login/heading "Nicht warten, schnaqqen!"
    :page.login/subheading "100% kostenlos für immer"
-   :page.login/login "Anmelden / Registrieren"
+   :page.login/login "Anmelden"
+   :page.login/or "oder"
    :page.login.alert/text-1 "Sieh dir"
    :page.login.alert/button "hier"
    :page.login.alert/text-2 "alle Vorteile als registrierte:r Nutzer:in an."
