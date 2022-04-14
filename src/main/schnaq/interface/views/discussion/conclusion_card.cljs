@@ -107,38 +107,11 @@
 (defn- statement-card->editable-card
   "Wrap `statement-card-component`. Check if this statement is currently being
   edited, show edit-card if true."
-  [statement statement-card-component]
-  (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
+  [statement-id statement-card-component]
+  (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? statement-id])]
     (if currently-edited?
-      [edit/edit-card-statement statement]
+      [edit/edit-card-statement statement-id]
       statement-card-component)))
-
-(defn statement-card
-  "Display a full interactive statement. Takes `additional-content`, e.g. the
-  answer of a question."
-  ([statement]
-   [statement-card statement nil])
-  ([statement additional-content]
-   [:article.statement-card
-    [:div.d-flex.flex-row
-     [card-highlighting statement]
-     [:div.card-view.card-body.py-2.px-0
-      (when (:meta/new? statement)
-        [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
-         (labels :discussion.badges/new)])
-      [:div.pt-2.d-flex.px-3
-       [:div.me-auto [user/user-info statement 32 "w-100"]]
-       [:div.d-flex.flex-row.align-items-center.ms-auto
-        (when-not @(rf/subscribe [:schnaq.routes/starting?])
-          [mark-as-answer-button statement])
-        [badges/edit-statement-dropdown-menu statement]]]
-      [:div.my-4]
-      [:div.text-typography.px-3
-       [truncated-content/statement statement]
-       [statement-information-row statement]]
-      [:div.mx-3
-       [input/reply-in-statement-input-form statement]
-       additional-content]]]]))
 
 (defn- discuss-answer-button [statement]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
@@ -157,47 +130,48 @@
 
 (defn reduced-statement-card
   "A reduced statement-card focusing on the statement."
-  [statement]
-  [motion/fade-in-and-out
-   [:article.statement-card.mt-1.border
-    [:div.d-flex.flex-row
-     [card-highlighting statement "me-2 highlight-card-reduced"]
-     [:div.card-view.card-body.p-2
-      [:div.d-flex.justify-content-start.pt-2
-       [user/user-info statement 25 "w-100"]
-       [badges/edit-statement-dropdown-menu statement]]
-      [:div.text-typography
-       [truncated-content/statement statement]]
-      [:div.d-flex.flex-wrap.align-items-center
-       [discuss-answer-button statement]
-       [reactions/up-down-vote statement]
-       [:div.d-flex.flex-row.align-items-center.ms-auto
-        [mark-as-answer-button statement]]]]]]])
+  [statement-id]
+  (let [statement @(rf/subscribe [:schnaq/statement statement-id])]
+    [motion/fade-in-and-out
+     [:article.statement-card.mt-1.border
+      [:div.d-flex.flex-row
+       [card-highlighting statement "me-2 highlight-card-reduced"]
+       [:div.card-view.card-body.p-2
+        [:div.d-flex.justify-content-start.pt-2
+         [user/user-info statement 25 "w-100"]
+         [badges/edit-statement-dropdown-menu statement]]
+        [:div.text-typography
+         [truncated-content/statement statement]]
+        [:div.d-flex.flex-wrap.align-items-center
+         [discuss-answer-button statement]
+         [reactions/up-down-vote statement]
+         [:div.d-flex.flex-row.align-items-center.ms-auto
+          [mark-as-answer-button statement]]]]]]]))
 
-(defn reduced-or-edit-card
+(defn- reduced-or-edit-card
   "Wrap reduced statement card to make it editable."
-  [statement]
-  [statement-card->editable-card statement [reduced-statement-card statement]])
+  [statement-id]
+  [statement-card->editable-card statement-id [reduced-statement-card statement-id]])
 
-(defn- answers [statement]
-  (let [answers @(rf/subscribe [:statements/answers (:db/id statement)])]
-    (when (seq answers)
+(defn- answers [statement-id]
+  (let [answers-ids @(rf/subscribe [:statements/answers statement-id])]
+    (when (seq answers-ids)
       [:div.mt-2
-       (for [answer answers]
+       (for [answer-id answers-ids]
          (with-meta
-           [reduced-or-edit-card answer]
-           {:key (str "answer-" (:db/id answer))}))])))
+           [reduced-or-edit-card answer-id]
+           {:key (str "answer-" answer-id)}))])))
 
-(defn- replies [_statement]
+(defn- replies [_statement-id]
   (let [collapsed? (reagent/atom true)]
-    (fn [statement]
-      (let [replies @(rf/subscribe [:statements/replies (:db/id statement)])
+    (fn [statement-id]
+      (let [reply-ids @(rf/subscribe [:statements/replies statement-id])
             rotation (if @collapsed? 0 180)
             button-icon [motion/rotate rotation [icon :collapse-down "my-auto"]]
             button-content (if @collapsed?
                              (labels :qanda.button.show/replies)
                              (labels :qanda.button.hide/replies))]
-        (when (not-empty replies)
+        (when (not-empty reply-ids)
           [:<>
            [:button.btn.btn-transparent.btn-no-outline
             {:type "button" :aria-expanded "false"
@@ -205,18 +179,37 @@
             [:span.me-2 button-content] button-icon]
            [motion/collapse-in-out
             @collapsed?
-            (for [reply replies]
+            (for [reply-id reply-ids]
               (with-meta
-                [reduced-or-edit-card reply]
-                {:key (str "reply-" (:db/id reply))}))]])))))
+                [reduced-or-edit-card reply-id]
+                {:key (str "reply-" reply-id)}))]])))))
 
-(defn answer-card
-  "Display the answer directly inside the statement itself."
-  [statement]
-  [statement-card statement
-   [:<>
-    [answers statement]
-    [replies statement]]])
+(defn statement-card
+  "Display a full interactive statement. Takes `additional-content`, e.g. the
+  answer of a question."
+  [statement-id]
+  (let [statement @(rf/subscribe [:schnaq/statement statement-id])]
+    [:article.statement-card
+     [:div.d-flex.flex-row
+      [card-highlighting statement]
+      [:div.card-view.card-body.py-2.px-0
+       (when (:meta/new? statement)
+         [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
+          (labels :discussion.badges/new)])
+       [:div.pt-2.d-flex.px-3
+        [:div.me-auto [user/user-info statement 32 "w-100"]]
+        [:div.d-flex.flex-row.align-items-center.ms-auto
+         (when-not @(rf/subscribe [:schnaq.routes/starting?])
+           [mark-as-answer-button statement])
+         [badges/edit-statement-dropdown-menu statement]]]
+       [:div.my-4]
+       [:div.text-typography.px-3
+        [truncated-content/statement statement]
+        [statement-information-row statement]]
+       [:div.mx-3
+        [input/reply-in-statement-input-form statement]
+        [answers statement-id]
+        [replies statement-id]]]]]))
 
 (defn- sort-statements
   "Sort statements according to the filter method. If we are in q-and-a-mode,
@@ -266,7 +259,7 @@
     (if edit-active?
       (if starting-route?
         [edit/edit-card-discussion statement]
-        [edit/edit-card-statement statement])
+        [edit/edit-card-statement (:db/id statement)])
       [:h2.h6 title])))
 
 (defn- topic-bubble-view []
@@ -276,13 +269,13 @@
                  :statement/author author
                  :statement/created-at created-at}
         starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        statement (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))]
+        statement-or-topic (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))]
     [motion/move-in :left
      [:div.p-2
       [:div.d-flex.flex-wrap.mb-4
-       [user/user-info statement 32 nil]
-       [current-topic-badges schnaq statement]]
-      [title-view statement]]]))
+       [user/user-info statement-or-topic 32 nil]
+       [current-topic-badges schnaq statement-or-topic]]
+      [title-view statement-or-topic]]]))
 
 (defn- search-info []
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
@@ -406,16 +399,16 @@
          (filter true?)
          count)))
 
-(defn statement-list-item
+(defn- statement-list-item
   "The highest part of a statement-list. Knows when to show itself and when not."
-  [statement index]
+  [statement-id index]
   (let [active-filters? @(rf/subscribe [:filters/active?])
         answered-only? @(rf/subscribe [:filters/answered?])
-        answers @(rf/subscribe [:statements/answers (:db/id statement)])
+        answers @(rf/subscribe [:statements/answers statement-id])
         item-component
         [:div.statement-column
          [motion/fade-in-and-out
-          [statement-card->editable-card statement [answer-card statement]]
+          [statement-card->editable-card statement-id [statement-card statement-id]]
           (delay-fade-in-for-subsequent-content index)]]]
     (if active-filters?
       (when (or (and answered-only? (seq answers))
@@ -423,26 +416,29 @@
         item-component)
       item-component)))
 
+(rf/reg-sub
+ :schnaq.statements/filtered-sorted-visible
+ :<- [:discussion.statements/sort-method]
+ :<- [:local-votes]
+ :<- [:discussion.statements/show]
+ :<- [:user/current]
+ :<- [:schnaq.question.input/current]
+ (fn [[sort-method local-votes shown-statements user current-input-tokens] _]
+   (let [sorted-conclusions (sort-statements user shown-statements sort-method local-votes)
+         grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)
+         input-filtered-statements
+         (sort-by #(score-hit current-input-tokens (:statement/content %)) > (get grouped-statements false))
+         pinned-statements (get grouped-statements true)
+         sorted-filtered-statements (concat pinned-statements input-filtered-statements)]
+     (map :db/id sorted-filtered-statements))))
+
 (defn- statements-list []
-  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
-        local-votes @(rf/subscribe [:local-votes])
-        current-input-tokens @(rf/subscribe [:schnaq.question.input/current])
-        user @(rf/subscribe [:user/current])
-        shown-premises @(rf/subscribe [:discussion.statements/show])
-        loading-statements? @(rf/subscribe [:loading/statements?])
-        sorted-conclusions (sort-statements user shown-premises sort-method local-votes)
-        grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)
-        pinned-statements (get grouped-statements true)
-        input-filtered-statements
-        (sort-by #(score-hit current-input-tokens (:statement/content %)) > (get grouped-statements false))
-        sorted-statements (concat pinned-statements input-filtered-statements)]
-    (if loading-statements?
-      [loading/loading-card]
-      (for [index (range (count sorted-statements))
-            :let [statement (nth sorted-statements index)]]
-        (with-meta
-          [statement-list-item statement index]
-          {:key (:db/id statement)})))))
+  (let [sorted-statements @(rf/subscribe [:schnaq.statements/filtered-sorted-visible])]
+    (for [index (range (count sorted-statements))
+          :let [statement-id (nth sorted-statements index)]]
+      (with-meta
+        [statement-list-item statement-id index]
+        {:key statement-id}))))
 
 (defn conclusion-cards-list
   "Prepare a list of statements and group them together."

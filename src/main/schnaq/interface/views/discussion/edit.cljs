@@ -35,18 +35,18 @@
 
 (defn edit-card-statement
   "Editable statement input."
-  [statement]
-  (let [statement-id (:db/id statement)
+  [statement-id]
+  (let [statement @(rf/subscribe [:schnaq/statement statement-id])
         pro-con-enabled? (and (:statement/parent statement)
                               (not @(rf/subscribe [:schnaq.selected/pro-con?])))
         statement-html-id (str "statement-edit-" statement-id)
         dispatch-fn #(rf/dispatch
-                      [:statement.edit/send (:db/id statement) statement-html-id (oget % [:currentTarget :elements])])]
+                      [:statement.edit/send statement-id statement-html-id (oget % [:currentTarget :elements])])]
     [edit-card
      :statement.edit/label
      statement-html-id
      dispatch-fn
-     (:db/id statement)
+     statement-id
      pro-con-enabled?
      (:statement/content statement)
      [:statement.edit/statement-type statement-id]
