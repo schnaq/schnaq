@@ -33,7 +33,7 @@
     (ok {:schnaq (-> (if (and keycloak-id (validator/user-schnaq-admin? share-hash keycloak-id))
                        (discussion-db/discussion-by-share-hash-private share-hash)
                        (discussion-db/discussion-by-share-hash share-hash))
-                     processors/add-meta-info-to-schnaq
+                     processors/schnaq-default
                      (processors/with-sub-statement-count share-hash)
                      (processors/with-new-post-info share-hash keycloak-id)
                      processors/hide-deleted-statement-content
@@ -56,7 +56,7 @@
     (if share-hashes
       (ok {:schnaqs
            (map #(-> %
-                     processors/add-meta-info-to-schnaq
+                     processors/schnaq-default
                      (processors/with-aggregated-votes user-id))
                 (discussion-db/discussions-by-share-hashes share-hashes-list))})
       at/not-found-hash-invalid)))

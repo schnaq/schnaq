@@ -25,7 +25,7 @@
   (let [keycloak-name (get-in parameters [:path :keycloak-name])]
     (if (auth/member-of-group? identity keycloak-name)
       (let [hub (hub-db/hub-by-keycloak-name keycloak-name)
-            processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
+            processed-hub (update hub :hub/schnaqs #(map processors/schnaq-default %))]
         (ok {:hub processed-hub
              :hub-members (user-db/members-of-group keycloak-name)}))
       forbidden-missing-permission)))
@@ -38,7 +38,7 @@
         hubs (hub-db/hubs-by-keycloak-names keycloak-names)
         processed-hubs (map
                         #(update % :hub/schnaqs
-                                 (fn [hub] (map processors/add-meta-info-to-schnaq hub)))
+                                 (fn [hub] (map processors/schnaq-default hub)))
                         hubs)]
     (ok {:hubs processed-hubs})))
 
@@ -54,7 +54,7 @@
         (let [discussion-id (:db/id (fast-pull [:discussion/share-hash share-hash] [:db/id]))
               hub-id (:db/id (fast-pull [:hub/keycloak-name keycloak-name] [:db/id]))
               hub (hub-db/add-discussions-to-hub! hub-id [discussion-id])
-              processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
+              processed-hub (update hub :hub/schnaqs #(map processors/schnaq-default %))]
           (ok {:hub processed-hub}))
         (not-found (at/build-error-body :hub/discussion-not-found
                                         "The discussion could not be found.")))
@@ -68,7 +68,7 @@
     (if (auth/member-of-group? identity keycloak-name)
       (let [hub (hub-db/remove-discussion-from-hub [:hub/keycloak-name keycloak-name]
                                                    [:discussion/share-hash share-hash])
-            processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
+            processed-hub (update hub :hub/schnaqs #(map processors/schnaq-default %))]
         (ok {:hub processed-hub}))
       forbidden-missing-permission)))
 
@@ -79,7 +79,7 @@
         new-hub-name (get-in parameters [:body :new-hub-name])]
     (if (auth/member-of-group? identity keycloak-name)
       (let [hub (hub-db/change-hub-name keycloak-name new-hub-name)
-            processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
+            processed-hub (update hub :hub/schnaqs #(map processors/schnaq-default %))]
         (ok {:hub processed-hub}))
       forbidden-missing-permission)))
 

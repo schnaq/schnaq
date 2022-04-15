@@ -1,25 +1,34 @@
 (ns schnaq.processors
   (:require [clojure.spec.alpha :as s]
             [clojure.walk :as walk]
-            [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
             [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
-            [schnaq.meta-info :as meta-info])
+            [schnaq.user :as user])
   (:import (clojure.lang IEditableCollection)))
 
 ;; -----------------------------------------------------------------------------
 ;; Processing schnaqs
 
-(>defn add-meta-info-to-schnaq
+(>defn- discussion-meta-info
+  "Returns a hashmap of meta infos {:all-statements int, :authors '()}"
+  [share-hash author]
+  [:discussion/share-hash :db/id => map?]
+  (let [all-statements (discussion-db/all-statements share-hash)
+        total-count (count all-statements)
+        authors (distinct (conj (map #(user/statement-author %) all-statements)
+                                (user/display-name author)))]
+    {:all-statements total-count :authors authors}))
+
+(>defn schnaq-default
   "Enrich a schnaq with its meta-infos."
   [schnaq]
   [::specs/discussion :ret ::specs/discussion]
   (let [share-hash (:discussion/share-hash schnaq)
-        author (:discussion/author schnaq)
-        meta-info (meta-info/discussion-meta-info share-hash author)]
-    (assoc schnaq :meta-info meta-info)))
+        author (:discussion/author schnaq)]
+    (assoc schnaq :meta-info (discussion-meta-info share-hash author))))
 
 ;; -----------------------------------------------------------------------------
 ;; Processing statements
