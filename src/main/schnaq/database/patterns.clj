@@ -12,9 +12,9 @@
   [:user.registered/email
    :user.registered/last-name
    :user.registered/first-name
-   {:user.registered/notification-mail-interval [:db/ident]}
+   {[:user.registered/notification-mail-interval :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {:user.registered/visited-schnaqs [:discussion/share-hash]}
-   {:user.registered.subscription/type [:db/ident]}
+   {[:user.registered.subscription/type :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    :user.registered.subscription/stripe-id
    :user.registered.subscription/stripe-customer-id])
 
@@ -54,7 +54,7 @@
    :statement/cumulative-downvotes
    :statement/cumulative-upvotes
    [:statement/_parent :as :statement/children :xform 'schnaq.database.xforms/maps->ids]
-   {:statement/type [:db/ident]}
+   {[:statement/type :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {:statement/author public-user}])
 
 (def statement-with-secret
