@@ -27,13 +27,6 @@
           %)
        statements))
 
-(defn valid-statements-with-votes
-  "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
-  [statements user-id]
-  (-> statements
-      processors/hide-deleted-statement-content
-      (processors/with-aggregated-votes user-id)))
-
 (defn- process-single-statement
   "Processes a single statement."
   [statement share-hash user-identity author-id]
@@ -64,10 +57,11 @@
   "Search through any valid discussion."
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash search-string display-name]} (:query parameters)
-        user-id (user-db/user-id display-name (:sub identity))]
-    (ok {:matching-statements (-> (discussion-db/search-statements share-hash search-string)
-                                  (processors/with-sub-statement-count share-hash)
-                                  (valid-statements-with-votes user-id))})))
+        keycloak-id (:sub identity)
+        user-id (user-db/user-id display-name keycloak-id)]
+    (ok {:matching-statements (processors/statement-default
+                               (discussion-db/search-statements share-hash search-string)
+                               share-hash keycloak-id user-id)})))
 
 (defn- get-statement-info
   "Return premises, conclusion and the history for a given statement id."
@@ -210,13 +204,11 @@
         locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
-          (created ""
-                   {:new-statement
-                    (valid-statements-with-votes
-                     (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type
-                                                        :registered-user? keycloak-id
-                                                        :locked? locked?)
-                     user-id)}))
+          (created
+           ""
+           {:new-statement (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type
+                                                              :registered-user? keycloak-id
+                                                              :locked? locked?)}))
       (validator/deny-access at/invalid-rights-message))))
 
 (defn graph-for-discussion
@@ -343,11 +335,8 @@
         keycloak-id (:sub identity)
         user-id (user-db/user-id display-name keycloak-id)]
     (if (user-allowed-to-label? identity share-hash)
-      (ok {:statement (-> [(discussion-db/add-label statement-id label)]
-                          (valid-statements-with-votes user-id)
-                          (processors/with-sub-statement-count share-hash)
-                          (processors/with-new-post-info share-hash keycloak-id)
-                          first)})
+      (ok {:statement (processors/statement-default (discussion-db/add-label statement-id label)
+                                                    share-hash keycloak-id user-id)})
       (forbidden (at/build-error-body :permission/forbidden "You are not allowed to edit labels")))))
 
 (defn- remove-label
@@ -358,11 +347,8 @@
         keycloak-id (:sub identity)
         user-id (user-db/user-id display-name keycloak-id)]
     (if (user-allowed-to-label? identity share-hash)
-      (ok {:statement (-> [(discussion-db/remove-label statement-id label)]
-                          (valid-statements-with-votes user-id)
-                          (processors/with-sub-statement-count share-hash)
-                          (processors/with-new-post-info share-hash keycloak-id)
-                          first)})
+      (ok {:statement (processors/statement-default (discussion-db/remove-label statement-id label)
+                                                    share-hash keycloak-id user-id)})
       (forbidden (at/build-error-body :permission/forbidden "You are not allowed to edit labels")))))
 
 (defn- toggle-statement-lock
