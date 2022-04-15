@@ -34,18 +34,10 @@
       processors/hide-deleted-statement-content
       (processors/with-aggregated-votes user-id)))
 
-(defn default-statement-processors
-  "Take all the default statement processors and apply them to the data."
-  [data share-hash user-identity author-id]
-  (-> data
-      (processors/with-sub-statement-count share-hash)
-      (processors/with-new-post-info share-hash user-identity)
-      (valid-statements-with-votes author-id)))
-
 (defn- process-single-statement
   "Processes a single statement."
   [statement share-hash user-identity author-id]
-  (first (default-statement-processors [statement] share-hash user-identity author-id)))
+  (first (processors/statement-default [statement] share-hash user-identity author-id)))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied.
@@ -53,7 +45,7 @@
   ([share-hash user-identity author-id]
    (-> share-hash
        discussion-db/starting-statements
-       (default-statement-processors share-hash user-identity author-id)))
+       (processors/statement-default share-hash user-identity author-id)))
   ([share-hash user-identity author-id secret-statement-id]
    (add-creation-secret (starting-conclusions-with-processors share-hash user-identity author-id) secret-statement-id)))
 
@@ -65,7 +57,7 @@
         author-id (user-db/user-id display-name user-identity)
         startings (starting-conclusions-with-processors share-hash user-identity author-id)]
     (ok {:starting-conclusions (processors/with-new-post-info startings share-hash user-identity)
-         :children (default-statement-processors
+         :children (processors/statement-default
                     (discussion-db/children-from-statements startings) share-hash user-identity author-id)})))
 
 (defn- search-statements
@@ -88,10 +80,10 @@
             premises (discussion-db/children-for-statement statement-id)]
         (ok {:conclusion (process-single-statement conclusion share-hash user-identity author-id)
              :premises (-> premises
-                           (default-statement-processors share-hash user-identity author-id))
+                           (processors/statement-default share-hash user-identity author-id))
              :history (-> (discussion-db/history-for-statement statement-id)
-                          (default-statement-processors share-hash user-identity author-id))
-             :children (default-statement-processors
+                          (processors/statement-default share-hash user-identity author-id))
+             :children (processors/statement-default
                         (discussion-db/children-from-statements (conj premises conclusion))
                         share-hash user-identity author-id)}))
       at/not-found-hash-invalid)))

@@ -161,7 +161,7 @@
     (ok {:matching-statements (-> matching-statements
                                   (processors/with-sub-statement-count share-hash)
                                   (discussion-api/valid-statements-with-votes user-id))
-         :children (discussion-api/default-statement-processors
+         :children (processors/statement-default
                     (discussion-db/children-from-statements matching-statements)
                     share-hash (:sub identity) user-id)})))
 

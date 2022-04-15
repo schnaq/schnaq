@@ -1,7 +1,7 @@
 (ns schnaq.processors
   (:require [clojure.spec.alpha :as s]
             [clojure.walk :as walk]
-            [com.fulcrologic.guardrails.core :refer [>defn]]
+            [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
             [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
@@ -82,3 +82,14 @@
            statement)
          statement))
      data)))
+
+(defn statement-default
+  "Receives a datastructure and enriches all statements found inside. Use this processor if you do not want to
+  explicitly hide information."
+  [data share-hash user-identity author-id]
+  [any? :discussion/share-hash (? :user.registered/keycloak-id) :db/id => any?]
+  (-> data
+      (with-sub-statement-count share-hash)
+      (with-new-post-info share-hash user-identity)
+      hide-deleted-statement-content
+      (with-aggregated-votes author-id)))
