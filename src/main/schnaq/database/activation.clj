@@ -2,8 +2,7 @@
   (:require [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
-            [schnaq.database.specs :as specs]
-            [schnaq.toolbelt :as tools]))
+            [schnaq.database.specs :as specs]))
 
 (>defn- new-activation!
   "Create a new activation for a discussion. 
@@ -11,25 +10,22 @@
   [share-hash]
   [:discussion/share-hash :ret (? ::specs/activation)]
   (let [temp-id "new-activation"]
-    (tools/pull-key-up
-     (db/transact-and-pull-temp
-      [{:db/id temp-id
-        :activation/count 0
-        :activation/discussion [:discussion/share-hash share-hash]}]
-      temp-id patterns/activation))))
+    (db/transact-and-pull-temp
+     [{:db/id temp-id
+       :activation/count 0
+       :activation/discussion [:discussion/share-hash share-hash]}]
+     temp-id patterns/activation)))
 
 (>defn activation-by-share-hash
   "Get the activation for a discussion by share-hash."
   [share-hash]
   [:discussion/share-hash :ret (? ::specs/activation)]
-  (first
-   (tools/pull-key-up
-    (db/query '[:find [(pull ?activation activation-pattern)]
-                :in $ ?share-hash activation-pattern
-                :where [?discussion :discussion/share-hash ?share-hash]
-                [?activation :activation/discussion ?discussion]]
-              share-hash patterns/activation))))
-
+  (db/query '[:find (pull ?activation activation-pattern) .
+              :in $ ?share-hash activation-pattern
+              :where [?discussion :discussion/share-hash ?share-hash]
+              [?activation :activation/discussion ?discussion]]
+            share-hash patterns/activation))
+;; TODO startseite bei schnaq löst spec error aus. was passiert?
 (>defn start-activation!
   "Starts a new activation if none has already been created."
   [share-hash]

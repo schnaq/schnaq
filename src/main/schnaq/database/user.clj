@@ -5,7 +5,6 @@
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
-            [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log]))
 
 ;; -----------------------------------------------------------------------------
@@ -37,31 +36,28 @@
   "Returns the registered user by email."
   [keycloak-id]
   [:user.registered/keycloak-id :ret ::specs/registered-user]
-  (toolbelt/pull-key-up
-   (fast-pull [:user.registered/keycloak-id keycloak-id]
-              patterns/private-user)))
+  (fast-pull [:user.registered/keycloak-id keycloak-id]
+             patterns/private-user))
 
 (>defn all-registered-users
   "Returns all registered users."
   []
   [:ret (s/coll-of ::specs/registered-user)]
-  (toolbelt/pull-key-up
-   (query
-    '[:find [(pull ?registered-user user-pattern) ...]
-      :in $ user-pattern
-      :where [?registered-user :user.registered/keycloak-id _]]
-    patterns/private-user)))
+  (query
+   '[:find [(pull ?registered-user user-pattern) ...]
+     :in $ user-pattern
+     :where [?registered-user :user.registered/keycloak-id _]]
+   patterns/private-user))
 
 (>defn users-by-notification-interval
   "Query users from database matching the notification interval."
   [interval]
   [:user.registered/notification-mail-interval :ret (s/coll-of ::specs/registered-user)]
-  (toolbelt/pull-key-up
-   (query
-    '[:find [(pull ?users pattern) ...]
-      :in $ ?interval pattern
-      :where [?users :user.registered/notification-mail-interval ?interval]]
-    interval patterns/private-user)))
+  (query
+   '[:find [(pull ?users pattern) ...]
+     :in $ ?interval pattern
+     :where [?users :user.registered/notification-mail-interval ?interval]]
+   interval patterns/private-user))
 
 ;; -----------------------------------------------------------------------------
 
@@ -182,8 +178,7 @@
   [{:keys [sub email preferred_username given_name family_name groups avatar] :as identity} visited-schnaqs visited-statements]
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [id (str sub)
-        existing-user (toolbelt/pull-key-up
-                       (fast-pull [:user.registered/keycloak-id id] patterns/private-user))
+        existing-user (fast-pull [:user.registered/keycloak-id id] patterns/private-user)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
@@ -220,8 +215,7 @@
    (let [new-db (:db-after
                  @(transact [[:db/add [:user.registered/keycloak-id keycloak-id]
                               field value]]))]
-     (toolbelt/pull-key-up
-      (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db)))))
+     (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db))))
 
 (>defn update-display-name
   "Update the name of an existing user."
@@ -277,8 +271,7 @@
                              :user.registered.subscription/type :user.registered.subscription.type/pro
                              :user.registered.subscription/stripe-id stripe-subscription-id
                              :user.registered.subscription/stripe-customer-id stripe-customer-id}]))]
-    (toolbelt/pull-key-up
-     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db))))
+    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
 
 (>defn unsubscribe-pro-tier
   "Remove subscription from user."
@@ -289,8 +282,7 @@
                 @(transact [(conj retractions :user.registered.subscription/type)
                             (conj retractions :user.registered.subscription/stripe-id)
                             (conj retractions :user.registered.subscription/stripe-customer-id)]))]
-    (toolbelt/pull-key-up
-     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db))))
+    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
 
 (>defn pro-subscription?
   "Check in our database the pro-subscription status of the user."

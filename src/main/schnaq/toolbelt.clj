@@ -2,13 +2,11 @@
   "Utility functions supporting the backend."
   (:require [clj-http.client :as client]
             [clojure.string :as string]
-            [clojure.walk :as walk]
             [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
             [muuntaja.core :as m]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config])
-  (:import (clojure.lang PersistentArrayMap)
-           (java.time Instant LocalDateTime ZoneOffset)
+  (:import (java.time Instant LocalDateTime ZoneOffset)
            (java.time.temporal ChronoUnit TemporalUnit)))
 
 (>defn now-minus-days
@@ -22,28 +20,6 @@
   [days]
   [integer? :ret inst?]
   (.toInstant (.plusDays (LocalDateTime/now) days) ZoneOffset/UTC))
-
-(>defn pull-key-up
-  "Finds any occurrence of a member of `key-name` in `coll`. Then replaced the corresponding
-   value with the value of its key-name entry.
-   E.g.
-   ```
-   (ident-map->value {:foo {:db/ident :bar}, :baz {:db/ident :oof}} :db/ident)
-   => {:foo :bar, :baz :oof}
-
-   (ident-map->value {:foo {:db/ident :bar}} :not-found)
-   => {:foo {:db/ident :bar}}
-   ```"
-  ([coll]
-   [(? coll?) :ret (? coll?)]
-   (pull-key-up coll :db/ident))
-  ([coll key-name]
-   [(? coll?) keyword? :ret (? coll?)]
-   (walk/postwalk
-    #(if (and (= PersistentArrayMap (type %)) (contains? % key-name))
-       (key-name %)
-       %)
-    coll)))
 
 (>defn ascending
   "Comparator, can be used to sort collections in an ascending way."

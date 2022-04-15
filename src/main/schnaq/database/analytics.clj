@@ -1,8 +1,7 @@
 (ns schnaq.database.analytics
   (:require [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
             [schnaq.database.main :as main-db]
-            [schnaq.database.patterns :as patterns]
-            [schnaq.toolbelt :as toolbelt])
+            [schnaq.database.patterns :as patterns])
   (:import (java.util Date)
            (java.time Instant)
            (java.text SimpleDateFormat)))
@@ -74,14 +73,13 @@
   "Return all users created since given days."
   [since]
   [:statistics/since => :statistics/users]
-  (toolbelt/pull-key-up
-   (main-db/query
-    '[:find [(pull ?users pattern) ...]
-      :in $ pattern ?since
-      :where [?users :user.registered/email _ ?tx]
-      [?tx :db/txInstant ?start-date]
-      [(< ?since ?start-date)]]
-    patterns/private-user (Date/from since))))
+  (main-db/query
+   '[:find [(pull ?users pattern) ...]
+     :in $ pattern ?since
+     :where [?users :user.registered/email _ ?tx]
+     [?tx :db/txInstant ?start-date]
+     [(< ?since ?start-date)]]
+   patterns/private-user (Date/from since)))
 
 (>defn number-or-registered-users
   "Returns the number of registered users in the database."

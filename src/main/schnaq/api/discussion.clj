@@ -15,7 +15,6 @@
             [schnaq.mail.emails :as emails]
             [schnaq.media :as media]
             [schnaq.processors :as processors]
-            [schnaq.toolbelt :as toolbelt]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
@@ -46,9 +45,7 @@
 (defn- process-single-statement
   "Processes a single statement."
   [statement share-hash user-identity author-id]
-  (first (-> [statement]
-             (default-statement-processors share-hash user-identity author-id)
-             toolbelt/pull-key-up)))
+  (first (default-statement-processors [statement] share-hash user-identity author-id)))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied.
@@ -87,7 +84,7 @@
         user-identity (:sub identity)
         author-id (user-db/user-id display-name user-identity)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
-      (let [conclusion (toolbelt/pull-key-up (db/fast-pull statement-id patterns/statement))
+      (let [conclusion (db/fast-pull statement-id patterns/statement)
             premises (discussion-db/children-for-statement statement-id)]
         (ok {:conclusion (process-single-statement conclusion share-hash user-identity author-id)
              :premises (-> premises
