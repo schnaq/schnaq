@@ -22,9 +22,10 @@
   "Get the visible entities for a discussion."
   [share-hash]
   [:discussion/share-hash :ret vector?]
-  (query
-   '[:find [(pull ?visible-entities [*]) ...]
-     :in $ ?share-hash
-     :where [?discussion :discussion/share-hash ?share-hash]
-     [?discussion :discussion.visible/entities ?visible-entities]]
-   share-hash))
+  (mapv :db/ident
+        (query
+         '[:find [(pull ?visible-entities [:db/ident]) ...]
+           :in $ ?share-hash
+           :where [?discussion :discussion/share-hash ?share-hash]
+           [?discussion :discussion.visible/entities ?visible-entities]]
+         share-hash)))

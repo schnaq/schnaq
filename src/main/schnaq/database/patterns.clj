@@ -84,12 +84,12 @@
 (def discussion-minimal
   [:db/id
    :discussion/title
-   {[:discussion/states :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
+   {[:discussion/states :xform 'schnaq.database.xforms/pull-up-ident-coll] [:db/ident]}
    :discussion/share-hash
    :discussion/header-image-url
    :discussion/created-at
    {:discussion/author public-user}
-   {[:discussion.visible/entities :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
+   {[:discussion.visible/entities :xform 'schnaq.database.xforms/pull-up-ident-coll] [:db/ident]}
    {:discussion/theme theme}])
 
 (def discussion
@@ -151,4 +151,4 @@
 (def survey-using-schnaq-for
   [:db/id
    :surveys.using-schnaq-for/user
-   {[:surveys.using-schnaq-for/topics :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}])
+   {[:surveys.using-schnaq-for/topics :xform 'schnaq.database.xforms/pull-up-ident-coll] [:db/ident]}])
