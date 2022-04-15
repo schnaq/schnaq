@@ -25,7 +25,7 @@
               :where [?discussion :discussion/share-hash ?share-hash]
               [?activation :activation/discussion ?discussion]]
             share-hash patterns/activation))
-;; TODO startseite bei schnaq löst spec error aus. was passiert?
+
 (>defn start-activation!
   "Starts a new activation if none has already been created."
   [share-hash]
