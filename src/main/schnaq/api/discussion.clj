@@ -1,6 +1,5 @@
 (ns schnaq.api.discussion
   (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [ring.util.http-response :refer [bad-request created forbidden ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
@@ -18,35 +17,17 @@
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
-(>defn- add-creation-secret
-  "Add creation-secret to a collection of statements. Only add to matching target-id."
-  [statements target-id]
-  [(s/coll-of ::specs/statement) :db/id :ret (s/coll-of ::specs/statement)]
-  (map #(if (= target-id (:db/id %))
-          (merge % (db/fast-pull target-id '[:statement/creation-secret]))
-          %)
-       statements))
-
-(defn- starting-conclusions-with-processors
-  "Returns starting conclusions for a discussion, with processors applied.
-  Optionally a statement-id can be passed to enrich the statement with its creation-secret."
-  ([share-hash user-identity author-id]
-   (-> share-hash
-       discussion-db/starting-statements
-       (processors/statement-default share-hash user-identity author-id)))
-  ([share-hash user-identity author-id secret-statement-id]
-   (add-creation-secret (starting-conclusions-with-processors share-hash user-identity author-id) secret-statement-id)))
-
 (defn get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash display-name]} (:query parameters)
         user-identity (:sub identity)
         author-id (user-db/user-id display-name user-identity)
-        startings (starting-conclusions-with-processors share-hash user-identity author-id)]
-    (ok {:starting-conclusions (processors/with-new-post-info startings share-hash user-identity)
-         :children (processors/statement-default
-                    (discussion-db/children-from-statements startings) share-hash user-identity author-id)})))
+        startings (discussion-db/starting-statements share-hash)]
+    (ok (processors/statement-default
+         {:starting-conclusions startings
+          :children (discussion-db/children-from-statements startings)}
+         share-hash user-identity author-id))))
 
 (defn- search-statements
   "Search through any valid discussion."
