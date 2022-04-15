@@ -86,16 +86,15 @@
   [:db/id
    :discussion/title
    :discussion/description
-   {:discussion/states [:db/ident]}
+   {[:discussion/states :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {:discussion/starting-statements statement}
    :discussion/share-hash
    :discussion/header-image-url
-   {:discussion/mode [:db/ident]}
+   {[:discussion/mode :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    :discussion/created-at
    {:discussion/author public-user}
-   {[:discussion.access/_discussion :as :discussion/access]
-    access-code}
-   {:discussion.visible/entities [:db/ident]}
+   {[:discussion.access/_discussion :as :discussion/access] access-code}
+   {[:discussion.visible/entities :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {:discussion/theme theme}])
 
 (def discussion-private
@@ -105,12 +104,12 @@
 (def discussion-minimal
   [:db/id
    :discussion/title
-   {:discussion/states [:db/ident]}
+   {[:discussion/states :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    :discussion/share-hash
    :discussion/header-image-url
    :discussion/created-at
    {:discussion/author public-user}
-   {:discussion.visible/entities [:db/ident]}
+   {[:discussion.visible/entities :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {:discussion/theme theme}])
 
 (def access-code-with-discussion
@@ -141,7 +140,7 @@
 (def poll
   [:db/id
    :poll/title
-   {:poll/type [:db/ident]}
+   {[:poll/type :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {:poll/options [:db/id
                    :option/value
                    [:option/votes :default 0]]}
@@ -159,4 +158,4 @@
 (def survey-using-schnaq-for
   [:db/id
    :surveys.using-schnaq-for/user
-   {:surveys.using-schnaq-for/topics [:db/ident]}])
+   {[:surveys.using-schnaq-for/topics :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}])
