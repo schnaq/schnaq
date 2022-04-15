@@ -9,3 +9,8 @@
   [123 321]"
   [result-coll]
   (not-empty (map :db/id result-coll)))
+
+(defn pull-up-db-ident
+  "Receives an entity and returns the :db/ident inside it."
+  [entity]
+  (:db/ident entity))
