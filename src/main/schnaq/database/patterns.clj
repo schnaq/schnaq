@@ -81,26 +81,6 @@
    :theme.images/header
    :theme.texts/activation])
 
-(def discussion
-  "Representation of a discussion."
-  [:db/id
-   :discussion/title
-   :discussion/description
-   {[:discussion/states :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
-   {:discussion/starting-statements statement}
-   :discussion/share-hash
-   :discussion/header-image-url
-   {[:discussion/mode :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
-   :discussion/created-at
-   {:discussion/author public-user}
-   {[:discussion.access/_discussion :as :discussion/access] access-code}
-   {[:discussion.visible/entities :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
-   {:discussion/theme theme}])
-
-(def discussion-private
-  "Holds sensitive information as well."
-  (conj discussion :discussion/edit-hash))
-
 (def discussion-minimal
   [:db/id
    :discussion/title
@@ -112,30 +92,43 @@
    {[:discussion.visible/entities :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {:discussion/theme theme}])
 
+(def discussion
+  "Representation of a discussion."
+  (concat
+   discussion-minimal
+   [:discussion/description
+    {:discussion/starting-statements statement}
+    {[:discussion/mode :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
+    {[:discussion.access/_discussion :as :discussion/access] access-code}]))
+
+(def discussion-private
+  "Holds sensitive information as well."
+  (conj discussion :discussion/edit-hash))
+
 (def access-code-with-discussion
   "Return the access-code and directly query the discussion."
   (conj access-code {:discussion.access/discussion discussion}))
 
 ;; -----------------------------------------------------------------------------
 
-(def summary
+(def ^:private minimal-summary
   [:db/id
-   :summary/discussion
    :summary/requested-at
    :summary/text
    :summary/created-at])
 
+(def summary
+  (conj minimal-summary :summary/discussion))
+
 (def summary-with-discussion
-  [:db/id
+  (conj
+   minimal-summary
    {:summary/discussion [:discussion/title
                          :discussion/share-hash
                          :db/id]}
-   :summary/requested-at
-   :summary/text
-   :summary/created-at
    {:summary/requester [:user.registered/email
                         :user.registered/display-name
-                        :user.registered/keycloak-id]}])
+                        :user.registered/keycloak-id]}))
 
 (def poll
   [:db/id
