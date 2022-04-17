@@ -93,7 +93,6 @@
   "Query a discussion by its access code."
   [code]
   [:discussion.access/code :ret (? :discussion/access)]
-  (let [access-code (-> (fast-pull [:discussion.access/code code] patterns/access-code-with-discussion)
-                        toolbelt/pull-key-up
-                        remove-invalid-and-pull-up-access-codes)]
+  (let [access-code (remove-invalid-and-pull-up-access-codes
+                     (fast-pull [:discussion.access/code code] patterns/access-code-with-discussion))]
     (when (valid? access-code) access-code)))

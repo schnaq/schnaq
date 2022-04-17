@@ -4,7 +4,6 @@
             [schnaq.database.main :refer [transact fast-pull query] :as main-db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
-            [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
   (:import (java.util Date)))
 
@@ -27,12 +26,11 @@
   "Return all schnaqs belonging to a hub. Includes the tx."
   [hub-id]
   [:db/id :ret any?]
-  (-> (query
-       '[:find [(pull ?discussions discussion-pattern) ...]
-         :in $ ?hub discussion-pattern
-         :where [?hub :hub/schnaqs ?discussions]]
-       hub-id patterns/discussion-minimal)
-      toolbelt/pull-key-up))
+  (query
+   '[:find [(pull ?discussions discussion-pattern) ...]
+     :in $ ?hub discussion-pattern
+     :where [?hub :hub/schnaqs ?discussions]]
+   hub-id patterns/discussion-minimal))
 
 (defn- pull-hub
   "Pull a hub from the database and include all txs pull db/ident up."
@@ -97,12 +95,11 @@
   "Takes a list of keycloak-names and returns the hub entities."
   [keycloak-names]
   [(s/coll-of string?) :ret (s/coll-of ::specs/hub)]
-  (toolbelt/pull-key-up
-   (main-db/query
-    '[:find [(pull ?hub hub-pattern) ...]
-      :in $ [?hub-names ...] hub-pattern
-      :where [?hub :hub/keycloak-name ?hub-names]]
-    keycloak-names hub-pattern)))
+  (main-db/query
+   '[:find [(pull ?hub hub-pattern) ...]
+     :in $ [?hub-names ...] hub-pattern
+     :where [?hub :hub/keycloak-name ?hub-names]]
+   keycloak-names hub-pattern))
 
 (>defn change-hub-name
   "Change a hub's name."
@@ -111,8 +108,7 @@
   (let [new-db (:db-after
                 @(transact [[:db/add [:hub/keycloak-name keycloak-name]
                              :hub/name new-name]]))]
-    (toolbelt/pull-key-up
-     (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern new-db))))
+    (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern new-db)))
 
 (>defn update-hub-logo-url
   "Update the hub logo url."
@@ -121,6 +117,4 @@
   (let [new-db (:db-after
                 @(transact [[:db/add [:hub/keycloak-name keycloak-name]
                              :hub/logo hub-logo-url]]))]
-    (toolbelt/pull-key-up
-     (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern new-db)
-     :db/ident)))
+    (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern new-db)))

@@ -12,9 +12,9 @@
   [:user.registered/email
    :user.registered/last-name
    :user.registered/first-name
-   {:user.registered/notification-mail-interval [:db/ident]}
+   {[:user.registered/notification-mail-interval :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {:user.registered/visited-schnaqs [:discussion/share-hash]}
-   {:user.registered.subscription/type [:db/ident]}
+   {[:user.registered.subscription/type :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    :user.registered.subscription/stripe-id
    :user.registered.subscription/stripe-customer-id])
 
@@ -54,7 +54,7 @@
    :statement/cumulative-downvotes
    :statement/cumulative-upvotes
    [:statement/_parent :as :statement/children :xform 'schnaq.database.xforms/maps->ids]
-   {:statement/type [:db/ident]}
+   {[:statement/type :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {:statement/author public-user}])
 
 (def statement-with-secret
@@ -81,37 +81,29 @@
    :theme.images/header
    :theme.texts/activation])
 
-(def discussion
-  "Representation of a discussion."
+(def discussion-minimal
   [:db/id
    :discussion/title
-   :discussion/description
-   {:discussion/states [:db/ident]}
-   {:discussion/starting-statements statement}
+   {[:discussion/states :xform 'schnaq.database.xforms/pull-up-ident-coll] [:db/ident]}
    :discussion/share-hash
    :discussion/header-image-url
-   {:discussion/mode [:db/ident]}
    :discussion/created-at
    {:discussion/author public-user}
-   {[:discussion.access/_discussion :as :discussion/access]
-    access-code}
-   {:discussion.visible/entities [:db/ident]}
+   {[:discussion.visible/entities :xform 'schnaq.database.xforms/pull-up-ident-coll] [:db/ident]}
    {:discussion/theme theme}])
+
+(def discussion
+  "Representation of a discussion."
+  (concat
+   discussion-minimal
+   [:discussion/description
+    {:discussion/starting-statements statement}
+    {[:discussion/mode :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
+    {[:discussion.access/_discussion :as :discussion/access] access-code}]))
 
 (def discussion-private
   "Holds sensitive information as well."
   (conj discussion :discussion/edit-hash))
-
-(def discussion-minimal
-  [:db/id
-   :discussion/title
-   {:discussion/states [:db/ident]}
-   :discussion/share-hash
-   :discussion/header-image-url
-   :discussion/created-at
-   {:discussion/author public-user}
-   {:discussion.visible/entities [:db/ident]}
-   {:discussion/theme theme}])
 
 (def access-code-with-discussion
   "Return the access-code and directly query the discussion."
@@ -119,29 +111,29 @@
 
 ;; -----------------------------------------------------------------------------
 
-(def summary
+(def ^:private minimal-summary
   [:db/id
-   :summary/discussion
    :summary/requested-at
    :summary/text
    :summary/created-at])
 
+(def summary
+  (conj minimal-summary :summary/discussion))
+
 (def summary-with-discussion
-  [:db/id
+  (conj
+   minimal-summary
    {:summary/discussion [:discussion/title
                          :discussion/share-hash
                          :db/id]}
-   :summary/requested-at
-   :summary/text
-   :summary/created-at
    {:summary/requester [:user.registered/email
                         :user.registered/display-name
-                        :user.registered/keycloak-id]}])
+                        :user.registered/keycloak-id]}))
 
 (def poll
   [:db/id
    :poll/title
-   {:poll/type [:db/ident]}
+   {[:poll/type :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {:poll/options [:db/id
                    :option/value
                    [:option/votes :default 0]]}
@@ -159,4 +151,4 @@
 (def survey-using-schnaq-for
   [:db/id
    :surveys.using-schnaq-for/user
-   {:surveys.using-schnaq-for/topics [:db/ident]}])
+   {[:surveys.using-schnaq-for/topics :xform 'schnaq.database.xforms/pull-up-ident-coll] [:db/ident]}])

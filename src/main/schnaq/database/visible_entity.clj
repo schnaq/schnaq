@@ -1,8 +1,7 @@
 (ns schnaq.database.visible-entity
   (:require [com.fulcrologic.guardrails.core :refer [>defn]]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.main :refer [transact query] :as main-db]
-            [schnaq.toolbelt :as toolbelt]
+            [schnaq.database.main :refer [transact query]]
             [taoensso.timbre :as log]))
 
 (>defn add-entity!
@@ -23,10 +22,10 @@
   "Get the visible entities for a discussion."
   [share-hash]
   [:discussion/share-hash :ret vector?]
-  (toolbelt/pull-key-up
-   (query
-    '[:find [(pull ?visible-entities [*]) ...]
-      :in $ ?share-hash
-      :where [?discussion :discussion/share-hash ?share-hash]
-      [?discussion :discussion.visible/entities ?visible-entities]]
-    share-hash)))
+  (mapv :db/ident
+        (query
+         '[:find [(pull ?visible-entities [:db/ident]) ...]
+           :in $ ?share-hash
+           :where [?discussion :discussion/share-hash ?share-hash]
+           [?discussion :discussion.visible/entities ?visible-entities]]
+         share-hash)))

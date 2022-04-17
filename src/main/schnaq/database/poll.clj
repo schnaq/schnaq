@@ -3,8 +3,7 @@
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
             [schnaq.database.main :as db :refer [query fast-pull]]
             [schnaq.database.patterns :as patterns]
-            [schnaq.database.specs :as specs]
-            [schnaq.toolbelt :as tools])
+            [schnaq.database.specs :as specs])
   (:import (java.util UUID)))
 
 (>defn new-poll!
@@ -12,30 +11,28 @@
   [title poll-type options discussion-id]
   [:poll/title :poll/type (s/coll-of ::specs/non-blank-string) :db/id :ret (? ::specs/poll)]
   (when (< 0 (count options))
-    (tools/pull-key-up
-     (db/transact-and-pull-temp
-      [{:db/id "newly-created-poll"
-        :poll/title title
-        :poll/type poll-type
-        :poll/discussion discussion-id
-        :poll/options (mapv (fn [val] {:db/id (.toString (UUID/randomUUID))
-                                       :option/value val}) options)}]
-      "newly-created-poll"
-      patterns/poll))))
+    (db/transact-and-pull-temp
+     [{:db/id "newly-created-poll"
+       :poll/title title
+       :poll/type poll-type
+       :poll/discussion discussion-id
+       :poll/options (mapv (fn [val] {:db/id (.toString (UUID/randomUUID))
+                                      :option/value val}) options)}]
+     "newly-created-poll"
+     patterns/poll)))
 
 (>defn poll-from-discussion
   "Get valid poll from a discussion. Returns `nil` if the poll or discussion
   is invalid."
   [share-hash poll-id]
   [:discussion/share-hash :db/id => (? ::specs/poll)]
-  (tools/pull-key-up
-   (query
-    '[:find (pull ?poll-id pattern) .
-      :in $ ?poll-id ?share-hash pattern
-      :where [?poll-id :poll/title]
-      [?poll-id :poll/discussion ?discussion]
-      [?discussion :discussion/share-hash ?share-hash]]
-    poll-id share-hash patterns/poll)))
+  (query
+   '[:find (pull ?poll-id pattern) .
+     :in $ ?poll-id ?share-hash pattern
+     :where [?poll-id :poll/title]
+     [?poll-id :poll/discussion ?discussion]
+     [?discussion :discussion/share-hash ?share-hash]]
+   poll-id share-hash patterns/poll))
 
 (>defn- poll-belongs-to-discussion?
   "Check if poll belongs to a discussion."
@@ -54,12 +51,11 @@
   "Return all polls which reference the discussion from the passed `share-hash`."
   [share-hash]
   [:discussion/share-hash :ret (s/coll-of ::specs/poll)]
-  (tools/pull-key-up
-   (db/query '[:find [(pull ?poll poll-pattern) ...]
-               :in $ ?share-hash poll-pattern
-               :where [?discussion :discussion/share-hash ?share-hash]
-               [?poll :poll/discussion ?discussion]]
-             share-hash patterns/poll)))
+  (db/query '[:find [(pull ?poll poll-pattern) ...]
+              :in $ ?share-hash poll-pattern
+              :where [?discussion :discussion/share-hash ?share-hash]
+              [?poll :poll/discussion ?discussion]]
+            share-hash patterns/poll))
 
 (>defn vote!
   "Casts a vote for a certain option.

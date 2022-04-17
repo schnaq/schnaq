@@ -3,7 +3,6 @@
             [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
-            [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log]))
 
 (>defn participate-using-schnaq-for-survey
@@ -19,10 +18,8 @@
   "Return all results of the survey."
   []
   [=> (s/coll-of :surveys/using-schnaq-for)]
-  (->
-   (db/query
-    '[:find [(pull ?surveys pattern) ...]
-      :in $ pattern
-      :where [?surveys :surveys.using-schnaq-for/user]]
-    patterns/survey-using-schnaq-for)
-   toolbelt/pull-key-up))
+  (db/query
+   '[:find [(pull ?surveys pattern) ...]
+     :in $ pattern
+     :where [?surveys :surveys.using-schnaq-for/user]]
+   patterns/survey-using-schnaq-for))
