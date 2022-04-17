@@ -80,7 +80,7 @@
   (transitive-child-rules 7))
 
 (defn sub-statement-count
-  "Takes a list of statement-ids and returns a map {id meta-info-map} for the statements."
+  "Takes a list of statement-ids and returns a map {id children-count} for the statements."
   [statement-ids]
   (apply merge
          (map #(hash-map (first %) (second %))

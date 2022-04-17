@@ -1,7 +1,6 @@
 (ns schnaq.api.schnaq
   (:require [clojure.spec.alpha :as s]
             [ring.util.http-response :refer [ok created bad-request forbidden]]
-            [schnaq.api.discussion :as discussion-api]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.config.shared :as shared-config]
@@ -34,7 +33,7 @@
     (ok {:schnaq (-> (if (and keycloak-id (validator/user-schnaq-admin? share-hash keycloak-id))
                        (discussion-db/discussion-by-share-hash-private share-hash)
                        (discussion-db/discussion-by-share-hash share-hash))
-                     processors/add-meta-info-to-schnaq
+                     processors/schnaq-default
                      (processors/with-sub-statement-count share-hash)
                      (processors/with-new-post-info share-hash keycloak-id)
                      processors/hide-deleted-statement-content
@@ -57,7 +56,7 @@
     (if share-hashes
       (ok {:schnaqs
            (map #(-> %
-                     processors/add-meta-info-to-schnaq
+                     processors/schnaq-default
                      (processors/with-aggregated-votes user-id))
                 (discussion-db/discussions-by-share-hashes share-hashes-list))})
       at/not-found-hash-invalid)))
@@ -156,14 +155,13 @@
   "Search through any valid discussion."
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash search-string display-name]} (:query parameters)
-        user-id (user-db/user-id display-name (:sub identity))
+        keycloak-id (:sub identity)
+        user-id (user-db/user-id display-name keycloak-id)
         matching-statements (discussion-db/search-similar-questions share-hash search-string)]
-    (ok {:matching-statements (-> matching-statements
-                                  (processors/with-sub-statement-count share-hash)
-                                  (discussion-api/valid-statements-with-votes user-id))
-         :children (discussion-api/default-statement-processors
-                    (discussion-db/children-from-statements matching-statements)
-                    share-hash (:sub identity) user-id)})))
+    (ok (processors/statement-default
+         {:matching-statements matching-statements
+          :children (discussion-db/children-from-statements matching-statements)}
+         share-hash keycloak-id user-id))))
 
 ;; -----------------------------------------------------------------------------
 

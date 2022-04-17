@@ -13,7 +13,6 @@
 (defn pull-up-db-ident
   "Receives an entity and returns the :db/ident inside it."
   [entity]
-  (println entity)
   (:db/ident entity))
 
 (defn pull-up-ident-coll

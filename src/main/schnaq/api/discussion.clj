@@ -1,6 +1,5 @@
 (ns schnaq.api.discussion
   (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [ring.util.http-response :refer [bad-request created forbidden ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
@@ -18,64 +17,27 @@
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
-(>defn- add-creation-secret
-  "Add creation-secret to a collection of statements. Only add to matching target-id."
-  [statements target-id]
-  [(s/coll-of ::specs/statement) :db/id :ret (s/coll-of ::specs/statement)]
-  (map #(if (= target-id (:db/id %))
-          (merge % (db/fast-pull target-id '[:statement/creation-secret]))
-          %)
-       statements))
-
-(defn valid-statements-with-votes
-  "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
-  [statements user-id]
-  (-> statements
-      processors/hide-deleted-statement-content
-      (processors/with-aggregated-votes user-id)))
-
-(defn default-statement-processors
-  "Take all the default statement processors and apply them to the data."
-  [data share-hash user-identity author-id]
-  (-> data
-      (processors/with-sub-statement-count share-hash)
-      (processors/with-new-post-info share-hash user-identity)
-      (valid-statements-with-votes author-id)))
-
-(defn- process-single-statement
-  "Processes a single statement."
-  [statement share-hash user-identity author-id]
-  (first (default-statement-processors [statement] share-hash user-identity author-id)))
-
-(defn- starting-conclusions-with-processors
-  "Returns starting conclusions for a discussion, with processors applied.
-  Optionally a statement-id can be passed to enrich the statement with its creation-secret."
-  ([share-hash user-identity author-id]
-   (-> share-hash
-       discussion-db/starting-statements
-       (default-statement-processors share-hash user-identity author-id)))
-  ([share-hash user-identity author-id secret-statement-id]
-   (add-creation-secret (starting-conclusions-with-processors share-hash user-identity author-id) secret-statement-id)))
-
 (defn get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash display-name]} (:query parameters)
         user-identity (:sub identity)
         author-id (user-db/user-id display-name user-identity)
-        startings (starting-conclusions-with-processors share-hash user-identity author-id)]
-    (ok {:starting-conclusions (processors/with-new-post-info startings share-hash user-identity)
-         :children (default-statement-processors
-                    (discussion-db/children-from-statements startings) share-hash user-identity author-id)})))
+        startings (discussion-db/starting-statements share-hash)]
+    (ok (processors/statement-default
+         {:starting-conclusions startings
+          :children (discussion-db/children-from-statements startings)}
+         share-hash user-identity author-id))))
 
 (defn- search-statements
   "Search through any valid discussion."
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash search-string display-name]} (:query parameters)
-        user-id (user-db/user-id display-name (:sub identity))]
-    (ok {:matching-statements (-> (discussion-db/search-statements share-hash search-string)
-                                  (processors/with-sub-statement-count share-hash)
-                                  (valid-statements-with-votes user-id))})))
+        keycloak-id (:sub identity)
+        user-id (user-db/user-id display-name keycloak-id)]
+    (ok {:matching-statements (processors/statement-default
+                               (discussion-db/search-statements share-hash search-string)
+                               share-hash keycloak-id user-id)})))
 
 (defn- get-statement-info
   "Return premises, conclusion and the history for a given statement id."
@@ -86,14 +48,12 @@
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (let [conclusion (db/fast-pull statement-id patterns/statement)
             premises (discussion-db/children-for-statement statement-id)]
-        (ok {:conclusion (process-single-statement conclusion share-hash user-identity author-id)
-             :premises (-> premises
-                           (default-statement-processors share-hash user-identity author-id))
-             :history (-> (discussion-db/history-for-statement statement-id)
-                          (default-statement-processors share-hash user-identity author-id))
-             :children (default-statement-processors
-                        (discussion-db/children-from-statements (conj premises conclusion))
-                        share-hash user-identity author-id)}))
+        (ok (processors/statement-default
+             {:conclusion conclusion
+              :premises premises
+              :history (discussion-db/history-for-statement statement-id)
+              :children (discussion-db/children-from-statements (conj premises conclusion))}
+             share-hash user-identity author-id)))
       at/not-found-hash-invalid)))
 
 (defn- update-seen-statements!
@@ -197,13 +157,10 @@
         ;; Only Moderators can lock
         locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
     (if (validator/valid-writeable-discussion? share-hash)
-      (let [new-starting (process-single-statement
-                          (discussion-db/add-starting-statement! share-hash user-id statement
-                                                                 :registered-user? keycloak-id
-                                                                 :locked? locked?)
-                          share-hash keycloak-id user-id)]
-        (log/info "Starting statement added for discussion" share-hash)
-        (created "" {:starting-conclusion new-starting}))
+      (do (log/info "Starting statement added for discussion" share-hash)
+          (created "" {:starting-conclusion (discussion-db/add-starting-statement! share-hash user-id statement
+                                                                                   :registered-user? keycloak-id
+                                                                                   :locked? locked?)}))
       (validator/deny-access at/invalid-rights-message))))
 
 (defn- react-to-any-statement!
@@ -218,13 +175,11 @@
         locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
-          (created ""
-                   {:new-statement
-                    (valid-statements-with-votes
-                     (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type
-                                                        :registered-user? keycloak-id
-                                                        :locked? locked?)
-                     user-id)}))
+          (created
+           ""
+           {:new-statement (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type
+                                                              :registered-user? keycloak-id
+                                                              :locked? locked?)}))
       (validator/deny-access at/invalid-rights-message))))
 
 (defn graph-for-discussion
@@ -351,11 +306,8 @@
         keycloak-id (:sub identity)
         user-id (user-db/user-id display-name keycloak-id)]
     (if (user-allowed-to-label? identity share-hash)
-      (ok {:statement (-> [(discussion-db/add-label statement-id label)]
-                          (valid-statements-with-votes user-id)
-                          (processors/with-sub-statement-count share-hash)
-                          (processors/with-new-post-info share-hash keycloak-id)
-                          first)})
+      (ok {:statement (processors/statement-default (discussion-db/add-label statement-id label)
+                                                    share-hash keycloak-id user-id)})
       (forbidden (at/build-error-body :permission/forbidden "You are not allowed to edit labels")))))
 
 (defn- remove-label
@@ -366,11 +318,8 @@
         keycloak-id (:sub identity)
         user-id (user-db/user-id display-name keycloak-id)]
     (if (user-allowed-to-label? identity share-hash)
-      (ok {:statement (-> [(discussion-db/remove-label statement-id label)]
-                          (valid-statements-with-votes user-id)
-                          (processors/with-sub-statement-count share-hash)
-                          (processors/with-new-post-info share-hash keycloak-id)
-                          first)})
+      (ok {:statement (processors/statement-default (discussion-db/remove-label statement-id label)
+                                                    share-hash keycloak-id user-id)})
       (forbidden (at/build-error-body :permission/forbidden "You are not allowed to edit labels")))))
 
 (defn- toggle-statement-lock
