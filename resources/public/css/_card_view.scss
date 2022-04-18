@@ -211,3 +211,7 @@
 .percentage-bar-highlight {
   box-shadow: 0 0 5px 1px $gray-500;
 }
+
+.card-view img {
+  @extend .img-fluid;
+}
