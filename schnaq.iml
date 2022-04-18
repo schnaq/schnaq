@@ -131,7 +131,7 @@
     <orderEntry type="library" name="Deps: io.grpc/grpc-context:1.41.0" level="project" />
     <orderEntry type="library" name="Deps: commons-io:2.10.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
-    <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.3.3" level="project" />
+    <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.3.4" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.namespace:0.3.1" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/tempura:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: fipp:0.6.25" level="project" />
