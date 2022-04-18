@@ -1,6 +1,6 @@
 @use '../node_modules/@fontsource/poppins/scss/mixins' as poppins;
 
-$weights: 100, 200, 300, 400, 500, 600, 700, 800, 900;
+$weights: 100, 200, 300, 400, 500, 600, 700;
 @each $thickness in $weights {
   @include poppins.fontFace(
     $weight: $thickness,
@@ -80,6 +80,9 @@ $dark: $dark-base !default;
 $input-background: $gray-200 !default;
 
 $font-family-sans-serif: 'Poppins', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
+$badge-font-weight: 400;
+$font-weight-bold: 600;
+$font-weight-bolder: 700;
 
 // Shadows
 // This overrides Bootstrap's default shadow-classes, e.g. .shadow
