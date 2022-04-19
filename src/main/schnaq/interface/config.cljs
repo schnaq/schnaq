@@ -20,8 +20,7 @@
 
 (def in-iframe?
   "Check if schnaq is loaded in an iframe."
-  false)
-
+  (not= (. js/window -location) (.. js/window -parent -location)))
 ;; -----------------------------------------------------------------------------
 ;; Keycloak
 
