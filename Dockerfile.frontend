@@ -1,4 +1,4 @@
-FROM clojure:openjdk-17-tools-deps-alpine AS shadow-build
+FROM clojure:openjdk-17-tools-deps-bullseye AS shadow-build
 
 WORKDIR /code
 
@@ -21,8 +21,11 @@ ARG EXAMPLE_STATEMENT
 ARG KEYCLOAK_CLIENT
 ARG KEYCLOAK_REALM
 
-RUN apk add yarn
-RUN yarn global add sass
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt update && \
+    apt install -y yarn && \
+    yarn global add sass
 
 # Cache and install JavaScript dependencies
 COPY package.json .
