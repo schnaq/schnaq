@@ -31,7 +31,7 @@ variables:
 
 test:
   extends: .with-datomic-pro
-  image: clojure:openjdk-17-tools-deps-alpine
+  image: clojure:openjdk-17-tools-deps-slim-bullseye
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:test
   artifacts:
@@ -41,7 +41,7 @@ test:
 
 test-cljs:
   extends: .with-datomic-pro
-  image: gitlab.cs.uni-duesseldorf.de:5001/dialogo/images/clojure-yarn-chrome
+  image: ghcr.io/schnaq/clojure-yarn-chrome
   before_script:
     - yarn install
   script:
@@ -50,14 +50,14 @@ test-cljs:
 
 lint:
   extends: .with-datomic-pro
-  image: clojure:openjdk-17-tools-deps-alpine
+  image: clojure:openjdk-17-tools-deps-slim-bullseye
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:clj-kondo --lint src
   allow_failure: true
   when: always
 
 css-compile-and-lint:
-  image: node:14.8-alpine
+  image: ghcr.io/schnaq/clojure-yarn-chrome
   before_script:
     - yarn install --dev
     - yarn global add sass
@@ -68,9 +68,7 @@ css-compile-and-lint:
 
 up-to-date?:
   extends: .with-datomic-pro
-  image: clojure:openjdk-17-tools-deps-alpine
-  before_script:
-    - apk add git
+  image: clojure:openjdk-17-tools-deps-slim-bullseye
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:outdated
   allow_failure: true

@@ -1,6 +1,4 @@
-FROM clojure:openjdk-17-tools-deps-alpine as backend-build
-
-RUN apk add --no-cache tzdata
+FROM clojure:openjdk-17-tools-deps-slim-bullseye as backend-build
 
 WORKDIR /code
 
@@ -25,7 +23,7 @@ RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -X:uberjar
 
 # ------------------------------------------------------------------------------
 
-FROM clojure:openjdk-17-tools-deps-alpine
+FROM clojure:openjdk-17-tools-deps-slim-bullseye
 
 WORKDIR /code
 COPY --from=backend-build /code/target/schnaq-standalone.jar .
