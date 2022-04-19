@@ -592,7 +592,7 @@
      "40221 Düsseldorf" [:br]
      "Germany"]
     [:p
-     (toolbelt/obfuscate-text "+49176 72265456") [:br]
+     (toolbelt/obfuscate-text "+49 156 78354553") [:br]
      (toolbelt/obfuscate-text "info@schnaq.com")]
     [:p
      "Commercial Register (Handelsregister): HRB 95753" [:br]
