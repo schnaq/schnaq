@@ -57,7 +57,7 @@ lint:
   when: always
 
 css-compile-and-lint:
-  image: node:14.8-alpine
+  image: ghcr.io/schnaq/clojure-yarn-chrome
   before_script:
     - yarn install --dev
     - yarn global add sass
