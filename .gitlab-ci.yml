@@ -31,7 +31,7 @@ variables:
 
 test:
   extends: .with-datomic-pro
-  image: clojure:openjdk-17-tools-deps-bullseye
+  image: clojure:openjdk-17-tools-deps-slim-bullseye
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:test
   artifacts:
@@ -50,7 +50,7 @@ test-cljs:
 
 lint:
   extends: .with-datomic-pro
-  image: clojure:openjdk-17-tools-deps-bullseye
+  image: clojure:openjdk-17-tools-deps-slim-bullseye
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:clj-kondo --lint src
   allow_failure: true
@@ -68,7 +68,7 @@ css-compile-and-lint:
 
 up-to-date?:
   extends: .with-datomic-pro
-  image: clojure:openjdk-17-tools-deps-bullseye
+  image: clojure:openjdk-17-tools-deps-slim-bullseye
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:outdated
   allow_failure: true
