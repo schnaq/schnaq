@@ -4,7 +4,6 @@
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -27,10 +26,7 @@
         back-label (if has-history?
                      (labels :history.back/label)
                      (labels :history.all-schnaqs/label))
-        navigation-target (cond
-                            has-history? back-history
-                            shared-config/embedded? nil
-                            :else back-feed)
+        navigation-target (if has-history? back-history back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
     (when navigation-target
       [:div.d-flex.flex-row.h-100

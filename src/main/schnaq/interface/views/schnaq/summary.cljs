@@ -3,7 +3,6 @@
   (:require [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.matomo :as matomo]
@@ -55,8 +54,7 @@
      [common-components/hint-text
       (str
        (labels :summary.user/computation-time)
-       (when-not shared-config/embedded?
-         (str " " (labels :summary.user/privacy-warning))))]]))
+       " " (labels :summary.user/privacy-warning))]]))
 
 (defn summary-body
   "Contains the summary and possibly some meta information."

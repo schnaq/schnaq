@@ -17,9 +17,6 @@
           (or (System/getenv "S3_HOST") "https://s3.schnaq.com"))
    :cljs (goog-define s3-host "https://s3.schnaq.com"))
 
-#?(;; TODO remove embedded
-   :cljs (goog-define embedded? false))
-
 (def default-anonymous-display-name "Anonymous")
 
 (defn s3-buckets

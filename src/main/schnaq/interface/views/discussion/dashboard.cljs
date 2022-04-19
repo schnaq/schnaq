@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.dashboard
   (:require [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.preview :as preview]
             [schnaq.interface.components.wordcloud :refer [wordcloud-preview]]
@@ -41,7 +40,7 @@
         current-schnaq @(rf/subscribe [:schnaq/selected])]
     [:div.panel-white.p-3
      [:h3.mb-3.text-break (labels :dashboard/summary)]
-     (if (or pro-user? shared-config/embedded?)
+     (if pro-user?
        [summary/summary-body current-schnaq]
        [preview/preview-image :preview/summary])]))
 

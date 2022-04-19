@@ -2,7 +2,6 @@
   (:require [clojure.string :as str]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
@@ -133,7 +132,7 @@
 (defn footer
   "Footer to display at the bottom the page."
   []
-  (when-not (or shared-config/embedded? config/in-iframe?)
+  (when-not config/in-iframe?
     [:footer
      [:div.container-fluid.px-5
       [:div.row

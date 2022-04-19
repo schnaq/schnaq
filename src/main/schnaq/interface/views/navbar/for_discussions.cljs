@@ -47,6 +47,7 @@
      [collapse-content/navbar-external-content navbar-content-id]]))
 
 (defn embeddable-header []
+  ;; TODO kill  this!
   ;; The view breaks earlier, because the breakpoints heed the screen size, not the div size
   (let [{:discussion/keys [title share-hash] :as discussion} @(rf/subscribe [:schnaq/selected])
         admin-access? @(rf/subscribe [:schnaq.current/admin-access])
