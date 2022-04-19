@@ -17,9 +17,7 @@
           (or (System/getenv "S3_HOST") "https://s3.schnaq.com"))
    :cljs (goog-define s3-host "https://s3.schnaq.com"))
 
-#?(:clj (def embedded?
-          ;; TODO remove embedded
-          (or (System/getenv "EMBEDDED") false))
+#?(;; TODO remove embedded
    :cljs (goog-define embedded? false))
 
 (def default-anonymous-display-name "Anonymous")
