@@ -1,6 +1,0 @@
-/* Unset all elements here that are overwritten in an embedded setting. It's not possible to unset
- everything without breaking the styles as of 2021-08-12. */
-
-.alert {
-  all: unset;
-}
