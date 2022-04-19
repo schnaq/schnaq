@@ -255,7 +255,7 @@
 
    :statement/discuss "Discuss"
    :statement/replies "Replies"
-   :statement/new "Absenden"
+   :statement/new "Post"
    :statement.new/placeholder "Your statement"
    :statement.edit.send.failure/title "Edit could not be made"
    :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."
