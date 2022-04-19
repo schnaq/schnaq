@@ -177,4 +177,5 @@
    ;; Do not delete completely. Device votes need to stay!
    (update db :votes
            dissoc :up
-           dissoc :down)))
+           dissoc :down
+           dissoc :own)))
