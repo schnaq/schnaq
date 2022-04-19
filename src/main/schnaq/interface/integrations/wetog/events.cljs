@@ -1,7 +1,7 @@
 (ns schnaq.interface.integrations.wetog.events
   (:require [re-frame.core :as rf]
             [schnaq.interface.utils.toolbelt :as tools]))
-
+;; TODO kill
 (rf/reg-event-fx
  :wetog/initialize-from-data
  (fn [{:keys [db]} _]

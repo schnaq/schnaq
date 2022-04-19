@@ -5,7 +5,7 @@
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.discussion.dashboard :as dashboard]
             [schnaq.interface.views.graph.view :as graph-view]))
-
+;; TODO kill
 (def routes
   ["/"
    {:coercion reitit.coercion.spec/coercion
