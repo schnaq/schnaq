@@ -108,9 +108,11 @@
            (conj [:dispatch [:schnaq.vote/send-anonymous statement :down :dec]]))
          new-vote (case recorded-vote
                     nil current-click
-                    :downvote (if (= :upvote current-click) :upvote nil)
-                    :upvote (if (= :downvote current-click) :downvote nil))]
-     {:db (assoc-in db [:votes :device (:db/id statement)] new-vote)
+                    :downvote (when (= :upvote current-click) :upvote)
+                    :upvote (when (= :downvote current-click) :downvote))]
+     {:db (if new-vote
+            (assoc-in db [:votes :device (:db/id statement)] new-vote)
+            (update-in db [:votes :device] dissoc (:db/id statement)))
       :fx (vec effects)})))
 
 (rf/reg-event-fx
@@ -175,5 +177,4 @@
    ;; Do not delete completely. Device votes need to stay!
    (update db :votes
            dissoc :up
-           dissoc :down
-           dissoc :own)))
+           dissoc :down)))
