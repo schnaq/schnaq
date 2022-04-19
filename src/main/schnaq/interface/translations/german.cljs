@@ -253,7 +253,7 @@
 
    :statement/discuss "Diskutieren"
    :statement/replies "Antworten"
-   :statement/new "Post"
+   :statement/new "Absenden"
    :statement.new/placeholder "Dein Beitrag"
    :statement.edit.send.failure/title "Änderung nicht gespeichert"
    :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."
