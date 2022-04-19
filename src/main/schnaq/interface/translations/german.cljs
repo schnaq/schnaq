@@ -93,28 +93,6 @@
 
    :startpage.faq/title "Häufig gestellte Fragen"
    :startpage.faq/subtitle "(so könnte es bei dir aussehen)"
-   :startpage.faq.data/question "Was passiert mit meinen Daten?"
-   :startpage.faq.data/answer-1 "Um einen möglichst sicheren Datenschutz zu gewährleisten, speichern
-        wir alle Daten nur auf deutschen Servern. Wir haben alle Details einzeln und verständlich in unserer"
-   :startpage.faq.data/link-name "Datenschutzerklärung"
-   :startpage.faq.data/answer-2 " zusammengefasst."
-   :startpage.faq.integration/question "Kann ich schnaq mit meiner bestehenden Software integrieren?"
-   :startpage.faq.integration/answer "Aktuell ist schnaq per Mausklick in WETOG integrierbar. Wir arbeiten mit Hochdruck an einer Integration für Slack, MS Team und andere gängige Kommunikationssoftware.
-        Wenn du sofort informiert werden willst, wenn die Integration live geht, melde dich für den"
-   :startpage.faq.integration/link-name "Newsletter an."
-   :startpage.faq.costs/question "Gibt es versteckte Kosten?"
-   :startpage.faq.costs/answer "schnaq ist derzeit in einer Testphase und kostenlos benutzbar. Es gibt keinerlei Kosten. Wir freuen uns
-        aber über ehrliches Feedback als Gegenleistung."
-   :startpage.faq.start/question "Wie kann ich mit schnaq starten?"
-   :startpage.faq.start/answer "Du kannst schnaq entweder anonym nutzen, oder dich registrieren und anmelden, um deine schnaqs und Beiträge von
-        überall aus einsehen und verwalten zu können. Probier es einfach aus und"
-   :startpage.faq.start/link-name "starte einen schnaq."
-   :startpage.faq.why/question "Warum sollte ich schnaq nutzen?"
-   :startpage.faq.why/answer "schnaq ist für dich, wenn du eine moderne, offene und gleichberechtigte Arbeitskultur unterstützt.
-        Unser Ziel ist es Kommunikation und Wissensaustausch am Arbeitsplatz flexibel zu gestalten. So heben wir
-        nicht nur das Potenzial einzelner Teammitglieder, sondern auch des gesamten Unternehmens."
-
-   :startpage/get-to-know "Lerne das Team hinter schnaq kennen"
 
    ;; Product Pages
    :productpage/title "Produktübersicht"
@@ -348,8 +326,6 @@
    :dashboard/summary "Kurzzusammenfassung"
    :dashboard/top-posts "Top Beiträge"
 
-   :discussion.navbar/posts "Beiträge"
-   :discussion.navbar/members "Mitglieder"
    :discussion.navbar/views "Ansichten"
    :discussion.state/read-only-label "schreibgeschützt"
    :discussion.state/read-only-warning "Dieser schnaq ist schreibgeschützt. Du kannst hier nur lesen."
@@ -1228,7 +1204,7 @@
    :registration.pricing.pro/themes "Persönliches Design"
    :registration.pricing.enterprise/all-from-pro "Alle Pro-Features, plus:"
 
-;; Alt texts
+   ;; Alt texts
    :schnaqqifant/hippie-alt-text "Schnaqqi, das schnaq Maskottchen, als Hippie verkleidet"
    :schnaqqifant/police-alt-text "Schnaqqi, das schnaq Maskottchen, als Polizist verkleidet"
    :schnaqqifant/stop-alt-text "Schnaqqi, das schnaq Maskottchen, hält ein Stop-Schild hoch"

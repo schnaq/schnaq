@@ -4,13 +4,7 @@
   "Returns an image path as String for a given identifier"
   [identifier]
   (identifier
-   {:alphazulu/logo "https://s3.schnaq.com/alphazulu/alphazulu_logo.png"
-    :alphazulu.cobago/logo "https://s3.schnaq.com/alphazulu/cobago_logo.png"
-    :alphazulu.ec3l/logo "https://s3.schnaq.com/alphazulu/ec3l_logo.png"
-    :alphazulu.trustcerts/logo "https://s3.schnaq.com/alphazulu/trustcerts_logo.png"
-    :alphazulu.wetog/logo "https://s3.schnaq.com/alphazulu/wetog_logo.png"
-    :alphazulu.xignsys/logo "https://s3.schnaq.com/alphazulu/xignsys_logo.png"
-    :how-to/taskbar "https://s3.schnaq.com/schnaq-common/howto/taskbar.svg"
+   {:how-to/taskbar "https://s3.schnaq.com/schnaq-common/howto/taskbar.svg"
     :icon-add "https://s3.schnaq.com/schnaq-common/buttons/add-button.svg"
     :icon-cards-dark "https://s3.schnaq.com/schnaq-common/icons/squares_dark.svg"
     :icon-community "https://s3.schnaq.com/schnaq-common/community.svg"

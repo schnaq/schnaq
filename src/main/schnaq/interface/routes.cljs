@@ -6,10 +6,8 @@
             [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as reitit-front-easy]
             [reitit.frontend.history :as rfh]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
-            [schnaq.interface.integrations.wetog.routes :as wetog-routes]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.legal-note :as legal-note]
@@ -370,20 +368,16 @@
 
 (def router
   (reitit-front/router
-   (if shared-config/embedded?
-     wetog-routes/routes
-     routes)
+   routes
    ;; This disables automatic conflict checking. So: Please check your own
    ;; routes that there are no conflicts.
    {:conflicts nil}))
 
 (defn- on-navigate [new-match]
   (let [window-hash (.. js/window -location -hash)]
-    (when (not shared-config/embedded?)
-      (if (empty? window-hash)
-        (.scrollTo js/window 0 0)
-        (oset! js/document "onreadystatechange"
-               #(tools/scroll-to-id window-hash)))))
+    (if (empty? window-hash)
+      (.scrollTo js/window 0 0)
+      (oset! js/document "onreadystatechange" #(tools/scroll-to-id window-hash))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
@@ -392,7 +386,7 @@
   (reitit-front-easy/start!
    router
    on-navigate
-   {:use-fragment shared-config/embedded?
+   {:use-fragment false
     :ignore-anchor-click? (fn [router e el uri]
                             (and (rfh/ignore-anchor-click? router e el uri)
                                  (empty? (.-hash el))))}))

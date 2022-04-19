@@ -24,8 +24,6 @@
             [schnaq.interface.components.wavy]
             [schnaq.interface.config :as config]
             [schnaq.interface.events]
-            [schnaq.interface.integrations.wetog.events]
-            [schnaq.interface.integrations.wetog.routes]
             [schnaq.interface.navigation]
             [schnaq.interface.notification.events]
             [schnaq.interface.pages.about-us]
@@ -100,8 +98,7 @@
 
 (defn render
   []
-  (reagent.dom/render [views/root]
-                      (gdom/getElement (if shared-config/embedded? "schnaq-integration" "app"))))
+  (reagent.dom/render [views/root] (gdom/getElement "app")))
 
 (defn ^:dev/after-load clear-cache-and-render!
   []
@@ -125,11 +122,10 @@
 (defn init
   "Entrypoint into the application."
   []
-  (let [init-routine (if shared-config/embedded? :initialize/wetog-integration :initialize/schnaq)]
-    (mount/start)
-    (routes/init-routes!)
-    (rf/dispatch-sync [init-routine]) ;; put a value into application state
-    (language/init-language)
-    (render) ;; mount the application's ui into '<div id="app" />'
-    (say-hello)
-    (updates/init-periodic-updates)))
+  (mount/start)
+  (routes/init-routes!)
+  (rf/dispatch-sync [:initialize/schnaq]) ;; put a value into application state
+  (language/init-language)
+  (render) ;; mount the application's ui into '<div id="app" />'
+  (say-hello)
+  (updates/init-periodic-updates))

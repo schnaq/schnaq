@@ -5,7 +5,6 @@
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.images :refer [img-path]]))
 
 (def ^:private default-identicon-background-color
@@ -139,7 +138,7 @@
   "Set a document's website title."
   [title]
   [(? string?) :ret any?]
-  (when (and (not shared-config/embedded?) title)
+  (when title
     (let [new-title (gstring/format "%s – schnaq" title)]
       (oset! js/document [:title] new-title))))
 
@@ -147,7 +146,7 @@
   "Set a document's website meta-description."
   [description]
   [(? string?) :ret any?]
-  (when (and (not shared-config/embedded?) description)
+  (when description
     (when-let [selector (.querySelector js/document "meta[name='description']")]
       (.setAttribute selector "content" description))
     (when-let [og-selector (.querySelector js/document "meta[name='og:description']")]

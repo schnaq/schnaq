@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.discussion.card-view
   (:require [clojure.string :as cstring]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.card-elements :as elements]
@@ -39,8 +38,7 @@
    [:div.d-md-none [elements/action-view]]
    [cards/conclusion-cards-list]
    [:div.d-md-none [elements/history-view]]
-   [:div.mx-auto
-    {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
+   [:div.mx-auto.col-11.col-md-12.col-xl-10
     [elements/show-how-to]]
    [:div.d-none.d-md-block [elements/history-view]]])
 

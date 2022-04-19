@@ -94,27 +94,6 @@
 
    :startpage.faq/title "Frequently Asked Questions"
    :startpage.faq/subtitle "(this is what it could look like for you)"
-   :startpage.faq.data/question "What happens with my data?"
-   :startpage.faq.data/answer-1 "We only store data on german servers, to provide the best possible data protection. All details are explained
-        in an understandable manner in our"
-   :startpage.faq.data/link-name "privacy policy"
-   :startpage.faq.data/answer-2 "."
-   :startpage.faq.integration/question "Can I integrate schnaq with the software I'm already using?"
-   :startpage.faq.integration/answer "Currently, schnaq can be integrated into WETOG at the click of a mouse. We currently work on integrations for Slack, MS Teams and other popular communication software.
-        If you want to be the first to know, when we launch the feature, subscribe to our"
-   :startpage.faq.integration/link-name "newsletter."
-   :startpage.faq.costs/question "Are there any hidden costs?"
-   :startpage.faq.costs/answer "schnaq is currently in a test-phase and completely free. No hidden payments.
-        Although we are always happy about your honest feedback as a form of payment."
-   :startpage.faq.start/question "How can I start using schnaq?"
-   :startpage.faq.start/answer "You can either use schnaq anonymously, or register to have the possibility to see and administrate your schnaqs
-        and statements from anywhere. Give it a try and"
-   :startpage.faq.start/link-name "create a schnaq."
-   :startpage.faq.why/question "Why should I use schnaq?"
-   :startpage.faq.why/answer "schnaq is for you, if you support a modern, open and equal work-culture.
-        Our goal is to make communication and knowledge-sharing at the workplace as flexible and easy as possible.
-        This way we heighten the potential of every person in the company, and thus of the company itself."
-   :startpage/get-to-know "Get to know the team behind schnaq"
 
    ;; Product Pages
    :productpage/title "Product Overview"
@@ -349,8 +328,6 @@
    :dashboard/summary "Summary"
    :dashboard/top-posts "Top Posts"
 
-   :discussion.navbar/posts "Posts"
-   :discussion.navbar/members "Members"
    :discussion.navbar/views "Views"
    :discussion.state/read-only-label "read-only"
    :discussion.state/read-only-warning "This schnaq is read-only. You can read, but not write."
@@ -1203,7 +1180,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :summary.admin/submit "Submit"
    :summary.admin/closed-at "Closed at"
 
-    ;; Registration
+   ;; Registration
    :registration/heading "Welcome to the account creation"
    :registration.steps/heading "Step %d of 3"
    :registration.email/lead "Or use your email"

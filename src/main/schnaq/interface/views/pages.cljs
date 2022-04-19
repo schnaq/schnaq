@@ -4,7 +4,6 @@
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
@@ -217,7 +216,7 @@
    [validate-conditions-middleware
     options
     [:div {:class classes}
-     (if shared-config/embedded? [discussion-navbar/embeddable-header] header)
+     header
      body
      [base/footer]]]])
 
