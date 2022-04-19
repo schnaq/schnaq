@@ -91,7 +91,7 @@
    :startpage.newsletter/heading "Sign up for the schnaq newsletter and get regular updates, tips and more!"
    :startpage.newsletter/button "Give me exclusive previews!"
    :startpage.newsletter/address-placeholder "E-Mail Address"
-   
+
    :startpage.faq/title "Frequently Asked Questions"
    :startpage.faq/subtitle "(this is what it could look like for you)"
 
@@ -328,8 +328,6 @@
    :dashboard/summary "Summary"
    :dashboard/top-posts "Top Posts"
 
-   :discussion.navbar/posts "Posts"
-   :discussion.navbar/members "Members"
    :discussion.navbar/views "Views"
    :discussion.state/read-only-label "read-only"
    :discussion.state/read-only-warning "This schnaq is read-only. You can read, but not write."

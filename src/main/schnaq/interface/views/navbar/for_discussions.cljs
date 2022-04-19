@@ -1,13 +1,8 @@
 (ns schnaq.interface.views.navbar.for-discussions
-  (:require [re-frame.core :as rf]
-            [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.components.navbar :as navbar-components]
-            [schnaq.interface.navigation :as navigation]
-            [schnaq.interface.translations :refer [labels]]
+  (:require [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.views.discussion.share :as share]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
-            [schnaq.interface.views.navbar.elements :as nav-elements]
-            [schnaq.interface.views.schnaq.admin :as admin]))
+            [schnaq.interface.views.navbar.elements :as nav-elements]))
 
 (defn- interaction-elements []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
@@ -45,36 +40,3 @@
      "bg-transparent"
      [qanda-interaction-elements]
      [collapse-content/navbar-external-content navbar-content-id]]))
-
-(defn embeddable-header []
-  ;; TODO kill  this!
-  ;; The view breaks earlier, because the breakpoints heed the screen size, not the div size
-  (let [{:discussion/keys [title share-hash] :as discussion} @(rf/subscribe [:schnaq/selected])
-        admin-access? @(rf/subscribe [:schnaq.current/admin-access])
-        meta-info (:meta-info discussion)
-        statement-count (:all-statements meta-info)
-        user-count (count (:authors meta-info))]
-    [:div.d-flex.flex-row.flex-wrap.p-md-3
-     [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4.me-3
-      ;; schnaq logo
-      [:div.mx-4.d-none.d-md-block
-       [:small.text-primary (labels :discussion.navbar/posts)]
-       [:h5.text-center statement-count]]
-      [:div.mx-4.d-none.d-md-block
-       [:small.text-primary (labels :discussion.navbar/members)]
-       [:h5.text-center user-count]]
-      [:a.schnaq-logo-container.d-flex.h-100.text-decoration-none
-       {:href (navigation/href :routes.schnaq/start)}
-       [:small.text-white "powered by"]
-       [:img.d-inline-block.align-middle.me-2
-        {:src (img-path :logo-white) :alt "schnaq logo"
-         :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]]
-     [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ms-xl-auto
-      [:div.d-flex.align-items-center.schnaq-navbar.px-4
-       [admin/txt-export share-hash title]
-       (when admin-access?
-         [admin/admin-center])
-       [navbar-components/language-toggle-with-tooltip true {:class "btn"}]]
-      [:div.d-flex.align-items-center.mt-4.mt-md-0
-       [:div.mx-2.embedded-nav-button [nav-elements/graph-button]]
-       [:div.me-2.embedded-nav-button [nav-elements/summary-button]]]]]))

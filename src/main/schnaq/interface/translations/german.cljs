@@ -326,8 +326,6 @@
    :dashboard/summary "Kurzzusammenfassung"
    :dashboard/top-posts "Top Beiträge"
 
-   :discussion.navbar/posts "Beiträge"
-   :discussion.navbar/members "Mitglieder"
    :discussion.navbar/views "Ansichten"
    :discussion.state/read-only-label "schreibgeschützt"
    :discussion.state/read-only-warning "Dieser schnaq ist schreibgeschützt. Du kannst hier nur lesen."
