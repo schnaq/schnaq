@@ -11,14 +11,15 @@
 
 (defmethod handle-message :discussion.starting/update [{:keys [?data]}]
   (when ?data
-    (let [parameters {:parameters {:query ?data}
-                      :identity (when-let [jwt (get ?data :jwt)]
-                                  (jwt/validate-signed-jwt jwt kc/keycloak-public-key))}
-          {{:keys [starting-conclusions]} :body} (discussion-api/get-starting-conclusions parameters)
-          {{:keys [polls]} :body} (poll-api/polls-for-discussion parameters)
-          {{:keys [activation]} :body} (activation-api/get-activation parameters)]
+    (let [request {:parameters {:query ?data}
+                   :identity (when-let [jwt (get ?data :jwt)]
+                               (jwt/validate-signed-jwt jwt kc/keycloak-public-key))}
+          {{:keys [starting-conclusions children]} :body} (discussion-api/get-starting-conclusions request)
+          {{:keys [polls]} :body} (poll-api/polls-for-discussion request)
+          {{:keys [activation]} :body} (activation-api/get-activation request)]
       (shared-tools/remove-nil-values-from-map
        {:starting-conclusions starting-conclusions
+        :children children
         :polls polls
         :activation activation
         :visible-entities (visible-entity/get-entities (:share-hash ?data))}))))
