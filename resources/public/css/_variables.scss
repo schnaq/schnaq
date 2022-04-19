@@ -81,9 +81,12 @@ $input-background: $gray-200 !default;
 
 $font-family-sans-serif: 'Poppins', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
 $badge-font-weight: 400;
+$font-weight-normal: 400;
 $font-weight-bold: 600;
 $font-weight-bolder: 700;
-$btn-font-weight: 500;
+$btn-font-weight: 400;
+$display-font-weight: 400;
+$headings-font-weight: 400;
 
 // Shadows
 // This overrides Bootstrap's default shadow-classes, e.g. .shadow
