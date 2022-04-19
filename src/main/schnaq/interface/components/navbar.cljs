@@ -1,5 +1,5 @@
 (ns schnaq.interface.components.navbar
-  (:require [com.fulcrologic.guardrails.core :refer [>defn]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn =>]]
             [re-frame.core :as rf]
             [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [icon]]
