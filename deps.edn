@@ -87,4 +87,6 @@
                         :jar "target/schnaq-standalone.jar"}}
 
            :run-server {:main-opts ["-m" "schnaq.api"]}
-           :notification-service {:main-opts ["-m" "schnaq.notification-service.core"]}}}
+           :notification-service {:main-opts ["-m" "schnaq.notification-service.core"]}
+           :test-cljs {:main-opts ["-m" "shadow.cljs.devtools.cli"
+                                   "compile" "test-headless"]}}}
