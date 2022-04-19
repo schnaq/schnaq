@@ -167,11 +167,6 @@
         :fx [[:dispatch [:votes.local/reset]]
              [:dispatch [:schnaq.wordcloud/calculate]]]}))))
 
-(rf/reg-event-db
- :votes.local/reset
- (fn [db _]
-   (dissoc db :votes)))
-
 ;; -----------------------------------------------------------------------------
 
 (defn- sort-options
