@@ -88,4 +88,5 @@
 
            :run-server {:main-opts ["-m" "schnaq.api"]}
            :notification-service {:main-opts ["-m" "schnaq.notification-service.core"]}
-           :ci-local-repo {:mvn/local-repo "./.m2/repository"}}}
+           :test-cljs {:main-opts ["-m" "shadow.cljs.devtools.cli"
+                                   "compile" "test-headless"]}}}
