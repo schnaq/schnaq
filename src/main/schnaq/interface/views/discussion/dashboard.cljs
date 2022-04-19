@@ -128,4 +128,5 @@
        [embedded-statistics]]]]))
 
 (defn embedded-view []
+  ;; TODO kill this
   [embedded-dashboard-view])
