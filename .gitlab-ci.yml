@@ -45,7 +45,7 @@ test-cljs:
   before_script:
     - yarn install
   script:
-    - clj -Sdeps '{:mvn/local-repo "./.m2/repository"}' -M:test-headless
+    - clj -Sdeps '{:mvn/local-repo "./.m2/repository"}' -M:test-cljs
     - yarn karma start --single-run
 
 lint:
