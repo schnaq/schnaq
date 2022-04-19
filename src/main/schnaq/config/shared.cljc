@@ -18,6 +18,7 @@
    :cljs (goog-define s3-host "https://s3.schnaq.com"))
 
 #?(:clj (def embedded?
+          ;; TODO remove embedded
           (or (System/getenv "EMBEDDED") false))
    :cljs (goog-define embedded? false))
 

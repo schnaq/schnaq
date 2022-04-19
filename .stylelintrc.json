@@ -4,8 +4,5 @@
     "scss/at-extend-no-missing-placeholder": null,
     "string-quotes": null,
     "max-nesting-depth": 2
-  },
-  "ignoreFiles": [
-    "resources/public/wetog/index.html"
-  ]
+  }
 }
