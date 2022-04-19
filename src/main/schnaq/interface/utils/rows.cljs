@@ -43,10 +43,11 @@
 
 (defn image-right
   "Build a row, where the image is located on the right side."
-  [image-key text-namespace]
+  [image-key alt-text-key text-namespace]
   [row-builder-text-left
    [build-text-box text-namespace]
-   [:img.img-fluid {:src (img-path image-key)}]])
+   [:img.img-fluid {:src (img-path image-key)
+                    :alt (labels alt-text-key)}]])
 
 (defn icon-right
   "Build a row with text on the left side and the icon on the right side."
