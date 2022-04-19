@@ -1,6 +1,7 @@
 {:paths ["src/main" "src/test" "resources"]
  :deps {binaryage/oops {:mvn/version "0.7.2"}
-        buddy/buddy {:mvn/version "2.0.0"}
+        buddy/buddy-auth {:mvn/version "3.0.323"}
+        buddy/buddy-core {:mvn/version "1.10.413"}
         clj-fuzzy/clj-fuzzy {:mvn/version "0.4.1"}
         clj-http/clj-http {:mvn/version "3.12.3"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}
