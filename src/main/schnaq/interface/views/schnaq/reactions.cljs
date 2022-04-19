@@ -168,3 +168,12 @@
       (get-in db [:votes :own :down statement-id])]
      [(= :upvote (get-in db [:votes :device statement-id]))
       (= :downvote (get-in db [:votes :device statement-id]))])))
+
+(rf/reg-event-db
+ :votes.local/reset
+ (fn [db _]
+   ;; Do not delete completely. Device votes need to stay!
+   (update db :votes
+           dissoc :up
+           dissoc :down
+           dissoc :own)))
