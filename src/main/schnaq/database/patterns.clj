@@ -97,7 +97,6 @@
   (concat
    discussion-minimal
    [:discussion/description
-    {:discussion/starting-statements statement}
     {[:discussion/mode :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
     {[:discussion.access/_discussion :as :discussion/access] access-code}]))
 
