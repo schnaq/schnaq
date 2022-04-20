@@ -248,6 +248,7 @@
                    :statistics.statement.length/average :statistics.statement.length/median]))
 (s/def :statistics/registered-users-num nat-int?)
 (s/def :statistics/labels-stats map?)
+(s/def :statistics/statement-percentiles map?)
 (s/def :statistics/users (s/coll-of ::registered-user))
 
 (s/def ::statistics
@@ -255,7 +256,7 @@
                    :statistics/average-statements-num :statistics/statements-num
                    :statistics/active-users-num :statistics/statement-length-stats
                    :statistics/statement-type-stats :statistics/registered-users-num
-                   :statistics/labels-stats :statistics/users]))
+                   :statistics/labels-stats :statistics/users :statistics/statement-percentiles]))
 
 ;; Polls
 (s/def :poll/title ::non-blank-string)
