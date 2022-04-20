@@ -16,6 +16,7 @@
           :statements-num (analytics-db/number-of-statements timestamp-since)
           :active-users-num (analytics-db/number-of-active-discussion-users timestamp-since)
           :statement-length-stats (analytics-db/statement-length-stats timestamp-since)
+          :statement-percentiles (analytics-db/statistical-statement-num-data timestamp-since)
           :statement-type-stats (analytics-db/statement-type-stats timestamp-since)
           :registered-users-num (analytics-db/number-or-registered-users timestamp-since)
           :pro-users-num (analytics-db/number-of-pro-users timestamp-since)
