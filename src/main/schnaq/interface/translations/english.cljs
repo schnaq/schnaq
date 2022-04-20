@@ -1055,6 +1055,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/how-to "How do I use schnaq?"
    :router/last-added-schnaq "Last created schnaq"
    :router/visited-schnaqs "Visited schnaqs"
+   :router/created-schnaqs "Created schnaqs"
+   :router/archived-schnaqs "Archived schnaqs"
    :router/not-found-label "Not found route redirect"
    :router/pricing "Pricing"
    :router/privacy "Privacy Policy"
@@ -1124,6 +1126,11 @@ Now we write down questions and discuss them and can still understand what we ha
 
    :loading.placeholder/lead "Loading..."
    :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
+
+   :overview.schnaqs/heading "schnaqs"
+   :overview.schnaqs/visited "Visited schnaqs"
+   :overview.schnaqs/created "Created schnaqs"
+   :overview.schnaqs/archived "Archived schnaqs"
 
    :hubs/heading "Hubs"
    :hub/heading "Personal %s Hub"

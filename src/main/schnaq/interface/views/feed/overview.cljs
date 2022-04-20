@@ -141,39 +141,62 @@
 
 (defn- feed-button
   "Create a button for the feed list."
-  ([text image-div class-button route]
-   [feed-button text image-div class-button route nil])
-  ([text image-div button-class route route-params]
-   [:a.btn.btn-link.text-start {:class button-class
-                                :role "button"
-                                :href (navigation/href route route-params)}
-    [:div.d-flex.flex-row
-     image-div
-     [:div.my-auto.ps-2 text]]]))
+  [text image-div href button-class]
+  [:a.btn.btn-link.text-start {:class button-class
+                               :role "button"
+                               :href href}
+   [:div.d-flex.flex-row
+    image-div
+    [:div.my-auto.ps-2 text]]])
+
+(defn feed-button-icon [icon-name]
+  [:div.mx-2.my-auto [icon icon-name "m-auto fa-fw"]])
 
 (defn icon-and-label-feed-button
-  [label icon-name route route-params]
-  (let [current-route @(rf/subscribe [:navigation/current-route-name])
-        button-class (if (= current-route route) "feed-button-focused" "feed-button")]
-    [feed-button (labels label)
-     [:div.mx-2.my-auto [icon icon-name "m-auto"]]
-     button-class route route-params]))
-
-(defn create-feed-button
-  [label icon-name route route-params]
-  (let [button-class "feed-button-create"]
-    [feed-button (labels label)
-     [:div.mx-2.my-auto [icon icon-name "m-auto"]]
-     button-class route route-params]))
+  [label icon-name href button-class]
+  #_(let [current-route @(rf/subscribe [:navigation/current-route-name])
+          button-class (if (= current-route route) "feed-button-focused" "feed-button")])
+  [feed-button (labels label)
+   [:div.mx-2.my-auto [icon icon-name "m-auto fa-fw"]]
+   href button-class])
 
 (defn hub-feed-button
   "Display a single hub."
   [{:hub/keys [keycloak-name name logo]}]
   (let [current-hub @(rf/subscribe [:hub/current])
         current-hub-name (:hub/keycloak-name current-hub)
-        path-keycloak-name keycloak-name
-        button-class (if (= current-hub-name path-keycloak-name) "feed-button-focused" "feed-button")]
-    [feed-button name [hub/hub-logo logo name 32] button-class :routes/hub {:keycloak-name keycloak-name}]))
+        button-class (if (= current-hub-name keycloak-name) "feed-button-focused" "feed-button")]
+    [feed-button
+     name
+     [hub/hub-logo logo name 32]
+     (navigation/href :routes/hub {:keycloak-name keycloak-name})
+     button-class]))
+
+(defn- feed-schnaqs []
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])
+        current-filter @(rf/subscribe [:schnaqs.visited/filter])
+        check-route-fn (fn [filter] (if (and
+                                         (= current-filter filter)
+                                         (= current-route :routes.schnaqs/personal))
+                                      "feed-button-focused" "feed-button"))]
+    [:section
+     [:h6.text-typography.pb-2.ms-4 (labels :overview.schnaqs/heading)]
+     [:div.d-flex.flex-column
+      [feed-button
+       (labels :overview.schnaqs/visited)
+       [feed-button-icon :eye]
+       (navigation/href :routes.schnaqs/personal)
+       (check-route-fn nil)]
+      [feed-button
+       (labels :overview.schnaqs/created)
+       [feed-button-icon :pen]
+       (navigation/href :routes.schnaqs/personal nil {:filter :created-by-user})
+       (check-route-fn :created-by-user)]
+      [feed-button
+       (labels :overview.schnaqs/archived)
+       [feed-button-icon :archive]
+       (navigation/href :routes.schnaqs/personal nil {:filter :archived-by-user})
+       (check-route-fn :archived-by-user)]]]))
 
 (defn feed-hubs []
   (when-let [hubs @(rf/subscribe [:hubs/all])]
@@ -181,8 +204,7 @@
      [:h6.text-typography.pb-2.ms-4 (labels :hubs/heading)]
      [:div.d-flex.flex-column
       (for [[keycloak-name hub] hubs]
-        (with-meta [hub-feed-button hub] {:key keycloak-name}))
-      [icon-and-label-feed-button :router/visited-schnaqs :eye :routes.schnaqs/personal]]]))
+        (with-meta [hub-feed-button hub] {:key keycloak-name}))]]))
 
 (defn feed-navigation
   "Navigate between the feeds."
@@ -191,10 +213,19 @@
         hubs @(rf/subscribe [:hubs/all])]
     [:section
      [:div.d-flex.flex-column.panel-white.mx-0.mt-0.mb-4
-      [create-feed-button :nav.schnaqs/create-schnaq :plus :routes.schnaq/create]
+      [feed-button
+       (labels :nav.schnaqs/create-schnaq)
+       [feed-button-icon :plus]
+       (navigation/href :routes.schnaq/create)
+       "feed-button-create"]
       (when-not (nil? edit-hash)
-        [icon-and-label-feed-button :nav.schnaqs/last-added :arrow-left
-         :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])]
+        [feed-button
+         (labels :nav.schnaqs/last-added)
+         [feed-button-icon :arrow-left]
+         (navigation/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
+         "feed-button"])]
+     [:div.panel-white.mb-4
+      [feed-schnaqs]]
      (when hubs
        [:div.panel-white.mb-4
         [feed-hubs]])]))

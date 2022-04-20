@@ -31,12 +31,18 @@
  (fn [db [_ {:keys [schnaqs]}]]
    (assoc-in db [:schnaqs :visited] schnaqs)))
 
+(rf/reg-sub
+ :schnaqs.visited/filter
+ (fn [db _]
+   (get-in db [:schnaqs :filter])))
+
 (rf/reg-event-fx
  :schnaqs.visited/load
- (fn [{:keys [db]} _]
+ (fn [{:keys [db]} [_ filter]]
    (let [visited-hashes (get-in db [:schnaqs :visited-hashes])]
      (when-not (empty? visited-hashes)
-       {:fx [(http/xhrio-request
+       {:db (assoc-in db [:schnaqs :filter] filter)
+        :fx [(http/xhrio-request
               db :post "/schnaqs/by-hashes"
               [:schnaqs.visited/store-from-backend]
               {:share-hashes visited-hashes

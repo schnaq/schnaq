@@ -1052,6 +1052,8 @@
    :router/how-to "Wie benutze ich schnaq?"
    :router/last-added-schnaq "Zuletzt angelegter schnaq"
    :router/visited-schnaqs "Besuchte schnaqs"
+   :router/created-schnaqs "Erstellte schnaqs"
+   :router/archived-schnaqs "Archivierte schnaqs"
    :router/not-found-label "Not Found route redirect"
    :router/pricing "Preise"
    :router/privacy "Datenschutz"
@@ -1121,6 +1123,11 @@
 
    :loading.placeholder/lead "Daten werden geladen..."
    :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
+
+   :overview.schnaqs/heading "schnaqs"
+   :overview.schnaqs/visited "Besuchte schnaqs"
+   :overview.schnaqs/created "Erstellte schnaqs"
+   :overview.schnaqs/archived "Archivierte schnaqs"
 
    :hubs/heading "Bereiche"
    :hub/heading "Persönlicher %s Hub"
