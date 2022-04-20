@@ -11,12 +11,13 @@
             [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.user :as user]))
 
-(defn- dashboard-statement [statement]
-  (let [chart-data (pie-chart/create-vote-chart-data statement)
+(defn- dashboard-statement [statement-id]
+  (let [statement @(rf/subscribe [:schnaq/statement statement-id])
+        chart-data (pie-chart/create-vote-chart-data statement)
         path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div.schnaq-entry.my-3.p-3
      [:a.link-unstyled
-      {:href (navigation/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
+      {:href (navigation/href :routes.schnaq.select/statement (assoc path-params :statement-id statement-id))}
       [:div.row.h-100
        [:div.col-xl-4.col-12
         [user/user-info statement 24]]
@@ -27,13 +28,12 @@
          [pie-chart/pie-chart-component chart-data]]]]]]))
 
 (defn- schnaq-statistics []
-  (let [current-discussion @(rf/subscribe [:schnaq/selected])
-        starting-conclusions (:discussion/starting-statements current-discussion)]
+  (let [starting-conclusion-ids @(rf/subscribe [:schnaq.statements/current-level])]
     [:div.panel-white
      [:h3.mb-3 (labels :dashboard/top-posts)]
-     (for [statement starting-conclusions]
-       (with-meta [dashboard-statement statement]
-         {:key (str "dashboard-statement-" (:db/id statement))}))]))
+     (for [statement-id starting-conclusion-ids]
+       (with-meta [dashboard-statement statement-id]
+         {:key (str "dashboard-statement-" statement-id)}))]))
 
 (defn- summary-view []
   (let [pro-user? @(rf/subscribe [:user/pro-user?])
