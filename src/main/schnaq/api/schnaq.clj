@@ -167,7 +167,6 @@
 (def schnaq-routes
   [["" {:swagger {:tags ["schnaqs"]}}
     ["/schnaq"
-     ;; TODO starting-statements werden nie genutzt
      ["/by-hash" {:get schnaq-by-hash
                   :description (at/get-doc #'schnaq-by-hash)
                   :name :api.schnaq/by-hash
