@@ -768,6 +768,7 @@
    :analytics/active-users-num-title "Active users"
    :analytics/statement-lengths-title "Length of statements"
    :analytics/statement-types-title "Argument types"
+   :analytics/statement-count-percentiles "Anzahl Statements pro schnaq"
    :analytics/labels-stats "Marked Answers"
    :analytics/fetch-data-button "Retrieving data…"
    :analytics.users/title "Newly registered users"
