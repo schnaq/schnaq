@@ -134,6 +134,7 @@
       [multi-arguments-card (labels :analytics/active-users-num-title) :analytics/number-of-active-users-overall]
       [multi-arguments-card (labels :analytics/statement-lengths-title) :analytics/statement-lengths-stats]
       [multi-arguments-card (labels :analytics/statement-types-title) :analytics/statement-type-stats]
+      [multi-arguments-card "Percentiles" :analytics/statement-percentiles]
       [analytics-card (labels :analytics/labels-stats) :analytics/marked-answers]]]]])
 
 (defn analytics-dashboard-entrypoint []
@@ -171,7 +172,8 @@
                          :statements {:number (:statements-num statistics)
                                       :lengths (:statement-length-stats statistics)
                                       :average-per-discussion (:average-statements-num statistics)
-                                      :types (:statement-type-stats statistics)}
+                                      :types (:statement-type-stats statistics)
+                                      :percentiles (:statement-percentiles statistics)}
                          :active-users-nums (:active-users-num statistics)
                          :labels (:labels-stats statistics)
                          :users {:registered (:users statistics)}})))
@@ -227,6 +229,11 @@
  :analytics/statement-type-stats
  (fn [db _]
    (get-in db [:analytics :statements :types])))
+
+(rf/reg-sub
+ :analytics/statement-percentiles
+ (fn [db _]
+   (get-in db [:analytics :statements :percentiles])))
 
 (rf/reg-sub
  :analytics/labels-stats

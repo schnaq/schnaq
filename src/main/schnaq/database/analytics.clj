@@ -148,6 +148,38 @@
        0
        (/ statements discussions)))))
 
+(defn- percentile-of
+  "Returns the first element from a percentile distribution in a array.
+  E.g. (percentile-of [1 4 6 8] 75)
+       => 8"
+  [collection percentile]
+  (let [n (int (Math/ceil (* (/ percentile 100) (count collection))))
+        n' (if (zero? n) n (dec n))]
+    (nth collection n')))
+
+(>defn statistical-statement-num-data
+  "Returns the median of statements per discusison."
+  ([]
+   [:ret map?]
+   (statistical-statement-num-data max-time-back))
+  ([since]
+   [:statistics/since :ret map?]
+   (let [statement-data
+         (main-db/query
+          '[:find ?discussion (count ?statements)
+            :in $ ?since
+            :where [?discussion :discussion/title _ ?tx]
+            [?tx :db/txInstant ?start-date]
+            [(< ?since ?start-date)]
+            [?statements :statement/discussions ?discussion]]
+          (Date/from since))
+         sorted-data (sort (map second statement-data))]
+     {:25-percentile (percentile-of sorted-data 25)
+      :50-percentile (percentile-of sorted-data 50)
+      :75-percentile (percentile-of sorted-data 65)
+      :90-percentile (percentile-of sorted-data 90)
+      :95-percentile (percentile-of sorted-data 95)})))
+
 (>defn number-of-active-discussion-users
   "Returns the number of active (anonymous or registered) users (With at least one statement)."
   ([]
