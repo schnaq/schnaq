@@ -51,7 +51,6 @@
 (rf/reg-event-db
  :schnaq.question.input/clear
  (fn [db _]
-   (println "dissocing like a mofo")
    (update db :schnaq dissoc :question)))
 
 (rf/reg-sub
