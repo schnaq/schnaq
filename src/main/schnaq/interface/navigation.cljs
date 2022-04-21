@@ -14,6 +14,12 @@
  (fn [db]
    (:current-route db)))
 
+(rf/reg-sub
+ :navigation/current-view
+ :<- [:navigation/current-route]
+ (fn [current-route]
+   (get-in current-route [:data :view])))
+
 (>defn canonical-route-name
   "Returns the canonical route name without language prefix."
   [route-name]
