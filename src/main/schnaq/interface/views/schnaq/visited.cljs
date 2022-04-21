@@ -10,7 +10,7 @@
  :schnaqs.visited/store-hashes-from-localstorage
  (fn [db _]
    (assoc-in db [:schnaqs :visited-hashes]
-             (remove nil? (:schnaqs/visited local-storage)))))
+             (set (remove nil? (:schnaqs/visited local-storage))))))
 
 (rf/reg-event-fx
  :schnaq.visited/to-localstorage
@@ -19,6 +19,15 @@
            [:localstorage/assoc
             [:schnaqs/visited
              (set (remove nil? (conj (:schnaqs/visited local-storage) share-hash)))]])
+         [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
+
+(rf/reg-event-fx
+ :schnaq.visited/remove-from-localstorage!
+ (fn [_ [_ share-hash]]
+   {:fx [(when share-hash
+           [:localstorage/assoc
+            [:schnaqs/visited
+             (set (remove #(= % share-hash) (:schnaqs/visited local-storage)))]])
          [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-sub
@@ -30,6 +39,24 @@
  :schnaqs.visited/store-from-backend
  (fn [db [_ {:keys [schnaqs]}]]
    (assoc-in db [:schnaqs :visited] schnaqs)))
+
+(rf/reg-event-db
+ :schnaqs.visited/remove-from-app-db!
+ (fn [db [_ share-hash]]
+   (let [share-hash-str (str share-hash)]
+     (-> db
+         (update-in [:schnaqs :visited-hashes]
+                    #(disj % share-hash-str))
+         (update-in [:schnaqs :visited]
+                    #(remove
+                      (fn [schnaq] (= share-hash-str (:discussion/share-hash schnaq)))
+                      %))))))
+
+(rf/reg-event-fx
+ :schnaqs.visited/remove!
+ (fn [_ [_ share-hash]]
+   {:fx [[:dispatch [:schnaqs.visited/remove-from-app-db! share-hash]]
+         [:dispatch [:schnaq.visited/remove-from-localstorage! share-hash]]]}))
 
 (rf/reg-sub
  :schnaqs.visited/filter

@@ -1161,6 +1161,9 @@
    :hub.members.add.form/title "Mitglieder hinzufügen"
    :hub.members.add.form/button "Nutzer:in hinzufügen!"
 
+   :schnaq.options.leave/label "schnaq verlassen"
+   :schnaq.options.leave/prompt "Möchtest du den schnaq wirklich verlassen?"
+
    :schnaq.search/heading "Suchergebnisse"
    :schnaq.search/results "Ergebnisse"
    :schnaq.search/input "Suche nach…"

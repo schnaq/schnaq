@@ -41,24 +41,33 @@
        :on-click #(rf/dispatch [:feed.sort/set :alphabetical])}
       (labels :badges.sort/alphabetical)]]))
 
-(defn- schnaq-options
+(defn- schnaq-dropdown-item [label on-click-fn]
+  [:button.dropdown-item {:type "button"
+                          :title (labels label)
+                          :on-click on-click-fn}
+   (labels label)])
+
+(defn- schnaq-dropdown
   "Adds a dropdown with deletion options to schnaqs, e.g. when displayed in the
   list of schnaqs in a hub."
   [schnaq]
   (let [options-id "options-dropdown-menu"
         dropdown-id "options-dropdown-elements"
-        share-hash (:discussion/share-hash schnaq)]
+        share-hash (:discussion/share-hash schnaq)
+        current-hub @(rf/subscribe [:hub/current])]
     [:div.dropdown
      [:button.btn.btn-transparent
       {:id options-id :type "button" :data-bs-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
       [icon :dots-v]]
      [:div.dropdown-menu.dropdown-menu-end {:id dropdown-id :aria-labelledby options-id}
-      [:button.dropdown-item {:type "button"
-                              :title (labels :hub.remove.schnaq/tooltip)
-                              :on-click (fn [_e] (when (js/confirm (labels :hub.remove.schnaq/prompt))
-                                                   (rf/dispatch [:hub.remove/schnaq share-hash])))}
-       (labels :hub.remove.schnaq/tooltip)]]]))
+      (when current-hub
+        [schnaq-dropdown-item :hub.remove.schnaq/tooltip
+         (fn [_e] (when (js/confirm (labels :hub.remove.schnaq/prompt))
+                    (rf/dispatch [:hub.remove/schnaq share-hash])))])
+      [schnaq-dropdown-item :schnaq.options.leave/label
+       (fn [_e] (when (js/confirm (labels :schnaq.options.leave/prompt))
+                  (rf/dispatch [:schnaqs.visited/remove! share-hash])))]]]))
 
 (defn- schnaq-title [title]
   [:div.schnaq-entry-title
@@ -97,7 +106,7 @@
 
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
-  [schnaq delete-from-hub?]
+  [schnaq]
   [:article.schnaq-entry.d-flex
    [:a.d-flex.flex-row.flex-grow-1.text-reset.text-decoration-none
     {:href (navigation/href :routes.schnaq/start {:share-hash (:discussion/share-hash schnaq)})
@@ -112,32 +121,29 @@
        [user/user-info-only (:discussion/author schnaq) 24]
        [:small.fw-light.d-inline.my-auto.ms-2
         [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]]]
-   (when delete-from-hub?
-     [schnaq-options schnaq])])
+   [schnaq-dropdown schnaq]])
 
 (defn schnaq-list-view
   "Shows a list of schnaqs."
-  ([subscription-vector]
-   [schnaq-list-view subscription-vector false])
-  ([subscription-vector show-delete-from-hub-button?]
-   (let [schnaqs @(rf/subscribe subscription-vector)
-         sort-method @(rf/subscribe [:feed/sort])
-         active-filters @(rf/subscribe [:filters.discussion/active])
-         filtered-schnaqs (filters/filter-discussions schnaqs active-filters)
-         sorted-schnaqs (if (= :alphabetical sort-method)
-                          (sort-by :discussion/title filtered-schnaqs)
-                          (sort-by :discussion/created-at > filtered-schnaqs))]
-     (if (empty? schnaqs)
-       [no-schnaqs-found]
-       [:div.panel-white.rounded-1.p-4
-        [:div.d-flex.flex-row.mb-4
-         [:h6.text-typography.d-none.d-md-block (labels :router/visited-schnaqs)]
-         [:div.ms-auto
-          [sort-options]
-          [filters/filter-button]]]
-        (for [schnaq sorted-schnaqs]
-          [:div.py-3 {:key (:db/id schnaq)}
-           [schnaq-entry schnaq show-delete-from-hub-button?]])]))))
+  [subscription-vector]
+  (let [schnaqs @(rf/subscribe subscription-vector)
+        sort-method @(rf/subscribe [:feed/sort])
+        active-filters @(rf/subscribe [:filters.discussion/active])
+        filtered-schnaqs (filters/filter-discussions schnaqs active-filters)
+        sorted-schnaqs (if (= :alphabetical sort-method)
+                         (sort-by :discussion/title filtered-schnaqs)
+                         (sort-by :discussion/created-at > filtered-schnaqs))]
+    (if (empty? schnaqs)
+      [no-schnaqs-found]
+      [:div.panel-white.rounded-1.p-4
+       [:div.d-flex.flex-row.mb-4
+        [:h6.text-typography.d-none.d-md-block (labels :router/visited-schnaqs)]
+        [:div.ms-auto
+         [sort-options]
+         [filters/filter-button]]]
+       (for [schnaq sorted-schnaqs]
+         [:div.py-3 {:key (:db/id schnaq)}
+          [schnaq-entry schnaq]])])))
 
 (defn- feed-button
   "Create a button for the feed list."

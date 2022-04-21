@@ -1163,6 +1163,9 @@ Now we write down questions and discuss them and can still understand what we ha
    :hub.members.add.form/title "Add Members"
    :hub.members.add.form/button "Add user now!"
 
+   :schnaq.options.leave/label "leave schnaq"
+   :schnaq.options.leave/prompt "Do you really want to leave this schnaq?"
+
    :schnaq.search/heading "Search results"
    :schnaq.search/results "results"
    :schnaq.search/input "Search for…"
