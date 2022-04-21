@@ -3,19 +3,17 @@
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.notifications :as notifications]))
 
-(defn- base-page
-  [language]
-  (let [current-route @(rf/subscribe [:navigation/current-route])]
+(defn- base-page []
+  (let [language @(rf/subscribe [:current-locale])
+        current-view @(rf/subscribe [:navigation/current-view])]
     [:div.base-wrapper {:key language}
-     (when current-route
+     (when current-view
        [:<>
         [modal/modal-view]
-        (if-let [current-view (-> current-route :data :view)]
-          [current-view]
-          [:div])])]))
+        [current-view]])]))
 
 (defn root []
   (let [language @(rf/subscribe [:current-locale])]
     [:main#root.text-break {:key language}
-     [base-page language]
+     [base-page]
      [notifications/view]]))
