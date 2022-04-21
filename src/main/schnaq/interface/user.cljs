@@ -53,7 +53,7 @@
            [:localstorage/dissoc :discussion.schnaqs/creation-secrets]
            [:dispatch [:schnaqs.visited/merge-registered-users-visits visited-hashes]]
            (when new-user?
-             [:matomo/track-event ["User Registration" "free"]])
+             [:matomo/track-event ["User Registration" "Registration" "Account Creation Free"]])
            (when (and updated-statements? (= current-route-name :routes.schnaq.select/statement))
              ;; The starting-statement view is updated automatically anyway
              [:dispatch [:discussion.query.statement/by-id]])
