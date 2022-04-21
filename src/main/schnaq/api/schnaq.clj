@@ -150,6 +150,15 @@
     (user-db/update-visited-schnaqs user-identity [discussion-id])
     (ok {:share-hash share-hash})))
 
+(defn- remove-visited-schnaq
+  "Remove a schnaq id from visited schnaqs by share-hash"
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash]} (:body parameters)
+        user-identity (:sub identity)
+        discussion-id (:db/id (discussion-db/discussion-by-share-hash share-hash))]
+    (user-db/remove-visited-schnaqs user-identity [discussion-id])
+    (ok {:share-hash share-hash})))
+
 (defn- search-qa
   "Search through any valid discussion."
   [{:keys [parameters identity]}]
@@ -189,6 +198,14 @@
                       :parameters {:body {:share-hash :discussion/share-hash}}
                       :responses {200 {:body {:share-hash :discussion/share-hash}}
                                   400 at/response-error-body}}]
+     ["/remove-visited" {:delete remove-visited-schnaq
+                         :description (at/get-doc #'remove-visited-schnaq)
+                         :name :api.schnaq/remove-visited
+                         :middleware [:user/authenticated?
+                                      :discussion/valid-share-hash?]
+                         :parameters {:body {:share-hash :discussion/share-hash}}
+                         :responses {200 {:body {:share-hash :discussion/share-hash}}
+                                     400 at/response-error-body}}]
      ["/add" {:post add-schnaq
               :description (at/get-doc #'add-schnaq)
               :name :api.schnaq/add

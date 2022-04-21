@@ -107,6 +107,14 @@
                   visited-schnaqs)]
     (transact txs)))
 
+(defn remove-visited-schnaqs
+  "Remove a set of schnaqs from a user."
+  [keycloak-id visited-schnaqs]
+  (let [txs (mapv #(vector :db/retract [:user.registered/keycloak-id keycloak-id]
+                           :user.registered/visited-schnaqs %)
+                  visited-schnaqs)]
+    (transact txs)))
+
 (defn seen-statements-entity
   "Returns the entity-id that a certain user / discussion combination has for seen statements."
   [keycloak-id discussion-hash]

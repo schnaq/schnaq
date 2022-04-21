@@ -55,7 +55,8 @@
 (rf/reg-event-fx
  :schnaqs.visited/remove!
  (fn [_ [_ share-hash]]
-   {:fx [[:dispatch [:schnaqs.visited/remove-from-app-db! share-hash]]
+   {:fx [[:dispatch [:schnaq/remove-visited! share-hash]]
+         [:dispatch [:schnaqs.visited/remove-from-app-db! share-hash]]
          [:dispatch [:schnaq.visited/remove-from-localstorage! share-hash]]]}))
 
 (rf/reg-sub

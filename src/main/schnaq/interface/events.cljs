@@ -184,6 +184,14 @@
                                {:share-hash share-hash})]})))
 
 (rf/reg-event-fx
+ :schnaq/remove-visited!
+ (fn [{:keys [db]} [_ share-hash]]
+   (when (auth/user-authenticated? db)
+     {:fx [(http/xhrio-request db :delete "/schnaq/remove-visited"
+                               [:no-op]
+                               {:share-hash share-hash})]})))
+
+(rf/reg-event-fx
  :schnaq/refresh-selected
  ;;Refreshes the selected schnaq by reloading it from the backend
  (fn [{:keys [db]} _]
