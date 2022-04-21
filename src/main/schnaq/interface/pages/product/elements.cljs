@@ -4,6 +4,7 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.videos :refer [video]]
+            [schnaq.interface.components.wavy :as wavy]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
@@ -107,17 +108,18 @@
                    {:auto-play true :loop true :muted true :plays-inline true}
                    [:source {:src (video :register.point-right/webm) :type "video/webm"}]
                    [:source {:src (video :register.point-right/mp4) :type "video/mp4"}]]]
-    [:section.container.container-85.mb-5
-     [:div.d-flex.flex-row.justify-content-center
-      [:div.mt-auto.me-3.d-none.d-lg-block cta-video]
-      [:div
-       [:div.display-5.text-white.mb-5 (labels :productpage/cta)]
-       [:div.d-flex.flex-row
-        [:div.mt-auto.me-3.d-lg-none cta-video]
-        [:a.btn.btn-lg.btn-dark.my-auto
-         {:role "button"
-          :href (navigation/href :routes.schnaq/create)}
-         (labels :schnaq.startpage.cta/button)]]]]]))
+    [:section.bg-primary
+     [:div.container.container-85
+      [:div.d-flex.flex-row.justify-content-center
+       [:div.mt-auto.me-3.d-none.d-lg-block cta-video]
+       [:div
+        [:div.display-5.text-white.mb-5 (labels :productpage/cta)]
+        [:div.d-flex.flex-row
+         [:div.mt-auto.me-3.d-lg-none cta-video]
+         [:a.btn.btn-lg.btn-dark.my-auto
+          {:role "button"
+           :href (navigation/href :routes.schnaq/create)}
+          (labels :schnaq.startpage.cta/button)]]]]]]))
 
 (defn product-page
   "Product page skeleton with a title and subtitle next to an tablet as ATF."
@@ -127,6 +129,7 @@
     {:page/title (labels title)
      :page/description (labels description)
      :page/vertical-header? true
+     :page/wavy-footer? true
      :page/more-for-heading (with-meta [product-above-the-fold
                                         heading
                                         subtitle
@@ -136,7 +139,8 @@
     [:div.wave-background
      [:section.container.container-85
       content]
-     [:div.wave-bottom-primary]
-     [:div.bg-primary
-      [try-schnaq]
-      [:div.wave-bottom-typography]]]]])
+     [:div.pb-5
+      [wavy/top-and-bottom
+       :primary
+       [try-schnaq]
+       :primary]]]]])
