@@ -7,12 +7,12 @@
   "Creates an event and tracks it to matomo."
   ([category]
    (.push js/window._paq #js ["trackEvent" category]))
-  ([category subcategory]
-   (.push js/window._paq #js ["trackEvent" category subcategory]))
-  ([category subcategory tag]
-   (.push js/window._paq #js ["trackEvent" category subcategory tag]))
-  ([category subcategory tag worth]
-   (.push js/window._paq #js ["trackEvent" category subcategory tag worth])))
+  ([category action]
+   (.push js/window._paq #js ["trackEvent" category action]))
+  ([category action event-name]
+   (.push js/window._paq #js ["trackEvent" category action event-name]))
+  ([category action event-name worth]
+   (.push js/window._paq #js ["trackEvent" category action event-name worth])))
 
 (defn track-current-page
   "Tracks the current page its url and description as a site visit."
@@ -38,5 +38,5 @@
 
 (rf/reg-fx
  :matomo/track-event
- (fn [[category subcategory]]
-   (track-event category subcategory)))
+ (fn [[category action event-name]]
+   (track-event category action event-name)))
