@@ -72,8 +72,7 @@
      [:<>
       [:div.container
        [activation/activation-event-view]]
-      [question-field-and-search-results :dark]
-      [:div.wave-bottom-typography.d-flex.align-self-end.mt-auto]]]))
+      [question-field-and-search-results :dark]]]))
 
 (defn qanda-view
   "A view that represents the first page of schnaq participation or creation."
