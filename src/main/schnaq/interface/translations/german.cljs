@@ -768,6 +768,7 @@
    :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
    :analytics/statement-lengths-title "Beitragslängen"
    :analytics/statement-types-title "Argumenttypen"
+   :analytics/statement-count-percentiles "# of statements per schnaq"
    :analytics/labels-stats "Markierte Antworten"
    :analytics/fetch-data-button "Hole Daten"
    :analytics.users/title "Neue registrierte Nutzer:innen"
