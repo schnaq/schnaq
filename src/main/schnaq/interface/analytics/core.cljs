@@ -134,7 +134,7 @@
       [multi-arguments-card (labels :analytics/active-users-num-title) :analytics/number-of-active-users-overall]
       [multi-arguments-card (labels :analytics/statement-lengths-title) :analytics/statement-lengths-stats]
       [multi-arguments-card (labels :analytics/statement-types-title) :analytics/statement-type-stats]
-      [multi-arguments-card "Percentiles" :analytics/statement-percentiles]
+      [multi-arguments-card (labels :analytics/statement-count-percentiles) :analytics/statement-percentiles]
       [analytics-card (labels :analytics/labels-stats) :analytics/marked-answers]]]]])
 
 (defn analytics-dashboard-entrypoint []
