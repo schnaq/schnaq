@@ -48,6 +48,11 @@
  (fn [db [_ current-input]]
    (assoc-in db [:schnaq :question :input] current-input)))
 
+(rf/reg-event-db
+ :schnaq.question.input/clear
+ (fn [db _]
+   (update db :schnaq dissoc :question)))
+
 (rf/reg-sub
  :schnaq.question.input/current
  (fn [db _]
