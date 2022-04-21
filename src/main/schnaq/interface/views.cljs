@@ -8,12 +8,11 @@
         current-view @(rf/subscribe [:navigation/current-view])]
     [:div.base-wrapper {:key language}
      (when current-view
-       [:<>
-        [modal/modal-view]
-        [current-view]])]))
+       [current-view])]))
 
 (defn root []
   (let [language @(rf/subscribe [:current-locale])]
     [:main#root.text-break {:key language}
      [base-page]
-     [notifications/view]]))
+     [notifications/view]
+     [modal/modal-view]]))
