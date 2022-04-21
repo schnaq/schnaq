@@ -450,17 +450,19 @@
         activation (when top-level? [activation/activation-card])
         poll (when top-level? (poll/poll-list))
         wordcloud (when top-level? [wordcloud-card/wordcloud-card])
-        access-code @(rf/subscribe [:schnaq.selected/access-code])]
+        access-code @(rf/subscribe [:schnaq.selected/access-code])
+        question-input @(rf/subscribe [:schnaq.question.input/current])
+        cards (if (not-empty question-input)
+                [statements activation poll wordcloud]
+                [activation poll wordcloud statements])]
     (if schnaq-loading?
       [loading/loading-card]
-      [:div.row
-       [:div.statement-column
-        [selection-card]]
-       activation
-       poll
-       wordcloud
-       statements
-       (when
-        (and top-level?
-             (not (or search? (seq statements) (seq poll) (not access-code))))
-         [call-to-share])])))
+      (cond->
+        (apply conj
+               [:div.row
+                [:div.statement-column
+                 [selection-card]]]
+               cards)
+        (and top-level? access-code
+             (not (or search? (seq statements) (seq poll))))
+        (conj [call-to-share])))))
