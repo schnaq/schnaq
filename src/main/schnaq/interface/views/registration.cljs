@@ -22,7 +22,7 @@
   process."
   [heading body footer {:keys [step class wide?]}]
   [string? :re-frame/component (? :re-frame/component) (? map?) => :re-frame/component]
-  [:section.mx-auto.pt-5.position-relative {:class (or class "col-11 col-md-6")}
+  [:section.mx-auto.pt-5.position-relative {:class (or class "col-11 col-md-8 col-xxl-6")}
    [:div.common-card
     [:div.position-absolute.top-0.end-0 [language-dropdown]]
     [:div.col-6.col-md-4.mx-auto
@@ -37,9 +37,9 @@
 ;; -----------------------------------------------------------------------------
 
 (defn- checkbox [id label icon-key]
-  [:<>
+  [:div.col-12.col-md-6.col-xxl-4.pb-2
    [:input.btn-check {:id id :type :checkbox :autoComplete :off :name id}]
-   [:label.btn.btn-outline-dark.mx-1 {:for id :style {:width "33%"}}
+   [:label.btn.btn-outline-dark.mx-1.w-100 {:for id}
     [icon icon-key "m-1" {:size :lg}]
     [:p.mb-0 label]]])
 
@@ -47,11 +47,10 @@
   "Ask user where she wants to use schnaq for."
   []
   [:section
-   [:div.d-flex.flex-row.pb-2
+   [:div.row
     [checkbox "education" (labels :registration.survey.options/education) :graduation-cap]
     [checkbox "coachings" (labels :registration.survey.options/coachings) :university]
-    [checkbox "seminars" (labels :registration.survey.options/seminars) :rocket]]
-   [:div.d-flex.flex-row
+    [checkbox "seminars" (labels :registration.survey.options/seminars) :rocket]
     [checkbox "fairs" (labels :registration.survey.options/fairs) :briefcase]
     [checkbox "meetings" (labels :registration.survey.options/meetings) :laptop]
     [checkbox "other" (labels :registration.survey.options/other) :magic]]])
