@@ -138,19 +138,17 @@
   "Form to collect the user's statements."
   []
   (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
-        when-starting (fn [e]
-                        (.preventDefault e)
-                        (rf/dispatch [:discussion.add.statement/starting (oget e [:currentTarget :elements])]))
-        when-deeper-in-discussion (fn [e]
-                                    (.preventDefault e)
-                                    (logic/submit-new-premise (oget e [:currentTarget :elements])))
-        event-to-send (if starting-route?
-                        when-starting when-deeper-in-discussion)]
+        when-starting #(rf/dispatch [:discussion.add.statement/starting (oget % [:currentTarget :elements])])
+        when-deeper-in-discussion #(logic/submit-new-premise (oget % [:currentTarget :elements]))
+        event-to-send (if starting-route? when-starting when-deeper-in-discussion)]
     (if (:statement/locked? @(rf/subscribe [:schnaq.statements/focus]))
       [:div.pt-3.ps-1
        [card-elements/locked-statement-icon]]
       [:form.my-md-2
-       {:on-submit #(event-to-send %)
+       {:on-submit (fn [e]
+                     (.preventDefault e)
+                     (rf/dispatch [:schnaq.question.input/clear])
+                     (event-to-send e))
         :on-key-down #(when (toolbelt/ctrl-press? % 13) (event-to-send %))}
        [topic-input-area]])))
 
