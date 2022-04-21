@@ -162,81 +162,65 @@
 ;; -----------------------------------------------------------------------------
 ;; Complete page layouts
 
+(>defn- page-builder
+  "Build pages and page-layouts.
+  Use this meta-component to build your pages and page-layouts. It sets the title,
+  description, composes header, body and footer for a common look, validates 
+  conditions and waits for the scheduler to finish."
+  [{:page/keys [title description heading classes] :as options} header body footer]
+  [::page-options (? :re-frame/component) (? :re-frame/component) (? :re-frame/component) :ret :re-frame/component]
+  (common/set-website-title! (or title heading))
+  (common/set-website-description! description)
+  [scheduler/middleware
+   [validate-conditions-middleware
+    options
+    [:div.d-flex.flex-column.min-vh-100 {:class classes}
+     header
+     [:div.flex-grow-1 body]
+     footer]]])
+
 (>defn with-nav-and-header
   "Default page with header and curly wave."
-  [{:page/keys [title description heading classes wavy-footer?] :as options} body]
+  [{:page/keys [wavy-footer?] :as options} body]
   [::page-options (? :re-frame/component) :ret :re-frame/component]
-  (common/set-website-title! (or title heading))
-  (common/set-website-description! description)
-  [scheduler/middleware
-   [validate-conditions-middleware
-    options
-    [:div {:class classes}
-     [:div.masthead-layered
-      [navbar-pages/navbar-transparent (:page/wrapper-classes options)]
-      [base/header options]]
-     body
-     (when wavy-footer?
-       [:div.wave-bottom-typography])
-     [base/footer]]]])
-
-(>defn with-nav
-  "Default page with header and curly wave."
-  [{:page/keys [title description heading] :as options} body]
-  [::page-options (s/+ vector?) :ret vector?]
-  (common/set-website-title! (or title heading))
-  (common/set-website-description! description)
-  [scheduler/middleware
-   [validate-conditions-middleware
-    options
-    [:<>
-     [navbar-pages/navbar (or title heading)]
-     body
-     [base/footer]]]])
-
-(>defn three-column-layout
-  "Use three column layout to display page."
-  [options left middle right]
-  [::page-options vector? vector? vector? :ret vector?]
-  [with-nav
+  [page-builder
    options
-   [:section.container-fluid.p-3
-    [:div.row
-     [:div.col-12.col-lg-3.px-0.px-md-3 left]
-     [:div.col-12.col-lg-6.px-0.px-md-3 middle]
-     [:div.col-12.col-lg-3.px-0.px-md-3 right]]]])
-
-(>defn- with-header
-  "Page layout with discussion header."
-  [{:page/keys [title description heading classes] :as options} body header]
-  [::page-options (s/+ vector?) vector? :ret vector?]
-  (common/set-website-title! (or title heading))
-  (common/set-website-description! description)
-  [scheduler/middleware
-   [validate-conditions-middleware
-    options
-    [:div {:class classes}
-     header
-     body
-     [base/footer]]]])
+   [:div.masthead-layered
+    [navbar-pages/navbar-transparent (:page/wrapper-classes options)]
+    [base/header options]]
+   body
+   (if wavy-footer?
+     [base/footer-with-wave]
+     [base/footer])])
 
 (>defn with-discussion-header
   "Page layout with discussion header."
   [options body]
   [::page-options (s/+ vector?) :ret vector?]
-  [with-header options body [discussion-navbar/header]])
+  [page-builder options [discussion-navbar/header] body [base/footer]])
 
 (>defn with-qanda-header
   "Page layout with discussion header."
   [options body]
   [::page-options (s/+ vector?) :ret vector?]
-  [with-header options body [discussion-navbar/qanda-header]])
+  [page-builder options [discussion-navbar/qanda-header] body [base/footer-with-wave]])
+
+(>defn three-column-layout
+  "Use three column layout to display page."
+  [{:page/keys [title heading] :as options} left middle right]
+  [::page-options vector? vector? vector? :ret vector?]
+  [page-builder
+   options
+   [navbar-pages/navbar (or title heading)]
+   [:section.container-fluid.p-3
+    [:div.row
+     [:div.col-12.col-lg-3.px-0.px-md-3 left]
+     [:div.col-12.col-lg-6.px-0.px-md-3 middle]
+     [:div.col-12.col-lg-3.px-0.px-md-3 right]]]
+   [base/footer]])
 
 (>defn fullscreen
   "Page layout with no header and no footer."
-  [{:page/keys [title description heading]} body]
+  [options body]
   [::page-options :re-frame/component => :re-frame/component]
-  (common/set-website-title! (or title heading))
-  (common/set-website-description! description)
-  [:div {:style {:min-height "100vh"}}
-   body])
+  [page-builder options nil body nil])

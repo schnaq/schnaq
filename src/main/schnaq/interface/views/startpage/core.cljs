@@ -111,6 +111,7 @@
     {:page/title (labels :startpage/title)
      :page/description (labels :startpage/description)
      :page/vertical-header? true
+     :page/wavy-footer? true
      :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
     [:div.wave-background
      [:section.container.mb-5
@@ -124,8 +125,7 @@
       [testimonials/testimonial-companies]
       [early-adopters]
       [cleverreach-form]
-      [team-and-supporters]]
-     [:div.wave-bottom-typography]]]])
+      [team-and-supporters]]]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."

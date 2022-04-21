@@ -100,49 +100,48 @@
 (defn- product-use-cases
   "Show schnaq use-cases for the users. Only in german."
   []
-  (let [locale @(rf/subscribe [:current-locale])]
-    (when (= :de locale)
-      [:section.px-2
-       ;; Remove hardcode, when there are english versions around!
-       [:h3.h5 "schnaq Lösungen"]
-       [:p
-        [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-meetings-moderieren/"}
-         "für Meetings"] [:br]
-        [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-diskussionsplattform/"}
-         "für Diskussionen"] [:br]
-        [:a.btn.btn-link {:href "https://schnaq.com/blog/de/ama-ask-me-anything-fragerunden/"}
-         "für AMAs"] [:br]
-        [:a.btn.btn-link {:href "https://schnaq.com/blog/de/online-workshop-moderation/"}
-         "für Online Workshops"]]])))
+  [:section.px-2
+   ;; Remove hardcode, when there are english versions around!
+   [:h3.h5 "schnaq Lösungen"]
+   [:ul {:style {:list-style :none
+                 :padding-left 0}}
+    [:li
+     [:a.btn.btn-link.text-white {:href "https://schnaq.com/blog/de/online-meetings-moderieren/"}
+      "für Meetings"]]
+    [:li
+     [:a.btn.btn-link.text-white {:href "https://schnaq.com/blog/de/online-diskussionsplattform/"}
+      "für Diskussionen"]]
+    [:li
+     [:a.btn.btn-link.text-white {:href "https://schnaq.com/blog/de/ama-ask-me-anything-fragerunden/"}
+      "für AMAs"]]
+    [:li
+     [:a.btn.btn-link.text-white {:href "https://schnaq.com/blog/de/online-workshop-moderation/"}
+      "für Online Workshops"]]]])
 
 (defn- alternatives
   "Show schnaq use-cases for the users. Only in german."
   []
-  (let [locale @(rf/subscribe [:current-locale])]
-    (when (= :en locale)
-      [:section.px-2
-       ;; Remove hardcode, when there are german versions around!
-       [:h3.h5 "schnaq vs."]
-       [:p
-        [:a.btn.btn-link {:href "https://schnaq.com/blog/en/best-alternative-to-slido/"}
-         "Alternative to Slido"] [:br]]])))
+  [:section.px-2
+   ;; Remove hardcode, when there are german versions around!
+   [:h3.h5 "schnaq vs."]
+   [:p
+    [:a.btn.btn-link.text-white {:href "https://schnaq.com/blog/en/best-alternative-to-slido/"}
+     "Alternative to Slido"]]])
 
 ;; -----------------------------------------------------------------------------
 
-(defn footer
-  "Footer to display at the bottom the page."
-  []
-  (when-not config/in-iframe?
+(defn- footer-common []
+  (let [locale @(rf/subscribe [:current-locale])]
     [:footer
      [:div.container-fluid.px-5
       [:div.row
        [:div.col-md-6.col-xl-3.col-12
         [logo-and-slogan]]
        [:div.col-md-6.col-xl-3.col-12
-        [alternatives]]
-       [:div.col-md-6.col-xl-3.col-12
-        [product-use-cases]]
-       [:div.col-md-6.col-xl-3.col-12.text-md-end.pt-3.pt-md-0
+        (if (= :en locale)
+          [alternatives]
+          [product-use-cases])]
+       [:div.col-md-6.col-xl-6.col-12.text-xl-end.pt-3.pt-md-0
         [footer-nav]]]
       [:div.row
        [:div.col-md-6.col-12
@@ -151,3 +150,15 @@
        [:div.col-md-6.col-12.text-md-end.pt-3.pt-md-0
         [social-media]
         [sponsors]]]]]))
+
+(defn footer
+  "Footer to display at the bottom the page."
+  []
+  (when-not config/in-iframe?
+    [footer-common]))
+
+(defn footer-with-wave []
+  (when-not config/in-iframe?
+    [:<>
+     [:div.wave-bottom-typography]
+     [footer-common]]))
