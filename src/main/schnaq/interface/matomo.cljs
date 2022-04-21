@@ -5,10 +5,6 @@
 
 (defn track-event
   "Creates an event and tracks it to matomo."
-  ([category]
-   (.push js/window._paq #js ["trackEvent" category]))
-  ([category action]
-   (.push js/window._paq #js ["trackEvent" category action]))
   ([category action event-name]
    (.push js/window._paq #js ["trackEvent" category action event-name]))
   ([category action event-name worth]
