@@ -427,7 +427,10 @@
    (let [sorted-conclusions (sort-statements user shown-statements sort-method local-votes)
          grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)
          input-filtered-statements
-         (sort-by #(score-hit current-input-tokens (:statement/content %)) > (get grouped-statements false))
+         (if (> 101 (count sorted-conclusions))
+           ;; Temporary toggle. Remove if performance with lots of statements is better
+           (sort-by #(score-hit current-input-tokens (:statement/content %)) > (get grouped-statements false))
+           (get grouped-statements false))
          pinned-statements (get grouped-statements true)
          sorted-filtered-statements (concat pinned-statements input-filtered-statements)]
      (map :db/id sorted-filtered-statements))))
