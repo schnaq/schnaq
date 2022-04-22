@@ -2,6 +2,7 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.user :as db]
+            [schnaq.test-data :refer [alex]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -104,3 +105,13 @@
         stripe-customer-id "cus_kangaroo"
         _ (db/subscribe-pro-tier kangaroo-keycloak-id stripe-subscription-id stripe-customer-id)]
     (is (db/pro-subscription? kangaroo-keycloak-id))))
+
+;; -----------------------------------------------------------------------------
+;; Visited schnaqs
+
+(deftest remove-visited-schnaq-test
+  (testing "Remove a set of visited schnaqs from a user"
+    (let [user-keycloak-id (:user.registered/keycloak-id alex)]
+      (db/remove-visited-schnaq user-keycloak-id "cat-dog-hash")
+      (is (zero? (count (:user.registered/visited-schnaqs
+                         (db/private-user-by-keycloak-id user-keycloak-id))))))))

@@ -154,9 +154,8 @@
   "Remove a schnaq id from visited schnaqs by share-hash"
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash]} (:body parameters)
-        user-identity (:sub identity)
-        discussion-id (:db/id (discussion-db/discussion-by-share-hash share-hash))]
-    (user-db/remove-visited-schnaqs user-identity [discussion-id])
+        user-identity (:sub identity)]
+    (user-db/remove-visited-schnaq user-identity share-hash)
     (ok {:share-hash share-hash})))
 
 (defn- search-qa
