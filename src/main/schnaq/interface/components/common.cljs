@@ -35,7 +35,7 @@
   "Create an outlined badge ()rounded pill)."
   [content variant]
   (let [stringed-variant (str (name variant))]
-    [:span.badge.rounded-pill.border
+    [:span.badge.rounded-pill.border.mx-1
      {:class (format "border-%s text-%s" stringed-variant stringed-variant)}
      content]))
 

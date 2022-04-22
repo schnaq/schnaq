@@ -118,8 +118,16 @@
      (when-not image
        [:div.display-4.m-auto.text-white img-title])]))
 
+(defn- schnaq-badges
+  "Show schnaq badges."
+  [schnaq]
+  [:<>
+   [badges/comments-info-badge schnaq]
+   [badges/read-only-badge schnaq]
+   [badges/archived-badge schnaq]])
+
 (defn- schnaq-entry
-  "Displays a single schnaq of the schnaq list"
+  "Displays a single schnaq of the schnaq list."
   [schnaq]
   [:article.schnaq-entry.d-flex
    [:a.d-flex.flex-row.flex-grow-1.text-reset.text-decoration-none
@@ -129,12 +137,12 @@
     [:div.ms-3.w-100.py-2
      [schnaq-title (:discussion/title schnaq)]
      [:div.d-flex.flex-row.mt-auto.pt-3
-      [:div [badges/comments-info-badge schnaq]]
-      [badges/read-only-badge schnaq]
+      [:div.d-none.d-xl-block [schnaq-badges schnaq]]
       [:div.d-flex.flex-row.ms-auto
        [user/user-info-only (:discussion/author schnaq) 24]
        [:small.fw-light.d-inline.my-auto.ms-2
-        [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]]]
+        [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]
+     [:div.d-xl-none [schnaq-badges schnaq]]]]
    [schnaq-dropdown schnaq]])
 
 (defn schnaq-list-view
