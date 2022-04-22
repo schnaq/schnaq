@@ -6,11 +6,11 @@
             [schnaq.api.middlewares :as middlewares]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.main :as db]
+            [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.themes :as themes-db]
             [schnaq.media :as media]
-            [schnaq.s3 :as s3]
-            [schnaq.database.patterns :as patterns]))
+            [schnaq.s3 :as s3]))
 
 (def ^:private image-max-width-logo
   "Set the maximum image-width of the logo in pixels."
