@@ -1004,6 +1004,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.free-tier/description "For efficient makers and small teams, that don't need a lot. Create discussions and Q&As with two clicks."
    :pricing.free-tier/beta-notice "This plan stays free forever. Need more features? Upgrade easily with a few clicks."
    :pricing.free-tier/call-to-action "Start Free of Charge"
+   :pricing.free-tier/call-to-action-preamble "Your current plan"
+   :pricing.free-tier/call-to-action-registered "Start a schnaq now!"
    :pricing.free-tier/for-free "Free forever"
    :pricing.pro-tier/title "Pro"
    :pricing.pro-tier/subtitle "Activate your potential"

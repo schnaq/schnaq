@@ -124,7 +124,15 @@
      [(labels :pricing.free-tier/for-free)])
     "text-primary")
    nil
-   [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (navigation/href :routes.schnaq/create)]])
+   [cta-button
+    (if @(rf/subscribe [:user/authenticated?])
+      [:<>
+       (when-not @(rf/subscribe [:user/pro-user?])
+         [:span.small (labels :pricing.free-tier/call-to-action-preamble) [:br]])
+       (labels :pricing.free-tier/call-to-action-registered)]
+      (labels :pricing.free-tier/call-to-action))
+    "btn-primary"
+    (navigation/href :routes.schnaq/create)]])
 
 (defn pro-tier-cta-button
   "Show button to checkout pro."
@@ -132,11 +140,11 @@
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         price-id (:id @(rf/subscribe [:pricing.pro/yearly]))]
     [buttons/button
-     (labels :pricing.pro-tier/call-to-action)
+     [:<> [icon :star] (labels :pricing.pro-tier/call-to-action)]
      #(if authenticated?
         (rf/dispatch [:subscription/create-checkout-session price-id])
         (rf/dispatch [:keycloak/login (links/checkout-link price-id)]))
-     "btn-secondary btn-lg"]))
+     "btn-secondary btn-lg fs-4"]))
 
 (defn- pro-tier-card
   "Display the pro tier card."
