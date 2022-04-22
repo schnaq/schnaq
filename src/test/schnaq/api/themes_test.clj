@@ -77,7 +77,9 @@
 
 (defn- edit-theme-request [user-token theme]
   (-> {:request-method :put :uri (:path (api/route-by-name :api.theme/edit))
-       :body-params {:theme theme}}
+       :body-params {:theme theme
+                     :delete-header? false
+                     :delete-logo? false}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       toolbelt/accept-edn-response-header
