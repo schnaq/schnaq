@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.badges
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.common :as common]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -298,9 +299,9 @@
 (defn read-only-badge
   "Badge that appears only if the passed schnaq is set to read-only"
   [schnaq]
-  (let [read-only? (some #{:discussion.state/read-only} (:discussion/states schnaq))]
-    (when read-only?
-      [:div.small.my-auto.text-secondary (labels :discussion.state/read-only-label)])))
+  (when (some #{:discussion.state/read-only} (:discussion/states schnaq))
+    [:small
+     [common/outlined-pill (labels :discussion.state/read-only-label) :secondary]]))
 
 ;; -----------------------------------------------------------------------------
 
