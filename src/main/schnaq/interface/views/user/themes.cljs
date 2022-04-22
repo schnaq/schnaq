@@ -193,14 +193,16 @@
  (fn [db _]
    (-> db
        (assoc-in [:schnaq :selected :discussion/theme :delete :header] true)
-       (update-in [:schnaq :selected :discussion/theme :temporary] dissoc :header))))
+       (update-in [:schnaq :selected :discussion/theme :temporary] dissoc :header)
+       (update-in [:schnaq :selected :discussion/theme] dissoc :theme.images/header))))
 
 (rf/reg-event-db
  :themes.personal.logo/reset
  (fn [db _]
    (-> db
        (assoc-in [:schnaq :selected :discussion/theme :delete :logo] true)
-       (update-in [:schnaq :selected :discussion/theme :temporary] dissoc :logo))))
+       (update-in [:schnaq :selected :discussion/theme :temporary] dissoc :logo)
+       (update-in [:schnaq :selected :discussion/theme] dissoc :theme.images/logo))))
 
 (defn- image-upload-with-preview
   "Add image inputs and provide a preview if image is present."
@@ -215,8 +217,13 @@
         [:schnaq :selected :discussion/theme :temporary :logo]]]
       [:div.col-md-4.pt-4
        (when logo
-         [:img.img-fluid {:src (gstring/format "%s?%s" logo (.getTime (js/Date.)))
-                          :alt (labels :themes.personal.creation.images.logo/alt)}])]]
+         [:<>
+          [:img.img-fluid {:src (gstring/format "%s?%s" logo (.getTime (js/Date.)))
+                           :alt (labels :themes.personal.creation.images.logo/alt)}]
+          [delete-button
+           (labels :themes.personal.edit.image/delete)
+           (labels :themes.personal.edit.image/delete-confirmation)
+           #(rf/dispatch [:themes.personal.logo/reset])]])]]
      [:div.row.pb-3
       [:div.col-md-8
        [inputs/image
@@ -232,8 +239,8 @@
           [:img.img-fluid {:src (gstring/format "%s?%s" header (.getTime (js/Date.)))
                            :alt (labels :themes.personal.creation.images.header/title)}]
           [delete-button
-           "Bild löschen"
-           "Soll das Bild wirklich gelöscht werden?"
+           (labels :themes.personal.edit.image/delete)
+           (labels :themes.personal.edit.image/delete-confirmation)
            #(rf/dispatch [:themes.personal.header/reset])]])]]]))
 
 (defn- configure-theme
