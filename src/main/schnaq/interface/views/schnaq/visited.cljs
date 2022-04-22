@@ -7,7 +7,7 @@
             [schnaq.interface.utils.toolbelt :as tools]))
 
 (rf/reg-event-db
- :schnaqs.visited/store-hashes-from-localstorage
+ :schnaqs.visited/from-localstorage
  (fn [db _]
    (assoc-in db [:schnaqs :visited-hashes]
              (set (remove nil? (:schnaqs/visited local-storage))))))
@@ -19,7 +19,7 @@
            [:localstorage/assoc
             [:schnaqs/visited
              (set (remove nil? (conj (:schnaqs/visited local-storage) share-hash)))]])
-         [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
+         [:dispatch [:schnaqs.visited/from-localstorage]]]}))
 
 (rf/reg-event-fx
  :schnaq.visited/remove-from-localstorage!
@@ -28,7 +28,35 @@
            [:localstorage/assoc
             [:schnaqs/visited
              (set (remove #(= % share-hash) (:schnaqs/visited local-storage)))]])
-         [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
+         [:dispatch [:schnaqs.visited/from-localstorage]]]}))
+
+;; -----------------------------------------------------------------------------
+
+(rf/reg-event-db
+ :schnaqs.archived/from-localstorage
+ (fn [db]
+   (assoc-in db [:schnaqs :archived-hashes]
+             (set (remove nil? (:schnaqs/archived local-storage))))))
+
+(rf/reg-event-fx
+ :schnaq.archived/to-localstorage
+ (fn [_ [_ share-hash]]
+   {:fx [(when share-hash
+           [:localstorage/assoc
+            [:schnaqs/visited
+             (set (remove nil? (conj (:schnaqs/archived local-storage) share-hash)))]])
+         [:dispatch [:schnaqs.archived/from-localstorage]]]}))
+
+(rf/reg-event-fx
+ :schnaq.archived/remove-from-localstorage!
+ (fn [_ [_ share-hash]]
+   {:fx [(when share-hash
+           [:localstorage/assoc
+            [:schnaqs/archived
+             (set (remove #(= % share-hash) (:schnaqs/archived local-storage)))]])
+         [:dispatch [:schnaqs.archived/from-localstorage]]]}))
+
+;; -----------------------------------------------------------------------------
 
 (rf/reg-sub
  :schnaqs.visited/all
@@ -89,15 +117,20 @@
                :display-name (tools/current-display-name db)})]}))))
 
 (rf/reg-event-fx
- :schnaqs.visited/merge-registered-users-visits
+ :schnaqs.archived-and-visited/to-localstorage
  ;; Takes the schnaqs the registered user has and merges them with the local ones.
  ;; This event should only be called, after the app is fully initialized (i.e. ls-schnaqs are already inside the db)
- (fn [{:keys [db]} [_ registered-visited-hashes]]
-   (let [db-schnaqs (get-in db [:schnaqs :visited-hashes])
-         merged-schnaqs (set (concat registered-visited-hashes db-schnaqs))
+ (fn [{:keys [db]} [_ visited-hashes archived-hashes]]
+   (let [db-hashes-visited (get-in db [:schnaqs :visited-hashes])
+         merged-visited-hashes (set (concat visited-hashes db-hashes-visited))
+         db-hashes-archived (get-in db [:schnaqs :archived-hashes])
+         merged-archived-hashes (set (concat archived-hashes db-hashes-archived))
          route-name (navigation/canonical-route-name (get-in db [:current-route :data :name]))]
-     {:db (assoc-in db [:schnaqs :visited-hashes] merged-schnaqs)
-      :fx [[:localstorage/assoc [:schnaqs/visited merged-schnaqs]]
+     {:db (-> db
+              (assoc-in [:schnaqs :visited-hashes] merged-visited-hashes)
+              (assoc-in [:schnaqs :archived-hashes] merged-archived-hashes))
+      :fx [[:localstorage/assoc [:schnaqs/visited merged-visited-hashes]]
+           [:localstorage/assoc [:schnaqs/archived merged-archived-hashes]]
            ;; reload visited schnaqs when we are inside the visited-schnaqs view, otherwise this happens with the controller
            (when (= :routes.schnaqs/personal route-name)
              [:dispatch [:schnaqs.visited/load]])]})))
