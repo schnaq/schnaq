@@ -140,11 +140,11 @@
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         price-id (:id @(rf/subscribe [:pricing.pro/yearly]))]
     [buttons/button
-     [:<> [icon :star] (labels :pricing.pro-tier/call-to-action)]
+     [:<> [icon :star "me-2"] (labels :pricing.pro-tier/call-to-action)]
      #(if authenticated?
         (rf/dispatch [:subscription/create-checkout-session price-id])
         (rf/dispatch [:keycloak/login (links/checkout-link price-id)]))
-     "btn-secondary btn-lg fs-4"]))
+     "btn-secondary btn-lg"]))
 
 (defn- pro-tier-card
   "Display the pro tier card."

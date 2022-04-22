@@ -153,9 +153,7 @@
   "Show the upgrade-button to non-pro users"
   []
   (when-not @(rf/subscribe [:user/pro-user?])
-    [:a.btn.btn-secondary.ms-2
-     {:href (navigation/href :routes/pricing)}
-     [icon :star] (labels :pricing.upgrade-nudge/button)]))
+    [buttons/upgrade]))
 
 (defn register-or-user-button
   "If not authenticated, show register button else show user menu."

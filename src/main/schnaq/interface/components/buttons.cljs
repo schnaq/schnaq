@@ -14,9 +14,9 @@
   ([content target classes attrs]
    [:a.btn
     (cond->
-      {:href target
-       :role "button"
-       :class classes}
+     {:href target
+      :role "button"
+      :class classes}
       attrs (merge attrs))
     content]))
 
@@ -42,16 +42,18 @@
   ([content on-click classes attrs]
    [:button.btn
     (cond->
-      {:on-click on-click
-       :role "button"
-       :class classes}
+     {:on-click on-click
+      :role "button"
+      :class classes}
       attrs (merge attrs))
     content]))
 
-(defn upgrade-large
-  "Large upgrade button for use in different places."
+(defn upgrade
+  "Upgrade button for use in different places."
   []
-  [anchor-big
-   [:<> [icon :star] (labels :pricing.upgrade-nudge/button)]
+  [anchor
+   [:<>
+    [icon :star "me-1"]
+    (labels :pricing.upgrade-nudge/button)]
    (navigation/href :routes/pricing)
-   "btn-secondary fs-2"])
+   "btn-secondary"])

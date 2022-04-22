@@ -369,7 +369,7 @@
      [header-image/image-url-input]]
     [:div.pt-1
      [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
-     [button/upgrade-large]
+     [button/upgrade]
      [:div.border.border-danger.p-3.mt-4
       [discussion-settings]
       [:div.pt-4

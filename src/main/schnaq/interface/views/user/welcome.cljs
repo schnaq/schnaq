@@ -79,7 +79,7 @@
        [:div.col-md-6.col-lg-4 [feature-themes]]
        [:div.col-md-6.col-lg-4 [feature-polls true]]
        [:div.col-md-6.col-lg-4 [feature-activation true]]]]
-     [button/upgrade-large]
+     [button/upgrade]
      [:img.pt-5 {:src (img-path :schnaqqifant/rocket)
                  :alt (labels :schnaqqi.rocket/alt-text)}]]}])
 
