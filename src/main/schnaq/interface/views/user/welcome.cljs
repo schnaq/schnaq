@@ -1,6 +1,8 @@
 (ns schnaq.interface.views.user.welcome
   (:require [schnaq.interface.components.common :refer [next-step]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
@@ -78,6 +80,9 @@
        [:div.col-md-6.col-lg-4 [feature-themes]]
        [:div.col-md-6.col-lg-4 [feature-polls true]]
        [:div.col-md-6.col-lg-4 [feature-activation true]]]]
+     [:a.btn.btn-secondary.btn-lg.fs-2
+      {:href (navigation/href :routes/pricing)}
+      [icon :star] (labels :pricing.upgrade-nudge/button)]
      [:img.pt-5 {:src (img-path :schnaqqifant/rocket)
                  :alt (labels :schnaqqi.rocket/alt-text)}]]}])
 
