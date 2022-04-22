@@ -121,6 +121,13 @@
   @(transact [[:db/add [:user.registered/keycloak-id keycloak-id]
                :user.registered/archived-schnaqs [:discussion/share-hash share-hash]]]))
 
+(>defn unarchive-schnaq
+  "Remove a schnaq from the user's archived schnaq."
+  [keycloak-id share-hash]
+  [:user.registered/keycloak-id :discussion/share-hash :ret map?]
+  @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id]
+               :user.registered/archived-schnaqs [:discussion/share-hash share-hash]]]))
+
 (defn seen-statements-entity
   "Returns the entity-id that a certain user / discussion combination has for seen statements."
   [keycloak-id discussion-hash]

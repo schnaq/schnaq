@@ -2,7 +2,7 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.user :as db]
-            [schnaq.test-data :refer [alex]]
+            [schnaq.test-data :refer [alex kangaroo]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -125,3 +125,10 @@
       (db/archive-schnaq keycloak-id "cat-dog-hash")
       (is (= 1 (count (:user.registered/archived-schnaqs
                        (db/private-user-by-keycloak-id keycloak-id))))))))
+
+(deftest unarchive-schnaq-test
+  (testing "Unarchive a schnaq for a user."
+    (let [keycloak-id (:user.registered/keycloak-id kangaroo)]
+      (db/unarchive-schnaq keycloak-id "cat-dog-hash")
+      (is (zero? (count (:user.registered/archived-schnaqs
+                         (db/private-user-by-keycloak-id keycloak-id))))))))

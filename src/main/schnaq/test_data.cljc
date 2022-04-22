@@ -312,7 +312,9 @@
    :user.registered/notification-mail-interval :notification-mail-interval/daily
    :user.registered/visited-schnaqs
    [#:discussion{:share-hash "cat-dog-hash"}
-    #:discussion{:share-hash "simple-hash"}]})
+    #:discussion{:share-hash "simple-hash"}]
+   :user.registered/archived-schnaqs
+   [#:discussion{:share-hash "cat-dog-hash"}]})
 
 (def christian
   {:db/id "user.registered/christian"
