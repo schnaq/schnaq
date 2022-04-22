@@ -1059,6 +1059,8 @@
    :router/how-to "Wie benutze ich schnaq?"
    :router/last-added-schnaq "Zuletzt angelegter schnaq"
    :router/visited-schnaqs "Besuchte schnaqs"
+   :router/created-schnaqs "Erstellte schnaqs"
+   :router/archived-schnaqs "Archivierte schnaqs"
    :router/not-found-label "Not Found route redirect"
    :router/pricing "Preise"
    :router/privacy "Datenschutz"
@@ -1129,6 +1131,11 @@
    :loading.placeholder/lead "Daten werden geladen..."
    :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
 
+   :overview.schnaqs/heading "schnaqs"
+   :overview.schnaqs/visited "Besuchte schnaqs"
+   :overview.schnaqs/created "Erstellte schnaqs"
+   :overview.schnaqs/archived "Archivierte schnaqs"
+
    :hubs/heading "Bereiche"
    :hub/heading "Persönlicher %s Hub"
    :hub/settings "Verwaltung"
@@ -1160,6 +1167,14 @@
    :hub.members.add.result.error/generic-error "Etwas ist schief gelaufen. Überprüfe die E-Mail und versuche es noch einmal."
    :hub.members.add.form/title "Mitglieder hinzufügen"
    :hub.members.add.form/button "Nutzer:in hinzufügen!"
+
+   :schnaq.options.archive/label "schnaq archivieren"
+   :schnaq.options.archive/prompt "Möchtest du den schnaq wirklich archivieren? Du kannst jederzeit über die Liste deiner archivierten schnaqs darauf zugreifen."
+   :schnaq.options.unarchive/label "Archivierung rückgängig machen"
+   :schnaq.options.unarchive/prompt "Möchtest du die Archivierung des schnaqs rückgängig machen? Dann erscheint der schnaq wieder in deiner Übersicht."
+   :schnaq.options.leave/label "schnaq verlassen"
+   :schnaq.options.leave/prompt "Möchtest du den schnaq wirklich verlassen? Der schnaq wird nicht mehr mit deinem Account verknüpft und du musst erneut eingeladen werden."
+   :schnaq.options/archived "archiviert"
 
    :schnaq.search/heading "Suchergebnisse"
    :schnaq.search/results "Ergebnisse"

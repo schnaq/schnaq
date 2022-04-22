@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.badges
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.common :as common]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -262,11 +263,10 @@
   [schnaq]
   (let [meta-info (:meta-info schnaq)
         statement-count (:all-statements meta-info)]
-    [:p.mb-0
-     [:span.small.me-2
-      [icon :comment/alt "m-auto"]
-      " " statement-count
-      " " (labels :discussion.badges/posts)]]))
+    [:span.small.me-2
+     [icon :comment/alt "m-auto"]
+     " " statement-count
+     " " (labels :discussion.badges/posts)]))
 
 (defn static-info-badges
   "Badges that display schnaq info."
@@ -298,9 +298,16 @@
 (defn read-only-badge
   "Badge that appears only if the passed schnaq is set to read-only"
   [schnaq]
-  (let [read-only? (some #{:discussion.state/read-only} (:discussion/states schnaq))]
-    (when read-only?
-      [:div.small.my-auto.text-secondary (labels :discussion.state/read-only-label)])))
+  (when (some #{:discussion.state/read-only} (:discussion/states schnaq))
+    [:small
+     [common/outlined-pill (labels :discussion.state/read-only-label) :secondary]]))
+
+(defn archived-badge
+  "Badge that appears only if the passed schnaq is set to read-only"
+  [{:keys [discussion/share-hash]}]
+  (when @(rf/subscribe [:schnaq.visited/archived? share-hash])
+    [:small
+     [common/outlined-pill (labels :schnaq.options/archived) :success]]))
 
 ;; -----------------------------------------------------------------------------
 

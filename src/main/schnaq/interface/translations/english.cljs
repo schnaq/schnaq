@@ -1062,6 +1062,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/how-to "How do I use schnaq?"
    :router/last-added-schnaq "Last created schnaq"
    :router/visited-schnaqs "Visited schnaqs"
+   :router/created-schnaqs "Created schnaqs"
+   :router/archived-schnaqs "Archived schnaqs"
    :router/not-found-label "Not found route redirect"
    :router/pricing "Pricing"
    :router/privacy "Privacy Policy"
@@ -1132,6 +1134,11 @@ Now we write down questions and discuss them and can still understand what we ha
    :loading.placeholder/lead "Loading..."
    :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 
+   :overview.schnaqs/heading "schnaqs"
+   :overview.schnaqs/visited "Visited schnaqs"
+   :overview.schnaqs/created "Created schnaqs"
+   :overview.schnaqs/archived "Archived schnaqs"
+
    :hubs/heading "Hubs"
    :hub/heading "Personal %s Hub"
    :hub/settings "Administration"
@@ -1162,6 +1169,14 @@ Now we write down questions and discuss them and can still understand what we ha
    :hub.members.add.result.error/generic-error "Something went wrong. Please check the email you entered and try again"
    :hub.members.add.form/title "Add Members"
    :hub.members.add.form/button "Add user now!"
+
+   :schnaq.options.archive/label "archive schnaq"
+   :schnaq.options.archive/prompt "Do you really want to archive this schnaq? You can still access this schnaq from your list of archived schnaqs."
+   :schnaq.options.unarchive/label "unarchive schnaq"
+   :schnaq.options.unarchive/prompt "Do you want to unarchive this schnaq? It will again appear in your overview."
+   :schnaq.options.leave/label "leave schnaq"
+   :schnaq.options.leave/prompt "Do you really want to leave this schnaq? It will be removed from your account and you have to be invited to access it again."
+   :schnaq.options/archived "archived"
 
    :schnaq.search/heading "Search results"
    :schnaq.search/results "results"

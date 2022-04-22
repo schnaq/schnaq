@@ -150,6 +150,30 @@
     (user-db/update-visited-schnaqs user-identity [discussion-id])
     (ok {:share-hash share-hash})))
 
+(defn- remove-visited-schnaq
+  "Remove a schnaq id from visited schnaqs by share-hash"
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash]} (:body parameters)
+        keycloak-id (:sub identity)]
+    (user-db/remove-visited-schnaq keycloak-id share-hash)
+    (ok {:share-hash share-hash})))
+
+(defn- archive-schnaq
+  "Add a share-hash to a user's archived schnaqs."
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash]} (:body parameters)
+        keycloak-id (:sub identity)]
+    (user-db/archive-schnaq keycloak-id share-hash)
+    (ok {:share-hash share-hash})))
+
+(defn- unarchive-schnaq
+  "Remove a schnaq from the archived schnaqs."
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash]} (:body parameters)
+        keycloak-id (:sub identity)]
+    (user-db/unarchive-schnaq keycloak-id share-hash)
+    (ok {:share-hash share-hash})))
+
 (defn- search-qa
   "Search through any valid discussion."
   [{:keys [parameters identity]}]
@@ -189,6 +213,24 @@
                       :parameters {:body {:share-hash :discussion/share-hash}}
                       :responses {200 {:body {:share-hash :discussion/share-hash}}
                                   400 at/response-error-body}}]
+     ["/remove-visited" {:delete remove-visited-schnaq
+                         :description (at/get-doc #'remove-visited-schnaq)
+                         :name :api.schnaq/remove-visited
+                         :middleware [:user/authenticated?
+                                      :discussion/valid-share-hash?]
+                         :parameters {:body {:share-hash :discussion/share-hash}}
+                         :responses {200 {:body {:share-hash :discussion/share-hash}}
+                                     400 at/response-error-body}}]
+     ["/archive" {:name :api.schnaq/archive
+                  :middleware [:user/authenticated?
+                               :discussion/valid-share-hash?]
+                  :parameters {:body {:share-hash :discussion/share-hash}}
+                  :responses {200 {:body {:share-hash :discussion/share-hash}}}
+                  :put {:handler archive-schnaq
+                        :description (at/get-doc #'archive-schnaq)}
+                  :delete {:handler unarchive-schnaq
+                           :description (at/get-doc #'unarchive-schnaq)}}]
+
      ["/add" {:post add-schnaq
               :description (at/get-doc #'add-schnaq)
               :name :api.schnaq/add

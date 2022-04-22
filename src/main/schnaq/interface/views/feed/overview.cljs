@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.feed.overview
-  (:require [re-frame.core :as rf]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.navigation :as navigation]
@@ -41,24 +42,46 @@
        :on-click #(rf/dispatch [:feed.sort/set :alphabetical])}
       (labels :badges.sort/alphabetical)]]))
 
-(defn- schnaq-options
+(>defn- schnaq-dropdown-item
+  [label on-click-fn]
+  [keyword? fn? :ret :re-frame/component]
+  [:button.dropdown-item {:type "button"
+                          :title (labels label)
+                          :on-click on-click-fn}
+   (labels label)])
+
+(defn- schnaq-dropdown
   "Adds a dropdown with deletion options to schnaqs, e.g. when displayed in the
   list of schnaqs in a hub."
   [schnaq]
   (let [options-id "options-dropdown-menu"
         dropdown-id "options-dropdown-elements"
-        share-hash (:discussion/share-hash schnaq)]
+        share-hash (:discussion/share-hash schnaq)
+        current-hub @(rf/subscribe [:hub/current])
+        current-user-id @(rf/subscribe [:user/id])
+        archived? @(rf/subscribe [:schnaq.visited/archived? share-hash])
+        author? (= current-user-id (-> schnaq :discussion/author :db/id))]
     [:div.dropdown
      [:button.btn.btn-transparent
       {:id options-id :type "button" :data-bs-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
       [icon :dots-v]]
      [:div.dropdown-menu.dropdown-menu-end {:id dropdown-id :aria-labelledby options-id}
-      [:button.dropdown-item {:type "button"
-                              :title (labels :hub.remove.schnaq/tooltip)
-                              :on-click (fn [_e] (when (js/confirm (labels :hub.remove.schnaq/prompt))
-                                                   (rf/dispatch [:hub.remove/schnaq share-hash])))}
-       (labels :hub.remove.schnaq/tooltip)]]]))
+      (when current-hub
+        [schnaq-dropdown-item :hub.remove.schnaq/tooltip
+         #(when (js/confirm (labels :hub.remove.schnaq/prompt))
+            (rf/dispatch [:hub.remove/schnaq share-hash]))])
+      (if archived?
+        [schnaq-dropdown-item :schnaq.options.unarchive/label
+         #(when (js/confirm (labels :schnaq.options.unarchive/prompt))
+            (rf/dispatch [:schnaqs.visited/unarchive! share-hash]))]
+        [schnaq-dropdown-item :schnaq.options.archive/label
+         #(when (js/confirm (labels :schnaq.options.archive/prompt))
+            (rf/dispatch [:schnaqs.visited/archive! share-hash]))])
+      (when-not author?
+        [schnaq-dropdown-item :schnaq.options.leave/label
+         #(when (js/confirm (labels :schnaq.options.leave/prompt))
+            (rf/dispatch [:schnaqs.visited/remove! share-hash]))])]]))
 
 (defn- schnaq-title [title]
   [:div.schnaq-entry-title
@@ -95,9 +118,17 @@
      (when-not image
        [:div.display-4.m-auto.text-white img-title])]))
 
+(defn- schnaq-badges
+  "Show schnaq badges."
+  [schnaq]
+  [:<>
+   [badges/comments-info-badge schnaq]
+   [badges/read-only-badge schnaq]
+   [badges/archived-badge schnaq]])
+
 (defn- schnaq-entry
-  "Displays a single schnaq of the schnaq list"
-  [schnaq delete-from-hub?]
+  "Displays a single schnaq of the schnaq list."
+  [schnaq]
   [:article.schnaq-entry.d-flex
    [:a.d-flex.flex-row.flex-grow-1.text-reset.text-decoration-none
     {:href (navigation/href :routes.schnaq/start {:share-hash (:discussion/share-hash schnaq)})
@@ -106,74 +137,98 @@
     [:div.ms-3.w-100.py-2
      [schnaq-title (:discussion/title schnaq)]
      [:div.d-flex.flex-row.mt-auto.pt-3
-      [:div [badges/comments-info-badge schnaq]]
-      [badges/read-only-badge schnaq]
+      [:div.d-none.d-xl-block [schnaq-badges schnaq]]
       [:div.d-flex.flex-row.ms-auto
        [user/user-info-only (:discussion/author schnaq) 24]
        [:small.fw-light.d-inline.my-auto.ms-2
-        [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]]]
-   (when delete-from-hub?
-     [schnaq-options schnaq])])
+        [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]
+     [:div.d-xl-none [schnaq-badges schnaq]]]]
+   [schnaq-dropdown schnaq]])
 
 (defn schnaq-list-view
   "Shows a list of schnaqs."
-  ([subscription-vector]
-   [schnaq-list-view subscription-vector false])
-  ([subscription-vector show-delete-from-hub-button?]
-   (let [schnaqs @(rf/subscribe subscription-vector)
-         sort-method @(rf/subscribe [:feed/sort])
-         active-filters @(rf/subscribe [:filters.discussion/active])
-         filtered-schnaqs (filters/filter-discussions schnaqs active-filters)
-         sorted-schnaqs (if (= :alphabetical sort-method)
-                          (sort-by :discussion/title filtered-schnaqs)
-                          (sort-by :discussion/created-at > filtered-schnaqs))]
-     (if (empty? schnaqs)
-       [no-schnaqs-found]
-       [:div.panel-white.rounded-1.p-4
-        [:div.d-flex.flex-row.mb-4
-         [:h6.text-typography.d-none.d-md-block (labels :router/visited-schnaqs)]
-         [:div.ms-auto
-          [sort-options]
-          [filters/filter-button]]]
-        (for [schnaq sorted-schnaqs]
-          [:div.py-3 {:key (:db/id schnaq)}
-           [schnaq-entry schnaq show-delete-from-hub-button?]])]))))
+  [subscription-vector]
+  (let [schnaqs @(rf/subscribe subscription-vector)
+        sort-method @(rf/subscribe [:feed/sort])
+        active-filters @(rf/subscribe [:filters.discussion/active])
+        filtered-schnaqs (filters/filter-discussions schnaqs active-filters)
+        sorted-schnaqs (if (= :alphabetical sort-method)
+                         (sort-by :discussion/title filtered-schnaqs)
+                         (sort-by :discussion/created-at > filtered-schnaqs))]
+    (if (empty? schnaqs)
+      [no-schnaqs-found]
+      [:div.panel-white.rounded-1.p-4
+       [:div.d-flex.flex-row.mb-4
+        [:h6.text-typography.d-none.d-md-block (labels :router/visited-schnaqs)]
+        [:div.ms-auto
+         [sort-options]
+         [filters/filter-button]]]
+       (for [schnaq sorted-schnaqs]
+         [:div.py-3 {:key (:db/id schnaq)}
+          [schnaq-entry schnaq]])])))
 
 (defn- feed-button
   "Create a button for the feed list."
-  ([text image-div class-button route]
-   [feed-button text image-div class-button route nil])
-  ([text image-div button-class route route-params]
-   [:a.btn.btn-link.text-start {:class button-class
-                                :role "button"
-                                :href (navigation/href route route-params)}
-    [:div.d-flex.flex-row
-     image-div
-     [:div.my-auto.ps-2 text]]]))
+  [text image-div href button-class]
+  [:a.btn.btn-link.text-start {:class button-class
+                               :role "button"
+                               :href href}
+   [:div.d-flex.flex-row
+    image-div
+    [:div.my-auto.ps-2 text]]])
+
+(defn feed-button-icon [icon-name]
+  [:div.mx-2.my-auto [icon icon-name "m-auto fa-fw"]])
 
 (defn icon-and-label-feed-button
-  [label icon-name route route-params]
-  (let [current-route @(rf/subscribe [:navigation/current-route-name])
-        button-class (if (= current-route route) "feed-button-focused" "feed-button")]
-    [feed-button (labels label)
-     [:div.mx-2.my-auto [icon icon-name "m-auto"]]
-     button-class route route-params]))
-
-(defn create-feed-button
-  [label icon-name route route-params]
-  (let [button-class "feed-button-create"]
-    [feed-button (labels label)
-     [:div.mx-2.my-auto [icon icon-name "m-auto"]]
-     button-class route route-params]))
+  [label icon-name href button-class]
+  #_(let [current-route @(rf/subscribe [:navigation/current-route-name])
+          button-class (if (= current-route route) "feed-button-focused" "feed-button")])
+  [feed-button (labels label)
+   [:div.mx-2.my-auto [icon icon-name "m-auto fa-fw"]]
+   href button-class])
 
 (defn hub-feed-button
   "Display a single hub."
   [{:hub/keys [keycloak-name name logo]}]
   (let [current-hub @(rf/subscribe [:hub/current])
         current-hub-name (:hub/keycloak-name current-hub)
-        path-keycloak-name keycloak-name
-        button-class (if (= current-hub-name path-keycloak-name) "feed-button-focused" "feed-button")]
-    [feed-button name [hub/hub-logo logo name 32] button-class :routes/hub {:keycloak-name keycloak-name}]))
+        button-class (if (= current-hub-name keycloak-name) "feed-button-focused" "feed-button")]
+    [feed-button
+     name
+     [hub/hub-logo logo name 32]
+     (navigation/href :routes/hub {:keycloak-name keycloak-name})
+     button-class]))
+
+(defn- feed-schnaqs
+  "Sidebar where users can dispatch which schnaqs are shown."
+  []
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])
+        current-route @(rf/subscribe [:navigation/current-route-name])
+        current-filter @(rf/subscribe [:schnaqs.visited/filter])
+        check-route-fn (fn [filter] (if (and
+                                         (= current-filter filter)
+                                         (= current-route :routes.schnaqs/personal))
+                                      "feed-button-focused" "feed-button"))]
+    [:section
+     [:h6.text-typography.pb-2.ms-4 (labels :overview.schnaqs/heading)]
+     [:div.d-flex.flex-column
+      [feed-button
+       (labels :overview.schnaqs/visited)
+       [feed-button-icon :eye]
+       (navigation/href :routes.schnaqs/personal)
+       (check-route-fn nil)]
+      (when authenticated?
+        [feed-button
+         (labels :overview.schnaqs/created)
+         [feed-button-icon :pen]
+         (navigation/href :routes.schnaqs/personal nil {:filter :created-by-user})
+         (check-route-fn :created-by-user)])
+      [feed-button
+       (labels :overview.schnaqs/archived)
+       [feed-button-icon :archive]
+       (navigation/href :routes.schnaqs/personal nil {:filter :archived-by-user})
+       (check-route-fn :archived-by-user)]]]))
 
 (defn feed-hubs []
   (when-let [hubs @(rf/subscribe [:hubs/all])]
@@ -181,8 +236,7 @@
      [:h6.text-typography.pb-2.ms-4 (labels :hubs/heading)]
      [:div.d-flex.flex-column
       (for [[keycloak-name hub] hubs]
-        (with-meta [hub-feed-button hub] {:key keycloak-name}))
-      [icon-and-label-feed-button :router/visited-schnaqs :eye :routes.schnaqs/personal]]]))
+        (with-meta [hub-feed-button hub] {:key keycloak-name}))]]))
 
 (defn feed-navigation
   "Navigate between the feeds."
@@ -191,10 +245,19 @@
         hubs @(rf/subscribe [:hubs/all])]
     [:section
      [:div.d-flex.flex-column.panel-white.mx-0.mt-0.mb-4
-      [create-feed-button :nav.schnaqs/create-schnaq :plus :routes.schnaq/create]
+      [feed-button
+       (labels :nav.schnaqs/create-schnaq)
+       [feed-button-icon :plus]
+       (navigation/href :routes.schnaq/create)
+       "feed-button-create"]
       (when-not (nil? edit-hash)
-        [icon-and-label-feed-button :nav.schnaqs/last-added :arrow-left
-         :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])]
+        [feed-button
+         (labels :nav.schnaqs/last-added)
+         [feed-button-icon :arrow-left]
+         (navigation/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
+         "feed-button"])]
+     [:div.panel-white.mb-4
+      [feed-schnaqs]]
      (when hubs
        [:div.panel-white.mb-4
         [feed-hubs]])]))
