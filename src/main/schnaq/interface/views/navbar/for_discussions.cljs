@@ -30,6 +30,7 @@
   [:div.d-flex.align-items-center
    [nav-elements/statement-counter]
    [nav-elements/dropdown-views :icon-views-light "text-white"]
+   [user-management/upgrade-button]
    [nav-elements/user-button]])
 
 (defn qanda-header
