@@ -115,3 +115,13 @@
       (db/remove-visited-schnaq user-keycloak-id "cat-dog-hash")
       (is (zero? (count (:user.registered/visited-schnaqs
                          (db/private-user-by-keycloak-id user-keycloak-id))))))))
+
+;; -----------------------------------------------------------------------------
+;; Archived schnaqs
+
+(deftest archive-schnaq-test
+  (testing "Archive a schnaq for a user."
+    (let [keycloak-id (:user.registered/keycloak-id alex)]
+      (db/archive-schnaq keycloak-id "cat-dog-hash")
+      (is (= 1 (count (:user.registered/archived-schnaqs
+                       (db/private-user-by-keycloak-id keycloak-id))))))))

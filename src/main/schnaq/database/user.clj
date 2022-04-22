@@ -115,9 +115,11 @@
                :user.registered/visited-schnaqs [:discussion/share-hash share-hash]]]))
 
 (>defn archive-schnaq
-  "Perist share-hash to a user's archived."
+  "Persist share-hash to a user's archived."
   [keycloak-id share-hash]
-  [:user.registered/keycloak-id :discussion/share-hash :ret map?])
+  [:user.registered/keycloak-id :discussion/share-hash :ret map?]
+  @(transact [[:db/add [:user.registered/keycloak-id keycloak-id]
+               :user.registered/archived-schnaqs [:discussion/share-hash share-hash]]]))
 
 (defn seen-statements-entity
   "Returns the entity-id that a certain user / discussion combination has for seen statements."
