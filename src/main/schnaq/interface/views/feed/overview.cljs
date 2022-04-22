@@ -192,8 +192,11 @@
      (navigation/href :routes/hub {:keycloak-name keycloak-name})
      button-class]))
 
-(defn- feed-schnaqs []
-  (let [current-route @(rf/subscribe [:navigation/current-route-name])
+(defn- feed-schnaqs
+  "Sidebar where users can dispatch which schnaqs are shown."
+  []
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])
+        current-route @(rf/subscribe [:navigation/current-route-name])
         current-filter @(rf/subscribe [:schnaqs.visited/filter])
         check-route-fn (fn [filter] (if (and
                                          (= current-filter filter)
@@ -207,11 +210,12 @@
        [feed-button-icon :eye]
        (navigation/href :routes.schnaqs/personal)
        (check-route-fn nil)]
-      [feed-button
-       (labels :overview.schnaqs/created)
-       [feed-button-icon :pen]
-       (navigation/href :routes.schnaqs/personal nil {:filter :created-by-user})
-       (check-route-fn :created-by-user)]
+      (when authenticated?
+        [feed-button
+         (labels :overview.schnaqs/created)
+         [feed-button-icon :pen]
+         (navigation/href :routes.schnaqs/personal nil {:filter :created-by-user})
+         (check-route-fn :created-by-user)])
       [feed-button
        (labels :overview.schnaqs/archived)
        [feed-button-icon :archive]

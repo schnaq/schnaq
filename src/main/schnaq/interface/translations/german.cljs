@@ -1164,7 +1164,7 @@
 
    :schnaq.options.archive/label "schnaq archivieren"
    :schnaq.options.archive/prompt "Möchtest du den schnaq wirklich archivieren? Du kannst jederzeit über die Liste deiner archivierten schnaqs darauf zugreifen."
-   :schnaq.options.unarchive/label "schnaq Archivierung rückgängig machen"
+   :schnaq.options.unarchive/label "Archivierung rückgängig machen"
    :schnaq.options.unarchive/prompt "Möchtest du die Archivierung des schnaqs rückgängig machen? Dann erscheint der schnaq wieder in deiner Übersicht."
    :schnaq.options.leave/label "schnaq verlassen"
    :schnaq.options.leave/prompt "Möchtest du den schnaq wirklich verlassen? Der schnaq wird nicht mehr mit deinem Account verknüpft und du musst erneut eingeladen werden."
