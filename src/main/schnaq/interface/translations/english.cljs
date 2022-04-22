@@ -1032,6 +1032,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.billing/info-1 "Prices shown are exclusive of any applicable sales taxes such as VAT."
    :pricing.billing/info-2 "Subscriptions to the Pro plan renews automatically at the end of each billing cycle unless duly terminated, at which point we'll charge the credit card in your account."
 
+   :pricing.upgrade-nudge/button "Upgrade"
+
    ;; tooltips
    :tooltip/history-statement "Back to statement made by"
    :tooltip/history-statement-current "Current statement"
