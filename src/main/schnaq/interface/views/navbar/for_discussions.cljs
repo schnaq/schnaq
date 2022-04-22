@@ -2,7 +2,8 @@
   (:require [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.views.discussion.share :as share]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
-            [schnaq.interface.views.navbar.elements :as nav-elements]))
+            [schnaq.interface.views.navbar.elements :as nav-elements]
+            [schnaq.interface.views.navbar.user-management :as user-management]))
 
 (defn- interaction-elements []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
@@ -11,6 +12,7 @@
    [nav-elements/navbar-settings]
    [nav-elements/language-toggle]
    [nav-elements/dropdown-views]
+   [user-management/upgrade-button]
    [nav-elements/user-button]])
 
 (defn header

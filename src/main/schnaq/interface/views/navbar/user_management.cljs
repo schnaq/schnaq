@@ -149,7 +149,7 @@
    #(rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))])
    (if on-light-background? "btn-outline-secondary ms-2" "btn-dark ms-2")])
 
-(defn- upgrade-button
+(defn upgrade-button
   "Show the upgrade-button to non-pro users"
   []
   (when-not @(rf/subscribe [:user/pro-user?])

@@ -83,8 +83,6 @@
      [:img.pt-5 {:src (img-path :schnaqqifant/rocket)
                  :alt (labels :schnaqqi.rocket/alt-text)}]]}])
 
-;; TODO upgrade button im schnaq (eventuell kann man den namensdropdown reusen)
-
 (defn- welcome-pro-user
   "Celebrating and welcoming the new pro user."
   []
