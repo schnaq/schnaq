@@ -6,6 +6,7 @@
             [schnaq.api.middlewares :as middlewares]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.main :as db]
+            [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.themes :as themes-db]
             [schnaq.media :as media]
@@ -85,12 +86,20 @@
 (defn- edit-theme
   "Change the content of a theme."
   [{{:keys [sub]} :identity
-    {{:keys [theme]} :body} :parameters}]
+    {{:keys [theme delete-header? delete-logo?]} :body} :parameters}]
   (let [images (prepare-images sub (:db/id theme) (:theme.images.raw/logo theme) (:theme.images.raw/header theme))
         prepared-theme (-> theme
                            (merge images)
-                           (dissoc :theme.images.raw/logo :theme.images.raw/header))]
-    (ok {:theme (themes-db/edit-theme sub prepared-theme)})))
+                           (dissoc :theme.images.raw/logo :theme.images.raw/header))
+        updated-theme (themes-db/edit-theme sub prepared-theme)
+        theme-id (:db/id updated-theme)]
+    (when delete-header?
+      (themes-db/delete-header theme-id)
+      (s3/delete-file :user/media (url->path-to-file (:theme.images/header updated-theme))))
+    (when delete-logo?
+      (themes-db/delete-logo theme-id)
+      (s3/delete-file :user/media (url->path-to-file (:theme.images/logo updated-theme))))
+    (ok {:theme (db/fast-pull theme-id patterns/theme)})))
 
 (defn- delete-theme
   "Delete a theme."
@@ -156,7 +165,9 @@
                :description (at/get-doc #'edit-theme)
                :name :api.theme/edit
                :middleware [user-is-theme-author?-middleware]
-               :parameters {:body {:theme ::specs/theme}}
+               :parameters {:body {:theme ::specs/theme
+                                   :delete-header? boolean?
+                                   :delete-logo? boolean?}}
                :responses {200 {:body {:theme ::specs/theme}}}}]
      ["/delete" {:delete delete-theme
                  :description (at/get-doc #'delete-theme)

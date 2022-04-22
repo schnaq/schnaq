@@ -179,6 +179,31 @@
                                  (oget % [:target :value])])}]
      [:label {:for "theme-title"} (labels :themes.personal.creation.title/label)]]))
 
+(defn- delete-button
+  "Delete theme or a single image."
+  [text confirmation-text deletion-fn]
+  [:button.float-end.btn.btn-sm.btn-link.text-danger
+   {:on-click #(when (js/confirm confirmation-text)
+                 (.preventDefault %)
+                 (deletion-fn))}
+   text])
+
+(rf/reg-event-db
+ :themes.personal.header/reset
+ (fn [db _]
+   (-> db
+       (assoc-in [:schnaq :selected :discussion/theme :delete :header] true)
+       (update-in [:schnaq :selected :discussion/theme :temporary] dissoc :header)
+       (update-in [:schnaq :selected :discussion/theme] dissoc :theme.images/header))))
+
+(rf/reg-event-db
+ :themes.personal.logo/reset
+ (fn [db _]
+   (-> db
+       (assoc-in [:schnaq :selected :discussion/theme :delete :logo] true)
+       (update-in [:schnaq :selected :discussion/theme :temporary] dissoc :logo)
+       (update-in [:schnaq :selected :discussion/theme] dissoc :theme.images/logo))))
+
 (defn- image-upload-with-preview
   "Add image inputs and provide a preview if image is present."
   []
@@ -192,8 +217,13 @@
         [:schnaq :selected :discussion/theme :temporary :logo]]]
       [:div.col-md-4.pt-4
        (when logo
-         [:img.img-fluid {:src (gstring/format "%s?%s" logo (.getTime (js/Date.)))
-                          :alt (labels :themes.personal.creation.images.logo/alt)}])]]
+         [:<>
+          [:img.img-fluid {:src (gstring/format "%s?%s" logo (.getTime (js/Date.)))
+                           :alt (labels :themes.personal.creation.images.logo/alt)}]
+          [delete-button
+           (labels :themes.personal.edit.image/delete)
+           (labels :themes.personal.edit.image/delete-confirmation)
+           #(rf/dispatch [:themes.personal.logo/reset])]])]]
      [:div.row.pb-3
       [:div.col-md-8
        [inputs/image
@@ -204,8 +234,13 @@
         [icon :info "me-1"] (labels :themes.personal.creation.images/info)]]
       [:div.col-md-4.pt-4
        (when header
-         [:img.img-fluid {:src (gstring/format "%s?%s" header (.getTime (js/Date.)))
-                          :alt (labels :themes.personal.creation.images.header/title)}])]]]))
+         [:<>
+          [:img.img-fluid {:src (gstring/format "%s?%s" header (.getTime (js/Date.)))
+                           :alt (labels :themes.personal.creation.images.header/title)}]
+          [delete-button
+           (labels :themes.personal.edit.image/delete)
+           (labels :themes.personal.edit.image/delete-confirmation)
+           #(rf/dispatch [:themes.personal.header/reset])]])]]]))
 
 (defn- configure-theme
   "Form to configure theme."
@@ -232,10 +267,10 @@
         [:input {:type :hidden :name "theme-id" :value (or theme-id "")}]
         [save-button-or-carrot]]
        (when (and theme-id pro-user?)
-         [:button.float-end.btn.btn-sm.btn-link.text-danger
-          {:on-click #(when (js/confirm (labels :themes.personal.creation.delete/confirmation))
-                        (rf/dispatch [:theme/delete theme-id]))}
-          (labels :themes.personal.creation.buttons/delete)])])))
+         [delete-button
+          (labels :themes.personal.creation.buttons/delete)
+          (labels :themes.personal.creation.delete/confirmation)
+          #(rf/dispatch [:theme/delete theme-id])])])))
 
 ;; -----------------------------------------------------------------------------
 
@@ -394,7 +429,9 @@
  (fn [{:keys [db]} [_ form]]
    {:fx [(http/xhrio-request db :put "/user/theme/edit"
                              [:theme.save/success]
-                             {:theme (theme-builder db form)})]}))
+                             {:theme (theme-builder db form)
+                              :delete-header? (get-in db [:schnaq :selected :discussion/theme :delete :header] false)
+                              :delete-logo? (get-in db [:schnaq :selected :discussion/theme :delete :logo] false)})]}))
 
 (rf/reg-event-fx
  :theme.save/success

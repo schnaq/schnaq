@@ -65,6 +65,18 @@
   [:db/id => map?]
   @(db/transact [[:db/retractEntity theme-id]]))
 
+(>defn delete-header
+  "Delete a header for a theme."
+  [theme-id]
+  [:db/id => map?]
+  @(db/transact [[:db/retract theme-id :theme.images/header]]))
+
+(>defn delete-logo
+  "Delete a logo for a theme."
+  [theme-id]
+  [:db/id => map?]
+  @(db/transact [[:db/retract theme-id :theme.images/logo]]))
+
 (>defn assign-theme
   "Assigns a theme to a discussion."
   [share-hash theme-id]
