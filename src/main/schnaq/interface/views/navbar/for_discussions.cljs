@@ -30,7 +30,7 @@
   [:div.d-flex.align-items-center
    [nav-elements/statement-counter]
    [nav-elements/dropdown-views :icon-views-light "text-white"]
-   [nav-elements/user-button "btn-outline-light btn-transparent"]])
+   [nav-elements/user-button]])
 
 (defn qanda-header
   "Header for schnaq Q&A View"
