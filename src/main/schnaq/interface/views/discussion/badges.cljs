@@ -10,6 +10,25 @@
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.links :as schnaq-links]))
 
+(defn- dropdown-dots
+  "Three dot menu which triggers a dropdown."
+  [dropdown-id]
+  [:button.btn.btn-link.text-dark.m-0.p-0
+   {:id dropdown-id
+    :role "button" :data-bs-toggle "dropdown"
+    :aria-haspopup "true" :aria-expanded "false"}
+   [icon :dots]])
+
+(defn- dropdown-menu
+  "Build a dropdown menu with dots."
+  [dropdown-id dropdown-items]
+  [:div.dropdown.ms-2
+   [dropdown-dots dropdown-id]
+   [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
+    dropdown-items]])
+
+;; -----------------------------------------------------------------------------
+
 (defn- anonymous-edit-modal
   "Show this modal to anonymous users trying to edit statements."
   []
@@ -114,15 +133,6 @@
          (or anonymous-owner?
              (= user-id (:db/id (:statement/author statement)))))))
 
-(defn- dropdown-dots
-  "Three dot menu which triggers a dropdown."
-  [dropdown-id]
-  [:button.btn.btn-link.text-dark.m-0.p-0
-   {:id dropdown-id
-    :role "button" :data-bs-toggle "dropdown"
-    :aria-haspopup "true" :aria-expanded "false"}
-   [icon :dots]])
-
 (defn- edit-discussion-dropdown-menu [{:keys [db/id discussion/share-hash discussion/author]}]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
         creation-secrets @(rf/subscribe [:schnaq.discussion/creation-secrets])
@@ -131,11 +141,7 @@
         editable? (or anonymous-owner?
                       (= user-id (:db/id author)))]
     (when editable?
-      [:div.dropdown.ms-2
-       [dropdown-dots]
-       [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
-        (when editable?
-          [edit-dropdown-button-discussion id share-hash])]])))
+      [dropdown-menu dropdown-id [edit-dropdown-button-discussion id share-hash]])))
 
 (defn- flag-dropdown-button-statement [statement]
   (let [confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :statement/flag-statement-confirmation))
@@ -209,12 +215,6 @@
                                     :body (labels :statement.notifications/statement-flagged-body)
                                     :context :success}]]]}))
 
-(defn- statement-dropdown-menu [dropdown-id dropdown-items]
-  [:div.dropdown.ms-2
-   [dropdown-dots dropdown-id]
-   [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
-    dropdown-items]])
-
 (defn edit-statement-dropdown-menu
   "Dropdown menu for statements containing edit report and deletion."
   [{:keys [db/id] :as statement}]
@@ -225,7 +225,7 @@
         creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
         deletable? (deletable? statement current-edit-hash user-id creation-secrets)
         editable? (editable? statement user-id creation-secrets)]
-    [statement-dropdown-menu dropdown-id
+    [dropdown-menu dropdown-id
      [:<>
       [share-link-to-statement statement]
       [flag-dropdown-button-statement statement]
