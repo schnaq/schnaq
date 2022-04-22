@@ -61,14 +61,14 @@
 
 (rf/reg-sub
  :schnaqs.visited/all
- (fn [db _]
-   (let [visited-filter (get-in db [:schnaqs :filter])
-         visited-schnaqs (get-in db [:schnaqs :visited])
-         archived-hashes (get-in db [:schnaqs :archived-hashes] #{})
-         archived? (fn [schnaq] (contains? archived-hashes (:discussion/share-hash schnaq)))
-         current-user-id (get-in db [:user :id])
-         from-current-user? (fn [schnaq] (= current-user-id (-> schnaq :discussion/author :db/id)))]
-     (case visited-filter
+ :<- [:schnaqs.visited/filter]
+ :<- [:schnaq/visited]
+ :<- [:schnaq.visited/archived-hashes]
+ :<- [:user/id]
+ (fn [[schnaq-filter visited-schnaqs archived-hashes user-id]]
+   (let [archived? (fn [schnaq] (contains? archived-hashes (:discussion/share-hash schnaq)))
+         from-current-user? (fn [schnaq] (= user-id (-> schnaq :discussion/author :db/id)))]
+     (case schnaq-filter
        :created-by-user (filter from-current-user? visited-schnaqs)
        :archived-by-user (filter archived? visited-schnaqs)
        (filter #(not (archived? %)) visited-schnaqs)))))
@@ -159,12 +159,17 @@
             {:share-hash share-hash}))]}))
 
 (rf/reg-sub
- :schnaq.visited/archived
+ :schnaq.visited/archived-hashes
  (fn [db]
    (get-in db [:schnaqs :archived-hashes] #{})))
 
 (rf/reg-sub
+ :schnaq/visited
+ (fn [db]
+   (get-in db [:schnaqs :visited] #{})))
+
+(rf/reg-sub
  :schnaq.visited/archived?
- :<- [:schnaq.visited/archived]
+ :<- [:schnaq.visited/archived-hashes]
  (fn [archived-hashes [_ share-hash]]
    (contains? archived-hashes share-hash)))
