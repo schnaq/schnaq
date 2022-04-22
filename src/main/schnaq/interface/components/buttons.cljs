@@ -51,6 +51,7 @@
 (defn upgrade-large
   "Large upgrade button for use in different places."
   []
-  [:a.btn.btn-secondary.btn-lg.fs-2
-   {:href (navigation/href :routes/pricing)}
-   [icon :star] (labels :pricing.upgrade-nudge/button)])
+  [anchor-big
+   [:<> [icon :star] (labels :pricing.upgrade-nudge/button)]
+   (navigation/href :routes/pricing)
+   "btn-secondary fs-2"])
