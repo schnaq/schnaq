@@ -1,5 +1,6 @@
 (ns schnaq.interface.components.common
   (:require [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
+            [goog.string :refer [format]]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon icon-card]]
@@ -29,6 +30,14 @@
   ([background]
    [:span.badge.rounded-pill
     {:class background} "free"]))
+
+(defn outlined-pill
+  "Create an outlined badge ()rounded pill)."
+  [content variant]
+  (let [stringed-variant (str (name variant))]
+    [:span.badge.rounded-pill.border
+     {:class (format "border-%s text-%s" stringed-variant stringed-variant)}
+     content]))
 
 (defn theme-logo
   "Show the current logo configured in a theme."
