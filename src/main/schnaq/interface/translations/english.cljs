@@ -927,7 +927,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :themes.personal.creation.buttons/delete "Delete"
    :themes.personal.edit.image/delete "Delete image"
    :themes.personal.creation.delete/confirmation "Do you really want to delete the theme?"
-   :themes.personal.edit.image/delete-confirmation "Do you really want to delete the image?"
+   :themes.personal.edit.image/delete-confirmation "Do you really want to delete the image? (You need to save the theme for the deletion to have an effect)"
    :themes.personal.preview/heading "Preview"
    :themes.schnaq.settings/heading "Set theme"
    :themes.schnaq.settings/lead "Once you have selected a theme, it will be saved for this schnaq. Your visitors will then see the new color scheme the next time they load the schnaq."

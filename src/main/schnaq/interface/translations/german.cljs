@@ -926,7 +926,7 @@
    :themes.personal.creation.buttons/delete "Löschen"
    :themes.personal.edit.image/delete "Bild löschen"
    :themes.personal.creation.delete/confirmation "Möchtest du die Designvorlage wirklich löschen?"
-   :themes.personal.edit.image/delete-confirmation "Möchtest du das Bild wirklich löschen?"
+   :themes.personal.edit.image/delete-confirmation "Möchtest du das Bild wirklich löschen? (Du musst das Design speichern, damit das Bild entfernt wird)"
    :themes.personal.preview/heading "Vorschau"
    :themes.schnaq.settings/heading "Design festlegen"
    :themes.schnaq.settings/lead "Sobald du ein Design ausgewählt hast, wird es für diesen schnaq gespeichert. Deine Besucher:innen sehen dann beim nächsten Laden des schnaqs das neue Farbschema."
