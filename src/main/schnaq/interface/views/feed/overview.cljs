@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.feed.overview
-  (:require [re-frame.core :as rf]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.navigation :as navigation]
@@ -41,7 +42,9 @@
        :on-click #(rf/dispatch [:feed.sort/set :alphabetical])}
       (labels :badges.sort/alphabetical)]]))
 
-(defn- schnaq-dropdown-item [label on-click-fn]
+(>defn- schnaq-dropdown-item
+  [label on-click-fn]
+  [keyword? fn? :ret :re-frame/component]
   [:button.dropdown-item {:type "button"
                           :title (labels label)
                           :on-click on-click-fn}
@@ -54,7 +57,9 @@
   (let [options-id "options-dropdown-menu"
         dropdown-id "options-dropdown-elements"
         share-hash (:discussion/share-hash schnaq)
-        current-hub @(rf/subscribe [:hub/current])]
+        current-hub @(rf/subscribe [:hub/current])
+        current-user-id @(rf/subscribe [:user/id])
+        author? (= current-user-id (-> schnaq :discussion/author :db/id))]
     [:div.dropdown
      [:button.btn.btn-transparent
       {:id options-id :type "button" :data-bs-toggle "dropdown"
@@ -63,11 +68,15 @@
      [:div.dropdown-menu.dropdown-menu-end {:id dropdown-id :aria-labelledby options-id}
       (when current-hub
         [schnaq-dropdown-item :hub.remove.schnaq/tooltip
-         (fn [_e] (when (js/confirm (labels :hub.remove.schnaq/prompt))
-                    (rf/dispatch [:hub.remove/schnaq share-hash])))])
-      [schnaq-dropdown-item :schnaq.options.leave/label
-       (fn [_e] (when (js/confirm (labels :schnaq.options.leave/prompt))
-                  (rf/dispatch [:schnaqs.visited/remove! share-hash])))]]]))
+         #(when (js/confirm (labels :hub.remove.schnaq/prompt))
+            (rf/dispatch [:hub.remove/schnaq share-hash]))])
+      [schnaq-dropdown-item :schnaq.options.archive/label
+       #(when (js/confirm (labels :schnaq.options.archive/prompt))
+          (rf/dispatch [:schnaqs.visited/archive! share-hash]))]
+      (when-not author?
+        [schnaq-dropdown-item :schnaq.options.leave/label
+         #(when (js/confirm (labels :schnaq.options.leave/prompt))
+            (rf/dispatch [:schnaqs.visited/remove! share-hash]))])]]))
 
 (defn- schnaq-title [title]
   [:div.schnaq-entry-title

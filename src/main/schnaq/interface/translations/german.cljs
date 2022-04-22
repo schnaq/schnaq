@@ -1161,8 +1161,10 @@
    :hub.members.add.form/title "Mitglieder hinzufügen"
    :hub.members.add.form/button "Nutzer:in hinzufügen!"
 
+   :schnaq.options.archive/label "schnaq archivieren"
+   :schnaq.options.archive/prompt "Möchtest du den schnaq wirklich archivieren? Du kannst jederzeit über die Liste deiner archivierten schnaqs darauf zugreifen."
    :schnaq.options.leave/label "schnaq verlassen"
-   :schnaq.options.leave/prompt "Möchtest du den schnaq wirklich verlassen?"
+   :schnaq.options.leave/prompt "Möchtest du den schnaq wirklich verlassen? Der schnaq wird nicht mehr mit deinem Account verknüpft und du musst erneut eingeladen werden."
 
    :schnaq.search/heading "Suchergebnisse"
    :schnaq.search/results "Ergebnisse"

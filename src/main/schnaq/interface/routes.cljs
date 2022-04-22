@@ -161,8 +161,8 @@
      :view feed/page
      :link-text (labels :router/visited-schnaqs)
      :controllers [{:parameters {:query [:filter]}
-                    :start (fn [parameters]
-                             (rf/dispatch [:schnaqs.visited/load (keyword (get-in parameters [:query :filter]))])
+                    :start (fn []
+                             (rf/dispatch [:schnaqs.visited/load])
                              (rf/dispatch [:hub/select! nil]))}]}]
    ["/schnaq"
     ["/create"

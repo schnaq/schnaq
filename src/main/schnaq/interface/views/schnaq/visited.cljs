@@ -33,7 +33,16 @@
 (rf/reg-sub
  :schnaqs.visited/all
  (fn [db _]
-   (get-in db [:schnaqs :visited])))
+   (let [visited-filter (get-in db [:schnaqs :filter])
+         visited-schnaqs (get-in db [:schnaqs :visited])
+         archived-hashes (get-in db [:schnaqs :archived-hashes] #{})
+         by-archived (fn [schnaq] (contains? archived-hashes (:discussion/share-hash schnaq)))
+         current-user-id (get-in db [:user :id])
+         by-current-user (fn [schnaq] (= current-user-id (-> schnaq :discussion/author :db/id)))]
+     (case visited-filter
+       :created-by-user (filter by-current-user visited-schnaqs)
+       :archived-by-user (filter by-archived visited-schnaqs)
+       (filter #(not (by-archived %)) visited-schnaqs)))))
 
 (rf/reg-event-db
  :schnaqs.visited/store-from-backend
@@ -66,10 +75,13 @@
 
 (rf/reg-event-fx
  :schnaqs.visited/load
- (fn [{:keys [db]} [_ filter]]
-   (let [visited-hashes (get-in db [:schnaqs :visited-hashes])]
+ (fn [{:keys [db]}]
+   (let [visited-hashes (get-in db [:schnaqs :visited-hashes])
+         schnaq-filter (keyword (get-in db [:current-route :parameters :query :filter]))]
      (when-not (empty? visited-hashes)
-       {:db (assoc-in db [:schnaqs :filter] filter)
+       {:db (if schnaq-filter
+              (assoc-in db [:schnaqs :filter] schnaq-filter)
+              (update db :schnaqs dissoc :filter))
         :fx [(http/xhrio-request
               db :post "/schnaqs/by-hashes"
               [:schnaqs.visited/store-from-backend]
@@ -89,3 +101,8 @@
            ;; reload visited schnaqs when we are inside the visited-schnaqs view, otherwise this happens with the controller
            (when (= :routes.schnaqs/personal route-name)
              [:dispatch [:schnaqs.visited/load]])]})))
+
+(rf/reg-event-fx
+ :schnaqs.visited/archive!
+ (fn [{:keys [db]} [_ share-hash]]
+   {:db (update-in db [:schnaqs :archived-hashes] #(set (conj % share-hash)))}))
