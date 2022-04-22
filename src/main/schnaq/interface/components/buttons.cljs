@@ -1,4 +1,7 @@
-(ns schnaq.interface.components.buttons)
+(ns schnaq.interface.components.buttons
+  (:require [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.navigation :as navigation]
+            [schnaq.interface.translations :refer [labels]]))
 
 (defn anchor
   "Create a `a`-Tag styled as a button. By default, in primary colors."
@@ -44,3 +47,13 @@
       :class classes}
       attrs (merge attrs))
     content]))
+
+(defn upgrade
+  "Upgrade button for use in different places."
+  []
+  [anchor
+   [:<>
+    [icon :star "me-1"]
+    (labels :pricing.upgrade-nudge/button)]
+   (navigation/href :routes/pricing)
+   "btn-secondary"])

@@ -1006,6 +1006,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.free-tier/description "For efficient makers and small teams, that don't need a lot. Create discussions and Q&As with two clicks."
    :pricing.free-tier/beta-notice "This plan stays free forever. Need more features? Upgrade easily with a few clicks."
    :pricing.free-tier/call-to-action "Start Free of Charge"
+   :pricing.free-tier/call-to-action-preamble "Your current plan"
+   :pricing.free-tier/call-to-action-registered "Start a schnaq now!"
    :pricing.free-tier/for-free "Free forever"
    :pricing.pro-tier/title "Pro"
    :pricing.pro-tier/subtitle "Activate your potential"
@@ -1033,6 +1035,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.notes/with-vat "plus VAT"
    :pricing.billing/info-1 "Prices shown are exclusive of any applicable sales taxes such as VAT."
    :pricing.billing/info-2 "Subscriptions to the Pro plan renews automatically at the end of each billing cycle unless duly terminated, at which point we'll charge the credit card in your account."
+
+   :pricing.upgrade-nudge/button "Upgrade"
 
    ;; tooltips
    :tooltip/history-statement "Back to statement made by"

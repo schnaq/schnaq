@@ -6,6 +6,7 @@
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.buttons :as button]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
@@ -368,6 +369,7 @@
      [header-image/image-url-input]]
     [:div.pt-1
      [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
+     [button/upgrade]
      [:div.border.border-danger.p-3.mt-4
       [discussion-settings]
       [:div.pt-4

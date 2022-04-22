@@ -198,7 +198,7 @@
 (defn user-button
   "Display the user settings button"
   ([]
-   [user-button "btn-link text-dark"])
-  ([classes]
+   [user-button false])
+  ([on-white-background?]
    [:div.d-flex.align-items-center
-    [um/user-dropdown-button classes]]))
+    [um/user-dropdown-button on-white-background?]]))

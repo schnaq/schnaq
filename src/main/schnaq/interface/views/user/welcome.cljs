@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.user.welcome
-  (:require [schnaq.interface.components.common :refer [next-step]]
+  (:require [schnaq.interface.components.buttons :as button]
+            [schnaq.interface.components.common :refer [next-step]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
@@ -78,6 +79,7 @@
        [:div.col-md-6.col-lg-4 [feature-themes]]
        [:div.col-md-6.col-lg-4 [feature-polls true]]
        [:div.col-md-6.col-lg-4 [feature-activation true]]]]
+     [button/upgrade]
      [:img.pt-5 {:src (img-path :schnaqqifant/rocket)
                  :alt (labels :schnaqqi.rocket/alt-text)}]]}])
 

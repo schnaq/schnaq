@@ -1004,6 +1004,8 @@
    :pricing.free-tier/description "Für effiziente Macher:innen und kleine Teams, die nicht viel brauchen. Erstelle Diskussionen und Q&As mit zwei Klicks."
    :pricing.free-tier/beta-notice "Dieser Plan bleibt dauerhaft kostenfrei. Du brauchst mehr Funktionen? Upgrade jederzeit."
    :pricing.free-tier/call-to-action "Kostenfrei loslegen"
+   :pricing.free-tier/call-to-action-preamble "Aktueller Plan"
+   :pricing.free-tier/call-to-action-registered "Jetzt schnaq starten!"
    :pricing.free-tier/for-free "Dauerhaft kostenfrei"
    :pricing.pro-tier/title "Pro"
    :pricing.pro-tier/subtitle "Aktiviere dein Potenzial"
@@ -1031,6 +1033,8 @@
    :pricing.notes/with-vat "zzgl. MwSt."
    :pricing.billing/info-1 "Die angegebenen Preise verstehen sich exklusive aller anfallenden Umsatzsteuern wie z.B. der Mehrwertsteuer."
    :pricing.billing/info-2 "Abonnements des Pro-Tarifs verlängern sich automatisch am Ende jedes Abrechnungszyklus, es sei denn, sie werden ordnungsgemäß gekündigt. Ohne erfolgte Kündigung wird dein hinterlegtes Zahlungsmittel belastet."
+
+   :pricing.upgrade-nudge/button "Upgrade"
 
    ;; Tooltips
    :tooltip/history-statement "Zurück zum Beitrag von"

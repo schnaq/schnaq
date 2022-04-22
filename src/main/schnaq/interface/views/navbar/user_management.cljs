@@ -149,9 +149,19 @@
    #(rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))])
    (if on-light-background? "btn-outline-secondary ms-2" "btn-dark ms-2")])
 
+(defn upgrade-button
+  "Show the upgrade-button to non-pro users"
+  []
+  (when-not @(rf/subscribe [:user/pro-user?])
+    [buttons/upgrade]))
+
 (defn register-or-user-button
   "If not authenticated, show register button else show user menu."
   [on-light-background?]
   (if @(rf/subscribe [:user/authenticated?])
-    [user-dropdown-button on-light-background?]
-    [:<> [login-button on-light-background?] [register-button on-light-background?]]))
+    [:<>
+     [upgrade-button]
+     [user-dropdown-button on-light-background?]]
+    [:<>
+     [login-button on-light-background?]
+     [register-button on-light-background?]]))
