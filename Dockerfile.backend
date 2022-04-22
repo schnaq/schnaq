@@ -23,7 +23,7 @@ RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -X:uberjar
 
 # ------------------------------------------------------------------------------
 
-FROM clojure:openjdk-17-tools-deps-slim-bullseye
+FROM amazoncorretto:17
 
 WORKDIR /code
 COPY --from=backend-build /code/target/schnaq-standalone.jar .
