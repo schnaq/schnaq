@@ -1,8 +1,7 @@
 (ns schnaq.interface.views.user.welcome
-  (:require [schnaq.interface.components.common :refer [next-step]]
-            [schnaq.interface.components.icons :refer [icon]]
+  (:require [schnaq.interface.components.buttons :as button]
+            [schnaq.interface.components.common :refer [next-step]]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
@@ -80,11 +79,11 @@
        [:div.col-md-6.col-lg-4 [feature-themes]]
        [:div.col-md-6.col-lg-4 [feature-polls true]]
        [:div.col-md-6.col-lg-4 [feature-activation true]]]]
-     [:a.btn.btn-secondary.btn-lg.fs-2
-      {:href (navigation/href :routes/pricing)}
-      [icon :star] (labels :pricing.upgrade-nudge/button)]
+     [button/upgrade-large]
      [:img.pt-5 {:src (img-path :schnaqqifant/rocket)
                  :alt (labels :schnaqqi.rocket/alt-text)}]]}])
+
+;; TODO upgrade button im schnaq (eventuell kann man den namensdropdown reusen)
 
 (defn- welcome-pro-user
   "Celebrating and welcoming the new pro user."
