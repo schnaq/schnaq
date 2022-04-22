@@ -154,8 +154,16 @@
   "Remove a schnaq id from visited schnaqs by share-hash"
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash]} (:body parameters)
-        user-identity (:sub identity)]
-    (user-db/remove-visited-schnaq user-identity share-hash)
+        keycloak-id (:sub identity)]
+    (user-db/remove-visited-schnaq keycloak-id share-hash)
+    (ok {:share-hash share-hash})))
+
+(defn- archive-schnaq
+  "Add a share-hash to a user's archived schnaqs."
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash]} (:body parameters)
+        keycloak-id (:sub identity)]
+    (user-db/archive-schnaq keycloak-id share-hash)
     (ok {:share-hash share-hash})))
 
 (defn- search-qa
@@ -205,6 +213,13 @@
                          :parameters {:body {:share-hash :discussion/share-hash}}
                          :responses {200 {:body {:share-hash :discussion/share-hash}}
                                      400 at/response-error-body}}]
+     ["/archive" {:put archive-schnaq
+                  :description (at/get-doc #'archive-schnaq)
+                  :name :api.schnaq/archive
+                  :middleware [:user/authenticated?
+                               :discussion/valid-share-hash?]
+                  :parameters {:body {:share-hash :discussion/share-hash}}
+                  :responses {200 {:body {:share-hash :discussion/share-hash}}}}]
      ["/add" {:post add-schnaq
               :description (at/get-doc #'add-schnaq)
               :name :api.schnaq/add
