@@ -233,7 +233,6 @@
        [:div.pt-3.small.text-info
         [icon :info "me-1"] (labels :themes.personal.creation.images/info)]]
       [:div.col-md-4.pt-4
-       ;; TODO beim neu erstellen Bild wieder rausnehmen können
        (when header
          [:<>
           [:img.img-fluid {:src (gstring/format "%s?%s" header (.getTime (js/Date.)))
