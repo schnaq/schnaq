@@ -307,7 +307,7 @@
   [{:keys [discussion/share-hash]}]
   (when @(rf/subscribe [:schnaq.visited/archived? share-hash])
     [:small
-     [common/outlined-pill (labels :schnaq.options/archived) :secondary]]))
+     [common/outlined-pill (labels :schnaq.options/archived) :success]]))
 
 ;; -----------------------------------------------------------------------------
 
