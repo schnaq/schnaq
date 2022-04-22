@@ -43,6 +43,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The schnaqs that are known to the registered user, i.e. they can open and view."}
+   {:db/ident :user.registered/archived-schnaqs
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "Archived schnaqs of a user."}
    {:db/ident :user.registered/notification-mail-interval
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
