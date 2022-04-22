@@ -1,0 +1,22 @@
+.ltr {
+  text-align: left;
+}
+
+.rtl {
+  text-align: right;
+}
+
+.editor-placeholder {
+  color: #999;
+  left: 15px;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  top: 15px;
+  user-select: none;
+}
+
+.editor-paragraph {
+  margin: 0 0 15px;
+  position: relative;
+}

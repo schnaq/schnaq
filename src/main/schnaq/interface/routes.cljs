@@ -8,6 +8,7 @@
             [reitit.frontend.history :as rfh]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
+            [schnaq.interface.components.editor :as editor]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.legal-note :as legal-note]
@@ -72,6 +73,8 @@
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)
      :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
+   ["/editor" {:name :routes.debug/editor
+               :view editor/page}]
    ["/product"
     [""
      {:name :routes/product-page
