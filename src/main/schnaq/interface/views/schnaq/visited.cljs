@@ -36,13 +36,13 @@
    (let [visited-filter (get-in db [:schnaqs :filter])
          visited-schnaqs (get-in db [:schnaqs :visited])
          archived-hashes (get-in db [:schnaqs :archived-hashes] #{})
-         by-archived (fn [schnaq] (contains? archived-hashes (:discussion/share-hash schnaq)))
+         archived? (fn [schnaq] (contains? archived-hashes (:discussion/share-hash schnaq)))
          current-user-id (get-in db [:user :id])
-         by-current-user (fn [schnaq] (= current-user-id (-> schnaq :discussion/author :db/id)))]
+         from-current-user? (fn [schnaq] (= current-user-id (-> schnaq :discussion/author :db/id)))]
      (case visited-filter
-       :created-by-user (filter by-current-user visited-schnaqs)
-       :archived-by-user (filter by-archived visited-schnaqs)
-       (filter #(not (by-archived %)) visited-schnaqs)))))
+       :created-by-user (filter from-current-user? visited-schnaqs)
+       :archived-by-user (filter archived? visited-schnaqs)
+       (filter #(not (archived? %)) visited-schnaqs)))))
 
 (rf/reg-event-db
  :schnaqs.visited/store-from-backend
@@ -105,4 +105,8 @@
 (rf/reg-event-fx
  :schnaqs.visited/archive!
  (fn [{:keys [db]} [_ share-hash]]
-   {:db (update-in db [:schnaqs :archived-hashes] #(set (conj % share-hash)))}))
+   {:db (update-in db [:schnaqs :archived-hashes] #(set (conj % share-hash)))
+    :fx [(http/xhrio-request
+          db :put "/schnaq/archive"
+          [:no-op]
+          {:share-hash share-hash})]}))
