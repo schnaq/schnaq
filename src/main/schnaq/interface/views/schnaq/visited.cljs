@@ -2,6 +2,7 @@
   "Handling visited schnaqs."
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
+            [schnaq.interface.auth :as auth]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]))
@@ -43,7 +44,7 @@
  (fn [_ [_ share-hash]]
    {:fx [(when share-hash
            [:localstorage/assoc
-            [:schnaqs/visited
+            [:schnaqs/archived
              (set (remove nil? (conj (:schnaqs/archived local-storage) share-hash)))]])
          [:dispatch [:schnaqs.archived/from-localstorage]]]}))
 
@@ -139,7 +140,9 @@
  :schnaqs.visited/archive!
  (fn [{:keys [db]} [_ share-hash]]
    {:db (update-in db [:schnaqs :archived-hashes] #(set (conj % share-hash)))
-    :fx [(http/xhrio-request
-          db :put "/schnaq/archive"
-          [:no-op]
-          {:share-hash share-hash})]}))
+    :fx [[:dispatch [:schnaq.archived/to-localstorage share-hash]]
+         (when (auth/user-authenticated? db)
+           (http/xhrio-request
+            db :put "/schnaq/archive"
+            [:no-op]
+            {:share-hash share-hash}))]}))
