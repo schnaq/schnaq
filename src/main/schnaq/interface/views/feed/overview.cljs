@@ -59,6 +59,7 @@
         share-hash (:discussion/share-hash schnaq)
         current-hub @(rf/subscribe [:hub/current])
         current-user-id @(rf/subscribe [:user/id])
+        archived? @(rf/subscribe [:schnaq.visited/archived? share-hash])
         author? (= current-user-id (-> schnaq :discussion/author :db/id))]
     [:div.dropdown
      [:button.btn.btn-transparent
@@ -70,9 +71,13 @@
         [schnaq-dropdown-item :hub.remove.schnaq/tooltip
          #(when (js/confirm (labels :hub.remove.schnaq/prompt))
             (rf/dispatch [:hub.remove/schnaq share-hash]))])
-      [schnaq-dropdown-item :schnaq.options.archive/label
-       #(when (js/confirm (labels :schnaq.options.archive/prompt))
-          (rf/dispatch [:schnaqs.visited/archive! share-hash]))]
+      (if archived?
+        [schnaq-dropdown-item :schnaq.options.unarchive/label
+         #(when (js/confirm (labels :schnaq.options.unarchive/prompt))
+            (rf/dispatch [:schnaqs.visited/unarchive! share-hash]))]
+        [schnaq-dropdown-item :schnaq.options.archive/label
+         #(when (js/confirm (labels :schnaq.options.archive/prompt))
+            (rf/dispatch [:schnaqs.visited/archive! share-hash]))])
       (when-not author?
         [schnaq-dropdown-item :schnaq.options.leave/label
          #(when (js/confirm (labels :schnaq.options.leave/prompt))

@@ -146,3 +146,25 @@
             db :put "/schnaq/archive"
             [:no-op]
             {:share-hash share-hash}))]}))
+
+(rf/reg-event-fx
+ :schnaqs.visited/unarchive!
+ (fn [{:keys [db]} [_ share-hash]]
+   {:db (update-in db [:schnaqs :archived-hashes] #(disj % share-hash))
+    :fx [[:dispatch [:schnaq.archived/remove-from-localstorage! share-hash]]
+         (when (auth/user-authenticated? db)
+           (http/xhrio-request
+            db :delete "/schnaq/archive"
+            [:no-op]
+            {:share-hash share-hash}))]}))
+
+(rf/reg-sub
+ :schnaq.visited/archived
+ (fn [db]
+   (get-in db [:schnaqs :archived-hashes] #{})))
+
+(rf/reg-sub
+ :schnaq.visited/archived?
+ :<- [:schnaq.visited/archived]
+ (fn [archived-hashes [_ share-hash]]
+   (contains? archived-hashes share-hash)))

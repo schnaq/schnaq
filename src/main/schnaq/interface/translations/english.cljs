@@ -1166,6 +1166,8 @@ Now we write down questions and discuss them and can still understand what we ha
 
    :schnaq.options.archive/label "archive schnaq"
    :schnaq.options.archive/prompt "Do you really want to archive this schnaq? You can still access this schnaq from your list of archived schnaqs."
+   :schnaq.options.unarchive/label "unarchive schnaq"
+   :schnaq.options.unarchive/prompt "Do you want to unarchive this schnaq? It will again appear in your overview."
    :schnaq.options.leave/label "leave schnaq"
    :schnaq.options.leave/prompt "Do you really want to leave this schnaq? It will be removed from your account and you have to be invited to access it again."
 
