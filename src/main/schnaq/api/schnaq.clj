@@ -166,6 +166,14 @@
     (user-db/archive-schnaq keycloak-id share-hash)
     (ok {:share-hash share-hash})))
 
+(defn- unarchive-schnaq
+  "Remove a schnaq from the archived schnaqs."
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash]} (:body parameters)
+        keycloak-id (:sub identity)]
+    (user-db/unarchive-schnaq keycloak-id share-hash)
+    (ok {:share-hash share-hash})))
+
 (defn- search-qa
   "Search through any valid discussion."
   [{:keys [parameters identity]}]
@@ -213,13 +221,16 @@
                          :parameters {:body {:share-hash :discussion/share-hash}}
                          :responses {200 {:body {:share-hash :discussion/share-hash}}
                                      400 at/response-error-body}}]
-     ["/archive" {:put archive-schnaq
-                  :description (at/get-doc #'archive-schnaq)
-                  :name :api.schnaq/archive
+     ["/archive" {:name :api.schnaq/archive
                   :middleware [:user/authenticated?
                                :discussion/valid-share-hash?]
                   :parameters {:body {:share-hash :discussion/share-hash}}
-                  :responses {200 {:body {:share-hash :discussion/share-hash}}}}]
+                  :responses {200 {:body {:share-hash :discussion/share-hash}}}
+                  :put {:handler archive-schnaq
+                        :description (at/get-doc #'archive-schnaq)}
+                  :delete {:handler unarchive-schnaq
+                           :description (at/get-doc #'unarchive-schnaq)}}]
+
      ["/add" {:post add-schnaq
               :description (at/get-doc #'add-schnaq)
               :name :api.schnaq/add
