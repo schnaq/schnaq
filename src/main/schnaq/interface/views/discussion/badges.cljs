@@ -135,8 +135,7 @@
        [dropdown-dots]
        [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
         (when editable?
-          [:dropdown-item
-           [edit-dropdown-button-discussion id share-hash]])]])))
+          [edit-dropdown-button-discussion id share-hash])]])))
 
 (defn- flag-dropdown-button-statement [statement]
   (let [confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :statement/flag-statement-confirmation))
@@ -228,22 +227,16 @@
         editable? (editable? statement user-id creation-secrets)]
     [statement-dropdown-menu dropdown-id
      [:<>
-      [:dropdown-item
-       [share-link-to-statement statement]]
-      [:dropdown-item
-       [flag-dropdown-button-statement statement]]
+      [share-link-to-statement statement]
+      [flag-dropdown-button-statement statement]
       (when (and current-edit-hash @(rf/subscribe [:user/authenticated?]))
-        [:dropdown-item
-         [lock-unlock-statement-dropdown-button statement]])
+        [lock-unlock-statement-dropdown-button statement])
       (when (and current-edit-hash @(rf/subscribe [:user/pro-user?]))
-        [:dropdown-item
-         [toggle-pin-statement-dropdown-button statement]])
+        [toggle-pin-statement-dropdown-button statement])
       (when editable?
-        [:dropdown-item
-         [edit-dropdown-button-statement statement]])
+        [edit-dropdown-button-statement statement])
       (when (or admin? deletable?)
-        [:dropdown-item
-         [delete-dropdown-button statement current-edit-hash]])]]))
+        [delete-dropdown-button statement current-edit-hash])]]))
 
 (defn show-number-of-replies [statement]
   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
