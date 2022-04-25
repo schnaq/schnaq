@@ -1,5 +1,6 @@
 (ns schnaq.interface.components.buttons
-  (:require [schnaq.interface.components.icons :refer [icon]]
+  (:require [re-frame.core :as rf]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]))
 
@@ -51,9 +52,10 @@
 (defn upgrade
   "Upgrade button for use in different places."
   []
-  [anchor
-   [:<>
-    [icon :star "me-1"]
-    (labels :pricing.upgrade-nudge/button)]
-   (navigation/href :routes/pricing)
-   "btn-secondary"])
+  (when-not @(rf/subscribe [:user/pro-user?])
+    [anchor
+     [:<>
+      [icon :star "me-1"]
+      (labels :pricing.upgrade-nudge/button)]
+     (navigation/href :routes/pricing)
+     "btn-secondary"]))

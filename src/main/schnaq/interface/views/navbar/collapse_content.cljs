@@ -78,12 +78,6 @@
                                  {:share-hash share-hash :edit-hash edit-hash})}
          (labels :schnaq.admin/tooltip)]))))
 
-(defn- user-button
-  "Display the user avatar and fitting dropdown."
-  []
-  [:div.d-flex.align-items-center.ms-auto
-   [nav-elements/user-button]])
-
 (defn- views
   "Display all views as a list-group"
   []
@@ -115,7 +109,7 @@
   [collapse-content-id]
   [external-content collapse-content-id
    [:<>
-    [user-button]
+    [nav-elements/user-button true]
     [views]
     [settings]]])
 
@@ -125,14 +119,12 @@
    {:href href}
    (labels label)])
 
-(defn navbar-external-overview-content
+(defn collapsed-navbar
   "Collapsible content for schnaq overview. Used in the collapsed navbar."
   [collapse-content-id]
   [external-content collapse-content-id
    [:<>
-    [:div.d-flex.align-items-center
-     [:div.ms-auto
-      [um/register-or-user-button true]]]
+    [um/register-or-user-button true]
     [:ul.list-group.list-group-flush
      [li-link-button :router/pricing (navigation/href :routes/pricing)]
      [li-link-button :router/privacy (navigation/href :routes.privacy/simple)]

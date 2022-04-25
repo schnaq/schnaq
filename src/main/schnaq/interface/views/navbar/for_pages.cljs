@@ -52,7 +52,7 @@
      navbar-content-id
      "navbar-bg-transparent-sm-white"
      [navbar-user]
-     [collapse-content/navbar-external-overview-content navbar-content-id]]))
+     [collapse-content/collapsed-navbar navbar-content-id]]))
 
 (defn navbar-transparent
   "Navbar definition for the default pages."

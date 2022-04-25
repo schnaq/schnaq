@@ -38,10 +38,13 @@
    content])
 
 (defn tooltip-button
-  [tooltip-location tooltip content on-click-fn]
-  [text
-   tooltip
-   [:button.btn.btn-outline-muted
-    {:on-click on-click-fn}
-    content]
-   {:placement tooltip-location}])
+  "Create a button with a tooltip on hover."
+  ([tooltip-location tooltip content on-click-fn]
+   [tooltip-button tooltip-location tooltip content on-click-fn nil])
+  ([tooltip-location tooltip content on-click-fn attrs]
+   [text
+    tooltip
+    [:button.btn.btn-outline-muted
+     (merge {:on-click on-click-fn} attrs)
+     content]
+    {:placement tooltip-location}]))

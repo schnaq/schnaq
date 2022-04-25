@@ -2,8 +2,7 @@
   (:require [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.views.discussion.share :as share]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
-            [schnaq.interface.views.navbar.elements :as nav-elements]
-            [schnaq.interface.views.navbar.user-management :as user-management]))
+            [schnaq.interface.views.navbar.elements :as nav-elements]))
 
 (defn- interaction-elements []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
@@ -12,7 +11,7 @@
    [nav-elements/navbar-settings]
    [nav-elements/language-toggle]
    [nav-elements/dropdown-views]
-   [user-management/upgrade-button]
+   [nav-elements/navbar-upgrade-button true]
    [nav-elements/user-button true]])
 
 (defn header
@@ -30,7 +29,7 @@
   [:div.d-flex.align-items-center
    [nav-elements/statement-counter]
    [nav-elements/dropdown-views :icon-views-light "text-white"]
-   [user-management/upgrade-button]
+   [nav-elements/navbar-upgrade-button]
    [nav-elements/user-button]])
 
 (defn qanda-header
