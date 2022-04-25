@@ -13,7 +13,7 @@
    [nav-elements/language-toggle]
    [nav-elements/dropdown-views]
    [user-management/upgrade-button]
-   [nav-elements/user-button]])
+   [nav-elements/user-button true]])
 
 (defn header
   "Header for schnaq view overview"
