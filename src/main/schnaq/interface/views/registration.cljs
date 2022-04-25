@@ -177,7 +177,10 @@
     [:div.text-center
      [buttons/anchor
       (labels :registration.pricing/compare-plans)
-      (navigation/href :routes/pricing) "btn-link"]]]
+      (navigation/href :routes/pricing) "btn-link"]]
+    [:div.text-center
+     [pricing-view/one-time-information :smaller]
+     [:p.small (labels :pricing.billing/info-4-one-time)]]]
    nil
    {:step 3
     :wide? true}])
