@@ -12,7 +12,7 @@
    [nav-elements/navbar-settings]
    [nav-elements/language-toggle]
    [nav-elements/dropdown-views]
-   [user-management/upgrade-button]
+   [nav-elements/navbar-upgrade-button]
    [nav-elements/user-button true]])
 
 (defn header

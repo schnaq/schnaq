@@ -136,6 +136,16 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn navbar-upgrade-button
+  "Show an upgrade button in the navbar."
+  []
+  [navbar-components/button-with-icon
+   :star
+   (labels :pricing.upgrade-nudge/tooltip)
+   (labels :pricing.upgrade-nudge/button)
+   #(rf/dispatch [:navigation/navigate :routes/pricing])
+   {:class "btn-outline-secondary"}])
+
 (defn navbar-settings
   "Either display schnaq or graph settings button"
   []
