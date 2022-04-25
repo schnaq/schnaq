@@ -27,6 +27,11 @@
             [schnaq.interface.views.user :as user]
             [schnaq.shared-toolbelt :as shared-tools]))
 
+(defn- question?
+  "Returns whether a statement has been marked as a question."
+  [statement]
+  (contains? (set (:statement/labels statement)) ":question"))
+
 (defn- call-to-action-schnaq
   "If no contributions are available, add a call to action to engage the users."
   [body]
@@ -190,6 +195,7 @@
   [statement-id]
   (let [statement @(rf/subscribe [:schnaq/statement statement-id])]
     [:article.statement-card
+     {:class (if (question? statement) "statement-question" "")}
      [:div.d-flex.flex-row
       [card-highlighting statement]
       [:div.card-view.card-body.py-2.px-0

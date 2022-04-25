@@ -273,7 +273,7 @@
                 :statement/discussions [discussion-id]
                 :statement/type statement-type}
          (not registered-user?) (assoc :statement/creation-secret (.toString (UUID/randomUUID)))
-         question? :statement/labels #{":question"})])))
+         question? (assoc :statement/labels #{":question"}))])))
 
 (>defn react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created statement."
