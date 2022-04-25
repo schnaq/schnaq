@@ -2,8 +2,7 @@
   (:require [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.views.discussion.share :as share]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
-            [schnaq.interface.views.navbar.elements :as nav-elements]
-            [schnaq.interface.views.navbar.user-management :as user-management]))
+            [schnaq.interface.views.navbar.elements :as nav-elements]))
 
 (defn- interaction-elements []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
