@@ -179,13 +179,16 @@
   ([user-id content discussion-id locked?]
    (build-new-statement user-id content discussion-id locked? (str "conclusion-" content)))
   ([user-id content discussion-id locked? temp-id]
-   {:db/id temp-id
-    :statement/author user-id
-    :statement/content content
-    :statement/version 1
-    :statement/created-at (Date.)
-    :statement/locked? locked?
-    :statement/discussions [discussion-id]}))
+   (let [question? (cstring/includes? content "?")]
+     (cond->
+      {:db/id temp-id
+       :statement/author user-id
+       :statement/content content
+       :statement/version 1
+       :statement/created-at (Date.)
+       :statement/locked? locked?
+       :statement/discussions [discussion-id]}
+       question? (assoc :statement/labels #{":question"})))))
 
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
