@@ -12,7 +12,7 @@
    [nav-elements/navbar-settings]
    [nav-elements/language-toggle]
    [nav-elements/dropdown-views]
-   [nav-elements/navbar-upgrade-button]
+   [nav-elements/navbar-upgrade-button true]
    [nav-elements/user-button true]])
 
 (defn header
@@ -30,7 +30,7 @@
   [:div.d-flex.align-items-center
    [nav-elements/statement-counter]
    [nav-elements/dropdown-views :icon-views-light "text-white"]
-   [user-management/upgrade-button]
+   [nav-elements/navbar-upgrade-button]
    [nav-elements/user-button]])
 
 (defn qanda-header
