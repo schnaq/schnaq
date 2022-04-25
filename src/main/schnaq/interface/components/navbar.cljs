@@ -1,5 +1,5 @@
 (ns schnaq.interface.components.navbar
-  (:require [com.fulcrologic.guardrails.core :refer [>defn =>]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn => ?]]
             [re-frame.core :as rf]
             [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [icon]]
@@ -105,10 +105,14 @@
 
 (>defn button-with-icon
   "Build a button for the navbar, with icon, text and tooltip."
-  [icon-key tooltip-text button-text on-click-fn]
-  [keyword? string? string? fn? => :re-frame/component]
-  [tooltip/tooltip-button "bottom" tooltip-text
-   [:<>
-    [icon icon-key "m-auto d-block" {:size "lg"}]
-    [:span.small.text-nowrap button-text]]
-   on-click-fn])
+  ([icon-key tooltip-text button-text on-click-fn]
+   [keyword? string? string? fn? => :re-frame/component]
+   [button-with-icon icon-key tooltip-text button-text on-click-fn nil])
+  ([icon-key tooltip-text button-text on-click-fn attrs]
+   [keyword? string? string? fn? (? map?) => :re-frame/component]
+   [tooltip/tooltip-button "bottom" tooltip-text
+    [:<>
+     [icon icon-key "m-auto d-block" {:size "lg"}]
+     [:span.small.text-nowrap button-text]]
+    on-click-fn
+    attrs]))

@@ -153,5 +153,9 @@
   "If not authenticated, show register button else show user menu."
   [on-light-background?]
   (if @(rf/subscribe [:user/authenticated?])
-    [user-dropdown-button on-light-background?]
-    [:<> [login-button on-light-background?] [register-button on-light-background?]]))
+    [:<>
+     [buttons/upgrade]
+     [user-dropdown-button on-light-background?]]
+    [:<>
+     [login-button on-light-background?]
+     [register-button on-light-background?]]))

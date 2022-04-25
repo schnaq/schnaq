@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.badges
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.common :as common]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -9,6 +10,25 @@
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.links :as schnaq-links]))
+
+(defn- dropdown-dots
+  "Three dot menu which triggers a dropdown."
+  [dropdown-id]
+  [:button.btn.btn-link.text-dark.m-0.p-0
+   {:id dropdown-id
+    :role "button" :data-bs-toggle "dropdown"
+    :aria-haspopup "true" :aria-expanded "false"}
+   [icon :dots]])
+
+(defn- dropdown-menu
+  "Build a dropdown menu with dots."
+  [dropdown-id dropdown-items]
+  [:div.dropdown.ms-2
+   [dropdown-dots dropdown-id]
+   [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
+    dropdown-items]])
+
+;; -----------------------------------------------------------------------------
 
 (defn- anonymous-edit-modal
   "Show this modal to anonymous users trying to edit statements."
@@ -114,15 +134,6 @@
          (or anonymous-owner?
              (= user-id (:db/id (:statement/author statement)))))))
 
-(defn- dropdown-dots
-  "Three dot menu which triggers a dropdown."
-  [dropdown-id]
-  [:button.btn.btn-link.text-dark.m-0.p-0
-   {:id dropdown-id
-    :role "button" :data-bs-toggle "dropdown"
-    :aria-haspopup "true" :aria-expanded "false"}
-   [icon :dots]])
-
 (defn- edit-discussion-dropdown-menu [{:keys [db/id discussion/share-hash discussion/author]}]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
         creation-secrets @(rf/subscribe [:schnaq.discussion/creation-secrets])
@@ -131,12 +142,7 @@
         editable? (or anonymous-owner?
                       (= user-id (:db/id author)))]
     (when editable?
-      [:div.dropdown.ms-2
-       [dropdown-dots]
-       [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
-        (when editable?
-          [:dropdown-item
-           [edit-dropdown-button-discussion id share-hash]])]])))
+      [dropdown-menu dropdown-id [edit-dropdown-button-discussion id share-hash]])))
 
 (defn- flag-dropdown-button-statement [statement]
   (let [confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :statement/flag-statement-confirmation))
@@ -210,12 +216,6 @@
                                     :body (labels :statement.notifications/statement-flagged-body)
                                     :context :success}]]]}))
 
-(defn- statement-dropdown-menu [dropdown-id dropdown-items]
-  [:div.dropdown.ms-2
-   [dropdown-dots dropdown-id]
-   [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
-    dropdown-items]])
-
 (defn edit-statement-dropdown-menu
   "Dropdown menu for statements containing edit report and deletion."
   [{:keys [db/id] :as statement}]
@@ -226,24 +226,18 @@
         creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
         deletable? (deletable? statement current-edit-hash user-id creation-secrets)
         editable? (editable? statement user-id creation-secrets)]
-    [statement-dropdown-menu dropdown-id
+    [dropdown-menu dropdown-id
      [:<>
-      [:dropdown-item
-       [share-link-to-statement statement]]
-      [:dropdown-item
-       [flag-dropdown-button-statement statement]]
+      [share-link-to-statement statement]
+      [flag-dropdown-button-statement statement]
       (when (and current-edit-hash @(rf/subscribe [:user/authenticated?]))
-        [:dropdown-item
-         [lock-unlock-statement-dropdown-button statement]])
+        [lock-unlock-statement-dropdown-button statement])
       (when (and current-edit-hash @(rf/subscribe [:user/pro-user?]))
-        [:dropdown-item
-         [toggle-pin-statement-dropdown-button statement]])
+        [toggle-pin-statement-dropdown-button statement])
       (when editable?
-        [:dropdown-item
-         [edit-dropdown-button-statement statement]])
+        [edit-dropdown-button-statement statement])
       (when (or admin? deletable?)
-        [:dropdown-item
-         [delete-dropdown-button statement current-edit-hash]])]]))
+        [delete-dropdown-button statement current-edit-hash])]]))
 
 (defn show-number-of-replies [statement]
   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
@@ -269,11 +263,10 @@
   [schnaq]
   (let [meta-info (:meta-info schnaq)
         statement-count (:all-statements meta-info)]
-    [:p.mb-0
-     [:span.small.me-2
-      [icon :comment/alt "m-auto"]
-      " " statement-count
-      " " (labels :discussion.badges/posts)]]))
+    [:span.small.me-2
+     [icon :comment/alt "m-auto"]
+     " " statement-count
+     " " (labels :discussion.badges/posts)]))
 
 (defn static-info-badges
   "Badges that display schnaq info."
@@ -305,9 +298,16 @@
 (defn read-only-badge
   "Badge that appears only if the passed schnaq is set to read-only"
   [schnaq]
-  (let [read-only? (some #{:discussion.state/read-only} (:discussion/states schnaq))]
-    (when read-only?
-      [:div.small.my-auto.text-secondary (labels :discussion.state/read-only-label)])))
+  (when (some #{:discussion.state/read-only} (:discussion/states schnaq))
+    [:small
+     [common/outlined-pill (labels :discussion.state/read-only-label) :secondary]]))
+
+(defn archived-badge
+  "Badge that appears only if the passed schnaq is set to read-only"
+  [{:keys [discussion/share-hash]}]
+  (when @(rf/subscribe [:schnaq.visited/archived? share-hash])
+    [:small
+     [common/outlined-pill (labels :schnaq.options/archived) :success]]))
 
 ;; -----------------------------------------------------------------------------
 

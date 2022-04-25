@@ -924,7 +924,9 @@
    :themes.personal.creation.buttons/create-new "Neu erstellen"
    :themes.personal.creation.buttons/save "Speichern"
    :themes.personal.creation.buttons/delete "Löschen"
+   :themes.personal.edit.image/delete "Bild löschen"
    :themes.personal.creation.delete/confirmation "Möchtest du die Designvorlage wirklich löschen?"
+   :themes.personal.edit.image/delete-confirmation "Möchtest du das Bild wirklich löschen? (Du musst das Design speichern, damit das Bild entfernt wird)"
    :themes.personal.preview/heading "Vorschau"
    :themes.schnaq.settings/heading "Design festlegen"
    :themes.schnaq.settings/lead "Sobald du ein Design ausgewählt hast, wird es für diesen schnaq gespeichert. Deine Besucher:innen sehen dann beim nächsten Laden des schnaqs das neue Farbschema."
@@ -1002,6 +1004,8 @@
    :pricing.free-tier/description "Für effiziente Macher:innen und kleine Teams, die nicht viel brauchen. Erstelle Diskussionen und Q&As mit zwei Klicks."
    :pricing.free-tier/beta-notice "Dieser Plan bleibt dauerhaft kostenfrei. Du brauchst mehr Funktionen? Upgrade jederzeit."
    :pricing.free-tier/call-to-action "Kostenfrei loslegen"
+   :pricing.free-tier/call-to-action-preamble "Aktueller Plan"
+   :pricing.free-tier/call-to-action-registered "Jetzt schnaq starten!"
    :pricing.free-tier/for-free "Dauerhaft kostenfrei"
    :pricing.pro-tier/title "Pro"
    :pricing.pro-tier/subtitle "Aktiviere dein Potenzial"
@@ -1030,6 +1034,9 @@
    :pricing.billing/info-1 "Die angegebenen Preise verstehen sich exklusive aller anfallenden Umsatzsteuern wie z.B. der Mehrwertsteuer."
    :pricing.billing/info-2 "Abonnements des Pro-Tarifs verlängern sich automatisch am Ende jedes Abrechnungszyklus, es sei denn, sie werden ordnungsgemäß gekündigt. Ohne erfolgte Kündigung wird dein hinterlegtes Zahlungsmittel belastet."
 
+   :pricing.upgrade-nudge/button "Upgrade"
+   :pricing.upgrade-nudge/tooltip "Upgrade deinen Account"
+
    ;; Tooltips
    :tooltip/history-statement "Zurück zum Beitrag von"
    :tooltip/history-statement-current "Aktueller Beitrag"
@@ -1053,6 +1060,8 @@
    :router/how-to "Wie benutze ich schnaq?"
    :router/last-added-schnaq "Zuletzt angelegter schnaq"
    :router/visited-schnaqs "Besuchte schnaqs"
+   :router/created-schnaqs "Erstellte schnaqs"
+   :router/archived-schnaqs "Archivierte schnaqs"
    :router/not-found-label "Not Found route redirect"
    :router/pricing "Preise"
    :router/privacy "Datenschutz"
@@ -1123,6 +1132,11 @@
    :loading.placeholder/lead "Daten werden geladen..."
    :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
 
+   :overview.schnaqs/heading "schnaqs"
+   :overview.schnaqs/visited "Besuchte schnaqs"
+   :overview.schnaqs/created "Erstellte schnaqs"
+   :overview.schnaqs/archived "Archivierte schnaqs"
+
    :hubs/heading "Bereiche"
    :hub/heading "Persönlicher %s Hub"
    :hub/settings "Verwaltung"
@@ -1154,6 +1168,14 @@
    :hub.members.add.result.error/generic-error "Etwas ist schief gelaufen. Überprüfe die E-Mail und versuche es noch einmal."
    :hub.members.add.form/title "Mitglieder hinzufügen"
    :hub.members.add.form/button "Nutzer:in hinzufügen!"
+
+   :schnaq.options.archive/label "schnaq archivieren"
+   :schnaq.options.archive/prompt "Möchtest du den schnaq wirklich archivieren? Du kannst jederzeit über die Liste deiner archivierten schnaqs darauf zugreifen."
+   :schnaq.options.unarchive/label "Archivierung rückgängig machen"
+   :schnaq.options.unarchive/prompt "Möchtest du die Archivierung des schnaqs rückgängig machen? Dann erscheint der schnaq wieder in deiner Übersicht."
+   :schnaq.options.leave/label "schnaq verlassen"
+   :schnaq.options.leave/prompt "Möchtest du den schnaq wirklich verlassen? Der schnaq wird nicht mehr mit deinem Account verknüpft und du musst erneut eingeladen werden."
+   :schnaq.options/archived "archiviert"
 
    :schnaq.search/heading "Suchergebnisse"
    :schnaq.search/results "Ergebnisse"

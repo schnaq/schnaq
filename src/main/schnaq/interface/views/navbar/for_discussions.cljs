@@ -11,7 +11,8 @@
    [nav-elements/navbar-settings]
    [nav-elements/language-toggle]
    [nav-elements/dropdown-views]
-   [nav-elements/user-button]])
+   [nav-elements/navbar-upgrade-button true]
+   [nav-elements/user-button true]])
 
 (defn header
   "Header for schnaq view overview"
@@ -28,7 +29,8 @@
   [:div.d-flex.align-items-center
    [nav-elements/statement-counter]
    [nav-elements/dropdown-views :icon-views-light "text-white"]
-   [nav-elements/user-button "btn-outline-light btn-transparent"]])
+   [nav-elements/navbar-upgrade-button]
+   [nav-elements/user-button]])
 
 (defn qanda-header
   "Header for schnaq Q&A View"

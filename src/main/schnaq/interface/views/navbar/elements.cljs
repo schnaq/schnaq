@@ -136,6 +136,17 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn navbar-upgrade-button
+  "Show an upgrade button in the navbar."
+  [on-white-background?]
+  (when-not @(rf/subscribe [:user/pro-user?])
+    [navbar-components/button-with-icon
+     :star
+     (labels :pricing.upgrade-nudge/tooltip)
+     (labels :pricing.upgrade-nudge/button)
+     #(rf/dispatch [:navigation/navigate :routes/pricing])
+     {:class (if on-white-background? "btn-outline-secondary" "btn-secondary")}]))
+
 (defn navbar-settings
   "Either display schnaq or graph settings button"
   []
@@ -198,7 +209,7 @@
 (defn user-button
   "Display the user settings button"
   ([]
-   [user-button "btn-link text-dark"])
-  ([classes]
+   [user-button false])
+  ([on-white-background?]
    [:div.d-flex.align-items-center
-    [um/user-dropdown-button classes]]))
+    [um/user-dropdown-button on-white-background?]]))

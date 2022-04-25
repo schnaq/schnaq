@@ -73,7 +73,7 @@
       :page/title (str keycloak-name)
       :condition/needs-authentication? true}
      [feed/feed-navigation]
-     [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] true]
+     [feed/schnaq-list-view [:hubs/schnaqs keycloak-name]]
      [sidebar-right]]))
 
 (defn hub-overview

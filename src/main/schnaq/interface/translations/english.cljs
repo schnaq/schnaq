@@ -925,7 +925,9 @@ Now we write down questions and discuss them and can still understand what we ha
    :themes.personal.creation.buttons/create-new "Create new"
    :themes.personal.creation.buttons/save "Save"
    :themes.personal.creation.buttons/delete "Delete"
+   :themes.personal.edit.image/delete "Delete image"
    :themes.personal.creation.delete/confirmation "Do you really want to delete the theme?"
+   :themes.personal.edit.image/delete-confirmation "Do you really want to delete the image? (You need to save the theme for the deletion to have an effect)"
    :themes.personal.preview/heading "Preview"
    :themes.schnaq.settings/heading "Set theme"
    :themes.schnaq.settings/lead "Once you have selected a theme, it will be saved for this schnaq. Your visitors will then see the new color scheme the next time they load the schnaq."
@@ -1004,6 +1006,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.free-tier/description "For efficient makers and small teams, that don't need a lot. Create discussions and Q&As with two clicks."
    :pricing.free-tier/beta-notice "This plan stays free forever. Need more features? Upgrade easily with a few clicks."
    :pricing.free-tier/call-to-action "Start Free of Charge"
+   :pricing.free-tier/call-to-action-preamble "Your current plan"
+   :pricing.free-tier/call-to-action-registered "Start a schnaq now!"
    :pricing.free-tier/for-free "Free forever"
    :pricing.pro-tier/title "Pro"
    :pricing.pro-tier/subtitle "Activate your potential"
@@ -1032,6 +1036,9 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.billing/info-1 "Prices shown are exclusive of any applicable sales taxes such as VAT."
    :pricing.billing/info-2 "Subscriptions to the Pro plan renews automatically at the end of each billing cycle unless duly terminated, at which point we'll charge the credit card in your account."
 
+   :pricing.upgrade-nudge/button "Upgrade"
+   :pricing.upgrade-nudge/tooltip "Upgrade your account"
+
    ;; tooltips
    :tooltip/history-statement "Back to statement made by"
    :tooltip/history-statement-current "Current statement"
@@ -1056,6 +1063,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/how-to "How do I use schnaq?"
    :router/last-added-schnaq "Last created schnaq"
    :router/visited-schnaqs "Visited schnaqs"
+   :router/created-schnaqs "Created schnaqs"
+   :router/archived-schnaqs "Archived schnaqs"
    :router/not-found-label "Not found route redirect"
    :router/pricing "Pricing"
    :router/privacy "Privacy Policy"
@@ -1126,6 +1135,11 @@ Now we write down questions and discuss them and can still understand what we ha
    :loading.placeholder/lead "Loading..."
    :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 
+   :overview.schnaqs/heading "schnaqs"
+   :overview.schnaqs/visited "Visited schnaqs"
+   :overview.schnaqs/created "Created schnaqs"
+   :overview.schnaqs/archived "Archived schnaqs"
+
    :hubs/heading "Hubs"
    :hub/heading "Personal %s Hub"
    :hub/settings "Administration"
@@ -1156,6 +1170,14 @@ Now we write down questions and discuss them and can still understand what we ha
    :hub.members.add.result.error/generic-error "Something went wrong. Please check the email you entered and try again"
    :hub.members.add.form/title "Add Members"
    :hub.members.add.form/button "Add user now!"
+
+   :schnaq.options.archive/label "archive schnaq"
+   :schnaq.options.archive/prompt "Do you really want to archive this schnaq? You can still access this schnaq from your list of archived schnaqs."
+   :schnaq.options.unarchive/label "unarchive schnaq"
+   :schnaq.options.unarchive/prompt "Do you want to unarchive this schnaq? It will again appear in your overview."
+   :schnaq.options.leave/label "leave schnaq"
+   :schnaq.options.leave/prompt "Do you really want to leave this schnaq? It will be removed from your account and you have to be invited to access it again."
+   :schnaq.options/archived "archived"
 
    :schnaq.search/heading "Search results"
    :schnaq.search/results "results"

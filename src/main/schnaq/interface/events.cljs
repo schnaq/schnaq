@@ -49,7 +49,8 @@
          [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
          [:dispatch [:visited.save-statement-ids/store-hashes-from-localstorage]]
          [:dispatch [:schnaqs.save-admin-access/store-hashes-from-localstorage]]
-         [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]
+         [:dispatch [:schnaqs.visited/from-localstorage]]
+         [:dispatch [:schnaqs.archived/from-localstorage]]
          [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
          [:dispatch [:load/last-added-schnaq]]
          [:dispatch [:schnaq.polls/load-past-votes]]
@@ -180,6 +181,14 @@
  (fn [{:keys [db]} [_ share-hash]]
    (when (auth/user-authenticated? db)
      {:fx [(http/xhrio-request db :put "/schnaq/add-visited"
+                               [:no-op]
+                               {:share-hash share-hash})]})))
+
+(rf/reg-event-fx
+ :schnaq/remove-visited!
+ (fn [{:keys [db]} [_ share-hash]]
+   (when (auth/user-authenticated? db)
+     {:fx [(http/xhrio-request db :delete "/schnaq/remove-visited"
                                [:no-op]
                                {:share-hash share-hash})]})))
 

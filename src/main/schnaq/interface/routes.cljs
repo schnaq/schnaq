@@ -163,7 +163,8 @@
     {:name :routes.schnaqs/personal
      :view feed/page
      :link-text (labels :router/visited-schnaqs)
-     :controllers [{:start (fn [_]
+     :controllers [{:parameters {:query [:filter]}
+                    :start (fn []
                              (rf/dispatch [:schnaqs.visited/load])
                              (rf/dispatch [:hub/select! nil]))}]}]
    ["/schnaq"
@@ -309,8 +310,7 @@
                             (rf/dispatch [:theme/reset]))}]}]
    ["/register"
     ["" {:name :routes.user/register
-         :controllers [{:parameters {:query [:currency]}
-                        :start (fn [parameters]
+         :controllers [{:start (fn [parameters]
                                  (rf/dispatch [:user.currency/store (keyword (get-in parameters [:query :currency]))])
                                  (rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))]))}]}]
     ["/step-2" {:name :routes.user.register/step-2

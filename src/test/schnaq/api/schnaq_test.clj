@@ -85,3 +85,22 @@
 (deftest add-schnaq-permission-test
   (testing "Only authenticated users are allowed to create schnaqs."
     (is (= 401 (:status add-schnaq-request-missing-jwt)))))
+
+;; -----------------------------------------------------------------------------
+
+(defn- archive-schnaq-request [verb share-hash]
+  (-> {:request-method verb :uri (:path (api/route-by-name :api.schnaq/archive))
+       :body-params {:share-hash share-hash}}
+      toolbelt/add-csrf-header
+      (toolbelt/mock-authorization-header toolbelt/token-kangaroo-normal-user)
+      test-app))
+
+(deftest archive-schnaq-test
+  (testing "Valid user can archive her schnaqs."
+    (is (= 200 (:status (archive-schnaq-request :put "cat-dog-hash"))))
+    (is (= 404 (:status (archive-schnaq-request :put "non-existent-hash"))))))
+
+(deftest unarchive-schnaq-test
+  (testing "Archived schnaqs can be removed to make them available again."
+    (is (= 200 (:status (archive-schnaq-request :delete "cat-dog-hash"))))
+    (is (= 404 (:status (archive-schnaq-request :put "non-existent-hash"))))))
