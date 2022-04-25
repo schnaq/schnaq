@@ -3,8 +3,8 @@
             [muuntaja.core :as m]
             [schnaq.api :as api]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]
             [schnaq.database.user :as user-db]
+            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]
             [taoensso.tufte :refer [profiled p]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
