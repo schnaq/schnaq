@@ -1035,6 +1035,7 @@
    :pricing.billing/info-2 "Abonnements des Pro-Tarifs verlängern sich automatisch am Ende jedes Abrechnungszyklus, es sei denn, sie werden ordnungsgemäß gekündigt. Ohne erfolgte Kündigung wird dein hinterlegtes Zahlungsmittel belastet."
 
    :pricing.upgrade-nudge/button "Upgrade"
+   :pricing.upgrade-nudge/tooltip "Upgrade deinen Account"
 
    ;; Tooltips
    :tooltip/history-statement "Zurück zum Beitrag von"
