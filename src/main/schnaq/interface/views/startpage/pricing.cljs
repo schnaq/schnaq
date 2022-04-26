@@ -220,11 +220,10 @@
    [:p.small (labels :pricing.billing/info-4-one-time)]])
 
 (defn one-time-information [smaller?]
-  [:div.text-center.pt-3
+  [:div.text-center.pt-3 {:class (if smaller? "" "fs-4")}
+   [:p (labels :pricing.one-time/question)]
+   [:p (gstring/format (labels :pricing.one-time/offer) config/max-concurrent-users-event-tier config/price-event-tier-euro)]
    [:p
-    {:class (if smaller? "" "fs-4")}
-    (labels :pricing.one-time/question) [:br]
-    (gstring/format (labels :pricing.one-time/offer) 250 49) [:br]
     (labels :pricing.one-time/contact) " "
     [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com"]]])
 
