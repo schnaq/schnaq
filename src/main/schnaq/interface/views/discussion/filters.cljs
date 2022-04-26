@@ -23,7 +23,10 @@
      :label-key :filters.option.answered/answered}
     {:on-click (fn [] (rf/dispatch [:filters/clear])
                  (rf/dispatch [:filters.activate/answered? false]))
-     :label-key :filters.option.answered/unanswered}]])
+     :label-key :filters.option.answered/unanswered}
+    {:on-click (fn [] (rf/dispatch [:filters/clear])
+                 (rf/dispatch [:filters.activate/questions]))
+     :label-key :filters.option/questions}]])
 
 
 ;; -----------------------------------------------------------------------------
@@ -37,6 +40,12 @@
  (fn [db [_ toggle]]
    (let [new-filter {:type :answered?
                      :criteria toggle}]
+     (register-new-filter db new-filter))))
+
+(rf/reg-event-db
+ :filters.activate/questions
+ (fn [db _]
+   (let [new-filter {:type :question}]
      (register-new-filter db new-filter))))
 
 (rf/reg-event-db
@@ -54,6 +63,12 @@
  ;; Show whether the answered? filter is active.
  (fn [db _]
    (contains? (get-in db [:discussion :filters]) {:type :answered? :criteria true})))
+
+(rf/reg-sub
+ :filters/questions?
+ ;; Shows whether the questions filter is active
+ (fn [db _]
+   (contains? (get-in db [:discussion :filters]) {:type :question})))
 
 (rf/reg-sub
  :filters/active?

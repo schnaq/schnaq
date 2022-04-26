@@ -431,8 +431,12 @@
  :<- [:discussion.statements/show]
  :<- [:user/current]
  :<- [:schnaq.question.input/current]
- (fn [[sort-method local-votes shown-statements user current-input-tokens] _]
-   (let [sorted-conclusions (sort-statements user shown-statements sort-method local-votes)
+ :<- [:filters/questions?]
+ (fn [[sort-method local-votes shown-statements user current-input-tokens questions-only?] _]
+   (let [question-filtered-statements (if questions-only?
+                                        (filter #((set (:statement/labels %)) ":question") shown-statements)
+                                        shown-statements)
+         sorted-conclusions (sort-statements user question-filtered-statements sort-method local-votes)
          grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)
          input-filtered-statements
          (if (> 101 (count sorted-conclusions))

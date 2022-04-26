@@ -1109,6 +1109,7 @@
    :filters.option.answered/all "Alle Beiträge"
    :filters.option.answered/answered "Beantwortete"
    :filters.option.answered/unanswered "Unbeantwortete"
+   :filters.option/questions "Fragen"
    :filters.buttons/clear "Alle Filter löschen"
    :filters.heading/active "Aktive Filter"
 
