@@ -1,23 +1,14 @@
 (ns schnaq.interface.components.editor
   (:require ["@lexical/react/LexicalComposer" :as LexicalComposer]
-            ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
-            ["@lexical/react/LexicalContentEditable" :as LexicalContentEditable]
-            ["@lexical/react/LexicalPlainTextPlugin" :as LexicalPlainTextPlugin]
-            ["@lexical/react/LexicalRichTextPlugin" :as LexicalRichTextPlugin]
+            ["@lexical/react/LexicalContentEditable" :as ContentEditable]
             ["@lexical/react/LexicalHistoryPlugin" :refer [HistoryPlugin]]
-            ["@lexical/react/LexicalOnChangePlugin" :as LexicalOnChangePlugin]
-            ["@lexical/react/LexicalTreeView" :as LexicalTreeView]
-            ["lexical" :refer [$getRoot $getSelection createEditor]]
-            ["react" :refer [useEffect] :as react]
-            ["/editor/plugins/ToolbarPlugin" :as ToolbarPlugin]
+            ["@lexical/react/LexicalPlainTextPlugin" :as PlainTextPlugin]
+            ["@lexical/react/LexicalRichTextPlugin" :as RichTextPlugin]
             [reagent.core :as r]
+            [schnaq.interface.components.plugins.on-change :refer [on-change-plugin]]
+            [schnaq.interface.components.plugins.toolbar :refer [toolbar-plugin]]
+            [schnaq.interface.components.plugins.tree-view :refer [tree-view-plugin]]
             [taoensso.timbre :as log]))
-
-#_(def theme
-    #js {:ltr "ltr"
-         :rtl "rtl"
-         :placeholder "editor-placeholder",
-         :paragraph "editor-paragraph"})
 
 (def theme
   #js
@@ -96,9 +87,11 @@
      [:> LexicalComposer {:initialConfig initial-config}
       [:div.editor-container
        [:div.editor-inner
-        [:> LexicalPlainTextPlugin
-         {:contentEditable (r/as-element [:> LexicalContentEditable {:className "editor-input"}])}]
-        [:> HistoryPlugin {}]]]]]))
+        [:> PlainTextPlugin
+         {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
+        [:> HistoryPlugin {}]
+        [:f> tree-view-plugin]
+        [on-change-plugin]]]]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -109,11 +102,12 @@
      [:h2 "RichTextEditor"]
      [:> LexicalComposer {:initialConfig initial-config}
       [:div.editor-container
-       ;; toolbar plugin
+       [:f> toolbar-plugin]
        [:div.editor-inner
-        [:> LexicalRichTextPlugin
-         {:contentEditable (r/as-element [:> LexicalContentEditable {:className "editor-input"}])}]
-        [:> HistoryPlugin {}]]]]]))
+        [:> RichTextPlugin
+         {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
+        [:> HistoryPlugin {}]
+        [:f> tree-view-plugin]]]]]))
 
 (defn- view []
   [:<>
