@@ -6,7 +6,7 @@
 
 (defn build-label
   "Takes a label and builds the necessary html."
-  [label set? hover?]
+  [label]
   (let [[badge-color icon-name]
         (case label
           ":comment" ["label-blue" :comment]
@@ -16,10 +16,9 @@
           ":ghost" ["label-dark" :ghost]
           ":question" ["label-cyan" :question]
           ":times" ["label-red" :cross]
-          ":unchecked" ["label-teal" :check/normal])
-        extra-class (if set? (str badge-color " label-set") badge-color)]
+          ":unchecked" ["label-teal" :check/normal])]
     [:span.badge.rounded-pill.px-3
-     {:class (if hover? (str extra-class " label") extra-class)}
+     {:class badge-color}
      [icon icon-name "m-auto"]]))
 
 (rf/reg-event-fx

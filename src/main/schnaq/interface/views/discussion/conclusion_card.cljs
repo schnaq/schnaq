@@ -67,6 +67,8 @@
     [:div.d-flex.flex-wrap.align-items-center
      [reactions/up-down-vote statement]
      [:div.ms-sm-0.ms-lg-auto
+      (when ((set (:statement/labels statement)) ":question")
+        [labels/build-label ":question"])
       (if (:statement/locked? statement)
         [elements/locked-statement-icon statement-id]
         [badges/show-number-of-replies statement])

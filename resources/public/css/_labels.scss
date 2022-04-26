@@ -16,5 +16,7 @@ $labels: (
   .label-#{$name} {
     background-color: $bg-color;
     color: $white;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
   }
 }
