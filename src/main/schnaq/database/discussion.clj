@@ -179,13 +179,16 @@
   ([user-id content discussion-id locked?]
    (build-new-statement user-id content discussion-id locked? (str "conclusion-" content)))
   ([user-id content discussion-id locked? temp-id]
-   {:db/id temp-id
-    :statement/author user-id
-    :statement/content content
-    :statement/version 1
-    :statement/created-at (Date.)
-    :statement/locked? locked?
-    :statement/discussions [discussion-id]}))
+   (let [question? (cstring/includes? content "?")]
+     (cond->
+      {:db/id temp-id
+       :statement/author user-id
+       :statement/content content
+       :statement/version 1
+       :statement/created-at (Date.)
+       :statement/locked? locked?
+       :statement/discussions [discussion-id]}
+       question? (assoc :statement/labels #{":question"})))))
 
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
@@ -258,17 +261,19 @@
   "Creates a new child statement, that references a parent."
   [discussion-id parent-id new-content statement-type user-id registered-user? locked?]
   [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id any? boolean? :ret associative?]
-  @(transact
-    [(cond-> {:db/id (str "new-child-" new-content)
-              :statement/author user-id
-              :statement/content new-content
-              :statement/version 1
-              :statement/created-at (Date.)
-              :statement/parent parent-id
-              :statement/locked? locked?
-              :statement/discussions [discussion-id]
-              :statement/type statement-type}
-       (not registered-user?) (assoc :statement/creation-secret (.toString (UUID/randomUUID))))]))
+  (let [question? (cstring/includes? new-content "?")]
+    @(transact
+      [(cond-> {:db/id (str "new-child-" new-content)
+                :statement/author user-id
+                :statement/content new-content
+                :statement/version 1
+                :statement/created-at (Date.)
+                :statement/parent parent-id
+                :statement/locked? locked?
+                :statement/discussions [discussion-id]
+                :statement/type statement-type}
+         (not registered-user?) (assoc :statement/creation-secret (.toString (UUID/randomUUID)))
+         question? (assoc :statement/labels #{":question"}))])))
 
 (>defn react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created statement."

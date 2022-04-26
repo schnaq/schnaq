@@ -27,6 +27,11 @@
             [schnaq.interface.views.user :as user]
             [schnaq.shared-toolbelt :as shared-tools]))
 
+(defn- question?
+  "Returns whether a statement has been marked as a question."
+  [statement]
+  (contains? (set (:statement/labels statement)) ":question"))
+
 (defn- call-to-action-schnaq
   "If no contributions are available, add a call to action to engage the users."
   [body]
@@ -61,7 +66,9 @@
   (let [statement-id (:db/id statement)]
     [:div.d-flex.flex-wrap.align-items-center
      [reactions/up-down-vote statement]
-     [:div.ms-sm-0.ms-lg-auto
+     [:div.ms-sm-0.ms-lg-auto.d-flex.align-items-center
+      (when ((set (:statement/labels statement)) ":question")
+        [labels/build-label ":question"])
       (if (:statement/locked? statement)
         [elements/locked-statement-icon statement-id]
         [badges/show-number-of-replies statement])
@@ -190,6 +197,7 @@
   [statement-id]
   (let [statement @(rf/subscribe [:schnaq/statement statement-id])]
     [:article.statement-card
+     {:class (if (question? statement) "statement-question" "")}
      [:div.d-flex.flex-row
       [card-highlighting statement]
       [:div.card-view.card-body.py-2.px-0
@@ -402,15 +410,16 @@
 (defn- statement-list-item
   "The highest part of a statement-list. Knows when to show itself and when not."
   [statement-id index]
-  (let [active-filters? @(rf/subscribe [:filters/active?])
-        answered-only? @(rf/subscribe [:filters/answered?])
+  (let [answered-only? @(rf/subscribe [:filters/answered? true])
+        unanswered-only? @(rf/subscribe [:filters/answered? false])
         answers @(rf/subscribe [:statements/answers statement-id])
         item-component
         [:div.statement-column
          [motion/fade-in-and-out
           [statement-card->editable-card statement-id [statement-card statement-id]]
           (delay-fade-in-for-subsequent-content index)]]]
-    (if active-filters?
+    (if (or answered-only? unanswered-only?)
+      ;; Other filters are handled in statement-list-generator
       (when (or (and answered-only? (seq answers))
                 (and (not answered-only?) (empty? answers)))
         item-component)
@@ -423,8 +432,12 @@
  :<- [:discussion.statements/show]
  :<- [:user/current]
  :<- [:schnaq.question.input/current]
- (fn [[sort-method local-votes shown-statements user current-input-tokens] _]
-   (let [sorted-conclusions (sort-statements user shown-statements sort-method local-votes)
+ :<- [:filters/questions?]
+ (fn [[sort-method local-votes shown-statements user current-input-tokens questions-only?] _]
+   (let [question-filtered-statements (if questions-only?
+                                        (filter #((set (:statement/labels %)) ":question") shown-statements)
+                                        shown-statements)
+         sorted-conclusions (sort-statements user question-filtered-statements sort-method local-votes)
          grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)
          input-filtered-statements
          (if (> 101 (count sorted-conclusions))

@@ -182,6 +182,18 @@
         {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
         (labels :badges.sort/popular)])]))
 
+(defn- question-filter-button
+  "Question filter."
+  []
+  (let [active? @(rf/subscribe [:filters/questions?])]
+    [tooltip/text "Nur Fragen anzeigen"
+     [:button.btn.btn-sm.h-100
+      {:on-click (if active?
+                   #(rf/dispatch [:filters.deactivate/questions])
+                   #(rf/dispatch [:filters.activate/questions]))
+       :class (if active? "btn-primary" "btn-outline-primary")}
+      (labels :filters.option/questions)]]))
+
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-db
@@ -244,7 +256,9 @@
       [sort-options]]
      [:div.h-100
       (when (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        [filters/filter-answered-statements])]]
+        [filters/filter-answered-statements])]
+     [:div.mx-lg-2.pe-0.pe-lg-2
+      [question-filter-button]]]
     [:div.ms-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
      [search-bar]]]])
 

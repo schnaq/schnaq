@@ -121,6 +121,11 @@
   }
 }
 
+.statement-question {
+  @extend .border;
+  @extend .border-info;
+}
+
 .selection-card {
   @extend .statement-card;
   @extend .border;
