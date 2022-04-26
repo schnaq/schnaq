@@ -18,10 +18,10 @@
   [sc/schnaq-statement-filter-button-group
    [{:on-click #(rf/dispatch [:filters/clear])
      :label-key :filters.option.answered/all}
-    {:on-click (fn [] (rf/dispatch [:filters/clear])
+    {:on-click (fn [] (rf/dispatch [:filters.deactivate/answered? false])
                  (rf/dispatch [:filters.activate/answered? true]))
      :label-key :filters.option.answered/answered}
-    {:on-click (fn [] (rf/dispatch [:filters/clear])
+    {:on-click (fn [] (rf/dispatch [:filters.deactivate/answered? true])
                  (rf/dispatch [:filters.activate/answered? false]))
      :label-key :filters.option.answered/unanswered}]])
 
@@ -41,6 +41,13 @@
    (let [new-filter {:type :answered?
                      :criteria toggle}]
      (register-new-filter db new-filter))))
+
+(rf/reg-event-db
+ :filters.deactivate/answered?
+ (fn [db [_ toggle]]
+   (let [old-filter {:type :answered?
+                     :criteria toggle}]
+     (remove-filter db old-filter))))
 
 (rf/reg-event-db
  :filters.activate/questions

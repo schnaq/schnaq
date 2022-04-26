@@ -187,7 +187,7 @@
   []
   (let [active? @(rf/subscribe [:filters/questions?])]
     [tooltip/text "Nur Fragen anzeigen"
-     [:button.btn.btn-sm.h-100.ms-2
+     [:button.btn.btn-sm.h-100
       {:on-click (if active?
                    #(rf/dispatch [:filters.deactivate/questions])
                    #(rf/dispatch [:filters.activate/questions]))
@@ -253,11 +253,12 @@
      [back-button]]
     [:div.d-flex
      [:div.me-1.mx-lg-2.pe-0.pe-lg-2
-      [sort-options]
-      [question-filter-button]]
+      [sort-options]]
      [:div.h-100
       (when (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        [filters/filter-answered-statements])]]
+        [filters/filter-answered-statements])]
+     [:div.mx-lg-2.pe-0.pe-lg-2
+      [question-filter-button]]]
     [:div.ms-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
      [search-bar]]]])
 
