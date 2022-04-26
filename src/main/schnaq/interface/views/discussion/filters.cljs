@@ -23,10 +23,7 @@
      :label-key :filters.option.answered/answered}
     {:on-click (fn [] (rf/dispatch [:filters/clear])
                  (rf/dispatch [:filters.activate/answered? false]))
-     :label-key :filters.option.answered/unanswered}
-    {:on-click (fn [] (rf/dispatch [:filters/clear])
-                 (rf/dispatch [:filters.activate/questions]))
-     :label-key :filters.option/questions}]])
+     :label-key :filters.option.answered/unanswered}]])
 
 
 ;; -----------------------------------------------------------------------------
@@ -34,6 +31,9 @@
 
 (defn- register-new-filter [db new-filter]
   (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))
+
+(defn- remove-filter [db old-filter]
+  (update-in db [:discussion :filters] disj old-filter))
 
 (rf/reg-event-db
  :filters.activate/answered?
@@ -49,6 +49,12 @@
      (register-new-filter db new-filter))))
 
 (rf/reg-event-db
+ :filters.deactivate/questions
+ (fn [db _]
+   (let [question-filter {:type :question}]
+     (remove-filter db question-filter))))
+
+(rf/reg-event-db
  :filters/clear
  (fn [db _]
    (assoc-in db [:discussion :filters] #{})))
@@ -61,8 +67,8 @@
 (rf/reg-sub
  :filters/answered?
  ;; Show whether the answered? filter is active.
- (fn [db _]
-   (contains? (get-in db [:discussion :filters]) {:type :answered? :criteria true})))
+ (fn [db [_ toggle]]
+   (contains? (get-in db [:discussion :filters]) {:type :answered? :criteria toggle})))
 
 (rf/reg-sub
  :filters/questions?

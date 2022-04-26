@@ -410,15 +410,16 @@
 (defn- statement-list-item
   "The highest part of a statement-list. Knows when to show itself and when not."
   [statement-id index]
-  (let [active-filters? @(rf/subscribe [:filters/active?])
-        answered-only? @(rf/subscribe [:filters/answered?])
+  (let [answered-only? @(rf/subscribe [:filters/answered? true])
+        unanswered-only? @(rf/subscribe [:filters/answered? false])
         answers @(rf/subscribe [:statements/answers statement-id])
         item-component
         [:div.statement-column
          [motion/fade-in-and-out
           [statement-card->editable-card statement-id [statement-card statement-id]]
           (delay-fade-in-for-subsequent-content index)]]]
-    (if active-filters?
+    (if (or answered-only? unanswered-only?)
+      ;; Other filters are handled in statement-list-generator
       (when (or (and answered-only? (seq answers))
                 (and (not answered-only?) (empty? answers)))
         item-component)
