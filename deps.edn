@@ -1,4 +1,4 @@
-{:paths ["src/main" "src/test" "src/js" "resources"]
+{:paths ["src/main" "src/test" "resources"]
  :deps {binaryage/oops {:mvn/version "0.7.2"}
         buddy/buddy-auth {:mvn/version "3.0.323"}
         buddy/buddy-core {:mvn/version "1.10.413"}
