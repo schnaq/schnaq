@@ -1036,7 +1036,7 @@
    :pricing.billing/info-3-edu "Du arbeitest an einer Bildungseinrichtung? Schreibe uns für einen Edu-Rabatt unter"
    :pricing.billing/info-4-one-time "* Der Veranstaltungsaccount ist für drei Tage gültig."
    :pricing.one-time/question "Möchtest du schnaq für ein Event ohne Abo nutzen?"
-   :pricing.one-time/offer "Erhalte einen Pro Account für eine Veranstaltung mit bis zu %s Leuten für %s € zzgl. MwSt.*"
+   :pricing.one-time/offer "Erhalte einen Pro Account für eine Veranstaltung mit bis zu %d Leuten für %d € zzgl. MwSt.*"
    :pricing.one-time/contact "Schreibe uns dazu eine Mail an"
 
    :pricing.upgrade-nudge/button "Upgrade"

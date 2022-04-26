@@ -1038,7 +1038,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.billing/info-3-edu "Do you work at an educational institution? Write us for an edu discount at"
    :pricing.billing/info-4-one-time "* The event pass is valid for three days."
    :pricing.one-time/question "Do you want to use schnaq for an event without a subscription?"
-   :pricing.one-time/offer "Get a pro account for your event with up to %s participants for %s € plus VAT.*"
+   :pricing.one-time/offer "Get a pro account for your event with up to %d participants for %d € plus VAT.*"
    :pricing.one-time/contact "Write us for the event pass at"
 
    :pricing.upgrade-nudge/button "Upgrade"
