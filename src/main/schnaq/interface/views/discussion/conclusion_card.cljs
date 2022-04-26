@@ -66,7 +66,7 @@
   (let [statement-id (:db/id statement)]
     [:div.d-flex.flex-wrap.align-items-center
      [reactions/up-down-vote statement]
-     [:div.ms-sm-0.ms-lg-auto
+     [:div.ms-sm-0.ms-lg-auto.d-flex.align-items-center
       (when ((set (:statement/labels statement)) ":question")
         [labels/build-label ":question"])
       (if (:statement/locked? statement)
