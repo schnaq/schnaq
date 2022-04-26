@@ -41,11 +41,16 @@
   "Maximal allowed image size of profile picture in megabytes."
   5)
 
-(def marketing-num-schnaqs 600)
+(def marketing-num-schnaqs 1000)
 (def marketing-num-statements 4000)
 
+;; -----------------------------------------------------------------------------
+;; Pricing
+
+(def price-event-tier-euro 49)
 (def max-concurrent-users-free-tier 100)
 (def max-concurrent-users-pro-tier 300)
+(def max-concurrent-users-event-tier 250)
 
 ;; -----------------------------------------------------------------------------
 ;; Example schnaqs and statements
