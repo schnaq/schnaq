@@ -456,29 +456,34 @@
         [statement-list-item statement-id index]
         {:key statement-id}))))
 
-(defn conclusion-cards-list
-  "Prepare a list of statements and group them together."
+(defn card-container
+  "Prepare a list of visible cards and group them together."
   []
   (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (statements-list)
         top-level? @(rf/subscribe [:schnaq.routes/starting?])
         schnaq-loading? @(rf/subscribe [:loading/schnaq?])
         activation (when top-level? [activation/activation-card])
-        poll (when top-level? (poll/poll-list))
+        polls (when top-level? (poll/poll-list))
         wordcloud (when top-level? [wordcloud-card/wordcloud-card])
         access-code @(rf/subscribe [:schnaq.selected/access-code])
         question-input @(rf/subscribe [:schnaq.question.input/current])
-        cards (if (not-empty question-input)
-                [statements activation poll wordcloud]
-                [activation poll wordcloud statements])]
+        interactions [polls activation wordcloud]
+        show-call-to-share? (and top-level? access-code
+                                 (not (or search? (seq statements) (seq polls))))
+        _cards (if (not-empty question-input)
+                 ;; TODO evaluate if showing statements first while typing is needed at all
+                 [statements activation polls wordcloud]
+                 [activation polls wordcloud statements])]
     (if schnaq-loading?
       [loading/loading-card]
-      (cond->
-        (apply conj
-               [:div.row
-                [:div.statement-column
-                 [selection-card]]]
-               cards)
-        (and top-level? access-code
-             (not (or search? (seq statements) (seq poll))))
-        (conj [call-to-share])))))
+      [:<>
+       [:div.row
+        [:div.statement-column
+         [selection-card]]
+        ;; TODO show all interactions in scrollable slideshow
+        (first interactions)]
+       [:div.row
+        (if show-call-to-share?
+          [call-to-share]
+          statements)]])))
