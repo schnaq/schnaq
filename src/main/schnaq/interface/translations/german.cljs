@@ -51,7 +51,7 @@
    :startpage/description "Die sicherste Software für Interaktion mit deinem Publikum bei live und virtuellen Events. Interagiere mit dem Publikum durch Q&A, Umfragen… Probiere es jetzt kostenfrei aus!"
    :startpage/hook "Fragen sammeln, Publikum verstehen, Wissen teilen. Schnaq macht da weiter, wo andere aufhören!"
    :schnaq.startpage.cta/button "Jetzt kostenfrei schnaq erstellen"
-   :startpage.social-proof/teaser "Mit einem Klick gehörst du zu den hunderten Menschen, die schnaq nutzen 👋"
+   :startpage.social-proof/teaser "Mit einem Klick gehörst du zu den tausenden Menschen, die schnaq nutzen 👋"
    :startpage.social-proof/companies "Mit denen haben wir schon geschnaqqt"
 
    :startpage.usage/lead "Wofür kann ich schnaq verwenden?"

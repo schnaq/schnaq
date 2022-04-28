@@ -51,7 +51,7 @@
    :startpage/description "The most secure audience interaction software for your live and virtual events. Interact with your audience through Live Q&A, real time polling… Try it for free!"
    :startpage/hook "Gather questions, understand your audience, share knowledge. Schnaq picks up where others leave off!"
    :schnaq.startpage.cta/button "Create a free schnaq now!"
-   :startpage.social-proof/teaser "You are one click away from joining hundreds of other schnaq users 👋"
+   :startpage.social-proof/teaser "You are one click away from joining thousands of other schnaq users 👋"
    :startpage.social-proof/companies "They're already used to schnaq"
 
    :startpage.usage/lead "What do I use schnaq for?"
