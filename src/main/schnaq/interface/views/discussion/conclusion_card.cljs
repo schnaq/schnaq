@@ -324,19 +324,14 @@
 (defn- deactivated-selection-card-tab
   "A single tab that is deactivated."
   [tab-content]
-  (let [pro-user? @(rf/subscribe [:user/pro-user?])
-        admin-access? @(rf/subscribe [:schnaq.current/admin-access])
-        disabled-tooltip-key (cond
-                               (not pro-user?) :schnaq.input-type/pro-only
-                               (not admin-access?) :schnaq.input-type/not-admin
-                               :else :schnaq.input-type/coming-soon)]
-    [:li.nav-item
-     [:button.nav-link.text-muted
-      {:role "button"}
-      [tooltip/text
-       (labels disabled-tooltip-key)
-       tab-content]]]))
+  [:li.nav-item
+   [:button.nav-link.text-muted
+    {:role "button"}
+    [tooltip/text
+     (labels :schnaq.input-type/pro-only)
+     tab-content]]])
 
+;; TODO was ist mit unteren Levels?
 (defn selection-card
   "Dispatch the different input options, e.g. questions, poll or activation.
   The poll and activation feature are not available for free plan users."
@@ -358,15 +353,15 @@
         [motion/fade-in-and-out
          [:section.selection-card
           [:div.card-view.card-body
-           (when-not read-only?
-             [:ul.selection-tab.nav.nav-tabs
-              [:li.nav-item
-               [:button.nav-link {:class (active-class :question)
-                                  :role "button"
-                                  :on-click #(on-click :question)}
-                [iconed-heading :info-question :schnaq.input-type/statement]]]
-              (when top-level?
-                (if (and pro-user? admin-access?)
+           (when top-level?
+             (when (and (not read-only?) admin-access?)
+               [:ul.selection-tab.nav.nav-tabs
+                [:li.nav-item
+                 [:button.nav-link {:class (active-class :question)
+                                    :role "button"
+                                    :on-click #(on-click :question)}
+                  [iconed-heading :info-question :schnaq.input-type/statement]]]
+                (if pro-user?
                   [:<>
                    [:li.nav-item
                     [:button.nav-link
@@ -389,7 +384,7 @@
                   [:<>
                    [deactivated-selection-card-tab poll-tab]
                    [deactivated-selection-card-tab activation-tab]
-                   [deactivated-selection-card-tab word-cloud-tab]]))])
+                   [deactivated-selection-card-tab word-cloud-tab]])]))
            (case @selected-option
              :question [input-form-or-disabled-alert]
              :poll [poll/poll-form]
@@ -490,7 +485,6 @@
         [:div.statement-column
          [info-card]
          [selection-card]]
-        ;; TODO show all interactions in scrollable slideshow
         activation polls wordcloud]
        [:div.row
         (if show-call-to-share?

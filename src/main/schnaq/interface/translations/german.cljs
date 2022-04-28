@@ -274,8 +274,6 @@
    :schnaq.input-type/poll "Umfrage"
    :schnaq.input-type/activation "Aktivierung"
    :schnaq.input-type/word-cloud "Wortwolke"
-   :schnaq.input-type/coming-soon "Bald verfügbar"
-   :schnaq.input-type/not-admin "Nur für Moderatoren"
    :schnaq.input-type/pro-only "Nur für Pro User"
 
    ;; Poll feature
