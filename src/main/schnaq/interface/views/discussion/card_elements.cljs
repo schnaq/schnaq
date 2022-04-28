@@ -208,7 +208,7 @@
 
 (defn show-how-to []
   [:div.py-5
-   (if @(rf/subscribe [:schnaq.routes/starting?])
+   (if @(rf/subscribe [:routes.schnaq/start?])
      [how-to-elements/quick-how-to-schnaq]
      [how-to-elements/quick-how-to-pro-con])])
 
@@ -257,7 +257,7 @@
      [:div.me-1.mx-lg-2.pe-0.pe-lg-2
       [sort-options]]
      [:div.h-100
-      (when @(rf/subscribe [:schnaq.routes/starting?])
+      (when @(rf/subscribe [:routes.schnaq/start?])
         [filters/filter-answered-statements])]
      [:div.mx-lg-2.pe-0.pe-lg-2
       [question-filter-button]]]

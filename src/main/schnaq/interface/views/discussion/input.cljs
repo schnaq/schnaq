@@ -132,7 +132,7 @@
 (defn- topic-input-area
   "Input form with an option to chose statement type."
   []
-  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+  (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])]
     [:<>
      [:div.pb-3
@@ -147,7 +147,7 @@
 (defn input-form
   "Form to collect the user's statements."
   []
-  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+  (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
         when-starting #(rf/dispatch [:discussion.add.statement/starting (oget % [:currentTarget :elements])])
         when-deeper-in-discussion #(logic/submit-new-premise (oget % [:currentTarget :elements]))
         event-to-send (if starting-route? when-starting when-deeper-in-discussion)]

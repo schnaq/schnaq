@@ -210,7 +210,7 @@
        [:div.pt-2.d-flex.px-3
         [:div.me-auto.small [user/user-info statement 20 "w-100"]]
         [:div.d-flex.flex-row.align-items-center.ms-auto
-         (when-not @(rf/subscribe [:schnaq.routes/starting?])
+         (when-not @(rf/subscribe [:routes.schnaq/start?])
            [mark-as-answer-button statement])
          [badges/edit-statement-dropdown-menu statement]]]
        [:div.my-4]
@@ -254,7 +254,7 @@
 (defn- current-topic-badges
   "Badges which are shown if a statement is selected."
   [schnaq statement]
-  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])]
+  (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])]
     [:div.ms-auto
      (if starting-route?
        [badges/static-info-badges-discussion schnaq]
@@ -264,7 +264,7 @@
         [badges/edit-statement-dropdown-menu statement]])]))
 
 (defn- title-view [statement]
-  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+  (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
         title [md/as-markdown (:statement/content statement)]
         edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if edit-active?
@@ -279,7 +279,7 @@
                  :statement/content title
                  :statement/author author
                  :statement/created-at created-at}
-        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        starting-route? @(rf/subscribe [:routes.schnaq/start?])
         statement-or-topic (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))]
     [motion/move-in :left
      [:<>
@@ -350,7 +350,7 @@
             pro-user? @(rf/subscribe [:user/pro-user?])
             admin-access? @(rf/subscribe [:schnaq.current/admin-access])
             read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-            top-level? @(rf/subscribe [:schnaq.routes/starting?])]
+            top-level? @(rf/subscribe [:routes.schnaq/start?])]
         [motion/fade-in-and-out
          [:section.selection-card
           [:div.card-view.card-body
@@ -462,7 +462,7 @@
   []
   (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (statements-list)
-        top-level? @(rf/subscribe [:schnaq.routes/starting?])
+        top-level? @(rf/subscribe [:routes.schnaq/start?])
         schnaq-loading? @(rf/subscribe [:loading/schnaq?])
         activation (when top-level? [activation/activation-card])
         polls (when top-level? (poll/poll-list))
@@ -476,13 +476,13 @@
       [loading/loading-card]
       [:div.row
        (cond->
-         [:> Masonry
-          {:breakpoints config/breakpoints
-           :columns {:xs 1 :lg 2}
-           :gap 10}
-          [:div
-           [info-card]
-           [selection-card]]]
+        [:> Masonry
+         {:breakpoints config/breakpoints
+          :columns {:xs 1 :lg 2}
+          :gap 10}
+         [:div
+          [info-card]
+          [selection-card]]]
          question-first? (conj statements activation polls wordcloud)
          (not question-first?) (conj activation polls wordcloud statements))
        (when show-call-to-share?
