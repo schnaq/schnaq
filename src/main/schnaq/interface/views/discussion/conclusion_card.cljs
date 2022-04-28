@@ -392,9 +392,6 @@
              :word-cloud [wordcloud-card/wordcloud-tab])]]
          motion/card-fade-in-time]))))
 
-(defn- delay-fade-in-for-subsequent-content [index]
-  (+ (/ (inc index) 20) motion/card-fade-in-time))
-
 (defn- some-levenshtein
   "Takes a list of strings and is truthy if the target-string matches any of the tokens
   without breaking the max levenshtein-distance."
@@ -413,14 +410,14 @@
 
 (defn- statement-list-item
   "The highest part of a statement-list. Knows when to show itself and when not."
-  [statement-id index]
+  [statement-id]
   (let [answered-only? @(rf/subscribe [:filters/answered? true])
         unanswered-only? @(rf/subscribe [:filters/answered? false])
         answers @(rf/subscribe [:statements/answers statement-id])
         item-component
         [motion/fade-in-and-out
          [statement-card->editable-card statement-id [statement-card statement-id]]
-         (delay-fade-in-for-subsequent-content index)]]
+         motion/card-fade-in-time]]
     (if (or answered-only? unanswered-only?)
       ;; Other filters are handled in statement-list-generator
       (when (or (and answered-only? (seq answers))
@@ -456,7 +453,7 @@
     (for [index (range (count sorted-statements))
           :let [statement-id (nth sorted-statements index)]]
       (with-meta
-        [statement-list-item statement-id index]
+        [statement-list-item statement-id]
         {:key statement-id}))))
 
 (defn card-container
