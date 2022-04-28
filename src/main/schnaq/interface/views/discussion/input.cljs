@@ -6,9 +6,9 @@
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.user :as user]
             [schnaq.interface.views.discussion.card-elements :as card-elements]
             [schnaq.interface.views.discussion.logic :as logic]
+            [schnaq.interface.views.user :as user]
             [schnaq.shared-toolbelt :as shared-tools]))
 
 (defn- statement-type-button

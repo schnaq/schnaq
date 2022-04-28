@@ -32,7 +32,7 @@
     <orderEntry type="library" name="Deps: org.apache.tomcat/tomcat-juli:7.0.27" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-compress:1.21" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-devel:1.9.5" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.192" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.206" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.9.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.5" level="project" />
@@ -46,7 +46,7 @@
     <orderEntry type="library" name="Deps: metosin/muuntaja:0.6.8" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-common:4.1.51.Final" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.module/jackson-module-jaxb-annotations:2.12.1" level="project" />
-    <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.65.1029" level="project" />
+    <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.66.1034" level="project" />
     <orderEntry type="library" name="Deps: jakarta.validation/jakarta.validation-api:2.0.2" level="project" />
     <orderEntry type="library" name="Deps: io.undertow/undertow-core:2.2.4.Final" level="project" />
     <orderEntry type="library" name="Deps: com.google.auth/google-auth-library-credentials:1.2.1" level="project" />
