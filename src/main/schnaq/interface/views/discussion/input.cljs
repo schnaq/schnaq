@@ -112,7 +112,7 @@
         :data-dynamic-height true
         :placeholder (labels :statement.new/placeholder)
         :on-key-up throttled-input-tokenizing}]
-      [:button.btn.btn-outline-dark
+      [:button.btn.btn-outline-secondary
        {:type "submit"
         :title (labels :discussion/create-argument-action)
         :on-click #(matomo/track-event "Active User", "Action", "Submit Post")}
