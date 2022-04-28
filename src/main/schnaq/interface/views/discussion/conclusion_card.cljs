@@ -480,7 +480,7 @@
        (cond->
          [:> Masonry
           {:breakpoints config/breakpoints
-           :columns {:xs 1 :md 2}
+           :columns {:xs 1 :lg 2}
            :gap 10}
           [:div
            [info-card]
