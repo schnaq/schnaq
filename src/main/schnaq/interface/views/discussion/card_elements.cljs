@@ -246,7 +246,9 @@
         :on-key-up #(throttled-in-schnaq-search %)}]
       [search-clear-button search-input-id]]]))
 
-(defn action-view []
+(defn discussion-options-navigation
+  "Navigation bar on top of the discussion contents."
+  []
   [:div.d-inline-block.text-dark.w-100.mb-3.mx-1.mx-md-0
    [:div.d-flex.flex-row.flex-wrap.panel-white.p-2
     [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2
@@ -255,7 +257,7 @@
      [:div.me-1.mx-lg-2.pe-0.pe-lg-2
       [sort-options]]
      [:div.h-100
-      (when (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+      (when @(rf/subscribe [:schnaq.routes/starting?])
         [filters/filter-answered-statements])]
      [:div.mx-lg-2.pe-0.pe-lg-2
       [question-filter-button]]]
