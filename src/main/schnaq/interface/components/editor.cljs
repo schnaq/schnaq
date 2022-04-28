@@ -2,6 +2,8 @@
   (:require ["@lexical/react/LexicalComposer" :as LexicalComposer]
             ["@lexical/react/LexicalContentEditable" :as ContentEditable]
             ["@lexical/react/LexicalHistoryPlugin" :refer [HistoryPlugin]]
+            ["@lexical/react/LexicalMarkdownShortcutPlugin" :as MarkdownShortcutPlugin]
+            ["@lexical/react/LexicalOnChangePlugin" :as OnChangePlugin]
             ["@lexical/react/LexicalPlainTextPlugin" :as PlainTextPlugin]
             ["@lexical/react/LexicalRichTextPlugin" :as RichTextPlugin]
             [reagent.core :as r]
@@ -95,19 +97,31 @@
 
 ;; -----------------------------------------------------------------------------
 
+(comment
+
+  @foo
+
+  nil)
+
 (defn- RichTextEditor
   []
-  (let [initial-config #js {:theme theme :onError on-error}]
-    [:<>
-     [:h2 "RichTextEditor"]
-     [:> LexicalComposer {:initialConfig initial-config}
-      [:div.editor-container
-       [:f> toolbar-plugin]
-       [:div.editor-inner
-        [:> RichTextPlugin
-         {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
-        [:> HistoryPlugin {}]
-        [:f> tree-view-plugin]]]]]))
+  (let [content (r/atom nil)
+        _ (def foo content)]
+    (fn []
+      (let [initial-config #js {:theme theme :onError on-error}]
+        [:<>
+         [:h2 "RichTextEditor"]
+         (.log js/console @content)
+         [:> LexicalComposer {:initialConfig initial-config}
+          [:div.editor-container
+           [:f> toolbar-plugin]
+           [:div.editor-inner
+            [:> RichTextPlugin
+             {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
+            [:> HistoryPlugin {}]
+            [:> MarkdownShortcutPlugin]
+            [:f> tree-view-plugin]
+            [:> OnChangePlugin {:onChange (fn [editorState] (reset! content (.toJSON editorState)))}]]]]]))))
 
 (defn- view []
   [:<>
