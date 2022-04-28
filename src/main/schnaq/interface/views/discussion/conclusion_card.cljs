@@ -336,7 +336,6 @@
   "Dispatch the different input options, e.g. questions, poll or activation.
   The poll and activation feature are not available for free plan users."
   []
-  ;; TODO add info card everywhere the selection card is used
   (let [selected-option (reagent/atom :question)
         on-click #(reset! selected-option %)
         active-class #(when (= @selected-option %) "active")
@@ -474,10 +473,7 @@
         question-input @(rf/subscribe [:schnaq.question.input/current])
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements) (seq polls))))
-        _cards (if (not-empty question-input)
-                 ;; TODO evaluate if showing statements first while typing is needed at all
-                 [statements activation polls wordcloud]
-                 [activation polls wordcloud statements])]
+        interaction-cards [:<> activation polls wordcloud]]
     (if schnaq-loading?
       [loading/loading-card]
       [:<>
@@ -485,8 +481,12 @@
         [:div.statement-column
          [info-card]
          [selection-card]]
-        activation polls wordcloud]
+        (if (not-empty question-input)
+          statements
+          interaction-cards)]
        [:div.row
         (if show-call-to-share?
           [call-to-share]
-          statements)]])))
+          (if (empty? question-input)
+            statements
+            interaction-cards))]])))
