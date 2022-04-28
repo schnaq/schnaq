@@ -147,7 +147,8 @@
        [card-highlighting statement "me-2 highlight-card-reduced"]
        [:div.card-view.card-body.p-2
         [:div.d-flex.justify-content-start.pt-2
-         [user/user-info statement 25 "w-100"]
+         [:div.small
+          [user/user-info statement 20 "w-100"]]
          [badges/edit-statement-dropdown-menu statement]]
         [:div.text-typography
          [truncated-content/statement statement]]
@@ -207,7 +208,7 @@
          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
           (labels :discussion.badges/new)])
        [:div.pt-2.d-flex.px-3
-        [:div.me-auto [user/user-info statement 32 "w-100"]]
+        [:div.me-auto.small [user/user-info statement 20 "w-100"]]
         [:div.d-flex.flex-row.align-items-center.ms-auto
          (when-not @(rf/subscribe [:schnaq.routes/starting?])
            [mark-as-answer-button statement])
