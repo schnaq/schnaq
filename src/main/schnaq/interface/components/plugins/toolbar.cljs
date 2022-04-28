@@ -48,8 +48,7 @@
                                            (setIsBold (.hasFormat selection "bold"))
                                            (setIsItalic (.hasFormat selection "italic"))
                                            (setIsUnderline (.hasFormat selection "underline"))
-                                           (setIsStrikethrough (.hasFormat selection "strikethrough"))
-                                           (.log js/console "huhu")))))
+                                           (setIsStrikethrough (.hasFormat selection "strikethrough"))))))
                                    #js [editor])]
     (useEffect
      #(mergeRegister
