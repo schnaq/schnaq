@@ -15,7 +15,7 @@
   (let [locale @(rf/subscribe [:current-locale])
         user (:statement/author statement)
         created (:statement/created-at statement)
-        display-name (tools/truncate-to-n-chars (user-utils/display-name user) 15)]
+        display-name (tools/truncate-to-n-chars (user-utils/display-name user) 20)]
     [:div.d-flex {:class additional-classes}
      [common/avatar user avatar-size]
      [:div.mx-2.d-inline.my-auto [:span.text-sm.text-typography display-name]

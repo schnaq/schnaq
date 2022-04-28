@@ -131,6 +131,13 @@
   @extend .shadow;
 }
 
+.info-card {
+  @extend .statement-card;
+  @extend .border;
+  @extend .border-primary;
+  @extend .shadow;
+}
+
 .common-card {
   @extend .statement-card;
   @extend .px-3;

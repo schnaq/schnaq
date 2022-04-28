@@ -268,7 +268,7 @@
       (if starting-route?
         [edit/edit-card-discussion statement]
         [edit/edit-card-statement (:db/id statement)])
-      [:h2.h6 title])))
+      [:h2.fs-6 title])))
 
 (defn- topic-bubble-view []
   (let [{:discussion/keys [title author created-at] :as schnaq} @(rf/subscribe [:schnaq/selected])
@@ -279,9 +279,10 @@
         starting-route? @(rf/subscribe [:schnaq.routes/starting?])
         statement-or-topic (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))]
     [motion/move-in :left
-     [:div.p-2
-      [:div.d-flex.flex-wrap.mb-4
-       [user/user-info statement-or-topic 32 nil]
+     [:<>
+      [:div.d-flex.flex-wrap.mb-3
+       [:div.small
+        [user/user-info statement-or-topic 20 nil]]
        [current-topic-badges schnaq statement-or-topic]]
       [title-view statement-or-topic]]]))
 
@@ -304,17 +305,43 @@
          [:p.mx-3 (labels :schnaq.search/new-search-title)]
          [:p.mx-3 (str (count search-results) " " (labels :schnaq.search/results))])]]]))
 
-(defn- topic-or-search-content []
-  (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
-    [:div.mb-4
-     (if search-inactive?
-       [topic-bubble-view]
-       [search-info])]))
+(defn info-card
+  "Contains information about the viewed schnaq or focus statement. Depending on the level of view."
+  []
+  (let [focus-statement @(rf/subscribe [:schnaq.statements/focus])
+        answered? (seq @(rf/subscribe [:statements/answers (:db/id focus-statement)]))
+        search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
+    [motion/fade-in-and-out
+     [:section.info-card
+      [:div.d-flex.flex-row
+       (when answered? [:div.highlight-card-answered])
+       [:div.card-view.card-body
+        (if search-inactive?
+          [topic-bubble-view]
+          [search-info])]]]
+     motion/card-fade-in-time]))
+
+(defn- deactivated-selection-card-tab
+  "A single tab that is deactivated."
+  [tab-content]
+  (let [pro-user? @(rf/subscribe [:user/pro-user?])
+        admin-access? @(rf/subscribe [:schnaq.current/admin-access])
+        disabled-tooltip-key (cond
+                               (not pro-user?) :schnaq.input-type/pro-only
+                               (not admin-access?) :schnaq.input-type/not-admin
+                               :else :schnaq.input-type/coming-soon)]
+    [:li.nav-item
+     [:button.nav-link.text-muted
+      {:role "button"}
+      [tooltip/text
+       (labels disabled-tooltip-key)
+       tab-content]]]))
 
 (defn selection-card
   "Dispatch the different input options, e.g. questions, poll or activation.
   The poll and activation feature are not available for free plan users."
   []
+  ;; TODO add info card everywhere the selection card is used
   (let [selected-option (reagent/atom :question)
         on-click #(reset! selected-option %)
         active-class #(when (= @selected-option %) "active")
@@ -327,65 +354,47 @@
             pro-user? @(rf/subscribe [:user/pro-user?])
             admin-access? @(rf/subscribe [:schnaq.current/admin-access])
             read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-            disabled-tooltip-key (cond
-                                   (not pro-user?) :schnaq.input-type/pro-only
-                                   (not admin-access?) :schnaq.input-type/not-admin
-                                   :else :schnaq.input-type/coming-soon)
-            top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-            focus-statement @(rf/subscribe [:schnaq.statements/focus])
-            answered? (seq @(rf/subscribe [:statements/answers (:db/id focus-statement)]))]
+            top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
         [motion/fade-in-and-out
          [:section.selection-card
-          [:div.d-flex.flex-row
-           (when answered? [:div.highlight-card-answered])
-           [:div.card-view.card-body
-            [topic-or-search-content]
-            (when-not read-only?
-              [:ul.selection-tab.nav.nav-tabs
-               [:li.nav-item
-                [:button.nav-link {:class (active-class :question)
-                                   :role "button"
-                                   :on-click #(on-click :question)}
-                 [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
-               (when top-level?
-                 (if (and pro-user? admin-access?)
-                   [:<>
-                    [:li.nav-item
-                     [:button.nav-link
-                      {:class (active-class :poll)
-                       :role "button"
-                       :on-click #(on-click :poll)}
-                      poll-tab]]
-                    [:li.nav-item
-                     [:button.nav-link
-                      {:class (active-class :activation)
-                       :role "button"
-                       :on-click #(on-click :activation)}
-                      activation-tab]]
-                    [:li.nav-item
-                     [:button.nav-link
-                      {:class (active-class :word-cloud)
-                       :role "button"
-                       :on-click #(on-click :word-cloud)}
-                      word-cloud-tab]]]
-                   [:<>
-                    [:li.nav-item
-                     [:button.nav-link.text-muted
-                      {:role "button"}
-                      [tooltip/text (labels disabled-tooltip-key) poll-tab]]]
-                    [:li.nav-item
-                     [:button.nav-link.text-muted
-                      {:role "button"}
-                      [tooltip/text (labels disabled-tooltip-key) activation-tab]]]
-                    [:li.nav-item
-                     [:button.nav-link.text-muted
-                      {:role "button"}
-                      [tooltip/text (labels disabled-tooltip-key) word-cloud-tab]]]]))])
-            (case @selected-option
-              :question [input-form-or-disabled-alert]
-              :poll [poll/poll-form]
-              :activation [activation/activation-tab]
-              :word-cloud [wordcloud-card/wordcloud-tab])]]]
+          [:div.card-view.card-body
+           (when-not read-only?
+             [:ul.selection-tab.nav.nav-tabs
+              [:li.nav-item
+               [:button.nav-link {:class (active-class :question)
+                                  :role "button"
+                                  :on-click #(on-click :question)}
+                [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
+              (when top-level?
+                (if (and pro-user? admin-access?)
+                  [:<>
+                   [:li.nav-item
+                    [:button.nav-link
+                     {:class (active-class :poll)
+                      :role "button"
+                      :on-click #(on-click :poll)}
+                     poll-tab]]
+                   [:li.nav-item
+                    [:button.nav-link
+                     {:class (active-class :activation)
+                      :role "button"
+                      :on-click #(on-click :activation)}
+                     activation-tab]]
+                   [:li.nav-item
+                    [:button.nav-link
+                     {:class (active-class :word-cloud)
+                      :role "button"
+                      :on-click #(on-click :word-cloud)}
+                     word-cloud-tab]]]
+                  [:<>
+                   [deactivated-selection-card-tab poll-tab]
+                   [deactivated-selection-card-tab activation-tab]
+                   [deactivated-selection-card-tab word-cloud-tab]]))])
+           (case @selected-option
+             :question [input-form-or-disabled-alert]
+             :poll [poll/poll-form]
+             :activation [activation/activation-tab]
+             :word-cloud [wordcloud-card/wordcloud-tab])]]
          motion/card-fade-in-time]))))
 
 (defn- delay-fade-in-for-subsequent-content [index]
@@ -468,7 +477,6 @@
         wordcloud (when top-level? [wordcloud-card/wordcloud-card])
         access-code @(rf/subscribe [:schnaq.selected/access-code])
         question-input @(rf/subscribe [:schnaq.question.input/current])
-        interactions [polls activation wordcloud]
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements) (seq polls))))
         _cards (if (not-empty question-input)
@@ -480,9 +488,10 @@
       [:<>
        [:div.row
         [:div.statement-column
+         [info-card]
          [selection-card]]
         ;; TODO show all interactions in scrollable slideshow
-        (first interactions)]
+        activation polls wordcloud]
        [:div.row
         (if show-call-to-share?
           [call-to-share]
