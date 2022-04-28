@@ -254,7 +254,7 @@
    :statement/discuss "Diskutieren"
    :statement/replies "Antworten"
    :statement/new "Absenden"
-   :statement.new/placeholder "Dein Beitrag"
+   :statement.new/placeholder "Dein Beitrag / Frage"
    :statement.edit.send.failure/title "Änderung nicht gespeichert"
    :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."
    :statement.edit/label "Beitrag bearbeiten"
@@ -270,8 +270,7 @@
    :statement.locked/tooltip "Dieser Beitrag kann nicht beantwortet werden"
    :statement.pinned/tooltip "Dieser Beitrag ist angepinnt"
 
-   :schnaq.input-type/question "Frage"
-   :schnaq.input-type/answer "Antwort"
+   :schnaq.input-type/statement "Beitrag"
    :schnaq.input-type/poll "Umfrage"
    :schnaq.input-type/activation "Aktivierung"
    :schnaq.input-type/word-cloud "Wortwolke"

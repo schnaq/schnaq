@@ -364,7 +364,7 @@
                [:button.nav-link {:class (active-class :question)
                                   :role "button"
                                   :on-click #(on-click :question)}
-                [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
+                [iconed-heading :info-question :schnaq.input-type/statement]]]
               (when top-level?
                 (if (and pro-user? admin-access?)
                   [:<>

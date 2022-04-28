@@ -36,6 +36,18 @@
       [common/avatar user avatar-size]]
      [:small.mx-2.my-auto {:class name-class} display-name]]))
 
+(defn current-user-info
+  "Returns the current users profile picture and name as a component."
+  [avatar-size name-class]
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])
+        picture-component (if authenticated? common/avatar common/automatic-identicon)]
+    [:div.d-flex.flex-row
+     [:div.d-md-none
+      [picture-component (.floor js/Math (* avatar-size 0.75))]]
+     [:div.d-none.d-md-block
+      [picture-component avatar-size]]
+     [:small.mx-2.my-auto {:class name-class} @(rf/subscribe [:user/display-name])]]))
+
 (rf/reg-event-fx
  :user/set-display-name
  (fn [{:keys [db]} [_ username]]
@@ -82,4 +94,4 @@
 
 (rf/reg-sub
  :user/current
- (fn [db] (:user db)))
+ (fn [db _] (:user db)))

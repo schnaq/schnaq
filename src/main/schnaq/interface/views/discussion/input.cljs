@@ -4,6 +4,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.views.user :as user]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.card-elements :as card-elements]
             [schnaq.interface.views.discussion.logic :as logic]
@@ -127,6 +128,8 @@
   (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])]
     [:<>
+     [:div.pb-3
+      [user/current-user-info 40 "text-primary fs-6"]]
      [conclusion-card-textarea]
      (when-not (or starting-route? pro-con-disabled?)
        [:div.mt-3

@@ -256,7 +256,7 @@
    :statement/discuss "Discuss"
    :statement/replies "Replies"
    :statement/new "Post"
-   :statement.new/placeholder "Your statement"
+   :statement.new/placeholder "Your statement / question"
    :statement.edit.send.failure/title "Edit could not be made"
    :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."
    :statement.edit/label "Edit statement"
@@ -272,8 +272,7 @@
    :statement.locked/tooltip "This statement is locked"
    :statement.pinned/tooltip "This statement is pinned"
 
-   :schnaq.input-type/question "Question"
-   :schnaq.input-type/answer "Answer"
+   :schnaq.input-type/statement "Statement"
    :schnaq.input-type/poll "Poll"
    :schnaq.input-type/activation "Activation"
    :schnaq.input-type/word-cloud "Word Cloud"
