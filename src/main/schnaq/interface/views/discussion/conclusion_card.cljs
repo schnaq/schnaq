@@ -396,7 +396,7 @@
   "Takes a list of strings and is truthy if the target-string matches any of the tokens
   without breaking the max levenshtein-distance."
   [target-string tokens]
-  (some #(> 2 (clj-fuzzy/levenshtein target-string %)) tokens))
+  (some #(> 3 (clj-fuzzy/levenshtein target-string %)) tokens))
 
 (defn- score-hit
   "Returns a numerical score how many tokens of `token-list` are a match for the

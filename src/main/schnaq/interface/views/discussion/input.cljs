@@ -1,11 +1,12 @@
 (ns schnaq.interface.views.discussion.input
-  (:require [oops.core :refer [oget]]
+  (:require [goog.functions :as gfun]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.views.user :as user]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.user :as user]
             [schnaq.interface.views.discussion.card-elements :as card-elements]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.shared-toolbelt :as shared-tools]))
@@ -47,7 +48,7 @@
 (rf/reg-event-db
  :schnaq.question.input/set-current
  (fn [db [_ current-input]]
-   (assoc-in db [:schnaq :question :input] current-input)))
+   (assoc-in db [:schnaq :question :input] (shared-tools/tokenize-string current-input))))
 
 (rf/reg-event-db
  :schnaq.question.input/clear
@@ -57,7 +58,7 @@
 (rf/reg-sub
  :schnaq.question.input/current
  (fn [db _]
-   (shared-tools/tokenize-string (get-in db [:schnaq :question :input] ""))))
+   (get-in db [:schnaq :question :input] [])))
 
 (defn- textarea-highlighting
   "Add highlighting to textarea based on the selected attitude."
@@ -89,6 +90,12 @@
      [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
      [icon :plane "m-auto"]]]])
 
+(def throttled-input-tokenizing
+  ;; Send a typing update at most every second
+  (gfun/throttle
+   #(rf/dispatch [:schnaq.question.input/set-current (oget % [:?target :value])])
+   1000))
+
 (defn- conclusion-card-textarea
   "Input, where users provide (starting) conclusions."
   []
@@ -104,7 +111,7 @@
         :required true
         :data-dynamic-height true
         :placeholder (labels :statement.new/placeholder)
-        :on-key-up #(rf/dispatch [:schnaq.question.input/set-current (oget % [:?target :value])])}]
+        :on-key-up throttled-input-tokenizing}]
       [:button.btn.btn-outline-dark
        {:type "submit"
         :title (labels :discussion/create-argument-action)
