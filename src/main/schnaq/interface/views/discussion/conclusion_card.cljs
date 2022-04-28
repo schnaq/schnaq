@@ -331,7 +331,6 @@
      (labels :schnaq.input-type/pro-only)
      tab-content]]])
 
-;; TODO was ist mit unteren Levels?
 (defn selection-card
   "Dispatch the different input options, e.g. questions, poll or activation.
   The poll and activation feature are not available for free plan users."
@@ -348,7 +347,7 @@
             pro-user? @(rf/subscribe [:user/pro-user?])
             admin-access? @(rf/subscribe [:schnaq.current/admin-access])
             read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-            top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
+            top-level? @(rf/subscribe [:schnaq.routes/starting?])]
         [motion/fade-in-and-out
          [:section.selection-card
           [:div.card-view.card-body
@@ -473,20 +472,15 @@
         question-input @(rf/subscribe [:schnaq.question.input/current])
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements) (seq polls))))
-        interaction-cards [:<> activation polls wordcloud]]
+        cards (if (not-empty question-input)
+                [:<> statements activation polls wordcloud]
+                [:<> activation polls wordcloud statements])]
     (if schnaq-loading?
       [loading/loading-card]
-      [:<>
-       [:div.row
-        [:div.statement-column
-         [info-card]
-         [selection-card]]
-        (if (not-empty question-input)
-          statements
-          interaction-cards)]
-       [:div.row
-        (if show-call-to-share?
-          [call-to-share]
-          (if (empty? question-input)
-            statements
-            interaction-cards))]])))
+      [:div.row
+       [:div.statement-column
+        [info-card]
+        [selection-card]]
+       (when show-call-to-share?
+         [call-to-share])
+       cards])))
