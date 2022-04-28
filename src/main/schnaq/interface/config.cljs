@@ -62,3 +62,15 @@
 (goog-define example-share-hash "6586e787-8704-4b4b-9221-5821d15626b5")
 (goog-define example-api-url "https://api.staging.schnaq.com")
 (goog-define example-statement 17592186049502)
+
+(def breakpoints
+  "Mirrors the breakpoints used in the bootsrap css."
+  {:xs 0,
+   :sm 576,
+   :md 768,
+   :lg 992,
+   :xl 1200,
+   :xxl 1439,
+   :xxxl 1600,
+   :hd 1900,
+   :qhd 2560})

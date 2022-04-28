@@ -2506,6 +2506,11 @@ react-qrcode-logo@^2.7.0:
     lodash.isequal "^4.5.0"
     qrcode-generator "^1.4.1"
 
+react-smart-masonry@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-smart-masonry/-/react-smart-masonry-2.0.2.tgz#fece64847d730bafc21cf4bc8b4ec65ba40fcac8"
+  integrity sha512-Dxw9+zYZ4mZf1snLErMu/66Q6/KyWcQJwDMYnq7PK9RzLasgfd0t1Ra4VeRTQfvxT4ize2AqP4iZ9NxE0B9ynw==
+
 react-wordcloud@^1.2.7:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/react-wordcloud/-/react-wordcloud-1.2.7.tgz#6a21d9a64a8f9b0f7d12eef789156538794e685c"

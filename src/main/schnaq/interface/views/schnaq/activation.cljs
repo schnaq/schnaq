@@ -112,7 +112,7 @@
   [activation-view
    nil
    "w-75"
-   "statement-column"])
+   ""])
 
 (defn activation-tab
   "Activation menu to create and reset the current activation."

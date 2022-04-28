@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [clj-fuzzy.metrics :as clj-fuzzy]
+  (:require ["react-smart-masonry" :default Masonry]
+            [clj-fuzzy.metrics :as clj-fuzzy]
             [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [re-frame.core :as rf]
@@ -9,6 +10,7 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.schnaq :as sc]
+            [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.markdown :as md]
@@ -416,10 +418,9 @@
         unanswered-only? @(rf/subscribe [:filters/answered? false])
         answers @(rf/subscribe [:statements/answers statement-id])
         item-component
-        [:div.statement-column
-         [motion/fade-in-and-out
-          [statement-card->editable-card statement-id [statement-card statement-id]]
-          (delay-fade-in-for-subsequent-content index)]]]
+        [motion/fade-in-and-out
+         [statement-card->editable-card statement-id [statement-card statement-id]]
+         (delay-fade-in-for-subsequent-content index)]]
     (if (or answered-only? unanswered-only?)
       ;; Other filters are handled in statement-list-generator
       (when (or (and answered-only? (seq answers))
@@ -472,15 +473,19 @@
         question-input @(rf/subscribe [:schnaq.question.input/current])
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements) (seq polls))))
-        cards (if (not-empty question-input)
-                [:<> statements activation polls wordcloud]
-                [:<> activation polls wordcloud statements])]
+        question-first? (not-empty question-input)]
     (if schnaq-loading?
       [loading/loading-card]
       [:div.row
-       [:div.statement-column
-        [info-card]
-        [selection-card]]
+       (cond->
+         [:> Masonry
+          {:breakpoints config/breakpoints
+           :columns {:xs 1 :md 2}
+           :gap 10}
+          [:div
+           [info-card]
+           [selection-card]]]
+         question-first? (conj statements activation polls wordcloud)
+         (not question-first?) (conj activation polls wordcloud statements))
        (when show-call-to-share?
-         [call-to-share])
-       cards])))
+         [call-to-share])])))
