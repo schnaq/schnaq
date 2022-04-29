@@ -15,7 +15,7 @@
   (let [locale @(rf/subscribe [:current-locale])
         user (:statement/author statement)
         created (:statement/created-at statement)
-        display-name (tools/truncate-to-n-chars (user-utils/display-name user) 15)]
+        display-name (tools/truncate-to-n-chars (user-utils/display-name user) 20)]
     [:div.d-flex {:class additional-classes}
      [common/avatar user avatar-size]
      [:div.mx-2.d-inline.my-auto [:span.text-sm.text-typography display-name]
@@ -35,6 +35,18 @@
      [:div.d-none.d-md-block
       [common/avatar user avatar-size]]
      [:small.mx-2.my-auto {:class name-class} display-name]]))
+
+(defn current-user-info
+  "Returns the current users profile picture and name as a component."
+  [avatar-size name-class]
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])
+        picture-component (if authenticated? common/avatar common/automatic-identicon)]
+    [:div.d-flex.flex-row
+     [:div.d-md-none
+      [picture-component (.floor js/Math (* avatar-size 0.75))]]
+     [:div.d-none.d-md-block
+      [picture-component avatar-size]]
+     [:small.mx-2.my-auto {:class name-class} @(rf/subscribe [:user/display-name])]]))
 
 (rf/reg-event-fx
  :user/set-display-name
@@ -82,4 +94,4 @@
 
 (rf/reg-sub
  :user/current
- (fn [db] (:user db)))
+ (fn [db _] (:user db)))

@@ -51,7 +51,7 @@
    :startpage/description "The most secure audience interaction software for your live and virtual events. Interact with your audience through Live Q&A, real time polling… Try it for free!"
    :startpage/hook "Gather questions, understand your audience, share knowledge. Schnaq picks up where others leave off!"
    :schnaq.startpage.cta/button "Create a free schnaq now!"
-   :startpage.social-proof/teaser "You are one click away from joining hundreds of other schnaq users 👋"
+   :startpage.social-proof/teaser "You are one click away from joining thousands of other schnaq users 👋"
    :startpage.social-proof/companies "They're already used to schnaq"
 
    :startpage.usage/lead "What do I use schnaq for?"
@@ -256,7 +256,7 @@
    :statement/discuss "Discuss"
    :statement/replies "Replies"
    :statement/new "Post"
-   :statement.new/placeholder "Your statement"
+   :statement.new/placeholder "Your statement / question"
    :statement.edit.send.failure/title "Edit could not be made"
    :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."
    :statement.edit/label "Edit statement"
@@ -272,13 +272,10 @@
    :statement.locked/tooltip "This statement is locked"
    :statement.pinned/tooltip "This statement is pinned"
 
-   :schnaq.input-type/question "Question"
-   :schnaq.input-type/answer "Answer"
+   :schnaq.input-type/statement "Statement"
    :schnaq.input-type/poll "Poll"
    :schnaq.input-type/activation "Activation"
    :schnaq.input-type/word-cloud "Word Cloud"
-   :schnaq.input-type/coming-soon "Coming Soon"
-   :schnaq.input-type/not-admin "Only for moderators"
    :schnaq.input-type/pro-only "Only for pro users"
 
    ;; Poll feature
@@ -1000,7 +997,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing/headline "Switch to schnaq"
    :pricing/title "Pricing options fit for your needs."
    :pricing/description "See the free and competitive pricing packages of schnaq. Choose the best plan that fits your need."
-   :pricing.intro/heading "schnaq helps you gain more insights from your webinars."
+   :pricing.intro/heading "Make your Events and Courses Interactive"
    :pricing.free-tier/title "Free"
    :pricing.free-tier/subtitle "Forever"
    :pricing.free-tier/description "For efficient makers and small teams, that don't need a lot. Create discussions and Q&As with two clicks."
@@ -1035,6 +1032,11 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.notes/with-vat "plus VAT"
    :pricing.billing/info-1 "Prices shown are exclusive of any applicable sales taxes such as VAT."
    :pricing.billing/info-2 "Subscriptions to the Pro plan renews automatically at the end of each billing cycle unless duly terminated, at which point we'll charge the credit card in your account."
+   :pricing.billing/info-3-edu "Do you work at an educational institution? Write us for an edu discount at"
+   :pricing.billing/info-4-one-time "* The event pass is valid for three days."
+   :pricing.one-time/question "Do you want to use schnaq for an event without a subscription?"
+   :pricing.one-time/offer "Get a pro account for your event with up to %d participants for %d € plus VAT.*"
+   :pricing.one-time/contact "Write us for the event pass at"
 
    :pricing.upgrade-nudge/button "Upgrade"
    :pricing.upgrade-nudge/tooltip "Upgrade your account"
@@ -1112,6 +1114,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :filters.option.answered/all "All Statements"
    :filters.option.answered/answered "Answered"
    :filters.option.answered/unanswered "Unanswered"
+   :filters.option/questions "Questions"
    :filters.buttons/clear "Clear all filters"
    :filters.heading/active "Active Filters"
 

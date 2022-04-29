@@ -182,6 +182,18 @@
         {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
         (labels :badges.sort/popular)])]))
 
+(defn- question-filter-button
+  "Question filter."
+  []
+  (let [active? @(rf/subscribe [:filters/questions?])]
+    [tooltip/text "Nur Fragen anzeigen"
+     [:button.btn.btn-sm.h-100
+      {:on-click (if active?
+                   #(rf/dispatch [:filters.deactivate/questions])
+                   #(rf/dispatch [:filters.activate/questions]))
+       :class (if active? "btn-primary" "btn-outline-primary")}
+      (labels :filters.option/questions)]]))
+
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-db
@@ -196,7 +208,7 @@
 
 (defn show-how-to []
   [:div.py-5
-   (if @(rf/subscribe [:schnaq.routes/starting?])
+   (if @(rf/subscribe [:routes.schnaq/start?])
      [how-to-elements/quick-how-to-schnaq]
      [how-to-elements/quick-how-to-pro-con])])
 
@@ -234,7 +246,9 @@
         :on-key-up #(throttled-in-schnaq-search %)}]
       [search-clear-button search-input-id]]]))
 
-(defn action-view []
+(defn discussion-options-navigation
+  "Navigation bar on top of the discussion contents."
+  []
   [:div.d-inline-block.text-dark.w-100.mb-3.mx-1.mx-md-0
    [:div.d-flex.flex-row.flex-wrap.panel-white.p-2
     [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2
@@ -243,8 +257,10 @@
      [:div.me-1.mx-lg-2.pe-0.pe-lg-2
       [sort-options]]
      [:div.h-100
-      (when (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        [filters/filter-answered-statements])]]
+      (when @(rf/subscribe [:routes.schnaq/start?])
+        [filters/filter-answered-statements])]
+     [:div.mx-lg-2.pe-0.pe-lg-2
+      [question-filter-button]]]
     [:div.ms-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
      [search-bar]]]])
 

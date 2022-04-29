@@ -103,8 +103,6 @@
 }
 
 .statement-column {
-  @extend .col-qhd-3;
-  @extend .col-xxl-4;
   @extend .col-lg-6;
   @extend .col-12;
 }
@@ -121,10 +119,22 @@
   }
 }
 
+.statement-question {
+  @extend .border;
+  @extend .border-info;
+}
+
 .selection-card {
   @extend .statement-card;
   @extend .border;
   @extend .border-secondary;
+  @extend .shadow;
+}
+
+.info-card {
+  @extend .statement-card;
+  @extend .border;
+  @extend .border-primary;
   @extend .shadow;
 }
 

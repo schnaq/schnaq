@@ -36,6 +36,11 @@
                      :dangerouslySetInnerHTML
                      {:__html (generate-identicon display-name size)}}]))
 
+(defn automatic-identicon
+  "Generate the identicon without passing a name, just a size. Gets the name from the db"
+  [size]
+  [identicon @(rf/subscribe [:user/display-name]) size])
+
 (>defn avatar
   "Get a user's avatar."
   ([size]
@@ -50,8 +55,8 @@
      [:div.avatar-image.p-0
       (if profile-picture
         [:div.profile-pic-fill
-         {:style {:height (str size "px") :width (str size "px")}}
          [:img.profile-pic-image {:src profile-picture
+                                  :style {:height (str size "px") :width (str size "px")}
                                   :alt (str "Profile Picture of " display-name)
                                   :on-error (set-fallback-identicon display-name 50)}]]
         [identicon display-name size])])))

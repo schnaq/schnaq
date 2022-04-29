@@ -3,7 +3,9 @@
             [muuntaja.core :as m]
             [schnaq.api :as api]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]))
+            [schnaq.database.user :as user-db]
+            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]
+            [taoensso.tufte :refer [profiled p]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
@@ -39,6 +41,23 @@
     (is (not (zero? (count (:starting-conclusions (get-starting-conclusions-request toolbelt/token-wegi-no-beta-user "cat-dog-hash"))))))
     (is (not (zero? (count (:starting-conclusions (get-starting-conclusions-request nil "cat-dog-hash"))))))
     (is (string? (:message (get-starting-conclusions-request nil ":shrug:"))))))
+
+(deftest get-starting-conclusions-timing-test
+  (testing "Check that the querying of many starting statements is performant"
+    (dotimes [_ 500]
+      (discussion-db/add-starting-statement!
+       "cat-dog-hash" (user-db/user-id "wegi" nil)
+       "Foo statements!"))
+    (let [stats @(second
+                  (profiled
+                   {}
+                   (dotimes [_ 10]
+                     (p :starting-conclusion-api
+                        (get-starting-conclusions-request
+                         toolbelt/token-wegi-no-beta-user
+                         "cat-dog-hash")))))]
+      ;; 500 ms
+      (is (< (get-in stats [:stats :starting-conclusion-api :mean]) 500000000)))))
 
 (defn- react-to-conclusions-request [statement-id]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.discussion.react-to/statement))

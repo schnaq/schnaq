@@ -30,7 +30,7 @@
   [[first-button & rest-buttons]]
   (let [{:keys [on-click label-key]} first-button
         active-filters? @(rf/subscribe [:filters/active?])]
-    [:div.btn-group.button-discussion-options.h-100
+    [:div.btn-group.button-discussion-options.h-100.me-1
      [:input.btn-check {:id label-key :name :filter-discussion-options
                         :type "radio" :autoComplete "off"
                         :onClick on-click}]

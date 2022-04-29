@@ -51,7 +51,7 @@
    :startpage/description "Die sicherste Software für Interaktion mit deinem Publikum bei live und virtuellen Events. Interagiere mit dem Publikum durch Q&A, Umfragen… Probiere es jetzt kostenfrei aus!"
    :startpage/hook "Fragen sammeln, Publikum verstehen, Wissen teilen. Schnaq macht da weiter, wo andere aufhören!"
    :schnaq.startpage.cta/button "Jetzt kostenfrei schnaq erstellen"
-   :startpage.social-proof/teaser "Mit einem Klick gehörst du zu den hunderten Menschen, die schnaq nutzen 👋"
+   :startpage.social-proof/teaser "Mit einem Klick gehörst du zu den tausenden Menschen, die schnaq nutzen 👋"
    :startpage.social-proof/companies "Mit denen haben wir schon geschnaqqt"
 
    :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
@@ -254,7 +254,7 @@
    :statement/discuss "Diskutieren"
    :statement/replies "Antworten"
    :statement/new "Absenden"
-   :statement.new/placeholder "Dein Beitrag"
+   :statement.new/placeholder "Dein Beitrag / Frage"
    :statement.edit.send.failure/title "Änderung nicht gespeichert"
    :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."
    :statement.edit/label "Beitrag bearbeiten"
@@ -270,13 +270,10 @@
    :statement.locked/tooltip "Dieser Beitrag kann nicht beantwortet werden"
    :statement.pinned/tooltip "Dieser Beitrag ist angepinnt"
 
-   :schnaq.input-type/question "Frage"
-   :schnaq.input-type/answer "Antwort"
+   :schnaq.input-type/statement "Beitrag"
    :schnaq.input-type/poll "Umfrage"
    :schnaq.input-type/activation "Aktivierung"
    :schnaq.input-type/word-cloud "Wortwolke"
-   :schnaq.input-type/coming-soon "Bald verfügbar"
-   :schnaq.input-type/not-admin "Nur für Moderatoren"
    :schnaq.input-type/pro-only "Nur für Pro User"
 
    ;; Poll feature
@@ -998,7 +995,7 @@
    :pricing/headline "Wechsle zu schnaq"
    :pricing/title "Preise, die zu jedem Zweck passen."
    :pricing/description "Siehe dir die kostenfreien und erschwinglichen Pakete von schnaq an. Wähle das, was am besten zu dir passt."
-   :pricing.intro/heading "schnaq hilft dir mehr Erkenntnisse aus deinen Webinaren zu gewinnen."
+   :pricing.intro/heading "Mache deine Events und Kurse maximal interaktiv"
    :pricing.free-tier/title "Frei"
    :pricing.free-tier/subtitle "für immer"
    :pricing.free-tier/description "Für effiziente Macher:innen und kleine Teams, die nicht viel brauchen. Erstelle Diskussionen und Q&As mit zwei Klicks."
@@ -1033,6 +1030,11 @@
    :pricing.notes/with-vat "zzgl. MwSt."
    :pricing.billing/info-1 "Die angegebenen Preise verstehen sich exklusive aller anfallenden Umsatzsteuern wie z.B. der Mehrwertsteuer."
    :pricing.billing/info-2 "Abonnements des Pro-Tarifs verlängern sich automatisch am Ende jedes Abrechnungszyklus, es sei denn, sie werden ordnungsgemäß gekündigt. Ohne erfolgte Kündigung wird dein hinterlegtes Zahlungsmittel belastet."
+   :pricing.billing/info-3-edu "Du arbeitest an einer Bildungseinrichtung? Schreibe uns für einen Edu-Rabatt unter"
+   :pricing.billing/info-4-one-time "* Der Veranstaltungsaccount ist für drei Tage gültig."
+   :pricing.one-time/question "Möchtest du schnaq für ein Event ohne Abo nutzen?"
+   :pricing.one-time/offer "Erhalte einen Pro Account für eine Veranstaltung mit bis zu %d Leuten für %d € zzgl. MwSt.*"
+   :pricing.one-time/contact "Schreibe uns dazu eine Mail an"
 
    :pricing.upgrade-nudge/button "Upgrade"
    :pricing.upgrade-nudge/tooltip "Upgrade deinen Account"
@@ -1109,6 +1111,7 @@
    :filters.option.answered/all "Alle Beiträge"
    :filters.option.answered/answered "Beantwortete"
    :filters.option.answered/unanswered "Unbeantwortete"
+   :filters.option/questions "Fragen"
    :filters.buttons/clear "Alle Filter löschen"
    :filters.heading/active "Aktive Filter"
 

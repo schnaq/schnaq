@@ -37,6 +37,7 @@
     "react-highlight.js": "1.0.7",
     "react-markdown": "^6.0.2",
     "react-qrcode-logo": "^2.7.0",
+    "react-smart-masonry": "^2.0.2",
     "react-wordcloud": "^1.2.7",
     "remark-gfm": "^1.0.0",
     "stopwords-de": "^0.3.0",

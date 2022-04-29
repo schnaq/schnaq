@@ -214,7 +214,18 @@
 (defn- subscription-information []
   [:div.text-center.text-muted
    [:p (labels :pricing.billing/info-1)]
-   [:p (labels :pricing.billing/info-2)]])
+   [:p (labels :pricing.billing/info-2)]
+   [:p (labels :pricing.billing/info-3-edu) " "
+    [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com"]]
+   [:p.small (labels :pricing.billing/info-4-one-time)]])
+
+(defn one-time-information [smaller?]
+  [:div.text-center.pt-3 {:class (if smaller? "" "fs-4")}
+   [:p (labels :pricing.one-time/question)]
+   [:p (gstring/format (labels :pricing.one-time/offer) config/max-concurrent-users-event-tier config/price-event-tier-euro)]
+   [:p
+    (labels :pricing.one-time/contact) " "
+    [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com"]]])
 
 (defn- pricing-page
   "A full page depicting our pricing and related items."
@@ -228,9 +239,11 @@
     [:div.container
      [intro]
      [tier-cards]
-     [subscription-information]]
+     [one-time-information]]
     [:div.container-fluid.pt-5
-     [faq]]]])
+     [faq]]
+    [:div.container
+     [subscription-information]]]])
 
 (defn pricing-view
   "The pricing view."

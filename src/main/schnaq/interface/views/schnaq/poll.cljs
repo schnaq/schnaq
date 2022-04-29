@@ -219,7 +219,7 @@
   "Displays all polls of the current schnaq."
   []
   (for [poll @(rf/subscribe [:schnaq/polls])]
-    [:div.statement-column
+    [:div
      {:key (str "poll-result-" (:db/id poll))}
      [motion/fade-in-and-out
       (if (= :poll.type/ranking (:poll/type poll))
