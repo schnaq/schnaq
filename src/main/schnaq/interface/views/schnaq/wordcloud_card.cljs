@@ -31,18 +31,17 @@
   "Displays a wordcloud in a card."
   []
   (when @(rf/subscribe [:schnaq.wordcloud/show?])
-    [:div.statement-column
-     [motion/fade-in-and-out
-      [:section.statement-card
-       [:div.d-flex.mt-3
-        [:h4.mx-auto.mt-3
-         (labels :schnaq.wordcloud/title)]
-        [dropdown-menu/moderator
-         "wordcloud-dropdown-id"
-         [dropdown-menu/item :trash
-          :schnaq.wordcloud/hide
-          #(rf/dispatch [:schnaq.wordcloud/toggle false])]]]
-       [wordcloud/wordcloud]]]]))
+    [motion/fade-in-and-out
+     [:section.statement-card
+      [:div.d-flex.mt-3
+       [:h4.mx-auto.mt-3
+        (labels :schnaq.wordcloud/title)]
+       [dropdown-menu/moderator
+        "wordcloud-dropdown-id"
+        [dropdown-menu/item :trash
+         :schnaq.wordcloud/hide
+         #(rf/dispatch [:schnaq.wordcloud/toggle false])]]]
+      [wordcloud/wordcloud]]]))
 
 ;; -----------------------------------------------------------------------------
 

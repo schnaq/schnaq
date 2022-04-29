@@ -51,7 +51,7 @@
    :startpage/description "The most secure audience interaction software for your live and virtual events. Interact with your audience through Live Q&A, real time polling… Try it for free!"
    :startpage/hook "Gather questions, understand your audience, share knowledge. Schnaq picks up where others leave off!"
    :schnaq.startpage.cta/button "Create a free schnaq now!"
-   :startpage.social-proof/teaser "You are one click away from joining hundreds of other schnaq users 👋"
+   :startpage.social-proof/teaser "You are one click away from joining thousands of other schnaq users 👋"
    :startpage.social-proof/companies "They're already used to schnaq"
 
    :startpage.usage/lead "What do I use schnaq for?"
@@ -256,7 +256,7 @@
    :statement/discuss "Discuss"
    :statement/replies "Replies"
    :statement/new "Post"
-   :statement.new/placeholder "Your statement"
+   :statement.new/placeholder "Your statement / question"
    :statement.edit.send.failure/title "Edit could not be made"
    :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."
    :statement.edit/label "Edit statement"
@@ -272,13 +272,10 @@
    :statement.locked/tooltip "This statement is locked"
    :statement.pinned/tooltip "This statement is pinned"
 
-   :schnaq.input-type/question "Question"
-   :schnaq.input-type/answer "Answer"
+   :schnaq.input-type/statement "Statement"
    :schnaq.input-type/poll "Poll"
    :schnaq.input-type/activation "Activation"
    :schnaq.input-type/word-cloud "Word Cloud"
-   :schnaq.input-type/coming-soon "Coming Soon"
-   :schnaq.input-type/not-admin "Only for moderators"
    :schnaq.input-type/pro-only "Only for pro users"
 
    ;; Poll feature

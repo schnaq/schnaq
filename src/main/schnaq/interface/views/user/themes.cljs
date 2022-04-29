@@ -13,7 +13,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.discussion.conclusion-card :refer [selection-card]]
+            [schnaq.interface.views.discussion.conclusion-card :refer [info-card selection-card]]
             [schnaq.interface.views.navbar.elements :as elements]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.activation :as activation]
@@ -90,6 +90,7 @@
         [buttons/button "secondary button" nil "btn-secondary ms-2"]
         [buttons/button "primary outlined button" nil "btn-outline-primary ms-2"]
         [buttons/button "secondary outlined button" nil "btn-outline-secondary ms-2"]]
+       [info-card]
        [selection-card]]]]))
 
 ;; -----------------------------------------------------------------------------

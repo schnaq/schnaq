@@ -43,7 +43,7 @@
 (defn tokenize-string
   "Tokenizes a string into single tokens for the purpose of searching."
   [content]
-  (->> (string/split content #"\s")
+  (->> (string/split (string/lower-case content) #"\s")
        (remove string/blank?)
        ;; Remove punctuation when generating token
        (map #(cond

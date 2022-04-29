@@ -71,33 +71,32 @@
      :schnaq.activation/delete-button
      #(rf/dispatch [:activation/delete])]]])
 
-(defn- activation-view [background-class button-class col-class]
+(defn- activation-view [background-class button-class]
   (when-let [activation @(rf/subscribe [:schnaq/activation])]
     (let [theme @(rf/subscribe [:schnaq.selected/theme])
           activation-phrase (or (:theme.texts/activation theme)
                                 (labels :schnaq.activation/phrase))
           background-image-url (or (:theme.images/header theme) default-activation-background)]
-      [:div {:class col-class}
-       [motion-comp/fade-in-and-out
-        [:section.activation
-         {:class background-class
-          :style (when-not (= "bg-transparent" background-class) {:background-image (gstring/format "url('%s')" background-image-url)})}
-         [:div.d-flex
-          [:h4.mx-auto.mt-3
-           (gstring/format (labels :schnaq.activation/title)
-                           activation-phrase)]
-          [activation-dropdown-menu]]
-         [:div.mx-auto.display-3 (:activation/count activation)]
-         [schnaqqi-walk]
-         [:div.text-center
-          [:button.btn.btn-lg.btn-secondary
-           {:class button-class
-            :on-click (fn [_e]
-                        (rf/dispatch [:activation/activate])
-                        (matomo/track-event "Active User", "Action", "Use Quick-Activation"))}
-           activation-phrase
-           "!"]]]
-        motion-comp/card-fade-in-time]])))
+      [motion-comp/fade-in-and-out
+       [:section.activation
+        {:class background-class
+         :style (when-not (= "bg-transparent" background-class) {:background-image (gstring/format "url('%s')" background-image-url)})}
+        [:div.d-flex
+         [:h4.mx-auto.mt-3
+          (gstring/format (labels :schnaq.activation/title)
+                          activation-phrase)]
+         [activation-dropdown-menu]]
+        [:div.mx-auto.display-3 (:activation/count activation)]
+        [schnaqqi-walk]
+        [:div.text-center
+         [:button.btn.btn-lg.btn-secondary
+          {:class button-class
+           :on-click (fn [_e]
+                       (rf/dispatch [:activation/activate])
+                       (matomo/track-event "Active User", "Action", "Use Quick-Activation"))}
+          activation-phrase
+          "!"]]]
+       motion-comp/card-fade-in-time])))
 
 (defn activation-event-view
   "Activation card for q-and-a view."
@@ -111,8 +110,7 @@
   []
   [activation-view
    nil
-   "w-75"
-   "statement-column"])
+   "w-75"])
 
 (defn activation-tab
   "Activation menu to create and reset the current activation."

@@ -31,16 +31,19 @@
 (defn- discussion-view
   "Displays a history  and input field on the left and conclusions in its center"
   []
-  [:div.container-fluid.px-0.px-md-3
-   [:div.row
-    [:div.col-md-12.col-xxl-8.py-0.pt-md-3
-     [:div.d-none.d-md-block [elements/action-view]]]]
-   [:div.d-md-none [elements/action-view]]
-   [cards/conclusion-cards-list]
-   [:div.d-md-none [elements/history-view]]
-   [:div.mx-auto.col-11.col-md-12.col-xl-10
-    [elements/show-how-to]]
-   [:div.d-none.d-md-block [elements/history-view]]])
+  [:<>
+   [:div.container-fluid.px-0.px-md-3
+    [:div.row
+     [:div.col-md-12.col-xxl-8.py-0.pt-md-3
+      [:div.d-none.d-md-block [elements/discussion-options-navigation]]]]
+    [:div.d-md-none [elements/discussion-options-navigation]]]
+   [:div.container
+    [cards/card-container]]
+   [:div.container-fluid.px-0.px-md-3
+    [:div.d-md-none [elements/history-view]]
+    [:div.mx-auto.col-11.col-md-12.col-xl-10
+     [elements/show-how-to]]
+    [:div.d-none.d-md-block [elements/history-view]]]])
 
 (rf/reg-sub
  :discussion.statements/show

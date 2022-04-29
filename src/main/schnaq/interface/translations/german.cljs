@@ -51,7 +51,7 @@
    :startpage/description "Die sicherste Software für Interaktion mit deinem Publikum bei live und virtuellen Events. Interagiere mit dem Publikum durch Q&A, Umfragen… Probiere es jetzt kostenfrei aus!"
    :startpage/hook "Fragen sammeln, Publikum verstehen, Wissen teilen. Schnaq macht da weiter, wo andere aufhören!"
    :schnaq.startpage.cta/button "Jetzt kostenfrei schnaq erstellen"
-   :startpage.social-proof/teaser "Mit einem Klick gehörst du zu den hunderten Menschen, die schnaq nutzen 👋"
+   :startpage.social-proof/teaser "Mit einem Klick gehörst du zu den tausenden Menschen, die schnaq nutzen 👋"
    :startpage.social-proof/companies "Mit denen haben wir schon geschnaqqt"
 
    :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
@@ -254,7 +254,7 @@
    :statement/discuss "Diskutieren"
    :statement/replies "Antworten"
    :statement/new "Absenden"
-   :statement.new/placeholder "Dein Beitrag"
+   :statement.new/placeholder "Dein Beitrag / Frage"
    :statement.edit.send.failure/title "Änderung nicht gespeichert"
    :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."
    :statement.edit/label "Beitrag bearbeiten"
@@ -270,13 +270,10 @@
    :statement.locked/tooltip "Dieser Beitrag kann nicht beantwortet werden"
    :statement.pinned/tooltip "Dieser Beitrag ist angepinnt"
 
-   :schnaq.input-type/question "Frage"
-   :schnaq.input-type/answer "Antwort"
+   :schnaq.input-type/statement "Beitrag"
    :schnaq.input-type/poll "Umfrage"
    :schnaq.input-type/activation "Aktivierung"
    :schnaq.input-type/word-cloud "Wortwolke"
-   :schnaq.input-type/coming-soon "Bald verfügbar"
-   :schnaq.input-type/not-admin "Nur für Moderatoren"
    :schnaq.input-type/pro-only "Nur für Pro User"
 
    ;; Poll feature

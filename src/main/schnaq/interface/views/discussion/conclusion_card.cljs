@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [clj-fuzzy.metrics :as clj-fuzzy]
+  (:require ["react-smart-masonry" :default Masonry]
+            [clj-fuzzy.metrics :as clj-fuzzy]
             [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [re-frame.core :as rf]
@@ -9,6 +10,7 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.schnaq :as sc]
+            [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.markdown :as md]
@@ -145,7 +147,8 @@
        [card-highlighting statement "me-2 highlight-card-reduced"]
        [:div.card-view.card-body.p-2
         [:div.d-flex.justify-content-start.pt-2
-         [user/user-info statement 25 "w-100"]
+         [:div.small
+          [user/user-info statement 20 "w-100"]]
          [badges/edit-statement-dropdown-menu statement]]
         [:div.text-typography
          [truncated-content/statement statement]]
@@ -205,9 +208,9 @@
          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
           (labels :discussion.badges/new)])
        [:div.pt-2.d-flex.px-3
-        [:div.me-auto [user/user-info statement 32 "w-100"]]
+        [:div.me-auto.small [user/user-info statement 20 "w-100"]]
         [:div.d-flex.flex-row.align-items-center.ms-auto
-         (when-not @(rf/subscribe [:schnaq.routes/starting?])
+         (when-not @(rf/subscribe [:routes.schnaq/start?])
            [mark-as-answer-button statement])
          [badges/edit-statement-dropdown-menu statement]]]
        [:div.my-4]
@@ -251,7 +254,7 @@
 (defn- current-topic-badges
   "Badges which are shown if a statement is selected."
   [schnaq statement]
-  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])]
+  (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])]
     [:div.ms-auto
      (if starting-route?
        [badges/static-info-badges-discussion schnaq]
@@ -261,14 +264,14 @@
         [badges/edit-statement-dropdown-menu statement]])]))
 
 (defn- title-view [statement]
-  (let [starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+  (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
         title [md/as-markdown (:statement/content statement)]
         edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if edit-active?
       (if starting-route?
         [edit/edit-card-discussion statement]
         [edit/edit-card-statement (:db/id statement)])
-      [:h2.h6 title])))
+      [:h2.fs-6 title])))
 
 (defn- topic-bubble-view []
   (let [{:discussion/keys [title author created-at] :as schnaq} @(rf/subscribe [:schnaq/selected])
@@ -276,12 +279,13 @@
                  :statement/content title
                  :statement/author author
                  :statement/created-at created-at}
-        starting-route? @(rf/subscribe [:schnaq.routes/starting?])
+        starting-route? @(rf/subscribe [:routes.schnaq/start?])
         statement-or-topic (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))]
     [motion/move-in :left
-     [:div.p-2
-      [:div.d-flex.flex-wrap.mb-4
-       [user/user-info statement-or-topic 32 nil]
+     [:<>
+      [:div.d-flex.flex-wrap.mb-3
+       [:div.small
+        [user/user-info statement-or-topic 20 nil]]
        [current-topic-badges schnaq statement-or-topic]]
       [title-view statement-or-topic]]]))
 
@@ -304,12 +308,31 @@
          [:p.mx-3 (labels :schnaq.search/new-search-title)]
          [:p.mx-3 (str (count search-results) " " (labels :schnaq.search/results))])]]]))
 
-(defn- topic-or-search-content []
-  (let [search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
-    [:div.mb-4
-     (if search-inactive?
-       [topic-bubble-view]
-       [search-info])]))
+(defn info-card
+  "Contains information about the viewed schnaq or focus statement. Depending on the level of view."
+  []
+  (let [focus-statement @(rf/subscribe [:schnaq.statements/focus])
+        answered? (seq @(rf/subscribe [:statements/answers (:db/id focus-statement)]))
+        search-inactive? (cstring/blank? @(rf/subscribe [:schnaq.search.current/search-string]))]
+    [motion/fade-in-and-out
+     [:section.info-card
+      [:div.d-flex.flex-row
+       (when answered? [:div.highlight-card-answered])
+       [:div.card-view.card-body
+        (if search-inactive?
+          [topic-bubble-view]
+          [search-info])]]]
+     motion/card-fade-in-time]))
+
+(defn- deactivated-selection-card-tab
+  "A single tab that is deactivated."
+  [tab-content]
+  [:li.nav-item
+   [:button.nav-link.text-muted
+    {:role "button"}
+    [tooltip/text
+     (labels :schnaq.input-type/pro-only)
+     tab-content]]])
 
 (defn selection-card
   "Dispatch the different input options, e.g. questions, poll or activation.
@@ -327,75 +350,54 @@
             pro-user? @(rf/subscribe [:user/pro-user?])
             admin-access? @(rf/subscribe [:schnaq.current/admin-access])
             read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-            disabled-tooltip-key (cond
-                                   (not pro-user?) :schnaq.input-type/pro-only
-                                   (not admin-access?) :schnaq.input-type/not-admin
-                                   :else :schnaq.input-type/coming-soon)
-            top-level? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-            focus-statement @(rf/subscribe [:schnaq.statements/focus])
-            answered? (seq @(rf/subscribe [:statements/answers (:db/id focus-statement)]))]
+            top-level? @(rf/subscribe [:routes.schnaq/start?])]
         [motion/fade-in-and-out
          [:section.selection-card
-          [:div.d-flex.flex-row
-           (when answered? [:div.highlight-card-answered])
-           [:div.card-view.card-body
-            [topic-or-search-content]
-            (when-not read-only?
-              [:ul.selection-tab.nav.nav-tabs
-               [:li.nav-item
-                [:button.nav-link {:class (active-class :question)
-                                   :role "button"
-                                   :on-click #(on-click :question)}
-                 [iconed-heading :info-question (if top-level? :schnaq.input-type/question :schnaq.input-type/answer)]]]
-               (when top-level?
-                 (if (and pro-user? admin-access?)
-                   [:<>
-                    [:li.nav-item
-                     [:button.nav-link
-                      {:class (active-class :poll)
-                       :role "button"
-                       :on-click #(on-click :poll)}
-                      poll-tab]]
-                    [:li.nav-item
-                     [:button.nav-link
-                      {:class (active-class :activation)
-                       :role "button"
-                       :on-click #(on-click :activation)}
-                      activation-tab]]
-                    [:li.nav-item
-                     [:button.nav-link
-                      {:class (active-class :word-cloud)
-                       :role "button"
-                       :on-click #(on-click :word-cloud)}
-                      word-cloud-tab]]]
-                   [:<>
-                    [:li.nav-item
-                     [:button.nav-link.text-muted
-                      {:role "button"}
-                      [tooltip/text (labels disabled-tooltip-key) poll-tab]]]
-                    [:li.nav-item
-                     [:button.nav-link.text-muted
-                      {:role "button"}
-                      [tooltip/text (labels disabled-tooltip-key) activation-tab]]]
-                    [:li.nav-item
-                     [:button.nav-link.text-muted
-                      {:role "button"}
-                      [tooltip/text (labels disabled-tooltip-key) word-cloud-tab]]]]))])
-            (case @selected-option
-              :question [input-form-or-disabled-alert]
-              :poll [poll/poll-form]
-              :activation [activation/activation-tab]
-              :word-cloud [wordcloud-card/wordcloud-tab])]]]
+          [:div.card-view.card-body
+           (when top-level?
+             (when (and (not read-only?) admin-access?)
+               [:ul.selection-tab.nav.nav-tabs
+                [:li.nav-item
+                 [:button.nav-link {:class (active-class :question)
+                                    :role "button"
+                                    :on-click #(on-click :question)}
+                  [iconed-heading :info-question :schnaq.input-type/statement]]]
+                (if pro-user?
+                  [:<>
+                   [:li.nav-item
+                    [:button.nav-link
+                     {:class (active-class :poll)
+                      :role "button"
+                      :on-click #(on-click :poll)}
+                     poll-tab]]
+                   [:li.nav-item
+                    [:button.nav-link
+                     {:class (active-class :activation)
+                      :role "button"
+                      :on-click #(on-click :activation)}
+                     activation-tab]]
+                   [:li.nav-item
+                    [:button.nav-link
+                     {:class (active-class :word-cloud)
+                      :role "button"
+                      :on-click #(on-click :word-cloud)}
+                     word-cloud-tab]]]
+                  [:<>
+                   [deactivated-selection-card-tab poll-tab]
+                   [deactivated-selection-card-tab activation-tab]
+                   [deactivated-selection-card-tab word-cloud-tab]])]))
+           (case @selected-option
+             :question [input-form-or-disabled-alert]
+             :poll [poll/poll-form]
+             :activation [activation/activation-tab]
+             :word-cloud [wordcloud-card/wordcloud-tab])]]
          motion/card-fade-in-time]))))
-
-(defn- delay-fade-in-for-subsequent-content [index]
-  (+ (/ (inc index) 20) motion/card-fade-in-time))
 
 (defn- some-levenshtein
   "Takes a list of strings and is truthy if the target-string matches any of the tokens
   without breaking the max levenshtein-distance."
   [target-string tokens]
-  (some #(> 2 (clj-fuzzy/levenshtein target-string %)) tokens))
+  (some #(> 3 (clj-fuzzy/levenshtein target-string %)) tokens))
 
 (defn- score-hit
   "Returns a numerical score how many tokens of `token-list` are a match for the
@@ -409,15 +411,14 @@
 
 (defn- statement-list-item
   "The highest part of a statement-list. Knows when to show itself and when not."
-  [statement-id index]
+  [statement-id]
   (let [answered-only? @(rf/subscribe [:filters/answered? true])
         unanswered-only? @(rf/subscribe [:filters/answered? false])
         answers @(rf/subscribe [:statements/answers statement-id])
         item-component
-        [:div.statement-column
-         [motion/fade-in-and-out
-          [statement-card->editable-card statement-id [statement-card statement-id]]
-          (delay-fade-in-for-subsequent-content index)]]]
+        [motion/fade-in-and-out
+         [statement-card->editable-card statement-id [statement-card statement-id]]
+         motion/card-fade-in-time]]
     (if (or answered-only? unanswered-only?)
       ;; Other filters are handled in statement-list-generator
       (when (or (and answered-only? (seq answers))
@@ -453,32 +454,36 @@
     (for [index (range (count sorted-statements))
           :let [statement-id (nth sorted-statements index)]]
       (with-meta
-        [statement-list-item statement-id index]
+        [statement-list-item statement-id]
         {:key statement-id}))))
 
-(defn conclusion-cards-list
-  "Prepare a list of statements and group them together."
+(defn card-container
+  "Prepare a list of visible cards and group them together."
   []
   (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (statements-list)
-        top-level? @(rf/subscribe [:schnaq.routes/starting?])
+        top-level? @(rf/subscribe [:routes.schnaq/start?])
         schnaq-loading? @(rf/subscribe [:loading/schnaq?])
         activation (when top-level? [activation/activation-card])
-        poll (when top-level? (poll/poll-list))
+        polls (when top-level? (poll/poll-list))
         wordcloud (when top-level? [wordcloud-card/wordcloud-card])
         access-code @(rf/subscribe [:schnaq.selected/access-code])
         question-input @(rf/subscribe [:schnaq.question.input/current])
-        cards (if (not-empty question-input)
-                [statements activation poll wordcloud]
-                [activation poll wordcloud statements])]
+        show-call-to-share? (and top-level? access-code
+                                 (not (or search? (seq statements) (seq polls))))
+        question-first? (not-empty question-input)]
     (if schnaq-loading?
       [loading/loading-card]
-      (cond->
-        (apply conj
-               [:div.row
-                [:div.statement-column
-                 [selection-card]]]
-               cards)
-        (and top-level? access-code
-             (not (or search? (seq statements) (seq poll))))
-        (conj [call-to-share])))))
+      [:div.row
+       (cond->
+        [:> Masonry
+         {:breakpoints config/breakpoints
+          :columns {:xs 1 :lg 2}
+          :gap 10}
+         [:div
+          [info-card]
+          [selection-card]]]
+         question-first? (conj statements activation polls wordcloud)
+         (not question-first?) (conj activation polls wordcloud statements))
+       (when show-call-to-share?
+         [call-to-share])])))

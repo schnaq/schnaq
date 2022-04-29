@@ -36,6 +36,12 @@
  (fn [current-route]
    (canonical-route-name (get-in current-route [:data :name]))))
 
+(rf/reg-sub
+ :routes.schnaq/start?
+ :<- [:navigation/current-route-name]
+ (fn [route-name _]
+   (= :routes.schnaq/start route-name)))
+
 (rf/reg-event-fx
  :navigation/navigate
  (fn [{:keys [db]} [_ route & rest]]
