@@ -27,10 +27,10 @@
   (let [[editor] (useLexicalComposerContext)
         toolbarRef (useRef nil)
         [blockType setBlockType] (useState "paragraph")
-        [isBold setIsBold] (useState false)
-        [isItalic setIsItalic] (useState false)
-        [isUnderline setIsUnderline] (useState false)
-        [IsStrikethrough setIsStrikethrough] (useState false)
+        [bold? setIsBold] (useState false)
+        [italic? setIsItalic] (useState false)
+        [underline? setIsUnderline] (useState false)
+        [strike-through? setIsStrikethrough] (useState false)
         updateToolbar (useCallback (fn []
                                      (let [selection ($getSelection)]
                                        (when ($isRangeSelection selection)
@@ -63,17 +63,17 @@
     [:div.toolbar
      [:button.toolbar-item.spaced
       {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "bold")
-       :class (when isBold "active")}
+       :class (when bold? "active")}
       [icon :bold]]
      [:button.toolbar-item.spaced
       {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "italic")
-       :class (when isItalic "active")}
+       :class (when italic? "active")}
       [icon :italic]]
      [:button.toolbar-item.spaced
       {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "underline")
-       :class (when isUnderline "active")}
+       :class (when underline? "active")}
       [icon :underline]]
      [:button.toolbar-item.spaced
       {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "strikethrough")
-       :class (when IsStrikethrough "active")}
+       :class (when strike-through? "active")}
       [icon :strikethrough]]]))
