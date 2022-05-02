@@ -270,23 +270,24 @@
      [feature-row :pricing.table.interaction.word-cloud no-feature feature-included]
      [feature-row :pricing.table.interaction.rankings no-feature feature-included]
      [:br]
-     [feature-group "Sicherheit und Datenschutz"]
-     [feature-row "DSGVO Konformes Datenhandling" feature-included feature-included]
-     [feature-row "Hosting in Deutscher Cloud" feature-included feature-included]
-     [feature-row "Anonyme Teilnahme Möglich" feature-included feature-included]
-     [feature-row "Teilnahme per Code" feature-included feature-included]
+     [feature-group :pricing.table.security/heading]
+     [feature-row :pricing.table.security.gdrp feature-included feature-included]
+     [feature-row :pricing.table.security.germany feature-included feature-included]
+     [feature-row :pricing.table.security.anon feature-included feature-included]
+     [feature-row :pricing.table.security.code feature-included feature-included]
      [:br]
-     [feature-group "Weiterführende Features"]
-     [feature-row "Personalisiertes Design" no-feature feature-included]
-     [feature-row "Analyse-Dashboard" no-feature feature-included]
-     [feature-row "Zusammenfassungs-K.I." no-feature feature-included]
-     [feature-row "Kollaborative Moderation" no-feature feature-included]
+     [feature-group :pricing.table.advanced/heading]
+     [feature-row :pricing.table.advanced.theming no-feature feature-included]
+     [feature-row :pricing.table.advanced.analytics no-feature feature-included]
+     [feature-row :pricing.table.advanced.summary no-feature feature-included]
+     [feature-row :pricing.table.advanced.moderation no-feature feature-included]
      [:br]
-     [feature-group "Support"]
-     [feature-row "Mail-Support" feature-included feature-included]
-     [feature-row "Priority-Support" no-feature feature-included]]
+     [feature-group :pricing.table.support/heading]
+     [feature-row :pricing.table.support.mail feature-included feature-included]
+     [feature-row :pricing.table.support.priority no-feature feature-included]]
     [:tfoot
-     [feature-row "" [free-tier-cta-button] [pro-tier-cta-button]]]]])
+     [:tr
+      [:th ""] [:th [free-tier-cta-button]] [:th [pro-tier-cta-button]]]]]])
 
 (defn- pricing-page
   "A full page depicting our pricing and related items."
