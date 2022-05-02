@@ -94,6 +94,19 @@
             [icon :check/normal (str class " me-2")] feature]
            {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))]]]))
 
+(defn- free-tier-cta-button
+  "Button to register a free account."
+  []
+  [cta-button
+   (if @(rf/subscribe [:user/authenticated?])
+     [:<>
+      (when-not @(rf/subscribe [:user/pro-user?])
+        [:span.small (labels :pricing.free-tier/call-to-action-preamble) [:br]])
+      (labels :pricing.free-tier/call-to-action-registered)]
+     (labels :pricing.free-tier/call-to-action))
+   "btn-primary"
+   (navigation/href :routes.schnaq/create)])
+
 (defn- free-tier-card
   "Display the free tier card."
   []
@@ -107,15 +120,7 @@
      (starter-features)
      [(labels :pricing.free-tier/for-free)])
     "text-primary")
-   [cta-button
-    (if @(rf/subscribe [:user/authenticated?])
-      [:<>
-       (when-not @(rf/subscribe [:user/pro-user?])
-         [:span.small (labels :pricing.free-tier/call-to-action-preamble) [:br]])
-       (labels :pricing.free-tier/call-to-action-registered)]
-      (labels :pricing.free-tier/call-to-action))
-    "btn-primary"
-    (navigation/href :routes.schnaq/create)]])
+   [free-tier-cta-button]])
 
 (defn pro-tier-cta-button
   "Show button to checkout pro."
@@ -207,6 +212,62 @@
     (labels :pricing.one-time/contact) " "
     [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com"]]])
 
+(defn- feature-row
+  "A single row for the features of the different schnaq plans."
+  [name free pro]
+  [:tr
+   [:td.align-middle name]
+   [:td.text-center.align-middle free]
+   [:td.text-center.align-middle pro]])
+
+(defn- feature-details
+  "A table displaying all features in detail."
+  []
+  [:div.table-responsive
+   [:table.table.table-striped.table-borderless
+    [:thead
+     [:tr
+      [:th ""]
+      [:th.text-center "schnaq Free"]
+      [:th.text-center "schnaq Pro"]]]
+    [:tbody
+     [feature-row [:span.fw-bold "Kernprodukt"]]
+     [feature-row "Schnaqs" "10 aktive" [icon :infty "text-primary"]]
+     [feature-row "Teilnehmer:innen" "100 pro schnaq" "250 pro schnaq"]
+     [feature-row "Mehr Teilnehmer:innen" [icon :cross "text-warning"] "Kontaktiere Sales für mehr"]
+     [feature-row "Aktivierungen" "1 pro schnaq" [icon :infty "text-primary"]]
+     [:br]
+     [feature-row [:span.fw-bold "Diskussionen, Fragen & Antworten"]]
+     [feature-row "Intelligentes Q&A" "Bis zu 50 Fragen" [icon :infty "text-primary"]]
+     [feature-row "Diskussionen" "Bis zu 50 Beiträge" [icon :infty "text-primary"]]
+     [feature-row "Moderationsfunktionen" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
+     [feature-row "Antworten" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
+     [feature-row "Automatisierte Fragenerkennung" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
+     [feature-row "Automatische Mindmaps" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
+     [:br]
+     [feature-row [:span.fw-bold "Interaktion"]]
+     [feature-row "Schnellumfragen" "1 pro schnaq" [icon :infty "text-primary"]]
+     [feature-row "Schnellaktivierung" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
+     [feature-row "Wortwolken" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
+     [feature-row "Rankings" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
+     [:br]
+     [feature-row [:span.fw-bold "Sicherheit und Datenschutz"]]
+     [feature-row "DSGVO Konformes Datenhandling" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
+     [feature-row "Hosting in Deutscher Cloud" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
+     [feature-row "Anonyme Teilnahme Möglich" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
+     [feature-row "Teilnahme per Code" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
+     [:br]
+     [feature-row [:span.fw-bold "Weiterführende Features"]]
+     [feature-row "Personalisiertes Design" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
+     [feature-row "Analyse-Dashboard" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
+     [feature-row "Zusammenfassungs-K.I." [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
+     [feature-row "Kollaborative Moderation" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
+     [:br]
+     [feature-row [:span.fw-bold "Support"]]
+     [feature-row "Mail-Support" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
+     [feature-row "Priority-Support" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
+     [feature-row "" [free-tier-cta-button] [pro-tier-cta-button]]]]])
+
 (defn- pricing-page
   "A full page depicting our pricing and related items."
   []
@@ -219,7 +280,8 @@
     [:div.container
      [intro]
      [tier-cards]
-     [one-time-information]]
+     [one-time-information]
+     [feature-details]]
     [:div.container-fluid.pt-5
      [faq]]
     [:div.container
