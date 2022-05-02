@@ -272,7 +272,8 @@
      [:br]
      [feature-group "Support"]
      [feature-row "Mail-Support" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
-     [feature-row "Priority-Support" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
+     [feature-row "Priority-Support" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]]
+    [:tfoot
      [feature-row "" [free-tier-cta-button] [pro-tier-cta-button]]]]])
 
 (defn- pricing-page
