@@ -230,7 +230,7 @@
   "A subheading in a table grouping multiple features."
   [group]
   [:tr
-   [:td.align-middle.table-transparent
+   [:td.align-middle.table-transparent.pt-4
     [:span.fw-bold.fs-5 (labels group)]]])
 
 (defonce no-feature [icon :cross "text-warning"])
@@ -252,7 +252,6 @@
      [feature-row :pricing.table.core.participants "100" "250"]
      [feature-row :pricing.table.core.additional no-feature (labels :pricing.table.contact/sales)]
      [feature-row :pricing.table.core.activations "1" (labels :pricing.table.number/infinite)]
-     [:br]
      [feature-group :pricing.table.qa/heading]
      [feature-row :pricing.table.qa.intelligent-qa "50" (labels :pricing.table.number/infinite)]
      [feature-row :pricing.table.qa.discussions "50" (labels :pricing.table.number/infinite)]
@@ -260,25 +259,21 @@
      [feature-row :pricing.table.qa.answers feature-included feature-included]
      [feature-row :pricing.table.qa.automatic-answers feature-included feature-included]
      [feature-row :pricing.table.qa.mindmaps feature-included feature-included]
-     [:br]
      [feature-group :pricing.table.interaction/heading]
      [feature-row :pricing.table.interaction.polls "1" (labels :pricing.table.number/infinite)]
      [feature-row :pricing.table.interaction.activation feature-included feature-included]
      [feature-row :pricing.table.interaction.word-cloud no-feature feature-included]
      [feature-row :pricing.table.interaction.rankings no-feature feature-included]
-     [:br]
      [feature-group :pricing.table.security/heading]
      [feature-row :pricing.table.security.gdrp feature-included feature-included]
      [feature-row :pricing.table.security.germany feature-included feature-included]
      [feature-row :pricing.table.security.anon feature-included feature-included]
      [feature-row :pricing.table.security.code feature-included feature-included]
-     [:br]
      [feature-group :pricing.table.advanced/heading]
      [feature-row :pricing.table.advanced.theming no-feature feature-included]
      [feature-row :pricing.table.advanced.analytics no-feature feature-included]
      [feature-row :pricing.table.advanced.summary no-feature feature-included]
      [feature-row :pricing.table.advanced.moderation no-feature feature-included]
-     [:br]
      [feature-group :pricing.table.support/heading]
      [feature-row :pricing.table.support.mail feature-included feature-included]
      [feature-row :pricing.table.support.priority no-feature feature-included]]
