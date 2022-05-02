@@ -220,7 +220,7 @@
    [:td.align-middle (labels (keyword (name feature-labels-ns) "name"))
     [tooltip/text
      (labels (keyword feature-labels-ns "description"))
-     [:span.small " " [icon :info-question]]
+     [:span [icon :info-question "small ms-1" {:style {:cursor :help}}]]
      {:placement "right"
       :theme "dark"}]]
    [:td.text-center.align-middle free]
