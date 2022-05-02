@@ -78,7 +78,7 @@
   "Build a single tier card."
   [title subtitle icon-name price description features cta-button options]
   (let [title-label (labels title)]
-    [:article.card.shadow-sm.mb-2 options
+    [:article.card.shadow-sm.mb-2.h-100 options
      [:div.card-body
       [:div.card-infos
        [:h3.card-title.text-center title-label]
@@ -177,8 +177,8 @@
   (let [classes "col-12 col-lg-4"]
     [:section.row
      [:div {:class classes}
-      [free-tier-card]
-      [:p.p-2.text-muted (labels :pricing.free-tier/beta-notice)]]
+      [:div [free-tier-card]
+       [:p.p-2.text-muted (labels :pricing.free-tier/beta-notice)]]]
      [:div {:class classes} [pro-tier-card]]
      [:div {:class classes} [enterprise-tier-card]]]))
 
