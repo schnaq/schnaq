@@ -22,8 +22,6 @@
   [label-keyword]
   (rest (labels label-keyword)))
 
-(defn- coming-soon []
-  (label-builder :pricing.features/upcoming))
 (defn- starter-features []
   (label-builder :pricing.features/free))
 (defn- pro-features []
@@ -45,7 +43,7 @@
   [price-class]
   (let [pro-price @(rf/subscribe [:pricing/pro-tier])
         currency-symbol @(rf/subscribe [:user.currency/symbol])
-        formatted-price (if (js/Number.isInteger pro-price) "%d %s" "%.2f %s")]
+        formatted-price (if (.isInteger js/Number pro-price) "%d %s" "%.2f %s")]
     (if (and pro-price (not (zero? pro-price)))
       [:<>
        [:span {:class price-class} (gstring/format formatted-price pro-price currency-symbol)]
@@ -70,15 +68,6 @@
   [:section.text-center.pb-5
    [:h3 (labels :pricing.intro/heading)]])
 
-(defn- mark-explanation
-  "Explain the check marks."
-  []
-  [:section.ps-4.pt-2
-   [:p.h6 [icon :check/normal "text-primary pe-2" {:size "lg"}]
-    (labels :pricing.features/implemented)]
-   [:p.h6 [icon :check/normal "text-muted pe-2" {:size "lg"}]
-    (labels :pricing.features/to-be-implemented)]])
-
 (defn- cta-button
   "Component to build the call-to-action button in a tier card."
   [label class fn]
@@ -87,7 +76,7 @@
 
 (defn- tier-card
   "Build a single tier card."
-  [title subtitle icon-name price description features upcoming-features cta-button options]
+  [title subtitle icon-name price description features cta-button options]
   (let [title-label (labels title)]
     [:article.card.shadow-sm.mb-2 options
      [:div.card-body
@@ -100,11 +89,6 @@
       cta-button
       [:ul.pricing-feature-list
        (for [[feature class] features]
-         (with-meta
-           [:li.list-group-item
-            [icon :check/normal (str class " me-2")] feature]
-           {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))
-       (for [[feature class] (add-class-to-feature upcoming-features "text-muted")]
          (with-meta
            [:li.list-group-item
             [icon :check/normal (str class " me-2")] feature]
@@ -123,7 +107,6 @@
      (starter-features)
      [(labels :pricing.free-tier/for-free)])
     "text-primary")
-   nil
    [cta-button
     (if @(rf/subscribe [:user/authenticated?])
       [:<>
@@ -159,7 +142,6 @@
      [(gstring/format (labels :pricing.features/number-of-users) config/max-concurrent-users-pro-tier)]
      (pro-features))
     "text-primary")
-   (coming-soon)
    (if @(rf/subscribe [:user/pro-user?])
      [:div.alert.alert-info.text-center
       [:p (labels :pricing.pro-tier/already-subscribed)]
@@ -189,7 +171,6 @@
      [(labels :pricing.features.number-of-users/unlimited)]
      (enterprise-features))
     "text-primary")
-   nil
    [:div.text-center.py-4 [enterprise-cta-button]]])
 
 (defn- tier-cards []
@@ -197,8 +178,7 @@
     [:section.row
      [:div {:class classes}
       [free-tier-card]
-      [:p.p-2.text-muted (labels :pricing.free-tier/beta-notice)]
-      [mark-explanation]]
+      [:p.p-2.text-muted (labels :pricing.free-tier/beta-notice)]]
      [:div {:class classes} [pro-tier-card]]
      [:div {:class classes} [enterprise-tier-card]]]))
 

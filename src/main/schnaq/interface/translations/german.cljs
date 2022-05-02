@@ -1015,15 +1015,12 @@
    :pricing.enterprise-tier/description "Optimiere die Kommunikation deines gesamten Unternehmens. Spezielle Wünsche und Anforderungen sind hier kein Problem."
    :pricing.enterprise-tier/call-to-action "Anfrage senden"
    :pricing.enterprise-tier/on-request "Auf Anfrage"
-   :pricing.features/implemented "Bereits implementiert"
-   :pricing.features/to-be-implemented "Bald verfügbar"
    :pricing.features/number-of-users "Bis zu %d Personen im Publikum"
    :pricing.features.number-of-users/unlimited "Unbeschränktes Publikum"
    :pricing.features/from-previous "Alles vom vorherigen Plan"
    :pricing.features/free ["In Deutschland gehostet" "Unendlich viele schnaqs" "Diskussionen erstellen" "Fragen und Antworten Modus" "Automatische Mindmap" "Teilbar per Link, QR-Code und Zahlencode" "Text- und Bild-Export" "E-Mail Support"]
    :pricing.features/pro ["Zuschauerumfragen" "Schnaq Schnellaktivierung" "Persönliches Design / Branding" "Persönlicher Bereich" "Analyse-Dashboard" "K.I. Zusammenfassungen" "Moderationsoptionen" "Support Priorität"]
    :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling" "On-Premise" "24/7 Telefonsupport"]
-   :pricing.features/upcoming ["K.I. Stimmungsanalyse" "Integrationen"]
    :pricing.schnaq.pro.yearly/payment-method "jährliche Zahlweise"
    :pricing.schnaq.pro.yearly/cancel-period "jährlich kündbar"
    :pricing.units/per-month "/ Monat"
