@@ -248,10 +248,7 @@
       [:th.text-center (labels :pricing.table.plans/pro)]]]
     [:tbody
      [feature-group :pricing.table.core/heading]
-     [feature-row
-      :pricing.table.core.schnaqs
-      (labels :pricing.table.core.schnaqs/free)
-      (labels :pricing.table.number/infinite)]
+     [feature-row :pricing.table.core.schnaqs "10" (labels :pricing.table.number/infinite)]
      [feature-row :pricing.table.core.participants "100" "250"]
      [feature-row :pricing.table.core.additional no-feature (labels :pricing.table.contact/sales)]
      [feature-row :pricing.table.core.activations "1" (labels :pricing.table.number/infinite)]

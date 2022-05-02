@@ -1040,7 +1040,6 @@
    :pricing.table.core/heading "Kernprodukt"
    :pricing.table.core.schnaqs/name "Schnaqs"
    :pricing.table.core.schnaqs/description "Anzahl aktiver schnaqs pro Account"
-   :pricing.table.core.schnaqs/free "10"
    :pricing.table.core.participants/name "Teilnehmer:innen"
    :pricing.table.core.participants/description "Anzahl an verschiedenen Geräten pro schnaq"
    :pricing.table.core.additional/name "Mehr Teilnehmer:innen"
