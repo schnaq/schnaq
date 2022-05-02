@@ -10,6 +10,7 @@
             [schnaq.interface.components.plugins.on-change :refer [on-change-plugin]]
             [schnaq.interface.components.plugins.toolbar :refer [toolbar-plugin]]
             [schnaq.interface.components.plugins.tree-view :refer [tree-view-plugin]]
+            [schnaq.interface.components.tiptap :as tiptap]
             [taoensso.timbre :as log]))
 
 (def theme
@@ -111,7 +112,6 @@
       (let [initial-config #js {:theme theme :onError on-error}]
         [:<>
          [:h2 "RichTextEditor"]
-         (.log js/console @content)
          [:> LexicalComposer {:initialConfig initial-config}
           [:div.editor-container
            [:f> toolbar-plugin]
@@ -125,6 +125,7 @@
 
 (defn- view []
   [:<>
+   [tiptap/page]
    [Editor]
    [RichTextEditor]])
 
