@@ -1033,6 +1033,18 @@
    :pricing.one-time/offer "Erhalte einen Pro Account für eine Veranstaltung mit bis zu %d Leuten für %d € zzgl. MwSt.*"
    :pricing.one-time/contact "Schreibe uns dazu eine Mail an"
 
+   :pricing.table.plans/free "schnaq Free"
+   :pricing.table.plans/pro "schnaq Pro"
+   :pricing.table.core/heading "Kernprodukt"
+   :pricing.table.core.schnaqs/name "Schnaqs"
+   :pricing.table.core.schnaqs/description "Anzahl aktiver schnaqs pro Account"
+   :pricing.table.core.participants/name "Teilnehmer:innen"
+   :pricing.table.core.participants/description "Anzahl an verschiedenen Geräten pro schnaq"
+   :pricing.table.core.additional/name "Mehr Teilnehmer:innen"
+   :pricing.table.core.additional/description "Maximale Teilnehmer:innen, die dazu gebucht werden können"
+   :pricing.table.core.activations/name "Aktivierungen"
+   :pricing.table.core.activations/description "Methoden um dein Publikum zu aktivieren"
+
    :pricing.upgrade-nudge/button "Upgrade"
    :pricing.upgrade-nudge/tooltip "Upgrade deinen Account"
 

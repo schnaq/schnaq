@@ -10,6 +10,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.loading :refer [spinner-icon]]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.qa.inputs :as qanda]
@@ -214,9 +215,14 @@
 
 (defn- feature-row
   "A single row for the features of the different schnaq plans."
-  [feature free pro]
+  [feature-labels-ns free pro]
   [:tr
-   [:td.align-middle feature]
+   [:td.align-middle (labels (keyword (name feature-labels-ns) "name"))
+    [tooltip/text
+     (labels (keyword feature-labels-ns "description"))
+     [:span.small " " [icon :info-question]]
+     {:placement "right"
+      :theme "dark"}]]
    [:td.text-center.align-middle free]
    [:td.text-center.align-middle pro]])
 
@@ -225,7 +231,10 @@
   [group]
   [:tr
    [:td.align-middle.table-transparent
-    [:span.fw-bold.fs-5 group]]])
+    [:span.fw-bold.fs-5 (labels group)]]])
+
+(defonce no-feature [icon :cross "text-warning"])
+(defonce feature-included [icon :check/normal "text-primary"])
 
 (defn- feature-details
   "A table displaying all features in detail."
@@ -235,44 +244,44 @@
     [:thead
      [:tr
       [:th ""]
-      [:th.text-center "schnaq Free"]
-      [:th.text-center "schnaq Pro"]]]
+      [:th.text-center (labels :pricing.table.plans/free)]
+      [:th.text-center (labels :pricing.table.plans/pro)]]]
     [:tbody
-     [feature-group "Kernprodukt"]
-     [feature-row "Schnaqs" "10 aktive" "Unbegrenzt"]
-     [feature-row "Teilnehmer:innen" "100 pro schnaq" "250 pro schnaq"]
-     [feature-row "Mehr Teilnehmer:innen" [icon :cross "text-warning"] "Kontaktiere Sales für mehr"]
-     [feature-row "Aktivierungen" "1 pro schnaq" "Unbegrenzt"]
+     [feature-group :pricing.table.core/heading]
+     [feature-row :pricing.table.core.schnaqs "10 aktive" "Unbegrenzt"]
+     [feature-row :pricing.table.core.participants "100 pro schnaq" "250 pro schnaq"]
+     [feature-row :pricing.table.core.additional no-feature "Kontaktiere Sales für mehr"]
+     [feature-row :pricing.table.core.activations "1 pro schnaq" "Unbegrenzt"]
      [:br]
      [feature-group "Diskussionen, Fragen & Antworten"]
      [feature-row "Intelligentes Q&A" "Bis zu 50 Fragen" "Unbegrenzt"]
      [feature-row "Diskussionen" "Bis zu 50 Beiträge" "Unbegrenzt"]
-     [feature-row "Moderationsfunktionen" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
-     [feature-row "Antworten" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
-     [feature-row "Automatisierte Fragenerkennung" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
-     [feature-row "Automatische Mindmaps" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
+     [feature-row "Moderationsfunktionen" no-feature feature-included]
+     [feature-row "Antworten" feature-included feature-included]
+     [feature-row "Automatisierte Fragenerkennung" feature-included feature-included]
+     [feature-row "Automatische Mindmaps" feature-included feature-included]
      [:br]
      [feature-group "Interaktion"]
      [feature-row "Schnellumfragen" "1 pro schnaq" "Unbegrenzt"]
-     [feature-row "Schnellaktivierung" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
-     [feature-row "Wortwolken" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
-     [feature-row "Rankings" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
+     [feature-row "Schnellaktivierung" feature-included feature-included]
+     [feature-row "Wortwolken" no-feature feature-included]
+     [feature-row "Rankings" no-feature feature-included]
      [:br]
      [feature-group "Sicherheit und Datenschutz"]
-     [feature-row "DSGVO Konformes Datenhandling" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
-     [feature-row "Hosting in Deutscher Cloud" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
-     [feature-row "Anonyme Teilnahme Möglich" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
-     [feature-row "Teilnahme per Code" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
+     [feature-row "DSGVO Konformes Datenhandling" feature-included feature-included]
+     [feature-row "Hosting in Deutscher Cloud" feature-included feature-included]
+     [feature-row "Anonyme Teilnahme Möglich" feature-included feature-included]
+     [feature-row "Teilnahme per Code" feature-included feature-included]
      [:br]
      [feature-group "Weiterführende Features"]
-     [feature-row "Personalisiertes Design" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
-     [feature-row "Analyse-Dashboard" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
-     [feature-row "Zusammenfassungs-K.I." [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
-     [feature-row "Kollaborative Moderation" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
+     [feature-row "Personalisiertes Design" no-feature feature-included]
+     [feature-row "Analyse-Dashboard" no-feature feature-included]
+     [feature-row "Zusammenfassungs-K.I." no-feature feature-included]
+     [feature-row "Kollaborative Moderation" no-feature feature-included]
      [:br]
      [feature-group "Support"]
-     [feature-row "Mail-Support" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
-     [feature-row "Priority-Support" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]]
+     [feature-row "Mail-Support" feature-included feature-included]
+     [feature-row "Priority-Support" no-feature feature-included]]
     [:tfoot
      [feature-row "" [free-tier-cta-button] [pro-tier-cta-button]]]]])
 
