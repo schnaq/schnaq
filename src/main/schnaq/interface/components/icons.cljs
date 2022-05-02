@@ -7,7 +7,7 @@
              [faArchive faBackspace faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
               faCloud faCog faComment faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
               faFileDownload faFlask faGem faGhost faGraduationCap faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
-              faLocationArrow faLock faLockOpen faMagic faPalette faMapPin faInfinity
+              faLocationArrow faLock faLockOpen faMagic faPalette faMapPin
               faPaperPlane faPenSquare faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
               faTimes faTimesCircle faTrashAlt faUniversity faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
@@ -58,7 +58,6 @@
    :handshake faHandshake
    :hourglass/empty faHourglass
    :id-card faIdCard
-   :infty faInfinity
    :info faInfoCircle
    :info-question faQuestionCircle
    :instagram faInstagram

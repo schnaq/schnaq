@@ -41,3 +41,14 @@
   }
 }
 
+.pricing-table {
+  @include media-breakpoint-up(lg) {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+}
+
+.table-transparent {
+  box-shadow: none !important;
+}
+

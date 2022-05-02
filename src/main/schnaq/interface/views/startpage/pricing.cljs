@@ -214,16 +214,23 @@
 
 (defn- feature-row
   "A single row for the features of the different schnaq plans."
-  [name free pro]
+  [feature free pro]
   [:tr
-   [:td.align-middle name]
+   [:td.align-middle feature]
    [:td.text-center.align-middle free]
    [:td.text-center.align-middle pro]])
+
+(defn- feature-group
+  "A subheading in a table grouping multiple features."
+  [group]
+  [:tr
+   [:td.align-middle.table-transparent
+    [:span.fw-bold.fs-5 group]]])
 
 (defn- feature-details
   "A table displaying all features in detail."
   []
-  [:div.table-responsive
+  [:div.table-responsive.pricing-table
    [:table.table.table-striped.table-borderless
     [:thead
      [:tr
@@ -231,39 +238,39 @@
       [:th.text-center "schnaq Free"]
       [:th.text-center "schnaq Pro"]]]
     [:tbody
-     [feature-row [:span.fw-bold "Kernprodukt"]]
-     [feature-row "Schnaqs" "10 aktive" [icon :infty "text-primary"]]
+     [feature-group "Kernprodukt"]
+     [feature-row "Schnaqs" "10 aktive" "Unbegrenzt"]
      [feature-row "Teilnehmer:innen" "100 pro schnaq" "250 pro schnaq"]
      [feature-row "Mehr Teilnehmer:innen" [icon :cross "text-warning"] "Kontaktiere Sales für mehr"]
-     [feature-row "Aktivierungen" "1 pro schnaq" [icon :infty "text-primary"]]
+     [feature-row "Aktivierungen" "1 pro schnaq" "Unbegrenzt"]
      [:br]
-     [feature-row [:span.fw-bold "Diskussionen, Fragen & Antworten"]]
-     [feature-row "Intelligentes Q&A" "Bis zu 50 Fragen" [icon :infty "text-primary"]]
-     [feature-row "Diskussionen" "Bis zu 50 Beiträge" [icon :infty "text-primary"]]
+     [feature-group "Diskussionen, Fragen & Antworten"]
+     [feature-row "Intelligentes Q&A" "Bis zu 50 Fragen" "Unbegrenzt"]
+     [feature-row "Diskussionen" "Bis zu 50 Beiträge" "Unbegrenzt"]
      [feature-row "Moderationsfunktionen" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
      [feature-row "Antworten" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
      [feature-row "Automatisierte Fragenerkennung" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
      [feature-row "Automatische Mindmaps" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
      [:br]
-     [feature-row [:span.fw-bold "Interaktion"]]
-     [feature-row "Schnellumfragen" "1 pro schnaq" [icon :infty "text-primary"]]
+     [feature-group "Interaktion"]
+     [feature-row "Schnellumfragen" "1 pro schnaq" "Unbegrenzt"]
      [feature-row "Schnellaktivierung" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
      [feature-row "Wortwolken" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
      [feature-row "Rankings" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
      [:br]
-     [feature-row [:span.fw-bold "Sicherheit und Datenschutz"]]
+     [feature-group "Sicherheit und Datenschutz"]
      [feature-row "DSGVO Konformes Datenhandling" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
      [feature-row "Hosting in Deutscher Cloud" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
      [feature-row "Anonyme Teilnahme Möglich" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
      [feature-row "Teilnahme per Code" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
      [:br]
-     [feature-row [:span.fw-bold "Weiterführende Features"]]
+     [feature-group "Weiterführende Features"]
      [feature-row "Personalisiertes Design" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
      [feature-row "Analyse-Dashboard" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
      [feature-row "Zusammenfassungs-K.I." [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
      [feature-row "Kollaborative Moderation" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
      [:br]
-     [feature-row [:span.fw-bold "Support"]]
+     [feature-group "Support"]
      [feature-row "Mail-Support" [icon :check/normal "text-primary"] [icon :check/normal "text-primary"]]
      [feature-row "Priority-Support" [icon :cross "text-warning"] [icon :check/normal "text-primary"]]
      [feature-row "" [free-tier-cta-button] [pro-tier-cta-button]]]]])
