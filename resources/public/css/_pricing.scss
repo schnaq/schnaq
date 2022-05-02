@@ -43,8 +43,8 @@
 
 .pricing-table {
   @include media-breakpoint-up(lg) {
-    max-width: 1000px;
     margin: 0 auto;
+    max-width: 1000px;
   }
 }
 
