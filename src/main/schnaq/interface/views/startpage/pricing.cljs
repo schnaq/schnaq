@@ -243,13 +243,13 @@
    [:table.table.table-striped.table-borderless
     [:thead
      [:tr.align-top
-      [:th ""]
+      [:th]
       [:th.text-center
        [:p.fs-4.mb-0 (labels :pricing.table.plans/free)]
        [:p.small.text-muted.fw-normal (labels :pricing.free-tier/for-free)]]
       [:th.text-center
        [:p.fs-4.mb-0 (labels :pricing.table.plans/pro)]
-       [:p.small.text-muted.fw-normal [price-tag-pro-tier]]]]]
+       [:small.text-muted.fw-normal [price-tag-pro-tier]]]]]
     [:tbody
      [feature-group :pricing.table.core/heading]
      [feature-row :pricing.table.core.schnaqs "10" (labels :pricing.table.number/infinite)]
@@ -271,7 +271,7 @@
      [feature-row :pricing.table.interaction.word-cloud no-feature feature-included]
      [feature-row :pricing.table.interaction.rankings no-feature feature-included]
      [feature-group :pricing.table.security/heading]
-     [feature-row :pricing.table.security.gdrp feature-included feature-included]
+     [feature-row :pricing.table.security.gdpr feature-included feature-included]
      [feature-row :pricing.table.security.germany feature-included feature-included]
      [feature-row :pricing.table.security.anon feature-included feature-included]
      [feature-row :pricing.table.security.code feature-included feature-included]
@@ -286,7 +286,7 @@
      [feature-row :pricing.table.support.priority no-feature feature-included]]
     [:tfoot
      [:tr
-      [:th ""] [:th [free-tier-cta-button]] [:th [pro-tier-cta-button]]]]]])
+      [:th] [:th [free-tier-cta-button]] [:th [pro-tier-cta-button]]]]]])
 
 (defn- pricing-page
   "A full page depicting our pricing and related items."
