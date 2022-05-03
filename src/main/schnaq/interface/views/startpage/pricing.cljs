@@ -280,6 +280,7 @@
      [feature-row :pricing.table.advanced.analytics no-feature feature-included]
      [feature-row :pricing.table.advanced.summary no-feature feature-included]
      [feature-row :pricing.table.advanced.moderation no-feature feature-included]
+     [feature-row :pricing.table.advanced.faq no-feature feature-included]
      [feature-group :pricing.table.support/heading]
      [feature-row :pricing.table.support.mail feature-included feature-included]
      [feature-row :pricing.table.support.priority no-feature feature-included]]
