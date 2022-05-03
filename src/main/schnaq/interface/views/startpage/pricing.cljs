@@ -242,10 +242,14 @@
   [:div.table-responsive.pricing-table
    [:table.table.table-striped.table-borderless
     [:thead
-     [:tr
+     [:tr.align-top
       [:th ""]
-      [:th.text-center (labels :pricing.table.plans/free)]
-      [:th.text-center (labels :pricing.table.plans/pro)]]]
+      [:th.text-center
+       [:p.fs-4.mb-0 (labels :pricing.table.plans/free)]
+       [:p.small.text-muted.fw-normal (labels :pricing.free-tier/for-free)]]
+      [:th.text-center
+       [:p.fs-4.mb-0 (labels :pricing.table.plans/pro)]
+       [:p.small.text-muted.fw-normal [price-tag-pro-tier]]]]]
     [:tbody
      [feature-group :pricing.table.core/heading]
      [feature-row :pricing.table.core.schnaqs "10" (labels :pricing.table.number/infinite)]
