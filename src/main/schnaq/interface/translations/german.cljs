@@ -1023,7 +1023,7 @@
    :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling" "On-Premise" "24/7 Telefonsupport"]
    :pricing.schnaq.pro.yearly/payment-method "jährliche Zahlweise"
    :pricing.schnaq.pro.yearly/cancel-period "jährlich kündbar"
-   :pricing.units/per-month "/ Monat pro Moderator:in"
+   :pricing.units/per-month "pro Monat pro Moderator:in"
    :pricing.notes/with-vat "zzgl. MwSt."
    :pricing.billing/info-1 "Die angegebenen Preise verstehen sich exklusive aller anfallenden Umsatzsteuern wie z.B. der Mehrwertsteuer."
    :pricing.billing/info-2 "Abonnements des Pro-Tarifs verlängern sich automatisch am Ende jedes Abrechnungszyklus, es sei denn, sie werden ordnungsgemäß gekündigt. Ohne erfolgte Kündigung wird dein hinterlegtes Zahlungsmittel belastet."
