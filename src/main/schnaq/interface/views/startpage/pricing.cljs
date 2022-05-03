@@ -208,7 +208,7 @@
 (defn one-time-information [smaller?]
   [:div.text-center.pt-3 {:class (if smaller? "" "fs-4")}
    [:p (labels :pricing.one-time/question)]
-   [:p (gstring/format (labels :pricing.one-time/offer) config/max-concurrent-users-event-tier config/price-event-tier-euro)]
+   [:p (gstring/format (labels :pricing.one-time/offer) config/max-concurrent-users-pro-tier config/price-event-tier-euro)]
    [:p
     (labels :pricing.one-time/contact) " "
     [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com"]]])

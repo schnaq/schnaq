@@ -1020,8 +1020,8 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.features/number-of-users "Up to %d users in the audience"
    :pricing.features.number-of-users/unlimited "Unlimited audience"
    :pricing.features/from-previous "Everything from the previous plan"
-   :pricing.features/free ["Hosted in Germany" "Unlimited schnaqs" "Create Discussions" "Live Q&As" "Automatic Mindmap" "Shareable by Link, QR Code and digit code" "Text and Image Export" "Email support"]
-   :pricing.features/pro ["Audience polls" "Quick-engage button" "Personal Themes / Brandings" "Personal Spaces" "Analysis Dashboard" "A.I. Summaries" "Moderation Options" "Priority Support"]
+   :pricing.features/free ["Hosted in Germany" "10 active schnaqs" "Discussions and Live Q&A" "Automatic Mindmap" "Shareable by Link, QR Code and digit code" "3 activations per schnaq" "Email support"]
+   :pricing.features/pro ["Unlimited schnaqs" "Unlimited Audience polls" "Personal Themes / Brandings" "Personal Spaces" "Analysis Dashboard" "A.I. Summaries" "Moderation Options" "Priority Support"]
    :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise" "24/7 telephone support"]
    :pricing.schnaq.pro.yearly/payment-method "billed annually"
    :pricing.schnaq.pro.yearly/cancel-period "annually cancellable"

@@ -49,8 +49,7 @@
 
 (def price-event-tier-euro 49)
 (def max-concurrent-users-free-tier 100)
-(def max-concurrent-users-pro-tier 300)
-(def max-concurrent-users-event-tier 250)
+(def max-concurrent-users-pro-tier 250)
 
 ;; -----------------------------------------------------------------------------
 ;; Example schnaqs and statements

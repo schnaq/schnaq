@@ -1018,8 +1018,8 @@
    :pricing.features/number-of-users "Bis zu %d Personen im Publikum"
    :pricing.features.number-of-users/unlimited "Unbeschränktes Publikum"
    :pricing.features/from-previous "Alles vom vorherigen Plan"
-   :pricing.features/free ["In Deutschland gehostet" "Unendlich viele schnaqs" "Diskussionen erstellen" "Fragen und Antworten Modus" "Automatische Mindmap" "Teilbar per Link, QR-Code und Zahlencode" "Text- und Bild-Export" "E-Mail Support"]
-   :pricing.features/pro ["Zuschauerumfragen" "Schnaq Schnellaktivierung" "Persönliches Design / Branding" "Persönlicher Bereich" "Analyse-Dashboard" "K.I. Zusammenfassungen" "Moderationsoptionen" "Support Priorität"]
+   :pricing.features/free ["In Deutschland gehostet" "10 aktive schnaqs" "Diskussionen und Q&A" "Automatische Mindmap" "Teilbar per Link, QR-Code und Zahlencode" "Insgesamt 3 Aktivierungen pro schnaq" "E-Mail Support"]
+   :pricing.features/pro ["Unbegrenzte schnaqs" "Unbegrenzt Zuschauerumfragen" "Persönliches Design / Branding" "Persönlicher Bereich" "Analyse-Dashboard" "K.I. Zusammenfassungen" "Moderationsoptionen" "Support Priorität"]
    :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling" "On-Premise" "24/7 Telefonsupport"]
    :pricing.schnaq.pro.yearly/payment-method "jährliche Zahlweise"
    :pricing.schnaq.pro.yearly/cancel-period "jährlich kündbar"
