@@ -1019,7 +1019,7 @@
    :pricing.features.number-of-users/unlimited "Unbeschränktes Publikum"
    :pricing.features/from-previous "Alles vom vorherigen Plan"
    :pricing.features/free ["In Deutschland gehostet" "10 aktive schnaqs" "Diskussionen und Q&A" "Automatische Mindmap" "Teilbar per Link, QR-Code und Zahlencode" "Insgesamt 3 Aktivierungen pro schnaq" "E-Mail Support"]
-   :pricing.features/pro ["Unbegrenzte schnaqs" "Unbegrenzt Zuschauerumfragen" "Persönliches Design / Branding" "Persönlicher Bereich" "Analyse-Dashboard" "K.I. Zusammenfassungen" "Moderationsoptionen" "Einbettbare intelligente FAQ" "Support Priorität"]
+   :pricing.features/pro ["Unbegrenzte schnaqs" "Unbegrenzt Zuschauerumfragen" "Persönliches Design / Branding" "Persönlicher Bereich" "Analyse-Dashboard" "K.I. Zusammenfassungen" "Moderationsoptionen" "Einbettbare dynamische FAQ" "Support Priorität"]
    :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling" "On-Premise" "24/7 Telefonsupport"]
    :pricing.schnaq.pro.yearly/payment-method "jährliche Zahlweise"
    :pricing.schnaq.pro.yearly/cancel-period "jährlich kündbar"
@@ -1088,7 +1088,7 @@
    :pricing.table.advanced.moderation/name "Kollaborative Moderation"
    :pricing.table.advanced.moderation/description "Moderiere deine schnaqs in Kollaboration mit anderen."
    :pricing.table.advanced.faq/name "Einbettbare FAQ"
-   :pricing.table.advanced.faq/description "Bette intelligente FAQs in jede Webseite."
+   :pricing.table.advanced.faq/description "Bette dynamische FAQs in jede Webseite."
    :pricing.table.support/heading "Support"
    :pricing.table.support.mail/name "Mail-Support"
    :pricing.table.support.mail/description "Stelle deine Anliegen zu jeder Zeit per Mail."
