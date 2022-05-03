@@ -47,7 +47,7 @@
         formatted-price (if (.isInteger js/Number pro-price) "%d %s" "%.2f %s")]
     (if (and pro-price (not (zero? pro-price)))
       [:<>
-       [:span {:class price-class} (gstring/format formatted-price pro-price currency-symbol)]
+       [:p.mb-0 {:class price-class} (gstring/format formatted-price pro-price currency-symbol)]
        [:span (labels :pricing.units/per-month)]
        [:p
         (labels :pricing.notes/with-vat)
@@ -60,7 +60,7 @@
   []
   (let [currency-symbol @(rf/subscribe [:user.currency/symbol])]
     [:<>
-     [:span.display-5 (gstring/format "0 %s" currency-symbol)]
+     [:p.display-5.mb-0 (gstring/format "0 %s" currency-symbol)]
      [:span (labels :pricing.units/per-month)]]))
 
 (defn- intro
