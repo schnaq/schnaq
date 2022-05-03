@@ -6,7 +6,7 @@
 (defn spinner-icon
   "Display a spinner icon."
   []
-  [:div.spinner-border.text-primary {:role "loading-status"}
+  [:span.spinner-border.text-primary {:role "loading-status"}
    [:span.visually-hidden "Loading..."]])
 
 (defn loading-placeholder
@@ -39,11 +39,6 @@
    (if toggle
      (assoc-in db [:loading field] true)
      (update db :loading dissoc field))))
-
-(rf/reg-sub
- :loading/statements?
- (fn [db]
-   (get-in db [:loading :statements?])))
 
 (rf/reg-sub
  :loading/schnaq?

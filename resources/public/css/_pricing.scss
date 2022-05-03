@@ -34,10 +34,21 @@
 }
 
 .card-infos {
-  height: 20rem;
+  height: 22rem;
 
   @include media-breakpoint-down(lg) {
-    height: 18rem;
+    height: 19rem;
   }
+}
+
+.pricing-table {
+  @include media-breakpoint-up(lg) {
+    margin: 0 auto;
+    max-width: 1000px;
+  }
+}
+
+.table-transparent {
+  box-shadow: none !important;
 }
 
