@@ -47,9 +47,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-              {:type (if single-choice? "radio" "checkbox")
-               :name :option-choice
-               :value id}
+             {:type (if single-choice? "radio" "checkbox")
+              :name :option-choice
+              :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -230,7 +230,8 @@
 (defn- poll-option
   "Returns a single option component. Can contain a button for removal of said component."
   ([placeholder rank]
-   [inputs/text placeholder (str "poll-option-" rank)]))
+   [inputs/text placeholder {:id (str "poll-option-" rank)
+                             :required true}]))
 
 (rf/reg-event-db
  :polls.create/set-option-count
@@ -258,8 +259,8 @@
                                  (oget event [:target :elements])
                                  option-count]))}
      [:div.mb-3
-      [:label.form-label {:for :poll-topic} (labels :schnaq.poll.create/topic-label)]
-      [inputs/text (labels :schnaq.poll.create/placeholder) :poll-topic]
+      [:p (labels :schnaq.poll.create/topic-label)]
+      [inputs/floating (labels :schnaq.poll.create/placeholder) :poll-topic {:required true}]
       [:small.form-text.text-muted (labels :schnaq.poll.create/hint)]]
      [:div.mb-3
       [:label.form-label (labels :schnaq.poll.create/options-label)]
