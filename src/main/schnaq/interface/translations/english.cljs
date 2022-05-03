@@ -1051,6 +1051,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.table.qa/heading "Discussions, Questions & Answers"
    :pricing.table.qa.intelligent-qa/name "Intelligent Q&A"
    :pricing.table.qa.intelligent-qa/description "Let your audience ask specific questions. Schnaq even helps answer them! Quantity per schnaq."
+   :pricing.table.qa.intelligent-qa/free "50 Questions or Statements"
    :pricing.table.qa.discussions/name "Discussions"
    :pricing.table.qa.discussions/description "Let your audience discuss with each other in a structured way."
    :pricing.table.qa.moderation/name "Moderation features"

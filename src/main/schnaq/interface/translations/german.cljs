@@ -1049,6 +1049,7 @@
    :pricing.table.qa/heading "Diskussionen, Fragen & Antworten"
    :pricing.table.qa.intelligent-qa/name "Intelligentes Q&A"
    :pricing.table.qa.intelligent-qa/description "Lasse dein Publikum gezielt Fragen stellen. Schnaq hilft sogar bei der Beantwortung! Anzahl pro schnaq."
+   :pricing.table.qa.intelligent-qa/free "50 Fragen oder Beiträge"
    :pricing.table.qa.discussions/name "Diskussionen"
    :pricing.table.qa.discussions/description "Lasse dein Publikum strukturiert miteinander diskutieren."
    :pricing.table.qa.moderation/name "Moderationsfunktionen"

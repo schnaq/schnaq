@@ -253,8 +253,10 @@
      [feature-row :pricing.table.core.additional no-feature (labels :pricing.table.contact/sales)]
      [feature-row :pricing.table.core.activations "1" (labels :pricing.table.number/infinite)]
      [feature-group :pricing.table.qa/heading]
-     [feature-row :pricing.table.qa.intelligent-qa "50" (labels :pricing.table.number/infinite)]
-     [feature-row :pricing.table.qa.discussions "50" (labels :pricing.table.number/infinite)]
+     [feature-row :pricing.table.qa.intelligent-qa
+      (labels :pricing.table.qa.intelligent-qa/free) (labels :pricing.table.number/infinite)]
+     [feature-row :pricing.table.qa.discussions
+      (labels :pricing.table.qa.intelligent-qa/free) (labels :pricing.table.number/infinite)]
      [feature-row :pricing.table.qa.moderation no-feature feature-included]
      [feature-row :pricing.table.qa.answers feature-included feature-included]
      [feature-row :pricing.table.qa.automatic-answers feature-included feature-included]
