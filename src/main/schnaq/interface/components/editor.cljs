@@ -7,9 +7,6 @@
             ["@lexical/react/LexicalPlainTextPlugin" :as PlainTextPlugin]
             ["@lexical/react/LexicalRichTextPlugin" :as RichTextPlugin]
             [reagent.core :as r]
-            [schnaq.interface.components.plugins.on-change :refer [on-change-plugin]]
-            [schnaq.interface.components.plugins.toolbar :refer [toolbar-plugin]]
-            [schnaq.interface.components.plugins.tree-view :refer [tree-view-plugin]]
             [schnaq.interface.components.tiptap :as tiptap]
             [taoensso.timbre :as log]))
 
@@ -104,30 +101,9 @@
 
   nil)
 
-(defn- RichTextEditor
-  []
-  (let [content (r/atom nil)
-        _ (def foo content)]
-    (fn []
-      (let [initial-config #js {:theme theme :onError on-error}]
-        [:<>
-         [:h2 "RichTextEditor"]
-         [:> LexicalComposer {:initialConfig initial-config}
-          [:div.editor-container
-           [:f> toolbar-plugin]
-           [:div.editor-inner
-            [:> RichTextPlugin
-             {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
-            [:> HistoryPlugin {}]
-            [:> MarkdownShortcutPlugin]
-            [:f> tree-view-plugin]
-            [:> OnChangePlugin {:onChange (fn [editorState] (reset! content (.toJSON editorState)))}]]]]]))))
-
 (defn- view []
   [:<>
-   [tiptap/page]
-   [Editor]
-   [RichTextEditor]])
+   [tiptap/page]])
 
 (defn page []
   [view])

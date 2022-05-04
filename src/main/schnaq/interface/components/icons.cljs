@@ -4,12 +4,12 @@
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub faFontAwesomeFlag]]
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faIdCard faHourglass]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faArchive faBackspace faBold faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
+             [faArchive faBackspace faBold faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle faCode
               faCloud faCog faComment faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
               faFileDownload faFlask faGem faGhost faGraduationCap faHandshake faItalic faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
-              faLocationArrow faLock faLockOpen faMagic faPalette faMapPin faStrikethrough
-              faPaperPlane faPenSquare faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
-              faTimes faTimesCircle faTrashAlt faUniversity faUnderline faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward]]
+              faList faListOl faLocationArrow faLock faLockOpen faMagic faPalette faMapPin faStrikethrough
+              faPaperPlane faPenSquare faPlayCircle faPlus faQrcode faQuestion faQuoteRight faRedo faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
+              faTimes faTimesCircle faTrashAlt faUndo faUniversity faUnderline faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
 (def ^:private icons
@@ -31,6 +31,7 @@
    :check/circle faCheckCircle
    :check/normal faCheck
    :cloud faCloud
+   :code faCode
    :cog faCog
    :collapse-down faAngleDown
    :collapse-up faAngleRight
@@ -66,6 +67,8 @@
    :language faLanguage
    :laptop faLaptop
    :linkedin faLinkedin
+   :list faList
+   :list-ol faListOl
    :location-arrow faLocationArrow
    :lock faLock
    :lock/open faLockOpen
@@ -79,6 +82,8 @@
    :plus faPlus
    :question faQuestion
    :qrcode faQrcode
+   :quote-right faQuoteRight
+   :redo faRedo
    :reset faStepBackward
    :rocket faRocket
    :search faSearch
@@ -95,6 +100,7 @@
    :trash faTrashAlt
    :twitter faTwitter
    :underline faUnderline
+   :undo faUndo
    :university faUniversity
    :user/group faUsers
    :user/lock faUserLock
