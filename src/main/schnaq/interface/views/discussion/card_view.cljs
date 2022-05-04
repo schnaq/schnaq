@@ -34,7 +34,7 @@
   [:<>
    [:div.container-fluid.px-0.px-md-3
     [:div.row
-     [:div.col-md-12.col-xxl-8.py-0.pt-md-3
+     [:div.col-md-12.py-0.pt-md-3
       [:div.d-none.d-md-block [elements/discussion-options-navigation]]]]
     [:div.d-md-none [elements/discussion-options-navigation]]]
    [:div.container

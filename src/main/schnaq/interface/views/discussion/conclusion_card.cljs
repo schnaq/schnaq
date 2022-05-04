@@ -386,11 +386,13 @@
                    [deactivated-selection-card-tab poll-tab]
                    [deactivated-selection-card-tab activation-tab]
                    [deactivated-selection-card-tab word-cloud-tab]])]))
-           (case @selected-option
-             :question [input-form-or-disabled-alert]
-             :poll [poll/poll-form]
-             :activation [activation/activation-tab]
-             :word-cloud [wordcloud-card/wordcloud-tab])]]
+           (if top-level?
+             (case @selected-option
+               :question [input-form-or-disabled-alert]
+               :poll [poll/poll-form]
+               :activation [activation/activation-tab]
+               :word-cloud [wordcloud-card/wordcloud-tab])
+             [input-form-or-disabled-alert])]]
          motion/card-fade-in-time]))))
 
 (defn- some-levenshtein

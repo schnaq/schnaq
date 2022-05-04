@@ -8,13 +8,14 @@
             [schnaq.interface.utils.images :as image]))
 
 (defn text
+  "Build a text-input component."
   ([placeholder]
    [text placeholder nil])
-  ([placeholder id]
+  ([placeholder attrs]
    [:input.form-control.my-1
-    (cond-> {:type "text"
-             :placeholder placeholder}
-      id (assoc :id id))]))
+    (merge {:type "text"
+            :placeholder placeholder}
+           attrs)]))
 
 (>defn image
   "Input field to upload image.
@@ -39,10 +40,10 @@
 
 (>defn floating
   "Create a floating input field."
-  [placeholder input-type id input-name attrs]
-  [string? (s/or :keyword keyword? :string string?) string? string? (? map?) => :re-frame/component]
+  [placeholder id attrs]
+  [string? (s/or :keyword keyword? :string string?) (? map?) => :re-frame/component]
   [:div.form-floating
-   [:input.form-control (merge {:id id :type input-type :placeholder placeholder :name input-name} attrs)]
+   [:input.form-control (merge {:id id :placeholder placeholder :name id} attrs)]
    [:label {:for id} placeholder]])
 
 (>defn checkbox

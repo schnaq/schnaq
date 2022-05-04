@@ -10,6 +10,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.loading :refer [spinner-icon]]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.qa.inputs :as qanda]
@@ -22,8 +23,6 @@
   [label-keyword]
   (rest (labels label-keyword)))
 
-(defn- coming-soon []
-  (label-builder :pricing.features/upcoming))
 (defn- starter-features []
   (label-builder :pricing.features/free))
 (defn- pro-features []
@@ -45,10 +44,10 @@
   [price-class]
   (let [pro-price @(rf/subscribe [:pricing/pro-tier])
         currency-symbol @(rf/subscribe [:user.currency/symbol])
-        formatted-price (if (js/Number.isInteger pro-price) "%d %s" "%.2f %s")]
+        formatted-price (if (.isInteger js/Number pro-price) "%d %s" "%.2f %s")]
     (if (and pro-price (not (zero? pro-price)))
       [:<>
-       [:span {:class price-class} (gstring/format formatted-price pro-price currency-symbol)]
+       [:p.mb-0 {:class price-class} (gstring/format formatted-price pro-price currency-symbol)]
        [:span (labels :pricing.units/per-month)]
        [:p
         (labels :pricing.notes/with-vat)
@@ -61,7 +60,7 @@
   []
   (let [currency-symbol @(rf/subscribe [:user.currency/symbol])]
     [:<>
-     [:span.display-5 (gstring/format "0 %s" currency-symbol)]
+     [:p.display-5.mb-0 (gstring/format "0 %s" currency-symbol)]
      [:span (labels :pricing.units/per-month)]]))
 
 (defn- intro
@@ -69,15 +68,6 @@
   []
   [:section.text-center.pb-5
    [:h3 (labels :pricing.intro/heading)]])
-
-(defn- mark-explanation
-  "Explain the check marks."
-  []
-  [:section.ps-4.pt-2
-   [:p.h6 [icon :check/normal "text-primary pe-2" {:size "lg"}]
-    (labels :pricing.features/implemented)]
-   [:p.h6 [icon :check/normal "text-muted pe-2" {:size "lg"}]
-    (labels :pricing.features/to-be-implemented)]])
 
 (defn- cta-button
   "Component to build the call-to-action button in a tier card."
@@ -87,9 +77,9 @@
 
 (defn- tier-card
   "Build a single tier card."
-  [title subtitle icon-name price description features upcoming-features cta-button options]
+  [title subtitle icon-name price description features cta-button options]
   (let [title-label (labels title)]
-    [:article.card.shadow-sm.mb-2 options
+    [:article.card.shadow-sm.mb-2.h-100 options
      [:div.card-body
       [:div.card-infos
        [:h3.card-title.text-center title-label]
@@ -103,12 +93,20 @@
          (with-meta
            [:li.list-group-item
             [icon :check/normal (str class " me-2")] feature]
-           {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))
-       (for [[feature class] (add-class-to-feature upcoming-features "text-muted")]
-         (with-meta
-           [:li.list-group-item
-            [icon :check/normal (str class " me-2")] feature]
            {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))]]]))
+
+(defn- free-tier-cta-button
+  "Button to register a free account."
+  []
+  [cta-button
+   (if @(rf/subscribe [:user/authenticated?])
+     [:<>
+      (when-not @(rf/subscribe [:user/pro-user?])
+        [:span.small (labels :pricing.free-tier/call-to-action-preamble) [:br]])
+      (labels :pricing.free-tier/call-to-action-registered)]
+     (labels :pricing.free-tier/call-to-action))
+   "btn-primary"
+   (navigation/href :routes.schnaq/create)])
 
 (defn- free-tier-card
   "Display the free tier card."
@@ -123,16 +121,7 @@
      (starter-features)
      [(labels :pricing.free-tier/for-free)])
     "text-primary")
-   nil
-   [cta-button
-    (if @(rf/subscribe [:user/authenticated?])
-      [:<>
-       (when-not @(rf/subscribe [:user/pro-user?])
-         [:span.small (labels :pricing.free-tier/call-to-action-preamble) [:br]])
-       (labels :pricing.free-tier/call-to-action-registered)]
-      (labels :pricing.free-tier/call-to-action))
-    "btn-primary"
-    (navigation/href :routes.schnaq/create)]])
+   [free-tier-cta-button]])
 
 (defn pro-tier-cta-button
   "Show button to checkout pro."
@@ -159,7 +148,6 @@
      [(gstring/format (labels :pricing.features/number-of-users) config/max-concurrent-users-pro-tier)]
      (pro-features))
     "text-primary")
-   (coming-soon)
    (if @(rf/subscribe [:user/pro-user?])
      [:div.alert.alert-info.text-center
       [:p (labels :pricing.pro-tier/already-subscribed)]
@@ -189,16 +177,14 @@
      [(labels :pricing.features.number-of-users/unlimited)]
      (enterprise-features))
     "text-primary")
-   nil
    [:div.text-center.py-4 [enterprise-cta-button]]])
 
 (defn- tier-cards []
   (let [classes "col-12 col-lg-4"]
     [:section.row
      [:div {:class classes}
-      [free-tier-card]
-      [:p.p-2.text-muted (labels :pricing.free-tier/beta-notice)]
-      [mark-explanation]]
+      [:div [free-tier-card]
+       [:p.p-2.text-muted (labels :pricing.free-tier/beta-notice)]]]
      [:div {:class classes} [pro-tier-card]]
      [:div {:class classes} [enterprise-tier-card]]]))
 
@@ -222,10 +208,85 @@
 (defn one-time-information [smaller?]
   [:div.text-center.pt-3 {:class (if smaller? "" "fs-4")}
    [:p (labels :pricing.one-time/question)]
-   [:p (gstring/format (labels :pricing.one-time/offer) config/max-concurrent-users-event-tier config/price-event-tier-euro)]
+   [:p (gstring/format (labels :pricing.one-time/offer) config/max-concurrent-users-pro-tier config/price-event-tier-euro)]
    [:p
     (labels :pricing.one-time/contact) " "
     [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com"]]])
+
+(defn- feature-row
+  "A single row for the features of the different schnaq plans."
+  [feature-labels-ns free pro]
+  [:tr
+   [:td.align-middle (labels (keyword (name feature-labels-ns) "name"))
+    [tooltip/text
+     (labels (keyword feature-labels-ns "description"))
+     [:span [icon :info-question "small ms-1" {:style {:cursor :help}}]]
+     {:placement "right"
+      :theme "dark"}]]
+   [:td.text-center.align-middle free]
+   [:td.text-center.align-middle pro]])
+
+(defn- feature-group
+  "A subheading in a table grouping multiple features."
+  [group]
+  [:tr
+   [:td.align-middle.table-transparent.pt-4
+    [:span.fw-bold.fs-5 (labels group)]]])
+
+(defonce no-feature [icon :cross "text-warning"])
+(defonce feature-included [icon :check/normal "text-primary"])
+
+(defn- feature-details
+  "A table displaying all features in detail."
+  []
+  [:div.table-responsive.pricing-table
+   [:table.table.table-striped.table-borderless
+    [:thead
+     [:tr.align-top
+      [:th]
+      [:th.text-center
+       [:p.fs-4.mb-0 (labels :pricing.table.plans/free)]
+       [:p.small.text-muted.fw-normal (labels :pricing.free-tier/for-free)]]
+      [:th.text-center
+       [:p.fs-4.mb-0 (labels :pricing.table.plans/pro)]
+       [:small.text-muted.fw-normal [price-tag-pro-tier]]]]]
+    [:tbody
+     [feature-group :pricing.table.core/heading]
+     [feature-row :pricing.table.core.schnaqs "10" (labels :pricing.table.number/infinite)]
+     [feature-row :pricing.table.core.participants "100" "250"]
+     [feature-row :pricing.table.core.additional no-feature (labels :pricing.table.contact/sales)]
+     [feature-row :pricing.table.core.activations "1" (labels :pricing.table.number/infinite)]
+     [feature-group :pricing.table.qa/heading]
+     [feature-row :pricing.table.qa.intelligent-qa
+      (labels :pricing.table.qa.intelligent-qa/free) (labels :pricing.table.number/infinite)]
+     [feature-row :pricing.table.qa.discussions
+      (labels :pricing.table.qa.intelligent-qa/free) (labels :pricing.table.number/infinite)]
+     [feature-row :pricing.table.qa.moderation no-feature feature-included]
+     [feature-row :pricing.table.qa.answers feature-included feature-included]
+     [feature-row :pricing.table.qa.automatic-answers feature-included feature-included]
+     [feature-row :pricing.table.qa.mindmaps feature-included feature-included]
+     [feature-group :pricing.table.interaction/heading]
+     [feature-row :pricing.table.interaction.polls "1" (labels :pricing.table.number/infinite)]
+     [feature-row :pricing.table.interaction.activation feature-included feature-included]
+     [feature-row :pricing.table.interaction.word-cloud no-feature feature-included]
+     [feature-row :pricing.table.interaction.rankings no-feature feature-included]
+     [feature-group :pricing.table.security/heading]
+     [feature-row :pricing.table.security.gdpr feature-included feature-included]
+     [feature-row :pricing.table.security.germany feature-included feature-included]
+     [feature-row :pricing.table.security.anon feature-included feature-included]
+     [feature-row :pricing.table.security.code feature-included feature-included]
+     [feature-group :pricing.table.advanced/heading]
+     [feature-row :pricing.table.advanced.theming no-feature feature-included]
+     [feature-row :pricing.table.advanced.analytics no-feature feature-included]
+     [feature-row :pricing.table.advanced.summary no-feature feature-included]
+     [feature-row :pricing.table.advanced.moderation no-feature feature-included]
+     [feature-row :pricing.table.advanced.faq no-feature feature-included]
+     [feature-group :pricing.table.support/heading]
+     [feature-row :pricing.table.support.mail feature-included feature-included]
+     [feature-row :pricing.table.support.priority no-feature feature-included]]
+    [:tfoot
+     [:tr
+      [:th] [:th [free-tier-cta-button]] [:th [pro-tier-cta-button]]]]]])
 
 (defn- pricing-page
   "A full page depicting our pricing and related items."
@@ -239,7 +300,8 @@
     [:div.container
      [intro]
      [tier-cards]
-     [one-time-information]]
+     [one-time-information]
+     [feature-details]]
     [:div.container-fluid.pt-5
      [faq]]
     [:div.container
