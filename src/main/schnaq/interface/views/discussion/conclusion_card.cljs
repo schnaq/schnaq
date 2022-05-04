@@ -459,6 +459,16 @@
         [statement-list-item statement-id]
         {:key statement-id}))))
 
+(defn- activation-card
+  "A single card containing all activations, which can be switched through."
+  []
+  (let [top-level? @(rf/subscribe [:routes.schnaq/start?])
+        activation [activation/activation-card]
+        polls (poll/poll-list)
+        wordcloud [wordcloud-card/wordcloud-card]]
+    (when top-level?
+      (conj [:<> polls activation wordcloud]))))
+
 (defn card-container
   "Prepare a list of visible cards and group them together."
   []
@@ -466,26 +476,24 @@
         statements (statements-list)
         top-level? @(rf/subscribe [:routes.schnaq/start?])
         schnaq-loading? @(rf/subscribe [:loading/schnaq?])
-        activation (when top-level? [activation/activation-card])
-        polls (when top-level? (poll/poll-list))
-        wordcloud (when top-level? [wordcloud-card/wordcloud-card])
         access-code @(rf/subscribe [:schnaq.selected/access-code])
         question-input @(rf/subscribe [:schnaq.question.input/current])
+        activation-card [activation-card]
         show-call-to-share? (and top-level? access-code
-                                 (not (or search? (seq statements) (seq polls))))
+                                 (not (or search? (seq statements) activation-card)))
         question-first? (not-empty question-input)]
     (if schnaq-loading?
       [loading/loading-card]
       [:div.row
        (cond->
-        [:> Masonry
-         {:breakpoints config/breakpoints
-          :columns {:xs 1 :lg 2}
-          :gap 10}
-         [:div
-          [info-card]
-          [selection-card]]]
-         question-first? (conj statements activation polls wordcloud)
-         (not question-first?) (conj activation polls wordcloud statements))
+         [:> Masonry
+          {:breakpoints config/breakpoints
+           :columns {:xs 1 :lg 2}
+           :gap 10}
+          [:div
+           [info-card]
+           [selection-card]]]
+         question-first? (conj statements activation-card)
+         (not question-first?) (conj activation-card statements))
        (when show-call-to-share?
          [call-to-share])])))
