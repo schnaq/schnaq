@@ -122,6 +122,7 @@
 (s/def :discussion/admins (s/coll-of (s/or :registered-user ::registered-user
                                            :reference :db/id)))
 (s/def :discussion/creation-secret ::non-blank-string)
+(s/def :discussion/activation-focus :db/id)
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
                :discussion.state/private :discussion.state/deleted
@@ -135,7 +136,8 @@
                                   :discussion/header-image-url :discussion/edit-hash
                                   :discussion/admins :discussion/hub-origin :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/admin-link
-                                  :discussion/creation-secret :discussion/mode :discussion/access]))
+                                  :discussion/creation-secret :discussion/mode :discussion/access
+                                  :discussion/activation-focus]))
 
 (s/def ::share-hash-statement-id-mapping
   (s/map-of :discussion/share-hash (s/coll-of :db/id)))
