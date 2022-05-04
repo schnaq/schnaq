@@ -475,12 +475,18 @@
           [:div
            (when (seq activations-seq)
              (nth activations-seq (mod @show-index (count activations-seq))))
-           [:button.btn.btn-dark
-            {:on-click #(swap! show-index dec)}
-            "<"]
-           [:button.btn.btn-dark.float-end
-            {:on-click #(swap! show-index inc)}
-            ">"]])))))
+           [:button.btn.btn-transparent
+            {:style {:position "relative"
+                     :bottom "1rem"
+                     :left "1.5rem"}
+             :on-click #(swap! show-index dec)}
+            [icon :chevron/left]]
+           [:button.btn.btn-transparent.float-end
+            {:style {:position "relative"
+                     :bottom "1rem"
+                     :right "1.5rem"}
+             :on-click #(swap! show-index inc)}
+            [icon :chevron/right]]])))))
 
 (defn card-container
   "Prepare a list of visible cards and group them together."
