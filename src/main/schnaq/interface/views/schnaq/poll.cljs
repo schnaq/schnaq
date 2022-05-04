@@ -47,9 +47,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-             {:type (if single-choice? "radio" "checkbox")
-              :name :option-choice
-              :value id}
+              {:type (if single-choice? "radio" "checkbox")
+               :name :option-choice
+               :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -219,7 +219,7 @@
   "Displays all polls of the current schnaq."
   []
   (for [poll @(rf/subscribe [:schnaq/polls])]
-    [:div
+    [:article
      {:key (str "poll-result-" (:db/id poll))}
      [motion/fade-in-and-out
       (if (= :poll.type/ranking (:poll/type poll))

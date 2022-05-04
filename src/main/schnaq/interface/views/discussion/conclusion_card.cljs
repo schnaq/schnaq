@@ -459,15 +459,17 @@
         [statement-list-item statement-id]
         {:key statement-id}))))
 
-(defn- activation-card
+(defn- activation-cards
   "A single card containing all activations, which can be switched through."
   []
   (let [top-level? @(rf/subscribe [:routes.schnaq/start?])
-        activation [activation/activation-card]
         polls (poll/poll-list)
-        wordcloud [wordcloud-card/wordcloud-card]]
+        activation? @(rf/subscribe [:schnaq/activation])
+        wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])]
     (when top-level?
-      (conj [:<> polls activation wordcloud]))))
+      (cond-> polls
+        activation? (conj [activation/activation-card])
+        wordcloud? (conj [wordcloud-card/wordcloud-card])))))
 
 (defn card-container
   "Prepare a list of visible cards and group them together."
@@ -478,10 +480,11 @@
         schnaq-loading? @(rf/subscribe [:loading/schnaq?])
         access-code @(rf/subscribe [:schnaq.selected/access-code])
         question-input @(rf/subscribe [:schnaq.question.input/current])
-        activation-card [activation-card]
+        activations (activation-cards)
         show-call-to-share? (and top-level? access-code
-                                 (not (or search? (seq statements) activation-card)))
-        question-first? (not-empty question-input)]
+                                 (not (or search? (seq statements) activations)))
+        question-first? (not-empty question-input)
+        focus-activation (first activations)]
     (if schnaq-loading?
       [loading/loading-card]
       [:div.row
@@ -493,7 +496,7 @@
           [:div
            [info-card]
            [selection-card]]]
-         question-first? (conj statements activation-card)
-         (not question-first?) (conj activation-card statements))
+         question-first? (conj statements focus-activation)
+         (not question-first?) (conj focus-activation statements))
        (when show-call-to-share?
          [call-to-share])])))
