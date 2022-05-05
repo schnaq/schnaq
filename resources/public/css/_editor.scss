@@ -1,5 +1,6 @@
-/* Basic editor styles */
+// stylelint-disable selector-class-pattern
 .ProseMirror {
+  // stylelint-enable selector-class-pattern
   >*+* {
     margin-top: 0.75em;
   }
@@ -63,8 +64,7 @@
   }
 }
 
-
-.toolbar {
+.tiptap-menubar {
   background: #fff;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -73,7 +73,7 @@
   padding: 4px;
   vertical-align: middle;
 
-  button.toolbar-item {
+  .menubar-item {
     background: none;
     border: 0;
     border-radius: 10px;
@@ -85,21 +85,13 @@
     &:disabled {
       cursor: not-allowed;
     }
-
-    &.spaced {
-      margin-right: 2px;
-    }
-
-    &.active {
-      background-color: rgba(223, 232, 250, 0.3);
-    }
   }
 
-  .toolbar-item:hover:not([disabled]) {
+  .menubar-item:hover:not([disabled]) {
     background-color: #eee;
   }
 
-  .toolbar-item {
+  .menubar-item {
     .text {
       color: #777;
       display: flex;
@@ -122,24 +114,6 @@
       margin-right: 8px;
       user-select: none;
       width: 20px;
-    }
-  }
-
-  i.chevron-down {
-    display: flex;
-    height: 16px;
-    margin-top: 3px;
-    user-select: none;
-    width: 16px;
-
-    &.inside {
-      display: flex;
-      height: 16px;
-      margin-left: -25px;
-      margin-right: 10px;
-      margin-top: 11px;
-      pointer-events: none;
-      width: 16px;
     }
   }
 }
