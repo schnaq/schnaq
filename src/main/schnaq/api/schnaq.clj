@@ -36,7 +36,8 @@
                      (processors/with-sub-statement-count share-hash)
                      (processors/with-new-post-info share-hash keycloak-id)
                      processors/hide-deleted-statement-content
-                     (processors/with-aggregated-votes user-id))})))
+                     (processors/with-aggregated-votes user-id))
+         :entity-ids (discussion-db/visible-entity-id-map)})))
 
 (defn- schnaqs-by-hashes
   "Bulk loading of discussions. May be used when users ask for all the schnaqs
@@ -197,7 +198,8 @@
                   :middleware [:discussion/valid-share-hash?]
                   :parameters {:query {:share-hash :discussion/share-hash
                                        :display-name ::specs/non-blank-string}}
-                  :responses {200 {:body {:schnaq ::specs/discussion}}
+                  :responses {200 {:body {:schnaq ::specs/discussion
+                                          :entity-ids map?}}
                               403 at/response-error-body}}]
      ["/join" {:get schnaq-by-access-code
                :description (at/get-doc #'schnaq-by-access-code)

@@ -6,6 +6,7 @@
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
 (def ^:private default-activation-background
@@ -179,7 +180,7 @@
  :activation/start
  (fn [{:keys [db]} _]
    {:fx [(http/xhrio-request db :put "/activation"
-                             [:schnaq.activation.load-from-backend/success]
+                             [:schnaq.activation.created/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
                               :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
 
@@ -189,6 +190,12 @@
    {:fx [(http/xhrio-request db :get "/activation/by-share-hash"
                              [:schnaq.activation.load-from-backend/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
+
+(rf/reg-event-fx
+ :schnaq.activation.created/success
+ (fn [{:keys [db]} [_ response]]
+   {:db (tools/new-activation-focus db (get-in response [:activation :db/id]))
+    :fx [[:dispatch [:schnaq.activation.load-from-backend/success response]]]}))
 
 (rf/reg-event-db
  :schnaq.activation.load-from-backend/success

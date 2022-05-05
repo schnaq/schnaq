@@ -6,10 +6,11 @@
             ["@fortawesome/free-solid-svg-icons" :refer
              [faArchive faBackspace faBold faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle faCode
               faCloud faCog faComment faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
-              faFileDownload faFlask faGem faGhost faGraduationCap faHandshake faItalic faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
-              faList faListOl faLocationArrow faLock faLockOpen faMagic faPalette faMapPin faStrikethrough
-              faPaperPlane faPenSquare faPlayCircle faPlus faQrcode faQuestion faQuoteRight faRedo faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
-              faTimes faTimesCircle faTrashAlt faUndo faUniversity faUnderline faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward]]
+              faFileDownload faFlask faGem faGhost faGraduationCap faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
+              faLocationArrow faLock faLockOpen faMagic faPalette faMapPin faChevronLeft faChevronRight faCircle
+              faPaperPlane faPenSquare faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
+              faTimes faTimesCircle faTrashAlt faUniversity faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward
+              faItalic faUndo faUnderline faStrikethrough faRedo faQuoteRight faListOl faList]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
 (def ^:private icons
@@ -30,6 +31,9 @@
    :chart-pie faChartPie
    :check/circle faCheckCircle
    :check/normal faCheck
+   :chevron/left faChevronLeft
+   :chevron/right faChevronRight
+   :circle faCircle
    :cloud faCloud
    :code faCode
    :cog faCog

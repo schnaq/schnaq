@@ -1,35 +1,39 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
-    <ClojureCodeStyleSettings>{
-  :cljs.core/as-&gt; :only-indent
-  :cljs.core/assoc 0
-  :cljs.core/cond-&gt; :only-indent
-  :cljs.core/cond-&gt;&gt; :only-indent
-  :cljs.core/defonce :only-indent
-  :cljs.core/with-meta :only-indent
-  :cljs.core.async/go :only-indent
-  :cljs.core.async/go-loop :only-indent
-  :cljs.core.match/match :only-indent
-  :cljs.spec.alpha/with-gen :only-indent
-  :clojure.core/as-&gt; :only-indent
-  :clojure.core/assoc 1000
-  :clojure.core/comment :only-indent
-  :clojure.core/cond-&gt; 1
-  :clojure.core/cond-&gt;&gt; 1
-  :clojure.core/defonce :only-indent
-  :clojure.core/future :only-indent
-  :clojure.core.async/thread :only-indent
-  :clojure.core.match/match :only-indent
-  :clojure.spec.alpha/fdef :only-indent
-  :clojure.spec.alpha/with-gen :only-indent
-  :clojure.test/are :only-indent
-  :cursive.formatting/align-conditionals false
-  :cursive.formatting/align-maps false
-  :cursive.formatting/comment-align-column 0
-  :cursive.formatting/one-space-lists true
-  :devcards.core/defcard-rg :only-indent
-  :devcards.core/deftest :only-indent
-  :oops.core/oset! :only-indent
-}</ClojureCodeStyleSettings>
+    <ClojureCodeStyleSettings>
+      <option name="alignMapValues" value="false" />
+      <option name="alignReaderConditionals" value="false" />
+      <option name="oneSpaceLists" value="true" />
+      <option name="commentAlignColumn" value="0" />
+      <option name="indentCustomisations">
+        <map>
+          <entry key="cljs.core.async/go" value="-1" />
+          <entry key="cljs.core.async/go-loop" value="-1" />
+          <entry key="cljs.core.match/match" value="-1" />
+          <entry key="cljs.core/as-&gt;" value="-1" />
+          <entry key="cljs.core/assoc" value="0" />
+          <entry key="cljs.core/cond-&gt;" value="1" />
+          <entry key="cljs.core/cond-&gt;&gt;" value="1" />
+          <entry key="cljs.core/defonce" value="-1" />
+          <entry key="cljs.core/with-meta" value="-1" />
+          <entry key="cljs.spec.alpha/with-gen" value="-1" />
+          <entry key="clojure.core.async/thread" value="-1" />
+          <entry key="clojure.core.match/match" value="-1" />
+          <entry key="clojure.core/as-&gt;" value="-1" />
+          <entry key="clojure.core/assoc" value="1000" />
+          <entry key="clojure.core/comment" value="-1" />
+          <entry key="clojure.core/cond-&gt;" value="1" />
+          <entry key="clojure.core/cond-&gt;&gt;" value="1" />
+          <entry key="clojure.core/defonce" value="-1" />
+          <entry key="clojure.core/future" value="-1" />
+          <entry key="clojure.spec.alpha/fdef" value="-1" />
+          <entry key="clojure.spec.alpha/with-gen" value="-1" />
+          <entry key="clojure.test/are" value="-1" />
+          <entry key="devcards.core/defcard-rg" value="-1" />
+          <entry key="devcards.core/deftest" value="-1" />
+          <entry key="oops.core/oset!" value="-1" />
+        </map>
+      </option>
+    </ClojureCodeStyleSettings>
   </code_scheme>
 </component>

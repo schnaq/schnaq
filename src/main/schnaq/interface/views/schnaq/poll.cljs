@@ -215,23 +215,29 @@
      [dropdown-menu (:db/id poll)]]
     [poll-content poll]]])
 
-(defn poll-list
-  "Displays all polls of the current schnaq."
-  []
-  (for [poll @(rf/subscribe [:schnaq/polls])]
-    [:div
-     {:key (str "poll-result-" (:db/id poll))}
-     [motion/fade-in-and-out
-      (if (= :poll.type/ranking (:poll/type poll))
-        [ranking-card poll]
-        [poll-card poll])
-      motion/card-fade-in-time]]))
+(defn poll-list-item
+  "A single item in the poll list. Contains a ranking or poll inside an animation."
+  [poll]
+  [motion/fade-in-and-out
+   (if (= :poll.type/ranking (:poll/type poll))
+     [ranking-card poll]
+     [poll-card poll])
+   motion/card-fade-in-time])
+
+(>defn poll-list
+  "Displays all polls of the current schnaq excluding the one in `exclude`."
+  [exclude]
+  [:db/id :ret :re-frame/component]
+  (for [poll (remove #(= exclude (:db/id %)) @(rf/subscribe [:schnaq/polls]))]
+    [:article
+     {:key (str "poll-card-" (:db/id poll))}
+     [poll-list-item poll]]))
 
 (defn- poll-option
   "Returns a single option component. Can contain a button for removal of said component."
-  ([placeholder rank]
-   [inputs/text placeholder {:id (str "poll-option-" rank)
-                             :required true}]))
+  [placeholder rank]
+  [inputs/text placeholder {:id (str "poll-option-" rank)
+                            :required true}])
 
 (rf/reg-event-db
  :polls.create/set-option-count
@@ -388,9 +394,16 @@
 (rf/reg-event-fx
  :schnaq.poll.create-new/success
  (fn [{:keys [db]} [_ form-elements {:keys [new-poll]}]]
-   {:db (assoc-in db [:schnaq :polls (:db/id new-poll)] new-poll)
+   {:db (-> db
+            (assoc-in [:schnaq :polls (:db/id new-poll)] new-poll)
+            (tools/new-activation-focus (:db/id new-poll)))
     :fx [[:form/clear form-elements]
          [:dispatch [:polls.create/reset-option-count]]]}))
+
+(rf/reg-sub
+ :schnaq/poll
+ (fn [db [_ poll-id]]
+   (get-in db [:schnaq :polls poll-id])))
 
 (rf/reg-sub
  :schnaq/polls

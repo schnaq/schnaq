@@ -1,9 +1,9 @@
 (ns schnaq.api.poll
   (:require [clojure.spec.alpha :as s]
-            [ring.util.http-response :refer [ok bad-request]]
+            [ring.util.http-response :refer [bad-request ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
-            [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.main :refer [fast-pull set-activation-focus]]
             [schnaq.database.poll :as poll-db]
             [schnaq.database.specs :as specs]
             [taoensso.timbre :as log]))
@@ -22,6 +22,7 @@
         (bad-request (at/build-error-body :poll/bad-parameters "Poll data not valid")))
       (do
         (log/info "Created a poll for discussion" discussion-id "of type" poll-type)
+        (set-activation-focus discussion-id (:db/id poll-created))
         (ok {:new-poll poll-created})))))
 
 (defn polls-for-discussion

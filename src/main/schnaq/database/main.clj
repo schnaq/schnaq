@@ -182,3 +182,16 @@
         '[:find [(pull ?feedback [*]) ...]
           :where [?feedback :feedback/description _ ?tx]])
        (sort-by :feedback/created-at toolbelt/ascending)))
+
+;; -----------------------------------------------------------------------------
+
+(>defn set-activation-focus
+  "Set the focus on the current entity. Takes db/ids or vectors to reference
+  the id. 
+  Samples:
+  `(set-activation-focus 3333333333 2222222222)`
+  `(set-activation-focus [:discussion/share-hash \"share-hash\"] 12345678)`
+  `(set-activation-focus [:discussion/share-hash \"share-hash\"] (:db/id poll))`"
+  [discussion-ref entity-ref]
+  [(s/or :id :db/id :vector vector?) (s/or :id :db/id :vector vector?) => future?]
+  (transact [[:db/add discussion-ref :discussion/activation-focus entity-ref]]))
