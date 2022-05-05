@@ -1,6 +1,6 @@
 (ns schnaq.database.main-test
   (:require [clojure.test :refer [deftest is testing use-fixtures]]
-            [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.discussion :as discussion-db :refer [discussion-by-share-hash]]
             [schnaq.database.main :refer [set-activation-focus]]
             [schnaq.database.poll :as poll-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -17,7 +17,6 @@
   (testing "Set a poll as a focus and its id is stored in the discussion."
     (let [share-hash "cat-dog-hash"
           poll-id (:db/id (first (poll-db/polls share-hash)))
-          _ (set-activation-focus [:discussion/share-hash share-hash] poll-id)
-          discussion (discussion-db/discussion-by-share-hash share-hash)]
+          _ (set-activation-focus [:discussion/share-hash share-hash] poll-id)]
       (is (= poll-id
-             (:discussion/activation-focus discussion))))))
+             (-> share-hash discussion-by-share-hash :discussion/activation-focus))))))
