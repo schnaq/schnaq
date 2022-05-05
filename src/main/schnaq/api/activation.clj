@@ -1,8 +1,9 @@
 (ns schnaq.api.activation
   (:require [clojure.spec.alpha :as s]
-            [ring.util.http-response :refer [ok bad-request]]
+            [ring.util.http-response :refer [bad-request ok]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.activation :as activation-db]
+            [schnaq.database.main :refer [set-activation-focus]]
             [schnaq.database.specs :as specs]
             [taoensso.timbre :as log]))
 
@@ -11,7 +12,9 @@
   exists."
   [{{{:keys [share-hash]} :body} :parameters}]
   (log/info "Starting activation for" share-hash)
-  (ok {:activation (activation-db/start-activation! share-hash)}))
+  (let [started-activation (activation-db/start-activation! share-hash)]
+    (set-activation-focus [:discussion/share-hash share-hash] (:db/id started-activation))
+    (ok {:activation started-activation})))
 
 (defn- delete-activation
   "Delete an activation for a discussion."

@@ -106,9 +106,17 @@
                        :jwt (.-token (get-in db [:user :keycloak]))}
                       (fn [response]
                         (rf/dispatch [:schnaq.activation.load-from-backend/success response])
+                        (rf/dispatch [:discussion.activations/focus response])
                         (rf/dispatch [:schnaq.polls.load-from-backend/success response])
                         (rf/dispatch [:discussion.query.conclusions/set-starting response])
                         (rf/dispatch [:discussion.visible.entities/store response]))]]]})))
+
+(rf/reg-event-db
+ :discussion.activations/focus
+ (fn [db [_ {:keys [activation-focus]}]]
+   (let [old-focus (get-in db [:schnaq :selected :discussion/activation-focus])]
+     (when (not= old-focus activation-focus)
+       (toolbelt/new-activation-focus db activation-focus)))))
 
 (rf/reg-event-fx
  :updates.periodic.activation/request

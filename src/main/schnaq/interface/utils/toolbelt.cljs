@@ -162,3 +162,10 @@
          #(= % :discussion.visible.entities/wordcloud)
          (get-in db [:schnaq :selected :discussion.visible/entities]))]
     (assoc-in db [:schnaq :current :display-wordcloud?] show-wordcloud?)))
+
+(defn new-activation-focus
+  "Resets the show-index and sets a new activation focus in a db."
+  [db new-focus-id]
+  (-> db
+      (assoc-in [:schnaq :selected :discussion/activation-focus] new-focus-id)
+      (assoc-in [:schnaq :activations :show-index] 0)))

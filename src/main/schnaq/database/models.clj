@@ -266,7 +266,7 @@
     :db/valueType :db.type/instant
     :db/cardinality :db.cardinality/one
     :db/doc "An optional time, when the discussion is finished and follow-up processes are started.
-    As of 2021.12.13  not in use."}
+    As of 2021.12.13 not in use."}
    {:db/ident :discussion/creation-secret
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
@@ -275,14 +275,19 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "Define the mode of your discussion."}
-   {:db/ident :discussion.mode/qanda
-    :db/doc "Q&A mode."}
-   {:db/ident :discussion.mode/discussion
-    :db/doc "Discussion mode."}
+   {:db/ident :discussion/activation-focus
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The activation element which should be displayed in focus. E.g. first element in the activations card."}
    {:db/ident :discussion.visible/entities
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "Visible Elements in discussion overview"}
+
+   {:db/ident :discussion.mode/qanda
+    :db/doc "Q&A mode."}
+   {:db/ident :discussion.mode/discussion
+    :db/doc "Discussion mode."}
 
    {:db/ident :discussion.visible.entities/wordcloud}
 

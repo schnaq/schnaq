@@ -1,3 +1,4 @@
 {:xforms [schnaq.database.xforms/maps->ids
+          schnaq.database.xforms/pull-up-db-id
           schnaq.database.xforms/pull-up-db-ident
           schnaq.database.xforms/pull-up-ident-coll]}

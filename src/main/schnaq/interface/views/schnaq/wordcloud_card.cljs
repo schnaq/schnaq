@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.schnaq.wordcloud-card
-  (:require [re-frame.core :as rf]
+  (:require [clojure.set :as cset]
+            [re-frame.core :as rf]
             [schnaq.export :as export]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.wordcloud :as wordcloud]
@@ -63,10 +64,13 @@
 (rf/reg-event-fx
  :schnaq.wordcloud.toggle/success
  (fn [{:keys [db]} [_ {:keys [display-wordcloud?]}]]
-   {:db (-> db
-            (assoc-in [:schnaq :current :display-wordcloud?] display-wordcloud?)
-            (update-in [:schnaq :selected :discussion.visible/entities] conj :discussion.visible.entities/wordcloud))
-    :fx [[:dispatch [:schnaq.wordcloud/calculate]]]}))
+   (let [wordcloud-id (:discussion.visible.entities/wordcloud
+                       (cset/map-invert (get-in db [:schnaq :visible-entities :mapping])))
+         db (if display-wordcloud? (tools/new-activation-focus db wordcloud-id) db)]
+     {:db (-> db
+              (assoc-in [:schnaq :current :display-wordcloud?] display-wordcloud?)
+              (update-in [:schnaq :selected :discussion.visible/entities] conj :discussion.visible.entities/wordcloud))
+      :fx [[:dispatch [:schnaq.wordcloud/calculate]]]})))
 
 (rf/reg-event-fx
  :schnaq.wordcloud/calculate
@@ -90,3 +94,16 @@
          premises-with-children (remove nil? (concat premises (stools/select-values all-premises children-ids)))]
      {:fx [[:dispatch [:wordcloud/store-words
                        {:string-representation (export/generate-fulltext premises-with-children)}]]]})))
+
+(rf/reg-event-db
+ :schnaq.visible-entities/set-id-mapping
+ (fn [db [_ mapping]]
+   (when (seq mapping)
+     (assoc-in db [:schnaq :visible-entities :mapping] mapping))))
+
+(rf/reg-sub
+ :schnaq.activations/focus-wordcloud?
+ (fn [db _]
+   (let [focus-id (get-in db [:schnaq :selected :discussion/activation-focus])
+         ?focus-entity (get-in db [:schnaq :visible-entities :mapping focus-id])]
+     (= ?focus-entity :discussion.visible.entities/wordcloud))))

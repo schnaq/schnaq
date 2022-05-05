@@ -23,6 +23,7 @@
             [schnaq.interface.views.discussion.truncated-content :as truncated-content]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.schnaq.activation :as activation]
+            [schnaq.interface.views.schnaq.activation-cards :as activation-cards]
             [schnaq.interface.views.schnaq.poll :as poll]
             [schnaq.interface.views.schnaq.reactions :as reactions]
             [schnaq.interface.views.schnaq.wordcloud-card :as wordcloud-card]
@@ -466,13 +467,10 @@
         statements (statements-list)
         top-level? @(rf/subscribe [:routes.schnaq/start?])
         schnaq-loading? @(rf/subscribe [:loading/schnaq?])
-        activation (when top-level? [activation/activation-card])
-        polls (when top-level? (poll/poll-list))
-        wordcloud (when top-level? [wordcloud-card/wordcloud-card])
         access-code @(rf/subscribe [:schnaq.selected/access-code])
         question-input @(rf/subscribe [:schnaq.question.input/current])
         show-call-to-share? (and top-level? access-code
-                                 (not (or search? (seq statements) (seq polls))))
+                                 (not (or search? (seq statements))))
         question-first? (not-empty question-input)]
     (if schnaq-loading?
       [loading/loading-card]
@@ -485,7 +483,7 @@
          [:div
           [info-card]
           [selection-card]]]
-         question-first? (conj statements activation polls wordcloud)
-         (not question-first?) (conj activation polls wordcloud statements))
+         question-first? (conj statements [activation-cards/activation-cards])
+         (not question-first?) (conj [activation-cards/activation-cards] statements))
        (when show-call-to-share?
          [call-to-share])])))

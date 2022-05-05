@@ -89,6 +89,7 @@
    :discussion/share-hash
    :discussion/header-image-url
    :discussion/created-at
+   [:discussion/activation-focus :xform 'schnaq.database.xforms/pull-up-db-id]
    {:discussion/author public-user}
    {[:discussion.visible/entities :xform 'schnaq.database.xforms/pull-up-ident-coll] [:db/ident]}
    {:discussion/theme theme}])

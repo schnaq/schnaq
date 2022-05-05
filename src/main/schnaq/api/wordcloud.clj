@@ -1,13 +1,16 @@
 (ns schnaq.api.wordcloud
   (:require [ring.util.http-response :refer [ok]]
             [schnaq.api.toolbelt :as at]
+            [schnaq.database.main :refer [set-activation-focus]]
             [schnaq.database.visible-entity :as visible-entity]))
 
 (defn- toggle-wordcloud
   "Toggle word cloud display for a schnaq."
   [{{{:keys [share-hash display-wordcloud?]} :body} :parameters}]
   (if display-wordcloud?
-    (visible-entity/add-entity! share-hash :discussion.visible.entities/wordcloud)
+    (do
+      (visible-entity/add-entity! share-hash :discussion.visible.entities/wordcloud)
+      (set-activation-focus [:discussion/share-hash share-hash] :discussion.visible.entities/wordcloud))
     (visible-entity/retract-entity! share-hash :discussion.visible.entities/wordcloud))
   (ok {:display-wordcloud? display-wordcloud?}))
 
