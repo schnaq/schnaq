@@ -47,9 +47,9 @@
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
-              {:type (if single-choice? "radio" "checkbox")
-               :name :option-choice
-               :value id}
+             {:type (if single-choice? "radio" "checkbox")
+              :name :option-choice
+              :value id}
               (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
         [:div.my-1
          {:class (if cast-votes "col-12" "col-11")}
@@ -227,7 +227,7 @@
 (>defn poll-list
   "Displays all polls of the current schnaq excluding the one in `exclude`."
   [exclude]
-  [:db/id :ret coll?]
+  [:db/id :ret :re-frame/component]
   (for [poll (remove #(= exclude (:db/id %)) @(rf/subscribe [:schnaq/polls]))]
     [:article
      {:key (str "poll-card-" (:db/id poll))}
@@ -235,9 +235,9 @@
 
 (defn- poll-option
   "Returns a single option component. Can contain a button for removal of said component."
-  ([placeholder rank]
-   [inputs/text placeholder {:id (str "poll-option-" rank)
-                             :required true}]))
+  [placeholder rank]
+  [inputs/text placeholder {:id (str "poll-option-" rank)
+                            :required true}])
 
 (rf/reg-event-db
  :polls.create/set-option-count
