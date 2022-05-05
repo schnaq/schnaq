@@ -479,7 +479,6 @@
   "A single card containing all activations, which can be switched through."
   []
   ;; TODO refactor this component into multiple (Activation cards and their logic should be  own ns)
-  ;; TODO Markerpünktchen (Buttons nur bei mehr als einer Karte)
   (let [show-index @(rf/subscribe [:schnaq.activations/show-index])
         top-level? @(rf/subscribe [:routes.schnaq/start?])
         activation-focus @(rf/subscribe [:schnaq/activation-focus])
@@ -496,23 +495,27 @@
                           ;; Add non focused elements in order
                           (seq polls) ((comp vec concat) polls)
                           (and (not focus-activation?) activation?) (conj [activation/activation-card])
-                          (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card]))]
+                          (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card]))
+        activations-count (count activations-seq)
+        active-index (mod show-index activations-count)]
     (when top-level?
       [:div
        (when (seq activations-seq)
-         (nth activations-seq (mod show-index (count activations-seq))))
-       [:button.btn.btn-transparent
-        {:style {:position "relative"
-                 :bottom "1rem"
-                 :left "1.5rem"}
-         :on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil dec 0)])}
-        [icon :chevron/left]]
-       [:button.btn.btn-transparent.float-end
-        {:style {:position "relative"
-                 :bottom "1rem"
-                 :right "1.5rem"}
-         :on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil inc 0)])}
-        [icon :chevron/right]]])))
+         (nth activations-seq active-index))
+       (when (< 1 activations-count)
+         [:div.d-flex.justify-content-between
+          [:button.btn.btn-transparent.ms-1
+           {:on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil dec 0)])}
+           [icon :chevron/left]]
+          [:div.d-flex.align-items-center
+           (for [index (range activations-count)
+                 :let [default-classes "tiny me-1"]]
+             (with-meta
+               [icon :circle (if (= index active-index) (str default-classes " text-primary") default-classes)]
+               {:key (str "index-activation-" index)}))]
+          [:button.btn.btn-transparent.me-1
+           {:on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil inc 0)])}
+           [icon :chevron/right]]])])))
 
 (defn card-container
   "Prepare a list of visible cards and group them together."
