@@ -180,7 +180,7 @@
  :activation/start
  (fn [{:keys [db]} _]
    {:fx [(http/xhrio-request db :put "/activation"
-                             [:schnaq.activation.load-from-backend/success]
+                             [:schnaq.activation.created/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
                               :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
 
@@ -191,6 +191,12 @@
                              [:schnaq.activation.load-from-backend/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
+(rf/reg-event-fx
+ :schnaq.activation.created/success
+ (fn [{:keys [db]} [_ response]]
+   {:db (tools/new-activation-focus db (get-in response [:activation :db/id]))
+    :fx [[:dispatch [:schnaq.activation.load-from-backend/success response]]]}))
+
 (rf/reg-event-db
  :schnaq.activation.load-from-backend/success
  (fn [db [_ {:keys [activation]}]]
@@ -199,8 +205,7 @@
            current-count (:activation/count activation)
            previous-count (get-in db [:schnaq :current :activation :activation/count] 0)
            current-activation #(update-in % [:schnaq :current :activation] merge activation)
-           temp-counter #(assoc-in % [:schnaq :current :activation :temp-counter] 0)
-           db (tools/new-activation-focus db (:db/id activation))]
+           temp-counter #(assoc-in % [:schnaq :current :activation :temp-counter] 0)]
        (if (> previous-count current-count)
          (-> db current-activation
              temp-counter)

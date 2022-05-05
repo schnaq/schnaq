@@ -485,7 +485,7 @@
         activation-focus @(rf/subscribe [:schnaq/activation-focus])
         focus-poll @(rf/subscribe [:schnaq/poll activation-focus])
         activation? @(rf/subscribe [:schnaq/activation])
-        focus-activation? (= activation-focus (:db/id activation?))
+        focus-activation? (and activation-focus (= activation-focus (:db/id activation?)))
         focus-wordcloud? @(rf/subscribe [:schnaq.activations/focus-wordcloud?])
         polls (poll/poll-list (:db/id focus-poll))
         wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])
