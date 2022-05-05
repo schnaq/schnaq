@@ -479,7 +479,7 @@
   "A single card containing all activations, which can be switched through."
   []
   ;; TODO refactor this component into multiple (Activation cards and their logic should be  own ns)
-  ;; TODO Update focus through websockets regularly!
+  ;; TODO Markerpünktchen (Buttons nur bei mehr als einer Karte)
   (let [show-index @(rf/subscribe [:schnaq.activations/show-index])
         top-level? @(rf/subscribe [:routes.schnaq/start?])
         activation-focus @(rf/subscribe [:schnaq/activation-focus])
@@ -497,7 +497,6 @@
                           (seq polls) ((comp vec concat) polls)
                           (and (not focus-activation?) activation?) (conj [activation/activation-card])
                           (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card]))]
-    (println focus-wordcloud?)
     (when top-level?
       [:div
        (when (seq activations-seq)

@@ -11,7 +11,6 @@
     (do
       (visible-entity/add-entity! share-hash :discussion.visible.entities/wordcloud)
       (transact [[:db/add [:discussion/share-hash share-hash] :discussion/activation-focus :discussion.visible.entities/wordcloud]]))
-    ;; TODO retract if its not there anymore?
     (visible-entity/retract-entity! share-hash :discussion.visible.entities/wordcloud))
   (ok {:display-wordcloud? display-wordcloud?}))
 
