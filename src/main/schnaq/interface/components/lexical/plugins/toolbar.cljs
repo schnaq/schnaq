@@ -1,20 +1,35 @@
 (ns schnaq.interface.components.lexical.plugins.toolbar
-  (:require ["@lexical/selection" :refer [$wrapLeafNodesInElements]]
+  (:require ["@lexical/link" :refer [$isLinkNode TOGGLE_LINK_COMMAND]]
             ["@lexical/list" :refer [$isListNode ListNode
                                      INSERT_ORDERED_LIST_COMMAND
                                      INSERT_UNORDERED_LIST_COMMAND
                                      REMOVE_LIST_COMMAND]]
             ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
             ["@lexical/rich-text" :refer [$isHeadingNode $createQuoteNode]]
+            ["@lexical/selection" :refer [$wrapLeafNodesInElements $isAtNodeEnd]]
             ["@lexical/utils" :refer [$getNearestNodeOfType mergeRegister]]
             ["lexical" :refer [$getSelection $isRangeSelection
                                FORMAT_TEXT_COMMAND SELECTION_CHANGE_COMMAND
                                CAN_UNDO_COMMAND CAN_REDO_COMMAND
                                REDO_COMMAND UNDO_COMMAND]]
-            ["react" :refer [useCallback useEffect useRef useState]]
+            ["react" :refer [useCallback useEffect useState]]
             [schnaq.interface.components.icons :refer [icon]]))
 
 (def low-priority 1)
+
+(defn get-selected-node
+  "Return the selected node by the user's selection."
+  [^js/LexicalNode selection]
+  (let [anchor (.-anchor selection)
+        focus (.-focus selection)
+        anchor-node (.getNode anchor)
+        focus-node (.getNode focus)
+        backward? (.isBackward selection)]
+    (if (= anchor-node focus-node)
+      anchor-node
+      (if backward?
+        (if ($isAtNodeEnd focus) anchor-node focus-node)
+        (if ($isAtNodeEnd anchor) focus-node anchor-node)))))
 
 (defn format-quote
   "Format a selection to be a quote block."
@@ -35,8 +50,15 @@
         [italic? setIsItalic] (useState false)
         [underline? setIsUnderline] (useState false)
         [strike-through? setIsStrikethrough] (useState false)
-        [canUndo setCanUndo] (useState false)
-        [canRedo setCanRedo] (useState false)
+        [link? setIsLink] (useState false)
+        [can-undo? setCanUndo] (useState false)
+        [can-redo? setCanRedo] (useState false)
+        insert-link (useCallback
+                     (fn []
+                       (if (not link?)
+                         (.dispatchCommand editor TOGGLE_LINK_COMMAND "https://")
+                         (.dispatchCommand editor TOGGLE_LINK_COMMAND nil)))
+                     #js [editor link?])
         updateToolbar
         (useCallback
          (fn []
@@ -53,11 +75,17 @@
                        (setBlockType block-type))
                      (let [block-type (if ($isHeadingNode element) (.getTag element) (.getType element))]
                        (setBlockType block-type))))
+                 ;; Update text format
                  (setIsBold (.hasFormat selection "bold"))
                  (setIsCode (.hasFormat selection "code"))
                  (setIsItalic (.hasFormat selection "italic"))
                  (setIsUnderline (.hasFormat selection "underline"))
-                 (setIsStrikethrough (.hasFormat selection "strikethrough"))))))
+                 (setIsStrikethrough (.hasFormat selection "strikethrough"))
+
+                 ;; Update links
+                 (let [node (get-selected-node selection)
+                       parent (.getParent node)]
+                   (setIsLink (or ($isLinkNode parent) ($isLinkNode node))))))))
          #js [editor])]
     (useEffect
      #(mergeRegister
@@ -117,9 +145,9 @@
       [icon :list-ol]]
      [:button.toolbar-item.spaced
       {:on-click #(.dispatchCommand editor UNDO_COMMAND)
-       :disabled (not canUndo)}
+       :disabled (not can-undo?)}
       [icon :undo]]
      [:button.toolbar-item.spaced
       {:on-click #(.dispatchCommand editor REDO_COMMAND)
-       :disabled (not canRedo)}
+       :disabled (not can-redo?)}
       [icon :redo]]]))
