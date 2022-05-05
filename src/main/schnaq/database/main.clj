@@ -182,3 +182,12 @@
         '[:find [(pull ?feedback [*]) ...]
           :where [?feedback :feedback/description _ ?tx]])
        (sort-by :feedback/created-at toolbelt/ascending)))
+
+;; -----------------------------------------------------------------------------
+
+(>defn set-activation-focus
+  "Set the focus on the current entity. Takes a db/id or a vector to reference
+  the id (e.g. `[:discussion/share-hash \"share-hash\"]`)"
+  [discussion-ref entity-ref]
+  [(s/or :id :db/id :vector vector?) (s/or :id :db/id :vector vector?) => future?]
+  (transact [[:db/add discussion-ref :discussion/activation-focus entity-ref]]))

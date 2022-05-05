@@ -1,7 +1,7 @@
 (ns schnaq.api.wordcloud
   (:require [ring.util.http-response :refer [ok]]
             [schnaq.api.toolbelt :as at]
-            [schnaq.database.main :refer [transact]]
+            [schnaq.database.main :refer [set-activation-focus]]
             [schnaq.database.visible-entity :as visible-entity]))
 
 (defn- toggle-wordcloud
@@ -10,7 +10,7 @@
   (if display-wordcloud?
     (do
       (visible-entity/add-entity! share-hash :discussion.visible.entities/wordcloud)
-      (transact [[:db/add [:discussion/share-hash share-hash] :discussion/activation-focus :discussion.visible.entities/wordcloud]]))
+      (set-activation-focus [:discussion/share-hash share-hash] :discussion.visible.entities/wordcloud))
     (visible-entity/retract-entity! share-hash :discussion.visible.entities/wordcloud))
   (ok {:display-wordcloud? display-wordcloud?}))
 
