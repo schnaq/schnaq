@@ -486,14 +486,18 @@
         focus-poll @(rf/subscribe [:schnaq/poll activation-focus])
         activation? @(rf/subscribe [:schnaq/activation])
         focus-activation? (= activation-focus (:db/id activation?))
+        focus-wordcloud? @(rf/subscribe [:schnaq.activations/focus-wordcloud?])
         polls (poll/poll-list (:db/id focus-poll))
         wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])
         activations-seq (cond-> []
                           focus-poll (conj [poll/poll-list-item focus-poll])
                           focus-activation? (conj [activation/activation-card])
+                          (and wordcloud? focus-wordcloud?) (conj [wordcloud-card/wordcloud-card])
+                          ;; Add non focused elements in order
                           (seq polls) ((comp vec concat) polls)
                           (and (not focus-activation?) activation?) (conj [activation/activation-card])
-                          wordcloud? (conj [wordcloud-card/wordcloud-card]))]
+                          (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card]))]
+    (println focus-wordcloud?)
     (when top-level?
       [:div
        (when (seq activations-seq)
