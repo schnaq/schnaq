@@ -15,6 +15,11 @@
   [entity]
   (:db/ident entity))
 
+(defn pull-up-db-id
+  "Receives an entity and returns the :db/id inside it."
+  [entity]
+  (:db/id entity))
+
 (defn pull-up-ident-coll
   "Receives a collection of db/ident entities and pulls them up."
   [entity-coll]

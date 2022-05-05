@@ -3,7 +3,7 @@
             [ring.util.http-response :refer [ok bad-request]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
-            [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.main :refer [fast-pull transact]]
             [schnaq.database.poll :as poll-db]
             [schnaq.database.specs :as specs]
             [taoensso.timbre :as log]))
@@ -22,6 +22,8 @@
         (bad-request (at/build-error-body :poll/bad-parameters "Poll data not valid")))
       (do
         (log/info "Created a poll for discussion" discussion-id "of type" poll-type)
+        ;; Set poll as active
+        (transact [[:db/add discussion-id :discussion/activation-focus (:db/id poll-created)]])
         (ok {:new-poll poll-created})))))
 
 (defn polls-for-discussion

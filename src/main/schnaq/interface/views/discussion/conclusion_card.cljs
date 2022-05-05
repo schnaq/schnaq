@@ -459,34 +459,55 @@
         [statement-list-item statement-id]
         {:key statement-id}))))
 
+(rf/reg-sub
+ :schnaq/activation-focus
+ (fn [db _]
+   (get-in db [:schnaq :selected :discussion/activation-focus])))
+
+(rf/reg-sub
+ :schnaq.activations/show-index
+ ;; The index of the current activation that is shown
+ (fn [db _]
+   (get-in db [:schnaq :activations :show-index] 0)))
+
+(rf/reg-event-db
+ :schnaq.activations.show-index/update
+ (fn [db [_ update-fn]]
+   (update-in db [:schnaq :activations :show-index] update-fn)))
+
 (defn- activation-cards
   "A single card containing all activations, which can be switched through."
   []
-  (let [show-index (reagent/atom 0)]
-    (fn []
-      (let [top-level? @(rf/subscribe [:routes.schnaq/start?])
-            polls (poll/poll-list)
-            activation? @(rf/subscribe [:schnaq/activation])
-            wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])
-            activations-seq (cond-> polls
-                              activation? (conj [activation/activation-card])
-                              wordcloud? (conj [wordcloud-card/wordcloud-card]))]
-        (when top-level?
-          [:div
-           (when (seq activations-seq)
-             (nth activations-seq (mod @show-index (count activations-seq))))
-           [:button.btn.btn-transparent
-            {:style {:position "relative"
-                     :bottom "1rem"
-                     :left "1.5rem"}
-             :on-click #(swap! show-index dec)}
-            [icon :chevron/left]]
-           [:button.btn.btn-transparent.float-end
-            {:style {:position "relative"
-                     :bottom "1rem"
-                     :right "1.5rem"}
-             :on-click #(swap! show-index inc)}
-            [icon :chevron/right]]])))))
+  ;; TODO refactor this component into multiple (Activation cards and their logic should be  own ns)
+  ;; TODO Update focus through websockets regularly!
+  (let [show-index @(rf/subscribe [:schnaq.activations/show-index])
+        top-level? @(rf/subscribe [:routes.schnaq/start?])
+        activation-focus @(rf/subscribe [:schnaq/activation-focus])
+        focus-poll @(rf/subscribe [:schnaq/poll activation-focus])
+        polls (poll/poll-list (:db/id focus-poll))
+        activation? @(rf/subscribe [:schnaq/activation])
+        wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])
+        activations-seq (cond-> []
+                          focus-poll (conj [poll/poll-list-item focus-poll])
+                          (seq polls) ((comp vec concat) polls)
+                          activation? (conj [activation/activation-card])
+                          wordcloud? (conj [wordcloud-card/wordcloud-card]))]
+    (when top-level?
+      [:div
+       (when (seq activations-seq)
+         (nth activations-seq (mod show-index (count activations-seq))))
+       [:button.btn.btn-transparent
+        {:style {:position "relative"
+                 :bottom "1rem"
+                 :left "1.5rem"}
+         :on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil dec 0)])}
+        [icon :chevron/left]]
+       [:button.btn.btn-transparent.float-end
+        {:style {:position "relative"
+                 :bottom "1rem"
+                 :right "1.5rem"}
+         :on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil inc 0)])}
+        [icon :chevron/right]]])))
 
 (defn card-container
   "Prepare a list of visible cards and group them together."
