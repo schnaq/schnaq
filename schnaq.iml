@@ -131,7 +131,7 @@
     <orderEntry type="library" name="Deps: io.grpc/grpc-context:1.41.0" level="project" />
     <orderEntry type="library" name="Deps: commons-io:2.10.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
-    <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.3.4" level="project" />
+    <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.3.5" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.namespace:0.3.1" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/tempura:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: fipp:0.6.25" level="project" />
@@ -312,7 +312,7 @@
     <orderEntry type="library" name="Deps: borkdude/sci.impl.reflector:0.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.sun.mail/jakarta.mail:1.6.5" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.44.v20210927" level="project" />
-    <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.116.0" level="project" />
+    <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.117.0" level="project" />
     <orderEntry type="library" name="Deps: io.opencensus/opencensus-api:0.28.0" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-auth:1.41.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpmime:4.5.13" level="project" />
