@@ -1,5 +1,6 @@
 (ns schnaq.interface.components.tiptap
   (:require ["@tiptap/extension-highlight" :as Highlight]
+            ["@tiptap/extension-image" :as Image]
             ["@tiptap/extension-link" :as Link]
             ["@tiptap/extension-typography" :as Typography]
             ["@tiptap/react" :refer [EditorContent useEditor]]
@@ -8,7 +9,7 @@
 
 (defn MenuBar [{:keys [editor]}]
   (when editor
-    [:section.menubar
+    [:section.tiptap-menubar
      [:button.menubar-item
       {:on-click #(-> editor .chain .focus .toggleBold .run)}
       [icon :bold]]
@@ -44,8 +45,9 @@
                                   Highlight ;; Markdown Shortcuts during typing
                                   Typography ;; visual effects, e.g. converting (c) to a symbol
                                   Link ;; automatically make links
+                                  Image ;; render images
                                   ]
-                 :content "<p>Huhu</p><ul><li><p>Hello World!</p></li><li><p>asd</p></li></ul><p>was ist hier los?</p>"})]
+                 :content "<img src=\"https://source.unsplash.com/8xznAGy4HcY/800x400\"/><p>Huhu</p><ul><li><p>Hello World!</p></li><li><p>asd</p></li></ul><p>was ist hier los?</p>"})]
     [:<>
      [MenuBar {:editor editor}]
      [:> EditorContent {:editor editor}]

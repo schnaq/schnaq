@@ -51,6 +51,10 @@
   img {
     height: auto;
     max-width: 100%;
+
+    &.ProseMirror-selectednode {
+      outline: 3px solid #68cef8;
+    }
   }
 
   blockquote {

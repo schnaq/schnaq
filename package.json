@@ -15,6 +15,7 @@
     "@tippyjs/react": "^4.2.6",
     "@tiptap/core": "^2.0.0-beta.175",
     "@tiptap/extension-highlight": "^2.0.0-beta.33",
+    "@tiptap/extension-image": "^2.0.0-beta.27",
     "@tiptap/extension-link": "^2.0.0-beta.37",
     "@tiptap/extension-typography": "^2.0.0-beta.20",
     "@tiptap/react": "^2.0.0-beta.109",
