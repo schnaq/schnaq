@@ -45,8 +45,8 @@
         top-level? @(rf/subscribe [:routes.schnaq/start?])
         activation-focus @(rf/subscribe [:schnaq/activation-focus])
         focus-poll @(rf/subscribe [:schnaq/poll activation-focus])
-        activation? @(rf/subscribe [:schnaq/activation])
-        focus-activation? (and activation-focus (= activation-focus (:db/id activation?)))
+        activation @(rf/subscribe [:schnaq/activation])
+        focus-activation? (and activation-focus (= activation-focus (:db/id activation)))
         focus-wordcloud? @(rf/subscribe [:schnaq.activations/focus-wordcloud?])
         polls (poll/poll-list (:db/id focus-poll))
         wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])
@@ -56,12 +56,12 @@
                           (and wordcloud? focus-wordcloud?) (conj [wordcloud-card/wordcloud-card])
                           ;; Add non focused elements in order
                           (seq polls) ((comp vec concat) polls)
-                          (and (not focus-activation?) activation?) (conj [activation/activation-card])
+                          (and (not focus-activation?) activation) (conj [activation/activation-card])
                           (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card]))
         activations-count (count activations-seq)
         active-index (mod show-index activations-count)]
     (when top-level?
-      [:div
+      [:<>
        (when (seq activations-seq)
          (nth activations-seq active-index))
        (when (< 1 activations-count)
