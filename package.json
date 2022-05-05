@@ -46,6 +46,8 @@
     "react-smart-masonry": "^2.0.2",
     "react-wordcloud": "^1.2.7",
     "remark-gfm": "^1.0.0",
+    "slate": "^0.78.0",
+    "slate-react": "^0.79.0",
     "stopwords-de": "^0.3.0",
     "timsort": "^0.3.0",
     "uuid": "^8.3.2",
