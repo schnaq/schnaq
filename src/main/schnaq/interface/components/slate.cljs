@@ -1,17 +1,18 @@
-#_(ns schnaq.interface.components.slate
-    #_(:require ["slate" :refer [createEditor]]
-                ["slate-react" :refer [Slate Editable withReact]]))
 (ns schnaq.interface.components.slate
-  (:require ["react" :refer [useState]]
+  (:require ["react" :refer [createElement useState]]
             ["slate" :refer [createEditor]]
-            ["slate-react" :refer [Slate Editable withReact]]))
+            ["slate-react" :refer [Editable Slate withReact]]
+            [reagent.core :as r]))
 
-(def initialValue #js [])
+(def initialValue
+  #js [#js {:type "paragraph"
+            :children #js [#js {:text "This is text"}]}])
 
 (defn slate
   []
-  (let [[editor] (useState (fn [] (withReact (createEditor))))]
-    [:f> Slate #js {:editor editor, :value initialValue}]))
+  (let [[editor] (useState #(withReact (createEditor)))]
+    (r/create-element Slate #js {:editor editor :value initialValue}
+                      (r/create-element Editable))))
 
 (defn- build-page []
   [:<>

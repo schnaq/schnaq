@@ -1,5 +1,6 @@
 (ns schnaq.interface.components.editor
-  (:require [schnaq.interface.components.slate :as slate]
+  (:require [schnaq.interface.components.lexical.editor :as lexical]
+            [schnaq.interface.components.slate :as slate]
             [schnaq.interface.components.tiptap :as tiptap]))
 
 ;; -----------------------------------------------------------------------------
@@ -7,7 +8,10 @@
 (defn- view []
   [:<>
    [tiptap/page]
-   [slate/page]])
+   [:hr]
+   [slate/page]
+   [:hr]
+   [lexical/page]])
 
 (defn page []
   [view])
