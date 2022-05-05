@@ -396,8 +396,7 @@
  (fn [{:keys [db]} [_ form-elements {:keys [new-poll]}]]
    {:db (-> db
             (assoc-in [:schnaq :polls (:db/id new-poll)] new-poll)
-            (assoc-in [:schnaq :selected :discussion/activation-focus] (:db/id new-poll))
-            (assoc-in [:schnaq :activations :show-index] 0))
+            (tools/new-activation-focus (:db/id new-poll)))
     :fx [[:form/clear form-elements]
          [:dispatch [:polls.create/reset-option-count]]]}))
 

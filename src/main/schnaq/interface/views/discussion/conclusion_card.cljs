@@ -484,13 +484,15 @@
         top-level? @(rf/subscribe [:routes.schnaq/start?])
         activation-focus @(rf/subscribe [:schnaq/activation-focus])
         focus-poll @(rf/subscribe [:schnaq/poll activation-focus])
-        polls (poll/poll-list (:db/id focus-poll))
         activation? @(rf/subscribe [:schnaq/activation])
+        focus-activation? (= activation-focus (:db/id activation?))
+        polls (poll/poll-list (:db/id focus-poll))
         wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])
         activations-seq (cond-> []
                           focus-poll (conj [poll/poll-list-item focus-poll])
+                          focus-activation? (conj [activation/activation-card])
                           (seq polls) ((comp vec concat) polls)
-                          activation? (conj [activation/activation-card])
+                          (and (not focus-activation?) activation?) (conj [activation/activation-card])
                           wordcloud? (conj [wordcloud-card/wordcloud-card]))]
     (when top-level?
       [:div

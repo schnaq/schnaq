@@ -6,6 +6,7 @@
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
 (def ^:private default-activation-background
@@ -198,7 +199,8 @@
            current-count (:activation/count activation)
            previous-count (get-in db [:schnaq :current :activation :activation/count] 0)
            current-activation #(update-in % [:schnaq :current :activation] merge activation)
-           temp-counter #(assoc-in % [:schnaq :current :activation :temp-counter] 0)]
+           temp-counter #(assoc-in % [:schnaq :current :activation :temp-counter] 0)
+           db (tools/new-activation-focus db (:db/id activation))]
        (if (> previous-count current-count)
          (-> db current-activation
              temp-counter)

@@ -3,6 +3,7 @@
             [ring.util.http-response :refer [ok bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.activation :as activation-db]
+            [schnaq.database.main :refer [transact]]
             [schnaq.database.specs :as specs]
             [taoensso.timbre :as log]))
 
@@ -11,7 +12,9 @@
   exists."
   [{{{:keys [share-hash]} :body} :parameters}]
   (log/info "Starting activation for" share-hash)
-  (ok {:activation (activation-db/start-activation! share-hash)}))
+  (let [started-activation (activation-db/start-activation! share-hash)]
+    (transact [[:db/add [:discussion/share-hash share-hash] :discussion/activation-focus (:db/id started-activation)]])
+    (ok {:activation started-activation})))
 
 (defn- delete-activation
   "Delete an activation for a discussion."
