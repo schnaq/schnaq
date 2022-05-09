@@ -481,7 +481,7 @@
          {:breakpoints config/breakpoints
           :columns {:xs 1 :lg 2}
           :gap 10}
-         [:div
+         [:section
           [info-card]
           [selection-card]]]
          question-first? (conj statements activations)
