@@ -38,6 +38,16 @@
     {:on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil inc 0)])}
     [icon :chevron/right]]])
 
+(rf/reg-sub
+ :schnaq/activations?
+ :<- [:routes.schnaq/start?]
+ :<- [:schnaq/activation]
+ :<- [:schnaq.wordcloud/show?]
+ :<- [:schnaq/polls]
+ (fn [[start? activation wordcloud? polls] _]
+   (and start?
+        (or wordcloud? (seq polls) activation))))
+
 (defn activation-cards
   "A single card containing all activations, which can be switched through."
   []
@@ -60,9 +70,8 @@
                           (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card]))
         activations-count (count activations-seq)
         active-index (mod show-index activations-count)]
-    (when top-level?
+    (when (and top-level? (seq activations-seq))
       [:<>
-       (when (seq activations-seq)
-         (nth activations-seq active-index))
+       (nth activations-seq active-index)
        (when (< 1 activations-count)
          [activation-card-controls activations-count active-index])])))

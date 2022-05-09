@@ -471,7 +471,8 @@
         question-input @(rf/subscribe [:schnaq.question.input/current])
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements))))
-        question-first? (not-empty question-input)]
+        question-first? (not-empty question-input)
+        activations (when @(rf/subscribe [:schnaq/activations?]) [activation-cards/activation-cards])]
     (if schnaq-loading?
       [loading/loading-card]
       [:div.row
@@ -480,10 +481,10 @@
          {:breakpoints config/breakpoints
           :columns {:xs 1 :lg 2}
           :gap 10}
-         [:div
+         [:section
           [info-card]
           [selection-card]]]
-         question-first? (conj statements [activation-cards/activation-cards])
-         (not question-first?) (conj [activation-cards/activation-cards] statements))
+         question-first? (conj statements activations)
+         (not question-first?) (conj activations statements))
        (when show-call-to-share?
          [call-to-share])])))
