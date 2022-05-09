@@ -472,7 +472,6 @@
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements))))
         question-first? (not-empty question-input)
-        ;; We need to check if the component produces a result, before we instantiate it
         activations (when @(rf/subscribe [:schnaq/activations?]) [activation-cards/activation-cards])]
     (if schnaq-loading?
       [loading/loading-card]
