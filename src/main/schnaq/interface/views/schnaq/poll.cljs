@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.schnaq.poll
-  (:require [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
+  (:require [cljs.spec.alpha :as s]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
@@ -227,7 +228,7 @@
 (>defn poll-list
   "Displays all polls of the current schnaq excluding the one in `exclude`."
   [exclude]
-  [:db/id :ret :re-frame/component]
+  [:db/id :ret (s/coll-of :re-frame/component)]
   (for [poll (remove #(= exclude (:db/id %)) @(rf/subscribe [:schnaq/polls]))]
     [:article
      {:key (str "poll-card-" (:db/id poll))}
