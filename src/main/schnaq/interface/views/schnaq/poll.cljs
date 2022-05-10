@@ -41,10 +41,11 @@
                         (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))
            single-choice? (= :poll.type/single-choice type)
            votes-set (if single-choice? #{cast-votes} (set cast-votes))
-           option-voted? (votes-set id)]
+           option-voted? (votes-set id)
+           read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
        [:<>
         {:key (str "option-" id)}
-        (when-not cast-votes
+        (when-not (or cast-votes read-only?)
           [:div.col-1
            [:input.form-check-input.mt-3.mx-auto
             (cond->
@@ -171,13 +172,14 @@
 (defn- poll-content
   "The content of a single or multiple choice poll. Can be either only the results or results and ability to vote."
   [poll]
-  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
+  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:form
      {:on-submit (fn [e]
                    (.preventDefault e)
                    (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
      [results-graph poll cast-votes]
-     (when-not cast-votes
+     (when-not (or cast-votes read-only?)
        [:div.text-center
         [:button.btn.btn-primary.btn-sm
          {:type :submit
@@ -189,9 +191,11 @@
   [poll]
   [::specs/poll => :re-frame/component]
   (if (= :poll.type/ranking (:poll/type poll))
-    (if-let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
-      [ranking-results poll cast-votes]
-      [ranking-input poll])
+    (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
+          read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+      (if (or cast-votes read-only?)
+        [ranking-results poll cast-votes]
+        [ranking-input poll]))
     [poll-content poll]))
 
 (>defn- ranking-card
