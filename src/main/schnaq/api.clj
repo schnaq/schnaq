@@ -157,6 +157,7 @@
                             :discussion/valid-credentials? middlewares/valid-credentials?-middleware
                             :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
                             :discussion/valid-statement? middlewares/valid-statement?-middleware
+                            :discussion/valid-writeable-discussion? middlewares/valid-writeable-discussion?
                             :user/admin? auth-middlewares/admin?-middleware
                             :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
                             :user/authenticated? auth-middlewares/authenticated?-middleware

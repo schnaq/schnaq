@@ -24,6 +24,15 @@
         (handler request)
         at/not-found-hash-invalid))))
 
+(defn valid-writeable-discussion?
+  "Verify that a discussion is valid and writing to it / modifying it is allowed."
+  [handler]
+  (fn [request]
+    (let [share-hash (extract-parameter-from-request request :share-hash)]
+      (if (validator/valid-writeable-discussion? share-hash)
+        (handler request)
+        (at/build-error-body :schnaq.error/discussion-invalid "You are not allowed to modify this discussion")))))
+
 (defn valid-statement?-middleware
   "Verify, that a valid share-hash was provided matching the statement-id."
   [handler]
