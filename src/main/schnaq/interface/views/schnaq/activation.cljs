@@ -77,7 +77,8 @@
     (let [theme @(rf/subscribe [:schnaq.selected/theme])
           activation-phrase (or (:theme.texts/activation theme)
                                 (labels :schnaq.activation/phrase))
-          background-image-url (or (:theme.images/header theme) default-activation-background)]
+          background-image-url (or (:theme.images/header theme) default-activation-background)
+          read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
       [motion-comp/fade-in-and-out
        [:section.activation
         {:class background-class
@@ -89,14 +90,15 @@
          [activation-dropdown-menu]]
         [:div.mx-auto.display-3 (:activation/count activation)]
         [schnaqqi-walk]
-        [:div.text-center
-         [:button.btn.btn-lg.btn-secondary
-          {:class button-class
-           :on-click (fn [_e]
-                       (rf/dispatch [:activation/activate])
-                       (matomo/track-event "Active User", "Action", "Use Quick-Activation"))}
-          activation-phrase
-          "!"]]]
+        (when-not read-only?
+          [:div.text-center
+           [:button.btn.btn-lg.btn-secondary
+            {:class button-class
+             :on-click (fn [_e]
+                         (rf/dispatch [:activation/activate])
+                         (matomo/track-event "Active User", "Action", "Use Quick-Activation"))}
+            activation-phrase
+            "!"]])]
        motion-comp/card-fade-in-time])))
 
 (defn activation-event-view
