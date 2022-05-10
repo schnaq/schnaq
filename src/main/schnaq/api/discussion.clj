@@ -83,7 +83,7 @@
   [user-identity statement-id share-hash statement success-fn bad-request-fn deny-access-fn]
   (let [user-is-author? (= (:sub user-identity) (-> statement :statement/author :user.registered/keycloak-id))]
     (if (or user-is-author? (:admin? user-identity))
-      (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
+      (if (and (discussion-db/check-valid-statement-id-for-discussion statement-id share-hash)
                (not (:statement/deleted? statement)))
         (success-fn)
         (bad-request-fn))
@@ -483,7 +483,8 @@
      ["/edit" {:put edit-statement!
                :description (at/get-doc #'edit-statement!)
                :name :api.discussion.statement/edit
-               :middleware [:user/authenticated?]
+               :middleware [:user/authenticated?
+                            :discussion/valid-writeable-discussion?]
                :parameters {:body {:statement-type (s/or :nil nil?
                                                          :type dto/statement-type)
                                    :new-content :statement/content
