@@ -500,7 +500,8 @@
      ["/delete" {:delete delete-statement!
                  :description (at/get-doc #'delete-statement!)
                  :name :api.discussion.statement/delete
-                 :middleware [:user/authenticated?]
+                 :middleware [:user/authenticated?
+                              :discussion/valid-writeable-discussion?]
                  :responses {200 {:body {:deleted-statement :db/id
                                          :method keyword?}}
                              400 at/response-error-body
