@@ -156,12 +156,10 @@
         user-id (user-db/user-id display-name keycloak-id)
         ;; Only Moderators can lock
         locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
-    (if (validator/valid-writeable-discussion? share-hash)
-      (do (log/info "Starting statement added for discussion" share-hash)
-          (created "" {:starting-conclusion (discussion-db/add-starting-statement! share-hash user-id statement
-                                                                                   :registered-user? keycloak-id
-                                                                                   :locked? locked?)}))
-      (validator/deny-access at/invalid-rights-message))))
+    (log/info "Starting statement added for discussion" share-hash)
+    (created "" {:starting-conclusion (discussion-db/add-starting-statement! share-hash user-id statement
+                                                                             :registered-user? keycloak-id
+                                                                             :locked? locked?)})))
 
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement. `conclusion-id` is the
@@ -173,7 +171,7 @@
         user-id (user-db/user-id display-name keycloak-id)
         ;; Only Moderators can lock
         locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
-    (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
+    (if (discussion-db/check-valid-statement-id-for-discussion conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (created
            ""
@@ -395,7 +393,8 @@
    ["/react-to/statement" {:post react-to-any-statement!
                            :description (at/get-doc #'react-to-any-statement!)
                            :name :api.discussion.react-to/statement
-                           :middleware [:discussion/parent-unlocked?]
+                           :middleware [:discussion/parent-unlocked?
+                                        :discussion/valid-writeable-discussion?]
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
                                                :premise :statement/content
@@ -430,6 +429,7 @@
     ["/starting/add" {:post add-starting-statement!
                       :description (at/get-doc #'add-starting-statement!)
                       :name :api.discussion.statements.starting/add
+                      :middleware [:discussion/valid-writeable-discussion?]
                       :parameters {:body {:share-hash :discussion/share-hash
                                           :edit-hash (s/or :edit-hash :discussion/edit-hash
                                                            :nil nil?)
