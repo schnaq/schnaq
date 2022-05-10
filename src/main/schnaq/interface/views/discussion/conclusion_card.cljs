@@ -86,8 +86,9 @@
         checked? (statement-labels label)
         authenticated? @(rf/subscribe [:user/authenticated?])
         mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        show-button? (or (not mods-mark-only?)
-                         (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash])))]
+        show-button? (and (not @(rf/subscribe [:schnaq.selected/read-only?]))
+                          (or (not mods-mark-only?)
+                              (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
     (when show-button?
       [:section.w-100
        [:button.btn.btn-sm.btn-link.text-dark.pe-0

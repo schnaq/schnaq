@@ -519,8 +519,8 @@
               :name :api.discussion.statement.vote/up
               :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
                           400 at/response-error-body}}]]
-     ;; TODO label change should also be locked
-     ["/label" {:middleware [:discussion/valid-statement?]}
+     ["/label" {:middleware [:discussion/valid-statement?
+                             :discussion/valid-writeable-discussion?]}
       ["/add" {:put add-label
                :description (at/get-doc #'add-label)
                :name :api.discussion.statement.label/add
