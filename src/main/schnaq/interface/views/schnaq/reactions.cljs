@@ -40,27 +40,30 @@
         ;; Do not use or shortcut, since the value can be false and should be preferably selected over backend value
         upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
         downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)
-        authenticated? @(rf/subscribe [:user/authenticated?])]
+        authenticated? @(rf/subscribe [:user/authenticated?])
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:div.d-flex.flex-row.align-items-center
      [:div.me-1
-      {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")
-       :on-click (fn [e]
-                   (.stopPropagation e)
-                   (if authenticated?
-                     (rf/dispatch [:discussion/toggle-upvote statement])
-                     (rf/dispatch [:schnaq.vote/toggle-anonymous statement :upvote]))
-                   (matomo/track-event "Active User", "Action", "Vote: Upvote"))}
-      [icon :arrow-up "vote-arrow m-auto"]]
+      (cond->
+       {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")}
+        (not read-only?) (merge {:on-click (fn [e]
+                                             (.stopPropagation e)
+                                             (if authenticated?
+                                               (rf/dispatch [:discussion/toggle-upvote statement])
+                                               (rf/dispatch [:schnaq.vote/toggle-anonymous statement :upvote]))
+                                             (matomo/track-event "Active User", "Action", "Vote: Upvote"))}))
+      [icon :arrow-up "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
      [:span.me-2 (get-up-votes statement votes)]
      [:div.me-1
-      {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")
-       :on-click (fn [e]
-                   (.stopPropagation e)
-                   (if authenticated?
-                     (rf/dispatch [:discussion/toggle-downvote statement])
-                     (rf/dispatch [:schnaq.vote/toggle-anonymous statement :downvote]))
-                   (matomo/track-event "Active User", "Action", "Vote: Downvote"))}
-      [icon :arrow-down "vote-arrow m-auto"]]
+      (cond->
+       {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")}
+        (not read-only?) (merge {:on-click (fn [e]
+                                             (.stopPropagation e)
+                                             (if authenticated?
+                                               (rf/dispatch [:discussion/toggle-downvote statement])
+                                               (rf/dispatch [:schnaq.vote/toggle-anonymous statement :downvote]))
+                                             (matomo/track-event "Active User", "Action", "Vote: Downvote"))}))
+      [icon :arrow-down "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
      [:span (get-down-votes statement votes)]]))
 
 (rf/reg-sub

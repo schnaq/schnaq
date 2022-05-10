@@ -224,6 +224,7 @@
         admin? @(rf/subscribe [:user/administrator?])
         user-id @(rf/subscribe [:user/id])
         creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         deletable? (deletable? statement current-edit-hash user-id creation-secrets)
         editable? (editable? statement user-id creation-secrets)]
     [dropdown-menu dropdown-id
@@ -234,10 +235,12 @@
         [lock-unlock-statement-dropdown-button statement])
       (when (and current-edit-hash @(rf/subscribe [:user/pro-user?]))
         [toggle-pin-statement-dropdown-button statement])
-      (when editable?
-        [edit-dropdown-button-statement statement])
-      (when (or admin? deletable?)
-        [delete-dropdown-button statement current-edit-hash])]]))
+      (when-not read-only?
+        [:<>
+         (when editable?
+           [edit-dropdown-button-statement statement])
+         (when (or admin? deletable?)
+           [delete-dropdown-button statement current-edit-hash])])]]))
 
 (defn show-number-of-replies [statement]
   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])

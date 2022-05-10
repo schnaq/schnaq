@@ -96,6 +96,7 @@
        {:put cast-vote
         :description (at/get-doc #'cast-vote)
         :name :poll/vote!
+        :middleware [:discussion/valid-writeable-discussion?]
         :parameters {:body {:share-hash :discussion/share-hash
                             :option-id (s/or :id :db/id
                                              :id-seq (s/coll-of :db/id))}}
