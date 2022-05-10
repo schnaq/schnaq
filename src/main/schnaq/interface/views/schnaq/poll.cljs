@@ -32,36 +32,36 @@
 (defn results-graph
   "A graph displaying the results of the poll."
   [{:poll/keys [options type]} cast-votes]
-  [:section.row
-   (for [index (range (count options))]
-     (let [{:keys [option/votes db/id option/value]} (get options index)
-           total-votes (apply + (map :option/votes options))
-           percentage (if (zero? total-votes)
-                        "0%"
-                        (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))
-           single-choice? (= :poll.type/single-choice type)
-           votes-set (if single-choice? #{cast-votes} (set cast-votes))
-           option-voted? (votes-set id)
-           read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
-       [:<>
-        {:key (str "option-" id)}
-        (when-not (or cast-votes read-only?)
-          [:div.col-1
-           [:input.form-check-input.mt-3.mx-auto
-            (cond->
-             {:type (if single-choice? "radio" "checkbox")
-              :name :option-choice
-              :value id}
-              (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
-        [:div.my-1
-         {:class (if cast-votes "col-12" "col-11")}
-         [percentage-bar votes percentage index]
-         [:p.small.ms-1
-          {:class (when option-voted? "font-italic")}
-          value
-          [:span.float-end
-           [:span.me-3 votes " " (labels :schnaq.poll/votes)]
-           percentage]]]]))])
+  (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+    [:section.row
+     (for [index (range (count options))]
+       (let [{:keys [option/votes db/id option/value]} (get options index)
+             total-votes (apply + (map :option/votes options))
+             percentage (if (zero? total-votes)
+                          "0%"
+                          (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))
+             single-choice? (= :poll.type/single-choice type)
+             votes-set (if single-choice? #{cast-votes} (set cast-votes))
+             option-voted? (votes-set id)]
+         [:<>
+          {:key (str "option-" id)}
+          (when-not (or cast-votes read-only?)
+            [:div.col-1
+             [:input.form-check-input.mt-3.mx-auto
+              (cond->
+               {:type (if single-choice? "radio" "checkbox")
+                :name :option-choice
+                :value id}
+                (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
+          [:div.my-1
+           {:class (if cast-votes "col-12" "col-11")}
+           [percentage-bar votes percentage index]
+           [:p.small.ms-1
+            {:class (when option-voted? "font-italic")}
+            value
+            [:span.float-end
+             [:span.me-3 votes " " (labels :schnaq.poll/votes)]
+             percentage]]]]))]))
 
 (defn ranking-item
   "A single graph-bar in ranking results"
