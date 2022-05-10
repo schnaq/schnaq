@@ -507,7 +507,8 @@
                                          :method keyword?}}
                              400 at/response-error-body
                              403 at/response-error-body}}]
-     ["/vote" {:parameters {:body {:inc-or-dec ::dto/maybe-inc-or-dec}}}
+     ["/vote" {:middleware [:discussion/valid-writeable-discussion?]
+               :parameters {:body {:inc-or-dec ::dto/maybe-inc-or-dec}}}
       ["/down" {:post toggle-downvote-statement
                 :description (at/get-doc #'toggle-downvote-statement)
                 :name :api.discussion.statement.vote/down
@@ -518,6 +519,7 @@
               :name :api.discussion.statement.vote/up
               :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
                           400 at/response-error-body}}]]
+     ;; TODO label change should also be locked
      ["/label" {:middleware [:discussion/valid-statement?]}
       ["/add" {:put add-label
                :description (at/get-doc #'add-label)
