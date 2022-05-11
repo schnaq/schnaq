@@ -30,7 +30,7 @@
   [[first-button & rest-buttons]]
   (let [{:keys [on-click label-key]} first-button
         active-filters? @(rf/subscribe [:filters/active?])]
-    [:div.btn-group.button-discussion-options.h-100.me-1
+    [:div.btn-group.me-1
      [:input.btn-check {:id label-key :name :filter-discussion-options
                         :type "radio" :autoComplete "off"
                         :onClick on-click}]
@@ -38,7 +38,7 @@
       (cond-> {:for label-key}
         (not active-filters?) (assoc :class "active"))
       [:small.d-md-none (labels label-key)]
-      [:div.d-none.d-md-block.mt-2 (labels label-key)]]
+      [:div.d-none.d-md-block (labels label-key)]]
      (for [{:keys [on-click label-key]} rest-buttons]
        [:<>
         {:key (str "discussion-options-button-group-item-" label-key)}
@@ -47,7 +47,7 @@
         [:label.btn.btn-sm.btn-outline-primary.px-1.px-md-2
          {:for label-key}
          [:small.d-md-none (labels label-key)]
-         [:div.d-none.d-md-block.mt-2 (labels label-key)]]])]))
+         [:div.d-none.d-md-block (labels label-key)]]])]))
 
 (defn qr-code
   ([link]
