@@ -49,41 +49,41 @@
       :hashtag "editor-text-hashtag"
       :underline "editor-text-underline"
       :strikethrough "editor-text-strikethrough"
-      :underlineStrikethrough "editor-text-underlineStrikethrough"
+      :underline-strikethrough "editor-text-underline-strikethrough"
       :code "editor-text-code"}
     :code "editor-code"
     :codeHighlight
     #js
-     {:atrule "editor-tokenAttr"
-      :attr "editor-tokenAttr"
-      :boolean "editor-tokenProperty"
-      :builtin "editor-tokenSelector"
-      :cdata "editor-tokenComment"
-      :char "editor-tokenSelector"
-      :class "editor-tokenFunction"
-      :class-name "editor-tokenFunction"
-      :comment "editor-tokenComment"
-      :constant "editor-tokenProperty"
-      :deleted "editor-tokenProperty"
-      :doctype "editor-tokenComment"
-      :entity "editor-tokenOperator"
-      :function "editor-tokenFunction"
-      :important "editor-tokenVariable"
-      :inserted "editor-tokenSelector"
-      :keyword "editor-tokenAttr"
-      :namespace "editor-tokenVariable"
-      :number "editor-tokenProperty"
-      :operator "editor-tokenOperator"
-      :prolog "editor-tokenComment"
-      :property "editor-tokenProperty"
-      :punctuation "editor-tokenPunctuation"
-      :regex "editor-tokenVariable"
-      :selector "editor-tokenSelector"
-      :string "editor-tokenSelector"
-      :symbol "editor-tokenProperty"
-      :tag "editor-tokenProperty"
-      :url "editor-tokenOperator"
-      :variable "editor-tokenVariable"}})
+     {:atrule "editor-token-attribute"
+      :attr "editor-token-attribute"
+      :boolean "editor-token-property"
+      :builtin "editor-token-selector"
+      :cdata "editor-token-comment"
+      :char "editor-token-selector"
+      :class "editor-token-function"
+      :class-name "editor-token-function"
+      :comment "editor-token-comment"
+      :constant "editor-token-property"
+      :deleted "editor-token-property"
+      :doctype "editor-token-comment"
+      :entity "editor-token-operator"
+      :function "editor-token-function"
+      :important "editor-token-variable"
+      :inserted "editor-token-selector"
+      :keyword "editor-token-attribute"
+      :namespace "editor-token-variable"
+      :number "editor-token-property"
+      :operator "editor-token-operator"
+      :prolog "editor-token-comment"
+      :property "editor-token-property"
+      :punctuation "editor-token-punctuation"
+      :regex "editor-token-variable"
+      :selector "editor-token-selector"
+      :string "editor-token-selector"
+      :symbol "editor-token-property"
+      :tag "editor-token-property"
+      :url "editor-token-operator"
+      :variable "editor-token-variable"}})
 
 (defn- on-error [error]
   (log/error error))
@@ -109,21 +109,23 @@
       [:<>
        [:button.btn.btn-primary {:on-click #(.log js/console @content)}
         "Mach was"]
-       [:> LexicalComposer {:initialConfig initial-config}
-        [:div.editor-container
-         [:f> toolbar-plugin]
-         [:div.editor-inner
-          [:> RichTextPlugin
-           {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
-          [:> HistoryPlugin {}]
-          [:f> tree-view-plugin]
-          [autolink-plugin]
-          [:> LinkPlugin]
-          [:> ListPlugin]
-          [:> MarkdownShortcut #js {:transformers TRANSFORMERS}]
-          [:> OnChangePlugin {:onChange (fn [editorState]
-                                          (.read editorState
-                                                 #(reset! content ($convertToMarkdownString TRANSFORMERS))))}]]]]])))
+       [:section.lexical-editor
+        [:> LexicalComposer {:initialConfig initial-config}
+         [:div.editor-container
+          [:f> toolbar-plugin]
+          [:div.editor-inner
+           [:> RichTextPlugin
+            {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
+           [:> HistoryPlugin {}]
+           [:f> tree-view-plugin]
+           [autolink-plugin]
+           [:> LinkPlugin]
+           [:> ListPlugin]
+           [:> MarkdownShortcut #js {:transformers TRANSFORMERS}]
+           [:> OnChangePlugin
+            {:onChange (fn [editorState]
+                         (.read editorState
+                                #(reset! content ($convertToMarkdownString TRANSFORMERS))))}]]]]]])))
 
 ;; -----------------------------------------------------------------------------
 
