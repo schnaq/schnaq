@@ -22,7 +22,8 @@
   @include button-template;
   color: $white;
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: $white;
   }
 }
