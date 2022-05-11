@@ -7,11 +7,11 @@
 
 (defn- view []
   [:<>
+   [lexical/page]
+   [:hr]
    [tiptap/page]
    [:hr]
-   [slate/page]
-   [:hr]
-   [lexical/page]])
+   [slate/page]])
 
 (defn page []
   [view])
