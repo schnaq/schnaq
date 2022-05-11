@@ -58,8 +58,8 @@
 
 (>defn add-user-to-customer-group!
   "Add an email address to a group in Cleverreach, i.e. a list of receivers."
-  [{:keys [email sub given_name family_name locale]}]
-  [::specs/identity => (? map?)]
+  [{:keys [email sub given_name family_name]} locale]
+  [::specs/identity ::specs/non-blank-string => (? map?)]
   (wrap-catch-exception
    email "Added mail %s to group" "User could not be added to cleverreach."
    #(client/post

@@ -75,7 +75,7 @@
   [{:keys [identity parameters]}]
   (log/info "User-Registration queried for" (:id identity)
             ", username:" (:preferred_username identity))
-  (let [{:keys [creation-secrets visited-hashes visited-statement-ids schnaq-creation-secrets]} (:body parameters)
+  (let [{:keys [creation-secrets visited-hashes visited-statement-ids schnaq-creation-secrets locale]} (:body parameters)
         visited-schnaqs (if visited-hashes (map :db/id (discussion-db/discussions-by-share-hashes visited-hashes)) [])
         [new-user? queried-user] (user-db/register-new-user identity visited-schnaqs visited-statement-ids)
         updated-statements? (associative? (discussion-db/update-authors-from-secrets
@@ -85,7 +85,7 @@
                   :updated-statements? updated-statements?
                   :updated-schnaqs? updated-schnaqs?}]
     (if new-user?
-      (do (cleverreach/add-user-to-customer-group! identity)
+      (do (cleverreach/add-user-to-customer-group! identity (str (name locale)))
           (created "" (assoc response :new-user? true)))
       (ok response))))
 
@@ -160,10 +160,12 @@
 (s/def ::visited-hashes (s/coll-of :discussion/share-hash))
 (s/def ::visited-statement-ids map?)
 (s/def ::schnaq-creation-secrets map?)
+(s/def ::locale keyword?)
 (s/def ::user-register (s/keys :opt-un [::visited-hashes
                                         ::creation-secrets
                                         ::visited-statement-ids
-                                        ::schnaq-creation-secrets]))
+                                        ::schnaq-creation-secrets
+                                        ::locale]))
 
 (def user-routes
   [["/user" {:swagger {:tags ["user"]}}
