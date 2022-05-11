@@ -175,10 +175,10 @@
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
     [tooltip/text (labels :badges/sort)
      (if (= :newest sort-method)
-       [:button.btn.btn-sm.btn-primary
+       [:button.btn.btn-sm.btn-primary.btn-invisible-border
         {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
         (labels :badges.sort/newest)]
-       [:button.btn.btn-sm.btn-primary
+       [:button.btn.btn-sm.btn-primary.btn-invisible-border
         {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
         (labels :badges.sort/popular)])]))
 
@@ -191,7 +191,7 @@
       {:on-click (if active?
                    #(rf/dispatch [:filters.deactivate/questions])
                    #(rf/dispatch [:filters.activate/questions]))
-       :class (if active? "btn-primary" "btn-outline-primary")}
+       :class (if active? "btn-primary btn-invisible-border" "btn-outline-primary")}
       (labels :filters.option/questions)]]))
 
 ;; -----------------------------------------------------------------------------
@@ -221,11 +221,11 @@
   [clear-id]
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
         action-icon (if (cstring/blank? search-string) :search :times)]
-    [:button.btn.button-muted.h-100
+    [:button.btn.button-muted.py-0
      {:on-click (fn [_e]
                   (toolbelt/clear-input clear-id)
                   (rf/dispatch [:schnaq.search.current/clear-search-string]))}
-     [icon action-icon "m-auto"]]))
+     [icon action-icon]]))
 
 (defn search-bar
   "A search-bar to search inside a schnaq."
@@ -233,11 +233,11 @@
   (let [search-input-id "search-bar"
         route-name @(rf/subscribe [:navigation/current-route-name])
         selected-statement-id (get-in @(rf/subscribe [:navigation/current-route]) [:path-params :statement-id])]
-    [:form
+    [:form.my-auto
      {:on-submit #(.preventDefault %)
       :key (str route-name selected-statement-id)}
-     [:div.input-group.search-bar.h-100.panel-white.p-0
-      [:input.form-control.my-auto.search-bar-input.h-100
+     [:div.input-group.search-bar.panel-white.p-0
+      [:input.form-control.my-auto.search-bar-input.py-0
        {:id search-input-id
         :type "text"
         :aria-label "Search"
@@ -256,12 +256,12 @@
     [:div.d-flex
      [:div.me-1.mx-lg-2.pe-0.pe-lg-2
       [sort-options]]
-     [:div.h-100
+     [:section
       (when @(rf/subscribe [:routes.schnaq/start?])
         [filters/filter-answered-statements])]
      [:div.mx-lg-2.pe-0.pe-lg-2
       [question-filter-button]]]
-    [:div.ms-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
+    [:div.ms-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0.d-flex.align-items-center
      [search-bar]]]])
 
 (defn locked-statement-icon
