@@ -96,6 +96,7 @@
     :startpage.information/anywhere "https://s3.schnaq.com/startpage/startpage_mobile_work.webp"
     :startpage.information/meeting "https://s3.schnaq.com/startpage/startpage-meeting.jpeg"
     :startpage.screenshots/qanda "https://s3.schnaq.com/startpage/screenshots/qanda.png"
+    :startpage.trust/germany-100 "https://s3.schnaq.com/startpage/100PercentGermany.png"
     :startpage/team-schnaq "https://s3.schnaq.com/startpage/schnaq-team.webp"
     :stock/team "https://s3.schnaq.com/startpage/team.jpeg"
     :team/alexander "https://s3.schnaq.com/team/alexanderschneider.jpg"

@@ -54,6 +54,9 @@
    :startpage.social-proof/teaser "Mit einem Klick gehörst du zu den tausenden Menschen, die schnaq nutzen 👋"
    :startpage.social-proof/companies "Mit denen haben wir schon geschnaqqt"
 
+   :startpage.trust/germany-100 "Ein Siegel: Schnaq ist 100 % gehostet in Deutschland"
+   :startpage.trust/capterra "Die schnaq Bewertung auf der B2B Bewertungsplattform Capterra"
+
    :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
    :startpage.features/more-information "Mehr Informationen"
 
