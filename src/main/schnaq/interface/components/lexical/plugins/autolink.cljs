@@ -1,13 +1,13 @@
 (ns schnaq.interface.components.lexical.plugins.autolink
   (:require ["@lexical/react/LexicalAutoLinkPlugin" :as AutoLinkPlugin]))
 
-(def url-regex
+(def ^:private url-regex
   (re-pattern "^https?://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]"))
 
-(def email-regex
+(def ^:private email-regex
   #"^[a-zA-Z0-9\._%-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,10}$")
 
-(def match-functions
+(def ^:private match-functions
   "Each function is executed on every character the user types, checked against
   the regular expressions and then converted, if there is a match."
   [(fn [text]
@@ -26,6 +26,8 @@
               :length (.-length (nth match 0)),
               :text (nth match 0),
               :url (str "mailto:" (nth match 0))})))])
+
+;; -----------------------------------------------------------------------------
 
 (defn autolink-plugin []
   [:> AutoLinkPlugin {:matchers match-functions}])
