@@ -113,7 +113,7 @@
           {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
          [:> HistoryPlugin {}]
          [:f> tree-view-plugin]
-        ;;  [:> LinkPlugin]
+         [:> LinkPlugin]
          [:> ListPlugin]
          [:> MarkdownShortcut #js {:transformers TRANSFORMERS}]
          [:> OnChangePlugin {:onChange (fn [editorState]
