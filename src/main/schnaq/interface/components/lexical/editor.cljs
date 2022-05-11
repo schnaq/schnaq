@@ -1,10 +1,8 @@
 (ns schnaq.interface.components.lexical.editor
-  (:require ["@lexical/code" :refer [CodeNode CodeHighlightNode]]
-            ["@lexical/link" :refer [LinkNode AutoLinkNode]]
+  (:require ["@lexical/code" :refer [CodeHighlightNode CodeNode]]
+            ["@lexical/link" :refer [AutoLinkNode LinkNode]]
             ["@lexical/list" :refer [ListItemNode ListNode]]
-            ["@lexical/rich-text" :refer [HeadingNode QuoteNode]]
-            ["@lexical/table" :refer [TableCellNode TableNode TableRowNode]]
-            ["@lexical/markdown" :refer [TRANSFORMERS $convertFromMarkdownString $convertToMarkdownString]]
+            ["@lexical/markdown" :refer [$convertToMarkdownString TRANSFORMERS]]
             ["@lexical/react/LexicalComposer" :as LexicalComposer]
             ["@lexical/react/LexicalContentEditable" :as ContentEditable]
             ["@lexical/react/LexicalHistoryPlugin" :refer [HistoryPlugin]]
@@ -13,7 +11,10 @@
             ["@lexical/react/LexicalMarkdownShortcutPlugin" :as MarkdownShortcut]
             ["@lexical/react/LexicalOnChangePlugin" :as OnChangePlugin]
             ["@lexical/react/LexicalRichTextPlugin" :as RichTextPlugin]
+            ["@lexical/rich-text" :refer [HeadingNode QuoteNode]]
+            ["@lexical/table" :refer [TableCellNode TableNode TableRowNode]]
             [reagent.core :as r]
+            [schnaq.interface.components.lexical.plugins.autolink :refer [autolink-plugin]]
             [schnaq.interface.components.lexical.plugins.toolbar :refer [toolbar-plugin]]
             [schnaq.interface.components.lexical.plugins.tree-view :refer [tree-view-plugin]]
             [taoensso.timbre :as log]))
@@ -105,20 +106,24 @@
   []
   (let [content (r/atom nil)]
     (fn []
-      [:> LexicalComposer {:initialConfig initial-config}
-       [:div.editor-container
-        [:f> toolbar-plugin]
-        [:div.editor-inner
-         [:> RichTextPlugin
-          {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
-         [:> HistoryPlugin {}]
-         [:f> tree-view-plugin]
-         [:> LinkPlugin]
-         [:> ListPlugin]
-         [:> MarkdownShortcut #js {:transformers TRANSFORMERS}]
-         [:> OnChangePlugin {:onChange (fn [editorState]
-                                         (.read editorState
-                                                #(reset! content ($convertToMarkdownString TRANSFORMERS))))}]]]])))
+      [:<>
+       [:button.btn.btn-primary {:on-click #(.log js/console @content)}
+        "Mach was"]
+       [:> LexicalComposer {:initialConfig initial-config}
+        [:div.editor-container
+         [:f> toolbar-plugin]
+         [:div.editor-inner
+          [:> RichTextPlugin
+           {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
+          [:> HistoryPlugin {}]
+          [:f> tree-view-plugin]
+          [autolink-plugin]
+          [:> LinkPlugin]
+          [:> ListPlugin]
+          [:> MarkdownShortcut #js {:transformers TRANSFORMERS}]
+          [:> OnChangePlugin {:onChange (fn [editorState]
+                                          (.read editorState
+                                                 #(reset! content ($convertToMarkdownString TRANSFORMERS))))}]]]]])))
 
 ;; -----------------------------------------------------------------------------
 
