@@ -54,6 +54,9 @@
    :startpage.social-proof/teaser "You are one click away from joining thousands of other schnaq users 👋"
    :startpage.social-proof/companies "They're already used to schnaq"
 
+   :startpage.trust/germany-100 "A Sign: Schnaq ist 100 % hosted in Germany"
+   :startpage.trust/capterra "Schnaq's user rating on the B2B reviews platform Capterra"
+
    :startpage.usage/lead "What do I use schnaq for?"
 
    :startpage.features/more-information "More information"
