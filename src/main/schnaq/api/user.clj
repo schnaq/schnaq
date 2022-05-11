@@ -1,13 +1,8 @@
 (ns schnaq.api.user
-  (:require [clj-http.client :as client]
-            [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [=> >defn-]]
-            [keycloak.admin :as kc-admin]
-            [muuntaja.core :as m]
+  (:require [clojure.spec.alpha :as s]
             [ring.util.http-response :refer [bad-request created ok]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
-            [schnaq.config.keycloak :as kc-config :refer [kc-client]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
@@ -26,45 +21,6 @@
 (s/def :login-error/error_description string?)
 (s/def ::login-error
   (s/keys :req-un [:login-error/error :login-error/error_description]))
-
-(s/def :registration-response/new? boolean?)
-(s/def ::registration-response
-  (s/keys :req-un [:registration-response/new? :user.registered/email]
-          :opt-un [::tokens]))
-
-(>defn- login-user-at-keycloak
-  "Login a user at keycloak. Return the tokens if login was successful."
-  [email password]
-  [:user.registered/email string? => (s/or :tokens ::tokens :error ::login-error)]
-  (try
-    (let [response
-          (:body
-           (client/post (format "%s/token" kc-config/openid-endpoint)
-                        {:headers {:content-type "application/x-www-form-urlencoded"}
-                         :form-params {:grant_type "password"
-                                       :client_id kc-config/client-id
-                                       :username email
-                                       :password password}
-                         :as :json}))]
-      response)
-    (catch Exception e
-      (let [body (m/decode-response-body (ex-data e))]
-        (log/info "Could not retrieve token for user:" body)
-        body))))
-
-(defn- user-registration
-  "Register new user if she does not already exist. On new registration, returns
-  the tokens to the user."
-  [{{{:keys [email password]} :body} :parameters}]
-  (if (user-db/user-by-email email)
-    (ok {:new? false
-         :email email})
-    (let [_ (kc-admin/create-user! kc-client kc-config/realm {:email email :password password})
-          tokens (login-user-at-keycloak email password)]
-      (log/debug "Registered new user:" email)
-      (if (:access_token tokens)
-        (ok {:new? true :tokens tokens :email email})
-        (bad-request (at/build-error-body (keyword (:error tokens)) (:error_description tokens)))))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -173,12 +129,6 @@
                        :description (at/get-doc #'add-anonymous-user)
                        :parameters {:body {:nickname :user/nickname}}
                        :responses {201 {:body {:user-id :db/id}}}}]
-    ["/registration/new" {:post user-registration
-                          :description (at/get-doc #'user-registration)
-                          :parameters {:body {:email :user.registered/email
-                                              :password string?}}
-                          :responses {200 {:body ::registration-response}
-                                      400 at/response-error-body}}]
     ["" {:middleware [:user/authenticated?]}
      ["/register" {:put register-user-if-they-not-exist
                    :description (at/get-doc #'register-user-if-they-not-exist)
