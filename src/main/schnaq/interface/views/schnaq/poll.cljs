@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.schnaq.poll
-  (:require [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
+  (:require [cljs.spec.alpha :as s]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
@@ -31,35 +32,36 @@
 (defn results-graph
   "A graph displaying the results of the poll."
   [{:poll/keys [options type]} cast-votes]
-  [:section.row
-   (for [index (range (count options))]
-     (let [{:keys [option/votes db/id option/value]} (get options index)
-           total-votes (apply + (map :option/votes options))
-           percentage (if (zero? total-votes)
-                        "0%"
-                        (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))
-           single-choice? (= :poll.type/single-choice type)
-           votes-set (if single-choice? #{cast-votes} (set cast-votes))
-           option-voted? (votes-set id)]
-       [:<>
-        {:key (str "option-" id)}
-        (when-not cast-votes
-          [:div.col-1
-           [:input.form-check-input.mt-3.mx-auto
-            (cond->
-             {:type (if single-choice? "radio" "checkbox")
-              :name :option-choice
-              :value id}
-              (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
-        [:div.my-1
-         {:class (if cast-votes "col-12" "col-11")}
-         [percentage-bar votes percentage index]
-         [:p.small.ms-1
-          {:class (when option-voted? "font-italic")}
-          value
-          [:span.float-end
-           [:span.me-3 votes " " (labels :schnaq.poll/votes)]
-           percentage]]]]))])
+  (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+    [:section.row
+     (for [index (range (count options))]
+       (let [{:keys [option/votes db/id option/value]} (get options index)
+             total-votes (apply + (map :option/votes options))
+             percentage (if (zero? total-votes)
+                          "0%"
+                          (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))
+             single-choice? (= :poll.type/single-choice type)
+             votes-set (if single-choice? #{cast-votes} (set cast-votes))
+             option-voted? (votes-set id)]
+         [:<>
+          {:key (str "option-" id)}
+          (when-not (or cast-votes read-only?)
+            [:div.col-1
+             [:input.form-check-input.mt-3.mx-auto
+              (cond->
+               {:type (if single-choice? "radio" "checkbox")
+                :name :option-choice
+                :value id}
+                (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
+          [:div.my-1
+           {:class (if cast-votes "col-12" "col-11")}
+           [percentage-bar votes percentage index]
+           [:p.small.ms-1
+            {:class (when option-voted? "font-italic")}
+            value
+            [:span.float-end
+             [:span.me-3 votes " " (labels :schnaq.poll/votes)]
+             percentage]]]]))]))
 
 (defn ranking-item
   "A single graph-bar in ranking results"
@@ -170,13 +172,14 @@
 (defn- poll-content
   "The content of a single or multiple choice poll. Can be either only the results or results and ability to vote."
   [poll]
-  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
+  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:form
      {:on-submit (fn [e]
                    (.preventDefault e)
                    (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
      [results-graph poll cast-votes]
-     (when-not cast-votes
+     (when-not (or cast-votes read-only?)
        [:div.text-center
         [:button.btn.btn-primary.btn-sm
          {:type :submit
@@ -188,9 +191,11 @@
   [poll]
   [::specs/poll => :re-frame/component]
   (if (= :poll.type/ranking (:poll/type poll))
-    (if-let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])]
-      [ranking-results poll cast-votes]
-      [ranking-input poll])
+    (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
+          read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+      (if (or cast-votes read-only?)
+        [ranking-results poll cast-votes]
+        [ranking-input poll]))
     [poll-content poll]))
 
 (>defn- ranking-card
@@ -227,7 +232,7 @@
 (>defn poll-list
   "Displays all polls of the current schnaq excluding the one in `exclude`."
   [exclude]
-  [:db/id :ret :re-frame/component]
+  [:db/id :ret (s/coll-of :re-frame/component)]
   (for [poll (remove #(= exclude (:db/id %)) @(rf/subscribe [:schnaq/polls]))]
     [:article
      {:key (str "poll-card-" (:db/id poll))}

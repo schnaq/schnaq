@@ -32,12 +32,6 @@
   (and (valid-discussion? share-hash)
        (db/check-valid-statement-id-for-discussion statement-id share-hash)))
 
-(defn valid-writeable-discussion-and-statement?
-  "Checks whether a discussion is valid, writeable and also whether the statement belongs to the discussion."
-  [statement-id share-hash]
-  (and (valid-writeable-discussion? share-hash)
-       (db/check-valid-statement-id-for-discussion statement-id share-hash)))
-
 (>defn valid-credentials?
   "Validate if share-hash and edit-hash match"
   [share-hash edit-hash]

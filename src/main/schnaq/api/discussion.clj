@@ -83,7 +83,7 @@
   [user-identity statement-id share-hash statement success-fn bad-request-fn deny-access-fn]
   (let [user-is-author? (= (:sub user-identity) (-> statement :statement/author :user.registered/keycloak-id))]
     (if (or user-is-author? (:admin? user-identity))
-      (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
+      (if (and (discussion-db/check-valid-statement-id-for-discussion statement-id share-hash)
                (not (:statement/deleted? statement)))
         (success-fn)
         (bad-request-fn))
@@ -156,12 +156,10 @@
         user-id (user-db/user-id display-name keycloak-id)
         ;; Only Moderators can lock
         locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
-    (if (validator/valid-writeable-discussion? share-hash)
-      (do (log/info "Starting statement added for discussion" share-hash)
-          (created "" {:starting-conclusion (discussion-db/add-starting-statement! share-hash user-id statement
-                                                                                   :registered-user? keycloak-id
-                                                                                   :locked? locked?)}))
-      (validator/deny-access at/invalid-rights-message))))
+    (log/info "Starting statement added for discussion" share-hash)
+    (created "" {:starting-conclusion (discussion-db/add-starting-statement! share-hash user-id statement
+                                                                             :registered-user? keycloak-id
+                                                                             :locked? locked?)})))
 
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement. `conclusion-id` is the
@@ -173,7 +171,7 @@
         user-id (user-db/user-id display-name keycloak-id)
         ;; Only Moderators can lock
         locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
-    (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
+    (if (discussion-db/check-valid-statement-id-for-discussion conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (created
            ""
@@ -395,7 +393,8 @@
    ["/react-to/statement" {:post react-to-any-statement!
                            :description (at/get-doc #'react-to-any-statement!)
                            :name :api.discussion.react-to/statement
-                           :middleware [:discussion/parent-unlocked?]
+                           :middleware [:discussion/parent-unlocked?
+                                        :discussion/valid-writeable-discussion?]
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
                                                :premise :statement/content
@@ -430,6 +429,7 @@
     ["/starting/add" {:post add-starting-statement!
                       :description (at/get-doc #'add-starting-statement!)
                       :name :api.discussion.statements.starting/add
+                      :middleware [:discussion/valid-writeable-discussion?]
                       :parameters {:body {:share-hash :discussion/share-hash
                                           :edit-hash (s/or :edit-hash :discussion/edit-hash
                                                            :nil nil?)
@@ -483,7 +483,8 @@
      ["/edit" {:put edit-statement!
                :description (at/get-doc #'edit-statement!)
                :name :api.discussion.statement/edit
-               :middleware [:user/authenticated?]
+               :middleware [:user/authenticated?
+                            :discussion/valid-writeable-discussion?]
                :parameters {:body {:statement-type (s/or :nil nil?
                                                          :type dto/statement-type)
                                    :new-content :statement/content
@@ -500,12 +501,14 @@
      ["/delete" {:delete delete-statement!
                  :description (at/get-doc #'delete-statement!)
                  :name :api.discussion.statement/delete
-                 :middleware [:user/authenticated?]
+                 :middleware [:user/authenticated?
+                              :discussion/valid-writeable-discussion?]
                  :responses {200 {:body {:deleted-statement :db/id
                                          :method keyword?}}
                              400 at/response-error-body
                              403 at/response-error-body}}]
-     ["/vote" {:parameters {:body {:inc-or-dec ::dto/maybe-inc-or-dec}}}
+     ["/vote" {:middleware [:discussion/valid-writeable-discussion?]
+               :parameters {:body {:inc-or-dec ::dto/maybe-inc-or-dec}}}
       ["/down" {:post toggle-downvote-statement
                 :description (at/get-doc #'toggle-downvote-statement)
                 :name :api.discussion.statement.vote/down
@@ -516,7 +519,8 @@
               :name :api.discussion.statement.vote/up
               :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
                           400 at/response-error-body}}]]
-     ["/label" {:middleware [:discussion/valid-statement?]}
+     ["/label" {:middleware [:discussion/valid-statement?
+                             :discussion/valid-writeable-discussion?]}
       ["/add" {:put add-label
                :description (at/get-doc #'add-label)
                :name :api.discussion.statement.label/add

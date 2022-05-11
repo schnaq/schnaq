@@ -105,10 +105,6 @@
       (is (= 200 (:status (edit-statement! (request keycloak-id)))))
       ;; Statement is deleted
       (db/transact [[:db/add (:db/id statement) :statement/deleted? true]])
-      (is (= 400 (:status (edit-statement! (request keycloak-id)))))
-      ;; Statement is fine but discussion is read-only
-      (db/transact [[:db/add (:db/id statement) :statement/deleted? false]])
-      (discussion-db/set-discussion-read-only share-hash)
       (is (= 400 (:status (edit-statement! (request keycloak-id))))))))
 
 (deftest edit-discussion-title!-test

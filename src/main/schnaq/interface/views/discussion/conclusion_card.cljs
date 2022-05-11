@@ -86,8 +86,9 @@
         checked? (statement-labels label)
         authenticated? @(rf/subscribe [:user/authenticated?])
         mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        show-button? (or (not mods-mark-only?)
-                         (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash])))]
+        show-button? (and (not @(rf/subscribe [:schnaq.selected/read-only?]))
+                          (or (not mods-mark-only?)
+                              (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
     (when show-button?
       [:section.w-100
        [:button.btn.btn-sm.btn-link.text-dark.pe-0
@@ -471,7 +472,8 @@
         question-input @(rf/subscribe [:schnaq.question.input/current])
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements))))
-        question-first? (not-empty question-input)]
+        question-first? (not-empty question-input)
+        activations (when @(rf/subscribe [:schnaq/activations?]) [activation-cards/activation-cards])]
     (if schnaq-loading?
       [loading/loading-card]
       [:div.row
@@ -480,10 +482,10 @@
          {:breakpoints config/breakpoints
           :columns {:xs 1 :lg 2}
           :gap 10}
-         [:div
+         [:section
           [info-card]
           [selection-card]]]
-         question-first? (conj statements [activation-cards/activation-cards])
-         (not question-first?) (conj [activation-cards/activation-cards] statements))
+         question-first? (conj statements activations)
+         (not question-first?) (conj activations statements))
        (when show-call-to-share?
          [call-to-share])])))

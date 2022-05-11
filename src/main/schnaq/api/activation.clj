@@ -75,6 +75,7 @@
      ["/increment" {:put increment-activation-counter
                     :description (at/get-doc #'increment-activation-counter)
                     :name :activation/increment
+                    :middleware [:discussion/valid-writeable-discussion?]
                     :parameters {:body {:share-hash :discussion/share-hash}}
                     :responses {200 {:body {:activation ::specs/activation}}
                                 400 at/response-error-body}}]
