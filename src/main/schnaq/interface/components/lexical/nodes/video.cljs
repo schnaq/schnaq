@@ -1,17 +1,17 @@
 (ns schnaq.interface.components.lexical.nodes.video
-  (:require ["lexical" :refer [DecoratorNode EditorConfig LexicalEditor]]
+  (:require ["lexical" :refer [DecoratorNode EditorConfig LexicalEditor NodeKey]]
             [oops.core :refer [oget oset!]]
             [reagent.core :as r]
             [shadow.cljs.modern :refer [defclass]]))
 
 (defn VideoPlayer [url]
-  (r/create-element "video"
-                    #js{:className "w-100"
-                        :src url
-                        :controls true}))
+  (r/as-element
+   [:video.w-75 {:src url
+                 :controls true}]))
 
 (defclass VideoNode
   (field ^string __url)
+  (field ^NodeKey __key)
   (extends DecoratorNode)
   (constructor [_this url ?key]
                (super ?key)
@@ -28,6 +28,9 @@
   (decorate [this ^LexicalEditor editor]
             (VideoPlayer (oget this "__url"))))
 (set! (.-getType VideoNode) (fn [] "video"))
+(set! (.-clone VideoNode)
+      (fn [^VideoNode node]
+        (VideoNode. (oget node "__url") (oget node "__key"))))
 
 (defn $createVideoNode [url]
   (VideoNode. url nil))

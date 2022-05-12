@@ -1,14 +1,56 @@
 (ns schnaq.interface.components.lexical.nodes.image
-  (:require ["lexical" :refer [DecoratorNode EditorConfig LexicalEditor]]
+  (:require ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
+            ["@lexical/react/useLexicalNodeSelection" :as useLexicalNodeSelection]
+            ["@lexical/utils" :refer [mergeRegister]]
+            ["lexical" :refer [$getNodeByKey $getSelection $isNodeSelection
+                               CLICK_COMMAND COMMAND_PRIORITY_LOW DecoratorNode
+                               EditorConfig KEY_BACKSPACE_COMMAND KEY_DELETE_COMMAND NodeKey]]
+            ["react" :refer [useCallback useEffect useRef]]
             [oops.core :refer [oget oset!]]
             [reagent.core :as r]
             [shadow.cljs.modern :refer [defclass]]))
 
-(defn ImageComponent [src altText]
-  (r/create-element "img"
-                    #js{:className "w-100"
-                        :src src
-                        :alt altText}))
+(defn ImageComponent [properties]
+  (let [src (.-src properties)
+        altText (.-alt properties)
+        nodeKey ^NodeKey (.-nodeKey properties)
+        ref (useRef nil)
+        [isSelected setSelected clearSelection] (useLexicalNodeSelection nodeKey)
+        [editor] (useLexicalComposerContext)
+        onDelete (useCallback
+                  (fn [payload]
+                    (when (and isSelected ($isNodeSelection ($getSelection)))
+                      (let [event payload]
+                        (.preventDefault event)
+                        (.update editor
+                                 (fn []
+                                   (let [node ($getNodeByKey nodeKey)]
+                                     (.remove node)
+                                     (setSelected false))))))
+                    false)
+                  #js [editor isSelected nodeKey setSelected])]
+    (useEffect
+     (fn []
+       (mergeRegister
+        (.registerCommand
+         editor
+         CLICK_COMMAND
+         (fn [payload]
+           (let [event payload]
+             (when (= (.-target event) (.-current ref))
+               (when (not (.-shiftKey event)) (clearSelection))
+               (setSelected (not isSelected))
+               true)
+             false))
+         COMMAND_PRIORITY_LOW)
+        (.registerCommand editor KEY_DELETE_COMMAND onDelete COMMAND_PRIORITY_LOW)
+        (.registerCommand editor KEY_BACKSPACE_COMMAND onDelete COMMAND_PRIORITY_LOW)))
+     #js [clearSelection editor isSelected nodeKey onDelete setSelected])
+    (r/as-element
+     [:img.w-75 {:class (when isSelected "focused")
+                 :src src
+                 :alt altText
+                 :ref ref}])))
 
 ;; -----------------------------------------------------------------------------
 ;; Extend the DecoratorNode to create an image node.
@@ -16,6 +58,7 @@
 (defclass ImageNode
   (field ^string __src)
   (field ^string __altText)
+  (field ^NodeKey __key)
   (extends DecoratorNode)
   (constructor [_this src altText ?key]
                (super ?key)
@@ -28,19 +71,13 @@
                div))
   (updateDOM [_this] false)
   (decorate [this ^LexicalEditor editor]
-            (ImageComponent (oget this "__src") (oget this "__altText"))))
+            (r/create-element ImageComponent #js {:src (oget this "__src") :alt (oget this "__altText") :nodeKey (.getKey this)})))
 ;; Configure static methods on our new class, because it is not possible to do
 ;; this inline in the `defclass` macro.
 (set! (.-getType ImageNode) (fn [] "image"))
 (set! (.-clone ImageNode)
       (fn [^ImageNode node]
-        (ImageNode. (.-src node) (.-altText node) nil)))
-
-;; -----------------------------------------------------------------------------
+        (ImageNode. (oget node "__src") (oget node "__altText") (oget node "__key"))))
 
 (defn $createImageNode [src altText]
   (ImageNode. src altText nil))
-
-(defn $isImageNode [^LexicalNode node]
-  (when node
-    (instance? node ImageNode)))

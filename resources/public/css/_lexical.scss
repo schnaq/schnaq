@@ -9,6 +9,11 @@
     text-align: right;
   }
 
+  .focused {
+    outline: 2px solid var(--theming-secondary);
+    user-select: none;
+  }
+
   .editor-container {
     border-radius: 2px;
     border-top-left-radius: 10px;
