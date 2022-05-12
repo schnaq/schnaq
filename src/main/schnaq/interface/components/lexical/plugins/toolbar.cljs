@@ -1,19 +1,19 @@
 (ns schnaq.interface.components.lexical.plugins.toolbar
   (:require ["@lexical/link" :refer [$isLinkNode TOGGLE_LINK_COMMAND]]
-            ["@lexical/list" :refer [$isListNode ListNode
-                                     INSERT_ORDERED_LIST_COMMAND
-                                     INSERT_UNORDERED_LIST_COMMAND
+            ["@lexical/list" :refer [$isListNode INSERT_ORDERED_LIST_COMMAND
+                                     INSERT_UNORDERED_LIST_COMMAND ListNode
                                      REMOVE_LIST_COMMAND]]
             ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
-            ["@lexical/rich-text" :refer [$isHeadingNode $createQuoteNode]]
-            ["@lexical/selection" :refer [$wrapLeafNodesInElements $isAtNodeEnd]]
+            ["@lexical/rich-text" :refer [$createQuoteNode $isHeadingNode]]
+            ["@lexical/selection" :refer [$isAtNodeEnd $wrapLeafNodesInElements]]
             ["@lexical/utils" :refer [$getNearestNodeOfType mergeRegister]]
-            ["lexical" :refer [$getSelection $isRangeSelection
-                               FORMAT_TEXT_COMMAND SELECTION_CHANGE_COMMAND
-                               CAN_UNDO_COMMAND CAN_REDO_COMMAND
-                               REDO_COMMAND UNDO_COMMAND]]
+            ["lexical" :refer [$getSelection $isRangeSelection CAN_REDO_COMMAND
+                               CAN_UNDO_COMMAND FORMAT_TEXT_COMMAND REDO_COMMAND
+                               SELECTION_CHANGE_COMMAND UNDO_COMMAND]]
             ["react" :refer [useCallback useEffect useState]]
-            [schnaq.interface.components.icons :refer [icon]]))
+            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.lexical.plugins.images :refer [INSERT_IMAGE_COMMAND]]
+            [schnaq.interface.components.lexical.plugins.video :refer [INSERT_VIDEO_COMMAND]]))
 
 (def low-priority 1)
 
@@ -129,6 +129,12 @@
      [:button.toolbar-item.spaced
       {:on-click #(format-quote editor blockType)}
       [icon :quote-right]]
+     [:button.toolbar-item.spaced
+      {:on-click #(.dispatchCommand editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "foo"})}
+      [icon :rocket]]
+     [:button.toolbar-item.spaced
+      {:on-click #(.dispatchCommand editor INSERT_VIDEO_COMMAND "https://s3.schnaq.com/startpage/videos/above_the_fold.webm")}
+      [icon :star]]
      [:button.toolbar-item.spaced
       (let [unordered-list? (= blockType "ul")]
         {:on-click #(if unordered-list?

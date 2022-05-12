@@ -14,9 +14,13 @@
             ["@lexical/rich-text" :refer [HeadingNode QuoteNode]]
             ["@lexical/table" :refer [TableCellNode TableNode TableRowNode]]
             [reagent.core :as r]
+            [schnaq.interface.components.lexical.nodes.image :refer [ImageNode]]
+            [schnaq.interface.components.lexical.nodes.video :refer [VideoNode]]
             [schnaq.interface.components.lexical.plugins.autolink :refer [autolink-plugin]]
+            [schnaq.interface.components.lexical.plugins.images :refer [ImagesPlugin]]
             [schnaq.interface.components.lexical.plugins.toolbar :refer [toolbar-plugin]]
             [schnaq.interface.components.lexical.plugins.tree-view :refer [tree-view-plugin]]
+            [schnaq.interface.components.lexical.plugins.video :refer [VideoPlugin]]
             [taoensso.timbre :as log]))
 
 (def theme
@@ -94,6 +98,8 @@
                    CodeNode
                    CodeHighlightNode
                    HeadingNode
+                   ImageNode
+                   VideoNode
                    LinkNode
                    ListNode
                    ListItemNode
@@ -119,12 +125,15 @@
            [:> HistoryPlugin {}]
            [:f> tree-view-plugin]
            [autolink-plugin]
+           [:f> ImagesPlugin]
+           [:f> VideoPlugin]
            [:> LinkPlugin]
            [:> ListPlugin]
            [:> MarkdownShortcut #js {:transformers TRANSFORMERS}]
            [:> OnChangePlugin
             {:onChange (fn [editorState]
                          (.read editorState
+                                #_(ImageNode. "src" "altText" "maxWidth" "width" "height" true "caption")
                                 #(reset! content ($convertToMarkdownString TRANSFORMERS))))}]]]]]])))
 
 ;; -----------------------------------------------------------------------------
