@@ -53,12 +53,12 @@
         [link? setIsLink] (useState false)
         [can-undo? setCanUndo] (useState false)
         [can-redo? setCanRedo] (useState false)
-        insert-link (useCallback
-                     (fn []
-                       (if (not link?)
-                         (.dispatchCommand editor TOGGLE_LINK_COMMAND "https://")
-                         (.dispatchCommand editor TOGGLE_LINK_COMMAND nil)))
-                     #js [editor link?])
+        _insert-link (useCallback
+                      (fn []
+                        (if (not link?)
+                          (.dispatchCommand editor TOGGLE_LINK_COMMAND "https://")
+                          (.dispatchCommand editor TOGGLE_LINK_COMMAND nil)))
+                      #js [editor link?])
         updateToolbar
         (useCallback
          (fn []

@@ -1,8 +1,8 @@
 (ns schnaq.interface.components.lexical.plugins.images
-  (:require [schnaq.interface.components.lexical.nodes.image :refer [$createImageNode ImageNode]]
+  (:require ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
             ["lexical" :refer [$getSelection $isRangeSelection $isRootNode COMMAND_PRIORITY_EDITOR createCommand LexicalCommand]]
-            ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
-            ["react" :refer [useEffect]]))
+            ["react" :refer [useEffect]]
+            [schnaq.interface.components.lexical.nodes.image :refer [$createImageNode ImageNode]]))
 
 (def INSERT_IMAGE_COMMAND (createCommand))
 

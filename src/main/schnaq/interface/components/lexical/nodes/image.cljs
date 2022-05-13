@@ -10,6 +10,8 @@
             [reagent.core :as r]
             [shadow.cljs.modern :refer [defclass]]))
 
+(declare $isImageNode)
+
 (defn ImageComponent [properties]
   (let [src (.-src properties)
         altText (.-alt properties)
@@ -23,7 +25,8 @@
                       (.preventDefault event)
                       (.update editor
                                #(let [node ($getNodeByKey nodeKey)]
-                                  (.remove node)
+                                  (when ($isImageNode node)
+                                    (.remove node))
                                   (setSelected false))))
                     false)
                   #js [editor isSelected nodeKey setSelected])]
@@ -50,6 +53,18 @@
 
 ;; -----------------------------------------------------------------------------
 ;; Extend the DecoratorNode to create an image node.
+
+;; (deftype ImageNode2 [src altText key])
+
+;; (extend-type ImageNode2
+;;   DecoratorNode)
+
+(comment
+
+  (type js/NodeList)
+  (type DecoratorNode)
+  (instance? js/Node "foo")
+  nil)
 
 (defclass ImageNode
   (field ^string __src)
@@ -78,3 +93,7 @@
 
 (defn $createImageNode [src altText]
   (ImageNode. src altText nil))
+
+(defn $isImageNode [^LexicalNode node]
+  (when node
+    (instance? ImageNode node)))
