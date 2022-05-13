@@ -18,30 +18,26 @@
         [isSelected setSelected clearSelection] (useLexicalNodeSelection nodeKey)
         [editor] (useLexicalComposerContext)
         onDelete (useCallback
-                  (fn [payload]
+                  (fn [event]
                     (when (and isSelected ($isNodeSelection ($getSelection)))
-                      (let [event payload]
-                        (.preventDefault event)
-                        (.update editor
-                                 (fn []
-                                   (let [node ($getNodeByKey nodeKey)]
-                                     (.remove node)
-                                     (setSelected false))))))
+                      (.preventDefault event)
+                      (.update editor
+                               #(let [node ($getNodeByKey nodeKey)]
+                                  (.remove node)
+                                  (setSelected false))))
                     false)
                   #js [editor isSelected nodeKey setSelected])]
     (useEffect
      (fn []
        (mergeRegister
         (.registerCommand
-         editor
-         CLICK_COMMAND
-         (fn [payload]
-           (let [event payload]
-             (when (= (.-target event) (.-current ref))
-               (when (not (.-shiftKey event)) (clearSelection))
-               (setSelected (not isSelected))
-               true)
-             false))
+         editor CLICK_COMMAND
+         (fn [event]
+           (when (= (.-target event) (.-current ref))
+             (when (not (.-shiftKey event)) (clearSelection))
+             (setSelected (not isSelected))
+             true)
+           false)
          COMMAND_PRIORITY_LOW)
         (.registerCommand editor KEY_DELETE_COMMAND onDelete COMMAND_PRIORITY_LOW)
         (.registerCommand editor KEY_BACKSPACE_COMMAND onDelete COMMAND_PRIORITY_LOW)))
@@ -70,8 +66,9 @@
                (oset! div ["style" "display"] "contents")
                div))
   (updateDOM [_this] false)
-  (decorate [this ^LexicalEditor editor]
+  (decorate [this ^LexicalEditor _editor]
             (r/create-element ImageComponent #js {:src (oget this "__src") :alt (oget this "__altText") :nodeKey (.getKey this)})))
+
 ;; Configure static methods on our new class, because it is not possible to do
 ;; this inline in the `defclass` macro.
 (set! (.-getType ImageNode) (fn [] "image"))

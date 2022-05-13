@@ -133,7 +133,6 @@
            [:> OnChangePlugin
             {:onChange (fn [editorState]
                          (.read editorState
-                                #_(ImageNode. "src" "altText" "maxWidth" "width" "height" true "caption")
                                 #(reset! content ($convertToMarkdownString TRANSFORMERS))))}]]]]]])))
 
 ;; -----------------------------------------------------------------------------

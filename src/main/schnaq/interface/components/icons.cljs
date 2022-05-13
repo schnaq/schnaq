@@ -2,7 +2,7 @@
   ;; For further information check: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react
   ;; For two styles of the same icon see here: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react#faqs
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub faFontAwesomeFlag]]
-            ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faIdCard faHourglass]]
+            ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faIdCard faHourglass faImage faFileVideo faFileImage]]
             ["@fortawesome/free-solid-svg-icons" :refer
              [faArchive faBackspace faBold faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle faCode
               faCloud faCog faComment faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
@@ -64,6 +64,8 @@
    :handshake faHandshake
    :hourglass/empty faHourglass
    :id-card faIdCard
+   :image faImage
+   :image-file faFileImage
    :info faInfoCircle
    :info-question faQuestionCircle
    :instagram faInstagram
@@ -109,7 +111,8 @@
    :user/group faUsers
    :user/lock faUserLock
    :user/ninja faUserNinja
-   :user/plus faUserPlus})
+   :user/plus faUserPlus
+   :video-file faFileVideo})
 
 (defn icon
   "The core icon building-block. Pass extra-attributes as a third parameter.

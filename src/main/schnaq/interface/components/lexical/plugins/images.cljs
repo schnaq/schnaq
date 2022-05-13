@@ -6,7 +6,9 @@
 
 (def INSERT_IMAGE_COMMAND (createCommand))
 
-(defn ImagesPlugin []
+(defn ImagesPlugin
+  "Plugin to include images into the editor."
+  []
   (let [[editor] (useLexicalComposerContext)]
     (useEffect
      (fn []
@@ -16,7 +18,6 @@
         editor
         INSERT_IMAGE_COMMAND
         (fn [^LexicalCommand payload]
-          (prn "[ImagesPlugin]")
           (let [selection ($getSelection)]
             (when ($isRangeSelection selection)
               (when ($isRootNode (.getNode (.-anchor selection)))
