@@ -11,6 +11,7 @@
                                CAN_UNDO_COMMAND FORMAT_TEXT_COMMAND REDO_COMMAND
                                SELECTION_CHANGE_COMMAND UNDO_COMMAND]]
             ["react" :refer [useCallback useEffect useState]]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.lexical.plugins.images :refer [INSERT_IMAGE_COMMAND]]
             [schnaq.interface.components.lexical.plugins.video :refer [INSERT_VIDEO_COMMAND]]
@@ -41,6 +42,22 @@
              #(let [selection ($getSelection)]
                 (when ($isRangeSelection selection)
                   ($wrapLeafNodesInElements selection (fn [] ($createQuoteNode))))))))
+
+(defn development-buttons
+  "Some buttons only for development, e.g. to fast insert an image."
+  [^LexicalEditor editor]
+  (when-not shared-config/production?
+    [:<>
+     [tooltip/text
+      "[Dev] Insert Image"
+      [:button.toolbar-item.spaced.text-secondary
+       {:on-click #(.dispatchCommand editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "foo"})}
+       [icon :image-file]]]
+     [tooltip/text
+      "[Dev] Insert Video"
+      [:button.toolbar-item.spaced.text-secondary
+       {:on-click #(.dispatchCommand editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"})}
+       [icon :video-file]]]]))
 
 (defn ToolbarPlugin
   "Build a toolbar for the editor."
@@ -181,4 +198,5 @@
       [:button.toolbar-item.spaced
        {:on-click #(.dispatchCommand editor REDO_COMMAND)
         :disabled (not can-redo?)}
-       [icon :redo]]]]))
+       [icon :redo]]]
+     [development-buttons editor]]))
