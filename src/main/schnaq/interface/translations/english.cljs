@@ -1291,6 +1291,20 @@ Now we write down questions and discuss them and can still understand what we ha
    :registration.pricing.pro/themes "Personal Design"
    :registration.pricing.enterprise/all-from-pro "All Pro Features, plus:"
 
+   ;; Editor
+   :editor.toolbar/bold "Bold"
+   :editor.toolbar/italic "Italic"
+   :editor.toolbar/underline "Underline"
+   :editor.toolbar/strike-through "Strike through"
+   :editor.toolbar/code "Code"
+   :editor.toolbar/quote "Quote"
+   :editor.toolbar/image-upload "Upload an image"
+   :editor.toolbar/video-upload "Upload a video"
+   :editor.toolbar/list-ul "Unsorted List"
+   :editor.toolbar/list-ol "Sorted List"
+   :editor.toolbar/undo "Undo"
+   :editor.toolbar/redo "Redo"
+
    ;; Alt texts
    :schnaqqifant/hippie-alt-text "Schnaqqi the schnaq mascot dressed as a hippie"
    :schnaqqifant/police-alt-text "Schnaqqi the schnaq mascot dressed as a police elefant"

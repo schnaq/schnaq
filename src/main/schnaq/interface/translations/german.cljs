@@ -1289,6 +1289,20 @@
    :registration.pricing.pro/themes "Persönliches Design"
    :registration.pricing.enterprise/all-from-pro "Alle Pro-Features, plus:"
 
+   ;; Editor
+   :editor.toolbar/bold "Fett"
+   :editor.toolbar/italic "Kursiv"
+   :editor.toolbar/underline "Unterstreichen"
+   :editor.toolbar/strike-through "Durchstreichen"
+   :editor.toolbar/code "Code"
+   :editor.toolbar/quote "Zitat"
+   :editor.toolbar/image-upload "Bild hochladen"
+   :editor.toolbar/video-upload "Video hochladen"
+   :editor.toolbar/list-ul "Unsortierte Liste"
+   :editor.toolbar/list-ol "Sortierte Liste"
+   :editor.toolbar/undo "Rückgängig"
+   :editor.toolbar/redo "Wiederholen"
+
    ;; Alt texts
    :schnaqqifant/hippie-alt-text "Schnaqqi, das schnaq Maskottchen, als Hippie verkleidet"
    :schnaqqifant/police-alt-text "Schnaqqi, das schnaq Maskottchen, als Polizist verkleidet"

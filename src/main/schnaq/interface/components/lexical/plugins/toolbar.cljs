@@ -13,7 +13,9 @@
             ["react" :refer [useCallback useEffect useState]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.lexical.plugins.images :refer [INSERT_IMAGE_COMMAND]]
-            [schnaq.interface.components.lexical.plugins.video :refer [INSERT_VIDEO_COMMAND]]))
+            [schnaq.interface.components.lexical.plugins.video :refer [INSERT_VIDEO_COMMAND]]
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.tooltip :as tooltip]))
 
 (def low-priority 1)
 
@@ -49,7 +51,7 @@
         [code? code!] (useState false)
         [italic? italic!] (useState false)
         [underline? underline!] (useState false)
-        [strike-through? strikethrough!] (useState false)
+        [strike-through? strike-through!] (useState false)
         [link? link!] (useState false)
         [can-undo? can-undo!] (useState false)
         [can-redo? can-redo!] (useState false)
@@ -79,7 +81,7 @@
                  (code! (.hasFormat selection "code"))
                  (italic! (.hasFormat selection "italic"))
                  (underline! (.hasFormat selection "underline"))
-                 (strikethrough! (.hasFormat selection "strikethrough"))
+                 (strike-through! (.hasFormat selection "strikethrough"))
 
                  ;; Update links
                  (let [node (get-selected-node selection)
@@ -105,54 +107,78 @@
                          low-priority))
      #js [editor updateToolbar])
     [:div.toolbar
-     [:button.toolbar-item.spaced
-      {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "bold")
-       :class (when bold? "active")}
-      [icon :bold]]
-     [:button.toolbar-item.spaced
-      {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "italic")
-       :class (when italic? "active")}
-      [icon :italic]]
-     [:button.toolbar-item.spaced
-      {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "underline")
-       :class (when underline? "active")}
-      [icon :underline]]
-     [:button.toolbar-item.spaced
-      {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "strikethrough")
-       :class (when strike-through? "active")}
-      [icon :strikethrough]]
-     [:button.toolbar-item.spaced
-      {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "code")
-       :class (when code? "active")}
-      [icon :code]]
-     [:button.toolbar-item.spaced
-      {:on-click #(format-quote editor block-type)}
-      [icon :quote-right]]
-     [:button.toolbar-item.spaced
-      {:on-click #(.dispatchCommand editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "foo"})}
-      [icon :image-file]]
-     [:button.toolbar-item.spaced
-      {:on-click #(.dispatchCommand editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"})}
-      [icon :video-file]]
-     [:button.toolbar-item.spaced
-      (let [unordered-list? (= block-type "ul")]
-        {:on-click #(if unordered-list?
-                      (.dispatchCommand editor REMOVE_LIST_COMMAND)
-                      (.dispatchCommand editor INSERT_UNORDERED_LIST_COMMAND))
-         :class (when unordered-list? "active")})
-      [icon :list]]
-     [:button.toolbar-item.spaced
-      (let [ordered-list? (= block-type "ol")]
-        {:on-click #(if ordered-list?
-                      (.dispatchCommand editor REMOVE_LIST_COMMAND)
-                      (.dispatchCommand editor INSERT_ORDERED_LIST_COMMAND))
-         :class (when ordered-list? "active")})
-      [icon :list-ol]]
-     [:button.toolbar-item.spaced
-      {:on-click #(.dispatchCommand editor UNDO_COMMAND)
-       :disabled (not can-undo?)}
-      [icon :undo]]
-     [:button.toolbar-item.spaced
-      {:on-click #(.dispatchCommand editor REDO_COMMAND)
-       :disabled (not can-redo?)}
-      [icon :redo]]]))
+     [tooltip/text
+      (labels :editor.toolbar/bold)
+      [:button.toolbar-item.spaced
+       {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "bold")
+        :class (when bold? "active")}
+       [icon :bold]]]
+     [tooltip/text
+      (labels :editor.toolbar/italic)
+      [:button.toolbar-item.spaced
+       {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "italic")
+        :class (when italic? "active")}
+       [icon :italic]]]
+     [tooltip/text
+      (labels :editor.toolbar/underline)
+      [:button.toolbar-item.spaced
+       {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "underline")
+        :class (when underline? "active")}
+       [icon :underline]]]
+     [tooltip/text
+      (labels :editor.toolbar/strike-through)
+      [:button.toolbar-item.spaced
+       {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "strikethrough")
+        :class (when strike-through? "active")}
+       [icon :strike-through]]]
+     [tooltip/text
+      (labels :editor.toolbar/code)
+      [:button.toolbar-item.spaced
+       {:on-click #(.dispatchCommand editor FORMAT_TEXT_COMMAND "code")
+        :class (when code? "active")}
+       [icon :code]]]
+     [tooltip/text
+      (labels :editor.toolbar/quote)
+      [:button.toolbar-item.spaced
+       {:on-click #(format-quote editor block-type)}
+       [icon :quote-right]]]
+     [tooltip/text
+      (labels :editor.toolbar/image-upload)
+      [:button.toolbar-item.spaced
+       {:on-click #(.dispatchCommand editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "foo"})}
+       [icon :image-file]]]
+     [tooltip/text
+      (labels :editor.toolbar/video-upload)
+      [:button.toolbar-item.spaced
+       {:on-click #(.dispatchCommand editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"})}
+       [icon :video-file]]]
+     [tooltip/text
+      (labels :editor.toolbar/list-ul)
+      [:button.toolbar-item.spaced
+       (let [unordered-list? (= block-type "ul")]
+         {:on-click #(if unordered-list?
+                       (.dispatchCommand editor REMOVE_LIST_COMMAND)
+                       (.dispatchCommand editor INSERT_UNORDERED_LIST_COMMAND))
+          :class (when unordered-list? "active")})
+       [icon :list]]]
+     [tooltip/text
+      (labels :editor.toolbar/list-ol)
+      [:button.toolbar-item.spaced
+       (let [ordered-list? (= block-type "ol")]
+         {:on-click #(if ordered-list?
+                       (.dispatchCommand editor REMOVE_LIST_COMMAND)
+                       (.dispatchCommand editor INSERT_ORDERED_LIST_COMMAND))
+          :class (when ordered-list? "active")})
+       [icon :list-ol]]]
+     [tooltip/text
+      (labels :editor.toolbar/undo)
+      [:button.toolbar-item.spaced
+       {:on-click #(.dispatchCommand editor UNDO_COMMAND)
+        :disabled (not can-undo?)}
+       [icon :undo]]]
+     [tooltip/text
+      (labels :editor.toolbar/redo)
+      [:button.toolbar-item.spaced
+       {:on-click #(.dispatchCommand editor REDO_COMMAND)
+        :disabled (not can-redo?)}
+       [icon :redo]]]]))

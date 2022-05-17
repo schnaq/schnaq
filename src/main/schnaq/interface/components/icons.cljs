@@ -97,7 +97,7 @@
    :share faShareAlt
    :shield faShieldAlt
    :star faStar
-   :strikethrough faStrikethrough
+   :strike-through faStrikethrough
    :sun faSun
    :tag faTag
    :terminal faTerminal
