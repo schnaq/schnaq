@@ -2,7 +2,7 @@
   (:require ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
             ["lexical" :refer [$getSelection $isRangeSelection $isRootNode COMMAND_PRIORITY_EDITOR createCommand LexicalCommand]]
             ["react" :refer [useEffect]]
-            [schnaq.interface.components.lexical.nodes.image :refer [$createImageNode ImageNode]]))
+            [schnaq.interface.components.lexical.nodes.image :refer [create-image-node ImageNode]]))
 
 (def INSERT_IMAGE_COMMAND (createCommand))
 
@@ -22,8 +22,9 @@
             (when ($isRangeSelection selection)
               (when ($isRootNode (.getNode (.-anchor selection)))
                 (.insertParagraph selection))
-              (let [imageNode ($createImageNode (.-src payload) (.-altText payload))]
-                (.insertNodes selection #js [imageNode])))
+              (let [imageNode (create-image-node (.-src payload) (.-altText payload))]
+                (.insertNodes selection #js [imageNode])
+                (.insertParagraph selection)))
             true))
         COMMAND_PRIORITY_EDITOR))
      #js [editor]))

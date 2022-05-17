@@ -4,7 +4,9 @@
             [reagent.core :as r]
             [shadow.cljs.modern :refer [defclass]]))
 
-(defn VideoPlayer [url]
+(defn VideoPlayer
+  "Create a video element."
+  [url]
   (r/as-element
    [:video.w-75 {:src url
                  :controls true}]))
@@ -22,6 +24,8 @@
                (oset! div ["style" "display"] "contents")
                div))
   (updateDOM [_this] false)
+  (getURL [this]
+          (oget this "__url"))
   (setURL [this url]
           (let [writable (.getWritable this)]
             (oset! writable "__url" url)))
@@ -32,9 +36,9 @@
       (fn [^VideoNode node]
         (VideoNode. (oget node "__url") (oget node "__key"))))
 
-(defn $createVideoNode [url]
+(defn create-video-node [url]
   (VideoNode. url nil))
 
-(defn $isVideoNode [^LexicalNode node]
+(defn video-node? [^LexicalNode node]
   (when node
-    (instance? node VideoNode)))
+    (instance? VideoNode node)))

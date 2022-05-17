@@ -10,9 +10,12 @@
             [reagent.core :as r]
             [shadow.cljs.modern :refer [defclass]]))
 
-(declare $isImageNode)
+(declare image-node?)
 
-(defn ImageComponent [properties]
+(defn- ImageComponent
+  "The real image component. Here all the magic happens and the component is
+  configured."
+  [properties]
   (let [src (.-src properties)
         altText (.-alt properties)
         nodeKey ^NodeKey (.-nodeKey properties)
@@ -25,7 +28,7 @@
                       (.preventDefault event)
                       (.update editor
                                #(let [node ($getNodeByKey nodeKey)]
-                                  (when ($isImageNode node)
+                                  (when (image-node? node)
                                     (.remove node))
                                   (setSelected false))))
                     false)
@@ -54,18 +57,6 @@
 ;; -----------------------------------------------------------------------------
 ;; Extend the DecoratorNode to create an image node.
 
-;; (deftype ImageNode2 [src altText key])
-
-;; (extend-type ImageNode2
-;;   DecoratorNode)
-
-(comment
-
-  (type js/NodeList)
-  (type DecoratorNode)
-  (instance? js/Node "foo")
-  nil)
-
 (defclass ImageNode
   (field ^string __src)
   (field ^string __altText)
@@ -81,6 +72,8 @@
                (oset! div ["style" "display"] "contents")
                div))
   (updateDOM [_this] false)
+  (getSrc [this] (oget this "__src"))
+  (getAltText [this] (oget this "__altText"))
   (decorate [this ^LexicalEditor _editor]
             (r/create-element ImageComponent #js {:src (oget this "__src") :alt (oget this "__altText") :nodeKey (.getKey this)})))
 
@@ -91,9 +84,9 @@
       (fn [^ImageNode node]
         (ImageNode. (oget node "__src") (oget node "__altText") (oget node "__key"))))
 
-(defn $createImageNode [src altText]
+(defn create-image-node [src altText]
   (ImageNode. src altText nil))
 
-(defn $isImageNode [^LexicalNode node]
+(defn image-node? [^LexicalNode node]
   (when node
     (instance? ImageNode node)))
