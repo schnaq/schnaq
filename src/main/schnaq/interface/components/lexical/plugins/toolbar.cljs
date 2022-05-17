@@ -133,7 +133,7 @@
       {:on-click #(.dispatchCommand editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "foo"})}
       [icon :image-file]]
      [:button.toolbar-item.spaced
-      {:on-click #(.dispatchCommand editor INSERT_VIDEO_COMMAND "https://s3.schnaq.com/startpage/videos/above_the_fold.webm")}
+      {:on-click #(.dispatchCommand editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"})}
       [icon :video-file]]
      [:button.toolbar-item.spaced
       (let [unordered-list? (= blockType "ul")]

@@ -2,13 +2,12 @@
   (:require ["@lexical/code" :refer [CodeHighlightNode CodeNode]]
             ["@lexical/link" :refer [AutoLinkNode LinkNode]]
             ["@lexical/list" :refer [ListItemNode ListNode]]
-            ["@lexical/markdown" :refer [$convertToMarkdownString TRANSFORMERS]]
+            ["@lexical/markdown" :refer [$convertToMarkdownString]]
             ["@lexical/react/LexicalComposer" :as LexicalComposer]
             ["@lexical/react/LexicalContentEditable" :as ContentEditable]
             ["@lexical/react/LexicalHistoryPlugin" :refer [HistoryPlugin]]
             ["@lexical/react/LexicalLinkPlugin" :as LinkPlugin]
             ["@lexical/react/LexicalListPlugin" :as ListPlugin]
-            ["@lexical/react/LexicalMarkdownShortcutPlugin" :as MarkdownShortcut]
             ["@lexical/react/LexicalOnChangePlugin" :as OnChangePlugin]
             ["@lexical/react/LexicalRichTextPlugin" :as RichTextPlugin]
             ["@lexical/rich-text" :refer [HeadingNode QuoteNode]]
@@ -18,6 +17,7 @@
             [schnaq.interface.components.lexical.nodes.video :refer [VideoNode]]
             [schnaq.interface.components.lexical.plugins.autolink :refer [autolink-plugin]]
             [schnaq.interface.components.lexical.plugins.images :refer [ImagesPlugin]]
+            [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
             [schnaq.interface.components.lexical.plugins.toolbar :refer [toolbar-plugin]]
             [schnaq.interface.components.lexical.plugins.tree-view :refer [tree-view-plugin]]
             [schnaq.interface.components.lexical.plugins.video :refer [VideoPlugin]]
@@ -129,11 +129,11 @@
            [:f> VideoPlugin]
            [:> LinkPlugin]
            [:> ListPlugin]
-           [:> MarkdownShortcut #js {:transformers TRANSFORMERS}]
+           [markdown-shortcut-plugin]
            [:> OnChangePlugin
             {:onChange (fn [editorState]
                          (.read editorState
-                                #(reset! content ($convertToMarkdownString TRANSFORMERS))))}]]]]]])))
+                                #(reset! content ($convertToMarkdownString schnaq-transformers))))}]]]]]])))
 
 ;; -----------------------------------------------------------------------------
 
