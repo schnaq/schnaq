@@ -20,19 +20,19 @@
         altText (.-alt properties)
         nodeKey ^NodeKey (.-nodeKey properties)
         ref (useRef nil)
-        [isSelected setSelected clearSelection] (useLexicalNodeSelection nodeKey)
+        [selected? set-selected clear-selection] (useLexicalNodeSelection nodeKey)
         [editor] (useLexicalComposerContext)
-        onDelete (useCallback
-                  (fn [event]
-                    (when (and isSelected ($isNodeSelection ($getSelection)))
-                      (.preventDefault event)
-                      (.update editor
-                               #(let [node ($getNodeByKey nodeKey)]
-                                  (when (image-node? node)
-                                    (.remove node))
-                                  (setSelected false))))
-                    false)
-                  #js [editor isSelected nodeKey setSelected])]
+        on-delete (useCallback
+                   (fn [event]
+                     (when (and selected? ($isNodeSelection ($getSelection)))
+                       (.preventDefault event)
+                       (.update editor
+                                #(let [node ($getNodeByKey nodeKey)]
+                                   (when (image-node? node)
+                                     (.remove node))
+                                   (set-selected false))))
+                     false)
+                   #js [editor selected? nodeKey set-selected])]
     (useEffect
      (fn []
        (mergeRegister
@@ -40,16 +40,16 @@
          editor CLICK_COMMAND
          (fn [event]
            (when (= (.-target event) (.-current ref))
-             (when (not (.-shiftKey event)) (clearSelection))
-             (setSelected (not isSelected))
+             (when-not (.-shiftKey event) (clear-selection))
+             (set-selected (not selected?))
              true)
            false)
          COMMAND_PRIORITY_LOW)
-        (.registerCommand editor KEY_DELETE_COMMAND onDelete COMMAND_PRIORITY_LOW)
-        (.registerCommand editor KEY_BACKSPACE_COMMAND onDelete COMMAND_PRIORITY_LOW)))
-     #js [clearSelection editor isSelected nodeKey onDelete setSelected])
+        (.registerCommand editor KEY_DELETE_COMMAND on-delete COMMAND_PRIORITY_LOW)
+        (.registerCommand editor KEY_BACKSPACE_COMMAND on-delete COMMAND_PRIORITY_LOW)))
+     #js [clear-selection editor selected? nodeKey on-delete set-selected])
     (r/as-element
-     [:img.w-75 {:class (when isSelected "focused")
+     [:img.w-75 {:class (when selected? "focused")
                  :src src
                  :alt altText
                  :ref ref}])))

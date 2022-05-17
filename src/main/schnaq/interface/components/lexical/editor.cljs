@@ -18,7 +18,7 @@
             [schnaq.interface.components.lexical.plugins.autolink :refer [autolink-plugin]]
             [schnaq.interface.components.lexical.plugins.images :refer [ImagesPlugin]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
-            [schnaq.interface.components.lexical.plugins.toolbar :refer [toolbar-plugin]]
+            [schnaq.interface.components.lexical.plugins.toolbar :refer [ToolbarPlugin]]
             [schnaq.interface.components.lexical.plugins.tree-view :refer [tree-view-plugin]]
             [schnaq.interface.components.lexical.plugins.video :refer [VideoPlugin]]
             [taoensso.timbre :as log]))
@@ -118,7 +118,7 @@
        [:section.lexical-editor
         [:> LexicalComposer {:initialConfig initial-config}
          [:div.editor-container
-          [:f> toolbar-plugin]
+          [:f> ToolbarPlugin]
           [:div.editor-inner
            [:> RichTextPlugin
             {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]

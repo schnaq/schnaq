@@ -40,24 +40,23 @@
                 (when ($isRangeSelection selection)
                   ($wrapLeafNodesInElements selection (fn [] ($createQuoteNode))))))))
 
-(defn toolbar-plugin
+(defn ToolbarPlugin
   "Build a toolbar for the editor."
   []
   (let [[editor] (useLexicalComposerContext)
-        [blockType setBlockType] (useState "paragraph")
-        [bold? setIsBold] (useState false)
-        [code? setIsCode] (useState false)
-        [italic? setIsItalic] (useState false)
-        [underline? setIsUnderline] (useState false)
-        [strike-through? setIsStrikethrough] (useState false)
-        [link? setIsLink] (useState false)
-        [can-undo? setCanUndo] (useState false)
-        [can-redo? setCanRedo] (useState false)
+        [block-type block-type!] (useState "paragraph")
+        [bold? bold!] (useState false)
+        [code? code!] (useState false)
+        [italic? italic!] (useState false)
+        [underline? underline!] (useState false)
+        [strike-through? strikethrough!] (useState false)
+        [link? link!] (useState false)
+        [can-undo? can-undo!] (useState false)
+        [can-redo? can-redo!] (useState false)
         _insert-link (useCallback
-                      (fn []
-                        (if (not link?)
-                          (.dispatchCommand editor TOGGLE_LINK_COMMAND "https://")
-                          (.dispatchCommand editor TOGGLE_LINK_COMMAND nil)))
+                      #(if (not link?)
+                         (.dispatchCommand editor TOGGLE_LINK_COMMAND "https://")
+                         (.dispatchCommand editor TOGGLE_LINK_COMMAND nil))
                       #js [editor link?])
         updateToolbar
         (useCallback
@@ -72,20 +71,20 @@
                    (if ($isListNode element)
                      (let [parentList ($getNearestNodeOfType anchorNode ListNode)
                            block-type (if parentList (.getTag parentList) (.getTag element))]
-                       (setBlockType block-type))
+                       (block-type! block-type))
                      (let [block-type (if ($isHeadingNode element) (.getTag element) (.getType element))]
-                       (setBlockType block-type))))
+                       (block-type! block-type))))
                  ;; Update text format
-                 (setIsBold (.hasFormat selection "bold"))
-                 (setIsCode (.hasFormat selection "code"))
-                 (setIsItalic (.hasFormat selection "italic"))
-                 (setIsUnderline (.hasFormat selection "underline"))
-                 (setIsStrikethrough (.hasFormat selection "strikethrough"))
+                 (bold! (.hasFormat selection "bold"))
+                 (code! (.hasFormat selection "code"))
+                 (italic! (.hasFormat selection "italic"))
+                 (underline! (.hasFormat selection "underline"))
+                 (strikethrough! (.hasFormat selection "strikethrough"))
 
                  ;; Update links
                  (let [node (get-selected-node selection)
                        parent (.getParent node)]
-                   (setIsLink (or ($isLinkNode parent) ($isLinkNode node))))))))
+                   (link! (or ($isLinkNode parent) ($isLinkNode node))))))))
          #js [editor])]
     (useEffect
      #(mergeRegister
@@ -98,11 +97,11 @@
                          low-priority)
        (.registerCommand editor
                          CAN_UNDO_COMMAND
-                         (fn [payload] (setCanUndo payload) false)
+                         (fn [payload] (can-undo! payload) false)
                          low-priority)
        (.registerCommand editor
                          CAN_REDO_COMMAND
-                         (fn [payload] (setCanRedo payload) false)
+                         (fn [payload] (can-redo! payload) false)
                          low-priority))
      #js [editor updateToolbar])
     [:div.toolbar
@@ -127,7 +126,7 @@
        :class (when code? "active")}
       [icon :code]]
      [:button.toolbar-item.spaced
-      {:on-click #(format-quote editor blockType)}
+      {:on-click #(format-quote editor block-type)}
       [icon :quote-right]]
      [:button.toolbar-item.spaced
       {:on-click #(.dispatchCommand editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "foo"})}
@@ -136,14 +135,14 @@
       {:on-click #(.dispatchCommand editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"})}
       [icon :video-file]]
      [:button.toolbar-item.spaced
-      (let [unordered-list? (= blockType "ul")]
+      (let [unordered-list? (= block-type "ul")]
         {:on-click #(if unordered-list?
                       (.dispatchCommand editor REMOVE_LIST_COMMAND)
                       (.dispatchCommand editor INSERT_UNORDERED_LIST_COMMAND))
          :class (when unordered-list? "active")})
       [icon :list]]
      [:button.toolbar-item.spaced
-      (let [ordered-list? (= blockType "ol")]
+      (let [ordered-list? (= block-type "ol")]
         {:on-click #(if ordered-list?
                       (.dispatchCommand editor REMOVE_LIST_COMMAND)
                       (.dispatchCommand editor INSERT_ORDERED_LIST_COMMAND))
