@@ -1,8 +1,12 @@
 (ns schnaq.api.common
-  (:require [ring.util.http-response :refer [ok]]
+  (:require [com.fulcrologic.guardrails.core :refer [=> >defn-]]
+            [ring.util.http-response :refer [created ok bad-request]]
             [schnaq.api.toolbelt :as at]
+            [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.specs :as specs]
             [schnaq.export :as export]
+            [schnaq.media :as media]
             [taoensso.timbre :as log]))
 
 (defn- ping
@@ -36,6 +40,26 @@
 
 ;; -----------------------------------------------------------------------------
 
+(>defn- file-name
+  "Create a file name to store assets for a schnaq."
+  [share-hash file-type]
+  [:discussion/share-hash :image/type => string?]
+  (format "%s/images/%s/image.%s" share-hash (str (random-uuid)) (media/mime-type->file-ending file-type)))
+
+(defn- upload-image
+  "Upload an image to a given bucket."
+  [{{{:keys [image bucket share-hash]} :body} :parameters}]
+  (let [{:keys [image-url error message]}
+        (media/upload-image!
+         (file-name share-hash (:type image))
+         (:type image) (:content image) config/image-width-in-statement bucket)]
+    (if image-url
+      (created "" {:url image-url})
+      (bad-request {:error error
+                    :message message}))))
+
+;; -----------------------------------------------------------------------------
+
 (def other-routes
   [["" {:swagger {:tags ["other"]}}
     ["/ping" {:get ping
@@ -50,6 +74,14 @@
                   :description (at/get-doc #'export-as-argdown)}]
      ["/fulltext" {:get export-as-fulltext
                    :description (at/get-doc #'export-as-fulltext)}]]
+    ["/upload/image" {:put upload-image
+                      :description (at/get-doc #'upload-image)
+                      :middleware [:discussion/valid-share-hash?]
+                      :parameters {:body {:image ::specs/image
+                                          :bucket keyword?
+                                          :share-hash :discussion/share-hash}}
+                      :responses {201 {:body {:url string?}}
+                                  400 at/response-error-body}}]
     ["/credentials/validate" {:post check-credentials-opt-add-as-admin!
                               :description (at/get-doc #'check-credentials-opt-add-as-admin!)
                               :middleware [:discussion/valid-credentials?]
