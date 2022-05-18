@@ -6,6 +6,7 @@
             [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as reitit-front-easy]
             [reitit.frontend.history :as rfh]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.components.editor :as editor]
@@ -73,8 +74,6 @@
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)
      :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
-   ["/editor" {:name :routes.debug/editor
-               :view editor/page}]
    ["/product"
     [""
      {:name :routes/product-page
@@ -336,6 +335,11 @@
    ["/legal-note"
     {:name :routes/legal-note
      :view legal-note/page}]
+   (when-not shared-config/production?
+     ["/playground/editor"
+      {:name :routes.playground/editor
+       :view editor/page
+       :controllers [{:start #(rf/dispatch [:schnaq/share-hash "CAFECAFE-CAFE-CAFE-CAFE-CAFECAFECAFE"])}]}])
    ["/error"
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub
