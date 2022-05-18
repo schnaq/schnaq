@@ -1,11 +1,12 @@
 (ns schnaq.media
   (:require [clj-http.client :as client]
             [clojure.java.io :as io]
+            [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
             [image-resizer.core :as resizer-core]
             [image-resizer.format :as resizer-format]
-            [ring.util.http-response :refer [created bad-request forbidden]]
+            [ring.util.http-response :refer [bad-request created forbidden]]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.main :as d]
             [schnaq.s3 :as s3]
@@ -85,11 +86,19 @@
   (when (and id file-type)
     (str (UUID/nameUUIDFromBytes (.getBytes (str id))) "." file-type)))
 
-(defn upload-image!
+(s/def :upload-image/image-url string?)
+(s/def :upload-image/error keyword?)
+(s/def :upload-image/message string?)
+(s/def ::upload-image
+  (s/keys :opt-un [:upload-image/image-url :upload-image/error :upload-image/message]))
+
+(>defn upload-image!
   "Scale and upload an image to s3."
   ([file-name image-type image-content target-image-width bucket-key]
+   [string? :image/type :image/content number? keyword? => ::upload-image]
    (upload-image! file-name image-type image-content target-image-width bucket-key true))
   ([file-name image-type image-content target-image-width bucket-key uuid-filename?]
+   [string? :image/type :image/content number? keyword? boolean? => ::upload-image]
    (if (shared-config/allowed-mime-types image-type)
      (if-let [{:keys [input-stream image-type content-type]}
               (scale-image-to-width image-content target-image-width)]
