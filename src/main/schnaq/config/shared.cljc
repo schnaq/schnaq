@@ -27,6 +27,7 @@
     :schnaq/header-images "schnaq-header-images"
     :user/profile-pictures "schnaq-profile-pictures"
     :user/media "user-media"
+    :schnaq/media "schnaq-media"
     :feedbacks/screenshots "schnaq-feedback-screenshots"}
    bucket-name))
 
