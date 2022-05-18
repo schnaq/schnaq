@@ -9,7 +9,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
-            [schnaq.interface.components.editor :as editor]
+            [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.legal-note :as legal-note]
@@ -338,7 +338,7 @@
    (when-not shared-config/production?
      ["/playground/editor"
       {:name :routes.playground/editor
-       :view editor/page
+       :view lexical/playground
        :controllers [{:start #(rf/dispatch [:schnaq/share-hash "CAFECAFE-CAFE-CAFE-CAFE-CAFECAFECAFE"])}]}])
    ["/error"
     {:name :routes/cause-not-found
