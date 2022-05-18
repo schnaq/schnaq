@@ -22,10 +22,10 @@
   Stores the image in a temporary field in the app-db, where it can than be
   used to transfer it to, e.g., the backend."
   ([label input-id temporary-image-location]
-   [string? string? (s/coll-of keyword?) => :re-frame/component]
+   [(s/or :string string? :component :re-frame/component) string? (s/coll-of keyword?) => :re-frame/component]
    [image label input-id temporary-image-location {}])
   ([label input-id temporary-image-location attrs]
-   [string? string? (s/coll-of keyword?) map? => :re-frame/component]
+   [(s/or :string string? :component :re-frame/component) string? (s/coll-of keyword?) map? => :re-frame/component]
    [:div
     [:label.form-label {:for input-id} label]
     [:input.form-control
