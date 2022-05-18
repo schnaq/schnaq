@@ -1,24 +1,17 @@
 (ns schnaq.api.themes
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as str]
-            [com.fulcrologic.guardrails.core :refer [>defn- => ?]]
-            [ring.util.http-response :refer [ok forbidden]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn- ?]]
+            [ring.util.http-response :refer [forbidden ok]]
             [schnaq.api.middlewares :as middlewares]
             [schnaq.api.toolbelt :as at]
+            [schnaq.config :as config]
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.themes :as themes-db]
             [schnaq.media :as media]
             [schnaq.s3 :as s3]))
-
-(def ^:private image-max-width-logo
-  "Set the maximum image-width of the logo in pixels."
-  500)
-
-(def ^:private image-max-width-header
-  "Set the maximum image-width of the header in pixels."
-  1000)
 
 (>defn- file-name
   "Create a theme-path in the bucket, prefixed with the keycloak-id."
@@ -40,8 +33,8 @@
   "Adds the raw images to the theme, if provided."
   [keycloak-id theme-id raw-logo raw-header]
   [:user.registered/keycloak-id :db/id (? ::specs/image) (? ::specs/image) => any?]
-  (let [logo (upload-theme-image keycloak-id theme-id "logo" image-max-width-logo raw-logo)
-        header (upload-theme-image keycloak-id theme-id "header" image-max-width-header raw-header)]
+  (let [logo (upload-theme-image keycloak-id theme-id "logo" config/image-max-width-logo raw-logo)
+        header (upload-theme-image keycloak-id theme-id "header" config/image-max-width-header raw-header)]
     (cond-> {}
       (:image-url logo) (assoc :theme.images/logo (:image-url logo))
       (:image-url header) (assoc :theme.images/header (:image-url header)))))

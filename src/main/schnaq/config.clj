@@ -65,9 +65,24 @@
   (or (System/getenv "MATTERMOST_WEBHOOK_URL")
       "***REMOVED***"))
 
+;; -----------------------------------------------------------------------------
+;; Images
+
 (def profile-picture-width
   "Profile Picture width in pixels."
   200)
+
+(def image-max-width-logo
+  "Set the maximum image-width of the logo in pixels."
+  500)
+
+(def image-max-width-header
+  "Set the maximum image-width of the header in pixels."
+  1000)
+
+(def image-width-in-statement
+  "Set maximum width of an image used, e.g. in a statement in pixels."
+  500)
 
 ;; -----------------------------------------------------------------------------
 ;; S3 Configuration
