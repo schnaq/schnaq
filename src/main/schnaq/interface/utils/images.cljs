@@ -1,11 +1,13 @@
 (ns schnaq.interface.utils.images
   (:require [clojure.string :as str]
-            [goog.string :as gstring]
+            [goog.string :refer [format]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.config :as config]
-            [schnaq.interface.translations :refer [labels]]))
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.http :as http]
+            [taoensso.timbre :as log]))
 
 (defn store-temporary-image
   "Store image file from event to database in the specified path.
@@ -33,8 +35,8 @@
        {:fx [[:dispatch
               [:notification/add
                #:notification{:title (labels :user.settings.profile-picture-title/error)
-                              :body (gstring/format (labels :user.settings.profile-picture-too-large/error)
-                                                    actual-size config/max-allowed-profile-picture-size)
+                              :body (format (labels :user.settings.profile-picture-too-large/error)
+                                            actual-size config/max-allowed-profile-picture-size)
                               :stay-visible? true
                               :context :danger}]]]}))))
 
@@ -44,10 +46,21 @@
    (let [mime-types (str/join ", " shared-config/allowed-mime-types)
          error-message (case (:error response)
                          :image.error/scaling (labels :user.settings.profile-picture.errors/scaling)
-                         :image.error/invalid-file-type (gstring/format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types)
+                         :image.error/invalid-file-type (format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types)
                          (labels :user.settings.profile-picture.errors/default))]
      {:db (assoc-in db [:user :profile-picture :temporary] nil)
       :fx [[:dispatch [:notification/add
                        #:notification{:title (labels :user.settings.profile-picture-title/error)
                                       :body error-message
                                       :context :danger}]]]})))
+
+(rf/reg-event-fx
+ :image/upload
+ (fn [{:keys [db]} [_ share-hash image bucket success-event]]
+   (if (and share-hash image bucket)
+     {:fx [(http/xhrio-request db :put "/upload/image"
+                               success-event
+                               {:share-hash share-hash
+                                :image image
+                                :bucket bucket})]}
+     (log/error (format "Some properties are missing. share-hash: %s, bucket: %s, image: %s" share-hash bucket image)))))
