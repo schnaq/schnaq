@@ -3,6 +3,7 @@
             [ring.util.http-response :refer [bad-request forbidden not-found]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.patterns :as patterns]
             [schnaq.validator :as validator]
@@ -20,9 +21,12 @@
   [handler]
   (fn [request]
     (let [share-hash (extract-parameter-from-request request :share-hash)]
-      (if (validator/valid-discussion? share-hash)
+      (if (and (not shared-config/production?)
+               (= share-hash shared-config/allowed-share-hash-in-development))
         (handler request)
-        at/not-found-hash-invalid))))
+        (if (validator/valid-discussion? share-hash)
+          (handler request)
+          at/not-found-hash-invalid)))))
 
 (defn valid-writeable-discussion?
   "Verify that a discussion is valid and writing to it / modifying it is allowed."

@@ -54,6 +54,10 @@
   "A set of allowed labels for statements. They correspond to fa symbols"
   #{":check" ":question" ":times" ":ghost" ":calendar-alt" ":arrow-right" ":comment"})
 
+(def allowed-share-hash-in-development
+  "Allow a share-hash in development without verification."
+  "CAFECAFE-CAFE-CAFE-CAFE-CAFECAFECAFE")
+
 ;; -----------------------------------------------------------------------------
 ;; Access Codes
 
