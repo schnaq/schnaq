@@ -49,8 +49,8 @@
         (.registerCommand editor KEY_BACKSPACE_COMMAND on-delete COMMAND_PRIORITY_LOW)))
      #js [clear-selection editor selected? nodeKey on-delete set-selected])
     (r/as-element
-     [:div.w-75
-      [:img.img-fluid
+     [:div.editor-image
+      [:img
        {:class (when selected? "focused")
         :src src
         :alt altText
@@ -75,7 +75,7 @@
                div))
   (updateDOM [_this] false)
   (getSrc [this] (oget this "__src"))
-  (getAltText [this] (oget this "__altText"))
+  (getAltText [this] (or (oget this "__altText") ""))
   (decorate [this ^LexicalEditor _editor]
             (r/create-element ImageComponent #js {:src (oget this "__src") :alt (oget this "__altText") :nodeKey (.getKey this)})))
 
@@ -89,7 +89,7 @@
 (defn $create-image-node
   "Create an image node."
   [src altText]
-  (ImageNode. src altText nil))
+  (ImageNode. src (or altText "") nil))
 
 (defn $image-node?
   "Check that `node` is an instance of `ImageNode`."

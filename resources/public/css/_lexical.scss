@@ -15,14 +15,14 @@
   }
 
   .editor-container {
-    border-radius: 2px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    // border-radius: 2px;
+    // border-top-left-radius: 10px;
+    // border-top-right-radius: 10px;
     color: #000;
     font-weight: 400;
     line-height: 20px;
-    margin: 20px auto;
-    max-width: 600px;
+    // margin: 20px auto;
+    // max-width: 600px;
     position: relative;
     text-align: left;
   }
@@ -55,6 +55,15 @@
     text-overflow: ellipsis;
     top: 15px;
     user-select: none;
+  }
+
+  .editor-image {
+    @extend .w-100;
+    max-width: 500px;
+
+    img {
+      @extend .img-fluid;
+    }
   }
 
   .editor-text-bold {
@@ -255,8 +264,8 @@
 
   .toolbar {
     background: #fff;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    // border-top-left-radius: 10px;
+    // border-top-right-radius: 10px;
     display: flex;
     margin-bottom: 1px;
     padding: 4px;
