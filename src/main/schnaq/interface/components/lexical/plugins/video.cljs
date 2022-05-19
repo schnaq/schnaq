@@ -1,6 +1,6 @@
 (ns schnaq.interface.components.lexical.plugins.video
   (:require ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
-            ["lexical" :refer [$getSelection $isParagraphNode $isRangeSelection
+            ["lexical" :refer [$getSelection $isRootNode $getRoot $isRangeSelection
                                COMMAND_PRIORITY_EDITOR createCommand
                                LexicalCommand]]
             ["react" :refer [useEffect]]
@@ -22,9 +22,9 @@
           editor
           INSERT_VIDEO_COMMAND
           (fn [^LexicalCommand payload]
-            (let [selection ($getSelection)]
+            (let [selection (or ($getSelection) (.selectEnd ($getRoot)))]
               (when ($isRangeSelection selection)
-                (when-not ($isParagraphNode (.getNode (.-anchor selection)))
+                (when ($isRootNode (.getNode (.-anchor selection)))
                   (.insertParagraph selection))
                 (let [imageNode (create-video-node (.-url payload))]
                   (.insertNodes selection #js [imageNode])
