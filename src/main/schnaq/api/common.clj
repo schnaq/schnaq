@@ -44,7 +44,7 @@
   "Create a file name to store assets for a schnaq."
   [share-hash file-type]
   [:discussion/share-hash :image/type => string?]
-  (format "%s/images/%s/image.%s" share-hash (str (random-uuid)) (media/mime-type->file-ending file-type)))
+  (format "%s/files/%s/image.%s" share-hash (str (random-uuid)) (media/mime-type->file-ending file-type)))
 
 (defn- upload-image
   "Upload an image to a given bucket."
