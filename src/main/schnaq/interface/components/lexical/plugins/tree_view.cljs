@@ -2,7 +2,7 @@
   (:require ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
             ["@lexical/react/LexicalTreeView" :as TreeView]))
 
-(defn tree-view-plugin
+(defn TreeViewPlugin
   "Show the structure of the editor's content in a tree view."
   []
   (let [[editor] (useLexicalComposerContext)]

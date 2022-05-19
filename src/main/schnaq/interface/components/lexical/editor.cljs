@@ -21,7 +21,7 @@
             [schnaq.interface.components.lexical.plugins.images :refer [ImagesPlugin]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
             [schnaq.interface.components.lexical.plugins.toolbar :refer [ToolbarPlugin]]
-            [schnaq.interface.components.lexical.plugins.tree-view :refer [tree-view-plugin]]
+            [schnaq.interface.components.lexical.plugins.tree-view :refer [TreeViewPlugin]]
             [schnaq.interface.components.lexical.plugins.video :refer [VideoPlugin]]
             [taoensso.timbre :as log]))
 
@@ -111,12 +111,13 @@
                    TableRowNode]})
 
 (defn- editor
-  "Create an editor instance. Optionally takes a bucket to store files to."
-  [{:keys [id focus? debug?] :as options}]
+  "Create an editor instance. Takes as a first argument the editor's options and
+  as a second argument attributes for the wrapping div."
+  [{:keys [id focus? debug? toolbar?] :as options} ?attributes]
   [:article.lexical-editor
    [:> LexicalComposer {:initialConfig initial-config}
-    [:div.editor-container
-     [:f> ToolbarPlugin options]
+    [:div.editor-container (merge {} ?attributes)
+     (when toolbar? [:f> ToolbarPlugin options])
      [:div.editor-inner
       [:> RichTextPlugin
        {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
@@ -128,7 +129,7 @@
       [:> ListPlugin]
       [markdown-shortcut-plugin]
       (when focus? [:> AutoFocusPlugin])
-      (when debug? [:f> tree-view-plugin])
+      (when debug? [:f> TreeViewPlugin])
       [:> OnChangePlugin
        {:onChange (fn [editorState]
                     (.read editorState
@@ -139,20 +140,34 @@
 (defn- build-page []
   (let [editor-id :playground-editor]
     [:div.container.pt-5
-     [:h2 "Lexical"]
+     [:h1 "Lexical"]
      [:p "Configured share-hash: " @(rf/subscribe [:schnaq/share-hash])]
      [:div.row
       [:div.col-6
        [editor {:id editor-id
                 :file-storage :schnaq/by-share-hash
                 :focus? true
-                :debug? true}]]
+                :debug? true
+                :toolbar? true}]]
       [:div.col-6
        [:div.card
         [:div.card-body
          [:div.card-title "Markdown content"]
          [:div.card-text.overflow-scroll
-          [:pre [:code @(rf/subscribe [:editor/content editor-id])]]]]]]]]))
+          [:pre [:code @(rf/subscribe [:editor/content editor-id])]]]]]]]
+     [:section.pt-3
+      [:p "Editor without toolbar"]
+      [editor {:id :playground-naked-editor} {:class "pb-3"}]]
+     [:section
+      [:p "Editor with toolbar"]
+      [editor {:id :playground-naked-editor-with-toolbar
+               :toolbar? true}
+       {:class "pb-3"}]]
+     [:section
+      [:p "Editor with toolbar"]
+      [editor {:id :playground-naked-editor-with-toolbar
+               :toolbar? true}
+       {:class "pb-3"}]]]))
 
 (defn playground []
   [build-page])
