@@ -3,6 +3,7 @@
             ["@lexical/link" :refer [AutoLinkNode LinkNode]]
             ["@lexical/list" :refer [ListItemNode ListNode]]
             ["@lexical/markdown" :refer [$convertToMarkdownString]]
+            ["@lexical/react/LexicalAutoFocusPlugin" :as AutoFocusPlugin]
             ["@lexical/react/LexicalComposer" :as LexicalComposer]
             ["@lexical/react/LexicalContentEditable" :as ContentEditable]
             ["@lexical/react/LexicalHistoryPlugin" :refer [HistoryPlugin]]
@@ -12,6 +13,7 @@
             ["@lexical/react/LexicalRichTextPlugin" :as RichTextPlugin]
             ["@lexical/rich-text" :refer [HeadingNode QuoteNode]]
             ["@lexical/table" :refer [TableCellNode TableNode TableRowNode]]
+            [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.interface.components.lexical.nodes.image :refer [ImageNode]]
             [schnaq.interface.components.lexical.nodes.video :refer [VideoNode]]
@@ -108,39 +110,59 @@
                    TableNode
                    TableRowNode]})
 
-(defn- Editor
-  []
-  (let [content (r/atom nil)]
-    (fn []
-      [:<>
-       [:button.btn.btn-primary {:on-click #(.log js/console @content)}
-        "Mach was"]
-       [:section.lexical-editor
-        [:> LexicalComposer {:initialConfig initial-config}
-         [:div.editor-container
-          [:f> ToolbarPlugin]
-          [:div.editor-inner
-           [:> RichTextPlugin
-            {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
-           [:> HistoryPlugin {}]
-           [:f> tree-view-plugin]
-           [autolink-plugin]
-           [:f> ImagesPlugin]
-           [:f> VideoPlugin]
-           [:> LinkPlugin]
-           [:> ListPlugin]
-           [markdown-shortcut-plugin]
-           [:> OnChangePlugin
-            {:onChange (fn [editorState]
-                         (.read editorState
-                                #(reset! content ($convertToMarkdownString schnaq-transformers))))}]]]]]])))
+(defn- editor
+  "Create an editor instance. Optionally takes a bucket to store files to."
+  [{:keys [id focus? debug?] :as options}]
+  [:article.lexical-editor
+   [:> LexicalComposer {:initialConfig initial-config}
+    [:div.editor-container
+     [:f> ToolbarPlugin options]
+     [:div.editor-inner
+      [:> RichTextPlugin
+       {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}]
+      [:> HistoryPlugin {}]
+      [autolink-plugin]
+      [:f> ImagesPlugin]
+      [:f> VideoPlugin]
+      [:> LinkPlugin]
+      [:> ListPlugin]
+      [markdown-shortcut-plugin]
+      (when focus? [:> AutoFocusPlugin])
+      (when debug? [:f> tree-view-plugin])
+      [:> OnChangePlugin
+       {:onChange (fn [editorState]
+                    (.read editorState
+                           #(rf/dispatch [:editor/content id ($convertToMarkdownString schnaq-transformers)])))}]]]]])
 
 ;; -----------------------------------------------------------------------------
 
 (defn- build-page []
-  [:<>
-   [:h2 "Lexical"]
-   [Editor]])
+  (let [editor-id :playground-editor]
+    [:div.container.pt-5
+     [:h2 "Lexical"]
+     [:p "Configured share-hash: " @(rf/subscribe [:schnaq/share-hash])]
+     [:div.row
+      [:div.col-6
+       [editor {:id editor-id
+                :file-storage :schnaq/by-share-hash
+                :focus? true
+                :debug? true}]]
+      [:div.col-6
+       [:div.card
+        [:div.card-body
+         [:div.card-title "Markdown content"]
+         [:div.card-text.overflow-scroll
+          [:pre [:code @(rf/subscribe [:editor/content editor-id])]]]]]]]]))
 
-(defn page []
+(defn playground []
   [build-page])
+
+(rf/reg-event-db
+ :editor/content
+ (fn [db [_ editor-id content]]
+   (assoc-in db [:editor :content editor-id] content)))
+
+(rf/reg-sub
+ :editor/content
+ (fn [db [_ editor-id]]
+   (get-in db [:editor :content editor-id])))
