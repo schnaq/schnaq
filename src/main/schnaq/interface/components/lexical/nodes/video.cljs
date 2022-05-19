@@ -36,9 +36,9 @@
       (fn [^VideoNode node]
         (VideoNode. (oget node "__url") (oget node "__key"))))
 
-(defn create-video-node [url]
+(defn $create-video-node [url]
   (VideoNode. url nil))
 
-(defn video-node? [^LexicalNode node]
+(defn $video-node? [^LexicalNode node]
   (when node
     (instance? VideoNode node)))
