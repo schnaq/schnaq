@@ -38,7 +38,7 @@
      [tooltip/text
       "[Dev] Insert Image"
       [:button.toolbar-item.spaced.text-secondary
-       {:on-click #(.dispatchCommand editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "foo"})}
+       {:on-click #(.dispatchCommand editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "Elephant in a forest"})}
        [icon :image-file]]]
      [tooltip/text
       "[Dev] Insert Video"
@@ -182,11 +182,11 @@
        {:on-click #(format-quote active-editor block-type)}
        [icon :quote-right]]]
      [image-upload-button active-editor file-storage]
-     [tooltip/text
-      (labels :editor.toolbar/video-upload)
-      [:button.toolbar-item.spaced
-       {:on-click #(.dispatchCommand active-editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"})}
-       [icon :video-file]]]
+     #_[tooltip/text
+        (labels :editor.toolbar/video-upload)
+        [:button.toolbar-item.spaced
+         {:on-click #(.dispatchCommand active-editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"})}
+         [icon :video-file]]]
      [tooltip/text
       (labels :editor.toolbar/list-ul)
       [:button.toolbar-item.spaced

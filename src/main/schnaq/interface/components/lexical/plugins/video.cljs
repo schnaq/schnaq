@@ -4,7 +4,7 @@
                                COMMAND_PRIORITY_EDITOR createCommand
                                LexicalCommand]]
             ["react" :refer [useEffect]]
-            [schnaq.interface.components.lexical.nodes.video :refer [create-video-node
+            [schnaq.interface.components.lexical.nodes.video :refer [$create-video-node
                                                                      VideoNode]]
             [taoensso.timbre :as log]))
 
@@ -26,7 +26,7 @@
               (when ($isRangeSelection selection)
                 (when ($isRootNode (.getNode (.-anchor selection)))
                   (.insertParagraph selection))
-                (let [imageNode (create-video-node (.-url payload))]
+                (let [imageNode ($create-video-node (.-url payload))]
                   (.insertNodes selection #js [imageNode])
                   (.insertParagraph selection)))
               true))
