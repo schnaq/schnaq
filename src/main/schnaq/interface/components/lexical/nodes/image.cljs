@@ -10,7 +10,7 @@
             [reagent.core :as r]
             [shadow.cljs.modern :refer [defclass]]))
 
-(declare image-node?)
+(declare $image-node?)
 
 (defn- ImageComponent
   "The real image component. Here all the magic happens and the component is
@@ -28,7 +28,7 @@
                        (.preventDefault event)
                        (.update editor
                                 #(let [node ($getNodeByKey nodeKey)]
-                                   (when (image-node? node)
+                                   (when ($image-node? node)
                                      (.remove node))
                                    (set-selected false))))
                      false)
@@ -49,10 +49,12 @@
         (.registerCommand editor KEY_BACKSPACE_COMMAND on-delete COMMAND_PRIORITY_LOW)))
      #js [clear-selection editor selected? nodeKey on-delete set-selected])
     (r/as-element
-     [:img.w-75 {:class (when selected? "focused")
-                 :src src
-                 :alt altText
-                 :ref ref}])))
+     [:div.w-75
+      [:img.img-fluid
+       {:class (when selected? "focused")
+        :src src
+        :alt altText
+        :ref ref}]])))
 
 ;; -----------------------------------------------------------------------------
 ;; Extend the DecoratorNode to create an image node.
@@ -84,9 +86,13 @@
       (fn [^ImageNode node]
         (ImageNode. (oget node "__src") (oget node "__altText") (oget node "__key"))))
 
-(defn create-image-node [src altText]
+(defn $create-image-node
+  "Create an image node."
+  [src altText]
   (ImageNode. src altText nil))
 
-(defn image-node? [^LexicalNode node]
+(defn $image-node?
+  "Check that `node` is an instance of `ImageNode`."
+  [^LexicalNode node]
   (when node
     (instance? ImageNode node)))
