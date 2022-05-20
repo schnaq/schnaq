@@ -119,12 +119,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(def ^:private sample-file
-  {:name "sample-file.txt"
-   :size 32
-   :type "text/plain"
-   :content "data:application/octet-stream;base64,V2lsbGtvbW1lbiBpbSBzY2huYXFxaXBhcmFkaWVzIQo="})
-
 (>defn file->stream
   "Convert a file to a stream."
   [{:keys [content]}]
