@@ -46,49 +46,57 @@
        {:on-click #(.dispatchCommand editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"})}
        [icon :video-file]]]]))
 
-(defn- image-upload-button
+(defn- file-upload-button
   "Show a button and a modal to upload own images."
-  [^js/LexicalEditor _editor _file-storage]
+  [_input-label _input-component _icon-component _on-click-event]
   (let [tooltip-visible? (r/atom false)]
-    (fn [editor file-storage]
+    (fn [input-label input-component icon-component on-click-event]
       [tooltip/text
-       (labels :editor.toolbar/image-upload)
+       input-label
        [:span ;; Wrap into a span to make tippy nestable.
         [tooltip/html
          [:<>
           [:form {:on-submit
                   (fn [e]
                     (.preventDefault e)
-                    (rf/dispatch [:editor.upload/image editor file-storage])
+                    (rf/dispatch on-click-event)
                     (reset! tooltip-visible? false))}
-           [inputs/image [:span.fs-5 (labels :editor.toolbar/image-upload)] "editor-upload-image" [:editor :temporary :image] {:required true}]
+           input-component
            [:div.d-flex.mt-2
             [:input.btn.btn-primary.me-auto
              {:type :submit
-              :value (labels :editor.toolbar.image-upload/submit)}]
+              :value (labels :editor.toolbar.file-upload/submit)}]
             [:button.btn.btn-sm.btn-link.text-dark.ps-auto
              {:type :button
               :on-click #(reset! tooltip-visible? false)}
-             (labels :editor.toolbar.image-upload/close)]]]]
+             (labels :editor.toolbar.file-upload/close)]]]]
          [:button.toolbar-item.spaced
           {:on-click #(swap! tooltip-visible? not)}
-          [icon :image-file]]
+          icon-component]
          {:visible @tooltip-visible?
           :appendTo js/document.body}
          [:trigger]]]])))
 
 (rf/reg-event-fx
  :editor.upload/image
- (fn [{:keys [db]} [_ editor file-storage]]
+ (fn [{:keys [db]} [_ id editor file-storage]]
    (when (= :schnaq/by-share-hash file-storage)
      (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-           image (get-in db [:editor :temporary :image])]
-       {:fx [[:dispatch [:image/upload share-hash image :schnaq/media [:editor.upload.image/success editor]]]]}))))
+           image (get-in db [:editors id :image])]
+       {:fx [[:dispatch [:file/upload share-hash image :schnaq/media [:editor.upload.image/success editor]]]]}))))
 
 (rf/reg-event-fx
  :editor.upload.image/success
  (fn [_ [_ editor {:keys [url]}]]
    {:fx [[:editor/dispatch-command! [editor INSERT_IMAGE_COMMAND #js {:src url}]]]}))
+
+(rf/reg-event-fx
+ :editor.upload/file
+ (fn [{:keys [db]} [_ id editor file-storage]]
+   (when (= :schnaq/by-share-hash file-storage)
+     (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+           image (get-in db [:editors id :file])]
+       {:fx [[:dispatch [:file/upload share-hash image :schnaq/media [:editor.upload.file/success editor]]]]}))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -101,7 +109,7 @@
 
 (defn ToolbarPlugin
   "Build a toolbar for the editor."
-  [{:keys [file-storage debug?]}]
+  [{:keys [file-storage debug? id]}]
   (let [[editor] (useLexicalComposerContext)
         [active-editor active-editor!] (useState editor)
         [block-type block-type!] (useState "paragraph")
@@ -190,7 +198,18 @@
        {:on-click #(format-quote active-editor block-type)}
        [icon :quote-right]]]
 
-     [image-upload-button active-editor file-storage]
+     [file-upload-button
+      (labels :editor.toolbar/image-upload)
+      [inputs/image [:span.fs-5 (labels :editor.toolbar/image-upload)] "editor-upload-image" [:editors id :image] {:required true}]
+      [icon :image-file]
+      [:editor.upload/image id active-editor file-storage]]
+
+     [file-upload-button
+      (labels :editor.toolbar/file-upload)
+      [inputs/file [:span.fs-5 (labels :editor.toolbar/file-upload)] "editor-upload-file" [:editors id :file] {:required true}]
+      [icon :image-file]
+      [:editor.upload/file id active-editor file-storage]]
+
      #_[tooltip/text
         (labels :editor.toolbar/video-upload)
         [:button.toolbar-item.spaced

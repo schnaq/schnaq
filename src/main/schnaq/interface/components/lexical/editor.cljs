@@ -101,9 +101,9 @@
 (rf/reg-event-db
  :editor/content
  (fn [db [_ editor-id content]]
-   (assoc-in db [:editor :content editor-id] content)))
+   (assoc-in db [:editors editor-id :content] content)))
 
 (rf/reg-sub
  :editor/content
  (fn [db [_ editor-id]]
-   (get-in db [:editor :content editor-id])))
+   (get-in db [:editors editor-id :content])))
