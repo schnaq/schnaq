@@ -854,11 +854,6 @@
    :user.settings.button/change-account-information "Änderungen speichern"
    :user.settings.profile-picture-title/success "Profilbild erfolgreich gesetzt"
    :user.settings.profile-picture-body/success "Profilbild wurde hochgeladen und gespeichert. Ggf. Seite neuladen um aktualisiertes Bild zu sehen."
-   :user.settings.profile-picture-title/error "Hochladen des Profilbildes fehlgeschlagen"
-   :user.settings.profile-picture-too-large/error "Dein Profilbild ist %d Megabyte groß, die maximal erlaubte Größe ist %d Megabyte. Bitte lade ein kleineres Bild hoch."
-   :user.settings.profile-picture.errors/scaling "Dein Profilbild konnte nicht konvertiert werden. Vielleicht ist das Bild kaputt. Bitte probiere ein anderes Bild oder kontaktiere uns."
-   :user.settings.profile-picture.errors/invalid-file-type "Dein Profilbild hat den falschen Dateitypen. Erlaubt sind: %s"
-   :user.settings.profile-picture.errors/default "Etwas ist beim Hochladen des Bildes schief gelaufen. Bitte versuche es erneut."
 
    ;; notification settings
    :user.notifications/header "Benachrichtigungen verwalten"
@@ -1307,6 +1302,13 @@
    :editor.toolbar/list-ol "Sortierte Liste"
    :editor.toolbar/undo "Rückgängig"
    :editor.toolbar/redo "Wiederholen"
+
+   ;; File handling
+   :file.store.error/title "Hochladen der Datei fehlgeschlagen"
+   :file.store.error/file-too-large "Deine Datei ist %d Megabyte groß, die maximal erlaubte Größe ist %d Megabyte. Bitte lade eine kleinere Datei hoch."
+   :file.store.error/scaling-problem "Dein Bild konnte nicht konvertiert werden. Vielleicht ist die Datei kaputt. Bitte probiere ein anderes Bild oder kontaktiere uns."
+   :file.store.error/invalid-file-type "Deine Datei hat den falschen Dateitypen. Erlaubt sind: %s"
+   :file.store.error/generic "Etwas ist beim Hochladen der Datei schief gelaufen. Bitte versuche es erneut."
 
    ;; Alt texts
    :schnaqqifant/hippie-alt-text "Schnaqqi, das schnaq Maskottchen, als Hippie verkleidet"

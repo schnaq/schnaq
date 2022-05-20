@@ -23,10 +23,10 @@
   (see `image`).
   Stores the file in a temporary field in the app-db, where it can than be
   used to transfer it to, e.g., the backend."
-  ([label input-id temporary-image-location]
+  ([label input-id temporary-file-location]
    [(s/or :string string? :component :re-frame/component) string? (s/coll-of keyword?) => :re-frame/component]
-   [file label input-id temporary-image-location {}])
-  ([label input-id temporary-image-location attrs]
+   [file label input-id temporary-file-location {}])
+  ([label input-id temporary-file-location attrs]
    [(s/or :string string? :component :re-frame/component) string? (s/coll-of keyword?) map? => :re-frame/component]
    [:div
     [:label.form-label {:for input-id} label]
@@ -34,7 +34,7 @@
      (merge
       {:type :file
        :id input-id
-       :on-change #(image/store-temporary-image % temporary-image-location)}
+       :on-change #(image/store-temporary-file % temporary-file-location)}
       attrs)]
     (when-let [mime-types (:accept attrs)]
       [:small.text-muted (labels :input.file/allowed-types) ": "

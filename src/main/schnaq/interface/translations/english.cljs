@@ -855,11 +855,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :user.settings.button/change-account-information "Save changes"
    :user.settings.profile-picture-title/success "Profile picture successfully uploaded"
    :user.settings.profile-picture-body/success "Your new profile picture was successfully set. You may have to reload the page to see it."
-   :user.settings.profile-picture-title/error "Error while uploading profile picture"
-   :user.settings.profile-picture-too-large/error "Your profile picture size is %d mega bytes, it exceeds the maximum allowed size of %d mega bytes Please upload a smaller picture."
-   :user.settings.profile-picture.errors/scaling "Your profile picture could not be converted. Maybe the image is corrupt. Please try a different image or contact us."
-   :user.settings.profile-picture.errors/invalid-file-type "The image you provided has the wrong file type. Allowed file types: %s"
-   :user.settings.profile-picture.errors/default "Something went wrong with the picture you're uploaded. Please try again."
 
    ;; notification settings
    :user.notifications/header "Manage Notifications"
@@ -1307,12 +1302,19 @@ Now we write down questions and discuss them and can still understand what we ha
    :editor.toolbar/undo "Undo"
    :editor.toolbar/redo "Redo"
 
+   ;; File handling
+   :file.store.error/title "Error while uploading your file"
+   :file.store.error/file-too-large "Your file size is %d mega bytes, it exceeds the maximum allowed size of %d mega bytes. Please upload a smaller file."
+   :file.store.error/scaling-problem "Your image could not be converted. Maybe the image is corrupt. Please try a different image or contact us."
+   :file.store.error/invalid-file-type "The file you provided has the wrong file type. Allowed file types: %s"
+   :file.store.error/generic "Something went wrong with the file you've uploaded. Please try again."
+
    ;; Alt texts
    :schnaqqifant/hippie-alt-text "Schnaqqi the schnaq mascot dressed as a hippie"
-   :schnaqqifant/police-alt-text "Schnaqqi the schnaq mascot dressed as a police elefant"
+   :schnaqqifant/police-alt-text "Schnaqqi the schnaq mascot dressed as a police elephant"
    :schnaqqifant/stop-alt-text "Schnaqqi the schnaq mascot holds up a stop sign"
-   :schnaqqi/pointing-right "Schnaqqi the elefant pointing right with his trunk"
-   :schnaqqi.rocket/alt-text "Schnaqqi the elefant riding on a huge space-rocket"
+   :schnaqqi/pointing-right "Schnaqqi the elephant pointing right with his trunk"
+   :schnaqqi.rocket/alt-text "Schnaqqi the elephant riding on a huge space-rocket"
    :schnaqqifant/share-alt-text "Schnaqqi the schnaq mascot holds up a note with a code on it"
    :schnaqqifant/talk-alt-text "Schnaqqi the schnaq mascot is talking to his friend Wilbert"
    :schnaqqifant/admin-alt-text "Schnaqqi the schnaq mascot is dressed as a very serious administrator"
