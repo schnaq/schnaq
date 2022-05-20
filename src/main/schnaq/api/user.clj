@@ -91,17 +91,23 @@
 
 ;; -----------------------------------------------------------------------------
 
+(>defn- path-to-file
+  "Store the profile picture in the user's media directory."
+  [user-id file-type]
+  [:user.registered/keycloak-id :file/type => string?]
+  (format "%s/images/%s/profile.%s" user-id (str (random-uuid))
+          (media/mime-type->file-ending file-type)))
+
 (defn- change-profile-picture
   "Change the profile picture of a user.
   This includes uploading an image to s3 and updating the associated url in the database."
   [{:keys [identity parameters]}]
-  (let [image-type (get-in parameters [:body :image :type])
-        image-name (get-in parameters [:body :image :name])
-        image-content (get-in parameters [:body :image :content])
+  (let [image (get-in parameters [:body :image])
         user-id (:id identity)]
-    (log/info "User" user-id "trying to set profile picture to:" image-name)
-    (let [{:keys [url error message]}
-          (media/upload-image! user-id image-type image-content config/profile-picture-width :user/profile-pictures)]
+    (log/info (format "User %s trying to set profile picture to %s" user-id (:name image)))
+    (let [file-name (path-to-file user-id (:type image))
+          {:keys [url error message]}
+          (media/upload-image! file-name (:type image) (:content image) config/profile-picture-width :user/media)]
       (if url
         (ok {:updated-user (user-db/update-profile-picture-url user-id url)})
         (bad-request (at/build-error-body error message))))))
