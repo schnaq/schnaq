@@ -127,9 +127,9 @@
 
 (>defn file->stream
   "Convert a file to a stream."
-  [file]
+  [{:keys [content]}]
   [::specs/file => :type/input-stream]
-  (let [[_header file-without-header] (string/split (:content file) #",")
+  (let [[_header file-without-header] (string/split content #",")
         bytes (.decode (Base64/getDecoder) file-without-header)]
     (io/input-stream bytes)))
 
