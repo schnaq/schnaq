@@ -158,7 +158,8 @@
 (s/def ::image ;; WIP replace with ::file
   (s/keys :req-un [:file/type :file/name :file/content]))
 (s/def ::file
-  (s/keys :req-un [:file/type :file/name :file/content]))
+  (s/keys :req-un [:file/content]
+          :opt-un [:file/type :file/name]))
 
 (s/def :file-stored/url string?)
 (s/def :file-stored/error keyword?)

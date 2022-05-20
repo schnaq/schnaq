@@ -23,7 +23,7 @@
 (>defn absolute-file-url
   "Return absolute URL to bucket."
   [bucket file-name]
-  [keyword? string? :ret string?]
+  [keyword? :file/name :ret string?]
   (format "%s/%s/%s" shared-config/s3-host (shared-config/s3-buckets bucket) file-name))
 
 (>defn upload-stream
@@ -48,7 +48,7 @@
   "Delete a file in a bucket.
     `filename` can also contain a path to the file, e.g. `foo/bar/baz.png`."
   [bucket-key file-name]
-  [keyword? (? string?) => (? map?)]
+  [keyword? (? :file/name) => (? map?)]
   (when file-name
     (aws/invoke
      s3-client

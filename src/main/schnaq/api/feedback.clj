@@ -2,29 +2,27 @@
   "Create API endpoints for feedback-functions."
   (:require [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
-            [clojure.string :as string]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
-            [ring.util.http-response :refer [ok created]]
+            [ring.util.http-response :refer [created ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.main :as db]
             [schnaq.database.specs :as specs]
             [schnaq.mail.emails :as emails]
+            [schnaq.media :as media]
             [schnaq.s3 :as s3]
-            [taoensso.timbre :as log])
-  (:import (java.util Base64)))
+            [taoensso.timbre :as log]))
 
 (>defn- upload-screenshot!
   "Stores a screenshot from a feedback in s3."
   [screenshot file-name]
   [:feedback/screenshot (s/or :number number? :string string?) :ret string?]
-  (let [[_header image] (string/split screenshot #",")
-        decodedBytes (.decode (Base64/getDecoder) image)]
+  (let [screenshot-stream (media/file->stream (:content screenshot))]
     (s3/upload-stream
      :feedbacks/screenshots
-     (io/input-stream decodedBytes)
+     (io/input-stream screenshot-stream)
      (format "%s.png" file-name)
-     {:content-length (count decodedBytes)})))
+     {:content-length (count screenshot-stream)})))
 
 (defn- add-feedback
   "Add new feedback from schnaq's frontend. If a screenshot is provided, it will

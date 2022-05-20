@@ -125,7 +125,7 @@
    :type "text/plain"
    :content "data:application/octet-stream;base64,V2lsbGtvbW1lbiBpbSBzY2huYXFxaXBhcmFkaWVzIQo="})
 
-(>defn- file->stream
+(>defn file->stream
   "Convert a file to a stream."
   [file]
   [::specs/file => :type/input-stream]
@@ -136,7 +136,7 @@
 (>defn upload-file!
   "Upload a file to s3."
   [file path-to-file bucket-key]
-  [::specs/file string? keyword? => ::file-stored]
+  [::specs/file string? keyword? => ::specs/file-stored]
   (let [absolute-url (s3/upload-stream bucket-key
                                        (file->stream file)
                                        path-to-file
