@@ -45,10 +45,10 @@
   Pre configures the allowed mime types for images. Same as `file`."
   ([label input-id temporary-image-location]
    [(s/or :string string? :component :re-frame/component) string? (s/coll-of keyword?) => :re-frame/component]
-   [file label input-id temporary-image-location {:accept shared-config/allowed-mime-types}])
+   [file label input-id temporary-image-location {:accept shared-config/allowed-mime-types-images}])
   ([label input-id temporary-image-location attrs]
    [(s/or :string string? :component :re-frame/component) string? (s/coll-of keyword?) map? => :re-frame/component]
-   [file label input-id temporary-image-location (assoc attrs :accept shared-config/allowed-mime-types)]))
+   [file label input-id temporary-image-location (assoc attrs :accept shared-config/allowed-mime-types-images)]))
 
 (>defn floating
   "Create a floating input field."

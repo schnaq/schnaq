@@ -95,7 +95,7 @@
    (upload-image! file-name image-type image-content target-image-width bucket-key true))
   ([file-name image-type image-content target-image-width bucket-key uuid-filename?]
    [:file/name :file/type :file/content number? keyword? boolean? => ::specs/file-stored]
-   (if (shared-config/allowed-mime-types image-type)
+   (if (shared-config/allowed-mime-types-images image-type)
      (if-let [{:keys [input-stream image-type content-type]}
               (scale-image-to-width image-content target-image-width)]
        (if-let [image-name (if uuid-filename?
@@ -115,7 +115,7 @@
      (do
        (log/warn "Invalid file type received.")
        {:error :image.error/invalid-file-type
-        :message (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types))}))))
+        :message (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types-images))}))))
 
 ;; -----------------------------------------------------------------------------
 

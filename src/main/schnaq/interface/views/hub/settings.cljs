@@ -34,7 +34,7 @@
         [:label.form-label.btn.btn-light.change-profile-pic-button
          [icon :camera]
          [:input {:id input-id
-                  :accept (string/join "," shared-config/allowed-mime-types)
+                  :accept (string/join "," shared-config/allowed-mime-types-images)
                   :type "file"
                   :on-change (fn [event] (files/store-temporary-file
                                           event [:hubs keycloak-name :logo-temporary]))

@@ -43,7 +43,7 @@
 (rf/reg-event-fx
  :file.store/error
  (fn [{:keys [db]} [_ {:keys [response]}]]
-   (let [mime-types (str/join ", " shared-config/allowed-mime-types)
+   (let [mime-types (str/join ", " shared-config/allowed-mime-types-images)
          error-message (case (:error response)
                          :image.error/scaling (labels :file.store.error/scaling-problem)
                          :image.error/invalid-file-type (format (labels :file.store.error/invalid-file-type) mime-types)

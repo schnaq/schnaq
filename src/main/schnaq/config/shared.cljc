@@ -37,7 +37,7 @@
   "Checks the configuration for the current environment."
   (= "production" environment))
 
-(def allowed-mime-types
+(def allowed-mime-types-images
   "Define a list of allowed mime-types."
   #{"image/jpeg" "image/png" "image/webp"})
 
