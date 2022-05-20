@@ -2,7 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [=> >defn- ?]]
-            [ring.util.http-response :refer [forbidden ok]]
+            [ring.util.http-response :refer [bad-request forbidden ok]]
             [schnaq.api.middlewares :as middlewares]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
@@ -11,7 +11,8 @@
             [schnaq.database.specs :as specs]
             [schnaq.database.themes :as themes-db]
             [schnaq.media :as media]
-            [schnaq.s3 :as s3]))
+            [schnaq.s3 :as s3]
+            [taoensso.timbre :as log]))
 
 (>defn- file-name
   "Create a theme-path in the bucket, prefixed with the keycloak-id."
@@ -32,9 +33,14 @@
 (>defn- prepare-images
   "Adds the raw images to the theme, if provided."
   [keycloak-id theme-id raw-logo raw-header]
-  [:user.registered/keycloak-id :db/id (? ::specs/image) (? ::specs/image) => any?]
+  [:user.registered/keycloak-id :db/id (? ::specs/image) (? ::specs/image) => map?]
   (let [logo (upload-theme-image keycloak-id theme-id "logo" config/image-max-width-logo raw-logo)
         header (upload-theme-image keycloak-id theme-id "header" config/image-max-width-header raw-header)]
+    (when-let [error (or (:error logo) (:error header))]
+      (let [message (or (:message logo) (:message header))
+            error-msg (format "Image upload failed: %s, %s" error message)]
+        (log/error error-msg)
+        (throw (ex-info error-msg {:error error :message message}))))
     (cond-> {}
       (:url logo) (assoc :theme.images/logo (:url logo))
       (:url header) (assoc :theme.images/header (:url header)))))
@@ -65,34 +71,42 @@
   "Save newly configured theme."
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
-  (let [theme-no-raw-images (dissoc theme :theme.images.raw/logo :theme.images.raw/header)
-        new-theme (themes-db/new-theme sub theme-no-raw-images)
-        images (prepare-images
-                sub (:db/id new-theme)
-                (:theme.images.raw/logo theme)
-                (:theme.images.raw/header theme))
-        imaged-theme (if-not (empty? images)
-                       (themes-db/edit-theme sub (assoc images :db/id (:db/id new-theme)))
-                       new-theme)]
-    (ok {:theme imaged-theme})))
+  (try
+    (let [theme-no-raw-images (dissoc theme :theme.images.raw/logo :theme.images.raw/header)
+          new-theme (themes-db/new-theme sub theme-no-raw-images)
+          images (prepare-images
+                  sub (:db/id new-theme)
+                  (:theme.images.raw/logo theme)
+                  (:theme.images.raw/header theme))
+          imaged-theme (if-not (empty? images)
+                         (themes-db/edit-theme sub (assoc images :db/id (:db/id new-theme)))
+                         new-theme)]
+      (ok {:theme imaged-theme}))
+    (catch Exception e
+      (let [{:keys [error message]} (ex-data e)]
+        (bad-request (at/build-error-body error message))))))
 
 (defn- edit-theme
   "Change the content of a theme."
   [{{:keys [sub]} :identity
     {{:keys [theme delete-header? delete-logo?]} :body} :parameters}]
-  (let [images (prepare-images sub (:db/id theme) (:theme.images.raw/logo theme) (:theme.images.raw/header theme))
-        prepared-theme (-> theme
-                           (merge images)
-                           (dissoc :theme.images.raw/logo :theme.images.raw/header))
-        updated-theme (themes-db/edit-theme sub prepared-theme)
-        theme-id (:db/id updated-theme)]
-    (when delete-header?
-      (themes-db/delete-header theme-id)
-      (s3/delete-file :user/media (url->path-to-file (:theme.images/header updated-theme))))
-    (when delete-logo?
-      (themes-db/delete-logo theme-id)
-      (s3/delete-file :user/media (url->path-to-file (:theme.images/logo updated-theme))))
-    (ok {:theme (db/fast-pull theme-id patterns/theme)})))
+  (try
+    (let [images (prepare-images sub (:db/id theme) (:theme.images.raw/logo theme) (:theme.images.raw/header theme))
+          prepared-theme (-> theme
+                             (merge images)
+                             (dissoc :theme.images.raw/logo :theme.images.raw/header))
+          updated-theme (themes-db/edit-theme sub prepared-theme)
+          theme-id (:db/id updated-theme)]
+      (when delete-header?
+        (themes-db/delete-header theme-id)
+        (s3/delete-file :user/media (url->path-to-file (:theme.images/header updated-theme))))
+      (when delete-logo?
+        (themes-db/delete-logo theme-id)
+        (s3/delete-file :user/media (url->path-to-file (:theme.images/logo updated-theme))))
+      (ok {:theme (db/fast-pull theme-id patterns/theme)}))
+    (catch Exception e
+      (let [{:keys [error message]} (ex-data e)]
+        (bad-request (at/build-error-body error message))))))
 
 (defn- delete-theme
   "Delete a theme."
