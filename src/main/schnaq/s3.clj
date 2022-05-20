@@ -5,6 +5,7 @@
             [com.fulcrologic.guardrails.core :refer [>defn => ?]]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
+            [schnaq.database.specs]
             [taoensso.timbre :as log]))
 
 (def s3-client
@@ -25,18 +26,23 @@
   [keyword? string? :ret string?]
   (format "%s/%s/%s" shared-config/s3-host (shared-config/s3-buckets bucket) file-name))
 
-(defn upload-stream
+(>defn upload-stream
   "Upload a data stream to a specified s3 bucket. Returns relative path to file in bucket."
   [bucket stream file-name {:keys [content-length content-type]}]
-  (aws/invoke s3-client
-              {:op :PutObject
-               :request {:Bucket (shared-config/s3-buckets bucket)
-                         :Key file-name
-                         :Body stream
-                         :Content-Length content-length
-                         :Content-Type content-type}})
-  (log/info "Uploaded file under the key" file-name "to bucket" (shared-config/s3-buckets bucket))
-  (absolute-file-url bucket file-name))
+  [keyword? :type/input-stream :file/name map? => string?]
+  (if-let [resolved-bucket (shared-config/s3-buckets bucket)]
+    (do
+      (aws/invoke s3-client
+                  {:op :PutObject
+                   :request {:Bucket resolved-bucket
+                             :Key file-name
+                             :Body stream
+                             :Content-Length content-length
+                             :Content-Type content-type}})
+      (log/info "Uploaded file under the key" file-name "to bucket" resolved-bucket)
+      (absolute-file-url bucket file-name))
+    (throw (ex-info (format "[upload-stream] No bucket registered for key `%s`" bucket)
+                    {:bucket bucket}))))
 
 (>defn delete-file
   "Delete a file in a bucket.
