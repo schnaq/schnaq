@@ -62,10 +62,11 @@
          [:div.d-flex.mt-2
           [:input.btn.btn-primary.me-auto
            {:type :submit
-            :value "Bild einfügen"}]
+            :value (labels :editor.toolbar.image-upload/submit)}]
           [:button.btn.btn-sm.btn-link.text-dark.ps-auto
-           {:on-click #(reset! tooltip-visible? false)}
-           "Schließen"]]]]
+           {:type :button
+            :on-click #(reset! tooltip-visible? false)}
+           (labels :editor.toolbar.image-upload/close)]]]]
        [:button.toolbar-item.spaced
         {:on-click #(swap! tooltip-visible? not)}
         [icon :image-file]]
