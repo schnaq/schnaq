@@ -1,4 +1,4 @@
-(ns schnaq.interface.utils.images
+(ns schnaq.interface.utils.files
   (:require [clojure.string :as str]
             [goog.string :refer [format]]
             [oops.core :refer [oget]]

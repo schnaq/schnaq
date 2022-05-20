@@ -7,7 +7,7 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.images :as image]
+            [schnaq.interface.utils.files :as files]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.pages :as pages]
@@ -36,7 +36,7 @@
          [:input {:id input-id
                   :accept (string/join "," shared-config/allowed-mime-types)
                   :type "file"
-                  :on-change (fn [event] (image/store-temporary-file
+                  :on-change (fn [event] (files/store-temporary-file
                                           event [:user :profile-picture :temporary]))
                   :hidden true}]])]]))
 

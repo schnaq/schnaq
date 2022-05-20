@@ -5,7 +5,7 @@
             [com.fulcrologic.guardrails.core :refer [>defn => ?]]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.images :as image]))
+            [schnaq.interface.utils.files :as files]))
 
 (defn text
   "Build a text-input component."
@@ -34,7 +34,7 @@
      (merge
       {:type :file
        :id input-id
-       :on-change #(image/store-temporary-file % temporary-file-location)}
+       :on-change #(files/store-temporary-file % temporary-file-location)}
       attrs)]
     (when-let [mime-types (:accept attrs)]
       [:small.text-muted (labels :input.file/allowed-types) ": "

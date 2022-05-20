@@ -8,7 +8,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.images :as image]
+            [schnaq.interface.utils.files :as files]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.hub.common :as hub-common]
@@ -36,7 +36,7 @@
          [:input {:id input-id
                   :accept (string/join "," shared-config/allowed-mime-types)
                   :type "file"
-                  :on-change (fn [event] (image/store-temporary-file
+                  :on-change (fn [event] (files/store-temporary-file
                                           event [:hubs keycloak-name :logo-temporary]))
                   :hidden true}]])]]))
 
