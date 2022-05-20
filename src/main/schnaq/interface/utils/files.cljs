@@ -41,7 +41,7 @@
                               :context :danger}]]]}))))
 
 (rf/reg-event-fx
- :image.store/error
+ :file.store/error
  (fn [{:keys [db]} [_ {:keys [response]}]]
    (let [mime-types (str/join ", " shared-config/allowed-mime-types)
          error-message (case (:error response)
@@ -55,12 +55,12 @@
                                       :context :danger}]]]})))
 
 (rf/reg-event-fx
- :image/upload
- (fn [{:keys [db]} [_ share-hash image bucket success-event]]
-   (if (and share-hash image bucket)
-     {:fx [(http/xhrio-request db :put "/upload/image"
+ :file/upload
+ (fn [{:keys [db]} [_ share-hash file bucket success-event]]
+   (if (and share-hash file bucket)
+     {:fx [(http/xhrio-request db :put "/upload/file"
                                success-event
                                {:share-hash share-hash
-                                :image image
+                                :file file
                                 :bucket bucket})]}
-     (log/error (format "Some properties are missing. share-hash: %s, bucket: %s, image: %s" share-hash bucket image)))))
+     (log/error (format "Some properties are missing. share-hash: %s, bucket: %s, image: %s" share-hash bucket file)))))

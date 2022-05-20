@@ -6,8 +6,8 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.files :as files]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.pages :as pages]
@@ -101,7 +101,7 @@
      {:fx [(http/xhrio-request db :put "/user/picture"
                                [:user.profile-picture/update-success]
                                {:image new-profile-picture-url}
-                               [:image.store/error])]})))
+                               [:file.store/error])]})))
 
 (rf/reg-event-db
  :user.picture/reset
