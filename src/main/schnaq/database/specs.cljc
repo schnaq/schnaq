@@ -2,7 +2,8 @@
   (:require #?(:clj [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]
-            [schnaq.config.shared :as shared-config]))
+            [schnaq.config.shared :as shared-config])
+  #?(:clj (:import (java.io InputStream))))
 
 (s/def ::non-blank-string (s/and string? (complement string/blank?)))
 
@@ -151,11 +152,14 @@
 (s/def ::hub (s/keys :req [:hub/name :hub/keycloak-name]
                      :opt [:hub/logo :hub/schnaqs :hub/created-at]))
 ;; image
-(s/def :image/type string?)
-(s/def :image/name string?)
-(s/def :image/content string?)
-(s/def ::image
-  (s/keys :req-un [:image/type :image/name :image/content]))
+(s/def :file/type string?)
+(s/def :file/name string?)
+(s/def :file/content string?)
+(s/def ::image ;; WIP replace with ::file
+  (s/keys :req-un [:file/type :file/name :file/content]))
+(s/def ::file
+  (s/keys :req-un [:file/type :file/name :file/content]))
+#?(:clj (s/def :type/input-stream (partial instance? InputStream)))
 
 ;; Statement
 (s/def :statement/type #{:statement.type/attack :statement.type/support :statement.type/neutral})

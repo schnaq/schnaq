@@ -9,6 +9,7 @@
             [ring.util.http-response :refer [bad-request created forbidden]]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.main :as d]
+            [schnaq.database.specs :as specs]
             [schnaq.s3 :as s3]
             [taoensso.timbre :as log])
   (:import (java.util Base64 UUID)))
@@ -24,6 +25,8 @@
   {"image/jpeg" "jpg"
    "image/png" "png"
    "image/webp" "webp"})
+
+;; -----------------------------------------------------------------------------
 
 (defn- add-bucket-url-to-database [relative-file-path share-hash]
   @(d/transact [[:db/add [:discussion/share-hash share-hash]
@@ -95,10 +98,10 @@
 (>defn upload-image!
   "Scale and upload an image to s3."
   ([file-name image-type image-content target-image-width bucket-key]
-   [string? :image/type :image/content number? keyword? => ::upload-image]
+   [:file/name :file/type :file/content number? keyword? => ::upload-image]
    (upload-image! file-name image-type image-content target-image-width bucket-key true))
   ([file-name image-type image-content target-image-width bucket-key uuid-filename?]
-   [string? :image/type :image/content number? keyword? boolean? => ::upload-image]
+   [:file/name :file/type :file/content number? keyword? boolean? => ::upload-image]
    (if (shared-config/allowed-mime-types image-type)
      (if-let [{:keys [input-stream image-type content-type]}
               (scale-image-to-width image-content target-image-width)]
@@ -120,3 +123,29 @@
        (log/warn "Invalid file type received.")
        {:error :image.error/invalid-file-type
         :message (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types))}))))
+
+;; -----------------------------------------------------------------------------
+
+(def ^:private sample-file
+  {:name "sample-file.txt"
+   :size 32
+   :type "text/plain"
+   :content "data:application/octet-stream;base64,V2lsbGtvbW1lbiBpbSBzY2huYXFxaXBhcmFkaWVzIQo="})
+
+(>defn- file->stream
+  "Convert a file to a stream."
+  [file]
+  [::specs/file => :type/input-stream]
+  (let [[_header file-without-header] (string/split (:content file) #",")
+        bytes (.decode (Base64/getDecoder) file-without-header)]
+    (io/input-stream bytes)))
+
+(>defn upload-file!
+  "Upload a file to s3."
+  [file path-to-file bucket-key]
+  [::specs/file string? keyword? => ::upload-image]
+  (let [absolute-url (s3/upload-stream bucket-key
+                                       (file->stream file)
+                                       path-to-file
+                                       {:content-type (:type file)})]
+    {:url absolute-url}))
