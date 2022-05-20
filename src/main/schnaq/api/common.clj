@@ -40,19 +40,25 @@
 
 ;; -----------------------------------------------------------------------------
 
-(>defn- file-name
+(>defn- image-file-name
   "Create a file name to store assets for a schnaq."
-  [share-hash file-type]
-  [:discussion/share-hash :image/type => string?]
-  (format "%s/files/%s/image.%s" share-hash (str (random-uuid)) (media/mime-type->file-ending file-type)))
+  [file share-hash]
+  [::specs/file :discussion/share-hash => string?]
+  (format "%s/files/%s/image.%s" share-hash (str (random-uuid)) (media/mime-type->file-ending (type file))))
 
-(defn- upload-image
+(>defn- common-file-name
+  "Create a file name to store assets for a schnaq."
+  [file share-hash]
+  [::specs/file :discussion/share-hash => string?]
+  (format "%s/files/%s/%s" share-hash (str (random-uuid)) (:name file)))
+
+(defn- upload-file
   "Upload an image to a given bucket."
-  [{{{:keys [image bucket share-hash]} :body} :parameters}]
+  [{{{:keys [file bucket share-hash]} :body} :parameters}]
   (let [{:keys [image-url error message]}
         (media/upload-image!
-         (file-name share-hash (:type image))
-         (:type image) (:content image) config/image-width-in-statement bucket)]
+         (image-file-name file share-hash)
+         (:type file) (:content file) config/image-width-in-statement bucket)]
     (if image-url
       (created "" {:url image-url})
       (bad-request {:error error
@@ -74,14 +80,14 @@
                   :description (at/get-doc #'export-as-argdown)}]
      ["/fulltext" {:get export-as-fulltext
                    :description (at/get-doc #'export-as-fulltext)}]]
-    ["/upload/image" {:put upload-image
-                      :description (at/get-doc #'upload-image)
-                      :middleware [:discussion/valid-share-hash?]
-                      :parameters {:body {:image ::specs/image
-                                          :bucket keyword?
-                                          :share-hash :discussion/share-hash}}
-                      :responses {201 {:body {:url string?}}
-                                  400 at/response-error-body}}]
+    ["/upload/file" {:put upload-file
+                     :description (at/get-doc #'upload-file)
+                     :middleware [:discussion/valid-share-hash?]
+                     :parameters {:body {:file ::specs/file
+                                         :bucket keyword?
+                                         :share-hash :discussion/share-hash}}
+                     :responses {201 {:body {:url string?}}
+                                 400 at/response-error-body}}]
     ["/credentials/validate" {:post check-credentials-opt-add-as-admin!
                               :description (at/get-doc #'check-credentials-opt-add-as-admin!)
                               :middleware [:discussion/valid-credentials?]
