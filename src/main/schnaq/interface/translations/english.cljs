@@ -1187,8 +1187,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :filters.labels.type/numbers "Statement-number"
    :filters.labels.type/author "You are"
 
-   :input.file/allowed-types "Allowed file types"
-
    :loading.placeholder/lead "Loading..."
    :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 
@@ -1308,6 +1306,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :file.store.error/scaling-problem "Your image could not be converted. Maybe the image is corrupt. Please try a different image or contact us."
    :file.store.error/invalid-file-type "The file you provided has the wrong file type. Allowed file types: %s"
    :file.store.error/generic "Something went wrong with the file you've uploaded. Please try again."
+   :file/allowed-types "Allowed file types"
 
    ;; Alt texts
    :schnaqqifant/hippie-alt-text "Schnaqqi the schnaq mascot dressed as a hippie"

@@ -37,7 +37,7 @@
        :on-change #(files/store-temporary-file % temporary-file-location)}
       attrs)]
     (when-let [mime-types (:accept attrs)]
-      [:small.text-muted (labels :input.file/allowed-types) ": "
+      [:small.text-muted (labels :file/allowed-types) ": "
        (str/join ", " (map #(second (str/split % #"/")) mime-types))])]))
 
 (>defn image
