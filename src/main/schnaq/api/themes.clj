@@ -23,7 +23,7 @@
 (>defn- upload-theme-image
   "Takes an image and uploads it."
   [keycloak-id theme-id image-name image-width {:keys [content type]}]
-  [:user.registered/keycloak-id :db/id string? nat-int? (? ::specs/image) => (? map?)]
+  [:user.registered/keycloak-id :db/id string? nat-int? (? ::specs/image) => (? ::specs/file-stored)]
   (when content
     (media/upload-image!
      (file-name keycloak-id theme-id image-name type)
@@ -36,8 +36,8 @@
   (let [logo (upload-theme-image keycloak-id theme-id "logo" config/image-max-width-logo raw-logo)
         header (upload-theme-image keycloak-id theme-id "header" config/image-max-width-header raw-header)]
     (cond-> {}
-      (:image-url logo) (assoc :theme.images/logo (:image-url logo))
-      (:image-url header) (assoc :theme.images/header (:image-url header)))))
+      (:url logo) (assoc :theme.images/logo (:url logo))
+      (:url header) (assoc :theme.images/header (:url header)))))
 
 (>defn- url->path-to-file
   "Takes an url in our s3 store and returns the path to the theme file after the

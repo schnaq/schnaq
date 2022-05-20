@@ -100,10 +100,10 @@
         image-content (get-in parameters [:body :image :content])
         user-id (:id identity)]
     (log/info "User" user-id "trying to set profile picture to:" image-name)
-    (let [{:keys [image-url error message]}
+    (let [{:keys [url error message]}
           (media/upload-image! user-id image-type image-content config/profile-picture-width :user/profile-pictures)]
-      (if image-url
-        (ok {:updated-user (user-db/update-profile-picture-url user-id image-url)})
+      (if url
+        (ok {:updated-user (user-db/update-profile-picture-url user-id url)})
         (bad-request (at/build-error-body error message))))))
 
 (defn- change-display-name

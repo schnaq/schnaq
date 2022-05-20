@@ -159,6 +159,12 @@
   (s/keys :req-un [:file/type :file/name :file/content]))
 (s/def ::file
   (s/keys :req-un [:file/type :file/name :file/content]))
+
+(s/def :file-stored/url string?)
+(s/def :file-stored/error keyword?)
+(s/def :file-stored/message string?)
+(s/def ::file-stored
+  (s/keys :opt-un [:file-stored/url :file-stored/error :file-stored/message]))
 #?(:clj (s/def :type/input-stream (partial instance? InputStream)))
 
 ;; Statement

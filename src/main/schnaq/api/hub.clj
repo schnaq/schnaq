@@ -113,10 +113,10 @@
         image-content (get-in parameters [:body :image :content])]
     (log/info (format "User %s is trying to set logo of Hub %s to: %s" (:id identity) keycloak-name image-name))
     (if (auth/member-of-group? identity keycloak-name)
-      (let [{:keys [image-url error message]}
+      (let [{:keys [url error message]}
             (media/upload-image! keycloak-name image-type image-content config/profile-picture-width :hub/logo)]
-        (if image-url
-          (ok {:hub (hub-db/update-hub-logo-url keycloak-name image-url)})
+        (if url
+          (ok {:hub (hub-db/update-hub-logo-url keycloak-name url)})
           (bad-request (at/response-error-body error message))))
       forbidden-missing-permission)))
 

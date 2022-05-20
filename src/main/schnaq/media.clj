@@ -1,7 +1,6 @@
 (ns schnaq.media
   (:require [clj-http.client :as client]
             [clojure.java.io :as io]
-            [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
             [image-resizer.core :as resizer-core]
@@ -89,19 +88,13 @@
   (when (and id file-type)
     (str (UUID/nameUUIDFromBytes (.getBytes (str id))) "." file-type)))
 
-(s/def :upload-image/image-url string?)
-(s/def :upload-image/error keyword?)
-(s/def :upload-image/message string?)
-(s/def ::upload-image
-  (s/keys :opt-un [:upload-image/image-url :upload-image/error :upload-image/message]))
-
 (>defn upload-image!
   "Scale and upload an image to s3."
   ([file-name image-type image-content target-image-width bucket-key]
-   [:file/name :file/type :file/content number? keyword? => ::upload-image]
+   [:file/name :file/type :file/content number? keyword? => ::specs/file-stored]
    (upload-image! file-name image-type image-content target-image-width bucket-key true))
   ([file-name image-type image-content target-image-width bucket-key uuid-filename?]
-   [:file/name :file/type :file/content number? keyword? boolean? => ::upload-image]
+   [:file/name :file/type :file/content number? keyword? boolean? => ::specs/file-stored]
    (if (shared-config/allowed-mime-types image-type)
      (if-let [{:keys [input-stream image-type content-type]}
               (scale-image-to-width image-content target-image-width)]
@@ -112,7 +105,7 @@
                                               input-stream
                                               image-name
                                               {:content-type content-type})]
-           {:image-url absolute-url})
+           {:url absolute-url})
          {:error :image.error/could-not-create-file-name
           :message "Could not create file-name. Maybe you are not authenticated or you did not provide a file-type."})
        (do
@@ -143,7 +136,7 @@
 (>defn upload-file!
   "Upload a file to s3."
   [file path-to-file bucket-key]
-  [::specs/file string? keyword? => ::upload-image]
+  [::specs/file string? keyword? => ::file-stored]
   (let [absolute-url (s3/upload-stream bucket-key
                                        (file->stream file)
                                        path-to-file

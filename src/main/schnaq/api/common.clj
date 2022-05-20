@@ -55,12 +55,12 @@
 (defn- upload-file
   "Upload an image to a given bucket."
   [{{{:keys [file bucket share-hash]} :body} :parameters}]
-  (let [{:keys [image-url error message]}
+  (let [{:keys [url error message]}
         (media/upload-image!
          (image-file-name file share-hash)
          (:type file) (:content file) config/image-width-in-statement bucket)]
-    (if image-url
-      (created "" {:url image-url})
+    (if url
+      (created "" {:url url})
       (bad-request {:error error
                     :message message}))))
 
