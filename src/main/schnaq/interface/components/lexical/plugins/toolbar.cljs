@@ -46,33 +46,36 @@
        {:on-click #(.dispatchCommand editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"})}
        [icon :video-file]]]]))
 
-(defn image-upload-button
+(defn- image-upload-button
   "Show a button and a modal to upload own images."
   [^js/LexicalEditor _editor _file-storage]
   (let [tooltip-visible? (r/atom false)]
     (fn [editor file-storage]
-      [tooltip/html
-       [:<>
-        [:form {:on-submit
-                (fn [e]
-                  (.preventDefault e)
-                  (rf/dispatch [:editor.upload/image editor file-storage])
-                  (reset! tooltip-visible? false))}
-         [inputs/image [:span.fs-5 "Image Upload"] "editor-upload-image" [:editor :temporary :image] {:required true}]
-         [:div.d-flex.mt-2
-          [:input.btn.btn-primary.me-auto
-           {:type :submit
-            :value (labels :editor.toolbar.image-upload/submit)}]
-          [:button.btn.btn-sm.btn-link.text-dark.ps-auto
-           {:type :button
-            :on-click #(reset! tooltip-visible? false)}
-           (labels :editor.toolbar.image-upload/close)]]]]
-       [:button.toolbar-item.spaced
-        {:on-click #(swap! tooltip-visible? not)}
-        [icon :image-file]]
-       {:visible @tooltip-visible?
-        :appendTo js/document.body}
-       [:trigger]])))
+      [tooltip/text
+       (labels :editor.toolbar/image-upload)
+       [:span ;; Wrap into a span to make tippy nestable.
+        [tooltip/html
+         [:<>
+          [:form {:on-submit
+                  (fn [e]
+                    (.preventDefault e)
+                    (rf/dispatch [:editor.upload/image editor file-storage])
+                    (reset! tooltip-visible? false))}
+           [inputs/image [:span.fs-5 (labels :editor.toolbar/image-upload)] "editor-upload-image" [:editor :temporary :image] {:required true}]
+           [:div.d-flex.mt-2
+            [:input.btn.btn-primary.me-auto
+             {:type :submit
+              :value (labels :editor.toolbar.image-upload/submit)}]
+            [:button.btn.btn-sm.btn-link.text-dark.ps-auto
+             {:type :button
+              :on-click #(reset! tooltip-visible? false)}
+             (labels :editor.toolbar.image-upload/close)]]]]
+         [:button.toolbar-item.spaced
+          {:on-click #(swap! tooltip-visible? not)}
+          [icon :image-file]]
+         {:visible @tooltip-visible?
+          :appendTo js/document.body}
+         [:trigger]]]])))
 
 (rf/reg-event-fx
  :editor.upload/image
@@ -87,10 +90,14 @@
  (fn [_ [_ editor {:keys [url]}]]
    {:fx [[:editor/dispatch-command! [editor INSERT_IMAGE_COMMAND #js {:src url}]]]}))
 
+;; -----------------------------------------------------------------------------
+
 (rf/reg-fx
  :editor/dispatch-command!
  (fn [[^LexicalEditor editor command payload]]
    (.dispatchCommand editor command payload)))
+
+;; -----------------------------------------------------------------------------
 
 (defn ToolbarPlugin
   "Build a toolbar for the editor."
@@ -182,6 +189,7 @@
       [:button.toolbar-item.spaced
        {:on-click #(format-quote active-editor block-type)}
        [icon :quote-right]]]
+
      [image-upload-button active-editor file-storage]
      #_[tooltip/text
         (labels :editor.toolbar/video-upload)

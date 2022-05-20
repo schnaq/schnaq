@@ -1189,7 +1189,7 @@
    :filters.labels.type/numbers "Anzahl Beiträge"
    :filters.labels.type/author "Du"
 
-   :input.file.image/allowed-types "Erlaubte Dateitypen"
+   :input.file/allowed-types "Erlaubte Dateitypen"
 
    :loading.placeholder/lead "Daten werden geladen..."
    :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
@@ -1296,6 +1296,9 @@
    :editor.toolbar/strike-through "Durchstreichen"
    :editor.toolbar/code "Code"
    :editor.toolbar/quote "Zitat"
+   :editor.toolbar/file-upload "Datei hochladen"
+   :editor.toolbar.file-upload/submit "Datei einfügen"
+   :editor.toolbar.file-upload/close "Schließen"
    :editor.toolbar/image-upload "Bild hochladen"
    :editor.toolbar.image-upload/submit "Bild einfügen"
    :editor.toolbar.image-upload/close "Schließen"

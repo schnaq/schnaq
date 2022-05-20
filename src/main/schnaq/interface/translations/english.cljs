@@ -1192,7 +1192,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :filters.labels.type/numbers "Statement-number"
    :filters.labels.type/author "You are"
 
-   :input.file.image/allowed-types "Allowed file types"
+   :input.file/allowed-types "Allowed file types"
 
    :loading.placeholder/lead "Loading..."
    :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
