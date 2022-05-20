@@ -17,13 +17,15 @@
             :placeholder placeholder}
            attrs)]))
 
-(>defn image
-  "Input field to upload image.
-  Stores the image in a temporary field in the app-db, where it can than be
+(>defn file
+  "Input field to upload a file.
+  Allowed files can be controlled by providing an `:accept` attribute
+  (see `image`).
+  Stores the file in a temporary field in the app-db, where it can than be
   used to transfer it to, e.g., the backend."
   ([label input-id temporary-image-location]
    [(s/or :string string? :component :re-frame/component) string? (s/coll-of keyword?) => :re-frame/component]
-   [image label input-id temporary-image-location {}])
+   [file label input-id temporary-image-location {}])
   ([label input-id temporary-image-location attrs]
    [(s/or :string string? :component :re-frame/component) string? (s/coll-of keyword?) map? => :re-frame/component]
    [:div
@@ -32,11 +34,21 @@
      (merge
       {:type :file
        :id input-id
-       :on-change #(image/store-temporary-image % temporary-image-location)
-       :accept shared-config/allowed-mime-types}
+       :on-change #(image/store-temporary-image % temporary-image-location)}
       attrs)]
-    [:small.text-muted (labels :input.file.image/allowed-types) ": "
-     (str/join ", " (map #(second (str/split % #"/")) shared-config/allowed-mime-types))]]))
+    (when-let [mime-types (:accept attrs)]
+      [:small.text-muted (labels :input.file/allowed-types) ": "
+       (str/join ", " (map #(second (str/split % #"/")) mime-types))])]))
+
+(>defn image
+  "Input field to upload image.
+  Pre configures the allowed mime types for images. Same as `file`."
+  ([label input-id temporary-image-location]
+   [(s/or :string string? :component :re-frame/component) string? (s/coll-of keyword?) => :re-frame/component]
+   [file label input-id temporary-image-location {:accept shared-config/allowed-mime-types}])
+  ([label input-id temporary-image-location attrs]
+   [(s/or :string string? :component :re-frame/component) string? (s/coll-of keyword?) map? => :re-frame/component]
+   [file label input-id temporary-image-location (assoc attrs :accept shared-config/allowed-mime-types)]))
 
 (>defn floating
   "Create a floating input field."
