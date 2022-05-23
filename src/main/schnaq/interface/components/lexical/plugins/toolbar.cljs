@@ -95,8 +95,8 @@
  (fn [{:keys [db]} [_ id editor file-storage]]
    (when (= :schnaq/by-share-hash file-storage)
      (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-           image (get-in db [:editors id :file])]
-       {:fx [[:dispatch [:file/upload share-hash image :schnaq/media [:editor.upload.file/success editor]]]]}))))
+           file (get-in db [:editors id :file])]
+       {:fx [[:dispatch [:file/upload share-hash file :schnaq/media [:editor.upload.file/success editor]]]]}))))
 
 ;; -----------------------------------------------------------------------------
 

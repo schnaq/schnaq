@@ -40,32 +40,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(>defn- image-file-name
-  "Create a file name to store assets for a schnaq."
-  [file share-hash]
-  [::specs/file :discussion/share-hash => string?]
-  (format "%s/files/%s/image.%s" share-hash (str (random-uuid)) (media/mime-type->file-ending (type file))))
-
-(>defn- common-file-name
-  "Create a file name to store assets for a schnaq."
-  [file share-hash]
-  [::specs/file :discussion/share-hash => string?]
-  (format "%s/files/%s/%s" share-hash (str (random-uuid)) (:name file)))
-
-(defn- upload-file
-  "Upload an image to a given bucket."
-  [{{{:keys [file bucket share-hash]} :body} :parameters}]
-  (let [{:keys [url error message]}
-        (media/upload-image!
-         (image-file-name file share-hash)
-         (:type file) (:content file) config/image-width-in-statement bucket)]
-    (if url
-      (created "" {:url url})
-      (bad-request {:error error
-                    :message message}))))
-
-;; -----------------------------------------------------------------------------
-
 (def other-routes
   [["" {:swagger {:tags ["other"]}}
     ["/ping" {:get ping
@@ -80,14 +54,6 @@
                   :description (at/get-doc #'export-as-argdown)}]
      ["/fulltext" {:get export-as-fulltext
                    :description (at/get-doc #'export-as-fulltext)}]]
-    ["/upload/file" {:put upload-file
-                     :description (at/get-doc #'upload-file)
-                     :middleware [:discussion/valid-share-hash?]
-                     :parameters {:body {:file ::specs/file
-                                         :bucket keyword?
-                                         :share-hash :discussion/share-hash}}
-                     :responses {201 {:body {:url string?}}
-                                 400 at/response-error-body}}]
     ["/credentials/validate" {:post check-credentials-opt-add-as-admin!
                               :description (at/get-doc #'check-credentials-opt-add-as-admin!)
                               :middleware [:discussion/valid-credentials?]

@@ -58,7 +58,7 @@
  :file/upload
  (fn [{:keys [db]} [_ share-hash file bucket success-event]]
    (if (and share-hash file bucket)
-     {:fx [(http/xhrio-request db :put "/upload/file"
+     {:fx [(http/xhrio-request db :put "/discussion/upload/file"
                                success-event
                                {:share-hash share-hash
                                 :file file

@@ -1,9 +1,11 @@
 (ns schnaq.api.discussion
   (:require [clojure.spec.alpha :as s]
+            [com.fulcrologic.guardrails.core :refer [=> >defn-]]
             [ring.util.http-response :refer [bad-request created forbidden ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.auth.lib :as auth-lib]
+            [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
@@ -342,6 +344,36 @@
 
 ;; -----------------------------------------------------------------------------
 
+(>defn- image-file-name
+  "Create a file name to store assets for a schnaq."
+  [file share-hash]
+  [::specs/file :discussion/share-hash => string?]
+  (format "%s/files/%s/image.%s" share-hash (str (random-uuid)) (media/mime-type->file-ending (:type file))))
+
+(>defn- common-file-name
+  "Create a file name to store assets for a schnaq."
+  [file share-hash]
+  [::specs/file :discussion/share-hash => string?]
+  (format "%s/files/%s/%s" share-hash (str (random-uuid)) (:name file)))
+
+(defn- upload-file
+  "Upload an image to a given bucket."
+  [{{{:keys [file bucket share-hash]} :body} :parameters}]
+  (let [{:keys [url error message]}
+        (if (media/image? file)
+          (media/upload-image!
+           (image-file-name file share-hash) (:type file) (:content file) config/image-width-in-statement bucket)
+          (media/upload-file! file (common-file-name file share-hash) bucket))]
+    (println "################################")
+    (println "################################")
+    (println error)
+    (if url
+      (created "" {:url url})
+      (bad-request {:error error
+                    :message message}))))
+
+;; -----------------------------------------------------------------------------
+
 (def discussion-routes
   ["/discussion" {:swagger {:tags ["discussions"]}}
    ["/conclusions/starting" {:get get-starting-conclusions
@@ -390,6 +422,15 @@
                                          :image-url :discussion/header-image-url}}
                      :responses {201 {:body {:message string?}}
                                  403 at/response-error-body}}]
+   ["/upload/file" {:put upload-file
+                    :name :api.discussion.upload/file
+                    :description (at/get-doc #'upload-file)
+                    :middleware [:discussion/valid-share-hash?]
+                    :parameters {:body {:file ::specs/file
+                                        :bucket keyword?
+                                        :share-hash :discussion/share-hash}}
+                    :responses {201 {:body ::specs/file-stored}
+                                400 at/response-error-body}}]
    ["/react-to/statement" {:post react-to-any-statement!
                            :description (at/get-doc #'react-to-any-statement!)
                            :name :api.discussion.react-to/statement
