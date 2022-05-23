@@ -175,5 +175,6 @@
   [url]
   [string? => (? string?)]
   (try
-    (-> url js/URL. .-pathname (.split "/") .pop)
+    (let [url (-> url js/URL. .-pathname (.split "/") .pop)]
+      (not-empty url))
     (catch js/Object _e)))
