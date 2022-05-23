@@ -1,5 +1,6 @@
 (ns schnaq.api.user
   (:require [clojure.spec.alpha :as s]
+            [com.fulcrologic.guardrails.core :refer [>defn- =>]]
             [ring.util.http-response :refer [bad-request created ok]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
