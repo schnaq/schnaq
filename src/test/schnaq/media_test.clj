@@ -6,7 +6,7 @@
             [schnaq.database.user :as user-db]
             [schnaq.media :as media]
             [schnaq.s3 :as s3]
-            [schnaq.test.toolbelt :as schnaq-toolbelt]))
+            [schnaq.test.toolbelt :as schnaq-toolbelt :refer [file image]]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
@@ -61,16 +61,18 @@
 
 ;; -----------------------------------------------------------------------------
 
-(def ^:private sample-file
-  {:name "sample-file.txt"
-   :size 32
-   :type "text/plain"
-   :content "data:application/octet-stream;base64,V2lsbGtvbW1lbiBpbSBzY2huYXFxaXBhcmFkaWVzIQo="})
-
 (deftest file->stream-test
   (testing "Valid file can be converted to stream."
-    (is (s/valid? :type/input-stream (media/file->stream sample-file)))))
+    (is (s/valid? :type/input-stream (media/file->stream file)))))
 
 (deftest upload-file!-test
   (testing "Upload sample file to bucket."
-    (is (string? (:url (media/upload-file! sample-file (format "testing/%s" (:name sample-file)) :user/media))))))
+    (is (string? (:url (media/upload-file! file (format "testing/%s" (:name file)) :user/media))))))
+
+;; -----------------------------------------------------------------------------
+
+(deftest image?-test
+  (testing "A file is not an image."
+    (is (not (media/image? file))))
+  (testing "An image evaluates to true."
+    (is (media/image? image))))

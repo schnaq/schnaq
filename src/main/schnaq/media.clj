@@ -25,6 +25,12 @@
    "image/png" "png"
    "image/webp" "webp"})
 
+(>defn image?
+  "Check if the type of a file is an image."
+  [file]
+  [::specs/file => boolean?]
+  (.startsWith (:type file) "image/"))
+
 ;; -----------------------------------------------------------------------------
 
 (defn- add-bucket-url-to-database [relative-file-path share-hash]
