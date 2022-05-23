@@ -74,7 +74,6 @@ up-to-date?:
   allow_failure: true
   when: always
 
-
 # ------------------------------------------------------------------------------
 # Stage "report"
 
@@ -85,8 +84,9 @@ coverage-report:
     - wget -O - https://s3.schnaq.com/schnaq-ci/lcov_cobertura.py | python3 - target/coverage/lcov.info --output target/coverage/coverage.xml
   artifacts:
     reports:
-      cobertura: target/coverage/coverage.xml
-
+      coverage_report:
+        ​coverage_format: cobertura
+        path: target/coverage/coverage.xml
 
 # ------------------------------------------------------------------------------
 # Stage "build-docker-images"
@@ -191,7 +191,6 @@ build-backend-staging-image:
   only:
     - develop
 
-
 # ------------------------------------------------------------------------------
 # Deploy
 
@@ -199,7 +198,7 @@ deploy-staging:
   stage: deploy
   variables:
     DEPLOYMENT: staging
-    DEPLOY_BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend:$CI_PIPELINE_IID-staging  # here, we cannot use the constructed vars from above, because than var expansion fails.
+    DEPLOY_BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend:$CI_PIPELINE_IID-staging # here, we cannot use the constructed vars from above, because than var expansion fails.
     DEPLOY_FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend:$CI_PIPELINE_IID-staging
   trigger: dialogo/deployments/schnaq
   only:
