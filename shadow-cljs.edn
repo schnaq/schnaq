@@ -6,6 +6,8 @@
                 :modules {:base {:init-fn schnaq.interface.core/init}}
                 :output-dir "resources/public/js/compiled"
                 :asset-path "/js/compiled"
+                :compiler-options {:warnings {:undeclared-var false
+                                              :redef false}}
                 :dev {:compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}
                                          :external-config {:guardrails {}}}}
                 :release {:closure-defines {schnaq.config.shared/api-url #shadow/env "REST_API_URL"
