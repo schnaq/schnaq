@@ -169,3 +169,11 @@
   (-> db
       (assoc-in [:schnaq :selected :discussion/activation-focus] new-focus-id)
       (assoc-in [:schnaq :activations :show-index] 0)))
+
+(>defn filename-from-url
+  "Takes a string-encoded url and extracts the filename from it."
+  [url]
+  [string? => (? string?)]
+  (try
+    (-> url js/URL. .-pathname (.split "/") .pop)
+    (catch js/Object _e)))
