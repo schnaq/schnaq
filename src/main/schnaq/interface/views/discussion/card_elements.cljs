@@ -29,10 +29,10 @@
         navigation-target (if has-history? back-history back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
     (when navigation-target
-      [:div.d-flex.flex-row.h-100
+      [:div.d-flex.flex-row
        [tooltip/text
         (labels tooltip)
-        [:button.btn.btn-dark.button-discussion-options.h-100.p-3
+        [:button.btn.btn-dark
          {:on-click #(rf/dispatch navigation-target)}
          [:div.d-flex
           [icon :arrow-left "m-auto"]]]]
@@ -175,10 +175,10 @@
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
     [tooltip/text (labels :badges/sort)
      (if (= :newest sort-method)
-       [:button.btn.btn-sm.btn-primary.h-100
+       [:button.btn.btn-sm.btn-primary.btn-invisible-border
         {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
         (labels :badges.sort/newest)]
-       [:button.btn.btn-sm.btn-primary.h-100
+       [:button.btn.btn-sm.btn-primary.btn-invisible-border
         {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
         (labels :badges.sort/popular)])]))
 
@@ -187,11 +187,11 @@
   []
   (let [active? @(rf/subscribe [:filters/questions?])]
     [tooltip/text "Nur Fragen anzeigen"
-     [:button.btn.btn-sm.h-100
+     [:button.btn.btn-sm
       {:on-click (if active?
                    #(rf/dispatch [:filters.deactivate/questions])
                    #(rf/dispatch [:filters.activate/questions]))
-       :class (if active? "btn-primary" "btn-outline-primary")}
+       :class (if active? "btn-primary btn-invisible-border" "btn-outline-primary")}
       (labels :filters.option/questions)]]))
 
 ;; -----------------------------------------------------------------------------
@@ -221,11 +221,11 @@
   [clear-id]
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
         action-icon (if (cstring/blank? search-string) :search :times)]
-    [:button.btn.button-muted.h-100
+    [:button.btn.button-muted.py-0
      {:on-click (fn [_e]
                   (toolbelt/clear-input clear-id)
                   (rf/dispatch [:schnaq.search.current/clear-search-string]))}
-     [icon action-icon "m-auto"]]))
+     [icon action-icon]]))
 
 (defn search-bar
   "A search-bar to search inside a schnaq."
@@ -233,11 +233,11 @@
   (let [search-input-id "search-bar"
         route-name @(rf/subscribe [:navigation/current-route-name])
         selected-statement-id (get-in @(rf/subscribe [:navigation/current-route]) [:path-params :statement-id])]
-    [:form.h-100
+    [:form.my-auto
      {:on-submit #(.preventDefault %)
       :key (str route-name selected-statement-id)}
-     [:div.input-group.search-bar.h-100.panel-white.p-0
-      [:input.form-control.my-auto.search-bar-input.h-100
+     [:div.input-group.search-bar.panel-white.p-0
+      [:input.form-control.my-auto.search-bar-input.py-0
        {:id search-input-id
         :type "text"
         :aria-label "Search"
@@ -249,19 +249,18 @@
 (defn discussion-options-navigation
   "Navigation bar on top of the discussion contents."
   []
-  [:div.d-inline-block.text-dark.w-100.mb-3.mx-1.mx-md-0
-   [:div.d-flex.flex-row.flex-wrap.panel-white.p-2
-    [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2
-     [back-button]]
-    [:div.d-flex
-     [:div.me-1.mx-lg-2.pe-0.pe-lg-2
-      [sort-options]]
-     [:div.h-100
-      (when @(rf/subscribe [:routes.schnaq/start?])
-        [filters/filter-answered-statements])]
-     [:div.mx-lg-2.pe-0.pe-lg-2
-      [question-filter-button]]]
-    [:div.ms-auto.flex-grow-1.flex-md-grow-0.mt-3.mt-md-0
+  [:div.text-dark.w-100.mb-1.mx-1.mx-md-0.d-flex.flex-row.flex-wrap.pb-2
+   [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2
+    [back-button]]
+   [:div.mt-2.mt-md-0.d-flex.flex-wrap.ms-auto.gy-5
+    [:div.ms-auto.ms-md-0.me-1.mx-lg-2.pe-0.pe-lg-2.order-0
+     [sort-options]]
+    [:section.ms-auto.ms-md-0.mt-2.mt-md-0.order-2.order-md-1
+     (when @(rf/subscribe [:routes.schnaq/start?])
+       [filters/filter-answered-statements])]
+    [:div.mx-lg-2.pe-1.pe-lg-2.order-1.order-md-2
+     [question-filter-button]]
+    [:div.mt-2.mt-md-0.ms-auto.ms-md-0.d-flex.align-items-center.order-3
      [search-bar]]]])
 
 (defn locked-statement-icon

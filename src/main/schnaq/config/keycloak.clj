@@ -16,10 +16,6 @@
   "Specify the realm you are connecting to."
   (or (System/getenv "KEYCLOAK_REALM") "development"))
 
-(def client-id
-  "Specify the client on the realm you want to interact with."
-  (or (System/getenv "KEYCLOAK_CLIENT_ID") "development"))
-
 (def openid-endpoint
   "OpenID Endpoint to authenticate using oauth2."
   (format "%srealms/%s/protocol/openid-connect" server realm))

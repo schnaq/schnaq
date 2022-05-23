@@ -40,6 +40,20 @@
    [:div.border-end.me-2.d-inline-block]
    [:p.small.my-auto (labels :startpage.social-proof/teaser)]])
 
+(defn- trust-badges
+  "An assortment of badges, that exude trust to the visiting user."
+  []
+  [:div.row.pt-5
+   [:div.col-3
+    [:a {:href "https://www.capterra.com/reviews/245761/schnaq?utm_source=vendor&utm_medium=badge&utm_campaign=capterra_reviews_badge"}
+     [:img.img-fluid
+      {:src "https://assets.capterra.com/badge/003723140a5adf622bfdb2e12c2118d7.svg?v=2203283&p=245761"
+       :alt (labels :startpage.trust/capterra)}]]]
+   [:div.col-3.d-flex.align-items-center
+    [:img.img-fluid
+     {:src (img-path :startpage.trust/germany-100)
+      :alt (labels :startpage.trust/germany-100)}]]])
+
 (defn features-call-to-action
   "Displays a list of features with a call-to-action button to start a schnaq"
   []
@@ -48,6 +62,7 @@
     [:h1 (labels :startpage/slogan)]
     [:p.lead (labels :startpage/hook)]
     [start-schnaq-button]
-    [social-proof-abtf]]
+    [social-proof-abtf]
+    [trust-badges]]
    [:div.col-lg-6.col-xxxl-4.pb-4
     [header-video]]])

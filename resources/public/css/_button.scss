@@ -22,7 +22,8 @@
   @include button-template;
   color: $white;
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: $white;
   }
 }
@@ -110,4 +111,9 @@
     box-shadow: none;
     outline: none;
   }
+}
+
+.btn-invisible-border {
+  // Adds an invisible border to be the same size as outline buttons
+  border: $btn-border-width solid transparent;
 }
