@@ -26,8 +26,8 @@
               (when ($isRangeSelection selection)
                 (when ($isRootNode (.getNode (.-anchor selection)))
                   (.insertParagraph selection))
-                (let [imageNode ($create-image-node (.-src payload) (.-altText payload))]
-                  (.insertNodes selection #js [imageNode])
+                (let [image-node ($create-image-node (.-src payload) (.-altText payload))]
+                  (.insertNodes selection #js [image-node])
                   (.insertParagraph selection)))
               true))
           COMMAND_PRIORITY_EDITOR)))

@@ -1,6 +1,7 @@
 (ns schnaq.interface.components.lexical.editor
   "Creating our own editor, based on lexical. "
-  (:require ["@lexical/markdown" :refer [$convertToMarkdownString $convertFromMarkdownString]]
+  (:require ["@lexical/markdown" :refer [$convertFromMarkdownString
+                                         $convertToMarkdownString]]
             ["@lexical/react/LexicalAutoFocusPlugin" :as AutoFocusPlugin]
             ["@lexical/react/LexicalComposer" :as LexicalComposer]
             ["@lexical/react/LexicalContentEditable" :as ContentEditable]
@@ -14,6 +15,7 @@
             [schnaq.interface.components.lexical.config :refer [initial-config]]
             [schnaq.interface.components.lexical.plugins.autolink :refer [autolink-plugin]]
             [schnaq.interface.components.lexical.plugins.images :refer [ImagesPlugin]]
+            [schnaq.interface.components.lexical.plugins.links :refer [LinksPlugin]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
             [schnaq.interface.components.lexical.plugins.toolbar :refer [ToolbarPlugin]]
             [schnaq.interface.components.lexical.plugins.tree-view :refer [TreeViewPlugin]]
@@ -47,6 +49,7 @@
       [:f> ImagesPlugin]
       [:f> VideoPlugin]
       [:> LinkPlugin]
+      [:f> LinksPlugin]
       [:> ListPlugin]
       [markdown-shortcut-plugin]
       (when focus? [:> AutoFocusPlugin])

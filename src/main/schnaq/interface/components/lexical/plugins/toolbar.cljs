@@ -15,8 +15,10 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.lexical.plugins.images :refer [INSERT_IMAGE_COMMAND]]
+            [schnaq.interface.components.lexical.plugins.links :refer [INSERT_LINK_COMMAND]]
             [schnaq.interface.components.lexical.plugins.video :refer [INSERT_VIDEO_COMMAND]]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (def low-priority 1)
@@ -96,7 +98,13 @@
    (when (= :schnaq/by-share-hash file-storage)
      (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
            file (get-in db [:editors id :file])]
-       {:fx [[:dispatch [:file/upload share-hash file :schnaq/media [:editor.upload.file/success editor]]]]}))))
+       {:fx [[:dispatch [:file/upload share-hash file :schnaq/media [:editor.upload.file/success editor] [:ajax.error/as-notification]]]]}))))
+
+(rf/reg-event-fx
+ :editor.upload.file/success
+ (fn [_ [_ editor {:keys [url]}]]
+   {:fx [[:editor/dispatch-command! [editor INSERT_LINK_COMMAND #js {:url url
+                                                                     :text (tools/filename-from-url url)}]]]}))
 
 ;; -----------------------------------------------------------------------------
 
