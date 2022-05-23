@@ -42,25 +42,25 @@
 
 (rf/reg-event-fx
  :file.store/error
- (fn [{:keys [db]} [_ {:keys [response]}]]
+ (fn [_ [_ {:keys [response]}]]
    (let [mime-types (str/join ", " shared-config/allowed-mime-types-images)
          error-message (case (:error response)
                          :image.error/scaling (labels :file.store.error/scaling-problem)
                          :image.error/invalid-file-type (format (labels :file.store.error/invalid-file-type) mime-types)
                          (labels :file.store.error/generic))]
-     {:db (assoc-in db [:user :profile-picture :temporary] nil)
-      :fx [[:dispatch [:notification/add
+     {:fx [[:dispatch [:notification/add
                        #:notification{:title (labels :file.store.error/title)
                                       :body error-message
                                       :context :danger}]]]})))
 
 (rf/reg-event-fx
  :file/upload
- (fn [{:keys [db]} [_ share-hash file bucket success-event]]
+ (fn [{:keys [db]} [_ share-hash file bucket success-event error-event]]
    (if (and share-hash file bucket)
      {:fx [(http/xhrio-request db :put "/discussion/upload/file"
                                success-event
                                {:share-hash share-hash
                                 :file file
-                                :bucket bucket})]}
+                                :bucket bucket}
+                               error-event)]}
      (log/error (format "Some properties are missing. share-hash: %s, bucket: %s, image: %s" share-hash bucket file)))))

@@ -83,7 +83,7 @@
    (when (= :schnaq/by-share-hash file-storage)
      (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
            image (get-in db [:editors id :image])]
-       {:fx [[:dispatch [:file/upload share-hash image :schnaq/media [:editor.upload.image/success editor]]]]}))))
+       {:fx [[:dispatch [:file/upload share-hash image :schnaq/media [:editor.upload.image/success editor] [:file.store/error]]]]}))))
 
 (rf/reg-event-fx
  :editor.upload.image/success
