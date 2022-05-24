@@ -11,7 +11,8 @@
             [schnaq.database.specs :as specs]
             [schnaq.s3 :as s3]
             [taoensso.timbre :as log])
-  (:import (java.util Base64)))
+  (:import (java.util Base64)
+           (javax.imageio ImageIO)))
 
 (def ^:private trusted-cdn-url-regex
   (re-pattern "https://cdn\\.pixabay\\.com/photo(.+)|https://s3\\.(disqtec|schnaq)\\.com/(.+)"))
@@ -79,28 +80,38 @@
       (created "" {:message success-img}))))
 
 (>defn- scale-image-to-width
-  "Scale image data url to a specified width and return a map containing input-stream, image-type and content-type"
-  [image-data-url width]
-  [string? number? :ret map?]
-  (try
-    (let [[header image-without-header] (string/split image-data-url #",")
-          image-bytes (.decode (Base64/getDecoder) image-without-header)
-          image-type (second (re-find #"/([A-z]*);" header))
-          content-type (second (re-find #":(([A-z]*)/[A-z]*);" header))
-          resized-image (resizer-core/resize-to-width (io/input-stream image-bytes) width)
-          input-stream (when image-type (resizer-format/as-stream resized-image image-type))]
-      {:input-stream input-stream
-       :image-type image-type
-       :content-type content-type})
-    (catch Exception e
-      (log/warn "Converting image failed with exception:" e))))
+  "Scales images to target-width.
+  If the provided image is resizable and too big, convert the width, else return
+  the image as a stream."
+  [image target-width]
+  [::specs/file number? :ret map?]
+  (if (or (= (:type image) "image/png")
+          (= (:type image) "image/jpg"))
+    (try
+      (let [image-stream (file->stream image)
+            file-ending (mime-type->file-ending (:type image))
+            image-width (.getWidth (ImageIO/read image-stream))]
+        (if (< target-width image-width)
+          (let [resized-image (resizer-core/resize-to-width (file->stream image) target-width)
+                input-stream (resizer-format/as-stream resized-image file-ending)]
+            {:input-stream input-stream
+             :content-type (:type image)})
+          ;; This stream must again be read, because ImageIO consumes the stream.
+          {:input-stream (file->stream image)
+           :content-type (:type image)}))
+      (catch Exception e
+        (log/warn "Converting image failed with exception:" e)))
+    {:input-stream (file->stream image)
+     :content-type (:type image)}))
+
+;; -----------------------------------------------------------------------------
 
 (>defn upload-image!
   "Scale and upload an image to s3."
   ([image file-name target-image-width bucket-key]
    [::specs/file :file/name number? keyword? => ::specs/file-stored]
    (if (shared-config/allowed-mime-types-images (:type image))
-     (if-let [{:keys [input-stream content-type]} (scale-image-to-width (:content image) target-image-width)]
+     (if-let [{:keys [input-stream content-type]} (scale-image-to-width image target-image-width)]
        (let [absolute-url (s3/upload-stream bucket-key input-stream file-name {:content-type content-type})]
          {:url absolute-url})
        (do
@@ -111,8 +122,6 @@
        (log/warn "Invalid file type received.")
        {:error :image.error/invalid-file-type
         :message (format "Invalid image uploaded. Received %s, expected one of: %s" (:type image) (string/join ", " shared-config/allowed-mime-types-images))}))))
-
-;; -----------------------------------------------------------------------------
 
 (>defn upload-file!
   "Upload a file to s3."
