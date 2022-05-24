@@ -97,10 +97,10 @@
 (rf/reg-event-fx
  :user.picture/update
  (fn [{:keys [db]} _]
-   (when-let [new-profile-picture-url (get-in db [:user :profile-picture :temporary])]
+   (when-let [new-profile-picture (get-in db [:user :profile-picture :temporary])]
      {:fx [(http/xhrio-request db :put "/user/picture"
                                [:user.profile-picture/update-success]
-                               {:image new-profile-picture-url}
+                               {:image new-profile-picture}
                                [:file.store/error])]})))
 
 (rf/reg-event-db

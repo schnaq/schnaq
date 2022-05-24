@@ -155,10 +155,10 @@
  :hub.logo/update
  (fn [{:keys [db]}]
    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-     (when-let [temporary-hub-logo-url (get-in db [:hubs keycloak-name :logo-temporary])]
+     (when-let [temporary-hub-logo (get-in db [:hubs keycloak-name :logo-temporary])]
        {:fx [(http/xhrio-request db :put (gstring/format "/hub/%s/logo" keycloak-name)
                                  [:hub.logo/update-success]
-                                 {:image temporary-hub-logo-url}
+                                 {:image temporary-hub-logo}
                                  [:image.store/error])]}))))
 
 (rf/reg-event-fx
