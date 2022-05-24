@@ -155,11 +155,11 @@
 (s/def :file/type string?)
 (s/def :file/name string?)
 (s/def :file/content string?)
-(s/def ::image ;; WIP replace with ::file
-  (s/keys :req-un [:file/type :file/name :file/content]))
+(s/def :file/size number?)
 (s/def ::file
   (s/keys :req-un [:file/content]
-          :opt-un [:file/type :file/name]))
+          :opt-un [:file/type :file/name :file/size]))
+(s/def ::image ::file)
 
 (s/def :file-stored/url string?)
 (s/def :file-stored/error keyword?)
