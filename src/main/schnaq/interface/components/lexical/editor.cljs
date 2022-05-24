@@ -39,10 +39,10 @@
 (defn- editor
   "Create an editor instance. Takes as a first argument the editor's options and
   as a second argument attributes for the wrapping div."
-  [{:keys [id focus? debug? toolbar? initial-content] :as options} ?attributes]
+  [{:keys [id focus? debug? toolbar? initial-content] :as options} attributes]
   [:article.lexical-editor
    [:> LexicalComposer {:initialConfig initial-config}
-    [:div.editor-container (merge {} ?attributes)
+    [:div.editor-container attributes
      (when toolbar? [:f> ToolbarPlugin options])
      [:div.editor-inner
       [:> RichTextPlugin
