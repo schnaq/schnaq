@@ -19,7 +19,7 @@
   [keycloak-id theme-id image-name file-type]
   [:user.registered/keycloak-id :db/id :file/name :file/type => string?]
   (format "%s/themes/%s/%s.%s" keycloak-id theme-id
-          image-name (media/mime-type->file-ending file-type)))
+          image-name (media/image-type->file-ending file-type)))
 
 (>defn- upload-theme-image
   "Takes an image and uploads it."

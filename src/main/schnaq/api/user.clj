@@ -53,7 +53,7 @@
   [user-id file-type]
   [:user.registered/keycloak-id :file/type => string?]
   (format "%s/images/profile.%s" user-id
-          (media/mime-type->file-ending file-type)))
+          (media/image-type->file-ending file-type)))
 
 (defn- change-profile-picture
   "Change the profile picture of a user.

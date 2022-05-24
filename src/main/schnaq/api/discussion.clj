@@ -348,7 +348,7 @@
   "Create a file name to store assets for a schnaq."
   [file share-hash]
   [::specs/file :discussion/share-hash => string?]
-  (format "%s/files/%s/image.%s" share-hash (str (random-uuid)) (media/mime-type->file-ending (:type file))))
+  (format "%s/files/%s/image.%s" share-hash (str (random-uuid)) (media/image-type->file-ending (:type file))))
 
 (>defn- common-file-name
   "Create a file name to store assets for a schnaq."
