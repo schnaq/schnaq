@@ -363,9 +363,6 @@
         (if (media/image? file)
           (media/upload-image! file (image-file-name file share-hash) config/image-width-in-statement bucket)
           (media/upload-file! file (common-file-name file share-hash) bucket))]
-    (println "################################")
-    (println "################################")
-    (println error)
     (if url
       (created "" {:url url})
       (bad-request {:error error
