@@ -59,22 +59,22 @@
        [:span ;; Wrap into a span to make tippy nestable.
         [tooltip/html
          [:<>
-          [:form {:on-submit
-                  (fn [e]
-                    (.preventDefault e)
-                    (rf/dispatch on-click-event)
-                    (reset! tooltip-visible? false))}
-           input-component
-           [:div.d-flex.mt-2
-            [:input.btn.btn-primary.me-auto
-             {:type :submit
-              :value (labels :editor.toolbar.file-upload/submit)}]
-            [:button.btn.btn-sm.btn-link.text-dark.ps-auto
-             {:type :button
-              :on-click #(reset! tooltip-visible? false)}
-             (labels :editor.toolbar.file-upload/close)]]]]
+          ;; Use here no form, because forms can't be nested.
+          input-component
+          [:div.d-flex.mt-2
+           [:button.btn.btn-primary.me-auto
+            {:type :button
+             :on-click (fn []
+                         (rf/dispatch on-click-event)
+                         (reset! tooltip-visible? false))}
+            (labels :editor.toolbar.file-upload/submit)]
+           [:button.btn.btn-sm.btn-link.text-dark.ps-auto
+            {:type :button
+             :on-click #(reset! tooltip-visible? false)}
+            (labels :editor.toolbar.file-upload/close)]]]
          [:button.toolbar-item.spaced
-          {:on-click #(swap! tooltip-visible? not)}
+          {:on-click #(swap! tooltip-visible? not)
+           :type :button}
           icon-component]
          {:visible @tooltip-visible?
           :appendTo js/document.body}
@@ -173,45 +173,52 @@
       (labels :editor.toolbar/bold)
       [:button.toolbar-item.spaced
        {:on-click #(.dispatchCommand active-editor FORMAT_TEXT_COMMAND "bold")
+        :type :button
         :class (when bold? "active")}
        [icon :bold]]]
      [tooltip/text
       (labels :editor.toolbar/italic)
       [:button.toolbar-item.spaced
        {:on-click #(.dispatchCommand active-editor FORMAT_TEXT_COMMAND "italic")
+        :type :button
         :class (when italic? "active")}
        [icon :italic]]]
      [tooltip/text
       (labels :editor.toolbar/strike-through)
       [:button.toolbar-item.spaced
        {:on-click #(.dispatchCommand active-editor FORMAT_TEXT_COMMAND "strikethrough")
+        :type :button
         :class (when strike-through? "active")}
        [icon :strike-through]]]
      [tooltip/text
       (labels :editor.toolbar/code)
       [:button.toolbar-item.spaced
        {:on-click #(.dispatchCommand active-editor FORMAT_TEXT_COMMAND "code")
+        :type :button
         :class (when code? "active")}
        [icon :code]]]
      [tooltip/text
       (labels :editor.toolbar/quote)
       [:button.toolbar-item.spaced
-       {:on-click #(format-quote active-editor block-type)}
+       {:on-click #(format-quote active-editor block-type)
+        :type :button}
        [icon :quote-right]]]
 
-     [file-upload-button
-      (labels :editor.toolbar/image-upload)
-      [inputs/image [:span.fs-5 (labels :editor.toolbar/image-upload)] "editor-upload-image" [:editors id :image]
-       {:required true
-        :accept (conj shared-config/allowed-mime-types-images "image/gif")}]
-      [icon :image-file]
-      [:editor.upload/image id active-editor file-storage]]
-
-     [file-upload-button
-      (labels :editor.toolbar/file-upload)
-      [inputs/file [:span.fs-5 (labels :editor.toolbar/file-upload)] "editor-upload-file" [:editors id :file] {:required true}]
-      [icon :file-alt]
-      [:editor.upload/file id active-editor file-storage]]
+     (when file-storage
+       [:<>
+        [file-upload-button
+         (labels :editor.toolbar/image-upload)
+         [inputs/image [:span.fs-5 (labels :editor.toolbar/image-upload)] "editor-upload-image" [:editors id :image]
+          {:required true
+           :accept (conj shared-config/allowed-mime-types-images "image/gif")
+           :form "form-upload-an-image"}]
+         [icon :image-file]
+         [:editor.upload/image id active-editor file-storage]]
+        [file-upload-button
+         (labels :editor.toolbar/file-upload)
+         [inputs/file [:span.fs-5 (labels :editor.toolbar/file-upload)] "editor-upload-file" [:editors id :file] {:required true}]
+         [icon :file-alt]
+         [:editor.upload/file id active-editor file-storage]]])
 
      [tooltip/text
       (labels :editor.toolbar/list-ul)
@@ -220,6 +227,7 @@
          {:on-click #(if unordered-list?
                        (.dispatchCommand active-editor REMOVE_LIST_COMMAND)
                        (.dispatchCommand active-editor INSERT_UNORDERED_LIST_COMMAND))
+          :type :button
           :class (when unordered-list? "active")})
        [icon :list]]]
      [tooltip/text
@@ -229,18 +237,21 @@
          {:on-click #(if ordered-list?
                        (.dispatchCommand active-editor REMOVE_LIST_COMMAND)
                        (.dispatchCommand active-editor INSERT_ORDERED_LIST_COMMAND))
+          :type :button
           :class (when ordered-list? "active")})
        [icon :list-ol]]]
      [tooltip/text
       (labels :editor.toolbar/undo)
       [:button.toolbar-item.spaced
        {:on-click #(.dispatchCommand active-editor UNDO_COMMAND)
+        :type :button
         :disabled (not can-undo?)}
        [icon :undo]]]
      [tooltip/text
       (labels :editor.toolbar/redo)
       [:button.toolbar-item.spaced
        {:on-click #(.dispatchCommand active-editor REDO_COMMAND)
+        :type :button
         :disabled (not can-redo?)}
        [icon :redo]]]
      [development-buttons active-editor debug?]]))
