@@ -36,7 +36,7 @@
 <a href=\"https://schnaq.com\">Click Me</a>
 ")
 
-(defn- editor
+(defn editor
   "Create an editor instance. Takes as a first argument the editor's options and
   as a second argument attributes for the wrapping div."
   [{:keys [id focus? debug? toolbar? initial-content] :as options} attributes]
