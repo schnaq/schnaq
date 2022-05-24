@@ -6,12 +6,13 @@
             ["@lexical/rich-text" :refer [$createQuoteNode $isHeadingNode]]
             ["@lexical/selection" :refer [$wrapLeafNodesInElements]]
             ["@lexical/utils" :refer [$getNearestNodeOfType mergeRegister]]
-            ["lexical" :refer [$getSelection $isRangeSelection CAN_REDO_COMMAND
-                               CAN_UNDO_COMMAND FORMAT_TEXT_COMMAND REDO_COMMAND
-                               SELECTION_CHANGE_COMMAND UNDO_COMMAND]]
+            ["lexical" :refer [$getSelection $isRangeSelection
+                               CAN_REDO_COMMAND CAN_UNDO_COMMAND FORMAT_TEXT_COMMAND
+                               REDO_COMMAND SELECTION_CHANGE_COMMAND UNDO_COMMAND]]
             ["react" :refer [useCallback useEffect useState]]
             [re-frame.core :as rf]
             [reagent.core :as r]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.lexical.plugins.images :refer [INSERT_IMAGE_COMMAND]]
@@ -200,7 +201,9 @@
 
      [file-upload-button
       (labels :editor.toolbar/image-upload)
-      [inputs/image [:span.fs-5 (labels :editor.toolbar/image-upload)] "editor-upload-image" [:editors id :image] {:required true}]
+      [inputs/image [:span.fs-5 (labels :editor.toolbar/image-upload)] "editor-upload-image" [:editors id :image]
+       {:required true
+        :accept (conj shared-config/allowed-mime-types-images "image/gif")}]
       [icon :image-file]
       [:editor.upload/image id active-editor file-storage]]
 
