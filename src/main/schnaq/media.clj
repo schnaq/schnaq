@@ -6,7 +6,6 @@
             [image-resizer.core :as resizer-core]
             [image-resizer.format :as resizer-format]
             [ring.util.http-response :refer [bad-request created forbidden]]
-            [schnaq.config.shared :as shared-config]
             [schnaq.database.main :as d]
             [schnaq.database.specs :as specs]
             [schnaq.s3 :as s3]
@@ -21,10 +20,16 @@
 (def ^:private error-img "Setting image failed")
 (def ^:private success-img "Setting image succeeded")
 
-(def mime-type->file-ending
-  {"image/jpeg" "jpg"
-   "image/png" "png"
-   "image/webp" "webp"})
+(defn image-type->file-ending
+  "Either use hardcoded file-endings or guess it by its mime-type."
+  [mime-type]
+  (if-let [file-ending (get {"image/jpeg" "jpg"
+                             "image/png" "png"
+                             "image/webp" "webp"
+                             "image/gif" "gif"}
+                            mime-type)]
+    file-ending
+    (second (.split mime-type "/"))))
 
 (>defn image?
   "Check if the type of a file is an image."
@@ -89,7 +94,7 @@
           (= (:type image) "image/jpg"))
     (try
       (let [image-stream (file->stream image)
-            file-ending (mime-type->file-ending (:type image))
+            file-ending (image-type->file-ending (:type image))
             image-width (.getWidth (ImageIO/read image-stream))]
         (if (< target-width image-width)
           (let [resized-image (resizer-core/resize-to-width (file->stream image) target-width)
@@ -110,18 +115,13 @@
   "Scale and upload an image to s3."
   ([image file-name target-image-width bucket-key]
    [::specs/file :file/name number? keyword? => ::specs/file-stored]
-   (if (shared-config/allowed-mime-types-images (:type image))
-     (if-let [{:keys [input-stream content-type]} (scale-image-to-width image target-image-width)]
-       (let [absolute-url (s3/upload-stream bucket-key input-stream file-name {:content-type content-type})]
-         {:url absolute-url})
-       (do
-         (log/warn "Conversion of image failed.")
-         {:error :image.error/scaling
-          :message "Could not scale image."}))
+   (if-let [{:keys [input-stream content-type]} (scale-image-to-width image target-image-width)]
+     (let [absolute-url (s3/upload-stream bucket-key input-stream file-name {:content-type content-type})]
+       {:url absolute-url})
      (do
-       (log/warn "Invalid file type received.")
-       {:error :image.error/invalid-file-type
-        :message (format "Invalid image uploaded. Received %s, expected one of: %s" (:type image) (string/join ", " shared-config/allowed-mime-types-images))}))))
+       (log/warn "Conversion of image failed.")
+       {:error :image.error/scaling
+        :message "Could not scale image."}))))
 
 (>defn upload-file!
   "Upload a file to s3."
