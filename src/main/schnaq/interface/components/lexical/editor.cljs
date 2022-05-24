@@ -22,7 +22,7 @@
             [schnaq.interface.components.lexical.plugins.video :refer [VideoPlugin]]))
 
 (def ^:private sample-markdown-input
-  "**Bold** *Italic* Underline ~~Strikethrough~~ `Code`
+  "**Bold** *Italic* ~~Strikethrough~~ `Code`
 > Quote
 - list item 1
 - list item 2
@@ -30,6 +30,10 @@
 2. sorted list item 2
 ![Elephant in a forest](https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg)
 ![](https://s3.schnaq.com/schnaq-common/logos/schnaq.webp)
+<a href=\"javascript:alert('XSS')\">Click Me</a>
+[Click Me](javascript:alert('Uh oh...'))
+[Some Link](https://schnaq.com)
+<a href=\"https://schnaq.com\">Click Me</a>
 ")
 
 (defn- editor

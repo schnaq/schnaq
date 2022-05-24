@@ -1294,6 +1294,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :editor.toolbar/strike-through "Strike through"
    :editor.toolbar/code "Code"
    :editor.toolbar/quote "Quote"
+   :editor.toolbar/file-upload "Upload a file"
    :editor.toolbar/image-upload "Upload an image"
    :editor.toolbar.image-upload/submit "Insert Image"
    :editor.toolbar.image-upload/close "Close"

@@ -124,7 +124,6 @@
         [bold? bold!] (useState false)
         [code? code!] (useState false)
         [italic? italic!] (useState false)
-        [underline? underline!] (useState false)
         [strike-through? strike-through!] (useState false)
         [can-undo? can-undo!] (useState false)
         [can-redo? can-redo!] (useState false)
@@ -148,7 +147,6 @@
                  (bold! (.hasFormat selection "bold"))
                  (code! (.hasFormat selection "code"))
                  (italic! (.hasFormat selection "italic"))
-                 (underline! (.hasFormat selection "underline"))
                  (strike-through! (.hasFormat selection "strikethrough"))))))
          #js [active-editor])]
     (useEffect
@@ -183,12 +181,6 @@
         :class (when italic? "active")}
        [icon :italic]]]
      [tooltip/text
-      (labels :editor.toolbar/underline)
-      [:button.toolbar-item.spaced
-       {:on-click #(.dispatchCommand active-editor FORMAT_TEXT_COMMAND "underline")
-        :class (when underline? "active")}
-       [icon :underline]]]
-     [tooltip/text
       (labels :editor.toolbar/strike-through)
       [:button.toolbar-item.spaced
        {:on-click #(.dispatchCommand active-editor FORMAT_TEXT_COMMAND "strikethrough")
@@ -215,14 +207,9 @@
      [file-upload-button
       (labels :editor.toolbar/file-upload)
       [inputs/file [:span.fs-5 (labels :editor.toolbar/file-upload)] "editor-upload-file" [:editors id :file] {:required true}]
-      [icon :image-file]
+      [icon :file-alt]
       [:editor.upload/file id active-editor file-storage]]
 
-     #_[tooltip/text
-        (labels :editor.toolbar/video-upload)
-        [:button.toolbar-item.spaced
-         {:on-click #(.dispatchCommand active-editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"})}
-         [icon :video-file]]]
      [tooltip/text
       (labels :editor.toolbar/list-ul)
       [:button.toolbar-item.spaced
