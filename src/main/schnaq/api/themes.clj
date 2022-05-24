@@ -23,19 +23,17 @@
 
 (>defn- upload-theme-image
   "Takes an image and uploads it."
-  [keycloak-id theme-id image-name image-width {:keys [content type]}]
-  [:user.registered/keycloak-id :db/id string? nat-int? (? ::specs/image) => (? ::specs/file-stored)]
+  [{:keys [content type] :as image} keycloak-id theme-id image-name image-width]
+  [::specs/image :user.registered/keycloak-id :db/id string? nat-int? => (? ::specs/file-stored)]
   (when content
-    (media/upload-image!
-     (file-name keycloak-id theme-id image-name type)
-     type content image-width :user/media)))
+    (media/upload-image! image (file-name keycloak-id theme-id image-name type) image-width :user/media)))
 
 (>defn- prepare-images
   "Adds the raw images to the theme, if provided."
   [keycloak-id theme-id raw-logo raw-header]
   [:user.registered/keycloak-id :db/id (? ::specs/image) (? ::specs/image) => map?]
-  (let [logo (upload-theme-image keycloak-id theme-id "logo" config/image-max-width-logo raw-logo)
-        header (upload-theme-image keycloak-id theme-id "header" config/image-max-width-header raw-header)]
+  (let [logo (upload-theme-image raw-logo keycloak-id theme-id "logo" config/image-max-width-logo)
+        header (upload-theme-image raw-header keycloak-id theme-id "header" config/image-max-width-header)]
     (when-let [error (or (:error logo) (:error header))]
       (let [message (or (:message logo) (:message header))
             error-msg (format "Image upload failed: %s, %s" error message)]

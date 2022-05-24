@@ -11,7 +11,7 @@
             [schnaq.database.specs :as specs]
             [schnaq.s3 :as s3]
             [taoensso.timbre :as log])
-  (:import (java.util Base64 UUID)))
+  (:import (java.util Base64)))
 
 (def ^:private trusted-cdn-url-regex
   (re-pattern "https://cdn\\.pixabay\\.com/photo(.+)|https://s3\\.(disqtec|schnaq)\\.com/(.+)"))
@@ -30,6 +30,14 @@
   [file]
   [::specs/file => boolean?]
   (.startsWith (:type file) "image/"))
+
+(>defn file->stream
+  "Convert a file to a stream."
+  [{:keys [content]}]
+  [::specs/file => :type/input-stream]
+  (let [[_header file-without-header] (string/split content #",")
+        bytes (.decode (Base64/getDecoder) file-without-header)]
+    (io/input-stream bytes)))
 
 ;; -----------------------------------------------------------------------------
 
@@ -87,33 +95,14 @@
     (catch Exception e
       (log/warn "Converting image failed with exception:" e))))
 
-(>defn- create-UUID-file-name
-  "Generates a UUID based on a unique id with a file type suffix."
-  [id file-type]
-  [string? string? :ret string?]
-  (when (and id file-type)
-    (str (UUID/nameUUIDFromBytes (.getBytes (str id))) "." file-type)))
-
 (>defn upload-image!
   "Scale and upload an image to s3."
-  ([file-name image-type image-content target-image-width bucket-key]
-   [:file/name :file/type :file/content number? keyword? => ::specs/file-stored]
-   (upload-image! file-name image-type image-content target-image-width bucket-key true))
-  ([file-name image-type image-content target-image-width bucket-key uuid-filename?]
-   [:file/name :file/type :file/content number? keyword? boolean? => ::specs/file-stored]
-   (if (shared-config/allowed-mime-types-images image-type)
-     (if-let [{:keys [input-stream image-type content-type]}
-              (scale-image-to-width image-content target-image-width)]
-       (if-let [image-name (if uuid-filename?
-                             file-name
-                             (create-UUID-file-name file-name image-type))]
-         (let [absolute-url (s3/upload-stream bucket-key
-                                              input-stream
-                                              image-name
-                                              {:content-type content-type})]
-           {:url absolute-url})
-         {:error :image.error/could-not-create-file-name
-          :message "Could not create file-name. Maybe you are not authenticated or you did not provide a file-type."})
+  ([image file-name target-image-width bucket-key]
+   [::specs/file :file/name number? keyword? => ::specs/file-stored]
+   (if (shared-config/allowed-mime-types-images (:type image))
+     (if-let [{:keys [input-stream content-type]} (scale-image-to-width (:content image) target-image-width)]
+       (let [absolute-url (s3/upload-stream bucket-key input-stream file-name {:content-type content-type})]
+         {:url absolute-url})
        (do
          (log/warn "Conversion of image failed.")
          {:error :image.error/scaling
@@ -121,17 +110,9 @@
      (do
        (log/warn "Invalid file type received.")
        {:error :image.error/invalid-file-type
-        :message (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types-images))}))))
+        :message (format "Invalid image uploaded. Received %s, expected one of: %s" (:type image) (string/join ", " shared-config/allowed-mime-types-images))}))))
 
 ;; -----------------------------------------------------------------------------
-
-(>defn file->stream
-  "Convert a file to a stream."
-  [{:keys [content]}]
-  [::specs/file => :type/input-stream]
-  (let [[_header file-without-header] (string/split content #",")
-        bytes (.decode (Base64/getDecoder) file-without-header)]
-    (io/input-stream bytes)))
 
 (>defn upload-file!
   "Upload a file to s3."

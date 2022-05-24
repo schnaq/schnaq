@@ -361,8 +361,7 @@
   [{{{:keys [file bucket share-hash]} :body} :parameters}]
   (let [{:keys [url error message]}
         (if (media/image? file)
-          (media/upload-image!
-           (image-file-name file share-hash) (:type file) (:content file) config/image-width-in-statement bucket)
+          (media/upload-image! file (image-file-name file share-hash) config/image-width-in-statement bucket)
           (media/upload-file! file (common-file-name file share-hash) bucket))]
     (println "################################")
     (println "################################")

@@ -63,8 +63,7 @@
         user-id (:id identity)]
     (log/info (format "User %s trying to set profile picture to %s" user-id (:name image)))
     (let [file-name (path-to-file user-id (:type image))
-          {:keys [url error message]}
-          (media/upload-image! file-name (:type image) (:content image) config/profile-picture-width :user/media)]
+          {:keys [url error message]} (media/upload-image! image file-name config/profile-picture-width :user/media)]
       (if url
         (ok {:updated-user (user-db/update-profile-picture-url user-id url)})
         (bad-request (at/build-error-body error message))))))
