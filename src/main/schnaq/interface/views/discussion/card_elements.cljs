@@ -29,7 +29,7 @@
         navigation-target (if has-history? back-history back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
     (when navigation-target
-      [:div.d-flex.flex-row
+      [:div.d-flex.flex-row.panel-white-sm
        [tooltip/text
         (labels tooltip)
         [:button.btn.btn-dark
@@ -252,7 +252,7 @@
   [:div.text-dark.w-100.mb-1.mx-1.mx-md-0.d-flex.flex-row.flex-wrap.pb-2
    [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2
     [back-button]]
-   [:div.mt-2.mt-md-0.d-flex.flex-wrap.ms-auto.gy-5
+   [:div.mt-2.mt-md-0.d-flex.flex-wrap.ms-auto.gy-5.panel-white-sm
     [:div.ms-auto.ms-md-0.me-1.mx-lg-2.pe-0.pe-lg-2.order-0
      [sort-options]]
     [:section.ms-auto.ms-md-0.mt-2.mt-md-0.order-2.order-md-1
