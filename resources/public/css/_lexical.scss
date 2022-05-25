@@ -1,6 +1,8 @@
 // stylelint-disable max-nesting-depth
 // stylelint-disable selector-max-compound-selectors
 .lexical-editor {
+  @extend .border;
+
   .ltr {
     text-align: left;
   }
@@ -36,7 +38,7 @@
     caret-color: rgb(5, 5, 5);
     caret-color: #444;
     font-size: 15px;
-    min-height: 150px;
+    min-height: 50px;
     outline: 0;
     padding: 15px 10px;
     position: relative;
