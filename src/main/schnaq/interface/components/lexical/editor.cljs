@@ -17,6 +17,7 @@
             [schnaq.interface.components.lexical.plugins.images :refer [ImagesPlugin]]
             [schnaq.interface.components.lexical.plugins.links :refer [LinksPlugin]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
+            [schnaq.interface.components.lexical.plugins.text-change :refer [TextChangePlugin]]
             [schnaq.interface.components.lexical.plugins.toolbar :refer [ToolbarPlugin]]
             [schnaq.interface.components.lexical.plugins.tree-view :refer [TreeViewPlugin]]
             [schnaq.interface.components.lexical.plugins.video :refer [VideoPlugin]]))
@@ -38,8 +39,19 @@
 
 (defn editor
   "Create an editor instance. Takes as a first argument the editor's options and
-  as a second argument attributes for the wrapping div."
-  [{:keys [id focus? debug? toolbar? initial-content] :as options} attributes]
+  as a second argument attributes for the wrapping div.
+   
+  **Options**
+  * `id`: Required, to store the editor's content.
+  * `focus?`: Adds autofocus for the editor.
+  * `debug?`: Shows debug information and adds additional buttons.
+  * `toolbar?` Shows the toolbar.
+  * `initial-content`: Add initial content to the editor, which gets parsed into
+   the editor's node-structure. Takes markdown or normal strings.
+  * `on-text-change`: If the current text-block is modified, call the provided
+  function.
+   "
+  [{:keys [id focus? debug? toolbar? initial-content on-text-change] :as options} attributes]
   [:article.lexical-editor
    [:> LexicalComposer {:initialConfig initial-config}
     [:div.editor-container attributes
@@ -54,18 +66,19 @@
       [:f> VideoPlugin]
       [:> LinkPlugin]
       [:f> LinksPlugin]
+      (when on-text-change [:f> TextChangePlugin {:on-text-change on-text-change}])
       [:> ListPlugin]
       [markdown-shortcut-plugin]
       (when focus? [:> AutoFocusPlugin])
       (when debug? [:f> TreeViewPlugin])
-      [:> OnChangePlugin
-       {:onChange (fn [editorState]
-                    (.read editorState
-                           #(rf/dispatch [:editor/content id ($convertToMarkdownString schnaq-transformers)])))}]]]]])
+      (when id [:> OnChangePlugin
+                {:onChange (fn [editorState]
+                             (.read editorState
+                                    #(rf/dispatch [:editor/content id ($convertToMarkdownString schnaq-transformers)])))}])]]]])
 
 ;; -----------------------------------------------------------------------------
 
-(defn- build-page []
+(defn- build-playground []
   (let [editor-id :playground-editor]
     [:div.container.pt-5
      [:h1 "Lexical"]
@@ -101,7 +114,7 @@
 ;; -----------------------------------------------------------------------------
 
 (defn playground []
-  [build-page])
+  [build-playground])
 
 ;; -----------------------------------------------------------------------------
 
