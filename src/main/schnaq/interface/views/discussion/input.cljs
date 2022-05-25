@@ -3,6 +3,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -90,44 +91,48 @@
      [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
      [icon :plane "m-auto"]]]])
 
-(def throttled-input-tokenizing
-  ;; Send a typing update at most every second
-  (gfun/throttle
-   #(rf/dispatch [:schnaq.question.input/set-current (oget % [:?target :value])])
-   1000))
+(defn- throttled-input-tokenizing-fn
+  "Send a typing update and wait for x ms."
+  [content]
+  ((gfun/throttle
+    #(rf/dispatch [:schnaq.question.input/set-current content])
+    5000)))
 
 (defn- conclusion-card-textarea
   "Input, where users provide (starting) conclusions."
   []
-  (when-not @(rf/subscribe [:schnaq.selected/read-only?])
-    [:<>
-     [:div.input-group
-      [textarea-highlighting :selected]
-      [:textarea.form-control.textarea-resize-none
-       {:name "statement" :wrap "soft" :rows 1
-        :auto-complete "off"
-        :autoFocus true
-        :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-        :required true
-        :data-dynamic-height true
-        :placeholder (labels :statement.new/placeholder)
-        :on-key-up throttled-input-tokenizing}]
-      [:button.btn.btn-outline-secondary
-       {:type "submit"
-        :title (labels :discussion/create-argument-action)
-        :on-click #(matomo/track-event "Active User", "Action", "Submit Post")}
-       [:div.d-flex.flex-row
-        [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
-        [icon :plane "m-auto"]]]]
-     (when (and @(rf/subscribe [:user/authenticated?]) @(rf/subscribe [:schnaq.current/admin-access]))
-       [:div.form-check.pt-2
-        [:input.form-check-input
-         {:type "checkbox"
-          :name "lock-card?"
-          :id "lock-card?"}]
-        [:label.form-check-label
-         {:for "lock-card?"}
-         (labels :discussion/lock-statement)]])]))
+  (let [editor-id :conclusion-card-editor
+        editor-content @(rf/subscribe [:editor/content editor-id])]
+    (when-not @(rf/subscribe [:schnaq.selected/read-only?])
+      [:<>
+       [:div.input-group
+        [textarea-highlighting :selected]
+        [:input {:type :hidden
+                 :name "statement"
+                 :focus? true
+                 :value (or editor-content "")}]
+        [:div.flex-grow-1
+         [lexical/editor {:id editor-id
+                          :file-storage :schnaq/by-share-hash
+                          :on-text-change throttled-input-tokenizing-fn
+                          :toolbar? true}]]
+        [:button.btn.btn-outline-secondary
+         {:type :submit
+          :disabled (empty? editor-content)
+          :title (labels :discussion/create-argument-action)
+          :on-click #(matomo/track-event "Active User", "Action", "Submit Post")}
+         [:div.d-flex.flex-row
+          [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
+          [icon :plane "m-auto"]]]]
+       (when (and @(rf/subscribe [:user/authenticated?]) @(rf/subscribe [:schnaq.current/admin-access]))
+         [:div.form-check.pt-2
+          [:input.form-check-input
+           {:type "checkbox"
+            :name "lock-card?"
+            :id "lock-card?"}]
+          [:label.form-check-label
+           {:for "lock-card?"}
+           (labels :discussion/lock-statement)]])])))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
