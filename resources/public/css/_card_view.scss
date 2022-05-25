@@ -12,6 +12,11 @@
   }
 }
 
+.panel-white-sm {
+  @extend .panel-white;
+  padding: 0.5rem;
+}
+
 .panel-transparent {
   @extend .panel-white;
   background: transparent;
