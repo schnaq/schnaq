@@ -24,7 +24,7 @@
 (defn- activation-card-controls
   "The controls allowing the user to switch between activation cards."
   [activations-count active-index]
-  [:div.d-flex.justify-content-between
+  [:div.d-flex.justify-content-between.panel-white-sm
    [:button.btn.btn-transparent.ms-1
     {:on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil dec 0)])}
     [icon :chevron/left]]
