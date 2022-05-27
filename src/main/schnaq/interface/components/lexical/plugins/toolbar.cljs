@@ -8,7 +8,8 @@
             ["@lexical/utils" :refer [$getNearestNodeOfType mergeRegister]]
             ["lexical" :refer [$getSelection $isRangeSelection
                                CAN_REDO_COMMAND CAN_UNDO_COMMAND FORMAT_TEXT_COMMAND
-                               REDO_COMMAND SELECTION_CHANGE_COMMAND UNDO_COMMAND]]
+                               REDO_COMMAND SELECTION_CHANGE_COMMAND UNDO_COMMAND
+                               CLEAR_HISTORY_COMMAND CLEAR_EDITOR_COMMAND]]
             ["react" :refer [useCallback useEffect useState]]
             [re-frame.core :as rf]
             [reagent.core :as r]
@@ -119,7 +120,8 @@
 (defn ToolbarPlugin
   "Build a toolbar for the editor."
   [{:keys [file-storage debug? id]}]
-  (let [[editor] (useLexicalComposerContext)
+  (let [editor-content @(rf/subscribe [:editor/content id])
+        [editor] (useLexicalComposerContext)
         [active-editor active-editor!] (useState editor)
         [block-type block-type!] (useState "paragraph")
         [bold? bold!] (useState false)
@@ -240,6 +242,15 @@
           :type :button
           :class (when ordered-list? "active")})
        [icon :list-ol]]]
+     [tooltip/text
+      (labels :editor.toolbar/clear)
+      [:button.toolbar-item.spaced
+       {:on-click (fn []
+                    (.dispatchCommand active-editor CLEAR_EDITOR_COMMAND)
+                    (.dispatchCommand active-editor CLEAR_HISTORY_COMMAND))
+        :type :button
+        :disabled (empty? editor-content)}
+       [icon :trash]]]
      [tooltip/text
       (labels :editor.toolbar/undo)
       [:button.toolbar-item.spaced

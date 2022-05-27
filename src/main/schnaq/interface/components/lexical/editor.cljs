@@ -3,6 +3,7 @@
   (:require ["@lexical/markdown" :refer [$convertFromMarkdownString
                                          $convertToMarkdownString]]
             ["@lexical/react/LexicalAutoFocusPlugin" :as AutoFocusPlugin]
+            ["@lexical/react/LexicalClearEditorPlugin" :as ClearEditorPlugin]
             ["@lexical/react/LexicalComposer" :as LexicalComposer]
             ["@lexical/react/LexicalContentEditable" :as ContentEditable]
             ["@lexical/react/LexicalHistoryPlugin" :refer [HistoryPlugin]]
@@ -10,6 +11,7 @@
             ["@lexical/react/LexicalListPlugin" :as ListPlugin]
             ["@lexical/react/LexicalOnChangePlugin" :as OnChangePlugin]
             ["@lexical/react/LexicalRichTextPlugin" :as RichTextPlugin]
+            ["lexical" :refer [CLEAR_EDITOR_COMMAND CLEAR_HISTORY_COMMAND]]
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.interface.components.lexical.config :refer [initial-config]]
@@ -17,6 +19,7 @@
             [schnaq.interface.components.lexical.plugins.images :refer [ImagesPlugin]]
             [schnaq.interface.components.lexical.plugins.links :refer [LinksPlugin]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
+            [schnaq.interface.components.lexical.plugins.register-editor :refer [RegisterEditorPlugin]]
             [schnaq.interface.components.lexical.plugins.text-change :refer [TextChangePlugin]]
             [schnaq.interface.components.lexical.plugins.toolbar :refer [ToolbarPlugin]]
             [schnaq.interface.components.lexical.plugins.tree-view :refer [TreeViewPlugin]]
@@ -52,9 +55,9 @@
   function.
    "
   [{:keys [id focus? debug? toolbar? initial-content on-text-change] :as options} attributes]
-  [:article.lexical-editor
-   [:> LexicalComposer {:initialConfig initial-config}
-    [:div.editor-container attributes
+  [:> LexicalComposer {:initialConfig initial-config}
+   [:section.lexical-editor attributes
+    [:div.editor-container
      (when toolbar? [:f> ToolbarPlugin options])
      [:div.editor-inner
       [:> RichTextPlugin
@@ -62,17 +65,19 @@
          initial-content (assoc :initialEditorState #($convertFromMarkdownString initial-content schnaq-transformers)))]
       [:> HistoryPlugin {}]
       [autolink-plugin]
+      [:> ClearEditorPlugin]
       [:f> ImagesPlugin]
       [:f> VideoPlugin]
       [:> LinkPlugin]
       [:f> LinksPlugin]
       (when on-text-change [:f> TextChangePlugin {:on-text-change on-text-change}])
       [:> ListPlugin]
+      (when id [:f> RegisterEditorPlugin {:id id}])
       [markdown-shortcut-plugin]
       (when focus? [:> AutoFocusPlugin])
       (when debug? [:f> TreeViewPlugin])
       (when id [:> OnChangePlugin
-                {:onChange (fn [editorState]
+                {:onChange (fn [editorState _editor]
                              (.read editorState
                                     #(rf/dispatch [:editor/content id ($convertToMarkdownString schnaq-transformers)])))}])]]]])
 
@@ -122,6 +127,24 @@
  :editor/content
  (fn [db [_ editor-id content]]
    (assoc-in db [:editors editor-id :content] content)))
+
+(rf/reg-event-db
+ :editor/register
+ (fn [db [_ editor-id ^LexicalEditor editor]]
+   (assoc-in db [:editors editor-id :editor] editor)))
+
+(rf/reg-event-fx
+ :editor/clear
+ (fn [{:keys [db]} [_ editor-id]]
+   (let [editor (get-in db [:editors editor-id :editor])]
+     {:db (update-in db [:editors editor-id] dissoc :content)
+      :fx [[:editor/clear! editor]]})))
+
+(rf/reg-fx
+ :editor/clear!
+ (fn [^LexicalEditor editor]
+   (.dispatchCommand editor CLEAR_EDITOR_COMMAND)
+   (.dispatchCommand editor CLEAR_HISTORY_COMMAND)))
 
 (rf/reg-sub
  :editor/content

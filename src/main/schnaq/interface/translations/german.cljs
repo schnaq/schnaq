@@ -1299,6 +1299,7 @@
    :editor.toolbar/video-upload "Video hochladen"
    :editor.toolbar/list-ul "Unsortierte Liste"
    :editor.toolbar/list-ol "Sortierte Liste"
+   :editor.toolbar/clear "Inhalt löschen"
    :editor.toolbar/undo "Rückgängig"
    :editor.toolbar/redo "Wiederholen"
 

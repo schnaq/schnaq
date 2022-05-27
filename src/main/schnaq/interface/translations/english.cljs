@@ -1301,6 +1301,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :editor.toolbar/video-upload "Upload a video"
    :editor.toolbar/list-ul "Unsorted List"
    :editor.toolbar/list-ol "Sorted List"
+   :editor.toolbar/clear "Clear contents"
    :editor.toolbar/undo "Undo"
    :editor.toolbar/redo "Redo"
 
