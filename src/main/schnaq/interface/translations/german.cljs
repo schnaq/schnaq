@@ -1286,6 +1286,7 @@
    :registration.pricing.enterprise/all-from-pro "Alle Pro-Features, plus:"
 
    ;; Editor
+   :routes.playground/editor "Playground: Lexical"
    :editor.toolbar/bold "Fett"
    :editor.toolbar/italic "Kursiv"
    :editor.toolbar/underline "Unterstreichen"

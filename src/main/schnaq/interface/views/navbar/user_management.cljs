@@ -91,7 +91,11 @@
         (when admin?
           [:li.dropdown-item
            [:a.btn {:role "button" :href (navigation/href :routes.admin/summaries)}
-            (labels :router/summaries)]])]])))
+            (labels :router/summaries)]])
+        (when admin?
+          [:li.dropdown-item
+           [:a.btn {:role "button" :href (navigation/href :routes.playground/editor)}
+            (labels :routes.playground/editor)]])]])))
 
 (defn- profile-picture-in-nav
   "Show profile picture-element in the navbar."

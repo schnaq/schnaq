@@ -1288,6 +1288,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :registration.pricing.enterprise/all-from-pro "All Pro Features, plus:"
 
    ;; Editor
+   :routes.playground/editor "Playground: Lexical"
    :editor.toolbar/bold "Bold"
    :editor.toolbar/italic "Italic"
    :editor.toolbar/underline "Underline"
