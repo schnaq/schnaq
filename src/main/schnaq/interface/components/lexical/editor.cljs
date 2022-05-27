@@ -52,7 +52,7 @@
    the editor's node-structure. Takes markdown or normal strings.
   * `on-text-change`: If the current text-block is modified, call the provided
   function."
-  [{:keys [id focus? debug? toolbar? initial-content on-text-change] :as options} attributes]
+  [{:keys [id focus? debug? toolbar? initial-content on-text-change placeholder] :as options} attributes]
   [:> LexicalComposer {:initialConfig initial-config}
    [:section.lexical-editor attributes
     [:div.editor-container
@@ -60,7 +60,8 @@
      [:div.editor-inner
       [:> RichTextPlugin
        (cond-> {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}
-         initial-content (assoc :initialEditorState #($convertFromMarkdownString initial-content schnaq-transformers)))]
+         initial-content (assoc :initialEditorState #($convertFromMarkdownString initial-content schnaq-transformers))
+         placeholder (assoc :placeholder (r/as-element [:div.editor-placeholder placeholder])))]
       [:> HistoryPlugin {}]
       [autolink-plugin]
       [:> ClearEditorPlugin]
@@ -92,7 +93,8 @@
                 :file-storage :schnaq/by-share-hash
                 :focus? true
                 :debug? true
-                :toolbar? true}]]
+                :toolbar? true
+                :placeholder "Write your code here..."}]]
       [:div.col-6
        [:div.card
         [:div.card-body

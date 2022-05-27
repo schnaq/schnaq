@@ -72,11 +72,10 @@
     [:div.highlight-card-reduced.highlight-card-reverse
      {:class (str "highlight-card-" attitude)}]))
 
-(defn- premise-card-textarea
+(defn- premise-card-editor
   "Input, where users provide premises."
-  [{:keys [db/id]}]
-  (let [editor-id (format "%s-%s" "premise-card-editor" id)
-        editor-content @(rf/subscribe [:editor/content editor-id])]
+  [{:keys [db/id]} editor-id]
+  (let [editor-content @(rf/subscribe [:editor/content editor-id])]
     [:<>
      [:div.input-group [textarea-highlighting id]
       [:input {:type :hidden
@@ -91,9 +90,7 @@
        {:type :submit
         :disabled (empty? editor-content)
         :title (labels :discussion/create-argument-action)
-        :on-click (fn []
-                    (matomo/track-event "Active User" "Action" "Submit Post")
-                    (rf/dispatch [:editor/clear editor-id]))}
+        :on-click #(matomo/track-event "Active User" "Action" "Submit Post")}
        [:div.d-flex.flex-row
         [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
         [icon :plane "m-auto"]]]]]))
@@ -105,11 +102,10 @@
     #(rf/dispatch [:schnaq.question.input/set-current content])
     5000)))
 
-(defn- conclusion-card-textarea
+(defn- conclusion-card-editor
   "Input, where users provide (starting) conclusions."
-  []
-  (let [editor-id :conclusion-card-editor
-        editor-content @(rf/subscribe [:editor/content editor-id])]
+  [editor-id]
+  (let [editor-content @(rf/subscribe [:editor/content editor-id])]
     (when-not @(rf/subscribe [:schnaq.selected/read-only?])
       [:<>
        [:div.input-group
@@ -120,15 +116,14 @@
         [lexical/editor {:id editor-id
                          :file-storage :schnaq/by-share-hash
                          :on-text-change throttled-input-tokenizing-fn
-                         :toolbar? true}
+                         :toolbar? true
+                         :placeholder (labels :statement.new/placeholder)}
          {:className "flex-grow-1"}]
         [:button.btn.btn-outline-secondary
          {:type :submit
           :disabled (empty? editor-content)
           :title (labels :discussion/create-argument-action)
-          :on-click (fn []
-                      (matomo/track-event "Active User" "Action" "Submit Post")
-                      (rf/dispatch [:editor/clear editor-id]))}
+          :on-click #(matomo/track-event "Active User" "Action" "Submit Post")}
          [:div.d-flex.flex-row
           [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
           [icon :plane "m-auto"]]]]
@@ -144,13 +139,13 @@
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
-  []
+  [editor-id]
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])]
     [:<>
      [:div.pb-3
       [user/current-user-info 40 "text-primary fs-6"]]
-     [conclusion-card-textarea]
+     [conclusion-card-editor editor-id]
      (when-not (or starting-route? pro-con-disabled?)
        [:div.mt-3
         [statement-type-choose-button
@@ -163,17 +158,20 @@
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
         when-starting #(rf/dispatch [:discussion.add.statement/starting (oget % [:currentTarget :elements])])
         when-deeper-in-discussion #(logic/submit-new-premise (oget % [:currentTarget :elements]))
-        event-to-send (if starting-route? when-starting when-deeper-in-discussion)]
+        event-to-send (if starting-route? when-starting when-deeper-in-discussion)
+        editor-id :conclusion-card-editor
+        submit-fn (fn [e]
+                    (.preventDefault e)
+                    (rf/dispatch [:schnaq.question.input/clear])
+                    (rf/dispatch [:editor/clear editor-id])
+                    (event-to-send e))]
     (if (:statement/locked? @(rf/subscribe [:schnaq.statements/focus]))
       [:div.pt-3.ps-1
        [card-elements/locked-statement-icon]]
       [:form.my-md-2
-       {:on-submit (fn [e]
-                     (.preventDefault e)
-                     (rf/dispatch [:schnaq.question.input/clear])
-                     (event-to-send e))
-        :on-key-down #(when (toolbelt/ctrl-press? % 13) (event-to-send %))}
-       [topic-input-area]])))
+       {:on-submit submit-fn
+        :on-key-down #(when (toolbelt/ctrl-press? % 13) (submit-fn %))}
+       [topic-input-area editor-id]])))
 
 (defn reply-in-statement-input-form
   "Input form inside a statement card. This form is used to directly reply to a statement inside its own card."
@@ -183,6 +181,7 @@
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         locked? (:statement/locked? statement)
+        editor-id (format "%s-%s" "premise-card-editor" (:db/id statement))
         answer-to-statement-event
         (fn [e]
           (.preventDefault e)
@@ -192,7 +191,7 @@
        {:on-submit #(answer-to-statement-event %)
         :on-key-down #(when (toolbelt/ctrl-press? % 13)
                         (answer-to-statement-event %))}
-       [premise-card-textarea statement]
+       [premise-card-editor statement editor-id]
        (when-not pro-con-disabled?
          [statement-type-choose-button
           [:form/statement-type statement-id]
