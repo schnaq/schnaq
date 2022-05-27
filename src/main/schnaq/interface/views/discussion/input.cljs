@@ -109,18 +109,19 @@
         [textarea-highlighting :selected]
         [:input {:type :hidden
                  :name "statement"
-                 :focus? true
                  :value (or editor-content "")}]
-        [:div.flex-grow-1
-         [lexical/editor {:id editor-id
-                          :file-storage :schnaq/by-share-hash
-                          :on-text-change throttled-input-tokenizing-fn
-                          :toolbar? true}]]
+        [lexical/editor {:id editor-id
+                         :file-storage :schnaq/by-share-hash
+                         :on-text-change throttled-input-tokenizing-fn
+                         :toolbar? true}
+         {:className "flex-grow-1"}]
         [:button.btn.btn-outline-secondary
          {:type :submit
           :disabled (empty? editor-content)
           :title (labels :discussion/create-argument-action)
-          :on-click #(matomo/track-event "Active User", "Action", "Submit Post")}
+          :on-click (fn []
+                      (matomo/track-event "Active User", "Action", "Submit Post")
+                      (rf/dispatch [:editor/clear editor-id]))}
          [:div.d-flex.flex-row
           [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
           [icon :plane "m-auto"]]]]
