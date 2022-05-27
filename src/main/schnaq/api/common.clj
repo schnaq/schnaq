@@ -1,12 +1,8 @@
 (ns schnaq.api.common
-  (:require [com.fulcrologic.guardrails.core :refer [=> >defn-]]
-            [ring.util.http-response :refer [created ok bad-request]]
+  (:require [ring.util.http-response :refer [ok]]
             [schnaq.api.toolbelt :as at]
-            [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.specs :as specs]
             [schnaq.export :as export]
-            [schnaq.media :as media]
             [taoensso.timbre :as log]))
 
 (defn- ping
