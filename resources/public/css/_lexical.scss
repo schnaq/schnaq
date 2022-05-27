@@ -42,11 +42,10 @@
     font-size: 15px;
     min-height: 50px;
     outline: 0;
-    padding: 15px 10px;
+    padding: 5px 10px;
     position: relative;
     resize: none;
-    tab-size: 1;
-    
+    tab-size: 1;  
   }
 
   .editor-placeholder {
@@ -269,8 +268,6 @@
 
   .toolbar {
     background: #fff;
-    // border-top-left-radius: 10px;
-    // border-top-right-radius: 10px;
     display: flex;
     margin-bottom: 1px;
     padding: 4px;
@@ -481,5 +478,12 @@
     }
   }
 }
+
+.lexical-editor-sm {
+  .editor-input {
+    min-height: 5px;
+  }
+}
+
 // stylelint-enable max-nesting-depth
 // stylelint-enable selector-max-compound-selectors

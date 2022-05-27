@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.input
   (:require [goog.functions :as gfun]
+            [goog.string :refer [format]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
@@ -74,22 +75,28 @@
 (defn- premise-card-textarea
   "Input, where users provide premises."
   [{:keys [db/id]}]
-  [:div.input-group
-   [textarea-highlighting id]
-   [:textarea.form-control.form-control-sm.textarea-resize-none
-    {:name "statement" :wrap "soft" :rows 1
-     :auto-complete "off"
-     :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-     :required true
-     :data-dynamic-height true
-     :placeholder (labels :statement.new/placeholder)}]
-   [:button.btn.btn-sm.btn-outline-dark
-    {:type "submit"
-     :title (labels :discussion/create-argument-action)
-     :on-click #(matomo/track-event "Active User", "Action", "Submit Post")}
-    [:div.d-flex.flex-row
-     [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
-     [icon :plane "m-auto"]]]])
+  (let [editor-id (format "%s-%s" "premise-card-editor" id)
+        editor-content @(rf/subscribe [:editor/content editor-id])]
+    [:<>
+     [:div.input-group [textarea-highlighting id]
+      [:input {:type :hidden
+               :name "statement"
+               :value (or editor-content "")}]
+      [lexical/editor {:id editor-id
+                       :file-storage :schnaq/by-share-hash
+                       :placeholder (labels :statement.new/placeholder)
+                       :toolbar? false}
+       {:className "flex-grow-1 lexical-editor-sm"}]
+      [:button.btn.btn-sm.btn-outline-dark
+       {:type :submit
+        :disabled (empty? editor-content)
+        :title (labels :discussion/create-argument-action)
+        :on-click (fn []
+                    (matomo/track-event "Active User" "Action" "Submit Post")
+                    (rf/dispatch [:editor/clear editor-id]))}
+       [:div.d-flex.flex-row
+        [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
+        [icon :plane "m-auto"]]]]]))
 
 (defn- throttled-input-tokenizing-fn
   "Send a typing update and wait for x ms."
@@ -120,7 +127,7 @@
           :disabled (empty? editor-content)
           :title (labels :discussion/create-argument-action)
           :on-click (fn []
-                      (matomo/track-event "Active User", "Action", "Submit Post")
+                      (matomo/track-event "Active User" "Action" "Submit Post")
                       (rf/dispatch [:editor/clear editor-id]))}
          [:div.d-flex.flex-row
           [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
@@ -128,7 +135,7 @@
        (when (and @(rf/subscribe [:user/authenticated?]) @(rf/subscribe [:schnaq.current/admin-access]))
          [:div.form-check.pt-2
           [:input.form-check-input
-           {:type "checkbox"
+           {:type :checkbox
             :name "lock-card?"
             :id "lock-card?"}]
           [:label.form-check-label

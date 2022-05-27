@@ -37,8 +37,7 @@
 <a href=\"javascript:alert('XSS')\">Click Me</a>
 [Click Me](javascript:alert('Uh oh...'))
 [Some Link](https://schnaq.com)
-<a href=\"https://schnaq.com\">Click Me</a>
-")
+<a href=\"https://schnaq.com\">Click Me</a>")
 
 (defn editor
   "Create an editor instance. Takes as a first argument the editor's options and
@@ -52,8 +51,7 @@
   * `initial-content`: Add initial content to the editor, which gets parsed into
    the editor's node-structure. Takes markdown or normal strings.
   * `on-text-change`: If the current text-block is modified, call the provided
-  function.
-   "
+  function."
   [{:keys [id focus? debug? toolbar? initial-content on-text-change] :as options} attributes]
   [:> LexicalComposer {:initialConfig initial-config}
    [:section.lexical-editor attributes
