@@ -17,21 +17,23 @@
   }
 
   .editor-container {
-    // border-radius: 2px;
-    // border-top-left-radius: 10px;
-    // border-top-right-radius: 10px;
+    border-color: transparent;
     color: #000;
     font-weight: 400;
     line-height: 20px;
-    // margin: 20px auto;
-    // max-width: 600px;
     position: relative;
     text-align: left;
+    transition: border-color 0.15s ease-in-out;
+    
+    &:focus-within {
+      border: var(--theming-primary) solid 0.25px;
+    }
   }
 
   .editor-inner {
     background: #fff;
     position: relative;
+   
   }
 
   .editor-input {
@@ -44,6 +46,7 @@
     position: relative;
     resize: none;
     tab-size: 1;
+    
   }
 
   .editor-placeholder {
