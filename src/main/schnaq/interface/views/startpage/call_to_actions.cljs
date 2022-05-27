@@ -51,7 +51,7 @@
        :alt (labels :startpage.trust/capterra)}]]]
    [:div.col-3.d-flex.align-items-center
     [:img.img-fluid
-     {:src (img-path :startpage.trust/germany-100)
+     {:src (img-path :startpage.trust/germany-100-white)
       :alt (labels :startpage.trust/germany-100)}]]])
 
 (defn features-call-to-action
