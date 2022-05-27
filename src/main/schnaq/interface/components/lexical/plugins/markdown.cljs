@@ -8,7 +8,7 @@
                                                                      $video-node?]]))
 
 (def ^:private markdown-image-import-regex
-  #"!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)")
+  #"!\[[^\]]*\]\((.*?)(?=\"|\))(\".*\")?\)")
 
 (def ^:private image-transformer
   "Export / import image nodes."
