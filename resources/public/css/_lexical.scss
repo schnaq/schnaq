@@ -42,7 +42,7 @@
     font-size: 15px;
     min-height: 50px;
     outline: 0;
-    padding: 5px 10px;
+    padding: 15px 10px;
     position: relative;
     resize: none;
     tab-size: 1;  
@@ -482,6 +482,11 @@
 .lexical-editor-sm {
   .editor-input {
     min-height: 5px;
+    padding: 5px;
+  }
+
+  .editor-placeholder {
+    top: 5px;
   }
 }
 
