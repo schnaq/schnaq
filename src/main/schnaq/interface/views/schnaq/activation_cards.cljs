@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.schnaq.activation-cards
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.schnaq.poll :as poll]
             [schnaq.interface.views.schnaq.wordcloud-card :as wordcloud-card]))
@@ -24,19 +25,20 @@
 (defn- activation-card-controls
   "The controls allowing the user to switch between activation cards."
   [activations-count active-index]
-  [:div.d-flex.justify-content-between.panel-white-sm
-   [:button.btn.btn-transparent.ms-1
-    {:on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil dec 0)])}
-    [icon :chevron/left]]
-   [:div.d-flex.align-items-center
-    (for [index (range activations-count)
-          :let [default-classes "tiny me-1"]]
-      (with-meta
-        [icon :circle (if (= index active-index) (str default-classes " text-primary") default-classes)]
-        {:key (str "index-activation-" index)}))]
-   [:button.btn.btn-transparent.me-1
-    {:on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil inc 0)])}
-    [icon :chevron/right]]])
+  [motion/fade-in-and-out
+   [:div.d-flex.justify-content-between.panel-white-sm
+    [:button.btn.btn-transparent.ms-1
+     {:on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil dec 0)])}
+     [icon :chevron/left]]
+    [:div.d-flex.align-items-center
+     (for [index (range activations-count)
+           :let [default-classes "tiny me-1"]]
+       (with-meta
+         [icon :circle (if (= index active-index) (str default-classes " text-primary") default-classes)]
+         {:key (str "index-activation-" index)}))]
+    [:button.btn.btn-transparent.me-1
+     {:on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil inc 0)])}
+     [icon :chevron/right]]]])
 
 (rf/reg-sub
  :schnaq/activations?
