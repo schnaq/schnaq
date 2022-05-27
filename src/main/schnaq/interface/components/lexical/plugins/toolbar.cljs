@@ -242,27 +242,30 @@
           :type :button
           :class (when ordered-list? "active")})
        [icon :list-ol]]]
-     [tooltip/text
-      (labels :editor.toolbar/clear)
-      [:button.toolbar-item.spaced
-       {:on-click (fn []
-                    (.dispatchCommand active-editor CLEAR_EDITOR_COMMAND)
-                    (.dispatchCommand active-editor CLEAR_HISTORY_COMMAND))
-        :type :button
-        :disabled (empty? editor-content)}
-       [icon :trash]]]
-     [tooltip/text
-      (labels :editor.toolbar/undo)
-      [:button.toolbar-item.spaced
-       {:on-click #(.dispatchCommand active-editor UNDO_COMMAND)
-        :type :button
-        :disabled (not can-undo?)}
-       [icon :undo]]]
-     [tooltip/text
-      (labels :editor.toolbar/redo)
-      [:button.toolbar-item.spaced
-       {:on-click #(.dispatchCommand active-editor REDO_COMMAND)
-        :type :button
-        :disabled (not can-redo?)}
-       [icon :redo]]]
+     [:span.d-none.d-md-block
+      [tooltip/text
+       (labels :editor.toolbar/clear)
+       [:button.toolbar-item.spaced
+        {:on-click (fn []
+                     (.dispatchCommand active-editor CLEAR_EDITOR_COMMAND)
+                     (.dispatchCommand active-editor CLEAR_HISTORY_COMMAND))
+         :type :button
+         :disabled (empty? editor-content)}
+        [icon :trash]]]]
+     [:span.d-none.d-md-block
+      [tooltip/text
+       (labels :editor.toolbar/undo)
+       [:button.toolbar-item.spaced
+        {:on-click #(.dispatchCommand active-editor UNDO_COMMAND)
+         :type :button
+         :disabled (not can-undo?)}
+        [icon :undo]]]]
+     [:span.d-none.d-md-block
+      [tooltip/text
+       (labels :editor.toolbar/redo)
+       [:button.toolbar-item.spaced
+        {:on-click #(.dispatchCommand active-editor REDO_COMMAND)
+         :type :button
+         :disabled (not can-redo?)}
+        [icon :redo]]]]
      [development-buttons active-editor debug?]]))
