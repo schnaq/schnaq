@@ -18,6 +18,7 @@
             [schnaq.interface.components.icons]
             [schnaq.interface.components.images]
             [schnaq.interface.components.lexical.editor]
+            [schnaq.interface.components.lexical.plugins.toolbar]
             [schnaq.interface.components.navbar]
             [schnaq.interface.components.preview]
             [schnaq.interface.components.schnaq]

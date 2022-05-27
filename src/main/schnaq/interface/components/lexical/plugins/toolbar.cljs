@@ -110,13 +110,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(rf/reg-fx
- :editor/dispatch-command!
- (fn [[^LexicalEditor editor command payload]]
-   (.dispatchCommand editor command payload)))
-
-;; -----------------------------------------------------------------------------
-
 (defn ToolbarPlugin
   "Build a toolbar for the editor."
   [{:keys [file-storage debug? id]}]

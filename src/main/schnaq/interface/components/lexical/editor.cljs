@@ -133,6 +133,11 @@
    (.dispatchCommand editor CLEAR_EDITOR_COMMAND)
    (.dispatchCommand editor CLEAR_HISTORY_COMMAND)))
 
+(rf/reg-fx
+ :editor/dispatch-command!
+ (fn [[^LexicalEditor editor command payload]]
+   (.dispatchCommand editor command payload)))
+
 (rf/reg-sub
  :editor/content
  (fn [db [_ editor-id]]
