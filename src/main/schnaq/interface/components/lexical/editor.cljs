@@ -27,8 +27,7 @@
             [schnaq.interface.components.lexical.plugins.video :refer [VideoPlugin]]))
 
 (defn editor
-  "Create an editor instance. Takes as a first argument the editor's options and
-  as a second argument attributes for the wrapping div.
+  "Create a lexical editor instance.
    
   **Options**
   * `id`: Required, to store the editor's content.
@@ -38,7 +37,8 @@
   * `initial-content`: Add initial content to the editor, which gets parsed into
    the editor's node-structure. Takes markdown or normal strings.
   * `on-text-change`: If the current text-block is modified, call the provided
-  function."
+  function.
+  * `placeholder`: Define a placeholder for the editor."
   [{:keys [id focus? debug? toolbar? initial-content on-text-change placeholder] :as options} attributes]
   [:> LexicalComposer {:initialConfig initial-config}
    [:section.lexical-editor attributes

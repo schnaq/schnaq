@@ -11,7 +11,8 @@
 (def INSERT_LINK_COMMAND (createCommand))
 
 (defn LinksPlugin
-  "Create new link nodes."
+  "Adds a link with the command `INSERT_LINK_COMMAND`.
+  Note: The `LinkPlugin` of lexical does not support inserting links directly."
   []
   (let [[editor] (useLexicalComposerContext)]
     (useEffect
