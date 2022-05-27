@@ -185,6 +185,7 @@
         answer-to-statement-event
         (fn [e]
           (.preventDefault e)
+          (rf/dispatch [:editor/clear editor-id])
           (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))]
     (when-not (or locked? read-only?)
       [:form.my-md-2
