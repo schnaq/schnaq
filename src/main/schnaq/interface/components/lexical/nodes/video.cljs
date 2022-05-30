@@ -31,10 +31,10 @@
             (oset! writable "__url" url)))
   (decorate [this ^LexicalEditor editor]
             (VideoPlayer (oget this "__url"))))
-(set! (.-getType VideoNode) (fn [] "video"))
-(set! (.-clone VideoNode)
-      (fn [^VideoNode node]
-        (VideoNode. (oget node "__url") (oget node "__key"))))
+(oset! VideoNode "getType" (fn [] "video"))
+(oset! VideoNode "clone"
+       (fn [^VideoNode node]
+         (VideoNode. (oget node "__url") (oget node "__key"))))
 
 (defn $create-video-node [url]
   (VideoNode. url nil))

@@ -81,10 +81,10 @@
 
 ;; Configure static methods on our new class, because it is not possible to do
 ;; this inline in the `defclass` macro.
-(set! (.-getType ImageNode) (fn [] "image"))
-(set! (.-clone ImageNode)
-      (fn [^ImageNode node]
-        (ImageNode. (oget node "__src") (oget node "__altText") (oget node "__key"))))
+(oset! ImageNode "getType" (fn [] "image"))
+(oset! ImageNode "clone"
+       (fn [^ImageNode node]
+         (ImageNode. (oget node "__src") (oget node "__altText") (oget node "__key"))))
 
 (defn $create-image-node
   "Create an image node."
