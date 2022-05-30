@@ -119,3 +119,17 @@
   This can be used to make real requests to the api, but without
   side-effect-services, like the websockets."
   (api/app))
+
+;; -----------------------------------------------------------------------------
+;; Files
+
+(def image
+  {:content "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=",
+   :name "1x1.png",
+   :type "image/png"})
+
+(def file
+  {:name "file.txt"
+   :size 32
+   :type "text/plain"
+   :content "data:application/octet-stream;base64,V2lsbGtvbW1lbiBpbSBzY2huYXFxaXBhcmFkaWVzIQo="})

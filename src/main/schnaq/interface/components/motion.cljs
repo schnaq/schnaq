@@ -51,7 +51,7 @@
   optional parameter `delay`, which adds a delay to the point when the component
   should fade in."
   ([component]
-   [fade-in-and-out component 0.5])
+   [fade-in-and-out component card-fade-in-time])
   ([component delay]
    [:> (.-div motion)
     {:initial {:opacity 0}

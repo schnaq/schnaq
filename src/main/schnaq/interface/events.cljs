@@ -150,6 +150,11 @@
    (:discussion/theme selected-schnaq)))
 
 (rf/reg-event-db
+ :schnaq/share-hash
+ (fn [db [_ share-hash]]
+   (assoc-in db [:schnaq :selected :discussion/share-hash] share-hash)))
+
+(rf/reg-event-db
  :schnaq.selected/dissoc
  ;; Remove currently selected schnaq
  (fn [db]

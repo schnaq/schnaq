@@ -1,6 +1,8 @@
 (ns schnaq.interface.views.discussion.edit
-  (:require [oops.core :refer [oget oget+]]
+  (:require [goog.string :refer [format]]
+            [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -9,29 +11,36 @@
 (defn- edit-card
   "The same as a statement-card, but currently being an editable input."
   [label html-id dispatch-fn edit-id pro-con-enabled? content statement-type change-statement-type]
-  [:form.statement-card.py-2.px-3
-   {:on-submit (fn [e]
-                 (.preventDefault e)
-                 (dispatch-fn e))
-    :on-key-down (fn [e]
-                   (when (tools/ctrl-press? e 13) (dispatch-fn e)))}
-   [:div.mb-3
-    [:label.form-label {:for html-id} (labels label)]
-    [:textarea.form-control {:name html-id
-                             :rows 3
-                             :placeholder content
-                             :defaultValue content}]]
-   [:div.d-flex.justify-content-between.flex-wrap
-    [:div.d-flex.mb-3
-     (when pro-con-enabled?
-       [input/statement-type-choose-button statement-type change-statement-type])]
-    [:div.d-flex.mb-3
-     [:button.btn.btn-link
-      {:on-click (fn [e]
+  (let [editor-id (format "-editor" html-id)
+        editor-content @(rf/subscribe [:editor/content editor-id])]
+    [:form.statement-card.py-2.px-3
+     {:on-submit (fn [e]
                    (.preventDefault e)
-                   (rf/dispatch [:statement.edit/deactivate-edit edit-id]))}
-      (labels :statement.edit.button/cancel)]
-     [:button.btn.btn-outline-dark.ms-1 {:type "submit"} (labels :statement.edit.button/submit)]]]])
+                   (rf/dispatch [:editor/content editor-id])
+                   (dispatch-fn e))
+      :on-key-down (fn [e]
+                     (when (tools/ctrl-press? e 13)
+                       (rf/dispatch [:editor/content editor-id])
+                       (dispatch-fn e)))}
+     [:div.mb-3
+      [:label.form-label {:for html-id} (labels label)]
+      [:input {:type :hidden
+               :name html-id
+               :value (or editor-content "")}]
+      [lexical/editor {:id editor-id
+                       :initial-content content
+                       :toolbar? true}]]
+     [:div.d-flex.justify-content-between.flex-wrap
+      [:div.d-flex.mb-3
+       (when pro-con-enabled?
+         [input/statement-type-choose-button statement-type change-statement-type])]
+      [:div.d-flex.mb-3
+       [:button.btn.btn-link
+        {:on-click (fn [e]
+                     (.preventDefault e)
+                     (rf/dispatch [:statement.edit/deactivate-edit edit-id]))}
+        (labels :statement.edit.button/cancel)]
+       [:button.btn.btn-outline-dark.ms-1 {:type "submit"} (labels :statement.edit.button/submit)]]]]))
 
 (defn edit-card-statement
   "Editable statement input."

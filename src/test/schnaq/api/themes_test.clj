@@ -6,7 +6,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.themes :as themes-db]
             [schnaq.test-data :refer [theme-anti-social schnaqqi kangaroo]]
-            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]))
+            [schnaq.test.toolbelt :as toolbelt :refer [test-app image]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
@@ -20,17 +20,12 @@
 (def ^:private sample-theme
   (dissoc theme-anti-social :db/id :theme/user))
 
-(def ^:private raw-image
-  {:content "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=",
-   :name "1x1.png",
-   :type "image/png"})
-
 (def ^:private sample-theme-with-images
   "Remove all db-specific information and add raw images."
   (-> theme-anti-social
       (dissoc :db/id :theme/user :theme.images/logo :theme.images/header)
-      (assoc :theme.images.raw/logo raw-image
-             :theme.images.raw/header raw-image)))
+      (assoc :theme.images.raw/logo image
+             :theme.images.raw/header image)))
 
 ;; -----------------------------------------------------------------------------
 
@@ -100,13 +95,13 @@
     (let [theme (first (themes-db/themes-by-keycloak-id schnaqqi-keycloak-id))
           modified-theme (assoc theme
                                 :db/id (:db/id theme)
-                                :theme.images.raw/logo raw-image
-                                :theme.images.raw/header raw-image)
+                                :theme.images.raw/logo image
+                                :theme.images.raw/header image)
           response (m/decode-response-body (edit-theme-request toolbelt/token-schnaqqifant-user modified-theme))]
       (is (-> response :theme :theme.images/logo string?))
       (is (-> response :theme :theme.images/header string?)))))
 
-;; -----------------------------------------------------------------------------
+;; -------------------------------------------------------}----------------------
 
 (defn- delete-theme-request [user-token theme-id]
   (-> {:request-method :delete :uri (:path (api/route-by-name :api.theme/delete))

@@ -7,8 +7,8 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.files :as files]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.images :as image]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.hub.common :as hub-common]
@@ -34,9 +34,9 @@
         [:label.form-label.btn.btn-light.change-profile-pic-button
          [icon :camera]
          [:input {:id input-id
-                  :accept (string/join "," shared-config/allowed-mime-types)
+                  :accept (string/join "," shared-config/allowed-mime-types-images)
                   :type "file"
-                  :on-change (fn [event] (image/store-temporary-image
+                  :on-change (fn [event] (files/store-temporary-file
                                           event [:hubs keycloak-name :logo-temporary]))
                   :hidden true}]])]]))
 
@@ -155,10 +155,10 @@
  :hub.logo/update
  (fn [{:keys [db]}]
    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-     (when-let [temporary-hub-logo-url (get-in db [:hubs keycloak-name :logo-temporary])]
+     (when-let [temporary-hub-logo (get-in db [:hubs keycloak-name :logo-temporary])]
        {:fx [(http/xhrio-request db :put (gstring/format "/hub/%s/logo" keycloak-name)
                                  [:hub.logo/update-success]
-                                 {:image temporary-hub-logo-url}
+                                 {:image temporary-hub-logo}
                                  [:image.store/error])]}))))
 
 (rf/reg-event-fx

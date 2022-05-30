@@ -1,8 +1,10 @@
 (ns schnaq.interface.views.discussion.input
   (:require [goog.functions :as gfun]
+            [goog.string :refer [format]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -70,74 +72,80 @@
     [:div.highlight-card-reduced.highlight-card-reverse
      {:class (str "highlight-card-" attitude)}]))
 
-(defn- premise-card-textarea
+(defn- premise-card-editor
   "Input, where users provide premises."
-  [{:keys [db/id]}]
-  [:div.input-group
-   [textarea-highlighting id]
-   [:textarea.form-control.form-control-sm.textarea-resize-none
-    {:name "statement" :wrap "soft" :rows 1
-     :auto-complete "off"
-     :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-     :required true
-     :data-dynamic-height true
-     :placeholder (labels :statement.new/placeholder)}]
-   [:button.btn.btn-sm.btn-outline-dark
-    {:type "submit"
-     :title (labels :discussion/create-argument-action)
-     :on-click #(matomo/track-event "Active User", "Action", "Submit Post")}
-    [:div.d-flex.flex-row
-     [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
-     [icon :plane "m-auto"]]]])
-
-(def throttled-input-tokenizing
-  ;; Send a typing update at most every second
-  (gfun/throttle
-   #(rf/dispatch [:schnaq.question.input/set-current (oget % [:?target :value])])
-   1000))
-
-(defn- conclusion-card-textarea
-  "Input, where users provide (starting) conclusions."
-  []
-  (when-not @(rf/subscribe [:schnaq.selected/read-only?])
+  [{:keys [db/id]} editor-id]
+  (let [editor-content @(rf/subscribe [:editor/content editor-id])]
     [:<>
-     [:div.input-group
-      [textarea-highlighting :selected]
-      [:textarea.form-control.textarea-resize-none
-       {:name "statement" :wrap "soft" :rows 1
-        :auto-complete "off"
-        :autoFocus true
-        :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-        :required true
-        :data-dynamic-height true
-        :placeholder (labels :statement.new/placeholder)
-        :on-key-up throttled-input-tokenizing}]
-      [:button.btn.btn-outline-secondary
-       {:type "submit"
+     [:div.input-group [textarea-highlighting id]
+      [:input {:type :hidden
+               :name "statement"
+               :value (or editor-content "")}]
+      [lexical/editor {:id editor-id
+                       :file-storage :schnaq/by-share-hash
+                       :placeholder (labels :statement.new/placeholder)
+                       :toolbar? false}
+       {:className "flex-grow-1 lexical-editor-sm"}]
+      [:button.btn.btn-sm.btn-outline-dark
+       {:type :submit
+        :disabled (empty? editor-content)
         :title (labels :discussion/create-argument-action)
-        :on-click #(matomo/track-event "Active User", "Action", "Submit Post")}
+        :on-click #(matomo/track-event "Active User" "Action" "Submit Post")}
        [:div.d-flex.flex-row
         [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
-        [icon :plane "m-auto"]]]]
-     (when (and @(rf/subscribe [:user/authenticated?]) @(rf/subscribe [:schnaq.current/admin-access]))
-       [:div.form-check.pt-2
-        [:input.form-check-input
-         {:type "checkbox"
-          :name "lock-card?"
-          :id "lock-card?"}]
-        [:label.form-check-label
-         {:for "lock-card?"}
-         (labels :discussion/lock-statement)]])]))
+        [icon :plane "m-auto"]]]]]))
+
+(defn- throttled-input-tokenizing-fn
+  "Send a typing update and wait for x ms."
+  [content]
+  ((gfun/throttle
+    #(rf/dispatch [:schnaq.question.input/set-current content])
+    5000)))
+
+(defn- conclusion-card-editor
+  "Input, where users provide (starting) conclusions."
+  [editor-id]
+  (let [editor-content @(rf/subscribe [:editor/content editor-id])]
+    (when-not @(rf/subscribe [:schnaq.selected/read-only?])
+      [:<>
+       [:div.input-group
+        [textarea-highlighting :selected]
+        [:input {:type :hidden
+                 :name "statement"
+                 :value (or editor-content "")}]
+        [lexical/editor {:id editor-id
+                         :file-storage :schnaq/by-share-hash
+                         :on-text-change throttled-input-tokenizing-fn
+                         :toolbar? true
+                         :placeholder (labels :statement.new/placeholder)}
+         {:className "flex-grow-1"}]
+        [:button.btn.btn-outline-secondary
+         {:type :submit
+          :disabled (empty? editor-content)
+          :title (labels :discussion/create-argument-action)
+          :on-click #(matomo/track-event "Active User" "Action" "Submit Post")}
+         [:div.d-flex.flex-row
+          [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
+          [icon :plane "m-auto"]]]]
+       (when (and @(rf/subscribe [:user/authenticated?]) @(rf/subscribe [:schnaq.current/admin-access]))
+         [:div.form-check.pt-2
+          [:input.form-check-input
+           {:type :checkbox
+            :name "lock-card?"
+            :id "lock-card?"}]
+          [:label.form-check-label
+           {:for "lock-card?"}
+           (labels :discussion/lock-statement)]])])))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
-  []
+  [editor-id]
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])]
     [:<>
      [:div.pb-3
       [user/current-user-info 40 "text-primary fs-6"]]
-     [conclusion-card-textarea]
+     [conclusion-card-editor editor-id]
      (when-not (or starting-route? pro-con-disabled?)
        [:div.mt-3
         [statement-type-choose-button
@@ -150,17 +158,20 @@
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
         when-starting #(rf/dispatch [:discussion.add.statement/starting (oget % [:currentTarget :elements])])
         when-deeper-in-discussion #(logic/submit-new-premise (oget % [:currentTarget :elements]))
-        event-to-send (if starting-route? when-starting when-deeper-in-discussion)]
+        event-to-send (if starting-route? when-starting when-deeper-in-discussion)
+        editor-id :conclusion-card-editor
+        submit-fn (fn [e]
+                    (.preventDefault e)
+                    (rf/dispatch [:schnaq.question.input/clear])
+                    (rf/dispatch [:editor/clear editor-id])
+                    (event-to-send e))]
     (if (:statement/locked? @(rf/subscribe [:schnaq.statements/focus]))
       [:div.pt-3.ps-1
        [card-elements/locked-statement-icon]]
       [:form.my-md-2
-       {:on-submit (fn [e]
-                     (.preventDefault e)
-                     (rf/dispatch [:schnaq.question.input/clear])
-                     (event-to-send e))
-        :on-key-down #(when (toolbelt/ctrl-press? % 13) (event-to-send %))}
-       [topic-input-area]])))
+       {:on-submit submit-fn
+        :on-key-down #(when (toolbelt/ctrl-press? % 13) (submit-fn %))}
+       [topic-input-area editor-id]])))
 
 (defn reply-in-statement-input-form
   "Input form inside a statement card. This form is used to directly reply to a statement inside its own card."
@@ -170,16 +181,18 @@
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         locked? (:statement/locked? statement)
+        editor-id (format "%s-%s" "premise-card-editor" (:db/id statement))
         answer-to-statement-event
         (fn [e]
           (.preventDefault e)
+          (rf/dispatch [:editor/clear editor-id])
           (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))]
     (when-not (or locked? read-only?)
       [:form.my-md-2
        {:on-submit #(answer-to-statement-event %)
         :on-key-down #(when (toolbelt/ctrl-press? % 13)
                         (answer-to-statement-event %))}
-       [premise-card-textarea statement]
+       [premise-card-editor statement editor-id]
        (when-not pro-con-disabled?
          [statement-type-choose-button
           [:form/statement-type statement-id]

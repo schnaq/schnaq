@@ -6,8 +6,8 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.files :as files]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.images :as image]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.pages :as pages]
@@ -34,9 +34,9 @@
         [:label.form-label.btn.btn-light.change-profile-pic-button
          [icon :camera]
          [:input {:id input-id
-                  :accept (string/join "," shared-config/allowed-mime-types)
+                  :accept (string/join "," shared-config/allowed-mime-types-images)
                   :type "file"
-                  :on-change (fn [event] (image/store-temporary-image
+                  :on-change (fn [event] (files/store-temporary-file
                                           event [:user :profile-picture :temporary]))
                   :hidden true}]])]]))
 
@@ -97,11 +97,11 @@
 (rf/reg-event-fx
  :user.picture/update
  (fn [{:keys [db]} _]
-   (when-let [new-profile-picture-url (get-in db [:user :profile-picture :temporary])]
+   (when-let [new-profile-picture (get-in db [:user :profile-picture :temporary])]
      {:fx [(http/xhrio-request db :put "/user/picture"
                                [:user.profile-picture/update-success]
-                               {:image new-profile-picture-url}
-                               [:image.store/error])]})))
+                               {:image new-profile-picture}
+                               [:file.store/error])]})))
 
 (rf/reg-event-db
  :user.picture/reset

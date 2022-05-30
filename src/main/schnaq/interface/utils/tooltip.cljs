@@ -4,6 +4,8 @@
 
 (defn html
   "Wraps some content in a tooltip with the provided html inside."
+  ([tooltip-content wrapped-element]
+   [html tooltip-content wrapped-element nil nil])
   ([tooltip-content wrapped-element options]
    [html tooltip-content wrapped-element options nil])
   ([tooltip-content wrapped-element options deactivated-options]

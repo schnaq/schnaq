@@ -2,14 +2,15 @@
   ;; For further information check: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react
   ;; For two styles of the same icon see here: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react#faqs
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub faFontAwesomeFlag]]
-            ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faIdCard faHourglass]]
+            ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEnvelope faFileAlt faIdCard faHourglass faImage faFileVideo faFileImage]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faArchive faBackspace faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
+             [faArchive faBackspace faBold faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle faCode
               faCloud faCog faComment faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
               faFileDownload faFlask faGem faGhost faGraduationCap faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
               faLocationArrow faLock faLockOpen faMagic faPalette faMapPin faChevronLeft faChevronRight faCircle
               faPaperPlane faPenSquare faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
-              faTimes faTimesCircle faTrashAlt faUniversity faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward]]
+              faTimes faTimesCircle faTrashAlt faUniversity faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward
+              faItalic faUndo faUnderline faStrikethrough faRedo faQuoteRight faListOl faList]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
 (def ^:private icons
@@ -20,6 +21,7 @@
    :arrow-up faArrowUp
    :backspace faBackspace
    :bell faBell
+   :bold faBold
    :briefcase faBriefcase
    :building faBuilding
    :calendar faCalendar
@@ -33,6 +35,7 @@
    :chevron/right faChevronRight
    :circle faCircle
    :cloud faCloud
+   :code faCode
    :cog faCog
    :collapse-down faAngleDown
    :collapse-up faAngleRight
@@ -50,6 +53,7 @@
    :envelope faEnvelope
    :envelope-open-text faEnvelopeOpenText
    :facebook faFacebook
+   :file-alt faFileAlt
    :file-download faFileDownload
    :flag faFontAwesomeFlag
    :flask faFlask
@@ -61,12 +65,17 @@
    :handshake faHandshake
    :hourglass/empty faHourglass
    :id-card faIdCard
+   :image faImage
+   :image-file faFileImage
    :info faInfoCircle
    :info-question faQuestionCircle
    :instagram faInstagram
+   :italic faItalic
    :language faLanguage
    :laptop faLaptop
    :linkedin faLinkedin
+   :list faList
+   :list-ol faListOl
    :location-arrow faLocationArrow
    :lock faLock
    :lock/open faLockOpen
@@ -80,6 +89,8 @@
    :plus faPlus
    :question faQuestion
    :qrcode faQrcode
+   :quote-right faQuoteRight
+   :redo faRedo
    :reset faStepBackward
    :rocket faRocket
    :search faSearch
@@ -87,6 +98,7 @@
    :share faShareAlt
    :shield faShieldAlt
    :star faStar
+   :strike-through faStrikethrough
    :sun faSun
    :tag faTag
    :terminal faTerminal
@@ -94,11 +106,14 @@
    :times-circle faTimesCircle
    :trash faTrashAlt
    :twitter faTwitter
+   :underline faUnderline
+   :undo faUndo
    :university faUniversity
    :user/group faUsers
    :user/lock faUserLock
    :user/ninja faUserNinja
-   :user/plus faUserPlus})
+   :user/plus faUserPlus
+   :video-file faFileVideo})
 
 (defn icon
   "The core icon building-block. Pass extra-attributes as a third parameter.

@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.navbar.user-management
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.common :refer [pro-badge]]
             [schnaq.interface.components.icons :refer [icon]]
@@ -91,7 +92,11 @@
         (when admin?
           [:li.dropdown-item
            [:a.btn {:role "button" :href (navigation/href :routes.admin/summaries)}
-            (labels :router/summaries)]])]])))
+            (labels :router/summaries)]])
+        (when (and admin? (not shared-config/production?))
+          [:li.dropdown-item
+           [:a.btn {:role "button" :href (navigation/href :routes.playground/editor)}
+            (labels :routes.playground/editor)]])]])))
 
 (defn- profile-picture-in-nav
   "Show profile picture-element in the navbar."

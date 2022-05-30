@@ -108,15 +108,13 @@
   This includes uploading an image to s3 and updating the associated url in the database."
   [{:keys [identity parameters]}]
   (let [keycloak-name (get-in parameters [:path :keycloak-name])
-        image-type (get-in parameters [:body :image :type])
-        image-name (get-in parameters [:body :image :name])
-        image-content (get-in parameters [:body :image :content])]
-    (log/info (format "User %s is trying to set logo of Hub %s to: %s" (:id identity) keycloak-name image-name))
+        image (get-in parameters [:body :image])]
+    (log/info (format "User %s is trying to set logo of Hub %s to: %s" (:id identity) keycloak-name (:name image)))
     (if (auth/member-of-group? identity keycloak-name)
-      (let [{:keys [image-url error message]}
-            (media/upload-image! keycloak-name image-type image-content config/profile-picture-width :hub/logo)]
-        (if image-url
-          (ok {:hub (hub-db/update-hub-logo-url keycloak-name image-url)})
+      (let [{:keys [url error message]}
+            (media/upload-image! image keycloak-name config/profile-picture-width :hub/logo)]
+        (if url
+          (ok {:hub (hub-db/update-hub-logo-url keycloak-name url)})
           (bad-request (at/response-error-body error message))))
       forbidden-missing-permission)))
 

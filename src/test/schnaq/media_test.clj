@@ -1,10 +1,12 @@
 (ns schnaq.media-test
-  (:require [clojure.test :refer [is deftest testing use-fixtures]]
+  (:require [clojure.spec.alpha :as s]
+            [clojure.test :refer [deftest is testing use-fixtures]]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.specs]
             [schnaq.database.user :as user-db]
             [schnaq.media :as media]
             [schnaq.s3 :as s3]
-            [schnaq.test.toolbelt :as schnaq-toolbelt]))
+            [schnaq.test.toolbelt :as schnaq-toolbelt :refer [file image]]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
@@ -56,3 +58,21 @@
       (is (not bad-url-1))
       (is (not bad-url-2))
       (is (not bad-url-3)))))
+
+;; -----------------------------------------------------------------------------
+
+(deftest file->stream-test
+  (testing "Valid file can be converted to stream."
+    (is (s/valid? :type/input-stream (media/file->stream file)))))
+
+(deftest upload-file!-test
+  (testing "Upload sample file to bucket."
+    (is (string? (:url (media/upload-file! file (format "testing/%s" (:name file)) :user/media))))))
+
+;; -----------------------------------------------------------------------------
+
+(deftest image?-test
+  (testing "A file is not an image."
+    (is (not (media/image? file))))
+  (testing "An image evaluates to true."
+    (is (media/image? image))))

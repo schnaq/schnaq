@@ -77,7 +77,7 @@
    :startpage.feature-box.know-how/img-alt "schnaqqi zeigt Features"
    :startpage.feature-box.discussion/title "Spare Zeit"
    :startpage.feature-box.discussion/body "Beantworte häufige Fragen nur einmal und lass' schnaq den Rest erledigen!"
-   :startpage.feature-box.discussio/img-alt "schnaqqi fliegt auf einer Rakete"
+   :startpage.feature-box.discussion/img-alt "schnaqqi fliegt auf einer Rakete"
    :startpage.feature-box.learnings/title "Zeige Expertise"
    :startpage.feature-box.learnings/body "Teile dein Wissen mit der Welt, indem du deine Wissenskarten veröffentlichst."
    :startpage.feature-box.learnings/img-alt "schnaqqi hat eine Glühbirne über dem Kopf"
@@ -857,11 +857,6 @@
    :user.settings.button/change-account-information "Änderungen speichern"
    :user.settings.profile-picture-title/success "Profilbild erfolgreich gesetzt"
    :user.settings.profile-picture-body/success "Profilbild wurde hochgeladen und gespeichert. Ggf. Seite neuladen um aktualisiertes Bild zu sehen."
-   :user.settings.profile-picture-title/error "Hochladen des Profilbildes fehlgeschlagen"
-   :user.settings.profile-picture-too-large/error "Dein Profilbild ist %d Megabyte groß, die maximal erlaubte Größe ist %d Megabyte. Bitte lade ein kleineres Bild hoch."
-   :user.settings.profile-picture.errors/scaling "Dein Profilbild konnte nicht konvertiert werden. Vielleicht ist das Bild kaputt. Bitte probiere ein anderes Bild oder kontaktiere uns."
-   :user.settings.profile-picture.errors/invalid-file-type "Dein Profilbild hat den falschen Dateitypen. Erlaubt sind: %s"
-   :user.settings.profile-picture.errors/default "Etwas ist beim Hochladen des Bildes schief gelaufen. Bitte versuche es erneut."
 
    ;; notification settings
    :user.notifications/header "Benachrichtigungen verwalten"
@@ -1192,8 +1187,6 @@
    :filters.labels.type/numbers "Anzahl Beiträge"
    :filters.labels.type/author "Du"
 
-   :input.file.image/allowed-types "Erlaubte Dateitypen"
-
    :loading.placeholder/lead "Daten werden geladen..."
    :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
 
@@ -1291,6 +1284,33 @@
    :registration.pricing.pro/mods "Moderationsoptionen"
    :registration.pricing.pro/themes "Persönliches Design"
    :registration.pricing.enterprise/all-from-pro "Alle Pro-Features, plus:"
+
+   ;; Editor
+   :routes.playground/editor "Playground: Lexical"
+   :editor.toolbar/bold "Fett"
+   :editor.toolbar/italic "Kursiv"
+   :editor.toolbar/underline "Unterstreichen"
+   :editor.toolbar/strike-through "Durchstreichen"
+   :editor.toolbar/code "Code"
+   :editor.toolbar/quote "Zitat"
+   :editor.toolbar/file-upload "Datei hochladen"
+   :editor.toolbar.file-upload/submit "Einfügen"
+   :editor.toolbar.file-upload/close "Schließen"
+   :editor.toolbar/image-upload "Bild hochladen"
+   :editor.toolbar/video-upload "Video hochladen"
+   :editor.toolbar/list-ul "Unsortierte Liste"
+   :editor.toolbar/list-ol "Sortierte Liste"
+   :editor.toolbar/clear "Inhalt löschen"
+   :editor.toolbar/undo "Rückgängig"
+   :editor.toolbar/redo "Wiederholen"
+
+   ;; File handling
+   :file.store.error/title "Hochladen der Datei fehlgeschlagen"
+   :file.store.error/file-too-large "Deine Datei ist %d Megabyte groß, die maximal erlaubte Größe ist %d Megabyte. Bitte lade eine kleinere Datei hoch."
+   :file.store.error/scaling-problem "Dein Bild konnte nicht konvertiert werden. Vielleicht ist die Datei kaputt. Bitte probiere ein anderes Bild oder kontaktiere uns."
+   :file.store.error/invalid-file-type "Deine Datei hat den falschen Dateitypen. Erlaubt sind: %s"
+   :file.store.error/generic "Etwas ist beim Hochladen der Datei schief gelaufen. Bitte versuche es erneut."
+   :file/allowed-types "Erlaubte Dateitypen"
 
    ;; Alt texts
    :schnaqqifant/hippie-alt-text "Schnaqqi, das schnaq Maskottchen, als Hippie verkleidet"

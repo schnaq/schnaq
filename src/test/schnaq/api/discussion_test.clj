@@ -2,10 +2,11 @@
   (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [muuntaja.core :as m]
             [schnaq.api :as api]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.user :as user-db]
-            [schnaq.test.toolbelt :as toolbelt :refer [test-app]]
-            [taoensso.tufte :refer [profiled p]]))
+            [schnaq.test.toolbelt :as toolbelt :refer [test-app file image]]
+            [taoensso.tufte :refer [p profiled]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
@@ -90,3 +91,28 @@
                      test-app)]
     (is (= 200 (:status (request toolbelt/token-schnaqqifant-user))))
     (is (= 403 (:status (request toolbelt/token-wegi-no-beta-user))))))
+
+;; -----------------------------------------------------------------------------
+
+(defn- upload-file-request [file share-hash]
+  (-> {:request-method :put :uri (:path (api/route-by-name :api.discussion.upload/file))
+       :body-params {:file file
+                     :bucket :schnaq/media
+                     :share-hash share-hash}}
+      toolbelt/add-csrf-header
+      test-app
+      m/decode-response-body))
+
+(deftest upload-file-test
+  (testing "Valid files can be uploaded."
+    (is (string? (:url (upload-file-request file shared-config/allowed-share-hash-in-development))))))
+
+(deftest upload-image-test
+  (testing "Valid images can be uploaded."
+    (is (string? (:url (upload-file-request image shared-config/allowed-share-hash-in-development))))))
+
+(deftest upload-file-wrong-hash-test
+  (testing "Valid files must be uploaded to valid discussions."
+    (let [response (upload-file-request file (str (random-uuid)))]
+      (is (nil? (:url response)))
+      (is (:error response)))))
