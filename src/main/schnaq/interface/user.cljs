@@ -54,7 +54,6 @@
            [:localstorage/dissoc :discussion.schnaqs/creation-secrets]
            [:dispatch [:schnaqs.archived-and-visited/to-localstorage visited-hashes archived-hashes]]
            (when new-user?
-             ;; WIP
              [:matomo/track-event ["User Registration" "Registration" "Account Creation Free"]])
            (when (and updated-statements? (= current-route-name :routes.schnaq.select/statement))
              ;; The starting-statement view is updated automatically anyway
