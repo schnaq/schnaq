@@ -57,7 +57,11 @@
                             title (oget form [:schnaq-title :value])
                             hub-exclusive? (oget form [:?hub-exclusive :checked])
                             origin-hub (oget form [:?exclusive-hub-select :value])]
-                        (rf/dispatch [:schnaq.create/new title hub-exclusive? origin-hub selected-hub])))}
+                        (rf/dispatch [:schnaq/create {:title title
+                                                      :hub-exclusive? hub-exclusive?
+                                                      :origin-hub origin-hub
+                                                      :selected-hub selected-hub}
+                                      [:schnaq.create/success]])))}
         [:div.panel-grey.row.p-4
          [:div.col-12
           [common/form-input {:id :schnaq-title
@@ -78,8 +82,8 @@
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
- :schnaq.create/new
- (fn [{:keys [db]} [_ title hub-exclusive? origin-hub selected-hub]]
+ :schnaq/create
+ (fn [{:keys [db]} [_ {:keys [title hub-exclusive? origin-hub selected-hub]} success-event]]
    (let [authenticated? (get-in db [:user :authenticated?] false)
          use-origin? (and authenticated?
                           (seq (get-in db [:user :groups] [])))
@@ -91,12 +95,12 @@
                                      :hub origin-hub)
                    (not authenticated?) (assoc :nickname nickname))]
      {:fx [(http/xhrio-request db :post "/schnaq/add"
-                               [:schnaq/created]
+                               success-event
                                payload
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
- :schnaq/created
+ :schnaq.create/success
  (fn [{:keys [db]} [_ {:keys [new-schnaq]}]]
    (let [{:discussion/keys [share-hash edit-hash creation-secret]} new-schnaq
          updated-secrets (assoc (get-in db [:discussion :schnaqs :creation-secrets]) share-hash creation-secret)]
@@ -114,3 +118,19 @@
            [:localstorage/assoc [:schnaq.last-added/edit-hash edit-hash]]
            [:localstorage/assoc [:discussion.schnaqs/creation-secrets updated-secrets]]
            [:dispatch [:schnaqs.save-admin-access/to-localstorage-and-db share-hash edit-hash]]]})))
+
+;; -----------------------------------------------------------------------------
+;; Create Demo schnaq
+
+(rf/reg-event-fx
+ :schnaq.create.demo/success
+ (fn [{:keys [db]} [_ {:keys [new-schnaq] :as response}]]
+   (prn new-schnaq)
+   {:fx [[:dispatch [:schnaq.create/success response]]]}))
+
+(comment
+
+  (rf/dispatch [:schnaq/create {:title (labels :schnaq.create.demo/title)}
+                [:schnaq.create.demo/success]])
+
+  nil)

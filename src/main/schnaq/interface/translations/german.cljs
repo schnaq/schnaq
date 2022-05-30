@@ -320,6 +320,10 @@
    :schnaq.create/info "Gib deinem schnaq einen möglichst einfachen und verständlichen Titel."
    :schnaq.create.button/save "Schnaq starten"
 
+   ;; Demo schnaq creation
+   :schnaq.create.demo/title "[Demo schnaq] Wie verwende ich schnaq?"
+   
+
    ;; Discussion Dashboard
    :dashboard/posts "Beiträge"
    :dashboard/members "Mitglieder"
