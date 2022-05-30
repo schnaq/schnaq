@@ -322,7 +322,12 @@
 
    ;; Demo schnaq creation
    :schnaq.create.demo/title "[Demo schnaq] Wie verwende ich schnaq?"
-   
+   :schnaq.create.demo/pinned-post "Willkommen in deinem ersten schnaq! Wir haben dir hier eine Demo vorbereitet, wo du schon einmal Beiträge, Fragen und Aktivierungen sehen kannst.\n\nSchau dich um und erstelle eigene Beiträge. Dieser schnaq ist nur für dich und den Personen zugänglich, mit denen du den Link zu diesem schnaq teilst.\n\nTörööö!\nschnaqqi"
+   :schnaq.create.demo/post-1 "Hier können Beiträge oder auch Fragen gestellt werden. Die Teilnehmenden können hier ihre Antworten abgeben, sie bewerten oder sortieren. Du kannst auch Beiträge auf diesen Beitrag als Antwort markieren und diese Karte damit hervorheben."
+   :schnaq.create.demo.poll/title "Von wem wird eine Elefantenherde angeführt?"
+   :schnaq.create.demo.poll/option-1 "Von einer Matriarchin"
+   :schnaq.create.demo.poll/option-2 "Von einem Patriarchen"
+   :schnaq.create.demo.poll/option-3 "Vom kleinsten Elefanten in der Herde"
 
    ;; Discussion Dashboard
    :dashboard/posts "Beiträge"

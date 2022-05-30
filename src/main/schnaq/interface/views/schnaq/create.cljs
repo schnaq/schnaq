@@ -123,14 +123,22 @@
 ;; Create Demo schnaq
 
 (rf/reg-event-fx
+ :schnaq.create/demo
+ (fn [_ _]
+   {:fx [[:dispatch [:schnaq/create {:title (labels :schnaq.create.demo/title)}
+                     [:schnaq.create.demo/success]]]]}))
+
+(rf/reg-event-fx
  :schnaq.create.demo/success
- (fn [{:keys [db]} [_ {:keys [new-schnaq] :as response}]]
-   (prn new-schnaq)
-   {:fx [[:dispatch [:schnaq.create/success response]]]}))
-
-(comment
-
-  (rf/dispatch [:schnaq/create {:title (labels :schnaq.create.demo/title)}
-                [:schnaq.create.demo/success]])
-
-  nil)
+ (fn [_ [_ {:keys [new-schnaq] :as response}]]
+   {:fx [[:dispatch [:schnaq.create/success response]]
+         [:dispatch [:schnaq/select-current new-schnaq]]
+         [:dispatch [:discussion.add.statement/starting (labels :schnaq.create.demo/pinned-post) true]]
+         [:dispatch [:discussion.add.statement/starting (labels :schnaq.create.demo/post-1) false]]
+         ;; Activate after it is possible to create activations as a free user
+         #_[:dispatch [:schnaq.poll/create {:title (labels :schnaq.create.demo.poll/title)
+                                            :poll-type :poll.type/single-choice
+                                            :options [(labels :schnaq.create.demo.poll/option-1)
+                                                      (labels :schnaq.create.demo.poll/option-2)
+                                                      (labels :schnaq.create.demo.poll/option-3)]}]]
+         #_[:dispatch [:activation/start]]]}))
