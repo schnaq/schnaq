@@ -259,6 +259,19 @@
  (fn [db _]
    (get-in db [:poll :create :option-count] 2)))
 
+(defn- extract-poll-from-form
+  "Extract information from a poll form."
+  [form option-count]
+  (let [poll-type (case (oget form :radio-type-choice :value)
+                    "multiple" :poll.type/multiple-choice
+                    "single" :poll.type/single-choice
+                    "ranking" :poll.type/ranking)
+        options (mapv #(oget+ form (str "poll-option-" %) :value)
+                      (range 1 (inc option-count)))]
+    {:title (oget form :poll-topic :value)
+     :poll-type poll-type
+     :options options}))
+
 (defn poll-form
   "Input form to create a poll with multiple options."
   []
@@ -266,12 +279,12 @@
     [:form.pt-2
      {:on-submit (fn [event]
                    (.preventDefault event)
-                   (rf/dispatch [:schnaq.poll/create-new
-                                 (oget event [:target :elements])
-                                 option-count]))}
+                   (let [form (oget event [:target :elements])]
+                     (rf/dispatch [:schnaq.poll/create (extract-poll-from-form form option-count)])
+                     (rf/dispatch [:form/should-clear form])))}
      [:div.mb-3
       [:p (labels :schnaq.poll.create/topic-label)]
-      [inputs/floating (labels :schnaq.poll.create/placeholder) :poll-topic {:required true}]
+      [inputs/floating (labels :schnaq.poll.create/placeholder) :poll-topic {:required true :autoFocus true}]
       [:small.form-text.text-muted (labels :schnaq.poll.create/hint)]]
      [:div.mb-3
       [:label.form-label (labels :schnaq.poll.create/options-label)]
@@ -320,20 +333,14 @@
        (labels :schnaq.poll.create/submit-button)]]]))
 
 (rf/reg-event-fx
- :schnaq.poll/create-new
- (fn [{:keys [db]} [_ form-elements number-of-options]]
+ :schnaq.poll/create
+ (fn [{:keys [db]} [_ poll]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         params {:title (oget form-elements :poll-topic :value)
-                 :poll-type (case (oget form-elements :radio-type-choice :value)
-                              "multiple" :poll.type/multiple-choice
-                              "single" :poll.type/single-choice
-                              "ranking" :poll.type/ranking)
-                 :options (mapv #(oget+ form-elements (str "poll-option-" %) :value)
-                                (range 1 (inc number-of-options)))
-                 :share-hash share-hash
-                 :edit-hash (get-in db [:schnaqs :admin-access share-hash])}]
+         params (assoc poll
+                       :share-hash share-hash
+                       :edit-hash (get-in db [:schnaqs :admin-access share-hash]))]
      {:fx [(http/xhrio-request db :post "/poll"
-                               [:schnaq.poll.create-new/success form-elements]
+                               [:schnaq.poll.create/success]
                                params)]})))
 
 (rf/reg-event-fx
@@ -397,13 +404,12 @@
    (update-in db [:polls :past-votes] dissoc poll-id)))
 
 (rf/reg-event-fx
- :schnaq.poll.create-new/success
- (fn [{:keys [db]} [_ form-elements {:keys [new-poll]}]]
+ :schnaq.poll.create/success
+ (fn [{:keys [db]} [_ {:keys [new-poll]}]]
    {:db (-> db
             (assoc-in [:schnaq :polls (:db/id new-poll)] new-poll)
             (tools/new-activation-focus (:db/id new-poll)))
-    :fx [[:form/clear form-elements]
-         [:dispatch [:polls.create/reset-option-count]]]}))
+    :fx [[:dispatch [:polls.create/reset-option-count]]]}))
 
 (rf/reg-sub
  :schnaq/poll
