@@ -53,10 +53,11 @@
        [:form
         {:on-submit (fn [e]
                       (.preventDefault e)
-                      (rf/dispatch [:schnaq.create/new
-                                    (oget e [:currentTarget :elements])
-                                    selected-hub]))}
-
+                      (let [form (oget e [:currentTarget :elements])
+                            title (oget form [:schnaq-title :value])
+                            hub-exclusive? (oget form [:?hub-exclusive :checked])
+                            origin-hub (oget form [:?exclusive-hub-select :value])]
+                        (rf/dispatch [:schnaq.create/new title hub-exclusive? origin-hub selected-hub])))}
         [:div.panel-grey.row.p-4
          [:div.col-12
           [common/form-input {:id :schnaq-title
@@ -73,19 +74,19 @@
 
 (defn create-schnaq-view []
   [create-qanda-page])
+
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
  :schnaq.create/new
- (fn [{:keys [db]} [_ form-elements selected-hub]]
+ (fn [{:keys [db]} [_ title hub-exclusive? origin-hub selected-hub]]
    (let [authenticated? (get-in db [:user :authenticated?] false)
          use-origin? (and authenticated?
                           (seq (get-in db [:user :groups] [])))
          nickname (tools/current-display-name db)
-         discussion-title (oget form-elements [:schnaq-title :value])
-         exclusive? (when use-origin? (and (oget form-elements [:?hub-exclusive :checked]) (not (nil? selected-hub))))
-         origin-hub (when use-origin? (or (oget form-elements [:?exclusive-hub-select :value]) selected-hub))
-         payload (cond-> {:discussion-title discussion-title}
+         exclusive? (when use-origin? (and hub-exclusive? (not (nil? selected-hub))))
+         origin-hub (when use-origin? (or origin-hub selected-hub))
+         payload (cond-> {:discussion-title title}
                    origin-hub (assoc :hub-exclusive? exclusive?
                                      :hub origin-hub)
                    (not authenticated?) (assoc :nickname nickname))]
