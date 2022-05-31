@@ -283,7 +283,7 @@
                  :statement/created-at created-at}
         starting-route? @(rf/subscribe [:routes.schnaq/start?])
         statement-or-topic (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))]
-    [motion/move-in :left
+    [motion/fade-in-and-out
      [:<>
       [:div.d-flex.flex-wrap.mb-3
        [:div.small
@@ -294,7 +294,7 @@
 (defn- search-info []
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
         search-results @(rf/subscribe [:schnaq.search.current/result])]
-    [motion/move-in :left
+    [motion/fade-in-and-out
      [:div.my-4
       [:div.d-inline-block
        [:h2 (labels :schnaq.search/heading)]

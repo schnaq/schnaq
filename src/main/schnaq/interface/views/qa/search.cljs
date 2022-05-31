@@ -58,11 +58,11 @@
         dark? (= :dark background-schema)]
     (when (seq search-results)
       [:div.mt-3
-       [motion/move-in :top
+       [motion/fade-in-and-out
         [:h5.mx-3.mx-md-0
          (when dark? {:class "text-white"})
          (labels :qanda.search/similar-results)]]
-       [motion/move-in :top
+       [motion/fade-in-and-out
         [:div.mx-3.mx-md-0
          [:text-sm
           (when dark? {:class "text-white"})
@@ -74,5 +74,5 @@
         (for [result-id search-results]
           [:div.statement-column
            {:key (str result-id "-search-result")}
-           [motion/move-in-spring :bottom
+           [motion/fade-in-and-out
             [card/statement-card result-id]]])]])))
