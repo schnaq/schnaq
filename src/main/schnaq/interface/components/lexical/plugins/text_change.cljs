@@ -12,7 +12,7 @@
      (ocall editor "registerNodeTransform"
             TextNode
             (fn [^TextNode node]
-              (on-text-change (.getTextContent node)))))
+              (on-text-change (ocall node "getTextContent")))))
    #js [editor]))
 
 (defn TextChangePlugin

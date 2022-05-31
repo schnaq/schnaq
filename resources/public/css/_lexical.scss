@@ -17,16 +17,16 @@
   }
 
   .editor-container {
-    border-color: transparent;
     color: #000;
     font-weight: 400;
     line-height: 20px;
+    outline-color: transparent;
     position: relative;
     text-align: left;
-    transition: border-color 0.15s ease-in-out;
+    transition: outline-color 0.15s ease-in-out;
     
     &:focus-within {
-      border: var(--theming-primary) solid 0.25px;
+      outline: var(--theming-primary) solid 1px;
     }
   }
 
