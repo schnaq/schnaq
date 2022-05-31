@@ -43,7 +43,7 @@
 (>defn- revoke-existing-access-codes
   "Looks up a discussion and revokes the existing access-code."
   [discussion-id]
-  [:db/id :ret (s/coll-of vector?)]
+  [:db/id :ret future?]
   (transact
    (for [access-code-ref (query '[:find [?access-code ...]
                                   :in $ ?discussion-id

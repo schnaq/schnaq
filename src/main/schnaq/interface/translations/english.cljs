@@ -322,6 +322,15 @@
    :schnaq.create/info "Add a simple and comprehensible title to your discussion."
    :schnaq.create.button/save "Start a new schnaq"
 
+   ;; Demo schnaq creation
+   :schnaq.create.demo/title "[Demo schnaq] How can I use schnaq?"
+   :schnaq.create.demo/pinned-post "Welcome to your first schnaq! We have prepared a demo for you here, where you can already see contributions, questions and activations.\n\nTake a look around and create your own posts. This schnaq is only accessible to you and the people with whom you share the link to this schnaq.\n\nTorooo!\nschnaqqi"
+   :schnaq.create.demo/post-1 "Contributions or questions can be posted here. Participants can post their answers here, rate them or sort them. You can also mark contributions to this post as a reply and thus highlight this card."
+   :schnaq.create.demo.poll/title "Who leads a herd of elephants?"
+   :schnaq.create.demo.poll/option-1 "A matriarch"
+   :schnaq.create.demo.poll/option-2 "A patriarch"
+   :schnaq.create.demo.poll/option-3 "The smallest elephant in the herd"
+
    ;; Discussion Dashboard
    :dashboard/posts "Posts"
    :dashboard/members "Members"

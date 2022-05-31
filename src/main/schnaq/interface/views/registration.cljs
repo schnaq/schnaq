@@ -120,9 +120,9 @@
      (labels :pricing.free-tier/title)
      (labels :pricing.free-tier/subtitle)
      [:span.display-6 (format "0 %s" currency-symbol)]
-     [buttons/anchor
+     [buttons/button
       (labels :registration.pricing/start-with-free)
-      (navigation/href :routes.welcome/free)
+      #(rf/dispatch [:schnaq.create/demo])
       "btn-primary"]
      [:ul.fa-ul.list-group.list-group-flush
       [list-item (format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]

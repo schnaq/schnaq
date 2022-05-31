@@ -98,11 +98,9 @@
 
 (rf/reg-event-fx
  :discussion.add.statement/starting
- (fn [{:keys [db]} [_ form]]
+ (fn [{:keys [db]} [_ statement-text locked?]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
-         statement-text (oget form [:statement :value])
-         locked? (boolean (oget form ["?lock-card?" :checked]))
          username (get-in db [:user :names :display])
          rand-id (rand-int 9999999)]
      {:db (-> db
@@ -114,7 +112,7 @@
                                                        :statement/locked? locked?})
               (update-in [:schnaq :statement-slice :current-level] (comp set conj) rand-int))
       :fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
-                               [:discussion.add.statement/starting-success form]
+                               [:discussion.add.statement.starting/success]
                                {:statement statement-text
                                 :share-hash share-hash
                                 :edit-hash edit-hash
@@ -123,8 +121,8 @@
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
- :discussion.add.statement/starting-success
- (fn [{:keys [db]} [_ form new-starting-statements]]
+ :discussion.add.statement.starting/success
+ (fn [{:keys [db]} [_ new-starting-statements]]
    (let [starting-conclusion (:starting-conclusion new-starting-statements)
          starting-id (:db/id starting-conclusion)
          statement-with-creation-secret? (:statement/creation-secret starting-conclusion)
@@ -140,8 +138,7 @@
            [:dispatch [:votes.local/reset]]
            [:dispatch [:schnaq.wordcloud/calculate]]
            (when statement-with-creation-secret?
-             [:dispatch [:discussion.statements/add-creation-secret starting-conclusion]])
-           [:form/clear form]]})))
+             [:dispatch [:discussion.statements/add-creation-secret starting-conclusion]])]})))
 
 (rf/reg-event-fx
  :discussion.query.conclusions/starting

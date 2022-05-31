@@ -156,7 +156,10 @@
   "Form to collect the user's statements."
   []
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
-        when-starting #(rf/dispatch [:discussion.add.statement/starting (oget % [:currentTarget :elements])])
+        when-starting #(let [form (oget % [:currentTarget :elements])
+                             statement-text (oget form [:statement :value])
+                             locked? (boolean (oget form ["?lock-card?" :checked]))]
+                         (rf/dispatch [:discussion.add.statement/starting statement-text locked?]))
         when-deeper-in-discussion #(logic/submit-new-premise (oget % [:currentTarget :elements]))
         event-to-send (if starting-route? when-starting when-deeper-in-discussion)
         editor-id :conclusion-card-editor

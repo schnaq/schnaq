@@ -53,10 +53,15 @@
        [:form
         {:on-submit (fn [e]
                       (.preventDefault e)
-                      (rf/dispatch [:schnaq.create/new
-                                    (oget e [:currentTarget :elements])
-                                    selected-hub]))}
-
+                      (let [form (oget e [:currentTarget :elements])
+                            title (oget form [:schnaq-title :value])
+                            hub-exclusive? (oget form [:?hub-exclusive :checked])
+                            origin-hub (oget form [:?exclusive-hub-select :value])]
+                        (rf/dispatch [:schnaq/create {:title title
+                                                      :hub-exclusive? hub-exclusive?
+                                                      :origin-hub origin-hub
+                                                      :selected-hub selected-hub}
+                                      [:schnaq.create/success]])))}
         [:div.panel-grey.row.p-4
          [:div.col-12
           [common/form-input {:id :schnaq-title
@@ -73,29 +78,29 @@
 
 (defn create-schnaq-view []
   [create-qanda-page])
+
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
- :schnaq.create/new
- (fn [{:keys [db]} [_ form-elements selected-hub]]
+ :schnaq/create
+ (fn [{:keys [db]} [_ {:keys [title hub-exclusive? origin-hub selected-hub]} success-event]]
    (let [authenticated? (get-in db [:user :authenticated?] false)
          use-origin? (and authenticated?
                           (seq (get-in db [:user :groups] [])))
          nickname (tools/current-display-name db)
-         discussion-title (oget form-elements [:schnaq-title :value])
-         exclusive? (when use-origin? (and (oget form-elements [:?hub-exclusive :checked]) (not (nil? selected-hub))))
-         origin-hub (when use-origin? (or (oget form-elements [:?exclusive-hub-select :value]) selected-hub))
-         payload (cond-> {:discussion-title discussion-title}
+         exclusive? (when use-origin? (and hub-exclusive? (not (nil? selected-hub))))
+         origin-hub (when use-origin? (or origin-hub selected-hub))
+         payload (cond-> {:discussion-title title}
                    origin-hub (assoc :hub-exclusive? exclusive?
                                      :hub origin-hub)
                    (not authenticated?) (assoc :nickname nickname))]
      {:fx [(http/xhrio-request db :post "/schnaq/add"
-                               [:schnaq/created]
+                               success-event
                                payload
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
- :schnaq/created
+ :schnaq.create/success
  (fn [{:keys [db]} [_ {:keys [new-schnaq]}]]
    (let [{:discussion/keys [share-hash edit-hash creation-secret]} new-schnaq
          updated-secrets (assoc (get-in db [:discussion :schnaqs :creation-secrets]) share-hash creation-secret)]
@@ -113,3 +118,27 @@
            [:localstorage/assoc [:schnaq.last-added/edit-hash edit-hash]]
            [:localstorage/assoc [:discussion.schnaqs/creation-secrets updated-secrets]]
            [:dispatch [:schnaqs.save-admin-access/to-localstorage-and-db share-hash edit-hash]]]})))
+
+;; -----------------------------------------------------------------------------
+;; Create Demo schnaq
+
+(rf/reg-event-fx
+ :schnaq.create/demo
+ (fn [_ _]
+   {:fx [[:dispatch [:schnaq/create {:title (labels :schnaq.create.demo/title)}
+                     [:schnaq.create.demo/success]]]]}))
+
+(rf/reg-event-fx
+ :schnaq.create.demo/success
+ (fn [_ [_ {:keys [new-schnaq] :as response}]]
+   {:fx [[:dispatch [:schnaq.create/success response]]
+         [:dispatch [:schnaq/select-current new-schnaq]]
+         [:dispatch [:discussion.add.statement/starting (labels :schnaq.create.demo/pinned-post) true]]
+         [:dispatch [:discussion.add.statement/starting (labels :schnaq.create.demo/post-1) false]]
+         ;; Activate after it is possible to create activations as a free user
+         #_[:dispatch [:schnaq.poll/create {:title (labels :schnaq.create.demo.poll/title)
+                                            :poll-type :poll.type/single-choice
+                                            :options [(labels :schnaq.create.demo.poll/option-1)
+                                                      (labels :schnaq.create.demo.poll/option-2)
+                                                      (labels :schnaq.create.demo.poll/option-3)]}]]
+         #_[:dispatch [:activation/start]]]}))
