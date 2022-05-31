@@ -132,7 +132,7 @@
                (let [anchorNode (.getNode (.-anchor selection))
                      element (if (= "root" anchorNode) anchorNode (.getTopLevelElementOrThrow anchorNode))
                      element-key (.getKey element)
-                     element-dom (.getElementByKey editor element-key)]
+                     element-dom (ocall editor "getElementByKey" element-key)]
                  (when element-dom
                    (if ($isListNode element)
                      (let [parentList ($getNearestNodeOfType anchorNode ListNode)
@@ -199,7 +199,6 @@
        {:on-click #(format-quote active-editor block-type)
         :type :button}
        [icon :quote-right]]]
-
      (when file-storage
        [:<>
         [file-upload-button
