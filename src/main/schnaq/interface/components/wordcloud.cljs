@@ -35,14 +35,15 @@
   "Convert a fulltext to the format our wordcloud requires."
   [fulltext]
   [string? :ret (s/coll-of ::word)]
-  (let [replaced (-> fulltext remove-md-links (str/replace #"\.|!|,|\?|;|-|–" ""))]
-    (for [[word total] (->> (str/split replaced #"\s")
-                            (remove #((set stopwords-de) %))
-                            (map extract-link-text-from-md)
-                            (remove empty?)
-                            frequencies)]
-      {:text word
-       :value total})))
+  (for [[word total] (->> (str/split (remove-md-links fulltext) #"\s")
+                          (remove #((set stopwords-de) %))
+                          (map extract-link-text-from-md)
+                          (map #(str/replace % #"(\W)*" "")) ;; remove all non-word characters
+                          (map str/lower-case)
+                          (remove empty?)
+                          frequencies)]
+    {:text word
+     :value total}))
 
 (def ^:private options
   {:colors (vals (dissoc colors :white))

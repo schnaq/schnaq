@@ -91,9 +91,10 @@
          current-premise-ids (get-in db [:schnaq :statement-slice :current-level])
          premises (stools/select-values all-premises current-premise-ids)
          children-ids (flatten (map :statement/children premises))
-         premises-with-children (remove nil? (concat premises (stools/select-values all-premises children-ids)))]
+         premises-with-children (remove nil? (concat premises (stools/select-values all-premises children-ids)))
+         locked-statements-removed (remove :statement/locked? premises-with-children)]
      {:fx [[:dispatch [:wordcloud/store-words
-                       {:string-representation (export/generate-fulltext premises-with-children)}]]]})))
+                       {:string-representation (export/generate-fulltext locked-statements-removed)}]]]})))
 
 (rf/reg-event-db
  :schnaq.visible-entities/set-id-mapping
