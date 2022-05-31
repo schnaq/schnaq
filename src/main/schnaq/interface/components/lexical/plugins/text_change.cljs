@@ -1,17 +1,17 @@
 (ns schnaq.interface.components.lexical.plugins.text-change
   (:require ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
-            ["lexical" :refer [TextNode LexicalEditor]]
-            ["react" :refer [useEffect]]))
+            ["lexical" :refer [LexicalEditor TextNode]]
+            ["react" :refer [useEffect]]
+            [oops.core :refer [ocall]]))
 
 (defn- on-text-change-fn
   "Calls the on-text-change function and fills it with the node's content."
   [^LexicalEditor editor on-text-change]
   (useEffect
    (fn []
-     (.registerNodeTransform
-      editor TextNode
-      (fn [^TextNode node]
-        (on-text-change (.getTextContent node)))))
+     (ocall editor "registerNodeTransform"
+            (fn [^TextNode node]
+              (on-text-change (.getTextContent node)))))
    #js [editor]))
 
 (defn TextChangePlugin
