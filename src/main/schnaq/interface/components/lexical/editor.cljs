@@ -17,14 +17,11 @@
             [schnaq.interface.components.lexical.config :refer [initial-config
                                                                 sample-markdown-input]]
             [schnaq.interface.components.lexical.plugins.autolink :refer [autolink-plugin]]
-            [schnaq.interface.components.lexical.plugins.images :refer [ImagesPlugin]]
-            [schnaq.interface.components.lexical.plugins.links :refer [LinksPlugin]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
             [schnaq.interface.components.lexical.plugins.register-editor :refer [RegisterEditorPlugin]]
             [schnaq.interface.components.lexical.plugins.text-change :refer [TextChangePlugin]]
             [schnaq.interface.components.lexical.plugins.toolbar :refer [ToolbarPlugin]]
-            [schnaq.interface.components.lexical.plugins.tree-view :refer [TreeViewPlugin]]
-            [schnaq.interface.components.lexical.plugins.video :refer [VideoPlugin]]))
+            [schnaq.interface.components.lexical.plugins.tree-view :refer [TreeViewPlugin]]))
 
 (defn editor
   "Create a lexical editor instance.
@@ -52,10 +49,9 @@
       [:> HistoryPlugin {}]
       [autolink-plugin]
       [:> ClearEditorPlugin]
-      [:f> ImagesPlugin]
-      [:f> VideoPlugin]
+      #_[:f> ImagesPlugin]
+      #_[:f> VideoPlugin]
       [:> LinkPlugin]
-      [:f> LinksPlugin]
       (when on-text-change [:f> TextChangePlugin {:on-text-change on-text-change}])
       [:> ListPlugin]
       (when id [:f> RegisterEditorPlugin {:id id}])
@@ -66,6 +62,11 @@
                 {:onChange (fn [editorState _editor]
                              (.read editorState
                                     #(rf/dispatch [:editor/content id ($convertToMarkdownString schnaq-transformers)])))}])]]]])
+
+(rf/reg-event-fx
+ :editor.plugins/register
+ (fn [_ [_ editor]]
+   {:fx [[:editor.plugins.register/links editor]]}))
 
 ;; -----------------------------------------------------------------------------
 
@@ -93,15 +94,15 @@
       [editor {:id :playground-naked-editor-with-toolbar
                :toolbar? true
                :initial-content sample-markdown-input}
-       {:class "pb-3"}]]
+       {:class "mb-3"}]]
      [:section.pt-3
       [:p "Editor without toolbar"]
-      [editor {:id :playground-naked-editor} {:class "pb-3"}]]
+      [editor {:id :playground-naked-editor} {:class "mb-3"}]]
      [:section
       [:p "Editor with toolbar"]
       [editor {:id :playground-naked-editor-with-toolbar
                :toolbar? true}
-       {:class "pb-3"}]]]))
+       {:class "mb-3"}]]]))
 
 ;; -----------------------------------------------------------------------------
 

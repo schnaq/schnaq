@@ -7,4 +7,5 @@
   [{:keys [id]}]
   (let [[editor] (useLexicalComposerContext)]
     (rf/dispatch [:editor/register id editor])
+    (rf/dispatch [:editor.plugins/register editor])
     nil))
