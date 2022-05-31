@@ -14,8 +14,7 @@
             ["lexical" :refer [CLEAR_EDITOR_COMMAND CLEAR_HISTORY_COMMAND]]
             [re-frame.core :as rf]
             [reagent.core :as r]
-            [schnaq.interface.components.lexical.config :refer [initial-config
-                                                                sample-markdown-input]]
+            [schnaq.interface.components.lexical.config :refer [initial-config sample-markdown-input]]
             [schnaq.interface.components.lexical.plugins.autolink :refer [autolink-plugin]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
             [schnaq.interface.components.lexical.plugins.register-editor :refer [RegisterEditorPlugin]]
@@ -49,8 +48,6 @@
       [:> HistoryPlugin {}]
       [autolink-plugin]
       [:> ClearEditorPlugin]
-      #_[:f> ImagesPlugin]
-      #_[:f> VideoPlugin]
       [:> LinkPlugin]
       (when on-text-change [:f> TextChangePlugin {:on-text-change on-text-change}])
       [:> ListPlugin]
@@ -66,7 +63,9 @@
 (rf/reg-event-fx
  :editor.plugins/register
  (fn [_ [_ editor]]
-   {:fx [[:editor.plugins.register/links editor]]}))
+   {:fx [[:editor.plugins.register/images editor]
+         [:editor.plugins.register/videos editor]
+         [:editor.plugins.register/links editor]]}))
 
 ;; -----------------------------------------------------------------------------
 

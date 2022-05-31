@@ -18,7 +18,7 @@
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.lexical.plugins.images :refer [INSERT_IMAGE_COMMAND]]
             [schnaq.interface.components.lexical.plugins.links :refer [INSERT_LINK_COMMAND]]
-            [schnaq.interface.components.lexical.plugins.video :refer [INSERT_VIDEO_COMMAND]]
+            [schnaq.interface.components.lexical.plugins.videos :refer [INSERT_VIDEO_COMMAND]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]))
