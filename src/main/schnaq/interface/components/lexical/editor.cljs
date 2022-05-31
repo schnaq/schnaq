@@ -58,8 +58,8 @@
       (when focus? [:> AutoFocusPlugin])
       (when debug? [:f> TreeViewPlugin])
       (when id [:> OnChangePlugin
-                {:onChange (fn [editorState _editor]
-                             (.read editorState
+                {:onChange (fn [editor-state _editor]
+                             (ocall editor-state "read"
                                     #(rf/dispatch [:editor/content id ($convertToMarkdownString schnaq-transformers)])))}])]]]])
 
 (rf/reg-event-fx

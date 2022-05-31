@@ -18,7 +18,7 @@
   [properties]
   (let [src (oget properties :src)
         altText (oget properties :alt)
-        nodeKey ^NodeKey (oget properties :nodeKey)
+        ^NodeKey nodeKey (oget properties :nodeKey)
         ref (useRef nil)
         [selected? set-selected clear-selection] (useLexicalNodeSelection nodeKey)
         [editor] (useLexicalComposerContext)

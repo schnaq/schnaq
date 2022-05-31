@@ -27,7 +27,7 @@ You will need to create a new account after one year.
 
 ==== Development: Starting the local transactor (for the database)
 
-Go to https://my.datomics.com/account and copy the `wget` command with the desired version.
+Go to https://my.datomic.com/account and copy the `wget` command with the desired version.
 Execute it in the schnaq folder and name it datomic-pro, or wherever you desire.
 
 - unzip
