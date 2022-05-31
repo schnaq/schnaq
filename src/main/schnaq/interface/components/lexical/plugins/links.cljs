@@ -4,7 +4,7 @@
             ["lexical" :refer [$createParagraphNode $createTextNode $getRoot
                                $getSelection $isRangeSelection $isRootNode
                                COMMAND_PRIORITY_EDITOR createCommand LexicalCommand]]
-            [oops.core :refer [ocall]]
+            [oops.core :refer [ocall oget]]
             [re-frame.core :as rf]
             [taoensso.timbre :as log]))
 
@@ -13,12 +13,12 @@
 (rf/reg-fx
  :editor.plugins.register/links
  (fn [^LexicalEditor editor]
-   (if-not (.hasNodes editor #js [LinkNode])
+   (if-not (ocall editor "hasNodes" #js [LinkNode])
      (log/error "LinksPlugin: LinkNode not registered on editor")
      (ocall editor "registerCommand" INSERT_LINK_COMMAND
             (fn [^LexicalCommand payload]
-              (let [url (.-url payload)
-                    text (.-text payload)
+              (let [url (oget payload :url)
+                    text (oget payload :text)
                     text-node ($createTextNode text)
                     link-node (.append ($createLinkNode url) text-node)
                     paragraph-node (.append ($createParagraphNode) link-node)

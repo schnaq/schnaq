@@ -7,10 +7,11 @@
             ["@lexical/selection" :refer [$wrapLeafNodesInElements]]
             ["@lexical/utils" :refer [$getNearestNodeOfType mergeRegister]]
             ["lexical" :refer [$getSelection $isRangeSelection
-                               CAN_REDO_COMMAND CAN_UNDO_COMMAND FORMAT_TEXT_COMMAND
-                               REDO_COMMAND SELECTION_CHANGE_COMMAND UNDO_COMMAND
-                               CLEAR_HISTORY_COMMAND CLEAR_EDITOR_COMMAND]]
+                               CAN_REDO_COMMAND CAN_UNDO_COMMAND CLEAR_EDITOR_COMMAND
+                               CLEAR_HISTORY_COMMAND FORMAT_TEXT_COMMAND REDO_COMMAND SELECTION_CHANGE_COMMAND
+                               UNDO_COMMAND]]
             ["react" :refer [useCallback useEffect useState]]
+            [oops.core :refer [ocall]]
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
@@ -147,21 +148,21 @@
          #js [active-editor])]
     (useEffect
      #(mergeRegister
-       (.registerUpdateListener active-editor
-                                (fn [editor]
-                                  (.read (.-editorState editor) (fn [] (update-toolbar)))))
-       (.registerCommand editor ;; here it is the initial editor to swap it when changed.
-                         SELECTION_CHANGE_COMMAND
-                         (fn [_payload new-editor] (update-toolbar) (active-editor! new-editor) false)
-                         low-priority)
-       (.registerCommand active-editor
-                         CAN_UNDO_COMMAND
-                         (fn [payload] (can-undo! payload) false)
-                         low-priority)
-       (.registerCommand active-editor
-                         CAN_REDO_COMMAND
-                         (fn [payload] (can-redo! payload) false)
-                         low-priority))
+       (ocall active-editor "registerUpdateListener"
+              (fn [editor]
+                (.read (.-editorState editor) (fn [] (update-toolbar)))))
+       (ocall editor "registerCommand" ;; here it is the initial editor to swap it when changed.
+              SELECTION_CHANGE_COMMAND
+              (fn [_payload new-editor] (update-toolbar) (active-editor! new-editor) false)
+              low-priority)
+       (ocall active-editor "registerCommand"
+              CAN_UNDO_COMMAND
+              (fn [payload] (can-undo! payload) false)
+              low-priority)
+       (ocall active-editor "registerCommand"
+              CAN_REDO_COMMAND
+              (fn [payload] (can-redo! payload) false)
+              low-priority))
      #js [editor update-toolbar])
     [:div.toolbar
      [tooltip/text

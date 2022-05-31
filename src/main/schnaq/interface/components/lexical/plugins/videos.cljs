@@ -12,8 +12,8 @@
 (rf/reg-fx
  :editor.plugins.register/videos
  (fn [^LexicalEditor editor]
-   (if-not (.hasNodes editor #js [VideoNode])
-     (log/error "ImagesPlugin: ImageNode not registered on editor")
+   (if-not (ocall editor "hasNodes" #js [VideoNode])
+     (log/error "ImagesPlugin: VideoNode not registered on editor")
      (ocall editor "registerCommand" INSERT_VIDEO_COMMAND
             (fn [^LexicalCommand payload]
               (let [selection (or ($getSelection) (.selectEnd ($getRoot)))]

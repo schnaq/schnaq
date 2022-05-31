@@ -12,7 +12,7 @@
 (rf/reg-fx
  :editor.plugins.register/images
  (fn [^LexicalEditor editor]
-   (if-not (.hasNodes editor #js [ImageNode])
+   (if-not (ocall editor "hasNodes" #js [ImageNode])
      (log/error "ImagesPlugin: ImageNode not registered on editor")
      (ocall editor "registerCommand" INSERT_IMAGE_COMMAND
             (fn [^LexicalCommand payload]
