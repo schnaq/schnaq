@@ -250,6 +250,9 @@
    :schnaq.admin.configurations.mods-mark-only/label "Nur Moderator:innen Antworten markieren lassen"
    :schnaq.admin.configurations.mods-mark-only/explanation "Wenn aktiviert, haben nur Moderatoren die Möglichkeit Antworten als korrekt zu markieren."
    :schnaq.admin.configurations.mods-mark-only/beta "Nur Pro-Nutzer:innen können diese Einstellung verändern. Upgrade deinen Account auf den Pro Plan um Zugang zu erhalten."
+   :schnaq.admin.focus/button "In Fokus setzen"
+   :schnaq.admin.focus.notification/title "Erfolgreich"
+   :schnaq.admin.focus.notification/body "Die ausgewählte Aktivierung wird nun den anderen Teilnehmenden als allererstes angezeigt."
 
    :schnaq.access-code.clipboard/header "Zugangscode kopiert"
    :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."

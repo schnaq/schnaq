@@ -4,8 +4,9 @@
             [schnaq.api :as api]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.poll :as poll-db]
             [schnaq.database.user :as user-db]
-            [schnaq.test.toolbelt :as toolbelt :refer [test-app file image]]
+            [schnaq.test.toolbelt :as toolbelt :refer [file image test-app]]
             [taoensso.tufte :refer [p profiled]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
@@ -116,3 +117,20 @@
     (let [response (upload-file-request file (str (random-uuid)))]
       (is (nil? (:url response)))
       (is (:error response)))))
+
+;; -----------------------------------------------------------------------------
+
+(defn- set-focus-request [entity-id share-hash edit-hash]
+  (-> {:request-method :put :uri (:path (api/route-by-name :api.discussion.manage/focus))
+       :body-params {:entity-id entity-id
+                     :share-hash share-hash
+                     :edit-hash edit-hash}}
+      toolbelt/add-csrf-header
+      test-app
+      :status))
+
+(deftest set-focus-test
+  (let [share-hash "cat-dog-hash"
+        poll-id (:db/id (first (poll-db/polls share-hash)))]
+    (testing "Users with moderator rights can toggle the focus."
+      (is (= 200 (set-focus-request poll-id share-hash "cat-dog-edit-hash"))))))

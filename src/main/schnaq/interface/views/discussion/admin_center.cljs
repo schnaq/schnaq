@@ -345,6 +345,22 @@
      (update-in db [:schnaq :selected :discussion/states]
                 #(-> % set (disj :discussion.state.qa/mark-as-moderators-only) vec)))))
 
+(rf/reg-event-fx
+ :schnaq.admin.focus/entity
+ (fn [{:keys [db]} [_ entity-id]]
+   {:fx [(http/xhrio-request db :put "/discussion/manage/focus" [:schnaq.admin.focus.entity/success]
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
+                              :entity-id entity-id})]}))
+
+(rf/reg-event-fx
+ :schnaq.admin.focus.entity/success
+ (fn [_ _]
+   {:fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :schnaq.admin.focus.notification/title)
+                                    :body (labels :schnaq.admin.focus.notification/body)
+                                    :context :success}]]]}))
+
 ;; -----------------------------------------------------------------------------
 
 (defn- discussion-settings

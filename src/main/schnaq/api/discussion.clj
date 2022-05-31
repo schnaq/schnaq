@@ -7,7 +7,7 @@
             [schnaq.auth.lib :as auth-lib]
             [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.main :as db]
+            [schnaq.database.main :as db :refer [set-activation-focus]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.reaction :as reaction-db]
             [schnaq.database.specs :as specs]
@@ -229,6 +229,12 @@
     (discussion-db/mods-mark-only! share-hash mods-mark-only?)
     (ok {:share-hash share-hash})))
 
+(defn- set-focus
+  "Set the current focus of the discussion to a single entity."
+  [{{{:keys [entity-id share-hash]} :body} :parameters}]
+  (set-activation-focus [:discussion/share-hash share-hash] entity-id)
+  (ok {:share-hash share-hash}))
+
 ;; -----------------------------------------------------------------------------
 ;; Votes
 
@@ -407,7 +413,11 @@
      ["/make-writeable" {:put make-discussion-writeable!
                          :description (at/get-doc #'make-discussion-writeable!)
                          :middleware [:user/pro-user?]
-                         :name :api.discussion.manage/make-writeable}]]]
+                         :name :api.discussion.manage/make-writeable}]
+     ["/focus" {:put set-focus
+                :description (at/get-doc #'set-focus)
+                :name :api.discussion.manage/focus
+                :parameters {:body {:entity-id :db/id}}}]]]
    ["/header-image" {:post media/set-preview-image
                      :description (at/get-doc #'media/set-preview-image)
                      :name :api.discussion/header-image
