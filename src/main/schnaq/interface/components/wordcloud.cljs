@@ -38,7 +38,7 @@
   (for [[word total] (->> (str/split (remove-md-links fulltext) #"\s")
                           (remove #((set stopwords-de) %))
                           (map extract-link-text-from-md)
-                          (map #(str/replace % #"(\W)*" "")) ;; remove all non-word characters
+                          (map #(str/replace % #"[^A-z0-9äöüÄÖÜß]" "")) ;; remove all non-word characters
                           (map str/lower-case)
                           (remove empty?)
                           frequencies)]
