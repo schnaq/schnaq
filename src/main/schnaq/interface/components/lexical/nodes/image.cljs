@@ -6,7 +6,7 @@
                                CLICK_COMMAND COMMAND_PRIORITY_LOW DecoratorNode
                                EditorConfig KEY_BACKSPACE_COMMAND KEY_DELETE_COMMAND NodeKey]]
             ["react" :refer [useCallback useEffect useRef]]
-            [oops.core :refer [oget oset!]]
+            [oops.core :refer [ocall oget oset!]]
             [reagent.core :as r]
             [shadow.cljs.modern :refer [defclass]]))
 
@@ -16,9 +16,9 @@
   "The real image component. Here all the magic happens and the component is
   configured."
   [properties]
-  (let [src (.-src properties)
-        altText (.-alt properties)
-        nodeKey ^NodeKey (.-nodeKey properties)
+  (let [src (oget properties :src)
+        altText (oget properties :alt)
+        ^NodeKey nodeKey (oget properties :nodeKey)
         ref (useRef nil)
         [selected? set-selected clear-selection] (useLexicalNodeSelection nodeKey)
         [editor] (useLexicalComposerContext)
@@ -36,17 +36,16 @@
     (useEffect
      (fn []
        (mergeRegister
-        (.registerCommand
-         editor CLICK_COMMAND
-         (fn [event]
-           (when (= (.-target event) (.-current ref))
-             (when-not (.-shiftKey event) (clear-selection))
-             (set-selected (not selected?))
-             true)
-           false)
-         COMMAND_PRIORITY_LOW)
-        (.registerCommand editor KEY_DELETE_COMMAND on-delete COMMAND_PRIORITY_LOW)
-        (.registerCommand editor KEY_BACKSPACE_COMMAND on-delete COMMAND_PRIORITY_LOW)))
+        (ocall editor "registerCommand" CLICK_COMMAND
+               (fn [event]
+                 (when (= (oget event :target) (oget ref :current))
+                   (when-not (oget event :shiftKey) (clear-selection))
+                   (set-selected (not selected?))
+                   true)
+                 false)
+               COMMAND_PRIORITY_LOW)
+        (ocall editor "registerCommand" KEY_DELETE_COMMAND on-delete COMMAND_PRIORITY_LOW)
+        (ocall editor "registerCommand" KEY_BACKSPACE_COMMAND on-delete COMMAND_PRIORITY_LOW)))
      #js [clear-selection editor selected? nodeKey on-delete set-selected])
     (r/as-element
      [:div.editor-image

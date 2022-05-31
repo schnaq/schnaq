@@ -8,8 +8,6 @@ ENV DATOMIC_REPO_USERNAME=$DATOMIC_REPO_USERNAME
 ARG DATOMIC_REPO_PASSWORD
 ENV DATOMIC_REPO_PASSWORD=$DATOMIC_REPO_PASSWORD
 COPY settings.xml /root/.m2/settings.xml
-COPY deps.edn .
-RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -e "(prn \"Downloading deps\")"
 
 # ------------------------------------------------------------------------------
 
@@ -32,6 +30,9 @@ COPY package.json .
 COPY yarn.lock .
 COPY resources/public/node_modules/ resources/public/node_modules/
 RUN yarn install
+
+COPY deps.edn .
+RUN clojure -P -M:frontend
 
 COPY . .
 

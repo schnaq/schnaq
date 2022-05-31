@@ -1,7 +1,7 @@
-= Dev Setup
+= schnaq
 :icons: font
 :icon-set: fa
-:source-highlighter: rouge
+:source-highlighter: highlightjs
 :experimental:
 ifdef::env-github[]
 :tip-caption: :bulb:
@@ -12,28 +12,30 @@ ifdef::env-github[]
 :stem: latexmath
 endif::[]
 
+== Development
+
 The dev-Setup has different parts for Backend and Frontend.
 
-== Database
+=== Database
 
 We are using `datomic pro` as our database, which can be used during development and testing.
-Get a fresh licence for datomic pro starter via this URL: https://my.datomic.com/
+Get a fresh license for datomic pro starter via this URL: https://my.datomic.com/
 
 Then, after registering visit: https://my.datomic.com/account.
 Follow the instructions to set your `~/.m2/settings.xml` server to contain credentials for my.datomic.com.
 You will need to create a new account after one year.
 
-=== Development: Starting the local transactor (for the database)
+==== Development: Starting the local transactor (for the database)
 
-Go to https://my.datomics.com/account and copy the `wget` command with the desired version.
+Go to https://my.datomic.com/account and copy the `wget` command with the desired version.
 Execute it in the schnaq folder and name it datomic-pro, or wherever you desire.
 
 - unzip
-- Enter your licence-key into the datomic-pro/dev-transactor.properties (Copy it over from datomic-pro/config/samples/dev-transactor-template.properties)
+- Enter your license-key into the datomic-pro/dev-transactor.properties (Copy it over from datomic-pro/config/samples/dev-transactor-template.properties)
 
 Start the transactor to dev with: `bin/transactor dev-transactor.properties`.
 
-=== Production
+==== Production
 
 To connect to a database, provide the proper connection string. You can find the
 connection string when starting your datomic instance.
@@ -42,7 +44,7 @@ We put the connection string into the project's environment variables and build
 them into the Docker image. The connection string from us is a **format string**.
 We replaced `<DB-NAME>` with `%s`. Set your database in the config namespace.
 
-== Backend
+=== Backend
 
 Start the backend-server with one of these two options:
 
@@ -51,7 +53,7 @@ Start the backend-server with one of these two options:
 Start the run configuration "CLJ REPL" and execute the `-main` method in
 `schnaq.api`.
 To do this manually, you can put the following commands into the REPL in IDEA:
-+
+
 [source,clojure]
 ----
 (require '[schnaq.api])
@@ -60,40 +62,59 @@ To do this manually, you can put the following commands into the REPL in IDEA:
 
 *Without REPL*
 
-`clj -A:run-server` on the terminal
+`clj -M:run-server` on the terminal
 
-== Frontend
+=== Frontend
 
 The Frontend works with shadow-cljs for hot code reload.
 
-1. Run `yarn install` or `npm install` to get javascript dependencies.
-2. Run `npx shadow-cljs watch app` to compile the cljs and start the watcher.
+1. Run `yarn install` to get javascript dependencies.
+2. Run `clj -M:frontend` to compile the cljs and start the watcher.
 3. Shadow-cljs starts a nrepl-server.
 You can connect to localhost and the port output to the `.shadow-cljs/nrepl.port` file.
 4. In the opened *CLJ* REPL you can execute `(shadow/repl :app)` to switch to the hot development REPL for *CLJS*.
 
-=== Stylesheets
+==== Stylesheets
 
 To automatically create the stylesheets, enable a file-watcher for the `public/css` directory.
 In the html we use the minimized version.
 So be sure to add `--style compressed` or similar as an option to your sass command.
 
-=== Linting Styles locally If you want to lint the style locally, you need to run `yarn install --dev` to install stylelint.
+Sample command:
+
+    sass --watch  ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed
+
+=== Linting Styles locally
+
+If you want to lint the style locally, you need to run `yarn install --dev` to install stylelint.
+
 Then just execute `yarn stylelint "public/css/*.scss"` in the project root.
 
-== Testing To run tests locally do the following.
+=== Testing 
 
-=== Backend
+==== Backend
 
-Run `clj -A:test`
+Run `clj -M:test`
 
-Run a single test or test namespace `clj -A:test --focus [namespace]/[function-name]`
+Run a single test or test namespace `clj -M:test --focus [namespace]/[function-name]`
 
-E.g.: `clj -A:test --focus schnaq.api-test/update-meeting-test`
+E.g.: `clj -M:test --focus schnaq.api-test/update-meeting-test`
 
-=== Frontend
+==== Frontend
 
 Run:
 
-- `yarn shadow-cljs compile test`
-- `node target/test/compiled/test.js`
+[source,bash]
+----
+yarn shadow-cljs compile test
+node target/test/compiled/test.js
+----
+
+
+== Known Problems
+
+=== Debugging a production build
+
+We use the google closure compiler collection to build minimized and optimized code. Sometimes, in the minified version, the resulting code contains problems, e.g. unresolvable functions. To debug this efficiently, use the following command to prepare a production build with debug information:
+
+    yarn shadow-cljs release app --debug  

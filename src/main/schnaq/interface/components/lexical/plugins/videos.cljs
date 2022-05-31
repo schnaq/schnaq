@@ -1,27 +1,27 @@
-(ns schnaq.interface.components.lexical.plugins.images
+(ns schnaq.interface.components.lexical.plugins.videos
   (:require ["lexical" :refer [$getRoot $getSelection $isRangeSelection
                                $isRootNode COMMAND_PRIORITY_EDITOR createCommand
                                LexicalCommand]]
             [oops.core :refer [ocall]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.lexical.nodes.image :refer [$create-image-node ImageNode]]
+            [schnaq.interface.components.lexical.nodes.video :refer [$create-video-node VideoNode]]
             [taoensso.timbre :as log]))
 
-(def INSERT_IMAGE_COMMAND (createCommand))
+(def INSERT_VIDEO_COMMAND (createCommand))
 
 (rf/reg-fx
- :editor.plugins.register/images
+ :editor.plugins.register/videos
  (fn [^LexicalEditor editor]
-   (if-not (ocall editor "hasNodes" #js [ImageNode])
-     (log/error "ImagesPlugin: ImageNode not registered on editor")
-     (ocall editor "registerCommand" INSERT_IMAGE_COMMAND
+   (if-not (ocall editor "hasNodes" #js [VideoNode])
+     (log/error "ImagesPlugin: VideoNode not registered on editor")
+     (ocall editor "registerCommand" INSERT_VIDEO_COMMAND
             (fn [^LexicalCommand payload]
               (let [selection (or ($getSelection) (.selectEnd ($getRoot)))]
                 (when ($isRangeSelection selection)
                   (when ($isRootNode (.getNode (.-anchor selection)))
                     (.insertParagraph selection))
-                  (let [image-node ($create-image-node (.-src payload) (.-altText payload))]
-                    (.insertNodes selection #js [image-node])
+                  (let [imageNode ($create-video-node (.-url payload))]
+                    (.insertNodes selection #js [imageNode])
                     (.insertParagraph selection)))
                 true))
             COMMAND_PRIORITY_EDITOR))))
