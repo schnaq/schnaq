@@ -15,8 +15,7 @@
             [oops.core :refer [ocall]]
             [re-frame.core :as rf]
             [reagent.core :as r]
-            [schnaq.interface.components.lexical.config :refer [initial-config
-                                                                sample-markdown-input]]
+            [schnaq.interface.components.lexical.config :refer [initial-config sample-markdown-input]]
             [schnaq.interface.components.lexical.plugins.autolink :refer [autolink-plugin]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
             [schnaq.interface.components.lexical.plugins.register-editor :refer [RegisterEditorPlugin]]
