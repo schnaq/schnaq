@@ -11,7 +11,7 @@
                                CLEAR_HISTORY_COMMAND FORMAT_TEXT_COMMAND REDO_COMMAND SELECTION_CHANGE_COMMAND
                                UNDO_COMMAND]]
             ["react" :refer [useCallback useEffect useState]]
-            [oops.core :refer [ocall]]
+            [oops.core :refer [ocall oget]]
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
@@ -30,10 +30,10 @@
   "Format a selection to be a quote block."
   [editor block-type]
   (when (not= block-type "quote")
-    (.update editor
-             #(let [selection ($getSelection)]
-                (when ($isRangeSelection selection)
-                  ($wrapLeafNodesInElements selection (fn [] ($createQuoteNode))))))))
+    (ocall editor "update"
+           #(let [selection ($getSelection)]
+              (when ($isRangeSelection selection)
+                ($wrapLeafNodesInElements selection (fn [] ($createQuoteNode))))))))
 
 (defn development-buttons
   "Some buttons only for development, e.g. to fast insert an image."
@@ -43,12 +43,12 @@
      [tooltip/text
       "[Dev] Insert Image"
       [:button.toolbar-item.spaced.text-secondary
-       {:on-click #(.dispatchCommand editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "Elephant in a forest"})}
+       {:on-click #(rf/dispatch [:editor/command editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "Elephant in a forest"}])}
        [icon :image-file]]]
      [tooltip/text
       "[Dev] Insert Video"
       [:button.toolbar-item.spaced.text-secondary
-       {:on-click #(.dispatchCommand editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"})}
+       {:on-click #(rf/dispatch [:editor/command editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"}])}
        [icon :video-file]]]]))
 
 (defn- file-upload-button
@@ -93,7 +93,7 @@
 (rf/reg-event-fx
  :editor.upload.image/success
  (fn [_ [_ editor {:keys [url]}]]
-   {:fx [[:editor/dispatch-command! [editor INSERT_IMAGE_COMMAND #js {:src url}]]]}))
+   {:fx [[:editor/command! [editor INSERT_IMAGE_COMMAND #js {:src url}]]]}))
 
 (rf/reg-event-fx
  :editor.upload/file
@@ -106,8 +106,8 @@
 (rf/reg-event-fx
  :editor.upload.file/success
  (fn [_ [_ editor {:keys [url]}]]
-   {:fx [[:editor/dispatch-command! [editor INSERT_LINK_COMMAND #js {:url url
-                                                                     :text (tools/filename-from-url url)}]]]}))
+   {:fx [[:editor/command! [editor INSERT_LINK_COMMAND #js {:url url
+                                                            :text (tools/filename-from-url url)}]]]}))
 
 ;; -----------------------------------------------------------------------------
 
@@ -150,7 +150,7 @@
      #(mergeRegister
        (ocall active-editor "registerUpdateListener"
               (fn [editor]
-                (.read (.-editorState editor) (fn [] (update-toolbar)))))
+                (ocall (oget editor :editorState) "read" (fn [] (update-toolbar)))))
        (ocall editor "registerCommand" ;; here it is the initial editor to swap it when changed.
               SELECTION_CHANGE_COMMAND
               (fn [_payload new-editor] (update-toolbar) (active-editor! new-editor) false)
@@ -168,28 +168,28 @@
      [tooltip/text
       (labels :editor.toolbar/bold)
       [:button.toolbar-item.spaced
-       {:on-click #(.dispatchCommand active-editor FORMAT_TEXT_COMMAND "bold")
+       {:on-click #(rf/dispatch [:editor/command active-editor FORMAT_TEXT_COMMAND "bold"])
         :type :button
         :class (when bold? "active")}
        [icon :bold]]]
      [tooltip/text
       (labels :editor.toolbar/italic)
       [:button.toolbar-item.spaced
-       {:on-click #(.dispatchCommand active-editor FORMAT_TEXT_COMMAND "italic")
+       {:on-click #(rf/dispatch [:editor/command active-editor FORMAT_TEXT_COMMAND "italic"])
         :type :button
         :class (when italic? "active")}
        [icon :italic]]]
      [tooltip/text
       (labels :editor.toolbar/strike-through)
       [:button.toolbar-item.spaced
-       {:on-click #(.dispatchCommand active-editor FORMAT_TEXT_COMMAND "strikethrough")
+       {:on-click #(rf/dispatch [:editor/command active-editor FORMAT_TEXT_COMMAND "strikethrough"])
         :type :button
         :class (when strike-through? "active")}
        [icon :strike-through]]]
      [tooltip/text
       (labels :editor.toolbar/code)
       [:button.toolbar-item.spaced
-       {:on-click #(.dispatchCommand active-editor FORMAT_TEXT_COMMAND "code")
+       {:on-click #(rf/dispatch [:editor/command active-editor FORMAT_TEXT_COMMAND "code"])
         :type :button
         :class (when code? "active")}
        [icon :code]]]
@@ -220,8 +220,8 @@
       [:button.toolbar-item.spaced
        (let [unordered-list? (= block-type "ul")]
          {:on-click #(if unordered-list?
-                       (.dispatchCommand active-editor REMOVE_LIST_COMMAND)
-                       (.dispatchCommand active-editor INSERT_UNORDERED_LIST_COMMAND))
+                       (rf/dispatch [:editor/command active-editor REMOVE_LIST_COMMAND])
+                       (rf/dispatch [:editor/command active-editor INSERT_UNORDERED_LIST_COMMAND]))
           :type :button
           :class (when unordered-list? "active")})
        [icon :list]]]
@@ -230,8 +230,8 @@
       [:button.toolbar-item.spaced
        (let [ordered-list? (= block-type "ol")]
          {:on-click #(if ordered-list?
-                       (.dispatchCommand active-editor REMOVE_LIST_COMMAND)
-                       (.dispatchCommand active-editor INSERT_ORDERED_LIST_COMMAND))
+                       (rf/dispatch [:editor/command active-editor REMOVE_LIST_COMMAND])
+                       (rf/dispatch [:editor/command active-editor INSERT_ORDERED_LIST_COMMAND]))
           :type :button
           :class (when ordered-list? "active")})
        [icon :list-ol]]]
@@ -240,8 +240,8 @@
        (labels :editor.toolbar/clear)
        [:button.toolbar-item.spaced
         {:on-click (fn []
-                     (.dispatchCommand active-editor CLEAR_EDITOR_COMMAND)
-                     (.dispatchCommand active-editor CLEAR_HISTORY_COMMAND))
+                     (rf/dispatch [:editor/command active-editor CLEAR_EDITOR_COMMAND])
+                     (rf/dispatch [:editor/command active-editor CLEAR_HISTORY_COMMAND]))
          :type :button
          :disabled (empty? editor-content)}
         [icon :trash]]]]
@@ -249,7 +249,7 @@
       [tooltip/text
        (labels :editor.toolbar/undo)
        [:button.toolbar-item.spaced
-        {:on-click #(.dispatchCommand active-editor UNDO_COMMAND)
+        {:on-click #(rf/dispatch [:editor/command active-editor UNDO_COMMAND])
          :type :button
          :disabled (not can-undo?)}
         [icon :undo]]]]
@@ -257,7 +257,7 @@
       [tooltip/text
        (labels :editor.toolbar/redo)
        [:button.toolbar-item.spaced
-        {:on-click #(.dispatchCommand active-editor REDO_COMMAND)
+        {:on-click #(rf/dispatch [:editor/command active-editor REDO_COMMAND])
          :type :button
          :disabled (not can-redo?)}
         [icon :redo]]]]

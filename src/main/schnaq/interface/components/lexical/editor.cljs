@@ -61,13 +61,6 @@
                              (ocall editor-state "read"
                                     #(rf/dispatch [:editor/content id ($convertToMarkdownString schnaq-transformers)])))}])]]]])
 
-(rf/reg-event-fx
- :editor.plugins/register
- (fn [_ [_ editor]]
-   {:fx [[:editor.plugins.register/images editor]
-         [:editor.plugins.register/videos editor]
-         [:editor.plugins.register/links editor]]}))
-
 ;; -----------------------------------------------------------------------------
 
 (defn- build-playground []
@@ -111,26 +104,35 @@
 
 ;; -----------------------------------------------------------------------------
 
+(rf/reg-event-fx
+ ;; Register editor in app-db and configure all plugins.
+ :editor/register
+ (fn [{:keys [db]} [_ editor-id ^LexicalEditor editor]]
+   {:db (assoc-in db [:editors editor-id :editor] editor)
+    :fx [[:editor.plugins.register/images editor]
+         [:editor.plugins.register/videos editor]
+         [:editor.plugins.register/links editor]]}))
+
 (rf/reg-event-db
  :editor/content
  (fn [db [_ editor-id content]]
    (assoc-in db [:editors editor-id :content] content)))
-
-(rf/reg-event-db
- :editor/register
- (fn [db [_ editor-id ^LexicalEditor editor]]
-   (assoc-in db [:editors editor-id :editor] editor)))
 
 (rf/reg-event-fx
  :editor/clear
  (fn [{:keys [db]} [_ editor-id]]
    (let [editor (get-in db [:editors editor-id :editor])]
      {:db (update-in db [:editors editor-id] dissoc :content)
-      :fx [[:editor/dispatch-command! [editor CLEAR_EDITOR_COMMAND nil]]
-           [:editor/dispatch-command! [editor CLEAR_HISTORY_COMMAND nil]]]})))
+      :fx [[:editor/command! [editor CLEAR_EDITOR_COMMAND nil]]
+           [:editor/command! [editor CLEAR_HISTORY_COMMAND nil]]]})))
+
+(rf/reg-event-fx
+ :editor/command
+ (fn [_ [_ editor command payload]]
+   {:fx [[:editor/command! [editor command payload]]]}))
 
 (rf/reg-fx
- :editor/dispatch-command!
+ :editor/command!
  (fn [[^LexicalEditor editor command payload]]
    (ocall editor "dispatchCommand" command payload)))
 
