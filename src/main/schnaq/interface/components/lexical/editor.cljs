@@ -126,8 +126,8 @@
  (fn [{:keys [db]} [_ editor-id]]
    (let [editor (get-in db [:editors editor-id :editor])]
      {:db (update-in db [:editors editor-id] dissoc :content)
-      :fx [[:editor/dispatch-command! editor CLEAR_EDITOR_COMMAND]
-           [:editor/dispatch-command! editor CLEAR_HISTORY_COMMAND]]})))
+      :fx [[:editor/dispatch-command! [editor CLEAR_EDITOR_COMMAND nil]]
+           [:editor/dispatch-command! [editor CLEAR_HISTORY_COMMAND nil]]]})))
 
 (rf/reg-fx
  :editor/dispatch-command!
