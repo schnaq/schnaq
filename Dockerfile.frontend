@@ -9,7 +9,7 @@ ARG DATOMIC_REPO_PASSWORD
 ENV DATOMIC_REPO_PASSWORD=$DATOMIC_REPO_PASSWORD
 COPY settings.xml /root/.m2/settings.xml
 COPY deps.edn .
-RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -e "(prn \"Downloading deps\")"
+RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -P -M:frontend
 
 # ------------------------------------------------------------------------------
 
