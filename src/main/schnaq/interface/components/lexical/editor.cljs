@@ -12,9 +12,11 @@
             ["@lexical/react/LexicalOnChangePlugin" :as OnChangePlugin]
             ["@lexical/react/LexicalRichTextPlugin" :as RichTextPlugin]
             ["lexical" :refer [CLEAR_EDITOR_COMMAND CLEAR_HISTORY_COMMAND]]
+            [oops.core :refer [ocall]]
             [re-frame.core :as rf]
             [reagent.core :as r]
-            [schnaq.interface.components.lexical.config :refer [initial-config sample-markdown-input]]
+            [schnaq.interface.components.lexical.config :refer [initial-config
+                                                                sample-markdown-input]]
             [schnaq.interface.components.lexical.plugins.autolink :refer [autolink-plugin]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
             [schnaq.interface.components.lexical.plugins.register-editor :refer [RegisterEditorPlugin]]
@@ -125,18 +127,13 @@
  (fn [{:keys [db]} [_ editor-id]]
    (let [editor (get-in db [:editors editor-id :editor])]
      {:db (update-in db [:editors editor-id] dissoc :content)
-      :fx [[:editor/clear! editor]]})))
-
-(rf/reg-fx
- :editor/clear!
- (fn [^LexicalEditor editor]
-   (.dispatchCommand editor CLEAR_EDITOR_COMMAND)
-   (.dispatchCommand editor CLEAR_HISTORY_COMMAND)))
+      :fx [[:editor/dispatch-command! editor CLEAR_EDITOR_COMMAND]
+           [:editor/dispatch-command! editor CLEAR_HISTORY_COMMAND]]})))
 
 (rf/reg-fx
  :editor/dispatch-command!
  (fn [[^LexicalEditor editor command payload]]
-   (.dispatchCommand editor command payload)))
+   (ocall editor "dispatchCommand" command payload)))
 
 (rf/reg-sub
  :editor/content
