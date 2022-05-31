@@ -13,7 +13,7 @@
   "Export / import image nodes."
   #js {:export (fn [^ImageNode node, _export-children, _export-format]
                  (when ($image-node? node)
-                   (format "![%s](%s)" (or (.getAltText node) "") (.getSrc node))))
+                   (format "![%s](%s)" (or (.getAltText node) "") (or (.getSrc node) ""))))
        :importRegExp markdown-image-import-regex
        :regExp markdown-image-import-regex
        :replace (fn [text-node match]

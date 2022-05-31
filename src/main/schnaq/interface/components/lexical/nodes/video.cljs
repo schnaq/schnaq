@@ -15,9 +15,9 @@
   (field ^string __url)
   (field ^NodeKey __key)
   (extends DecoratorNode)
-  (constructor [_this url ?key]
+  (constructor [this url ?key]
                (super ?key)
-               (set! __url url))
+               (oset! this :!__url url))
   Object
   (createDOM [this ^EditorConfig config]
              (let [div (.createElement js/document "div")]
