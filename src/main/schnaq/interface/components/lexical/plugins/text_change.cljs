@@ -10,6 +10,7 @@
   (useEffect
    (fn []
      (ocall editor "registerNodeTransform"
+            TextNode
             (fn [^TextNode node]
               (on-text-change (.getTextContent node)))))
    #js [editor]))
