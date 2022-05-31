@@ -100,12 +100,15 @@
   [poll-id]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [dropdown-menu/moderator
-     (str "poll-dropdown-id-" poll-id)
+     {:id (str "poll-dropdown-id-" poll-id)}
      [:<>
       [dropdown-menu/item :play/circle
        :view/present
        #(rf/dispatch [:navigation/navigate :routes.present/entity
                       {:share-hash share-hash :entity-id poll-id}])]
+      [dropdown-menu/item :bullseye
+       :schnaq.admin.focus/button
+       #(rf/dispatch [:schnaq.admin.focus/entity poll-id])]
       [dropdown-menu/item :trash
        :schnaq.poll/delete-button
        #(rf/dispatch [:poll/delete poll-id])]]]))

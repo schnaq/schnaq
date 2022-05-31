@@ -252,6 +252,9 @@
    :schnaq.admin.configurations.mods-mark-only/label "Only Moderators mark answers"
    :schnaq.admin.configurations.mods-mark-only/explanation "When checked, only moderators are allowed to mark an answer as the correct one. Otherwise, everybody is able to do this."
    :schnaq.admin.configurations.mods-mark-only/beta "Only pro-users are allowed to change this setting. Upgrade your account, to have access."
+   :schnaq.admin.focus/button "Put in focus"
+   :schnaq.admin.focus.notification/title "Success"
+   :schnaq.admin.focus.notification/body "The selected activation is now displayed to the other participants as the very first one."
 
    :schnaq.access-code.clipboard/header "Access code copied"
    :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."

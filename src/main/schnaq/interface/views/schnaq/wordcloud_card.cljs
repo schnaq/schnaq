@@ -38,10 +38,16 @@
        [:h4.mx-auto.mt-3
         (labels :schnaq.wordcloud/title)]
        [dropdown-menu/moderator
-        "wordcloud-dropdown-id"
-        [dropdown-menu/item :trash
-         :schnaq.wordcloud/hide
-         #(rf/dispatch [:schnaq.wordcloud/toggle false])]]]
+        {:id "wordcloud-dropdown-id"}
+        [:<>
+         [dropdown-menu/item :bullseye
+          :schnaq.admin.focus/button
+          (fn []
+            (rf/dispatch [:schnaq.wordcloud/toggle true])
+            (rf/dispatch [:schnaq.admin.focus.entity/success]))]
+         [dropdown-menu/item :trash
+          :schnaq.wordcloud/hide
+          #(rf/dispatch [:schnaq.wordcloud/toggle false])]]]]
       [wordcloud/wordcloud]]]))
 
 ;; -----------------------------------------------------------------------------

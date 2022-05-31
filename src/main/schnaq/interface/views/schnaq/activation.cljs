@@ -62,12 +62,17 @@
   "Dropdown menu for activation containing reset and delete."
   []
   [dropdown-menu/moderator
-   "activation-dropdown-id"
-   "text-white"
+   {:id "activation-dropdown-id"
+    :class "text-white"}
    [:<>
     [dropdown-menu/item :reset
      :schnaq.activation/reset-button
      #(rf/dispatch [:activation/reset])]
+    [dropdown-menu/item :bullseye
+     :schnaq.admin.focus/button
+     (fn []
+       (rf/dispatch [:activation/start])
+       (rf/dispatch [:schnaq.admin.focus.entity/success]))]
     [dropdown-menu/item :trash
      :schnaq.activation/delete-button
      #(rf/dispatch [:activation/delete])]]])
