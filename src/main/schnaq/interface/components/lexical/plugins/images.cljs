@@ -2,7 +2,7 @@
   (:require ["lexical" :refer [$getRoot $getSelection $isRangeSelection
                                $isRootNode COMMAND_PRIORITY_EDITOR createCommand
                                LexicalCommand]]
-            [oops.core :refer [ocall]]
+            [oops.core :refer [ocall oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.lexical.nodes.image :refer [$create-image-node ImageNode]]
             [taoensso.timbre :as log]))
@@ -20,7 +20,7 @@
                 (when ($isRangeSelection selection)
                   (when ($isRootNode (.getNode (.-anchor selection)))
                     (.insertParagraph selection))
-                  (let [image-node ($create-image-node (.-src payload) (.-altText payload))]
+                  (let [image-node ($create-image-node (oget payload :src) (oget payload :?altText))]
                     (.insertNodes selection #js [image-node])
                     (.insertParagraph selection)))
                 true))

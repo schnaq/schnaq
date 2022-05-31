@@ -4,7 +4,7 @@
             ["@lexical/utils" :refer [mergeRegister]]
             ["lexical" :refer [$getNodeByKey $getSelection $isNodeSelection
                                CLICK_COMMAND COMMAND_PRIORITY_LOW DecoratorNode
-                               EditorConfig KEY_BACKSPACE_COMMAND KEY_DELETE_COMMAND NodeKey]]
+                               KEY_BACKSPACE_COMMAND KEY_DELETE_COMMAND NodeKey]]
             ["react" :refer [useCallback useEffect useRef]]
             [oops.core :refer [ocall oget oset!]]
             [reagent.core :as r]
@@ -17,7 +17,7 @@
   configured."
   [properties]
   (let [src (oget properties :src)
-        altText (oget properties :alt)
+        alt-text (oget properties :altText)
         ^NodeKey nodeKey (oget properties :nodeKey)
         ref (useRef nil)
         [selected? set-selected clear-selection] (useLexicalNodeSelection nodeKey)
@@ -52,7 +52,7 @@
       [:img
        {:class (when selected? "focused")
         :src src
-        :alt altText
+        :alt alt-text
         :ref ref}]])))
 
 ;; -----------------------------------------------------------------------------
@@ -63,32 +63,32 @@
   (field ^string __altText)
   (field ^NodeKey __key)
   (extends DecoratorNode)
-  (constructor [_this src altText ?key]
+  (constructor [this src altText ?key]
                (super ?key)
-               (set! __src src)
-               (set! __altText altText))
+               (oset! this :!__src src)
+               (oset! this :!__altText altText))
   Object
-  (createDOM [this ^EditorConfig config]
+  (createDOM [this _config]
              (let [div (.createElement js/document "div")]
-               (oset! div ["style" "display"] "contents")
+               (oset! div [:style :display] "contents")
                div))
   (updateDOM [_this] false)
-  (getSrc [this] (oget this "__src"))
-  (getAltText [this] (or (oget this "__altText") ""))
-  (decorate [this ^LexicalEditor _editor]
-            (r/create-element ImageComponent #js {:src (oget this "__src") :alt (oget this "__altText") :nodeKey (.getKey this)})))
+  (getSrc [this] (oget this :__src))
+  (getAltText [this] (or (oget this :__altText) ""))
+  (decorate [this _editor]
+            (r/create-element ImageComponent #js {:src (oget this :__src) :altText (oget this :__altText) :nodeKey (.getKey this)})))
 
 ;; Configure static methods on our new class, because it is not possible to do
 ;; this inline in the `defclass` macro.
 (oset! ImageNode "getType" (fn [] "image"))
 (oset! ImageNode "clone"
        (fn [^ImageNode node]
-         (ImageNode. (oget node "__src") (oget node "__altText") (oget node "__key"))))
+         (ImageNode. (oget node :__src) (oget node :?__altText) (oget node :__key))))
 
 (defn $create-image-node
   "Create an image node."
-  [src altText]
-  (ImageNode. src (or altText "") nil))
+  [src alt-text]
+  (ImageNode. src (or alt-text "") nil))
 
 (defn $image-node?
   "Check that `node` is an instance of `ImageNode`."

@@ -138,7 +138,7 @@
                      (let [parentList ($getNearestNodeOfType anchorNode ListNode)
                            block-type (if parentList (.getTag parentList) (.getTag element))]
                        (block-type! block-type))
-                     (let [block-type (if ($isHeadingNode element) (.getTag element) (.getType element))]
+                     (let [block-type (if ($isHeadingNode element) (ocall element "getTag") (ocall element "getType"))]
                        (block-type! block-type))))
                  ;; Update text format
                  (bold! (.hasFormat selection "bold"))
