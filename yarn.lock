@@ -3031,10 +3031,10 @@ specificity@^0.4.1:
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
   integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
 
-stopwords-de@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/stopwords-de/-/stopwords-de-0.3.0.tgz#a63123c7217645967f8a4055cdb6ce921b8ba40f"
-  integrity sha512-9Agjg1Hv6nXxEZFI1L1WUo1Qqbiy113Xjdw2PDZ9L/YISASZuPJZlShF7AGXDhULiBvmWdg4rBlCv05CJsXnww==
+stopword@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/stopword/-/stopword-2.0.2.tgz#a52ff1ddf12b37f87687d79965f26a3d0bc8fd94"
+  integrity sha512-CzXIXl2lt6wHfZ+RNjzlFpO63y7NtT4HBbKqWQvQ4dvutM/US5tGrAYKNMV05SdyudimyuNiIUD0/IQDMq8YNw==
 
 stream-browserify@^2.0.1:
   version "2.0.2"
