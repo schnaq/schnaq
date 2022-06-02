@@ -1,6 +1,7 @@
 (ns schnaq.interface.components.wordcloud
   (:require ["react-wordcloud" :default ReactWordcloud]
-            ["stopwords-de" :as stopwords-de]
+            ["stopword" :refer [deu eng]]
+            [clojure.set :as set]
             [clojure.spec.alpha :as s]
             [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
@@ -10,6 +11,14 @@
             [schnaq.interface.components.preview :as preview]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.loading :refer [spinner-icon]]))
+
+(def ^:private stopwords
+  "Stopwords which should be removed from the wordcloud."
+  (set/union (set deu) (set eng)))
+
+(def ^:private words-to-be-wordclouded
+  "Reduce total number of words which are rendered in the wordcloud."
+  50)
 
 (s/def ::text ::specs/non-blank-string)
 (s/def ::value number?)
@@ -36,10 +45,10 @@
   [fulltext]
   [string? :ret (s/coll-of ::word)]
   (for [[word total] (->> (str/split (remove-md-links fulltext) #"\s")
-                          (remove #((set stopwords-de) %))
                           (map extract-link-text-from-md)
                           (map #(str/replace % #"[^A-z0-9äöüÄÖÜß]" "")) ;; remove all non-word characters
                           (map str/lower-case)
+                          (remove #(stopwords %))
                           (remove empty?)
                           frequencies)]
     {:text word
@@ -69,7 +78,7 @@
   (if-let [words (->> @(rf/subscribe [:wordcloud/words])
                       (sort-by :value)
                       reverse
-                      (take 50))]
+                      (take words-to-be-wordclouded))]
     [:> ReactWordcloud {:words words :options options}]
     [:div.text-center.py-3 [spinner-icon]]))
 
