@@ -6,7 +6,7 @@
             ["@fortawesome/free-solid-svg-icons" :refer
              [faArchive faBackspace faBold faBullseye faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle faCode
               faCloud faCog faComment faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
-              faFileDownload faFlask faGem faGhost faGraduationCap faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
+              faFileDownload faExternalLinkAlt faFlask faGem faGhost faGraduationCap faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
               faLocationArrow faLock faLockOpen faMagic faPalette faMapPin faChevronLeft faChevronRight faCircle
               faPaperPlane faPenSquare faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
               faTimes faTimesCircle faTrashAlt faUniversity faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward
@@ -53,6 +53,7 @@
    :eye faEye
    :envelope faEnvelope
    :envelope-open-text faEnvelopeOpenText
+   :external-link-alt faExternalLinkAlt
    :facebook faFacebook
    :file-alt faFileAlt
    :file-download faFileDownload

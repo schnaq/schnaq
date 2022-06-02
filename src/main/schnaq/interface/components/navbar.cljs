@@ -1,8 +1,9 @@
 (ns schnaq.interface.components.navbar
-  (:require [com.fulcrologic.guardrails.core :refer [>defn => ?]]
+  (:require [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
             [re-frame.core :as rf]
             [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.tooltip :as tooltip]))
@@ -62,6 +63,9 @@
      [:div.dropdown-menu
       {:aria-labelledby dropdown-id}
       [drop-down-button-link :routes/product-page :router/product]
+      [:a.dropdown-item {:href config/roadmap-url :target :_blank}
+       (labels :productpage/roadmap)
+       [icon :external-link-alt "ms-1" {:size :sm}]]
       [:hr.m-1.mx-auto.p-0.w-75]
       [drop-down-button-link :routes/product-page-qa :router/product-qa]
       [drop-down-button-link :routes/product-page-poll :router/product-poll]

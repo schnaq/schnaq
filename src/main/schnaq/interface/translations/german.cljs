@@ -98,7 +98,6 @@
    :startpage.faq/subtitle "(so könnte es bei dir aussehen)"
 
    ;; Product Pages
-   :productpage/title "Produktübersicht"
    :productpage/button "Produkt"
    :productpage.overview/ipad-alt-text "Ein Tablet mit schnaq auf dem Bildschirm"
    :productpage.overview/heading "Veranstaltungen so interaktiv, wie sie sein sollen"
@@ -116,6 +115,7 @@
    :productpage.overview.feedback/text "Erhalte wichtige Erkenntnisse in der Analyseübersicht. Schalte Feedback frei oder wirf einen Blick auf die automatisch generierte Wortwolke."
    :productpage/cta "Probiere es aus und verbessere deine nächste Veranstaltung mit schnaq"
    :productpage/learn-more "Erfahre mehr"
+   :productpage/roadmap "Roadmap"
 
    ;; QA Feature
    :productpage.qa/phone-alt-text "Ein Smartphone mit dem schnaq Q&A Feature auf dem Bildschirm"
