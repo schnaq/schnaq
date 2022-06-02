@@ -53,7 +53,7 @@
     "karma-chrome-launcher": "^3.1.1",
     "karma-cljs-test": "^0.1.0",
     "postcss": "^8.4.12",
-    "shadow-cljs": "^2.19.0",
+    "shadow-cljs": "^2.19.1",
     "stylelint": "^14.7.1",
     "stylelint-config-sass-guidelines": "^9.0.1"
   }
