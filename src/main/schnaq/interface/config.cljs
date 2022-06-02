@@ -21,6 +21,11 @@
 (def in-iframe?
   "Check if schnaq is loaded in an iframe."
   (not= (. js/window -location) (.. js/window -parent -location)))
+
+(def roadmap-url
+  "URL to the roadmap."
+  "https://trello.com/b/tVatIivm/schnaq-roadmap")
+
 ;; -----------------------------------------------------------------------------
 ;; Keycloak
 
