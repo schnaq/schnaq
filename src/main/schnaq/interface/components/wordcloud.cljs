@@ -16,6 +16,10 @@
   "Stopwords which should be removed from the wordcloud."
   (set/union (set deu) (set eng)))
 
+(def ^:private words-to-be-wordclouded
+  "Reduce total number of words which are rendered in the wordcloud."
+  50)
+
 (s/def ::text ::specs/non-blank-string)
 (s/def ::value number?)
 (s/def ::word
@@ -74,7 +78,7 @@
   (if-let [words (->> @(rf/subscribe [:wordcloud/words])
                       (sort-by :value)
                       reverse
-                      (take 50))]
+                      (take words-to-be-wordclouded))]
     [:> ReactWordcloud {:words words :options options}]
     [:div.text-center.py-3 [spinner-icon]]))
 
