@@ -11,7 +11,6 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.loading :refer [spinner-icon]]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.qa.inputs :as qanda]

@@ -205,6 +205,7 @@
   [poll]
   (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        edit-hash @(rf/subscribe [:schnaq/edit-hash])
         voted? (or cast-votes read-only?)]
     [:form
      {:on-submit (fn [e]
