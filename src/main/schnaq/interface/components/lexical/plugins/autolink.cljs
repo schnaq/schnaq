@@ -1,6 +1,6 @@
 (ns schnaq.interface.components.lexical.plugins.autolink
   "Find patterns in the given text and convert them to url / email links."
-  (:require ["@lexical/react/LexicalAutoLinkPlugin" :as AutoLinkPlugin]))
+  (:require ["@lexical/react/LexicalAutoLinkPlugin" :refer [AutoLinkPlugin]]))
 
 (def ^:private url-regex
   (re-pattern "^https?://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]"))
