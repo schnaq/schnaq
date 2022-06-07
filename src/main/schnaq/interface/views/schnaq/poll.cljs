@@ -30,6 +30,12 @@
               :height "35px"}}]]
    {:width percentage}])
 
+(defn- results-hidden-message
+  "Show a message to the user, that the she voted, but is not allowed to see the
+  results."
+  []
+  [common/hint-text (labels :schnaq.poll/hidden-results-hint)])
+
 (defn results-graph
   "A graph displaying the results of the poll."
   [{:poll/keys [options type hide-results?]} cast-votes]
@@ -69,9 +75,9 @@
                [:span.me-3 votes " " (labels :schnaq.poll/votes)]
                percentage])]]]))
      (when-not show-results?
-       [common/hint-text "Vielen Dank für deine Teilnahme! Die Ergebnisse werden von der Moderation präsentiert."])]))
+       [results-hidden-message])]))
 
-(defn ranking-item
+(defn- ranking-item
   "A single graph-bar in ranking results"
   [sorted-options old-indices index]
   (let [{:keys [option/votes db/id option/value]} (nth sorted-options index)
@@ -208,9 +214,14 @@
   [::specs/poll => :re-frame/component]
   (if (= :poll.type/ranking (:poll/type poll))
     (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
-          read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
-      (if (or cast-votes read-only?)
-        [ranking-results poll cast-votes]
+          read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+          edit-hash @(rf/subscribe [:schnaq/edit-hash])
+          voted? (or cast-votes read-only?)
+          show-results? (or edit-hash (not (:poll/hide-results? poll)))]
+      (if voted?
+        (if show-results?
+          [ranking-results poll cast-votes]
+          [results-hidden-message])
         [ranking-input poll]))
     [poll-content poll]))
 
@@ -452,7 +463,8 @@
  :schnaq.poll/hide-results
  (fn [{:keys [db]} [_ poll-id hide-results?]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-     {:fx [(http/xhrio-request db :put "/poll/hide-results"
+     {:db (assoc-in db [:schnaq :polls poll-id :poll/hide-results?] hide-results?)
+      :fx [(http/xhrio-request db :put "/poll/hide-results"
                                [:schnaq.poll.hide-results/success hide-results?]
                                {:share-hash share-hash
                                 :edit-hash (get-in db [:schnaqs :admin-access share-hash])
