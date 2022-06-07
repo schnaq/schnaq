@@ -9,11 +9,10 @@
 
 (deftest new-poll-test
   (testing "Check whether the poll object is created correctly."
-    (let [discussion-id (:db/id (fast-pull [:discussion/share-hash "cat-dog-hash"] '[:db/id]))
-          new-poll (db/new-poll! "Test Poll" :poll.type/multiple-choice
-                                 ["Eis" "Sorbet" "Joghurt"] discussion-id)
+    (let [new-poll (db/new-poll! "Test Poll" :poll.type/multiple-choice
+                                 ["Eis" "Sorbet" "Joghurt"] "cat-dog-hash")
           failed-poll (db/new-poll! "Failed" :poll.type/single-choice
-                                    [] discussion-id)]
+                                    [] "cat-dog-hash")]
       (is (zero? (apply + (map :option/votes (:poll/options new-poll)))))
       (is (= 3 (count (:poll/options new-poll))))
       (is (= :poll.type/multiple-choice (:poll/type new-poll)))
@@ -38,15 +37,15 @@
         poll-id (:db/id poll)
         option (first (filter #(zero? (:option/votes %)) (:poll/options poll)))]
     (testing "A vote always increments the number when the option and share-hash match."
-      (db/vote! (:db/id option) poll-id share-hash)
+      (db/vote! share-hash poll-id (:db/id option))
       (is (= 1 (:option/votes (fast-pull (:db/id option) '[:option/votes]))))
-      (db/vote! (:db/id option) poll-id share-hash)
+      (db/vote! share-hash poll-id (:db/id option))
       (is (= 2 (:option/votes (fast-pull (:db/id option) '[:option/votes])))))
     (testing "Providing a non-matching share-hash should do nothing"
-      (is (nil? (db/vote! (:db/id option) poll-id "Non-matching share hash 123")))
+      (is (nil? (db/vote! "Non-matching share hash 123" poll-id (:db/id option))))
       (is (= 2 (:option/votes (fast-pull (:db/id option) '[:option/votes])))))
     (testing "Providing a non-matching poll-id should do nothing as well"
-      (is (nil? (db/vote! (:db/id option) (inc poll-id) share-hash)))
+      (is (nil? (db/vote! share-hash (inc poll-id) (:db/id option))))
       (is (= 2 (:option/votes (fast-pull (:db/id option) '[:option/votes])))))))
 
 (deftest vote-multiple!-test
@@ -60,16 +59,16 @@
         option-2 (first (filter #(= 2 (:option/votes %)) options))
         all-option-ids [(:db/id option-0) (:db/id option-1) (:db/id option-2)]]
     (testing "A vote always increments the number when the options and share-hash match."
-      (db/vote-multiple! all-option-ids poll-id share-hash)
+      (db/vote-multiple! share-hash poll-id all-option-ids)
       (is (= 1 (:option/votes (fast-pull (:db/id option-0) '[:option/votes]))))
       (is (= 2 (:option/votes (fast-pull (:db/id option-1) '[:option/votes]))))
       (is (= 3 (:option/votes (fast-pull (:db/id option-2) '[:option/votes])))))
     (testing "Providing a non-matching share-hash should do nothing"
-      (is (nil? (db/vote-multiple! all-option-ids poll-id "Non-matching share hash 123")))
+      (is (nil? (db/vote-multiple! "Non-matching share hash 123" poll-id all-option-ids)))
       (is (= 1 (:option/votes (fast-pull (:db/id option-0) '[:option/votes])))))
     (testing "Providing a non-matching option-id should ignore the particular option"
-      (let [txs (db/vote-multiple! [(:db/id option-0) (:db/id option-1) (+ 99 (:db/id option-2))]
-                                   poll-id share-hash)]
+      (let [txs (db/vote-multiple! share-hash poll-id
+                                   [(:db/id option-0) (:db/id option-1) (+ 99 (:db/id option-2))])]
         (is (= 2 (count txs))))
       (is (= 2 (:option/votes (fast-pull (:db/id option-0) '[:option/votes]))))
       (is (= 3 (:option/votes (fast-pull (:db/id option-1) '[:option/votes]))))
@@ -112,7 +111,7 @@
           option-1 (first (filter #(= 1 (:option/votes %)) options))
           option-2 (first (filter #(= 2 (:option/votes %)) options))
           all-option-ids [(:db/id option-0) (:db/id option-1) (:db/id option-2)]]
-      (db/vote-ranking! all-option-ids (:db/id poll) share-hash)
+      (db/vote-ranking! share-hash (:db/id poll) all-option-ids)
       (is (= 3 (:option/votes (fast-pull (:db/id option-0) '[:option/votes]))))
       (is (= 3 (:option/votes (fast-pull (:db/id option-1) '[:option/votes]))))
       (is (= 3 (:option/votes (fast-pull (:db/id option-2) '[:option/votes])))))))
