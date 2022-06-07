@@ -32,8 +32,11 @@
 
 (defn results-graph
   "A graph displaying the results of the poll."
-  [{:poll/keys [options type]} cast-votes]
-  (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+  [{:poll/keys [options type hide-results?]} cast-votes]
+  (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        edit-hash @(rf/subscribe [:schnaq/edit-hash])
+        voted? (or cast-votes read-only?)
+        show-results? (or edit-hash (not hide-results?))]
     [:section.row
      (for [index (range (count options))]
        (let [{:keys [option/votes db/id option/value]} (get options index)
@@ -46,23 +49,27 @@
              option-voted? (votes-set id)]
          [:<>
           {:key (str "option-" id)}
-          (when-not (or cast-votes read-only?)
+          (when-not voted?
             [:div.col-1
-             [:input.form-check-input.mt-3.mx-auto
+             [:input.form-check-input.mx-auto
               (cond->
                {:type (if single-choice? "radio" "checkbox")
                 :name :option-choice
-                :value id}
+                :value id
+                :class (if show-results? "mt-3" "mt-2")}
                 (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
           [:div.my-1
            {:class (if cast-votes "col-12" "col-11")}
-           [percentage-bar votes percentage index]
+           (when show-results? [percentage-bar votes percentage index])
            [:p.small.ms-1
-            {:class (when option-voted? "font-italic")}
+            {:class (when option-voted? "text-decoration-underline text-secondary")}
             value
-            [:span.float-end
-             [:span.me-3 votes " " (labels :schnaq.poll/votes)]
-             percentage]]]]))]))
+            (when show-results?
+              [:span.float-end
+               [:span.me-3 votes " " (labels :schnaq.poll/votes)]
+               percentage])]]]))
+     (when-not show-results?
+       [common/hint-text "Vielen Dank für deine Teilnahme! Die Ergebnisse werden von der Moderation präsentiert."])]))
 
 (defn ranking-item
   "A single graph-bar in ranking results"
@@ -187,7 +194,7 @@
        [:div.text-center
         [:button.btn.btn-primary.btn-sm
          {:type :submit
-          :on-click #(matomo/track-event "Active User", "Action", "Vote on Poll")}
+          :on-click #(matomo/track-event "Active User" "Action" "Vote on Poll")}
          (labels :schnaq.poll/vote!)]])]))
 
 (>defn input-or-results

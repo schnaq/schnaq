@@ -298,6 +298,7 @@
    :schnaq.poll.create.hide-results/info "Du kannst einstellen, dass nur du als Moderator:in des schnaqs die Ergebnisse der Umfrage sehen kannst. Die Einstellung kannst du hinterher ändern."
    :schnaq.poll/votes "Stimmen"
    :schnaq.poll/vote! "Abstimmen"
+   :schnaq.poll/hidden-results-hint "Vielen Dank für deine Teilnahme! Die Ergebnisse werden von der Moderation präsentiert."
    :schnaq.poll.ranking/points "Punkte"
    :schnaq.poll/delete-button "Löschen"
    :schnaq.ranking/choose-place "Wähle Platz %s"

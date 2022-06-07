@@ -300,6 +300,7 @@
    :schnaq.poll.create.hide-results/info "You can set that only you as moderator of the schnaq can see the results of the survey. You can change this setting afterwards."
    :schnaq.poll/votes "Votes"
    :schnaq.poll/vote! "Vote"
+   :schnaq.poll/hidden-results-hint "Thank you for your participation! The results will be presented by the moderator."
    :schnaq.poll.ranking/points "Points"
    :schnaq.poll/delete-button "Delete"
    :schnaq.ranking/choose-place "Choose Rank %s"
