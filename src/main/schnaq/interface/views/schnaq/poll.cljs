@@ -105,8 +105,10 @@
 
 (defn- dropdown-menu
   "Dropdown menu for poll configuration."
-  [poll-id]
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+  [poll]
+  (let [poll-id (:db/id poll)
+        {:poll/keys [hide-results?]} poll
+        share-hash @(rf/subscribe [:schnaq/share-hash])]
     [dropdown-menu/moderator
      {:id (str "poll-dropdown-id-" poll-id)}
      [:<>
@@ -117,6 +119,9 @@
       [dropdown-menu/item :bullseye
        :schnaq.admin.focus/button
        #(rf/dispatch [:schnaq.admin.focus/entity poll-id])]
+      [dropdown-menu/item :rocket
+       (if hide-results? :schnaq.poll/show-results-button :schnaq.poll/hide-results-button)
+       #(rf/dispatch [:schnaq.poll/hide-results poll-id (not hide-results?)])]
       [dropdown-menu/item :trash
        :schnaq.poll/delete-button
        #(rf/dispatch [:poll/delete poll-id])]]]))
@@ -217,7 +222,7 @@
    [:div.mx-4.my-2
     [:div.d-flex
      [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-     [dropdown-menu (:db/id poll)]]
+     [dropdown-menu poll]]
     [input-or-results poll]]])
 
 (>defn- poll-card
@@ -228,7 +233,7 @@
    [:div.mx-4.my-2
     [:div.d-flex
      [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-     [dropdown-menu (:db/id poll)]]
+     [dropdown-menu poll]]
     [poll-content poll]]])
 
 (defn poll-list-item
@@ -442,6 +447,28 @@
  ;; Returns all polls of the selected schnaq.
  (fn [db _]
    (vals (get-in db [:schnaq :polls] {}))))
+
+(rf/reg-event-fx
+ :schnaq.poll/hide-results
+ (fn [{:keys [db]} [_ poll-id hide-results?]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :put "/poll/hide-results"
+                               [:schnaq.poll.hide-results/success hide-results?]
+                               {:share-hash share-hash
+                                :edit-hash (get-in db [:schnaqs :admin-access share-hash])
+                                :poll-id poll-id
+                                :hide-results? hide-results?})]})))
+
+(rf/reg-event-fx
+ :schnaq.poll.hide-results/success
+ (fn [_ [_ hide-results?]]
+   {:fx [[:dispatch
+          [:notification/add
+           #:notification{:title (labels :schnaq.poll.hide-results.notification/title)
+                          :body (labels (if hide-results?
+                                          :schnaq.poll.hide-results.notification/body-hide
+                                          :schnaq.poll.hide-results.notification/body-show))
+                          :context :success}]]]}))
 
 (rf/reg-event-fx
  :schnaq.poll/load-from-query
