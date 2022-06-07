@@ -83,7 +83,7 @@
               [:span.float-end
                [:span.me-3 votes " " (labels :schnaq.poll/votes)]
                percentage])]]]))
-     (when-not show-results?
+     (when (and voted? (not show-results?))
        [results-hidden-message])]))
 
 (defn- ranking-item
@@ -204,18 +204,21 @@
   "The content of a single or multiple choice poll. Can be either only the results or results and ability to vote."
   [poll]
   (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        voted? (or cast-votes read-only?)]
     [:form
      {:on-submit (fn [e]
                    (.preventDefault e)
                    (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
      [results-graph poll cast-votes]
-     (when-not (or cast-votes read-only?)
+     (when-not voted?
        [:div.text-center
         [:button.btn.btn-primary.btn-sm
          {:type :submit
           :on-click #(matomo/track-event "Active User" "Action" "Vote on Poll")}
-         (labels :schnaq.poll/vote!)]])]))
+         (labels :schnaq.poll/vote!)]])
+     (when edit-hash
+       [show-results-information (:poll/hide-results? poll)])]))
 
 (>defn input-or-results
   "Toggle if there should be an input or the results of the poll."
