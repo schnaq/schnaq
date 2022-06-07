@@ -13,8 +13,8 @@
   This can only be done by a registered user, that is also the moderator of the schnaq and
   has at least the pro subscription."
   [{:keys [parameters]}]
-  (let [{:keys [title poll-type options share-hash]} (:body parameters)
-        poll-created (poll-db/new-poll! title poll-type options share-hash)]
+  (let [{:keys [title poll-type options share-hash hide-results?]} (:body parameters)
+        poll-created (poll-db/new-poll! share-hash title poll-type options hide-results?)]
     (if (nil? poll-created)
       (do
         (log/warn (format "Creating poll with title %s and options %s failed for discussion %s" title options share-hash))
@@ -87,7 +87,8 @@
                                      :poll-type dto/poll-type
                                      :options (s/coll-of ::specs/non-blank-string)
                                      :share-hash :discussion/share-hash
-                                     :edit-hash :discussion/edit-hash}}
+                                     :edit-hash :discussion/edit-hash
+                                     :hide-results? :poll/hide-results?}}
                  :responses {200 {:body {:new-poll ::dto/poll}}
                              400 at/response-error-body}}
           :get {:handler get-poll

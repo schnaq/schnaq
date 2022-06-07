@@ -9,10 +9,12 @@
 
 (deftest new-poll-test
   (testing "Check whether the poll object is created correctly."
-    (let [new-poll (db/new-poll! "Test Poll" :poll.type/multiple-choice
-                                 ["Eis" "Sorbet" "Joghurt"] "cat-dog-hash")
-          failed-poll (db/new-poll! "Failed" :poll.type/single-choice
-                                    [] "cat-dog-hash")]
+    (let [new-poll (db/new-poll! "cat-dog-hash" "Test Poll" :poll.type/multiple-choice
+                                 ["Eis" "Sorbet" "Joghurt"]
+                                 false)
+          failed-poll (db/new-poll! "cat-dog-hash"
+                                    "Failed" :poll.type/single-choice []
+                                    false)]
       (is (zero? (apply + (map :option/votes (:poll/options new-poll)))))
       (is (= 3 (count (:poll/options new-poll))))
       (is (= :poll.type/multiple-choice (:poll/type new-poll)))

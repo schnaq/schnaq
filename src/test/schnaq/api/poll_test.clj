@@ -27,7 +27,8 @@
                                      :poll-type :poll.type/single-choice
                                      :options ["a" "b" "c"]
                                      :share-hash share-hash
-                                     :edit-hash "cat-dog-edit-hash"}}
+                                     :edit-hash "cat-dog-edit-hash"
+                                     :hide-results? false}}
                       toolbelt/add-csrf-header
                       (toolbelt/mock-authorization-header user-token)))]
     (testing "Non logged in user can not create a poll."

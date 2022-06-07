@@ -7,8 +7,8 @@
 
 (>defn new-poll!
   "Create and return a poll entity. Options must be passed as a collection of strings."
-  [title poll-type options share-hash]
-  [:poll/title :poll/type (s/coll-of ::specs/non-blank-string) :discussion/share-hash => (? ::specs/poll)]
+  [share-hash title poll-type options hide-results?]
+  [:discussion/share-hash :poll/title :poll/type (s/coll-of ::specs/non-blank-string) :poll/hide-results? => (? ::specs/poll)]
   (when (< 0 (count options))
     (db/transact-and-pull-temp
      [{:db/id "newly-created-poll"
@@ -16,7 +16,8 @@
        :poll/type poll-type
        :poll/discussion [:discussion/share-hash share-hash]
        :poll/options (mapv (fn [val] {:db/id (str (random-uuid))
-                                      :option/value val}) options)}]
+                                      :option/value val}) options)
+       :poll/hide-results? hide-results?}]
      "newly-created-poll"
      patterns/poll)))
 
