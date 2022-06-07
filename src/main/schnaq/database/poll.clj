@@ -61,7 +61,7 @@
   "Casts a vote for a certain option.
   Share-hash, poll-id and option-id must be known to prove one is not randomly incrementing values.
   Returns nil if combination is invalid and the transaction otherwise."
-  [option-id poll-id]
+  [option-id poll-id share-hash]
   [:db/id :db/id :discussion/share-hash :ret (? map?)]
   (when-let [matching-option
              (db/query
