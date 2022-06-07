@@ -4,6 +4,7 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
+            [schnaq.interface.components.common :as common]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
             [schnaq.interface.matomo :as matomo]
@@ -218,9 +219,8 @@
   [feature-labels-ns free pro]
   [:tr
    [:td.align-middle (labels (keyword (name feature-labels-ns) "name"))
-    [tooltip/text
+    [common/info-icon-with-tooltip
      (labels (keyword feature-labels-ns "description"))
-     [:span [icon :info-question "small ms-1" {:style {:cursor :help}}]]
      {:placement "right"
       :theme "dark"}]]
    [:td.text-center.align-middle free]

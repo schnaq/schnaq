@@ -1,12 +1,13 @@
 (ns schnaq.interface.views.schnaq.poll
   (:require [cljs.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn >defn-]]
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.colors :as colors]
+            [schnaq.interface.components.common :as common]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
@@ -270,10 +271,12 @@
                     "single" :poll.type/single-choice
                     "ranking" :poll.type/ranking)
         options (mapv #(oget+ form (str "poll-option-" %) :value)
-                      (range 1 (inc option-count)))]
+                      (range 1 (inc option-count)))
+        hide-results? (oget form :hide-results? :checked)]
     {:title (oget form :poll-topic :value)
      :poll-type poll-type
-     :options options}))
+     :options options
+     :hide-results? hide-results?}))
 
 (defn poll-form
   "Input form to create a poll with multiple options."
@@ -307,28 +310,36 @@
          {:type :button
           :on-click #(rf/dispatch [:polls.create/set-option-count (dec option-count)])}
          [icon :minus] " " (labels :schnaq.poll.create/remove-button)])]
-     [:div.form-check.form-check-inline
-      [:input#radio-single-choice.form-check-input
-       {:type "radio"
-        :name :radio-type-choice
-        :value :single
-        :defaultChecked true}]
-      [:label.form-check-label
-       {:for :radio-single-choice} (labels :schnaq.poll.create/single-choice-label)]]
-     [:div.form-check.form-check-inline
-      [:input#radio-multiple-choice.form-check-input
-       {:type "radio"
-        :name :radio-type-choice
-        :value :multiple}]
-      [:label.form-check-label
-       {:for :radio-multiple-choice} (labels :schnaq.poll.create/multiple-choice-label)]]
-     [:div.form-check.form-check-inline
-      [:input#radio-ranking-choice.form-check-input
-       {:type "radio"
-        :name :radio-type-choice
-        :value :ranking}]
-      [:label.form-check-label
-       {:for :radio-ranking-choice} (labels :schnaq.poll.create/ranking-label)]]
+
+     [:section.py-3
+      [:div.form-check.form-check-inline
+       [:input#radio-single-choice.form-check-input
+        {:type "radio"
+         :name :radio-type-choice
+         :value :single
+         :defaultChecked true}]
+       [:label.form-check-label
+        {:for :radio-single-choice} (labels :schnaq.poll.create/single-choice-label)]]
+      [:div.form-check.form-check-inline
+       [:input#radio-multiple-choice.form-check-input
+        {:type "radio"
+         :name :radio-type-choice
+         :value :multiple}]
+       [:label.form-check-label
+        {:for :radio-multiple-choice} (labels :schnaq.poll.create/multiple-choice-label)]]
+      [:div.form-check.form-check-inline.pb-1
+       [:input#radio-ranking-choice.form-check-input
+        {:type "radio"
+         :name :radio-type-choice
+         :value :ranking}]
+       [:label.form-check-label
+        {:for :radio-ranking-choice} (labels :schnaq.poll.create/ranking-label)]]
+      [inputs/checkbox
+       [:<>
+        (labels :schnaq.poll.create.hide-results/label)
+        [common/info-icon-with-tooltip (labels :schnaq.poll.create.hide-results/info)]]
+       :hide-results?]]
+
      [:div.text-center.pt-2
       [:button.btn.btn-primary.w-75
        {:type "submit"
