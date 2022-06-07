@@ -109,3 +109,23 @@
       (is (= 400 (get-poll-request share-hash (inc poll-id)))))
     (testing "Wrong share-hash returns bad request."
       (is (= 400 (get-poll-request "something different" poll-id))))))
+
+;; -----------------------------------------------------------------------------
+
+(defn- toggle-hide-results-request [share-hash edit-hash poll-id hide-results?]
+  (-> {:request-method :put :uri (:path (api/route-by-name :api.poll/hide-results))
+       :body-params {:poll-id poll-id
+                     :share-hash share-hash
+                     :edit-hash edit-hash
+                     :hide-results? hide-results?}}
+      toolbelt/add-csrf-header
+      test-app
+      :status))
+
+(deftest toggle-hide-results-test
+  (let [share-hash "cat-dog-hash"
+        edit-hash "cat-dog-edit-hash"
+        poll-id (-> (poll-db/polls share-hash) first :db/id)]
+    (testing "Toggle hide-results via api."
+      (is (= 200 (toggle-hide-results-request share-hash edit-hash poll-id true)))
+      (is (= 403 (toggle-hide-results-request share-hash "no-edit-hash" poll-id true))))))

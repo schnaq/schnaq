@@ -67,6 +67,12 @@
      (at/build-error-body :poll.get/invalid-params
                           (format "Could not find poll-id %d for %s" poll-id share-hash)))))
 
+(defn- toggle-hide-results
+  "Toggle result visibility for participants."
+  [{{{:keys [share-hash poll-id hide-results?]} :body} :parameters}]
+  (poll-db/toggle-hide-poll-results share-hash poll-id hide-results?)
+  (ok {:hide-results? hide-results?}))
+
 ;; -----------------------------------------------------------------------------
 
 (def poll-routes
@@ -101,6 +107,18 @@
                             :option-id (s/or :id :db/id
                                              :id-seq (s/coll-of :db/id))}}
         :responses {200 {:body {:voted? boolean?}}}}]]
+     ["/hide-results"
+      {:put toggle-hide-results
+       :description (at/get-doc #'toggle-hide-results)
+       :name :api.poll/hide-results
+       :middleware [:discussion/valid-writeable-discussion?
+                    :discussion/valid-credentials?]
+       :parameters {:body {:share-hash :discussion/share-hash
+                           :edit-hash :discussion/edit-hash
+                           :poll-id :db/id
+                           :hide-results? :poll/hide-results?}}
+       :responses {200 {:body {:hide-results? :poll/hide-results?}}
+                   400 at/response-error-body}}]
      ["/delete" {:delete delete-poll
                  :description (at/get-doc #'delete-poll)
                  :name :poll/delete
