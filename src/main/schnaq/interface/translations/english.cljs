@@ -296,6 +296,8 @@
    :schnaq.poll.create/multiple-choice-label "Multiple Choice"
    :schnaq.poll.create/ranking-label "Ranking"
    :schnaq.poll.create/submit-button "Create Poll"
+   :schnaq.poll.create.hide-results/label "Hide results from participants"
+   :schnaq.poll.create.hide-results/info "You can set that only you as moderator of the schnaq can see the results of the survey. You can change this setting afterwards."
    :schnaq.poll/votes "Votes"
    :schnaq.poll/vote! "Vote"
    :schnaq.poll.ranking/points "Points"

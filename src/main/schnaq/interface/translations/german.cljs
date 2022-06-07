@@ -294,6 +294,8 @@
    :schnaq.poll.create/multiple-choice-label "Multiple Choice"
    :schnaq.poll.create/ranking-label "Ranking"
    :schnaq.poll.create/submit-button "Umfrage erstellen"
+   :schnaq.poll.create.hide-results/label "Verstecke Ergebnisse vor Teilnehmer:innen"
+   :schnaq.poll.create.hide-results/info "Du kannst einstellen, dass nur du als Moderator:in des schnaqs die Ergebnisse der Umfrage sehen kannst. Die Einstellung kannst du hinterher ändern."
    :schnaq.poll/votes "Stimmen"
    :schnaq.poll/vote! "Abstimmen"
    :schnaq.poll.ranking/points "Punkte"
