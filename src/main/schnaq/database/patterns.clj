@@ -134,6 +134,7 @@
 (def poll
   [:db/id
    :poll/title
+   :poll/hide-results?
    {[:poll/type :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {:poll/options [:db/id
                    :option/value

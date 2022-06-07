@@ -116,3 +116,11 @@
       (is (= 3 (:option/votes (fast-pull (:db/id option-0) '[:option/votes]))))
       (is (= 3 (:option/votes (fast-pull (:db/id option-1) '[:option/votes]))))
       (is (= 3 (:option/votes (fast-pull (:db/id option-2) '[:option/votes])))))))
+
+(deftest toggle-poll-hide-results-test
+  (let [share-hash "cat-dog-hash"
+        poll-id (-> share-hash db/polls first :db/id)
+        _ (db/toggle-hide-poll-results share-hash poll-id true)
+        poll (db/poll-from-discussion "cat-dog-hash" poll-id)]
+    (testing "Flag to hide poll results can be set."
+      (is (:poll/hide-results? poll)))))

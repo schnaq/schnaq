@@ -110,3 +110,11 @@
          (for [[option-id increment-num] (partition 2 (interleave matching-ordered-options (range option-num 0 -1)))]
            (db/increment-number option-id :option/votes increment-num))))
       false)))
+
+(>defn toggle-hide-poll-results
+  "Toggle if participants can see the poll-results or not."
+  [share-hash poll-id hide-results?]
+  [:discussion/share-hash :db/id :poll/hide-results? => any?]
+  (when (poll-belongs-to-discussion? poll-id share-hash)
+    @(db/transact [[:db/add poll-id
+                    :poll/hide-results? hide-results?]])))
