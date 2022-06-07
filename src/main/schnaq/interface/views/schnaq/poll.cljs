@@ -134,7 +134,7 @@
       [dropdown-menu/item :bullseye
        :schnaq.admin.focus/button
        #(rf/dispatch [:schnaq.admin.focus/entity poll-id])]
-      [dropdown-menu/item :rocket
+      [dropdown-menu/item (if hide-results? :eye :eye-slash)
        (if hide-results? :schnaq.poll/show-results-button :schnaq.poll/hide-results-button)
        #(rf/dispatch [:schnaq.poll/hide-results poll-id (not hide-results?)])]
       [dropdown-menu/item :trash
