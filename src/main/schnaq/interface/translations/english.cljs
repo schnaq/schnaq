@@ -307,6 +307,7 @@
    :schnaq.poll.hide-results.notification/title "Successfully changed result visibility"
    :schnaq.poll.hide-results.notification/body-show "The results can now be seen by the participants."
    :schnaq.poll.hide-results.notification/body-hide "The results can no longer be seen by your participants."
+   :schnaq.poll.hide-results/hint-text "The results are immediately displayed to the participants."
    :schnaq.poll/delete-button "Delete"
    :schnaq.ranking/choose-place "Choose Rank %s"
    :schnaq.rankings/delete-last-choice "Delete last choice"

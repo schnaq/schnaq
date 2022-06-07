@@ -36,7 +36,16 @@
   []
   [common/hint-text (labels :schnaq.poll/hidden-results-hint)])
 
-(defn results-graph
+(defn- show-results-information
+  "Information text to indicate that the poll's results are presented to the
+  users."
+  [hide-results?]
+  (when-not hide-results?
+    [:div.text-center.text-muted.small
+     [icon :eye "me-2"]
+     (labels :schnaq.poll.hide-results/hint-text)]))
+
+(defn- results-graph
   "A graph displaying the results of the poll."
   [{:poll/keys [options type hide-results?]} cast-votes]
   (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])
@@ -212,18 +221,21 @@
   "Toggle if there should be an input or the results of the poll."
   [poll]
   [::specs/poll => :re-frame/component]
-  (if (= :poll.type/ranking (:poll/type poll))
-    (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
-          read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-          edit-hash @(rf/subscribe [:schnaq/edit-hash])
-          voted? (or cast-votes read-only?)
-          show-results? (or edit-hash (not (:poll/hide-results? poll)))]
-      (if voted?
-        (if show-results?
-          [ranking-results poll cast-votes]
-          [results-hidden-message])
-        [ranking-input poll]))
-    [poll-content poll]))
+  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        edit-hash @(rf/subscribe [:schnaq/edit-hash])
+        voted? (or cast-votes read-only?)
+        show-results? (or edit-hash (not (:poll/hide-results? poll)))]
+    [:<>
+     (if (= :poll.type/ranking (:poll/type poll))
+       (if voted?
+         (if show-results?
+           [ranking-results poll cast-votes]
+           [results-hidden-message])
+         [ranking-input poll])
+       [poll-content poll])
+     (when edit-hash
+       [show-results-information (:poll/hide-results? poll)])]))
 
 (>defn- ranking-card
   "Show a ranking card."

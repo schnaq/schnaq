@@ -305,6 +305,7 @@
    :schnaq.poll.hide-results.notification/title "Erfolgreich Sichtbarkeit der Ergebnisse geändert"
    :schnaq.poll.hide-results.notification/body-show "Die Ergebnisse können nun von allen Teilnehmer:innen eingesehen werden."
    :schnaq.poll.hide-results.notification/body-hide "Die Ergebnisse können nun nicht mehr von den Teilnehmer:innen gesehen werden."
+   :schnaq.poll.hide-results/hint-text "Die Ergebnisse werden den Teilnehmer:innen sofort angezeigt."
    :schnaq.poll/delete-button "Löschen"
    :schnaq.ranking/choose-place "Wähle Platz %s"
    :schnaq.rankings/delete-last-choice "Letzte Wahl löschen"
