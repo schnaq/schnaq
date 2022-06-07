@@ -36,15 +36,15 @@
 
 (>defn- poll-belongs-to-discussion?
   "Check if poll belongs to a discussion."
-  [poll-id share-hash]
-  [:db/id :discussion/share-hash => boolean?]
+  [share-hash poll-id]
+  [:discussion/share-hash :db/id => boolean?]
   (some? (poll-from-discussion share-hash poll-id)))
 
 (>defn delete-poll!
   "Delete a poll"
-  [poll-id share-hash]
-  [:db/id :discussion/share-hash :ret (? map?)]
-  (when (poll-belongs-to-discussion? poll-id share-hash)
+  [share-hash poll-id]
+  [:discussion/share-hash :db/id :ret (? map?)]
+  (when (poll-belongs-to-discussion? share-hash poll-id)
     @(db/transact [[:db/retractEntity poll-id]])))
 
 (>defn polls
@@ -61,7 +61,7 @@
   "Casts a vote for a certain option.
   Share-hash, poll-id and option-id must be known to prove one is not randomly incrementing values.
   Returns nil if combination is invalid and the transaction otherwise."
-  [option-id poll-id share-hash]
+  [option-id poll-id]
   [:db/id :db/id :discussion/share-hash :ret (? map?)]
   (when-let [matching-option
              (db/query
@@ -115,6 +115,6 @@
   "Toggle if participants can see the poll-results or not."
   [share-hash poll-id hide-results?]
   [:discussion/share-hash :db/id :poll/hide-results? => any?]
-  (when (poll-belongs-to-discussion? poll-id share-hash)
+  (when (poll-belongs-to-discussion? share-hash poll-id)
     @(db/transact [[:db/add poll-id
                     :poll/hide-results? hide-results?]])))
