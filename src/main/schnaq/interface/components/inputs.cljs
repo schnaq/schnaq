@@ -60,8 +60,8 @@
 
 (>defn checkbox
   "Create a checkbox."
-  [label id input-name attrs]
-  [(s/or :string string? :component :re-frame/component) string? string? (? map?) => :re-frame/component]
+  [label id attrs]
+  [(s/or :string string? :component :re-frame/component) (s/or :string string? :keyword keyword?) (? map?) => :re-frame/component]
   [:div.form-check
-   [:input.form-check-input (merge {:id id :type :checkbox :name input-name} attrs)]
+   [:input.form-check-input (merge {:id id :type :checkbox :name id} attrs)]
    [:label.form-check-label {:for id} label]])

@@ -382,6 +382,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The options that are possible in this poll. An option knows how many voted for it."}
+   {:db/ident :poll/hide-results?
+    :db/valueType :db.type/boolean
+    :db/cardinality :db.cardinality/one
+    :db/doc "Show or hide results to participants."}
 
    ;; Polls Option
    {:db/ident :option/value

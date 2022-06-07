@@ -3,21 +3,21 @@
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
             [schnaq.database.main :as db :refer [query fast-pull]]
             [schnaq.database.patterns :as patterns]
-            [schnaq.database.specs :as specs])
-  (:import (java.util UUID)))
+            [schnaq.database.specs :as specs]))
 
 (>defn new-poll!
   "Create and return a poll entity. Options must be passed as a collection of strings."
-  [title poll-type options discussion-id]
-  [:poll/title :poll/type (s/coll-of ::specs/non-blank-string) :db/id :ret (? ::specs/poll)]
+  [share-hash title poll-type options hide-results?]
+  [:discussion/share-hash :poll/title :poll/type (s/coll-of ::specs/non-blank-string) :poll/hide-results? => (? ::specs/poll)]
   (when (< 0 (count options))
     (db/transact-and-pull-temp
      [{:db/id "newly-created-poll"
        :poll/title title
        :poll/type poll-type
-       :poll/discussion discussion-id
-       :poll/options (mapv (fn [val] {:db/id (.toString (UUID/randomUUID))
-                                      :option/value val}) options)}]
+       :poll/discussion [:discussion/share-hash share-hash]
+       :poll/options (mapv (fn [val] {:db/id (str (random-uuid))
+                                      :option/value val}) options)
+       :poll/hide-results? hide-results?}]
      "newly-created-poll"
      patterns/poll)))
 
@@ -36,15 +36,15 @@
 
 (>defn- poll-belongs-to-discussion?
   "Check if poll belongs to a discussion."
-  [poll-id share-hash]
-  [:db/id :discussion/share-hash => boolean?]
+  [share-hash poll-id]
+  [:discussion/share-hash :db/id => boolean?]
   (some? (poll-from-discussion share-hash poll-id)))
 
 (>defn delete-poll!
   "Delete a poll"
-  [poll-id share-hash]
-  [:db/id :discussion/share-hash :ret (? map?)]
-  (when (poll-belongs-to-discussion? poll-id share-hash)
+  [share-hash poll-id]
+  [:discussion/share-hash :db/id :ret (? map?)]
+  (when (poll-belongs-to-discussion? share-hash poll-id)
     @(db/transact [[:db/retractEntity poll-id]])))
 
 (>defn polls
@@ -61,8 +61,8 @@
   "Casts a vote for a certain option.
   Share-hash, poll-id and option-id must be known to prove one is not randomly incrementing values.
   Returns nil if combination is invalid and the transaction otherwise."
-  [option-id poll-id share-hash]
-  [:db/id :db/id :discussion/share-hash :ret (? map?)]
+  [share-hash poll-id option-id]
+  [:discussion/share-hash :db/id :db/id :ret (? map?)]
   (when-let [matching-option
              (db/query
               '[:find ?option .
@@ -88,8 +88,8 @@
   "Casts a vote for a multiple options.
   Share-hash, poll-id and option-ids must be known to prove one is not randomly incrementing values.
   Returns nil if all combinations are invalid and the transaction with the valid votes otherwise."
-  [option-ids poll-id share-hash]
-  [(s/coll-of :db/id) :db/id :discussion/share-hash :ret (? (s/coll-of map?))]
+  [share-hash poll-id option-ids]
+  [:discussion/share-hash :db/id (s/coll-of :db/id) :ret (? (s/coll-of map?))]
   (let [matching-options (match-options share-hash poll-id option-ids)
         transaction-results (doall (map #(db/increment-number % :option/votes) matching-options))
         clean-results (remove nil? transaction-results)]
@@ -99,8 +99,8 @@
 (>defn vote-ranking!
   "Check whether the rank distribution is correct. (Not more options than allowed)
   Then votes accordingly. When there are 8 options the first rank gets 8 votes, etc."
-  [option-id-tuples poll-id share-hash]
-  [(s/coll-of :db/id) :db/id :discussion/share-hash :ret (? (s/coll-of map?))]
+  [share-hash poll-id option-id-tuples]
+  [:discussion/share-hash :db/id (s/coll-of :db/id) :ret (? (s/coll-of map?))]
   (let [option-num (count (:poll/options (fast-pull poll-id [:poll/options])))]
     (if (>= option-num (count option-id-tuples))
       (let [matching-options (set (match-options share-hash poll-id option-id-tuples))
@@ -110,3 +110,11 @@
          (for [[option-id increment-num] (partition 2 (interleave matching-ordered-options (range option-num 0 -1)))]
            (db/increment-number option-id :option/votes increment-num))))
       false)))
+
+(>defn toggle-hide-poll-results
+  "Toggle if participants can see the poll-results or not."
+  [share-hash poll-id hide-results?]
+  [:discussion/share-hash :db/id :poll/hide-results? => any?]
+  (when (poll-belongs-to-discussion? share-hash poll-id)
+    @(db/transact [[:db/add poll-id
+                    :poll/hide-results? hide-results?]])))

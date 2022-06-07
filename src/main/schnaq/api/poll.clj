@@ -13,16 +13,15 @@
   This can only be done by a registered user, that is also the moderator of the schnaq and
   has at least the pro subscription."
   [{:keys [parameters]}]
-  (let [{:keys [title poll-type options share-hash]} (:body parameters)
-        discussion-id (:db/id (fast-pull [:discussion/share-hash share-hash] '[:db/id]))
-        poll-created (poll-db/new-poll! title poll-type options discussion-id)]
+  (let [{:keys [title poll-type options share-hash hide-results?]} (:body parameters)
+        poll-created (poll-db/new-poll! share-hash title poll-type options hide-results?)]
     (if (nil? poll-created)
       (do
-        (log/warn "Creating poll with title" title "and options" options "failed for discussion" discussion-id)
+        (log/warn (format "Creating poll with title %s and options %s failed for discussion %s" title options share-hash))
         (bad-request (at/build-error-body :poll/bad-parameters "Poll data not valid")))
       (do
-        (log/info "Created a poll for discussion" discussion-id "of type" poll-type)
-        (set-activation-focus discussion-id (:db/id poll-created))
+        (log/info (format "Created a poll for discussion %s of type %s" share-hash poll-type))
+        (set-activation-focus [:discussion/share-hash share-hash] (:db/id poll-created))
         (ok {:new-poll poll-created})))))
 
 (defn polls-for-discussion
@@ -42,7 +41,7 @@
                     :poll.type/single-choice poll-db/vote!
                     :poll.type/multiple-choice poll-db/vote-multiple!
                     :poll.type/ranking poll-db/vote-ranking!)]
-    (if (voting-fn option-id poll-id share-hash)
+    (if (voting-fn share-hash poll-id option-id)
       (do
         (log/info "Vote cast for option(s)" option-id)
         (ok {:voted? true}))
@@ -53,9 +52,9 @@
 
 (defn- delete-poll
   "Delete a poll."
-  [{{{:keys [poll-id share-hash]} :body} :parameters}]
+  [{{{:keys [share-hash poll-id]} :body} :parameters}]
   (log/debug "Poll deletion for" poll-id)
-  (poll-db/delete-poll! poll-id share-hash)
+  (poll-db/delete-poll! share-hash poll-id)
   (ok {:deleted? true}))
 
 (defn get-poll
@@ -66,6 +65,12 @@
     (bad-request
      (at/build-error-body :poll.get/invalid-params
                           (format "Could not find poll-id %d for %s" poll-id share-hash)))))
+
+(defn- toggle-hide-results
+  "Toggle result visibility for participants."
+  [{{{:keys [share-hash poll-id hide-results?]} :body} :parameters}]
+  (poll-db/toggle-hide-poll-results share-hash poll-id hide-results?)
+  (ok {:hide-results? hide-results?}))
 
 ;; -----------------------------------------------------------------------------
 
@@ -82,7 +87,8 @@
                                      :poll-type dto/poll-type
                                      :options (s/coll-of ::specs/non-blank-string)
                                      :share-hash :discussion/share-hash
-                                     :edit-hash :discussion/edit-hash}}
+                                     :edit-hash :discussion/edit-hash
+                                     :hide-results? :poll/hide-results?}}
                  :responses {200 {:body {:new-poll ::dto/poll}}
                              400 at/response-error-body}}
           :get {:handler get-poll
@@ -101,6 +107,18 @@
                             :option-id (s/or :id :db/id
                                              :id-seq (s/coll-of :db/id))}}
         :responses {200 {:body {:voted? boolean?}}}}]]
+     ["/hide-results"
+      {:put toggle-hide-results
+       :description (at/get-doc #'toggle-hide-results)
+       :name :api.poll/hide-results
+       :middleware [:discussion/valid-writeable-discussion?
+                    :discussion/valid-credentials?]
+       :parameters {:body {:share-hash :discussion/share-hash
+                           :edit-hash :discussion/edit-hash
+                           :poll-id :db/id
+                           :hide-results? :poll/hide-results?}}
+       :responses {200 {:body {:hide-results? :poll/hide-results?}}
+                   400 at/response-error-body}}]
      ["/delete" {:delete delete-poll
                  :description (at/get-doc #'delete-poll)
                  :name :poll/delete
