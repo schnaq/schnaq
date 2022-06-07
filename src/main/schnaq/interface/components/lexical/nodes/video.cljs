@@ -4,6 +4,8 @@
             [reagent.core :as r]
             [shadow.cljs.modern :refer [defclass]]))
 
+(declare $create-video-node)
+
 (defn VideoPlayer
   "Create a video element."
   [url]
@@ -29,12 +31,19 @@
   (setURL [this url]
           (let [writable (.getWritable this)]
             (oset! writable "__url" url)))
+  (exportJSON [this] {:url (oget this :__url)
+                      :type "video"
+                      :version 1})
   (decorate [this ^LexicalEditor editor]
             (VideoPlayer (oget this "__url"))))
 (oset! VideoNode "getType" (fn [] "video"))
 (oset! VideoNode "clone"
        (fn [^VideoNode node]
          (VideoNode. (oget node "__url") (oget node "__key"))))
+(oset! VideoNode "importJSON"
+       (fn [^SerializedVideoNode node]
+         (let [url (oget node :url)]
+           ($create-video-node url))))
 
 (defn $create-video-node [url]
   (VideoNode. url nil))
