@@ -1,9 +1,9 @@
 (ns schnaq.interface.utils.markdown
-  (:require ["react-markdown" :as ReactMarkdown]
+  (:require ["react-markdown$default" :as ReactMarkdown]
             ["remark-gfm" :as gfm]))
 
 (defn as-markdown
   "Renders any string as markdown."
   [content]
-  [:> ReactMarkdown {:children content
-                     :remarkPlugins [gfm]}])
+  [:> ReactMarkdown {:remarkPlugins [gfm]}
+   content])
