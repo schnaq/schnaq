@@ -57,6 +57,9 @@
   },
   "dependenciesComments": {
     "@types/react": "peer dependency for react-markdown",
-    "@popperjs/core": "peer dependency for bootstrap 5"
+    "@popperjs/core": "peer dependency for bootstrap 5",
+    "@egjs/hammerjs": "peer dependency for vis-network and vis-util",
+    "keycharm": "peer dependency for vis-network",
+    "uuid": "peer dependency for vis-network and vis-util"
   }
 }
