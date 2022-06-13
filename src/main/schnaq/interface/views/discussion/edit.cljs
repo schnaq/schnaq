@@ -11,7 +11,7 @@
 (defn- edit-card
   "The same as a statement-card, but currently being an editable input."
   [label html-id dispatch-fn edit-id pro-con-enabled? content statement-type change-statement-type]
-  (let [editor-id (format "-editor" html-id)
+  (let [editor-id (format "%s-editor" html-id)
         editor-content @(rf/subscribe [:editor/content editor-id])]
     [:form.statement-card.py-2.px-3
      {:on-submit (fn [e]
@@ -29,6 +29,7 @@
                :value (or editor-content "")}]
       [lexical/editor {:id editor-id
                        :initial-content content
+                       :file-storage :schnaq/by-share-hash
                        :toolbar? true}]]
      [:div.d-flex.justify-content-between.flex-wrap
       [:div.d-flex.mb-3
