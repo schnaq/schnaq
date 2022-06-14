@@ -282,8 +282,10 @@
 (s/def ::option (s/keys :req [:option/value]
                         :opt [:option/votes]))
 (s/def :poll/options (s/coll-of ::option))
+(s/def :poll/hide-results? boolean?)
 (s/def ::poll
-  (s/keys :req [:poll/title :poll/options :poll/type :poll/discussion]))
+  (s/keys :req [:poll/title :poll/options :poll/type :poll/discussion]
+          :opt [:poll/hide-results?]))
 
 ;; Activation
 (s/def :activation/discussion (s/or :id :db/id :discussion ::discussion))

@@ -1,12 +1,13 @@
 (ns schnaq.interface.views.schnaq.poll
   (:require [cljs.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn >defn-]]
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.colors :as colors]
+            [schnaq.interface.components.common :as common]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
@@ -29,10 +30,28 @@
               :height "35px"}}]]
    {:width percentage}])
 
-(defn results-graph
+(defn- results-hidden-message
+  "Show a message to the user, that the she voted, but is not allowed to see the
+  results."
+  []
+  [common/hint-text (labels :schnaq.poll/hidden-results-hint)])
+
+(defn- show-results-information
+  "Information text to indicate that the poll's results are presented to the
+  users."
+  [hide-results?]
+  (when-not hide-results?
+    [:div.text-center.text-muted.small
+     [icon :eye "me-2"]
+     (labels :schnaq.poll.hide-results/hint-text)]))
+
+(defn- results-graph
   "A graph displaying the results of the poll."
-  [{:poll/keys [options type]} cast-votes]
-  (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+  [{:poll/keys [options type hide-results?]} cast-votes]
+  (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        edit-hash @(rf/subscribe [:schnaq/edit-hash])
+        voted? (or cast-votes read-only?)
+        show-results? (or edit-hash (not hide-results?))]
     [:section.row
      (for [index (range (count options))]
        (let [{:keys [option/votes db/id option/value]} (get options index)
@@ -45,25 +64,29 @@
              option-voted? (votes-set id)]
          [:<>
           {:key (str "option-" id)}
-          (when-not (or cast-votes read-only?)
+          (when-not voted?
             [:div.col-1
-             [:input.form-check-input.mt-3.mx-auto
+             [:input.form-check-input.mx-auto
               (cond->
                {:type (if single-choice? "radio" "checkbox")
                 :name :option-choice
-                :value id}
+                :value id
+                :class (if show-results? "mt-3" "mt-2")}
                 (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
           [:div.my-1
            {:class (if cast-votes "col-12" "col-11")}
-           [percentage-bar votes percentage index]
+           (when show-results? [percentage-bar votes percentage index])
            [:p.small.ms-1
-            {:class (when option-voted? "font-italic")}
+            {:class (when option-voted? "text-decoration-underline text-secondary")}
             value
-            [:span.float-end
-             [:span.me-3 votes " " (labels :schnaq.poll/votes)]
-             percentage]]]]))]))
+            (when show-results?
+              [:span.float-end
+               [:span.me-3 votes " " (labels :schnaq.poll/votes)]
+               percentage])]]]))
+     (when (and voted? (not show-results?))
+       [results-hidden-message])]))
 
-(defn ranking-item
+(defn- ranking-item
   "A single graph-bar in ranking results"
   [sorted-options old-indices index]
   (let [{:keys [option/votes db/id option/value]} (nth sorted-options index)
@@ -97,8 +120,10 @@
 
 (defn- dropdown-menu
   "Dropdown menu for poll configuration."
-  [poll-id]
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+  [poll]
+  (let [poll-id (:db/id poll)
+        {:poll/keys [hide-results?]} poll
+        share-hash @(rf/subscribe [:schnaq/share-hash])]
     [dropdown-menu/moderator
      {:id (str "poll-dropdown-id-" poll-id)}
      [:<>
@@ -109,6 +134,9 @@
       [dropdown-menu/item :bullseye
        :schnaq.admin.focus/button
        #(rf/dispatch [:schnaq.admin.focus/entity poll-id])]
+      [dropdown-menu/item (if hide-results? :eye :eye-slash)
+       (if hide-results? :schnaq.poll/show-results-button :schnaq.poll/hide-results-button)
+       #(rf/dispatch [:schnaq.poll/hide-results poll-id (not hide-results?)])]
       [dropdown-menu/item :trash
        :schnaq.poll/delete-button
        #(rf/dispatch [:poll/delete poll-id])]]]))
@@ -176,30 +204,42 @@
   "The content of a single or multiple choice poll. Can be either only the results or results and ability to vote."
   [poll]
   (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        edit-hash @(rf/subscribe [:schnaq/edit-hash])
+        voted? (or cast-votes read-only?)]
     [:form
      {:on-submit (fn [e]
                    (.preventDefault e)
                    (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
      [results-graph poll cast-votes]
-     (when-not (or cast-votes read-only?)
+     (when-not voted?
        [:div.text-center
         [:button.btn.btn-primary.btn-sm
          {:type :submit
-          :on-click #(matomo/track-event "Active User", "Action", "Vote on Poll")}
-         (labels :schnaq.poll/vote!)]])]))
+          :on-click #(matomo/track-event "Active User" "Action" "Vote on Poll")}
+         (labels :schnaq.poll/vote!)]])
+     (when edit-hash
+       [show-results-information (:poll/hide-results? poll)])]))
 
 (>defn input-or-results
   "Toggle if there should be an input or the results of the poll."
   [poll]
   [::specs/poll => :re-frame/component]
-  (if (= :poll.type/ranking (:poll/type poll))
-    (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
-          read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
-      (if (or cast-votes read-only?)
-        [ranking-results poll cast-votes]
-        [ranking-input poll]))
-    [poll-content poll]))
+  (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        edit-hash @(rf/subscribe [:schnaq/edit-hash])
+        voted? (or cast-votes read-only?)
+        show-results? (or edit-hash (not (:poll/hide-results? poll)))]
+    [:<>
+     (if (= :poll.type/ranking (:poll/type poll))
+       (if voted?
+         (if show-results?
+           [ranking-results poll cast-votes]
+           [results-hidden-message])
+         [ranking-input poll])
+       [poll-content poll])
+     (when edit-hash
+       [show-results-information (:poll/hide-results? poll)])]))
 
 (>defn- ranking-card
   "Show a ranking card."
@@ -209,7 +249,7 @@
    [:div.mx-4.my-2
     [:div.d-flex
      [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-     [dropdown-menu (:db/id poll)]]
+     [dropdown-menu poll]]
     [input-or-results poll]]])
 
 (>defn- poll-card
@@ -220,7 +260,7 @@
    [:div.mx-4.my-2
     [:div.d-flex
      [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
-     [dropdown-menu (:db/id poll)]]
+     [dropdown-menu poll]]
     [poll-content poll]]])
 
 (defn poll-list-item
@@ -270,10 +310,12 @@
                     "single" :poll.type/single-choice
                     "ranking" :poll.type/ranking)
         options (mapv #(oget+ form (str "poll-option-" %) :value)
-                      (range 1 (inc option-count)))]
+                      (range 1 (inc option-count)))
+        hide-results? (oget form :hide-results? :checked)]
     {:title (oget form :poll-topic :value)
      :poll-type poll-type
-     :options options}))
+     :options options
+     :hide-results? hide-results?}))
 
 (defn poll-form
   "Input form to create a poll with multiple options."
@@ -307,28 +349,36 @@
          {:type :button
           :on-click #(rf/dispatch [:polls.create/set-option-count (dec option-count)])}
          [icon :minus] " " (labels :schnaq.poll.create/remove-button)])]
-     [:div.form-check.form-check-inline
-      [:input#radio-single-choice.form-check-input
-       {:type "radio"
-        :name :radio-type-choice
-        :value :single
-        :defaultChecked true}]
-      [:label.form-check-label
-       {:for :radio-single-choice} (labels :schnaq.poll.create/single-choice-label)]]
-     [:div.form-check.form-check-inline
-      [:input#radio-multiple-choice.form-check-input
-       {:type "radio"
-        :name :radio-type-choice
-        :value :multiple}]
-      [:label.form-check-label
-       {:for :radio-multiple-choice} (labels :schnaq.poll.create/multiple-choice-label)]]
-     [:div.form-check.form-check-inline
-      [:input#radio-ranking-choice.form-check-input
-       {:type "radio"
-        :name :radio-type-choice
-        :value :ranking}]
-      [:label.form-check-label
-       {:for :radio-ranking-choice} (labels :schnaq.poll.create/ranking-label)]]
+
+     [:section.py-3
+      [:div.form-check.form-check-inline
+       [:input#radio-single-choice.form-check-input
+        {:type "radio"
+         :name :radio-type-choice
+         :value :single
+         :defaultChecked true}]
+       [:label.form-check-label
+        {:for :radio-single-choice} (labels :schnaq.poll.create/single-choice-label)]]
+      [:div.form-check.form-check-inline
+       [:input#radio-multiple-choice.form-check-input
+        {:type "radio"
+         :name :radio-type-choice
+         :value :multiple}]
+       [:label.form-check-label
+        {:for :radio-multiple-choice} (labels :schnaq.poll.create/multiple-choice-label)]]
+      [:div.form-check.form-check-inline.pb-1
+       [:input#radio-ranking-choice.form-check-input
+        {:type "radio"
+         :name :radio-type-choice
+         :value :ranking}]
+       [:label.form-check-label
+        {:for :radio-ranking-choice} (labels :schnaq.poll.create/ranking-label)]]
+      [inputs/checkbox
+       [:<>
+        (labels :schnaq.poll.create.hide-results/label)
+        [common/info-icon-with-tooltip (labels :schnaq.poll.create.hide-results/info)]]
+       :hide-results?]]
+
      [:div.text-center.pt-2
       [:button.btn.btn-primary.w-75
        {:type "submit"
@@ -424,6 +474,29 @@
  ;; Returns all polls of the selected schnaq.
  (fn [db _]
    (vals (get-in db [:schnaq :polls] {}))))
+
+(rf/reg-event-fx
+ :schnaq.poll/hide-results
+ (fn [{:keys [db]} [_ poll-id hide-results?]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:db (assoc-in db [:schnaq :polls poll-id :poll/hide-results?] hide-results?)
+      :fx [(http/xhrio-request db :put "/poll/hide-results"
+                               [:schnaq.poll.hide-results/success hide-results?]
+                               {:share-hash share-hash
+                                :edit-hash (get-in db [:schnaqs :admin-access share-hash])
+                                :poll-id poll-id
+                                :hide-results? hide-results?})]})))
+
+(rf/reg-event-fx
+ :schnaq.poll.hide-results/success
+ (fn [_ [_ hide-results?]]
+   {:fx [[:dispatch
+          [:notification/add
+           #:notification{:title (labels :schnaq.poll.hide-results.notification/title)
+                          :body (labels (if hide-results?
+                                          :schnaq.poll.hide-results.notification/body-hide
+                                          :schnaq.poll.hide-results.notification/body-show))
+                          :context :success}]]]}))
 
 (rf/reg-event-fx
  :schnaq.poll/load-from-query

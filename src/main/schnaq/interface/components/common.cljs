@@ -1,11 +1,13 @@
 (ns schnaq.interface.components.common
-  (:require [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
+  (:require [cljs.spec.alpha :as s]
+            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
             [goog.string :refer [format]]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon icon-card]]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.navigation :as navigation]))
+            [schnaq.interface.navigation :as navigation]
+            [schnaq.interface.utils.tooltip :as tooltip]))
 
 (>defn hint-text
   "Info box to explain functionality."
@@ -15,6 +17,14 @@
    [:div.d-flex.flex-row
     [icon :info "my-auto me-3"]
     text]])
+
+(>defn info-icon-with-tooltip
+  "Display an info icon with a tooltip on mouse-over."
+  [label attrs]
+  [(s/or :string string? :component :re-frame/component) (? map?) => :re-frame/component]
+  [tooltip/text
+   label
+   [:span attrs [icon :info-question "small ms-1" {:style {:cursor :help}}]]])
 
 (defn pro-badge
   "Display a pro badge."
