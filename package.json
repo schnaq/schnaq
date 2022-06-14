@@ -49,7 +49,7 @@
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "karma": "^6.3.20",
+    "karma": "^6.4.0",
     "karma-chrome-launcher": "^3.1.1",
     "karma-cljs-test": "^0.1.0",
     "postcss": "^8.4.14",
