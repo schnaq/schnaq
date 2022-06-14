@@ -302,6 +302,7 @@
    :schnaq.poll.ranking/points "Punkte"
    :schnaq.poll/hide-results-button "Verstecke Ergebnisse vor Teilnehmer:innen"
    :schnaq.poll/show-results-button "Veröffentliche Ergebnisse"
+   :schnaq.poll/delete-confirmation "Möchtest du die Umfrage wirklich löschen?"
    :schnaq.poll.hide-results.notification/title "Erfolgreich Sichtbarkeit der Ergebnisse geändert"
    :schnaq.poll.hide-results.notification/body-show "Die Ergebnisse können nun von allen Teilnehmer:innen eingesehen werden."
    :schnaq.poll.hide-results.notification/body-hide "Die Ergebnisse können nun nicht mehr von den Teilnehmer:innen gesehen werden."

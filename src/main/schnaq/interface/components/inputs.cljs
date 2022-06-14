@@ -54,7 +54,7 @@
 (>defn floating
   "Create a floating input field."
   [placeholder id attrs]
-  [string? (s/or :keyword keyword? :string string?) (? map?) => :re-frame/component]
+  [string? ::specs/keyword-or-string (? map?) => :re-frame/component]
   [:div.form-floating
    [:input.form-control (merge {:id id :placeholder placeholder :name id} attrs)]
    [:label {:for id} placeholder]])
@@ -62,7 +62,7 @@
 (>defn checkbox
   "Create a checkbox."
   [label id attrs]
-  [::specs/component-or-string string? (? map?) => :re-frame/component]
+  [::specs/component-or-string ::specs/keyword-or-string (? map?) => :re-frame/component]
   [:div.form-check
    [:input.form-check-input (merge {:id id :type :checkbox :name id} attrs)]
    [:label.form-check-label {:for id} label]])
