@@ -552,15 +552,6 @@
     [:p "Weitere Informationen zum Datenschutz und Reporting-Funktionen von CleverReach finden Sie hinter den folgenden Buttons:"]]
    :privacy.extended.cleverreach.buttons/privacy "CleverReach's Datenschutz"
    :privacy.extended.cleverreach.buttons/reports "Über CleverReach's Berichte und Nachverfolgung"
-   :privacy.extended.hotjar/title "Nutzer:innenverhalten verstehen mit Hotjar"
-   :privacy.extended.hotjar/body
-   [:<>
-    [:h4 "Beschreibung und Umfang der Datenverarbeitung"]
-    [:p "Rein optional und nur mit Ihrer Einstimmung nutzen wir das Tool Hotjar zur tieferen Analyse und zum Verständnis der Nutzung unserer Anwendungen. Damit können wir Probleme im Design und Aufbau der Seite besser verstehen und schneller reagieren. Ohne solche Tools müssten wir nur raten und könnten nicht schnell und einfach das Problem direkt beheben können."]
-    [:p "Wir nutzen Hotjar, um die Bedürfnisse unserer Nutzer besser zu verstehen und das Angebot und die Erfahrung auf dieser Webseite zu optimieren. Mithilfe der Technologie von Hotjar bekommen wir ein besseres Verständnis von den Erfahrungen unserer Nutzer (z.B. wie viel Zeit Nutzer auf welchen Seiten verbringen, welche Links sie anklicken, was sie mögen und was nicht etc.) und das hilft uns, unser Angebot am Feedback unserer Nutzer:innen auszurichten. Hotjar arbeitet mit Cookies und anderen Technologien, um Daten über das Verhalten unserer Nutzer:innen und über ihre Endgeräte zu erheben, insbesondere IP Adresse des Geräts (wird während Ihrer Website-Nutzung nur in anonymisierter Form erfasst und gespeichert), Bildschirmgröße, Gerätetyp (Unique Device Identifiers), Informationen über den verwendeten Browser, Standort (nur Land), zum Anzeigen unserer Webseite bevorzugte Sprache. Hotjar speichert diese Informationen in unserem Auftrag in einem pseudonymisierten Nutzerprofil. Hotjar ist es vertraglich verboten, die in unserem Auftrag erhobenen Daten zu verkaufen."]
-    [:p "Alle Daten werden auf Servern in Irland gespeichert und verlassen nicht die Europäische Union."]
-    [:p "Der Einsatz von Hotjar auf unserer Homepage erfolgt auf Rechtsgrundlage des Art. 6 Abs. 1 lit. a DSGVO und wird nur nach Ihrem explizitem Einverständnis eingebunden. Sie können jederzeit widersprechen."]
-    [:p "Weitere Informationen finden Sie in unter dem Abschnitt 'about Hotjar' auf den Hilfeseiten von Hotjar."]]
    :privacy.extended.rights-of-the-affected/title "Rechte der Betroffenen"
    :privacy.extended.rights-of-the-affected/body
    [:<>

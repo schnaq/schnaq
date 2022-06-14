@@ -555,15 +555,6 @@
     [:p "Further information on CleverReach's data protection and reporting functions can be found behind the following buttons:"]]
    :privacy.extended.cleverreach.buttons/privacy "CleverReach's Privacy Policy"
    :privacy.extended.cleverreach.buttons/reports "About CleverReach's Reports and Tracking"
-   :privacy.extended.hotjar/title "Understanding User's Behavior with Hotjar"
-   :privacy.extended.hotjar/body
-   [:<>
-    [:h4 "Description and scope of data processing"]
-    [:p "Purely optional and only with your consent, we use the Hotjar tool for deeper analysis and understanding of how our applications are used. This allows us to better understand and respond more quickly to problems in the design and structure of the site. Without such tools, we would have to guess and would not be able to quickly and easily fix the problem directly."]
-    [:p "We use Hotjar to better understand the needs of our users and optimize the offering and experience on this website. Using Hotjar's technology, we get a better understanding of our users' experiences (e.g., how much time users spend on which pages, which links they click, what they like and don't like, etc.), and this helps us tailor our offering to our users' feedback. Hotjar works with cookies and other technologies to collect data about our users' behavior and about their devices, in particular IP address of the device (collected and stored only in anonymized form during your website use), screen size, device type (Unique Device Identifiers), information about the browser used, location (country only), language preferred to view our website. Hotjar stores this information on our behalf in a pseudonymized user profile. Hotjar is contractually prohibited from selling the data collected on our behalf."]
-    [:p "All data is stored on servers in Ireland and does not leave the European Union."]
-    [:p "The use of Hotjar on our homepage is based on the legal basis of Art. 6 para. 1 lit. a GDPR and is only integrated after your explicit consent. You can object at any time."]
-    [:p "You can find more information in under the section 'about Hotjar' on the help pages of Hotjar."]]
    :privacy.extended.rights-of-the-affected/title "Rights of the Data Subjects"
    :privacy.extended.rights-of-the-affected/body
    [:<>

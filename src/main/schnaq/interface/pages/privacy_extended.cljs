@@ -33,16 +33,6 @@
 (defn- matomo []
   [privacy-entry :privacy.extended.matomo [privacy/open-privacy-settings]])
 
-(defn- hotjar []
-  [privacy-entry :privacy.extended.hotjar
-   [:<>
-    [buttons/anchor
-     "Hotjar Help Page"
-     "https://help.hotjar.com/hc/en-us/categories/115001323967-About-Hotjar"
-     "btn-outline-primary me-3"
-     {:target :_blank}]
-    [privacy/open-privacy-settings]]])
-
 (defn- cleverreach []
   [privacy-entry :privacy.extended.cleverreach
    [:<>
@@ -84,7 +74,6 @@
     [personal-data]
     [matomo]
     [cleverreach]
-    [hotjar]
     [rights-of-the-affected]
     [right-to-complain]
     [hosting]]])
