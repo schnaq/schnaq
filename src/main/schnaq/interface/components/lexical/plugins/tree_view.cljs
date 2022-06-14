@@ -1,6 +1,6 @@
 (ns schnaq.interface.components.lexical.plugins.tree-view
   (:require ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
-            ["@lexical/react/LexicalTreeView" :as TreeView]))
+            ["@lexical/react/LexicalTreeView" :refer [TreeView]]))
 
 (defn TreeViewPlugin
   "Show the structure of the editor's content in a tree view."

@@ -304,6 +304,7 @@
    :schnaq.poll.ranking/points "Points"
    :schnaq.poll/hide-results-button "Hide results for participants"
    :schnaq.poll/show-results-button "Show results for participants"
+   :schnaq.poll/delete-confirmation "Do you really want to delete this poll?"
    :schnaq.poll.hide-results.notification/title "Successfully changed result visibility"
    :schnaq.poll.hide-results.notification/body-show "The results can now be seen by the participants."
    :schnaq.poll.hide-results.notification/body-hide "The results can no longer be seen by your participants."

@@ -139,7 +139,8 @@
        #(rf/dispatch [:schnaq.poll/hide-results poll-id (not hide-results?)])]
       [dropdown-menu/item :trash
        :schnaq.poll/delete-button
-       #(rf/dispatch [:poll/delete poll-id])]]]))
+       #(when (js/confirm (labels :schnaq.poll/delete-confirmation))
+          (rf/dispatch [:poll/delete poll-id]))]]]))
 
 (>defn- ranking-select
   "Show a select input to choose from the current poll options."

@@ -1,6 +1,6 @@
 (ns schnaq.interface.components.lexical.plugins.markdown
   (:require ["@lexical/markdown" :refer [TRANSFORMERS]]
-            ["@lexical/react/LexicalMarkdownShortcutPlugin" :as MarkdownShortcut]
+            ["@lexical/react/LexicalMarkdownShortcutPlugin" :refer [MarkdownShortcutPlugin]]
             [goog.string :refer [format]]
             [oops.core :refer [ocall]]
             [schnaq.interface.components.lexical.nodes.image :refer [$create-image-node $image-node?]]
@@ -45,4 +45,4 @@
 (defn markdown-shortcut-plugin
   "Plugin to enable markdown support"
   []
-  [:> MarkdownShortcut #js {:transformers schnaq-transformers}])
+  [:> MarkdownShortcutPlugin #js {:transformers schnaq-transformers}])

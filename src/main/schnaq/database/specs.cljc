@@ -5,12 +5,13 @@
             [schnaq.config.shared :as shared-config])
   #?(:clj (:import (java.io InputStream))))
 
-(s/def ::non-blank-string (s/and string? (complement string/blank?)))
-
-;; Frontend only
 #?(:cljs (s/def :re-frame/component vector?))
 
 ;; Common
+(s/def ::non-blank-string (s/and string? (complement string/blank?)))
+(s/def ::keyword-or-string (s/or :keyword keyword? :string string?))
+(s/def ::component-or-string (s/or :component :re-frame/component :string string?))
+
 (s/def :db/id (s/or :transacted integer? :temporary any?))
 (s/def :db/txInstant inst?)
 (s/def :color/hex (s/and ::non-blank-string #(.startsWith % "#") #(= 7 (.length %))))

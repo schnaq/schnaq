@@ -1,6 +1,6 @@
 (ns schnaq.interface.components.lexical.nodes.image
   (:require ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
-            ["@lexical/react/useLexicalNodeSelection" :as useLexicalNodeSelection]
+            ["@lexical/react/useLexicalNodeSelection" :refer [useLexicalNodeSelection]]
             ["@lexical/utils" :refer [mergeRegister]]
             ["lexical" :refer [$getNodeByKey $getSelection $isNodeSelection
                                CLICK_COMMAND COMMAND_PRIORITY_LOW DecoratorNode
@@ -10,7 +10,7 @@
             [reagent.core :as r]
             [shadow.cljs.modern :refer [defclass]]))
 
-(declare $image-node?)
+(declare $image-node? $create-image-node)
 
 (defn- ImageComponent
   "The real image component. Here all the magic happens and the component is
@@ -75,6 +75,10 @@
   (updateDOM [_this] false)
   (getSrc [this] (oget this :__src))
   (getAltText [this] (or (oget this :__altText) ""))
+  (exportJSON [this] {:altText (or (oget this :__altText) "")
+                      :src (oget this :__src)
+                      :type "image"
+                      :version 1})
   (decorate [this _editor]
             (r/create-element ImageComponent #js {:src (oget this :__src) :altText (oget this :__altText) :nodeKey (.getKey this)})))
 
@@ -84,6 +88,11 @@
 (oset! ImageNode "clone"
        (fn [^ImageNode node]
          (ImageNode. (oget node :__src) (oget node :?__altText) (oget node :__key))))
+(oset! ImageNode "importJSON"
+       (fn [node]
+         (let [src (oget node :src)
+               alt-text (oget node :altText)]
+           ($create-image-node src alt-text))))
 
 (defn $create-image-node
   "Create an image node."

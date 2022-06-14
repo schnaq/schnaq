@@ -43,12 +43,14 @@
      [tooltip/text
       "[Dev] Insert Image"
       [:button.toolbar-item.spaced.text-secondary
-       {:on-click #(rf/dispatch [:editor/command editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "Elephant in a forest"}])}
+       {:type :button
+        :on-click #(rf/dispatch [:editor/command editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "Elephant in a forest"}])}
        [icon :image-file]]]
      [tooltip/text
       "[Dev] Insert Video"
       [:button.toolbar-item.spaced.text-secondary
-       {:on-click #(rf/dispatch [:editor/command editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"}])}
+       {:type :button
+        :on-click #(rf/dispatch [:editor/command editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"}])}
        [icon :video-file]]]]))
 
 (defn- file-upload-button
