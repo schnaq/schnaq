@@ -16,7 +16,7 @@ var klaroConfig = {
   // supporting IE9-10 (which you probably shouldn't) you need to use Klaro
   // with an external stylesheet as the dynamic replacement won't work there.
   styling: {
-    theme: ['light', 'top', 'wide'],
+    theme: ['light', 'bottom'],
   },
 
   // Setting this to true will keep Klaro from automatically loading itself
@@ -65,14 +65,14 @@ var klaroConfig = {
   // If "mustConsent" is set to true, Klaro will directly display the consent
   // manager modal and not allow the user to close it before having actively
   // consented or declines the use of third-party services.
-  mustConsent: true,
+  mustConsent: false,
 
   // Show "accept all" to accept all services instead of "ok" that only accepts
   // required and "default: true" services
-  acceptAll: true,
+  acceptAll: false,
 
   // replace "decline" with cookie manager modal
-  hideDeclineAll: false,
+  hideDeclineAll: true,
 
   // hide "learnMore" link
   hideLearnMore: false,
@@ -113,6 +113,19 @@ var klaroConfig = {
         title: "<img src='https://s3.schnaq.com/schnaq-common/logos/schnaqqifant.svg' alt='schnaqqifant' width='75px'> Cookies",
         description: 'Wir verwenden Cookies :-) Einige sind für Statistiken, andere für essenzielle Funktionen der Anwendung.',
       },
+      consentNotice: {
+        title: "<img src='https://s3.schnaq.com/schnaq-common/logos/schnaqqifant.svg' alt='schnaqqifant' width='75px'> Cookies",
+        description: 'Wir verwenden Cookies :-) Einige sind für Statistiken, andere für essenzielle Funktionen der Anwendung.',
+        changeDescription: "Seit deinem letzten Besuch gab es Änderungen, bitte prüfe deine Einstellungen.",
+        imprint: {
+          name: "Impressum",
+        },
+        learnMore: "Erzähl mir mehr",
+        privacyPolicy: {
+          name: "Datenschutzerklärung"
+        },
+      },
+      ok: "Okay",
       privacyPolicy: {
         text: 'Mehr Informationen: {privacyPolicy}'
       },
@@ -120,6 +133,7 @@ var klaroConfig = {
         advertising: 'Anzeigen von Werbung',
         analytics: 'Analysen',
         essential: 'Essenziell',
+        payment: 'Payment',
         livechat: 'Live Chat',
         security: 'Sicherheit',
         styling: 'Styling',
@@ -134,6 +148,19 @@ var klaroConfig = {
         description:
           'We use cookies :-) Some are for statistics, others for essential functions of the application.',
       },
+      consentNotice: {
+        title: "<img src='https://s3.schnaq.com/schnaq-common/logos/schnaqqifant.svg' alt='schnaqqifant' width='75px'> Cookies",
+        description: 'We use cookies :-) Some are for statistics, some are for essential functions of the application.',
+        changeDescription: 'There have been changes since your last visit, please check your settings',
+        imprint: {
+          name: "Legal Notice",
+        },
+        learnMore: 'Tell me more',
+        privacyPolicy: {
+          name: "Privacy Policy"
+        },
+      },
+      ok: "Okay",
       privacyPolicy: {
         text: 'More information: {privacyPolicy}'
       },
@@ -141,6 +168,7 @@ var klaroConfig = {
         advertising: 'Advertising',
         analytics: 'Analytics',
         essential: 'Essential',
+        payment: 'Bezahlvorgang',
         livechat: 'Livechat',
         security: 'Security',
         styling: 'Styling',
@@ -169,9 +197,6 @@ var klaroConfig = {
         },
         de: {
           description: 'Erfassen von anonymen Besucher:innenstatistiken.'
-        },
-        pl: {
-          description: 'Gromadzenie anonimowych statystyk odwiedzin.'
         }
       },
       purposes: ['essential'],
@@ -234,31 +259,24 @@ var klaroConfig = {
         de: {
           description: 'Für den Betrieb notwendige Einstellungen, wenn man sich bspw. einen Benutzer:innenaccount erstellt.'
         },
-        pl: {
-          description: 'Ustawienia wymagane do pracy, np. przy zakładaniu konta użytkownika.'
-        }
       },
       purposes: ['essential'],
       required: true,
     },
     {
-      name: 'hotjar',
+      name: 'stripe',
       translations: {
         en: {
-          title: 'Hotjar: Show user behaviour',
-          description: 'With this tool, we can see how the page is being used and can quickly uncover problems in our design 🤗'
+          title: 'Stripe: Payment processing',
+          description: 'We use Stripe for payment processing in the self-checkout. Data is only transferred to Stripe when you take out a subscription yourself.'
         },
         de: {
-          title: 'HotJar: Nutzer:innenverhalten anzeigen',
-          description: 'Mit diesem Tool können wir feststellen, wie die Seite verwendet wird und können so schnell Probleme in unserem Design aufdecken 🤗'
+          title: 'Stripe: Zahlungsabwicklung',
+          description: 'Wir verwenden Stripe für die Zahlungsabwicklung im Self-Checkout. Es werden nur Daten an Stripe übertragen, wenn du selbst ein Abonnement abschließt.' 
         },
-        pl: {
-          title: 'Hotjar: Pokaż zachowanie użytkowników',
-          description: 'Dzięki temu narzędziu możemy zobaczyć, jak strona jest używana i szybko odkryć problemy w naszym projekcie 🤗'
-        }
       },
-      purposes: ['analytics'],
-      required: false,
+      purposes: ['essential'],
+      required: true,
     }
   ],
 };

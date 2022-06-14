@@ -8,6 +8,7 @@ $var-red1: vars.$red;
 
 @import '../node_modules/klaro/src/scss/klaro';
 
+// Cookie Modal
 .cm-btn-accept,
 .cm-btn-danger {
   @extend .bg-primary;
@@ -21,7 +22,6 @@ $var-red1: vars.$red;
 
 .cm-btn {
   @extend .mx-auto;
-  @extend .w-75;
 }
 
 .cm-btn {
