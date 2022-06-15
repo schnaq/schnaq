@@ -122,7 +122,7 @@
      :where [?discussions :discussion/share-hash ?share-hashes]
      (not-join [?discussions]
                [?discussions :discussion/states :discussion.state/deleted])]
-   share-hashes patterns/discussion-minimal))
+   share-hashes patterns/discussion))
 
 (>defn discussions-from-user
   "Return all discussions created by a user."
@@ -135,7 +135,7 @@
      [?discussions :discussion/author ?user]
      (not-join [?discussions]
                [?discussions :discussion/states :discussion.state/deleted])]
-   keycloak-id patterns/discussion-minimal))
+   keycloak-id patterns/discussion))
 
 (>defn children-for-statement
   "Returns all children for a statement. (Statements that have the input set as a parent)."

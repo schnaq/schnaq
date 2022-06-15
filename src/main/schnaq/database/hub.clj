@@ -30,7 +30,7 @@
    '[:find [(pull ?discussions discussion-pattern) ...]
      :in $ ?hub discussion-pattern
      :where [?hub :hub/schnaqs ?discussions]]
-   hub-id patterns/discussion-minimal))
+   hub-id patterns/discussion))
 
 (defn- pull-hub
   "Pull a hub from the database and include all txs pull db/ident up."
