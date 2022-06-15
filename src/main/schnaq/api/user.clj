@@ -12,19 +12,6 @@
             [schnaq.media :as media]
             [taoensso.timbre :as log]))
 
-(s/def ::access_token (s/and ::specs/non-blank-string #(.startsWith % "ey"))) ;; eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2..
-(s/def ::refresh_token (s/and ::specs/non-blank-string #(.startsWith % "ey"))) ;; eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2...
-(s/def ::token_type ::specs/non-blank-string) ;; Bearer
-(s/def ::scope ::specs/non-blank-string) ;; "email profile"
-(s/def ::tokens
-  (s/keys :opt-un [::access_token ::refresh_token ::token_type ::scope]))
-(s/def :login-error/error string?)
-(s/def :login-error/error_description string?)
-(s/def ::login-error
-  (s/keys :req-un [:login-error/error :login-error/error_description]))
-
-;; -----------------------------------------------------------------------------
-
 (defn- register-user-if-they-not-exist
   "Register a new user if they do not exist. In all cases return the user. New
   users will receive a welcome mail. `creation-secrets` can optionally be provided
