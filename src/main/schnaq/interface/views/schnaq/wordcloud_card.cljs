@@ -1,13 +1,11 @@
 (ns schnaq.interface.views.schnaq.wordcloud-card
-  (:require [clojure.set :as cset]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [schnaq.export :as export]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.wordcloud :as wordcloud]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
             [schnaq.shared-toolbelt :as stools]))
 
@@ -56,7 +54,7 @@
  :schnaq.wordcloud/show?
  ;; Checks if the wordcloud shall be displayed.
  (fn [db _]
-   (get-in db [:schnaq :current :display-wordcloud?] false)))
+   (get-in db [:schnaq :selected :discussion/wordcloud :wordcloud/visible?] false)))
 
 (rf/reg-event-fx
  :schnaq.wordcloud/toggle
@@ -70,25 +68,14 @@
 (rf/reg-event-fx
  :schnaq.wordcloud.toggle/success
  (fn [{:keys [db]} [_ {:keys [display-wordcloud?]}]]
-   (let [wordcloud-id (:discussion.visible.entities/wordcloud
-                       (cset/map-invert (get-in db [:schnaq :visible-entities :mapping])))
-         db (if display-wordcloud? (tools/new-activation-focus db wordcloud-id) db)]
-     {:db (-> db
-              (assoc-in [:schnaq :current :display-wordcloud?] display-wordcloud?)
-              (update-in [:schnaq :selected :discussion.visible/entities] conj :discussion.visible.entities/wordcloud))
-      :fx [[:dispatch [:schnaq.wordcloud/calculate]]]})))
+   {:db (assoc-in db [:schnaq :selected :discussion/wordcloud :wordcloud/visible?] display-wordcloud?)
+    :fx [(when display-wordcloud? [:dispatch [:schnaq.wordcloud/calculate]])]}))
 
 (rf/reg-event-fx
+ ;; TODO simplify
  :schnaq.wordcloud/calculate
  (fn [{:keys [db]} [_ _]]
-   (when (get-in db [:schnaq :current :display-wordcloud?])
-     {:fx [[:dispatch [:schnaq.wordcloud/for-selected-discussion]]]})))
-
-(rf/reg-event-fx
- :schnaq.wordcloud/for-selected-discussion
- (fn [{:keys [db]} [_ _]]
-   {:db (tools/set-wordcloud-in-current-schnaq db)
-    :fx [[:dispatch [:schnaq.wordcloud/from-current-premises]]]}))
+   {:fx [[:dispatch [:schnaq.wordcloud/from-current-premises]]]}))
 
 (rf/reg-event-fx
  :schnaq.wordcloud/from-current-premises
@@ -109,8 +96,13 @@
      (assoc-in db [:schnaq :visible-entities :mapping] mapping))))
 
 (rf/reg-sub
- :schnaq.activations/focus-wordcloud?
+ :schnaq.wordcloud/focus?
  (fn [db _]
-   (let [focus-id (get-in db [:schnaq :selected :discussion/activation-focus])
-         ?focus-entity (get-in db [:schnaq :visible-entities :mapping focus-id])]
-     (= ?focus-entity :discussion.visible.entities/wordcloud))))
+   (let [{:keys [db/id]} (get-in db [:schnaq :selected :discussion/wordcloud])
+         focus-id (get-in db [:schnaq :selected :discussion/activation-focus])]
+     (= id focus-id))))
+
+(rf/reg-event-db
+ :schnaq.wordcloud/from-backend
+ (fn [db [_ {:keys [wordcloud]}]]
+   (assoc-in db [:schnaq :selected :discussion/wordcloud] wordcloud)))

@@ -109,7 +109,7 @@
                         (rf/dispatch [:discussion.activations/focus response])
                         (rf/dispatch [:schnaq.polls.load-from-backend/success response])
                         (rf/dispatch [:discussion.query.conclusions/set-starting response])
-                        (rf/dispatch [:discussion.visible.entities/store response]))]]]})))
+                        (rf/dispatch [:schnaq.wordcloud/from-backend response]))]]]})))
 
 (rf/reg-event-db
  :discussion.activations/focus
@@ -157,6 +157,6 @@
 
 (comment
 
- (rf/dispatch [:updates.periodic.discussion.starting/request])
+  (rf/dispatch [:updates.periodic.discussion.starting/request])
 
- nil)
+  nil)

@@ -7,6 +7,7 @@
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.specs]
             [schnaq.database.visible-entity :as visible-entity]
+            [schnaq.database.wordcloud :as wordcloud-db]
             [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.websockets.handler :refer [handle-message]]))
 
@@ -18,12 +19,14 @@
           {{:keys [starting-conclusions children]} :body} (discussion-api/get-starting-conclusions request)
           {{:keys [polls]} :body} (poll-api/polls-for-discussion request)
           {{:keys [activation]} :body} (activation-api/get-activation request)
-          share-hash (:share-hash ?data)]
+          share-hash (:share-hash ?data)
+          wordcloud (wordcloud-db/wordcloud-by-share-hash share-hash)]
       (shared-tools/remove-nil-values-from-map
        {:starting-conclusions starting-conclusions
         :children children
         :polls polls
         :activation activation
+        :wordcloud wordcloud
         :visible-entities (visible-entity/get-entities share-hash)
         :activation-focus (get-in
                            (fast-pull [:discussion/share-hash share-hash] '[:discussion/activation-focus])

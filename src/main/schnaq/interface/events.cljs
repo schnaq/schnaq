@@ -93,7 +93,7 @@
          [:dispatch [:schnaq/select-current schnaq]]
          [:dispatch [:theme.apply/from-discussion]]
          [:dispatch [:schnaq.visible-entities/set-id-mapping entity-ids]]
-         [:dispatch [:schnaq.wordcloud/for-selected-discussion]]]}))
+         [:dispatch [:schnaq.wordcloud/from-current-premises]]]}))
 
 (rf/reg-event-fx
  :schnaq/select-current
