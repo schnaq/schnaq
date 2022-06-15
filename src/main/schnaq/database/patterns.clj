@@ -93,7 +93,6 @@
    :discussion/created-at
    [:discussion/activation-focus :xform 'schnaq.database.xforms/pull-up-db-id]
    {:discussion/author public-user}
-   {[:discussion.visible/entities :xform 'schnaq.database.xforms/pull-up-ident-coll] [:db/ident]}
    {:discussion/theme theme}
    :discussion/wordcloud
    {[:discussion/mode :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}

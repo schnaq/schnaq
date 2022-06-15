@@ -279,17 +279,11 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The activation element which should be displayed in focus. E.g. first element in the activations card."}
-   {:db/ident :discussion.visible/entities
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "Visible Elements in discussion overview"}
 
    {:db/ident :discussion.mode/qanda
     :db/doc "Q&A mode."}
    {:db/ident :discussion.mode/discussion
     :db/doc "Discussion mode."}
-
-   {:db/ident :discussion.visible.entities/wordcloud}
 
    {:db/ident :discussion.access/code
     :db/valueType :db.type/long

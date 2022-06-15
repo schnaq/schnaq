@@ -36,8 +36,7 @@
                      (processors/with-sub-statement-count share-hash)
                      (processors/with-new-post-info share-hash keycloak-id)
                      processors/hide-deleted-statement-content
-                     (processors/with-aggregated-votes user-id))
-         :entity-ids (discussion-db/visible-entity-id-map)})))
+                     (processors/with-aggregated-votes user-id))})))
 
 (defn- schnaqs-by-hashes
   "Bulk loading of discussions. May be used when users ask for all the schnaqs

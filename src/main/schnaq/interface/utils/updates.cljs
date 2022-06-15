@@ -127,13 +127,6 @@
                       (fn [response]
                         (rf/dispatch [:schnaq.activation.load-from-backend/success (:body response)]))]]]})))
 
-(rf/reg-event-db
- :discussion.visible.entities/store
- (fn [db [_ {:keys [visible-entities]}]]
-   (-> db
-       (assoc-in [:schnaq :selected :discussion.visible/entities] visible-entities)
-       toolbelt/set-wordcloud-in-current-schnaq)))
-
 (rf/reg-event-fx
  :updates.periodic.discussion.graph/request
  (fn [{:keys [db]}]

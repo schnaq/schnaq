@@ -742,10 +742,3 @@
   [statement-id pin?]
   [:db/id boolean? :ret any?]
   @(transact [[:db/add statement-id :statement/pinned? pin?]]))
-
-(>defn visible-entity-id-map
-  "Return a map of all visible entity idents and their ids."
-  []
-  [:ret map?]
-  ;; There is only this one. In the future there will be multiple. Then use a query to prevent multiple db roundtrips.
-  {(:db/id (fast-pull :discussion.visible.entities/wordcloud '[:db/id])) :discussion.visible.entities/wordcloud})

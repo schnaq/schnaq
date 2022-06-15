@@ -83,12 +83,6 @@
      {:fx [[:dispatch [:wordcloud/store-words
                        {:string-representation (export/generate-fulltext locked-statements-removed)}]]]})))
 
-(rf/reg-event-db
- :schnaq.visible-entities/set-id-mapping
- (fn [db [_ mapping]]
-   (when (seq mapping)
-     (assoc-in db [:schnaq :visible-entities :mapping] mapping))))
-
 (rf/reg-sub
  :schnaq.wordcloud/focus?
  (fn [db _]

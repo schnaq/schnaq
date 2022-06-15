@@ -282,13 +282,6 @@
     :activation/count 42
     :activation/discussion "discussion/simple"}])
 
-(def discussions-with-visible-entities
-  [{:discussion/title "Visible Entities Discussion"
-    :discussion/share-hash "share-hash-visible-entities"
-    :discussion/edit-hash "edit-hash-visible-entities"
-    :discussion/author "user/schredder"
-    :discussion.visible/entities [:discussion.visible.entities/wordcloud]}])
-
 (def alex
   {:db/id "user.registered/alex"
    :user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
@@ -413,5 +406,4 @@
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
           deleted-discussions graph-discussion simple-discussion registered-users
-          discussions-with-visible-entities
           themes activations polls))

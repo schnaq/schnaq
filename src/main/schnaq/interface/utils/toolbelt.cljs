@@ -2,8 +2,6 @@
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
-            [goog.dom :as gdom]
-            [goog.dom.dataset :as dataset]
             [oops.core :refer [oset! oget oget+]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
@@ -139,16 +137,6 @@
   [id]
   (when-let [element (js/document.getElementById id)]
     (set! (.-value element) "")))
-
-(>defn set-wordcloud-in-current-schnaq
-  "Check in app db at selected schnaq whether to display a word cloud."
-  [db]
-  [map? => map?]
-  (let [show-wordcloud?
-        (some
-         #(= % :discussion.visible.entities/wordcloud)
-         (get-in db [:schnaq :selected :discussion.visible/entities]))]
-    (assoc-in db [:schnaq :current :display-wordcloud?] show-wordcloud?)))
 
 (defn new-activation-focus
   "Resets the show-index and sets a new activation focus in a db."
