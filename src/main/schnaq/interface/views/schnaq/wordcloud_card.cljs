@@ -69,13 +69,7 @@
  :schnaq.wordcloud.toggle/success
  (fn [{:keys [db]} [_ {:keys [display-wordcloud?]}]]
    {:db (assoc-in db [:schnaq :selected :discussion/wordcloud :wordcloud/visible?] display-wordcloud?)
-    :fx [(when display-wordcloud? [:dispatch [:schnaq.wordcloud/calculate]])]}))
-
-(rf/reg-event-fx
- ;; TODO simplify
- :schnaq.wordcloud/calculate
- (fn [{:keys [db]} [_ _]]
-   {:fx [[:dispatch [:schnaq.wordcloud/from-current-premises]]]}))
+    :fx [(when display-wordcloud? [:dispatch [:schnaq.wordcloud/from-current-premises]])]}))
 
 (rf/reg-event-fx
  :schnaq.wordcloud/from-current-premises

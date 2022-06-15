@@ -136,7 +136,7 @@
                                       :body (labels :discussion.notification/new-content-body)
                                       :context :success}]]
            [:dispatch [:votes.local/reset]]
-           [:dispatch [:schnaq.wordcloud/calculate]]
+           [:dispatch [:schnaq.wordcloud/from-current-premises]]
            (when statement-with-creation-secret?
              [:dispatch [:discussion.statements/add-creation-secret starting-conclusion]])]})))
 
@@ -162,7 +162,7 @@
                 (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) statement-ids))
         ;; hier die seen setzen
         :fx [[:dispatch [:votes.local/reset]]
-             [:dispatch [:schnaq.wordcloud/calculate]]]}))))
+             [:dispatch [:schnaq.wordcloud/from-current-premises]]]}))))
 
 ;; -----------------------------------------------------------------------------
 
