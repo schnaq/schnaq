@@ -87,7 +87,6 @@
 
 ;; Meta Information
 (s/def :meta/all-statements nat-int?)
-(s/def :meta/sub-statements number?)
 ;; Marks whether the user has up / downvoted a statement themselves.
 (s/def :meta/upvoted? boolean?)
 (s/def :meta/downvoted? boolean?)
@@ -132,6 +131,9 @@
                :discussion.state/disable-pro-con :discussion.state.qa/mark-as-moderators-only}
              :distinct true))
 (s/def :discussion/mode #{:discussion.mode/discussion :discussion.mode/qanda})
+(s/def :wordcloud/visible? boolean?)
+(s/def :discussion/wordcloud
+  (s/keys :req [:db/id :wordcloud/visible?]))
 (s/def :discussion/starting-statements (s/coll-of ::statement))
 (s/def ::discussion (s/keys :req [:discussion/title :discussion/share-hash :discussion/author]
                             :opt [:discussion/starting-statements :discussion/description
@@ -139,7 +141,7 @@
                                   :discussion/admins :discussion/hub-origin :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/admin-link
                                   :discussion/creation-secret :discussion/mode :discussion/access
-                                  :discussion/activation-focus]))
+                                  :discussion/activation-focus :discussion/wordcloud]))
 
 (s/def ::share-hash-statement-id-mapping
   (s/map-of :discussion/share-hash (s/coll-of :db/id)))
