@@ -23,7 +23,6 @@
   E.g. after submitting of a form all dynamic height fields will be reset to one line."
   [fields]
   (doseq [field fields]
-    ;; ? : nil if not present
     (when (oget field [:dataset :?dynamicHeight])
       (height-to-scrollheight! field))))
 
@@ -76,11 +75,6 @@
   [string? :ret :re-frame/component]
   [:span.obfuscate
    (apply str (reverse text))])
-
-(defn update-statement-in-list
-  "Updates the content of a statement in a collection."
-  [coll new-statement]
-  (map #(if (= (:db/id new-statement) (:db/id %)) new-statement %) coll))
 
 (defn get-selection-from-event
   "Helper for retrieving selected attribute after an event."
@@ -139,13 +133,6 @@
         state (.-readyState js/document)]
     (when (and element (= state "complete"))
       (.scrollIntoView element))))
-
-(defn data-attribute
-  "Reads a dataset attribute from some element by id."
-  [element-id data-key]
-  (-> element-id
-      gdom/getElement
-      (dataset/get data-key)))
 
 (defn clear-input
   "Clears an input field."
