@@ -146,6 +146,10 @@
                             :discussion/share-hash
                             :discussion/title]}])
 
+(def wordcloud
+  [:db/id
+   :wordcloud/visible?])
+
 (def survey-using-schnaq-for
   [:db/id
    :surveys.using-schnaq-for/user
