@@ -117,9 +117,9 @@ Purgecss will be installed as a dev dependency.
 You can run the following command from the schnaq route to find unused css in the app.
 (Build the app once before)
 
-`./resources/public/node_modules/purgecss/bin/purgecss.js -c purgecss.config.js`
+    yarn purgecss -c purgecss.config.js
 
-This will output all unused css classes.
+This outputs all unused css classes.
 
 == Known Problems
 
