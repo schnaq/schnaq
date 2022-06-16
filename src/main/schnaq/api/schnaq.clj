@@ -197,8 +197,7 @@
                   :middleware [:discussion/valid-share-hash?]
                   :parameters {:query {:share-hash :discussion/share-hash
                                        :display-name ::specs/non-blank-string}}
-                  :responses {200 {:body {:schnaq ::specs/discussion
-                                          :entity-ids map?}}
+                  :responses {200 {:body {:schnaq ::specs/discussion}}
                               403 at/response-error-body}}]
      ["/join" {:get schnaq-by-access-code
                :description (at/get-doc #'schnaq-by-access-code)
