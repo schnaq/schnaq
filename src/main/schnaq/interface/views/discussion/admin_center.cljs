@@ -156,7 +156,7 @@
          [:dispatch [:discussion.delete/purge-stores statement-id return]]]}))
 
 (rf/reg-event-db
- ;; Delete a statement-id from conclusions-list, history and carousels
+ ;; Delete a statement-id from conclusions-list and history
  :discussion.delete/purge-stores
  (fn [db [_ statement-id return-value]]
    (let [method (or (:method return-value) (first (:methods return-value)))
