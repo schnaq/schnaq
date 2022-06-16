@@ -7,13 +7,12 @@
   color: $white;
 }
 
-// btns
-
 .btn-secondary {
   @include button-template;
   color: $white;
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: $white;
   }
 }
@@ -46,46 +45,13 @@
 }
 
 // Buttons
-
-.button-secondary {
-  @include button-template;
-  background-color: $secondary;
-
-  &:hover {
-    box-shadow: $hover-shadow;
-    color: $white;
-  }
-}
-
-.btn-outline-primary-small {
-  @extend .btn-outline-primary;
-  border-radius: 0.3rem;
-  padding: 0.1rem 0.3rem;
-
-  &:hover {
-    color: $white;
-  }
-}
-
 .btn-outline-primary {
   &:hover,
   &:active,
-  &:visited,
   &.active {
     color: $white;
   }
 }
-
-.button-primary {
-  @include button-template;
-  background-color: $primary;
-
-  &:hover {
-    box-shadow: $hover-shadow;
-    color: $white;
-  }
-}
-
 
 .font-150 {
   font-size: 150%;
