@@ -1,29 +1,5 @@
 @import 'variables';
 
-.trial-box {
-  background-color: $dark;
-  border-radius: 1.5rem;
-  color: $white;
-  display: inline-block;
-  max-width: 400px;
-  padding: 1em;
-
-  &:hover {
-    background-color: $dark-hover;
-    box-shadow: $hover-shadow !important;
-  }
-}
-
-.feature-card {
-  background-color: rgba($secondary, 0.2);
-  border-radius: 0.5em;
-  padding: 0.5em;
-
-  p {
-    margin-bottom: 0;
-  }
-}
-
 .pricing-feature-list {
   @extend .list-group;
   @extend .list-group-flush;

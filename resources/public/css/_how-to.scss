@@ -1,18 +1,8 @@
 @use 'rounded' as rounded;
 @use 'variables' as vars;
 
-.how-to-video-row {
-  padding-bottom: 10rem;
-  padding-top: 10rem;
-}
-
 .chat-background {
   background-image: url('https://s3.schnaq.com/schnaq-common/background/background_clutter.svg');
-}
-
-.bubble-background {
-  background-image: url('https://s3.schnaq.com/schnaq-common/background/bubble-fade.svg');
-  background-repeat: no-repeat;
 }
 
 .taskbar-background {

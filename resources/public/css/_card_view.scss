@@ -54,40 +54,17 @@
   }
 }
 
-.line-divider {
-  margin-left: auto;
-  margin-right: auto;
-  min-height: 0.01rem;
-  text-align: center;
-}
-
-.discussion-light-background {
-  background: $white;
-  color: $gray-900;
-  white-space: pre-line;
-}
-
-.discussion-input-content {
+.qanda-input-content {
   background: $gray-100;
   border-color: rgba($primary, 0.8);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba($primary, 0.6);
-  min-height: 1rem;
+  min-height: 0;
   outline: 0 none;
-  padding: 1rem 0.5rem 0.5rem 0;
+  padding: 0.5rem 0.5rem 0.5rem 0;
 
   @include media-breakpoint-down(md) {
     padding: 0.2rem 0.2rem 0.2rem 0;
   }
-}
-
-.qanda-input-content {
-  @extend .discussion-input-content;
-  min-height: 0;
-  padding: 0.5rem 0.5rem 0.5rem 0;
-}
-
-.textarea-resize-none {
-  resize: none;
 }
 
 .discussion-text-input-area {
@@ -221,10 +198,6 @@
 
 .percentage-bar {
   border: 1px solid $gray-300;
-}
-
-.percentage-bar-highlight {
-  box-shadow: 0 0 5px 1px $gray-500;
 }
 
 .card-view img {

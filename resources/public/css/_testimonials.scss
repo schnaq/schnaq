@@ -1,52 +1,7 @@
 @use 'variables' as vars;
 
 
-.testimonial {
-  max-width: 33%;
-  min-width: 20rem;
-
-  @include media-breakpoint-down(lg) {
-    max-width: 100%;
-    min-width: 10rem;
-  }
-}
-
-
 .testimonial-logo {
   height: 6rem;
   object-fit: contain;
-}
-
-.carousel-testimonial {
-  min-height: 48rem;
-
-  @include media-breakpoint-down(lg) {
-    min-height: 100rem;
-  }
-}
-
-.carousel-indicator-testimonial {
-  margin-bottom: 0;
-
-  li {
-    background-color: vars.$gray-300;
-    border: 0;
-    cursor: pointer;
-    display: inline-block;
-    height: 0.25rem;
-    margin: 0.5rem;
-    width: 3rem;
-  }
-}
-
-.carousel-indicator-testimonial .active {
-  background-color: vars.$gray-500;
-}
-
-.carousel-control-color {
-  filter: invert(50%);
-}
-
-.carousel-control-testimonial {
-  max-width: 2rem;
 }

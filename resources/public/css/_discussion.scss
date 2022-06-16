@@ -1,26 +1,6 @@
 @import 'rounded';
 @import 'variables';
 
-.discussion-text-input {
-  background: transparent;
-  border: 0;
-  border-bottom: 2px solid $white;
-  color: $white;
-}
-
-.discussion-text-input:focus {
-  background-color: rgba(255, 255, 255, 0.0125);
-  border: 0;
-  border-bottom: 2px solid $white;
-  box-shadow: none;
-  color: $white;
-}
-
-.discussion-text-input::placeholder {
-  color: $white;
-  opacity: 0.85;
-}
-
 .label-set {
   border: 2px solid $gray-600;
 }
@@ -34,8 +14,4 @@
   font-size: 1.1rem;
   padding-bottom: 0.2rem;
   padding-top: 0.2rem;
-}
-
-.value-icon {
-  min-width: 2rem;
 }
