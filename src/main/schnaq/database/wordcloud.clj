@@ -1,6 +1,5 @@
 (ns schnaq.database.wordcloud
   (:require [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
-            [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db :refer [transact]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs]))
@@ -15,11 +14,11 @@
               [?discussion :discussion/wordcloud ?wordcloud]]
             share-hash patterns/wordcloud))
 
-(>defn show-discussion-wordcloud
-  "Change visibility of wordcloud."
-  [share-hash show-wordcloud?]
-  [:discussion/share-hash boolean? => (? map?)]
-  (let [{:keys [db/id]} (wordcloud-by-share-hash share-hash)
-        wordcloud-id (or id (format "new-wordcloud-%s" share-hash))]
-    @(transact [{:db/id wordcloud-id
-                 :wordcloud/visible? show-wordcloud?}])))
+(defn toggle-wordcloud-visibility
+  "Toggle visibility of wordcloud."
+  [share-hash]
+  [:discussion/share-hash => (? map?)]
+  (if-let [{:keys [db/id wordcloud/visible?]} (wordcloud-by-share-hash share-hash)]
+    @(transact [[:db/add id :wordcloud/visible? (not visible?)]])
+    @(transact [{:discussion/share-hash share-hash
+                 :discussion/wordcloud {:wordcloud/visible? true}}])))
