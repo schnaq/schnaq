@@ -24,3 +24,11 @@
   (testing "Return the wordcloud."
     (let [{:keys [wordcloud/visible?]} (wordcloud-db/wordcloud-by-share-hash "cat-dog-hash")]
       (is (= true visible?)))))
+
+(deftest wordcloud-by-share-hash-non-existent-discussion-test
+  (testing "Return nil if the discussion does not exist."
+    (is (nil? (wordcloud-db/wordcloud-by-share-hash "not-a-real-share-hash")))))
+
+(deftest wordcloud-by-share-hash-no-wordcloud-test
+  (testing "Return nil if there is no wordcloud in the discussion."
+    (is (nil? (wordcloud-db/wordcloud-by-share-hash "simple-hash")))))
