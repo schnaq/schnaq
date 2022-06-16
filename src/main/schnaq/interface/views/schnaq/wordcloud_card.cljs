@@ -6,6 +6,7 @@
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
             [schnaq.shared-toolbelt :as stools]))
 
@@ -23,7 +24,7 @@
         [:button.btn.btn-secondary.w-75
          {:on-click (fn [_e]
                       (rf/dispatch [:schnaq.wordcloud/toggle true])
-                      (matomo/track-event "Active User", "Action", "Create Wordcloud"))}
+                      (matomo/track-event "Active User" "Action" "Create Wordcloud"))}
          (labels :schnaq.wordcloud/show)])]]))
 
 (defn wordcloud-card
@@ -58,18 +59,18 @@
 
 (rf/reg-event-fx
  :schnaq.wordcloud/toggle
- (fn [{:keys [db]} [_ display-wordcloud?]]
+ (fn [{:keys [db]} [_]]
    {:fx [(http/xhrio-request db :put "/wordcloud/discussion"
                              [:schnaq.wordcloud.toggle/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
-                              :display-wordcloud? display-wordcloud?})]}))
+                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
 
 (rf/reg-event-fx
  :schnaq.wordcloud.toggle/success
- (fn [{:keys [db]} [_ {:keys [display-wordcloud?]}]]
-   {:db (assoc-in db [:schnaq :selected :discussion/wordcloud :wordcloud/visible?] display-wordcloud?)
-    :fx [(when display-wordcloud? [:dispatch [:schnaq.wordcloud/from-current-premises]])]}))
+ (fn [{:keys [db]} [_ {{:keys [db/id wordcloud/visible?] :as wordcloud} :wordcloud}]]
+   {:db (cond-> (assoc-in db [:schnaq :selected :discussion/wordcloud] wordcloud)
+          visible? (tools/new-activation-focus id))
+    :fx [(when (:wordcloud/visible? wordcloud) [:dispatch [:schnaq.wordcloud/from-current-premises]])]}))
 
 (rf/reg-event-fx
  :schnaq.wordcloud/from-current-premises
