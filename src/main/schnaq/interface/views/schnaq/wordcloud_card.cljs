@@ -41,9 +41,7 @@
         [:<>
          [dropdown-menu/item :bullseye
           :schnaq.admin.focus/button
-          (fn []
-            (rf/dispatch [:schnaq.wordcloud/toggle true])
-            (rf/dispatch [:schnaq.admin.focus.entity/success]))]
+          #(rf/dispatch [:schnaq.admin.focus/entity (:db/id @(rf/subscribe [:schnaq/wordcloud]))])]
          [dropdown-menu/item :trash
           :schnaq.wordcloud/hide
           #(rf/dispatch [:schnaq.wordcloud/toggle false])]]]]
@@ -52,10 +50,15 @@
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-sub
- :schnaq.wordcloud/show?
- ;; Checks if the wordcloud shall be displayed.
+ :schnaq/wordcloud
  (fn [db _]
-   (get-in db [:schnaq :selected :discussion/wordcloud :wordcloud/visible?] false)))
+   (get-in db [:schnaq :selected :discussion/wordcloud])))
+
+(rf/reg-sub
+ :schnaq.wordcloud/show?
+ :<- [:schnaq/wordcloud]
+ (fn [wordcloud]
+   (:wordcloud/visible? wordcloud)))
 
 (rf/reg-event-fx
  :schnaq.wordcloud/toggle
