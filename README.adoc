@@ -37,12 +37,13 @@ Start the transactor to dev with: `bin/transactor dev-transactor.properties`.
 
 ==== Production
 
-To connect to a database, provide the proper connection string. You can find the
-connection string when starting your datomic instance.
+To connect to a database, provide the proper connection string.
+You can find the connection string when starting your datomic instance.
 
-We put the connection string into the project's environment variables and build
-them into the Docker image. The connection string from us is a **format string**.
-We replaced `<DB-NAME>` with `%s`. Set your database in the config namespace.
+We put the connection string into the project's environment variables and build them into the Docker image.
+The connection string from us is a **format string**.
+We replaced `<DB-NAME>` with `%s`.
+Set your database in the config namespace.
 
 === Backend
 
@@ -110,11 +111,22 @@ yarn shadow-cljs compile test
 node target/test/compiled/test.js
 ----
 
+== CSS Optimization
+
+Purgecss will be installed as a dev dependency.
+You can run the following command from the schnaq route to find unused css in the app.
+(Build the app once before)
+
+`./resources/public/node_modules/purgecss/bin/purgecss.js -css resources/public/css/main.min.css --content resources/public/js/compiled/base.js --rejected`
+
+This will output all unused css classes.
 
 == Known Problems
 
 === Debugging a production build
 
-We use the google closure compiler collection to build minimized and optimized code. Sometimes, in the minified version, the resulting code contains problems, e.g. unresolvable functions. To debug this efficiently, use the following command to prepare a production build with debug information:
+We use the google closure compiler collection to build minimized and optimized code.
+Sometimes, in the minified version, the resulting code contains problems, e.g. unresolvable functions.
+To debug this efficiently, use the following command to prepare a production build with debug information:
 
     yarn shadow-cljs release app --debug  
