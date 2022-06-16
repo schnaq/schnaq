@@ -14,6 +14,7 @@ module.exports = {
       'schnaq-navbar-skeleton',
       'speech-bubble-bordered',
       'vote-arrow',
+      'wave-bottom-primary-and-secondary',
       /^highlight-card/,
       /^label-/,
       /^masthead/,

@@ -46,6 +46,11 @@ $header-opacity: 1;
   width: 100%;
 }
 
+.wave-bottom-primary-and-secondary {
+  @extend .wave-bottom-white;
+  background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-primary-secondary.svg');
+}
+
 .wave-bottom-light {
   @extend .wave-bottom-white;
   background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-light.svg');
