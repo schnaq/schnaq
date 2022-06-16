@@ -44,7 +44,7 @@
           #(rf/dispatch [:schnaq.admin.focus/entity (:db/id @(rf/subscribe [:schnaq/wordcloud]))])]
          [dropdown-menu/item :trash
           :schnaq.wordcloud/hide
-          #(rf/dispatch [:schnaq.wordcloud/toggle false])]]]]
+          #(rf/dispatch [:schnaq.wordcloud/toggle])]]]]
       [wordcloud/wordcloud]]]))
 
 ;; -----------------------------------------------------------------------------
