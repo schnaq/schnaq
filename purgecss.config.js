@@ -3,7 +3,25 @@ module.exports = {
   css: ['resources/public/css/main.min.css'],
   rejected: true,
   safelist: {
-    standard: ['vote-arrow'],
-    deep: [/^theming-enabled$/]
+    standard: [
+      'vote-arrow',
+      /^startpage-step-/,
+      /^masthead/,
+      'speech-bubble-bordered',
+      'product-page-feature-image',
+      'navbar-bg-transparent-sm-white',
+      'schnaq-navbar-skeleton',
+      'modal-child',
+      /^label-/,
+      'feed-button-create',
+      'feed-button',
+      'feed-button-focused'],
+    deep: [
+      /^theming-enabled$/,
+      /^image-container$/,
+      /^lexical-editor-sm$/,
+      /^lexical-editor$/,
+      /^klaro$/],
+    greedy: [/toast-header$/]
   }
 }

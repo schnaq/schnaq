@@ -182,8 +182,6 @@
 
 (defn icon-and-label-feed-button
   [label icon-name href button-class]
-  #_(let [current-route @(rf/subscribe [:navigation/current-route-name])
-          button-class (if (= current-route route) "feed-button-focused" "feed-button")])
   [feed-button (labels label)
    [:div.mx-2.my-auto [icon icon-name "m-auto fa-fw"]]
    href button-class])

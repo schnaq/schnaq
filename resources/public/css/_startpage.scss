@@ -23,16 +23,6 @@ $header-opacity: 1;
       font-size: 3vw;
     }
   }
-
-  .overlay {
-    background-color: vars.$gray-900;
-    height: 100%;
-    left: 0;
-    opacity: 0.3;
-    position: absolute;
-    top: 0;
-    width: 100%;
-  }
 }
 
 .masthead-layered {
@@ -54,16 +44,6 @@ $header-opacity: 1;
   height: 0;
   padding-top: 8%;
   width: 100%;
-}
-
-.wave-bottom-white-and-primary {
-  @extend .wave-bottom-white;
-  background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-white-primary.svg');
-}
-
-.wave-bottom-primary-and-secondary {
-  @extend .wave-bottom-white;
-  background-image: url('https://s3.schnaq.com/schnaq-common/background/wave-bottom-primary-secondary.svg');
 }
 
 .wave-bottom-light {
@@ -122,11 +102,6 @@ $header-opacity: 1;
   width: 40px;
 }
 
-.social-proof-img-lg {
-  max-height: 60px;
-  width: 60px;
-}
-
 .example-dashboard-image {
   margin-top: 1rem;
   @include media-breakpoint-up(lg) {
@@ -141,10 +116,6 @@ $header-opacity: 1;
 .vertical-fullsize {
   display: flex;
   min-height: 100vh;
-}
-
-.leading-number {
-  font-size: 7rem;
 }
 
 .startpage-step-image {

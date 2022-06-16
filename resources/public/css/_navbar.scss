@@ -3,10 +3,6 @@
 
 $height-of-components: 4.25rem;
 
-.schnaq-navbar-space {
-  min-height: $height-of-components;
-}
-
 .schnaq-navbar-skeleton {
   @include rounded.rounded-1;
   height: $height-of-components;
