@@ -3,6 +3,7 @@ module.exports = {
   css: ['resources/public/css/main.min.css'],
   rejected: true,
   safelist: {
+    standard: ['vote-arrow'],
     deep: [/^theming-enabled$/]
   }
 }
