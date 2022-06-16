@@ -14,7 +14,7 @@
               [?discussion :discussion/wordcloud ?wordcloud]]
             share-hash patterns/wordcloud))
 
-(defn toggle-wordcloud-visibility
+(>defn toggle-wordcloud-visibility
   "Toggle visibility of wordcloud."
   [share-hash]
   [:discussion/share-hash => (? map?)]
