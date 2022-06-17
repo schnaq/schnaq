@@ -18,10 +18,18 @@
             [schnaq.interface.components.lexical.config :refer [initial-config sample-markdown-input]]
             [schnaq.interface.components.lexical.plugins.autolink :refer [autolink-plugin]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
-            [schnaq.interface.components.lexical.plugins.register-editor :refer [RegisterEditorPlugin]]
             [schnaq.interface.components.lexical.plugins.text-change :refer [TextChangePlugin]]
             [schnaq.interface.components.lexical.plugins.toolbar :refer [ToolbarPlugin]]
             [schnaq.interface.components.lexical.plugins.tree-view :refer [TreeViewPlugin]]))
+
+(defn- initialize-editor-state
+  "Initial editor state. Called only once when the editor is loaded."
+  [id initial-content]
+  (fn [editor]
+    (rf/dispatch [:editor/register id editor])
+    (when initial-content
+      ($convertFromMarkdownString initial-content schnaq-transformers)
+      (rf/dispatch [:editor/content id ($convertToMarkdownString schnaq-transformers)]))))
 
 (defn editor
   "Create a lexical editor instance.
@@ -43,8 +51,8 @@
      (when toolbar? [:f> ToolbarPlugin options])
      [:div.editor-inner
       [:> RichTextPlugin
-       (cond-> {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}
-         initial-content (assoc :initialEditorState #($convertFromMarkdownString initial-content schnaq-transformers))
+       (cond-> {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])
+                :initialEditorState (initialize-editor-state id initial-content)}
          placeholder (assoc :placeholder (r/as-element [:div.editor-placeholder placeholder])))]
       [:> HistoryPlugin {}]
       [autolink-plugin]
@@ -52,7 +60,6 @@
       [:> LinkPlugin]
       (when on-text-change [:f> TextChangePlugin {:on-text-change on-text-change}])
       [:> ListPlugin]
-      (when id [:f> RegisterEditorPlugin {:id id}])
       [markdown-shortcut-plugin]
       (when focus? [:> AutoFocusPlugin])
       (when debug? [:f> TreeViewPlugin])
