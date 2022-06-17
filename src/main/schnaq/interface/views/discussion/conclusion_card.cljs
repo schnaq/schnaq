@@ -6,6 +6,7 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.database.specs :as specs]
+            [schnaq.interface.components.buttons :refer [button]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -20,6 +21,7 @@
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.discussion.labels :as labels]
+            [schnaq.interface.views.discussion.share :refer [open-share-schnaq]]
             [schnaq.interface.views.discussion.truncated-content :as truncated-content]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.schnaq.activation :as activation]
@@ -60,8 +62,9 @@
       "https://schnaq.app"]
      " "
      (labels :qanda.call-to-action/intro-2)]
-    [:p.pt-3 [icon :info "m-auto fas"] " "
-     (labels :qanda.call-to-action/help) " " [icon :share "m-auto fas"]]]])
+    [:p.pt-3 [icon :info "me-1"]
+     (labels :qanda.call-to-action/help)
+     [button [icon :share] open-share-schnaq "btn-outline-white ms-1"]]]])
 
 ;; -----------------------------------------------------------------------------
 
