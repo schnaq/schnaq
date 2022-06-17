@@ -383,7 +383,7 @@
      [:div.text-center.pt-2
       [:button.btn.btn-primary.w-75
        {:type "submit"
-        :on-click #(matomo/track-event "Active User", "Action", "Create Poll")}
+        :on-click #(matomo/track-event "Active User" "Action" "Create Poll")}
        (labels :schnaq.poll.create/submit-button)]]]))
 
 (rf/reg-event-fx

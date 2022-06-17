@@ -429,7 +429,7 @@
        [:div.single-image [:img {:src (img-path :schnaqqifant/stop)
                                  :alt (labels :schnaqqifant/stop-alt-text)}]]
        [:h4.mb-4 (labels :schnaqs/continue-with-schnaq-after-creation)]
-       [:a.btn.button-primary.btn-lg.center-block.mb-5
+       [:a.btn.btn-primary.btn-lg.center-block.mb-5
         {:role "button"
          :href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
         (labels :schnaqs/continue-to-schnaq-button)]]]]))

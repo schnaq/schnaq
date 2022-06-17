@@ -35,7 +35,7 @@
   [:div.text-center.my-5
    [:p.h4.text-primary (labels :startpage.early-adopter/title)]
    [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
-   [:a.btn.btn-lg.button-secondary
+   [:a.btn.btn-lg.btn-secondary
     {:role "button"
      :href (navigation/href :routes.schnaq/create)}
     (labels :schnaq.startpage.cta/button)]])

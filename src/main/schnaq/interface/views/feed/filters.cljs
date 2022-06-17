@@ -97,7 +97,7 @@
       [:strong type-label] " "
       criteria-label " "
       extra-label]
-     [:button.btn.btn-outline-primary-small.my-1
+     [:button.btn.btn-outline-primary.btn-sm.my-1
       {:on-click #(rf/dispatch [:filters.discussion/deactivate filter-data])} "x"]]))
 
 (defn- active-filters
