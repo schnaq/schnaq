@@ -26,10 +26,10 @@
   "Initial editor state. Called only once when the editor is loaded."
   [id initial-content]
   (fn [editor]
-    (rf/dispatch [:editor/register id editor])
-    (when initial-content
-      ($convertFromMarkdownString initial-content schnaq-transformers)
-      (rf/dispatch [:editor/content id ($convertToMarkdownString schnaq-transformers)]))))
+    (let [content (or initial-content "")]
+      (rf/dispatch [:editor/register id editor])
+      (rf/dispatch [:editor/content id content])
+      ($convertFromMarkdownString content schnaq-transformers))))
 
 (defn editor
   "Create a lexical editor instance.
@@ -91,7 +91,7 @@
           [:pre [:code @(rf/subscribe [:editor/content editor-id])]]]]]]]
      [:section
       [:p "Pre-filled editor"]
-      [editor {:id :playground-naked-editor-with-toolbar
+      [editor {:id :playground-pre-filled
                :toolbar? true
                :initial-content sample-markdown-input}
        {:class "mb-3"}]]
