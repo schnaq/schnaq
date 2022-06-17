@@ -42,7 +42,7 @@
        [:input.form-control.form-round.copy-link-form.clickable-no-hover
         {:id meeting-link-id
          :type "text"
-         :value display-content
+         :value (or display-content "")
          :readOnly true}]
        [:label.form-label.clickable-no-hover.align-right.ms-4.d-flex.justify-content-center {:for meeting-link-id}
         [icon :copy "m-auto" {:size "lg"}]]]

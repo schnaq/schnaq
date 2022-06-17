@@ -1,6 +1,7 @@
 (ns schnaq.interface.core
   (:require ["bootstrap/js/dist/collapse"]
             ["bootstrap/js/dist/dropdown"]
+            ["bootstrap/js/dist/tab"]
             [day8.re-frame.http-fx]
             [goog.dom :as gdom]
             [goog.string :as gstring]
