@@ -22,8 +22,8 @@
   [display-name size]
   (fn [image]
     (oset! image [:target :src]
-      (str "data:image/svg+xml;base64,"
-           (js/btoa (generate-identicon display-name size))))))
+           (str "data:image/svg+xml;base64,"
+                (js/btoa (generate-identicon display-name size))))))
 
 (>defn identicon
   "Generate unique identicon component."
@@ -87,7 +87,7 @@
 (defn tab-builder
   "Create a tabbed view. Prefix must be unique on this page."
   ([tab-prefix first-tab second-tab]
-   (tab-builder tab-prefix first-tab second-tab nil nil))
+   [tab-builder tab-prefix first-tab second-tab nil nil])
   ([tab-prefix first-tab second-tab third-tab fourth-tab]
    (let [tab-prefix# (str "#" tab-prefix)]
      [:div.panel-white
