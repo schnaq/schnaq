@@ -82,25 +82,21 @@
    :theme.images/header
    :theme.texts/activation])
 
-(def discussion-minimal
+(def discussion
+  "Representation of a discussion."
   [:db/id
    :discussion/title
+   :discussion/description
    {[:discussion/states :xform 'schnaq.database.xforms/pull-up-ident-coll] [:db/ident]}
    :discussion/share-hash
    :discussion/header-image-url
    :discussion/created-at
    [:discussion/activation-focus :xform 'schnaq.database.xforms/pull-up-db-id]
    {:discussion/author public-user}
-   {[:discussion.visible/entities :xform 'schnaq.database.xforms/pull-up-ident-coll] [:db/ident]}
-   {:discussion/theme theme}])
-
-(def discussion
-  "Representation of a discussion."
-  (concat
-   discussion-minimal
-   [:discussion/description
-    {[:discussion/mode :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
-    {[:discussion.access/_discussion :as :discussion/access] access-code}]))
+   {:discussion/theme theme}
+   :discussion/wordcloud
+   {[:discussion/mode :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
+   {[:discussion.access/_discussion :as :discussion/access] access-code}])
 
 (def discussion-private
   "Holds sensitive information as well."
@@ -149,6 +145,10 @@
    {:activation/discussion [:db/id
                             :discussion/share-hash
                             :discussion/title]}])
+
+(def wordcloud
+  [:db/id
+   :wordcloud/visible?])
 
 (def survey-using-schnaq-for
   [:db/id

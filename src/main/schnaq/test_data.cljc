@@ -161,6 +161,8 @@
     :discussion/share-hash "cat-dog-hash"
     :discussion/edit-hash "cat-dog-edit-hash"
     :discussion/author "user/wegi"
+    :discussion/wordcloud {:db/id "wordcloud/cat-or-dog"
+                           :wordcloud/visible? true}
     :discussion/created-at #inst "2019-01-01"
     :discussion/starting-statements ["statement/get-dog" "statement/get-both" "statement/get-cat"]
     :discussion/theme "theme/elephants"}
@@ -281,13 +283,6 @@
   [{:db/id "activation/for-simple-discussion"
     :activation/count 42
     :activation/discussion "discussion/simple"}])
-
-(def discussions-with-visible-entities
-  [{:discussion/title "Visible Entities Discussion"
-    :discussion/share-hash "share-hash-visible-entities"
-    :discussion/edit-hash "edit-hash-visible-entities"
-    :discussion/author "user/schredder"
-    :discussion.visible/entities [:discussion.visible.entities/wordcloud]}])
 
 (def alex
   {:db/id "user.registered/alex"
@@ -413,5 +408,4 @@
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
           deleted-discussions graph-discussion simple-discussion registered-users
-          discussions-with-visible-entities
           themes activations polls))

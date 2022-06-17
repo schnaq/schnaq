@@ -279,17 +279,11 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The activation element which should be displayed in focus. E.g. first element in the activations card."}
-   {:db/ident :discussion.visible/entities
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "Visible Elements in discussion overview"}
 
    {:db/ident :discussion.mode/qanda
     :db/doc "Q&A mode."}
    {:db/ident :discussion.mode/discussion
     :db/doc "Discussion mode."}
-
-   {:db/ident :discussion.visible.entities/wordcloud}
 
    {:db/ident :discussion.access/code
     :db/valueType :db.type/long
@@ -395,7 +389,7 @@
    {:db/ident :option/votes
     :db/valueType :db.type/long
     :db/cardinality :db.cardinality/one
-    :db/doc "The cmmulative number of votes for this option. Must be 0 or positive."}
+    :db/doc "The cumulative number of votes for this option. Must be 0 or positive."}
 
    ;; Activation
    {:db/ident :activation/count
@@ -406,6 +400,17 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The discussion to which the activation belongs to."}
+
+   ;; Wordcloud
+   {:db/ident :discussion/wordcloud
+    :db/valueType :db.type/ref
+    :db/isComponent true
+    :db/cardinality :db.cardinality/one
+    :db/doc "Wordcloud configuration for a discussion."}
+   {:db/ident :wordcloud/visible?
+    :db/valueType :db.type/boolean
+    :db/cardinality :db.cardinality/one
+    :db/doc "Hide or show the wordcloud."}
 
    ;; Themes
    {:db/ident :theme/title

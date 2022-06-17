@@ -122,7 +122,7 @@
      :where [?discussions :discussion/share-hash ?share-hashes]
      (not-join [?discussions]
                [?discussions :discussion/states :discussion.state/deleted])]
-   share-hashes patterns/discussion-minimal))
+   share-hashes patterns/discussion))
 
 (>defn discussions-from-user
   "Return all discussions created by a user."
@@ -135,7 +135,7 @@
      [?discussions :discussion/author ?user]
      (not-join [?discussions]
                [?discussions :discussion/states :discussion.state/deleted])]
-   keycloak-id patterns/discussion-minimal))
+   keycloak-id patterns/discussion))
 
 (>defn children-for-statement
   "Returns all children for a statement. (Statements that have the input set as a parent)."
@@ -742,10 +742,3 @@
   [statement-id pin?]
   [:db/id boolean? :ret any?]
   @(transact [[:db/add statement-id :statement/pinned? pin?]]))
-
-(>defn visible-entity-id-map
-  "Return a map of all visible entity idents and their ids."
-  []
-  [:ret map?]
-  ;; There is only this one. In the future there will be multiple. Then use a query to prevent multiple db roundtrips.
-  {(:db/id (fast-pull :discussion.visible.entities/wordcloud '[:db/id])) :discussion.visible.entities/wordcloud})

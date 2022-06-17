@@ -88,12 +88,11 @@
 
 (rf/reg-event-fx
  :schnaq/select-current-from-backend
- (fn [_ [_ {:keys [schnaq entity-ids]}]]
+ (fn [_ [_ {:keys [schnaq]}]]
    {:fx [[:dispatch [:loading/toggle [:schnaq? false]]]
          [:dispatch [:schnaq/select-current schnaq]]
          [:dispatch [:theme.apply/from-discussion]]
-         [:dispatch [:schnaq.visible-entities/set-id-mapping entity-ids]]
-         [:dispatch [:schnaq.wordcloud/for-selected-discussion]]]}))
+         [:dispatch [:schnaq.wordcloud/from-current-premises]]]}))
 
 (rf/reg-event-fx
  :schnaq/select-current

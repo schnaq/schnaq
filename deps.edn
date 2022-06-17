@@ -23,7 +23,7 @@
         http-kit/http-kit {:mvn/version "2.6.0"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
         jarohen/chime {:mvn/version "0.3.3"}
-        keycloak-clojure/keycloak-clojure {:mvn/version "1.27.0"}
+        keycloak-clojure/keycloak-clojure {:mvn/version "1.28.2"}
         metosin/reitit {:mvn/version "0.5.18"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
         metosin/spec-tools {:mvn/version "0.10.5"}

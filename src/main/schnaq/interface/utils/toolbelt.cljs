@@ -2,8 +2,6 @@
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
-            [goog.dom :as gdom]
-            [goog.dom.dataset :as dataset]
             [oops.core :refer [oset! oget oget+]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
@@ -23,7 +21,6 @@
   E.g. after submitting of a form all dynamic height fields will be reset to one line."
   [fields]
   (doseq [field fields]
-    ;; ? : nil if not present
     (when (oget field [:dataset :?dynamicHeight])
       (height-to-scrollheight! field))))
 
@@ -76,11 +73,6 @@
   [string? :ret :re-frame/component]
   [:span.obfuscate
    (apply str (reverse text))])
-
-(defn update-statement-in-list
-  "Updates the content of a statement in a collection."
-  [coll new-statement]
-  (map #(if (= (:db/id new-statement) (:db/id %)) new-statement %) coll))
 
 (defn get-selection-from-event
   "Helper for retrieving selected attribute after an event."
@@ -140,28 +132,11 @@
     (when (and element (= state "complete"))
       (.scrollIntoView element))))
 
-(defn data-attribute
-  "Reads a dataset attribute from some element by id."
-  [element-id data-key]
-  (-> element-id
-      gdom/getElement
-      (dataset/get data-key)))
-
 (defn clear-input
   "Clears an input field."
   [id]
   (when-let [element (js/document.getElementById id)]
     (set! (.-value element) "")))
-
-(>defn set-wordcloud-in-current-schnaq
-  "Check in app db at selected schnaq whether to display a word cloud."
-  [db]
-  [map? => map?]
-  (let [show-wordcloud?
-        (some
-         #(= % :discussion.visible.entities/wordcloud)
-         (get-in db [:schnaq :selected :discussion.visible/entities]))]
-    (assoc-in db [:schnaq :current :display-wordcloud?] show-wordcloud?)))
 
 (defn new-activation-focus
   "Resets the show-index and sets a new activation focus in a db."
