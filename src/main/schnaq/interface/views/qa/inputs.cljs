@@ -3,6 +3,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -13,32 +14,34 @@
 (defn- text-input-for-qanda
   "Input where users can enter their questions for Q&A."
   []
-  (let [input-id "qanda-input"
-        current-route @(rf/subscribe [:navigation/current-route-name])
+  (let [editor-id "qanda-input"
+        editor-content @(rf/subscribe [:editor/content editor-id])
         submit-fn (fn [e] (.preventDefault e)
-                    (rf/dispatch [:discussion.add.statement/starting
-                                  (oget e [:currentTarget :elements])])
-                    (rf/dispatch [:schnaq.qa.new-question/pulse true]))]
+                    (let [form (oget e [:currentTarget :elements])
+                          statement-text (oget form [:statement :value])
+                          locked? (boolean (oget form ["?lock-card?" :checked]))]
+                      (rf/dispatch [:editor/clear editor-id])
+                      (rf/dispatch [:schnaq.qa.new-question/pulse true])
+                      (rf/dispatch [:discussion.add.statement/starting statement-text locked?])))]
     [:form {:on-submit #(submit-fn %)
             :on-key-down #(when (toolbelt/ctrl-press? % 13) (submit-fn %))}
-     [:label.form-label.h5.mb-3 {:for input-id} (labels :qanda/add-question-label)]
+     [:label.form-label.h5.mb-3 {:for editor-id} (labels :qanda/add-question-label)]
      [:div.d-flex.flex-row.qanda-input-content.rounded-1
-      [:div {:class "highlight-card-neutral"}]
-      [:textarea.form-control.discussion-text-input-area.m-1.w-100.mb-0
-       {:name "statement" :wrap "soft" :rows 1 :id input-id
-        :auto-complete "off" :autoFocus (= :routes.schnaq/qanda current-route)
-        :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-        :required true :data-dynamic-height true
-        :placeholder (labels :qanda/add-question)
-        :on-key-up #(throttled-search %)}]]
+      [:div.highlight-card-neutral]
+      [:input {:type :hidden
+               :name "statement"
+               :value (or editor-content "")}]
+      [lexical/editor {:id editor-id
+                       :focus? true
+                       :on-text-change throttled-search
+                       :placeholder (labels :statement.new/placeholder)}
+       {:className "flex-grow-1"}]]
      [:button.btn.btn-lg.btn-secondary.w-100.shadow-sm.mt-3.rounded-1
       {:type "submit"
        :title (labels :qanda.button/submit)
-       :on-click #(matomo/track-event "Active User", "Action", "Submit Question")}
-      [:div.d-inline-block
-       [:div.d-flex.flex-row.justify-content-center
-        [:div.me-3 (labels :qanda.button/submit)]
-        [icon :plane "m-auto"]]]]]))
+       :on-click #(matomo/track-event "Active User" "Action" "Submit Question")}
+      (labels :qanda.button/submit)
+      [icon :plane "m-auto ms-2"]]]))
 
 (>defn- ask-question
   "Either display input or read-only warning."
