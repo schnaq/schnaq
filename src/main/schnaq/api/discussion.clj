@@ -534,7 +534,8 @@
                             :discussion/valid-writeable-discussion?]
                :parameters {:body {:statement-type (s/or :nil nil?
                                                          :type dto/statement-type)
-                                   :new-content :statement/content
+                                   :new-content (s/or :nil nil?
+                                                      :content :statement/content)
                                    :display-name ::specs/non-blank-string}}
                :responses {200 {:body {:updated-statement ::dto/statement}}
                            400 at/response-error-body

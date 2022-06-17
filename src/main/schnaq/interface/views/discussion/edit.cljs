@@ -16,7 +16,7 @@
     [:form.statement-card.py-2.px-3
      {:on-submit (fn [e]
                    (.preventDefault e)
-                   (rf/dispatch [:editor/content editor-id])
+                   (rf/dispatch [:editor/clear editor-id])
                    (dispatch-fn e))
       :on-key-down (fn [e]
                      (when (tools/ctrl-press? e 13)
