@@ -3,7 +3,6 @@
             [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [goog.functions :as gfun]
-            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
@@ -15,10 +14,12 @@
 
 (s/def :background/schema #{:dark :light})
 
-(def throttled-search
-  (gfun/throttle
-   #(rf/dispatch [:schnaq.qa/search (oget % [:?target :value])])
-   500))
+(defn throttled-search
+  "Search in q&a view."
+  [content]
+  ((gfun/throttle
+    #(rf/dispatch [:schnaq.qa/search content])
+    500)))
 
 (rf/reg-event-fx
  :schnaq.qa/search
