@@ -116,8 +116,7 @@
 (defn ToolbarPlugin
   "Build a toolbar for the editor."
   [{:keys [file-storage debug? id]}]
-  (let [editor-content @(rf/subscribe [:editor/content id])
-        [editor] (useLexicalComposerContext)
+  (let [[editor] (useLexicalComposerContext)
         [active-editor active-editor!] (useState editor)
         [block-type block-type!] (useState "paragraph")
         [bold? bold!] (useState false)
@@ -244,8 +243,7 @@
         {:on-click (fn []
                      (rf/dispatch [:editor/command active-editor CLEAR_EDITOR_COMMAND])
                      (rf/dispatch [:editor/command active-editor CLEAR_HISTORY_COMMAND]))
-         :type :button
-         :disabled (empty? editor-content)}
+         :type :button}
         [icon :trash]]]]
      [:span.d-none.d-md-block
       [tooltip/text
