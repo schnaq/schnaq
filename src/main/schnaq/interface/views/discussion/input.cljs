@@ -117,6 +117,7 @@
                          :file-storage :schnaq/by-share-hash
                          :on-text-change throttled-input-tokenizing-fn
                          :toolbar? true
+                         :focus? true
                          :placeholder (labels :statement.new/placeholder)}
          {:className "flex-grow-1"}]
         [:button.btn.btn-outline-secondary
