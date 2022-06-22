@@ -1,7 +1,6 @@
 (ns schnaq.interface.components.lexical.editor
   "Creating our own editor, based on lexical. "
-  (:require ["@lexical/markdown" :refer [$convertFromMarkdownString
-                                         $convertToMarkdownString]]
+  (:require ["@lexical/markdown" :refer [$convertToMarkdownString]]
             ["@lexical/react/LexicalAutoFocusPlugin" :refer [AutoFocusPlugin]]
             ["@lexical/react/LexicalClearEditorPlugin" :refer [ClearEditorPlugin]]
             ["@lexical/react/LexicalComposer" :refer [LexicalComposer]]
@@ -22,15 +21,6 @@
             [schnaq.interface.components.lexical.plugins.toolbar :refer [ToolbarPlugin]]
             [schnaq.interface.components.lexical.plugins.tree-view :refer [TreeViewPlugin]]))
 
-(defn- initialize-editor-state
-  "Initial editor state. Called only once when the editor is loaded."
-  [id initial-content]
-  (fn [editor]
-    (let [content (or initial-content "")]
-      (rf/dispatch [:editor/register id editor])
-      (rf/dispatch [:editor/content id content])
-      ($convertFromMarkdownString content schnaq-transformers))))
-
 (defn editor
   "Create a lexical editor instance.
    
@@ -45,14 +35,13 @@
   function.
   * `placeholder`: Define a placeholder for the editor."
   [{:keys [id focus? debug? toolbar? initial-content on-text-change placeholder] :as options} attributes]
-  [:> LexicalComposer {:initialConfig initial-config}
+  [:> LexicalComposer {:initialConfig (initial-config id initial-content)}
    [:section.lexical-editor attributes
     [:div.editor-container
      (when toolbar? [:f> ToolbarPlugin options])
      [:div.editor-inner
       [:> RichTextPlugin
-       (cond-> {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])
-                :initialEditorState (initialize-editor-state id initial-content)}
+       (cond-> {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}
          placeholder (assoc :placeholder (r/as-element [:div.editor-placeholder placeholder])))]
       [:> HistoryPlugin {}]
       [autolink-plugin]

@@ -2,10 +2,14 @@
   (:require ["@lexical/code" :refer [CodeHighlightNode CodeNode]]
             ["@lexical/link" :refer [AutoLinkNode LinkNode]]
             ["@lexical/list" :refer [ListItemNode ListNode]]
+            ["@lexical/markdown" :refer [$convertFromMarkdownString]]
             ["@lexical/rich-text" :refer [HeadingNode QuoteNode]]
             ["@lexical/table" :refer [TableCellNode TableNode TableRowNode]]
+            ["lexical" :refer [$createParagraphNode]]
+            [re-frame.core :as rf]
             [schnaq.interface.components.lexical.nodes.image :refer [ImageNode]]
             [schnaq.interface.components.lexical.nodes.video :refer [VideoNode]]
+            [schnaq.interface.components.lexical.plugins.markdown :refer [schnaq-transformers]]
             [taoensso.timbre :as log]))
 
 (def ^:private theme
@@ -74,8 +78,21 @@
       :url "editor-token-operator"
       :variable "editor-token-variable"}})
 
-(def initial-config
+(defn- initialize-editor-state
+  "Initial editor state. Called only once when the editor is loaded.
+  Convert initial-content from markdown to lexical nodes or create an empty
+  paragraph node."
+  [id initial-content]
+  (fn [editor]
+    (rf/dispatch [:editor/register id editor])
+    (rf/dispatch [:editor/content id initial-content])
+    (if initial-content
+      ($convertFromMarkdownString initial-content schnaq-transformers)
+      ($createParagraphNode))))
+
+(defn initial-config
   "Initial configuration for all editor instances."
+  [id initial-content]
   #js {:theme theme :onError #(log/error %)
        :nodes #js [AutoLinkNode
                    CodeNode
@@ -89,7 +106,8 @@
                    QuoteNode
                    TableCellNode
                    TableNode
-                   TableRowNode]})
+                   TableRowNode]
+       :editorState (initialize-editor-state id initial-content)})
 
 (def sample-markdown-input
   "**Bold** *Italic* ~~Strikethrough~~ `Code`
