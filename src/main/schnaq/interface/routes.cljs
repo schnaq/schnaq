@@ -75,18 +75,6 @@
      :link-text (labels :router/startpage)
      :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
    ["/product"
-    [""
-     {:name :routes/product-page
-      :view product-overview/overview-view
-      :link-text (labels :router/product)}]
-    ["/qa"
-     {:name :routes/product-page-qa
-      :view product-overview/qa-view
-      :link-text (labels :router/product-qa)}]
-    ["/poll"
-     {:name :routes/product-page-poll
-      :view product-overview/poll-view
-      :link-text (labels :router/product-poll)}]
     ["/activation"
      {:name :routes/product-page-activation
       :view product-overview/activation-view

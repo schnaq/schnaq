@@ -76,31 +76,6 @@
    [:div.col-12.col-lg-6 [feature-text title text] more-content]
    [:div.col-12.d-lg-none.mt-5 [feature-image image]]])
 
-(defn qa-feature-row
-  "First Q&A feature row with a phone and website mock-up."
-  []
-  (let [subtitle-focus [:div.display-6.text-typography (labels :productpage.qa.mobile/subtitle)]
-        subtitle-overview [:div.display-6.text-typography (labels :productpage.qa.overview/subtitle)]]
-    [:<>
-     [:div.row.py-5.mt-5
-      [:div.col-12.col-lg-6.px-5
-       [:div.display-4.text-primary.mb-5 (labels :productpage.qa.mobile/title)]
-       [:div.d-lg-none subtitle-focus]]
-      [:div.col-12.col-lg-6.px-5.mt-5.mt-lg-0
-       [:div.display-4.text-primary.mb-5 (labels :productpage.qa.overview/title)]]
-      [:div.col-12.col-lg-6.px-5
-       subtitle-focus
-       [:div.d-lg-none subtitle-overview]]
-      [:div.col-12.col-lg-6.px-5.d-none.d-lg-block
-       subtitle-overview]]
-     [:div.row.mt-3.px-5
-      [:div.col-3.d-flex
-       [:div.align-self-end
-        [:img.product-page-qa-phone {:src (img-path :productpage.qa/phone)
-                                     :alt (labels :productpage.qa/phone-alt-text)}]]]
-      [:div.col-9
-       [feature-image :productpage.qa/overview]]]]))
-
 (defn- try-schnaq
   "Present early-adopters section to catch up interest."
   []
