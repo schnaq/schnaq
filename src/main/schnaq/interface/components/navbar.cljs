@@ -48,6 +48,7 @@
    (labels label)])
 
 (defn- drop-down-button-link [link label]
+  ;; TODO remove
   [:a.dropdown-item {:href (navigation/href link)} (labels label)])
 
 (defn product-dropdown-button
@@ -66,9 +67,7 @@
       [:a.dropdown-item {:href config/roadmap-url :target :_blank}
        (labels :productpage/roadmap)
        [icon :external-link-alt "ms-1" {:size :sm}]]
-      [:hr.m-1.mx-auto.p-0.w-75]
-      [drop-down-button-link :routes.product-page/theming :router/product-theming]
-      [drop-down-button-link :routes/product-page-activation :router/product-activation]]]))
+      [:hr.m-1.mx-auto.p-0.w-75]]]))
 
 (defn separated-button
   "The default navbar-button. Dropdown-content must have according classes."

@@ -16,7 +16,6 @@
             [schnaq.interface.pages.press :as press]
             [schnaq.interface.pages.privacy :as privacy]
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
-            [schnaq.interface.pages.product.pages :as product-overview]
             [schnaq.interface.pages.publications :as publications]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.routing :as route-utils]
@@ -74,15 +73,6 @@
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)
      :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
-   ["/product"
-    ["/activation"
-     {:name :routes/product-page-activation
-      :view product-overview/activation-view
-      :link-text (labels :router/product-activation)}]
-    ["/theming"
-     {:name :routes.product-page/theming
-      :view product-overview/theming-view
-      :link-text (labels :router/product-theming)}]]
    ["/login"
     {:name :routes/login
      :view pages/login-page
