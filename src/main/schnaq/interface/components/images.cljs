@@ -81,7 +81,6 @@
     :team/at-table-with-laptop "https://s3.schnaq.com/team/team_hinter_laptop_am_tisch.jpg"
     :team/christian "https://s3.schnaq.com/team/christianmeter.jpg"
     :team/mike "https://s3.schnaq.com/team/michaelbirkhoff.jpg"
-    :team/vision-mindmap-team "https://s3.schnaq.com/team/vision_mindmap_team.jpg"
     :testimonial-picture/bjorn "https://s3.schnaq.com/schnaq-common/testimonials/bjorn_picture.webp"
     :testimonial-picture/eugen-bialon "https://s3.schnaq.com/schnaq-common/testimonials/eugen_bialon_picture.webp"
     :testimonial-picture/florian-clever "https://s3.schnaq.com/schnaq-common/testimonials/florian_picture.webp"

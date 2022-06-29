@@ -294,35 +294,6 @@
    :preview.image-overlay/title "This is a pro function."
    :preview.image-overlay/body "To use it, you need a Pro or Beta account."
 
-   ;; Publications
-   :publications/heading "Publications and Articles"
-   :publications/subheading "The Science behind schnaq"
-   :publications/title "Publications and Articles from Experts."
-   :publications/description "Publications contain schnaq news, publications, reports and mentions, which are centered around the audience response software."
-   :publications.primer/alt-text "One person is presenting something schnaq related on a screen in front of three other people."
-   :publications.primer/heading "From Science into Practice"
-   :publications.primer/body "The software we develop is based not only on experience, but also on many years of research in the fields of discussion and communication. Here you will find scientific articles, newspaper articles and other publications that originate from our team or have been produced in cooperation with our team."
-
-   :publications.perspective-daily/summary "An article about our research in Perspective Daily. Focus on structured discussion."
-   :publications.salto/summary "An interview with our founders Dr. Christian Meter and Dr. Alexander Schneider about discussions on the internet, trolls and how to fight them."
-   :publications.dissertation-alex/summary "Dr. Alexander Schneider's dissertation deals with the question of whether structured discussions can be carried out on the internet via decentralised systems."
-   :publications.dissertation-christian/summary "In Dr. Christian Meter's dissertation, several novel procedures and approaches are highlighted to be able to conduct structured discussions on the internet."
-   :publications.structure-or-content/summary "This paper analyses whether Pagerank as an algorithm can make reliable statements about argument relevance and how its performance compares to newer algorithms."
-   :publications.overview-paper/summary "A presentation of a wide variety of methods that make it possible to improve real discussions on the internet."
-   :publications.dbas/summary "The description of a formal prototype for dialogue-based online argumentation including evaluation."
-   :publications.dbas-politics/summary "A presentation of the concept of dialogue-based online discussions for lay people."
-   :publications.eden/summary "The presentation of a software package that allows the operation of decentralised servers that give users access to online discussion systems."
-   :publications.jebediah/summary "The paper demonstrates a social bot based on Google's Dialogflow Engine. The bot is able to communicate with its users in social networks based on dialogue."
-   :publications.dbas-experiment/summary "In a field experiment with over 100 test persons, we will investigate how well a dialogue-based argumentation system can be used by laypersons."
-   :publications.reusable-statements/summary "The authors explore the idea of making online arguments and their interrelationships usable and reusable as a resource."
-   :publications.discuss/summary "If structured discussions are possible via software, is it also possible to let these discussions take place in any web context? The authors explore this question."
-   :publications.kind/article "Article"
-   :publications.kind/dissertation "Dissertation (english)"
-   :publications.kind/interview "Interview"
-   :publications.kind/newspaper-article "Newspaper Article"
-   :publications.kind/paper "Paper (english)"
-   :publications.kind/short-paper "Shortpaper (english)"
-
    ;; Presentation View
    :presentation.access/code [:p "Go to " [:a.text-nowrap {:href "https://schnaq.app"} "schnaq.app"] " and use code: "]
    :presentation.access/qr-alternative "Or scan the QR-Code"

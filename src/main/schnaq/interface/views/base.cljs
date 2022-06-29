@@ -53,7 +53,7 @@
     [footer-button "https://schnaq.com/code-of-conduct" :coc/heading]
     [footer-button :routes/about-us :footer.buttons/about-us]
     [footer-button "https://schnaq.com/press" :footer.buttons/press-kit]
-    [footer-button :routes/publications :footer.buttons/publications]]
+    [footer-button "https://schnaq.com/publications" :footer.buttons/publications]]
    [:ul.list-inline
     [:li.list-inline-item
      [:button.btn.btn-sm.btn-outline-white {:on-click feedback/show-feedback-modal}

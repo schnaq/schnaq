@@ -14,7 +14,6 @@
             [schnaq.interface.pages.legal-note :as legal-note]
             [schnaq.interface.pages.privacy :as privacy]
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
-            [schnaq.interface.pages.publications :as publications]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.routing :as route-utils]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -124,9 +123,6 @@
      {:name :routes.admin/summaries
       :view summary/admin-summaries-view
       :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:summaries/load-all]]))}]}]]
-   ["/publications"
-    {:name :routes/publications
-     :view publications/view}]
    ["/schnaqs"
     {:name :routes.schnaqs/personal
      :view feed/page
