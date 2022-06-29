@@ -18,7 +18,7 @@
   [navbar-components/button :nav/blog "https://schnaq.com/blog/"])
 
 (defn- pricing-button []
-  [navbar-components/button :router/pricing (navigation/href :routes/pricing)])
+  [navbar-components/button :router/pricing "https://schnaq.com/pricing"])
 
 (defn- product-button []
   [navbar-components/product-dropdown-button])

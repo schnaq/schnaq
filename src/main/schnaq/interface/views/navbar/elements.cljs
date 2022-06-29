@@ -144,7 +144,7 @@
      :star
      (labels :pricing.upgrade-nudge/tooltip)
      (labels :pricing.upgrade-nudge/button)
-     #(rf/dispatch [:navigation/navigate :routes/pricing])
+     #(js/location [:navigation.redirect/follow "https://schnaq.com/pricing"])
      {:class (if on-white-background? "btn-outline-secondary" "btn-secondary")}]))
 
 (defn navbar-settings

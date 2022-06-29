@@ -159,7 +159,7 @@
     [:strong (labels :registration.pricing.enterprise/all-from-pro)]
     [:ul.fa-ul.list-group.list-group-flush
      [list-item (labels :pricing.features.number-of-users/unlimited)]
-     (for [label (take 3 (rest (labels :pricing.features/enterprise)))]
+     (for [label (rest (labels :pricing.features/enterprise))]
        (with-meta
          [list-item label]
          {:key (str "list-item-" label)}))]]])
@@ -177,7 +177,7 @@
     [:div.text-center
      [buttons/anchor
       (labels :registration.pricing/compare-plans)
-      (navigation/href :routes/pricing) "btn-link"]]
+      "https://schnaq.com/pricing" "btn-link"]]
     [:div.text-center
      [pricing-view/one-time-information :smaller]
      [:p.small (labels :pricing.billing/info-4-one-time)]]]

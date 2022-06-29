@@ -9,7 +9,6 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.videos :refer [video]]
             [schnaq.interface.config :as config]
-            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -90,7 +89,7 @@
          (labels :page.login.alert/text-1)
          [buttons/anchor
           (labels :page.login.alert/button)
-          (navigation/href :routes/pricing)
+          "https://schnaq.com/pricing"
           "btn-sm btn-outline-white mx-2"]
          (labels :page.login.alert/text-2)]
         [:img.w-50.align-self-center.d-lg-none {:src (img-path :schnaqqifant/three-d-bubble)

@@ -34,7 +34,6 @@
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.startpage.core :as startpage-views]
-            [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.subscription :as subscription-views]
             [schnaq.interface.views.user.edit-account :as edit-account]
             [schnaq.interface.views.user.edit-notifications :as edit-notifications]
@@ -245,13 +244,6 @@
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/graph false])
                               (rf/dispatch [:notifications/reset]))}]}]]]
-   ["/pricing"
-    {:name :routes/pricing
-     :view pricing-view/pricing-view
-     :link-text (labels :router/pricing)
-     :controllers [{:start (fn []
-                             (rf/dispatch [:load-preview-statements])
-                             (rf/dispatch [:pricing/get-prices]))}]}]
    ["/subscription"
     ["/cancel" {:name :routes.subscription/cancel
                 :view subscription-views/cancel-view}]

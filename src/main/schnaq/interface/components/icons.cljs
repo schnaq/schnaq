@@ -4,8 +4,8 @@
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub faFontAwesomeFlag]]
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEyeSlash faEnvelope faFileAlt faIdCard faHourglass faImage faFileVideo faFileImage]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faArchive faBackspace faBold faBullseye faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle faCode
-              faCloud faCog faComment faCookie faCopy faCrown faEnvelopeOpenText faTimes faEllipsisH faEllipsisV faEdit
+             [faArchive faBackspace faBold faBullseye faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle faCode
+              faCloud faCog faComment faCookie faCopy faEnvelopeOpenText faTimes faEllipsisH faEllipsisV faEdit
               faFileDownload faExternalLinkAlt faFlask faGem faGhost faGraduationCap faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
               faLocationArrow faLock faLockOpen faMagic faPalette faMapPin faChevronLeft faChevronRight faCircle
               faPaperPlane faPenSquare faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
@@ -23,7 +23,6 @@
    :bell faBell
    :bold faBold
    :briefcase faBriefcase
-   :building faBuilding
    :bullseye faBullseye
    :calendar faCalendar
    :calendar-alt faCalendarAlt
@@ -45,7 +44,6 @@
    :cookie/complete faCookie
    :copy faCopy
    :cross faTimes
-   :crown faCrown
    :delete-icon faTimesCircle
    :dots faEllipsisH
    :dots-v faEllipsisV
