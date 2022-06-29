@@ -1,6 +1,5 @@
 (ns schnaq.interface.pages.legal-note
-  (:require [schnaq.interface.navigation :as navigation]
-            [schnaq.interface.pages.privacy-extended :as privacy-extended]
+  (:require [schnaq.interface.pages.privacy-extended :as privacy-extended]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
@@ -21,7 +20,7 @@
 (defn- privacy []
   [:article.pb-3
    [:h2 (labels :legal-note.privacy/title)]
-   [:p [:a.btn.btn-link.ps-0 {:href (navigation/href :routes.privacy/complete)}
+   [:p [:a.btn.btn-link.ps-0 {:href "https://schnaq.com/privacy"}
         (labels :legal-note.privacy/body)]]])
 
 ;; ----------------------------------------------------------------------------

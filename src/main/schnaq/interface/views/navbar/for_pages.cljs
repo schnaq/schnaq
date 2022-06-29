@@ -24,7 +24,7 @@
   [navbar-components/product-dropdown-button])
 
 (defn- privacy-button []
-  [navbar-components/button :router/privacy (navigation/href :routes.privacy/simple)])
+  [navbar-components/button :router/privacy "https://schnaq.com/privacy"])
 
 ;; -----------------------------------------------------------------------------
 

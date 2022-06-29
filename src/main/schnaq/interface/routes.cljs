@@ -12,8 +12,6 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.legal-note :as legal-note]
-            [schnaq.interface.pages.privacy :as privacy]
-            [schnaq.interface.pages.privacy-extended :as privacy-extended]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.routing :as route-utils]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -274,18 +272,6 @@
     ["/step-3" {:name :routes.user.register/step-3
                 :view registration/registration-step-3-view
                 :controllers [{:start #(rf/dispatch [:pricing/get-prices])}]}]]
-   ["/privacy"
-    [""
-     {:name :routes.privacy/complete
-      :view privacy-extended/view}]
-    ["/overview"
-     {:name :routes.privacy/simple
-      :view privacy/view
-      :link-text (labels :router/privacy)}]
-    ;; Legacy route.
-    ["/extended"
-     {:name :routes.legacy/privacy-extended
-      :controllers [{:start #(rf/dispatch [:navigation/navigate :routes.privacy/complete])}]}]]
    ["/about"
     {:name :routes/about-us
      :view about-us/page}]

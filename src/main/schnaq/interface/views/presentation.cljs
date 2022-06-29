@@ -18,7 +18,7 @@
     {:href (navigation/href :routes/legal-note)}
     (labels :footer.buttons/legal-note)]
    [:a.btn.btn-sm.btn-link.text-dark
-    {:href (navigation/href :routes.privacy/complete)}
+    {:href "https://schnaq.com/privacy"}
     (labels :router/privacy)]])
 
 (defn- share-options

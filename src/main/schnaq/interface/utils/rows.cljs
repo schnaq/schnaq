@@ -29,19 +29,3 @@
   [:div.row.feature-row
    [:div.col-12.col-lg-6.my-auto left]
    [:div.col-12.col-lg-5.offset-lg-1.my-auto right]])
-
-;; -----------------------------------------------------------------------------
-
-(defn icon-right
-  "Build a row with text on the left side and the icon on the right side."
-  [icon text-namespace]
-  [row-builder-text-left
-   [build-text-box text-namespace]
-   [:div.display-1.text-center.text-primary icon]])
-
-(defn icon-left
-  "Build a row with text on the right side and the icon on the left side."
-  [icon text-namespace]
-  [row-builder-text-right
-   [:div.display-1.text-center.text-primary icon]
-   [build-text-box text-namespace]])

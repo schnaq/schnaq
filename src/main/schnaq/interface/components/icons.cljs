@@ -5,11 +5,11 @@
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEyeSlash faEnvelope faFileAlt faIdCard faHourglass faImage faFileVideo faFileImage]]
             ["@fortawesome/free-solid-svg-icons" :refer
              [faArchive faBackspace faBold faBullseye faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle faCode
-              faCloud faCog faComment faCookie faCopy faEnvelopeOpenText faTimes faEllipsisH faEllipsisV faEdit
+              faCloud faCog faComment faCopy faEnvelopeOpenText faTimes faEllipsisH faEllipsisV faEdit
               faFileDownload faExternalLinkAlt faFlask faGem faGhost faGraduationCap faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
               faLocationArrow faLock faLockOpen faMagic faPalette faMapPin faChevronLeft faChevronRight faCircle
               faPaperPlane faPenSquare faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
-              faTimes faTimesCircle faTrashAlt faUniversity faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward
+              faTimes faTimesCircle faTrashAlt faUniversity faUsers faAngleDown faAngleRight faMinus faStepBackward
               faItalic faUndo faUnderline faStrikethrough faRedo faQuoteRight faListOl faList]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
@@ -41,7 +41,6 @@
    :collapse-up faAngleRight
    :comment faComment
    :comment/alt faCommentAlt
-   :cookie/complete faCookie
    :copy faCopy
    :cross faTimes
    :delete-icon faTimesCircle
@@ -110,9 +109,6 @@
    :undo faUndo
    :university faUniversity
    :user/group faUsers
-   :user/lock faUserLock
-   :user/ninja faUserNinja
-   :user/plus faUserPlus
    :video-file faFileVideo})
 
 (defn icon
