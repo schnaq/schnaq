@@ -12,7 +12,6 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.legal-note :as legal-note]
-            [schnaq.interface.pages.press :as press]
             [schnaq.interface.pages.privacy :as privacy]
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
             [schnaq.interface.pages.publications :as publications]
@@ -125,9 +124,6 @@
      {:name :routes.admin/summaries
       :view summary/admin-summaries-view
       :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:summaries/load-all]]))}]}]]
-   ["/press"
-    {:name :routes/press
-     :view press/view}]
    ["/publications"
     {:name :routes/publications
      :view publications/view}]

@@ -23,7 +23,7 @@
 
    ;; code of conduct
    :coc/heading "Verhaltensregeln"
-   
+
    ;; how-to
    :how-to.schnaq/title "Wie schnaqqe ich?"
    :how-to.schnaq/body "Teile deine Frage! Trage sie in das Eingabefeld ein und sie erscheint in der Liste an Beiträgen. Du kannst Fragen als relevant markieren und beantworten. Die Mindmap wird automatisch generiert und aktualisiert sich mit jedem neuen Beitrag."
@@ -299,30 +299,6 @@
    ;; Preview
    :preview.image-overlay/title "Dies ist eine Pro-Funktion."
    :preview.image-overlay/body "Um sie nutzen zu können, benötigst du einen Pro- oder Beta-Zugang."
-
-   ;; Press Kit
-   :press-kit/heading "Presse & Medien"
-   :press-kit/subheading "Wir stehen gerne für Interviews und Artikel zur Verfügung!"
-   :press-kit/title "Presse & Medien."
-   :press-kit/description "In schnaq's Presseseite findest du die neuesten Nachrichten, Bilder, Logos und Pressekits."
-   :press-kit.intro/heading "Vielen Dank für Ihr Interesse an schnaq!"
-   :press-kit.intro/lead "Bitte nehmen Sie sich einen Moment Zeit, um unsere Markenrichtlinien zu lesen. Wenn Sie Presseanfragen haben oder über uns schreiben möchten, senden Sie eine E-Mail an presse@schnaq.com. Wir würden uns sehr gerne mit Ihnen unterhalten!"
-   :press-kit.spelling/heading "Richtige Schreibweise und Aussprache"
-   :press-kit.spelling/content-1 "Unser Produkt heißt"
-   :press-kit.spelling/content-2 "(gesprochen: [ˈʃnak]) und wird mit einem \"q\" geschrieben. Ausgesprochen wird es mit einem weichen \"sch\", analog zum norddeutschen \"schnacken\". Außer an Satzanfängen sollte schnaq kleingeschrieben werden. Das grammatikalische Geschlecht von schnaq ist männlich, somit heißt es beispielsweise \"der schnaq\" oder \"einen schnaq erstellen\"."
-   :press-kit.not-to-do/heading "Bitte beachten Sie folgende Punkte"
-   :press-kit.not-to-do/bullet-1 "Verwenden Sie keine anderen Bilder, Illustrationen, Inhalte oder andere Assets aus dieser Domain ohne Genehmigung."
-   :press-kit.not-to-do/bullet-2 "Vermeiden Sie es diese Grafiken in einer Weise anzeigen, die eine Beziehung, Zugehörigkeit oder Befürwortung durch schnaq impliziert. Sollten Sie unsicher sein, so kontaktieren Sie uns gerne."
-   :press-kit.not-to-do/bullet-3 "Verwenden Sie diese Grafiken nicht als Teil des Namens Ihres eigenen Produkts, Geschäfts oder Ihrer Dienstleistung."
-   :press-kit.not-to-do/bullet-4 "Vermeiden Sie es bitte diese Grafiken in irgendeiner Weise zu verändern oder sie mit anderen Grafiken zu kombinieren, ohne unsere schriftliche Zustimmung."
-   :press-kit.materials/heading "Materialien"
-   :press-kit.materials/fact-sheet "Fact-Sheet"
-   :press-kit.materials/logos "Logos"
-   :press-kit.materials/product "Produktbilder"
-   :press-kit.materials/team "Teamfotos"
-   :press-kit.materials/download "Herunterladen"
-   :press-kit.about-us/heading "Weitere Informationen"
-   :press-kit.about-us/body "Weitere Informationen zu unseren Gründern, wissenschaftliche Publikationen sowie weitere Erscheinungen in Zeitungen und Medien, finden Sie auf den folgenden Seiten:"
 
    ;; Publications
    :publications/heading "Publikationen und Artikel"

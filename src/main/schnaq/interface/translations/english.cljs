@@ -23,7 +23,7 @@
 
    ;; code of conduct
    :coc/heading "Code of Conduct"
-   
+
    ;; how-to
    :how-to.schnaq/title "How do I schnaq?"
    :how-to.schnaq/body "Share your question! Others can upvote your question or answer it. The mindmap is automatically generated and updated whenever there is a new statement."
@@ -293,30 +293,6 @@
    ;; Preview
    :preview.image-overlay/title "This is a pro function."
    :preview.image-overlay/body "To use it, you need a Pro or Beta account."
-
-   ;; Press Kit
-   :press-kit/heading "Press & Media"
-   :press-kit/subheading "We are happy to be available for interviews and articles!"
-   :press-kit/title "Press & Media."
-   :press-kit/description "From schnaq's press center you can get the latest schnaq logos, screenshots and images."
-   :press-kit.intro/heading "Thank you for your interest in schnaq!"
-   :press-kit.intro/lead "Please take a moment to read our brand guidelines. If you have any press enquiries or would like to write about us, please email presse@schnaq.com. We would love to talk to you!"
-   :press-kit.spelling/heading "Correct Spelling and Pronunciation"
-   :press-kit.spelling/content-1 "Our product is called"
-   :press-kit.spelling/content-2 "(spoken: [ˈʃnak]) and is written with a \"q\". It is pronounced with a soft \"sch\", analogous to the North German \"schnacken\". Except at the beginning of sentences, schnaq should be written in lower case."
-   :press-kit.not-to-do/heading "Please note the following points"
-   :press-kit.not-to-do/bullet-1 "Do not use any other images, illustrations, content or other assets from this domain without permission."
-   :press-kit.not-to-do/bullet-2 "Avoid displaying these graphics in a way that implies a relationship, affiliation or endorsement by schnaq. If you are unsure, please feel free to contact us."
-   :press-kit.not-to-do/bullet-3 "Do not use these graphics as part of the name of your own product, business or service."
-   :press-kit.not-to-do/bullet-4 "Please avoid altering these graphics in any way or combining them with other graphics without our written consent."
-   :press-kit.materials/heading "Assets"
-   :press-kit.materials/fact-sheet "Fact-Sheet"
-   :press-kit.materials/logos "Logos"
-   :press-kit.materials/product "Product Images"
-   :press-kit.materials/team "Team Pictures"
-   :press-kit.materials/download "Download"
-   :press-kit.about-us/heading "Further Information"
-   :press-kit.about-us/body "Further information on our founders, scientific publications and other appearances in newspapers and media, can be found on the following pages:"
 
    ;; Publications
    :publications/heading "Publications and Articles"
