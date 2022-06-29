@@ -23,16 +23,7 @@
 
    ;; code of conduct
    :coc/heading "Verhaltensregeln"
-   :coc/subheading "Unsere Benimmregeln"
-
-   :coc.users/lead "Verhalten gegenüber anderen Nutzer:innen"
-   :coc.users/title "Respektvoller Umgang und Nichtdiskriminierung"
-   :coc.users/body "Ein respektvoller Umgang ist wichtig, um miteinander leben zu können und bietet die Grundlage für sachliche Diskussionen. Dies gilt nicht nur offline sondern auch online. \nUns ist es wichtig, dass sich jede:r Nutzer:in ausdrücken kann, ohne aufgrund ihrer Person, Herkunft oder Ansichten diskriminiert zu werden. \nBeiträge, die sich nicht an diese Richtlinien halten, werden entfernt."
-
-   :coc.content/lead "Inhalte"
-   :coc.content/title "Wir halten uns an das Gesetz, bitte tut das auch"
-   :coc.content/body "Wir halten das Deutsche Grundgesetz ein; dies gilt auch und insbesondere für Datenschutz, Gleichberechtigung und Nichtdiskriminierung.\nInhalte, die gegen geltendes Recht verstoßen, werden von uns gelöscht."
-
+   
    ;; how-to
    :how-to.schnaq/title "Wie schnaqqe ich?"
    :how-to.schnaq/body "Teile deine Frage! Trage sie in das Eingabefeld ein und sie erscheint in der Liste an Beiträgen. Du kannst Fragen als relevant markieren und beantworten. Die Mindmap wird automatisch generiert und aktualisiert sich mit jedem neuen Beitrag."
@@ -1076,7 +1067,6 @@
    :router/start-discussion "Starte Diskussion"
    :router/startpage "Startseite"
    :router/true-404-view "404 Fehlerseite"
-   :router/code-of-conduct "Verhaltensregeln"
    :router/summaries "Zusammenfassungen"
 
    :admin.center.start/heading "Admin-Center"
@@ -1256,8 +1246,6 @@
    :file/allowed-types "Erlaubte Dateitypen"
 
    ;; Alt texts
-   :schnaqqifant/hippie-alt-text "Schnaqqi, das schnaq Maskottchen, als Hippie verkleidet"
-   :schnaqqifant/police-alt-text "Schnaqqi, das schnaq Maskottchen, als Polizist verkleidet"
    :schnaqqifant/stop-alt-text "Schnaqqi, das schnaq Maskottchen, hält ein Stop-Schild hoch"
    :schnaqqi/pointing-right "Schnaqqi, der Elefant, zeigt nach rechts mit dem Rüssel"
    :schnaqqi.rocket/alt-text "Schnaqqi, der Elefant, reitet auf einem großen Raumschiff"

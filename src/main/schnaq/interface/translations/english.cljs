@@ -23,16 +23,7 @@
 
    ;; code of conduct
    :coc/heading "Code of Conduct"
-   :coc/subheading "Do onto others as you would have them do unto you"
-
-   :coc.users/lead "Behaviour towards other users"
-   :coc.users/title "Respect and Non-Discrimination"
-   :coc.users/body "A respectful behaviour is important and is the basis of each factual discussion. This applies not only offline but also online.\nIt is important to us that all users can express themselves without being discriminated against based on their person, origin or views. \nPosts that do not adhere to these guidelines will be deleted."
-
-   :coc.content/lead "Content"
-   :coc.content/title "We obey the law, please do that too"
-   :coc.content/body "We comply with German law; this applies especially to data protection, equality and non-discrimination.\nContent that violates applicable law will be deleted."
-
+   
    ;; how-to
    :how-to.schnaq/title "How do I schnaq?"
    :how-to.schnaq/body "Share your question! Others can upvote your question or answer it. The mindmap is automatically generated and updated whenever there is a new statement."
@@ -1071,7 +1062,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/start-discussion "Start discussion"
    :router/startpage "Startpage"
    :router/true-404-view "404 error page"
-   :router/code-of-conduct "Code of Conduct"
    :router/summaries "Summaries"
 
    :admin.center.start/heading "Admin Center"
@@ -1250,8 +1240,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :file/allowed-types "Allowed file types"
 
    ;; Alt texts
-   :schnaqqifant/hippie-alt-text "Schnaqqi the schnaq mascot dressed as a hippie"
-   :schnaqqifant/police-alt-text "Schnaqqi the schnaq mascot dressed as a police elephant"
    :schnaqqifant/stop-alt-text "Schnaqqi the schnaq mascot holds up a stop sign"
    :schnaqqi/pointing-right "Schnaqqi the elephant pointing right with his trunk"
    :schnaqqi.rocket/alt-text "Schnaqqi the elephant riding on a huge space-rocket"

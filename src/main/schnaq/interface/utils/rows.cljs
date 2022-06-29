@@ -1,6 +1,5 @@
 (ns schnaq.interface.utils.rows
-  (:require [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.translations :refer [labels]]
+  (:require [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.common :as common]))
 
 (defn build-text-box
@@ -32,22 +31,6 @@
    [:div.col-12.col-lg-5.offset-lg-1.my-auto right]])
 
 ;; -----------------------------------------------------------------------------
-
-(defn image-left
-  "Build a row, where the image is located on the left side."
-  [image-key alt-text-key text-namespace]
-  [row-builder-text-right
-   [:img.img-fluid {:src (img-path image-key)
-                    :alt (labels alt-text-key)}]
-   [build-text-box text-namespace]])
-
-(defn image-right
-  "Build a row, where the image is located on the right side."
-  [image-key alt-text-key text-namespace]
-  [row-builder-text-left
-   [build-text-box text-namespace]
-   [:img.img-fluid {:src (img-path image-key)
-                    :alt (labels alt-text-key)}]])
 
 (defn icon-right
   "Build a row with text on the left side and the icon on the right side."

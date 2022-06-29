@@ -8,7 +8,6 @@
             [reitit.frontend.history :as rfh]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.analytics.core :as analytics]
-            [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.pages.about-us :as about-us]
@@ -126,10 +125,6 @@
      {:name :routes.admin/summaries
       :view summary/admin-summaries-view
       :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:summaries/load-all]]))}]}]]
-   ["/code-of-conduct"
-    {:name :routes/code-of-conduct
-     :view coc/view
-     :link-text (labels :router/code-of-conduct)}]
    ["/press"
     {:name :routes/press
      :view press/view}]

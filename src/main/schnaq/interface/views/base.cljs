@@ -44,13 +44,13 @@
 (defn- footer-button
   [route-name content-label]
   [:li.list-inline-item
-   [:a.btn.btn-sm.btn-outline-white {:href (navigation/href route-name)}
+   [:a.btn.btn-sm.btn-outline-white {:href (if (keyword? route-name) (navigation/href route-name) route-name)}
     (labels content-label)]])
 
 (defn- footer-nav []
   [:<>
    [:ul.list-inline
-    [footer-button :routes/code-of-conduct :coc/heading]
+    [footer-button "https://schnaq.com/code-of-conduct" :coc/heading]
     [footer-button :routes/about-us :footer.buttons/about-us]
     [footer-button :routes/press :footer.buttons/press-kit]
     [footer-button :routes/publications :footer.buttons/publications]]
