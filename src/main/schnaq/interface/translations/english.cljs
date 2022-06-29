@@ -100,9 +100,6 @@
 
    ;; Product Pages
    :productpage/button "Product"
-   :productpage.overview/ipad-alt-text "An Tablet with schnaq on the screen"
-   :productpage/cta "Try it out and elevate your next event with schnaq"
-   :productpage/learn-more "Learn more!"
    :productpage/roadmap "Roadmap"
 
    ;; Login page

@@ -99,9 +99,6 @@
 
    ;; Product Pages
    :productpage/button "Produkt"
-   :productpage.overview/ipad-alt-text "Ein Tablet mit schnaq auf dem Bildschirm"
-   :productpage/cta "Probiere es aus und verbessere deine nächste Veranstaltung mit schnaq"
-   :productpage/learn-more "Erfahre mehr"
    :productpage/roadmap "Roadmap"
 
    ;; Activation Feature

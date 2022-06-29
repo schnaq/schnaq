@@ -47,10 +47,6 @@
   [:a.nav-link.text-nowrap {:href href :role "button"}
    (labels label)])
 
-(defn- drop-down-button-link [link label]
-  ;; TODO remove
-  [:a.dropdown-item {:href (navigation/href link)} (labels label)])
-
 (defn product-dropdown-button
   "Product button containing all subpages in its dropdown content."
   []
@@ -62,7 +58,7 @@
        :aria-haspopup "true" :aria-expanded "false"}
       (labels :productpage/button)]
      [:div.dropdown-menu
-      ;; TODO kill
+      ;; TODO kill maybe
       {:aria-labelledby dropdown-id}
       [:a.dropdown-item {:href config/roadmap-url :target :_blank}
        (labels :productpage/roadmap)

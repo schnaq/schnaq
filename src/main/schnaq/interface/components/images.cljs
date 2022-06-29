@@ -47,7 +47,6 @@
     :pricing.others/confluence "https://s3.schnaq.com/schnaq-common/startpage/pricing/confluence.jpeg"
     :pricing.others/loomio "https://s3.schnaq.com/schnaq-common/startpage/pricing/loomio.png"
     :pricing.others/miro "https://s3.schnaq.com/schnaq-common/startpage/pricing/miro.png"
-    :productpage.overview/ipad "https://s3.schnaq.com/schnaq-common/product-page/ipad-schnaq.png"
     :productpage.qa/relevant "https://s3.schnaq.com/schnaq-common/product-page/qa-relevant.jpg"
     :productpage.poll/multiple "https://s3.schnaq.com/schnaq-common/product-page/poll-multiple.jpg"
     :schnaqqifant/admin "https://s3.schnaq.com/schnaq-schnaqqifanten/admin.png"
