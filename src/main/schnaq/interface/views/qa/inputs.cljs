@@ -32,12 +32,13 @@
                :name "statement"
                :value (or editor-content "")}]
       [lexical/editor {:id editor-id
-                       :focus? true
+                       :focus? true ;; WIP
                        :on-text-change throttled-search
                        :placeholder (labels :statement.new/placeholder)}
        {:className "flex-grow-1"}]]
      [:button.btn.btn-lg.btn-secondary.w-100.shadow-sm.mt-3.rounded-1
       {:type "submit"
+       :disabled (empty? editor-content)
        :title (labels :qanda.button/submit)
        :on-click #(matomo/track-event "Active User" "Action" "Submit Question")}
       (labels :qanda.button/submit)
