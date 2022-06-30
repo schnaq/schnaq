@@ -228,21 +228,12 @@
         [replies statement-id]]]]]))
 
 (defn- sort-statements
-  "Sort statements according to the filter method. If we are in q-and-a-mode,
-  then always display own statements first."
-  [user statements sort-method local-votes]
-  (let [username (get-in user [:names :display])
-        selection-function (if (:authenticated? user)
-                             #(= (:id user) (get-in % [:statement/author :db/id]))
-                             #(= username (get-in % [:statement/author :user/nickname])))
-        keyfn (case sort-method
+  "Sort statements according to the filter method."
+  [statements sort-method local-votes]
+  (let [keyfn (case sort-method
                 :newest :statement/created-at
-                :popular #(reactions/calculate-votes % local-votes))
-        own-statements (sort-by keyfn > (filter selection-function statements))
-        other-statements (sort-by keyfn > (remove selection-function statements))]
-    (if (= "Anonymous" username)
-      (sort-by keyfn > statements)
-      (concat own-statements other-statements))))
+                :popular #(reactions/calculate-votes % local-votes))]
+    (sort-by keyfn > statements)))
 
 (defn- input-form-or-disabled-alert
   "Dispatch to show input form or an alert that it is currently not allowed to 
@@ -438,14 +429,13 @@
  :<- [:discussion.statements/sort-method]
  :<- [:local-votes]
  :<- [:discussion.statements/show]
- :<- [:user/current]
  :<- [:schnaq.question.input/current]
  :<- [:filters/questions?]
- (fn [[sort-method local-votes shown-statements user current-input-tokens questions-only?] _]
+ (fn [[sort-method local-votes shown-statements current-input-tokens questions-only?] _]
    (let [question-filtered-statements (if questions-only?
                                         (filter #((set (:statement/labels %)) ":question") shown-statements)
                                         shown-statements)
-         sorted-conclusions (sort-statements user question-filtered-statements sort-method local-votes)
+         sorted-conclusions (sort-statements question-filtered-statements sort-method local-votes)
          grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)
          input-filtered-statements
          (if (> 101 (count sorted-conclusions))
