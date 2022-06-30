@@ -778,5 +778,4 @@
    :icon.search/alt-text "Such-Symbol"
    :icon.posts/alt-text "Symbol für Anzahl Beiträge"
    :icon.users/alt-text "Symbol für Anzahl Nutzer:innen"
-   :navbar.icon.views/alt-text "Icon für verschiedene Ansichten"
-   :startpage.example.statements/alt-text "Drei Beiträge, schnaq-typisch im Kartenformat"})
+   :navbar.icon.views/alt-text "Icon für verschiedene Ansichten"})

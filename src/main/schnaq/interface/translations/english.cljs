@@ -774,5 +774,4 @@
    :icon.search/alt-text "Search Icon"
    :icon.posts/alt-text "Icon representing number of posts"
    :icon.users/alt-text "Icon for number of users"
-   :navbar.icon.views/alt-text "Icon representing different views"
-   :startpage.example.statements/alt-text "Three statements in the schnaq look in cards"})
+   :navbar.icon.views/alt-text "Icon representing different views"})

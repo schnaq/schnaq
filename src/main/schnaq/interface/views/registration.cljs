@@ -8,11 +8,10 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.navbar :refer [language-dropdown]]
             [schnaq.interface.config :as config]
-            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.startpage.pricing :as pricing-view]))
+            [schnaq.interface.views.pricing :as pricing-view]))
 
 (defn- next-button [label attrs]
   [buttons/button label nil "btn-primary btn-lg w-100 mt-5" attrs])

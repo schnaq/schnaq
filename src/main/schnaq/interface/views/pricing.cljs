@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.startpage.pricing
+(ns schnaq.interface.views.pricing
   (:require [goog.string :as gstring]
             [re-frame.core :as rf]
             [schnaq.interface.config :as config]

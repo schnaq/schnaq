@@ -48,7 +48,6 @@
     :startpage.alternatives.e-learning/christian "https://s3.schnaq.com/startpage/christian.jpg"
     :startpage.alternatives.e-learning/david "https://s3.schnaq.com/startpage/david.jpeg"
     :startpage.alternatives.e-learning/mike "https://s3.schnaq.com/startpage/mike.jpg"
-    :startpage.example/statements "https://s3.schnaq.com/schnaq-common/startpage/screenshots/all_statements.png"
     :startpage.features/admin-center "https://s3.schnaq.com/startpage/features/admin-center.png"
     :startpage.information/meeting "https://s3.schnaq.com/startpage/startpage-meeting.jpeg"
     :startpage.screenshots/qanda "https://s3.schnaq.com/startpage/screenshots/qanda.png"
