@@ -5,7 +5,6 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
-            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.feedback.collect :as feedback]))
 
@@ -42,9 +41,9 @@
     (labels :startpage/slogan)]])
 
 (defn- footer-button
-  [route-name content-label]
+  [url content-label]
   [:li.list-inline-item
-   [:a.btn.btn-sm.btn-outline-white {:href (if (keyword? route-name) (navigation/href route-name) route-name)}
+   [:a.btn.btn-sm.btn-outline-white {:href url}
     (labels content-label)]])
 
 (defn- footer-nav []
@@ -59,7 +58,7 @@
      [:button.btn.btn-sm.btn-outline-white {:on-click feedback/show-feedback-modal}
       (labels :feedbacks/button)]]
     [footer-button "https://schnaq.com/privacy" :router/privacy]
-    [footer-button :routes/legal-note :footer.buttons/legal-note]]])
+    [footer-button "https://schnaq.com/legal-note" :footer.buttons/legal-note]]])
 
 (defn- developed-in-nrw []
   [:section.pt-3

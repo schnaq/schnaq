@@ -3,7 +3,6 @@
             [re-frame.core :as rf]
             [schnaq.interface.components.common :refer [schnaq-logo]]
             [schnaq.interface.components.schnaq :as sc]
-            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]
@@ -15,7 +14,7 @@
   [:div.text-center
    [:hr.w-50.mx-auto]
    [:a.btn.btn-sm.btn-link.text-dark
-    {:href (navigation/href :routes/legal-note)}
+    {:href "https://schnaq.com/legal-note"}
     (labels :footer.buttons/legal-note)]
    [:a.btn.btn-sm.btn-link.text-dark
     {:href "https://schnaq.com/privacy"}
