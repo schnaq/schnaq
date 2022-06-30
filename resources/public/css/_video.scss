@@ -6,18 +6,6 @@
   width: 100% !important;
 }
 
-.video-header {
-  @extend .rounded-2;
-  margin: auto;
-  overflow: hidden;
-
-  @include media-breakpoint-down(lg) {
-    height: auto !important;
-    overflow: hidden;
-    width: 100% !important;
-  }
-}
-
 .bg-ipad {
   background-image: url('https://s3.schnaq.com/startpage/videos/ipad-background.png');
   background-repeat: no-repeat;

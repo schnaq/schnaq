@@ -12,7 +12,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.startpage.pricing :as pricing-view]))
+            [schnaq.interface.views.pricing :as pricing-view]))
 
 (defn- next-button [label attrs]
   [buttons/button label nil "btn-primary btn-lg w-100 mt-5" attrs])
@@ -26,7 +26,7 @@
    [:div.common-card
     [:div.position-absolute.top-0.end-0 [language-dropdown]]
     [:div.col-6.col-md-4.mx-auto
-     [:a {:href (navigation/href :routes/startpage)}
+     [:a {:href (navigation/href :routes.schnaqs/personal)}
       [schnaq-logo]]
      [:p.text-center.text-muted (format (labels :registration.steps/heading) step)]]
     [:section.mx-auto.px-3 {:class (when-not wide? "w-75")}
@@ -159,7 +159,7 @@
     [:strong (labels :registration.pricing.enterprise/all-from-pro)]
     [:ul.fa-ul.list-group.list-group-flush
      [list-item (labels :pricing.features.number-of-users/unlimited)]
-     (for [label (take 3 (rest (labels :pricing.features/enterprise)))]
+     (for [label (rest (labels :pricing.features/enterprise))]
        (with-meta
          [list-item label]
          {:key (str "list-item-" label)}))]]])
@@ -177,7 +177,7 @@
     [:div.text-center
      [buttons/anchor
       (labels :registration.pricing/compare-plans)
-      (navigation/href :routes/pricing) "btn-link"]]
+      "https://schnaq.com/pricing" "btn-link"]]
     [:div.text-center
      [pricing-view/one-time-information :smaller]
      [:p.small (labels :pricing.billing/info-4-one-time)]]]

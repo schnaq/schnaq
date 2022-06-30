@@ -42,8 +42,7 @@
    [navbar-title title true])
   ([title clickable-title?]
    [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2.bg-white
-    [:a.schnaq-logo-container.d-flex.h-100 (when clickable-title?
-                                             {:href (navigation/href :routes/startpage)})
+    [:a.schnaq-logo-container.d-flex.h-100 (when clickable-title? {:href (navigation/href :routes.schnaqs/personal)})
      [schnaq-logo]]
     [:div.mx-0.mx-md-4.text-wrap title]
     [:div.h-100.d-none.d-md-block.p-2
@@ -144,7 +143,7 @@
      :star
      (labels :pricing.upgrade-nudge/tooltip)
      (labels :pricing.upgrade-nudge/button)
-     #(rf/dispatch [:navigation/navigate :routes/pricing])
+     #(js/location [:navigation.redirect/follow "https://schnaq.com/pricing"])
      {:class (if on-white-background? "btn-outline-secondary" "btn-secondary")}]))
 
 (defn navbar-settings

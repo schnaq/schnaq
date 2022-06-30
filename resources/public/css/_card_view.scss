@@ -17,12 +17,6 @@
   padding: 0.5rem;
 }
 
-.panel-transparent {
-  @extend .panel-white;
-  background: transparent;
-  border: 0;
-}
-
 .panel-grey {
   @extend .panel-white;
   background: $input-background;
