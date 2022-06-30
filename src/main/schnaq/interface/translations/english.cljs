@@ -33,10 +33,6 @@
 
    :startpage/slogan "Events as interactive as they should be!"
 
-   ;; Product Pages
-   :productpage/button "Product"
-   :productpage/roadmap "Roadmap"
-
    ;; Login page
    :page.login/heading "Let's schnaq"
    :page.login/subheading "100% free forever"
@@ -118,6 +114,13 @@
    :schnaq.admin.focus.notification/title "Success"
    :schnaq.admin.focus.notification/body "The selected activation is now displayed to the other participants as the very first one."
 
+   :schnaq.join.access-code/heading "Enter a schnaq"
+   :schnaq.join.access-code/access-code "Access Code"
+   :schnaq.join.access-code/enter-code "Please enter the eight-digit code."
+   :schnaq.join.access-code/invalid "Your access code is invalid. Please check your entry."
+   :schnaq.join.access-code/join "Join"
+   :schnaq.join.access-code/existing-user "Ever been here before?"
+   :schnaq.join.access-code/go-to-schnaqs "Go to your schnaqs"
    :schnaq.access-code.clipboard/header "Access code copied"
    :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."
 

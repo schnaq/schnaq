@@ -22,10 +22,6 @@
   "Check if schnaq is loaded in an iframe."
   (not= (. js/window -location) (.. js/window -parent -location)))
 
-(def roadmap-url
-  "URL to the roadmap."
-  "https://trello.com/b/tVatIivm/schnaq-roadmap")
-
 ;; -----------------------------------------------------------------------------
 ;; Keycloak
 
@@ -45,9 +41,6 @@
 (def max-allowed-file-size
   "Maximal allowed image size of a file in megabytes."
   5)
-
-(def marketing-num-schnaqs 1000)
-(def marketing-num-statements 4000)
 
 ;; -----------------------------------------------------------------------------
 ;; Pricing

@@ -117,6 +117,13 @@
    :schnaq.admin.focus.notification/title "Erfolgreich"
    :schnaq.admin.focus.notification/body "Die ausgewählte Aktivierung wird nun den anderen Teilnehmenden als allererstes angezeigt."
 
+   :schnaq.join.access-code/heading "Tritt einem schnaq bei"
+   :schnaq.join.access-code/access-code "Zugangscode"
+   :schnaq.join.access-code/enter-code "Bitte gib den den achtstelligen Code ein."
+   :schnaq.join.access-code/invalid "Dein Zugangscode ist ungültig. Bitte überprüfe deine Eingabe."
+   :schnaq.join.access-code/join "Beitreten"
+   :schnaq.join.access-code/existing-user "Schon mal hier gewesen?"
+   :schnaq.join.access-code/go-to-schnaqs "Gehe zu deinen schnaqs"
    :schnaq.access-code.clipboard/header "Zugangscode kopiert"
    :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."
 

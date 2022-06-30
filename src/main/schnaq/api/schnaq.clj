@@ -16,11 +16,11 @@
   (:import (java.util UUID)))
 
 (defn- schnaq-by-access-code
-  "Validate access code and redirect request, if the code was valid."
+  "Validate access code and return share-hash, if the code was valid."
   [{:keys [parameters]}]
   (let [{:keys [access-code]} (:query parameters)]
     (if-let [share-hash (get-in (ac/discussion-by-access-code access-code) [:discussion.access/discussion :discussion/share-hash])]
-      (ok {:location (links/get-share-link share-hash)})
+      (ok {:share-hash share-hash})
       at/access-code-invalid)))
 
 (defn- schnaq-by-hash
@@ -199,12 +199,13 @@
                                        :display-name ::specs/non-blank-string}}
                   :responses {200 {:body {:schnaq ::specs/discussion}}
                               403 at/response-error-body}}]
-     ["/join" {:get schnaq-by-access-code
-               :description (at/get-doc #'schnaq-by-access-code)
-               :name :api.schnaq/by-access-code
-               :parameters {:query {:access-code :discussion.access/code}}
-               :responses {200 {:body {:location string?}}
-                           403 at/response-error-body}}]
+     ["/by-access-code"
+      {:get schnaq-by-access-code
+       :description (at/get-doc #'schnaq-by-access-code)
+       :name :api.schnaq/by-access-code
+       :parameters {:query {:access-code :discussion.access/code}}
+       :responses {200 {:body {:share-hash :discussion/share-hash}}
+                   404 at/response-error-body}}]
      ["/add-visited" {:put add-visited-schnaq
                       :description (at/get-doc #'add-visited-schnaq)
                       :name :api.schnaq/add-visited
