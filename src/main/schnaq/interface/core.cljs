@@ -31,7 +31,7 @@
             [schnaq.interface.events]
             [schnaq.interface.navigation]
             [schnaq.interface.notification.events]
-            [schnaq.interface.pages.join]
+            [schnaq.interface.pages.start]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.scheduler]
             [schnaq.interface.translations]

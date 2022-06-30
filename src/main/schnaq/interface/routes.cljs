@@ -10,7 +10,7 @@
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.navigation :as navigation]
-            [schnaq.interface.pages.join :refer [join-schnaq]]
+            [schnaq.interface.pages.start :refer [startpage]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.routing :as route-utils]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -60,14 +60,14 @@
    routes))
 
 (def common-routes
-  [["/login"
+  [["/"
+    {:name :routes/startpage
+     :view startpage
+     :controllers [{:stop #(rf/dispatch [:schnaq.join.form/clear])}]}]
+   ["/login"
     {:name :routes/login
      :view pages/login-page
      :link-text (labels :user/login)}]
-   ["/join" ;; WIP
-    {:name :routes/join
-     :view join-schnaq
-     :controllers [{:stop #(rf/dispatch [:schnaq.join.form/clear])}]}]
    ["/hub/:keycloak-name"
     {:parameters {:path {:keycloak-name string?}}
      :controllers [{:parameters {:path [:keycloak-name]}
