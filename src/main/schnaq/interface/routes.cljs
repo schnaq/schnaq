@@ -12,6 +12,7 @@
             [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.pages.about-us :as about-us]
+            [schnaq.interface.pages.join :refer [join-schnaq]]
             [schnaq.interface.pages.legal-note :as legal-note]
             [schnaq.interface.pages.press :as press]
             [schnaq.interface.pages.privacy :as privacy]
@@ -99,6 +100,10 @@
     {:name :routes/login
      :view pages/login-page
      :link-text (labels :user/login)}]
+   ["/join" ;; WIP
+    {:name :routes/join
+     :view join-schnaq
+     :controllers [{:stop #(rf/dispatch [:schnaq.join.form/clear])}]}]
    ["/hub/:keycloak-name"
     {:parameters {:path {:keycloak-name string?}}
      :controllers [{:parameters {:path [:keycloak-name]}

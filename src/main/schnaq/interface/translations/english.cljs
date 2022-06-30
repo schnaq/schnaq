@@ -256,6 +256,11 @@
    :schnaq.admin.focus.notification/title "Success"
    :schnaq.admin.focus.notification/body "The selected activation is now displayed to the other participants as the very first one."
 
+   :schnaq.join.access-code/heading "Enter a schnaq"
+   :schnaq.join.access-code/access-code "Access Code"
+   :schnaq.join.access-code/enter-code "Please enter the eight-digit code."
+   :schnaq.join.access-code/invalid "Your access code is invalid. Please check your entry."
+   :schnaq.join.access-code/join "Join"
    :schnaq.access-code.clipboard/header "Access code copied"
    :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."
 
