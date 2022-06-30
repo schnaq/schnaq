@@ -42,8 +42,7 @@
    [navbar-title title true])
   ([title clickable-title?]
    [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2.bg-white
-    [:a.schnaq-logo-container.d-flex.h-100 (when clickable-title?
-                                             {:href (navigation/href :routes/startpage)})
+    [:a.schnaq-logo-container.d-flex.h-100 (when clickable-title? {:href "https://schnaq.com/"})
      [schnaq-logo]]
     [:div.mx-0.mx-md-4.text-wrap title]
     [:div.h-100.d-none.d-md-block.p-2

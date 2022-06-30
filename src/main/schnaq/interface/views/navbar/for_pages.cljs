@@ -60,7 +60,7 @@
   [:nav.navbar.navbar-expand-lg.py-3.navbar-transparent.bg-transparent.mb-4
    [:section
     {:class (if (str/blank? wrapper-classes) "container container-85" wrapper-classes)}
-    [:a.navbar-brand {:href (navigation/href :routes/startpage)}
+    [:a.navbar-brand {:href "https://schnaq.com/"}
      [:img.d-inline-block.align-middle.me-2
       {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
     ;; hamburger

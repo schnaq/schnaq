@@ -26,7 +26,7 @@
    [:div.common-card
     [:div.position-absolute.top-0.end-0 [language-dropdown]]
     [:div.col-6.col-md-4.mx-auto
-     [:a {:href (navigation/href :routes/startpage)}
+     [:a {:href "https://schnaq.com/"}
       [schnaq-logo]]
      [:p.text-center.text-muted (format (labels :registration.steps/heading) step)]]
     [:section.mx-auto.px-3 {:class (when-not wide? "w-75")}

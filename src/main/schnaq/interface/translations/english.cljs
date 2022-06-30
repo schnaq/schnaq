@@ -31,47 +31,17 @@
    :how-to/question-dont-show-again "Got it?"
    :how-to/answer-dont-show-again "Don't show this tip anymore!"
 
-   ;; localized startpage videos
-   :startpage.above-the-fold/webm "https://s3.schnaq.com/startpage/videos/above_the_fold_english.webm"
-   :startpage.above-the-fold/mp4 "https://s3.schnaq.com/startpage/videos/above_the_fold_english.mp4"
-
    ;; Startpage
    :startpage/slogan "Events as interactive as they should be!"
-   :startpage/title "The most secure software for increased audience engagement."
-   :startpage/description "The most secure audience interaction software for your live and virtual events. Interact with your audience through Live Q&A, real time polling… Try it for free!"
-   :startpage/hook "Gather questions, understand your audience, share knowledge. Schnaq picks up where others leave off!"
    :schnaq.startpage.cta/button "Create a free schnaq now!"
-   :startpage.social-proof/teaser "You are one click away from joining thousands of other schnaq users 👋"
    :startpage.social-proof/companies "They're already used to schnaq"
-
-   :startpage.trust/germany-100 "A Sign: Schnaq ist 100 % hosted in Germany"
-   :startpage.trust/capterra "Schnaq's user rating on the B2B reviews platform Capterra"
 
    :startpage.usage/lead "What do I use schnaq for?"
 
    :startpage.features/more-information "More information"
 
-   :startpage.information.know-how/title "Collecting questions made easy"
-   :startpage.information.know-how/body "Schnaq's Q&A functions and structured discussions help your course, workshop or training to exchange knowledge at lightning speed and to prepare it in a sustainable way. Only where knowledge flows can great things be created."
-
-   :startpage.information.positioning/title "Understand what is being asked"
-   :startpage.information.positioning/body "Identify the problems of your course at a glance. With the automatically generated mindmap and A.I. analyses, each question round is clearly presented and easy to understand."
-
-   :startpage.information.anywhere/title "Use schnaq anywhere at any time"
-   :startpage.information.anywhere/body "Schnaq runs as a web app on all major operating systems, browsers and devices. Whether it's a smartphone, tablet or computer."
-
    :startpage.information.meetings/title "Hybrid questioning"
    :startpage.information.meetings/body "Reach out through schnaq to people who can't be there. Everyone can be involved and questions can be asked anonymously. With smart Q&A, you can even stay up-to-date online!"
-
-   :startpage.feature-box.know-how/title "Self-explanatory"
-   :startpage.feature-box.know-how/body "Schnaq needs no explanation and can be used immediately anonymously without registration."
-   :startpage.feature-box.know-how/img-alt "The mascot of schnaq shows the features"
-   :startpage.feature-box.discussion/title "Save Time"
-   :startpage.feature-box.discussion/body "Answer common questions only once and let schnaq do the rest!"
-   :startpage.feature-box.discussion/img-alt "schnaqqi riding a rocket"
-   :startpage.feature-box.learnings/title "Show expertise"
-   :startpage.feature-box.learnings/body "Share your knowledge with the world by sharing your knowledge cards."
-   :startpage.feature-box.learnings/img-alt "schnaqqi with lightbulb over its head"
 
    :startpage.early-adopter/title "Gotten Curious?"
    :startpage.early-adopter/body "Try the \"Free Forever\" plan."
@@ -432,51 +402,13 @@
    ;; Testimonials
    :testimonials/heading "Testimonials"
    :testimonials.doctronic/company "doctronic GmbH & Co. KG"
-   :testimonials.doctronic/quote "We observe the development of schnaq with great interest for our own use and for the use of our customers."
-   :testimonials.doctronic/author "Ingo Küper, Managing Director"
-
    :testimonials.leetdesk/company "Leetdesk – ODYN GmbH"
-   :testimonials.leetdesk/quote "Even with our quite small team, it is helpful to collect our thoughts in order to be able to properly drive a discussion. This has been made possible for us very well by schnaq. More efficient meetings were the result."
-   :testimonials.leetdesk/author "Meiko Tse, Managing Director"
-
    :testimonials.hhu/company "Heinrich Heine University Düsseldorf"
-   :testimonials.bjorn/quote "For internal coordination and agreement we used schnaq so that all participants could write down their thoughts and put them into context. Finally, concrete tasks were derived and we could go into the work phase in a structured way."
-   :testimonials.bjorn/author "Björn Ebbinghaus, Research assistant"
-
-   :testimonials.lokay/company "Mediator and Conflict Resolution Advisor"
-   :testimonials.lokay/quote "I had the honour of giving feedback to the colleagues in the initial phase and I am impressed by their spirited values and practical orientation."
-   :testimonials.lokay/author "Oliver Lokay, Mediator and Conflict Resolution Advisor"
-
-   :testimonials.hck/company "Chief Digital Officer"
-   :testimonials.hck/quote "As an expert in digital transformation of companies, I quickly recognised the potential of schnaq and have been available to the team as a mentor ever since. A strong idea and a competent founding team that we will for sure be hearing more from!"
-   :testimonials.hck/author "Hans-Christoph Kaiser, CDO"
-
    :testimonials.franky/company "FoxBase GmbH"
-   :testimonials.franky/quote "Schnaq's backend is rocket science while its frontend is as simple as riding a tricycle."
-   :testimonials.franky/author "Frank Stampa, Head of Sales"
-
    :testimonials.metro/company "Metro Digital"
-   :testimonials.metro/quote "As an asyncronous work evangelist, I really appreciate schnaq for breaking down information silos and making it available to all employees in a transparent and clear way."
-   :testimonials.metro/author "Dr. Tobias Schröder, Product Manager"
 
    :testimonials.muetze/company "Landesverband der Mütterzentren NRW"
    :testimonials.digihub/company "Digital Innovation Hub Düsseldorf/Rheinland GmbH"
-
-   :testimonials.eugenbialon/company "EugenBialonArchitekt GmbH"
-   :testimonials.eugenbialon/quote "In an architect's office, there are several parallel projects with a large number of players involved. Schnaq supports us in cross-project information management, whether in the office, in the home office or on the construction site!"
-   :testimonials.eugenbialon/author "Dipl.-Ing. Eugen Bialon, Managing Partner and Architect, EugenBialonArchitekt GmbH"
-
-   :testimonials.bialon/quote "With schnaq, I am able to process the mass of information regarding the digitisation of a university in a structured and clear way. This allows me to act quickly in any project context."
-   :testimonials.bialon/author "Raphael Bialon, Personal Assistant to the Prorector for Digitisation, Heinrich Heine University Düsseldorf"
-
-   :testimonials.sensor/company "Enterprise company in the field of sensor and measurement technology"
-   :testimonials.sensor/quote "As part of the familiarisation process with new service products, we used schnaq to collect our ideas and open questions centrally throughout the team. This enabled us to go into exchange meetings well prepared and address specific points.
-Now we write down questions and discuss them and can still understand what we have decided three weeks later."
-   :testimonials.sensor/author "Florian Clever, Customer Consultant for Service Processes Automation"
-
-   :testimonials.bib/company "Research Assistant"
-   :testimonials.bib/quote "We were also able to stimulate discussion and exchange between students at online events through schnaq, which had a significant impact on the success of the events."
-   :testimonials.bib/author "Frauke Kling, Research assistant"
 
    ;; User related
    :user.button/set-name "Save name"
@@ -693,7 +625,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/privacy "Privacy Policy"
    :router/qanda "Q&A"
    :router/start-discussion "Start discussion"
-   :router/startpage "Startpage"
    :router/true-404-view "404 error page"
    :router/summaries "Summaries"
 
@@ -886,6 +817,4 @@ Now we write down questions and discuss them and can still understand what we ha
    :icon.posts/alt-text "Icon representing number of posts"
    :icon.users/alt-text "Icon for number of users"
    :navbar.icon.views/alt-text "Icon representing different views"
-   :testimonial-picture/alt-text "Picture of a schnaq user"
-   :startpage.information.anywhere/alt-text "A tablet with schnaq on it"
    :startpage.example.statements/alt-text "Three statements in the schnaq look in cards"})

@@ -46,7 +46,7 @@
     :page/heading (labels :page.login/heading)
     :page/subheading (labels :page.login/subheading)}
    (when @(rf/subscribe [:user/authenticated?])
-     (rf/dispatch [:navigation/navigate :routes/startpage]))])
+     (rf/dispatch [:navigation.redirect/follow "https://schnaq.com/"]))])
 
 (defn- bullet-points
   "Short overview of free-features."

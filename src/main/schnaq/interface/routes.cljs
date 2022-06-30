@@ -60,12 +60,7 @@
    routes))
 
 (def common-routes
-  [["/"
-    {:name :routes/startpage
-     :view startpage-views/startpage-view
-     :link-text (labels :router/startpage)
-     :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
-   ["/login"
+  [["/login"
     {:name :routes/login
      :view pages/login-page
      :link-text (labels :user/login)}]

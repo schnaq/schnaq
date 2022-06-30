@@ -6,8 +6,6 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.qa.inputs :as qanda]
-            [schnaq.interface.views.startpage.call-to-actions :as cta]
-            [schnaq.interface.views.startpage.features :as startpage-features]
             [schnaq.interface.views.startpage.testimonials :as testimonials]))
 
 (defn- cleverreach-form
@@ -126,8 +124,3 @@
       [early-adopters]
       [cleverreach-form]
       [team-and-supporters]]]]])
-
-(defn startpage-view
-  "A view that represents the first page of schnaq participation or creation."
-  []
-  [startpage-content])

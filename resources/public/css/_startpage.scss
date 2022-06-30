@@ -102,22 +102,6 @@ $header-opacity: 1;
   }
 }
 
-.social-proof-img {
-  max-height: 40px;
-  width: 40px;
-}
-
-.example-dashboard-image {
-  margin-top: 1rem;
-  @include media-breakpoint-up(lg) {
-    //width: 60rem;
-    margin-bottom: -15rem;
-    margin-right: -30rem;
-    margin-top: -15rem;
-    object-fit: contain;
-  }
-}
-
 .vertical-fullsize {
   display: flex;
   min-height: 100vh;
@@ -145,14 +129,5 @@ $header-opacity: 1;
 .startpage-step-3 {
   @include media-breakpoint-up(lg) {
     padding-top: 10rem;
-  }
-}
-
-.startpage-feature-box-image {
-  height: auto;
-  max-width: 75%;
-  object-fit: contain;
-  @include media-breakpoint-down(lg) {
-    max-width: 30%;
   }
 }
