@@ -2,6 +2,7 @@
   (:require [clojure.string :as str]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
             [schnaq.interface.views.navbar.elements :as elements]
@@ -59,7 +60,7 @@
   [:nav.navbar.navbar-expand-lg.py-3.navbar-transparent.bg-transparent.mb-4
    [:section
     {:class (if (str/blank? wrapper-classes) "container container-85" wrapper-classes)}
-    [:a.navbar-brand {:href "https://schnaq.com/"}
+    [:a.navbar-brand {:href (navigation/href :routes.schnaqs/personal)}
      [:img.d-inline-block.align-middle.me-2
       {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
     ;; hamburger

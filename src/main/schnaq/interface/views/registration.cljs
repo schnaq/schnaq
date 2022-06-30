@@ -8,6 +8,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.navbar :refer [language-dropdown]]
             [schnaq.interface.config :as config]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.pages :as pages]
@@ -25,7 +26,7 @@
    [:div.common-card
     [:div.position-absolute.top-0.end-0 [language-dropdown]]
     [:div.col-6.col-md-4.mx-auto
-     [:a {:href "https://schnaq.com/"}
+     [:a {:href (navigation/href :routes.schnaqs/personal)}
       [schnaq-logo]]
      [:p.text-center.text-muted (format (labels :registration.steps/heading) step)]]
     [:section.mx-auto.px-3 {:class (when-not wide? "w-75")}
