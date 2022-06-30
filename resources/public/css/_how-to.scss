@@ -1,10 +1,6 @@
 @use 'rounded' as rounded;
 @use 'variables' as vars;
 
-.chat-background {
-  background-image: url('https://s3.schnaq.com/schnaq-common/background/background_clutter.svg');
-}
-
 .taskbar-background {
   background-color: #fff;
   border-radius: 20px 20px 0 0;

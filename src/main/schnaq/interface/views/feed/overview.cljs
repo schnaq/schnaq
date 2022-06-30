@@ -274,7 +274,7 @@
       [:div.btn-group-vertical
        [outline-info-button :user/features
         (navigation/href (if pro-user? :routes.welcome/pro :routes.welcome/free))]
-       [outline-info-button :coc/heading (navigation/href :routes/code-of-conduct)]]]]))
+       [outline-info-button :coc/heading "https://schnaq.com/code-of-conduct"]]]]))
 
 (defn- personal-discussions-view
   "Shows the page for an overview of schnaqs. Takes a subscription-key which

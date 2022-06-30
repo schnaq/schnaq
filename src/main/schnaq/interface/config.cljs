@@ -22,10 +22,6 @@
   "Check if schnaq is loaded in an iframe."
   (not= (. js/window -location) (.. js/window -parent -location)))
 
-(def roadmap-url
-  "URL to the roadmap."
-  "https://trello.com/b/tVatIivm/schnaq-roadmap")
-
 ;; -----------------------------------------------------------------------------
 ;; Keycloak
 
@@ -46,26 +42,12 @@
   "Maximal allowed image size of a file in megabytes."
   5)
 
-(def marketing-num-schnaqs 1000)
-(def marketing-num-statements 4000)
-
 ;; -----------------------------------------------------------------------------
 ;; Pricing
 
 (def price-event-tier-euro 49)
 (def max-concurrent-users-free-tier 100)
 (def max-concurrent-users-pro-tier 250)
-
-;; -----------------------------------------------------------------------------
-;; Example schnaqs and statements
-;;
-;; These samples default to the staging environment so that it works on staging
-;; and on production. Change these symbols to your dev environment accordingly.
-;; Replaced by the CI when building the application for production.
-
-(goog-define example-share-hash "6586e787-8704-4b4b-9221-5821d15626b5")
-(goog-define example-api-url "https://api.staging.schnaq.com")
-(goog-define example-statement 17592186049502)
 
 (def breakpoints
   "Mirrors the breakpoints used in the bootstrap css."

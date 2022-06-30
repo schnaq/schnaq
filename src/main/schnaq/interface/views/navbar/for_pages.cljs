@@ -18,13 +18,10 @@
   [navbar-components/button :nav/blog "https://schnaq.com/blog/"])
 
 (defn- pricing-button []
-  [navbar-components/button :router/pricing (navigation/href :routes/pricing)])
-
-(defn- product-button []
-  [navbar-components/product-dropdown-button])
+  [navbar-components/button :router/pricing "https://schnaq.com/pricing"])
 
 (defn- privacy-button []
-  [navbar-components/button :router/privacy (navigation/href :routes.privacy/simple)])
+  [navbar-components/button :router/privacy "https://schnaq.com/privacy"])
 
 ;; -----------------------------------------------------------------------------
 
@@ -60,7 +57,7 @@
   [:nav.navbar.navbar-expand-lg.py-3.navbar-transparent.bg-transparent.mb-4
    [:section
     {:class (if (str/blank? wrapper-classes) "container container-85" wrapper-classes)}
-    [:a.navbar-brand {:href (navigation/href :routes/startpage)}
+    [:a.navbar-brand {:href (navigation/href :routes.schnaqs/personal)}
      [:img.d-inline-block.align-middle.me-2
       {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
     ;; hamburger
@@ -73,7 +70,6 @@
     [:div#schnaq-navbar.collapse.navbar-collapse
      [:ul.navbar-nav.ms-auto
       [:li.nav-item [navbar-components/button :nav/schnaqs (toolbelt/current-overview-link)]]
-      [:li.nav-item [product-button]]
       [:li.nav-item [pricing-button]]
       [:li.nav-item [privacy-button]]
       [:li.nav-item [blog-link]]

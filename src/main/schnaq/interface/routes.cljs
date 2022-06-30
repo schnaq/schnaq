@@ -8,16 +8,9 @@
             [reitit.frontend.history :as rfh]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.analytics.core :as analytics]
-            [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.navigation :as navigation]
-            [schnaq.interface.pages.about-us :as about-us]
-            [schnaq.interface.pages.legal-note :as legal-note]
-            [schnaq.interface.pages.press :as press]
-            [schnaq.interface.pages.privacy :as privacy]
-            [schnaq.interface.pages.privacy-extended :as privacy-extended]
-            [schnaq.interface.pages.product.pages :as product-overview]
-            [schnaq.interface.pages.publications :as publications]
+            [schnaq.interface.pages.start :refer [startpage]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.routing :as route-utils]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -37,8 +30,6 @@
             [schnaq.interface.views.registration :as registration]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
-            [schnaq.interface.views.startpage.core :as startpage-views]
-            [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.subscription :as subscription-views]
             [schnaq.interface.views.user.edit-account :as edit-account]
             [schnaq.interface.views.user.edit-notifications :as edit-notifications]
@@ -71,30 +62,8 @@
 (def common-routes
   [["/"
     {:name :routes/startpage
-     :view startpage-views/startpage-view
-     :link-text (labels :router/startpage)
-     :controllers [{:start #(rf/dispatch [:load-preview-statements])}]}]
-   ["/product"
-    [""
-     {:name :routes/product-page
-      :view product-overview/overview-view
-      :link-text (labels :router/product)}]
-    ["/qa"
-     {:name :routes/product-page-qa
-      :view product-overview/qa-view
-      :link-text (labels :router/product-qa)}]
-    ["/poll"
-     {:name :routes/product-page-poll
-      :view product-overview/poll-view
-      :link-text (labels :router/product-poll)}]
-    ["/activation"
-     {:name :routes/product-page-activation
-      :view product-overview/activation-view
-      :link-text (labels :router/product-activation)}]
-    ["/theming"
-     {:name :routes.product-page/theming
-      :view product-overview/theming-view
-      :link-text (labels :router/product-theming)}]]
+     :view startpage
+     :controllers [{:stop #(rf/dispatch [:schnaq.join.form/clear])}]}]
    ["/login"
     {:name :routes/login
      :view pages/login-page
@@ -148,16 +117,6 @@
      {:name :routes.admin/summaries
       :view summary/admin-summaries-view
       :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:summaries/load-all]]))}]}]]
-   ["/code-of-conduct"
-    {:name :routes/code-of-conduct
-     :view coc/view
-     :link-text (labels :router/code-of-conduct)}]
-   ["/press"
-    {:name :routes/press
-     :view press/view}]
-   ["/publications"
-    {:name :routes/publications
-     :view publications/view}]
    ["/schnaqs"
     {:name :routes.schnaqs/personal
      :view feed/page
@@ -280,13 +239,6 @@
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/graph false])
                               (rf/dispatch [:notifications/reset]))}]}]]]
-   ["/pricing"
-    {:name :routes/pricing
-     :view pricing-view/pricing-view
-     :link-text (labels :router/pricing)
-     :controllers [{:start (fn []
-                             (rf/dispatch [:load-preview-statements])
-                             (rf/dispatch [:pricing/get-prices]))}]}]
    ["/subscription"
     ["/cancel" {:name :routes.subscription/cancel
                 :view subscription-views/cancel-view}]
@@ -317,24 +269,6 @@
     ["/step-3" {:name :routes.user.register/step-3
                 :view registration/registration-step-3-view
                 :controllers [{:start #(rf/dispatch [:pricing/get-prices])}]}]]
-   ["/privacy"
-    [""
-     {:name :routes.privacy/complete
-      :view privacy-extended/view}]
-    ["/overview"
-     {:name :routes.privacy/simple
-      :view privacy/view
-      :link-text (labels :router/privacy)}]
-    ;; Legacy route.
-    ["/extended"
-     {:name :routes.legacy/privacy-extended
-      :controllers [{:start #(rf/dispatch [:navigation/navigate :routes.privacy/complete])}]}]]
-   ["/about"
-    {:name :routes/about-us
-     :view about-us/page}]
-   ["/legal-note"
-    {:name :routes/legal-note
-     :view legal-note/page}]
    (when-not shared-config/production?
      ["/playground/editor"
       {:name :routes.playground/editor

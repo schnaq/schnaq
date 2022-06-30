@@ -27,14 +27,11 @@
             [schnaq.interface.components.preview]
             [schnaq.interface.components.schnaq]
             [schnaq.interface.components.videos]
-            [schnaq.interface.components.wavy]
             [schnaq.interface.config :as config]
             [schnaq.interface.events]
             [schnaq.interface.navigation]
             [schnaq.interface.notification.events]
-            [schnaq.interface.pages.about-us]
-            [schnaq.interface.pages.press]
-            [schnaq.interface.pages.privacy]
+            [schnaq.interface.pages.start]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.scheduler]
             [schnaq.interface.translations]
@@ -88,7 +85,6 @@
             [schnaq.interface.views.schnaq.summary]
             [schnaq.interface.views.schnaq.visited]
             [schnaq.interface.views.schnaq.wordcloud-card]
-            [schnaq.interface.views.startpage.core]
             [schnaq.interface.views.user]
             [schnaq.interface.views.user.edit-account]
             [schnaq.interface.views.user.settings]
@@ -123,7 +119,6 @@
   (log/info (gstring/format "Build Hash: %s" config/build-hash))
   (log/info (gstring/format "API: %s" shared-config/api-url))
   (log/info (gstring/format "Environment: %s" shared-config/environment))
-  (log/info (gstring/format "Example Data: %s from %s, statements [%d]" config/example-share-hash config/example-api-url config/example-statement))
   (log/info (gstring/format "[Keycloak] Realm: %s, Client: %s" config/keycloak-realm config/keycloak-client)))
 
 (defn init

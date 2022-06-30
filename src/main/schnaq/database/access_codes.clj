@@ -95,4 +95,6 @@
   [:discussion.access/code :ret (? :discussion/access)]
   (let [access-code (remove-invalid-and-pull-up-access-codes
                      (fast-pull [:discussion.access/code code] patterns/access-code-with-discussion))]
-    (when (valid? access-code) access-code)))
+    (when (and (not (nil? (:db/id access-code)))
+               (valid? access-code))
+      access-code)))

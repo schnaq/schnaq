@@ -56,6 +56,14 @@
                        :access-control-allow-methods api/allowed-http-verbs}))
       nil false
       "" false
+      "http://schnaq.app" true
+      "https://schnaq.app" true
+      "api.schnaq.app" true
+      "https://api.schnaq.app" true
+      "https://schnaq.app" true
+      "https://schnaq.app/?kangaroo=rocks" true
+      "schnaq.app" true
+      "www.schnaq.app" true
       "http://schnaq.com" true
       "https://schnaq.com" true
       "api.schnaq.com" true

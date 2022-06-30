@@ -1,7 +1,6 @@
 (ns schnaq.interface.components.buttons
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]))
 
 (defn anchor
@@ -57,5 +56,5 @@
      [:<>
       [icon :star "me-1"]
       (labels :pricing.upgrade-nudge/button)]
-     (navigation/href :routes/pricing)
+     "https://schnaq.com/pricing"
      "btn-secondary"]))
