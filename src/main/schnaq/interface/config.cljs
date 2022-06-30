@@ -45,6 +45,7 @@
 ;; -----------------------------------------------------------------------------
 ;; Pricing
 
+(def price-event-tier-euro 49)
 (def max-concurrent-users-free-tier 100)
 (def max-concurrent-users-pro-tier 250)
 
