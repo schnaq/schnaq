@@ -4,12 +4,12 @@
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub faFontAwesomeFlag]]
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEyeSlash faEnvelope faFileAlt faIdCard faHourglass faImage faFileVideo faFileImage]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faArchive faBackspace faBold faBullseye faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faBuilding faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle faCode
-              faCloud faCog faComment faCookie faCopy faCrown faEnvelopeOpenText faTimes faTimesCircle faEllipsisH faEllipsisV faEdit
-              faFileDownload faExternalLinkAlt faFlask faGem faGhost faGraduationCap faHandshake faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
-              faLocationArrow faLock faLockOpen faMagic faPalette faMapPin faChevronLeft faChevronRight faCircle
+             [faArchive faBackspace faBold faBullseye faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle faCode
+              faCloud faCog faComment faCopy faTimes faEllipsisH faEllipsisV faEdit
+              faFileDownload faExternalLinkAlt faFlask faGhost faGraduationCap faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
+              faLock faLockOpen faMagic faPalette faMapPin faChevronLeft faChevronRight faCircle
               faPaperPlane faPenSquare faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
-              faTimes faTimesCircle faTrashAlt faUniversity faUsers faUserLock faUserNinja faUserPlus faAngleDown faAngleRight faMinus faStepBackward
+              faTimes faTimesCircle faTrashAlt faUniversity faUsers faAngleDown faAngleRight faMinus faStepBackward
               faItalic faUndo faUnderline faStrikethrough faRedo faQuoteRight faListOl faList]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
 
@@ -23,7 +23,6 @@
    :bell faBell
    :bold faBold
    :briefcase faBriefcase
-   :building faBuilding
    :bullseye faBullseye
    :calendar faCalendar
    :calendar-alt faCalendarAlt
@@ -42,10 +41,8 @@
    :collapse-up faAngleRight
    :comment faComment
    :comment/alt faCommentAlt
-   :cookie/complete faCookie
    :copy faCopy
    :cross faTimes
-   :crown faCrown
    :delete-icon faTimesCircle
    :dots faEllipsisH
    :dots-v faEllipsisV
@@ -53,19 +50,16 @@
    :eye faEye
    :eye-slash faEyeSlash
    :envelope faEnvelope
-   :envelope-open-text faEnvelopeOpenText
    :external-link-alt faExternalLinkAlt
    :facebook faFacebook
    :file-alt faFileAlt
    :file-download faFileDownload
    :flag faFontAwesomeFlag
    :flask faFlask
-   :gem faGem
    :ghost faGhost
    :graduation-cap faGraduationCap
    :graph faProjectDiagram
    :github faGithub
-   :handshake faHandshake
    :hourglass/empty faHourglass
    :id-card faIdCard
    :image faImage
@@ -79,7 +73,6 @@
    :linkedin faLinkedin
    :list faList
    :list-ol faListOl
-   :location-arrow faLocationArrow
    :lock faLock
    :lock/open faLockOpen
    :magic faMagic
@@ -106,16 +99,12 @@
    :tag faTag
    :terminal faTerminal
    :times faTimes
-   :times-circle faTimesCircle
    :trash faTrashAlt
    :twitter faTwitter
    :underline faUnderline
    :undo faUndo
    :university faUniversity
    :user/group faUsers
-   :user/lock faUserLock
-   :user/ninja faUserNinja
-   :user/plus faUserPlus
    :video-file faFileVideo})
 
 (defn icon

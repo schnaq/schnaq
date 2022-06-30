@@ -105,9 +105,6 @@ build-frontend-image:
       docker build -f Dockerfile.frontend --pull
       --build-arg REST_API_URL=https://api.schnaq.com
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
-      --build-arg EXAMPLE_SHARE_HASH=$EXAMPLE_SHARE_HASH
-      --build-arg EXAMPLE_API_URL=$EXAMPLE_API_URL
-      --build-arg EXAMPLE_STATEMENT=$EXAMPLE_STATEMENT
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT
       --build-arg DATOMIC_REPO_USERNAME
