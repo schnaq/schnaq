@@ -126,7 +126,7 @@
    [:<>
     [um/register-or-user-button true]
     [:ul.list-group.list-group-flush
-     [li-link-button :router/pricing (navigation/href :routes/pricing)]
-     [li-link-button :router/privacy (navigation/href :routes.privacy/simple)]
+     [li-link-button :router/pricing "https://schnaq.com/pricing"]
+     [li-link-button :router/privacy "https://schnaq.com/en/privacy"]
      [li-link-button :nav/blog "https://schnaq.com/blog/"]
      [:li.list-group-item.dropdown [navbar/language-dropdown true {:class "p-0 text-dark"}]]]]])

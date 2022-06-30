@@ -2,7 +2,6 @@
   (:require [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.common :refer [next-step]]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
@@ -40,7 +39,7 @@
     [:h3.pb-3 (labels :subscription.page.cancel/title)]
     [:p.lead (labels :subscription.page.cancel/lead)]
     [:p (labels :subscription.page.cancel/body)]
-    [buttons/anchor (labels :subscription.page.cancel/button) (navigation/href :routes/pricing)]]])
+    [buttons/anchor (labels :subscription.page.cancel/button) "https://schnaq.com/pricing"]]])
 
 ;; -----------------------------------------------------------------------------
 
