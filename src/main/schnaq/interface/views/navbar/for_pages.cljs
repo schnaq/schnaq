@@ -2,7 +2,6 @@
   (:require [clojure.string :as str]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
-            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
             [schnaq.interface.views.navbar.elements :as elements]
