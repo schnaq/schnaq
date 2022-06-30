@@ -204,7 +204,7 @@ deploy-staging:
 deploy-production:
   stage: deploy
   variables:
-    DEPLOYMENT: production
+    DEPLOYMENT: app
     DEPLOY_BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend:$CI_PIPELINE_IID
     DEPLOY_FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend:$CI_PIPELINE_IID
   trigger: dialogo/deployments/schnaq
