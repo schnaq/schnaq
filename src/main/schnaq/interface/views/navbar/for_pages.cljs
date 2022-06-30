@@ -20,9 +20,6 @@
 (defn- pricing-button []
   [navbar-components/button :router/pricing "https://schnaq.com/pricing"])
 
-(defn- product-button []
-  [navbar-components/product-dropdown-button])
-
 (defn- privacy-button []
   [navbar-components/button :router/privacy "https://schnaq.com/privacy"])
 
@@ -73,7 +70,6 @@
     [:div#schnaq-navbar.collapse.navbar-collapse
      [:ul.navbar-nav.ms-auto
       [:li.nav-item [navbar-components/button :nav/schnaqs (toolbelt/current-overview-link)]]
-      [:li.nav-item [product-button]]
       [:li.nav-item [pricing-button]]
       [:li.nav-item [privacy-button]]
       [:li.nav-item [blog-link]]

@@ -33,10 +33,6 @@
 
    :startpage/slogan "Events as interactive as they should be!"
 
-   ;; Product Pages
-   :productpage/button "Product"
-   :productpage/roadmap "Roadmap"
-
    ;; Login page
    :page.login/heading "Let's schnaq"
    :page.login/subheading "100% free forever"

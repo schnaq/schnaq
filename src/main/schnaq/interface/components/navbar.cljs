@@ -3,7 +3,6 @@
             [re-frame.core :as rf]
             [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.tooltip :as tooltip]))
@@ -46,24 +45,6 @@
   [keyword? any? :ret vector?]
   [:a.nav-link.text-nowrap {:href href :role "button"}
    (labels label)])
-
-(defn product-dropdown-button
-  "Product button containing all subpages in its dropdown content."
-  []
-  (let [dropdown-id "product-drop-down-id"]
-    [:div.dropdown
-     [:button.btn.nav-link.dropdown-toggle
-      {:id dropdown-id
-       :role "button" :data-bs-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}
-      (labels :productpage/button)]
-     [:div.dropdown-menu
-      ;; TODO kill maybe
-      {:aria-labelledby dropdown-id}
-      [:a.dropdown-item {:href config/roadmap-url :target :_blank}
-       (labels :productpage/roadmap)
-       [icon :external-link-alt "ms-1" {:size :sm}]]
-      [:hr.m-1.mx-auto.p-0.w-75]]]))
 
 (defn separated-button
   "The default navbar-button. Dropdown-content must have according classes."
