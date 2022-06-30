@@ -31,32 +31,7 @@
    :how-to/question-dont-show-again "Got it?"
    :how-to/answer-dont-show-again "Don't show this tip anymore!"
 
-   ;; Startpage
    :startpage/slogan "Events as interactive as they should be!"
-   :schnaq.startpage.cta/button "Create a free schnaq now!"
-   :startpage.social-proof/companies "They're already used to schnaq"
-
-   :startpage.usage/lead "What do I use schnaq for?"
-
-   :startpage.features/more-information "More information"
-
-   :startpage.information.meetings/title "Hybrid questioning"
-   :startpage.information.meetings/body "Reach out through schnaq to people who can't be there. Everyone can be involved and questions can be asked anonymously. With smart Q&A, you can even stay up-to-date online!"
-
-   :startpage.early-adopter/title "Gotten Curious?"
-   :startpage.early-adopter/body "Try the \"Free Forever\" plan."
-
-   :startpage.three-steps/heading "Three steps to an active audience"
-   :startpage.three-steps/first "Create a schnaq"
-   :startpage.three-steps/second "Share your schnaq"
-   :startpage.three-steps/third "Answer questions and understand the participants"
-
-   :startpage.newsletter/heading "Sign up for the schnaq newsletter and get regular updates, tips and more!"
-   :startpage.newsletter/button "Give me exclusive previews!"
-   :startpage.newsletter/address-placeholder "E-Mail Address"
-
-   :startpage.faq/title "Frequently Asked Questions"
-   :startpage.faq/subtitle "(this is what it could look like for you)"
 
    ;; Product Pages
    :productpage/button "Product"
@@ -393,22 +368,6 @@
    :analytics.users/copy-button "Copy"
    :analytics.users.table/name "Name"
    :analytics.users.table/email "Email"
-
-   ;; Supporters
-   :supporters/heading "Supported by:"
-   :startpage/team-schnaq "We work every day to do our part for better knowledge exchange where everyone is heard."
-   :startpage/team-schnaq-heading "Get to know the team behind schnaq"
-
-   ;; Testimonials
-   :testimonials/heading "Testimonials"
-   :testimonials.doctronic/company "doctronic GmbH & Co. KG"
-   :testimonials.leetdesk/company "Leetdesk – ODYN GmbH"
-   :testimonials.hhu/company "Heinrich Heine University Düsseldorf"
-   :testimonials.franky/company "FoxBase GmbH"
-   :testimonials.metro/company "Metro Digital"
-
-   :testimonials.muetze/company "Landesverband der Mütterzentren NRW"
-   :testimonials.digihub/company "Digital Innovation Hub Düsseldorf/Rheinland GmbH"
 
    ;; User related
    :user.button/set-name "Save name"
@@ -811,7 +770,6 @@
    :schnaqqifant/talk-alt-text "Schnaqqi the schnaq mascot is talking to his friend Wilbert"
    :schnaqqifant/admin-alt-text "Schnaqqi the schnaq mascot is dressed as a very serious administrator"
    :schnaqqifant/erase-alt-text "Schnaqqi the schnaq mascot is holding up an eraser"
-   :schnaqqifant.mail/alt-text "Schnaqqi the schnaq mascot is dressed as a mailperson"
    :schnaqqifant/three-d-head-alt-text "Schnaqqis Head in 3D looking at you"
    :icon.search/alt-text "Search Icon"
    :icon.posts/alt-text "Icon representing number of posts"

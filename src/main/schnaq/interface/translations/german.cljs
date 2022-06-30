@@ -31,43 +31,11 @@
    :how-to/question-dont-show-again "Verstanden?"
    :how-to/answer-dont-show-again "In Zukunft nicht mehr anzeigen!"
 
-   ;; Startpage
    :startpage/slogan "Veranstaltungen so interaktiv, wie sie sein sollen!"
-   :schnaq.startpage.cta/button "Jetzt kostenfrei schnaq erstellen"
-   :startpage.social-proof/companies "Mit denen haben wir schon geschnaqqt"
-
-   :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
-   :startpage.features/more-information "Mehr Informationen"
-
-   :startpage.information.meetings/title "Hybrides Fragenstellen"
-   :startpage.information.meetings/body "Erreiche durch schnaq auch die Menschen, die nicht vor Ort sein können. Alle können eingebunden und die Fragen anonym gestellt werden. Mit intelligentem Q&A kannst du sogar online up-to-date bleiben!"
-
-   :startpage.early-adopter/title "Neugierig geworden?"
-   :startpage.early-adopter/body "Probiere den \"Frei für Immer\" Plan."
-
-   :startpage.three-steps/heading "Drei Schritte zum aktiven Publikum"
-   :startpage.three-steps/first "Erstelle einen schnaq"
-   :startpage.three-steps/second "Teile den schnaq"
-   :startpage.three-steps/third "Beantworte Fragen und verstehe Teilnehmer:innen"
-
-   :startpage.newsletter/heading "Melde dich für den schnaq Newsletter an und erhalte regelmäßig Updates, Tipps und mehr!"
-   :startpage.newsletter/button "Exklusive Informationen anfordern!"
-   :startpage.newsletter/address-placeholder "E-Mail Adresse"
-
-   :startpage.faq/title "Häufig gestellte Fragen"
-   :startpage.faq/subtitle "(so könnte es bei dir aussehen)"
 
    ;; Product Pages
    :productpage/button "Produkt"
    :productpage/roadmap "Roadmap"
-
-   ;; Activation Feature
-   :productpage.activation.torooo/title "Lass etwas von deinem Publikum hören!"
-   :productpage.activation.torooo/subtitle "Binde dein Publikum aktiv in deine Veranstaltung ein! Deine Teilnehmer:innen können dir mit einem Klick auf den Törööö-Knopf sofort Feedback geben. Beispielsweise wie viele Sprachen sie sprechen oder wie viele Serien sie diese Woche bereits geguckt haben."
-   :productpage.activation.raise-hands/title "Handheben in digital"
-   :productpage.activation.raise-hands/subtitle "Ein Törööö ist das digitale Äquivalent zum Handheben. Du kannst die Aktivierung jederzeit freischalten oder beenden. Wenn du eine neue Frage stellst, kannst du die Anzahl der Törööös einfach zurücksetzen."
-   :productpage.activation.audience/title "Das sieht dein Publikum"
-   :productpage.activation.audience/subtitle "Sobald du startest, ist die erste Kachel, die dein Publikum sieht, die Aktivierungsansicht mitsamt Törööö-Knopf. Deine Teilnehmer:innen können jederzeit ein Törööö von sich geben. Damit kannst du sie jederzeit einbinden!"
 
    ;; Login Page
    :page.login/heading "Nicht warten, schnaqqen!"
@@ -402,22 +370,6 @@
    :analytics.users/copy-button "Kopieren"
    :analytics.users.table/name "Name"
    :analytics.users.table/email "E-Mail"
-
-   ;; Supporters
-   :supporters/heading "Mit freundlicher Unterstützung von:"
-   :startpage/team-schnaq "Wir arbeiten tagtäglich daran unseren Beitrag für einen besseren Wissensaustausch zu leisten, bei dem alle gehört werden."
-   :startpage/team-schnaq-heading "Lerne das Team hinter schnaq kennen"
-
-   ;; Testimonials
-   :testimonials/heading "Die haben schon mit uns geschnaqqt"
-   :testimonials.doctronic/company "doctronic GmbH & Co. KG"
-   :testimonials.leetdesk/company "Leetdesk – ODYN GmbH"
-   :testimonials.hhu/company "Heinrich-Heine-Universität Düsseldorf"
-   :testimonials.franky/company "FoxBase GmbH"
-   :testimonials.metro/company "Metro Digital"
-
-   :testimonials.muetze/company "Landesverband der Mütterzentren NRW"
-   :testimonials.digihub/company "Digital Innovation Hub Düsseldorf/Rheinland GmbH"
 
    ;; User related
    :user.button/set-name "Name speichern"
@@ -822,7 +774,6 @@
    :schnaqqifant/talk-alt-text "Schnaqqi, das schnaq Maskottchen, redet mit seinem Freund-Elefant Wilbert"
    :schnaqqifant/admin-alt-text "Schnaqqi, das schnaq Maskottchen, ist als seriöser Administrator verkleidet"
    :schnaqqifant/erase-alt-text "Schnaqqi, das schnaq Maskottchen, hält einen Radiergummi hoch"
-   :schnaqqifant.mail/alt-text "Schnaqqi, das schnaq Maskottchen, ist als Briefträger verkleidet"
    :schnaqqifant/three-d-head-alt-text "Schnaqqis Kopf in 3D wie er dich anschaut"
    :icon.search/alt-text "Such-Symbol"
    :icon.posts/alt-text "Symbol für Anzahl Beiträge"
