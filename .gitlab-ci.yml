@@ -168,7 +168,7 @@ build-frontend-temp-image:
     - docker push ${FRONTEND_IMAGE_TAGGED}-app
     - docker push $FRONTEND_IMAGE:app
   only:
-    - develop
+    - migration
 
 # ------------------------------------------------------------------------------
 
