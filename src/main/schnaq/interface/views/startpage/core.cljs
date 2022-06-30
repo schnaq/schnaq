@@ -70,7 +70,7 @@
      [:img.img-fluid.mb-2 {:src (img-path :startpage/team-schnaq)
                            :alt "Alexander Schneider, Michael Birkhoff, Christian Meter"
                            :style {:max-width "400px"}}]
-     [:h2 [:a {:href (navigation/href :routes/about-us)} (labels :startpage/team-schnaq-heading)]]]
+     [:h2 [:a {:href "https://schnaq.com/about"} (labels :startpage/team-schnaq-heading)]]]
     [:div.col-12.col-lg-6.my-lg-auto
      [:p.h5.mb-5 (labels :startpage/team-schnaq)]
      [:p.h4.text-primary.text-center (labels :supporters/heading)]

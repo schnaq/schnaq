@@ -10,7 +10,6 @@
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.navigation :as navigation]
-            [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.legal-note :as legal-note]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.routing :as route-utils]
@@ -272,9 +271,6 @@
     ["/step-3" {:name :routes.user.register/step-3
                 :view registration/registration-step-3-view
                 :controllers [{:start #(rf/dispatch [:pricing/get-prices])}]}]]
-   ["/about"
-    {:name :routes/about-us
-     :view about-us/page}]
    ["/legal-note"
     {:name :routes/legal-note
      :view legal-note/page}]

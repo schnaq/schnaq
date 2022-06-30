@@ -318,41 +318,6 @@
      "Dr Alexander Schneider, Dr Christian Meter, and Michael Birkhoff"]
     [:p "Legally binding is the German version of this page."]]
 
-   ;; About us
-   :about-us.unity/title "The Unit schnaq"
-   :about-us.team/alt-text "The four people that started schnaq as a project: Alexander Schneider, Philip Bernardy, Christian Meter, Michael Birkhoff."
-   :about-us.unity/body [:<> [:p "schnaq brings digital discussions into the future. We offer companies the opportunity to conduct transparent decision-making processes in which the entire team can be heard, so that equal-opportunity and comprehensible discourse takes place. Our analytics help you understand which team member has not been heard enough and should be included. By sharing knowledge through discussions on our platform, we prevent knowledge silos and tacit company knowledge by making company knowledge available to all, be it written or later spoken communication."]
-                         [:p "Our team is committed to ensuring that every voice can be heard!"]]
-
-   :about-us.value/title "Our Values"
-   :about-us.value/subtitle "We follow values that define our actions and our products."
-   :about-us.honesty/title "Honesty"
-   :about-us.honesty/body "We focus on presenting our products and their capabilities honestly and without exaggeration. We firmly believe that our products can stand for themselves without any exaggeration."
-   :about-us.collaborate/title "Will to Collaborate"
-   :about-us.collaborate/body "We firmly believe that we can achieve more together than alone. That's why we like to cultivate a culture of collaboration. Whether it's among ourselves as a team or with our customers and cooperation partners. Together we can create great things."
-   :about-us.action/title "Drive"
-   :about-us.action/body "We don't make decisions out of the blue, but based on all the data we have available. But once a decision has been made after discussions, we stand behind it together and pull together to move forward efficiently."
-   :about-us.quality/title "Quality"
-   :about-us.quality/body "We are proud of our work and what we create. We like our work, we see it as a part of us and we enjoy connecting people all over the world. That's why we care that our products are of the highest possible quality."
-   :about-us.diversity/title "Diversity"
-   :about-us.diversity/body "Every person brings their own unique perspective on the world. And precisely because we bring people into contact with each other, we want as many of these perspectives as possible to flow into our work."
-
-   :about-us.numbers/title "schnaq in Numbers"
-   :about-us.numbers/research "Years of Research"
-   :about-us.numbers/users "Users"
-   :about-us.numbers/statements "Statements Structured"
-   :about-us.numbers/loc "Lines of Code"
-
-   :about-us.team/title "Focus on the Team"
-   :about-us.team/alexander "Co-Founder - Operational Management"
-   :about-us.team/christian "Co-Founder - Technical Management"
-   :about-us.team/mike "Co-Founder - Product Design Management"
-
-   :about-us.page/heading "About Us"
-   :about-us.page/subheading "Information about us"
-   :about-us.page/title "Schnaq's Mission and Values - Learn more about schnaq's story."
-   :about-us.page/description "Schnaq – an audience interaction platform to facilitate live and virtual audience engagement through live Q&A, real time polling and live audience activation tools."
-
    ;; Legal Note
    :legal-note.page/heading "Legal Note"
    :legal-note.page/disclaimer "Disclaimer"

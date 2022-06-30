@@ -32,7 +32,6 @@
             [schnaq.interface.events]
             [schnaq.interface.navigation]
             [schnaq.interface.notification.events]
-            [schnaq.interface.pages.about-us]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.scheduler]
             [schnaq.interface.translations]
