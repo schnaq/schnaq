@@ -134,12 +134,13 @@
     ["/:share-hash"
      {:name :routes.schnaq.start/controller-init
       :parameters {:path {:share-hash :discussion/share-hash}
-                   :query :ui.configuration/schnaq} ;; WIP
+                   :query :ui.settings/schnaq}
       :controllers [{:parameters {:path [:share-hash]
                                   :query [:hide-discussion-options :hide-navbar
-                                          :hide-input :num-rows]}
+                                          :hide-input :num-rows
+                                          :hide-input-replies]}
                      :start (fn [{:keys [path query]}]
-                              (rf/dispatch [:ui.configuration/parse-query-parameters query])
+                              (rf/dispatch [:ui.settings/parse-query-parameters query])
                               (rf/dispatch [:body.class/add "theming-enabled"])
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
                               (rf/dispatch [:schnaq/add-visited! (:share-hash path)])

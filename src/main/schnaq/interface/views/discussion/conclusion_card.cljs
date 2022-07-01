@@ -463,8 +463,8 @@
         schnaq-loading? @(rf/subscribe [:loading/schnaq?])
         access-code @(rf/subscribe [:schnaq.selected/access-code])
         question-input @(rf/subscribe [:schnaq.question.input/current])
-        hide-input? @(rf/subscribe [:ui/configuration :hide-input])
-        number-of-rows @(rf/subscribe [:ui/configuration :num-rows])
+        hide-input? @(rf/subscribe [:ui/setting :hide-input])
+        number-of-rows @(rf/subscribe [:ui/setting :num-rows])
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements))))
         question-first? (not-empty question-input)

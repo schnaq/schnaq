@@ -378,15 +378,17 @@
           :opt [:db/id]))
 
 ;; -----------------------------------------------------------------------------
-;; UI Configuration
+;; UI Settings
 
-(s/def :ui.configuration/hide-discussion-options boolean?)
-(s/def :ui.configuration/hide-navbar boolean?)
-(s/def :ui.configuration/hide-input boolean?)
-(s/def :ui.configuration/num-rows nat-int?)
+(s/def :ui.settings/hide-discussion-options boolean?)
+(s/def :ui.settings/hide-navbar boolean?)
+(s/def :ui.settings/hide-input boolean?)
+(s/def :ui.settings/num-rows nat-int?)
+(s/def :ui.settings/hide-input-replies boolean?)
 
-(s/def :ui.configuration/schnaq
-  (s/keys :opt-un [:ui.configuration/hide-discussion-options
-                   :ui.configuration/hide-navbar
-                   :ui.configuration/hide-input
-                   :ui.configuration/num-rows]))
+(s/def :ui.settings/schnaq
+  (s/keys :opt-un [:ui.settings/hide-discussion-options
+                   :ui.settings/hide-navbar
+                   :ui.settings/hide-input
+                   :ui.settings/num-rows
+                   :ui.settings/hide-input-replies]))

@@ -64,7 +64,7 @@
 (defn collapsible-navbar
   "Collapsible navbar with split content header, collapsible-content-id must match id of collapsible-content."
   [brand-content collapse-content-id navbar-bg-class top-right-content collapsible-content]
-  (when-not @(rf/subscribe [:ui/configuration :hide-navbar])
+  (when-not @(rf/subscribe [:ui/setting :hide-navbar])
     [:<>
      [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
       {:class navbar-bg-class}

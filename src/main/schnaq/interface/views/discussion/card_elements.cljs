@@ -245,19 +245,19 @@
       [search-clear-button search-input-id]]]))
 
 (rf/reg-sub
- :ui/configuration
+ :ui/setting
  (fn [db [_ field]]
-   (get-in db [:ui :configuration field])))
+   (get-in db [:ui :settings field])))
 
 (rf/reg-event-db
- :ui.configuration/parse-query-parameters
+ :ui.settings/parse-query-parameters
  (fn [db [_ query]]
-   (assoc-in db [:ui :configuration] query)))
+   (assoc-in db [:ui :settings] query)))
 
 (defn discussion-options-navigation
   "Navigation bar on top of the discussion contents."
   []
-  (when-not @(rf/subscribe [:ui/configuration :hide-discussion-options])
+  (when-not @(rf/subscribe [:ui/setting :hide-discussion-options])
     [:div.text-dark.w-100.mb-1.mx-1.mx-md-0.d-flex.flex-row.flex-wrap.pb-2
      (when-not config/in-iframe?
        [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2
