@@ -5,6 +5,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -243,22 +244,34 @@
         :on-key-up #(throttled-in-schnaq-search %)}]
       [search-clear-button search-input-id]]]))
 
+(rf/reg-sub
+ :ui.configuration/hidden?
+ (fn [db [_ field]]
+   (get-in db [:ui :configuration field])))
+
+(rf/reg-event-db
+ :ui.configuration/parse-query-parameters
+ (fn [db [_ query]]
+   (assoc-in db [:ui :configuration] query)))
+
 (defn discussion-options-navigation
   "Navigation bar on top of the discussion contents."
   []
-  [:div.text-dark.w-100.mb-1.mx-1.mx-md-0.d-flex.flex-row.flex-wrap.pb-2
-   [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2
-    [back-button]]
-   [:div.mt-2.mt-md-0.d-flex.flex-wrap.ms-auto.gy-5.panel-white-sm
-    [:div.ms-auto.ms-md-0.me-1.mx-lg-2.pe-0.pe-lg-2.order-0
-     [sort-options]]
-    [:section.ms-auto.ms-md-0.mt-2.mt-md-0.order-2.order-md-1
-     (when @(rf/subscribe [:routes.schnaq/start?])
-       [filters/filter-answered-statements])]
-    [:div.mx-lg-2.pe-1.pe-lg-2.order-1.order-md-2
-     [question-filter-button]]
-    [:div.mt-2.mt-md-0.ms-auto.ms-md-0.d-flex.align-items-center.order-3
-     [search-bar]]]])
+  (when-not @(rf/subscribe [:ui.configuration/hidden? :hide-discussion-options])
+    [:div.text-dark.w-100.mb-1.mx-1.mx-md-0.d-flex.flex-row.flex-wrap.pb-2
+     (when-not config/in-iframe?
+       [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2
+        [back-button]])
+     [:div.mt-2.mt-md-0.d-flex.flex-wrap.ms-auto.gy-5.panel-white-sm
+      [:div.ms-auto.ms-md-0.me-1.mx-lg-2.pe-0.pe-lg-2.order-0
+       [sort-options]]
+      [:section.ms-auto.ms-md-0.mt-2.mt-md-0.order-2.order-md-1
+       (when @(rf/subscribe [:routes.schnaq/start?])
+         [filters/filter-answered-statements])]
+      [:div.mx-lg-2.pe-1.pe-lg-2.order-1.order-md-2
+       [question-filter-button]]
+      [:div.mt-2.mt-md-0.ms-auto.ms-md-0.d-flex.align-items-center.order-3
+       [search-bar]]]]))
 
 (defn locked-statement-icon
   "Indicator that a statement is locked."

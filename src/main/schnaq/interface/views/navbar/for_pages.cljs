@@ -43,7 +43,7 @@
   [title]
   (let [navbar-content-id "Overview-Content"
         navbar-title (toolbelt/truncate-to-n-chars title 64)]
-    [navbar-components/collapsible-nav-bar
+    [navbar-components/collapsible-navbar
      [elements/navbar-title
       [:h1.h6.fw-bold.my-auto.text-dark navbar-title]]
      navbar-content-id
