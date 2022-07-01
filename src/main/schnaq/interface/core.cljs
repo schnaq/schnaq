@@ -119,7 +119,8 @@
   (log/info (gstring/format "Build Hash: %s" config/build-hash))
   (log/info (gstring/format "API: %s" shared-config/api-url))
   (log/info (gstring/format "Environment: %s" shared-config/environment))
-  (log/info (gstring/format "[Keycloak] Realm: %s, Client: %s" config/keycloak-realm config/keycloak-client)))
+  (log/info (gstring/format "[Keycloak] Realm: %s, Client: %s" config/keycloak-realm config/keycloak-client))
+  (log/info (gstring/format "[FAQs] Share-Hash: %s" config/faq-share-hash)))
 
 (defn init
   "Entrypoint into the application."
