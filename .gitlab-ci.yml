@@ -103,7 +103,7 @@ build-frontend-image:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
       docker build -f Dockerfile.frontend --pull
-      --build-arg REST_API_URL=https://api.schnaq.app
+      --build-arg REST_API_URL=https://api.app.schnaq.com
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT
@@ -152,7 +152,7 @@ build-frontend-staging-image:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
       docker build -f Dockerfile.frontend --pull
-      --build-arg REST_API_URL=https://api.staging.schnaq.app
+      --build-arg REST_API_URL=https://api.staging.app.schnaq.com
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM_STAGING
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT_STAGING
