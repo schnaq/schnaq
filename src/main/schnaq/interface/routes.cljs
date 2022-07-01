@@ -7,6 +7,7 @@
             [reitit.frontend.easy :as reitit-front-easy]
             [reitit.frontend.history :as rfh]
             [schnaq.config.shared :as shared-config]
+            [schnaq.database.specs]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.navigation :as navigation]
@@ -132,9 +133,13 @@
       :link-text (labels :router/create-schnaq)}]
     ["/:share-hash"
      {:name :routes.schnaq.start/controller-init
-      :parameters {:path {:share-hash string?}}
-      :controllers [{:parameters {:path [:share-hash]}
-                     :start (fn [{:keys [path]}]
+      :parameters {:path {:share-hash :discussion/share-hash}
+                   :query :ui.configuration/schnaq} ;; WIP
+      :controllers [{:parameters {:path [:share-hash]
+                                  :query [:hide-discussion-options
+                                          :hide-navbar]}
+                     :start (fn [{:keys [path query]}]
+                              (rf/dispatch [:ui.configuration/parse-query-parameters query])
                               (rf/dispatch [:body.class/add "theming-enabled"])
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
                               (rf/dispatch [:schnaq/add-visited! (:share-hash path)])

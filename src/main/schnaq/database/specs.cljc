@@ -376,3 +376,13 @@
   (s/keys :req [:surveys.using-schnaq-for/user
                 :surveys.using-schnaq-for/topics]
           :opt [:db/id]))
+
+;; -----------------------------------------------------------------------------
+;; UI Configuration
+
+(s/def :ui.configuration/hide-discussion-options boolean?)
+(s/def :ui.configuration/hide-navbar boolean?)
+
+(s/def :ui.configuration/schnaq
+  (s/keys :opt-un [:ui.configuration/hide-discussion-options
+                   :ui.configuration/hide-navbar]))
