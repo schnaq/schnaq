@@ -20,7 +20,8 @@
   [{:keys [parameters]}]
   (let [{:keys [access-code]} (:query parameters)]
     (if-let [share-hash (get-in (ac/discussion-by-access-code access-code) [:discussion.access/discussion :discussion/share-hash])]
-      (ok {:share-hash share-hash})
+      (ok {:share-hash share-hash
+           :location (links/get-share-link share-hash)})
       at/access-code-invalid)))
 
 (defn- schnaq-by-hash
@@ -204,7 +205,8 @@
        :description (at/get-doc #'schnaq-by-access-code)
        :name :api.schnaq/by-access-code
        :parameters {:query {:access-code :discussion.access/code}}
-       :responses {200 {:body {:share-hash :discussion/share-hash}}
+       :responses {200 {:body {:share-hash :discussion/share-hash
+                               :location string?}}
                    404 at/response-error-body}}]
      ["/add-visited" {:put add-visited-schnaq
                       :description (at/get-doc #'add-visited-schnaq)
