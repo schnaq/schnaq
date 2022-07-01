@@ -6,7 +6,6 @@
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.auth :as auth]
-            [schnaq.interface.config :as config]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
@@ -55,8 +54,7 @@
          [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
          [:dispatch [:load/last-added-schnaq]]
          [:dispatch [:schnaq.polls/load-past-votes]]
-         [:dispatch [:schnaq.votes/load-from-localstorage]]
-         [:dispatch [:schnaq.faq/load]]]}))
+         [:dispatch [:schnaq.votes/load-from-localstorage]]]}))
 
 (rf/reg-event-fx
  :form/should-clear
@@ -231,12 +229,3 @@
    {:fx [(http/xhrio-request db :post "/schnaq/by-hash-as-admin" [:schnaq/save-as-last-added]
                              {:share-hash share-hash
                               :edit-hash edit-hash})]}))
-
-(rf/reg-event-fx
- :schnaq.faq/load
- ;; Load FAQ-schnaq if in production and not yet visited.
- (fn [{:keys [db]} []]
-   (let [visited (get-in db [:schnaqs :visited-hashes])
-         faq-visited? (contains? visited config/faq-share-hash)]
-     (when (and (not faq-visited?) shared-config/production?)
-       {:fx [[:dispatch [:schnaq/load-by-share-hash config/faq-share-hash]]]}))))
