@@ -245,7 +245,7 @@
       [search-clear-button search-input-id]]]))
 
 (rf/reg-sub
- :ui.configuration/hidden?
+ :ui/configuration
  (fn [db [_ field]]
    (get-in db [:ui :configuration field])))
 
@@ -257,7 +257,7 @@
 (defn discussion-options-navigation
   "Navigation bar on top of the discussion contents."
   []
-  (when-not @(rf/subscribe [:ui.configuration/hidden? :hide-discussion-options])
+  (when-not @(rf/subscribe [:ui/configuration :hide-discussion-options])
     [:div.text-dark.w-100.mb-1.mx-1.mx-md-0.d-flex.flex-row.flex-wrap.pb-2
      (when-not config/in-iframe?
        [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2

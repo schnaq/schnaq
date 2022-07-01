@@ -382,7 +382,11 @@
 
 (s/def :ui.configuration/hide-discussion-options boolean?)
 (s/def :ui.configuration/hide-navbar boolean?)
+(s/def :ui.configuration/hide-input boolean?)
+(s/def :ui.configuration/num-rows nat-int?)
 
 (s/def :ui.configuration/schnaq
   (s/keys :opt-un [:ui.configuration/hide-discussion-options
-                   :ui.configuration/hide-navbar]))
+                   :ui.configuration/hide-navbar
+                   :ui.configuration/hide-input
+                   :ui.configuration/num-rows]))

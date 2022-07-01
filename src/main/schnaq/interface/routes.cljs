@@ -136,8 +136,8 @@
       :parameters {:path {:share-hash :discussion/share-hash}
                    :query :ui.configuration/schnaq} ;; WIP
       :controllers [{:parameters {:path [:share-hash]
-                                  :query [:hide-discussion-options
-                                          :hide-navbar]}
+                                  :query [:hide-discussion-options :hide-navbar
+                                          :hide-input :num-rows]}
                      :start (fn [{:keys [path query]}]
                               (rf/dispatch [:ui.configuration/parse-query-parameters query])
                               (rf/dispatch [:body.class/add "theming-enabled"])
