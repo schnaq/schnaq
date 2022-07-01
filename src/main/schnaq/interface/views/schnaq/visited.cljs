@@ -2,7 +2,9 @@
   "Handling visited schnaqs."
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.auth :as auth]
+            [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]))
@@ -104,17 +106,19 @@
 
 (rf/reg-event-fx
  :schnaqs.visited/load
+ ;; Load visited schnaqs for the user. Always adds FAQ-schnaq in production.
  (fn [{:keys [db]}]
    (let [visited-hashes (get-in db [:schnaqs :visited-hashes])
+         visited-hashes-with-faq (conj visited-hashes config/faq-share-hash)
          schnaq-filter (keyword (get-in db [:current-route :parameters :query :filter]))]
-     (when-not (empty? visited-hashes)
+     (when-not (empty? visited-hashes-with-faq)
        {:db (if schnaq-filter
               (assoc-in db [:schnaqs :filter] schnaq-filter)
               (update db :schnaqs dissoc :filter))
         :fx [(http/xhrio-request
               db :post "/schnaqs/by-hashes"
               [:schnaqs.visited/store-from-backend]
-              {:share-hashes visited-hashes
+              {:share-hashes (if shared-config/production? visited-hashes-with-faq visited-hashes)
                :display-name (tools/current-display-name db)})]}))))
 
 (rf/reg-event-fx

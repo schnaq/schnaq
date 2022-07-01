@@ -180,12 +180,6 @@
 (defn feed-button-icon [icon-name]
   [:div.mx-2.my-auto [icon icon-name "m-auto fa-fw"]])
 
-(defn icon-and-label-feed-button
-  [label icon-name href button-class]
-  [feed-button (labels label)
-   [:div.mx-2.my-auto [icon icon-name "m-auto fa-fw"]]
-   href button-class])
-
 (defn hub-feed-button
   "Display a single hub."
   [{:hub/keys [keycloak-name name logo]}]
