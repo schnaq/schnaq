@@ -17,8 +17,7 @@
                                             schnaq.interface.config/keycloak-realm #shadow/env "KEYCLOAK_REALM"
                                             schnaq.interface.config/keycloak-client #shadow/env "KEYCLOAK_CLIENT"
                                             schnaq.interface.config/faq-share-hash #shadow/env "FAQ_SHARE_HASH"
-                                            schnaq.config.shared/s3-host #shadow/env "S3_HOST"
-                                            schnaq.config.shared/embedded? #shadow/env "EMBEDDED"}
+                                            schnaq.config.shared/s3-host #shadow/env "S3_HOST"}
                           :build-options {:ns-aliases {com.fulcrologic.guardrails.core com.fulcrologic.guardrails.noop
                                                        day8.re-frame.tracing day8.re-frame.tracing-stubs}}}
                 :devtools {:preloads [devtools.preload day8.re-frame-10x.preload]}}
