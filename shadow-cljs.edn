@@ -16,6 +16,7 @@
                                             schnaq.interface.config/build-hash #shadow/env "BUILD_HASH"
                                             schnaq.interface.config/keycloak-realm #shadow/env "KEYCLOAK_REALM"
                                             schnaq.interface.config/keycloak-client #shadow/env "KEYCLOAK_CLIENT"
+                                            schnaq.interface.config/share-hash-faq #shadow/env "SHARE_HASH_FAQ"
                                             schnaq.config.shared/s3-host #shadow/env "S3_HOST"
                                             schnaq.config.shared/embedded? #shadow/env "EMBEDDED"}
                           :build-options {:ns-aliases {com.fulcrologic.guardrails.core com.fulcrologic.guardrails.noop

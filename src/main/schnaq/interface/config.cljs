@@ -60,3 +60,11 @@
    :xxxl 1600
    :hd 1900
    :qhd 2560})
+
+;; -----------------------------------------------------------------------------
+;; Load FAQs
+;;
+;; When in Production / Staging, load the FAQ schnaq to not present an empty
+;; state to the users.
+
+(goog-define share-hash-faq "6586e787-8704-4b4b-9221-5821d15626b5")
