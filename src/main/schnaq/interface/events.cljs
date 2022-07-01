@@ -237,6 +237,6 @@
  ;; Load FAQ-schnaq if in production and not yet visited.
  (fn [{:keys [db]} []]
    (let [visited (get-in db [:schnaqs :visited-hashes])
-         faq-visited? (contains? visited config/share-hash-faq)]
+         faq-visited? (contains? visited config/faq-share-hash)]
      (when (and (not faq-visited?) shared-config/production?)
-       {:fx [[:dispatch [:schnaq/load-by-share-hash config/share-hash-faq]]]}))))
+       {:fx [[:dispatch [:schnaq/load-by-share-hash config/faq-share-hash]]]}))))

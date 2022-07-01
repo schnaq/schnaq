@@ -107,6 +107,7 @@ build-frontend-image:
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT
+      --build-arg FAQ_SHARE_HASH=$FAQ_SHARE_HASH
       --build-arg DATOMIC_REPO_USERNAME
       --build-arg DATOMIC_REPO_PASSWORD
       -t $FRONTEND_IMAGE_TAGGED .

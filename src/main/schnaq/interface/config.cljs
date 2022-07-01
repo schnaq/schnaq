@@ -67,4 +67,4 @@
 ;; When in Production / Staging, load the FAQ schnaq to not present an empty
 ;; state to the users.
 
-(goog-define share-hash-faq "6586e787-8704-4b4b-9221-5821d15626b5")
+(goog-define faq-share-hash "6586e787-8704-4b4b-9221-5821d15626b5")
