@@ -463,6 +463,8 @@
         schnaq-loading? @(rf/subscribe [:loading/schnaq?])
         access-code @(rf/subscribe [:schnaq.selected/access-code])
         question-input @(rf/subscribe [:schnaq.question.input/current])
+        hide-input? @(rf/subscribe [:ui/setting :hide-input])
+        number-of-rows @(rf/subscribe [:ui/setting :num-rows])
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements))))
         question-first? (not-empty question-input)
@@ -473,11 +475,11 @@
        (cond->
         [:> Masonry
          {:breakpoints config/breakpoints
-          :columns {:xs 1 :lg 2}
+          :columns {:xs 1 :lg (or number-of-rows 2)}
           :gap 10}
          [:section
           [info-card]
-          [selection-card]]]
+          (when-not hide-input? [selection-card])]]
          question-first? (conj statements activations)
          (not question-first?) (conj activations statements))
        (when show-call-to-share?

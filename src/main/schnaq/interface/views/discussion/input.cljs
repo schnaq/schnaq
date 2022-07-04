@@ -5,6 +5,7 @@
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.lexical.editor :as lexical]
+            [schnaq.interface.config :as config]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -117,7 +118,7 @@
                          :file-storage :schnaq/by-share-hash
                          :on-text-change throttled-input-tokenizing-fn
                          :toolbar? true
-                         :focus? true
+                         :focus? (not config/in-iframe?)
                          :placeholder (labels :statement.new/placeholder)}
          {:className "flex-grow-1"}]
         [:button.btn.btn-outline-secondary
@@ -185,13 +186,14 @@
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         locked? (:statement/locked? statement)
+        hide-input-replies @(rf/subscribe [:ui/setting :hide-input-replies])
         editor-id (format "%s-%s" "premise-card-editor" (:db/id statement))
         answer-to-statement-event
         (fn [e]
           (.preventDefault e)
           (rf/dispatch [:editor/clear editor-id])
           (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))]
-    (when-not (or locked? read-only?)
+    (when-not (or locked? read-only? hide-input-replies)
       [:form.my-md-2
        {:on-submit #(answer-to-statement-event %)
         :on-key-down #(when (toolbelt/ctrl-press? % 13)
