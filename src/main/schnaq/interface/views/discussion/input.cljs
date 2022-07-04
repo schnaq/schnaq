@@ -193,7 +193,7 @@
           (.preventDefault e)
           (rf/dispatch [:editor/clear editor-id])
           (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))]
-    (when-not (or locked? read-only? hide-input-replies) ;; wip
+    (when-not (or locked? read-only? hide-input-replies)
       [:form.my-md-2
        {:on-submit #(answer-to-statement-event %)
         :on-key-down #(when (toolbelt/ctrl-press? % 13)
