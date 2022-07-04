@@ -5,6 +5,7 @@
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.lexical.editor :as lexical]
+            [schnaq.interface.config :as config]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -117,7 +118,7 @@
                          :file-storage :schnaq/by-share-hash
                          :on-text-change throttled-input-tokenizing-fn
                          :toolbar? true
-                         :focus? true
+                         :focus? (not config/in-iframe?)
                          :placeholder (labels :statement.new/placeholder)}
          {:className "flex-grow-1"}]
         [:button.btn.btn-outline-secondary
