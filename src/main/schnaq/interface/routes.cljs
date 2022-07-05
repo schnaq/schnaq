@@ -137,7 +137,7 @@
                    :query :ui.settings/schnaq}
       :controllers [{:parameters {:path [:share-hash]
                                   :query [:hide-discussion-options :hide-navbar
-                                          :hide-input :num-rows
+                                          :hide-footer :hide-input :num-rows
                                           :hide-input-replies]}
                      :start (fn [{:keys [path query]}]
                               (rf/dispatch [:ui.settings/parse-query-parameters query])

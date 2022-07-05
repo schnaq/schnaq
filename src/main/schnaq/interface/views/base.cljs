@@ -153,11 +153,11 @@
 (defn footer
   "Footer to display at the bottom the page."
   []
-  (when-not config/in-iframe?
+  (when-not (or config/in-iframe? @(rf/subscribe [:ui/setting :hide-footer]))
     [footer-common]))
 
 (defn footer-with-wave []
-  (when-not config/in-iframe?
+  (when-not (or config/in-iframe? @(rf/subscribe [:ui/setting :hide-footer]))
     [:<>
      [:div.wave-bottom-typography]
      [footer-common]]))
