@@ -138,7 +138,7 @@
       :controllers [{:parameters {:path [:share-hash]
                                   :query [:hide-discussion-options :hide-navbar
                                           :hide-footer :hide-input :num-rows
-                                          :hide-input-replies]}
+                                          :hide-input-replies :hide-activations]}
                      :start (fn [{:keys [path query]}]
                               (rf/dispatch [:ui.settings/parse-query-parameters query])
                               (rf/dispatch [:body.class/add "theming-enabled"])

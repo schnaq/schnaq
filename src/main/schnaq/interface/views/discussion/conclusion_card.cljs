@@ -464,11 +464,12 @@
         access-code @(rf/subscribe [:schnaq.selected/access-code])
         question-input @(rf/subscribe [:schnaq.question.input/current])
         hide-input? @(rf/subscribe [:ui/setting :hide-input])
+        hide-activations? @(rf/subscribe [:ui/setting :hide-activations])
         number-of-rows @(rf/subscribe [:ui/setting :num-rows])
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements))))
         question-first? (not-empty question-input)
-        activations (when @(rf/subscribe [:schnaq/activations?]) [activation-cards/activation-cards])]
+        activations (when (and (not hide-activations?) @(rf/subscribe [:schnaq/activations?])) [activation-cards/activation-cards])]
     (if schnaq-loading?
       [loading/loading-card]
       [:div.row
