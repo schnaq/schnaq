@@ -32,7 +32,7 @@
                :name "statement"
                :value (or editor-content "")}]
       [lexical/editor {:id editor-id
-                       :focus? true ;; WIP
+                       :focus? true
                        :on-text-change throttled-search
                        :placeholder (labels :statement.new/placeholder)}
        {:className "flex-grow-1"}]]

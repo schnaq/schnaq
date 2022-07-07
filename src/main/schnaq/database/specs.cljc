@@ -384,13 +384,15 @@
 (s/def :ui.settings/hide-navbar boolean?)
 (s/def :ui.settings/hide-footer boolean?)
 (s/def :ui.settings/hide-input boolean?)
-(s/def :ui.settings/num-rows nat-int?)
 (s/def :ui.settings/hide-input-replies boolean?)
+(s/def :ui.settings/hide-activations boolean?)
+(s/def :ui.settings/num-rows nat-int?)
 
 (s/def :ui.settings/schnaq
   (s/keys :opt-un [:ui.settings/hide-discussion-options
                    :ui.settings/hide-navbar
                    :ui.settings/hide-footer
                    :ui.settings/hide-input
-                   :ui.settings/num-rows
-                   :ui.settings/hide-input-replies]))
+                   :ui.settings/hide-input-replies
+                   :ui.settings/hide-activations
+                   :ui.settings/num-rows]))
