@@ -1,2 +1,4 @@
 User-agent: *
 Disallow: /schnaq/
+Disallow: /de/schnaq/
+Disallow: /en/schnaq/
