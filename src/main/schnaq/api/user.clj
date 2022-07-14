@@ -119,6 +119,13 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- get-user
+  "Return a user with all personal information."
+  [{{{:keys [keycloak-id]} :query} :parameters}]
+  (ok {:user (user-db/private-user-by-keycloak-id keycloak-id)}))
+
+;; -----------------------------------------------------------------------------
+
 (s/def ::creation-secrets map?)
 (s/def ::visited-hashes (s/coll-of :discussion/share-hash))
 (s/def ::visited-statement-ids map?)
@@ -168,6 +175,11 @@
    ["/admin/user" {:swagger {:tags ["admin"]}
                    :middleware [:user/authenticated? :user/admin?]
                    :responses {400 at/response-error-body}}
+    ["" {:get get-user
+         :description (at/get-doc #'get-user)
+         :name :api.admin/user
+         :parameters {:query {:keycloak-id :user.registered/keycloak-id}}
+         :resopnses {200 {:body {:user ::specs/registered-user}}}}]
     ["/statements" {:delete delete-all-statements-for-user
                     :description (at/get-doc #'delete-all-statements-for-user)
                     :parameters {:body {:keycloak-id :user.registered/keycloak-id}}
