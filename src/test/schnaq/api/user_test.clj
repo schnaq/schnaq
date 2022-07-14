@@ -46,9 +46,15 @@
        :uri (:path (api/route-by-name :api.admin/user))
        :query-params {:keycloak-id keycloak-id}}
       (toolbelt/mock-authorization-header user-token)
-      test-app
-      m/decode-response-body))
+      test-app))
 
 (deftest get-user-test
   (testing "Admins can retrieve a user's personal information."
-    (is (s/valid? ::specs/registered-user (:user (get-user-request toolbelt/token-n2o-admin kangaroo-keycloak-id))))))
+    (is (-> (get-user-request toolbelt/token-n2o-admin kangaroo-keycloak-id)
+            m/decode-response-body
+            :user :user.registered/visited-schnaqs
+            seq))))
+
+(deftest get-user-invalid-test
+  (testing "Non-admin users can't access private user information."
+    (is (= 403 (:status (get-user-request toolbelt/token-schnaqqifant-user kangaroo-keycloak-id))))))
