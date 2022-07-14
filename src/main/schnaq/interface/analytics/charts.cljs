@@ -10,4 +10,7 @@
                     :datasets [{:label chart-name
                                 :data data
                                 :borderColor (:positive/default colors)
-                                :backgroundColor (:positive/default colors)}]}}])
+                                :backgroundColor (:positive/default colors)}]}
+             :options {:scales
+                       {:yAxes [{:display true,
+                                 :ticks {:beginAtZero true}}]}}}])
