@@ -105,6 +105,20 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- add-role
+  "Add a role to a user."
+  [{{{:keys [keycloak-id role]} :body} :parameters}]
+  (let [roles (:user.registered/roles (user-db/add-role keycloak-id role))]
+    (ok {:roles roles})))
+
+(defn- remove-role
+  "Remove a role from a user."
+  [{{{:keys [keycloak-id role]} :body} :parameters}]
+  (let [roles (:user.registered/roles (user-db/remove-role keycloak-id role))]
+    (ok {:roles roles})))
+
+;; -----------------------------------------------------------------------------
+
 (s/def ::creation-secrets map?)
 (s/def ::visited-hashes (s/coll-of :discussion/share-hash))
 (s/def ::visited-statement-ids map?)
@@ -165,4 +179,12 @@
     ["/identity" {:delete delete-user-identity
                   :description (at/get-doc #'delete-user-identity)
                   :parameters {:body {:keycloak-id :user.registered/keycloak-id}}
-                  :responses {200 {:body {:deleted? boolean?}}}}]]])
+                  :responses {200 {:body {:deleted? boolean?}}}}]
+    ["/role" {:put {:handler add-role
+                    :description (at/get-doc #'add-role)}
+              :delete {:handler remove-role
+                       :description (at/get-doc #'remove-role)}
+              :name :api.admin.user/role
+              :parameters {:body {:keycloak-id :user.registered/keycloak-id
+                                  :role :user.registered/valid-roles}}
+              :responses {200 {:body {:roles :user.registered/roles}}}}]]])
