@@ -48,7 +48,7 @@
   (cset/union admin-roles #{"analytics-admin"}))
 
 (def beta-tester-roles
-  (cset/union admin-roles analytics-roles #{"beta-tester"}))
+  (cset/union admin-roles analytics-roles #{"beta-tester" "tester"}))
 
 (def allowed-labels
   "A set of allowed labels for statements. They correspond to fa symbols"
@@ -82,3 +82,22 @@
 (def currencies
   "Define the accepted currencies."
   #{:eur :usd})
+
+;; -----------------------------------------------------------------------------
+
+(def tier-features
+  "Describe tier features for free and pro users."
+  {:free {:wordcloud? false
+          :activation? true
+          :rankings? false
+          :polls 0
+          :schnaqs {:total 10
+                    :posts 30
+                    :concurrent-users 100}}
+   :pro {:wordcloud? true
+         :activation? true
+         :rankings? true
+         :polls :unlimited
+         :schnaqs {:total :unlimited
+                   :posts :unlimited
+                   :concurrent-users 250}}})
