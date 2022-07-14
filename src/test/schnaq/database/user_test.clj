@@ -10,8 +10,7 @@
 
 (deftest add-user-test
   (testing "Check for correct user-addition"
-    (is (number? (db/add-user "Gib ihm!")))
-    (is (nil? (db/add-user :nono-string)))))
+    (is (number? (db/add-user "Gib ihm!")))))
 
 (deftest user-by-nickname-test
   (testing "Tests whether the user is correctly found, disregarding case."
@@ -85,7 +84,7 @@
 
 (deftest subscribe-pro-tier-test
   (let [kangaroo-keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
-        stripe-subscription-id "razupaltuff"
+        stripe-subscription-id "sub_razupaltuff"
         stripe-customer-id "cus_kangaroo"
         pro-kangaroo (db/subscribe-pro-tier kangaroo-keycloak-id stripe-subscription-id stripe-customer-id)]
     (testing "User subscribes to pro-tier."
@@ -101,7 +100,7 @@
 (deftest pro-subscription?-test
   (testing "Check pro-status in database.")
   (let [kangaroo-keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
-        stripe-subscription-id "razupaltuff"
+        stripe-subscription-id "sub_razupaltuff"
         stripe-customer-id "cus_kangaroo"
         _ (db/subscribe-pro-tier kangaroo-keycloak-id stripe-subscription-id stripe-customer-id)]
     (is (db/pro-subscription? kangaroo-keycloak-id))))
