@@ -729,7 +729,7 @@
    :registration.survey.options/education "Lehre"
    :registration.survey.options/coachings "Coachings"
    :registration.survey.options/seminars "Seminare"
-   :registration.survey.options/fairs "Messen"
+   :registration.survey.options/fairs "Events"
    :registration.survey.options/meetings "(Online) Meetings"
    :registration.survey.options/other "Anderes"
    :registration.survey.input/submit-button "Weiter"
