@@ -62,7 +62,7 @@
                                                      :notification-mail-interval/weekly
                                                      :notification-mail-interval/every-minute
                                                      :notification-mail-interval/never})
-(s/def :user.registered/valid-roles #{:role/admin :role/enterprise :role/tester :role/pro})
+(s/def :user.registered/valid-roles #{:role/admin :role/enterprise :role/tester :role/pro :role/analytics})
 (s/def :user.registered/roles
   (s/coll-of :user.registered/valid-roles
              :distinct true))

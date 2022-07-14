@@ -45,7 +45,7 @@
   #{"admin"})
 
 (def analytics-roles
-  (cset/union admin-roles #{"analytics-admin"}))
+  (cset/union admin-roles #{"analytics-admin" "analytics"}))
 
 (def beta-tester-roles
   (cset/union admin-roles analytics-roles #{"beta-tester" "tester"}))

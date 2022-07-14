@@ -63,6 +63,7 @@
     :db/cardinality :db.cardinality/many
     :db/doc "The user's roles."}
    {:db/ident :role/enterprise}
+   {:db/ident :role/analytics}
    {:db/ident :role/tester}
    {:db/ident :role/admin}
    {:db/ident :role/pro}
