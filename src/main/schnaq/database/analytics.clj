@@ -155,7 +155,9 @@
   [collection percentile]
   (let [n (int (Math/ceil (* (/ percentile 100) (count collection))))
         n' (if (zero? n) n (dec n))]
-    (nth collection n')))
+    (if (seq collection)
+      (nth collection n')
+      0)))
 
 (>defn statistical-statement-num-data
   "Returns the median of statements per discusison."

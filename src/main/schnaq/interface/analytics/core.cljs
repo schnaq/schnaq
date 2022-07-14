@@ -113,6 +113,7 @@
 (defn- analytics-dashboard-view
   "The dashboard displaying all analytics."
   []
+  (println @(rf/subscribe [:analytics/schnaq-usage-types]))
   [pages/with-nav-and-header
    {:condition/needs-analytics-admin? true
     :page/heading (labels :analytics/heading)}
@@ -131,11 +132,12 @@
       [analytics-card (labels :analytics/registered-users-numbers) :analytics/number-of-users-registered]
       [analytics-card (labels :analytics/pro-users-numbers) :analytics/number-of-users-pro]
       [analytics-card (labels :analytics/average-statements-title) :analytics/number-of-average-statements]
+      [analytics-card (labels :analytics/labels-stats) :analytics/marked-answers]
       [multi-arguments-card (labels :analytics/active-users-num-title) :analytics/number-of-active-users-overall]
       [multi-arguments-card (labels :analytics/statement-lengths-title) :analytics/statement-lengths-stats]
       [multi-arguments-card (labels :analytics/statement-types-title) :analytics/statement-type-stats]
       [multi-arguments-card (labels :analytics/statement-count-percentiles) :analytics/statement-percentiles]
-      [analytics-card (labels :analytics/labels-stats) :analytics/marked-answers]]]]])
+      [multi-arguments-card (labels "Schnaq Nutzung") :analytics/schnaq-usage-types]]]]])
 
 (defn analytics-dashboard-entrypoint []
   [analytics-dashboard-view])
@@ -176,6 +178,7 @@
                                       :percentiles (:statement-percentiles statistics)}
                          :active-users-nums (:active-users-num statistics)
                          :labels (:labels-stats statistics)
+                         :usage (:usage statistics)
                          :users {:registered (:users statistics)}})))
 
 ;; #### Subs ####
@@ -248,5 +251,10 @@
 
 (rf/reg-sub
  :analytics/registered-users
- (fn [db]
+ (fn [db _]
    (get-in db [:analytics :users :registered])))
+
+(rf/reg-sub
+ :analytics/schnaq-usage-types
+ (fn [db _]
+   (get-in db [:analytics :usage])))
