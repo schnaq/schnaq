@@ -323,7 +323,10 @@
   []
   (let [option-count @(rf/subscribe [:polls.create/option-count])]
     [:form.pt-2
-     {:on-submit (fn [event]
+     {:on-key-down (fn [event] (when (= 13 (.-keyCode event))
+                                 (.preventDefault event)
+                                 false))
+      :on-submit (fn [event]
                    (.preventDefault event)
                    (let [form (oget event [:target :elements])]
                      (rf/dispatch [:schnaq.poll/create (extract-poll-from-form form option-count)])
