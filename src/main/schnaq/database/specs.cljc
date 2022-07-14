@@ -62,6 +62,10 @@
                                                      :notification-mail-interval/weekly
                                                      :notification-mail-interval/every-minute
                                                      :notification-mail-interval/never})
+(s/def :user.registered/valid-roles #{:role/admin :role/enterprise :role/tester :role/pro})
+(s/def :user.registered/roles
+  (s/coll-of :user.registered/valid-roles
+             :distinct true))
 (s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)
                                               :schnaqs (s/coll-of ::discussion)))
@@ -71,6 +75,7 @@
 (s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/display-name]
                                  :opt [:user.registered/last-name :user.registered/first-name
                                        :user.registered/groups :user.registered/profile-picture
+                                       :user.registered/roles
                                        :user.registered/email :user.registered/notification-mail-interval
                                        :user.registered/visited-schnaqs :user.registered.subscription/type
                                        :user.registered.subscription/stripe-id

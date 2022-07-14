@@ -8,6 +8,8 @@
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
+(def kangaroo-keycloak-id (:user.registered/keycloak-id kangaroo))
+
 (deftest add-user-test
   (testing "Check for correct user-addition"
     (is (number? (db/add-user "Gib ihm!")))))
@@ -127,7 +129,15 @@
 
 (deftest unarchive-schnaq-test
   (testing "Unarchive a schnaq for a user."
-    (let [keycloak-id (:user.registered/keycloak-id kangaroo)]
-      (db/unarchive-schnaq keycloak-id "cat-dog-hash")
-      (is (zero? (count (:user.registered/archived-schnaqs
-                         (db/private-user-by-keycloak-id keycloak-id))))))))
+    (db/unarchive-schnaq kangaroo-keycloak-id "cat-dog-hash")
+    (is (zero? (count (:user.registered/archived-schnaqs
+                       (db/private-user-by-keycloak-id kangaroo-keycloak-id)))))))
+
+;; -----------------------------------------------------------------------------
+;; Role management
+(deftest add-role-test
+  (testing "Add a role to an existing user should succeed"
+    (db/add-role kangaroo-keycloak-id :role/admin)
+    (is (contains? (:user.registered/roles
+                    (db/private-user-by-keycloak-id kangaroo-keycloak-id))
+                   :role/admin))))

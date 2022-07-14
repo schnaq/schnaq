@@ -58,6 +58,15 @@
    {:db/ident :notification-mail-interval/weekly}
    {:db/ident :notification-mail-interval/never}
 
+   {:db/ident :user.registered/roles
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The user's roles."}
+   {:db/ident :role/enterprise}
+   {:db/ident :role/tester}
+   {:db/ident :role/admin}
+   {:db/ident :role/pro}
+
    ;; Subscriptions
    {:db/ident :user.registered.subscription/stripe-id
     :db/valueType :db.type/string

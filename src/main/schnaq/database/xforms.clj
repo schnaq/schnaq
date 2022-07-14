@@ -24,3 +24,9 @@
   "Receives a collection of db/ident entities and pulls them up."
   [entity-coll]
   (map :db/ident entity-coll))
+
+(defn pull-up-ident-coll-to-set
+  "Receives a collection of db/ident entities and pulls them up. Converts them
+  to a set afterwards."
+  [entity-coll]
+  (set (pull-up-ident-coll entity-coll)))

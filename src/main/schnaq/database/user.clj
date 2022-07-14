@@ -238,6 +238,13 @@
                               field value]]))]
      (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db))))
 
+
+(>defn add-role
+  "Add a role to a user."
+  [keycloak-id role]
+  [:user.registered/keycloak-id :user.registered/valid-roles => ::specs/registered-user]
+  (update-user-field keycloak-id :user.registered/roles role))
+
 (>defn update-display-name
   "Update the name of an existing user."
   [keycloak-id display-name]
