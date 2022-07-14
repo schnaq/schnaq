@@ -155,7 +155,9 @@
   [collection percentile]
   (let [n (int (Math/ceil (* (/ percentile 100) (count collection))))
         n' (if (zero? n) n (dec n))]
-    (nth collection n')))
+    (if (seq collection)
+      (nth collection n')
+      0)))
 
 (>defn statistical-statement-num-data
   "Returns the median of statements per discusison."
@@ -251,3 +253,20 @@
     :calendar-alt (number-of-entities-with-value-since :statement/labels ":calendar-alt" since)
     :arrow-right (number-of-entities-with-value-since :statement/labels ":arrow-right" since)
     :comment (number-of-entities-with-value-since :statement/labels ":comment" since)}))
+
+(defn schnaq-usage
+  ([]
+   [:ret :statistics/usage]
+   (schnaq-usage max-time-back))
+  ([since]
+   [:statistics/since :ret :statistics/usage]
+   (->>
+    (main-db/query
+     '[:find ?entities (pull ?values [:db/ident])
+       :in $ ?since
+       :where [?entities :surveys.using-schnaq-for/topics ?values ?tx]
+       [?tx :db/txInstant ?start-date]
+       [(< ?since ?start-date)]]
+     (Date/from since))
+    (group-by second)
+    (map #(vector (:db/ident (first %)) (count (second %)))))))
