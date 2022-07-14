@@ -319,6 +319,7 @@
    :user.registered/last-name "Meter"
    :user.registered/first-name "Christian"
    :user.registered/groups ["admin"]
+   :user.registered/roles #{:role/admin}
    :user.registered/notification-mail-interval :notification-mail-interval/daily})
 
 (def schnaqqi

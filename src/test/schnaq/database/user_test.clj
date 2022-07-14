@@ -2,7 +2,7 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.user :as db]
-            [schnaq.test-data :refer [alex kangaroo]]
+            [schnaq.test-data :refer [alex christian kangaroo]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -135,9 +135,16 @@
 
 ;; -----------------------------------------------------------------------------
 ;; Role management
+
 (deftest add-role-test
   (testing "Add a role to an existing user should succeed"
     (db/add-role kangaroo-keycloak-id :role/admin)
     (is (contains? (:user.registered/roles
                     (db/private-user-by-keycloak-id kangaroo-keycloak-id))
                    :role/admin))))
+
+(deftest remove-role-test
+  (testing "Remove an existing role from a user."
+    (db/remove-role (:user.registered/keycloak-id christian) :role/admin)
+    (is (empty? (:user.registered/roles
+                 (db/private-user-by-keycloak-id kangaroo-keycloak-id))))))

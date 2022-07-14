@@ -1,7 +1,7 @@
 (ns schnaq.database.user
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
-            [schnaq.database.main :refer [transact fast-pull query]]
+            [schnaq.database.main :refer [fast-pull query transact]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
@@ -226,11 +226,11 @@
           (update-visited-statements (:user.registered/keycloak-id new-user-from-db) visited-statements))
         [true new-user-from-db]))))
 
-(>defn- update-user-field
+(>defn- add-user-field
   "Updates a user's field in the database and return updated user."
   ([keycloak-id field value]
    [:user.registered/keycloak-id keyword? any? :ret ::specs/registered-user]
-   (update-user-field keycloak-id field value patterns/public-user))
+   (add-user-field keycloak-id field value patterns/public-user))
   ([keycloak-id field value pattern]
    [:user.registered/keycloak-id keyword? any? any? :ret ::specs/registered-user]
    (let [new-db (:db-after
@@ -238,24 +238,17 @@
                               field value]]))]
      (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db))))
 
-
-(>defn add-role
-  "Add a role to a user."
-  [keycloak-id role]
-  [:user.registered/keycloak-id :user.registered/valid-roles => ::specs/registered-user]
-  (update-user-field keycloak-id :user.registered/roles role))
-
 (>defn update-display-name
   "Update the name of an existing user."
   [keycloak-id display-name]
   [:user.registered/keycloak-id string? :ret ::specs/registered-user]
-  (update-user-field keycloak-id :user.registered/display-name display-name))
+  (add-user-field keycloak-id :user.registered/display-name display-name))
 
 (>defn update-profile-picture-url
   "Update the profile picture url."
   [keycloak-id profile-picture-url]
   [:user.registered/keycloak-id :user.registered/profile-picture :ret ::specs/registered-user]
-  (update-user-field keycloak-id :user.registered/profile-picture profile-picture-url))
+  (add-user-field keycloak-id :user.registered/profile-picture profile-picture-url))
 
 (>defn members-of-group
   "Returns all members of a certain group."
@@ -268,12 +261,29 @@
    group-name patterns/public-user))
 
 ;; -----------------------------------------------------------------------------
+;; Role Management
+
+(>defn add-role
+  "Add a role to a user."
+  [keycloak-id role]
+  [:user.registered/keycloak-id :user.registered/valid-roles => ::specs/registered-user]
+  (add-user-field keycloak-id :user.registered/roles role patterns/private-user))
+
+(>defn remove-role
+  "Remove a role from a user." [keycloak-id role]
+  [:user.registered/keycloak-id :user.registered/valid-roles => ::specs/registered-user]
+  (let [new-db (:db-after
+                @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id]
+                             :user.registered/roles role]]))]
+    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
+
+;; -----------------------------------------------------------------------------
 
 (>defn update-notification-mail-interval
   "Update the name of an existing user."
   [keycloak-id interval]
   [:user.registered/keycloak-id :user.registered/notification-mail-interval :ret ::specs/registered-user]
-  (update-user-field keycloak-id :user.registered/notification-mail-interval interval patterns/private-user))
+  (add-user-field keycloak-id :user.registered/notification-mail-interval interval patterns/private-user))
 
 (>defn subscribed-share-hashes
   "Return all subscribed share-hashes from the users respecting their 
