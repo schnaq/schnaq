@@ -266,13 +266,15 @@
 (s/def :statistics/labels-stats map?)
 (s/def :statistics/statement-percentiles map?)
 (s/def :statistics/users (s/coll-of ::registered-user))
+(s/def :statistics/usage (s/coll-of (s/tuple keyword? nat-int?)))
 
 (s/def ::statistics
   (s/keys :req-un [:statistics/discussions-sum :statistics/usernames-sum
                    :statistics/average-statements-num :statistics/statements-num
                    :statistics/active-users-num :statistics/statement-length-stats
                    :statistics/statement-type-stats :statistics/registered-users-num
-                   :statistics/labels-stats :statistics/users :statistics/statement-percentiles]))
+                   :statistics/labels-stats :statistics/users :statistics/statement-percentiles
+                   :statistics/usage]))
 
 ;; Polls
 (s/def :poll/title ::non-blank-string)

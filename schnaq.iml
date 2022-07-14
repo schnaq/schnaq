@@ -24,7 +24,7 @@
     <orderEntry type="library" name="Deps: joda-time:2.8.1" level="project" />
     <orderEntry type="library" name="Deps: day8.re-frame/test:0.1.5" level="project" />
     <orderEntry type="library" name="Deps: commons-codec:1.15" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/api:0.8.561" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/api:0.8.568" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: amperity/envoy:0.3.3" level="project" />
     <orderEntry type="library" name="Deps: com.bhauman/cljs-test-display:0.1.1" level="project" />
@@ -32,7 +32,7 @@
     <orderEntry type="library" name="Deps: org.apache.tomcat/tomcat-juli:7.0.109" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-compress:1.21" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-devel:1.9.5" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.230" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.257" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.9.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.5" level="project" />
@@ -79,7 +79,7 @@
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpasyncclient:4.1.4" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer.jvm:1.2.2" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-handler-proxy:4.1.73.Final" level="project" />
-    <orderEntry type="library" name="Deps: keycloak-clojure:1.28.3" level="project" />
+    <orderEntry type="library" name="Deps: keycloak-clojure:1.28.5" level="project" />
     <orderEntry type="library" name="Deps: jarohen/chime:0.3.3" level="project" />
     <orderEntry type="library" name="Deps: net.incongru.watchservice/barbary-watchservice:1.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.protobuf/protobuf-java-util:3.18.1" level="project" />
@@ -314,7 +314,7 @@
     <orderEntry type="library" name="Deps: borkdude/sci.impl.reflector:0.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.sun.mail/jakarta.mail:1.6.5" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.44.v20210927" level="project" />
-    <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.131.0" level="project" />
+    <orderEntry type="library" name="Deps: com.stripe/stripe-java:20.133.0" level="project" />
     <orderEntry type="library" name="Deps: io.opencensus/opencensus-api:0.28.0" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-auth:1.41.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpmime:4.5.13" level="project" />

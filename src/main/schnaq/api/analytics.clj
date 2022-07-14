@@ -21,6 +21,7 @@
           :registered-users-num (analytics-db/number-or-registered-users timestamp-since)
           :pro-users-num (analytics-db/number-of-pro-users timestamp-since)
           :labels-stats (analytics-db/labels-stats timestamp-since)
+          :usage (analytics-db/schnaq-usage timestamp-since)
           :users (analytics-db/users-created-since timestamp-since)}})))
 
 ;; -----------------------------------------------------------------------------
