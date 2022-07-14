@@ -113,7 +113,6 @@
 (defn- analytics-dashboard-view
   "The dashboard displaying all analytics."
   []
-  (println @(rf/subscribe [:analytics/schnaq-usage-types]))
   [pages/with-nav-and-header
    {:condition/needs-analytics-admin? true
     :page/heading (labels :analytics/heading)}

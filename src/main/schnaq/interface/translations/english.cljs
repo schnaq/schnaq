@@ -721,7 +721,7 @@
    :registration.survey.options/education "Teach"
    :registration.survey.options/coachings "Coachings"
    :registration.survey.options/seminars "Seminars"
-   :registration.survey.options/fairs "Exhibitions"
+   :registration.survey.options/fairs "Events"
    :registration.survey.options/meetings "(Online) Meetings"
    :registration.survey.options/other "Other"
    :registration.survey.input/submit-button "Next"
