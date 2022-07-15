@@ -148,3 +148,24 @@
     (db/remove-role (:user.registered/keycloak-id christian) :role/admin)
     (is (empty? (:user.registered/roles
                  (db/private-user-by-keycloak-id kangaroo-keycloak-id))))))
+
+;; -----------------------------------------------------------------------------
+
+(deftest update-user-display-name-test
+  (testing "Update an existing user's display name."
+    (let [new-name "not-kangaroo"]
+      (is (= new-name
+             (:user.registered/display-name
+              (db/update-user {:user.registered/keycloak-id kangaroo-keycloak-id
+                               :user.registered/display-name new-name})))))))
+
+(deftest update-user-multiple-fields-test
+  (testing "Update an existing user'"
+    (let [new-name "not-kangaroo"
+          new-mail "foo@bar.com"
+          {:user.registered/keys [display-name email]}
+          (db/update-user {:user.registered/keycloak-id kangaroo-keycloak-id
+                           :user.registered/display-name new-name
+                           :user.registered/email new-mail})]
+      (is (= new-mail email))
+      (is (= new-name display-name)))))

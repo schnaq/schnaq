@@ -226,6 +226,13 @@
           (update-visited-statements (:user.registered/keycloak-id new-user-from-db) visited-statements))
         [true new-user-from-db]))))
 
+(defn update-user
+  "Update an existing user. Throw in all changed fields."
+  [{:user.registered/keys [keycloak-id] :as user}]
+  (let [user' (assoc user :db/id [:user.registered/keycloak-id keycloak-id])
+        tx-result @(transact [user'])]
+    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user (:db-after tx-result))))
+
 (>defn- add-user-field
   "Updates a user's field in the database and return updated user."
   ([keycloak-id field value]
