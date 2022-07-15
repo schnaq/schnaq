@@ -62,7 +62,8 @@
                                                      :notification-mail-interval/weekly
                                                      :notification-mail-interval/every-minute
                                                      :notification-mail-interval/never})
-(s/def :user.registered/valid-roles #{:role/admin :role/enterprise :role/tester :role/pro :role/analytics})
+(def user-roles #{:role/admin :role/enterprise :role/tester :role/pro :role/analytics})
+(s/def :user.registered/valid-roles user-roles)
 (s/def :user.registered/roles
   (s/coll-of :user.registered/valid-roles
              :distinct true))
@@ -72,8 +73,9 @@
 (s/def :user.registered.subscription/stripe-id :stripe.subscription/id)
 (s/def :user.registered.subscription/stripe-customer-id :stripe/customer-id)
 (s/def :user.registered.subscription/type #{:user.registered.subscription.type/pro})
-(s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/display-name]
-                                 :opt [:user.registered/last-name :user.registered/first-name
+(s/def ::registered-user (s/keys :req [:user.registered/keycloak-id]
+                                 :opt [:user.registered/display-name
+                                       :user.registered/last-name :user.registered/first-name
                                        :user.registered/groups :user.registered/profile-picture
                                        :user.registered/roles
                                        :user.registered/email :user.registered/notification-mail-interval
