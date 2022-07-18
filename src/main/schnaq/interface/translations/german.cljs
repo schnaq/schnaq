@@ -3,6 +3,8 @@
 (def labels
   {:error/export-failed "Export hat nicht geklappt, versuche es später erneut."
 
+   :common/keycloak-id "keycloak-id"
+
    :view/present "Präsentieren"
 
    :nav/schnaqs "schnaqs"
@@ -605,12 +607,11 @@
    :admin.center.delete.schnaq/heading "schnaqs"
    :admin.center.delete.schnaq/button "schnaq löschen"
    :admin.center.delete.user/heading "Benutzer:innen"
-   :admin.center.delete.user.statements/label "keycloak-id"
    :admin.center.delete.user.statements/button "Alle Statements löschen"
-   :admin.center.delete.user.schnaqs/label "keycloak-id"
    :admin.center.delete.user.schnaqs/button "Alle schnaqs löschen"
-   :admin.center.delete.user.identity/label "keycloak-id"
    :admin.center.delete.user.identity/button "Identität löschen"
+
+   :admin.center.user.load/button "User laden"
 
    :badges.filters/label "Anzeige"
    :badges/sort "Sortierung der Beiträge"
