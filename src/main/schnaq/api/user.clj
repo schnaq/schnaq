@@ -124,6 +124,11 @@
   [{{{:keys [keycloak-id]} :query} :parameters}]
   (ok {:user (user-db/private-user-by-keycloak-id keycloak-id)}))
 
+(defn- update-user
+  "Update a field of a user."
+  [{{:keys [body]} :parameters}]
+  (ok {:user (user-db/update-user body)}))
+
 ;; -----------------------------------------------------------------------------
 
 (s/def ::creation-secrets map?)
@@ -175,11 +180,15 @@
    ["/admin/user" {:swagger {:tags ["admin"]}
                    :middleware [:user/authenticated? :user/admin?]
                    :responses {400 at/response-error-body}}
-    ["" {:get get-user
-         :description (at/get-doc #'get-user)
+    ["" {:get {:handler get-user
+               :description (at/get-doc #'get-user)
+               :parameters {:query {:keycloak-id :user.registered/keycloak-id}}}
+         :put {:handler update-user
+               :description (at/get-doc #'update-user)
+               :parameters {:body ::specs/registered-user}
+               :responses {200 {:body any?}}}
          :name :api.admin/user
-         :parameters {:query {:keycloak-id :user.registered/keycloak-id}}
-         :resopnses {200 {:body {:user ::specs/registered-user}}}}]
+         :responses {200 {:body {:user ::specs/registered-user}}}}]
     ["/statements" {:delete delete-all-statements-for-user
                     :description (at/get-doc #'delete-all-statements-for-user)
                     :parameters {:body {:keycloak-id :user.registered/keycloak-id}}
