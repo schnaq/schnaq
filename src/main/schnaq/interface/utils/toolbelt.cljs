@@ -136,3 +136,11 @@
     (let [url (-> url js/URL. .-pathname (.split "/") .pop)]
       (not-empty url))
     (catch js/Object _e)))
+
+(defn form->map
+  "Takes all form elements and transforms them to a map."
+  [form-elements]
+  (->> form-elements
+       (map (fn [field] [(keyword (oget field :name)) (oget field :value)]))
+       (remove #(empty? (second %)))
+       (into {})))
