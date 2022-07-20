@@ -1,12 +1,10 @@
 (ns schnaq.interface.auth
   (:require ["keycloak-js" :as Keycloak]
             [cljs.core.async :refer [<! go timeout]]
-            [clojure.set :as set]
             [com.fulcrologic.guardrails.core :refer [>defn]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
             [schnaq.interface.matomo :as matomo]
