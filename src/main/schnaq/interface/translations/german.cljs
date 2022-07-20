@@ -612,6 +612,7 @@
    :admin.center.delete.user.identity/button "Identität löschen"
 
    :admin.center.user/headline "User Management"
+   :admin.center.user/subheadline "Lade zunächste einen User, um die Bearbeitung zu beginnen."
    :admin.center.user.load/button "User laden"
    :admin.center.user.save/button "User speichern"
    :admin.center.user.role.delete/label "Entferne Rolle von User"

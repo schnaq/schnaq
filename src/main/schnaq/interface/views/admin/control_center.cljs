@@ -56,7 +56,6 @@
       {:id input-id
        :name input-id
        :placeholder (labels placeholder-text)
-       :defaultValue "85c6aa73-ae9e-4686-ba1a-b8cfe27349c2"
        :required true}]
      [:label {:for input-id} (labels placeholder-text)]]
     [:button.input-group-text (labels button-text)]]])
@@ -211,6 +210,7 @@
   []
   [:section.pb-5
    [:h2 (labels :admin.center.user/headline)]
+   [:p.lead (labels :admin.center.user/subheadline)]
    [load-user]
    [user-form]])
 
