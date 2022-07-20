@@ -175,7 +175,7 @@
         _ (db/new-discussion new-public-discussion)]
     (testing "Valid discussions should be returned."
       (are [valid share-hashes]
-        (= valid (count (db/discussions-by-share-hashes share-hashes)))
+           (= valid (count (db/discussions-by-share-hashes share-hashes)))
         0 []
         0 ["razupaltuff"]
         1 ["simple-hash"]

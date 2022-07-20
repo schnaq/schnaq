@@ -78,23 +78,27 @@
 (>defn beta-tester?
   "Check if a user has one of the valid beta tester roles."
   [roles]
-  [:user.registered/valid-roles => boolean?]
-  (intersection? roles shared-config/beta-tester-roles))
+  [(? :user.registered/roles) => (? boolean?)]
+  (when roles
+    (intersection? roles shared-config/beta-tester-roles)))
 
 (>defn pro-user?
   "Check if a user has one of the valid pro-roles."
   [roles]
-  [:user.registered/valid-roles => boolean?]
-  (intersection? roles shared-config/pro-roles))
+  [(? :user.registered/roles) => (? boolean?)]
+  (when roles
+    (intersection? roles shared-config/pro-roles)))
 
 (>defn admin?
   "Check if a user has one of the valid admin-roles."
   [roles]
-  [:user.registered/valid-roles => boolean?]
-  (intersection? roles shared-config/admin-roles))
+  [(? :user.registered/roles) => (? boolean?)]
+  (when roles
+    (intersection? roles shared-config/admin-roles)))
 
 (>defn analytics-admin?
   "Check if a user has one of the valid admin-roles."
   [roles]
-  [:user.registered/valid-roles => boolean?]
-  (intersection? roles shared-config/analytics-roles))
+  [(? :user.registered/roles) => (? boolean?)]
+  (when roles
+    (intersection? roles shared-config/analytics-roles)))

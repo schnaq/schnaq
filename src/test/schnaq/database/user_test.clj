@@ -92,7 +92,7 @@
         stripe-customer-id "cus_kangaroo"
         pro-kangaroo (db/subscribe-pro-tier kangaroo-keycloak-id stripe-subscription-id stripe-customer-id)]
     (testing "User subscribes to pro-tier."
-      (is (= :user.registered.subscription.type/pro (:user.registered.subscription/type pro-kangaroo)))
+      (is (contains? (:user.registered/roles pro-kangaroo) :role/pro))
       (is (= stripe-subscription-id (:user.registered.subscription/stripe-id pro-kangaroo)))
       (is (= stripe-customer-id (:user.registered.subscription/stripe-customer-id pro-kangaroo))))
     (testing "User unsubscribes from pro tier."

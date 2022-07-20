@@ -4,7 +4,7 @@
             [schnaq.database.main :refer [fast-pull query transact]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
-            [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
+            [schnaq.shared-toolbelt :refer [remove-nil-values-from-map] :as shared-tools]
             [taoensso.timbre :as log]))
 
 ;; -----------------------------------------------------------------------------
@@ -276,10 +276,12 @@
   "Add a role to a user."
   [keycloak-id role]
   [:user.registered/keycloak-id :user.registered/valid-roles => ::specs/registered-user]
-  (add-user-field keycloak-id :user.registered/roles role patterns/private-user))
+  (update-user {:user.registered/keycloak-id keycloak-id
+                :user.registered/roles role}))
 
 (>defn remove-role
-  "Remove a role from a user." [keycloak-id role]
+  "Remove a role from a user."
+  [keycloak-id role]
   [:user.registered/keycloak-id :user.registered/valid-roles => ::specs/registered-user]
   (let [new-db (:db-after
                 @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id]
@@ -313,12 +315,10 @@
   "Confirm subscription of pro tier and persist it in the user."
   [keycloak-id stripe-subscription-id stripe-customer-id]
   [:user.registered/keycloak-id :user.registered.subscription/stripe-id :user.registered.subscription/stripe-customer-id :ret ::specs/registered-user]
-  (let [new-db (:db-after
-                @(transact [{:db/id [:user.registered/keycloak-id keycloak-id]
-                             :user.registered/roles :roles/pro
-                             :user.registered.subscription/stripe-id stripe-subscription-id
-                             :user.registered.subscription/stripe-customer-id stripe-customer-id}]))]
-    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
+  (update-user {:user.registered/keycloak-id keycloak-id
+                :user.registered/roles :role/pro
+                :user.registered.subscription/stripe-id stripe-subscription-id
+                :user.registered.subscription/stripe-customer-id stripe-customer-id}))
 
 (>defn unsubscribe-pro-tier
   "Remove subscription from user."
@@ -328,7 +328,8 @@
         new-db (:db-after
                 @(transact [(conj retractions :user.registered.subscription/type)
                             (conj retractions :user.registered.subscription/stripe-id)
-                            (conj retractions :user.registered.subscription/stripe-customer-id)]))]
+                            (conj retractions :user.registered.subscription/stripe-customer-id)
+                            (conj retractions :user.registered/roles :role/pro)]))]
     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
 
 (>defn pro-subscription?
@@ -336,14 +337,5 @@
   [keycloak-id]
   [:user.registered/keycloak-id :ret boolean?]
   (-> (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user)
-      :user.registered.subscription/type
-      :db/ident
-      (= :user.registered.subscription.type/pro)))
-
-(def keycloak-id "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18")
-
-(comment
-
-  (:user.registered/roles (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user))
-
-  nil)
+      :user.registered/roles
+      shared-tools/pro-user?))

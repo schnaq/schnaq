@@ -5,8 +5,8 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.auth.lib :as auth-lib]
             [schnaq.config :as config]
-            [schnaq.config.shared :as shared-config]
-            [schnaq.database.user :as user-db]))
+            [schnaq.database.user :as user-db]
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (defn- valid-app-code?
   "Check if an app-code was provided via the request-body."
@@ -29,7 +29,7 @@
   "Check if user has admin-role."
   [handler]
   (fn [request]
-    (if (auth-lib/has-role? (:identity request) shared-config/admin-roles)
+    (if (shared-tools/admin? (:user.registered/roles (:user request)))
       (handler request)
       (forbidden (at/build-error-body :auth/not-an-admin "You are not an admin.")))))
 
@@ -37,7 +37,7 @@
   "Check if user has analytics-admin or higher role."
   [handler]
   (fn [request]
-    (if (auth-lib/has-role? (:identity request) shared-config/analytics-roles)
+    (if (shared-tools/analytics-admin? (:user.registered/roles (:user request)))
       (handler request)
       (forbidden (at/build-error-body :auth/not-an-admin "You are not allowed to see analytics.")))))
 
@@ -45,7 +45,7 @@
   "Check if is eligible for our beta-testers program."
   [handler]
   (fn [request]
-    (if (auth-lib/beta-tester? (:identity request))
+    (if (shared-tools/beta-tester? (:user.registered/roles (:user request)))
       (handler request)
       (forbidden (at/build-error-body :auth/not-a-beta-tester "You are not a beta tester.")))))
 
@@ -53,7 +53,7 @@
   "Validate, that user has a subscription in our database or is a beta user."
   [handler]
   (fn [request]
-    (if (auth-lib/pro-user? (:identity request))
+    (if (shared-tools/pro-user? (:user.registered/roles (:user request)))
       (handler request)
       (forbidden (at/build-error-body :auth/no-pro-subscription "You have no valid pro-subscription.")))))
 
