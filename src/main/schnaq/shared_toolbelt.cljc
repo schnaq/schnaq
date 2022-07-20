@@ -2,7 +2,7 @@
   (:require [clojure.set :as set]
             [clojure.spec.alpha :as s]
             [clojure.string :as str]
-            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
             [schnaq.config.shared :as shared-config])
   #?(:clj (:import (java.lang Character))))
 
@@ -67,8 +67,34 @@
         (str/join "/" [kw-ns kw])
         (str kw)))))
 
+;; -----------------------------------------------------------------------------
+
+(>defn- intersection?
+  "Check if the two sets have an intersection."
+  [set1 set2]
+  [set? set? => boolean?]
+  (not (nil? (seq (set/intersection set1 set2)))))
+
+(>defn beta-tester?
+  "Check if a user has one of the valid beta tester roles."
+  [roles]
+  [:user.registered/valid-roles => boolean?]
+  (intersection? roles shared-config/beta-tester-roles))
+
 (>defn pro-user?
   "Check if a user has one of the valid pro-roles."
   [roles]
   [:user.registered/valid-roles => boolean?]
-  (not (nil? (seq (set/intersection shared-config/pro-roles roles)))))
+  (intersection? roles shared-config/pro-roles))
+
+(>defn admin?
+  "Check if a user has one of the valid admin-roles."
+  [roles]
+  [:user.registered/valid-roles => boolean?]
+  (intersection? roles shared-config/admin-roles))
+
+(>defn analytics-admin?
+  "Check if a user has one of the valid admin-roles."
+  [roles]
+  [:user.registered/valid-roles => boolean?]
+  (intersection? roles shared-config/analytics-roles))
