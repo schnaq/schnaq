@@ -1,7 +1,9 @@
 (ns schnaq.shared-toolbelt
-  (:require [clojure.spec.alpha :as s]
+  (:require [clojure.set :as set]
+            [clojure.spec.alpha :as s]
             [clojure.string :as str]
-            [com.fulcrologic.guardrails.core :refer [=> >defn ?]])
+            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
+            [schnaq.config.shared :as shared-config])
   #?(:clj (:import (java.lang Character))))
 
 (>defn slugify
@@ -64,3 +66,9 @@
       (if kw-ns
         (str/join "/" [kw-ns kw])
         (str kw)))))
+
+(>defn pro-user?
+  "Check if a user has one of the valid pro-roles."
+  [roles]
+  [:user.registered/valid-roles => boolean?]
+  (not (nil? (seq (set/intersection shared-config/pro-roles roles)))))
