@@ -4,7 +4,6 @@
             [ring.util.http-response :refer [bad-request created forbidden ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
-            [schnaq.auth.lib :as auth-lib]
             [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db :refer [set-activation-focus]]
@@ -16,6 +15,7 @@
             [schnaq.mail.emails :as emails]
             [schnaq.media :as media]
             [schnaq.processors :as processors]
+            [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
@@ -293,10 +293,11 @@
      reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement)
     (toggle-anon-vote-statement (:body parameters) :downvote)))
 
-(defn- user-allowed-to-label?
+(>defn- user-allowed-to-label?
   "Helper function checking, whether the user is allowed to use labels in the discussion."
-  [identity share-hash]
-  (let [pro-user? (auth-lib/pro-user? identity)
+  [{:user.registered/keys [roles]} share-hash]
+  [::specs/registered-user :discussion/share-hash => boolean?]
+  (let [pro-user? (shared-tools/pro-user? roles)
         mods-only? (-> (discussion-db/discussion-by-share-hash share-hash)
                        :discussion/states
                        set
@@ -307,11 +308,11 @@
 (defn- add-label
   "Add a label to a statement. Only pre-approved labels can be set. Custom labels have no effect.
   The user needs to be authenticated. The statement concerned is always returned."
-  [{:keys [parameters identity]}]
-  (let [{:keys [statement-id label share-hash display-name]} (:body parameters)
-        keycloak-id (:sub identity)
-        user-id (user-db/user-id display-name keycloak-id)]
-    (if (user-allowed-to-label? identity share-hash)
+  [{:keys [parameters user]}]
+  (let [{:keys [statement-id label share-hash]} (:body parameters)
+        keycloak-id (:user.registered/keycloak-id user)
+        user-id (:db/id user)]
+    (if (user-allowed-to-label? user share-hash)
       (ok {:statement (processors/statement-default (discussion-db/add-label statement-id label)
                                                     share-hash keycloak-id user-id)})
       (forbidden (at/build-error-body :permission/forbidden "You are not allowed to edit labels")))))
@@ -319,11 +320,11 @@
 (defn- remove-label
   "Remove a label from a statement. Removing a label not present has no effect.
   The user needs to be authenticated. The statement concerned is always returned."
-  [{:keys [parameters identity]}]
-  (let [{:keys [statement-id label share-hash display-name]} (:body parameters)
-        keycloak-id (:sub identity)
-        user-id (user-db/user-id display-name keycloak-id)]
-    (if (user-allowed-to-label? identity share-hash)
+  [{:keys [parameters user]}]
+  (let [{:keys [statement-id label share-hash]} (:body parameters)
+        keycloak-id (:user.registered/keycloak-id user)
+        user-id (:db/id user)]
+    (if (user-allowed-to-label? user share-hash)
       (ok {:statement (processors/statement-default (discussion-db/remove-label statement-id label)
                                                     share-hash keycloak-id user-id)})
       (forbidden (at/build-error-body :permission/forbidden "You are not allowed to edit labels")))))
@@ -569,7 +570,8 @@
               :name :api.discussion.statement.vote/up
               :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
                           400 at/response-error-body}}]]
-     ["/label" {:middleware [:discussion/valid-statement?
+     ["/label" {:middleware [:user/authenticated?
+                             :discussion/valid-statement?
                              :discussion/valid-writeable-discussion?]}
       ["/add" {:put add-label
                :description (at/get-doc #'add-label)
