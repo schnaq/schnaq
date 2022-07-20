@@ -18,7 +18,7 @@
     ["/discussion" {:put toggle-wordcloud
                     :description (at/get-doc #'toggle-wordcloud)
                     :middleware [:user/authenticated?
-                                 :user/pro-user?
+                                 :user/pro?
                                  :discussion/valid-credentials?]
                     :name :wordcloud/display
                     :parameters {:body {:share-hash :discussion/share-hash

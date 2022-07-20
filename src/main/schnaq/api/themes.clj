@@ -153,7 +153,7 @@
 (def theme-routes
   [["/user" {:swagger {:tags ["themes"]}
              :middleware [:user/authenticated?
-                          :user/pro-user?]
+                          :user/pro?]
              :responses {400 at/response-error-body}}
     ["/themes"
      {:get personal

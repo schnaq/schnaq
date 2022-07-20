@@ -400,21 +400,21 @@
                       :discussion/valid-credentials?]}
      ["/disable-pro-con" {:put disable-pro-con!
                           :description (at/get-doc #'disable-pro-con!)
-                          :middleware [:user/pro-user?]
+                          :middleware [:user/pro?]
                           :name :api.discussion.manage/disable-pro-con
                           :parameters {:body {:disable-pro-con? boolean?}}}]
      ["/mods-mark-only" {:put mods-mark-only!
                          :description (at/get-doc #'mods-mark-only!)
                          :name :api.discussion.manage/mods-mark-only
-                         :middleware [:user/pro-user?]
+                         :middleware [:user/pro?]
                          :parameters {:body {:mods-mark-only? boolean?}}}]
      ["/make-read-only" {:put make-discussion-read-only!
                          :description (at/get-doc #'make-discussion-read-only!)
-                         :middleware [:user/pro-user?]
+                         :middleware [:user/pro?]
                          :name :api.discussion.manage/make-read-only}]
      ["/make-writeable" {:put make-discussion-writeable!
                          :description (at/get-doc #'make-discussion-writeable!)
-                         :middleware [:user/pro-user?]
+                         :middleware [:user/pro?]
                          :name :api.discussion.manage/make-writeable}]
      ["/focus" {:put set-focus
                 :description (at/get-doc #'set-focus)
@@ -425,7 +425,7 @@
                      :name :api.discussion/header-image
                      :middleware [:discussion/valid-credentials?
                                   :user/authenticated?
-                                  :user/pro-user?]
+                                  :user/pro?]
                      :parameters {:body {:share-hash :discussion/share-hash
                                          :edit-hash :discussion/edit-hash
                                          :image-url :discussion/header-image-url}}
@@ -526,7 +526,7 @@
      ["/pin/toggle" {:post toggle-pinned-statement
                      :description (at/get-doc #'toggle-pinned-statement)
                      :name :api.discussion.statements/pin
-                     :middleware [:user/authenticated? :user/pro-user? :discussion/valid-credentials?]
+                     :middleware [:user/authenticated? :user/pro? :discussion/valid-credentials?]
                      :parameters {:body {:edit-hash :discussion/edit-hash
                                          :pin? boolean?}}
                      :responses {200 {:body {:pinned? boolean?}}}}]

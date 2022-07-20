@@ -162,7 +162,7 @@
                             :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
                             :user/authenticated? auth-middlewares/authenticated?-middleware
                             :user/beta-tester? auth-middlewares/beta-tester?-middleware
-                            :user/pro-user? auth-middlewares/pro-user?-middleware}})))
+                            :user/pro? auth-middlewares/pro-user?-middleware}})))
 
 (defn route-by-name
   "Return a route by its name."

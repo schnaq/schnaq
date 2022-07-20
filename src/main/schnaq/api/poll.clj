@@ -81,7 +81,7 @@
           :post {:handler new-poll
                  :description (at/get-doc #'new-poll)
                  :middleware [:user/authenticated?
-                              :user/pro-user?
+                              :user/pro?
                               :discussion/valid-credentials?]
                  :parameters {:body {:title :poll/title
                                      :poll-type dto/poll-type
