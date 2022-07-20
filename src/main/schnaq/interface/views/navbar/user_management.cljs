@@ -55,7 +55,7 @@
   []
   (let [admin? @(rf/subscribe [:user/administrator?])
         beta-tester? @(rf/subscribe [:user/beta-tester?])
-        pro-user? @(rf/subscribe [:user/pro-user?])
+        pro-user? @(rf/subscribe [:user/pro?])
         indicator (cond
                     admin? [icon :star]
                     beta-tester? [icon :rocket]

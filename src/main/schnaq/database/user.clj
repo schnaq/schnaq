@@ -313,7 +313,7 @@
   [:user.registered/keycloak-id :user.registered.subscription/stripe-id :user.registered.subscription/stripe-customer-id :ret ::specs/registered-user]
   (let [new-db (:db-after
                 @(transact [{:db/id [:user.registered/keycloak-id keycloak-id]
-                             :user.registered.subscription/type :user.registered.subscription.type/pro
+                             :user.registered/roles :roles/pro
                              :user.registered.subscription/stripe-id stripe-subscription-id
                              :user.registered.subscription/stripe-customer-id stripe-customer-id}]))]
     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
@@ -333,7 +333,15 @@
   "Check in our database the pro-subscription status of the user."
   [keycloak-id]
   [:user.registered/keycloak-id :ret boolean?]
-  (-> (fast-pull [:user.registered/keycloak-id keycloak-id] [{:user.registered.subscription/type [:db/ident]}])
+  (-> (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user)
       :user.registered.subscription/type
       :db/ident
       (= :user.registered.subscription.type/pro)))
+
+(def keycloak-id "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18")
+
+(comment
+  
+  (:user.registered/roles (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user))
+
+  nil)

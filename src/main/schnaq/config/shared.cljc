@@ -42,13 +42,18 @@
   #{"image/jpeg" "image/png" "image/webp"})
 
 (def admin-roles
-  #{"admin"})
+  #{"admin" :role/admin})
 
 (def analytics-roles
-  (cset/union admin-roles #{"analytics-admin" "analytics"}))
+  (cset/union admin-roles #{"analytics-admin" :role/analytics}))
 
 (def beta-tester-roles
-  (cset/union admin-roles analytics-roles #{"beta-tester" "tester"}))
+  "Admins and testers have beta-access."
+  (cset/union admin-roles analytics-roles #{"beta-tester" :role/tester}))
+
+(def pro-roles
+  "All beta testers, admins, pro and enterprise users have pro access."
+  (cset/union beta-tester-roles #{:role/pro :role/enterprise}))
 
 (def allowed-labels
   "A set of allowed labels for statements. They correspond to fa symbols"

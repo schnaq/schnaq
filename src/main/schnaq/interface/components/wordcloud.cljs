@@ -85,7 +85,7 @@
 (defn wordcloud-preview
   "If user is pro-user display a wordcloud and if not show a preview instead."
   []
-  (if @(rf/subscribe [:user/pro-user?])
+  (if @(rf/subscribe [:user/pro?])
     [wordcloud]
     [preview/preview-image :preview/wordcloud]))
 

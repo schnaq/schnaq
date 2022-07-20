@@ -233,7 +233,7 @@
       [flag-dropdown-button-statement statement]
       (when (and current-edit-hash @(rf/subscribe [:user/authenticated?]))
         [lock-unlock-statement-dropdown-button statement])
-      (when (and current-edit-hash @(rf/subscribe [:user/pro-user?]))
+      (when (and current-edit-hash @(rf/subscribe [:user/pro?]))
         [toggle-pin-statement-dropdown-button statement])
       (when-not read-only?
         [:<>

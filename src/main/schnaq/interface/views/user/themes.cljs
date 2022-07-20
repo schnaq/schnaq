@@ -115,7 +115,7 @@
   "Display all available themes."
   []
   (let [user-name @(rf/subscribe [:user/display-name])
-        pro-user? @(rf/subscribe [:user/pro-user?])]
+        pro-user? @(rf/subscribe [:user/pro?])]
     [:section.pb-5
      [:h2 (labels :themes.personal.creation/heading)]
      [:p (labels :themes.personal.creation/lead)]
@@ -138,7 +138,7 @@
   "Activate save-button only for pro-users. Other users see an subscription 
   information."
   []
-  (let [pro-user? @(rf/subscribe [:user/pro-user?])]
+  (let [pro-user? @(rf/subscribe [:user/pro?])]
     [:<>
      (when-not pro-user?
        [:div.alert.alert-info
@@ -247,7 +247,7 @@
   "Form to configure theme."
   []
   (when-let [selected @(rf/subscribe [:schnaq.selected/theme])]
-    (let [pro-user? @(rf/subscribe [:user/pro-user?])
+    (let [pro-user? @(rf/subscribe [:user/pro?])
           theme-id (:db/id selected)]
       [:<>
        [:form

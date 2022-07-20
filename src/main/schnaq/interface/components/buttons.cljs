@@ -51,7 +51,7 @@
 (defn upgrade
   "Upgrade button for use in different places."
   []
-  (when-not @(rf/subscribe [:user/pro-user?])
+  (when-not @(rf/subscribe [:user/pro?])
     [anchor
      [:<>
       [icon :star "me-1"]

@@ -343,7 +343,7 @@
       (let [poll-tab [:span [iconed-heading :chart-pie :schnaq.input-type/poll]]
             activation-tab [:span [iconed-heading :magic :schnaq.input-type/activation]]
             word-cloud-tab [:span [iconed-heading :cloud :schnaq.input-type/word-cloud]]
-            pro-user? @(rf/subscribe [:user/pro-user?])
+            pro-user? @(rf/subscribe [:user/pro?])
             admin-access? @(rf/subscribe [:schnaq.current/admin-access])
             read-only? @(rf/subscribe [:schnaq.selected/read-only?])
             top-level? @(rf/subscribe [:routes.schnaq/start?])]

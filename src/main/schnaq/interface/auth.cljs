@@ -1,6 +1,7 @@
 (ns schnaq.interface.auth
   (:require ["keycloak-js" :as Keycloak]
-            [cljs.core.async :refer [go <! timeout]]
+            [cljs.core.async :refer [<! go timeout]]
+            [clojure.set :as set]
             [com.fulcrologic.guardrails.core :refer [>defn]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
@@ -11,6 +12,7 @@
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.modal :as modal]
+            [schnaq.shared-toolbelt :as shared-tools]
             [taoensso.timbre :as log]))
 
 (def ^:private refresh-token-time
@@ -207,6 +209,11 @@
 
 ;; -----------------------------------------------------------------------------
 
+(rf/reg-sub
+ :user/roles
+ (fn [db]
+   (get-in db [:user :roles])))
+
 (rf/reg-event-db
  :user/authenticated!
  (fn [db [_ toggle]]
@@ -219,35 +226,33 @@
 
 (rf/reg-sub
  :user/administrator?
- (fn [db _]
-   (let [roles (get-in db [:user :roles])]
-     (string? (some shared-config/admin-roles roles)))))
+ :<- [:user/roles]
+ (fn [roles]
+   (shared-tools/admin? roles)))
 
 (rf/reg-sub
  :user/analytics-admin?
  ;; Users that are allowed to see all analytics.
- (fn [db _]
-   (let [roles (get-in db [:user :roles])]
-     (string? (some shared-config/analytics-roles roles)))))
+ :<- [:user/roles]
+ (fn [roles]
+   (shared-tools/analytics-admin? roles)))
 
 (rf/reg-sub
  :user/beta-tester?
- (fn [db _]
-   (let [roles (get-in db [:user :roles])]
-     (string? (some shared-config/beta-tester-roles roles)))))
+ :<- [:user/roles]
+ (fn [roles]
+   (shared-tools/beta-tester? roles)))
+
+(rf/reg-sub
+ :user/pro?
+ :<- [:user/roles]
+ (fn [roles]
+   (shared-tools/pro-user? roles)))
 
 (rf/reg-sub
  :user/subscription
  (fn [db _]
    (get-in db [:user :subscription])))
-
-(rf/reg-sub
- :user/pro-user?
- :<- [:user/beta-tester?]
- :<- [:user/subscription]
- (fn [[beta-tester? subscription]]
-   (or beta-tester?
-       (= :user.registered.subscription.type/pro (:type subscription)))))
 
 (rf/reg-event-db
  :keycloak.roles/extract
@@ -256,7 +261,7 @@
      (let [keycloak (get-in db [:user :keycloak])
            roles (:roles (js->clj (oget keycloak [:realmAccess])
                                   :keywordize-keys true))]
-       (assoc-in db [:user :roles] roles)))))
+       (assoc-in db [:user :keycloak-roles] roles)))))
 
 (rf/reg-sub
  :keycloak/object

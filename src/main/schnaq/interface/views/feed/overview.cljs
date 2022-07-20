@@ -262,7 +262,7 @@
     (labels label)]])
 
 (defn sidebar-info-links []
-  (let [pro-user? @(rf/subscribe [:user/pro-user?])]
+  (let [pro-user? @(rf/subscribe [:user/pro?])]
     [:section.panel-white.text-center
      [:div.btn-group {:role "group"}
       [:div.btn-group-vertical

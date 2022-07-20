@@ -15,7 +15,7 @@
 
 (defn image-url-input []
   (let [input-id "admin-image-url"
-        pro-user? @(rf/subscribe [:user/pro-user?])]
+        pro-user? @(rf/subscribe [:user/pro?])]
     [:form.form.text-start.mb-5
      {:on-submit (fn [e]
                    (.preventDefault e)

@@ -181,7 +181,9 @@
                            :placeholder user-value}]
      [:small.text-muted sample]]))
 
-(defn- user-form []
+(defn- user-form
+  "Generate a form to update a user."
+  []
   (when-let [keycloak-id @(rf/subscribe [:admin/user :user.registered/keycloak-id])]
     [:<>
      [:div.d-flex.flex-row
