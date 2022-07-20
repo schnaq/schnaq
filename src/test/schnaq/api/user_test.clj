@@ -1,9 +1,7 @@
 (ns schnaq.api.user-test
-  (:require [clojure.spec.alpha :as s]
-            [clojure.test :refer [deftest is testing use-fixtures]]
+  (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [muuntaja.core :as m]
             [schnaq.api :as api]
-            [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.test-data :refer [kangaroo]]
             [schnaq.test.toolbelt :as toolbelt :refer [test-app]]))
