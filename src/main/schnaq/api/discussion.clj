@@ -395,7 +395,8 @@
                                    :edit-hash :discussion/edit-hash}}
                :responses {403 at/response-error-body}}
     ["" {:responses {200 {:body {:share-hash :discussion/share-hash}}}
-         :middleware [:discussion/valid-credentials?]}
+         :middleware [:user/authenticated?
+                      :discussion/valid-credentials?]}
      ["/disable-pro-con" {:put disable-pro-con!
                           :description (at/get-doc #'disable-pro-con!)
                           :middleware [:user/pro-user?]
@@ -422,6 +423,7 @@
                      :description (at/get-doc #'media/set-preview-image)
                      :name :api.discussion/header-image
                      :middleware [:discussion/valid-credentials?
+                                  :user/authenticated?
                                   :user/pro-user?]
                      :parameters {:body {:share-hash :discussion/share-hash
                                          :edit-hash :discussion/edit-hash
