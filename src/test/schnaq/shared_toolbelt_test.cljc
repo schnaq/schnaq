@@ -31,3 +31,10 @@
       (is (= christian (get normalized (:db/id christian))))
       (is (= kangaroo (get normalized (:db/id kangaroo))))
       (is (nil? (get normalized "razupaltuff"))))))
+
+(deftest namespaced-keyword->string-test
+  (are [x y] (= y (tools/namespaced-keyword->string x))
+    nil nil
+    :foo "foo"
+    :foo/bar "foo/bar"
+    :foo.bar/baz "foo.bar/baz"))

@@ -1,7 +1,7 @@
 (ns schnaq.shared-toolbelt
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as str]
-            [com.fulcrologic.guardrails.core :refer [=> >defn]])
+            [com.fulcrologic.guardrails.core :refer [=> >defn ?]])
   #?(:clj (:import (java.lang Character))))
 
 (>defn slugify
@@ -58,5 +58,9 @@
   Example: `(namespaced-keyword->string :user.registered/keycloak-id)
   => \"user.registered/keycloak-id\"`"
   [namespaced-keyword]
-  [keyword? => string?]
-  (str/join "/" ((juxt namespace name) namespaced-keyword)))
+  [(? keyword?) => (? string?)]
+  (when namespaced-keyword
+    (let [[kw-ns kw] ((juxt namespace name) namespaced-keyword)]
+      (if kw-ns
+        (str/join "/" [kw-ns kw])
+        (str kw)))))
