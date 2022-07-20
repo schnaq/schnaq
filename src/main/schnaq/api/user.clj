@@ -126,8 +126,8 @@
 
 (defn- update-user
   "Update a field of a user."
-  [{{:keys [body]} :parameters}]
-  (ok {:user (user-db/update-user body)}))
+  [{{{:keys [user]} :body} :parameters}]
+  (ok {:user (user-db/update-user user)}))
 
 ;; -----------------------------------------------------------------------------
 
@@ -185,8 +185,8 @@
                :parameters {:query {:keycloak-id :user.registered/keycloak-id}}}
          :put {:handler update-user
                :description (at/get-doc #'update-user)
-               :parameters {:body ::specs/registered-user}
-               :responses {200 {:body any?}}}
+               :parameters {:body {:user ::specs/registered-user}}
+               :responses {200 {:body {:user ::specs/registered-user}}}}
          :name :api.admin/user
          :responses {200 {:body {:user ::specs/registered-user}}}}]
     ["/statements" {:delete delete-all-statements-for-user
