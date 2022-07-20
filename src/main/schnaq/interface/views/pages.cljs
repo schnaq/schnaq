@@ -123,8 +123,8 @@
   []
   [with-nav-and-header
    {:page/vertical-header? true
-    :page/heading "Seite wird geladen"
-    :page/subheading "Du wirst bald weitergeleitet"}
+    :page/heading (labels :loading.page/heading)
+    :page/subheading (labels :loading.page/subheading)}
    [:div.container
     [loading/loading-placeholder]]])
 
@@ -142,9 +142,9 @@
       (and create-schnaq? (not authenticated?)) [register-cta]
       (and (or needs-authentication? needs-administrator? needs-beta-tester? needs-analytics-admin?)
            (not authenticated?)) [please-login]
-      (and needs-administrator? (not admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
+      (and needs-administrator? (not admin?)) [loading-page]
       (and needs-beta-tester? (not beta-tester?)) [beta-only]
-      (and needs-analytics-admin? (not analytics-admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
+      (and needs-analytics-admin? (not analytics-admin?)) [loading-page]
       :else page)))
 
 ;; -----------------------------------------------------------------------------

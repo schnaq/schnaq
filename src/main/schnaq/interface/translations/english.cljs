@@ -649,6 +649,8 @@
    :filters.labels.type/numbers "Statement-number"
    :filters.labels.type/author "You are"
 
+   :loading.page/heading "Page is loading"
+   :loading.page/subheading "You will soon be forwarded"
    :loading.placeholder/lead "Loading..."
    :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 

@@ -656,6 +656,8 @@
    :filters.labels.type/numbers "Anzahl Beiträge"
    :filters.labels.type/author "Du"
 
+   :loading.page/heading "Seite wird geladen"
+   :loading.page/subheading "Du wirst bald weitergeleitet"
    :loading.placeholder/lead "Daten werden geladen..."
    :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
 
