@@ -139,14 +139,14 @@
                              (let [role (keyword "role" selection)]
                                (rf/dispatch [:admin.user/update {:user.registered/keycloak-id keycloak-id
                                                                  :user.registered/roles role}])))))}
-     [:label "Füge Rolle zu User hinzu"
+     [:label (labels :admin.center.user.role.add/label)
       [:div.input-group
        [:select.form-control {:id selection-id}
         [:option {:value ""} "---"]
         (for [role (set/difference specs/user-roles roles)]
           [:option {:key (str "role-selector-" role)
                     :value role} role])]
-       [:button.input-group-text {:type :submit} "Rolle hinzufügen"]]]]))
+       [:button.input-group-text {:type :submit} (labels :admin.center.user.role.add/button)]]]]))
 
 (defn- remove-role
   "Remove a user's role."
@@ -160,14 +160,14 @@
                              (when (not-empty selection)
                                (let [role (keyword "role" selection)]
                                  (rf/dispatch [:admin.user.delete/role keycloak-id role])))))}
-       [:label "Entferne Rolle von User"
+       [:label (labels :admin.center.user.role.delete/label)
         [:div.input-group
          [:select.form-control {:id selection-id}
           [:option {:value ""} "---"]
           (for [role roles]
             [:option {:key (str "role-remove-selector-" role)
                       :value role} role])]
-         [:button.input-group-text {:type :submit} "Rolle entfernen"]]]])))
+         [:button.input-group-text {:type :submit} (labels :admin.center.user.role.delete/button)]]]])))
 
 (defn- input-field
   "Generate an input field based on a model's field."
@@ -204,13 +204,13 @@
        [input-field :user.registered.subscription/stripe-customer-id (str (s/form :user.registered.subscription/stripe-customer-id))]
        [input-field :user.registered.subscription/stripe-id (str (s/form :stripe.subscription/id))]]
       [:button.btn.btn-primary.mt-3 {:type :submit}
-       "User speichern"]]]))
+       (labels :admin.center.user.save/button)]]]))
 
 (defn- user-management
   "Show user management section."
   []
   [:section.pb-5
-   [:h2 "User Management"]
+   [:h2 (labels :admin.center.user/headline)]
    [load-user]
    [user-form]])
 

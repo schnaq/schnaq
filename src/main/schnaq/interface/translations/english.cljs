@@ -604,7 +604,13 @@
    :admin.center.delete.user.schnaqs/button "Delete all schnaqs"
    :admin.center.delete.user.identity/button "Delete identity"
 
-   :admin.center.user.load/button "User laden"
+   :admin.center.user/headline "User Management"
+   :admin.center.user.load/button "Load User"
+   :admin.center.user.save/button "Save User"
+   :admin.center.user.role.delete/label "Remove role from user"
+   :admin.center.user.role.delete/button "Remove Role"
+   :admin.center.user.role.add/label "Add role to user"
+   :admin.center.user.role.add/button "Add role"
 
    :badges.filters/label "Display"
    :badges/sort "Sort the posts"
