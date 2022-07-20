@@ -1,6 +1,8 @@
 (ns schnaq.database.user-test
-  (:require [clojure.test :refer [deftest testing use-fixtures is]]
+  (:require [clojure.spec.alpha :as s]
+            [clojure.test :refer [deftest is testing use-fixtures]]
             [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.specs :as specs]
             [schnaq.database.user :as db]
             [schnaq.test-data :refer [alex christian kangaroo]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -169,3 +171,8 @@
                            :user.registered/email new-mail})]
       (is (= new-mail email))
       (is (= new-name display-name)))))
+
+(deftest private-user-by-keycloak-id-test
+  (testing "Valid users are returned can be queried by their keycloak-id."
+    (is (nil? (db/private-user-by-keycloak-id "foo")))
+    (is (s/valid? ::specs/registered-user (db/private-user-by-keycloak-id kangaroo-keycloak-id)))))

@@ -35,9 +35,11 @@
 (>defn private-user-by-keycloak-id
   "Returns the registered user by email."
   [keycloak-id]
-  [:user.registered/keycloak-id :ret ::specs/registered-user]
-  (fast-pull [:user.registered/keycloak-id keycloak-id]
-             patterns/private-user))
+  [:user.registered/keycloak-id => (? ::specs/registered-user)]
+  (let [user (fast-pull [:user.registered/keycloak-id keycloak-id]
+                        patterns/private-user)]
+    (when (:db/id user)
+      user)))
 
 (>defn all-registered-users
   "Returns all registered users."
@@ -341,7 +343,7 @@
 (def keycloak-id "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18")
 
 (comment
-  
+
   (:user.registered/roles (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user))
 
   nil)
