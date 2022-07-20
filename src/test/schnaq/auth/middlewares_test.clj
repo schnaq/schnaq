@@ -59,12 +59,13 @@
       (is (= 401 (:status (test-routes (mock/request :get path))))))))
 
 (deftest pro-user?-middleware-test
-  (let [mw (auth-middlewares/pro-user?-middleware (constantly :success))]
+  (let [alex (user-db/add-role alex-keycloak-id :role/pro)
+        mw (auth-middlewares/pro-user?-middleware (constantly :success))]
     (testing "Non-existent user is no pro user."
       (is (= 403 (:status (mw {:identity {:sub "non-existent-user"}})))))
     (testing "Normal registered users have no access."
       (is (= 403 (:status (mw {:user (user-db/private-user-by-keycloak-id kangaroo-keycloak-id)})))))
     (testing "Pro-User shall pass."
-      (is (= :success (mw {:user (user-db/private-user-by-keycloak-id alex-keycloak-id)}))))
+      (is (= :success (mw {:user alex}))))
     (testing "Beta-Users also have access to pro-features."
       (is (= :success (mw {:user (user-db/private-user-by-keycloak-id schnaqqi-keycloak-id)}))))))

@@ -292,7 +292,6 @@
    :user.registered/last-name "Schneider"
    :user.registered/first-name "Alexander"
    :user.registered/groups ["test-group"]
-   :user.registered/roles #{:role/pro}
    :user.registered/notification-mail-interval :notification-mail-interval/weekly
    :user.registered/visited-schnaqs
    [#:discussion{:share-hash "cat-dog-hash"}]})
