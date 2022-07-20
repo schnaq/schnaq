@@ -1,11 +1,16 @@
 (ns schnaq.interface.views.admin.control-center
   (:require [cljs.pprint :refer [pprint]]
-            [oops.core :refer [oget+]]
+            [cljs.spec.alpha :as s]
+            [clojure.set :as set]
+            [clojure.test.check.properties]
+            [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (rf/reg-event-fx
  :admin.delete/schnaq
@@ -51,7 +56,7 @@
       {:id input-id
        :name input-id
        :placeholder (labels placeholder-text)
-       :defaultValue "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18"
+       :defaultValue "85c6aa73-ae9e-4686-ba1a-b8cfe27349c2"
        :required true}]
      [:label {:for input-id} (labels placeholder-text)]]
     [:button.input-group-text (labels button-text)]]])
@@ -114,54 +119,138 @@
     [:div.row
      [:div.col-12.col-md-6
       [input-form-builder "user-load"
-       :admin/load-user
+       :admin.user/load
        :common/keycloak-id :admin.center.user.load/button]]
-     [:div.col-12.col-md-6
-      [:pre {:style {:max-height "200px"}}
-       [:code
-        (with-out-str (pprint user))]]]]))
+     (when user
+       [:div.col-12.col-md-6
+        [:pre {:style {:max-height "200px"}}
+         [:code
+          (with-out-str (pprint user))]]])]))
 
-(defn- change-role []
-  (let [selection-id "select-role-id"]
+(defn- add-role
+  "Add role to user."
+  []
+  (let [selection-id "select-role-id"
+        {:user.registered/keys [keycloak-id roles]} @(rf/subscribe [:admin/user])]
     [:form {:on-submit (fn [e]
                          (.preventDefault e)
                          (when-let [selection (oget+ e [:target :elements selection-id :value])]
-                           (when (not-empty selection)
-                             (let [selection (keyword "role" selection)]
-                               (prn selection)))))}
+                           (when (seq selection)
+                             (let [role (keyword "role" selection)]
+                               (rf/dispatch [:admin.user/update {:user.registered/keycloak-id keycloak-id
+                                                                 :user.registered/roles role}])))))}
      [:label "Füge Rolle zu User hinzu"
       [:div.input-group
        [:select.form-control {:id selection-id}
         [:option {:value ""} "---"]
-        (for [role specs/user-roles]
+        (for [role (set/difference specs/user-roles roles)]
           [:option {:key (str "role-selector-" role)
                     :value role} role])]
-       [:button.input-group-text {:type :submit} "foo"]]]]))
+       [:button.input-group-text {:type :submit} "Rolle hinzufügen"]]]]))
+
+(defn- remove-role
+  "Remove a user's role."
+  []
+  (let [selection-id "remove-role-id"
+        {:user.registered/keys [keycloak-id roles]} @(rf/subscribe [:admin/user])]
+    (when (seq roles)
+      [:form {:on-submit (fn [e]
+                           (.preventDefault e)
+                           (when-let [selection (oget+ e [:target :elements selection-id :value])]
+                             (when (not-empty selection)
+                               (let [role (keyword "role" selection)]
+                                 (rf/dispatch [:admin.user.delete/role keycloak-id role])))))}
+       [:label "Entferne Rolle von User"
+        [:div.input-group
+         [:select.form-control {:id selection-id}
+          [:option {:value ""} "---"]
+          (for [role roles]
+            [:option {:key (str "role-remove-selector-" role)
+                      :value role} role])]
+         [:button.input-group-text {:type :submit} "Rolle entfernen"]]]])))
+
+(defn- input-field
+  "Generate an input field based on a model's field."
+  [field sample]
+  (let [user-value @(rf/subscribe [:admin/user field])
+        fqname (shared-tools/namespaced-keyword->string field)
+        id (str "user-input-" fqname)]
+    [:div.col-12.col-md-4.pt-3
+     [:label.small {:for id} fqname]
+     [:input.form-control {:id id
+                           :name fqname
+                           :placeholder user-value}]
+     [:small.text-muted sample]]))
+
+(defn- user-form []
+  (when-let [keycloak-id @(rf/subscribe [:admin/user :user.registered/keycloak-id])]
+    [:<>
+     [:div.d-flex.flex-row
+      [:div.me-3 [add-role]]
+      [remove-role]]
+     [:form {:on-submit (fn [e]
+                          (.preventDefault e)
+                          (let [form (oget e [:target :elements])
+                                user (toolbelt/form->map form)]
+                            (rf/dispatch [:admin.user/update (assoc user :user.registered/keycloak-id keycloak-id)])
+                            (rf/dispatch [:form/should-clear form])))}
+      [:div.row
+       [input-field :user.registered/display-name]
+       [input-field :user.registered/first-name]
+       [input-field :user.registered/last-name]
+       [input-field :user.registered/email]
+       [input-field :user.registered/profile-picture]
+       [input-field :user.registered/groups]
+       [input-field :user.registered.subscription/stripe-customer-id (str (s/form :user.registered.subscription/stripe-customer-id))]
+       [input-field :user.registered.subscription/stripe-id (str (s/form :stripe.subscription/id))]]
+      [:button.btn.btn-primary.mt-3 {:type :submit}
+       "User speichern"]]]))
 
 (defn- user-management
   "Show user management section."
   []
-  [:section
+  [:section.pb-5
    [:h2 "User Management"]
    [load-user]
-   [change-role]])
+   [user-form]])
 
 (rf/reg-event-fx
- :admin/load-user
+ :admin.user/update
+ (fn [{:keys [db]} [_ user]]
+   {:fx [(http/xhrio-request db :put "/admin/user"
+                             [:admin.user.load/success]
+                             {:user user}
+                             [:ajax.error/as-notification])]}))
+
+(rf/reg-event-fx
+ :admin.user.delete/role
+ (fn [{:keys [db]} [_ keycloak-id role]]
+   {:db (update-in db [:admin :user :user.registered/roles] #(disj % role))
+    :fx [(http/xhrio-request db :delete "/admin/user/role"
+                             [:admin.user/load keycloak-id]
+                             {:keycloak-id keycloak-id
+                              :role role}
+                             [:ajax.error/as-notification])]}))
+
+(rf/reg-event-fx
+ :admin.user/load
  (fn [{:keys [db]} [_ keycloak-id]]
    {:fx [(http/xhrio-request db :get "/admin/user"
-                             [:admin.load-user/success]
-                             {:keycloak-id keycloak-id})]}))
+                             [:admin.user.load/success]
+                             {:keycloak-id keycloak-id}
+                             [:ajax.error/as-notification])]}))
 
 (rf/reg-event-db
- :admin.load-user/success
+ :admin.user.load/success
  (fn [db [_ {:keys [user]}]]
    (assoc-in db [:admin :user] user)))
 
 (rf/reg-sub
  :admin/user
- (fn [db]
-   (get-in db [:admin :user])))
+ (fn [db [_ field]]
+   (if field
+     (get-in db [:admin :user field])
+     (get-in db [:admin :user]))))
 
 ;; -----------------------------------------------------------------------------
 
