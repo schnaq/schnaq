@@ -32,7 +32,6 @@
  :user.register/success
  (fn [{:keys [db]} [_ {:keys [registered-user updated-statements? updated-schnaqs? new-user?]}]]
    (let [{:user.registered/keys [display-name first-name last-name email profile-picture visited-schnaqs archived-schnaqs keycloak-id notification-mail-interval roles]} registered-user
-         subscription-type (:user.registered.subscription/type registered-user)
          current-route-name (navigation/canonical-route-name (get-in db [:current-route :data :name]))
          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          visited-hashes (map :discussion/share-hash visited-schnaqs)
@@ -47,7 +46,6 @@
               (cond-> notification-mail-interval (assoc-in [:user :notification-mail-interval] notification-mail-interval))
               (cond-> first-name (assoc-in [:user :names :first] first-name))
               (cond-> last-name (assoc-in [:user :names :last] last-name))
-              (cond-> subscription-type (assoc-in [:user :subscription :type] subscription-type))
               ;; Clear secrets, they have been persisted.
               (assoc-in [:discussion :statements :creation-secrets] {})
               (assoc-in [:discussion :schnaqs :creation-secrets] {}))

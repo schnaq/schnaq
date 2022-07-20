@@ -326,8 +326,7 @@
   [:user.registered/keycloak-id :ret any?]
   (let [retractions [:db/retract [:user.registered/keycloak-id keycloak-id]]
         new-db (:db-after
-                @(transact [(conj retractions :user.registered.subscription/type)
-                            (conj retractions :user.registered.subscription/stripe-id)
+                @(transact [(conj retractions :user.registered.subscription/stripe-id)
                             (conj retractions :user.registered.subscription/stripe-customer-id)
                             (conj retractions :user.registered/roles :role/pro)]))]
     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))

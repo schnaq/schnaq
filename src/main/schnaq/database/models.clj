@@ -77,11 +77,6 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "Store the customer id from stripe."}
-   {:db/ident :user.registered.subscription/type
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "Define which plan the user subscribed to."}
-   {:db/ident :user.registered.subscription.type/pro}
 
    ;; Seen statements
    {:db/ident :seen-statements/user

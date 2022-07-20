@@ -73,14 +73,13 @@
                                               :schnaqs (s/coll-of ::discussion)))
 (s/def :user.registered.subscription/stripe-id :stripe.subscription/id)
 (s/def :user.registered.subscription/stripe-customer-id :stripe/customer-id)
-(s/def :user.registered.subscription/type #{:user.registered.subscription.type/pro})
 (s/def ::registered-user (s/keys :req [:user.registered/keycloak-id]
                                  :opt [:user.registered/display-name
                                        :user.registered/last-name :user.registered/first-name
                                        :user.registered/groups :user.registered/profile-picture
                                        :user.registered/roles
                                        :user.registered/email :user.registered/notification-mail-interval
-                                       :user.registered/visited-schnaqs :user.registered.subscription/type
+                                       :user.registered/visited-schnaqs
                                        :user.registered.subscription/stripe-id
                                        :user.registered.subscription/stripe-customer-id]))
 
