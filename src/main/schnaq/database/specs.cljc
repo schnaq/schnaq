@@ -35,7 +35,7 @@
 (s/def :stripe/kw-to-price (s/map-of keyword? :stripe/price))
 (s/def :stripe/prices (s/map-of keyword? :stripe/kw-to-price))
 
-(s/def :stripe.subscription/id (s/and string? #(.startsWith % "sub_")))
+(s/def :stripe.subscription/id (s/and #(.startsWith % "sub_") string?))
 (s/def :stripe.subscription/status #{:incomplete :incomplete_expired :trialing :active :past_due :canceled :unpaid})
 (s/def :stripe.subscription/cancelled? boolean?)
 (s/def :stripe.subscription/period-start nat-int?)
@@ -65,8 +65,9 @@
 (def user-roles #{:role/admin :role/enterprise :role/tester :role/pro :role/analytics})
 (s/def :user.registered/valid-roles user-roles)
 (s/def :user.registered/roles
-  (s/coll-of :user.registered/valid-roles
-             :distinct true))
+  (s/or :coll (s/coll-of :user.registered/valid-roles
+                         :distinct true)
+        :role :user.registered/valid-roles))
 (s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)
                                               :schnaqs (s/coll-of ::discussion)))
