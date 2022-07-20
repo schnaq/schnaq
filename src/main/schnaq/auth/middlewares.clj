@@ -1,11 +1,12 @@
 (ns schnaq.auth.middlewares
   (:require [buddy.auth :refer [authenticated?]]
             [clojure.string :as string]
-            [ring.util.http-response :refer [unauthorized forbidden]]
+            [ring.util.http-response :refer [forbidden unauthorized]]
             [schnaq.api.toolbelt :as at]
             [schnaq.auth.lib :as auth-lib]
             [schnaq.config :as config]
-            [schnaq.config.shared :as shared-config]))
+            [schnaq.config.shared :as shared-config]
+            [schnaq.database.user :as user-db]))
 
 (defn- valid-app-code?
   "Check if an app-code was provided via the request-body."
@@ -16,11 +17,11 @@
 ;; -----------------------------------------------------------------------------
 
 (defn authenticated?-middleware
-  "Validate, that user is logged-in."
+  "Validate, that user is logged-in. Lookup this user from database if available."
   [handler]
   (fn [request]
     (if (authenticated? request)
-      (handler request)
+      (handler (assoc request :user (user-db/private-user-by-keycloak-id (get-in request [:identity :sub]))))
       (unauthorized (at/build-error-body :auth/not-logged-in
                                          "You are not logged in. Maybe your token is malformed / expired.")))))
 
