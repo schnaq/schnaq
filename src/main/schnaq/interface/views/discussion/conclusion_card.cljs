@@ -249,11 +249,11 @@
 
 (defn- current-topic-badges
   "Badges which are shown if a statement is selected."
-  [schnaq statement]
+  [statement]
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])]
     [:div.ms-auto
      (if starting-route?
-       [badges/static-info-badges-discussion schnaq]
+       [badges/static-info-badges-discussion]
        [:div.d-flex.flex-row
         [badges/show-number-of-replies statement]
         [reactions/up-down-vote statement]
@@ -282,7 +282,7 @@
       [:div.d-flex.flex-wrap.mb-3
        [:div.small
         [user/user-info statement-or-topic 20 nil]]
-       [current-topic-badges schnaq statement-or-topic]]
+       [current-topic-badges statement-or-topic]]
       [title-view statement-or-topic]]]))
 
 (defn- search-info []
