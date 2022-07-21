@@ -90,19 +90,17 @@
 
 ;; -----------------------------------------------------------------------------
 
-(def tier-features
-  "Describe tier features for free and pro users."
+(def feature-limits
+  "Describe default tier limits. If no value is provided, the user has unlimited
+  access to this feature."
   {:free {:wordcloud? false
           :activation? true
           :rankings? false
           :polls 0
-          :schnaqs {:total 10
-                    :posts 30
-                    :concurrent-users 100}}
+          :concurrent-users 100
+          :total-schnaqs 10
+          :posts-per-schnaq 30}
    :pro {:wordcloud? true
          :activation? true
          :rankings? true
-         :polls :unlimited
-         :schnaqs {:total :unlimited
-                   :posts :unlimited
-                   :concurrent-users 250}}})
+         :concurrent-users 250}})
