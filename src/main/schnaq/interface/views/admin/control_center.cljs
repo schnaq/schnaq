@@ -179,7 +179,7 @@
      [:input.form-control {:id id
                            :name fqname
                            :placeholder user-value}]
-     [:small.text-muted sample]]))
+     [:small.text-muted (str (s/form field))]]))
 
 (defn- user-form
   "Generate a form to update a user."
@@ -202,8 +202,9 @@
        [input-field :user.registered/email]
        [input-field :user.registered/profile-picture]
        [input-field :user.registered/groups]
-       [input-field :user.registered.subscription/stripe-customer-id (str (s/form :user.registered.subscription/stripe-customer-id))]
-       [input-field :user.registered.subscription/stripe-id (str (s/form :stripe.subscription/id))]]
+       [input-field :user.registered.features/concurrent-users]
+       [input-field :user.registered.subscription/stripe-customer-id]
+       [input-field :user.registered.subscription/stripe-id]]
       [:button.btn.btn-primary.mt-3 {:type :submit}
        (labels :admin.center.user.save/button)]]]))
 
