@@ -1,7 +1,7 @@
 (ns schnaq.user-test
   (:require [clojure.test :refer [deftest is testing]]
             [schnaq.config.shared :refer [feature-limits]]
-            [schnaq.user :refer [feature-limit]]))
+            [schnaq.user :refer [feature-limit usage-warning-level]]))
 
 (def ^:private free-user
   {:user.registered/keycloak-id "foo"
@@ -24,6 +24,9 @@
    :user.registered.features/concurrent-users 400
    :user.registered/display-name "Beam me up!"})
 
+(def ^:private posts-per-schnaq-free
+  (get-in feature-limits [:free :posts-per-schnaq]))
+
 (deftest feature-limit-concurrent-users-test
   (testing "Test valid concurrent user lookup."
     (is (= (get-in feature-limits [:free :concurrent-users])
@@ -41,3 +44,8 @@
            (feature-limit free-user :wordcloud?)))
     (is (= (get-in feature-limits [:pro :wordcloud?])
            (feature-limit pro-user :wordcloud?)))))
+
+(deftest usage-warning-level-test
+  (is (nil? (usage-warning-level free-user :posts-per-schnaq (/ posts-per-schnaq-free 3))))
+  (is (= :warning (usage-warning-level free-user :posts-per-schnaq (/ posts-per-schnaq-free 2))))
+  (is (= :danger (usage-warning-level free-user :posts-per-schnaq posts-per-schnaq-free))))

@@ -296,6 +296,8 @@
    :discussion.badges/user-overview "Alle Teilnehmer:innen"
    :discussion.badges/delete-statement "löschen"
    :discussion.badges/posts "Beiträge"
+   :discussion.badges/posts-alt "Beiträgen"
+   :discussion.badges/posts-of "von"
    :discussion.badges/delete-statement-confirmation "Möchtest du den Beitrag wirklich löschen?"
    :discussion.notification/new-content-title "Neuer Beitrag!"
    :discussion.notification/new-content-body "Dein Beitrag wurde erfolgreich gespeichert."

@@ -293,6 +293,8 @@
    :discussion.badges/user-overview "All participants"
    :discussion.badges/delete-statement "delete"
    :discussion.badges/posts "Posts"
+   :discussion.badges/posts-alt "Posts"
+   :discussion.badges/posts-of "of"
    :discussion.badges/delete-statement-confirmation "Do you really want to delete the statement?"
    :discussion.notification/new-content-title "New statement!"
    :discussion.notification/new-content-body "Your statement was added successfully!"

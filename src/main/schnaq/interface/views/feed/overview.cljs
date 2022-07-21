@@ -120,11 +120,11 @@
 
 (defn- schnaq-badges
   "Show schnaq badges."
-  [schnaq]
+  []
   [:<>
-   [badges/comments-info-badge schnaq]
-   [badges/read-only-badge schnaq]
-   [badges/archived-badge schnaq]])
+   [badges/comments-info-badge]
+   [badges/read-only-badge]
+   [badges/archived-badge]])
 
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list."
@@ -137,12 +137,12 @@
     [:div.ms-3.w-100.py-2
      [schnaq-title (:discussion/title schnaq)]
      [:div.d-flex.flex-row.mt-auto.pt-3
-      [:div.d-none.d-xl-block [schnaq-badges schnaq]]
+      [:div.d-none.d-xl-block [schnaq-badges]]
       [:div.d-flex.flex-row.ms-auto
        [user/user-info-only (:discussion/author schnaq) 24]
        [:small.fw-light.d-inline.my-auto.ms-2
         [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]
-     [:div.d-xl-none [schnaq-badges schnaq]]]]
+     [:div.d-xl-none [schnaq-badges]]]]
    [schnaq-dropdown schnaq]])
 
 (defn schnaq-list-view

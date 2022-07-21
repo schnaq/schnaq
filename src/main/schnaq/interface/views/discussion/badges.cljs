@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.badges
-  (:require [hodgepodge.core :refer [local-storage]]
+  (:require [goog.string :refer [format]]
+            [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [schnaq.interface.components.common :as common]
             [schnaq.interface.components.icons :refer [icon]]
@@ -9,7 +10,9 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.notifications :refer [notify!]]
-            [schnaq.links :as schnaq-links]))
+            [schnaq.links :as schnaq-links]
+            [schnaq.user :refer [feature-limit usage-warning-level
+                                 warning-level-class]]))
 
 (defn- dropdown-dots
   "Three dot menu which triggers a dropdown."
@@ -134,8 +137,9 @@
          (or anonymous-owner?
              (= user-id (:db/id (:statement/author statement)))))))
 
-(defn- edit-discussion-dropdown-menu [{:keys [db/id discussion/share-hash discussion/author]}]
-  (let [dropdown-id (str "drop-down-conclusion-card-" id)
+(defn- edit-discussion-dropdown-menu []
+  (let [{:keys [db/id discussion/share-hash discussion/author]} @(rf/subscribe [:schnaq/selected])
+        dropdown-id (str "drop-down-conclusion-card-" id)
         creation-secrets @(rf/subscribe [:schnaq.discussion/creation-secrets])
         user-id @(rf/subscribe [:user/id])
         anonymous-owner? (contains? creation-secrets share-hash)
@@ -263,8 +267,9 @@
 
 (defn comments-info-badge
   "Badge that display the comment count."
-  [schnaq]
-  (let [meta-info (:meta-info schnaq)
+  []
+  (let [schnaq @(rf/subscribe [:schnaq/selected])
+        meta-info (:meta-info schnaq)
         statement-count (:all-statements meta-info)]
     [:span.small.me-2
      [icon :comment/alt "m-auto"]
@@ -287,30 +292,42 @@
        :title (labels :discussion.badges/user-overview)}
       [icon :user/group "m-auto"] " " user-count]]))
 
+(defn- number-of-remaining-posts
+  "Calculate and highlight the number of remaining posts in this schnaq."
+  []
+  (let [author @(rf/subscribe [:schnaq/author])
+        schnaq @(rf/subscribe [:schnaq/selected])
+        statement-count (get-in schnaq [:meta-info :all-statements])
+        warning-class (warning-level-class (usage-warning-level author :posts-per-schnaq statement-count))
+        limit (feature-limit author :posts-per-schnaq)]
+    [:span.badge.rounded-pill.badge-transparent.me-2 {:class warning-class}
+     [icon :comment/alt "m-auto me-1"]
+     (if limit
+       [:span (format "%d %s %d %s" statement-count (labels :discussion.badges/posts-of) limit (labels :discussion.badges/posts-alt))]
+       [:span (format "%d %s" statement-count (labels :discussion.badges/posts))])]))
+
 (defn static-info-badges-discussion
   "Badges that display schnaq info."
-  [schnaq]
-  (let [meta-info (:meta-info schnaq)
-        statement-count (:all-statements meta-info)]
-    [:div.d-flex.flex-row.mb-0
-     [:span.badge.rounded-pill.badge-transparent.me-2
-      [icon :comment/alt "m-auto me-1"]
-      statement-count " " (labels :discussion.badges/posts)]
-     [edit-discussion-dropdown-menu schnaq]]))
+  []
+  [:div.d-flex.flex-row.mb-0
+   [number-of-remaining-posts]
+   [edit-discussion-dropdown-menu]])
 
 (defn read-only-badge
   "Badge that appears only if the passed schnaq is set to read-only"
-  [schnaq]
-  (when (some #{:discussion.state/read-only} (:discussion/states schnaq))
-    [:small
-     [common/outlined-pill (labels :discussion.state/read-only-label) :secondary]]))
+  []
+  (let [schnaq @(rf/subscribe [:schnaq/selected])]
+    (when (some #{:discussion.state/read-only} (:discussion/states schnaq))
+      [:small
+       [common/outlined-pill (labels :discussion.state/read-only-label) :secondary]])))
 
 (defn archived-badge
   "Badge that appears only if the passed schnaq is set to read-only"
-  [{:keys [discussion/share-hash]}]
-  (when @(rf/subscribe [:schnaq.visited/archived? share-hash])
-    [:small
-     [common/outlined-pill (labels :schnaq.options/archived) :success]]))
+  []
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+    (when @(rf/subscribe [:schnaq.visited/archived? share-hash])
+      [:small
+       [common/outlined-pill (labels :schnaq.options/archived) :success]])))
 
 ;; -----------------------------------------------------------------------------
 

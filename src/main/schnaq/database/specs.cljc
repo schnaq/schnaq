@@ -420,3 +420,5 @@
 
 (s/def ::feature-limits
   #{:wordcloud? :activation? :rankings? :polls :concurrent-users :total-schnaqs :posts-per-schnaq})
+
+(s/def ::warning-levels #{:warning :danger})
