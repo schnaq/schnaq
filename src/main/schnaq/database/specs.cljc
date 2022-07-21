@@ -405,3 +405,9 @@
                    :ui.settings/hide-input-replies
                    :ui.settings/hide-activations
                    :ui.settings/num-rows]))
+
+;; -----------------------------------------------------------------------------
+;; Feature limits
+
+(s/def ::feature-limits
+  #{:wordcloud? :activation? :rankings? :polls :concurrent-users :total-schnaqs :posts-per-schnaq})
