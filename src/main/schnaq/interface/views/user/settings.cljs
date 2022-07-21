@@ -10,12 +10,6 @@
             [schnaq.interface.views.feed.overview :as feed-overview]
             [schnaq.interface.views.pages :as pages]))
 
-(defn- current-user []
-  (let [user @(rf/subscribe [:user/current])]
-    [:div.ps-4
-     [common/avatar-with-nickname-right #:user.registered{:profile-picture (get-in user [:profile-picture :display])
-                                                          :display-name (get-in user [:names :display])} 40]]))
-
 (defn- settings-button
   "Create a button for the feed list."
   [icon-name text route]
@@ -46,6 +40,36 @@
    [settings-button :bell (labels :user.settings/notifications) :routes.user.manage/notifications]
    [settings-button :palette [:<> (labels :user.settings/themes) " " [pro-badge]] :routes.user.manage/themes]])
 
+(defn- feature-overview []
+  (let [user @(rf/subscribe [:user/entity])]
+    [:<>
+     [:h5.pt-3 "Meine Features"]
+     [:dl.row
+      [:dt.col-sm-7 "schnaqs erstellt"]
+      [:dd.col-sm-5 "9 von 10"]
+
+      [:dt.col-sm-7 "Beiträge pro schnaq"]
+      [:dd.col-sm-5 "1000"]
+
+      [:dt.col-sm-7 "Max. gleichzeitige User pro schnaq"]
+      [:dd.col-sm-5 "120"]
+
+      [:dt.col-sm-7 "Persönliches Design"]
+      [:dd.col-sm-5 "nein"]
+
+      [:dt.col-sm-7 [:a {:href "https://academy.schnaq.com" :target :_blank} "Integrationen?"]]
+      [:dd.col-sm-5 "nein"]]
+     [:h5 "Interaktionsfunktionen"]
+     [:dl.row
+      [:dt.col-sm-7 "Wortwolke"]
+      [:dd.col-sm-5 "nein"]
+
+      [:dt.col-sm-7 "Umfragen"]
+      [:dd.col-sm-5 "0"]
+
+      [:dt.col-sm-7 "Rankings"]
+      [:dd.col-sm-5 "nein"]]]))
+
 (defn user-view [page-heading-label content]
   [pages/three-column-layout
    {:page/heading (labels page-heading-label)
@@ -53,10 +77,11 @@
    [edit-user-panel]
    content
    [:section.panel-white
-    [current-user]
+    [common/avatar-with-nickname-right 40]
+    [feature-overview]
     [:hr.my-4]
     [feed-overview/sidebar-info-links]]])
 
 (rf/reg-event-db
  :user.settings.temporary/reset
- (fn [db _] (assoc-in db [:user :settings :temporary] nil)))
+ (fn [db _] (update-in db [:user :settings] dissoc :temporary)))
