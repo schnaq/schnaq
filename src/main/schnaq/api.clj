@@ -146,6 +146,7 @@
                          middlewares/exception-printing-middleware
                          coercion/coerce-response-middleware ;; coercing response bodies
                          coercion/coerce-request-middleware ;; coercing request parameters
+                         coercion/coerce-exceptions-middleware
                          multipart/multipart-middleware
                          auth-middlewares/replace-bearer-with-token
                          auth/wrap-jwt-authentication

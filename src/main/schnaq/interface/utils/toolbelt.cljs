@@ -1,12 +1,13 @@
 (ns schnaq.interface.utils.toolbelt
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
-            [oops.core :refer [oset! oget oget+]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
+            [oops.core :refer [oget oget+ oset!]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.navigation :as navigation]
-            [schnaq.interface.utils.tooltip :as tooltip]))
+            [schnaq.interface.utils.tooltip :as tooltip]
+            [spec-tools.core :as st]))
 
 (>defn reset-form-fields!
   "Takes a collection of form input fields and resets their DOM representation
@@ -137,10 +138,15 @@
       (not-empty url))
     (catch js/Object _e)))
 
-(defn form->map
-  "Takes all form elements and transforms them to a map."
+(defn form->coerced-map
+  "Takes all form elements and transforms them to a map. Coerces values by their
+  specs. If there is no spec existent for the field's value, returns the value
+  itself as a string."
   [form-elements]
   (->> form-elements
-       (map (fn [field] [(keyword (oget field :name)) (oget field :value)]))
-       (remove #(empty? (second %)))
+       (map (fn [field]
+              (let [spec (keyword (oget field :name))]
+                [(keyword (oget field :name))
+                 (st/coerce spec (oget field :value) st/string-transformer)])))
+       (remove #(= "" (second %)))
        (into {})))
