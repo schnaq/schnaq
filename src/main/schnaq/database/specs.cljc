@@ -71,8 +71,14 @@
 (s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)
                                               :schnaqs (s/coll-of ::discussion)))
+
 (s/def :user.registered.subscription/stripe-id :stripe.subscription/id)
 (s/def :user.registered.subscription/stripe-customer-id :stripe/customer-id)
+
+(s/def :user.registered.features/concurrent-users nat-int?)
+(s/def :user.registered.features/total-schnaqs nat-int?)
+(s/def :user.registered.features/posts-per-schnaq nat-int?)
+
 (s/def ::registered-user (s/keys :req [:user.registered/keycloak-id]
                                  :opt [:user.registered/display-name
                                        :user.registered/last-name :user.registered/first-name
@@ -81,7 +87,10 @@
                                        :user.registered/email :user.registered/notification-mail-interval
                                        :user.registered/visited-schnaqs
                                        :user.registered.subscription/stripe-id
-                                       :user.registered.subscription/stripe-customer-id]))
+                                       :user.registered.subscription/stripe-customer-id
+                                       :user.registered.features/concurrent-users
+                                       :user.registered.features/total-schnaqs
+                                       :user.registered.features/posts-per-schnaq]))
 
 ;; Could be anonymous or registered
 (s/def ::any-user (s/or :user ::user

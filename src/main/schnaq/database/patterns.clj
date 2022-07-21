@@ -7,7 +7,10 @@
    :user.registered/keycloak-id
    :user.registered/display-name
    :user.registered/profile-picture
-   {[:user.registered/roles :xform 'schnaq.database.xforms/pull-up-ident-coll-to-set] [:db/ident]}])
+   {[:user.registered/roles :xform 'schnaq.database.xforms/pull-up-ident-coll-to-set] [:db/ident]}
+   :user.registered.features/concurrent-users
+   :user.registered.features/total-schnaqs
+   :user.registered.features/posts-per-schnaq])
 
 (def ^:private registered-private-user
   [:user.registered/email

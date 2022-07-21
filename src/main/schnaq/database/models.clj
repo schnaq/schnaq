@@ -68,6 +68,19 @@
    {:db/ident :role/admin}
    {:db/ident :role/pro}
 
+   {:db/ident :user.registered.features/concurrent-users
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set concurrent-users limit for this user and all of her schnaqs."}
+   {:db/ident :user.registered.features/total-schnaqs
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set total number of schnaqs."}
+   {:db/ident :user.registered.features/posts-per-schnaq
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set custom number of posts per schnaq."}
+
    ;; Subscriptions
    {:db/ident :user.registered.subscription/stripe-id
     :db/valueType :db.type/string
