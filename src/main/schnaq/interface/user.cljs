@@ -37,12 +37,13 @@
          visited-hashes (map :discussion/share-hash visited-schnaqs)
          archived-hashes (map :discussion/share-hash archived-schnaqs)]
      {:db (-> db
+              (assoc-in [:user :entity] registered-user)
               (assoc-in [:user :names :display] display-name)
               (assoc-in [:user :email] email)
               (assoc-in [:user :id] (:db/id registered-user))
               (assoc-in [:user :keycloak-id] keycloak-id)
-              (assoc-in [:user :roles] roles)
               (assoc-in [:user :profile-picture :display] profile-picture)
+              (cond-> roles (assoc-in [:user :roles] roles))
               (cond-> notification-mail-interval (assoc-in [:user :notification-mail-interval] notification-mail-interval))
               (cond-> first-name (assoc-in [:user :names :first] first-name))
               (cond-> last-name (assoc-in [:user :names :last] last-name))

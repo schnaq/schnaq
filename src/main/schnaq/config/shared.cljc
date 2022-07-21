@@ -95,6 +95,8 @@
   access to this feature."
   {:free {:wordcloud? false
           :rankings? false
+          :embeddings? false
+          :theming false
           :polls 0
           :concurrent-users 100
           :total-schnaqs 10
