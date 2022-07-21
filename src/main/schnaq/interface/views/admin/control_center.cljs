@@ -170,11 +170,11 @@
 
 (defn- input-field
   "Generate an input field based on a model's field."
-  [field sample]
+  [field]
   (let [user-value @(rf/subscribe [:admin/user field])
         fqname (shared-tools/namespaced-keyword->string field)
         id (str "user-input-" fqname)]
-    [:div.col-12.col-md-4.pt-3
+    [:div.col-12.col-md-4.pt-2
      [:label.small {:for id} fqname]
      [:input.form-control {:id id
                            :name fqname
@@ -186,23 +186,28 @@
   []
   (when-let [keycloak-id @(rf/subscribe [:admin/user :user.registered/keycloak-id])]
     [:<>
-     [:div.d-flex.flex-row
+     [:div.d-flex.flex-row.pt-5
       [:div.me-3 [add-role]]
       [remove-role]]
      [:form {:on-submit (fn [e]
                           (.preventDefault e)
                           (let [form (oget e [:target :elements])
-                                user (toolbelt/form->map form)]
+                                user (toolbelt/form->coerced-map form)]
                             (rf/dispatch [:admin.user/update (assoc user :user.registered/keycloak-id keycloak-id)])
                             (rf/dispatch [:form/should-clear form])))}
-      [:div.row
+      [:div.row.pt-3
        [input-field :user.registered/display-name]
        [input-field :user.registered/first-name]
        [input-field :user.registered/last-name]
        [input-field :user.registered/email]
-       [input-field :user.registered/profile-picture]
-       [input-field :user.registered/groups]
+       [input-field :user.registered/profile-picture]]
+      [:div.row
+       [:p.lead.pt-3.mb-0 "Features"]
        [input-field :user.registered.features/concurrent-users]
+       [input-field :user.registered.features/total-schnaqs]
+       [input-field :user.registered.features/posts-per-schnaq]]
+      [:div.row
+       [:p.lead.pt-3.mb-0 "Stripe"]
        [input-field :user.registered.subscription/stripe-customer-id]
        [input-field :user.registered.subscription/stripe-id]]
       [:button.btn.btn-primary.mt-3 {:type :submit}
