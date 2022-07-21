@@ -53,12 +53,10 @@
  (fn [{:keys [db]} [_ username]]
    ;; only update when string contains
    (when-not (clj-string/blank? username)
-     (cond-> {:db (-> db
-                      (assoc-in [:user :names :display] username)
-                      (assoc-in [:user :entity :user.registered/display-name] username))
-              :fx [(http/xhrio-request db :put "/user/anonymous/add" [:user/hide-display-name-input username]
+     (cond-> {:fx [(http/xhrio-request db :put "/user/anonymous/add" [:user/hide-display-name-input username]
                                        {:nickname username}
-                                       [:ajax.error/as-notification])]}
+                                       [:ajax.error/as-notification])
+                   [:dispatch [:user.name/store username]]]}
        (not= default-anonymous-display-name username)
        (update :fx conj [:localstorage/assoc [:username username]])))))
 
