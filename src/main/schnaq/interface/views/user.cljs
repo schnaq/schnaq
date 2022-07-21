@@ -53,7 +53,9 @@
  (fn [{:keys [db]} [_ username]]
    ;; only update when string contains
    (when-not (clj-string/blank? username)
-     (cond-> {:db (assoc-in db [:user :names :display] username)
+     (cond-> {:db (-> db
+                      (assoc-in [:user :names :display] username)
+                      (assoc-in [:user :entity :user.registered/display-name] username))
               :fx [(http/xhrio-request db :put "/user/anonymous/add" [:user/hide-display-name-input username]
                                        {:nickname username}
                                        [:ajax.error/as-notification])]}
@@ -95,3 +97,9 @@
 (rf/reg-sub
  :user/current
  (fn [db _] (:user db)))
+
+(rf/reg-sub
+ :user/entity
+ ;; The user at it was queried from the database
+ (fn [db _]
+   (get-in db [:user :entity])))

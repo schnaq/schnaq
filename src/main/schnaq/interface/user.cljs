@@ -10,7 +10,9 @@
  :username/from-localstorage
  (fn [{:keys [db]} _]
    (when-let [username (:username local-storage)]
-     {:db (assoc-in db [:user :names :display] username)})))
+     {:db (-> db
+              (assoc-in [:user :names :display] username)
+              (assoc-in [:user :entity :user.registered/display-name] username))})))
 
 (rf/reg-event-fx
  ;; Registers a user in the backend. Sets the returned user in the db

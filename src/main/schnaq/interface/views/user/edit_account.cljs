@@ -83,7 +83,10 @@
 (rf/reg-event-fx
  :user.name/update
  (fn [{:keys [db]} [_ new-display-name]]
-   {:fx [(http/xhrio-request db :put "/user/name"
+   {:db (-> db
+            (assoc-in [:user :names :display] new-display-name)
+            (assoc-in [:user :entity :user.registered/display-name] new-display-name))
+    :fx [(http/xhrio-request db :put "/user/name"
                              [:user.name/update-success]
                              {:display-name new-display-name}
                              [:ajax.error/as-notification])]}))
@@ -91,8 +94,10 @@
 (rf/reg-event-db
  :user.name/update-success
  (fn [db [_ {:keys [updated-user]}]]
-   (assoc-in db [:user :names :display]
-             (:user.registered/display-name updated-user))))
+   (let [username (:user.registered/display-name updated-user)]
+     (-> db
+         (assoc-in [:user :names :display] username)
+         (assoc-in [:user :entity :user.registered/display-name] username)))))
 
 (rf/reg-event-fx
  :user.picture/update
