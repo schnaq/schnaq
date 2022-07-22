@@ -1,9 +1,5 @@
 (ns schnaq.interface.views.user
-  (:require [clojure.string :as clj-string]
-            [re-frame.core :as rf]
-            [schnaq.config.shared :refer [default-anonymous-display-name]]
-            [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.http :as http]
+  (:require [re-frame.core :as rf]
             [schnaq.interface.utils.time :as util-time]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.common :as common]
@@ -47,57 +43,3 @@
      [:div.d-none.d-md-block
       [picture-component avatar-size]]
      [:small.mx-2.my-auto {:class name-class} @(rf/subscribe [:user/display-name])]]))
-
-(rf/reg-event-fx
- :user/set-display-name
- (fn [{:keys [db]} [_ username]]
-   ;; only update when string contains
-   (when-not (clj-string/blank? username)
-     (cond-> {:fx [(http/xhrio-request db :put "/user/anonymous/add" [:user/hide-display-name-input username]
-                                       {:nickname username}
-                                       [:ajax.error/as-notification])
-                   [:dispatch [:user.name/store username]]]}
-       (not= default-anonymous-display-name username)
-       (update :fx conj [:localstorage/assoc [:username username]])))))
-
-(rf/reg-sub
- :user/display-name
- (fn [db _]
-   (tools/current-display-name db)))
-
-(rf/reg-sub
- :user/groups
- (fn [db _]
-   (get-in db [:user :groups] [])))
-
-(rf/reg-sub
- :user/show-display-name-input?
- (fn [db]
-   (get-in db [:controls :username-input :show?] false)))
-
-(rf/reg-event-fx
- :user/hide-display-name-input
- (fn [{:keys [db]} [_ username]]
-   (let [notification
-         [[:dispatch [:notification/add
-                      #:notification{:title (labels :user.button/set-name)
-                                     :body (labels :user.button/success-body)
-                                     :context :success}]]]]
-     ;; Show notification if user is not default anonymous display name
-     (cond-> {:db (assoc-in db [:controls :username-input :show?] false)}
-       (not= default-anonymous-display-name username) (assoc :fx notification)))))
-
-(rf/reg-event-db
- :user/show-display-name-input
- (fn [db _]
-   (assoc-in db [:controls :username-input :show?] true)))
-
-(rf/reg-sub
- :user/current
- (fn [db _] (:user db)))
-
-(rf/reg-sub
- :user/entity
- ;; The user at it was queried from the database
- (fn [db _]
-   (get-in db [:user :entity])))

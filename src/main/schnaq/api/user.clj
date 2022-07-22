@@ -10,6 +10,7 @@
             [schnaq.database.user-deletion :as user-deletion]
             [schnaq.mail.cleverreach :as cleverreach]
             [schnaq.media :as media]
+            [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
             [taoensso.timbre :as log]))
 
 (defn- register-user-if-they-not-exist
@@ -27,7 +28,9 @@
         updated-schnaqs? (associative? (discussion-db/update-schnaq-authors schnaq-creation-secrets (:db/id queried-user)))
         response {:registered-user queried-user
                   :updated-statements? updated-statements?
-                  :updated-schnaqs? updated-schnaqs?}]
+                  :updated-schnaqs? updated-schnaqs?
+                  :meta (remove-nil-values-from-map
+                         {:total-schnaqs (user-db/created-discussions (:user.registered/keycloak-id queried-user))})}]
     (if new-user?
       (do (cleverreach/add-user-to-customer-group! identity (str (name locale)))
           (created "" (assoc response :new-user? true)))
