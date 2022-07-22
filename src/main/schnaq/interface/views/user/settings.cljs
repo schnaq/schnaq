@@ -45,6 +45,14 @@
 (defn- check-icon []
   [icon :check/circle "text-success"])
 
+(defn- external-link-icon []
+  [icon :external-link-alt "ms-2" {:size "xs"}])
+
+(defn- settings-link [attrs body]
+  [:a attrs
+   body
+   [external-link-icon]])
+
 (defn- feature-available
   "Check feature availability and return an icon for it."
   [feature]
@@ -73,15 +81,22 @@
                       limit (labels :user.settings.features/unlimited))]
 
       [:dt.col-sm-7 (labels :user.settings.features/mail-notifications)]
-      [:dd.col-sm-5 [check-icon]]
+      [:dd.col-sm-5
+       [settings-link
+        {:href (navigation/href :routes.user.manage/notifications)}
+        [check-icon]]]
 
       [:dt.col-sm-7 (labels :user.settings.features/theming)]
-      [:dd.col-sm-5 [feature-available :theming?]]
+      [:dd.col-sm-5
+       [settings-link
+        {:href (navigation/href :routes.user.manage/themes)}
+        [feature-available :theming?]]]
 
-      [:dt.col-sm-7 (labels :user.settings.features/embeddings)
-       [:a {:href "https://academy.schnaq.com" :target :_blank}
-        [info-icon-with-tooltip (labels :user.settings.features/learn-academy)]]]
-      [:dd.col-sm-5 [feature-available :embeddings?]]]
+      [:dt.col-sm-7 (labels :user.settings.features/embeddings)]
+      [:dd.col-sm-5
+       [settings-link
+        {:href "https://academy.schnaq.com" :target :_blank}
+        [feature-available :embeddings?]]]]
 
      [:strong (labels :user.settings.features/interactions)]
      [:dl.row
