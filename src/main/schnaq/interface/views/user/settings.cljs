@@ -56,42 +56,42 @@
 (defn- feature-overview []
   (let [user @(rf/subscribe [:user/entity])]
     [:<>
-     [:strong.mt-3.d-block "Featureübersicht"]
+     [:strong.mt-3.d-block (labels :user.settings.features/heading)]
      [:dl.row
-      [:dt.col-sm-7 "schnaqs erstellt"]
+      [:dt.col-sm-7 (labels :user.settings.features/schnaqs-created)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :total-schnaqs)]
                       (format "%d %s %d" :todo "von" limit)
                       (format "%d" :todo))]
 
-      [:dt.col-sm-7 "Beiträge pro schnaq"]
+      [:dt.col-sm-7 (labels :user.settings.features/posts-per-schnaq)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :posts-per-schnaq)]
-                      limit "unbegrenzt")]
+                      limit (labels :user.settings.features/unlimited))]
 
-      [:dt.col-sm-7 "Max. gleichzeitige User pro schnaq"]
+      [:dt.col-sm-7 (labels :user.settings.features/concurrent-users)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :concurrent-users)]
-                      limit "unbegrenzt")]
+                      limit (labels :user.settings.features/unlimited))]
 
-      [:dt.col-sm-7 "Persönliches Design"]
-      [:dd.col-sm-5 [feature-available :theming?]]
-
-      [:dt.col-sm-7 "E-Mail Benachrichtigungen"]
+      [:dt.col-sm-7 (labels :user.settings.features/mail-notifications)]
       [:dd.col-sm-5 [check-icon]]
 
-      [:dt.col-sm-7 "Integrationen?"
+      [:dt.col-sm-7 (labels :user.settings.features/theming)]
+      [:dd.col-sm-5 [feature-available :theming?]]
+
+      [:dt.col-sm-7 (labels :user.settings.features/embeddings)
        [:a {:href "https://academy.schnaq.com" :target :_blank}
-        [info-icon-with-tooltip "Lerne mehr in der schnaq academy."]]]
+        [info-icon-with-tooltip (labels :user.settings.features/learn-academy)]]]
       [:dd.col-sm-5 [feature-available :embeddings?]]]
 
-     [:strong "Interaktionsfunktionen"]
+     [:strong (labels :user.settings.features/interactions)]
      [:dl.row
-      [:dt.col-sm-7 "Umfragen"]
+      [:dt.col-sm-7 (labels :user.settings.features/polls)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :polls)]
-                      limit "unbegrenzt")]
+                      limit (labels :user.settings.features/unlimited))]
 
-      [:dt.col-sm-7 "Rankings"]
+      [:dt.col-sm-7 (labels :user.settings.features/rankings)]
       [:dd.col-sm-5 [feature-available :rankings?]]
 
-      [:dt.col-sm-7 "Wortwolke"]
+      [:dt.col-sm-7 (labels :user.settings.features/wordclouds)]
       [:dd.col-sm-5 [feature-available :wordcloud?]]]]))
 
 (defn- outline-info-button
