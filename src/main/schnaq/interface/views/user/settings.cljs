@@ -1,7 +1,8 @@
 (ns schnaq.interface.views.user.settings
   (:require [goog.string :refer [format]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.common :refer [pro-badge info-icon-with-tooltip]]
+            [schnaq.interface.components.common :refer [info-icon-with-tooltip pro-badge
+                                                        role-indicator]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -114,7 +115,9 @@
   []
   [:section.panel-white
    [:a.text-decoration-none {:href (navigation/href :routes.user.manage/account)}
-    [common/avatar-with-nickname-right 40]]
+    [:div.d-flex.flex-row
+     [common/avatar-with-nickname-right 40]
+     [:div.align-self-center [role-indicator true]]]]
    [feature-overview]
    [:hr.my-4]
    [feature-and-coc-buttons]])
