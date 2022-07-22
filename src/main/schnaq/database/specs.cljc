@@ -49,7 +49,7 @@
 
 ;; User
 (s/def :user/nickname string?)
-(s/def ::user (s/keys :req [:user/nickname]))
+(s/def ::user (s/keys :opt [:user/nickname]))
 
 ;; Registered user
 (s/def :user.registered/keycloak-id ::non-blank-string)
@@ -419,6 +419,6 @@
 ;; Feature limits
 
 (s/def ::feature-limits
-  #{:wordcloud? :activation? :rankings? :polls :concurrent-users :total-schnaqs :posts-per-schnaq})
+  #{:wordcloud? :activation? :rankings? :polls :theming? :embeddings? :concurrent-users :total-schnaqs :posts-per-schnaq})
 
 (s/def ::warning-levels #{:warning :danger})

@@ -25,7 +25,7 @@
 (>defn feature-limit
   "Lookup if there are limits for a user and a given feature."
   [{:user.registered/keys [roles] :as user} feature]
-  [(? ::specs/registered-user) ::specs/feature-limits => (s/or :boolean boolean? :number number? :nil nil?)]
+  [(? ::specs/any-user) ::specs/feature-limits => (s/or :boolean boolean? :number number? :nil nil?)]
   (when user
     (let [admin? (shared-tools/admin? roles)
           pro? (shared-tools/pro-user? roles)
