@@ -330,11 +330,3 @@
                             (conj retractions :user.registered.subscription/stripe-customer-id)
                             (conj retractions :user.registered/roles :role/pro)]))]
     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
-
-(>defn pro-subscription?
-  "Check in our database the pro-subscription status of the user."
-  [keycloak-id]
-  [:user.registered/keycloak-id :ret boolean?]
-  (-> (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user)
-      :user.registered/roles
-      shared-tools/pro-user?))
