@@ -101,7 +101,7 @@
    [:a.feed-button-outlined {:href href-link}
     (labels label)]])
 
-(defn- feature-and-coc-butons []
+(defn- feature-and-coc-buttons []
   (let [pro-user? @(rf/subscribe [:user/pro?])]
     [:section.panel-white.text-center
      [:div.btn-group {:role "group"}
@@ -117,7 +117,7 @@
    [common/avatar-with-nickname-right 40]
    [feature-overview]
    [:hr.my-4]
-   [feature-and-coc-butons]])
+   [feature-and-coc-buttons]])
 
 (defn user-view [page-heading-label content]
   [pages/three-column-layout
