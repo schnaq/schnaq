@@ -442,11 +442,13 @@
         unanswered-only? @(rf/subscribe [:filters/answered? false])]
     (for [index (range (count sorted-statements))
           :let [statement-id (nth sorted-statements index)
-                answers @(rf/subscribe [:statements/answers statement-id])]
+                answers @(rf/subscribe [:statements/answers statement-id])
+                any-filter-active (or answered-only? unanswered-only?)]
           ;; This when needs to be done here and not in the statement-list-item to prevent empty components
-          :when (and (or answered-only? unanswered-only?)
-                     (or (and answered-only? (seq answers))
-                         (and (not answered-only?) (empty? answers))))]
+          :when (or (not any-filter-active)
+                    (and any-filter-active
+                         (or (and answered-only? (seq answers))
+                             (and (not answered-only?) (empty? answers)))))]
       (with-meta
         [statement-list-item statement-id]
         {:key statement-id}))))
