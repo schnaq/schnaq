@@ -8,7 +8,6 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.feed.overview :as feed-overview]
             [schnaq.interface.views.pages :as pages]
             [schnaq.user :as user]))
 
@@ -54,7 +53,7 @@
 (defn- feature-overview []
   (let [user @(rf/subscribe [:user/entity])]
     [:<>
-     [:h5.pt-3 "Featureübersicht"]
+     [:strong.mt-3.d-block "Featureübersicht"]
      [:dl.row
       [:dt.col-sm-7 "schnaqs erstellt"]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :total-schnaqs)]
@@ -72,14 +71,12 @@
       [:dt.col-sm-7 "Persönliches Design"]
       [:dd.col-sm-5 [feature-available :theming?]]
 
-      [:dt.col-sm-7
-       "Integrationen?"
+      [:dt.col-sm-7 "Integrationen?"
        [:a {:href "https://academy.schnaq.com" :target :_blank}
         [info-icon-with-tooltip "Lerne mehr in der schnaq academy."]]]
-
       [:dd.col-sm-5 [feature-available :embeddings?]]]
 
-     [:h6 "Interaktionsfunktionen"]
+     [:strong "Interaktionsfunktionen"]
      [:dl.row
 
       [:dt.col-sm-7 "Umfragen"]
@@ -92,17 +89,38 @@
       [:dt.col-sm-7 "Wortwolke"]
       [:dd.col-sm-5 [feature-available :wordcloud?]]]]))
 
+(defn- outline-info-button
+  "Generic outline button."
+  [label href-link]
+  [:article.w-100
+   [:a.feed-button-outlined {:href href-link}
+    (labels label)]])
+
+(defn- feature-and-coc-butons []
+  (let [pro-user? @(rf/subscribe [:user/pro?])]
+    [:section.panel-white.text-center
+     [:div.btn-group {:role "group"}
+      [:div.btn-group-vertical
+       [outline-info-button :user/features
+        (navigation/href (if pro-user? :routes.welcome/pro :routes.welcome/free))]
+       [outline-info-button :coc/heading "https://schnaq.com/code-of-conduct"]]]]))
+
+(defn user-info-box
+  "Display an overview of a user's features."
+  []
+  [:section.panel-white
+   [common/avatar-with-nickname-right 40]
+   [feature-overview]
+   [:hr.my-4]
+   [feature-and-coc-butons]])
+
 (defn user-view [page-heading-label content]
   [pages/three-column-layout
    {:page/heading (labels page-heading-label)
     :condition/needs-authentication? true}
    [edit-user-panel]
    content
-   [:section.panel-white
-    [common/avatar-with-nickname-right 40]
-    [feature-overview]
-    [:hr.my-4]
-    [feed-overview/sidebar-info-links]]])
+   [user-info-box]])
 
 (rf/reg-event-db
  :user.settings.temporary/reset

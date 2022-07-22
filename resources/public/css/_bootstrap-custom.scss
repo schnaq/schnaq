@@ -111,3 +111,7 @@ $grid-breakpoints: map-merge($grid-breakpoints, $custom-breakpoints);
 .badge.bg-white {
   color: $typography;
 }
+
+dt {
+  font-weight: 500;
+}

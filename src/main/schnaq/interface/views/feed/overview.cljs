@@ -12,7 +12,8 @@
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.hub.common :as hub]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user :as user]))
+            [schnaq.interface.views.user :as user]
+            [schnaq.interface.views.user.settings :refer [user-info-box]]))
 
 (defn- no-schnaqs-found
   "Show error message when no meetings were loaded."
@@ -254,22 +255,6 @@
        [:div.panel-white.mb-4
         [feed-hubs]])]))
 
-(defn- outline-info-button
-  "Generic outline button."
-  [label href-link]
-  [:article.w-100
-   [:a.feed-button-outlined {:href href-link}
-    (labels label)]])
-
-(defn sidebar-info-links []
-  (let [pro-user? @(rf/subscribe [:user/pro?])]
-    [:section.panel-white.text-center
-     [:div.btn-group {:role "group"}
-      [:div.btn-group-vertical
-       [outline-info-button :user/features
-        (navigation/href (if pro-user? :routes.welcome/pro :routes.welcome/free))]
-       [outline-info-button :coc/heading "https://schnaq.com/code-of-conduct"]]]]))
-
 (defn- personal-discussions-view
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
   must be a keyword referring to a subscription, which returns a collection of
@@ -280,7 +265,7 @@
     :page/subheading (labels :schnaqs/subheader)}
    [feed-navigation]
    [schnaq-list-view [:schnaqs.visited/all]]
-   [sidebar-info-links]])
+   [user-info-box]])
 
 (defn page []
   [personal-discussions-view])
