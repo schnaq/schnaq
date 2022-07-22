@@ -82,6 +82,8 @@
                         "watch" ":app"]
             :jvm-opts ["-Dguardrails.enabled=true"]}
 
+           :dev {:extra-paths ["dev"]}
+
            :uberjar
            {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.1.303"}}
             :exec-fn hf.depstar/uberjar
