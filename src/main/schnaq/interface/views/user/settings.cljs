@@ -55,8 +55,7 @@
 
 (defn- feature-overview []
   (let [user @(rf/subscribe [:user/entity])]
-    [:<>
-     [:strong.mt-3.d-block (labels :user.settings.features/heading)]
+    [:section.pt-4
      [:dl.row
       [:dt.col-sm-7 (labels :user.settings.features/schnaqs-created)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :total-schnaqs)]
@@ -114,7 +113,8 @@
   "Display an overview of a user's features."
   []
   [:section.panel-white
-   [common/avatar-with-nickname-right 40]
+   [:a.text-decoration-none {:href (navigation/href :routes.user.manage/account)}
+    [common/avatar-with-nickname-right 40]]
    [feature-overview]
    [:hr.my-4]
    [feature-and-coc-buttons]])

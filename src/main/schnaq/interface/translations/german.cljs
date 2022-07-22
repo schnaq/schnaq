@@ -410,7 +410,6 @@
    :user.settings.profile-picture-title/success "Profilbild erfolgreich gesetzt"
    :user.settings.profile-picture-body/success "Profilbild wurde hochgeladen und gespeichert. Ggf. Seite Neuladen um aktualisiertes Bild zu sehen."
 
-   :user.settings.features/heading "Featureübersicht"
    :user.settings.features/schnaqs-created "schnaqs erstellt"
    :user.settings.features/unlimited "unbegrenzt"
    :user.settings.features/posts-per-schnaq "Beiträge pro schnaq"

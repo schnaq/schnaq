@@ -404,7 +404,6 @@
    :user.settings.profile-picture-title/success "Profile picture successfully uploaded"
    :user.settings.profile-picture-body/success "Your new profile picture was successfully set. You may have to reload the page to see it."
 
-   :user.settings.features/heading "Feature Overview"
    :user.settings.features/schnaqs-created "Created schnaqs"
    :user.settings.features/unlimited "unlimited"
    :user.settings.features/posts-per-schnaq "Posts per schnaq"
