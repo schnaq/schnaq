@@ -10,7 +10,8 @@
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
-(def kangaroo-keycloak-id (:user.registered/keycloak-id kangaroo))
+(def ^:private kangaroo-keycloak-id (:user.registered/keycloak-id kangaroo))
+(def ^:private alex-keycloak-id (:user.registered/keycloak-id alex))
 
 (deftest add-user-test
   (testing "Check for correct user-addition"
@@ -105,20 +106,18 @@
 
 (deftest remove-visited-schnaq-test
   (testing "Remove a set of visited schnaqs from a user"
-    (let [user-keycloak-id (:user.registered/keycloak-id alex)]
-      (db/remove-visited-schnaq user-keycloak-id "cat-dog-hash")
-      (is (zero? (count (:user.registered/visited-schnaqs
-                         (db/private-user-by-keycloak-id user-keycloak-id))))))))
+    (db/remove-visited-schnaq alex-keycloak-id "cat-dog-hash")
+    (is (zero? (count (:user.registered/visited-schnaqs
+                       (db/private-user-by-keycloak-id alex-keycloak-id)))))))
 
 ;; -----------------------------------------------------------------------------
 ;; Archived schnaqs
 
 (deftest archive-schnaq-test
   (testing "Archive a schnaq for a user."
-    (let [keycloak-id (:user.registered/keycloak-id alex)]
-      (db/archive-schnaq keycloak-id "cat-dog-hash")
-      (is (= 1 (count (:user.registered/archived-schnaqs
-                       (db/private-user-by-keycloak-id keycloak-id))))))))
+    (db/archive-schnaq alex-keycloak-id "cat-dog-hash")
+    (is (= 1 (count (:user.registered/archived-schnaqs
+                     (db/private-user-by-keycloak-id alex-keycloak-id)))))))
 
 (deftest unarchive-schnaq-test
   (testing "Unarchive a schnaq for a user."
@@ -167,3 +166,11 @@
   (testing "Valid users are returned can be queried by their keycloak-id."
     (is (nil? (db/private-user-by-keycloak-id "foo")))
     (is (s/valid? ::specs/registered-user (db/private-user-by-keycloak-id kangaroo-keycloak-id)))))
+
+;; -----------------------------------------------------------------------------
+
+(deftest created-discussions-test
+  (testing "Count number of created discussions per user."
+    (is (= 0 (db/created-discussions kangaroo-keycloak-id)))
+    (is (= 1 (db/created-discussions alex-keycloak-id)))
+    (is (= 0 (db/created-discussions "razupaltuff")))))

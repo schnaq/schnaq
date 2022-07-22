@@ -61,6 +61,20 @@
      :where [?users :user.registered/notification-mail-interval ?interval]]
    interval patterns/private-user))
 
+(>defn created-discussions
+  "Count created discussions for a user."
+  [keycloak-id]
+  [(? :user.registered/keycloak-id) => (? nat-int?)]
+  (when keycloak-id
+    (if-let [num (query
+                  '[:find (count ?discussions) .
+                    :in $ ?keycloak-id
+                    :where [?user :user.registered/keycloak-id ?keycloak-id]
+                    [?discussions :discussion/author ?user]]
+                  keycloak-id)]
+      num
+      0)))
+
 ;; -----------------------------------------------------------------------------
 
 (>defn add-user
