@@ -209,8 +209,9 @@
 
 (rf/reg-sub
  :user/roles
- (fn [db]
-   (get-in db [:user :roles])))
+ :<- [:user/current]
+ (fn [user]
+   (:roles user)))
 
 (rf/reg-event-db
  :user/authenticated!
@@ -219,8 +220,9 @@
 
 (rf/reg-sub
  :user/authenticated?
- (fn [db _]
-   (get-in db [:user :authenticated?] false)))
+ :<- [:user/current]
+ (fn [user]
+   (get user :authenticated? false)))
 
 (rf/reg-sub
  :user/administrator?
@@ -249,8 +251,9 @@
 
 (rf/reg-sub
  :user/subscription
- (fn [db _]
-   (get-in db [:user :subscription])))
+ :<- [:user/current]
+ (fn [user]
+   (:subscription user)))
 
 (rf/reg-event-db
  :keycloak.roles/extract
