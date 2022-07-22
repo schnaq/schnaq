@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.user.settings
   (:require [goog.string :refer [format]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.common :refer [info-icon-with-tooltip pro-badge
+            [schnaq.interface.components.common :refer [pro-badge
                                                         role-indicator]]
-            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.icons :refer [icon icon-with-tooltip]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -45,6 +45,9 @@
 (defn- check-icon []
   [icon :check/circle "text-success"])
 
+(defn- unlimited-icon []
+  [icon-with-tooltip (labels :user.settings.features/unlimited) :infinity])
+
 (defn- external-link-icon []
   [icon :external-link-alt "ms-2" {:size "xs"}])
 
@@ -74,11 +77,11 @@
 
       [:dt.col-sm-7 (labels :user.settings.features/posts-per-schnaq)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :posts-per-schnaq)]
-                      limit (labels :user.settings.features/unlimited))]
+                      limit [unlimited-icon])]
 
       [:dt.col-sm-7 (labels :user.settings.features/concurrent-users)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :concurrent-users)]
-                      limit (labels :user.settings.features/unlimited))]
+                      limit [unlimited-icon])]
 
       [:dt.col-sm-7 (labels :user.settings.features/mail-notifications)]
       [:dd.col-sm-5
@@ -102,7 +105,7 @@
      [:dl.row
       [:dt.col-sm-7 (labels :user.settings.features/polls)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :polls)]
-                      limit (labels :user.settings.features/unlimited))]
+                      limit [unlimited-icon])]
 
       [:dt.col-sm-7 (labels :user.settings.features/rankings)]
       [:dd.col-sm-5 [feature-available :rankings?]]

@@ -1,17 +1,26 @@
 (ns schnaq.interface.components.icons
   ;; For further information check: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react
   ;; For two styles of the same icon see here: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react#faqs
-  (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook faInstagram faLinkedin faTwitter faGithub faFontAwesomeFlag]]
-            ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faCommentAlt faEye faEyeSlash faEnvelope faFileAlt faIdCard faHourglass faImage faFileVideo faFileImage]]
+  (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook
+                                                          faFontAwesomeFlag faGithub
+                                                          faInstagram faLinkedin faTwitter]]
+            ["@fortawesome/free-regular-svg-icons" :refer [faCalendar
+                                                           faCommentAlt faEnvelope
+                                                           faEye faEyeSlash faFileAlt faFileImage faFileVideo faHourglass faIdCard faImage]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faArchive faBackspace faBold faBullseye faArrowLeft faArrowRight faArrowDown faArrowUp faBell faBriefcase faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle faCode
-              faCloud faCog faComment faCopy faTimes faEllipsisH faEllipsisV faEdit
-              faFileDownload faExternalLinkAlt faFlask faGhost faGraduationCap faProjectDiagram faInfoCircle faQuestionCircle faLanguage faLaptop
-              faLock faLockOpen faMagic faPalette faMapPin faChevronLeft faChevronRight faCircle
-              faPaperPlane faPenSquare faPlayCircle faPlus faQrcode faQuestion faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar faSun faTag faTerminal
-              faTimes faTimesCircle faTrashAlt faUniversity faUsers faAngleDown faAngleRight faMinus faStepBackward
-              faItalic faUndo faUnderline faStrikethrough faRedo faQuoteRight faListOl faList]]
-            ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]))
+             [faAngleDown faAngleRight faArchive faArrowDown faArrowLeft
+              faArrowRight faArrowUp faBackspace faBell faBold faBriefcase
+              faBullseye faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
+              faChevronLeft faChevronRight faCircle faCloud faCode faCog faComment faCopy
+              faEdit faEllipsisH faEllipsisV faExternalLinkAlt faFileDownload faFlask faGhost
+              faGraduationCap faInfinity faInfoCircle faItalic faLanguage faLaptop faList faListOl
+              faLock faLockOpen faMagic faMapPin faMinus faPalette faPaperPlane faPenSquare
+              faPlayCircle faPlus faProjectDiagram faQrcode faQuestion faQuestionCircle
+              faQuoteRight faRedo faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar
+              faStepBackward faStrikethrough faSun faTag faTerminal faTimes faTimes faTimesCircle
+              faTrashAlt faUnderline faUndo faUniversity faUsers]]
+            ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]
+            [schnaq.interface.utils.tooltip :as tooltip]))
 
 (def ^:private icons
   {:archive faArchive
@@ -64,6 +73,7 @@
    :id-card faIdCard
    :image faImage
    :image-file faFileImage
+   :infinity faInfinity
    :info faInfoCircle
    :info-question faQuestionCircle
    :instagram faInstagram
@@ -121,6 +131,13 @@
      {:icon (get icons identifier)
       :className classes}
      extras)]))
+
+(defn icon-with-tooltip
+  "Add an icon with a tooltip on mouseover."
+  [tooltip identifier classes extras]
+  [tooltip/text
+   tooltip
+   [:span [icon identifier classes extras]]])
 
 (defn icon-card
   "Wrap an icon into a panel to emphasize it. Takes same parameters as `icon`."
