@@ -86,6 +86,13 @@
    (:id user)))
 
 (rf/reg-sub
+ :user/meta
+ ;; The user at it was queried from the database
+ :<- [:user/current]
+ (fn [user]
+   (:meta user)))
+
+(rf/reg-sub
  :user/currency
  :<- [:user/current]
  (fn [user]

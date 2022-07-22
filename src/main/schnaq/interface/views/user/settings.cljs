@@ -55,13 +55,14 @@
       [check-icon])))
 
 (defn- feature-overview []
-  (let [user @(rf/subscribe [:user/entity])]
+  (let [user @(rf/subscribe [:user/entity])
+        {:keys [total-schnaqs]} @(rf/subscribe [:user/meta])]
     [:section.pt-4
      [:dl.row
       [:dt.col-sm-7 (labels :user.settings.features/schnaqs-created)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :total-schnaqs)]
-                      (format "%d %s %d" :todo "von" limit)
-                      (format "%d" :todo))]
+                      (format "%d %s %d" total-schnaqs "von" limit)
+                      (format "%d" total-schnaqs))]
 
       [:dt.col-sm-7 (labels :user.settings.features/posts-per-schnaq)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :posts-per-schnaq)]
@@ -114,12 +115,14 @@
   "Display an overview of a user's features."
   []
   [:section.panel-white
-   [:a.text-decoration-none {:href (navigation/href :routes.user.manage/account)}
-    [:div.d-flex.flex-row
-     [common/avatar-with-nickname-right 40]
-     [:div.align-self-center [role-indicator true]]]]
-   [feature-overview]
-   [:hr.my-4]
+   (when @(rf/subscribe [:user/authenticated?])
+     [:<>
+      [:a.text-decoration-none {:href (navigation/href :routes.user.manage/account)}
+       [:div.d-flex.flex-row
+        [common/avatar-with-nickname-right 40]
+        [:div.align-self-center [role-indicator true]]]]
+      [feature-overview]
+      [:hr.my-4]])
    [feature-and-coc-buttons]])
 
 (defn user-view [page-heading-label content]
