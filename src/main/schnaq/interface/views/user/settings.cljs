@@ -41,6 +41,9 @@
    [settings-button :bell (labels :user.settings/notifications) :routes.user.manage/notifications]
    [settings-button :palette [:<> (labels :user.settings/themes) " " [pro-badge]] :routes.user.manage/themes]])
 
+(defn- check-icon []
+  [icon :check/circle "text-success"])
+
 (defn- feature-available
   "Check feature availability and return an icon for it."
   [feature]
@@ -48,7 +51,7 @@
         disabled? (= false (user/feature-limit user feature))]
     (if disabled?
       [icon :cross "text-danger"]
-      [icon :check/circle "text-success"])))
+      [check-icon])))
 
 (defn- feature-overview []
   (let [user @(rf/subscribe [:user/entity])]
@@ -71,6 +74,9 @@
       [:dt.col-sm-7 "Persönliches Design"]
       [:dd.col-sm-5 [feature-available :theming?]]
 
+      [:dt.col-sm-7 "E-Mail Benachrichtigungen"]
+      [:dd.col-sm-5 [check-icon]]
+
       [:dt.col-sm-7 "Integrationen?"
        [:a {:href "https://academy.schnaq.com" :target :_blank}
         [info-icon-with-tooltip "Lerne mehr in der schnaq academy."]]]
@@ -78,7 +84,6 @@
 
      [:strong "Interaktionsfunktionen"]
      [:dl.row
-
       [:dt.col-sm-7 "Umfragen"]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :polls)]
                       limit "unbegrenzt")]
