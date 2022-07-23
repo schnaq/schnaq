@@ -79,8 +79,8 @@
 (s/def :user.registered.features/total-schnaqs nat-int?)
 (s/def :user.registered.features/posts-per-schnaq nat-int?)
 
-(s/def ::registered-user (s/keys :req [:user.registered/keycloak-id]
-                                 :opt [:user.registered/display-name
+(s/def ::registered-user (s/keys :opt [:user.registered/keycloak-id
+                                       :user.registered/display-name
                                        :user.registered/last-name :user.registered/first-name
                                        :user.registered/groups :user.registered/profile-picture
                                        :user.registered/roles
