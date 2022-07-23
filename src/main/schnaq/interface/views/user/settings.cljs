@@ -133,7 +133,7 @@
       [:a.text-decoration-none {:href (navigation/href :routes.user.manage/account)}
        [:div.d-flex.d-row
         [common/avatar-with-nickname-right 40]
-        [:div.align-self-center [role-indicator]]]]
+        [:div.align-self-center [role-indicator true]]]]
       [feature-overview]
       [:hr.my-4]])
    [feature-and-coc-buttons]])
