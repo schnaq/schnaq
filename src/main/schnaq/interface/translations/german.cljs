@@ -418,7 +418,7 @@
    :user.settings.features/mail-notifications "E-Mail Benachrichtigungen"
    :user.settings.features/theming "Persönliches Design"
    :user.settings.features/embeddings "Integrationen?"
-   :user.settings.features/interactions "Interationsfunktionen"
+   :user.settings.features/interactions "Interaktionsfunktionen"
    :user.settings.features/polls "Umfragen"
    :user.settings.features/rankings "Rankings"
    :user.settings.features/wordclouds "Wortwolken"
