@@ -407,6 +407,7 @@
    :user.settings.features/schnaqs-created "Created schnaqs"
    :user.settings.features/unlimited "unlimited"
    :user.settings.features/posts-per-schnaq "Posts per schnaq"
+   :user.settings.features/of "of"
    :user.settings.features/concurrent-users "Max. concurrent users per schnaq"
    :user.settings.features/mail-notifications "Email Notifications"
    :user.settings.features/theming "Personal Themes"
@@ -415,7 +416,6 @@
    :user.settings.features/polls "Polls"
    :user.settings.features/rankings "Rankings"
    :user.settings.features/wordclouds "Wordclouds"
-   :user.settings.features/learn-academy "Learn more in the schnaq academy."
 
    ;; notification settings
    :user.notifications/header "Manage Notifications"

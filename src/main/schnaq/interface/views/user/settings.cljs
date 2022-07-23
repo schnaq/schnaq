@@ -1,8 +1,6 @@
 (ns schnaq.interface.views.user.settings
-  (:require [goog.string :refer [format]]
-            [re-frame.core :as rf]
-            [schnaq.interface.components.common :refer [pro-badge
-                                                        role-indicator]]
+  (:require [re-frame.core :as rf]
+            [schnaq.interface.components.common :refer [pro-badge]]
             [schnaq.interface.components.icons :refer [icon icon-with-tooltip]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -71,41 +69,37 @@
     [:section.pt-4
      [:dl.row
       [:dt.col-sm-7 (labels :user.settings.features/schnaqs-created)]
-      [:dd.col-sm-5 (if-let [limit (user/feature-limit user :total-schnaqs)]
-                      (format "%d %s %d" total-schnaqs "von" limit)
-                      (format "%d" total-schnaqs))]
+      [:dd.col-sm-5 (let [limit (user/feature-limit user :total-schnaqs)]
+                      [:<> total-schnaqs " " (labels :user.settings.features/of) " " (or limit [unlimited-icon])])]
 
       [:dt.col-sm-7 (labels :user.settings.features/posts-per-schnaq)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :posts-per-schnaq)]
-                      limit [unlimited-icon])]
+                      limit (labels :user.settings.features/unlimited))]
 
       [:dt.col-sm-7 (labels :user.settings.features/concurrent-users)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :concurrent-users)]
-                      limit [unlimited-icon])]
+                      limit (labels :user.settings.features/unlimited))]
 
       [:dt.col-sm-7 (labels :user.settings.features/mail-notifications)]
       [:dd.col-sm-5
-       [settings-link
-        {:href (navigation/href :routes.user.manage/notifications)}
+       [settings-link {:href (navigation/href :routes.user.manage/notifications)}
         [check-icon]]]
 
       [:dt.col-sm-7 (labels :user.settings.features/theming)]
       [:dd.col-sm-5
-       [settings-link
-        {:href (navigation/href :routes.user.manage/themes)}
+       [settings-link {:href (navigation/href :routes.user.manage/themes)}
         [feature-available :theming?]]]
 
       [:dt.col-sm-7 (labels :user.settings.features/embeddings)]
       [:dd.col-sm-5
-       [settings-link
-        {:href "https://academy.schnaq.com" :target :_blank}
+       [settings-link {:href "https://academy.schnaq.com" :target :_blank}
         [feature-available :embeddings?]]]]
 
      [:strong (labels :user.settings.features/interactions)]
      [:dl.row
       [:dt.col-sm-7 (labels :user.settings.features/polls)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :polls)]
-                      limit [unlimited-icon])]
+                      limit (labels :user.settings.features/unlimited))]
 
       [:dt.col-sm-7 (labels :user.settings.features/rankings)]
       [:dd.col-sm-5 [feature-available :rankings?]]
@@ -135,10 +129,7 @@
   [:section.panel-white
    (when @(rf/subscribe [:user/authenticated?])
      [:<>
-      [:a.text-decoration-none {:href (navigation/href :routes.user.manage/account)}
-       [:div.d-flex.flex-row
-        [common/avatar-with-nickname-right 40]
-        [:div.align-self-center [role-indicator true]]]]
+      [common/avatar-with-nickname-right 40]
       [feature-overview]
       [:hr.my-4]])
    [feature-and-coc-buttons]])
