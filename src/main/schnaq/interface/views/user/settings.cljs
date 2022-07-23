@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.user.settings
   (:require [re-frame.core :as rf]
-            [schnaq.interface.components.common :refer [pro-badge]]
+            [schnaq.interface.components.common :refer [pro-badge
+                                                        role-indicator]]
             [schnaq.interface.components.icons :refer [icon icon-with-tooltip]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -74,11 +75,11 @@
 
       [:dt.col-sm-7 (labels :user.settings.features/posts-per-schnaq)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :posts-per-schnaq)]
-                      limit (labels :user.settings.features/unlimited))]
+                      limit [unlimited-icon])]
 
       [:dt.col-sm-7 (labels :user.settings.features/concurrent-users)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :concurrent-users)]
-                      limit (labels :user.settings.features/unlimited))]
+                      limit [unlimited-icon])]
 
       [:dt.col-sm-7 (labels :user.settings.features/mail-notifications)]
       [:dd.col-sm-5
@@ -99,7 +100,7 @@
      [:dl.row
       [:dt.col-sm-7 (labels :user.settings.features/polls)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :polls)]
-                      limit (labels :user.settings.features/unlimited))]
+                      limit [unlimited-icon])]
 
       [:dt.col-sm-7 (labels :user.settings.features/rankings)]
       [:dd.col-sm-5 [feature-available :rankings?]]
@@ -129,7 +130,10 @@
   [:section.panel-white
    (when @(rf/subscribe [:user/authenticated?])
      [:<>
-      [common/avatar-with-nickname-right 40]
+      [:a.text-decoration-none {:href (navigation/href :routes.user.manage/account)}
+       [:div.d-flex.d-row
+        [common/avatar-with-nickname-right 40]
+        [:div.align-self-center [role-indicator]]]]
       [feature-overview]
       [:hr.my-4]])
    [feature-and-coc-buttons]])
