@@ -9,7 +9,8 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.user :as user]))
+            [schnaq.user :as user :refer [usage-warning-level
+                                          warning-level-class]]))
 
 (defn- settings-button
   "Create a button for the feed list."
@@ -70,8 +71,10 @@
     [:section.pt-4
      [:dl.row
       [:dt.col-sm-7 (labels :user.settings.features/schnaqs-created)]
-      [:dd.col-sm-5 (let [limit (user/feature-limit user :total-schnaqs)]
-                      [:<> total-schnaqs " " (labels :user.settings.features/of) " " (or limit [unlimited-icon])])]
+      [:dd.col-sm-5 (let [limit (user/feature-limit user :total-schnaqs)
+                          warning-class (warning-level-class (usage-warning-level user :total-schnaqs total-schnaqs))]
+                      [:span {:class warning-class}
+                       total-schnaqs " " (labels :user.settings.features/of) " " (or limit [unlimited-icon])])]
 
       [:dt.col-sm-7 (labels :user.settings.features/posts-per-schnaq)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :posts-per-schnaq)]
