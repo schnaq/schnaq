@@ -102,3 +102,8 @@
           :total-schnaqs 10
           :posts-per-schnaq 30}
    :pro {:concurrent-users 250}})
+
+;; -----------------------------------------------------------------------------
+;; Feature toggles
+
+(def check-limits? (not production?))
