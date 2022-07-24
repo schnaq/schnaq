@@ -19,7 +19,7 @@
 (defn- post-limit-reached-alert []
   (let [author @(rf/subscribe [:schnaq/author])]
     [:div.alert.alert-primary {:role :alert}
-     "Die maximale Anzahl von Beiträgen wurde in diesem schnaq erreicht. Folgende Person hat den schnaq erstellt und muss ein Upgrade vornehmen, um weitere Beiträge zu aktivieren:"
+     (labels :feature.limit.posts/alert)
      " "
      (display-name author)]))
 
