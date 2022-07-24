@@ -1,7 +1,8 @@
 (ns schnaq.user-test
   (:require [clojure.test :refer [deftest is testing]]
-            [schnaq.config.shared :refer [feature-limits]]
-            [schnaq.user :refer [feature-limit usage-warning-level posts-limit-reached?]]))
+            [schnaq.user :refer [feature-limit usage-warning-level posts-limit-reached?] :as user]))
+
+(def feature-limits @#'user/feature-limits)
 
 (def ^:private free-user
   {:user.registered/keycloak-id "foo"

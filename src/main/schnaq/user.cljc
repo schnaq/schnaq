@@ -3,10 +3,22 @@
                :clj [clojure.spec.alpha :as s])
             #?(:cljs [goog.string :refer [format]])
             [com.fulcrologic.guardrails.core :refer [>defn ?]]
-            [schnaq.config.shared :refer [feature-limits]]
             [schnaq.database.specs :as specs]
             [schnaq.shared-toolbelt :as shared-tools]
             [taoensso.timbre :as log]))
+
+(def ^:private feature-limits
+  "Describe default tier limits. If no value is provided, the user has unlimited
+  access to this feature."
+  {:free {:wordcloud? false
+          :rankings? false
+          :embeddings? false
+          :theming? false
+          :polls 0
+          :concurrent-users 100
+          :total-schnaqs 10
+          :posts-per-schnaq 30}
+   :pro {:concurrent-users 250}})
 
 (defn statement-author
   "Returns the display-name of a statement author."

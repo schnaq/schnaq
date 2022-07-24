@@ -119,7 +119,7 @@
         schnaq @(rf/subscribe [:schnaq/selected])
         limit-reached? (posts-limit-reached? author schnaq)
         editor-content @(rf/subscribe [:editor/content editor-id])]
-    (if (and limit-reached? shared-config/check-limits?)
+    (if (and limit-reached? shared-config/enforce-limits?)
       [post-limit-reached-alert]
       (when-not @(rf/subscribe [:schnaq.selected/read-only?])
         [:<>
@@ -210,7 +210,7 @@
           (.preventDefault e)
           (rf/dispatch [:editor/clear editor-id])
           (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))]
-    (when-not (or locked? read-only? hide-input-replies (and limit-reached? shared-config/check-limits?))
+    (when-not (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?))
       [:form.my-md-2
        {:on-submit #(answer-to-statement-event %)
         :on-key-down #(when (toolbelt/ctrl-press? % 13)

@@ -41,7 +41,7 @@
                        :on-text-change throttled-search
                        :placeholder (labels :statement.new/placeholder)}
        {:className "flex-grow-1"}]]
-     (when-not (and limit-reached? shared-config/check-limits?)
+     (when-not (and limit-reached? shared-config/enforce-limits?)
        [:button.btn.btn-lg.btn-secondary.w-100.shadow-sm.mt-3.rounded-1
         {:type "submit"
          :disabled (empty? editor-content)

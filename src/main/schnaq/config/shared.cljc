@@ -89,23 +89,10 @@
   #{:eur :usd})
 
 ;; -----------------------------------------------------------------------------
+;; Feature limits
+;;
+;; Feature limits are defined in schnaq.user.cljc
 
-(def feature-limits
-  "Describe default tier limits. If no value is provided, the user has unlimited
-  access to this feature."
-  {:free {:wordcloud? false
-          :rankings? false
-          :embeddings? false
-          :theming? false
-          :polls 0
-          :concurrent-users 100
-          :total-schnaqs 10
-          :posts-per-schnaq 30}
-   :pro {:concurrent-users 250}})
-
-;; -----------------------------------------------------------------------------
-;; Feature toggles
-
-(def check-limits?
+(def enforce-limits?
   "Enable limits. If false, shows only warnings, but does not restrict adding more posts."
   (not production?))
