@@ -1,11 +1,14 @@
 (ns schnaq.database.user
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.main :refer [fast-pull query transact]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map] :as shared-tools]
             [taoensso.timbre :as log]))
+
+(declare add-role)
 
 ;; -----------------------------------------------------------------------------
 ;; Query user(s) from database
@@ -116,6 +119,16 @@
       (transact add-new-groups)
       groups)))
 
+(>defn- promote-to-admin
+  "Promote user to admin, if this is provided in the JWT token.
+  This is how initial admins are translated to schnaq."
+  [{:user.registered/keys [roles keycloak-id]} realm-roles]
+  [::specs/registered-user (s/coll-of string?) => any?]
+  (let [keycloak-realm-admin? (string? (some (set shared-config/admin-roles) realm-roles))
+        not-yet-admin? (not (shared-tools/admin? roles))]
+    (when (and keycloak-realm-admin? not-yet-admin?)
+      (add-role keycloak-id :role/admin))))
+
 (defn update-visited-schnaqs
   "Updates the user's visited schnaqs by adding the new ones. Input is a user-id and a collection of valid ids."
   [keycloak-id visited-schnaqs]
@@ -212,7 +225,7 @@
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
   Returns the user, after updating their groups, when they exist. Returns a tuple which contains
   whether the user is newly created and the user entity itself."
-  [{:keys [sub email preferred_username given_name family_name groups avatar] :as identity} visited-schnaqs visited-statements]
+  [{:keys [sub email preferred_username given_name family_name groups avatar roles] :as identity} visited-schnaqs visited-statements]
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [id (str sub)
         existing-user (fast-pull [:user.registered/keycloak-id id] patterns/private-user)
@@ -231,6 +244,7 @@
       (do
         (update-user-info identity existing-user)
         (update-groups id groups)
+        (promote-to-admin existing-user roles)
         (update-visited-schnaqs id visited-schnaqs)
         (when-not (nil? visited-statements)
           (update-visited-statements id visited-statements))

@@ -42,7 +42,7 @@
   #{"image/jpeg" "image/png" "image/webp"})
 
 (def admin-roles
-  #{"admin" :role/admin})
+  #{"admin" :role/admin}) ;; keep string version of "admin", which is used to initialize new admins
 
 (def analytics-roles
   (cset/union admin-roles #{"analytics-admin" :role/analytics}))
