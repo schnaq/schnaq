@@ -1,8 +1,9 @@
 (ns schnaq.user-test
   (:require [clojure.test :refer [deftest is testing]]
-            [schnaq.user :refer [feature-limit usage-warning-level posts-limit-reached?] :as user]))
+            [schnaq.user :refer [feature-limit posts-limit-reached?
+                                 total-schnaqs-reached? usage-warning-level] :as user]))
 
-(def feature-limits @#'user/feature-limits)
+(def ^:private feature-limits @#'user/feature-limits)
 
 (def ^:private free-user
   {:user.registered/keycloak-id "foo"
@@ -71,3 +72,22 @@
   (testing "Admin users have no limits."
     (is (not (posts-limit-reached? admin-user {:meta-info {:all-statements 10}})))
     (is (not (posts-limit-reached? admin-user {:meta-info {:all-statements 10000}})))))
+
+(deftest total-schnaqs-reached?-free-user-test
+  (testing "Free users can create some schnaqs."
+    (is (not (total-schnaqs-reached? free-user 0)))
+    (is (not (total-schnaqs-reached? free-user 1)))
+    (is (not (total-schnaqs-reached? free-user (dec (get-in feature-limits [:free :total-schnaqs])))))
+    (is (total-schnaqs-reached? free-user (get-in feature-limits [:free :total-schnaqs])))))
+
+(deftest total-schnaqs-reached?-pro-user-test
+  (testing "Pro users can create many schnaqs."
+    (is (not (total-schnaqs-reached? pro-user 0)))
+    (is (not (total-schnaqs-reached? pro-user 1)))
+    (is (not (total-schnaqs-reached? pro-user (get-in feature-limits [:pro :total-schnaqs]))))))
+
+(deftest total-schnaqs-reached?-admin-user-test
+  (testing "Pro users can create many schnaqs."
+    (is (not (total-schnaqs-reached? admin-user 0)))
+    (is (not (total-schnaqs-reached? admin-user 1)))
+    (is (not (total-schnaqs-reached? admin-user 10000)))))

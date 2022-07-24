@@ -82,3 +82,13 @@
     (if limit
       (>= statement-count limit)
       false)))
+
+(>defn total-schnaqs-reached?
+  "Check if the user's schnaq limit is reached."
+  [author total-schnaqs]
+  [(? ::specs/registered-user) (? nat-int?) => (? boolean?)]
+  (when (and author total-schnaqs)
+    (let [limit (feature-limit author :total-schnaqs)]
+      (if limit
+        (>= total-schnaqs limit)
+        false))))
