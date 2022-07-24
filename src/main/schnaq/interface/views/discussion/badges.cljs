@@ -8,6 +8,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.links :as schnaq-links]
@@ -303,7 +304,8 @@
     [:span.badge.rounded-pill.badge-transparent.me-2 {:class warning-class}
      [icon :comment/alt "m-auto me-1"]
      (if limit
-       [:span (format "%d %s %d %s" statement-count (labels :discussion.badges/posts-of) limit (labels :discussion.badges/posts-alt))]
+       [tooltip/text (labels :feature.limit.posts/alert-tooltip)
+        [:span (format "%d %s %d %s" statement-count (labels :discussion.badges/posts-of) limit (labels :discussion.badges/posts-alt))]] ;; WIP
        [:span (format "%d %s" statement-count (labels :discussion.badges/posts))])]))
 
 (defn static-info-badges-discussion

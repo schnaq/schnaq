@@ -428,6 +428,7 @@
 
    ;; Feature limits
    :feature.limit.posts/alert "The maximum number of posts has been reached in this schnaq. The following person has created the schnaq and needs to upgrade to enable more posts:"
+   :feature.limit.posts/alert-tooltip "The maximum number of posts has been reached in this schnaq."
 
    ;; Welcome
    :welcome.free/heading "Welcome to schnaq"

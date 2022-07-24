@@ -434,6 +434,7 @@
 
    ;; Feature limits
    :feature.limit.posts/alert "Die maximale Anzahl von Beiträgen wurde in diesem schnaq erreicht. Folgende Person hat den schnaq erstellt und muss ein Upgrade vornehmen, um weitere Beiträge zu aktivieren:"
+   :feature.limit.posts/alert-tooltip "Die maximale Anzahl von Beiträgen wurde in diesem schnaq erreicht."
 
    ;; Welcome user
    :welcome.free/heading "Willkommen bei schnaq"
