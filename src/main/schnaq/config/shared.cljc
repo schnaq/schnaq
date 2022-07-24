@@ -106,4 +106,6 @@
 ;; -----------------------------------------------------------------------------
 ;; Feature toggles
 
-(def check-limits? (not production?))
+(def check-limits?
+  "Enable limits. If false, shows only warnings, but does not restrict adding more posts."
+  (not production?))

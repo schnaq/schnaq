@@ -2,6 +2,7 @@
   (:require [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.matomo :as matomo]
@@ -9,7 +10,8 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.qa.search :refer [throttled-search] :as search]
-            [schnaq.interface.views.schnaq.activation :as activation]))
+            [schnaq.interface.views.schnaq.activation :as activation]
+            [schnaq.user :refer [posts-limit-reached?]]))
 
 (defn- text-input-for-qanda
   "Input where users can enter their questions for Q&A."
@@ -22,7 +24,10 @@
                           locked? (boolean (oget form ["?lock-card?" :checked]))]
                       (rf/dispatch [:editor/clear editor-id])
                       (rf/dispatch [:schnaq.qa.new-question/pulse true])
-                      (rf/dispatch [:discussion.add.statement/starting statement-text locked?])))]
+                      (rf/dispatch [:discussion.add.statement/starting statement-text locked?])))
+        author @(rf/subscribe [:schnaq/author])
+        schnaq @(rf/subscribe [:schnaq/selected])
+        limit-reached? (posts-limit-reached? author schnaq)]
     [:form {:on-submit #(submit-fn %)
             :on-key-down #(when (toolbelt/ctrl-press? % 13) (submit-fn %))}
      [:label.form-label.h5.mb-3 {:for editor-id} (labels :qanda/add-question-label)]
@@ -36,13 +41,14 @@
                        :on-text-change throttled-search
                        :placeholder (labels :statement.new/placeholder)}
        {:className "flex-grow-1"}]]
-     [:button.btn.btn-lg.btn-secondary.w-100.shadow-sm.mt-3.rounded-1
-      {:type "submit"
-       :disabled (empty? editor-content)
-       :title (labels :qanda.button/submit)
-       :on-click #(matomo/track-event "Active User" "Action" "Submit Question")}
-      (labels :qanda.button/submit)
-      [icon :plane "m-auto ms-2"]]]))
+     (when-not (and limit-reached? shared-config/check-limits?)
+       [:button.btn.btn-lg.btn-secondary.w-100.shadow-sm.mt-3.rounded-1
+        {:type "submit"
+         :disabled (empty? editor-content)
+         :title (labels :qanda.button/submit)
+         :on-click #(matomo/track-event "Active User" "Action" "Submit Question")}
+        (labels :qanda.button/submit)
+        [icon :plane "m-auto ms-2"]])]))
 
 (>defn- ask-question
   "Either display input or read-only warning."
