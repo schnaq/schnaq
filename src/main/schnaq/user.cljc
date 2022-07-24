@@ -50,7 +50,6 @@
     (when-let [limit (feature-limit user feature)]
       (when-not (zero? limit)
         (let [used (/ current limit)]
-          (prn used)
           (cond
             (<= 0.75 used) :danger
             (<= 0.5 used) :warning))))))
@@ -61,3 +60,13 @@
     :warning "text-warning"
     :danger "text-danger"
     ""))
+
+(>defn posts-limit-reached?
+  "Check if the user's posts limit is reached for the provided schnaq."
+  [author schnaq]
+  [::specs/registered-user ::specs/discussion => boolean?]
+  (let [statement-count (get-in schnaq [:meta-info :all-statements])
+        limit (feature-limit author :posts-per-schnaq)]
+    (if limit
+      (>= statement-count limit)
+      false)))
