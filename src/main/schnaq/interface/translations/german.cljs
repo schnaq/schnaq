@@ -423,7 +423,7 @@
    :user.settings.features/rankings "Rankings"
    :user.settings.features/wordclouds "Wortwolken"
 
-;; notification settings
+   ;; notification settings
    :user.notifications/header "Benachrichtigungen verwalten"
    :user.notifications/mails "E-Mail Benachrichtigungen"
    :user.notifications/info "Du erhältst nur Benachrichtigungen, wenn es neue Beiträge in deinen besuchten schnaqs gibt."
@@ -431,6 +431,9 @@
    :user.notifications.set-all-to-read/info "Du erhältst noch Benachrichtigungen von alten Diskussionen? Kein Problem, setze einfach alles auf gelesen und erhalte nur noch Benachrichtigungen für neue Diskussionen."
    :user.notifications.mail-interval.success/title "Benachrichtigung aktualisiert"
    :user.notifications.mail-interval.success/body "Du erhältst nun Benachrichtigungen gemäß deiner Einstellungen:"
+
+   ;; Feature limits
+   :feature.limit.posts/alert "Die maximale Anzahl von Beiträgen wurde in diesem schnaq erreicht. Folgende Person hat den schnaq erstellt und muss ein Upgrade vornehmen, um weitere Beiträge zu aktivieren:"
 
    ;; Welcome user
    :welcome.free/heading "Willkommen bei schnaq"

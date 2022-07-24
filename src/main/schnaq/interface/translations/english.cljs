@@ -426,6 +426,9 @@
    :user.notifications.mail-interval.success/title "Notification updated"
    :user.notifications.mail-interval.success/body "You will now receive notifications according to your settings:"
 
+   ;; Feature limits
+   :feature.limit.posts/alert "The maximum number of posts has been reached in this schnaq. The following person has created the schnaq and needs to upgrade to enable more posts:"
+
    ;; Welcome
    :welcome.free/heading "Welcome to schnaq"
    :welcome.free/subheading "These are now your available functions"
