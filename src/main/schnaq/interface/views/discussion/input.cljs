@@ -102,7 +102,7 @@
         :title (labels :discussion/create-argument-action)
         :on-click #(matomo/track-event "Active User" "Action" "Submit Post")}
        [:div.d-flex.flex-row
-        [:div.d-none.d-lg-block.me-1 (labels :statement/new)] ;; WIP
+        [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
         [icon :plane "m-auto"]]]]]))
 
 (defn- throttled-input-tokenizing-fn
