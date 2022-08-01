@@ -4,7 +4,7 @@
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as db]
-            [schnaq.test-data :refer [alex christian kangaroo]]
+            [schnaq.test-data :refer [alex christian kangaroo schnaqqi]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -160,3 +160,15 @@
     (is (= 0 (db/created-discussions kangaroo-keycloak-id)))
     (is (= 1 (db/created-discussions alex-keycloak-id)))
     (is (= 0 (db/created-discussions "razupaltuff")))))
+
+;; -----------------------------------------------------------------------------
+
+(deftest retract-user-attribute-test
+  (testing "Removing an attribute results in a nil lookup."
+    (is (nil? (:user.registered/email (db/retract-user-attribute {:user.registered/keycloak-id kangaroo-keycloak-id} :user.registered/email))))))
+
+(deftest retract-user-attributes-value-test
+  (testing "Retract a value from a set, returns the set without the value."
+    (let [tester-admin-christian (db/add-role (:user.registered/keycloak-id christian) :role/tester)
+          {:keys [:user.registered/roles]} (db/retract-user-attributes-value tester-admin-christian :user.registered/roles :role/tester)]
+      (is (= #{:role/admin} roles)))))

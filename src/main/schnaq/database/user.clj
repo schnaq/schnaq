@@ -1,6 +1,6 @@
 (ns schnaq.database.user
   (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.main :refer [fast-pull query transact]]
             [schnaq.database.patterns :as patterns]
@@ -256,13 +256,6 @@
           (update-visited-statements (:user.registered/keycloak-id new-user-from-db) visited-statements))
         [true new-user-from-db]))))
 
-(defn update-user
-  "Update an existing user. Throw in all changed fields."
-  [{:user.registered/keys [keycloak-id] :as user}]
-  (let [user' (assoc user :db/id [:user.registered/keycloak-id keycloak-id])
-        tx-result @(transact [user'])]
-    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user (:db-after tx-result))))
-
 (>defn members-of-group
   "Returns all members of a certain group."
   [group-name]
@@ -272,6 +265,32 @@
      :in $ ?group public-user-pattern
      :where [?users :user.registered/groups ?group]]
    group-name patterns/public-user))
+
+;; -----------------------------------------------------------------------------
+
+(>defn update-user
+  "Update an existing user. Throw in all changed fields."
+  [{:user.registered/keys [keycloak-id] :as user}]
+  [::specs/registered-user => ::specs/registered-user]
+  (let [user' (assoc user :db/id [:user.registered/keycloak-id keycloak-id])
+        tx-result @(transact [user'])]
+    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user (:db-after tx-result))))
+
+(>defn retract-user-attribute
+  "Retract an attribute of a user."
+  [{:user.registered/keys [keycloak-id]} attribute]
+  [::specs/registered-user keyword? => ::specs/registered-user]
+  (let [new-db (:db-after
+                @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id] attribute]]))]
+    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
+
+(>defn retract-user-attributes-value
+  "Retract a value from a user's attributes."
+  [{:user.registered/keys [keycloak-id]} attribute value]
+  [::specs/registered-user keyword? any? => ::specs/registered-user]
+  (let [new-db (:db-after
+                @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id] attribute value]]))]
+    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
 
 ;; -----------------------------------------------------------------------------
 ;; Role Management
@@ -287,10 +306,7 @@
   "Remove a role from a user."
   [keycloak-id role]
   [:user.registered/keycloak-id :user.registered/valid-roles => ::specs/registered-user]
-  (let [new-db (:db-after
-                @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id]
-                             :user.registered/roles role]]))]
-    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
+  (retract-user-attributes-value {:user.registered/keycloak-id keycloak-id} :user.registered/roles role))
 
 ;; -----------------------------------------------------------------------------
 
