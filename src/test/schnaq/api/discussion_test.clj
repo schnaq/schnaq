@@ -126,6 +126,7 @@
                      :share-hash share-hash
                      :edit-hash edit-hash}}
       toolbelt/add-csrf-header
+      (toolbelt/mock-authorization-header toolbelt/token-schnaqqifant-user)
       test-app
       :status))
 

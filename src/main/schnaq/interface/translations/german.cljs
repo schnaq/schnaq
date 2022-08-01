@@ -3,6 +3,8 @@
 (def labels
   {:error/export-failed "Export hat nicht geklappt, versuche es später erneut."
 
+   :common/keycloak-id "keycloak-id"
+
    :view/present "Präsentieren"
 
    :nav/schnaqs "schnaqs"
@@ -294,6 +296,8 @@
    :discussion.badges/user-overview "Alle Teilnehmer:innen"
    :discussion.badges/delete-statement "löschen"
    :discussion.badges/posts "Beiträge"
+   :discussion.badges/posts-alt "Beiträgen"
+   :discussion.badges/posts-of "von"
    :discussion.badges/delete-statement-confirmation "Möchtest du den Beitrag wirklich löschen?"
    :discussion.notification/new-content-title "Neuer Beitrag!"
    :discussion.notification/new-content-body "Dein Beitrag wurde erfolgreich gespeichert."
@@ -396,7 +400,7 @@
    :user/edit-hubs "Hubs verwalten"
    :user/features "Meine Features"
    :user/profile-settings "Profileinstellungen"
-   :user.settings/header "Nutzer:innendaten verwalten"
+   :user.settings/header "Verwalte deine Daten"
    :user.settings/info "Persönliche Informationen"
    :user.settings/notifications "Benachrichtigungen"
    :user.settings/hubs "Hubs"
@@ -404,7 +408,20 @@
    :user.settings/change-name "Namen ändern"
    :user.settings.button/change-account-information "Änderungen speichern"
    :user.settings.profile-picture-title/success "Profilbild erfolgreich gesetzt"
-   :user.settings.profile-picture-body/success "Profilbild wurde hochgeladen und gespeichert. Ggf. Seite neuladen um aktualisiertes Bild zu sehen."
+   :user.settings.profile-picture-body/success "Profilbild wurde hochgeladen und gespeichert. Ggf. Seite Neuladen um aktualisiertes Bild zu sehen."
+
+   :user.settings.features/schnaqs-created "schnaqs erstellt"
+   :user.settings.features/unlimited "unbegrenzt"
+   :user.settings.features/posts-per-schnaq "Beiträge pro schnaq"
+   :user.settings.features/of "von"
+   :user.settings.features/concurrent-users "Max. gleichzeitige User pro schnaq"
+   :user.settings.features/mail-notifications "E-Mail Benachrichtigungen"
+   :user.settings.features/theming "Persönliches Design"
+   :user.settings.features/embeddings "Integrationen?"
+   :user.settings.features/interactions "Interaktionsfunktionen"
+   :user.settings.features/polls "Umfragen"
+   :user.settings.features/rankings "Rankings"
+   :user.settings.features/wordclouds "Wortwolken"
 
    ;; notification settings
    :user.notifications/header "Benachrichtigungen verwalten"
@@ -414,6 +431,12 @@
    :user.notifications.set-all-to-read/info "Du erhältst noch Benachrichtigungen von alten Diskussionen? Kein Problem, setze einfach alles auf gelesen und erhalte nur noch Benachrichtigungen für neue Diskussionen."
    :user.notifications.mail-interval.success/title "Benachrichtigung aktualisiert"
    :user.notifications.mail-interval.success/body "Du erhältst nun Benachrichtigungen gemäß deiner Einstellungen:"
+
+   ;; Feature limits
+   :feature.limit.posts/alert "Die maximale Anzahl von Beiträgen wurde in diesem schnaq erreicht. Folgende Person hat den schnaq erstellt und muss ein Upgrade vornehmen, um weitere Beiträge zu aktivieren:"
+   :feature.limit.posts/alert-tooltip "Die maximale Anzahl von Beiträgen wurde in diesem schnaq erreicht."
+   :feature.limit.schnaqs/alert "Du hast die maximale Anzahl deiner erlaubten schnaqs erstellt. Das ist super, dir scheint schnaq zu gefallen 🎉"
+   :feature.limit.schnaqs/alert-2 "Um weitere schnaqs zu erstellen, musst ein Upgrade durchführen."
 
    ;; Welcome user
    :welcome.free/heading "Willkommen bei schnaq"
@@ -605,12 +628,18 @@
    :admin.center.delete.schnaq/heading "schnaqs"
    :admin.center.delete.schnaq/button "schnaq löschen"
    :admin.center.delete.user/heading "Benutzer:innen"
-   :admin.center.delete.user.statements/label "keycloak-id"
    :admin.center.delete.user.statements/button "Alle Statements löschen"
-   :admin.center.delete.user.schnaqs/label "keycloak-id"
    :admin.center.delete.user.schnaqs/button "Alle schnaqs löschen"
-   :admin.center.delete.user.identity/label "keycloak-id"
    :admin.center.delete.user.identity/button "Identität löschen"
+
+   :admin.center.user/headline "User Management"
+   :admin.center.user/subheadline "Lade zunächste einen User, um die Bearbeitung zu beginnen."
+   :admin.center.user.load/button "User laden"
+   :admin.center.user.save/button "User speichern"
+   :admin.center.user.role.delete/label "Entferne Rolle von User"
+   :admin.center.user.role.delete/button "Rolle entfernen"
+   :admin.center.user.role.add/label "Füge Rolle zu User hinzu"
+   :admin.center.user.role.add/button "Rolle hinzufügen"
 
    :badges.filters/label "Anzeige"
    :badges/sort "Sortierung der Beiträge"
@@ -648,6 +677,8 @@
    :filters.labels.type/numbers "Anzahl Beiträge"
    :filters.labels.type/author "Du"
 
+   :loading.page/heading "Seite wird geladen"
+   :loading.page/subheading "Du wirst bald weitergeleitet"
    :loading.placeholder/lead "Daten werden geladen..."
    :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
 

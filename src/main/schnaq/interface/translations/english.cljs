@@ -3,6 +3,8 @@
 (def labels
   {:error/export-failed "Export failed. Please try again later."
 
+   :common/keycloak-id "keycloak-id"
+
    :view/present "Present"
 
    :nav/schnaqs "schnaqs"
@@ -291,6 +293,8 @@
    :discussion.badges/user-overview "All participants"
    :discussion.badges/delete-statement "delete"
    :discussion.badges/posts "Posts"
+   :discussion.badges/posts-alt "Posts"
+   :discussion.badges/posts-of "of"
    :discussion.badges/delete-statement-confirmation "Do you really want to delete the statement?"
    :discussion.notification/new-content-title "New statement!"
    :discussion.notification/new-content-body "Your statement was added successfully!"
@@ -390,7 +394,7 @@
    :user/edit-hubs "Manage Hubs"
    :user/features "My Features"
    :user/profile-settings "Profile Settings"
-   :user.settings/header "Manage User Data"
+   :user.settings/header "Manage Your Settings"
    :user.settings/info "User Infos"
    :user.settings/notifications "Notifications"
    :user.settings/hubs "Hubs"
@@ -400,6 +404,19 @@
    :user.settings.profile-picture-title/success "Profile picture successfully uploaded"
    :user.settings.profile-picture-body/success "Your new profile picture was successfully set. You may have to reload the page to see it."
 
+   :user.settings.features/schnaqs-created "Created schnaqs"
+   :user.settings.features/unlimited "unlimited"
+   :user.settings.features/posts-per-schnaq "Posts per schnaq"
+   :user.settings.features/of "of"
+   :user.settings.features/concurrent-users "Max. concurrent users per schnaq"
+   :user.settings.features/mail-notifications "Email Notifications"
+   :user.settings.features/theming "Personal Themes"
+   :user.settings.features/embeddings "Embeddings?"
+   :user.settings.features/interactions "Interactions"
+   :user.settings.features/polls "Polls"
+   :user.settings.features/rankings "Rankings"
+   :user.settings.features/wordclouds "Wordclouds"
+
    ;; notification settings
    :user.notifications/header "Manage Notifications"
    :user.notifications/mails "E-Mail Notifications"
@@ -408,6 +425,12 @@
    :user.notifications.set-all-to-read/info "You still receive notifications from old discussions? No problem, just mark everything as read and only receive notifications from new discussions."
    :user.notifications.mail-interval.success/title "Notification updated"
    :user.notifications.mail-interval.success/body "You will now receive notifications according to your settings:"
+
+   ;; Feature limits
+   :feature.limit.posts/alert "The maximum number of posts has been reached in this schnaq. The following person has created the schnaq and needs to upgrade to enable more posts:"
+   :feature.limit.posts/alert-tooltip "The maximum number of posts has been reached in this schnaq."
+   :feature.limit.schnaqs/alert "You have created the maximum number of your allowed schnaqs. That's great, you seem to like schnaq 🎉"
+   :feature.limit.schnaqs/alert-2 "To create more schnaqs, you need to upgrade."
 
    ;; Welcome
    :welcome.free/heading "Welcome to schnaq"
@@ -598,12 +621,18 @@
    :admin.center.delete.schnaq/heading "schnaqs"
    :admin.center.delete.schnaq/button "Delete schnaq"
    :admin.center.delete.user/heading "Users"
-   :admin.center.delete.user.statements/label "keycloak-id"
    :admin.center.delete.user.statements/button "Delete statements"
-   :admin.center.delete.user.schnaqs/label "keycloak-id"
    :admin.center.delete.user.schnaqs/button "Delete all schnaqs"
-   :admin.center.delete.user.identity/label "keycloak-id"
    :admin.center.delete.user.identity/button "Delete identity"
+
+   :admin.center.user/headline "User Management"
+   :admin.center.user/subheadline "First load a user to start editing."
+   :admin.center.user.load/button "Load User"
+   :admin.center.user.save/button "Save User"
+   :admin.center.user.role.delete/label "Remove role from user"
+   :admin.center.user.role.delete/button "Remove Role"
+   :admin.center.user.role.add/label "Add role to user"
+   :admin.center.user.role.add/button "Add role"
 
    :badges.filters/label "Display"
    :badges/sort "Sort the posts"
@@ -641,6 +670,8 @@
    :filters.labels.type/numbers "Statement-number"
    :filters.labels.type/author "You are"
 
+   :loading.page/heading "Page is loading"
+   :loading.page/subheading "You will soon be forwarded"
    :loading.placeholder/lead "Loading..."
    :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 

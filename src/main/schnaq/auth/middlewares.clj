@@ -1,11 +1,12 @@
 (ns schnaq.auth.middlewares
   (:require [buddy.auth :refer [authenticated?]]
             [clojure.string :as string]
-            [ring.util.http-response :refer [unauthorized forbidden]]
+            [ring.util.http-response :refer [forbidden unauthorized]]
             [schnaq.api.toolbelt :as at]
             [schnaq.auth.lib :as auth-lib]
             [schnaq.config :as config]
-            [schnaq.config.shared :as shared-config]))
+            [schnaq.database.user :as user-db]
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (defn- valid-app-code?
   "Check if an app-code was provided via the request-body."
@@ -16,11 +17,11 @@
 ;; -----------------------------------------------------------------------------
 
 (defn authenticated?-middleware
-  "Validate, that user is logged-in."
+  "Validate, that user is logged-in. Lookup this user from database if available."
   [handler]
   (fn [request]
     (if (authenticated? request)
-      (handler request)
+      (handler (assoc request :user (user-db/private-user-by-keycloak-id (get-in request [:identity :sub]))))
       (unauthorized (at/build-error-body :auth/not-logged-in
                                          "You are not logged in. Maybe your token is malformed / expired.")))))
 
@@ -28,7 +29,7 @@
   "Check if user has admin-role."
   [handler]
   (fn [request]
-    (if (auth-lib/has-role? (:identity request) shared-config/admin-roles)
+    (if (shared-tools/admin? (:user.registered/roles (:user request)))
       (handler request)
       (forbidden (at/build-error-body :auth/not-an-admin "You are not an admin.")))))
 
@@ -36,7 +37,7 @@
   "Check if user has analytics-admin or higher role."
   [handler]
   (fn [request]
-    (if (auth-lib/has-role? (:identity request) shared-config/analytics-roles)
+    (if (shared-tools/analytics-admin? (:user.registered/roles (:user request)))
       (handler request)
       (forbidden (at/build-error-body :auth/not-an-admin "You are not allowed to see analytics.")))))
 
@@ -44,7 +45,7 @@
   "Check if is eligible for our beta-testers program."
   [handler]
   (fn [request]
-    (if (auth-lib/beta-tester? (:identity request))
+    (if (shared-tools/beta-tester? (:user.registered/roles (:user request)))
       (handler request)
       (forbidden (at/build-error-body :auth/not-a-beta-tester "You are not a beta tester.")))))
 
@@ -52,7 +53,7 @@
   "Validate, that user has a subscription in our database or is a beta user."
   [handler]
   (fn [request]
-    (if (auth-lib/pro-user? (:identity request))
+    (if (shared-tools/pro-user? (:user.registered/roles (:user request)))
       (handler request)
       (forbidden (at/build-error-body :auth/no-pro-subscription "You have no valid pro-subscription.")))))
 

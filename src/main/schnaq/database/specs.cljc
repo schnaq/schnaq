@@ -35,7 +35,7 @@
 (s/def :stripe/kw-to-price (s/map-of keyword? :stripe/price))
 (s/def :stripe/prices (s/map-of keyword? :stripe/kw-to-price))
 
-(s/def :stripe.subscription/id (s/and string? #(.startsWith % "sub_")))
+(s/def :stripe.subscription/id (s/and #(.startsWith % "sub_") string?))
 (s/def :stripe.subscription/status #{:incomplete :incomplete_expired :trialing :active :past_due :canceled :unpaid})
 (s/def :stripe.subscription/cancelled? boolean?)
 (s/def :stripe.subscription/period-start nat-int?)
@@ -49,7 +49,7 @@
 
 ;; User
 (s/def :user/nickname string?)
-(s/def ::user (s/keys :req [:user/nickname]))
+(s/def ::user (s/keys :opt [:user/nickname]))
 
 ;; Registered user
 (s/def :user.registered/keycloak-id ::non-blank-string)
@@ -62,19 +62,35 @@
                                                      :notification-mail-interval/weekly
                                                      :notification-mail-interval/every-minute
                                                      :notification-mail-interval/never})
+(def user-roles #{:role/admin :role/enterprise :role/tester :role/pro :role/analytics})
+(s/def :user.registered/valid-roles user-roles)
+(s/def :user.registered/roles
+  (s/or :coll (s/coll-of :user.registered/valid-roles
+                         :distinct true)
+        :role :user.registered/valid-roles))
 (s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)
                                               :schnaqs (s/coll-of ::discussion)))
+
 (s/def :user.registered.subscription/stripe-id :stripe.subscription/id)
 (s/def :user.registered.subscription/stripe-customer-id :stripe/customer-id)
-(s/def :user.registered.subscription/type #{:user.registered.subscription.type/pro})
-(s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/display-name]
-                                 :opt [:user.registered/last-name :user.registered/first-name
+
+(s/def :user.registered.features/concurrent-users nat-int?)
+(s/def :user.registered.features/total-schnaqs nat-int?)
+(s/def :user.registered.features/posts-per-schnaq nat-int?)
+
+(s/def ::registered-user (s/keys :opt [:user.registered/keycloak-id
+                                       :user.registered/display-name
+                                       :user.registered/last-name :user.registered/first-name
                                        :user.registered/groups :user.registered/profile-picture
+                                       :user.registered/roles
                                        :user.registered/email :user.registered/notification-mail-interval
-                                       :user.registered/visited-schnaqs :user.registered.subscription/type
+                                       :user.registered/visited-schnaqs
                                        :user.registered.subscription/stripe-id
-                                       :user.registered.subscription/stripe-customer-id]))
+                                       :user.registered.subscription/stripe-customer-id
+                                       :user.registered.features/concurrent-users
+                                       :user.registered.features/total-schnaqs
+                                       :user.registered.features/posts-per-schnaq]))
 
 ;; Could be anonymous or registered
 (s/def ::any-user (s/or :user ::user
@@ -398,3 +414,11 @@
                    :ui.settings/hide-input-replies
                    :ui.settings/hide-activations
                    :ui.settings/num-rows]))
+
+;; -----------------------------------------------------------------------------
+;; Feature limits
+
+(s/def ::feature-limits
+  #{:wordcloud? :activation? :rankings? :polls :theming? :embeddings? :concurrent-users :total-schnaqs :posts-per-schnaq})
+
+(s/def ::warning-levels #{:warning :danger})

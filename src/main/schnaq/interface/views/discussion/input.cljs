@@ -3,6 +3,7 @@
             [goog.string :refer [format]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.config :as config]
@@ -12,7 +13,15 @@
             [schnaq.interface.views.discussion.card-elements :as card-elements]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]
-            [schnaq.shared-toolbelt :as shared-tools]))
+            [schnaq.shared-toolbelt :as shared-tools]
+            [schnaq.user :refer [display-name posts-limit-reached?]]))
+
+(defn- post-limit-reached-alert []
+  (let [author @(rf/subscribe [:schnaq/author])]
+    [:div.alert.alert-primary {:role :alert}
+     (labels :feature.limit.posts/alert)
+     " "
+     (display-name author)]))
 
 (defn- statement-type-button
   "Button to select the attitude of a statement. Current attitude is subscribed via get-subscription.
@@ -106,38 +115,43 @@
 (defn- conclusion-card-editor
   "Input, where users provide (starting) conclusions."
   [editor-id]
-  (let [editor-content @(rf/subscribe [:editor/content editor-id])]
-    (when-not @(rf/subscribe [:schnaq.selected/read-only?])
-      [:<>
-       [:div.input-group
-        [textarea-highlighting :selected]
-        [:input {:type :hidden
-                 :name "statement"
-                 :value (or editor-content "")}]
-        [lexical/editor {:id editor-id
-                         :file-storage :schnaq/by-share-hash
-                         :on-text-change throttled-input-tokenizing-fn
-                         :toolbar? true
-                         :focus? (not config/in-iframe?)
-                         :placeholder (labels :statement.new/placeholder)}
-         {:className "flex-grow-1"}]
-        [:button.btn.btn-outline-secondary
-         {:type :submit
-          :disabled (empty? editor-content)
-          :title (labels :discussion/create-argument-action)
-          :on-click #(matomo/track-event "Active User" "Action" "Submit Post")}
-         [:div.d-flex.flex-row
-          [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
-          [icon :plane "m-auto"]]]]
-       (when (and @(rf/subscribe [:user/authenticated?]) @(rf/subscribe [:schnaq.current/admin-access]))
-         [:div.form-check.pt-2
-          [:input.form-check-input
-           {:type :checkbox
-            :name "lock-card?"
-            :id "lock-card?"}]
-          [:label.form-check-label
-           {:for "lock-card?"}
-           (labels :discussion/lock-statement)]])])))
+  (let [author @(rf/subscribe [:schnaq/author])
+        schnaq @(rf/subscribe [:schnaq/selected])
+        limit-reached? (posts-limit-reached? author schnaq)
+        editor-content @(rf/subscribe [:editor/content editor-id])]
+    (if (and limit-reached? shared-config/enforce-limits?)
+      [post-limit-reached-alert]
+      (when-not @(rf/subscribe [:schnaq.selected/read-only?])
+        [:<>
+         [:div.input-group
+          [textarea-highlighting :selected]
+          [:input {:type :hidden
+                   :name "statement"
+                   :value (or editor-content "")}]
+          [lexical/editor {:id editor-id
+                           :file-storage :schnaq/by-share-hash
+                           :on-text-change throttled-input-tokenizing-fn
+                           :toolbar? true
+                           :focus? (not config/in-iframe?)
+                           :placeholder (labels :statement.new/placeholder)}
+           {:className "flex-grow-1"}]
+          [:button.btn.btn-outline-secondary
+           {:type :submit
+            :disabled (empty? editor-content)
+            :title (labels :discussion/create-argument-action)
+            :on-click #(matomo/track-event "Active User" "Action" "Submit Post")}
+           [:div.d-flex.flex-row
+            [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
+            [icon :plane "m-auto"]]]]
+         (when (and @(rf/subscribe [:user/authenticated?]) @(rf/subscribe [:schnaq.current/admin-access]))
+           [:div.form-check.pt-2
+            [:input.form-check-input
+             {:type :checkbox
+              :name "lock-card?"
+              :id "lock-card?"}]
+            [:label.form-check-label
+             {:for "lock-card?"}
+             (labels :discussion/lock-statement)]])]))))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
@@ -181,7 +195,10 @@
 (defn reply-in-statement-input-form
   "Input form inside a statement card. This form is used to directly reply to a statement inside its own card."
   [statement]
-  (let [statement-id (:db/id statement)
+  (let [author @(rf/subscribe [:schnaq/author])
+        schnaq @(rf/subscribe [:schnaq/selected])
+        limit-reached? (posts-limit-reached? author schnaq)
+        statement-id (:db/id statement)
         statement-type @(rf/subscribe [:form/statement-type statement-id])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
@@ -193,7 +210,7 @@
           (.preventDefault e)
           (rf/dispatch [:editor/clear editor-id])
           (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))]
-    (when-not (or locked? read-only? hide-input-replies)
+    (when-not (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?))
       [:form.my-md-2
        {:on-submit #(answer-to-statement-event %)
         :on-key-down #(when (toolbelt/ctrl-press? % 13)

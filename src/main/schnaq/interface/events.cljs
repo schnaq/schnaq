@@ -113,6 +113,12 @@
    (get-in db [:schnaq :selected])))
 
 (rf/reg-sub
+ :schnaq/author
+ :<- [:schnaq/selected]
+ (fn [schnaq]
+   (:discussion/author schnaq)))
+
+(rf/reg-sub
  :schnaq/share-hash
  :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]

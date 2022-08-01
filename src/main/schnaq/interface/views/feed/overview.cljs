@@ -12,7 +12,8 @@
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.hub.common :as hub]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user :as user]))
+            [schnaq.interface.views.user :as user]
+            [schnaq.interface.views.user.settings :refer [user-info-box]]))
 
 (defn- no-schnaqs-found
   "Show error message when no meetings were loaded."
@@ -120,11 +121,11 @@
 
 (defn- schnaq-badges
   "Show schnaq badges."
-  [schnaq]
+  []
   [:<>
-   [badges/comments-info-badge schnaq]
-   [badges/read-only-badge schnaq]
-   [badges/archived-badge schnaq]])
+   [badges/comments-info-badge]
+   [badges/read-only-badge]
+   [badges/archived-badge]])
 
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list."
@@ -137,12 +138,12 @@
     [:div.ms-3.w-100.py-2
      [schnaq-title (:discussion/title schnaq)]
      [:div.d-flex.flex-row.mt-auto.pt-3
-      [:div.d-none.d-xl-block [schnaq-badges schnaq]]
+      [:div.d-none.d-xl-block [schnaq-badges]]
       [:div.d-flex.flex-row.ms-auto
        [user/user-info-only (:discussion/author schnaq) 24]
        [:small.fw-light.d-inline.my-auto.ms-2
         [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]
-     [:div.d-xl-none [schnaq-badges schnaq]]]]
+     [:div.d-xl-none [schnaq-badges]]]]
    [schnaq-dropdown schnaq]])
 
 (defn schnaq-list-view
@@ -254,22 +255,6 @@
        [:div.panel-white.mb-4
         [feed-hubs]])]))
 
-(defn- outline-info-button
-  "Generic outline button."
-  [label href-link]
-  [:article.w-100
-   [:a.feed-button-outlined {:href href-link}
-    (labels label)]])
-
-(defn sidebar-info-links []
-  (let [pro-user? @(rf/subscribe [:user/pro-user?])]
-    [:section.panel-white.text-center
-     [:div.btn-group {:role "group"}
-      [:div.btn-group-vertical
-       [outline-info-button :user/features
-        (navigation/href (if pro-user? :routes.welcome/pro :routes.welcome/free))]
-       [outline-info-button :coc/heading "https://schnaq.com/code-of-conduct"]]]]))
-
 (defn- personal-discussions-view
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
   must be a keyword referring to a subscription, which returns a collection of
@@ -280,7 +265,7 @@
     :page/subheading (labels :schnaqs/subheader)}
    [feed-navigation]
    [schnaq-list-view [:schnaqs.visited/all]]
-   [sidebar-info-links]])
+   [user-info-box]])
 
 (defn page []
   [personal-discussions-view])

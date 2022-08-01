@@ -36,7 +36,7 @@
          {:key (str "dashboard-statement-" statement-id)}))]))
 
 (defn- summary-view []
-  (let [pro-user? @(rf/subscribe [:user/pro-user?])
+  (let [pro-user? @(rf/subscribe [:user/pro?])
         current-schnaq @(rf/subscribe [:schnaq/selected])]
     [:div.panel-white.p-3
      [:h3.mb-3.text-break (labels :dashboard/summary)]

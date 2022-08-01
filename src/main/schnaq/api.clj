@@ -146,6 +146,7 @@
                          middlewares/exception-printing-middleware
                          coercion/coerce-response-middleware ;; coercing response bodies
                          coercion/coerce-request-middleware ;; coercing request parameters
+                         coercion/coerce-exceptions-middleware
                          multipart/multipart-middleware
                          auth-middlewares/replace-bearer-with-token
                          auth/wrap-jwt-authentication
@@ -162,7 +163,7 @@
                             :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
                             :user/authenticated? auth-middlewares/authenticated?-middleware
                             :user/beta-tester? auth-middlewares/beta-tester?-middleware
-                            :user/pro-user? auth-middlewares/pro-user?-middleware}})))
+                            :user/pro? auth-middlewares/pro-user?-middleware}})))
 
 (defn route-by-name
   "Return a route by its name."

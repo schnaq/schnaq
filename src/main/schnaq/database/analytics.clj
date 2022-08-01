@@ -94,11 +94,11 @@
   "Returns the number of pro users in the database."
   ([]
    [:ret :statistics/registered-users-num]
-   (number-of-entities-with-value-since :user.registered.subscription/type :user.registered.subscription.type/pro))
+   (number-of-entities-with-value-since :user.registered/roles :role/pro))
   ([since]
    [:statistics/since :ret :statistics/registered-users-num]
    (number-of-entities-with-value-since
-    :user.registered.subscription/type :user.registered.subscription.type/pro since)))
+    :user.registered/roles :role/pro since)))
 
 (defn- date-to-day
   "Get only the date, without time from java.util.date"

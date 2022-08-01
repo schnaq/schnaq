@@ -1,6 +1,6 @@
 (ns schnaq.api.user
   (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn- =>]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn-]]
             [ring.util.http-response :refer [bad-request created ok]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
@@ -10,6 +10,7 @@
             [schnaq.database.user-deletion :as user-deletion]
             [schnaq.mail.cleverreach :as cleverreach]
             [schnaq.media :as media]
+            [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
             [taoensso.timbre :as log]))
 
 (defn- register-user-if-they-not-exist
@@ -27,7 +28,9 @@
         updated-schnaqs? (associative? (discussion-db/update-schnaq-authors schnaq-creation-secrets (:db/id queried-user)))
         response {:registered-user queried-user
                   :updated-statements? updated-statements?
-                  :updated-schnaqs? updated-schnaqs?}]
+                  :updated-schnaqs? updated-schnaqs?
+                  :meta (remove-nil-values-from-map
+                         {:total-schnaqs (user-db/created-discussions (:user.registered/keycloak-id queried-user))})}]
     (if new-user?
       (do (cleverreach/add-user-to-customer-group! identity (str (name locale)))
           (created "" (assoc response :new-user? true)))
@@ -105,6 +108,32 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- add-role
+  "Add a role to a user."
+  [{{{:keys [keycloak-id role]} :body} :parameters}]
+  (let [roles (:user.registered/roles (user-db/add-role keycloak-id role))]
+    (ok {:roles roles})))
+
+(defn- remove-role
+  "Remove a role from a user."
+  [{{{:keys [keycloak-id role]} :body} :parameters}]
+  (let [roles (:user.registered/roles (user-db/remove-role keycloak-id role))]
+    (ok {:roles roles})))
+
+;; -----------------------------------------------------------------------------
+
+(defn- get-user
+  "Return a user with all personal information."
+  [{{{:keys [keycloak-id]} :query} :parameters}]
+  (ok {:user (user-db/private-user-by-keycloak-id keycloak-id)}))
+
+(defn- update-user
+  "Update a field of a user."
+  [{{{:keys [user]} :body} :parameters}]
+  (ok {:user (user-db/update-user user)}))
+
+;; -----------------------------------------------------------------------------
+
 (s/def ::creation-secrets map?)
 (s/def ::visited-hashes (s/coll-of :discussion/share-hash))
 (s/def ::visited-statement-ids map?)
@@ -154,6 +183,15 @@
    ["/admin/user" {:swagger {:tags ["admin"]}
                    :middleware [:user/authenticated? :user/admin?]
                    :responses {400 at/response-error-body}}
+    ["" {:get {:handler get-user
+               :description (at/get-doc #'get-user)
+               :parameters {:query {:keycloak-id :user.registered/keycloak-id}}}
+         :put {:handler update-user
+               :description (at/get-doc #'update-user)
+               :parameters {:body {:user ::specs/registered-user}}
+               :responses {200 {:body {:user ::specs/registered-user}}}}
+         :name :api.admin/user
+         :responses {200 {:body {:user ::specs/registered-user}}}}]
     ["/statements" {:delete delete-all-statements-for-user
                     :description (at/get-doc #'delete-all-statements-for-user)
                     :parameters {:body {:keycloak-id :user.registered/keycloak-id}}
@@ -165,4 +203,12 @@
     ["/identity" {:delete delete-user-identity
                   :description (at/get-doc #'delete-user-identity)
                   :parameters {:body {:keycloak-id :user.registered/keycloak-id}}
-                  :responses {200 {:body {:deleted? boolean?}}}}]]])
+                  :responses {200 {:body {:deleted? boolean?}}}}]
+    ["/role" {:put {:handler add-role
+                    :description (at/get-doc #'add-role)}
+              :delete {:handler remove-role
+                       :description (at/get-doc #'remove-role)}
+              :name :api.admin.user/role
+              :parameters {:body {:keycloak-id :user.registered/keycloak-id
+                                  :role :user.registered/valid-roles}}
+              :responses {200 {:body {:roles :user.registered/roles}}}}]]])

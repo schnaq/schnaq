@@ -244,7 +244,7 @@
         dispatch (if schnaq-read-only?
                    :discussion.admin/make-writeable
                    :discussion.admin/make-read-only)
-        pro-user? @(rf/subscribe [:user/pro-user?])]
+        pro-user? @(rf/subscribe [:user/pro?])]
     [:div {:class (when-not pro-user? "text-muted")}
      [:input.big-checkbox
       {:type :checkbox
@@ -259,7 +259,7 @@
 
 (defn- disable-pro-con []
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        pro-user? @(rf/subscribe [:user/pro-user?])]
+        pro-user? @(rf/subscribe [:user/pro?])]
     [:div {:class (when-not pro-user? "text-muted")}
      [:input.big-checkbox
       {:type :checkbox
@@ -276,7 +276,7 @@
 
 (defn- only-moderators-mark-setting []
   (let [mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        pro-user? @(rf/subscribe [:user/pro-user?])]
+        pro-user? @(rf/subscribe [:user/pro?])]
     [:div {:class (when-not pro-user? "text-muted")}
      [:input.big-checkbox
       {:type :checkbox
@@ -376,7 +376,7 @@
   "Settings for the discussion."
   []
   [:ret :re-frame/component]
-  (if @(rf/subscribe [:user/pro-user?])
+  (if @(rf/subscribe [:user/pro?])
     [:<>
      [themes/assign-theme-to-schnaq]
      [:hr.my-5]

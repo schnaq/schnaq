@@ -42,13 +42,18 @@
   #{"image/jpeg" "image/png" "image/webp"})
 
 (def admin-roles
-  #{"admin"})
+  #{"admin" :role/admin}) ;; keep string version of "admin", which is used to initialize new admins
 
 (def analytics-roles
-  (cset/union admin-roles #{"analytics-admin"}))
+  (cset/union admin-roles #{"analytics-admin" :role/analytics}))
 
 (def beta-tester-roles
-  (cset/union admin-roles analytics-roles #{"beta-tester"}))
+  "Admins and testers have beta-access."
+  (cset/union admin-roles analytics-roles #{"beta-tester" :role/tester}))
+
+(def pro-roles
+  "All beta testers, admins, pro and enterprise users have pro access."
+  (cset/union beta-tester-roles #{:role/pro :role/enterprise}))
 
 (def allowed-labels
   "A set of allowed labels for statements. They correspond to fa symbols"
@@ -82,3 +87,12 @@
 (def currencies
   "Define the accepted currencies."
   #{:eur :usd})
+
+;; -----------------------------------------------------------------------------
+;; Feature limits
+;;
+;; Feature limits are defined in schnaq.user.cljc
+
+(def enforce-limits?
+  "Enable limits. If false, shows only warnings, but does not restrict adding more posts."
+  (not production?))

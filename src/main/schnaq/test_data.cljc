@@ -318,7 +318,8 @@
    :user.registered/email "christian@schnaq.com"
    :user.registered/last-name "Meter"
    :user.registered/first-name "Christian"
-   :user.registered/groups ["admin"]
+   :user.registered/groups ["schnaqqifantenparty"]
+   :user.registered/roles #{:role/admin}
    :user.registered/notification-mail-interval :notification-mail-interval/daily})
 
 (def schnaqqi
@@ -328,7 +329,8 @@
    :user.registered/email "schnaqqi@schnaq.com"
    :user.registered/last-name "Fant"
    :user.registered/first-name "schnaqqi"
-   :user.registered/groups ["beta-tester"]
+   :user.registered/roles #{:role/tester}
+   :user.registered/groups ["schni schna schnaqqi"]
    :user.registered/notification-mail-interval :notification-mail-interval/daily})
 
 (def registered-users

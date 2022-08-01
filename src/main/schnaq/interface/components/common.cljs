@@ -41,6 +41,22 @@
    [:span.badge.rounded-pill
     {:class background} "free"]))
 
+(defn role-indicator
+  "Show an icon if the user has special roles."
+  ([]
+   [role-indicator false])
+  ([with-free-badge?]
+   (let [admin? @(rf/subscribe [:user/administrator?])
+         beta-tester? @(rf/subscribe [:user/beta-tester?])
+         pro-user? @(rf/subscribe [:user/pro?])
+         indicator (cond
+                     admin? [icon :star]
+                     beta-tester? [icon :rocket]
+                     (and pro-user? (not beta-tester?)) [pro-badge]
+                     with-free-badge? [free-badge])]
+     (when indicator
+       [:span.px-1 indicator]))))
+
 (defn outlined-pill
   "Create an outlined badge ()rounded pill)."
   [content variant]

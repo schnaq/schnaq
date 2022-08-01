@@ -1,13 +1,16 @@
 (ns schnaq.interface.views.schnaq.create
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.user :as user]))
 
 (defn- add-schnaq-to-hub
   "Selection if schnaq should be added to a hub."
@@ -41,40 +44,49 @@
     [icon :arrow-right "ms-2"]]])
 
 (defn- create-qanda-page []
-  (let [selected-hub @(rf/subscribe [:hub/selected])]
+  (let [selected-hub @(rf/subscribe [:hub/selected])
+        user @(rf/subscribe [:user/entity])
+        {:keys [total-schnaqs]} @(rf/subscribe [:user/meta])
+        limit-reached? (user/total-schnaqs-reached? user total-schnaqs)]
     [pages/with-nav-and-header
      {:page/heading (labels :schnaq.create/heading)
       :page/vertical-header? true
       :page/title (labels :schnaq.create/title)
       :page/classes "base-wrapper bg-white"
       :condition/create-schnaq? true}
-     [:div.container
-      [:div.py-3
-       [:form
-        {:on-submit (fn [e]
-                      (.preventDefault e)
-                      (let [form (oget e [:currentTarget :elements])
-                            title (oget form [:schnaq-title :value])
-                            hub-exclusive? (oget form [:?hub-exclusive :checked])
-                            origin-hub (oget form [:?exclusive-hub-select :value])]
-                        (rf/dispatch [:schnaq/create {:title title
-                                                      :hub-exclusive? hub-exclusive?
-                                                      :origin-hub origin-hub
-                                                      :selected-hub selected-hub}
-                                      [:schnaq.create/success]])))}
-        [:div.panel-grey.row.p-4
-         [:div.col-12
-          [common/form-input {:id :schnaq-title
-                              :placeholder (labels :schnaq.create.input/placeholder)
-                              :css "font-150"}]]]
-        [:div.text-primary.p-3
-         [icon :info " my-auto me-3"]
-         [:span (labels :schnaq.create/info)]]
-        [:div.row.my-5
-         [:div.col-12.col-md-8.col-lg-6
-          [add-schnaq-to-hub]]
-         [:div.col-12.col-md-4.col-lg-6
-          [create-schnaq-button]]]]]]]))
+     (if (and limit-reached? shared-config/enforce-limits?)
+       [:div.container
+        [:div.alert.alert-primary
+         [:p (labels :feature.limit.schnaqs/alert)]
+         [:p (labels :feature.limit.schnaqs/alert-2)]
+         [buttons/upgrade]]]
+       [:div.container
+        [:div.py-3
+         [:form
+          {:on-submit (fn [e]
+                        (.preventDefault e)
+                        (let [form (oget e [:currentTarget :elements])
+                              title (oget form [:schnaq-title :value])
+                              hub-exclusive? (oget form [:?hub-exclusive :checked])
+                              origin-hub (oget form [:?exclusive-hub-select :value])]
+                          (rf/dispatch [:schnaq/create {:title title
+                                                        :hub-exclusive? hub-exclusive?
+                                                        :origin-hub origin-hub
+                                                        :selected-hub selected-hub}
+                                        [:schnaq.create/success]])))}
+          [:div.panel-grey.row.p-4
+           [:div.col-12
+            [common/form-input {:id :schnaq-title
+                                :placeholder (labels :schnaq.create.input/placeholder)
+                                :css "font-150"}]]]
+          [:div.text-primary.p-3
+           [icon :info " my-auto me-3"]
+           [:span (labels :schnaq.create/info)]]
+          [:div.row.my-5
+           [:div.col-12.col-md-8.col-lg-6
+            [add-schnaq-to-hub]]
+           [:div.col-12.col-md-4.col-lg-6
+            [create-schnaq-button]]]]]])]))
 
 (defn create-schnaq-view []
   [create-qanda-page])

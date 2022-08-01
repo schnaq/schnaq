@@ -1,7 +1,9 @@
 (ns schnaq.shared-toolbelt
-  (:require [clojure.spec.alpha :as s]
-            [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [=> >defn]])
+  (:require [clojure.set :as set]
+            [clojure.spec.alpha :as s]
+            [clojure.string :as str]
+            [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
+            [schnaq.config.shared :as shared-config])
   #?(:clj (:import (java.lang Character))))
 
 (>defn slugify
@@ -10,11 +12,11 @@
   [string]
   [string? => string?]
   (let [reduced-string (-> string
-                           (string/replace #"/|\." " ")
-                           string/trim
-                           (string/split #"\s"))
-        tokens (map string/lower-case reduced-string)]
-    (string/join "-" (take (count tokens) tokens))))
+                           (str/replace #"/|\." " ")
+                           str/trim
+                           (str/split #"\s"))
+        tokens (map str/lower-case reduced-string)]
+    (str/join "-" (take (count tokens) tokens))))
 
 (>defn remove-nil-values-from-map
   "Removes all entries from a map that have a value of nil or empty string."
@@ -22,7 +24,7 @@
   [associative? :ret associative?]
   (into {} (remove #(or (nil? (second %))
                         (when (string? (second %))
-                          (string/blank? (second %))))
+                          (str/blank? (second %))))
                    data)))
 
 (>defn normalize
@@ -43,8 +45,8 @@
 (defn tokenize-string
   "Tokenizes a string into single tokens for the purpose of searching."
   [content]
-  (->> (string/split (string/lower-case content) #"\s")
-       (remove string/blank?)
+  (->> (str/split (str/lower-case content) #"\s")
+       (remove str/blank?)
        ;; Remove punctuation when generating token
        (map #(cond
                (not (alphanumeric? (first %))) (subs % 1)
@@ -52,3 +54,51 @@
                :else %))))
 
 (def select-values (comp vals select-keys))
+
+(>defn namespaced-keyword->string
+  "Takes a namespaced keyword and returns it containing the namespace.
+  Example: `(namespaced-keyword->string :user.registered/keycloak-id)
+  => \"user.registered/keycloak-id\"`"
+  [namespaced-keyword]
+  [(? keyword?) => (? string?)]
+  (when namespaced-keyword
+    (let [[kw-ns kw] ((juxt namespace name) namespaced-keyword)]
+      (if kw-ns
+        (str/join "/" [kw-ns kw])
+        (str kw)))))
+
+;; -----------------------------------------------------------------------------
+
+(>defn- intersection?
+  "Check if the two sets have an intersection."
+  [set1 set2]
+  [set? set? => boolean?]
+  (not (nil? (seq (set/intersection set1 set2)))))
+
+(>defn beta-tester?
+  "Check if a user has one of the valid beta tester roles."
+  [roles]
+  [(? :user.registered/roles) => (? boolean?)]
+  (when roles
+    (intersection? roles shared-config/beta-tester-roles)))
+
+(>defn pro-user?
+  "Check if a user has one of the valid pro-roles."
+  [roles]
+  [(? :user.registered/roles) => (? boolean?)]
+  (when roles
+    (intersection? roles shared-config/pro-roles)))
+
+(>defn admin?
+  "Check if a user has one of the valid admin-roles."
+  [roles]
+  [(? :user.registered/roles) => (? boolean?)]
+  (when roles
+    (intersection? roles shared-config/admin-roles)))
+
+(>defn analytics-admin?
+  "Check if a user has one of the valid admin-roles."
+  [roles]
+  [(? :user.registered/roles) => (? boolean?)]
+  (when roles
+    (intersection? roles shared-config/analytics-roles)))

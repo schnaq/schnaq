@@ -63,10 +63,10 @@
 ;; Authentication test helper
 (defn jwt-from-test-user
   "Create JWT token for our test users, defined in `test_data.clj`."
-  [{:user.registered/keys [display-name email last-name first-name groups keycloak-id]}]
+  [{:user.registered/keys [display-name email last-name first-name roles keycloak-id]}]
   {:exp 5950068575100 :iat 1630069374 :auth_time 1630069374 :jti 1
    :aud "account" :type "Bearer"
-   :realm_access {:roles groups}
+   :realm_access {:roles (map name roles)}
    :scope "email profile"
    :avatar (format "https://schnaq.com/user/%s/avatar" display-name)
    :name first-name

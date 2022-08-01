@@ -40,9 +40,7 @@
       [:a.btn.btn-outline-dark.btn-rounded-2
        {:href (navigation/href :routes.hub/edit {:keycloak-name (:hub/keycloak-name hub)})}
        [icon :cog "me-1"]
-       (labels :hub/settings)]]
-     [:hr]
-     [feed/sidebar-info-links]]))
+       (labels :hub/settings)]]]))
 
 (defn member-list
   "Lists all members of a hub."

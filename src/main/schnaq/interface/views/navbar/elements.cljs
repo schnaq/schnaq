@@ -138,7 +138,7 @@
 (defn navbar-upgrade-button
   "Show an upgrade button in the navbar."
   [on-white-background?]
-  (when-not @(rf/subscribe [:user/pro-user?])
+  (when-not @(rf/subscribe [:user/pro?])
     [navbar-components/button-with-icon
      :star
      (labels :pricing.upgrade-nudge/tooltip)

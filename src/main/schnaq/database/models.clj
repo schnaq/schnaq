@@ -58,6 +58,29 @@
    {:db/ident :notification-mail-interval/weekly}
    {:db/ident :notification-mail-interval/never}
 
+   {:db/ident :user.registered/roles
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The user's roles."}
+   {:db/ident :role/enterprise}
+   {:db/ident :role/analytics}
+   {:db/ident :role/tester}
+   {:db/ident :role/admin}
+   {:db/ident :role/pro}
+
+   {:db/ident :user.registered.features/concurrent-users
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set concurrent-users limit for this user and all of her schnaqs."}
+   {:db/ident :user.registered.features/total-schnaqs
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set total number of schnaqs."}
+   {:db/ident :user.registered.features/posts-per-schnaq
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set custom number of posts per schnaq."}
+
    ;; Subscriptions
    {:db/ident :user.registered.subscription/stripe-id
     :db/valueType :db.type/string
@@ -67,11 +90,6 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "Store the customer id from stripe."}
-   {:db/ident :user.registered.subscription/type
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "Define which plan the user subscribed to."}
-   {:db/ident :user.registered.subscription.type/pro}
 
    ;; Seen statements
    {:db/ident :seen-statements/user

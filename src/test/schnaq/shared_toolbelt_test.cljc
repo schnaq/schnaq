@@ -31,3 +31,66 @@
       (is (= christian (get normalized (:db/id christian))))
       (is (= kangaroo (get normalized (:db/id kangaroo))))
       (is (nil? (get normalized "razupaltuff"))))))
+
+(deftest namespaced-keyword->string-test
+  (are [x y] (= y (tools/namespaced-keyword->string x))
+    nil nil
+    :foo "foo"
+    :foo/bar "foo/bar"
+    :foo.bar/baz "foo.bar/baz"))
+
+(deftest pro-user?-test
+  (testing "Valid pro user roles are true."
+    (are [roles result] (= result (tools/pro-user? roles))
+      #{} false
+      #{:foo} false
+      #{:foo :bar} false
+      #{:role/pro} true
+      #{:role/pro :role/foo} true
+      #{:role/enterprise} true
+      #{:role/tester} true
+      #{:role/admin} true
+      #{:role/analytics} true
+      #{:role/admin :role/pro} true)))
+
+(deftest beta-tester?-test
+  (testing "Check valid beta-tester roles"
+    (are [roles result] (= result (tools/beta-tester? roles))
+      #{} false
+      #{:foo} false
+      #{:foo :bar} false
+      #{:role/pro} false
+      #{:role/pro :role/foo} false
+      #{:role/enterprise} false
+      #{:role/admin} true
+      #{:role/admin :role/pro} true
+      #{:role/analytics} true
+      #{:role/tester} true)))
+
+(deftest admin?-test
+  (testing "Check valid admin roles"
+    (are [roles result] (= result (tools/admin? roles))
+      #{} false
+      #{:foo} false
+      #{:foo :bar} false
+      #{:role/pro} false
+      #{:role/pro :role/foo} false
+      #{:role/enterprise} false
+      #{:role/admin} true
+      #{:role/admin :role/pro} true
+      #{:role/analytics} false
+      #{:role/tester} false)))
+
+(deftest analytics-admin?-test
+  (testing "Check valid analytics-admin roles"
+    (are [roles result] (= result (tools/analytics-admin? roles))
+      #{} false
+      #{:foo} false
+      #{:foo :bar} false
+      #{:role/pro} false
+      #{:role/pro :role/foo} false
+      #{:role/enterprise} false
+      #{:role/admin} true
+      #{:role/admin :role/pro} true
+      #{:role/analytics} true
+      #{:role/tester} false)))

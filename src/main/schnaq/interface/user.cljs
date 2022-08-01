@@ -1,16 +1,19 @@
 (ns schnaq.interface.user
-  (:require [hodgepodge.core :refer [local-storage]]
+  (:require [clojure.string :as clj-string]
+            [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
+            [schnaq.config.shared :refer [default-anonymous-display-name] :as shared-config]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.navigation :as navigation]
-            [schnaq.interface.utils.http :as http]))
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as tools]))
 
 (rf/reg-event-fx
  :username/from-localstorage
- (fn [{:keys [db]} _]
+ (fn [_ _]
    (when-let [username (:username local-storage)]
-     {:db (assoc-in db [:user :names :display] username)})))
+     {:fx [[:dispatch [:user.name/store username]]]})))
 
 (rf/reg-event-fx
  ;; Registers a user in the backend. Sets the returned user in the db
@@ -30,23 +33,24 @@
 
 (rf/reg-event-fx
  :user.register/success
- (fn [{:keys [db]} [_ {:keys [registered-user updated-statements? updated-schnaqs? new-user?]}]]
-   (let [{:user.registered/keys [display-name first-name last-name email profile-picture visited-schnaqs archived-schnaqs keycloak-id notification-mail-interval]} registered-user
-         subscription-type (:user.registered.subscription/type registered-user)
+ (fn [{:keys [db]} [_ {:keys [registered-user updated-statements? updated-schnaqs? new-user? meta]}]]
+   (let [{:user.registered/keys [display-name first-name last-name email profile-picture visited-schnaqs archived-schnaqs keycloak-id notification-mail-interval roles]} registered-user
          current-route-name (navigation/canonical-route-name (get-in db [:current-route :data :name]))
          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          visited-hashes (map :discussion/share-hash visited-schnaqs)
          archived-hashes (map :discussion/share-hash archived-schnaqs)]
      {:db (-> db
+              (assoc-in [:user :entity] registered-user)
               (assoc-in [:user :names :display] display-name)
               (assoc-in [:user :email] email)
               (assoc-in [:user :id] (:db/id registered-user))
               (assoc-in [:user :keycloak-id] keycloak-id)
               (assoc-in [:user :profile-picture :display] profile-picture)
+              (assoc-in [:user :meta] meta)
+              (cond-> roles (assoc-in [:user :roles] roles))
               (cond-> notification-mail-interval (assoc-in [:user :notification-mail-interval] notification-mail-interval))
               (cond-> first-name (assoc-in [:user :names :first] first-name))
               (cond-> last-name (assoc-in [:user :names :last] last-name))
-              (cond-> subscription-type (assoc-in [:user :subscription :type] subscription-type))
               ;; Clear secrets, they have been persisted.
               (assoc-in [:discussion :statements :creation-secrets] {})
               (assoc-in [:discussion :schnaqs :creation-secrets] {}))
@@ -61,10 +65,65 @@
            (when (and updated-schnaqs? (= current-route-name :routes.schnaq/start))
              [:dispatch [:schnaq/load-by-share-hash share-hash]])]})))
 
+;; -----------------------------------------------------------------------------
+;; Subscriptions
+
+(rf/reg-sub
+ :user/current
+ (fn [db _] (:user db)))
+
+(rf/reg-sub
+ :user/entity
+ ;; The user at it was queried from the database
+ :<- [:user/current]
+ (fn [user]
+   (:entity user)))
+
 (rf/reg-sub
  :user/id
+ :<- [:user/current]
+ (fn [user]
+   (:id user)))
+
+(rf/reg-sub
+ :user/meta
+ ;; The user at it was queried from the database
+ :<- [:user/current]
+ (fn [user]
+   (:meta user)))
+
+(rf/reg-sub
+ :user/currency
+ :<- [:user/current]
+ (fn [user]
+   (:currency user)))
+
+(rf/reg-sub
+ :user.currency/symbol
+ :<- [:user/currency]
+ (fn [currency]
+   (if (= :usd currency)
+     "$"
+     "€")))
+
+(rf/reg-sub
+ :user/display-name
  (fn [db _]
-   (get-in db [:user :id])))
+   (tools/current-display-name db)))
+
+(rf/reg-sub
+ :user/groups
+ :<- [:user/current]
+ (fn [user]
+   (get user :groups [])))
+
+(rf/reg-sub
+ :user/show-display-name-input?
+ (fn [db]
+   (get-in db [:controls :username-input :show?] false)))
+
+;; -----------------------------------------------------------------------------
+;; Events
 
 (rf/reg-event-fx
  :user.currency/store
@@ -79,15 +138,31 @@
    (when-let [currency (:user/currency local-storage)]
      {:db (assoc-in db [:user :currency] currency)})))
 
-(rf/reg-sub
- :user/currency
- (fn [db]
-   (get-in db [:user :currency])))
+(rf/reg-event-fx
+ :user/set-display-name
+ (fn [{:keys [db]} [_ username]]
+   ;; only update when string contains
+   (when-not (clj-string/blank? username)
+     (cond-> {:fx [(http/xhrio-request db :put "/user/anonymous/add" [:user/hide-display-name-input username]
+                                       {:nickname username}
+                                       [:ajax.error/as-notification])
+                   [:dispatch [:user.name/store username]]]}
+       (not= default-anonymous-display-name username)
+       (update :fx conj [:localstorage/assoc [:username username]])))))
 
-(rf/reg-sub
- :user.currency/symbol
- :<- [:user/currency]
- (fn [currency]
-   (if (= :usd currency)
-     "$"
-     "€")))
+(rf/reg-event-fx
+ :user/hide-display-name-input
+ (fn [{:keys [db]} [_ username]]
+   (let [notification
+         [[:dispatch [:notification/add
+                      #:notification{:title (labels :user.button/set-name)
+                                     :body (labels :user.button/success-body)
+                                     :context :success}]]]]
+     ;; Show notification if user is not default anonymous display name
+     (cond-> {:db (assoc-in db [:controls :username-input :show?] false)}
+       (not= default-anonymous-display-name username) (assoc :fx notification)))))
+
+(rf/reg-event-db
+ :user/show-display-name-input
+ (fn [db _]
+   (assoc-in db [:controls :username-input :show?] true)))

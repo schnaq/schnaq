@@ -3,8 +3,7 @@
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
-            [schnaq.interface.components.common :refer [pro-badge]]
-            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.common :refer [role-indicator]]
             [schnaq.interface.components.navbar :as nav-component]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
@@ -49,19 +48,6 @@
     (if show-input?
       [name-input]
       [change-name-button])))
-
-(defn- role-indicator
-  "Show an icon if the user has special roles."
-  []
-  (let [admin? @(rf/subscribe [:user/administrator?])
-        beta-tester? @(rf/subscribe [:user/beta-tester?])
-        pro-user? @(rf/subscribe [:user/pro-user?])
-        indicator (cond
-                    admin? [icon :star]
-                    beta-tester? [icon :rocket]
-                    (and pro-user? (not beta-tester?)) [pro-badge])]
-    (when indicator
-      [:span.pe-1 indicator])))
 
 (defn admin-dropdown
   "Show Admin pages when user is authenticated and has admin role."

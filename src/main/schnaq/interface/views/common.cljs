@@ -45,10 +45,7 @@
   "Get a user's avatar."
   ([size]
    [nat-int? :ret vector?]
-   (let [user @(rf/subscribe [:user/current])
-         user-registered #:user.registered{:profile-picture (get-in user [:profile-picture :display])
-                                           :display-name (get-in user [:names :display])}]
-     [avatar user-registered size]))
+   [avatar @(rf/subscribe [:user/entity]) size])
   ([{:user.registered/keys [profile-picture display-name] :as user} size]
    [(? map?) nat-int? :ret vector?]
    (let [display-name (or display-name (:user/nickname user))]
@@ -63,11 +60,12 @@
 
 (>defn avatar-with-nickname-right
   "Create an image based on the nickname and also print the nickname."
-  [{:user.registered/keys [display-name] :as user} size]
-  [map? number? :ret vector?]
-  [:div.d-flex
-   [:div.me-4 [avatar user size]]
-   [:h4.my-auto display-name]])
+  [size]
+  [number? :ret vector?]
+  (let [{:user.registered/keys [display-name]} @(rf/subscribe [:user/entity])]
+    [:div.d-flex
+     [:div.me-4 [avatar size]]
+     [:h4.my-auto display-name]]))
 
 (defn inline-avatar
   "Creates an inline image and name."

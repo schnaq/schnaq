@@ -48,7 +48,7 @@
      ["" {:put start-activation
           :description (at/get-doc #'start-activation)
           :middleware [:user/authenticated?
-                       :user/pro-user?
+                       :user/pro?
                        :discussion/valid-credentials?]
           :name :activation/start
           :parameters {:body {:share-hash :discussion/share-hash
@@ -58,7 +58,7 @@
      ["/delete" {:delete delete-activation
                  :description (at/get-doc #'delete-activation)
                  :middleware [:user/authenticated?
-                              :user/pro-user?
+                              :user/pro?
                               :discussion/valid-credentials?]
                  :name :activation/delete
                  :parameters {:body {:share-hash :discussion/share-hash
@@ -82,7 +82,7 @@
      ["/reset" {:put reset-activation
                 :description (at/get-doc #'reset-activation)
                 :middleware [:user/authenticated?
-                             :user/pro-user?
+                             :user/pro?
                              :discussion/valid-credentials?]
                 :name :activation/reset
                 :parameters {:body {:share-hash :discussion/share-hash
