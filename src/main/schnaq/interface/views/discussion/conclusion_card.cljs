@@ -408,21 +408,11 @@
          count)))
 
 (defn- statement-list-item
-  "The highest part of a statement-list. Knows when to show itself and when not."
+  "The highest part of a statement-list."
   [statement-id]
-  (let [answered-only? @(rf/subscribe [:filters/answered? true])
-        unanswered-only? @(rf/subscribe [:filters/answered? false])
-        answers @(rf/subscribe [:statements/answers statement-id])
-        item-component
-        [motion/fade-in-and-out
-         [statement-card->editable-card statement-id [statement-card statement-id]]
-         motion/card-fade-in-time]]
-    (if (or answered-only? unanswered-only?)
-      ;; Other filters are handled in statement-list-generator
-      (when (or (and answered-only? (seq answers))
-                (and (not answered-only?) (empty? answers)))
-        item-component)
-      item-component)))
+  [motion/fade-in-and-out
+   [statement-card->editable-card statement-id [statement-card statement-id]]
+   motion/card-fade-in-time])
 
 (rf/reg-sub
  :schnaq.statements/filtered-sorted-visible
@@ -447,9 +437,18 @@
      (map :db/id sorted-filtered-statements))))
 
 (defn- statements-list []
-  (let [sorted-statements @(rf/subscribe [:schnaq.statements/filtered-sorted-visible])]
+  (let [sorted-statements @(rf/subscribe [:schnaq.statements/filtered-sorted-visible])
+        answered-only? @(rf/subscribe [:filters/answered? true])
+        unanswered-only? @(rf/subscribe [:filters/answered? false])]
     (for [index (range (count sorted-statements))
-          :let [statement-id (nth sorted-statements index)]]
+          :let [statement-id (nth sorted-statements index)
+                answers @(rf/subscribe [:statements/answers statement-id])
+                any-filter-active (or answered-only? unanswered-only?)]
+          ;; This when needs to be done here and not in the statement-list-item to prevent empty components
+          :when (or (not any-filter-active)
+                    (and any-filter-active
+                         (or (and answered-only? (seq answers))
+                             (and (not answered-only?) (empty? answers)))))]
       (with-meta
         [statement-list-item statement-id]
         {:key statement-id}))))
