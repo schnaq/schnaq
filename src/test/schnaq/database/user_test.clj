@@ -4,7 +4,7 @@
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as db]
-            [schnaq.test-data :refer [alex christian kangaroo schnaqqi]]
+            [schnaq.test-data :refer [alex christian kangaroo]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)

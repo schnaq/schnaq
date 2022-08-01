@@ -305,7 +305,7 @@
      [icon :comment/alt "m-auto me-1"]
      (if limit
        [tooltip/text (labels :feature.limit.posts/alert-tooltip)
-        [:span (format "%d %s %d %s" statement-count (labels :discussion.badges/posts-of) limit (labels :discussion.badges/posts-alt))]] ;; WIP
+        [:span (format "%d %s %d %s" statement-count (labels :discussion.badges/posts-of) limit (labels :discussion.badges/posts-alt))]]
        [:span (format "%d %s" statement-count (labels :discussion.badges/posts))])]))
 
 (defn static-info-badges-discussion
