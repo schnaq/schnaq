@@ -31,20 +31,6 @@
       (is (int? new-user))
       (is (= new-user (db/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
 
-(deftest change-user-name-test
-  (testing "Test update user name"
-    (let [id "test-id-abcdefg"
-          user-name "Tester"
-          name-new "New Tester"
-          [new-user? user] (db/register-new-user {:sub id :preferred_username "Tester"} [] [])
-          updated-user (db/update-display-name id name-new)
-          current-name (:user.registered/display-name user)
-          updated-name (:user.registered/display-name updated-user)]
-      (is (not (= current-name updated-name)))
-      (is new-user?)
-      (is (= user-name current-name))
-      (is (= name-new updated-name)))))
-
 (deftest update-groups-test
   (testing "Test, whether the user has correct groups"
     (let [test-user-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
@@ -126,22 +112,6 @@
                        (db/private-user-by-keycloak-id kangaroo-keycloak-id)))))))
 
 ;; -----------------------------------------------------------------------------
-;; Role management
-
-(deftest add-role-test
-  (testing "Add a role to an existing user should succeed"
-    (db/add-role kangaroo-keycloak-id :role/admin)
-    (is (contains? (:user.registered/roles
-                    (db/private-user-by-keycloak-id kangaroo-keycloak-id))
-                   :role/admin))))
-
-(deftest remove-role-test
-  (testing "Remove an existing role from a user."
-    (db/remove-role (:user.registered/keycloak-id christian) :role/admin)
-    (is (empty? (:user.registered/roles
-                 (db/private-user-by-keycloak-id kangaroo-keycloak-id))))))
-
-;; -----------------------------------------------------------------------------
 
 (deftest update-user-display-name-test
   (testing "Update an existing user's display name."
@@ -174,3 +144,16 @@
     (is (= 0 (db/created-discussions kangaroo-keycloak-id)))
     (is (= 1 (db/created-discussions alex-keycloak-id)))
     (is (= 0 (db/created-discussions "razupaltuff")))))
+
+;; -----------------------------------------------------------------------------
+
+(deftest retract-user-attribute-test
+  (testing "Removing an attribute results in a nil lookup."
+    (is (nil? (:user.registered/email (db/retract-user-attribute {:user.registered/keycloak-id kangaroo-keycloak-id} :user.registered/email))))))
+
+(deftest retract-user-attributes-value-test
+  (testing "Retract a value from a set, returns the set without the value."
+    (let [tester-admin-christian (db/update-user {:user.registered/keycloak-id (:user.registered/keycloak-id christian)
+                                                  :user.registered/roles :role/tester})
+          {:keys [:user.registered/roles]} (db/retract-user-attributes-value tester-admin-christian :user.registered/roles :role/tester)]
+      (is (= (:user.registered/roles christian) roles)))))

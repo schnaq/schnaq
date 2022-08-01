@@ -59,7 +59,8 @@
       (is (= 401 (:status (test-routes (mock/request :get path))))))))
 
 (deftest pro-user?-middleware-test
-  (let [alex (user-db/add-role alex-keycloak-id :role/pro)
+  (let [alex (user-db/update-user {:user.registered/keycloak-id alex-keycloak-id
+                                   :user.registered/roles :role/pro})
         mw (auth-middlewares/pro-user?-middleware (constantly :success))]
     (testing "Non-existent user is no pro user."
       (is (= 403 (:status (mw {:identity {:sub "non-existent-user"}})))))

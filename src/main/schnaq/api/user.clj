@@ -11,6 +11,7 @@
             [schnaq.mail.cleverreach :as cleverreach]
             [schnaq.media :as media]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
+            [spec-tools.data-spec :as ds]
             [taoensso.timbre :as log]))
 
 (defn- register-user-if-they-not-exist
@@ -50,26 +51,29 @@
   This includes uploading an image to s3 and updating the associated url in the database."
   [{:keys [identity parameters]}]
   (let [image (get-in parameters [:body :image])
-        user-id (:id identity)]
-    (log/info (format "User %s trying to set profile picture to %s" user-id (:name image)))
-    (let [file-name (path-to-file user-id (:type image))
+        keycloak-id (:id identity)]
+    (log/info (format "User %s trying to set profile picture to %s" keycloak-id (:name image)))
+    (let [file-name (path-to-file keycloak-id (:type image))
           {:keys [url error message]} (media/upload-image! image file-name config/profile-picture-width :user/media)]
       (if url
-        (ok {:updated-user (user-db/update-profile-picture-url user-id url)})
+        (ok {:updated-user (user-db/update-user {:user.registered/keycloak-id keycloak-id
+                                                 :user.registered/profile-picture url})})
         (bad-request (at/build-error-body error message))))))
 
 (defn- change-display-name
   "Change the display name of a registered user."
-  [{:keys [parameters identity]}]
+  [{:keys [parameters user]}]
   (let [display-name (get-in parameters [:body :display-name])]
-    (ok {:updated-user (user-db/update-display-name (:id identity) display-name)})))
+    (ok {:updated-user
+         (user-db/update-user (assoc (select-keys user [:user.registered/keycloak-id])
+                                     :user.registered/display-name display-name))})))
 
 (defn- change-notification-mail-interval
   "Change the interval a user receives notification mails"
-  [{:keys [parameters identity]}]
-  (let [interval (get-in parameters [:body :notification-mail-interval])
-        user (user-db/update-notification-mail-interval (:id identity) interval)]
-    (ok {:updated-user user})))
+  [{:keys [parameters user]}]
+  (let [interval (get-in parameters [:body :notification-mail-interval])]
+    (ok {:updated-user (user-db/update-user (assoc (select-keys user [:user.registered/keycloak-id])
+                                                   :user.registered/notification-mail-interval interval))})))
 
 (defn- mark-all-statements-as-read
   "Mark all statements of a user's visited schnaqs as read"
@@ -108,20 +112,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- add-role
-  "Add a role to a user."
-  [{{{:keys [keycloak-id role]} :body} :parameters}]
-  (let [roles (:user.registered/roles (user-db/add-role keycloak-id role))]
-    (ok {:roles roles})))
-
-(defn- remove-role
-  "Remove a role from a user."
-  [{{{:keys [keycloak-id role]} :body} :parameters}]
-  (let [roles (:user.registered/roles (user-db/remove-role keycloak-id role))]
-    (ok {:roles roles})))
-
-;; -----------------------------------------------------------------------------
-
 (defn- get-user
   "Return a user with all personal information."
   [{{{:keys [keycloak-id]} :query} :parameters}]
@@ -131,6 +121,13 @@
   "Update a field of a user."
   [{{{:keys [user]} :body} :parameters}]
   (ok {:user (user-db/update-user user)}))
+
+(defn- delete-user-field
+  "Delete a field from the user."
+  [{{{:keys [keycloak-id attribute value]} :body} :parameters}]
+  (if value
+    (ok {:user (user-db/retract-user-attributes-value {:user.registered/keycloak-id keycloak-id} attribute value)})
+    (ok {:user (user-db/retract-user-attribute {:user.registered/keycloak-id keycloak-id} attribute)})))
 
 ;; -----------------------------------------------------------------------------
 
@@ -190,6 +187,12 @@
                :description (at/get-doc #'update-user)
                :parameters {:body {:user ::specs/registered-user}}
                :responses {200 {:body {:user ::specs/registered-user}}}}
+         :delete {:handler delete-user-field
+                  :description (at/get-doc #'delete-user-field)
+                  :parameters {:body {:keycloak-id :user.registered/keycloak-id
+                                      :attribute keyword?
+                                      (ds/opt :value) any?}}
+                  :responses {200 {:body {:user ::specs/registered-user}}}}
          :name :api.admin/user
          :responses {200 {:body {:user ::specs/registered-user}}}}]
     ["/statements" {:delete delete-all-statements-for-user
@@ -203,12 +206,4 @@
     ["/identity" {:delete delete-user-identity
                   :description (at/get-doc #'delete-user-identity)
                   :parameters {:body {:keycloak-id :user.registered/keycloak-id}}
-                  :responses {200 {:body {:deleted? boolean?}}}}]
-    ["/role" {:put {:handler add-role
-                    :description (at/get-doc #'add-role)}
-              :delete {:handler remove-role
-                       :description (at/get-doc #'remove-role)}
-              :name :api.admin.user/role
-              :parameters {:body {:keycloak-id :user.registered/keycloak-id
-                                  :role :user.registered/valid-roles}}
-              :responses {200 {:body {:roles :user.registered/roles}}}}]]])
+                  :responses {200 {:body {:deleted? boolean?}}}}]]])

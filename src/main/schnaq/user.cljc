@@ -76,7 +76,7 @@
 (>defn posts-limit-reached?
   "Check if the user's posts limit is reached for the provided schnaq."
   [author schnaq]
-  [::specs/registered-user ::specs/discussion => boolean?]
+  [(? ::specs/registered-user) (? ::specs/discussion) => boolean?]
   (let [statement-count (get-in schnaq [:meta-info :all-statements])
         limit (feature-limit author :posts-per-schnaq)]
     (if limit
