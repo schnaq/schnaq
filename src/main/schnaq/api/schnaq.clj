@@ -1,6 +1,6 @@
 (ns schnaq.api.schnaq
   (:require [clojure.spec.alpha :as s]
-            [ring.util.http-response :refer [ok created bad-request forbidden]]
+            [ring.util.http-response :refer [ok created bad-request forbidden not-found]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.access-codes :as ac]
@@ -199,31 +199,30 @@
                   :parameters {:query {:share-hash :discussion/share-hash
                                        :display-name ::specs/non-blank-string}}
                   :responses {200 {:body {:schnaq ::specs/discussion}}
-                              403 at/response-error-body}}]
+                              400 at/response-error-body
+                              403 at/response-error-body
+                              404 at/response-error-body}}]
      ["/by-access-code"
       {:get schnaq-by-access-code
        :description (at/get-doc #'schnaq-by-access-code)
        :name :api.schnaq/by-access-code
        :parameters {:query {:access-code :discussion.access/code}}
        :responses {200 {:body {:share-hash :discussion/share-hash
-                               :location string?}}
-                   404 at/response-error-body}}]
+                               :location string?}}}}]
      ["/add-visited" {:put add-visited-schnaq
                       :description (at/get-doc #'add-visited-schnaq)
                       :name :api.schnaq/add-visited
                       :middleware [:user/authenticated?
                                    :discussion/valid-share-hash?]
                       :parameters {:body {:share-hash :discussion/share-hash}}
-                      :responses {200 {:body {:share-hash :discussion/share-hash}}
-                                  400 at/response-error-body}}]
+                      :responses {200 {:body {:share-hash :discussion/share-hash}}}}]
      ["/remove-visited" {:delete remove-visited-schnaq
                          :description (at/get-doc #'remove-visited-schnaq)
                          :name :api.schnaq/remove-visited
                          :middleware [:user/authenticated?
                                       :discussion/valid-share-hash?]
                          :parameters {:body {:share-hash :discussion/share-hash}}
-                         :responses {200 {:body {:share-hash :discussion/share-hash}}
-                                     400 at/response-error-body}}]
+                         :responses {200 {:body {:share-hash :discussion/share-hash}}}}]
      ["/archive" {:name :api.schnaq/archive
                   :middleware [:user/authenticated?
                                :discussion/valid-share-hash?]
@@ -239,8 +238,7 @@
               :name :api.schnaq/add
               :parameters {:body ::dto/discussion-add-body}
               :middleware [:user/authenticated?]
-              :responses {201 {:body {:new-schnaq ::dto/discussion}}
-                          400 at/response-error-body}}]
+              :responses {201 {:body {:new-schnaq ::dto/discussion}}}}]
      ["/edit/title" {:put edit-schnaq-title!
                      :description (at/get-doc #'edit-schnaq-title!)
                      :name :api.schnaq/edit-title
@@ -248,9 +246,7 @@
                      :parameters {:body {:share-hash :discussion/share-hash
                                          :edit-hash :discussion/edit-hash
                                          :new-title :discussion/title}}
-                     :responses {201 {:body {:schnaq ::dto/discussion}}
-                                 400 at/response-error-body
-                                 403 at/response-error-body}}]
+                     :responses {201 {:body {:schnaq ::dto/discussion}}}}]
      ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin
                            :description (at/get-doc #'schnaq-by-hash-as-admin)
                            :name :api.schnaq/by-hash-as-admin
@@ -266,8 +262,7 @@
                   :parameters {:query {:share-hash :discussion/share-hash
                                        :search-string string?
                                        :display-name ::specs/non-blank-string}}
-                  :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}
-                              404 at/response-error-body}}]]]
+                  :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}}}]]]
 
     ["/schnaqs/by-hashes"
      {:post schnaqs-by-hashes

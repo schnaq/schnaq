@@ -128,9 +128,7 @@
       (is (number? (db/new-discussion minimal-discussion)))
       (is (number? (db/new-discussion (assoc minimal-discussion
                                              :discussion/description nil
-                                             :discussion/header-image-url "")))))
-    (testing "Transacting something non-essential should return nil"
-      (is (nil? (db/new-discussion (dissoc minimal-discussion :discussion/title)))))))
+                                             :discussion/header-image-url "")))))))
 
 (deftest all-statements-for-graph-test
   (testing "Returns all statements belonging to a agenda, specially prepared for graph-building."
