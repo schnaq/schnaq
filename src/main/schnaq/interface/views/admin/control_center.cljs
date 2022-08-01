@@ -234,10 +234,11 @@
  :admin.user.delete/role
  (fn [{:keys [db]} [_ keycloak-id role]]
    {:db (update-in db [:admin :user :user.registered/roles] #(disj % role))
-    :fx [(http/xhrio-request db :delete "/admin/user/role"
+    :fx [(http/xhrio-request db :delete "/admin/user"
                              [:admin.user/load keycloak-id]
                              {:keycloak-id keycloak-id
-                              :role role}
+                              :attribute :user.registered/roles
+                              :value role}
                              [:ajax.error/as-notification])]}))
 
 (rf/reg-event-fx

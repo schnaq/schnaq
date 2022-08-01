@@ -112,22 +112,6 @@
                        (db/private-user-by-keycloak-id kangaroo-keycloak-id)))))))
 
 ;; -----------------------------------------------------------------------------
-;; Role management
-
-(deftest add-role-test
-  (testing "Add a role to an existing user should succeed"
-    (db/add-role kangaroo-keycloak-id :role/admin)
-    (is (contains? (:user.registered/roles
-                    (db/private-user-by-keycloak-id kangaroo-keycloak-id))
-                   :role/admin))))
-
-(deftest remove-role-test
-  (testing "Remove an existing role from a user."
-    (db/remove-role (:user.registered/keycloak-id christian) :role/admin)
-    (is (empty? (:user.registered/roles
-                 (db/private-user-by-keycloak-id kangaroo-keycloak-id))))))
-
-;; -----------------------------------------------------------------------------
 
 (deftest update-user-display-name-test
   (testing "Update an existing user's display name."
@@ -169,6 +153,7 @@
 
 (deftest retract-user-attributes-value-test
   (testing "Retract a value from a set, returns the set without the value."
-    (let [tester-admin-christian (db/add-role (:user.registered/keycloak-id christian) :role/tester)
+    (let [tester-admin-christian (db/update-user {:user.registered/keycloak-id (:user.registered/keycloak-id christian)
+                                                  :user.registered/roles :role/tester})
           {:keys [:user.registered/roles]} (db/retract-user-attributes-value tester-admin-christian :user.registered/roles :role/tester)]
-      (is (= #{:role/admin} roles)))))
+      (is (= (:user.registered/roles christian) roles)))))

@@ -11,6 +11,7 @@
             [schnaq.mail.cleverreach :as cleverreach]
             [schnaq.media :as media]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
+            [spec-tools.data-spec :as ds]
             [taoensso.timbre :as log]))
 
 (defn- register-user-if-they-not-exist
@@ -111,20 +112,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- add-role
-  "Add a role to a user."
-  [{{{:keys [keycloak-id role]} :body} :parameters}]
-  (let [roles (:user.registered/roles (user-db/add-role keycloak-id role))]
-    (ok {:roles roles})))
-
-(defn- remove-role
-  "Remove a role from a user."
-  [{{{:keys [keycloak-id role]} :body} :parameters}]
-  (let [roles (:user.registered/roles (user-db/remove-role keycloak-id role))]
-    (ok {:roles roles})))
-
-;; -----------------------------------------------------------------------------
-
 (defn- get-user
   "Return a user with all personal information."
   [{{{:keys [keycloak-id]} :query} :parameters}]
@@ -134,6 +121,13 @@
   "Update a field of a user."
   [{{{:keys [user]} :body} :parameters}]
   (ok {:user (user-db/update-user user)}))
+
+(defn- delete-user-field
+  "Delete a field from the user."
+  [{{{:keys [keycloak-id attribute value]} :body} :parameters}]
+  (if value
+    (ok {:user (user-db/retract-user-attributes-value {:user.registered/keycloak-id keycloak-id} attribute value)})
+    (ok {:user (user-db/retract-user-attribute {:user.registered/keycloak-id keycloak-id} attribute)})))
 
 ;; -----------------------------------------------------------------------------
 
@@ -193,6 +187,12 @@
                :description (at/get-doc #'update-user)
                :parameters {:body {:user ::specs/registered-user}}
                :responses {200 {:body {:user ::specs/registered-user}}}}
+         :delete {:handler delete-user-field
+                  :description (at/get-doc #'delete-user-field)
+                  :parameters {:body {:keycloak-id :user.registered/keycloak-id
+                                      :attribute keyword?
+                                      (ds/opt :value) any?}}
+                  :responses {200 {:body {:user ::specs/registered-user}}}}
          :name :api.admin/user
          :responses {200 {:body {:user ::specs/registered-user}}}}]
     ["/statements" {:delete delete-all-statements-for-user
@@ -206,12 +206,4 @@
     ["/identity" {:delete delete-user-identity
                   :description (at/get-doc #'delete-user-identity)
                   :parameters {:body {:keycloak-id :user.registered/keycloak-id}}
-                  :responses {200 {:body {:deleted? boolean?}}}}]
-    ["/role" {:put {:handler add-role
-                    :description (at/get-doc #'add-role)}
-              :delete {:handler remove-role
-                       :description (at/get-doc #'remove-role)}
-              :name :api.admin.user/role
-              :parameters {:body {:keycloak-id :user.registered/keycloak-id
-                                  :role :user.registered/valid-roles}}
-              :responses {200 {:body {:roles :user.registered/roles}}}}]]])
+                  :responses {200 {:body {:deleted? boolean?}}}}]]])

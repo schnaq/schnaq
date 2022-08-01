@@ -8,7 +8,33 @@
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map] :as shared-tools]
             [taoensso.timbre :as log]))
 
-(declare add-role)
+;; -----------------------------------------------------------------------------
+;; General user update functions
+
+(>defn update-user
+  "Update an existing user. Throw in all changed fields."
+  [{:user.registered/keys [keycloak-id] :as user}]
+  [::specs/registered-user => ::specs/registered-user]
+  (let [user' (assoc user :db/id [:user.registered/keycloak-id keycloak-id])
+        tx-result @(transact [user'])]
+    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user (:db-after tx-result))))
+
+(>defn retract-user-attribute
+  "Retract an attribute of a user."
+  [{:user.registered/keys [keycloak-id]} attribute]
+  [::specs/registered-user keyword? => ::specs/registered-user]
+  (let [new-db (:db-after
+                @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id] attribute]]))]
+    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
+
+(>defn retract-user-attributes-value
+  "Retract a value from a user's attributes."
+  [{:user.registered/keys [keycloak-id]} attribute value]
+  [::specs/registered-user keyword? any? => ::specs/registered-user]
+  (let [new-db (:db-after
+                @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id]
+                             attribute value]]))]
+    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
 
 ;; -----------------------------------------------------------------------------
 ;; Query user(s) from database
@@ -122,12 +148,12 @@
 (>defn- promote-to-admin
   "Promote user to admin, if this is provided in the JWT token.
   This is how initial admins are translated to schnaq."
-  [{:user.registered/keys [roles keycloak-id]} realm-roles]
+  [{:user.registered/keys [roles] :as user} realm-roles]
   [::specs/registered-user (s/coll-of string?) => any?]
   (let [keycloak-realm-admin? (string? (some (set shared-config/admin-roles) realm-roles))
         not-yet-admin? (not (shared-tools/admin? roles))]
     (when (and keycloak-realm-admin? not-yet-admin?)
-      (add-role keycloak-id :role/admin))))
+      (update-user (assoc user :user.registered/roles :role/admin)))))
 
 (defn update-visited-schnaqs
   "Updates the user's visited schnaqs by adding the new ones. Input is a user-id and a collection of valid ids."
@@ -265,48 +291,6 @@
      :in $ ?group public-user-pattern
      :where [?users :user.registered/groups ?group]]
    group-name patterns/public-user))
-
-;; -----------------------------------------------------------------------------
-
-(>defn update-user
-  "Update an existing user. Throw in all changed fields."
-  [{:user.registered/keys [keycloak-id] :as user}]
-  [::specs/registered-user => ::specs/registered-user]
-  (let [user' (assoc user :db/id [:user.registered/keycloak-id keycloak-id])
-        tx-result @(transact [user'])]
-    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user (:db-after tx-result))))
-
-(>defn retract-user-attribute
-  "Retract an attribute of a user."
-  [{:user.registered/keys [keycloak-id]} attribute]
-  [::specs/registered-user keyword? => ::specs/registered-user]
-  (let [new-db (:db-after
-                @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id] attribute]]))]
-    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
-
-(>defn retract-user-attributes-value
-  "Retract a value from a user's attributes."
-  [{:user.registered/keys [keycloak-id]} attribute value]
-  [::specs/registered-user keyword? any? => ::specs/registered-user]
-  (let [new-db (:db-after
-                @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id] attribute value]]))]
-    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
-
-;; -----------------------------------------------------------------------------
-;; Role Management
-
-(>defn add-role
-  "Add a role to a user."
-  [keycloak-id role]
-  [:user.registered/keycloak-id :user.registered/valid-roles => ::specs/registered-user]
-  (update-user {:user.registered/keycloak-id keycloak-id
-                :user.registered/roles role}))
-
-(>defn remove-role
-  "Remove a role from a user."
-  [keycloak-id role]
-  [:user.registered/keycloak-id :user.registered/valid-roles => ::specs/registered-user]
-  (retract-user-attributes-value {:user.registered/keycloak-id keycloak-id} :user.registered/roles role))
 
 ;; -----------------------------------------------------------------------------
 
