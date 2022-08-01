@@ -275,18 +275,6 @@
                               field value]]))]
      (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db))))
 
-(>defn update-display-name
-  "Update the name of an existing user."
-  [keycloak-id display-name]
-  [:user.registered/keycloak-id string? :ret ::specs/registered-user]
-  (add-user-field keycloak-id :user.registered/display-name display-name))
-
-(>defn update-profile-picture-url
-  "Update the profile picture url."
-  [keycloak-id profile-picture-url]
-  [:user.registered/keycloak-id :user.registered/profile-picture :ret ::specs/registered-user]
-  (add-user-field keycloak-id :user.registered/profile-picture profile-picture-url))
-
 (>defn members-of-group
   "Returns all members of a certain group."
   [group-name]
@@ -317,12 +305,6 @@
     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
 
 ;; -----------------------------------------------------------------------------
-
-(>defn update-notification-mail-interval
-  "Update the name of an existing user."
-  [keycloak-id interval]
-  [:user.registered/keycloak-id :user.registered/notification-mail-interval :ret ::specs/registered-user]
-  (add-user-field keycloak-id :user.registered/notification-mail-interval interval patterns/private-user))
 
 (>defn subscribed-share-hashes
   "Return all subscribed share-hashes from the users respecting their 

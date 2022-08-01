@@ -50,26 +50,29 @@
   This includes uploading an image to s3 and updating the associated url in the database."
   [{:keys [identity parameters]}]
   (let [image (get-in parameters [:body :image])
-        user-id (:id identity)]
-    (log/info (format "User %s trying to set profile picture to %s" user-id (:name image)))
-    (let [file-name (path-to-file user-id (:type image))
+        keycloak-id (:id identity)]
+    (log/info (format "User %s trying to set profile picture to %s" keycloak-id (:name image)))
+    (let [file-name (path-to-file keycloak-id (:type image))
           {:keys [url error message]} (media/upload-image! image file-name config/profile-picture-width :user/media)]
       (if url
-        (ok {:updated-user (user-db/update-profile-picture-url user-id url)})
+        (ok {:updated-user (user-db/update-user {:user.registered/keycloak-id keycloak-id
+                                                 :user.registered/profile-picture url})})
         (bad-request (at/build-error-body error message))))))
 
 (defn- change-display-name
   "Change the display name of a registered user."
-  [{:keys [parameters identity]}]
+  [{:keys [parameters user]}]
   (let [display-name (get-in parameters [:body :display-name])]
-    (ok {:updated-user (user-db/update-display-name (:id identity) display-name)})))
+    (ok {:updated-user
+         (user-db/update-user (assoc (select-keys user [:user.registered/keycloak-id])
+                                     :user.registered/display-name display-name))})))
 
 (defn- change-notification-mail-interval
   "Change the interval a user receives notification mails"
-  [{:keys [parameters identity]}]
-  (let [interval (get-in parameters [:body :notification-mail-interval])
-        user (user-db/update-notification-mail-interval (:id identity) interval)]
-    (ok {:updated-user user})))
+  [{:keys [parameters user]}]
+  (let [interval (get-in parameters [:body :notification-mail-interval])]
+    (ok {:updated-user (user-db/update-user (assoc (select-keys user [:user.registered/keycloak-id])
+                                                   :user.registered/notification-mail-interval interval))})))
 
 (defn- mark-all-statements-as-read
   "Mark all statements of a user's visited schnaqs as read"

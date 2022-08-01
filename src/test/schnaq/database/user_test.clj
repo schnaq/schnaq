@@ -31,20 +31,6 @@
       (is (int? new-user))
       (is (= new-user (db/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
 
-(deftest change-user-name-test
-  (testing "Test update user name"
-    (let [id "test-id-abcdefg"
-          user-name "Tester"
-          name-new "New Tester"
-          [new-user? user] (db/register-new-user {:sub id :preferred_username "Tester"} [] [])
-          updated-user (db/update-display-name id name-new)
-          current-name (:user.registered/display-name user)
-          updated-name (:user.registered/display-name updated-user)]
-      (is (not (= current-name updated-name)))
-      (is new-user?)
-      (is (= user-name current-name))
-      (is (= name-new updated-name)))))
-
 (deftest update-groups-test
   (testing "Test, whether the user has correct groups"
     (let [test-user-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
