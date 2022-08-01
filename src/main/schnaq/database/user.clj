@@ -193,7 +193,7 @@
                      :seen-statements/visited-statements visited-statements}]
     (transact [(remove-nil-values-from-map new-visited)])))
 
-(defn update-visited-statements
+(>defn update-visited-statements
   "Updates the user's visited statements by adding the new ones."
   [keycloak-id share-hash-statement-ids]
   [:user.registered/keycloak-id ::specs/share-hash-statement-id-mapping :ret nil?]
@@ -262,18 +262,6 @@
   (let [user' (assoc user :db/id [:user.registered/keycloak-id keycloak-id])
         tx-result @(transact [user'])]
     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user (:db-after tx-result))))
-
-(>defn- add-user-field
-  "Updates a user's field in the database and return updated user."
-  ([keycloak-id field value]
-   [:user.registered/keycloak-id keyword? any? :ret ::specs/registered-user]
-   (add-user-field keycloak-id field value patterns/public-user))
-  ([keycloak-id field value pattern]
-   [:user.registered/keycloak-id keyword? any? any? :ret ::specs/registered-user]
-   (let [new-db (:db-after
-                 @(transact [[:db/add [:user.registered/keycloak-id keycloak-id]
-                              field value]]))]
-     (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db))))
 
 (>defn members-of-group
   "Returns all members of a certain group."
