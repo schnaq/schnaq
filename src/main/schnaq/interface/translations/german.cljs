@@ -636,6 +636,7 @@
    :admin.center.user/subheadline "Lade zunächste einen User, um die Bearbeitung zu beginnen."
    :admin.center.user.load/button "User laden"
    :admin.center.user.save/button "User speichern"
+   :admin.center.user.delete/confirmation "Möchtest du das Attribut wirklich entfernen?"
    :admin.center.user.role.delete/label "Entferne Rolle von User"
    :admin.center.user.role.delete/button "Rolle entfernen"
    :admin.center.user.role.add/label "Füge Rolle zu User hinzu"

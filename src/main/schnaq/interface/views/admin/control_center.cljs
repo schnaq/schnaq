@@ -6,6 +6,7 @@
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -172,13 +173,21 @@
   "Generate an input field based on a model's field."
   [field]
   (let [user-value @(rf/subscribe [:admin/user field])
+        keycloak-id @(rf/subscribe [:admin/user :user.registered/keycloak-id])
         fqname (shared-tools/namespaced-keyword->string field)
         id (str "user-input-" fqname)]
     [:div.col-12.col-md-4.pt-2
      [:label.small {:for id} fqname]
-     [:input.form-control {:id id
-                           :name fqname
-                           :placeholder user-value}]
+     [:div.input-group
+      [:input.form-control {:id id
+                            :name fqname
+                            :placeholder user-value}]
+      [:button.btn.btn-outline-danger
+       {:type :button
+        :on-click (fn [_]
+                    (when (js/confirm (labels :admin.center.user.delete/confirmation))
+                      (rf/dispatch [:admin.user.delete/attribute keycloak-id (keyword fqname)])))}
+       [icon :times]]]
      [:small.text-muted (str (s/form field))]]))
 
 (defn- user-form
@@ -228,6 +237,16 @@
    {:fx [(http/xhrio-request db :put "/admin/user"
                              [:admin.user.load/success]
                              {:user user}
+                             [:ajax.error/as-notification])]}))
+
+(rf/reg-event-fx
+ :admin.user.delete/attribute
+ (fn [{:keys [db]} [_ keycloak-id attribute]]
+   {:db (update-in db [:admin :user] dissoc attribute)
+    :fx [(http/xhrio-request db :delete "/admin/user"
+                             [:admin.user/load keycloak-id]
+                             {:keycloak-id keycloak-id
+                              :attribute attribute}
                              [:ajax.error/as-notification])]}))
 
 (rf/reg-event-fx
