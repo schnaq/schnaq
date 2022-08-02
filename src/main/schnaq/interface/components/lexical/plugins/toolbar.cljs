@@ -17,6 +17,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
+            [schnaq.interface.components.lexical.plugins.excalidraw :refer [INSERT_EXCALIDRAW_COMMAND]]
             [schnaq.interface.components.lexical.plugins.images :refer [INSERT_IMAGE_COMMAND]]
             [schnaq.interface.components.lexical.plugins.links :refer [INSERT_LINK_COMMAND]]
             [schnaq.interface.components.lexical.plugins.videos :refer [INSERT_VIDEO_COMMAND]]
@@ -236,6 +237,13 @@
           :type :button
           :class (when ordered-list? "active")})
        [icon :list-ol]]]
+     [:span.d-none.d-md-block
+      [tooltip/text
+       (labels :editor.toolbar/clear)
+       [:button.toolbar-item.spaced
+        {:on-click #(rf/dispatch [:editor/command active-editor INSERT_EXCALIDRAW_COMMAND])
+         :type :button}
+        [icon :rocket]]]]
      [:span.d-none.d-md-block
       [tooltip/text
        (labels :editor.toolbar/clear)
