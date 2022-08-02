@@ -49,11 +49,11 @@
 (deftest api-cors-test
   (testing "CORS settings for main API."
     (are [origin expected]
-         (= expected (cors/allow-request?
-                      {:headers {"origin" origin}
-                       :request-method :get}
-                      {:access-control-allow-origin (conj api/allowed-origins (toolbelt/build-allowed-origin "schnaq.localhost"))
-                       :access-control-allow-methods api/allowed-http-verbs}))
+      (= expected (cors/allow-request?
+                   {:headers {"origin" origin}
+                    :request-method :get}
+                   {:access-control-allow-origin (conj api/allowed-origins (toolbelt/build-allowed-origin "schnaq.localhost"))
+                    :access-control-allow-methods api/allowed-http-verbs}))
       nil false
       "" false
       "http://schnaq.app" true
@@ -118,14 +118,12 @@
 (deftest edit-discussion-title!-test
   (let [edit-schnaq-title! #'schnaq-api/edit-schnaq-title!
         share-hash "simple-hash"
-        edit-hash "simple-hash-secret"
         discussion (discussion-db/discussion-by-share-hash share-hash)
-        keycloak-id (:user.registered/keycloak-id test-data/kangaroo)
+        keycloak-id (:user.registered/keycloak-id test-data/alex)
         new-title "Neuer Titel"
         request #(-> (mock/request :put "/schnaq/edit/title")
                      (assoc-in [:identity :sub] %)
                      (assoc-in [:parameters :body :share-hash] share-hash)
-                     (assoc-in [:parameters :body :edit-hash] edit-hash)
                      (assoc-in [:parameters :body :new-title] new-title))]
     (testing "Test edit schnaq title."
       (testing "Only author should be able to edit the title"

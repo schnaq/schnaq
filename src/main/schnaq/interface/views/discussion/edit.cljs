@@ -112,12 +112,10 @@
 (rf/reg-event-fx
  :discussion.edit-title/send
  (fn [{:keys [db]} [_ html-selector form]]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         edit-hash @(rf/subscribe [:schnaq.current/admin-access])]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [(http/xhrio-request db :put "/schnaq/edit/title"
                                [:discussion.edit.send/success form]
                                {:share-hash share-hash
-                                :edit-hash edit-hash
                                 :new-title (oget+ form [html-selector :value])}
                                [:statement.edit.send/failure])]})))
 
