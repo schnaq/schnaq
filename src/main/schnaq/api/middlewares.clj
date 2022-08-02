@@ -70,7 +70,7 @@
                                  :user.registered/keycloak-id)]
       (if (= author-keycloak-id (-> request :user :user.registered/keycloak-id))
         (handler request)
-        (forbidden "Only the author of the schnaq may use this operation")))))
+        (forbidden (at/build-error-body :credentials/invalid "Only the author is allowed to modify the schnaq."))))))
 
 (defn parent-unlocked?-middleware
   "Verify that the parent statement is unlocked and can be written to."
