@@ -207,7 +207,7 @@
     ["/schnaq"
      [""
       {:delete user-delete-schnaq!
-       :name :api.schnaq.admin/delete
+       :name :api.schnaq/delete
        :description (at/get-doc #'user-delete-schnaq!)
        :middleware [:user/authenticated?]
        :parameters {:body {:share-hash :discussion/share-hash}}
