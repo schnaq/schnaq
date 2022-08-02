@@ -232,7 +232,7 @@
      ["/edit/title" {:put edit-schnaq-title!
                      :description (at/get-doc #'edit-schnaq-title!)
                      :name :api.schnaq/edit-title
-                     :middleware [:discussion/valid-author? :discussion/valid-share-hash?]
+                     :middleware [:user/authenticated? :discussion/valid-author? :discussion/valid-share-hash?]
                      :parameters {:body {:share-hash :discussion/share-hash
                                          :new-title :discussion/title}}
                      :responses {201 {:body {:schnaq ::dto/discussion}}}}]
