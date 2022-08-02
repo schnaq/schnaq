@@ -79,7 +79,10 @@
         [schnaq-dropdown-item :schnaq.options.archive/label
          #(when (js/confirm (labels :schnaq.options.archive/prompt))
             (rf/dispatch [:schnaqs.visited/archive! share-hash]))])
-      (when-not author?
+      (if author?
+        [schnaq-dropdown-item :schnaq.options.delete/label
+         #(when (js/confirm (labels :schnaq.options.delete/prompt))
+            (rf/dispatch [:schnaq/remove! share-hash]))]
         [schnaq-dropdown-item :schnaq.options.leave/label
          #(when (js/confirm (labels :schnaq.options.leave/prompt))
             (rf/dispatch [:schnaqs.visited/remove! share-hash]))])]]))

@@ -20,6 +20,14 @@
                              {:share-hash share-hash} [:ajax.error/as-notification])]}))
 
 (rf/reg-event-fx
+ :schnaq/remove!
+ (fn [{:keys [db]} [_ share-hash]]
+   ;; TODO do something after deletion to remove schnaq from list
+   {:fx [(http/xhrio-request db :delete "/schnaq" [:no-op]
+                             {:share-hash share-hash}
+                             [:ajax.error/as-notification])]}))
+
+(rf/reg-event-fx
  :admin.delete.user/statements
  (fn [{:keys [db]} [_ keycloak-id]]
    {:fx [(http/xhrio-request db :delete "/admin/user/statements" [:no-op]
