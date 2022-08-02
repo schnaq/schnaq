@@ -28,7 +28,7 @@
  (fn [_ _]
    (let [share-hash (:schnaq.last-added/share-hash local-storage)
          edit-hash (:schnaq.last-added/edit-hash local-storage)]
-     (when-not (and (nil? edit-hash) (nil? share-hash))
+     (when (and (not (nil? edit-hash)) (not (nil? share-hash)))
        {:fx [[:dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash]]]}))))
 
 (rf/reg-event-fx

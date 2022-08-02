@@ -4,7 +4,6 @@
             [ring.mock.request :as mock]
             [schnaq.api :as api]
             [schnaq.api.discussion :as discussion-api]
-            [schnaq.api.schnaq :as schnaq-api]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
             [schnaq.test-data :as test-data]
@@ -49,11 +48,11 @@
 (deftest api-cors-test
   (testing "CORS settings for main API."
     (are [origin expected]
-         (= expected (cors/allow-request?
-                      {:headers {"origin" origin}
-                       :request-method :get}
-                      {:access-control-allow-origin (conj api/allowed-origins (toolbelt/build-allowed-origin "schnaq.localhost"))
-                       :access-control-allow-methods api/allowed-http-verbs}))
+      (= expected (cors/allow-request?
+                   {:headers {"origin" origin}
+                    :request-method :get}
+                   {:access-control-allow-origin (conj api/allowed-origins (toolbelt/build-allowed-origin "schnaq.localhost"))
+                    :access-control-allow-methods api/allowed-http-verbs}))
       nil false
       "" false
       "http://schnaq.app" true
@@ -116,27 +115,26 @@
       (is (= 400 (:status (edit-statement! (request keycloak-id))))))))
 
 (deftest edit-discussion-title!-test
-  (let [edit-schnaq-title! #'schnaq-api/edit-schnaq-title!
-        share-hash "simple-hash"
-        edit-hash "simple-hash-secret"
+  (let [share-hash "simple-hash"
+        request #(-> {:request-method :put :uri (:path (api/route-by-name :api.schnaq/edit-title))
+                      :body-params {:share-hash share-hash
+                                    :new-title %}}
+                     schnaq-toolbelt/add-csrf-header
+                     (schnaq-toolbelt/mock-authorization-header schnaq-toolbelt/token-kangaroo-normal-user)
+                     test-app)
         discussion (discussion-db/discussion-by-share-hash share-hash)
         keycloak-id (:user.registered/keycloak-id test-data/kangaroo)
-        new-title "Neuer Titel"
-        request #(-> (mock/request :put "/schnaq/edit/title")
-                     (assoc-in [:identity :sub] %)
-                     (assoc-in [:parameters :body :share-hash] share-hash)
-                     (assoc-in [:parameters :body :edit-hash] edit-hash)
-                     (assoc-in [:parameters :body :new-title] new-title))]
+        new-title "Neuer Titel"]
     (testing "Test edit schnaq title."
       (testing "Only author should be able to edit the title"
         ;; The author is not the registered user, rest is fine
-        (is (= 403 (:status (edit-schnaq-title! (request keycloak-id)))))
+        (is (= 403 (:status (request new-title))))
         ;; Make the author the user
         (db/transact [[:db/add (:db/id discussion) :discussion/author
                        [:user.registered/keycloak-id keycloak-id]]])
         ;; Everything should be fine
-        (is (= 200 (:status (edit-schnaq-title! (request keycloak-id))))))
+        (is (= 200 (:status (request new-title)))))
       (testing "Deleted schnaqs shall not be editable"
         ;; discussion is deleted
         (discussion-db/delete-discussion share-hash)
-        (is (= 400 (:status (edit-schnaq-title! (request keycloak-id)))))))))
+        (is (= 404 (:status (request new-title))))))))

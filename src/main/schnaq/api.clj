@@ -155,6 +155,7 @@
                          profiling/profiling-middleware]}
      ::middleware/registry {:app/valid-code? auth-middlewares/valid-app-code?-middleware
                             :discussion/parent-unlocked? middlewares/parent-unlocked?-middleware
+                            :discussion/valid-author? middlewares/valid-author?-middleware
                             :discussion/valid-credentials? middlewares/valid-credentials?-middleware
                             :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
                             :discussion/valid-statement? middlewares/valid-statement?-middleware
