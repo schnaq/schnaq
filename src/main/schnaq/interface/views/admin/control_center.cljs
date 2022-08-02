@@ -23,6 +23,7 @@
  :schnaq/remove!
  (fn [{:keys [db]} [_ share-hash]]
    ;; TODO do something after deletion to remove schnaq from list
+   ;; TODO remove from last-added share-hash and edit-hash if its that to prevent error
    {:fx [(http/xhrio-request db :delete "/schnaq" [:no-op]
                              {:share-hash share-hash}
                              [:ajax.error/as-notification])]}))

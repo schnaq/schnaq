@@ -111,11 +111,11 @@
 
 (defn- author-permissions-or-error
   "Allow modification of valid discussions. Only allowed for authors of the discussion."
-  [user-identity author-identity share-hash ok-answer bad-answer forbidden-answer]
+  [user-identity author-identity share-hash ok-answer-fn bad-answer forbidden-answer]
   (if (= user-identity author-identity)
     (if (discussion-db/discussion-deleted? share-hash)
       bad-answer
-      ok-answer)
+      (ok-answer-fn))
     forbidden-answer))
 
 (defn- delete-schnaq!
@@ -135,7 +135,7 @@
         author-identity (-> discussion :discussion/author :user.registered/keycloak-id)]
     (author-permissions-or-error
      user-identity author-identity share-hash
-     (delete-schnaq! request)
+     #(delete-schnaq! request)
      (bad-request (at/build-error-body :discussion-not-the-author "Schnaq is already deleted"))
      (forbidden (at/build-error-body :discussion-not-the-author "Only the author can delete a schnaq")))))
 
@@ -148,8 +148,9 @@
         author-identity (-> discussion :discussion/author :user.registered/keycloak-id)]
     (author-permissions-or-error
      user-identity author-identity share-hash
-     (do (discussion-db/edit-title share-hash new-title)
-         (ok {:schnaq (discussion-db/discussion-by-share-hash share-hash)}))
+     (fn []
+       (discussion-db/edit-title share-hash new-title)
+       (ok {:schnaq (discussion-db/discussion-by-share-hash share-hash)}))
      (bad-request (at/build-error-body :discussion-not-the-author
                                        "You can not edit the title of a deleted discussion."))
      (forbidden (at/build-error-body :discussion-not-the-author
