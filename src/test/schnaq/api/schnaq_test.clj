@@ -65,7 +65,7 @@
   (testing "schnaq creation. Takes an authenticated user and creates schnaqs."
     (let [minimal-request {:discussion-title "huhu"}]
       (are [status payload]
-           (= status (:status (add-authenticated-schnaq-request payload)))
+        (= status (:status (add-authenticated-schnaq-request payload)))
         400 {}
         400 {:nickname "penguin"}
         400 {:razupaltuff "kangaroo"}
@@ -104,3 +104,18 @@
   (testing "Archived schnaqs can be removed to make them available again."
     (is (= 200 (:status (archive-schnaq-request :delete "cat-dog-hash"))))
     (is (= 404 (:status (archive-schnaq-request :put "non-existent-hash"))))))
+
+(defn- delete-schnaq-request [user-token share-hash]
+  (-> {:request-method :delete :uri (:path (api/route-by-name :api.schnaq/delete))
+       :body-params {:share-hash share-hash}}
+      toolbelt/add-csrf-header
+      (toolbelt/mock-authorization-header user-token)
+      test-app))
+
+(deftest user-delete-schnaq!-test
+  (testing "Deleting a schnaq as a user."
+    (is (= 403 (:status (delete-schnaq-request toolbelt/token-kangaroo-normal-user "simple-hash"))))
+    (is (= 200 (:status (delete-schnaq-request toolbelt/token-wegi-no-beta-user "simple-hash"))))
+    (testing "Schnaq is already deleted, return a bad-request"
+      (is (= 400 (:status (delete-schnaq-request toolbelt/token-wegi-no-beta-user "simple-hash")))))
+    (is (= 403 (:status (delete-schnaq-request toolbelt/token-wegi-no-beta-user "some-fantasy-hash"))))))
