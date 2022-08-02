@@ -3,6 +3,7 @@
             [cljs.spec.alpha :as s]
             [clojure.set :as set]
             [clojure.test.check.properties]
+            [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
@@ -22,11 +23,20 @@
 (rf/reg-event-fx
  :schnaq/remove!
  (fn [{:keys [db]} [_ share-hash]]
-   ;; TODO do something after deletion to remove schnaq from list
-   ;; TODO remove from last-added share-hash and edit-hash if its that to prevent error
-   {:fx [(http/xhrio-request db :delete "/schnaq" [:no-op]
+   {:fx [(http/xhrio-request db :delete "/schnaq"
+                             [:schnaq.remove!/success share-hash]
                              {:share-hash share-hash}
                              [:ajax.error/as-notification])]}))
+
+(rf/reg-event-fx
+ :schnaq.remove!/success
+ (fn [{:keys [db]} [_ share-hash]]
+   (let [last-added-hash (:schnaq.last-added/share-hash local-storage)]
+     {:db (-> db
+              (update-in [:schnaqs :visited] (fn [schnaq-list]
+                                               (remove #(= share-hash (:discussion/share-hash %)) schnaq-list)))
+              (update-in [:user :meta :total-schnaqs] dec))
+      :fx [(when (= last-added-hash share-hash) [:localstorage/dissoc :schnaq.last-added/share-hash])]})))
 
 (rf/reg-event-fx
  :admin.delete.user/statements
