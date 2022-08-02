@@ -126,19 +126,6 @@
       (ok {:share-hash share-hash})
       (bad-request (at/build-error-body :error-deleting-schnaq "An error occurred, while deleting the schnaq.")))))
 
-(defn- user-delete-schnaq!
-  "User deletes schnaq when they're the author."
-  [{:keys [parameters identity] :as request}]
-  (let [share-hash (get-in parameters [:body :share-hash])
-        user-identity (:sub identity)
-        discussion (discussion-db/discussion-by-share-hash share-hash)
-        author-identity (-> discussion :discussion/author :user.registered/keycloak-id)]
-    (author-permissions-or-error
-     user-identity author-identity share-hash
-     #(delete-schnaq! request)
-     (bad-request (at/build-error-body :discussion-not-the-author "Schnaq is already deleted"))
-     (forbidden (at/build-error-body :discussion-not-the-author "Only the author can delete a schnaq")))))
-
 (defn- edit-schnaq-title!
   "Edit title of a schnaq"
   [{:keys [parameters identity]}]
@@ -207,10 +194,10 @@
   [["" {:swagger {:tags ["schnaqs"]}}
     ["/schnaq"
      [""
-      {:delete user-delete-schnaq!
+      {:delete delete-schnaq!
        :name :api.schnaq/delete
-       :description (at/get-doc #'user-delete-schnaq!)
-       :middleware [:user/authenticated?]
+       :description (at/get-doc #'delete-schnaq!)
+       :middleware [:user/authenticated? :discussion/valid-author? :discussion/valid-share-hash?]
        :parameters {:body {:share-hash :discussion/share-hash}}
        :responses {200 {:share-hash :discussion/share-hash}
                    400 at/response-error-body}}]

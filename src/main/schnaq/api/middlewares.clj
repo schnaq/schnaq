@@ -4,6 +4,7 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.patterns :as patterns]
             [schnaq.validator :as validator]
@@ -58,6 +59,18 @@
           (handler request)
           (forbidden (at/build-error-body :credentials/invalid "Your share-hash and edit-hash do not fit together.")))
         (bad-request (at/build-error-body :parameters/missing (format "Share-hash oder edit-hash is missing, share-hash: %s, edit-hash: %s" share-hash edit-hash)))))))
+
+(defn valid-author?-middleware
+  "Verify the requesting user being the author of the discussion."
+  [handler]
+  (fn [request]
+    (let [author-keycloak-id (-> (extract-parameter-from-request request :share-hash)
+                                 discussion-db/discussion-by-share-hash
+                                 :discussion/author
+                                 :user.registered/keycloak-id)]
+      (if (= author-keycloak-id (-> request :user :user.registered/keycloak-id))
+        (handler request)
+        (forbidden "Only the author of the schnaq may use this operation")))))
 
 (defn parent-unlocked?-middleware
   "Verify that the parent statement is unlocked and can be written to."
