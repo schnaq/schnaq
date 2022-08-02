@@ -109,22 +109,35 @@
   (let [{:keys [share-hash]} (:body parameters)]
     (ok {:schnaq (discussion-db/discussion-by-share-hash-private share-hash)})))
 
-(defn- delete-schnaq!
-  "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash]} (:body parameters)]
-    (if (discussion-db/delete-discussion share-hash)
-      (ok {:share-hash share-hash})
-      (bad-request (at/build-error-body :error-deleting-schnaq "An error occurred, while deleting the schnaq.")))))
-
-(defn- check-edit-discussion-error
-  "Check if an editor is the author of a discussion or if it is deleted."
+(defn- author-permissions-or-error
+  "Allow modification of valid discussions. Only allowed for authors of the discussion."
   [user-identity author-identity share-hash ok-answer bad-answer forbidden-answer]
   (if (= user-identity author-identity)
     (if (discussion-db/discussion-deleted? share-hash)
       bad-answer
       ok-answer)
     forbidden-answer))
+
+(defn- delete-schnaq!
+  "Sets the state of a schnaq to delete. Performed by admins and authors of the schnaq."
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash]} (:body parameters)]
+    (if (discussion-db/delete-discussion share-hash)
+      (ok {:share-hash share-hash})
+      (bad-request (at/build-error-body :error-deleting-schnaq "An error occurred, while deleting the schnaq.")))))
+
+(defn- user-delete-schnaq!
+  "User deletes schnaq when they're the author."
+  [{:keys [parameters identity] :as request}]
+  (let [share-hash (get-in parameters [:body :share-hash])
+        user-identity (:sub identity)
+        discussion (discussion-db/discussion-by-share-hash share-hash)
+        author-identity (-> discussion :discussion/author :user.registered/keycloak-id)]
+    (author-permissions-or-error
+     user-identity author-identity share-hash
+     (delete-schnaq! request)
+     (bad-request (at/build-error-body :discussion-not-the-author "Schnaq is already deleted"))
+     (forbidden (at/build-error-body :discussion-not-the-author "Only the author can delete a schnaq")))))
 
 (defn- edit-schnaq-title!
   "Edit title of a schnaq"
@@ -133,7 +146,7 @@
         user-identity (:sub identity)
         discussion (discussion-db/discussion-by-share-hash share-hash)
         author-identity (-> discussion :discussion/author :user.registered/keycloak-id)]
-    (check-edit-discussion-error
+    (author-permissions-or-error
      user-identity author-identity share-hash
      (do (discussion-db/edit-title share-hash new-title)
          (ok {:schnaq (discussion-db/discussion-by-share-hash share-hash)}))
@@ -192,6 +205,14 @@
 (def schnaq-routes
   [["" {:swagger {:tags ["schnaqs"]}}
     ["/schnaq"
+     [""
+      {:delete user-delete-schnaq!
+       :name :api.schnaq.admin/delete
+       :description (at/get-doc #'user-delete-schnaq!)
+       :middleware [:user/authenticated?]
+       :parameters {:body {:share-hash :discussion/share-hash}}
+       :responses {200 {:share-hash :discussion/share-hash}
+                   400 at/response-error-body}}]
      ["/by-hash" {:get schnaq-by-hash
                   :description (at/get-doc #'schnaq-by-hash)
                   :name :api.schnaq/by-hash
