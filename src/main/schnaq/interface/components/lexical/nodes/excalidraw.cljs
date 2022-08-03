@@ -44,59 +44,51 @@
         delete-node (useCallback
                      (fn []
                        (modal-open! false)
-                       (ocall editor "update" (fn []
-                                                (let [node ($getNodeByKey nodeKey)]
-                                                  (when ($excalidraw-node? node)
-                                                    (ocall node "remove")))))))
+                       (.update editor #(let [node ($getNodeByKey nodeKey)]
+                                          (when ($excalidraw-node? node)
+                                            (ocall node "remove"))))))
         set-data (fn [new-data]
-                   (when-not (ocall editor "isReadOnly")
-                     (ocall editor "update" (fn []
-                                              (let [node ($getNodeByKey nodeKey)]
-                                                (when ($excalidraw-node? node)
-                                                  (if (pos? (oget new-data :length))
-                                                    (ocall node "setData" (.stringify js/JSON new-data))
-                                                    (ocall node "remove"))))))))
+                   (when-not (.isReadOnly editor)
+                     (.update editor #(let [node ($getNodeByKey nodeKey)]
+                                        (when ($excalidraw-node? node)
+                                          (if (pos? (oget new-data :length))
+                                            (ocall node "setData" (.stringify js/JSON new-data))
+                                            (ocall node "remove")))))))
         on-resize-start #(resizing! true)
         on-resize-end (fn [] (js/setTimeout #(resizing! false) 200))
-        elements (useMemo (fn []
-                            (prn data)
-                            (.parse js/JSON data)) #js [data])]
+        elements (useMemo #(.parse js/JSON data) #js [data])]
 
     (useEffect
      #(ocall editor "setReadOnly" modal-open?)
      #js [modal-open? editor])
 
     (useEffect
-     (fn []
-       (mergeRegister
-        (ocall editor "registerCommand" CLICK_COMMAND
-               (fn [event]
-                 (let [button-element (oget button-ref :current)
-                       event-target (oget event :target)]
-                   (if resizing?
-                     true
-                     (when (and (not= button-element nil) (.contains button-element event-target))
-                       (when-not (ocall event "shiftKey")
-                         (clear-selection!))
-                       (selected! (not selected?))
-                       (when (> (oget event :detail) 1)
-                         (modal-open! true))
-                       true)))
-                 false)
-               COMMAND_PRIORITY_LOW)
-        (ocall editor "registerCommand" KEY_DELETE_COMMAND on-delete COMMAND_PRIORITY_LOW)
-        (ocall editor "registerCommand" KEY_BACKSPACE_COMMAND on-delete COMMAND_PRIORITY_LOW)))
+     #(mergeRegister
+       (ocall editor "registerCommand" CLICK_COMMAND
+              (fn [event]
+                (let [button-element (oget button-ref :current)
+                      event-target (oget event :target)]
+                  (if resizing?
+                    true
+                    (when (and (not= button-element nil) (.contains button-element event-target))
+                      (when-not (ocall event "shiftKey")
+                        (clear-selection!))
+                      (selected! (not selected?))
+                      (when (pos? (oget event :detail))
+                        (modal-open! true))
+                      true)))
+                false)
+              COMMAND_PRIORITY_LOW)
+       (ocall editor "registerCommand" KEY_DELETE_COMMAND on-delete COMMAND_PRIORITY_LOW)
+       (ocall editor "registerCommand" KEY_BACKSPACE_COMMAND on-delete COMMAND_PRIORITY_LOW))
      #js [clear-selection! editor selected? nodeKey on-delete selected!])
 
     (r/as-element
      [:<>
-      (prn "ExcalidrawComponent")
-      [:div "Brudi was los"]
       [:> ExcalidrawModal {:initialElements elements
                            :shown? modal-open?
                            :onDelete delete-node
                            :onSave (fn [new-data]
-                                     (prn "in on-save")
                                      (.setReadOnly editor false)
                                      (set-data new-data)
                                      (modal-open! false))

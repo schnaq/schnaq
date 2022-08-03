@@ -128,25 +128,24 @@
         [can-redo? can-redo!] (useState false)
         update-toolbar
         (useCallback
-         (fn []
-           (let [selection ($getSelection)]
-             (when ($isRangeSelection selection)
-               (let [anchorNode (.getNode (.-anchor selection))
-                     element (if (= "root" anchorNode) anchorNode (.getTopLevelElementOrThrow anchorNode))
-                     element-key (.getKey element)
-                     element-dom (ocall editor "getElementByKey" element-key)]
-                 (when element-dom
-                   (if ($isListNode element)
-                     (let [parentList ($getNearestNodeOfType anchorNode ListNode)
-                           block-type (if parentList (.getTag parentList) (.getTag element))]
-                       (block-type! block-type))
-                     (let [block-type (if ($isHeadingNode element) (ocall element "getTag") (ocall element "getType"))]
-                       (block-type! block-type))))
+         #(let [selection ($getSelection)]
+            (when ($isRangeSelection selection)
+              (let [anchorNode (.getNode (.-anchor selection))
+                    element (if (= "root" (.getKey anchorNode)) anchorNode (.getTopLevelElementOrThrow anchorNode))
+                    element-key (.getKey element)
+                    element-dom (ocall editor "getElementByKey" element-key)]
+                (when element-dom
+                  (if ($isListNode element)
+                    (let [parentList ($getNearestNodeOfType anchorNode ListNode)
+                          block-type (if parentList (.getTag parentList) (.getTag element))]
+                      (block-type! block-type))
+                    (let [block-type (if ($isHeadingNode element) (ocall element "getTag") (ocall element "getType"))]
+                      (block-type! block-type))))
                  ;; Update text format
-                 (bold! (.hasFormat selection "bold"))
-                 (code! (.hasFormat selection "code"))
-                 (italic! (.hasFormat selection "italic"))
-                 (strike-through! (.hasFormat selection "strikethrough"))))))
+                (bold! (.hasFormat selection "bold"))
+                (code! (.hasFormat selection "code"))
+                (italic! (.hasFormat selection "italic"))
+                (strike-through! (.hasFormat selection "strikethrough")))))
          #js [active-editor])]
     (useEffect
      #(mergeRegister
