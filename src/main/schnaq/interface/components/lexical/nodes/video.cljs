@@ -1,5 +1,5 @@
 (ns schnaq.interface.components.lexical.nodes.video
-  (:require ["lexical" :refer [DecoratorNode EditorConfig LexicalEditor NodeKey]]
+  (:require ["lexical" :refer [DecoratorNode EditorConfig LexicalEditor]]
             [oops.core :refer [oget oset!]]
             [reagent.core :as r]
             [shadow.cljs.modern :refer [defclass]]))
