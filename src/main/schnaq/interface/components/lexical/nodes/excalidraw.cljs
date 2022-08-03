@@ -103,7 +103,7 @@
   (when-let [excalidraw-data (.getAttribute domNode data-excalidraw-attribute)]
     (let [node ($create-excalidraw-node)]
       (oset! node :__data excalidraw-data)
-      node)))
+      {:node node})))
 
 (defclass ExcalidrawNode
   (field ^string __data)

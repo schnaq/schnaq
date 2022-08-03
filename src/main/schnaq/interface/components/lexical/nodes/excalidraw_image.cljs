@@ -7,8 +7,13 @@
 (defn- remove-external-excalidraw-fonts
   "Remove fonts from excalidraw.com, we import them manually from our servers."
   [svg]
-  (when-let [style-tag (oget svg [:?firstElementChild :?firstElementChild])]
-    (when (= (oget style-tag :tagName) "style")
+  (let [style-tag (oget svg [:?firstElementChild :?firstElementChild])
+        view-box (.getAttribute svg "viewBox")]
+    (when view-box
+      (let [view-box-dimensions (.split view-box " ")]
+        (ocall svg "setAttribute" "width" (get view-box-dimensions 2))
+        (ocall svg "setAttribute" "width" (get view-box-dimensions 3))))
+    (when (and style-tag (= (oget style-tag :tagName) "style"))
       (ocall style-tag "remove"))))
 
 (defn ExcalidrawImage [_props]

@@ -1,6 +1,6 @@
 (ns schnaq.interface.components.lexical.nodes.excalidraw-modal
   (:require ["@excalidraw/excalidraw" :refer [Excalidraw]]
-            ["react" :refer [useEffect useRef useState]]
+            ["react" :refer [useEffect useRef useState useLayoutEffect]]
             [oops.core :refer [ocall oget]]
             [reagent.core :as r]))
 
@@ -47,16 +47,15 @@
              (ocall modal-overlay-element "removeEventListener" "click" click-outside-handler)))))
      #js [closeOnClickOutside? onDelete])
 
-    #_(useLayoutEffect
-       (fn []
-         (let [current-modal-ref (oget excalidraw-modal-ref :current)
-               on-key-down (fn [^KeyboardEvent _event] (on-delete))]
-           (when current-modal-ref
-             (ocall current-modal-ref "keydown" on-key-down))
-           (fn []
-             (when current-modal-ref
-               (ocall current-modal-ref "removeEventListener" "keydown" on-key-down)))))
-       #js [elements on-delete])
+    (useLayoutEffect
+     #(let [current-modal-ref (oget excalidraw-modal-ref :current)
+            on-key-down (fn [^KeyboardEvent _event] (onDelete))]
+        (when current-modal-ref
+          (ocall current-modal-ref "addEventListener" "keydown" on-key-down))
+        (fn []
+          (when current-modal-ref
+            (ocall current-modal-ref "removeEventListener" "keydown" on-key-down))))
+     #js [elements onDelete])
 
     (r/as-element
      (when shown?
