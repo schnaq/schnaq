@@ -15,7 +15,6 @@
 
 (defclass VideoNode
   (field ^string __url)
-  (field ^NodeKey __key)
   (extends DecoratorNode)
   (constructor [this url ?key]
                (super ?key)

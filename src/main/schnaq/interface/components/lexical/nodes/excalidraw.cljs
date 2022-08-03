@@ -107,7 +107,6 @@
 
 (defclass ExcalidrawNode
   (field ^string __data)
-  (field ^NodeKey __key)
   (extends DecoratorNode)
   (constructor [this ?data ?key]
                (super ?key)

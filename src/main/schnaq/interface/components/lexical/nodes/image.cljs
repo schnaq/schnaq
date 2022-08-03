@@ -61,7 +61,6 @@
 (defclass ImageNode
   (field ^string __src)
   (field ^string __altText)
-  (field ^NodeKey __key)
   (extends DecoratorNode)
   (constructor [this src altText ?key]
                (super ?key)
