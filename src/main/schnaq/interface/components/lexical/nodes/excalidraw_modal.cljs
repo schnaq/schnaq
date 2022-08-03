@@ -49,7 +49,9 @@
 
     (useLayoutEffect
      #(let [current-modal-ref (oget excalidraw-modal-ref :current)
-            on-key-down (fn [^KeyboardEvent _event] (onDelete))]
+            on-key-down (fn [^KeyboardEvent event]
+                          (when (= "Escape" (oget event :key))
+                            (onDelete)))]
         (when current-modal-ref
           (ocall current-modal-ref "addEventListener" "keydown" on-key-down))
         (fn []
