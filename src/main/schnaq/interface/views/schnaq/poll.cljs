@@ -323,7 +323,7 @@
   []
   (let [option-count @(rf/subscribe [:polls.create/option-count])]
     [:form.pt-2
-     {:on-key-down (fn [event] (when (= 13 (.-keyCode event))
+     {:on-key-down (fn [event] (when (= "Enter" (oget event :key))
                                  (.preventDefault event)
                                  false))
       :on-submit (fn [event]

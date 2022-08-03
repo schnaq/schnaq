@@ -103,10 +103,12 @@
   (map #(js/parseInt (oget % :value))
        (filter #(oget % :checked) checkboxes)))
 
-(defn ctrl-press?
-  "Check for a ctrl + `keyCode` combination in `event`."
-  [event keyCode]
-  (and (.-ctrlKey event) (= keyCode (.-keyCode event))))
+(>defn ctrl-press?
+  "Check for a ctrl + `key` combination in `event`. Don't use keyCode, as it is 
+  deprecated."
+  [event key]
+  [any? string? => boolean?]
+  (and (oget event :ctrlKey) (= key (oget event :key))))
 
 (defn scroll-to-id
   [id]

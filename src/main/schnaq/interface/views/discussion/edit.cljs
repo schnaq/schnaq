@@ -19,7 +19,7 @@
                    (rf/dispatch [:editor/clear editor-id])
                    (dispatch-fn e))
       :on-key-down (fn [e]
-                     (when (tools/ctrl-press? e 13)
+                     (when (tools/ctrl-press? e "Enter")
                        (rf/dispatch [:editor/content editor-id])
                        (dispatch-fn e)))}
      [:div.mb-3

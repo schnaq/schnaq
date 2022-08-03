@@ -189,7 +189,7 @@
        [card-elements/locked-statement-icon]]
       [:form.my-md-2
        {:on-submit submit-fn
-        :on-key-down #(when (toolbelt/ctrl-press? % 13) (submit-fn %))}
+        :on-key-down #(when (toolbelt/ctrl-press? % "Enter") (submit-fn %))}
        [topic-input-area editor-id]])))
 
 (defn reply-in-statement-input-form
@@ -213,7 +213,7 @@
     (when-not (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?))
       [:form.my-md-2
        {:on-submit #(answer-to-statement-event %)
-        :on-key-down #(when (toolbelt/ctrl-press? % 13)
+        :on-key-down #(when (toolbelt/ctrl-press? % "Enter")
                         (answer-to-statement-event %))}
        [premise-card-editor statement editor-id]
        (when-not pro-con-disabled?
