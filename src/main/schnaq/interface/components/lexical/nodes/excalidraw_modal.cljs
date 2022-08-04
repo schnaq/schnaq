@@ -19,7 +19,7 @@
                         (onDelete)
                         (discard-modal-open! true)))
         on-change-fn #(elements! %)
-        ShowDiscardDialog [:div {:class "ExcalidrawModal__discardModal"}
+        ShowDiscardDialog [:div.excalidraw-discard-modal
                            [:button {:on-click (fn []
                                                  (discard-modal-open! false)
                                                  (onDelete))}
@@ -59,22 +59,22 @@
             (ocall current-modal-ref "removeEventListener" "keydown" on-key-down))))
      #js [elements onDelete])
 
+    (prn excalidraw-modal-ref)
     (r/as-element
      (when shown?
-       [:div {:class "ExcalidrawModal__overlay"
-              :role "dialog"}
-        [:div {:class "ExcalidrawModal__modal"
-               :ref excalidraw-modal-ref
-               :tabIndex -1}
-         [:div {:class "ExcalidrawModal__row"}
-          (when discard-modal-open? [ShowDiscardDialog])
-          [:> Excalidraw {:onChange on-change-fn
-                          :initialData {:appState {:isLoading false}
-                                        :elements initialElements}}]
-          [:div {:class "ExcalidrawModal__actions"}
-           [:button {:class "action-button"
-                     :on-click discard-fn}
-            "Discard"]
-           [:button {:class "action-button"
-                     :on-click save-fn}
-            "Save"]]]]]))))
+       [:div.excalidraw
+        [:div {:class "excalidraw-overlay"
+               :role :dialog}
+         [:div {:class "excalidraw-modal"
+                :ref excalidraw-modal-ref
+                :tabIndex -1}
+          [:div {:class "excalidraw-row"}
+           (when discard-modal-open? [ShowDiscardDialog])
+           [:> Excalidraw {:onChange on-change-fn
+                           :initialData {:appState {:isLoading false}
+                                         :elements initialElements}}]
+           [:div {:class "excalidraw-actions"}
+            [:button {:on-click discard-fn}
+             "Discard"]
+            [:button {:on-click save-fn}
+             "Save"]]]]]]))))

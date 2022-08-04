@@ -131,7 +131,7 @@
 
 (defn- footer-common []
   (let [locale @(rf/subscribe [:current-locale])]
-    [:footer
+    [:footer.footer
      [:div.container-fluid.px-5
       [:div.row
        [:div.col-md-6.col-xl-3.col-12

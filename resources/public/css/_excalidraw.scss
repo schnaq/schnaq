@@ -1,4 +1,7 @@
+@use 'rounded' as rounded;
 /**
+ * Based on Lexical
+ *
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -7,7 +10,6 @@
  *
  */
 
-// Fonts for excalidraw
 @font-face {
   font-family: "Virgilia";
   src: url("../node_modules/@excalidraw/excalidraw/dist/excalidraw-assets/Virgil.woff2") format("woff2");
@@ -18,63 +20,68 @@
   src: url("../node_modules/@excalidraw/excalidraw/dist/excalidraw-assets/Cascadia.woff2") format("woff2");
 }
 
-// stylelint-disable selector-class-pattern
-.ExcalidrawModal__overlay {
-  align-items: center;
-  background-color: rgba(40, 40, 40, 0.6);
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 0;
-  flex-shrink: 1px;
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 100;
-}
+.excalidraw {
+  .excalidraw-overlay {
+    align-items: center;
+    background-color: rgba(40, 40, 40, 0.6);
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    flex-shrink: 1px;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 100;
+  }
 
-.ExcalidrawModal__actions {
-  position: absolute;
-  right: 5px;
-  text-align: end;
-  top: 5px;
-  z-index: 1;
+  .excalidraw-actions {
+    position: absolute;
+    right: 5px;
+    text-align: end;
+    top: 5px;
+    z-index: 1;
 
-  button {
-    background-color: #fff;
-    border-radius: 5px;
+    button {
+      @include rounded.rounded-1;
+      background-color: #fff;
+      margin-left: 0.5rem;
+    }
+  }
+
+  .excalidraw-row {
+    @include rounded.rounded-1;
+    box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    height: 80vh;
+    padding: 40px 5px 5px;
+    position: relative;
+    width: 75vw;
+    @include media-breakpoint-down(xl) {
+      height: 85vh;
+      width: 95vw;
+    }
+
+    >div {
+      border-radius: 5px;
+    }
+  }
+
+  .excalidraw-modal {
+    @include rounded.rounded-1;
+    align-items: center;
+    background-color: #eee;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: relative;
+    top: 50px;
+    width: auto;
+    z-index: 1000;
+  }
+
+  .excalidraw-discard-modal {
+    margin-top: 60px;
+    text-align: center;
   }
 }
-
-.ExcalidrawModal__row {
-  border-radius: 8px;
-  box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-  height: 70vh;
-  padding: 40px 5px 5px;
-  position: relative;
-  width: 70vw;
-
-  >div {
-    border-radius: 5px;
-  }
-}
-
-.ExcalidrawModal__modal {
-  align-items: center;
-  background-color: #eee;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  left: 0;
-  position: relative;
-  top: 50px;
-  width: auto;
-  z-index: 10;
-}
-
-.ExcalidrawModal__discardModal {
-  margin-top: 60px;
-  text-align: center;
-}
-// stylelint-enable selector-class-pattern

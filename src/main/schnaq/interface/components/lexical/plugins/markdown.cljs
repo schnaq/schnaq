@@ -3,6 +3,7 @@
             ["@lexical/react/LexicalMarkdownShortcutPlugin" :refer [MarkdownShortcutPlugin]]
             [goog.string :refer [format]]
             [oops.core :refer [ocall]]
+            [schnaq.interface.components.lexical.nodes.excalidraw :refer [$excalidraw-node?]]
             [schnaq.interface.components.lexical.nodes.image :refer [$create-image-node $image-node?]]
             [schnaq.interface.components.lexical.nodes.video :refer [$create-video-node $video-node?]]))
 
@@ -37,10 +38,24 @@
        :trigger ")"
        :type "text-match"})
 
+(def ^:private excalidraw-transformer
+  "Export / import excalidraw nodes."
+  #js {:export (fn [^ExcalidrawNode node, _export-children, _export-format]
+                 (when ($excalidraw-node? node)
+                   (format "![%s](%s)" "Excalidraw drawing" "TODO")))
+       :importRegExp markdown-image-import-regex
+       :regExp markdown-image-import-regex
+       :replace (fn [text-node match]
+                  (let [[_ src altText] match
+                        image-node ($create-image-node src altText)]
+                    (ocall text-node "replace" image-node)))
+       :trigger ")"
+       :type "text-match"})
+
 ;; -----------------------------------------------------------------------------
 
 (def schnaq-transformers
-  (.concat #js [image-transformer video-transformer] TRANSFORMERS))
+  (.concat #js [image-transformer video-transformer excalidraw-transformer] TRANSFORMERS))
 
 (defn markdown-shortcut-plugin
   "Plugin to enable markdown support"
