@@ -7,6 +7,7 @@
                                KEY_BACKSPACE_COMMAND KEY_DELETE_COMMAND NodeKey]]
             ["react" :refer [useCallback useEffect useMemo useRef useState]]
             [oops.core :refer [ocall oget oset!]]
+            [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.interface.components.lexical.nodes.excalidraw-image :refer [ExcalidrawImage]]
             [schnaq.interface.components.lexical.nodes.excalidraw-modal :refer [ExcalidrawModal]]

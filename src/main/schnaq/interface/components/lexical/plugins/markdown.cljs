@@ -42,6 +42,7 @@
   "Export / import excalidraw nodes."
   #js {:export (fn [^ExcalidrawNode node, _export-children, _export-format]
                  (when ($excalidraw-node? node)
+                   (def nnode node)
                    (format "![%s](%s)" "Excalidraw drawing" "TODO")))
        :importRegExp markdown-image-import-regex
        :regExp markdown-image-import-regex

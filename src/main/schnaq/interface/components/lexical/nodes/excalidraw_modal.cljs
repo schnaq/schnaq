@@ -1,7 +1,9 @@
 (ns schnaq.interface.components.lexical.nodes.excalidraw-modal
-  (:require ["@excalidraw/excalidraw" :refer [Excalidraw]]
-            ["react" :refer [useEffect useRef useState useLayoutEffect]]
+  (:require ["@excalidraw/excalidraw" :refer [Excalidraw exportToSvg]]
+            ["react" :refer [useEffect useLayoutEffect useRef useState]]
             [oops.core :refer [ocall oget]]
+            [promesa.core :as p]
+            [re-frame.core :as rf]
             [reagent.core :as r]))
 
 (defn ExcalidrawModal [props]
@@ -11,10 +13,13 @@
         [elements elements!] (useState initialElements)
         save-fn #(let [filtered-elements (ocall elements "filter" (fn [el] (not (oget el :isDeleted))))]
                    (if (pos? (count filtered-elements))
-                     (onSave elements)
+                     (do
+                       (rf/dispatch [:excalidraw.elements/convert elements])
+                       (onSave elements))
                       ;; else delete node if the scene is clear
                      (onDelete)))
         discard-fn #(let [filtered-elements (ocall elements "filter" (fn [el] (not (oget el :isDeleted))))]
+                      (rf/dispatch [:excalidraw.elements/dissoc])
                       (if (zero? (count filtered-elements))
                         (onDelete)
                         (discard-modal-open! true)))
@@ -59,7 +64,6 @@
             (ocall current-modal-ref "removeEventListener" "keydown" on-key-down))))
      #js [elements onDelete])
 
-    (prn excalidraw-modal-ref)
     (r/as-element
      (when shown?
        [:div.excalidraw
@@ -78,3 +82,48 @@
              "Discard"]
             [:button {:on-click save-fn}
              "Save"]]]]]]))))
+
+;; -----------------------------------------------------------------------------
+
+(defn- remove-external-excalidraw-fonts
+  "Remove fonts from excalidraw.com, we import them manually from our servers."
+  [svg]
+  (let [style-tag (oget svg [:?firstElementChild :?firstElementChild])
+        view-box (.getAttribute svg "viewBox")]
+    (when view-box
+      (let [view-box-dimensions (.split view-box " ")]
+        (ocall svg "setAttribute" "width" (get view-box-dimensions 2))
+        (ocall svg "setAttribute" "width" (get view-box-dimensions 3))))
+    (when (and style-tag (= (oget style-tag :tagName) "style"))
+      (ocall style-tag "remove"))))
+
+(rf/reg-event-db
+ :excalidraw.elements/svg
+ (fn [db [_ svg]]
+   (assoc-in db [:excalidraw :elements :svg] (oget svg :?outerHTML))))
+
+(rf/reg-fx
+ :excalidraw.elements/to-svg
+ (fn [elements]
+   (p/let [svg (exportToSvg #js {:elements elements :files nil})]
+     (remove-external-excalidraw-fonts svg)
+     (ocall svg "setAttribute" "width" "100%")
+     (ocall svg "setAttribute" "height" "100%")
+     (ocall svg "setAttribute" "display" "block")
+     (rf/dispatch [:excalidraw.elements/svg svg]))))
+
+(rf/reg-event-fx
+ :excalidraw.elements/convert
+ (fn [{:keys [db]} [_ elements]]
+   {:db (assoc-in db [:excalidraw :elements :raw] elements)
+    :fx [[:excalidraw.elements/to-svg elements]]}))
+
+(rf/reg-event-db
+ :excalidraw.elements/dissoc
+ (fn [db]
+   (update db :excalidraw dissoc :elements)))
+
+(rf/reg-sub
+ :excalidraw.elements/svg
+ (fn [db]
+   (get-in db [:excalidraw :elements :svg])))
