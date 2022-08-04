@@ -1,6 +1,7 @@
 (ns schnaq.database.discussion
   "Discussion related functions interacting with the database."
-  (:require [clojure.data :as cdata]
+  (:require [clj-fuzzy.metrics :as fuzzy-metrics]
+            [clojure.data :as cdata]
             [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
@@ -498,6 +499,13 @@
     (when valid-secrets
       @(transact
         (mapv #(vector :db/add % :statement/author author-id) (keys valid-secrets))))))
+
+(defn levenshtein-max?
+  "Levenshtein-Helper for datomic to have a maximum distance."
+  [max string-1 string-2]
+  (>= max (fuzzy-metrics/levenshtein
+           (cstring/lower-case string-1)
+           (cstring/lower-case string-2))))
 
 (defn- add-synonyms-to-list
   "Go through a list and add all synonyms that can be found in our dictionary.\n
