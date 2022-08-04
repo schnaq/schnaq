@@ -449,7 +449,8 @@
       [:div.row
        (cond->
         [:> Masonry
-         {:breakpoints config/breakpoints
+         {:autoArrange true
+          :breakpoints config/breakpoints
           :columns {:xs 1 :lg (or number-of-rows 2)}
           :gap 10}
          [:section
