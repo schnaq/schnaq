@@ -447,7 +447,7 @@
     (if schnaq-loading?
       [loading/loading-card]
       [:div.row
-       (cond->
+       (conj
         [:> Masonry
          {:autoArrange true
           :breakpoints config/breakpoints
@@ -455,7 +455,10 @@
           :gap 10}
          [:section
           [info-card]
-          (when-not hide-input? [selection-card])]]
-         true (conj activations statements))
+          (when-not hide-input? [selection-card])
+          #_(conj activations statements)]]
+        activations
+        statements)
+
        (when show-call-to-share?
          [call-to-share])])))
