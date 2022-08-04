@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.conclusion-card
   (:require ["react-smart-masonry" :default Masonry]
-            [clj-fuzzy.metrics :as clj-fuzzy]
             [clojure.string :as cstring]
             [com.fulcrologic.guardrails.core :refer [>defn- ?]]
             [re-frame.core :as rf]
@@ -29,8 +28,7 @@
             [schnaq.interface.views.schnaq.poll :as poll]
             [schnaq.interface.views.schnaq.reactions :as reactions]
             [schnaq.interface.views.schnaq.wordcloud-card :as wordcloud-card]
-            [schnaq.interface.views.user :as user]
-            [schnaq.shared-toolbelt :as shared-tools]))
+            [schnaq.interface.views.user :as user]))
 
 (defn- question?
   "Returns whether a statement has been marked as a question."
@@ -391,22 +389,6 @@
              [input-form-or-disabled-alert])]]
          motion/card-fade-in-time]))))
 
-(defn- some-levenshtein
-  "Takes a list of strings and is truthy if the target-string matches any of the tokens
-  without breaking the max levenshtein-distance."
-  [target-string tokens]
-  (some #(> 3 (clj-fuzzy/levenshtein target-string %)) tokens))
-
-(defn- score-hit
-  "Returns a numerical score how many tokens of `token-list` are a match for the
-  supplied `string`."
-  [token-list string]
-  (let [string-tokens (shared-tools/tokenize-string string)]
-    (->> token-list
-         (map #(some-levenshtein % string-tokens))
-         (filter true?)
-         count)))
-
 (defn- statement-list-item
   "The highest part of a statement-list."
   [statement-id]
@@ -419,21 +401,16 @@
  :<- [:discussion.statements/sort-method]
  :<- [:local-votes]
  :<- [:discussion.statements/show]
- :<- [:schnaq.question.input/current]
  :<- [:filters/questions?]
- (fn [[sort-method local-votes shown-statements current-input-tokens questions-only?] _]
+ (fn [[sort-method local-votes shown-statements questions-only?] _]
    (let [question-filtered-statements (if questions-only?
                                         (filter #((set (:statement/labels %)) ":question") shown-statements)
                                         shown-statements)
          sorted-conclusions (sort-statements question-filtered-statements sort-method local-votes)
          grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)
-         input-filtered-statements
-         (if (> 101 (count sorted-conclusions))
-           ;; Temporary toggle. Remove if performance with lots of statements is better
-           (sort-by #(score-hit current-input-tokens (:statement/content %)) > (get grouped-statements false))
-           (get grouped-statements false))
+         non-pinned-statements (get grouped-statements false)
          pinned-statements (get grouped-statements true)
-         sorted-filtered-statements (concat pinned-statements input-filtered-statements)]
+         sorted-filtered-statements (concat pinned-statements non-pinned-statements)]
      (map :db/id sorted-filtered-statements))))
 
 (defn- statements-list []
@@ -461,26 +438,25 @@
         top-level? @(rf/subscribe [:routes.schnaq/start?])
         schnaq-loading? @(rf/subscribe [:loading/schnaq?])
         access-code @(rf/subscribe [:schnaq.selected/access-code])
-        question-input @(rf/subscribe [:schnaq.question.input/current])
         hide-input? @(rf/subscribe [:ui/setting :hide-input])
         hide-activations? @(rf/subscribe [:ui/setting :hide-activations])
         number-of-rows @(rf/subscribe [:ui/setting :num-rows])
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements))))
-        question-first? (not-empty question-input)
         activations (when (and (not hide-activations?) @(rf/subscribe [:schnaq/activations?])) [activation-cards/activation-cards])]
     (if schnaq-loading?
       [loading/loading-card]
       [:div.row
-       (cond->
-        [:> Masonry
-         {:breakpoints config/breakpoints
-          :columns {:xs 1 :lg (or number-of-rows 2)}
-          :gap 10}
-         [:section
-          [info-card]
-          (when-not hide-input? [selection-card])]]
-         question-first? (conj statements activations)
-         (not question-first?) (conj activations statements))
+       [:> Masonry
+        {:autoArrange true
+         :breakpoints config/breakpoints
+         :columns {:xs 1 :lg (or number-of-rows 2)}
+         :gap 10}
+        [:section
+         [info-card]
+         (when-not hide-input? [selection-card])]
+        activations
+        statements]
+
        (when show-call-to-share?
          [call-to-share])])))
