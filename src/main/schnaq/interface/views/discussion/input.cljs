@@ -55,16 +55,6 @@
       :discussion.add.button/attack :discussion/add-premise-supporting
       get-subscription set-event]]))
 
-(rf/reg-event-db
- :schnaq.question.input/clear
- (fn [db _]
-   (update db :schnaq dissoc :question)))
-
-(rf/reg-sub
- :schnaq.question.input/current
- (fn [db _]
-   (get-in db [:schnaq :question :input] [])))
-
 (defn- textarea-highlighting
   "Add highlighting to textarea based on the selected attitude."
   [field]
@@ -166,7 +156,6 @@
         editor-id :conclusion-card-editor
         submit-fn (fn [e]
                     (.preventDefault e)
-                    (rf/dispatch [:schnaq.question.input/clear])
                     (rf/dispatch [:editor/clear editor-id])
                     (event-to-send e))]
     (if (:statement/locked? @(rf/subscribe [:schnaq.statements/focus]))
