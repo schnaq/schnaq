@@ -455,8 +455,7 @@
           :gap 10}
          [:section
           [info-card]
-          (when-not hide-input? [selection-card])
-          #_(conj activations statements)]]
+          (when-not hide-input? [selection-card])]]
         activations
         statements)
 
