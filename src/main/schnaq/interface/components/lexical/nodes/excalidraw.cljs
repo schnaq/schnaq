@@ -109,10 +109,10 @@
   (field ^string __data)
   (field ^string __url)
   (extends DecoratorNode)
-  (constructor [this ?data ?key]
+  (constructor [this ?data ?url ?key]
                (super ?key)
                (oset! this :!__data (or ?data "[]"))
-               (oset! this :!__url ""))
+               (oset! this :!__url (or ?url "")))
   Object
   (createDOM [this config]
              (let [span (.createElement js/document "span")
@@ -131,7 +131,6 @@
                element))
   (setUrl [this url]
           (let [self (.getWritable this)]
-            (prn ".setUrl: Setting url")
             (oset! self :__url url)))
   (getUrl [this]
           (oget this :__url))
@@ -142,11 +141,12 @@
              (oset! self :__data data)))
   (exportJSON [this]
               {:data (oget this :__data)
+               :url (oget this :__url)
                :type "excalidraw"
                :version 1})
   (decorate [this _editor]
             (r/create-element ExcalidrawComponent
-                              #js {:data (oget this :__data) :nodeKey (.getKey this)})))
+                              #js {:data (oget this :__data) :url (oget this :__url) :nodeKey (.getKey this)})))
 
 ;; Configure static methods on our new class, because it is not possible to do
 ;; this inline in the `defclass` macro.
@@ -159,15 +159,15 @@
 (oset! ExcalidrawNode "getType" (fn [] "excalidraw"))
 (oset! ExcalidrawNode "clone"
        (fn [^ExcalidrawNode node]
-         (ExcalidrawNode. (oget node :__data) (oget node :__key))))
+         (ExcalidrawNode. (oget node :__data) (oget node :__url) (oget node :__key))))
 (oset! ExcalidrawNode "importJSON"
        (fn [node]
-         (ExcalidrawNode. (oget node :data) nil)))
+         (ExcalidrawNode. (oget node :data) (oget node :url) nil)))
 
 (defn $create-excalidraw-node
   "Create an image node."
   []
-  (ExcalidrawNode. nil nil))
+  (ExcalidrawNode. nil nil nil))
 
 (defn $excalidraw-node?
   "Check that `node` is an instance of `ExcalidrawNode`."
