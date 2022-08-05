@@ -17,7 +17,7 @@
             [schnaq.interface.components.lexical.config :refer [initial-config sample-markdown-input]]
             [schnaq.interface.components.lexical.plugins.autolink :refer [autolink-plugin]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
-            [schnaq.interface.components.lexical.plugins.text-change :refer [TextChangePlugin]]
+            [schnaq.interface.components.lexical.plugins.node-changed :refer [NodeChangedPlugin]]
             [schnaq.interface.components.lexical.plugins.toolbar :refer [ToolbarPlugin]]
             [schnaq.interface.components.lexical.plugins.tree-view :refer [TreeViewPlugin]]))
 
@@ -47,7 +47,7 @@
       [autolink-plugin]
       [:> ClearEditorPlugin]
       [:> LinkPlugin]
-      (when on-text-change [:f> TextChangePlugin {:on-text-change on-text-change}])
+      [:f> NodeChangedPlugin {:on-text-change on-text-change}]
       [:> ListPlugin]
       [markdown-shortcut-plugin]
       (when focus? [:> AutoFocusPlugin])
@@ -137,3 +137,8 @@
  :editor/content
  (fn [db [_ editor-id]]
    (get-in db [:editors editor-id :content])))
+
+(rf/reg-fx
+ :editor/update!
+ (fn [[^LexicalEditor editor f]]
+   (.update editor f)))
