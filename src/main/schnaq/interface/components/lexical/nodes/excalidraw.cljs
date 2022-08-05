@@ -7,7 +7,6 @@
                                KEY_BACKSPACE_COMMAND KEY_DELETE_COMMAND NodeKey]]
             ["react" :refer [useCallback useEffect useMemo useRef useState]]
             [oops.core :refer [ocall oget oset!]]
-            [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.interface.components.lexical.nodes.excalidraw-image :refer [ExcalidrawImage]]
             [schnaq.interface.components.lexical.nodes.excalidraw-modal :refer [ExcalidrawModal]]
@@ -108,10 +107,12 @@
 
 (defclass ExcalidrawNode
   (field ^string __data)
+  (field ^string __url)
   (extends DecoratorNode)
   (constructor [this ?data ?key]
                (super ?key)
-               (oset! this :!__data (or ?data "[]")))
+               (oset! this :!__data (or ?data "[]"))
+               (oset! this :!__url ""))
   Object
   (createDOM [this config]
              (let [span (.createElement js/document "span")
@@ -128,6 +129,14 @@
                    (oset! element :innerHTML (oget svg :outerHTML))))
                (.setAttribute element data-excalidraw-attribute (oget this :__data))
                element))
+  (setUrl [this url]
+          (let [self (.getWritable this)]
+            (prn ".setUrl: Setting url")
+            (oset! self :__url url)))
+  (getUrl [this]
+          (oget this :__url))
+  (hasUrl [this]
+          (seq (oget this :__url)))
   (setData [this data]
            (let [self (.getWritable this)]
              (oset! self :__data data)))
