@@ -2,7 +2,7 @@
   (:require ["@lexical/markdown" :refer [TRANSFORMERS]]
             ["@lexical/react/LexicalMarkdownShortcutPlugin" :refer [MarkdownShortcutPlugin]]
             [goog.string :refer [format]]
-            [oops.core :refer [ocall oget]]
+            [oops.core :refer [ocall]]
             [schnaq.interface.components.lexical.nodes.excalidraw :refer [$excalidraw-node?]]
             [schnaq.interface.components.lexical.nodes.image :refer [$create-image-node $image-node?]]
             [schnaq.interface.components.lexical.nodes.video :refer [$create-video-node $video-node?]]))
