@@ -2,10 +2,11 @@
   (:require [clojure.string :as str]
             [cognitect.aws.client.api :as aws]
             [cognitect.aws.credentials :as credentials]
-            [com.fulcrologic.guardrails.core :refer [>defn => ?]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.specs]
+            [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
             [taoensso.timbre :as log]))
 
 (def s3-client
@@ -34,11 +35,12 @@
     (do
       (aws/invoke s3-client
                   {:op :PutObject
-                   :request {:Bucket resolved-bucket
-                             :Key file-name
-                             :Body stream
-                             :Content-Length content-length
-                             :Content-Type content-type}})
+                   :request (remove-nil-values-from-map
+                             {:Bucket resolved-bucket
+                              :Key file-name
+                              :Body stream
+                              :ContentLength content-length
+                              :ContentType content-type})})
       (log/info (format "Uploaded file under the key %s to bucket %s, content-type: %s, content-length: %s" file-name resolved-bucket content-type content-length))
       (absolute-file-url bucket file-name))
     (throw (ex-info (format "[upload-stream] No bucket registered for key `%s`" bucket)
