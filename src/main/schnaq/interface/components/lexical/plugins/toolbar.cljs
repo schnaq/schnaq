@@ -202,6 +202,13 @@
        [icon :quote-right]]]
      (when file-storage
        [:<>
+        [:span.d-none.d-md-block
+         [tooltip/text
+          (labels :editor.toolbar/drawing)
+          [:button.toolbar-item.spaced
+           {:on-click #(rf/dispatch [:editor/command active-editor INSERT_EXCALIDRAW_COMMAND])
+            :type :button}
+           [icon :pencil-ruler]]]]
         [file-upload-button
          (labels :editor.toolbar/image-upload)
          [inputs/image [:span.fs-5 (labels :editor.toolbar/image-upload)] "editor-upload-image" [:editors id :image]
@@ -236,13 +243,6 @@
           :type :button
           :class (when ordered-list? "active")})
        [icon :list-ol]]]
-     [:span.d-none.d-md-block
-      [tooltip/text
-       (labels :editor.toolbar/clear)
-       [:button.toolbar-item.spaced
-        {:on-click #(rf/dispatch [:editor/command active-editor INSERT_EXCALIDRAW_COMMAND])
-         :type :button}
-        [icon :rocket]]]]
      [:span.d-none.d-md-block
       [tooltip/text
        (labels :editor.toolbar/clear)

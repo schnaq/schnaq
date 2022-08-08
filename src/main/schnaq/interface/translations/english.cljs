@@ -781,6 +781,7 @@
    :editor.toolbar/file-upload "Upload a file"
    :editor.toolbar.file-upload/submit "Insert Image"
    :editor.toolbar.file-upload/close "Close"
+   :editor.toolbar/drawing "Create Drawing"
    :editor.toolbar/image-upload "Upload an image"
    :editor.toolbar/video-upload "Upload a video"
    :editor.toolbar/list-ul "Unsorted List"

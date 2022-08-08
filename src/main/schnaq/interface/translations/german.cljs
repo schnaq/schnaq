@@ -789,6 +789,7 @@
    :editor.toolbar/file-upload "Datei hochladen"
    :editor.toolbar.file-upload/submit "Einfügen"
    :editor.toolbar.file-upload/close "Schließen"
+   :editor.toolbar/drawing "Zeichnung erstellen"
    :editor.toolbar/image-upload "Bild hochladen"
    :editor.toolbar/video-upload "Video hochladen"
    :editor.toolbar/list-ul "Unsortierte Liste"
