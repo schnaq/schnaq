@@ -11,13 +11,13 @@
  */
 
 @font-face {
-  font-family: "Virgilia";
-  src: url("../node_modules/@excalidraw/excalidraw/dist/excalidraw-assets/Virgil.woff2") format("woff2");
+  font-family: "Virgil";
+  src: url("https://s3.schnaq.com/schnaq-common/fonts/excalidraw/Virgil.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Cascadia";
-  src: url("../node_modules/@excalidraw/excalidraw/dist/excalidraw-assets/Cascadia.woff2") format("woff2");
+  src: url("https://s3.schnaq.com/schnaq-common/fonts/excalidraw/Cascadia.woff2") format("woff2");
 }
 
 .excalidraw {
