@@ -37,8 +37,8 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          svg-b64 (.btoa js/window (oget svg :outerHTML))
          file {:name "drawing.svg"
-               :type "text/plain"
-               :content (format "data:application/octet-stream;base64,%s" svg-b64)}]
+               :type "image/svg+xml"
+               :content (format "data:image/svg+xml;base64,%s" svg-b64)}]
      (rf/dispatch [:file/upload share-hash file :schnaq/media [:excalidraw.elements.store/success editor node] [:ajax.error/as-notification]]))))
 
 (defn excalidraw-changed

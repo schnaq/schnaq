@@ -39,7 +39,7 @@
                              :Body stream
                              :Content-Length content-length
                              :Content-Type content-type}})
-      (log/info "Uploaded file under the key" file-name "to bucket" resolved-bucket)
+      (log/info (format "Uploaded file under the key %s to bucket %s, content-type: %s, content-length: %s" file-name resolved-bucket content-type content-length))
       (absolute-file-url bucket file-name))
     (throw (ex-info (format "[upload-stream] No bucket registered for key `%s`" bucket)
                     {:bucket bucket}))))

@@ -6,6 +6,7 @@
             [image-resizer.core :as resizer-core]
             [image-resizer.format :as resizer-format]
             [ring.util.http-response :refer [bad-request created forbidden]]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.main :as d]
             [schnaq.database.specs :as specs]
             [schnaq.s3 :as s3]
@@ -35,7 +36,7 @@
   "Check if the type of a file is an image."
   [file]
   [::specs/file => boolean?]
-  (.startsWith (:type file) "image/"))
+  (contains? shared-config/allowed-mime-types-images (:type file)))
 
 (>defn file->stream
   "Convert a file to a stream."

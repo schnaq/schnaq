@@ -39,7 +39,7 @@
 
 (def allowed-mime-types-images
   "Define a list of allowed mime-types."
-  #{"image/jpeg" "image/png" "image/webp"})
+  #{"image/jpeg" "image/png" "image/webp" "image/gif"})
 
 (def admin-roles
   #{"admin" :role/admin}) ;; keep string version of "admin", which is used to initialize new admins
