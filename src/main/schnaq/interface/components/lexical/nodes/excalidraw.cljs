@@ -44,9 +44,10 @@
         delete-node (useCallback
                      (fn []
                        (modal-open! false)
-                       (.update editor #(let [node ($getNodeByKey nodeKey)]
-                                          (when ($excalidraw-node? node)
-                                            (ocall node "remove"))))))
+                       (ocall editor "update"
+                              #(when-let [node ($getNodeByKey nodeKey)]
+                                 (when ($excalidraw-node? node)
+                                   (ocall node "remove"))))))
         set-data (fn [new-data]
                    (when-not (.isReadOnly editor)
                      (.update editor #(let [node ($getNodeByKey nodeKey)]

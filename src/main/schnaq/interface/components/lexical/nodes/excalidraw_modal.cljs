@@ -2,7 +2,8 @@
   (:require ["@excalidraw/excalidraw" :refer [Excalidraw]]
             ["react" :refer [useEffect useLayoutEffect useRef useState]]
             [oops.core :refer [ocall oget]]
-            [reagent.core :as r]))
+            [reagent.core :as r]
+            [schnaq.interface.translations :refer [labels]]))
 
 (defn ExcalidrawModal [props]
   (let [{:keys [closeOnClickOutside? onSave onDelete initialElements shown?]} (js->clj props :keywordize-keys true)
@@ -14,18 +15,18 @@
                      (onSave elements)
                       ;; else delete node if the scene is clear
                      (onDelete)))
-        discard-fn #(let [filtered-elements (ocall elements "filter" (fn [el] (not (oget el :isDeleted))))]
-                      (if (zero? (count filtered-elements))
-                        (onDelete)
-                        (discard-modal-open! true)))
+        discard-fn (fn [event]
+                     (.preventDefault event)
+                     (discard-modal-open! true)
+                     (onDelete))
         on-change-fn #(elements! %)
         ShowDiscardDialog [:div.excalidraw-discard-modal
                            [:button {:on-click (fn []
                                                  (discard-modal-open! false)
                                                  (onDelete))}
-                            "Discard"]
+                            (labels :excalidraw/discard)]
                            [:button {:on-click #(discard-modal-open! false)}
-                            "Cancel"]]]
+                            (labels :excalidraw/cancel)]]]
 
     (useEffect #(when-let [current (oget excalidraw-modal-ref :current)]
                   (ocall current "focus")) #js [])
@@ -68,12 +69,13 @@
                 :ref excalidraw-modal-ref
                 :tabIndex -1}
           [:div {:class "excalidraw-row"}
-           (when discard-modal-open? [ShowDiscardDialog])
+
            [:> Excalidraw {:onChange on-change-fn
                            :initialData {:appState {:isLoading false}
                                          :elements initialElements}}]
+           (when discard-modal-open? [ShowDiscardDialog])
            [:div {:class "excalidraw-actions"}
             [:button {:on-click discard-fn}
-             "Discard"]
+             (labels :excalidraw/discard)]
             [:button {:on-click save-fn}
-             "Save"]]]]]]))))
+             (labels :excalidraw/save)]]]]]]))))

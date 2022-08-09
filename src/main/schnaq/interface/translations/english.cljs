@@ -790,6 +790,10 @@
    :editor.toolbar/undo "Undo"
    :editor.toolbar/redo "Redo"
 
+   :excalidraw/discard "Discard"
+   :excalidraw/cancel "Cancel"
+   :excalidraw/save "Save"
+
    ;; File handling
    :file.store.error/title "Error while uploading your file"
    :file.store.error/file-too-large "Your file size is %d mega bytes, it exceeds the maximum allowed size of %d mega bytes. Please upload a smaller file."

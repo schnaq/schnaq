@@ -798,6 +798,10 @@
    :editor.toolbar/undo "Rückgängig"
    :editor.toolbar/redo "Wiederholen"
 
+   :excalidraw/discard "Verwerfen"
+   :excalidraw/cancel "Abbrechen"
+   :excalidraw/save "Speichern"
+
    ;; File handling
    :file.store.error/title "Hochladen der Datei fehlgeschlagen"
    :file.store.error/file-too-large "Deine Datei ist %d Megabyte groß, die maximal erlaubte Größe ist %d Megabyte. Bitte lade eine kleinere Datei hoch."
