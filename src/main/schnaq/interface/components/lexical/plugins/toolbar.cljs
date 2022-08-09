@@ -7,8 +7,7 @@
             ["@lexical/selection" :refer [$wrapLeafNodesInElements]]
             ["@lexical/utils" :refer [$getNearestNodeOfType mergeRegister]]
             ["lexical" :refer [$getSelection $isRangeSelection
-                               CAN_REDO_COMMAND CAN_UNDO_COMMAND CLEAR_EDITOR_COMMAND
-                               CLEAR_HISTORY_COMMAND FORMAT_TEXT_COMMAND REDO_COMMAND SELECTION_CHANGE_COMMAND
+                               CAN_REDO_COMMAND CAN_UNDO_COMMAND FORMAT_TEXT_COMMAND REDO_COMMAND SELECTION_CHANGE_COMMAND
                                UNDO_COMMAND]]
             ["react" :refer [useCallback useEffect useState]]
             [oops.core :refer [ocall oget]]
@@ -17,6 +16,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
+            [schnaq.interface.components.lexical.plugins.excalidraw :refer [INSERT_EXCALIDRAW_COMMAND]]
             [schnaq.interface.components.lexical.plugins.images :refer [INSERT_IMAGE_COMMAND]]
             [schnaq.interface.components.lexical.plugins.links :refer [INSERT_LINK_COMMAND]]
             [schnaq.interface.components.lexical.plugins.videos :refer [INSERT_VIDEO_COMMAND]]
@@ -127,25 +127,24 @@
         [can-redo? can-redo!] (useState false)
         update-toolbar
         (useCallback
-         (fn []
-           (let [selection ($getSelection)]
-             (when ($isRangeSelection selection)
-               (let [anchorNode (.getNode (.-anchor selection))
-                     element (if (= "root" anchorNode) anchorNode (.getTopLevelElementOrThrow anchorNode))
-                     element-key (.getKey element)
-                     element-dom (ocall editor "getElementByKey" element-key)]
-                 (when element-dom
-                   (if ($isListNode element)
-                     (let [parentList ($getNearestNodeOfType anchorNode ListNode)
-                           block-type (if parentList (.getTag parentList) (.getTag element))]
-                       (block-type! block-type))
-                     (let [block-type (if ($isHeadingNode element) (ocall element "getTag") (ocall element "getType"))]
-                       (block-type! block-type))))
+         #(let [selection ($getSelection)]
+            (when ($isRangeSelection selection)
+              (let [anchorNode (.getNode (.-anchor selection))
+                    element (if (= "root" (.getKey anchorNode)) anchorNode (.getTopLevelElementOrThrow anchorNode))
+                    element-key (.getKey element)
+                    element-dom (ocall editor "getElementByKey" element-key)]
+                (when element-dom
+                  (if ($isListNode element)
+                    (let [parentList ($getNearestNodeOfType anchorNode ListNode)
+                          block-type (if parentList (.getTag parentList) (.getTag element))]
+                      (block-type! block-type))
+                    (let [block-type (if ($isHeadingNode element) (ocall element "getTag") (ocall element "getType"))]
+                      (block-type! block-type))))
                  ;; Update text format
-                 (bold! (.hasFormat selection "bold"))
-                 (code! (.hasFormat selection "code"))
-                 (italic! (.hasFormat selection "italic"))
-                 (strike-through! (.hasFormat selection "strikethrough"))))))
+                (bold! (.hasFormat selection "bold"))
+                (code! (.hasFormat selection "code"))
+                (italic! (.hasFormat selection "italic"))
+                (strike-through! (.hasFormat selection "strikethrough")))))
          #js [active-editor])]
     (useEffect
      #(mergeRegister
@@ -202,6 +201,12 @@
        [icon :quote-right]]]
      (when file-storage
        [:<>
+        [tooltip/text
+         (labels :editor.toolbar/drawing)
+         [:button.toolbar-item.spaced
+          {:on-click #(rf/dispatch [:editor/command active-editor INSERT_EXCALIDRAW_COMMAND])
+           :type :button}
+          [icon :pencil-ruler]]]
         [file-upload-button
          (labels :editor.toolbar/image-upload)
          [inputs/image [:span.fs-5 (labels :editor.toolbar/image-upload)] "editor-upload-image" [:editors id :image]
@@ -236,29 +241,18 @@
           :type :button
           :class (when ordered-list? "active")})
        [icon :list-ol]]]
-     [:span.d-none.d-md-block
-      [tooltip/text
-       (labels :editor.toolbar/clear)
-       [:button.toolbar-item.spaced
-        {:on-click (fn []
-                     (rf/dispatch [:editor/command active-editor CLEAR_EDITOR_COMMAND])
-                     (rf/dispatch [:editor/command active-editor CLEAR_HISTORY_COMMAND]))
-         :type :button}
-        [icon :trash]]]]
-     [:span.d-none.d-md-block
-      [tooltip/text
-       (labels :editor.toolbar/undo)
-       [:button.toolbar-item.spaced
-        {:on-click #(rf/dispatch [:editor/command active-editor UNDO_COMMAND])
-         :type :button
-         :disabled (not can-undo?)}
-        [icon :undo]]]]
-     [:span.d-none.d-md-block
-      [tooltip/text
-       (labels :editor.toolbar/redo)
-       [:button.toolbar-item.spaced
-        {:on-click #(rf/dispatch [:editor/command active-editor REDO_COMMAND])
-         :type :button
-         :disabled (not can-redo?)}
-        [icon :redo]]]]
+     [tooltip/text
+      (labels :editor.toolbar/undo)
+      [:button.toolbar-item.spaced
+       {:on-click #(rf/dispatch [:editor/command active-editor UNDO_COMMAND])
+        :type :button
+        :disabled (not can-undo?)}
+       [icon :undo]]]
+     [tooltip/text
+      (labels :editor.toolbar/redo)
+      [:button.toolbar-item.spaced
+       {:on-click #(rf/dispatch [:editor/command active-editor REDO_COMMAND])
+        :type :button
+        :disabled (not can-redo?)}
+       [icon :redo]]]
      [development-buttons active-editor debug?]]))

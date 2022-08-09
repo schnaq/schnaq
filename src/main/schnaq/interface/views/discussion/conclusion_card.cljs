@@ -428,13 +428,13 @@
                              (and (not answered-only?) (empty? answers)))))]
       (with-meta
         [statement-list-item statement-id]
-        {:key statement-id}))))
+        {:key (str "statement-" statement-id)}))))
 
 (defn card-container
   "Prepare a list of visible cards and group them together."
   []
   (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
-        statements (statements-list)
+        statements (doall (statements-list))
         top-level? @(rf/subscribe [:routes.schnaq/start?])
         schnaq-loading? @(rf/subscribe [:loading/schnaq?])
         access-code @(rf/subscribe [:schnaq.selected/access-code])

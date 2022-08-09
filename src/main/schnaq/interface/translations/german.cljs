@@ -791,6 +791,7 @@
    :editor.toolbar/file-upload "Datei hochladen"
    :editor.toolbar.file-upload/submit "Einfügen"
    :editor.toolbar.file-upload/close "Schließen"
+   :editor.toolbar/drawing "Zeichnung erstellen"
    :editor.toolbar/image-upload "Bild hochladen"
    :editor.toolbar/video-upload "Video hochladen"
    :editor.toolbar/list-ul "Unsortierte Liste"
@@ -798,6 +799,11 @@
    :editor.toolbar/clear "Inhalt löschen"
    :editor.toolbar/undo "Rückgängig"
    :editor.toolbar/redo "Wiederholen"
+
+   :excalidraw/discard "Verwerfen"
+   :excalidraw/cancel "Abbrechen"
+   :excalidraw/save "Speichern"
+   :excalidraw.discard/confirm "Möchtest du deine Zeichnung wirklich löschen?"
 
    ;; File handling
    :file.store.error/title "Hochladen der Datei fehlgeschlagen"

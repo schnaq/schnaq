@@ -63,4 +63,4 @@
                                 :file file
                                 :bucket bucket}
                                error-event)]}
-     (log/error (format "Some properties are missing. share-hash: %s, bucket: %s, image: %s" share-hash bucket file)))))
+     (log/error (format "Some properties are missing. share-hash: %s, bucket: %s, file: %s" share-hash bucket file)))))

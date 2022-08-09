@@ -1,5 +1,5 @@
 (ns schnaq.interface.components.lexical.nodes.video
-  (:require ["lexical" :refer [DecoratorNode EditorConfig LexicalEditor NodeKey]]
+  (:require ["lexical" :refer [DecoratorNode EditorConfig LexicalEditor]]
             [oops.core :refer [oget oset!]]
             [reagent.core :as r]
             [shadow.cljs.modern :refer [defclass]]))
@@ -15,7 +15,6 @@
 
 (defclass VideoNode
   (field ^string __url)
-  (field ^NodeKey __key)
   (extends DecoratorNode)
   (constructor [this url ?key]
                (super ?key)

@@ -1,0 +1,99 @@
+@use 'rounded' as rounded;
+/**
+ * Based on Lexical
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ *
+ */
+
+@font-face {
+  font-family: "Virgil";
+  src: url("https://s3.schnaq.com/schnaq-common/fonts/excalidraw/Virgil.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Cascadia";
+  src: url("https://s3.schnaq.com/schnaq-common/fonts/excalidraw/Cascadia.woff2") format("woff2");
+}
+
+.schnaq .excalidraw {
+  --color-primary: var(--theming-primary);
+  --color-primary-light: var(--theming-secondary);
+}
+
+.excalidraw {
+  .excalidraw-modal-overlay {
+    align-items: center;
+    background-color: rgba(40, 40, 40, 0.6);
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    flex-shrink: 1px;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 5;
+  }
+
+  .excalidraw-modal {
+    @include rounded.rounded-1;
+    align-items: center;
+    background-color: #eee;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: relative;
+    top: 50px;
+    width: auto;
+    z-index: 10;
+  }
+
+  .excalidraw-modal-actions {
+    position: absolute;
+    right: 5px;
+    text-align: end;
+    top: 5px;
+    z-index: 1;
+
+    button {
+      @include rounded.rounded-1;
+      background-color: #fff;
+      margin-left: 0.5rem;
+    }
+  }
+
+  .excalidraw-modal-row {
+    @include rounded.rounded-1;
+    box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    height: 90vh;
+    padding: 40px 5px 5px;
+    position: relative;
+    width: 90vw;
+    @include media-breakpoint-down(xl) {
+      height: 95vh;
+      width: 95vw;
+    }
+
+    >div {
+      border-radius: 5px;
+    }
+  }
+
+  .excalidraw-discard-modal {
+    margin-top: 60px;
+    text-align: center;
+  }
+
+  // Hide Library icon
+  // stylelint-disable selector-class-pattern
+  .ToolIcon__library {
+    display: none !important;
+  }
+  // stylelint-enable selector-class-pattern
+}

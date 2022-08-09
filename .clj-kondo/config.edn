@@ -1,6 +1,8 @@
 {:lint-as {com.fulcrologic.guardrails.core/>defn clojure.core/defn
            com.fulcrologic.guardrails.core/>defn- clojure.core/defn
            mount.core/defstate clj-kondo.lint-as/def-catch-all
+           promesa.core/let clojure.core/let
+           promesa.core/-> clojure.core/->
            shadow.cljs.modern/defclass clojure.core/def}
  :linters {:single-key-in {:level :warning}
            :unsorted-required-namespaces {:level :warning}

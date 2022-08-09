@@ -18,7 +18,7 @@ datomic/
 datomic-pro/
 datomic-*.zip
 
-.clj-kondo/.cache/
+.cache/
 resources/public/media/
 !resources/public/media/.gitkeep
 

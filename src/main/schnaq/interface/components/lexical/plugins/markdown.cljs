@@ -4,7 +4,8 @@
             [goog.string :refer [format]]
             [oops.core :refer [ocall]]
             [schnaq.interface.components.lexical.nodes.image :refer [$create-image-node $image-node?]]
-            [schnaq.interface.components.lexical.nodes.video :refer [$create-video-node $video-node?]]))
+            [schnaq.interface.components.lexical.nodes.video :refer [$create-video-node $video-node?]]
+            [schnaq.interface.components.lexical.plugins.excalidraw :refer [excalidraw-transformer]]))
 
 (def ^:private markdown-image-import-regex
   #"!\[[^\]]*\]\((.*?)(?=\"|\))(\".*\")?\)")
@@ -40,7 +41,7 @@
 ;; -----------------------------------------------------------------------------
 
 (def schnaq-transformers
-  (.concat #js [image-transformer video-transformer] TRANSFORMERS))
+  (.concat #js [image-transformer video-transformer excalidraw-transformer] TRANSFORMERS))
 
 (defn markdown-shortcut-plugin
   "Plugin to enable markdown support"

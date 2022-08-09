@@ -197,3 +197,10 @@
 .card-view img {
   @extend .img-fluid;
 }
+
+// Markdown content of statements
+
+.markdown-image {
+  max-height: 250px;
+  max-width: 100%;
+}

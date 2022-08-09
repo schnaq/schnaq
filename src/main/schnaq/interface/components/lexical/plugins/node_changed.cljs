@@ -1,10 +1,11 @@
-(ns schnaq.interface.components.lexical.plugins.text-change
+(ns schnaq.interface.components.lexical.plugins.node-changed
   (:require ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
-            ["lexical" :refer [LexicalEditor TextNode]]
+            ["lexical" :refer [TextNode]]
             ["react" :refer [useEffect]]
-            [oops.core :refer [ocall]]))
+            [oops.core :refer [ocall]]
+            [schnaq.interface.components.lexical.plugins.excalidraw :refer [excalidraw-changed]]))
 
-(defn- on-text-change-fn
+(defn- text-changed
   "Calls the on-text-change function and fills it with the node's content."
   [^LexicalEditor editor on-text-change]
   (useEffect
@@ -15,9 +16,10 @@
               (on-text-change (ocall node "getTextContent")))))
    #js [editor]))
 
-(defn TextChangePlugin
+(defn NodeChangedPlugin
   "Trigger functions if a TextNode changes in the editor."
   [{:keys [on-text-change]}]
   (let [[editor] (useLexicalComposerContext)]
-    (on-text-change-fn editor on-text-change)
+    (when on-text-change (text-changed editor on-text-change))
+    (excalidraw-changed editor)
     nil))

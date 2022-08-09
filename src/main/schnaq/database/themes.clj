@@ -4,8 +4,7 @@
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
-            [schnaq.shared-toolbelt :as shared-tools])
-  (:import java.util.UUID))
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (>defn themes-by-keycloak-id
   "Return all themes for a given user by it's `keycloak-id`."
@@ -41,7 +40,7 @@
   (let [temp-id (str "new-theme-" keycloak-id)
         theme-title-exists? (query-existing-theme keycloak-id theme)
         unique-title (if theme-title-exists?
-                       (format "%s-%s" (:theme/title theme) (.toString (UUID/randomUUID)))
+                       (format "%s-%s" (:theme/title theme) (.toString (random-uuid)))
                        (:theme/title theme))
         new-theme (assoc theme
                          :theme/user [:user.registered/keycloak-id keycloak-id]

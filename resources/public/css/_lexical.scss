@@ -62,11 +62,8 @@
   }
 
   .editor-image {
-    @extend .w-100;
-    max-width: 500px;
-
     img {
-      @extend .img-fluid;
+      @extend .markdown-image;
     }
   }
 
@@ -269,6 +266,7 @@
   .toolbar {
     background: #fff;
     display: flex;
+    flex-wrap: wrap;
     margin-bottom: 1px;
     padding: 4px;
     vertical-align: middle;

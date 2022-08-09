@@ -29,7 +29,7 @@
         schnaq @(rf/subscribe [:schnaq/selected])
         limit-reached? (posts-limit-reached? author schnaq)]
     [:form {:on-submit #(submit-fn %)
-            :on-key-down #(when (toolbelt/ctrl-press? % 13) (submit-fn %))}
+            :on-key-down #(when (toolbelt/ctrl-press? % "Enter") (submit-fn %))}
      [:label.form-label.h5.mb-3 {:for editor-id} (labels :qanda/add-question-label)]
      [:div.d-flex.flex-row.qanda-input-content.rounded-1
       [:div.highlight-card-neutral]

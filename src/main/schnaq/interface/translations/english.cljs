@@ -783,6 +783,7 @@
    :editor.toolbar/file-upload "Upload a file"
    :editor.toolbar.file-upload/submit "Insert Image"
    :editor.toolbar.file-upload/close "Close"
+   :editor.toolbar/drawing "Create Drawing"
    :editor.toolbar/image-upload "Upload an image"
    :editor.toolbar/video-upload "Upload a video"
    :editor.toolbar/list-ul "Unsorted List"
@@ -790,6 +791,11 @@
    :editor.toolbar/clear "Clear contents"
    :editor.toolbar/undo "Undo"
    :editor.toolbar/redo "Redo"
+
+   :excalidraw/discard "Discard"
+   :excalidraw/cancel "Cancel"
+   :excalidraw/save "Save"
+   :excalidraw.discard/confirm "Do you really want to delete your drawing?"
 
    ;; File handling
    :file.store.error/title "Error while uploading your file"

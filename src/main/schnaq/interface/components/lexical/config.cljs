@@ -7,6 +7,7 @@
             ["@lexical/table" :refer [TableCellNode TableNode TableRowNode]]
             ["lexical" :refer [$createParagraphNode]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.lexical.nodes.excalidraw :refer [ExcalidrawNode]]
             [schnaq.interface.components.lexical.nodes.image :refer [ImageNode]]
             [schnaq.interface.components.lexical.nodes.video :refer [VideoNode]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [schnaq-transformers]]
@@ -97,6 +98,7 @@
        :nodes #js [AutoLinkNode
                    CodeNode
                    CodeHighlightNode
+                   ExcalidrawNode
                    HeadingNode
                    ImageNode
                    VideoNode
