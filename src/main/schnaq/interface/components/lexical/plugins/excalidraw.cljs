@@ -1,12 +1,12 @@
 (ns schnaq.interface.components.lexical.plugins.excalidraw
-  (:require ["lexical" :refer [$getSelection $isRangeSelection
-                               COMMAND_PRIORITY_EDITOR createCommand]]
+  (:require ["lexical" :refer [COMMAND_PRIORITY_EDITOR createCommand]]
             ["react" :refer [useEffect]]
             [goog.string :refer [format]]
             [oops.core :refer [ocall oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.lexical.nodes.excalidraw :refer [$create-excalidraw-node ExcalidrawNode]]
+            [schnaq.interface.components.lexical.nodes.excalidraw :refer [$create-excalidraw-node $excalidraw-node? ExcalidrawNode]]
             [schnaq.interface.components.lexical.nodes.excalidraw-utils :refer [convert-elements-to-svg]]
+            [schnaq.interface.components.lexical.utils :refer [$insert-node-wrapped-in-paragraphs]]
             [taoensso.timbre :as log]))
 
 (def INSERT_EXCALIDRAW_COMMAND (createCommand))
@@ -17,12 +17,17 @@
    (if-not (ocall editor "hasNodes" #js [ExcalidrawNode])
      (log/error "ExcalidrawPlugin: ExcalidrawNode not registered on editor")
      (ocall editor "registerCommand" INSERT_EXCALIDRAW_COMMAND
-            #(let [selection ($getSelection)]
-               (when ($isRangeSelection selection)
-                 (let [node ($create-excalidraw-node)]
-                   (.insertNodes selection #js [node])))
-               true)
+            #($insert-node-wrapped-in-paragraphs ($create-excalidraw-node))
             COMMAND_PRIORITY_EDITOR))))
+
+;; -----------------------------------------------------------------------------
+
+(def excalidraw-transformer
+  "Export / import excalidraw nodes as markdown."
+  #js {:export (fn [^ExcalidrawNode node, _export-children, _export-format]
+                 (when ($excalidraw-node? node)
+                   (format "![%s](%s)" "Excalidraw drawing" (.getUrl node))))
+       :type "text-match"})
 
 ;; -----------------------------------------------------------------------------
 

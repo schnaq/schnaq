@@ -3,9 +3,9 @@
             ["@lexical/react/LexicalMarkdownShortcutPlugin" :refer [MarkdownShortcutPlugin]]
             [goog.string :refer [format]]
             [oops.core :refer [ocall]]
-            [schnaq.interface.components.lexical.nodes.excalidraw :refer [$excalidraw-node?]]
             [schnaq.interface.components.lexical.nodes.image :refer [$create-image-node $image-node?]]
-            [schnaq.interface.components.lexical.nodes.video :refer [$create-video-node $video-node?]]))
+            [schnaq.interface.components.lexical.nodes.video :refer [$create-video-node $video-node?]]
+            [schnaq.interface.components.lexical.plugins.excalidraw :refer [excalidraw-transformer]]))
 
 (def ^:private markdown-image-import-regex
   #"!\[[^\]]*\]\((.*?)(?=\"|\))(\".*\")?\)")
@@ -36,13 +36,6 @@
                         video-node ($create-video-node src)]
                     (ocall text-node "replace" video-node)))
        :trigger ")"
-       :type "text-match"})
-
-(def ^:private excalidraw-transformer
-  "Export / import excalidraw nodes."
-  #js {:export (fn [^ExcalidrawNode node, _export-children, _export-format]
-                 (when ($excalidraw-node? node)
-                   (format "![%s](%s)" "Excalidraw drawing" (.getUrl node))))
        :type "text-match"})
 
 ;; -----------------------------------------------------------------------------
