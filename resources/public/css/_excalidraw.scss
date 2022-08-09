@@ -23,10 +23,6 @@
 .excalidraw {
   --color-primary: red;
 
-  .ToolIcon__library {
-    display: none !important;
-  }
-
   .excalidraw-modal-overlay {
     align-items: center;
     background-color: rgba(40, 40, 40, 0.6);
@@ -90,4 +86,11 @@
     margin-top: 60px;
     text-align: center;
   }
+
+  // Hide Library icon
+  // stylelint-disable selector-class-pattern
+  .ToolIcon__library {
+    display: none !important;
+  }
+  // stylelint-enable selector-class-pattern
 }

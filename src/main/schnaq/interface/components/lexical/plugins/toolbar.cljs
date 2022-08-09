@@ -7,8 +7,7 @@
             ["@lexical/selection" :refer [$wrapLeafNodesInElements]]
             ["@lexical/utils" :refer [$getNearestNodeOfType mergeRegister]]
             ["lexical" :refer [$getSelection $isRangeSelection
-                               CAN_REDO_COMMAND CAN_UNDO_COMMAND CLEAR_EDITOR_COMMAND
-                               CLEAR_HISTORY_COMMAND FORMAT_TEXT_COMMAND REDO_COMMAND SELECTION_CHANGE_COMMAND
+                               CAN_REDO_COMMAND CAN_UNDO_COMMAND FORMAT_TEXT_COMMAND REDO_COMMAND SELECTION_CHANGE_COMMAND
                                UNDO_COMMAND]]
             ["react" :refer [useCallback useEffect useState]]
             [oops.core :refer [ocall oget]]
@@ -202,13 +201,12 @@
        [icon :quote-right]]]
      (when file-storage
        [:<>
-        [:span.d-none.d-md-block
-         [tooltip/text
-          (labels :editor.toolbar/drawing)
-          [:button.toolbar-item.spaced
-           {:on-click #(rf/dispatch [:editor/command active-editor INSERT_EXCALIDRAW_COMMAND])
-            :type :button}
-           [icon :pencil-ruler]]]]
+        [tooltip/text
+         (labels :editor.toolbar/drawing)
+         [:button.toolbar-item.spaced
+          {:on-click #(rf/dispatch [:editor/command active-editor INSERT_EXCALIDRAW_COMMAND])
+           :type :button}
+          [icon :pencil-ruler]]]
         [file-upload-button
          (labels :editor.toolbar/image-upload)
          [inputs/image [:span.fs-5 (labels :editor.toolbar/image-upload)] "editor-upload-image" [:editors id :image]
@@ -243,29 +241,18 @@
           :type :button
           :class (when ordered-list? "active")})
        [icon :list-ol]]]
-     [:span.d-none.d-md-block
-      [tooltip/text
-       (labels :editor.toolbar/clear)
-       [:button.toolbar-item.spaced
-        {:on-click (fn []
-                     (rf/dispatch [:editor/command active-editor CLEAR_EDITOR_COMMAND])
-                     (rf/dispatch [:editor/command active-editor CLEAR_HISTORY_COMMAND]))
-         :type :button}
-        [icon :trash]]]]
-     [:span.d-none.d-md-block
-      [tooltip/text
-       (labels :editor.toolbar/undo)
-       [:button.toolbar-item.spaced
-        {:on-click #(rf/dispatch [:editor/command active-editor UNDO_COMMAND])
-         :type :button
-         :disabled (not can-undo?)}
-        [icon :undo]]]]
-     [:span.d-none.d-md-block
-      [tooltip/text
-       (labels :editor.toolbar/redo)
-       [:button.toolbar-item.spaced
-        {:on-click #(rf/dispatch [:editor/command active-editor REDO_COMMAND])
-         :type :button
-         :disabled (not can-redo?)}
-        [icon :redo]]]]
+     [tooltip/text
+      (labels :editor.toolbar/undo)
+      [:button.toolbar-item.spaced
+       {:on-click #(rf/dispatch [:editor/command active-editor UNDO_COMMAND])
+        :type :button
+        :disabled (not can-undo?)}
+       [icon :undo]]]
+     [tooltip/text
+      (labels :editor.toolbar/redo)
+      [:button.toolbar-item.spaced
+       {:on-click #(rf/dispatch [:editor/command active-editor REDO_COMMAND])
+        :type :button
+        :disabled (not can-redo?)}
+       [icon :redo]]]
      [development-buttons active-editor debug?]]))
