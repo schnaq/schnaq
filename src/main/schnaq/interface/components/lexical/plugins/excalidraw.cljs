@@ -31,7 +31,7 @@
        :regExp nil
        :replace nil
        :trigger nil
-       :type nil})
+       :type "text-match"})
 
 ;; -----------------------------------------------------------------------------
 
