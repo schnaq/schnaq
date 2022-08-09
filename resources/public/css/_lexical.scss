@@ -62,11 +62,8 @@
   }
 
   .editor-image {
-    @extend .w-100;
-    max-width: 500px;
-
     img {
-      @extend .img-fluid;
+      @extend .markdown-image;
     }
   }
 
