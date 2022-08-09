@@ -130,14 +130,14 @@
                (.setAttribute element data-excalidraw-attribute (oget this :__data))
                element))
   (setUrl [this url]
-          (let [self (.getWritable this)]
+          (let [self (ocall this "getWritable")]
             (oset! self :__url url)))
   (getUrl [this]
           (oget this :__url))
   (hasUrl [this]
           (seq (oget this :__url)))
   (setData [this data]
-           (let [self (.getWritable this)]
+           (let [self (ocall this "getWritable")]
              (oset! self :__data data)))
   (exportJSON [this]
               {:data (oget this :__data)
