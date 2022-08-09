@@ -20,6 +20,11 @@
   src: url("https://s3.schnaq.com/schnaq-common/fonts/excalidraw/Cascadia.woff2") format("woff2");
 }
 
+.schnaq .excalidraw {
+  --color-primary: var(--theming-primary);
+  --color-primary-light: var(--theming-secondary);
+}
+
 .excalidraw {
   .excalidraw-modal-overlay {
     align-items: center;
