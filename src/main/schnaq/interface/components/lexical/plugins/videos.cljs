@@ -1,10 +1,10 @@
 (ns schnaq.interface.components.lexical.plugins.videos
-  (:require ["lexical" :refer [$getRoot $getSelection $isRangeSelection
-                               $isRootNode COMMAND_PRIORITY_EDITOR createCommand
+  (:require ["lexical" :refer [COMMAND_PRIORITY_EDITOR createCommand
                                LexicalCommand]]
-            [oops.core :refer [ocall]]
+            [oops.core :refer [ocall oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.lexical.nodes.video :refer [$create-video-node VideoNode]]
+            [schnaq.interface.components.lexical.utils :refer [$insert-node-wrapped-in-paragraphs]]
             [taoensso.timbre :as log]))
 
 (def INSERT_VIDEO_COMMAND (createCommand))
@@ -16,12 +16,6 @@
      (log/error "ImagesPlugin: VideoNode not registered on editor")
      (ocall editor "registerCommand" INSERT_VIDEO_COMMAND
             (fn [^LexicalCommand payload]
-              (let [selection (or ($getSelection) (.selectEnd ($getRoot)))]
-                (when ($isRangeSelection selection)
-                  (when ($isRootNode (.getNode (.-anchor selection)))
-                    (.insertParagraph selection))
-                  (let [imageNode ($create-video-node (.-url payload))]
-                    (.insertNodes selection #js [imageNode])
-                    (.insertParagraph selection)))
-                true))
+              (let [node ($create-video-node (oget payload :url))]
+                ($insert-node-wrapped-in-paragraphs node)))
             COMMAND_PRIORITY_EDITOR))))
