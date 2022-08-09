@@ -27,7 +27,11 @@
   #js {:export (fn [^ExcalidrawNode node, _export-children, _export-format]
                  (when ($excalidraw-node? node)
                    (format "![%s](%s)" "Excalidraw drawing" (.getUrl node))))
-       :type "text-match"})
+       :importRegExp nil
+       :regExp nil
+       :replace nil
+       :trigger nil
+       :type nil})
 
 ;; -----------------------------------------------------------------------------
 
