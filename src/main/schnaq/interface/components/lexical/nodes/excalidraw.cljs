@@ -33,23 +33,24 @@
                    (fn [event]
                      (when (and selected? ($isNodeSelection ($getSelection)))
                        (.preventDefault event)
-                       (.update editor
-                                #(let [node ($getNodeByKey nodeKey)]
-                                   (when ($excalidraw-node? node)
-                                     (.remove node))
-                                   (selected! false))))
+                       (ocall editor "update"
+                              #(let [node ($getNodeByKey nodeKey)]
+                                 (when ($excalidraw-node? node)
+                                   (ocall node "remove"))
+                                 (selected! false))))
                      false)
                    #js [editor selected? nodeKey selected!])
 
         delete-node (useCallback
                      (fn []
-                       (if (js/confirm (labels :excalidraw.discard/confirm))
-                         (do (modal-open! false)
-                             (ocall editor "update"
-                                    #(when-let [node ($getNodeByKey nodeKey)]
-                                       (when ($excalidraw-node? node)
-                                         (ocall node "remove")))))
-                         false)))
+                       (when (js/confirm (labels :excalidraw.discard/confirm))
+                         (modal-open! false)
+                         (ocall editor "update"
+                                #(when-let [node ($getNodeByKey nodeKey)]
+                                   (when ($excalidraw-node? node)
+                                     (ocall node "remove")))))
+                       false)
+                     #js [editor modal-open! nodeKey])
         set-data (fn [new-data]
                    (when-not (.isReadOnly editor)
                      (.update editor #(let [node ($getNodeByKey nodeKey)]
