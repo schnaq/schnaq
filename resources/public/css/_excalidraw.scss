@@ -21,7 +21,13 @@
 }
 
 .excalidraw {
-  .excalidraw-overlay {
+  --color-primary: red;
+
+  .ToolIcon__library {
+    display: none !important;
+  }
+
+  .excalidraw-modal-overlay {
     align-items: center;
     background-color: rgba(40, 40, 40, 0.6);
     bottom: 0;
@@ -33,10 +39,23 @@
     position: fixed;
     right: 0;
     top: 0;
-    z-index: 100;
+    z-index: 5;
   }
 
-  .excalidraw-actions {
+  .excalidraw-modal {
+    @include rounded.rounded-1;
+    align-items: center;
+    background-color: #eee;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: relative;
+    top: 50px;
+    width: auto;
+    z-index: 10;
+  }
+
+  .excalidraw-modal-actions {
     position: absolute;
     right: 5px;
     text-align: end;
@@ -50,34 +69,21 @@
     }
   }
 
-  .excalidraw-row {
+  .excalidraw-modal-row {
     @include rounded.rounded-1;
     box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-    height: 80vh;
+    height: 90vh;
     padding: 40px 5px 5px;
     position: relative;
-    width: 75vw;
+    width: 90vw;
     @include media-breakpoint-down(xl) {
-      height: 85vh;
+      height: 95vh;
       width: 95vw;
     }
 
     >div {
       border-radius: 5px;
     }
-  }
-
-  .excalidraw-modal {
-    @include rounded.rounded-1;
-    align-items: center;
-    background-color: #eee;
-    display: flex;
-    justify-content: center;
-    left: 0;
-    position: relative;
-    top: 50px;
-    width: auto;
-    z-index: 1000;
   }
 
   .excalidraw-discard-modal {

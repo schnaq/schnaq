@@ -64,25 +64,22 @@
     (when shown?
       (createPortal
        (r/as-element
-        [:div.excalidraw
-         [:div {:class "excalidraw-overlay"
-                :role :dialog}
-          [:div {:class "excalidraw-modal"
-                 :ref excalidraw-modal-ref
-                 :tabIndex -1}
-           [:div {:class "excalidraw-row"}
+        [:section.excalidraw
+         [:div.excalidraw-modal-overlay {:role :dialog}
+          [:div.excalidraw-modal {:ref excalidraw-modal-ref
+                                  :tabIndex -1}
+           [:div.excalidraw-modal-row
             (when discard-modal-open? [ShowDiscardDialog])
             [:> Excalidraw {:onChange on-change-fn
                             :initialData {:appState {:isLoading false}
                                           :elements initialElements}
-                            :libraryReturnUrl nil
                             :UIOptions {:canvasActions {:loadScene false
                                                         :export false
                                                         :saveToActiveFile false
                                                         :saveAsImage false
                                                         :clearCanvas false
                                                         :changeViewBackgroundColor false}}}]
-            [:div {:class "excalidraw-actions"}
+            [:div.excalidraw-modal-actions
              [:button {:on-click discard-fn}
               (labels :excalidraw/discard)]
              [:button {:on-click save-fn}
