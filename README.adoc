@@ -123,6 +123,17 @@ This outputs all unused css classes.
 
 == Known Problems
 
+== Google Closure: Advanced Compilation
+
+In the process of optimizations, the function names are reduced to a couple of
+unpredictable characters. Sometimes, when doing JavaScript-Interop, these
+functions are no longer accessible (e.g. when calling `(.getWritable this)`). 
+This can also happen to fields / constants, which are renamed during the
+compilation.
+
+To avoid errors, use the [oops](https://github.com/binaryage/cljs-oops) library,
+especially `oget`, `ocall`, and `oset` (there are more useful functions).
+
 === Debugging a production build
 
 We use the google closure compiler collection to build minimized and optimized code.
