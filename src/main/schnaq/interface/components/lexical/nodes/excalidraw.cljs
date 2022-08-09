@@ -27,7 +27,6 @@
         image-container-ref (useRef nil)
         button-ref (useRef nil)
         [selected? selected! clear-selection!] (useLexicalNodeSelection nodeKey)
-        [resizing? resizing!] (useState false)
 
         on-delete (useCallback
                    (fn [event]
@@ -55,8 +54,6 @@
                                           (if (pos? (oget new-data :length))
                                             (ocall node "setData" (.stringify js/JSON new-data))
                                             (ocall node "remove")))))))
-        on-resize-start #(resizing! true)
-        on-resize-end (fn [] (js/setTimeout #(resizing! false) 200))
         elements (useMemo #(.parse js/JSON data) #js [data])]
 
     (useEffect
@@ -69,15 +66,13 @@
               (fn [event]
                 (let [button-element (oget button-ref :current)
                       event-target (oget event :target)]
-                  (if resizing?
-                    true
-                    (when (and (not= button-element nil) (.contains button-element event-target))
-                      (when-not (ocall event "shiftKey")
-                        (clear-selection!))
-                      (selected! (not selected?))
-                      (when (pos? (oget event :detail))
-                        (modal-open! true))
-                      true)))
+                  (when (and (not= button-element nil) (.contains button-element event-target))
+                    (when-not (ocall event "shiftKey")
+                      (clear-selection!))
+                    (selected! (not selected?))
+                    (when (pos? (oget event :detail))
+                      (modal-open! true))
+                    true))
                 false)
               COMMAND_PRIORITY_LOW)
        (ocall editor "registerCommand" KEY_DELETE_COMMAND on-delete COMMAND_PRIORITY_LOW)
