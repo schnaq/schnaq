@@ -1,6 +1,7 @@
 (ns schnaq.interface.components.lexical.nodes.excalidraw-modal
   (:require ["@excalidraw/excalidraw" :refer [Excalidraw]]
             ["react" :refer [useEffect useLayoutEffect useRef useState]]
+            ["react-dom" :refer [createPortal]]
             [oops.core :refer [ocall oget]]
             [reagent.core :as r]
             [schnaq.interface.translations :refer [labels]]))
@@ -60,22 +61,30 @@
             (ocall current-modal-ref "removeEventListener" "keydown" on-key-down))))
      #js [elements onDelete])
 
-    (r/as-element
-     (when shown?
-       [:div.excalidraw
-        [:div {:class "excalidraw-overlay"
-               :role :dialog}
-         [:div {:class "excalidraw-modal"
-                :ref excalidraw-modal-ref
-                :tabIndex -1}
-          [:div {:class "excalidraw-row"}
-
-           [:> Excalidraw {:onChange on-change-fn
-                           :initialData {:appState {:isLoading false}
-                                         :elements initialElements}}]
-           (when discard-modal-open? [ShowDiscardDialog])
-           [:div {:class "excalidraw-actions"}
-            [:button {:on-click discard-fn}
-             (labels :excalidraw/discard)]
-            [:button {:on-click save-fn}
-             (labels :excalidraw/save)]]]]]]))))
+    (when shown?
+      (createPortal
+       (r/as-element
+        [:div.excalidraw
+         [:div {:class "excalidraw-overlay"
+                :role :dialog}
+          [:div {:class "excalidraw-modal"
+                 :ref excalidraw-modal-ref
+                 :tabIndex -1}
+           [:div {:class "excalidraw-row"}
+            (when discard-modal-open? [ShowDiscardDialog])
+            [:> Excalidraw {:onChange on-change-fn
+                            :initialData {:appState {:isLoading false}
+                                          :elements initialElements}
+                            :libraryReturnUrl nil
+                            :UIOptions {:canvasActions {:loadScene false
+                                                        :export false
+                                                        :saveToActiveFile false
+                                                        :saveAsImage false
+                                                        :clearCanvas false
+                                                        :changeViewBackgroundColor false}}}]
+            [:div {:class "excalidraw-actions"}
+             [:button {:on-click discard-fn}
+              (labels :excalidraw/discard)]
+             [:button {:on-click save-fn}
+              (labels :excalidraw/save)]]]]]])
+       (oget js/document :body)))))
