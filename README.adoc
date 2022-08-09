@@ -129,4 +129,9 @@ We use the google closure compiler collection to build minimized and optimized c
 Sometimes, in the minified version, the resulting code contains problems, e.g. unresolvable functions.
 To debug this efficiently, use the following command to prepare a production build with debug information:
 
-    yarn shadow-cljs release app --debug  
+    yarn shadow-cljs release app --debug
+
+Serve the assets then via an nginx. You can pick the nginx-configuration from
+the root of this repository, e.g. with this call:
+
+    docker run -it --rm -v $(pwd):/usr/share/nginx/html -v $(pwd)/nginx/schnaq.conf:/etc/nginx/conf.d/default.conf -p 8888:80 nginx
