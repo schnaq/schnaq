@@ -78,20 +78,20 @@
          [:div.card-title "Markdown content"]
          [:div.card-text.overflow-scroll
           [:pre [:code @(rf/subscribe [:editor/content editor-id])]]]]]]]
-     #_#_#_[:section
-            [:p "Pre-filled editor"]
-            [editor {:id :playground-pre-filled
-                     :toolbar? true
-                     :initial-content sample-markdown-input}
-             {:class "mb-3"}]]
-         [:section.pt-3
-          [:p "Editor without toolbar"]
-          [editor {:id :playground-naked-editor} {:class "mb-3"}]]
-       [:section
-        [:p "Editor with toolbar"]
-        [editor {:id :playground-naked-editor-with-toolbar
-                 :toolbar? true}
-         {:class "mb-3"}]]]))
+     [:section
+      [:p "Pre-filled editor"]
+      [editor {:id :playground-pre-filled
+               :toolbar? true
+               :initial-content sample-markdown-input}
+       {:class "mb-3"}]]
+     [:section.pt-3
+      [:p "Editor without toolbar"]
+      [editor {:id :playground-naked-editor} {:class "mb-3"}]]
+     [:section
+      [:p "Editor with toolbar"]
+      [editor {:id :playground-naked-editor-with-toolbar
+               :toolbar? true}
+       {:class "mb-3"}]]]))
 
 ;; -----------------------------------------------------------------------------
 
