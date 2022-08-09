@@ -1,6 +1,6 @@
 (ns schnaq.api.schnaq
   (:require [clojure.spec.alpha :as s]
-            [ring.util.http-response :refer [ok created bad-request forbidden]]
+            [ring.util.http-response :refer [ok created bad-request]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.access-codes :as ac]
@@ -110,37 +110,19 @@
     (ok {:schnaq (discussion-db/discussion-by-share-hash-private share-hash)})))
 
 (defn- delete-schnaq!
-  "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
+  "Sets the state of a schnaq to delete. Performed by admins and authors of the schnaq."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:body parameters)]
     (if (discussion-db/delete-discussion share-hash)
       (ok {:share-hash share-hash})
       (bad-request (at/build-error-body :error-deleting-schnaq "An error occurred, while deleting the schnaq.")))))
 
-(defn- check-edit-discussion-error
-  "Check if an editor is the author of a discussion or if it is deleted."
-  [user-identity author-identity share-hash ok-answer bad-answer forbidden-answer]
-  (if (= user-identity author-identity)
-    (if (discussion-db/discussion-deleted? share-hash)
-      bad-answer
-      ok-answer)
-    forbidden-answer))
-
 (defn- edit-schnaq-title!
   "Edit title of a schnaq"
-  [{:keys [parameters identity]}]
-  (let [{:keys [share-hash new-title]} (:body parameters)
-        user-identity (:sub identity)
-        discussion (discussion-db/discussion-by-share-hash share-hash)
-        author-identity (-> discussion :discussion/author :user.registered/keycloak-id)]
-    (check-edit-discussion-error
-     user-identity author-identity share-hash
-     (do (discussion-db/edit-title share-hash new-title)
-         (ok {:schnaq (discussion-db/discussion-by-share-hash share-hash)}))
-     (bad-request (at/build-error-body :discussion-not-the-author
-                                       "You can not edit the title of a deleted discussion."))
-     (forbidden (at/build-error-body :discussion-not-the-author
-                                     "You can not edit the title of someone else's discussion.")))))
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash new-title]} (:body parameters)]
+    (discussion-db/edit-title share-hash new-title)
+    (ok {:schnaq (discussion-db/discussion-by-share-hash share-hash)})))
 
 (defn- add-visited-schnaq
   "Add schnaq id to visited schnaqs by share-hash"
@@ -192,6 +174,14 @@
 (def schnaq-routes
   [["" {:swagger {:tags ["schnaqs"]}}
     ["/schnaq"
+     [""
+      {:delete delete-schnaq!
+       :name :api.schnaq/delete
+       :description (at/get-doc #'delete-schnaq!)
+       :middleware [:user/authenticated? :discussion/valid-author? :discussion/valid-share-hash?]
+       :parameters {:body {:share-hash :discussion/share-hash}}
+       :responses {200 {:share-hash :discussion/share-hash}
+                   400 at/response-error-body}}]
      ["/by-hash" {:get schnaq-by-hash
                   :description (at/get-doc #'schnaq-by-hash)
                   :name :api.schnaq/by-hash
@@ -242,9 +232,8 @@
      ["/edit/title" {:put edit-schnaq-title!
                      :description (at/get-doc #'edit-schnaq-title!)
                      :name :api.schnaq/edit-title
-                     :middleware [:discussion/valid-credentials?]
+                     :middleware [:user/authenticated? :discussion/valid-author? :discussion/valid-share-hash?]
                      :parameters {:body {:share-hash :discussion/share-hash
-                                         :edit-hash :discussion/edit-hash
                                          :new-title :discussion/title}}
                      :responses {201 {:body {:schnaq ::dto/discussion}}}}]
      ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin

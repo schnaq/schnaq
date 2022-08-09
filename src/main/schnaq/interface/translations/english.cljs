@@ -717,7 +717,9 @@
    :schnaq.options.unarchive/label "unarchive schnaq"
    :schnaq.options.unarchive/prompt "Do you want to unarchive this schnaq? It will again appear in your overview."
    :schnaq.options.leave/label "leave schnaq"
+   :schnaq.options.delete/label "delete schnaq!"
    :schnaq.options.leave/prompt "Do you really want to leave this schnaq? It will be removed from your account and you have to be invited to access it again."
+   :schnaq.options.delete/prompt "Do you really want to delete this schnaq? You will not be able to recover it."
    :schnaq.options/archived "archived"
 
    :schnaq.search/heading "Search results"

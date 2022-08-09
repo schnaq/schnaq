@@ -99,7 +99,8 @@
                   '[:find (count ?discussions) .
                     :in $ ?keycloak-id
                     :where [?user :user.registered/keycloak-id ?keycloak-id]
-                    [?discussions :discussion/author ?user]]
+                    [?discussions :discussion/author ?user]
+                    (not [?discussions :discussion/states :discussion.state/deleted])]
                   keycloak-id)]
       num
       0)))

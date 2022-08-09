@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.input
-  (:require [goog.functions :as gfun]
-            [goog.string :refer [format]]
+  (:require [goog.string :refer [format]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
@@ -13,7 +12,6 @@
             [schnaq.interface.views.discussion.card-elements :as card-elements]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]
-            [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.user :refer [display-name posts-limit-reached?]]))
 
 (defn- post-limit-reached-alert []
@@ -57,21 +55,6 @@
       :discussion.add.button/attack :discussion/add-premise-supporting
       get-subscription set-event]]))
 
-(rf/reg-event-db
- :schnaq.question.input/set-current
- (fn [db [_ current-input]]
-   (assoc-in db [:schnaq :question :input] (shared-tools/tokenize-string current-input))))
-
-(rf/reg-event-db
- :schnaq.question.input/clear
- (fn [db _]
-   (update db :schnaq dissoc :question)))
-
-(rf/reg-sub
- :schnaq.question.input/current
- (fn [db _]
-   (get-in db [:schnaq :question :input] [])))
-
 (defn- textarea-highlighting
   "Add highlighting to textarea based on the selected attitude."
   [field]
@@ -105,13 +88,6 @@
         [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
         [icon :plane "m-auto"]]]]]))
 
-(defn- throttled-input-tokenizing-fn
-  "Send a typing update and wait for x ms."
-  [content]
-  ((gfun/throttle
-    #(rf/dispatch [:schnaq.question.input/set-current content])
-    5000)))
-
 (defn- conclusion-card-editor
   "Input, where users provide (starting) conclusions."
   [editor-id]
@@ -130,7 +106,6 @@
                    :value (or editor-content "")}]
           [lexical/editor {:id editor-id
                            :file-storage :schnaq/by-share-hash
-                           :on-text-change throttled-input-tokenizing-fn
                            :toolbar? true
                            :focus? (not config/in-iframe?)
                            :placeholder (labels :statement.new/placeholder)}
@@ -181,7 +156,6 @@
         editor-id :conclusion-card-editor
         submit-fn (fn [e]
                     (.preventDefault e)
-                    (rf/dispatch [:schnaq.question.input/clear])
                     (rf/dispatch [:editor/clear editor-id])
                     (event-to-send e))]
     (if (:statement/locked? @(rf/subscribe [:schnaq.statements/focus]))
