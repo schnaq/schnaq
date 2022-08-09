@@ -73,12 +73,7 @@
             [:> Excalidraw {:onChange on-change-fn
                             :initialData {:appState {:isLoading false}
                                           :elements initialElements}
-                            :UIOptions {:canvasActions {:loadScene false
-                                                        :export false
-                                                        :saveToActiveFile false
-                                                        :saveAsImage false
-                                                        :clearCanvas false
-                                                        :changeViewBackgroundColor false}}}]
+                            :UIOptions {:canvasActions {:changeViewBackgroundColor false}}}]
             [:div.excalidraw-modal-actions
              [:button {:on-click discard-fn}
               (labels :excalidraw/discard)]

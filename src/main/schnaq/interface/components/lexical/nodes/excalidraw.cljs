@@ -10,6 +10,7 @@
             [reagent.core :as r]
             [schnaq.interface.components.lexical.nodes.excalidraw-image :refer [ExcalidrawImage]]
             [schnaq.interface.components.lexical.nodes.excalidraw-modal :refer [ExcalidrawModal]]
+            [schnaq.interface.translations :refer [labels]]
             [shadow.cljs.modern :refer [defclass]]))
 
 (def ^:private data-excalidraw-attribute "data-lexical-excalidraw-json")
@@ -42,11 +43,13 @@
 
         delete-node (useCallback
                      (fn []
-                       (modal-open! false)
-                       (ocall editor "update"
-                              #(when-let [node ($getNodeByKey nodeKey)]
-                                 (when ($excalidraw-node? node)
-                                   (ocall node "remove"))))))
+                       (if (js/confirm (labels :excalidraw.discard/confirm))
+                         (do (modal-open! false)
+                             (ocall editor "update"
+                                    #(when-let [node ($getNodeByKey nodeKey)]
+                                       (when ($excalidraw-node? node)
+                                         (ocall node "remove")))))
+                         false)))
         set-data (fn [new-data]
                    (when-not (.isReadOnly editor)
                      (.update editor #(let [node ($getNodeByKey nodeKey)]

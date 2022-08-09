@@ -803,6 +803,7 @@
    :excalidraw/discard "Verwerfen"
    :excalidraw/cancel "Abbrechen"
    :excalidraw/save "Speichern"
+   :excalidraw.discard/confirm "Möchtest du deine Zeichnung wirklich löschen?"
 
    ;; File handling
    :file.store.error/title "Hochladen der Datei fehlgeschlagen"

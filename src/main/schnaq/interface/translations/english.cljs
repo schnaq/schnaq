@@ -795,6 +795,7 @@
    :excalidraw/discard "Discard"
    :excalidraw/cancel "Cancel"
    :excalidraw/save "Save"
+   :excalidraw.discard/confirm "Do you really want to delete your drawing?"
 
    ;; File handling
    :file.store.error/title "Error while uploading your file"
