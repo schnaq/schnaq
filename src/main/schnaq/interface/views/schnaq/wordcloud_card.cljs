@@ -97,4 +97,5 @@
 (rf/reg-event-db
  :schnaq.wordcloud/from-backend
  (fn [db [_ {:keys [wordcloud]}]]
-   (assoc-in db [:schnaq :selected :discussion/wordcloud] wordcloud)))
+   (when wordcloud
+     (assoc-in db [:schnaq :selected :discussion/wordcloud] wordcloud))))
