@@ -27,7 +27,7 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          updated-statement (update statement :statement/labels (fn [labels] (-> labels set (disj label) vec)))]
      {:db (assoc-in db [:schnaq :statements (:db/id updated-statement)] updated-statement)
-      :fx [(http/xhrio-request db :put "/discussion/statement/label/remove"
+      :fx [(http/xhrio-request db :delete "/discussion/statement/label"
                                [:statement/update]
                                {:share-hash share-hash
                                 :statement-id (:db/id statement)
@@ -40,7 +40,7 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          updated-statement (update statement :statement/labels conj label)]
      {:db (assoc-in db [:schnaq :statements (:db/id updated-statement)] updated-statement)
-      :fx [(http/xhrio-request db :put "/discussion/statement/label/add"
+      :fx [(http/xhrio-request db :put "/discussion/statement/label"
                                [:statement/update]
                                {:share-hash share-hash
                                 :statement-id (:db/id statement)

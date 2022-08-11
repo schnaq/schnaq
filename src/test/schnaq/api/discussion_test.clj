@@ -15,7 +15,7 @@
 ;; -----------------------------------------------------------------------------
 
 (defn- add-label-request [share-hash statement-id token]
-  (-> {:request-method :put :uri (:path (api/route-by-name :api.discussion.statement.label/add))}
+  (-> {:request-method :put :uri (:path (api/route-by-name :api.discussion.statement/label))}
       (assoc :body-params {:label ":check"
                            :display-name "A. Schneider"
                            :share-hash share-hash

@@ -309,24 +309,24 @@
   "Add a label to a statement. Only pre-approved labels can be set. Custom labels have no effect.
   The user needs to be authenticated. The statement concerned is always returned."
   [{:keys [parameters user]}]
-  (let [{:keys [statement-id label share-hash]} (:body parameters)
+  (let [{:keys [statement-id label share-hash display-name]} (:body parameters)
         keycloak-id (:user.registered/keycloak-id user)
-        user-id (:db/id user)]
+        user (if user user (user-db/add-user-if-not-exists display-name))]
     (if (user-allowed-to-label? user share-hash)
       (ok {:statement (processors/statement-default (discussion-db/add-label statement-id label)
-                                                    share-hash keycloak-id user-id)})
+                                                    share-hash keycloak-id (:db/id user))})
       (forbidden (at/build-error-body :permission/forbidden "You are not allowed to edit labels")))))
 
 (defn- remove-label
   "Remove a label from a statement. Removing a label not present has no effect.
   The user needs to be authenticated. The statement concerned is always returned."
   [{:keys [parameters user]}]
-  (let [{:keys [statement-id label share-hash]} (:body parameters)
+  (let [{:keys [statement-id label share-hash display-name]} (:body parameters)
         keycloak-id (:user.registered/keycloak-id user)
-        user-id (:db/id user)]
+        user (if user user (user-db/add-user-if-not-exists display-name))]
     (if (user-allowed-to-label? user share-hash)
       (ok {:statement (processors/statement-default (discussion-db/remove-label statement-id label)
-                                                    share-hash keycloak-id user-id)})
+                                                    share-hash keycloak-id (:db/id user))})
       (forbidden (at/build-error-body :permission/forbidden "You are not allowed to edit labels")))))
 
 (defn- toggle-statement-lock
@@ -571,20 +571,14 @@
               :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
                           400 at/response-error-body}}]]
      ["/label" {:middleware [:discussion/valid-statement?
-                             :discussion/valid-writeable-discussion?]}
-      ["/add" {:put add-label
-               :description (at/get-doc #'add-label)
-               :name :api.discussion.statement.label/add
-               :parameters {:body {:label :statement/label
-                                   :display-name ::specs/non-blank-string}}
-               :responses {200 {:body {:statement ::dto/statement}}
-                           400 at/response-error-body
-                           403 at/response-error-body}}]
-      ["/remove" {:put remove-label
-                  :description (at/get-doc #'remove-label)
-                  :name :api.discussion.statement.label/remove
-                  :parameters {:body {:label :statement/label
-                                      :display-name ::specs/non-blank-string}}
-                  :responses {200 {:body {:statement ::dto/statement}}
-                              400 at/response-error-body
-                              403 at/response-error-body}}]]]]])
+                             :discussion/valid-writeable-discussion?]
+                :name :api.discussion.statement/label
+                :put {:handler add-label
+                      :description (at/get-doc #'add-label)}
+                :delete {:handler remove-label
+                         :description (at/get-doc #'remove-label)}
+                :parameters {:body {:label :statement/label
+                                    :display-name ::specs/non-blank-string}}
+                :responses {200 {:body {:statement ::dto/statement}}
+                            400 at/response-error-body
+                            403 at/response-error-body}}]]]])
