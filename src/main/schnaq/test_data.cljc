@@ -262,7 +262,8 @@
     :statement/created-at #inst "2020-01-01"
     :statement/creation-secret "secret-creation-secret"
     :statement/version 1
-    :statement/discussions ["discussion/simple"]}
+    :statement/discussions ["discussion/simple"]
+    :statement/labels [":comment" ":check"]}
    {:db/id "statement/denken-tut-weh"
     :statement/author "user.registered/kangaroo"
     :statement/content "Denken sorgt nur für Kopfschmerzen. Lieber den Donaldo machen!"
