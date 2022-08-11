@@ -34,7 +34,7 @@
 (deftest support-statement!-test
   (testing "Add a new supporting statement to a discussion"
     (let [share-hash "simple-hash"
-          user-id (user-db/user-by-nickname "Wegi")
+          user-id (:db/id (user-db/user-by-nickname "Wegi"))
           starting-conclusion (first (db/starting-statements share-hash))
           new-support (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
                                               "This is a new support" :statement.type/support
@@ -50,7 +50,7 @@
 (deftest attack-statement!-test
   (testing "Add a new attacking statement to a discussion"
     (let [share-hash "simple-hash"
-          user-id (user-db/user-by-nickname "Wegi")
+          user-id (:db/id (user-db/user-by-nickname "Wegi"))
           starting-conclusion (first (db/starting-statements share-hash))
           new-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
                                              "This is a new attack" :statement.type/attack
@@ -63,7 +63,7 @@
 (deftest locked-statement!-test
   (testing "Add a new locked statement to a discussion"
     (let [share-hash "simple-hash"
-          user-id (user-db/user-by-nickname "Wegi")
+          user-id (:db/id (user-db/user-by-nickname "Wegi"))
           registered-user-id (:db/id (first (user-db/all-registered-users)))
           starting-conclusion (first (db/starting-statements share-hash))
           new-non-locked-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
@@ -149,7 +149,7 @@
                                 :discussion/share-hash share-hash
                                 :discussion/edit-hash (str "secret-" share-hash)
                                 :discussion/author (user-db/add-user-if-not-exists "Wegi")})
-          christian-id (user-db/user-by-nickname "Christian")
+          christian-id (:db/id (user-db/user-by-nickname "Christian"))
           first-id (:db/id (db/add-starting-statement! share-hash christian-id "this is sparta"))
           second-id (:db/id (db/add-starting-statement! share-hash christian-id "this is kreta"))]
       (is (db/check-valid-statement-id-for-discussion first-id "Wegi-ist-der-schönste"))
@@ -223,7 +223,7 @@
 (deftest update-authors-from-secrets-test
   (testing "Change of author, when a registered user claims the statement."
     (let [statement (first (db/starting-statements "simple-hash"))
-          original-author (user-db/user-by-nickname "Christian")
+          original-author (:db/id (user-db/user-by-nickname "Christian"))
           registered-user (fast-pull [:user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"])]
       ;; Using the wrong secret should do nothing
       (db/update-authors-from-secrets {(:db/id statement) "wrong-secret"} (:db/id registered-user))

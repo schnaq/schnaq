@@ -2,7 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
             [schnaq.config.shared :as shared-config]
-            [schnaq.database.main :refer [fast-pull query transact]]
+            [schnaq.database.main :refer [fast-pull query transact transact-and-pull-temp]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map] :as shared-tools]
@@ -43,14 +43,14 @@
   "Return the **schnaq** user-id by nickname. The nickname is not case-sensitive.
   If there is no user with said nickname returns nil."
   [nickname]
-  [:user/nickname :ret (? :db/id)]
+  [:user/nickname => (? ::specs/user)]
   (query
-   '[:find ?user .
-     :in $ ?user-name
+   '[:find (pull ?user pattern) .
+     :in $ ?user-name pattern
      :where [?user :user/nickname ?original-nickname]
      [(.toLowerCase ^String ?original-nickname) ?lower-name]
      [(= ?lower-name ?user-name)]]
-   (.toLowerCase ^String nickname)))
+   (.toLowerCase ^String nickname) patterns/private-user))
 
 (>defn user-by-email
   "Returns the registered user by email."
@@ -110,19 +110,20 @@
 (>defn add-user
   "Add a new anonymous user / author to the database."
   [nickname]
-  [:user/nickname :ret :db/id]
+  [:user/nickname => ::specs/any-user]
   (when (s/valid? :user/nickname nickname)
-    (get-in
-     @(transact [{:db/id "temp-user"
-                  :user/nickname nickname}])
-     [:tempids "temp-user"])))
+    (let [temp-id (str "temp-user-" nickname)]
+      (transact-and-pull-temp
+       [{:db/id temp-id
+         :user/nickname nickname}]
+       temp-id patterns/private-user))))
 
 (>defn add-user-if-not-exists
   "Adds a user if they do not exist yet. Returns the (new) user-id."
   [nickname]
-  [:user/nickname :ret :db/id]
-  (if-let [user-id (user-by-nickname nickname)]
-    user-id
+  [:user/nickname => ::specs/any-user]
+  (if-let [user (user-by-nickname nickname)]
+    user
     (do (log/info "Added a new user:" nickname)
         (add-user nickname))))
 
@@ -131,8 +132,8 @@
   Returns the keycloak-user if logged-in, otherwise the anon user-id."
   [display-name keycloak-id]
   (if keycloak-id
-    (:db/id (fast-pull [:user.registered/keycloak-id keycloak-id] [:db/id]))
-    (add-user-if-not-exists display-name)))
+    (:db/id (private-user-by-keycloak-id keycloak-id))
+    (:db/id (add-user-if-not-exists display-name))))
 
 (>defn update-groups
   "Updates the user groups to be equal to the new input."
