@@ -5,7 +5,7 @@
             [schnaq.config.shared :as shared-config])
   #?(:clj (:import (java.io InputStream))))
 
-#?(:cljs (s/def :re-frame/component vector?))
+#?(:cljs (s/def :re-frame/component (s/or :form-1 vector? :form-2 fn?)))
 
 ;; Common
 (s/def ::non-blank-string (s/and string? (complement string/blank?)))
