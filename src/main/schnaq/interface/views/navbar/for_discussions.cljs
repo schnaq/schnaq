@@ -6,7 +6,7 @@
 
 (defn- interaction-elements []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
-   [share/share-schnaq-button]
+   [share/navbar-share-schnaq-button]
    [nav-elements/navbar-download]
    [nav-elements/navbar-settings]
    [nav-elements/language-toggle]

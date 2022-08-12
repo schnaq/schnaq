@@ -82,21 +82,16 @@
         [:input.btn.btn-primary.me-auto {:type "submit"}]
         [:small.text-muted (labels :feedbacks.modal/disclaimer)]]])))
 
-(defn- feedback-modal
+(defn feedback-modal
   "Create a modal to fetch user's feedback."
-  []
-  [modal/modal-template
+  [component]
+  (screenshot!)
+  [modal/modal {:size :lg}
+   component
    (labels :feedbacks.overview/header)
    [:div.tab-pane.fade.show.active
     [:p (labels :feedbacks.modal/primer)]
     [form-input]]])
-
-(defn show-feedback-modal
-  "The on-click function to show the feedback modal."
-  [_event]
-  (screenshot!)
-  (rf/dispatch [:modal {:show? true :large? true
-                        :child [feedback-modal]}]))
 
 ;; -----------------------------------------------------------------------------
 

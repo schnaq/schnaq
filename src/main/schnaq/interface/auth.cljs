@@ -32,7 +32,7 @@
    error-handling, e.g. when a token expired and could not be refreshed"
   []
   (let [keycloak @(rf/subscribe [:keycloak/object])]
-    [modal/modal-template
+    [modal/modal {:show true}
      (labels :auth.modal.request-login/title)
      [:<>
       [:p (labels :auth.modal.request-login/lead) " 👍"]
@@ -95,7 +95,7 @@
  (fn [[keycloak redirect-uri]]
    (-> keycloak
        (.login #js {:redirectUri redirect-uri})
-       (.catch #(rf/dispatch [:modal {:show? true :child [request-login-modal]}])))))
+       (.catch #(rf/dispatch [:modal [request-login-modal]])))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -111,7 +111,7 @@
  (fn [[keycloak redirect-uri]]
    (-> keycloak
        (.register #js {:redirectUri redirect-uri})
-       (.catch #(rf/dispatch [:modal {:show? true :child [request-login-modal]}])))))
+       (.catch #(rf/dispatch [:modal [request-login-modal]])))))
 
 ;; -----------------------------------------------------------------------------
 ;; If login / init was successful, ask in keycloak for the user's information.
@@ -131,7 +131,7 @@
        (.then #(let [keycloak-fields (js->clj % :keywordize-keys true)]
                  (rf/dispatch [:keycloak/store-groups keycloak-fields])
                  (matomo/set-user-id (:id keycloak-fields))))
-       (.catch #(rf/dispatch [:modal {:show? true :child [request-login-modal]}])))))
+       (.catch #(rf/dispatch [:modal [request-login-modal]])))))
 
 (rf/reg-event-db
  :keycloak/store-groups
@@ -186,7 +186,7 @@
                  (log/trace "Access Token for user validation refreshed")))
              (.catch
               (fn [e]
-                (rf/dispatch [:modal {:show? true :child [request-login-modal]}])
+                (rf/dispatch [:modal [request-login-modal]])
                 (log/error "Error when updating the keycloak access token." e))))))))
 
 (defn- authorization-header [token]

@@ -4,7 +4,7 @@
             [schnaq.interface.components.navbar :as navbar]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.views.discussion.share :as share-modal]
+            [schnaq.interface.views.discussion.share :refer [share-schnaq-button]]
             [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.navbar.elements :as nav-elements]
             [schnaq.interface.views.navbar.user-management :as um]))
@@ -58,10 +58,9 @@
 
 (defn- li-button
   "List element standard button."
-  [content on-click-fn]
+  [props content]
   [:button.list-group-item.list-group-item-action
-   {:on-click on-click-fn}
-   content])
+   props content])
 
 (defn- settings-li-button
   "Either display schnaq settings or graph settings button."
@@ -71,7 +70,7 @@
         current-route @(rf/subscribe [:navigation/current-route-name])
         graph? (= current-route :routes/graph-view)]
     (if graph?
-      [li-button (labels :graph.settings/title) (fn [_] (graph-settings/show-notification))]
+      [li-button {:on-click #(graph-settings/show-notification)} (labels :graph.settings/title)]
       (when edit-hash
         [:a.button.list-group-item.list-group-item-action
          {:href (navigation/href :routes.schnaq/admin-center
@@ -95,7 +94,7 @@
   [:<>
    [:div.fw-bold.mt-3 (labels :discussion.navbar/settings)]
    [:ul.list-group.list-group-flush
-    [li-button (labels :sharing/tooltip) (fn [_] (share-modal/open-share-schnaq))]
+    [share-schnaq-button (fn [props] [li-button props (labels :sharing/tooltip)])]
     [:li.list-group-item.dropdown [navbar/language-dropdown true {:class "p-0 text-dark"}]]
     [settings-li-button]]])
 
