@@ -15,12 +15,11 @@
 
 (deftest add-user-test
   (testing "Check for correct user-addition"
-    (is (number? (db/add-user "Gib ihm!")))))
+    (is (s/valid? ::specs/any-user (db/add-user "Gib ihm!")))))
 
 (deftest user-by-nickname-test
   (testing "Tests whether the user is correctly found, disregarding case."
     (let [wegi (db/user-by-nickname "Wegi")]
-      (is (int? wegi))
       (is (= wegi (db/user-by-nickname "WeGi")
              (db/user-by-nickname "wegi")
              (db/user-by-nickname "wegI"))))))
@@ -28,7 +27,6 @@
 (deftest add-user-if-not-exists-test
   (testing "Test the function to add a new user if they do not exist."
     (let [new-user (db/add-user-if-not-exists "For Sure a new User that does Not exist")]
-      (is (int? new-user))
       (is (= new-user (db/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
 
 (deftest update-groups-test

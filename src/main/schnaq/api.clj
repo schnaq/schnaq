@@ -150,7 +150,7 @@
                          multipart/multipart-middleware
                          auth-middlewares/replace-bearer-with-token
                          auth/wrap-jwt-authentication
-                         auth-middlewares/update-jwt-middleware
+                         auth-middlewares/parse-jwt-middleware
                          middlewares/wrap-custom-schnaq-csrf-header
                          profiling/profiling-middleware]}
      ::middleware/registry {:app/valid-code? auth-middlewares/valid-app-code?-middleware

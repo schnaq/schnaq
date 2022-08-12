@@ -12,20 +12,58 @@
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
 
-(deftest add-label-test
+;; -----------------------------------------------------------------------------
+
+(defn- statement-label-request [verb share-hash statement-id token]
+  (-> {:request-method verb :uri (:path (api/route-by-name :api.discussion.statement/label))}
+      (assoc :body-params {:label ":check"
+                           :display-name "A. Schneider"
+                           :share-hash share-hash
+                           :statement-id statement-id})
+      toolbelt/add-csrf-header
+      (toolbelt/mock-authorization-header token)
+      test-app
+      :status))
+
+(deftest add-label-no-restriction-test
   (let [share-hash "cat-dog-hash"
         statement-id (:db/id (first (discussion-db/starting-statements share-hash)))
-        request #(-> {:request-method :put :uri "/discussion/statement/label/add"}
-                     (assoc :body-params {:label ":check"
-                                          :display-name "A. Schneider"
-                                          :share-hash share-hash
-                                          :statement-id statement-id})
-                     toolbelt/add-csrf-header
-                     (toolbelt/mock-authorization-header %))]
-    (testing "Only request with valid role shall be accepted."
-      @(discussion-db/mods-mark-only! share-hash true)
-      (is (= 200 (-> toolbelt/token-schnaqqifant-user request test-app :status)))
-      (is (= 403 (-> toolbelt/token-wegi-no-beta-user request test-app :status))))))
+        request-fn (partial statement-label-request :put share-hash statement-id)]
+    (testing "Anonymous and registered users are allowed to add labels."
+      (is (= 200 (request-fn nil)))
+      (is (= 200 (request-fn toolbelt/token-schnaqqifant-user)))
+      (is (= 200 (request-fn toolbelt/token-kangaroo-normal-user)))
+      (is (= 200 (request-fn toolbelt/token-n2o-admin))))))
+
+(deftest add-label-mods-only-test
+  (let [share-hash "cat-dog-hash"
+        statement-id (:db/id (first (discussion-db/starting-statements share-hash)))
+        request-fn (partial statement-label-request :put share-hash statement-id)
+        _ @(discussion-db/mods-mark-only! share-hash true)]
+    (testing "Only moderators are allowed to set labels."
+      (is (= 403 (request-fn nil)))
+      (is (= 403 (request-fn toolbelt/token-kangaroo-normal-user)))
+      (is (= 200 (request-fn toolbelt/token-schnaqqifant-user))))))
+
+(deftest remove-label-no-restriction-test
+  (let [share-hash "simple-hash"
+        statement-id (:db/id (first (discussion-db/statements-by-content "Brainstorming ist total wichtig")))
+        request-fn (partial statement-label-request :delete share-hash statement-id)]
+    (testing "Anonymous and registered users are allowed to remove labels."
+      (is (= 200 (request-fn nil)))
+      (is (= 200 (request-fn toolbelt/token-schnaqqifant-user)))
+      (is (= 200 (request-fn toolbelt/token-kangaroo-normal-user)))
+      (is (= 200 (request-fn toolbelt/token-n2o-admin))))))
+
+(deftest remove-label-mods-only-test
+  (let [share-hash "simple-hash"
+        statement-id (:db/id (first (discussion-db/statements-by-content "Brainstorming ist total wichtig")))
+        request-fn (partial statement-label-request :delete share-hash statement-id)
+        _ @(discussion-db/mods-mark-only! share-hash true)]
+    (testing "Only moderators are allowed to remove labels."
+      (is (= 403 (request-fn nil)))
+      (is (= 403 (request-fn toolbelt/token-kangaroo-normal-user)))
+      (is (= 200 (request-fn toolbelt/token-schnaqqifant-user))))))
 
 ;; -----------------------------------------------------------------------------
 

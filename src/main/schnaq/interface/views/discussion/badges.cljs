@@ -67,7 +67,7 @@
                                             (dispatch-fn)))
         admin-delete-fn #(confirmation-fn (fn [] (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
         user-delete-fn (if anonymous-owner?
-                         #(rf/dispatch [:modal {:show? true :child [anonymous-delete-modal]}])
+                         #(rf/dispatch [:modal [anonymous-delete-modal]])
                          #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))))]
     [:button.dropdown-item
      {:tabIndex 60
@@ -110,8 +110,7 @@
   (let [creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
         anonymous-owner? (contains? creation-secrets (:db/id statement))
         on-click-fn (if anonymous-owner?
-                      #(rf/dispatch [:modal {:show? true
-                                             :child [anonymous-edit-modal]}])
+                      #(rf/dispatch [:modal [anonymous-edit-modal]])
                       (fn []
                         (rf/dispatch [:statement.edit/activate-edit (:db/id statement)])
                         (rf/dispatch [:statement.edit/change-statement-type (:db/id statement)
@@ -124,8 +123,7 @@
   (let [creation-secrets @(rf/subscribe [:schnaq.discussion/creation-secrets])
         anonymous-owner? (contains? creation-secrets share-hash)
         on-click-fn (if anonymous-owner?
-                      #(rf/dispatch [:modal {:show? true
-                                             :child [anonymous-edit-modal]}])
+                      #(rf/dispatch [:modal [anonymous-edit-modal]])
                       (fn []
                         (rf/dispatch [:statement.edit/activate-edit discussion-id])))]
     [edit-dropdown-button on-click-fn]))

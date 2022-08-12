@@ -60,7 +60,6 @@
 
    :footer.buttons/about-us "About us"
    :footer.buttons/legal-note "Legal Note"
-   :footer.buttons/privacy "Privacy Notice"
    :footer.buttons/press-kit "Press Kit"
    :footer.buttons/publications "Publications"
    :footer.tagline/developed-with "Developed with"

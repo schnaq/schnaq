@@ -43,7 +43,7 @@
   can be passed to an anchor's href."
   [label href]
   [keyword? any? :ret vector?]
-  [:a.nav-link.text-nowrap {:href href :role "button"}
+  [:a.nav-link.text-nowrap.btn.btn-link {:href href :role "button"}
    (labels label)])
 
 (defn separated-button
@@ -69,7 +69,7 @@
      [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
       {:class navbar-bg-class}
       [:div.container-fluid
-       [:div.navbar-brand.p-0.btn brand-content]
+       [:div.navbar-brand.pt-0 brand-content]
        [:button.navbar-toggler.mx-2.panel-white
         {:type "button" :data-bs-toggle "collapse"
          :data-bs-target (str "#" collapse-content-id)
@@ -85,10 +85,10 @@
 (>defn button-with-icon
   "Build a button for the navbar, with icon, text and tooltip."
   ([icon-key tooltip-text button-text on-click-fn]
-   [keyword? string? string? fn? => :re-frame/component]
+   [keyword? string? string? (? fn?) => :re-frame/component]
    [button-with-icon icon-key tooltip-text button-text on-click-fn nil])
   ([icon-key tooltip-text button-text on-click-fn attrs]
-   [keyword? string? string? fn? (? map?) => :re-frame/component]
+   [keyword? string? string? (? fn?) (? map?) => :re-frame/component]
    [tooltip/tooltip-button "bottom" tooltip-text
     [:<>
      [icon icon-key "m-auto d-block" {:size "lg"}]

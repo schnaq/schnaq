@@ -1,42 +1,41 @@
 (ns schnaq.interface.views.modal
-  (:require [com.fulcrologic.guardrails.core :refer [>defn]]
+  (:require ["react-bootstrap" :refer [Modal]]
+            [com.fulcrologic.guardrails.core :refer [>defn => ?]]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reagent.core :as r]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]))
 
-(defn modal-panel
-  [{:keys [child show? large?]}]
-  [:div.modal-wrapper
-   [:div {:class "modal-backdrop"
-          :on-click (fn [event]
-                      (rf/dispatch [:modal {:show? (not show?)
-                                            :child nil}])
-                      (.preventDefault event)
-                      (.stopPropagation event))}]
-   (let [classes "modal-child modal-dialog modal-dialog-scrollable"]
-     [:div {:class (if large? (str classes " modal-lg") classes)}
-      child])])
+(>defn modal
+  "Create a modal and takes an optional `toggle-element`, e.g. a button, which
+  opens the modal when clicked. `toggle-element` must be a function/1 returning
+  a component."
+  ([props title body]
+   [map? any? any? => :re-frame/component]
+   [modal props nil title body])
+  ([props _toggle-element _title _body]
+   [map? (? :re-frame/component) any? any? => :re-frame/component]
+   (let [show (r/atom (or (:show props) false))]
+     (fn [props toggle-element title body]
+       [:<>
+        (when toggle-element
+          [toggle-element {:onClick #(reset! show true)}])
+        [:> Modal (merge {:show @show
+                          :onHide (fn [_e]
+                                    (reset! show false)
+                                    (rf/dispatch [:modal/dissoc]))}
+                         (dissoc props :show))
+         [:> (oget Modal :Header) {:closeButton true}
+          [:> (oget Modal :Title) title]]
+         [:> (oget Modal :Body)
+          body]]]))))
 
 (defn modal-view
   "Include modal in view."
   []
-  (let [modal @(rf/subscribe [:modal])]
-    (when (:show? modal)
-      [modal-panel modal])))
-
-(defn close-modal []
-  (rf/dispatch [:modal {:show? false :child nil}]))
-
-(>defn modal-template
-  "Generic modal template."
-  [header body]
-  [string? vector? :ret vector?]
-  [:div.modal-content.px-4
-   [:div.modal-header
-    [:h5.modal-title header]
-    [:button.btn-close {:type "button" :data-dismiss "modal" :aria-label "Close" :on-click close-modal}
-     [:span {:aria-hidden "true"}]]]
-   [:div.modal-body body]])
+  (when-let [modal @(rf/subscribe [:modal])]
+    modal))
 
 ;; -----------------------------------------------------------------------------
 ;; Enter Name Modal
@@ -44,7 +43,7 @@
 (defn anonymous-modal
   "Basic modal which is presented to anonymous users trying to alter statements."
   [header-label shield-label info-label]
-  [modal-template
+  [modal {:show true}
    (labels header-label)
    [:<>
     [:p [icon :shield "m-auto" {:size "lg"}] " " (labels shield-label)]
@@ -63,3 +62,8 @@
  :modal
  (fn [db [_ data]]
    (assoc db :modal data)))
+
+(rf/reg-event-db
+ :modal/dissoc
+ (fn [db _]
+   (dissoc db :modal)))

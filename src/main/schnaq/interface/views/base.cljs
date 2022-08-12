@@ -6,7 +6,7 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.views.feedback.collect :as feedback]))
+            [schnaq.interface.views.feedback.collect :refer [feedback-modal]]))
 
 (defn header
   "Build a header with a curly bottom for a page. Heading, subheading and more will be included in the header."
@@ -55,8 +55,9 @@
     [footer-button "https://schnaq.com/publications" :footer.buttons/publications]]
    [:ul.list-inline
     [:li.list-inline-item
-     [:button.btn.btn-sm.btn-outline-white {:on-click feedback/show-feedback-modal}
-      (labels :feedbacks/button)]]
+     [feedback-modal
+      (fn [props] [:button.btn.btn-sm.btn-outline-white props
+                   (labels :feedbacks/button)])]]
     [footer-button "https://schnaq.com/privacy" :router/privacy]
     [footer-button "https://schnaq.com/legal-note" :footer.buttons/legal-note]]])
 

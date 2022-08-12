@@ -1,9 +1,9 @@
 (ns schnaq.auth.middlewares
   (:require [buddy.auth :refer [authenticated?]]
             [clojure.string :as string]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [ring.util.http-response :refer [forbidden unauthorized]]
             [schnaq.api.toolbelt :as at]
-            [schnaq.auth.lib :as auth-lib]
             [schnaq.config :as config]
             [schnaq.database.user :as user-db]
             [schnaq.shared-toolbelt :as shared-tools]))
@@ -21,7 +21,7 @@
   [handler]
   (fn [request]
     (if (authenticated? request)
-      (handler (assoc request :user (user-db/private-user-by-keycloak-id (get-in request [:identity :sub]))))
+      (handler request)
       (unauthorized (at/build-error-body :auth/not-logged-in
                                          "You are not logged in. Maybe your token is malformed / expired.")))))
 
@@ -66,12 +66,26 @@
       (handler request)
       (forbidden (at/build-error-body :app/invalid-code "Your application has no permission to access this API. Please provide a valid app-code in your request.")))))
 
-(defn update-jwt-middleware
+;; -----------------------------------------------------------------------------
+
+(>defn- extract-user-information-from-jwt
+  "Extend identity map parsed from JWT and convert types."
+  [request]
+  [map? => map?]
+  (-> request
+      (assoc :user (user-db/private-user-by-keycloak-id (get-in request [:identity :sub])))
+      (update-in [:identity :sub] str)
+      (assoc-in [:identity :id] (str (get-in request [:identity :sub])))
+      (assoc-in [:identity :preferred_username] (or (get-in request [:identity :preferred_username])
+                                                    (get-in request [:identity :name])))
+      (assoc-in [:identity :roles] (get-in request [:identity :realm_access :roles]))))
+
+(defn parse-jwt-middleware
   "Always update identity-map, if provided. Else just passes the request through."
   [handler]
   (fn [request]
     (if (authenticated? request)
-      (handler (auth-lib/prepare-identity-map request))
+      (handler (extract-user-information-from-jwt request))
       (handler request))))
 
 (defn replace-bearer-with-token
