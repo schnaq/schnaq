@@ -26,12 +26,12 @@
   "A form that displays the link the user can copy. Form is read-only."
   [create-link-fn id-extra]
   (let [display-content (create-link-fn @(rf/subscribe [:schnaq/share-hash]))
-        meeting-link-id (str "meeting-link" id-extra)]
+        link-id (str "schnaq-link" id-extra)]
     [:div.pb-4
      [tooltip/text
       (labels :schnaq/copy-link-tooltip)
       [:form.form.create-meeting-form.d-flex
-       {:id (str "meeting-link-form-" id-extra)
+       {:id (str "schnaq-link-form-" id-extra)
         :on-click (fn [e]
                     (.preventDefault e)
                     (clipboard/copy-to-clipboard! display-content)
@@ -39,12 +39,13 @@
                              (labels :schnaq/link-copied-success)
                              :info
                              false))}
-       [:input.form-control.form-round.copy-link-form.clickable-no-hover
-        {:id meeting-link-id
-         :type "text"
+       [:input.form-control.form-round.copy-link-form
+        {:id link-id
+         :type :text
+         :role :button
          :value (or display-content "")
          :readOnly true}]
-       [:label.form-label.clickable-no-hover.align-right.ms-4.d-flex.justify-content-center {:for meeting-link-id}
+       [:label.form-label.align-right.ms-4.d-flex.justify-content-center {:for link-id :role :button}
         [icon :copy "m-auto" {:size "lg"}]]]
       {:plugins followCursor
        :followCursor true}]]))
