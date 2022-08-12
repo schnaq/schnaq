@@ -21,11 +21,10 @@
    [clickable-title "text-dark"])
   ([title-class]
    (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])]
-     [:div.clickable-no-hover
-      [:a.link-unstyled
-       {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
-       [:h1.h6.d-none.d-md-block.text-wrap {:class title-class} (toolbelt/truncate-to-n-chars title 64)]
-       [:div.d-md-none {:class title-class} (toolbelt/truncate-to-n-chars title 32)]]])))
+     [:a.link-unstyled
+      {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
+      [:h1.h6.d-none.d-md-block.text-wrap {:class title-class} (toolbelt/truncate-to-n-chars title 64)]
+      [:div.d-md-none {:class title-class} (toolbelt/truncate-to-n-chars title 32)]])))
 
 (defn- schnaq-logo []
   [:<>

@@ -114,7 +114,7 @@
     [:div.dropdown
      [nav-component/separated-button
       [profile-picture-in-nav]
-      {:class (if on-white-background? "btn-link" "btn-outline-light btn-transparent")
+      {:class (when-not on-white-background? "text-white")
        :data-bs-toggle "dropdown"
        :aria-expanded "false"}
       [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby "profile-dropdown"}
