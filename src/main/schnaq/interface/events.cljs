@@ -8,7 +8,8 @@
             [schnaq.interface.auth :as auth]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+            [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.links :as links]))
 
 ;; Note: this lives in the common namespace to prevent circles through the routes import
 (rf/reg-event-fx
@@ -129,6 +130,12 @@
  :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
    (:discussion/edit-hash selected-schnaq)))
+
+(rf/reg-sub
+ :schnaq/share-link
+ :<- [:schnaq/selected]
+ (fn [selected-schnaq]
+   (links/get-share-link (:discussion/share-hash selected-schnaq))))
 
 (rf/reg-sub
  :schnaq.selected/statement-number
