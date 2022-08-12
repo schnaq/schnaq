@@ -64,7 +64,6 @@
 
    :footer.buttons/about-us "Über uns"
    :footer.buttons/legal-note "Impressum"
-   :footer.buttons/privacy "Datenschutz"
    :footer.buttons/press-kit "Presse"
    :footer.buttons/publications "Publikationen"
    :footer.tagline/developed-with "Entwickelt mit"

@@ -1,11 +1,11 @@
+// The ordering of the imports is important. Please read the bootstrap docs if
+// you want to learn more.
+
 // Functions and variables are needed to define the custom maps for bs 5
 @import "../node_modules/bootstrap/scss/functions";
-@import '../node_modules/bootstrap/scss/variables';
+
 // Overwrite bs variables with our own
 @import 'variables';
-// Load mixins and utilities like map-merge
-@import '../node_modules/bootstrap/scss/mixins';
-@import '../node_modules/bootstrap/scss/utilities';
 
 // Additional colors. Defaults are primary, secondary, ... and here you can add
 // your own color styles.
@@ -19,6 +19,8 @@ $custom-colors: (
   'white-shade' :$white-shade,
 );
 
+@import '../node_modules/bootstrap/scss/variables';
+
 $theme-colors: map-merge($theme-colors, $custom-colors);
 
 $custom-breakpoints: (
@@ -29,11 +31,15 @@ $custom-breakpoints: (
 
 $grid-breakpoints: map-merge($grid-breakpoints, $custom-breakpoints);
 
-// Load bootstrap-components that are needed by schnaq, not just everything in bulk
-// See: https://getbootstrap.com/docs/5.0/customize/optimize/
-// Layout & components
+// base bootstrap components
+@import "../node_modules/bootstrap/scss/maps";
+@import '../node_modules/bootstrap/scss/mixins';
+@import '../node_modules/bootstrap/scss/utilities';
 @import "../node_modules/bootstrap/scss/root";
 @import "../node_modules/bootstrap/scss/reboot";
+// remaining bootstrap imports
+// Load bootstrap-components that are needed by schnaq, not just everything in bulk
+// See: https://getbootstrap.com/docs/5.0/customize/optimize/
 @import "../node_modules/bootstrap/scss/type";
 @import "../node_modules/bootstrap/scss/images";
 @import "../node_modules/bootstrap/scss/containers";

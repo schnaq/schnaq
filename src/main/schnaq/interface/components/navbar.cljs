@@ -43,7 +43,7 @@
   can be passed to an anchor's href."
   [label href]
   [keyword? any? :ret vector?]
-  [:a.nav-link.text-nowrap {:href href :role "button"}
+  [:a.nav-link.text-nowrap.btn.btn-link {:href href :role "button"}
    (labels label)])
 
 (defn separated-button

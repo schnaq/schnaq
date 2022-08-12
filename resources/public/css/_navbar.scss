@@ -1,6 +1,10 @@
 @use 'rounded' as rounded;
 @use 'variables' as vars;
 
+// Reminder: Most of this can be configured via bootstrap variables.
+// See: https: //getbootstrap.com/docs/5.2/components/navbar/#variables
+// These have to be configured in our _variables.scss file.
+
 $height-of-components: 4.25rem;
 
 .schnaq-navbar-skeleton {
@@ -21,6 +25,10 @@ $height-of-components: 4.25rem;
 
   @include media-breakpoint-down(md) {
     border-radius: 0;
+  }
+
+  .nav-link {
+    @extend .p-2;
   }
 }
 
@@ -70,4 +78,3 @@ $height-of-components: 4.25rem;
     background: $white;
   }
 }
-
