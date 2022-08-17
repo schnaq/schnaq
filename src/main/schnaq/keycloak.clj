@@ -39,3 +39,11 @@
   [keycloak-id roles]
   [:user.registered/keycloak-id (s/coll-of string?) => (s/coll-of string?)]
   (kc-user/add-realm-roles! kc-client realm (.getUsername (get-user keycloak-id)) roles))
+
+(>defn remove-realm-roles!
+  "Removes realm roles from the user. Only valid roles are removed.
+   
+  Example: `(remove-realm-roles! \"00000000-0000-0000-0000-000000000000\" [\"pro\"])`"
+  [keycloak-id roles]
+  [:user.registered/keycloak-id (s/coll-of string?) => (s/coll-of string?)]
+  (kc-user/remove-realm-roles! kc-client realm (.getUsername (get-user keycloak-id)) roles))
