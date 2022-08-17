@@ -3,8 +3,6 @@
             [schnaq.api :as api]
             [schnaq.api.subscription.stripe :as stripe]
             [schnaq.config.stripe :refer [prices]]
-            [schnaq.database.user :as user-db]
-            [schnaq.test-data :refer [kangaroo]]
             [schnaq.test.toolbelt :as toolbelt :refer [token-n2o-admin test-app]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
