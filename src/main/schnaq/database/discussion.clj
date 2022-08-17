@@ -203,10 +203,9 @@
                         (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))
         temporary-id (:db/id new-statement)
         tx-result @(transact [new-statement [:db/add discussion-id :discussion/starting-statements temporary-id]])
-        new-db (:db-after tx-result)
         new-id (get-in tx-result [:tempids temporary-id])
         pattern (if registered-user? patterns/statement patterns/statement-with-secret)]
-    (fast-pull new-id pattern new-db)))
+    (fast-pull new-id pattern (:db-after tx-result))))
 
 (>defn all-discussions-by-title
   "Query all discussions based on the title. Could possible be multiple
