@@ -44,7 +44,7 @@
   (reset! access-token (:access_token (get-access-token cconfig/client-id cconfig/client-secret)))
   (try
     (fn)
-    (toolbelt/post-in-mattermost! "[Cleverreach] Recovered last operation with fresh token")
+    (toolbelt/post-in-mattermost! "[CleverReach] Recovered last operation with fresh token")
     (catch Exception e
       (let [error (ex-data e)]
         (toolbelt/post-error-in-chat "CleverReach"
