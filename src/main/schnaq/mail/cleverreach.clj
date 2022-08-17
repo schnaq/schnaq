@@ -32,10 +32,24 @@
           (toolbelt/post-error-in-chat "CleverReach" (format "Could not retrieve access token: `%s`" error))
           error)))))
 
-(def ^:private access-token
-  (:access_token (get-access-token cconfig/client-id cconfig/client-secret)))
+(defonce ^:private access-token
+  (atom (:access_token (get-access-token cconfig/client-id cconfig/client-secret))))
 
 ;; -----------------------------------------------------------------------------
+
+(>defn- retry-with-new-token
+  "Retry the last operation with a freshly queried token. If it does not work again, give up."
+  [fn]
+  [fn? => (? map?)]
+  (reset! access-token (:access_token (get-access-token cconfig/client-id cconfig/client-secret)))
+  (try
+    (fn)
+    (toolbelt/post-in-mattermost! "[Cleverreach] Recovered last operation with fresh token")
+    (catch Exception e
+      (let [error (ex-data e)]
+        (toolbelt/post-error-in-chat "CleverReach"
+                                     (format "Could not recover with new token, Giving up. Error %s" error))
+        error))))
 
 (>defn- wrap-catch-exception
   "Do API call, catch exception and print result or error."
@@ -48,10 +62,13 @@
         response)
       (catch Exception e
         (let [error (ex-data e)
-              formatted-error (format "%s mail: %s, body: `%s`" error-log email (m/decode-response-body error))]
+              response-body (m/decode-response-body error)
+              formatted-error (format "%s mail: %s, body: `%s`" error-log email response-body)]
           (toolbelt/post-error-in-chat "CleverReach" formatted-error)
           (log/error formatted-error)
-          error)))
+          (if (= "Unauthorized: token expired" (:message response-body))
+            (retry-with-new-token fn)
+            error))))
     (log/debug "Cleverreach is not enabled.")))
 
 ;; -----------------------------------------------------------------------------
@@ -63,7 +80,7 @@
   (wrap-catch-exception
    email "Added mail %s to group" "User could not be added to cleverreach."
    #(client/post
-     (format "https://rest.cleverreach.com/v3/groups.json/%s/receivers?token=%s" cconfig/receiver-group access-token)
+     (format "https://rest.cleverreach.com/v3/groups.json/%s/receivers?token=%s" cconfig/receiver-group @access-token)
      {:body
       (m/encode "application/json"
                 {:email email
@@ -83,7 +100,7 @@
   (wrap-catch-exception
    email "Added tag to mail %s." "Could not add tag to mail."
    #(client/post
-     (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags?token=%s" email access-token)
+     (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags?token=%s" email @access-token)
      {:body (m/encode "application/json" {:tags tags
                                           :group_id cconfig/receiver-group})
       :content-type :json
@@ -109,7 +126,7 @@
    email "Removed tag from mail %s." "Could not remove tag from mail."
    #(client/delete
      ;; The tags, which should be removed, must be a single tag or a comma separated list of tags.
-     (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags/%s?token=%s" email tag access-token)
+     (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags/%s?token=%s" email tag @access-token)
      {:content-type :json
       :accept :json})))
 
