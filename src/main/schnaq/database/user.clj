@@ -336,22 +336,30 @@
 
 (>defn subscribe-pro-tier
   "Confirm subscription of pro tier and persist it in the user."
-  [keycloak-id stripe-subscription-id stripe-customer-id]
-  [:user.registered/keycloak-id :user.registered.subscription/stripe-id :user.registered.subscription/stripe-customer-id :ret ::specs/registered-user]
-  (kc/add-realm-roles! keycloak-id ["pro"])
-  (update-user {:user.registered/keycloak-id keycloak-id
-                :user.registered/roles :role/pro
-                :user.registered.subscription/stripe-id stripe-subscription-id
-                :user.registered.subscription/stripe-customer-id stripe-customer-id}))
+  ([keycloak-id stripe-subscription-id stripe-customer-id]
+   [:user.registered/keycloak-id :user.registered.subscription/stripe-id :user.registered.subscription/stripe-customer-id => ::specs/registered-user]
+   (subscribe-pro-tier keycloak-id stripe-subscription-id stripe-customer-id true))
+  ([keycloak-id stripe-subscription-id stripe-customer-id send-to-keycloak?]
+   [:user.registered/keycloak-id :user.registered.subscription/stripe-id :user.registered.subscription/stripe-customer-id boolean? => ::specs/registered-user]
+   (when send-to-keycloak?
+     (kc/add-realm-roles! keycloak-id ["pro"]))
+   (update-user {:user.registered/keycloak-id keycloak-id
+                 :user.registered/roles :role/pro
+                 :user.registered.subscription/stripe-id stripe-subscription-id
+                 :user.registered.subscription/stripe-customer-id stripe-customer-id})))
 
 (>defn unsubscribe-pro-tier
   "Remove subscription from user."
-  [keycloak-id]
-  [:user.registered/keycloak-id :ret any?]
-  (kc/remove-realm-roles! keycloak-id ["pro"])
-  (let [retractions [:db/retract [:user.registered/keycloak-id keycloak-id]]
-        new-db (:db-after
-                @(transact [(conj retractions :user.registered.subscription/stripe-id)
-                            (conj retractions :user.registered.subscription/stripe-customer-id)
-                            (conj retractions :user.registered/roles :role/pro)]))]
-    (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
+  ([keycloak-id]
+   [:user.registered/keycloak-id => any?]
+   (unsubscribe-pro-tier keycloak-id true))
+  ([keycloak-id send-to-keycloak?]
+   [:user.registered/keycloak-id boolean? => any?]
+   (when send-to-keycloak?
+     (kc/remove-realm-roles! keycloak-id ["pro"]))
+   (let [retractions [:db/retract [:user.registered/keycloak-id keycloak-id]]
+         new-db (:db-after
+                 @(transact [(conj retractions :user.registered.subscription/stripe-id)
+                             (conj retractions :user.registered.subscription/stripe-customer-id)
+                             (conj retractions :user.registered/roles :role/pro)]))]
+     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db))))

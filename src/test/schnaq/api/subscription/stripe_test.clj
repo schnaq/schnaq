@@ -23,23 +23,6 @@
     (is (= 400 (:status (request :post :api.stripe/cancel-user-subscription {:cancel? true}))))))
 
 ;; -----------------------------------------------------------------------------
-;; Testing webhook events
-
-(def webhook #'stripe/webhook)
-(def keycloak-id (:user.registered/keycloak-id kangaroo))
-
-(deftest webhook-customer-subscription-created-test
-  (let [subscription-id "sub_foo"]
-    (testing "Store subscription information from stripe into the database."
-      (is (= 200 (:status (webhook {:body-params {:type "customer.subscription.created"
-                                                  :data {:object {:metadata {:keycloak-id keycloak-id}
-                                                                  :customer "cus_foo"
-                                                                  :id subscription-id}}}}))))
-      (is (= subscription-id
-             (:user.registered.subscription/stripe-id
-              (user-db/private-user-by-keycloak-id keycloak-id)))))))
-
-;; -----------------------------------------------------------------------------
 
 (deftest get-product-prices-test
   (let [get-product-prices #'stripe/get-product-prices
