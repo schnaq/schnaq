@@ -47,7 +47,7 @@
   [locale]
   [{:start #(rf/dispatch [:language/switch locale])}])
 
-(defn check-for-fresh-pro
+(defn- check-for-fresh-pro
   "Checks whether a user is freshly subbed (via query in the success url in Stripe) and fire an event for matomo."
   [query]
   (when (= "true" (-> query :query :subbed))
