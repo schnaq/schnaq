@@ -10,6 +10,7 @@
             [schnaq.database.specs]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.components.lexical.editor :as lexical]
+            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.pages.start :refer [startpage]]
             [schnaq.interface.translations :refer [labels]]
@@ -45,6 +46,12 @@
   "Returns controllers for the desired locale switch and redirect."
   [locale]
   [{:start #(rf/dispatch [:language/switch locale])}])
+
+(defn check-for-fresh-pro
+  "Checks whether a user is freshly subbed (via query in the success url in Stripe) and fire an event for matomo."
+  [query]
+  (when (= "1" (-> query :query :subbed))
+    (matomo/track-event "User Upgrade" "Pro-Upgrade" "Stripe Transaction Success")))
 
 ;; IMPORTANT: Routes called here as views do not hot-reload for some reason. Only
 ;; components inside do regularly. So just use components here that wrap the view you
@@ -98,7 +105,10 @@
          :view welcome/welcome-free-user-view}]
     ["/pro"
      {:name :routes.welcome/pro
-      :view welcome/welcome-pro-user-view}]]
+      :view welcome/welcome-pro-user-view
+
+      :controllers [{:parameters {:query [:subbed]}
+                     :start (fn [query] (check-for-fresh-pro query))}]}]]
    ["/admin"
     ["/center"
      {:name :routes/admin-center

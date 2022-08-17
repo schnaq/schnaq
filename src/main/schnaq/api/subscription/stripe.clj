@@ -29,7 +29,7 @@
   [:stripe.price/id :user.registered/keycloak-id :user.registered/email => map?]
   (let [items [{"price" price-id
                 "quantity" 1}]]
-    {"success_url" (format "%s/welcome/pro" config/frontend-url)
+    {"success_url" (format "%s/welcome/pro?subbed=1" config/frontend-url)
      "cancel_url" (format "%s/subscription/cancel" config/frontend-url)
      "mode" "subscription"
      "client_reference_id" keycloak-id
