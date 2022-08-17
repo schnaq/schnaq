@@ -4,8 +4,7 @@
   "Returns an image path as String for a given identifier"
   [identifier]
   (identifier
-   {:how-to/taskbar "https://s3.schnaq.com/schnaq-common/howto/taskbar.svg"
-    :icon-add "https://s3.schnaq.com/schnaq-common/buttons/add-button.svg"
+   {:icon-add "https://s3.schnaq.com/schnaq-common/buttons/add-button.svg"
     :icon-cards-dark "https://s3.schnaq.com/schnaq-common/icons/squares_dark.svg"
     :icon-community "https://s3.schnaq.com/schnaq-common/community.svg"
     :icon-crane "https://s3.schnaq.com/schnaq-common/icons/crane.svg"

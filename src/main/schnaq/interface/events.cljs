@@ -45,7 +45,6 @@
    {:fx [[:dispatch [:username/from-localstorage]]
          [:dispatch [:user.currency/from-localstorage]]
          [:dispatch [:re-frame-10x/hide-on-mobile]]
-         [:dispatch [:how-to-visibility/from-localstorage-to-app-db]]
          [:dispatch [:keycloak/init]]
          [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
          [:dispatch [:visited.save-statement-ids/store-hashes-from-localstorage]]
