@@ -1,12 +1,10 @@
 (ns schnaq.interface.views.admin.control-center
   (:require [cljs.pprint :refer [pprint]]
             [cljs.spec.alpha :as s]
-            [clojure.set :as set]
             [clojure.test.check.properties]
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
-            [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -146,48 +144,6 @@
          [:code
           (with-out-str (pprint user))]]])]))
 
-(defn- add-role
-  "Add role to user."
-  []
-  (let [selection-id "select-role-id"
-        {:user.registered/keys [keycloak-id roles]} @(rf/subscribe [:admin/user])]
-    [:form {:on-submit (fn [e]
-                         (.preventDefault e)
-                         (when-let [selection (oget+ e [:target :elements selection-id :value])]
-                           (when (seq selection)
-                             (let [role (keyword "role" selection)]
-                               (rf/dispatch [:admin.user/update {:user.registered/keycloak-id keycloak-id
-                                                                 :user.registered/roles role}])))))}
-     [:label (labels :admin.center.user.role.add/label)
-      [:div.input-group
-       [:select.form-control {:id selection-id}
-        [:option {:value ""} "---"]
-        (for [role (set/difference specs/user-roles roles)]
-          [:option {:key (str "role-selector-" role)
-                    :value role} role])]
-       [:button.input-group-text {:type :submit} (labels :admin.center.user.role.add/button)]]]]))
-
-(defn- remove-role
-  "Remove a user's role."
-  []
-  (let [selection-id "remove-role-id"
-        {:user.registered/keys [keycloak-id roles]} @(rf/subscribe [:admin/user])]
-    (when (seq roles)
-      [:form {:on-submit (fn [e]
-                           (.preventDefault e)
-                           (when-let [selection (oget+ e [:target :elements selection-id :value])]
-                             (when (not-empty selection)
-                               (let [role (keyword "role" selection)]
-                                 (rf/dispatch [:admin.user.delete/role keycloak-id role])))))}
-       [:label (labels :admin.center.user.role.delete/label)
-        [:div.input-group
-         [:select.form-control {:id selection-id}
-          [:option {:value ""} "---"]
-          (for [role roles]
-            [:option {:key (str "role-remove-selector-" role)
-                      :value role} role])]
-         [:button.input-group-text {:type :submit} (labels :admin.center.user.role.delete/button)]]]])))
-
 (defn- input-field
   "Generate an input field based on a model's field."
   [field]
@@ -213,33 +169,29 @@
   "Generate a form to update a user."
   []
   (when-let [keycloak-id @(rf/subscribe [:admin/user :user.registered/keycloak-id])]
-    [:<>
-     [:div.d-flex.flex-row.pt-5
-      [:div.me-3 [add-role]]
-      [remove-role]]
-     [:form {:on-submit (fn [e]
-                          (.preventDefault e)
-                          (let [form (oget e [:target :elements])
-                                user (toolbelt/form->coerced-map form)]
-                            (rf/dispatch [:admin.user/update (assoc user :user.registered/keycloak-id keycloak-id)])
-                            (rf/dispatch [:form/should-clear form])))}
-      [:div.row.pt-3
-       [input-field :user.registered/display-name]
-       [input-field :user.registered/first-name]
-       [input-field :user.registered/last-name]
-       [input-field :user.registered/email]
-       [input-field :user.registered/profile-picture]]
-      [:div.row
-       [:p.lead.pt-3.mb-0 "Features"]
-       [input-field :user.registered.features/concurrent-users]
-       [input-field :user.registered.features/total-schnaqs]
-       [input-field :user.registered.features/posts-per-schnaq]]
-      [:div.row
-       [:p.lead.pt-3.mb-0 "Stripe"]
-       [input-field :user.registered.subscription/stripe-customer-id]
-       [input-field :user.registered.subscription/stripe-id]]
-      [:button.btn.btn-primary.mt-3 {:type :submit}
-       (labels :admin.center.user.save/button)]]]))
+    [:form {:on-submit (fn [e]
+                         (.preventDefault e)
+                         (let [form (oget e [:target :elements])
+                               user (toolbelt/form->coerced-map form)]
+                           (rf/dispatch [:admin.user/update (assoc user :user.registered/keycloak-id keycloak-id)])
+                           (rf/dispatch [:form/should-clear form])))}
+     [:div.row.pt-3
+      [input-field :user.registered/display-name]
+      [input-field :user.registered/first-name]
+      [input-field :user.registered/last-name]
+      [input-field :user.registered/email]
+      [input-field :user.registered/profile-picture]]
+     [:div.row
+      [:p.lead.pt-3.mb-0 "Features"]
+      [input-field :user.registered.features/concurrent-users]
+      [input-field :user.registered.features/total-schnaqs]
+      [input-field :user.registered.features/posts-per-schnaq]]
+     [:div.row
+      [:p.lead.pt-3.mb-0 "Stripe"]
+      [input-field :user.registered.subscription/stripe-customer-id]
+      [input-field :user.registered.subscription/stripe-id]]
+     [:button.btn.btn-primary.mt-3 {:type :submit}
+      (labels :admin.center.user.save/button)]]))
 
 (defn- user-management
   "Show user management section."

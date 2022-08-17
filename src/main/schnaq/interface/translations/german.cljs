@@ -624,14 +624,10 @@
    :admin.center.delete.user.identity/button "Identität löschen"
 
    :admin.center.user/headline "User Management"
-   :admin.center.user/subheadline "Lade zunächste einen User, um die Bearbeitung zu beginnen."
+   :admin.center.user/subheadline "Lade zunächst einen User, um die Bearbeitung zu beginnen. Rollenmanagement findet über Keycloak statt."
    :admin.center.user.load/button "User laden"
    :admin.center.user.save/button "User speichern"
    :admin.center.user.delete/confirmation "Möchtest du das Attribut wirklich entfernen?"
-   :admin.center.user.role.delete/label "Entferne Rolle von User"
-   :admin.center.user.role.delete/button "Rolle entfernen"
-   :admin.center.user.role.add/label "Füge Rolle zu User hinzu"
-   :admin.center.user.role.add/button "Rolle hinzufügen"
 
    :badges.filters/label "Anzeige"
    :badges/sort "Sortierung der Beiträge"

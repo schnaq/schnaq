@@ -1,8 +1,9 @@
 (ns schnaq.database.user
-  (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
-            [schnaq.config.shared :as shared-config]
-            [schnaq.database.main :refer [fast-pull query transact transact-and-pull-temp]]
+  (:require [clojure.data :as data]
+            [clojure.spec.alpha :as s]
+            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
+            [schnaq.database.main :refer [fast-pull query transact
+                                          transact-and-pull-temp]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map] :as shared-tools]
@@ -147,15 +148,36 @@
       (transact add-new-groups)
       groups)))
 
-(>defn- promote-to-admin
-  "Promote user to admin, if this is provided in the JWT token.
-  This is how initial admins are translated to schnaq."
-  [{:user.registered/keys [roles] :as user} realm-roles]
-  [::specs/registered-user (s/coll-of string?) => any?]
-  (let [keycloak-realm-admin? (string? (some (set shared-config/admin-roles) realm-roles))
-        not-yet-admin? (not (shared-tools/admin? roles))]
-    (when (and keycloak-realm-admin? not-yet-admin?)
-      (update-user (assoc user :user.registered/roles :role/admin)))))
+(>defn jwt-roles->schnaq-roles
+  "Convert collection of jwt-roles to data."
+  [jwt-roles]
+  [(s/coll-of string?) => :user.registered/roles]
+  (let [role-mapping #(case %
+                        "beta-tester" :role/tester
+                        "pro" :role/pro
+                        "enterprise" :role/enterprise
+                        "admin" :role/admin
+                        nil)]
+    (->> (map role-mapping jwt-roles)
+         (remove nil?)
+         (into #{}))))
+
+(defn update-roles
+  "Update the user's roles based on the JWT."
+  [{:user.registered/keys [roles keycloak-id] :as user} jwt-roles]
+  [::specs/registered-user (s/coll-of string?) => ::specs/registered-user]
+  (let [new-user-roles (jwt-roles->schnaq-roles jwt-roles)]
+    (if (= new-user-roles roles)
+      user
+      (let [[added-roles removed-roles] (data/diff new-user-roles roles)
+            add-txs (for [role added-roles]
+                      [:db/add [:user.registered/keycloak-id keycloak-id] :user.registered/roles role])
+            retract-txs (for [role removed-roles]
+                          [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered/roles role])]
+        @(transact (concat retract-txs add-txs))
+        (private-user-by-keycloak-id keycloak-id)))))
+
+;; -----------------------------------------------------------------------------
 
 (defn update-visited-schnaqs
   "Updates the user's visited schnaqs by adding the new ones. Input is a user-id and a collection of valid ids."
@@ -247,7 +269,7 @@
                (not= avatar (:user.registered/profile-picture existing-user)))
           (conj [:db/add user-ref :user.registered/profile-picture avatar]))]
     (when (seq transaction)
-      (transact transaction))))
+      @(transact transaction))))
 
 (>defn register-new-user
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
@@ -256,7 +278,7 @@
   [{:keys [sub email preferred_username given_name family_name groups avatar roles] :as identity} visited-schnaqs visited-statements]
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [id (str sub)
-        existing-user (fast-pull [:user.registered/keycloak-id id] patterns/private-user)
+        existing-user (private-user-by-keycloak-id id)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
@@ -272,11 +294,11 @@
       (do
         (update-user-info identity existing-user)
         (update-groups id groups)
-        (promote-to-admin existing-user roles)
+        (update-roles existing-user roles)
         (update-visited-schnaqs id visited-schnaqs)
         (when-not (nil? visited-statements)
           (update-visited-statements id visited-statements))
-        [false existing-user])
+        [false (private-user-by-keycloak-id id)])
       (let [new-user-from-db (-> @(transact [(remove-nil-values-from-map new-user)])
                                  (get-in [:tempids temp-id])
                                  (fast-pull patterns/public-user))]
