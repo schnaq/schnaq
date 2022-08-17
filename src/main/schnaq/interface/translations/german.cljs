@@ -355,6 +355,7 @@
    :feedbacks.modal/description "Deine Rückmeldung"
    :feedbacks.modal/optional "Optional"
    :feedbacks.modal/screenshot "Foto der Anwendung mit abschicken?"
+   :feedbacks.modal/submit "Senden"
    :feedbacks.modal/disclaimer "Deine Daten werden nur auf unseren Servern
      abgespeichert und keinen Dritten zugänglich gemacht."
    :feedbacks.notification/title "Vielen Dank für deine Rückmeldung!"

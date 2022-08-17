@@ -351,6 +351,7 @@
    :feedbacks.modal/description "Your Feedback"
    :feedbacks.modal/optional "Optional"
    :feedbacks.modal/screenshot "Add screenshot?"
+   :feedbacks.modal/submit "Submit"
    :feedbacks.modal/disclaimer "Your data is only saved on our german servers and not exchanged with any third party."
    :feedbacks.notification/title "Thank you for your feedback!"
    :feedbacks.notification/body "Your feedback reached us safely 🎉"
