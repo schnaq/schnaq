@@ -1,12 +1,10 @@
 (ns schnaq.interface.views.admin.control-center
   (:require [cljs.pprint :refer [pprint]]
             [cljs.spec.alpha :as s]
-            [clojure.set :as set]
             [clojure.test.check.properties]
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
-            [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
