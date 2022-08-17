@@ -56,7 +56,7 @@
 (s/def ::user (s/keys :opt [:user/nickname]))
 
 ;; Registered user
-(s/def :user.registered/keycloak-id ::non-blank-string)
+(s/def :user.registered/keycloak-id ::uuid-str)
 (s/def :user.registered/email ::non-blank-string)
 (s/def :user.registered/display-name ::non-blank-string)
 (s/def :user.registered/first-name ::non-blank-string)
