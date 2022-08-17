@@ -294,7 +294,7 @@
       (do
         (update-user-info identity existing-user)
         (update-groups id groups)
-        (update-roles existing-user roles) ;; WIP
+        (update-roles existing-user roles)
         (update-visited-schnaqs id visited-schnaqs)
         (when-not (nil? visited-statements)
           (update-visited-statements id visited-statements))
