@@ -14,7 +14,6 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.filters :as filters]
-            [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.user :as user-utils]))
 
@@ -203,12 +202,6 @@
  :discussion.statements/sort-method
  (fn [db _]
    (get-in db [:discussion :statements :sort-method] :newest)))
-
-(defn show-how-to []
-  [:div.py-5
-   (if @(rf/subscribe [:routes.schnaq/start?])
-     [how-to-elements/quick-how-to-schnaq]
-     [how-to-elements/quick-how-to-pro-con])])
 
 (def throttled-in-schnaq-search
   (gfun/throttle

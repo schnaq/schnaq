@@ -41,8 +41,6 @@
     [cards/card-container]]
    [:div.container-fluid.px-0.px-md-3
     [:div.d-md-none [elements/history-view]]
-    [:div.mx-auto.col-11.col-md-12.col-xl-10
-     [elements/show-how-to]]
     [:div.d-none.d-md-block [elements/history-view]]]])
 
 (rf/reg-sub
