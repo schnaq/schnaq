@@ -1,7 +1,7 @@
 (ns schnaq.database.user
-  (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
-            [schnaq.config.shared :as shared-config]
+  (:require [clojure.data :as data]
+            [clojure.spec.alpha :as s]
+            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
             [schnaq.database.main :refer [fast-pull query transact transact-and-pull-temp]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
@@ -147,15 +147,36 @@
       (transact add-new-groups)
       groups)))
 
-(>defn- promote-to-admin
-  "Promote user to admin, if this is provided in the JWT token.
-  This is how initial admins are translated to schnaq."
-  [{:user.registered/keys [roles] :as user} realm-roles]
-  [::specs/registered-user (s/coll-of string?) => any?]
-  (let [keycloak-realm-admin? (string? (some (set shared-config/admin-roles) realm-roles))
-        not-yet-admin? (not (shared-tools/admin? roles))]
-    (when (and keycloak-realm-admin? not-yet-admin?)
-      (update-user (assoc user :user.registered/roles :role/admin)))))
+(>defn jwt-roles->schnaq-roles
+  "Convert collection of jwt-roles to data."
+  [jwt-roles]
+  [(s/coll-of string?) => :user.registered/roles]
+  (let [role-mapping #(case %
+                        "beta-tester" :role/tester
+                        "pro" :role/pro
+                        "enterprise" :role/enterprise
+                        "admin" :role/admin
+                        nil)]
+    (->> (map role-mapping jwt-roles)
+         (remove nil?)
+         (into #{}))))
+
+(defn update-roles
+  "Update the user's roles based on the JWT."
+  [{:user.registered/keys [roles keycloak-id] :as user} jwt-roles]
+  [::specs/registered-user (s/coll-of string?) => ::specs/registered-user]
+  (let [new-user-roles (jwt-roles->schnaq-roles jwt-roles)]
+    (if (= new-user-roles roles)
+      user
+      (let [[added-roles removed-roles] (data/diff new-user-roles roles)
+            add-txs (for [role added-roles]
+                      [:db/add [:user.registered/keycloak-id keycloak-id] :user.registered/roles role])
+            retract-txs (for [role removed-roles]
+                          [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered/roles role])]
+        @(transact (concat retract-txs add-txs))
+        (private-user-by-keycloak-id keycloak-id)))))
+
+;; -----------------------------------------------------------------------------
 
 (defn update-visited-schnaqs
   "Updates the user's visited schnaqs by adding the new ones. Input is a user-id and a collection of valid ids."
@@ -272,7 +293,7 @@
       (do
         (update-user-info identity existing-user)
         (update-groups id groups)
-        (promote-to-admin existing-user roles)
+        (update-roles existing-user roles) ;; WIP
         (update-visited-schnaqs id visited-schnaqs)
         (when-not (nil? visited-statements)
           (update-visited-statements id visited-statements))

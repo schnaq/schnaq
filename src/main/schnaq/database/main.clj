@@ -128,7 +128,7 @@
   "Syntactic sugar to transact and then synchronously pull an id from the resulting database.
   Takes a temp-id from the transaction instead of a live-id."
   [transaction-vector temp-id pattern]
-  [vector? ::specs/non-blank-string vector? :ret map?]
+  [vector? ::specs/non-blank-string coll? :ret map?]
   (let [tx @(transact transaction-vector)
         entity-id (get-in tx [:tempids temp-id])
         db-after (:db-after tx)]

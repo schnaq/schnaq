@@ -1,10 +1,10 @@
 (ns schnaq.database.user-test
   (:require [clojure.spec.alpha :as s]
-            [clojure.test :refer [deftest is testing use-fixtures]]
+            [clojure.test :refer [deftest is are testing use-fixtures]]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as db]
-            [schnaq.test-data :refer [alex christian kangaroo]]
+            [schnaq.test-data :refer [alex christian kangaroo schnaqqi]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -12,6 +12,7 @@
 
 (def ^:private kangaroo-keycloak-id (:user.registered/keycloak-id kangaroo))
 (def ^:private alex-keycloak-id (:user.registered/keycloak-id alex))
+(def ^:private christian-keycloak-id (:user.registered/keycloak-id christian))
 
 (deftest add-user-test
   (testing "Check for correct user-addition"
@@ -151,7 +152,70 @@
 
 (deftest retract-user-attributes-value-test
   (testing "Retract a value from a set, returns the set without the value."
-    (let [tester-admin-christian (db/update-user {:user.registered/keycloak-id (:user.registered/keycloak-id christian)
+    (let [tester-admin-christian (db/update-user {:user.registered/keycloak-id christian-keycloak-id
                                                   :user.registered/roles :role/tester})
           {:keys [:user.registered/roles]} (db/retract-user-attributes-value tester-admin-christian :user.registered/roles :role/tester)]
       (is (= (:user.registered/roles christian) roles)))))
+
+(deftest retract-user-attributes-value-multiple-test
+  (testing "Retract multiple values from a set, returns the set without the value."
+    (let [tester-admin-christian (db/update-user {:user.registered/keycloak-id christian-keycloak-id
+                                                  :user.registered/roles #{:role/tester :role/pro}})
+          _ (run! (partial db/retract-user-attributes-value tester-admin-christian :user.registered/roles) #{:role/pro :role/admin})
+          {:keys [user.registered/roles]} (db/private-user-by-keycloak-id christian-keycloak-id)]
+      (is (= #{:role/tester} roles)))))
+
+;; -----------------------------------------------------------------------------
+
+(deftest realm-roles->schnaq-roles-test
+  (testing "Extract and map valid roles from JWT."
+    (are [x y] (= x (db/jwt-roles->schnaq-roles y))
+      #{} [""]
+      #{} ["nonsense"]
+      #{:role/admin} ["admin"]
+      #{:role/admin} ["admin" "else"]
+      #{:role/admin :role/tester} ["admin" "beta-tester"])))
+
+;; -----------------------------------------------------------------------------
+
+(deftest users-roles-test
+  (testing "Testing the user roles for the test users."
+    (are [roles user] (= roles (:user.registered/roles (db/private-user-by-keycloak-id (:user.registered/keycloak-id user))))
+      #{} kangaroo
+      #{:role/admin} christian
+      #{:role/tester} schnaqqi)))
+
+(deftest update-roles-add-roles-test
+  (testing "Adding new roles to the JWT should update the user and add the role."
+    (are [user-roles jwt-roles] (= user-roles (-> kangaroo-keycloak-id
+                                                  db/private-user-by-keycloak-id
+                                                  (db/update-roles jwt-roles)
+                                                  :user.registered/roles))
+      #{} []
+      #{:role/pro} ["pro"]
+      #{:role/pro :role/admin} ["pro" "admin"]
+      #{:role/pro :role/admin} ["pro" "admin" "nonsense"]
+      #{:role/pro :role/admin :role/enterprise} ["pro" "admin" "nonsense" "enterprise"])))
+
+(deftest update-roles-remove-roles-test
+  (testing "User with existing role gets updated roles based on the JWT roles"
+    (are [user-roles jwt-roles] (= user-roles (-> christian-keycloak-id
+                                                  db/private-user-by-keycloak-id
+                                                  (db/update-roles jwt-roles)
+                                                  :user.registered/roles))
+      #{} []
+      #{:role/pro} ["pro"]
+      #{:role/admin} ["admin"]
+      #{:role/pro :role/admin} ["pro" "admin"])))
+
+(deftest update-roles-remove-single-roles-test
+  (let [user (db/private-user-by-keycloak-id christian-keycloak-id)
+        user (db/update-user (assoc user :user.registered/roles #{:role/pro :role/admin}))]
+    (testing "User with two roles gets a role removed if it is missing in JWT."
+      (is (= #{:role/pro} (:user.registered/roles (db/update-roles user ["pro"])))))))
+
+(deftest update-roles-remove-two-roles-test
+  (let [user (db/private-user-by-keycloak-id christian-keycloak-id)
+        user (db/update-user (assoc user :user.registered/roles #{:role/pro :role/admin}))]
+    (testing "User with two roles gets both roles removed if there are no matching roles from JWT."
+      (is (= #{} (:user.registered/roles (db/update-roles user [])))))))
