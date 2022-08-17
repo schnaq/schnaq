@@ -50,7 +50,7 @@
 (defn check-for-fresh-pro
   "Checks whether a user is freshly subbed (via query in the success url in Stripe) and fire an event for matomo."
   [query]
-  (when (= "1" (-> query :query :subbed))
+  (when (= "true" (-> query :query :subbed))
     (matomo/track-event "User Upgrade" "Pro-Upgrade" "Stripe Transaction Success")))
 
 ;; IMPORTANT: Routes called here as views do not hot-reload for some reason. Only
