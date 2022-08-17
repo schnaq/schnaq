@@ -17,6 +17,10 @@
 (s/def :color/hex (s/and ::non-blank-string #(.startsWith % "#") #(= 7 (.length %))))
 (s/def ::email (s/and ::non-blank-string #(.contains % "@") #(.contains % ".")))
 
+(def uuid-pattern
+  #"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+(s/def ::uuid-str (s/and string? #(re-matches uuid-pattern %)))
+
 ;; API
 (s/def :api.response/error keyword?)
 (s/def :api.response/message string?)
@@ -52,7 +56,7 @@
 (s/def ::user (s/keys :opt [:user/nickname]))
 
 ;; Registered user
-(s/def :user.registered/keycloak-id ::non-blank-string)
+(s/def :user.registered/keycloak-id ::uuid-str)
 (s/def :user.registered/email ::non-blank-string)
 (s/def :user.registered/display-name ::non-blank-string)
 (s/def :user.registered/first-name ::non-blank-string)

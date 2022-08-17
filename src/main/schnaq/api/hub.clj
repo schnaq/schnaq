@@ -1,16 +1,15 @@
 (ns schnaq.api.hub
   (:require [clojure.spec.alpha :as s]
-            [keycloak.admin :as kc-admin]
             [ring.util.http-response :refer [ok bad-request forbidden not-found internal-server-error]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
-            [schnaq.config.keycloak :as kc-config :refer [kc-client]]
             [schnaq.database.hub :as hub-db]
             [schnaq.database.main :refer [fast-pull transact]]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
+            [schnaq.keycloak :as kc]
             [schnaq.media :as media]
             [schnaq.processors :as processors]
             [schnaq.validator :as validators]
@@ -91,11 +90,11 @@
         new-member-mail (get-in parameters [:body :new-member-mail])]
     (if (auth/member-of-group? identity keycloak-name)
       (if-let [new-user-keycloak-id (:user.registered/keycloak-id (user-db/user-by-email new-member-mail))]
-        (let [group-id (kc-admin/get-group-id kc-client kc-config/realm keycloak-name)]
+        (let [group-id (kc/get-group-id keycloak-name)]
           (try
             (transact [[:db/add [:user.registered/keycloak-id new-user-keycloak-id]
                         :user.registered/groups keycloak-name]])
-            (kc-admin/add-user-to-group! kc-client kc-config/realm group-id new-user-keycloak-id)
+            (kc/add-user-to-group! group-id new-user-keycloak-id)
             (ok {:status :user-added})
             (catch Exception _e
               (internal-server-error (at/build-error-body :hub/error-adding-user

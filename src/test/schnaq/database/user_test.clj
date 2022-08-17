@@ -76,13 +76,13 @@
   (let [kangaroo-keycloak-id "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
         stripe-subscription-id "sub_razupaltuff"
         stripe-customer-id "cus_kangaroo"
-        pro-kangaroo (db/subscribe-pro-tier kangaroo-keycloak-id stripe-subscription-id stripe-customer-id)]
+        pro-kangaroo (db/subscribe-pro-tier kangaroo-keycloak-id stripe-subscription-id stripe-customer-id false)]
     (testing "User subscribes to pro-tier."
       (is (contains? (:user.registered/roles pro-kangaroo) :role/pro))
       (is (= stripe-subscription-id (:user.registered.subscription/stripe-id pro-kangaroo)))
       (is (= stripe-customer-id (:user.registered.subscription/stripe-customer-id pro-kangaroo))))
     (testing "User unsubscribes from pro tier."
-      (let [no-pro-kangaroo (db/unsubscribe-pro-tier kangaroo-keycloak-id)]
+      (let [no-pro-kangaroo (db/unsubscribe-pro-tier kangaroo-keycloak-id false)]
         (is (nil? (:user.registered.subscription/stripe-id no-pro-kangaroo)))
         (is (nil? (:user.registered.subscription/stripe-customer-id no-pro-kangaroo)))))))
 
