@@ -625,14 +625,10 @@
    :admin.center.delete.user.identity/button "Delete identity"
 
    :admin.center.user/headline "User Management"
-   :admin.center.user/subheadline "First load a user to start editing."
+   :admin.center.user/subheadline "First load a user to start editing. Role management takes place via Keycloak."
    :admin.center.user.load/button "Load User"
    :admin.center.user.save/button "Save User"
    :admin.center.user.delete/confirmation "Do you really want to remove this attribute?"
-   :admin.center.user.role.delete/label "Remove role from user"
-   :admin.center.user.role.delete/button "Remove Role"
-   :admin.center.user.role.add/label "Add role to user"
-   :admin.center.user.role.add/button "Add role"
 
    :badges.filters/label "Display"
    :badges/sort "Sort the posts"
