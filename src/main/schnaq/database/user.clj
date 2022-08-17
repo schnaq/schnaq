@@ -6,6 +6,7 @@
                                           transact-and-pull-temp]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
+            [schnaq.keycloak :as kc]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map] :as shared-tools]
             [taoensso.timbre :as log]))
 
@@ -337,6 +338,7 @@
   "Confirm subscription of pro tier and persist it in the user."
   [keycloak-id stripe-subscription-id stripe-customer-id]
   [:user.registered/keycloak-id :user.registered.subscription/stripe-id :user.registered.subscription/stripe-customer-id :ret ::specs/registered-user]
+  (kc/add-realm-roles! keycloak-id ["pro"])
   (update-user {:user.registered/keycloak-id keycloak-id
                 :user.registered/roles :role/pro
                 :user.registered.subscription/stripe-id stripe-subscription-id
@@ -346,6 +348,7 @@
   "Remove subscription from user."
   [keycloak-id]
   [:user.registered/keycloak-id :ret any?]
+  (kc/remove-realm-roles! keycloak-id ["pro"])
   (let [retractions [:db/retract [:user.registered/keycloak-id keycloak-id]]
         new-db (:db-after
                 @(transact [(conj retractions :user.registered.subscription/stripe-id)
