@@ -2,9 +2,11 @@
   (:require [clojure.data :as data]
             [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
-            [schnaq.database.main :refer [fast-pull query transact transact-and-pull-temp]]
+            [schnaq.database.main :refer [fast-pull query transact
+                                          transact-and-pull-temp]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
+            [schnaq.database.user :as user-db]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map] :as shared-tools]
             [taoensso.timbre :as log]))
 
@@ -268,7 +270,7 @@
                (not= avatar (:user.registered/profile-picture existing-user)))
           (conj [:db/add user-ref :user.registered/profile-picture avatar]))]
     (when (seq transaction)
-      (transact transaction))))
+      @(transact transaction))))
 
 (>defn register-new-user
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
@@ -277,7 +279,7 @@
   [{:keys [sub email preferred_username given_name family_name groups avatar roles] :as identity} visited-schnaqs visited-statements]
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [id (str sub)
-        existing-user (fast-pull [:user.registered/keycloak-id id] patterns/private-user)
+        existing-user (user-db/private-user-by-keycloak-id id)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
@@ -297,7 +299,7 @@
         (update-visited-schnaqs id visited-schnaqs)
         (when-not (nil? visited-statements)
           (update-visited-statements id visited-statements))
-        [false existing-user])
+        [false (user-db/private-user-by-keycloak-id id)])
       (let [new-user-from-db (-> @(transact [(remove-nil-values-from-map new-user)])
                                  (get-in [:tempids temp-id])
                                  (fast-pull patterns/public-user))]
