@@ -32,7 +32,8 @@
   (kc-user/get-user kc-client realm keycloak-id))
 
 (>defn add-realm-roles!
-  "Add realm roles to a user. Must be valid roles defined for the realm in keycloak.
+  "Add realm roles to a user. Must be valid roles defined for the realm in
+  keycloak. Only adds valid roles to the users. No new roles are created.
    
   Example: `(add-realm-roles! \"00000000-0000-0000-0000-000000000000\" [\"pro\"])`"
   [keycloak-id roles]
