@@ -40,11 +40,11 @@
                     :steps steps
                     :styles styles}])
      [:> Button {:variant "primary"
-                 :on-click #(rf/dispatch [:tour/run :discussion])} "Start Discussion Tour"]
+                 :on-click #(rf/dispatch [:tour/start :discussion])} "Start Discussion Tour"]
      [:> Button {:variant "primary"
-                 :on-click #(rf/dispatch [:tour/run :user])} "Start User Tour"]
+                 :on-click #(rf/dispatch [:tour/start :user])} "Start User Tour"]
      [:> Button {:variant "primary"
-                 :on-click #(rf/dispatch [:tour/run :feed])} "Start Overview Tour"]]))
+                 :on-click #(rf/dispatch [:tour/start :feed])} "Start Overview Tour"]]))
 
 (rf/reg-sub
  :tour/steps
@@ -53,7 +53,7 @@
      (get tours tour-type))))
 
 (rf/reg-event-db
- :tour/run
+ :tour/start
  (fn [db [_ tour-type]]
    (assoc-in db [:tour :type] tour-type)))
 
