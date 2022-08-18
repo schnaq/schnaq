@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.feed.overview
-  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn- =>]]
             [re-frame.core :as rf]
+            [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.navigation :as navigation]
@@ -122,13 +123,13 @@
      (when-not image
        [:div.display-4.m-auto.text-white img-title])]))
 
-(defn- schnaq-badges
+(>defn- schnaq-badges
   "Show schnaq badges."
   [schnaq]
+  [::specs/discussion => :re-frame/component]
   [:<>
-   [badges/comments-info-badge schnaq]
-   [badges/read-only-badge schnaq]
-   [badges/archived-badge schnaq]])
+   [:div [badges/comments-info-badge schnaq]]
+   [:div [badges/read-only-badge schnaq] [badges/archived-badge schnaq]]])
 
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list."
@@ -146,7 +147,7 @@
        [user/user-info-only (:discussion/author schnaq) 24]
        [:small.fw-light.d-inline.my-auto.ms-2
         [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]
-     [:div.d-xl-none [schnaq-badges]]]]
+     [:div.d-xl-none [schnaq-badges schnaq]]]]
    [schnaq-dropdown schnaq]])
 
 (defn schnaq-list-view
