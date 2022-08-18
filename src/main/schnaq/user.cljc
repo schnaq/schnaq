@@ -63,8 +63,8 @@
       (when-not (zero? limit)
         (let [used (/ current limit)]
           (cond
-            (<= 0.75 used) :danger
-            (<= 0.5 used) :warning))))))
+            (<= 0.9 used) :danger
+            (<= 0.6 used) :warning))))))
 
 (>defn warning-level-class [level]
   [(? ::specs/warning-levels) => (? string?)]

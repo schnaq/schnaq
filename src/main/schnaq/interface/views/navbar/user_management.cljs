@@ -94,7 +94,7 @@
     [:div.d-flex.flex-column
      [:div.mx-auto.rounded-2.overflow-hidden
       (if authenticated? [common/avatar icon-size] [common/identicon username icon-size])]
-     [:p.small.text-nowrap.dropdown-toggle {:class (when authenticated? "text-primary")}
+     [:p.small.text-nowrap.dropdown-toggle
       (when pro? [icon :star "me-1"])
       (toolbelt/truncate-to-n-chars username 15)]]))
 

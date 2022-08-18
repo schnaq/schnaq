@@ -139,8 +139,8 @@
 
 (>defn update-groups
   "Updates the user groups to be equal to the new input."
-  [keycloak-id groups]
-  [:user.registered/keycloak-id (? :user.registered/groups) :ret (? :user.registered/groups)]
+  [{:user.registered/keys [keycloak-id]} groups]
+  [::specs/registered-user (? :user.registered/groups) :ret (? :user.registered/groups)]
   (when groups
     (let [empty-groups [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered/groups]
           add-new-groups (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/groups %)
@@ -183,10 +183,10 @@
 
 (defn update-visited-schnaqs
   "Updates the user's visited schnaqs by adding the new ones. Input is a user-id and a collection of valid ids."
-  [keycloak-id visited-schnaqs]
+  [{:user.registered/keys [keycloak-id]} visited-schnaqs]
   (let [txs (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/visited-schnaqs %)
                   visited-schnaqs)]
-    (transact txs)))
+    @(transact txs)))
 
 (>defn remove-visited-schnaq
   "Remove a visited schnaq from a user."
@@ -243,7 +243,7 @@
                      :seen-statements/user [:user.registered/keycloak-id keycloak-id]
                      :seen-statements/visited-schnaq [:discussion/share-hash discussion-hash]
                      :seen-statements/visited-statements visited-statements}]
-    (transact [(remove-nil-values-from-map new-visited)])))
+    @(transact [(remove-nil-values-from-map new-visited)])))
 
 (>defn update-visited-statements
   "Updates the user's visited statements by adding the new ones."
@@ -254,59 +254,66 @@
 
 (defn- update-user-info
   "Updates given-name, last-name, email-address when they are not nil."
-  [{:keys [id given_name family_name email avatar]} existing-user]
+  [user {:keys [id given_name family_name email avatar nickname]}]
   (let [user-ref [:user.registered/keycloak-id id]
         transaction
         (cond-> []
           (and given_name
-               (not= given_name (:user.registered/first-name existing-user)))
+               (not= given_name (:user.registered/first-name user)))
           (conj [:db/add user-ref :user.registered/first-name given_name])
           (and family_name
-               (not= family_name (:user.registered/last-name existing-user)))
+               (not= family_name (:user.registered/last-name user)))
           (conj [:db/add user-ref :user.registered/last-name family_name])
+          (and nickname
+               (not= nickname (:user.registered/display-name user)))
+          (conj [:db/add user-ref :user.registered/display-name nickname])
           (and email
-               (not= email (:user.registered/email existing-user)))
+               (not= email (:user.registered/email user)))
           (conj [:db/add user-ref :user.registered/email email])
           (and avatar
-               (not= avatar (:user.registered/profile-picture existing-user)))
+               (not= avatar (:user.registered/profile-picture user)))
           (conj [:db/add user-ref :user.registered/profile-picture avatar]))]
     (when (seq transaction)
       @(transact transaction))))
+
+(defn- update-user-via-jwt
+  "Update the schnaq user in our database based on external information from our
+  auth system and the visited schnaqs / statements. Returns the updated user."
+  [{:user.registered/keys [keycloak-id] :as user} {:keys [groups roles] :as identity} visited-schnaqs visited-statements]
+  [::specs/registered-user ::specs/identity any? any? => ::specs/registered-user]
+  (update-user-info user identity)
+  (update-groups user groups)
+  (update-roles user roles)
+  (update-visited-schnaqs user visited-schnaqs)
+  (when-not (nil? visited-statements)
+    (update-visited-statements keycloak-id visited-statements))
+  (private-user-by-keycloak-id keycloak-id))
 
 (>defn register-new-user
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
   Returns the user, after updating their groups, when they exist. Returns a tuple which contains
   whether the user is newly created and the user entity itself."
-  [{:keys [sub email preferred_username given_name family_name groups avatar roles] :as identity} visited-schnaqs visited-statements]
+  [{:keys [sub email preferred_username given_name family_name groups avatar] :as identity} visited-schnaqs visited-statements]
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [id (str sub)
         existing-user (private-user-by-keycloak-id id)
         temp-id (str "new-registered-user-" id)
-        new-user {:db/id temp-id
-                  :user.registered/keycloak-id id
-                  :user.registered/email email
-                  :user.registered/display-name preferred_username
-                  :user.registered/first-name given_name
-                  :user.registered/last-name family_name
-                  :user.registered/groups groups
-                  :user.registered/profile-picture avatar
-                  :user.registered/notification-mail-interval :notification-mail-interval/never
-                  :user.registered/visited-schnaqs visited-schnaqs}]
+        user-template {:db/id temp-id
+                       :user.registered/keycloak-id id
+                       :user.registered/email email
+                       :user.registered/display-name preferred_username
+                       :user.registered/first-name given_name
+                       :user.registered/last-name family_name
+                       :user.registered/groups groups
+                       :user.registered/profile-picture avatar
+                       :user.registered/notification-mail-interval :notification-mail-interval/never
+                       :user.registered/visited-schnaqs visited-schnaqs}]
     (if (:db/id existing-user)
-      (do
-        (update-user-info identity existing-user)
-        (update-groups id groups)
-        (update-roles existing-user roles)
-        (update-visited-schnaqs id visited-schnaqs)
-        (when-not (nil? visited-statements)
-          (update-visited-statements id visited-statements))
-        [false (private-user-by-keycloak-id id)])
-      (let [new-user-from-db (-> @(transact [(remove-nil-values-from-map new-user)])
-                                 (get-in [:tempids temp-id])
-                                 (fast-pull patterns/public-user))]
-        (when-not (nil? visited-statements)
-          (update-visited-statements (:user.registered/keycloak-id new-user-from-db) visited-statements))
-        [true new-user-from-db]))))
+      [false (update-user-via-jwt existing-user identity visited-schnaqs visited-statements)]
+      (let [new-user (-> @(transact [(remove-nil-values-from-map user-template)])
+                         (get-in [:tempids temp-id])
+                         (fast-pull patterns/public-user))]
+        [true (update-user-via-jwt new-user identity visited-schnaqs visited-statements)]))))
 
 (>defn members-of-group
   "Returns all members of a certain group."
