@@ -135,8 +135,7 @@
       [:button.btn.btn-outline-primary.btn-sm.mx-1
        {:class (when active-filters? "btn-outline-secondary active")}
        (labels :badges.filters/button)]]
-     {:hideOnClick :toggle
-      :appendTo js/document.body}]))
+     {:appendTo js/document.body}]))
 
 (rf/reg-event-db
  :filters.discussion/activate

@@ -45,6 +45,9 @@
 (defn- check-icon []
   [icon :check/circle "text-success"])
 
+(defn- cross-icon []
+  [icon :cross "text-danger"])
+
 (defn- unlimited-icon []
   [icon-with-tooltip (labels :user.settings.features/unlimited) :infinity])
 
@@ -61,9 +64,7 @@
   [feature]
   (let [user @(rf/subscribe [:user/entity])
         disabled? (= false (user/feature-limit user feature))]
-    (if disabled?
-      [icon :cross "text-danger"]
-      [check-icon])))
+    (if disabled? [cross-icon] [check-icon])))
 
 (defn- feature-overview []
   (let [user @(rf/subscribe [:user/entity])
@@ -83,6 +84,9 @@
       [:dt.col-sm-7 (labels :user.settings.features/concurrent-users)]
       [:dd.col-sm-5 (if-let [limit (user/feature-limit user :concurrent-users)]
                       limit [unlimited-icon])]
+
+      [:dt.col-sm-7 (labels :user.settings.features/pro)]
+      [:dd.col-sm-5 (if @(rf/subscribe [:user/pro?]) [check-icon] [cross-icon])]
 
       [:dt.col-sm-7 (labels :user.settings.features/mail-notifications)]
       [:dd.col-sm-5

@@ -3,7 +3,7 @@
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
-            [schnaq.interface.components.common :refer [role-indicator]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.navbar :as nav-component]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
@@ -89,12 +89,13 @@
   []
   (let [username @(rf/subscribe [:user/display-name])
         authenticated? @(rf/subscribe [:user/authenticated?])
+        pro? @(rf/subscribe [:user/pro?])
         icon-size 32]
     [:div.d-flex.flex-column
      [:div.mx-auto.rounded-2.overflow-hidden
       (if authenticated? [common/avatar icon-size] [common/identicon username icon-size])]
      [:p.small.text-nowrap.dropdown-toggle
-      [role-indicator]
+      (when pro? [icon :star "me-1"])
       (toolbelt/truncate-to-n-chars username 15)]]))
 
 (defn- login-dropdown-items []
