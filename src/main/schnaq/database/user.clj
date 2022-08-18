@@ -276,48 +276,44 @@
     (when (seq transaction)
       @(transact transaction))))
 
+(defn- update-user-via-jwt
+  "Update the schnaq user in our database based on external information from our
+  auth system and the visited schnaqs / statements. Returns the updated user."
+  [{:user.registered/keys [keycloak-id] :as user} {:keys [groups roles] :as identity} visited-schnaqs visited-statements]
+  [::specs/registered-user ::specs/identity any? any? => ::specs/registered-user]
+  (update-user-info user identity)
+  (update-groups user groups)
+  (update-roles user roles)
+  (update-visited-schnaqs user visited-schnaqs)
+  (when-not (nil? visited-statements)
+    (update-visited-statements keycloak-id visited-statements))
+  (private-user-by-keycloak-id keycloak-id))
+
 (>defn register-new-user
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
   Returns the user, after updating their groups, when they exist. Returns a tuple which contains
   whether the user is newly created and the user entity itself."
-  [{:keys [sub email preferred_username given_name family_name groups avatar roles] :as identity} visited-schnaqs visited-statements]
+  [{:keys [sub email preferred_username given_name family_name groups avatar] :as identity} visited-schnaqs visited-statements]
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [id (str sub)
         existing-user (private-user-by-keycloak-id id)
         temp-id (str "new-registered-user-" id)
-        new-user {:db/id temp-id
-                  :user.registered/keycloak-id id
-                  :user.registered/email email
-                  :user.registered/display-name preferred_username
-                  :user.registered/first-name given_name
-                  :user.registered/last-name family_name
-                  :user.registered/groups groups
-                  :user.registered/profile-picture avatar
-                  :user.registered/notification-mail-interval :notification-mail-interval/never
-                  :user.registered/visited-schnaqs visited-schnaqs}]
+        user-template {:db/id temp-id
+                       :user.registered/keycloak-id id
+                       :user.registered/email email
+                       :user.registered/display-name preferred_username
+                       :user.registered/first-name given_name
+                       :user.registered/last-name family_name
+                       :user.registered/groups groups
+                       :user.registered/profile-picture avatar
+                       :user.registered/notification-mail-interval :notification-mail-interval/never
+                       :user.registered/visited-schnaqs visited-schnaqs}]
     (if (:db/id existing-user)
-      (do
-        (def ii identity)
-        (def eu existing-user)
-        (update-user-info existing-user identity)
-        (update-groups existing-user groups)
-        (update-roles existing-user roles)
-        (update-visited-schnaqs existing-user visited-schnaqs)
-        (when-not (nil? visited-statements)
-          (update-visited-statements id visited-statements))
-        [false (private-user-by-keycloak-id id)])
-      (let [new-user-from-db (-> @(transact [(remove-nil-values-from-map new-user)])
-                                 (get-in [:tempids temp-id])
-                                 (fast-pull patterns/public-user))]
-        (when-not (nil? visited-statements)
-          (update-visited-statements (:user.registered/keycloak-id new-user-from-db) visited-statements))
-        [true new-user-from-db]))))
-
-(comment
-
-  (update-user-info eu ii)
-
-  nil)
+      [false (update-user-via-jwt existing-user identity visited-schnaqs visited-statements)]
+      (let [new-user (-> @(transact [(remove-nil-values-from-map user-template)])
+                         (get-in [:tempids temp-id])
+                         (fast-pull patterns/public-user))]
+        [true (update-user-via-jwt new-user identity visited-schnaqs visited-statements)]))))
 
 (>defn members-of-group
   "Returns all members of a certain group."
