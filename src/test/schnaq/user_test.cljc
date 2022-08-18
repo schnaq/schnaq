@@ -54,8 +54,8 @@
 
 (deftest usage-warning-level-test
   (is (nil? (usage-warning-level free-user :posts-per-schnaq (/ posts-per-schnaq-free 3))))
-  (is (= :warning (usage-warning-level free-user :posts-per-schnaq (/ posts-per-schnaq-free 2))))
-  (is (= :danger (usage-warning-level free-user :posts-per-schnaq posts-per-schnaq-free))))
+  (is (= :warning (usage-warning-level free-user :posts-per-schnaq (- posts-per-schnaq-free 10))))
+  (is (= :danger (usage-warning-level free-user :posts-per-schnaq (dec posts-per-schnaq-free)))))
 
 (deftest posts-limit-reached?-free-user-test
   (testing "Free users have limits."
