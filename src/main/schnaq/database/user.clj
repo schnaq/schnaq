@@ -158,6 +158,7 @@
                         "pro" :role/pro
                         "enterprise" :role/enterprise
                         "admin" :role/admin
+                        "analytics-admin" :role/analytics
                         nil)]
     (->> (map role-mapping jwt-roles)
          (remove nil?)
