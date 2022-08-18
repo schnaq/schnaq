@@ -26,20 +26,41 @@
    label
    [:span attrs [icon :info-question "small ms-1" {:style {:cursor :help}}]]])
 
+;; -----------------------------------------------------------------------------
+
+(defn- badge-builder
+  [props child]
+  [:span.badge.rounded-pill.bg-gradient props child])
+
+(defn admin-badge
+  "Display an admin badge."
+  [props]
+  [badge-builder (merge {:class "bg-danger"} props) "admin"])
+
+(defn analytics-admin-badge
+  "Display an analytics-admin badge."
+  [props]
+  [badge-builder (merge {:class "bg-secondary"} props) "analytics"])
+
+(defn tester-badge
+  "Display a tester badge."
+  [props]
+  [badge-builder (merge {:class "bg-success"} props) "tester"])
+
+(defn enterprise-badge
+  "Display an enterprise badge."
+  [props]
+  [badge-builder (merge {:class "bg-info"} props) "enterprise"])
+
 (defn pro-badge
   "Display a pro badge."
-  ([]
-   [pro-badge "bg-primary"])
-  ([background]
-   [:span.badge.rounded-pill
-    {:class background} "pro"]))
+  [props]
+  [badge-builder (merge {:class "bg-primary"} props) "pro"])
 
 (defn free-badge
   "Display a free badge."
-  ([] [free-badge "bg-white"])
-  ([background]
-   [:span.badge.rounded-pill
-    {:class background} "free"]))
+  [props]
+  [badge-builder (merge {:class "bg-white"} props) "free"])
 
 (defn role-indicator
   "Show an icon if the user has special roles."
@@ -47,15 +68,21 @@
    [role-indicator false])
   ([with-free-badge?]
    (let [admin? @(rf/subscribe [:user/administrator?])
+         analytics-admin? @(rf/subscribe [:user/analytics-admin?])
          beta-tester? @(rf/subscribe [:user/beta-tester?])
          pro-user? @(rf/subscribe [:user/pro?])
+         enterprise-user? @(rf/subscribe [:user/enterprise?])
          indicator (cond
-                     admin? [icon :star]
-                     beta-tester? [icon :rocket]
+                     admin? [admin-badge]
+                     analytics-admin? [analytics-admin-badge]
+                     (and enterprise-user? (not beta-tester?)) [enterprise-badge]
                      (and pro-user? (not beta-tester?)) [pro-badge]
+                     beta-tester? [tester-badge]
                      with-free-badge? [free-badge])]
      (when indicator
        [:span.px-1 indicator]))))
+
+;; -----------------------------------------------------------------------------
 
 (defn outlined-pill
   "Create an outlined badge ()rounded pill)."
