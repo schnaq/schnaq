@@ -143,9 +143,9 @@
      [schnaq-title (:discussion/title schnaq)]
      [:div.d-flex.flex-row.mt-auto.pt-3
       [:div.d-none.d-xl-block [schnaq-badges schnaq]]
-      [:div.d-flex.flex-row.ms-auto
+      [:div.d-md-flex.flex-row.ms-md-auto
        [user/user-info-only (:discussion/author schnaq) 24]
-       [:small.fw-light.d-inline.my-auto.ms-2
+       [:small.fw-light.d-inline.my-auto.ms-md-2
         [util-time/timestamp-with-tooltip (:discussion/created-at schnaq) @(rf/subscribe [:current-locale])]]]]
      [:div.d-xl-none [schnaq-badges schnaq]]]]
    [schnaq-dropdown schnaq]])
