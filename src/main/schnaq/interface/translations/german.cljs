@@ -426,7 +426,7 @@
 
    ;; Feature limits
    :feature.limit.posts/alert "Die maximale Anzahl von Beiträgen wurde in diesem schnaq erreicht. Folgende Person hat den schnaq erstellt und muss ein Upgrade vornehmen, um weitere Beiträge zu aktivieren:"
-   :feature.limit.posts/alert-tooltip "Die maximale Anzahl von Beiträgen wurde in diesem schnaq erreicht."
+   :feature.limit.posts/alert-tooltip "Die maximale Anzahl von Beiträgen für diesen schnaq."
    :feature.limit.schnaqs/alert "Du hast die maximale Anzahl deiner erlaubten schnaqs erstellt. Das ist super, dir scheint schnaq zu gefallen 🎉"
    :feature.limit.schnaqs/alert-2 "Um weitere schnaqs zu erstellen, musst ein Upgrade durchführen."
 
