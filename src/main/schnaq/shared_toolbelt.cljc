@@ -82,6 +82,13 @@
   (when roles
     (intersection? roles shared-config/beta-tester-roles)))
 
+(>defn enterprise-user?
+  "Check if a user has one of the valid enterprise-roles."
+  [roles]
+  [(? :user.registered/roles) => (? boolean?)]
+  (when roles
+    (intersection? roles shared-config/enterprise-roles)))
+
 (>defn pro-user?
   "Check if a user has one of the valid pro-roles."
   [roles]

@@ -231,6 +231,12 @@
    (shared-tools/admin? roles)))
 
 (rf/reg-sub
+ :user/enterprise?
+ :<- [:user/roles]
+ (fn [roles]
+   (shared-tools/enterprise-user? roles)))
+
+(rf/reg-sub
  :user/analytics-admin?
  ;; Users that are allowed to see all analytics.
  :<- [:user/roles]
