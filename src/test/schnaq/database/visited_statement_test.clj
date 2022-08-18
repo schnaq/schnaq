@@ -88,7 +88,8 @@
 
 (defn- add-dead-parrot-sketch!
   []
-  (let [user-id (:db/id (user-db/private-user-by-keycloak-id kangaroo-keycloak-id))
+  (let [user (user-db/private-user-by-keycloak-id kangaroo-keycloak-id)
+        user-id (:db/id user)
         ;; add discussion
         discussion-title "Have you seen this discussion?"
         share-hash "share-hash-1"
@@ -114,7 +115,7 @@
         all-statements (mapv #(fast-pull % patterns/statement)
                              [statement-1 statement-2 statement-3 statement-4 statement-5])
         ;; add visited schnaqs
-        _ (user-db/update-visited-schnaqs kangaroo-keycloak-id [discussion-id])]
+        _ (user-db/update-visited-schnaqs user [discussion-id])]
     {:discussion-hash share-hash
      :discussion-id discussion-id
      :all-statements all-statements
@@ -145,7 +146,8 @@
     (let [{:keys [_user _keycloak-id discussion-hash discussion-id all-statements]}
           (add-dead-parrot-sketch!)
           keycloak-id christian-keycloak-id
-          _ (user-db/update-visited-schnaqs keycloak-id [discussion-id])
+          user (user-db/private-user-by-keycloak-id keycloak-id)
+          _ (user-db/update-visited-schnaqs user [discussion-id])
           known-before (user-db/known-statement-ids keycloak-id discussion-hash)
           marked-as-read (discussion-db/mark-all-statements-as-read! keycloak-id)
           new-statements-after-mark-as-read (discussion-db/new-statement-ids-for-user

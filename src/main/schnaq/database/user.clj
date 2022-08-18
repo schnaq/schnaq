@@ -139,8 +139,8 @@
 
 (>defn update-groups
   "Updates the user groups to be equal to the new input."
-  [keycloak-id groups]
-  [:user.registered/keycloak-id (? :user.registered/groups) :ret (? :user.registered/groups)]
+  [{:user.registered/keys [keycloak-id]} groups]
+  [::specs/registered-user (? :user.registered/groups) :ret (? :user.registered/groups)]
   (when groups
     (let [empty-groups [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered/groups]
           add-new-groups (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/groups %)
@@ -183,7 +183,7 @@
 
 (defn update-visited-schnaqs
   "Updates the user's visited schnaqs by adding the new ones. Input is a user-id and a collection of valid ids."
-  [keycloak-id visited-schnaqs]
+  [{:user.registered/keys [keycloak-id]} visited-schnaqs]
   (let [txs (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/visited-schnaqs %)
                   visited-schnaqs)]
     (transact txs)))
@@ -254,21 +254,21 @@
 
 (defn- update-user-info
   "Updates given-name, last-name, email-address when they are not nil."
-  [{:keys [id given_name family_name email avatar]} existing-user]
+  [user {:keys [id given_name family_name email avatar]}]
   (let [user-ref [:user.registered/keycloak-id id]
         transaction
         (cond-> []
           (and given_name
-               (not= given_name (:user.registered/first-name existing-user)))
+               (not= given_name (:user.registered/first-name user)))
           (conj [:db/add user-ref :user.registered/first-name given_name])
           (and family_name
-               (not= family_name (:user.registered/last-name existing-user)))
+               (not= family_name (:user.registered/last-name user)))
           (conj [:db/add user-ref :user.registered/last-name family_name])
           (and email
-               (not= email (:user.registered/email existing-user)))
+               (not= email (:user.registered/email user)))
           (conj [:db/add user-ref :user.registered/email email])
           (and avatar
-               (not= avatar (:user.registered/profile-picture existing-user)))
+               (not= avatar (:user.registered/profile-picture user)))
           (conj [:db/add user-ref :user.registered/profile-picture avatar]))]
     (when (seq transaction)
       @(transact transaction))))
@@ -294,10 +294,12 @@
                   :user.registered/visited-schnaqs visited-schnaqs}]
     (if (:db/id existing-user)
       (do
-        (update-user-info identity existing-user)
-        (update-groups id groups)
+        (def ii identity)
+        (def eu existing-user)
+        (update-user-info existing-user identity)
+        (update-groups existing-user groups)
         (update-roles existing-user roles)
-        (update-visited-schnaqs id visited-schnaqs)
+        (update-visited-schnaqs existing-user visited-schnaqs)
         (when-not (nil? visited-statements)
           (update-visited-statements id visited-statements))
         [false (private-user-by-keycloak-id id)])
@@ -307,6 +309,12 @@
         (when-not (nil? visited-statements)
           (update-visited-statements (:user.registered/keycloak-id new-user-from-db) visited-statements))
         [true new-user-from-db]))))
+
+(comment
+
+  (update-user-info eu ii)
+
+  nil)
 
 (>defn members-of-group
   "Returns all members of a certain group."
