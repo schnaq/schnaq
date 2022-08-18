@@ -30,7 +30,7 @@
       [common/avatar user (* avatar-size 0.75)]]
      [:div.d-none.d-md-block
       [common/avatar user avatar-size]]
-     [:small.mx-2.my-auto {:class name-class} display-name]]))
+     [:small.mx-md-2.my-auto {:class name-class} (tools/truncate-to-n-chars display-name 20)]]))
 
 (defn current-user-info
   "Returns the current users profile picture and name as a component."

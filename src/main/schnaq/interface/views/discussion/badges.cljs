@@ -266,9 +266,8 @@
 
 (defn comments-info-badge
   "Badge that display the comment count."
-  []
-  (let [schnaq @(rf/subscribe [:schnaq/selected])
-        meta-info (:meta-info schnaq)
+  [schnaq]
+  (let [meta-info (:meta-info schnaq)
         statement-count (:all-statements meta-info)]
     [:span.small.me-2
      [icon :comment/alt "m-auto"]
@@ -315,19 +314,17 @@
 
 (defn read-only-badge
   "Badge that appears only if the passed schnaq is set to read-only"
-  []
-  (let [schnaq @(rf/subscribe [:schnaq/selected])]
-    (when (some #{:discussion.state/read-only} (:discussion/states schnaq))
-      [:small
-       [common/outlined-pill (labels :discussion.state/read-only-label) :secondary]])))
+  [schnaq]
+  (when (some #{:discussion.state/read-only} (:discussion/states schnaq))
+    [:small
+     [common/outlined-pill (labels :discussion.state/read-only-label) :secondary]]))
 
 (defn archived-badge
   "Badge that appears only if the passed schnaq is set to read-only"
-  []
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    (when @(rf/subscribe [:schnaq.visited/archived? share-hash])
-      [:small
-       [common/outlined-pill (labels :schnaq.options/archived) :success]])))
+  [{:keys [discussion/share-hash]}]
+  (when @(rf/subscribe [:schnaq.visited/archived? share-hash])
+    [:small
+     [common/outlined-pill (labels :schnaq.options/archived) :success]]))
 
 ;; -----------------------------------------------------------------------------
 
