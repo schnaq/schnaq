@@ -32,7 +32,7 @@
   []
   (when @(rf/subscribe [:schnaq.wordcloud/show?])
     [motion/fade-in-and-out
-     [:section.statement-card
+     [:section.activation-card
       [:div.d-flex.mt-3
        [:h4.mx-auto.mt-3
         (labels :schnaq.wordcloud/title)]

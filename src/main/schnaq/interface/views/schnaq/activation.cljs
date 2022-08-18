@@ -85,7 +85,7 @@
           background-image-url (or (:theme.images/header theme) default-activation-background)
           read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
       [motion-comp/fade-in-and-out
-       [:section.activation
+       [:section.activation-card.blue-card
         {:class background-class
          :style (when-not (= "bg-transparent" background-class) {:background-image (gstring/format "url('%s')" background-image-url)})}
         [:div.d-flex

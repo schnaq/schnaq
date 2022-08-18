@@ -27,7 +27,7 @@
   []
   [:div.statement-column
    [motion/fade-in-and-out
-    [:div.statement-card.p-2
+    [:div.shadow-card.p-2
      [loading-placeholder]]
     1]])
 
