@@ -186,7 +186,7 @@
   [{:user.registered/keys [keycloak-id]} visited-schnaqs]
   (let [txs (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/visited-schnaqs %)
                   visited-schnaqs)]
-    (transact txs)))
+    @(transact txs)))
 
 (>defn remove-visited-schnaq
   "Remove a visited schnaq from a user."
@@ -243,7 +243,7 @@
                      :seen-statements/user [:user.registered/keycloak-id keycloak-id]
                      :seen-statements/visited-schnaq [:discussion/share-hash discussion-hash]
                      :seen-statements/visited-statements visited-statements}]
-    (transact [(remove-nil-values-from-map new-visited)])))
+    @(transact [(remove-nil-values-from-map new-visited)])))
 
 (>defn update-visited-statements
   "Updates the user's visited statements by adding the new ones."
