@@ -414,6 +414,7 @@
    :user.settings.features/polls "Umfragen"
    :user.settings.features/rankings "Rankings"
    :user.settings.features/wordclouds "Wortwolken"
+   :user.settings.features/pro "Pro-Features?"
 
    ;; notification settings
    :user.notifications/header "Benachrichtigungen verwalten"
