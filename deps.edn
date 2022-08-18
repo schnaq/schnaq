@@ -33,7 +33,7 @@
         org.clojure/clojurescript {:mvn/version "1.11.60"}
         org.clojure/core.async {:mvn/version "1.5.648"}
         org.clojure/test.check {:mvn/version "1.1.1"}
-        org.postgresql/postgresql {:mvn/version "42.4.1"
+        org.postgresql/postgresql {:mvn/version "42.4.2"
                                    :doc "Necessary for our production transactor"}
         re-frame/re-frame {:mvn/version "1.2.0"}
         reagent/reagent {:mvn/version "1.1.1"}
