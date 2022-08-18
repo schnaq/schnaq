@@ -254,7 +254,7 @@
 
 (defn- update-user-info
   "Updates given-name, last-name, email-address when they are not nil."
-  [user {:keys [id given_name family_name email avatar]}]
+  [user {:keys [id given_name family_name email avatar nickname]}]
   (let [user-ref [:user.registered/keycloak-id id]
         transaction
         (cond-> []
@@ -264,6 +264,9 @@
           (and family_name
                (not= family_name (:user.registered/last-name user)))
           (conj [:db/add user-ref :user.registered/last-name family_name])
+          (and nickname
+               (not= nickname (:user.registered/display-name user)))
+          (conj [:db/add user-ref :user.registered/display-name nickname])
           (and email
                (not= email (:user.registered/email user)))
           (conj [:db/add user-ref :user.registered/email email])
