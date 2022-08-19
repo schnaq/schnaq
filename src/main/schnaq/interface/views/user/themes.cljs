@@ -78,7 +78,7 @@
 (defn- preview []
   (when @(rf/subscribe [:schnaq.selected/theme])
     [:<>
-     [:h2 (labels :themes.personal.preview/heading)]
+     [:h3 (labels :themes.personal.preview/heading)]
      [:section.theming-enabled
       [:div.base-wrapper.p-3
        [elements/navbar-title
@@ -117,7 +117,7 @@
   (let [user-name @(rf/subscribe [:user/display-name])
         pro-user? @(rf/subscribe [:user/pro?])]
     [:section.pb-5
-     [:h2 (labels :themes.personal.creation/heading)]
+     [:h3 (labels :themes.personal.creation/heading)]
      [:p (labels :themes.personal.creation/lead)]
      (when-not pro-user?
        [:div.alert.alert-info (labels :themes.personal.creation/pro-hint)])
