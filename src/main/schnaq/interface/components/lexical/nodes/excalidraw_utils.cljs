@@ -1,7 +1,10 @@
 (ns schnaq.interface.components.lexical.nodes.excalidraw-utils
-  (:require ["@excalidraw/excalidraw" :refer [exportToSvg]]
-            [oops.core :refer [ocall oget]]
+  (:require ["@excalidraw/excalidraw" :refer [exportToBlob exportToSvg]]
+            [oops.core :refer [ocall oget oset!]]
             [promesa.core :as p]))
+
+;; -----------------------------------------------------------------------------
+;; SVG conversion of excalidraw nodes
 
 (defn- remove-external-excalidraw-fonts
   "Remove fonts from excalidraw.com, we import them manually from our servers."
@@ -20,7 +23,7 @@
   (ocall svg "setAttribute" "height" "100%")
   (ocall svg "setAttribute" "display" "block"))
 
-(defn convert-elements-to-svg
+(defn elements->svg
   "Convert the excalidraw elements to an svg. This is a promise, so we take a
   callback function receiving the updated svg."
   [elements callback]
@@ -28,3 +31,23 @@
     (remove-external-excalidraw-fonts svg)
     (set-attributes-for-svg svg)
     (callback svg)))
+
+;; -----------------------------------------------------------------------------
+;; PNG conversion of nodes
+
+(defn- blob->base64
+  "Convert a blob to a base64 encoded image."
+  [blob]
+  (let [reader (new js/FileReader)]
+    (.readAsDataURL reader blob)
+    (new js/Promise
+         (fn [resolve]
+           (oset! reader :onloadend #(resolve (oget reader :result)))))))
+
+(defn elements->base64
+  "Convert the excalidraw elements to a base64 encoded string. This is a
+  promise, so we take a callback function receiving the updated drawing."
+  [elements callback]
+  (p/let [blob (exportToBlob #js {:elements elements :files nil})
+          b64 (blob->base64 blob)]
+    (callback b64)))
