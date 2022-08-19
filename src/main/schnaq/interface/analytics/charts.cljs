@@ -11,6 +11,4 @@
                                 :data data
                                 :borderColor (:positive/default colors)
                                 :backgroundColor (:positive/default colors)}]}
-             :options {:scales
-                       {:yAxes [{:display true,
-                                 :ticks {:beginAtZero true}}]}}}])
+             :options {:scales {:y {:beginAtZero true}}}}])
