@@ -155,7 +155,7 @@
   [heading body]
   [string? vector? :ret vector?]
   [:div.panel-white.p-5
-   [:h1.text-center heading]
+   [:h2.text-center heading] ;; h1 is set in the navbar
    body])
 
 ;; -----------------------------------------------------------------------------
