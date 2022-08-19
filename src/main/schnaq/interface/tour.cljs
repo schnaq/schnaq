@@ -3,7 +3,8 @@
             ["react-joyride" :refer [STATUS] :default Joyride]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.colors :refer [colors]]))
+            [schnaq.interface.components.colors :refer [colors]]
+            [schnaq.interface.translations :refer [labels]]))
 
 (def ^:private finished
   (oget STATUS :FINISHED))
@@ -37,8 +38,15 @@
        [:> Joyride {:callback callback
                     :continuous true
                     :run true
+                    :showProgress true
                     :steps steps
-                    :styles styles}])
+                    :styles styles
+                    :locale {:back (labels :tour.buttons/back)
+                             :close (labels :tour.buttons/close)
+                             :last (labels :tour.buttons/last)
+                             :next (labels :tour.buttons/next)
+                             :open (labels :tour.buttons/open)
+                             :skip (labels :tour.buttons/skip)}}])
      [:> Button {:variant "primary"
                  :on-click #(rf/dispatch [:tour/start :discussion])} "Start Discussion Tour"]
      [:> Button {:variant "primary"

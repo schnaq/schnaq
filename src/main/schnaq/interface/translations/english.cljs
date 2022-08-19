@@ -735,6 +735,14 @@
    :summary.admin/submit "Submit"
    :summary.admin/closed-at "Closed at"
 
+   ;; Tour
+   :tour.buttons/back "Back"
+   :tour.buttons/close "Close"
+   :tour.buttons/last "Done!"
+   :tour.buttons/next "Next"
+   :tour.buttons/open "Open the dialog"
+   :tour.buttons/skip "Skip"
+
    ;; Registration
    :registration/heading "Welcome to the account creation"
    :registration.steps/heading "Step %d of 3"

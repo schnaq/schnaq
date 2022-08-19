@@ -743,6 +743,14 @@
    :summary.admin/submit "Abschicken"
    :summary.admin/closed-at "Geschlossen am"
 
+   ;; Tour
+   :tour.buttons/back "Zurück"
+   :tour.buttons/close "Schließen"
+   :tour.buttons/last "Geschafft!"
+   :tour.buttons/next "Weiter"
+   :tour.buttons/open "Dialog öffnen"
+   :tour.buttons/skip "Überspringen"
+
    ;; Registration
    :registration/heading "Willkommen bei der Accounterstellung"
    :registration.steps/heading "Schritt %d von 3"
