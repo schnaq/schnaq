@@ -9,7 +9,8 @@
             [reagent.core :as reagent]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.modal :as modal]))
+            [schnaq.interface.views.modal :as modal]
+            [taoensso.timbre :as log]))
 
 (defonce screenshot-url (reagent/atom nil))
 
@@ -17,6 +18,7 @@
   "Take screenshot of whole page using html2canvas. Errors in rendering SVG
   elements are normal."
   []
+  (log/debug "Taking screenshot of application.")
   (.then
    (html2canvas (gdom/getElement "app")
                 (clj->js {:letterRendering 1}))
@@ -70,8 +72,10 @@
        [:div.mb-3
         [:input.form-check-input
          {:id "feedback-include-screenshot"
-          :on-click #(reset! with-screenshot?
-                             (oget (gdom/getElement "feedback-include-screenshot") [:checked]))
+          :on-click (fn [_e]
+                      (screenshot!)
+                      (reset! with-screenshot?
+                              (oget (gdom/getElement "feedback-include-screenshot") [:checked])))
           :type "checkbox"
           :name "screenshot?"}]
         [:label.form-check-label.mx-2 {:for "feedback-include-screenshot"}
@@ -85,7 +89,6 @@
 (defn feedback-modal
   "Create a modal to fetch user's feedback."
   [component]
-  (screenshot!)
   [modal/modal {:size :lg}
    component
    (labels :feedbacks.overview/header)
