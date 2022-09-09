@@ -378,7 +378,8 @@
 ;; -----------------------------------------------------------------------------
 
 (def discussion-routes
-  ["/discussion" {:swagger {:tags ["discussions"]}}
+  ["/discussion" {:swagger {:tags ["discussions"]}
+                  :middleware [:discussion/add-device-id]}
    ["/conclusions/starting" {:get get-starting-conclusions
                              :description (at/get-doc #'get-starting-conclusions)
                              :name :api.discussion.conclusions/starting
