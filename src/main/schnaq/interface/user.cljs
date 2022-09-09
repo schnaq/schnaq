@@ -16,6 +16,15 @@
      {:fx [[:dispatch [:user.name/store username]]]})))
 
 (rf/reg-event-fx
+ :user/init-device-id
+ (fn [{:keys [db]} _]
+   (if-let [device-id (:device-id local-storage)]
+     {:db (assoc-in db [:user :device-id] device-id)}
+     (let [new-device-id (random-uuid)]
+       {:db (assoc-in db [:user :device-id] new-device-id)
+        :fx [[:localstorage/assoc [:device-id new-device-id]]]}))))
+
+(rf/reg-event-fx
  ;; Registers a user in the backend. Sets the returned user in the db
  :user/register
  (fn [{:keys [db]}]

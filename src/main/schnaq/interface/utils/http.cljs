@@ -22,6 +22,7 @@
    [map? ::http-methods string? vector? map? vector? string? :ret vector?]
    (let [path (if (.startsWith path "/") path (str "/" path))
          headers (cond-> (auth/authentication-header db)
+                   true (assoc "device-id" (get-in db [:user :device-id]))
                    (#{:post :put :delete} method) (assoc "X-Schnaq-CSRF" "T25seSBlbGVwaGFudHMgc2hvdWxkIG93biBpdm9yeS4="))]
      [:http-xhrio {:method method
                    :uri (str api-url path)
