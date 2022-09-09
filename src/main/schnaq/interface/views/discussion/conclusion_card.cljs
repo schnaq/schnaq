@@ -447,7 +447,7 @@
       [loading/loading-card]
       [:div.row
        [:> Masonry
-        {:autoArrange true
+        {:autoArrange false ;; autoArrange is turned off, because it produces rendering issues and huge frame rate drops
          :breakpoints config/breakpoints
          :columns {:xs 1 :lg (or number-of-rows 2)}
          :gap 10}

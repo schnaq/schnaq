@@ -5,7 +5,7 @@
             [oops.core :refer [ocall oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.lexical.nodes.excalidraw :refer [$create-excalidraw-node $excalidraw-node? ExcalidrawNode]]
-            [schnaq.interface.components.lexical.nodes.excalidraw-utils :refer [convert-elements-to-svg]]
+            [schnaq.interface.components.lexical.nodes.excalidraw-utils :refer [elements->base64]]
             [schnaq.interface.components.lexical.utils :refer [$insert-node-wrapped-in-paragraphs]]
             [taoensso.timbre :as log]))
 
@@ -41,14 +41,15 @@
    {:fx [[:editor/update! [editor #(.setUrl node url)]]]}))
 
 (rf/reg-event-fx
- :excalidraw.elements/store
- (fn [{:keys [db]} [_ editor node svg]]
+ :excalidraw.elements/store-png
+ (fn [{:keys [db]} [_ editor node b64]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         svg-b64 (.btoa js/window (oget svg :outerHTML))
-         file {:name "drawing.svg"
-               :type "image/svg+xml"
-               :content (format "data:image/svg+xml;base64,%s" svg-b64)}]
-     (rf/dispatch [:file/upload share-hash file :schnaq/media [:excalidraw.elements.store/success editor node] [:ajax.error/as-notification]]))))
+         file {:content b64
+               :name "drawing.png"
+               :type "image/png"}]
+     (if b64
+       (rf/dispatch [:file/upload share-hash file :schnaq/media [:excalidraw.elements.store/success editor node] [:ajax.error/as-notification]])
+       (log/error "Could not store excalidraw image. Conversion failed.")))))
 
 (defn excalidraw-changed
   "Handle a changed excalidraw node."
@@ -61,7 +62,7 @@
               (let [data (oget node :__data)]
                 (when-not (or (= data "[]") (.hasUrl node))
                   (let [elements (.parse js/JSON data)]
-                    (convert-elements-to-svg
+                    (elements->base64
                      elements
-                     #(rf/dispatch [:excalidraw.elements/store editor node %]))))))))
+                     #(rf/dispatch [:excalidraw.elements/store-png editor node %]))))))))
    #js [editor]))

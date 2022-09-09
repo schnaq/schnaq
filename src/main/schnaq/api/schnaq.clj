@@ -126,9 +126,8 @@
 
 (defn- add-visited-schnaq
   "Add schnaq id to visited schnaqs by share-hash"
-  [{:keys [parameters identity]}]
+  [{:keys [parameters user]}]
   (let [{:keys [share-hash]} (:body parameters)
-        user (:user identity)
         discussion-id (:db/id (discussion-db/discussion-by-share-hash share-hash))]
     (user-db/update-visited-schnaqs user [discussion-id])
     (ok {:share-hash share-hash})))

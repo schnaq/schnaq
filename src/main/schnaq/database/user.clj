@@ -236,7 +236,7 @@
 
 (>defn create-visited-statements-for-discussion
   [keycloak-id discussion-hash visited-statements]
-  [:user.registered/keycloak-id :discussion/share-hash (s/coll-of :db/id) :ret future?]
+  [:user.registered/keycloak-id :discussion/share-hash (s/coll-of :db/id) :ret map?]
   (let [queried-id (seen-statements-entity keycloak-id discussion-hash)
         temp-id (or queried-id (str "seen-statements-" keycloak-id "-" discussion-hash))
         new-visited {:db/id temp-id
