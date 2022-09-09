@@ -7,6 +7,14 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.config.summy :as summy-config]))
 
+(def pro-email-hosts
+  "Define email-hosts which should automatically be assigned a pro-role.
+  Environment variable should be comma-separated to be parsable.
+   
+  Example: `hhu.de,schnaq.com,razupaltu.ff`"
+  (when-let [hosts (System/getenv "PRO_EMAIL_HOSTS")]
+    (set (str/split hosts #", ?"))))
+
 (def frontend-url
   (or (System/getenv "FRONTEND_URL") "http://localhost:8700"))
 
