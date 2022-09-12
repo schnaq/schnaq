@@ -741,3 +741,10 @@
   [statement-id pin?]
   [:db/id boolean? :ret any?]
   @(transact [[:db/add statement-id :statement/pinned? pin?]]))
+
+(>defn add-device-id
+  "Adds a device-id to a schnaq. No need to deref, as it can run in the async."
+  [share-hash device-id]
+  [:discussion/share-hash uuid? :ret any?]
+  (transact [[:db/add [:discussion/share-hash share-hash]
+              :discussion/device-ids device-id]]))

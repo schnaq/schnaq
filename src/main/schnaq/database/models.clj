@@ -326,6 +326,11 @@
     :db/cardinality :db.cardinality/one
     :db/doc "The discussion's theme."}
 
+   {:db/ident :discussion/device-ids
+    :db/valueType :db.type/uuid
+    :db/cardinality :db.cardinality/many
+    :db/doc "The device ids of all devices, that participated in the schnaq"}
+
    ;; hub
    {:db/ident :hub/name
     :db/valueType :db.type/string

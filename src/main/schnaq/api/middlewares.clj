@@ -8,7 +8,8 @@
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.patterns :as patterns]
             [schnaq.validator :as validator]
-            [taoensso.timbre :as log]))
+            [taoensso.timbre :as log])
+  (:import (java.util UUID)))
 
 (defn extract-parameter-from-request
   "Look up parameter in request and return its value."
@@ -142,3 +143,13 @@
                         (log/error "ERROR" (pr-str (:uri request)))
                         (.printStackTrace e)
                         (handler e request))})))
+
+(defn add-device-id
+  "Extracts the device-id and saves it to the known ids of the queries schnaq"
+  [handler]
+  (fn [request]
+    (when-let [device-id (get-in request [:headers "device-id"])]
+      (discussion-db/add-device-id
+       (extract-parameter-from-request request :share-hash)
+       (UUID/fromString device-id)))
+    (handler request)))

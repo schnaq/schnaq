@@ -173,6 +173,7 @@
 (def schnaq-routes
   [["" {:swagger {:tags ["schnaqs"]}}
     ["/schnaq"
+     {:middleware [:discussion/add-device-id]}
      [""
       {:delete delete-schnaq!
        :name :api.schnaq/delete

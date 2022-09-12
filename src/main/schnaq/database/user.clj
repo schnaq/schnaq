@@ -1,7 +1,8 @@
 (ns schnaq.database.user
   (:require [clojure.data :as data]
             [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
+            [schnaq.config :as config]
             [schnaq.database.main :refer [fast-pull query transact
                                           transact-and-pull-temp]]
             [schnaq.database.patterns :as patterns]
@@ -37,6 +38,14 @@
                 @(transact [[:db/retract [:user.registered/keycloak-id keycloak-id]
                              attribute value]]))]
     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user new-db)))
+
+(>defn user->pro!
+  "Add pro role to user."
+  [{:user.registered/keys [keycloak-id]}]
+  [::specs/registered-user => ::specs/registered-user]
+  (kc/add-realm-roles! keycloak-id ["pro"])
+  (update-user {:user.registered/keycloak-id keycloak-id
+                :user.registered/roles :role/pro}))
 
 ;; -----------------------------------------------------------------------------
 ;; Query user(s) from database
@@ -164,7 +173,7 @@
          (remove nil?)
          (into #{}))))
 
-(defn update-roles
+(>defn update-roles
   "Update the user's roles based on the JWT."
   [{:user.registered/keys [roles keycloak-id] :as user} jwt-roles]
   [::specs/registered-user (s/coll-of string?) => ::specs/registered-user]
@@ -178,6 +187,24 @@
                           [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered/roles role])]
         @(transact (concat retract-txs add-txs))
         (private-user-by-keycloak-id keycloak-id)))))
+
+(>defn- check-host-in-coll
+  "Takes a collection of hosts and checks if the mail's host matches at least
+  one of them."
+  [mail hosts]
+  [string? (s/coll-of string?) => boolean?]
+  (let [matches (map #(re-matches (re-pattern (format ".*@%s" %)) mail)
+                     hosts)]
+    (some string? matches)))
+
+(>defn update-roles-based-on-email-host
+  "Check the user's email address. If the mail's host is in the list of eligible
+  hosts, upgrade it to a pro user."
+  [{:user.registered/keys [roles email] :as user}]
+  [::specs/registered-user => ::specs/registered-user]
+  (when-not (shared-tools/pro-user? roles)
+    (when (check-host-in-coll email config/pro-email-hosts)
+      (user->pro! user))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -284,6 +311,7 @@
   (update-user-info user identity)
   (update-groups user groups)
   (update-roles user roles)
+  (update-roles-based-on-email-host user)
   (update-visited-schnaqs user visited-schnaqs)
   (when-not (nil? visited-statements)
     (update-visited-statements keycloak-id visited-statements))
