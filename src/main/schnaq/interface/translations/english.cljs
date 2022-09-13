@@ -287,6 +287,7 @@
    :discussion.badges/posts-alt "Posts"
    :discussion.badges/posts-of "of"
    :discussion.badges/delete-statement-confirmation "Do you really want to delete the statement?"
+   :discussion.badges/delete-statement-confirmation-admin "Do you really want to delete the statement and all its children statements?"
    :discussion.notification/new-content-title "New statement!"
    :discussion.notification/new-content-body "Your statement was added successfully!"
    :discussion.badges/edit-statement "edit"

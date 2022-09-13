@@ -290,6 +290,7 @@
    :discussion.badges/posts-alt "Beiträgen"
    :discussion.badges/posts-of "von"
    :discussion.badges/delete-statement-confirmation "Möchtest du den Beitrag wirklich löschen?"
+   :discussion.badges/delete-statement-confirmation-admin "Möchtest du den Beitrag und alle Antworten darauf wirklich löschen?"
    :discussion.notification/new-content-title "Neuer Beitrag!"
    :discussion.notification/new-content-body "Dein Beitrag wurde erfolgreich gespeichert."
    :discussion.badges/edit-statement "editieren"

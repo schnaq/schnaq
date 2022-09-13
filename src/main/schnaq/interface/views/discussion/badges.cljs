@@ -63,12 +63,13 @@
   [statement edit-hash]
   (let [creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
         anonymous-owner? (contains? creation-secrets (:db/id statement))
-        confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
-                                            (dispatch-fn)))
-        admin-delete-fn #(confirmation-fn (fn [] (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
+        confirmation-fn (fn [dispatch-fn label] (when (js/confirm (labels label)) (dispatch-fn)))
+        admin-delete-fn #(confirmation-fn (fn [] (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash]))
+                                          :discussion.badges/delete-statement-confirmation-admin)
         user-delete-fn (if anonymous-owner?
                          #(rf/dispatch [:modal [anonymous-delete-modal]])
-                         #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))))]
+                         #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))
+                                           :discussion.badges/delete-statement-confirmation))]
     [:button.dropdown-item
      {:tabIndex 60
       :on-click (fn [e]
@@ -76,6 +77,18 @@
                   (if edit-hash (admin-delete-fn) (user-delete-fn)))
       :title (labels :discussion.badges/delete-statement)}
      [icon :trash "my-auto me-2"] (labels :discussion.badges/delete-statement)]))
+
+(rf/reg-event-fx
+ :discussion.delete/statement
+ ;; Function called by schnaq author / admin. Deletes all children as well
+ (fn [{:keys [db]} [_ statement-id edit-hash]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :delete "/discussion/statements/delete-with-children"
+                               [:discussion.admin/delete-statement-success statement-id]
+                               {:statement-id statement-id
+                                :share-hash share-hash
+                                :edit-hash edit-hash}
+                               [:ajax.error/as-notification])]})))
 
 (defn- share-link-to-statement
   "Copies a link to the statement to the clipboard"

@@ -136,17 +136,6 @@
               #(-> % set (disj :discussion.state/read-only) vec))))
 
 (rf/reg-event-fx
- :discussion.delete/statement
- (fn [{:keys [db]} [_ statement-id edit-hash]]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-     {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
-                               [:discussion.admin/delete-statement-success statement-id]
-                               {:statement-ids [statement-id]
-                                :share-hash share-hash
-                                :edit-hash edit-hash}
-                               [:ajax.error/as-notification])]})))
-
-(rf/reg-event-fx
  ;; Success event of deletion live in discussion - not from admin panel
  :discussion.admin/delete-statement-success
  (fn [_ [_ statement-id return]]
@@ -160,16 +149,22 @@
  ;; Delete a statement-id from conclusions-list and history
  :discussion.delete/purge-stores
  (fn [db [_ statement-id return-value]]
-   (let [method (or (:method return-value) (first (:methods return-value)))
+   (let [;; User deleted their own post
+         method (:method return-value)
+         ;; Admin deleted multiple statements
+         deleted-statements (:deleted-statements return-value)
          history (get-in db [:history :full-context])
-         parent-id (get-in db [:schnaq :statements statement-id :statement/parent :db/id])]
-     (if (= :deleted method)
-       (cond-> (update-in db [:schnaq :statements] dissoc statement-id)
-         (= statement-id (last history))
-         (update-in [:history :full-context] (comp vec butlast))
-         parent-id
-         (update-in [:schnaq :statements parent-id :meta/sub-statement-count] dec))
-       (assoc-in db [:schnaq :statements statement-id :statement/content] config/deleted-statement-text)))))
+         parent-id (get-in db [:schnaq :statements statement-id :statement/parent :db/id])
+         update-history-parent-fn #(cond-> %
+                                     parent-id
+                                     (update-in [:schnaq :statements parent-id :meta/sub-statement-count] dec)
+                                     (= statement-id (last history))
+                                     (update-in [:history :full-context] (comp vec butlast)))]
+     (if deleted-statements
+       (update-history-parent-fn (update-in db [:schnaq :statements] #(apply dissoc % deleted-statements)))
+       (if (= :deleted method)
+         (update-history-parent-fn (update-in db [:schnaq :statements] dissoc statement-id))
+         (assoc-in db [:schnaq :statements statement-id :statement/content] config/deleted-statement-text))))))
 
 (rf/reg-event-fx
  :discussion.admin/send-email-invites
