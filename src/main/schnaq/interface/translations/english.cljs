@@ -734,6 +734,18 @@
    :tour.buttons/next "Next"
    :tour.buttons/open "Open the dialog"
    :tour.buttons/skip "Skip"
+   :tour.discussion/step-1-title "Current topic"
+   :tour.discussion/step-1 "Here you will always find the post or topic that is currently being discussed."
+   :tour.discussion/step-2-title "Your post"
+   :tour.discussion/step-2 "Now formulate your own contribution. See the bar above the input field? There you can style your post to fit and even insert drawings, pictures and files."
+   :tour.discussion/step-3-title "Other posts"
+   :tour.discussion/step-3 "This is a post. You can respond to it directly or view reactions to this post."
+   :tour.themes/step-1-title "Personal Designs"
+   :tour.themes/step-1 "You can create your own theme here. Start by giving your theme a name."
+   :tour.themes/step-2-title "Your schnaq, your colors"
+   :tour.themes/step-2 "You can choose colors and images here. Don't forget to click on \"save\"."
+   :tour.themes/step-3-title "Live Preview"
+   :tour.themes/step-3 "See a preview of your colors here. Save and your theme will be available for your schnaqs. To do this, go to the settings in your schnaq."
 
    ;; Registration
    :registration/heading "Welcome to the account creation"

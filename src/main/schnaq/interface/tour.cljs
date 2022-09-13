@@ -18,18 +18,24 @@
   {:user []
    :discussion
    [{:target ".info-card"
-     :content "Hier findest du immer den Beitrag oder das Thema, um das es hier gerade geht."}
+     :content (labels :tour.discussion/step-1)
+     :title (labels :tour.discussion/step-1-title)}
     {:target ".selection-card"
-     :content "Formuliere nun deinen eigenen Beitrag. Siehst du die Leiste über dem Eingabefeld? Dort kannst du deinen Beitrag passend stylen und sogar Zeichnungen, Bilder und Dateien einfügen."}
+     :content (labels :tour.discussion/step-2)
+     :title (labels :tour.discussion/step-2-title)}
     {:target ".statement-card"
-     :content "Das hier ist ein Beitrag. Du kannst darauf direkt reagieren oder Reaktionen auf diesen Beitrag anschauen."}]
+     :content (labels :tour.discussion/step-3)
+     :title (labels :tour.discussion/step-3-title)}]
    :themes
    [{:target "#theme-title"
-     :content "Du kannst hier dein eigenes Design erstellen. Fange an, indem du deinem Design einen Namen gibst."}
+     :content (labels :tour.themes/step-1)
+     :title (labels :tour.themes/step-1-title)}
     {:target "#primary-color-picker"
-     :content "Farben und Bilder kannst du hier auswählen. Vergiss nicht auf \"Speichern\" zu klicken."}
+     :content (labels :tour.themes/step-2)
+     :title (labels :tour.themes/step-2-title)}
     {:target "#theme-preview-title"
-     :content "Siehe hier eine Vorschau deiner Farben. Speichere, und dein Design steht dir für deine schnaqs zur Verfügung. Gehe dafür in deinem schnaq in die Einstellungen."}]})
+     :content (labels :tour.themes/step-3)
+     :title (labels :tour.themes/step-3-title)}]})
 
 (defn tour []
   (let [steps @(rf/subscribe [:tour/steps])

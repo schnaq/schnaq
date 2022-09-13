@@ -742,6 +742,18 @@
    :tour.buttons/next "Weiter"
    :tour.buttons/open "Dialog öffnen"
    :tour.buttons/skip "Überspringen"
+   :tour.discussion/step-1-title "Aktuelles Thema"
+   :tour.discussion/step-1 "Hier findest du immer den Beitrag oder das Thema, um das es hier gerade geht."
+   :tour.discussion/step-2-title "Dein Beitrag"
+   :tour.discussion/step-2 "Formuliere nun deinen eigenen Beitrag. Siehst du die Leiste über dem Eingabefeld? Dort kannst du deinen Beitrag passend stylen und sogar Zeichnungen, Bilder und Dateien einfügen."
+   :tour.discussion/step-3-title "Andere Beiträge"
+   :tour.discussion/step-3 "Das hier ist ein Beitrag. Du kannst darauf direkt reagieren oder Reaktionen auf diesen Beitrag anschauen."
+   :tour.themes/step-1-title "Persönliche Designs"
+   :tour.themes/step-1 "Du kannst hier dein eigenes Design erstellen. Fange an, indem du deinem Design einen Namen gibst."
+   :tour.themes/step-2-title "Dein schnaq, deine Farben"
+   :tour.themes/step-2 "Farben und Bilder kannst du hier auswählen. Vergiss nicht auf \"Speichern\" zu klicken."
+   :tour.themes/step-3-title "Live-Vorschau"
+   :tour.themes/step-3 "Siehe hier eine Vorschau deiner Farben. Speichere, und dein Design steht dir für deine schnaqs zur Verfügung. Gehe dafür in deinem schnaq in die Einstellungen."
 
    ;; Registration
    :registration/heading "Willkommen bei der Accounterstellung"
