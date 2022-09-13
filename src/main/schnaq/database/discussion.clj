@@ -185,11 +185,17 @@
         :deleted))))
 
 (>defn delete-statements!
-  "Deletes all statements, without explicitly checking anything."
+  "Deletes all statements, without explicitly checking anything. Heeds the delete marker."
   [statement-ids]
   [(s/coll-of :db/id) :ret (s/coll-of keyword?)]
   (log/info "Statement ids scheduled for deletion:" statement-ids)
   (doall (map delete-statement! statement-ids)))
+
+(>defn delete-entities!
+  "Deletes entities from the db."
+  [entity-ids]
+  [(s/coll-of :db/id) :ret any?]
+  (transact (mapv #(vector :db/retractEntity %) entity-ids)))
 
 (defn- build-new-statement
   "Builds a new statement for transaction."

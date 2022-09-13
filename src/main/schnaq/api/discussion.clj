@@ -138,17 +138,16 @@
      #(validator/deny-access at/invalid-rights-message))))
 
 (defn- delete-statement-and-children!
-  "Deletes the passed list of statements if the admin-rights are fitting.
-  Important: Needs to check whether the statement-id really belongs to the discussion with
-  the passed edit-hash."
+  "Deletes the passed statement and all descendants.
+  Important: Needs to check whether the statement-id belongs to the discussion with the passed edit-hash."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash statement-ids]} (:body parameters)
-        deny-access (validator/deny-access "You do not have the rights to access this action.")]
-    ;; could optimize with a collection query here
-    (if (every? #(discussion-db/check-valid-statement-id-for-discussion % share-hash) statement-ids)
-      (ok {:deleted-statements statement-ids
-           :methods (discussion-db/delete-statements! statement-ids)})
-      deny-access)))
+  (let [{:keys [share-hash statement-id]} (:body parameters)
+        descendants (discussion-db/descendants-of-statement statement-id)
+        deleted-ids (conj descendants statement-id)]
+    (if (discussion-db/check-valid-statement-id-for-discussion statement-id share-hash)
+      (do (discussion-db/delete-entities! deleted-ids)
+          (ok {:deleted-statements deleted-ids}))
+      (validator/deny-access "You do not have the rights to access this action."))))
 
 (defn- add-starting-statement!
   "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
@@ -463,7 +462,7 @@
                               :middleware [:discussion/valid-credentials?]
                               :parameters {:body {:share-hash :discussion/share-hash
                                                   :edit-hash :discussion/edit-hash
-                                                  :statement-ids (s/coll-of :db/id)}}
+                                                  :statement-id :db/id}}
                               :responses {200 {:body {:deleted-statements (s/coll-of :db/id)
                                                       :methods (s/coll-of keyword?)}}
                                           401 at/response-error-body
