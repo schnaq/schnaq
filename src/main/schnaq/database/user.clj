@@ -202,7 +202,7 @@
   "Check the user's email address. If the mail's host is in the list of eligible
   hosts, upgrade it to a pro user."
   [{:user.registered/keys [roles email] :as user}]
-  [::specs/registered-user => ::specs/registered-user]
+  [::specs/registered-user => (? ::specs/registered-user)]
   (when-not (shared-tools/pro-user? roles)
     (when (check-host-in-coll email config/pro-email-hosts)
       (user->pro! user))))
