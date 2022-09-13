@@ -1,6 +1,7 @@
 (ns schnaq.interface.tour
   (:require ["react-bootstrap" :refer [Button]]
             ["react-joyride" :refer [STATUS] :default Joyride]
+            [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.colors :refer [colors]]
@@ -19,13 +20,9 @@
    [{:target ".info-card"
      :content "Hier findest du immer den Beitrag oder das Thema, um das es hier gerade geht."}
     {:target ".selection-card"
-     :content "Hier kannst du deine eigenen Beiträge auf oberster Ebene platzieren. Siehst du die Leiste über dem Eingabefeld? Dort kannst du deinen Beitrag passend stylen und sogar Zeichnungen, Bilder und Dateien einfügen."}
+     :content "Formuliere nun deinen eigenen Beitrag. Siehst du die Leiste über dem Eingabefeld? Dort kannst du deinen Beitrag passend stylen und sogar Zeichnungen, Bilder und Dateien einfügen."}
     {:target ".statement-card"
-     :content "Das hier ist ein Beitrag. Du kannst darauf direkt reagieren oder Reaktionen auf diesen Beitrag anschauen."}
-    {:target ".activation-card"
-     :content "In dieser Karte werden Umfragen, Wortwolken oder auch Aktivierungsphrasen angezeigt."}
-    {:target ".schnaq-navbar"
-     :content "Das sind die Optionen und unterschiedlichen Ansichten für deinen schnaq. Dort kommst du auch zu deinem Profil, wenn du dir eins erstellst."}]})
+     :content "Das hier ist ein Beitrag. Du kannst darauf direkt reagieren oder Reaktionen auf diesen Beitrag anschauen."}]})
 
 (defn tour []
   (let [steps @(rf/subscribe [:tour/steps])
@@ -54,18 +51,45 @@
      [:> Button {:variant "primary"
                  :on-click #(rf/dispatch [:tour/start :feed])} "Start Overview Tour"]]))
 
+;; -----------------------------------------------------------------------------
+
 (rf/reg-sub
  :tour/steps
  (fn [db]
-   (let [tour-type (get-in db [:tour :type])]
-     (get tours tour-type))))
+   (when-let [current-tour (get-in db [:tour :current])]
+     (get tours current-tour))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  :tour/start
- (fn [db [_ tour-type]]
-   (assoc-in db [:tour :type] tour-type)))
+ (fn [{:keys [db]} [_ current-tour]]
+   (let [current-tours (get-in db [:user :tours])]
+     (when-not (current-tour current-tours)
+       {:db (assoc-in db [:tour :current] current-tour)}))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  :tour/stop
- (fn [db]
-   (update db :tour dissoc :type)))
+ (fn [{:keys [db]}]
+   (when-let [current-tour (get-in db [:tour :current])]
+     {:db (-> db
+              (update :tour dissoc :current)
+              (update-in [:user :tours] conj current-tour))
+      :fx [[:tour/to-localstorage current-tour]]})))
+
+(rf/reg-event-fx
+ :user.tours/from-localstorage
+ (fn [{:keys [db]}]
+   (if-let [tours (:tours local-storage)]
+     {:db (assoc-in db [:user :tours] tours)}
+     {:db (assoc-in db [:user :tours] #{})
+      :fx [[:localstorage/assoc [:tours #{}]]]})))
+
+(rf/reg-sub
+ :user/tours
+ :-> #(get-in % [:user :tours]))
+
+(rf/reg-fx
+ :tour/to-localstorage
+ (fn [tour]
+   (when tour
+     (let [new-tours (conj (:tours local-storage) tour)]
+       (assoc! local-storage :tours new-tours)))))
