@@ -79,6 +79,14 @@
 (def ^:private transitive-7
   (transitive-child-rules 7))
 
+(def ^:private descendants-of-rules
+  ;; Rule for getting all descendants of a certain statement
+  '[[(descendants-of? [?parent] ?statement)
+     [?statement :statement/parent ?parent]]
+    [(descendants-of? [?parent] ?statement)
+     [?intermediate :statement/parent ?parent]
+     (descendants-of? ?intermediate ?statement)]])
+
 (defn sub-statement-count
   "Takes a list of statement-ids and returns a map {id children-count} for the statements."
   [statement-ids]
@@ -145,6 +153,15 @@
            :in $ ?parent statement-pattern
            :where [?children :statement/parent ?parent]]
          parent-id patterns/statement))
+
+(>defn descendants-of-statement
+  "Returns all descendants of a certain statement."
+  [parent-id]
+  [:db/id :ret (s/coll-of :db/id)]
+  (query '[:find [?children ...]
+           :in $ % ?parent
+           :where (descendants-of? ?parent ?children)]
+         descendants-of-rules parent-id))
 
 (defn delete-statement!
   "Deletes a statement. Hard delete if there are no children, delete flag if there are.

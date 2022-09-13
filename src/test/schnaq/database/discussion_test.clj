@@ -173,7 +173,7 @@
         _ (db/new-discussion new-public-discussion)]
     (testing "Valid discussions should be returned."
       (are [valid share-hashes]
-           (= valid (count (db/discussions-by-share-hashes share-hashes)))
+        (= valid (count (db/discussions-by-share-hashes share-hashes)))
         0 []
         0 ["razupaltuff"]
         1 ["simple-hash"]
@@ -369,3 +369,10 @@
           children (db/children-from-statements startings)]
       (is (= 6 (count children)))
       (is (= 6 (count (filter :statement/content children)))))))
+
+(deftest descendants-of-statement-test
+  (testing "Find all descendants of a statement."
+    (let [parent-id (:db/id (first (db/statements-by-content "we should get a cat")))
+          both-parent-id (:db/id (first (db/statements-by-content "we could get both, a dog and a cat")))]
+      (is (= 11 (count (db/descendants-of-statement parent-id))))
+      (is (= 2 (count (db/descendants-of-statement both-parent-id)))))))
