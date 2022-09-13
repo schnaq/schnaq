@@ -55,4 +55,5 @@
    :sliders-h
    (labels :graph.settings/title)
    (labels :discussion.navbar/settings)
-   show-notification])
+   show-notification
+   {:id :graph-settings}])

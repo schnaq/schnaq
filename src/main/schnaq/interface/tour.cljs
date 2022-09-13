@@ -35,7 +35,18 @@
      :title (labels :tour.themes/step-2-title)}
     {:target "#theme-preview-title"
      :content (labels :tour.themes/step-3)
-     :title (labels :tour.themes/step-3-title)}]})
+     :title (labels :tour.themes/step-3-title)}]
+   :mindmap
+   [{:target "#graph"
+     :content (labels :tour.mindmap/step-1)
+     :title (labels :tour.mindmap/step-1-title)
+     :placement :left}
+    {:target "#graph-export"
+     :content (labels :tour.mindmap/step-2)
+     :title (labels :tour.mindmap/step-2-title)}
+    {:target "#graph-settings" ;; WIP
+     :content (labels :tour.mindmap/step-3)
+     :title (labels :tour.mindmap/step-3-title)}]})
 
 (defn tour []
   (let [steps @(rf/subscribe [:tour/steps])
@@ -62,7 +73,9 @@
      [:> Button {:variant "primary"
                  :on-click #(rf/dispatch [:tour/start :user])} "Start User Tour"]
      [:> Button {:variant "primary"
-                 :on-click #(rf/dispatch [:tour/start :themes])} "Themes"]]))
+                 :on-click #(rf/dispatch [:tour/start :themes])} "Themes"]
+     [:> Button {:variant "primary"
+                 :on-click #(rf/dispatch [:tour/start :mindmap])} "Mindmap"]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -102,10 +115,6 @@
      {:db (assoc-in db [:user :tours] tours)}
      {:db (assoc-in db [:user :tours] #{})
       :fx [[:localstorage/assoc [:tours #{}]]]})))
-
-(rf/reg-sub
- :user/tours
- :-> #(get-in % [:user :tours]))
 
 (rf/reg-fx
  :tour/to-localstorage
