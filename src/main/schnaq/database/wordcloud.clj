@@ -1,6 +1,6 @@
 (ns schnaq.database.wordcloud
   (:require [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
-            [schnaq.database.main :as db :refer [transact]]
+            [schnaq.database.main :as db :refer [transact query]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]))
 
@@ -33,3 +33,21 @@
                                  :wordcloud.local/discussion [:discussion/share-hash share-hash]}]
                                temp-id
                                patterns/local-wordcloud)))
+
+(>defn add-word-to-wordcloud
+  "Adds a word to the wordcloud. If word already exists, increase count."
+  [wordcloud-id word]
+  [:db/id ::specs/non-blank-string => ::specs/non-blank-string]
+  (let [[_ word-count :as existing-word-tuple]
+        (query '[:find ?tuple .
+                 :in $ ?wordcloud ?word
+                 :where [?wordcloud :wordcloud.local/words ?tuple]
+                 [(untuple ?tuple) [?word _]]]
+               wordcloud-id word)]
+    (if existing-word-tuple
+      ;; Increment the words count
+      (transact [[:db/retract wordcloud-id :wordcloud.local/words existing-word-tuple]
+                 [:db/add wordcloud-id :wordcloud.local/words [word (inc word-count)]]])
+      ;; Create the new word
+      (transact [[:db/add wordcloud-id :wordcloud.local/words [word 1]]]))
+    word))
