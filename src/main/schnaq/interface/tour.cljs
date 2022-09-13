@@ -22,14 +22,21 @@
     {:target ".selection-card"
      :content "Formuliere nun deinen eigenen Beitrag. Siehst du die Leiste über dem Eingabefeld? Dort kannst du deinen Beitrag passend stylen und sogar Zeichnungen, Bilder und Dateien einfügen."}
     {:target ".statement-card"
-     :content "Das hier ist ein Beitrag. Du kannst darauf direkt reagieren oder Reaktionen auf diesen Beitrag anschauen."}]})
+     :content "Das hier ist ein Beitrag. Du kannst darauf direkt reagieren oder Reaktionen auf diesen Beitrag anschauen."}]
+   :designs
+   [{:target "#theme-title"
+     :content "Du kannst hier dein eigenes Design erstellen. Fange an, indem du deinem Design einen Namen gibst."}
+    {:target "#primary-color-picker"
+     :content "Farben und Bilder kannst du hier auswählen. Vergiss nicht auf \"Speichern\" zu klicken."}
+    {:target "#theme-preview-title"
+     :content "Siehe hier eine Vorschau deiner Farben. Speichere, und dein Design steht dir für deine schnaqs zur Verfügung. Gehe dafür in deinem schnaq in die Einstellungen."}]})
 
 (defn tour []
   (let [steps @(rf/subscribe [:tour/steps])
         callback
         (fn [data]
           (let [{:keys [status]} (js->clj data :keywordize-keys true)]
-            (when (= status finished) (rf/dispatch [:tour/stop]))))]
+            (when (= status finished) (rf/dispatch [:tour/stop true]))))]
     [:<>
      (when steps
        [:> Joyride {:callback callback
@@ -49,7 +56,7 @@
      [:> Button {:variant "primary"
                  :on-click #(rf/dispatch [:tour/start :user])} "Start User Tour"]
      [:> Button {:variant "primary"
-                 :on-click #(rf/dispatch [:tour/start :feed])} "Start Overview Tour"]]))
+                 :on-click #(rf/dispatch [:tour/start :designs])} "Designs"]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -59,21 +66,28 @@
    (when-let [current-tour (get-in db [:tour :current])]
      (get tours current-tour))))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  :tour/start
+ (fn [db [_ current-tour]]
+   (assoc-in db [:tour :current] current-tour)))
+
+(rf/reg-event-fx
+ :tour/start-if-not-visited
  (fn [{:keys [db]} [_ current-tour]]
    (let [current-tours (get-in db [:user :tours])]
      (when-not (current-tour current-tours)
-       {:db (assoc-in db [:tour :current] current-tour)}))))
+       {:fx [[:dispatch [:tour/start current-tour]]]}))))
 
 (rf/reg-event-fx
  :tour/stop
- (fn [{:keys [db]}]
-   (when-let [current-tour (get-in db [:tour :current])]
-     {:db (-> db
-              (update :tour dissoc :current)
-              (update-in [:user :tours] conj current-tour))
-      :fx [[:tour/to-localstorage current-tour]]})))
+ (fn [{:keys [db]} [_ save-tour?]]
+   (if save-tour?
+     (when-let [current-tour (get-in db [:tour :current])]
+       {:db (-> db
+                (update :tour dissoc :current)
+                (update-in [:user :tours] conj current-tour))
+        :fx [[:tour/to-localstorage current-tour]]})
+     {:db (update db :tour dissoc :current)})))
 
 (rf/reg-event-fx
  :user.tours/from-localstorage
@@ -91,5 +105,5 @@
  :tour/to-localstorage
  (fn [tour]
    (when tour
-     (let [new-tours (conj (:tours local-storage) tour)]
+     (let [new-tours (conj (or (:tours local-storage) #{}) tour)]
        (assoc! local-storage :tours new-tours)))))
