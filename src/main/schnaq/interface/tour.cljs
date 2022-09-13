@@ -23,7 +23,7 @@
      :content "Formuliere nun deinen eigenen Beitrag. Siehst du die Leiste über dem Eingabefeld? Dort kannst du deinen Beitrag passend stylen und sogar Zeichnungen, Bilder und Dateien einfügen."}
     {:target ".statement-card"
      :content "Das hier ist ein Beitrag. Du kannst darauf direkt reagieren oder Reaktionen auf diesen Beitrag anschauen."}]
-   :designs
+   :themes
    [{:target "#theme-title"
      :content "Du kannst hier dein eigenes Design erstellen. Fange an, indem du deinem Design einen Namen gibst."}
     {:target "#primary-color-picker"
@@ -56,7 +56,7 @@
      [:> Button {:variant "primary"
                  :on-click #(rf/dispatch [:tour/start :user])} "Start User Tour"]
      [:> Button {:variant "primary"
-                 :on-click #(rf/dispatch [:tour/start :designs])} "Designs"]]))
+                 :on-click #(rf/dispatch [:tour/start :themes])} "Themes"]]))
 
 ;; -----------------------------------------------------------------------------
 
