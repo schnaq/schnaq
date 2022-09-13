@@ -137,7 +137,7 @@
      #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not delete a closed / deleted discussion or statement."))
      #(validator/deny-access at/invalid-rights-message))))
 
-(defn- delete-statements!
+(defn- delete-statement-and-children!
   "Deletes the passed list of statements if the admin-rights are fitting.
   Important: Needs to check whether the statement-id really belongs to the discussion with
   the passed edit-hash."
@@ -457,17 +457,17 @@
                            :responses {201 {:body {:new-statement ::dto/statement}}
                                        403 at/response-error-body}}]
    ["/statements"
-    ["/delete" {:delete delete-statements!
-                :description (at/get-doc #'delete-statements!)
-                :name :api.discussion.statements/delete
-                :middleware [:discussion/valid-credentials?]
-                :parameters {:body {:share-hash :discussion/share-hash
-                                    :edit-hash :discussion/edit-hash
-                                    :statement-ids (s/coll-of :db/id)}}
-                :responses {200 {:body {:deleted-statements (s/coll-of :db/id)
-                                        :methods (s/coll-of keyword?)}}
-                            401 at/response-error-body
-                            403 at/response-error-body}}]
+    ["/delete-with-children" {:delete delete-statement-and-children!
+                              :description (at/get-doc #'delete-statement-and-children!)
+                              :name :api.discussion.statements/delete
+                              :middleware [:discussion/valid-credentials?]
+                              :parameters {:body {:share-hash :discussion/share-hash
+                                                  :edit-hash :discussion/edit-hash
+                                                  :statement-ids (s/coll-of :db/id)}}
+                              :responses {200 {:body {:deleted-statements (s/coll-of :db/id)
+                                                      :methods (s/coll-of keyword?)}}
+                                          401 at/response-error-body
+                                          403 at/response-error-body}}]
     ["/search" {:get search-statements
                 :description (at/get-doc #'search-statements)
                 :name :api.discussion.statements/search

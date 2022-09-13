@@ -137,9 +137,11 @@
 
 (rf/reg-event-fx
  :discussion.delete/statement
+ ;; Function called by schnaq author / admin. Deletes all children as well
  (fn [{:keys [db]} [_ statement-id edit-hash]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-     {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
+     {:fx [(http/xhrio-request db :delete "/discussion/statements/delete-with-children"
+                               ;; TODO update success fn
                                [:discussion.admin/delete-statement-success statement-id]
                                {:statement-ids [statement-id]
                                 :share-hash share-hash

@@ -63,12 +63,13 @@
   [statement edit-hash]
   (let [creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
         anonymous-owner? (contains? creation-secrets (:db/id statement))
-        confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
-                                            (dispatch-fn)))
-        admin-delete-fn #(confirmation-fn (fn [] (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
+        confirmation-fn (fn [dispatch-fn label] (when (js/confirm (labels label)) (dispatch-fn)))
+        admin-delete-fn #(confirmation-fn (fn [] (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash]))
+                                          :discussion.badges/delete-statement-confirmation-admin)
         user-delete-fn (if anonymous-owner?
                          #(rf/dispatch [:modal [anonymous-delete-modal]])
-                         #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))))]
+                         #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))
+                                           :discussion.badges/delete-statement-confirmation))]
     [:button.dropdown-item
      {:tabIndex 60
       :on-click (fn [e]
