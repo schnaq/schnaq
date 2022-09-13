@@ -110,6 +110,7 @@
                         :edges edges-vis}
               graph (Network. root-node data (clj->js options))]
           (rf/dispatch [:graph/store-object graph])
+          (rf/dispatch [:tour/start :mindmap])
           (.on graph "doubleClick"
                (fn [properties]
                  (when-let [clicked-node-id (first (get (js->clj properties) "nodes"))] ;; If `clicked-node-id` is nil, the user clicked in an empty space instead of a node
