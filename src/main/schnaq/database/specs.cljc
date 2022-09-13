@@ -164,6 +164,13 @@
                                   :discussion/creation-secret :discussion/mode :discussion/access
                                   :discussion/activation-focus :discussion/wordcloud]))
 
+(s/def :wordcloud/title ::non-blank-string)
+(s/def :wordcloud/discussion (s/or :id :db/id
+                                   :discussion ::discussion))
+(s/def :wordcloud/words (s/coll-of (s/tuple :non-blank-string pos-int?)))
+(s/def ::wordcloud (s/keys :req [:wordcloud/title :wordcloud/discussion]
+                           :opt [:wordcloud/words]))
+
 (s/def ::share-hash-statement-id-mapping
   (s/map-of :discussion/share-hash (s/coll-of :db/id)))
 
