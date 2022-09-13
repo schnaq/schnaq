@@ -35,6 +35,7 @@
             [schnaq.interface.pages.start]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.scheduler]
+            [schnaq.interface.tour]
             [schnaq.interface.translations]
             [schnaq.interface.translations.english]
             [schnaq.interface.translations.german]
