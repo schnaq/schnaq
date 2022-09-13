@@ -192,10 +192,11 @@
   "Takes a collection of hosts and checks if the mail's host matches at least
   one of them."
   [mail hosts]
-  [string? (s/coll-of string?) => boolean?]
-  (let [matches (map #(re-matches (re-pattern (format ".*@%s" %)) mail)
-                     hosts)]
-    (some string? matches)))
+  [string? (? (s/coll-of string?)) => (? boolean?)]
+  (when hosts
+    (let [matches (map #(re-matches (re-pattern (format ".*@%s" %)) mail)
+                       hosts)]
+      (some string? matches))))
 
 (>defn update-roles-based-on-email-host
   "Check the user's email address. If the mail's host is in the list of eligible
