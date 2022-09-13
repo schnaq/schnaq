@@ -149,16 +149,22 @@
  ;; Delete a statement-id from conclusions-list and history
  :discussion.delete/purge-stores
  (fn [db [_ statement-id return-value]]
-   (let [method (or (:method return-value) (first (:methods return-value)))
+   (let [;; User deleted their own post
+         method (:method return-value)
+         ;; Admin deleted multiple statements
+         deleted-statements (:deleted-statements return-value)
          history (get-in db [:history :full-context])
-         parent-id (get-in db [:schnaq :statements statement-id :statement/parent :db/id])]
-     (if (= :deleted method)
-       (cond-> (update-in db [:schnaq :statements] dissoc statement-id)
-         (= statement-id (last history))
-         (update-in [:history :full-context] (comp vec butlast))
-         parent-id
-         (update-in [:schnaq :statements parent-id :meta/sub-statement-count] dec))
-       (assoc-in db [:schnaq :statements statement-id :statement/content] config/deleted-statement-text)))))
+         parent-id (get-in db [:schnaq :statements statement-id :statement/parent :db/id])
+         update-history-parent-fn #(cond-> %
+                                     parent-id
+                                     (update-in [:schnaq :statements parent-id :meta/sub-statement-count] dec)
+                                     (= statement-id (last history))
+                                     (update-in [:history :full-context] (comp vec butlast)))]
+     (if deleted-statements
+       (update-history-parent-fn (update-in db [:schnaq :statements] #(apply dissoc % deleted-statements)))
+       (if (= :deleted method)
+         (update-history-parent-fn (update-in db [:schnaq :statements] dissoc statement-id))
+         (assoc-in db [:schnaq :statements statement-id :statement/content] config/deleted-statement-text))))))
 
 (rf/reg-event-fx
  :discussion.admin/send-email-invites

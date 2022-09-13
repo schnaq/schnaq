@@ -84,7 +84,6 @@
  (fn [{:keys [db]} [_ statement-id edit-hash]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [(http/xhrio-request db :delete "/discussion/statements/delete-with-children"
-                               ;; TODO update success fn
                                [:discussion.admin/delete-statement-success statement-id]
                                {:statement-id statement-id
                                 :share-hash share-hash
