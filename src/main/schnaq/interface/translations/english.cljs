@@ -178,7 +178,7 @@
    :schnaq.activation.create/reset-button "Reset Activation"
    :schnaq.activation/reset-button "Reset"
    :schnaq.activation/delete-button "Delete"
-   :schnaq.activation/title "%ss total:"
+   :schnaq.activation/title "# of %s:"
    :schnaq.activation/phrase "Torooo"
 
    ;; Word Cloud feature
