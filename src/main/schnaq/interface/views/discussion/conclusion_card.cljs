@@ -351,7 +351,7 @@
              (when (and (not read-only?) admin-access?)
                [:ul.selection-tab.nav.nav-tabs
                 {:ref (fn [_element]
-                        (js/setTimeout #(rf/dispatch [:tour/start :discussion]) 1000))} ;; wait a second until tour appears
+                        (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :discussion]) 1000))} ;; wait a second until tour appears
                 [:li.nav-item
                  [:button.nav-link {:class (active-class :question)
                                     :role "button"
