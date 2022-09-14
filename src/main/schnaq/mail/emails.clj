@@ -79,8 +79,8 @@
   [discussion statement recipients]
   [::specs/discussion ::specs/statement (s/coll-of string?) :ret any?]
   (send-mails
-   "Beitrag mit bedenklichem Inhalt!"
-   (format "Ein:e Nutzer:in hat folgenden Beitrag als Bedenklich gemeldet:\n\n'%s'\n\n %s"
+   "[Aktion erforderlich] Beitrag mit bedenklichem Inhalt!"
+   (format "Diese Mail erhalten die schnaq Administrator:innen und der:die Autor:in des schnaqs.\n\nEin:e Nutzer:in hat folgenden Beitrag als Bedenklich gemeldet:\n\n\"%s\"\n\n %s"
            (hiccup-util/escape-html (:statement/content statement))
            (schnaq-links/get-link-to-statement
             (:discussion/share-hash discussion)

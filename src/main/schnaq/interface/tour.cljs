@@ -43,7 +43,7 @@
     {:target "#graph-export"
      :content (labels :tour.mindmap/step-2)
      :title (labels :tour.mindmap/step-2-title)}
-    {:target "#graph-settings" ;; WIP
+    {:target "#graph-settings"
      :content (labels :tour.mindmap/step-3)
      :title (labels :tour.mindmap/step-3-title)}]})
 
