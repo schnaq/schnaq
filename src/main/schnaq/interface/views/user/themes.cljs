@@ -78,7 +78,7 @@
 (defn- preview []
   (when @(rf/subscribe [:schnaq.selected/theme])
     [:<>
-     [:h3 (labels :themes.personal.preview/heading)]
+     [:h3#theme-preview-title (labels :themes.personal.preview/heading)]
      [:section.theming-enabled
       [:div.base-wrapper.p-3
        [elements/navbar-title
@@ -130,7 +130,8 @@
          (rf/dispatch [:theme.selected/update :theme/title
                        (gstring/format (labels :themes.personal.creation/theme-placeholder) user-name)])
          (matomo/track-event "Active User", "Secondary Action", "Design New Theme"))
-       "btn-outline-primary h-100"]]]))
+       "btn-outline-primary h-100"
+       {:id "design-create-new"}]]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -251,7 +252,9 @@
           theme-id (:db/id selected)]
       [:<>
        [:form
-        {:on-submit (fn [e]
+        {:ref (fn [_element]
+                (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :themes]) 1000))
+         :on-submit (fn [e]
                       (.preventDefault e)
                       (let [add-or-edit (if theme-id :theme/edit :theme/add)]
                         (rf/dispatch [add-or-edit (oget e [:target :elements])])))}

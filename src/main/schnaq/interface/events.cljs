@@ -45,6 +45,7 @@
    {:fx [[:dispatch [:username/from-localstorage]]
          [:dispatch [:user/init-device-id]]
          [:dispatch [:user.currency/from-localstorage]]
+         [:dispatch [:user.tours/from-localstorage]]
          [:dispatch [:re-frame-10x/hide-on-mobile]]
          [:dispatch [:keycloak/init]]
          [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]

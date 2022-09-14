@@ -40,7 +40,8 @@
           anchor (.createElement js/document "a")]
       (oset! anchor [:href] (.toDataURL canvas "image/png"))
       (oset! anchor [:download] "graph.png")
-      (.click anchor))])
+      (.click anchor))
+   {:id :graph-export}])
 
 (defn txt-export
   "Request a txt-export of the discussion."

@@ -1,7 +1,5 @@
 (ns schnaq.interface.views.discussion.admin-center
-  (:require ["tippy.js" :refer [followCursor]]
-            [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
@@ -12,43 +10,12 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.header-image :as header-image]
-            [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.themes :as themes]
             [schnaq.links :as links]))
-
-(defn- copy-link-form
-  "A form that displays the link the user can copy. Form is read-only."
-  [create-link-fn id-extra]
-  (let [display-content (create-link-fn @(rf/subscribe [:schnaq/share-hash]))
-        link-id (str "schnaq-link" id-extra)]
-    [:div.pb-4
-     [tooltip/text
-      (labels :schnaq/copy-link-tooltip)
-      [:form.form.create-meeting-form.d-flex
-       {:id (str "schnaq-link-form-" id-extra)
-        :on-click (fn [e]
-                    (.preventDefault e)
-                    (clipboard/copy-to-clipboard! display-content)
-                    (notify! (labels :schnaq/link-copied-heading)
-                             (labels :schnaq/link-copied-success)
-                             :info
-                             false))}
-       [:input.form-control.form-round.copy-link-form
-        {:id link-id
-         :type :text
-         :role :button
-         :value (or display-content "")
-         :readOnly true}]
-       [:label.form-label.align-right.ms-4.d-flex.justify-content-center {:for link-id :role :button}
-        [icon :copy "m-auto" {:size "lg"}]]]
-      {:plugins followCursor
-       :followCursor true}]]))
 
 (defn- img-text
   "Create one icon in a grid"
@@ -57,42 +24,6 @@
    [:img {:src path-to-img
           :alt (labels alt-key)}]
    [:h5 heading]])
-
-(defn- educate-element []
-  [:div.row.mb-3
-   [:div.col-12.col-md-6.share-link-icons
-    [img-text (img-path :schnaqqifant/share) :schnaqqifant/share-alt-text
-     (labels :schnaq/educate-on-link-text)]]
-   [:div.col-12.col-md-6.share-link-icons
-    [img-text (img-path :schnaqqifant/talk) :schnaqqifant/talk-alt-text
-     (labels :schnaq/educate-on-link-text-subtitle)]]])
-
-;; -----------------------------------------------------------------------------
-
-(>defn- invite-participants-form
-  "A form which allows the sending of the invitation-link to several participants via E-Mail."
-  []
-  [:ret :re-frame/component]
-  (let [input-id "participant-email-addresses"]
-    [:<>
-     [:h4.mt-4 (labels :schnaq.admin/send-invites-heading)]
-     [:form.form.text-start.mb-5
-      {:on-submit (fn [e]
-                    (.preventDefault e)
-                    (rf/dispatch [:discussion.admin/send-email-invites
-                                  (oget e [:target :elements])]))}
-      [:div.mb-3
-       [:label.form-label.m-1 {:for input-id} (labels :schnaq.admin/addresses-label)]
-       [:textarea.form-control.m-1.rounded-3
-        {:id input-id
-         :name "participant-addresses" :wrap "soft" :rows 3
-         :auto-complete "off"
-         :required true
-         :placeholder (labels :schnaq.admin/addresses-placeholder)}]
-       [:small.form-text.text-muted.float-end
-        (labels :schnaq.admin/addresses-privacy)]]
-      [:button.btn.btn-outline-primary
-       (labels :schnaq.admin/send-invites-button-text)]]]))
 
 (rf/reg-event-fx
  :discussion.admin/send-admin-center-link
@@ -165,19 +96,6 @@
        (if (= :deleted method)
          (update-history-parent-fn (update-in db [:schnaq :statements] dissoc statement-id))
          (assoc-in db [:schnaq :statements statement-id :statement/content] config/deleted-statement-text))))))
-
-(rf/reg-event-fx
- :discussion.admin/send-email-invites
- (fn [{:keys [db]} [_ form]]
-   (let [raw-emails (oget form ["participant-addresses" :value])
-         recipients (string/split raw-emails #"\s+")
-         {:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
-     {:fx [(http/xhrio-request db :post "/emails/send-invites" [:discussion.admin/send-email-success form]
-                               {:recipients recipients
-                                :share-hash share-hash
-                                :edit-hash edit-hash
-                                :share-link (links/get-share-link share-hash)}
-                               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
  :discussion.admin/send-email-success
@@ -395,14 +313,6 @@
    ;; Manage discussion settings
    {:link (labels :schnaq.admin.edit/administrate)
     :view [administrate-discussion]}
-   ;; participants access via link
-   {:link (labels :schnaq.admin.invite/via-link)
-    :view [:div.text-center
-           [educate-element]
-           [copy-link-form links/get-share-link "share-hash"]]}
-   ;; participants access via mail
-   {:link (labels :schnaq.admin.invite/via-mail)
-    :view [:div.text-center [invite-participants-form]]}
    ;; admin access via mail
    {:link (labels :schnaq.admin.edit.link/header)
     :view [:div.text-center [send-admin-center-link]]}])

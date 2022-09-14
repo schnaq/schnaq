@@ -246,7 +246,7 @@
   "Show a ranking card."
   [poll]
   [::specs/poll => :re-frame/component]
-  [:section.statement-card
+  [:section.activation-card
    [:div.mx-4.my-2
     [:div.d-flex
      [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
