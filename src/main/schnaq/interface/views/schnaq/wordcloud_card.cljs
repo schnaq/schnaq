@@ -1,16 +1,20 @@
 (ns schnaq.interface.views.schnaq.wordcloud-card
-  (:require [oops.core :refer [oget]]
-            [re-frame.core :as rf]
-            [schnaq.export :as export]
-            [schnaq.interface.components.inputs :as inputs]
-            [schnaq.interface.components.motion :as motion]
-            [schnaq.interface.components.wordcloud :as wordcloud]
-            [schnaq.interface.matomo :as matomo]
-            [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.toolbelt :as tools]
-            [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
-            [schnaq.shared-toolbelt :as stools]))
+  (:require
+   [cljs.spec.alpha :as s]
+   [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
+   [oops.core :refer [oget]]
+   [re-frame.core :as rf]
+   [schnaq.database.specs :as specs]
+   [schnaq.export :as export]
+   [schnaq.interface.components.inputs :as inputs]
+   [schnaq.interface.components.motion :as motion]
+   [schnaq.interface.components.wordcloud :as wordcloud]
+   [schnaq.interface.matomo :as matomo]
+   [schnaq.interface.translations :refer [labels]]
+   [schnaq.interface.utils.http :as http]
+   [schnaq.interface.utils.toolbelt :as tools]
+   [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
+   [schnaq.shared-toolbelt :as stools]))
 
 (defn- global-wordcloud
   "Shows the controls for the global word cloud"
@@ -71,7 +75,27 @@
          [dropdown-menu/item :trash
           :schnaq.wordcloud/hide
           #(rf/dispatch [:schnaq.wordcloud/toggle])]]]]
-      [wordcloud/wordcloud]]]))
+      [wordcloud/wordcloud @(rf/subscribe [:wordcloud/words])]]]))
+
+(>defn- local-wordcloud-card
+  "A single wordcloud with possibility for inputs."
+  [{:wordcloud/keys [title words]}]
+  [::specs/wordcloud => :re-frame/component]
+  (let [formatted-words (map #(hash-map :text (first %)
+                                        :value (second %))
+                             words)]
+    [:div.text-center.pt-2.activation-card
+     [:p title]
+     [wordcloud/wordcloud formatted-words]]))
+
+(>defn wordcloud-list
+  "Displays all wordclouds of the current schnaq excluding the one in `exclude`."
+  [exclude]
+  [:db/id :ret (s/coll-of :re-frame/component)]
+  (for [wordcloud (remove #(= exclude (:db/id %)) @(rf/subscribe [:schnaq.wordclouds/local]))]
+    [:article
+     {:key (str "wordcloud-card-" (:db/id wordcloud))}
+     [local-wordcloud-card wordcloud]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -129,7 +153,6 @@
 (rf/reg-event-fx
  :schnaq.wordcloud.local/create
  (fn [{:keys [db]} [_ title]]
-   (println title)
    {:fx [(http/xhrio-request db :post "/wordcloud/local"
                              [:schnaq.wordclod.local.create/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
@@ -138,6 +161,9 @@
 
 (rf/reg-event-db
  :schnaq.wordclod.local.create/success
- (fn [_db [_ return]]
-   ;; TODO show newly created wordcloud in activations
-   (println "neue wordcloud: " return)))
+ (fn [db [_ return]]
+   (update-in db [:schnaq :wordclouds] conj (:wordcloud return))))
+
+(rf/reg-sub
+ :schnaq.wordclouds/local
+ :-> #(get-in % [:schnaq :wordclouds]))

@@ -73,9 +73,9 @@
 ;; -----------------------------------------------------------------------------
 
 (defn wordcloud
-  "Create a wordcloud based on the data in the db."
-  []
-  (if-let [words (->> @(rf/subscribe [:wordcloud/words])
+  "Create a wordcloud based on the data that is passed in."
+  [input]
+  (if-let [words (->> input
                       (sort-by :value)
                       reverse
                       (take words-to-be-wordclouded))]
@@ -86,7 +86,7 @@
   "If user is pro-user display a wordcloud and if not show a preview instead."
   []
   (if @(rf/subscribe [:user/pro?])
-    [wordcloud]
+    [wordcloud @(rf/subscribe [:wordcloud/words])]
     [preview/preview-image :preview/wordcloud]))
 
 ;; -----------------------------------------------------------------------------
