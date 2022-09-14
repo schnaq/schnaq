@@ -5,7 +5,6 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.config :as config]
-            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]))
 
