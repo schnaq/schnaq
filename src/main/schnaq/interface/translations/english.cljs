@@ -182,8 +182,8 @@
    :schnaq.activation/phrase "Torooo"
 
    ;; Word Cloud feature
-   :schnaq.wordcloud/show "Show Word Cloud"
-   :schnaq.wordcloud/hide "Hide Word Cloud"
+   :schnaq.wordcloud/show "Show Word Cloud for schnaq room"
+   :schnaq.wordcloud/hide "Hide Word Cloud for schnaq room"
    :schnaq.wordcloud/title "Word Cloud"
    :schnaq.wordcloud/label "Show the most common words from your schnaq as a word cloud."
 

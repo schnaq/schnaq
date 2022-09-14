@@ -185,8 +185,8 @@
    :schnaq.activation/phrase "Törööö"
 
    ;; Word Cloud feature
-   :schnaq.wordcloud/show "Wortwolke anzeigen"
-   :schnaq.wordcloud/hide "Wortwolke verbergen"
+   :schnaq.wordcloud/show "Wortwolke für schnaq Raum anzeigen"
+   :schnaq.wordcloud/hide "Wortwolke für schnaq Raum verbergen"
    :schnaq.wordcloud/title "Wortwolke"
    :schnaq.wordcloud/label "Zeige die häufigsten Wörter aus deinem schnaq als Wortwolke an."
 
