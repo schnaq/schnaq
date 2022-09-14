@@ -126,7 +126,7 @@
    :statement.edit.button/cancel "Abbrechen"
    :schnaq.edit/label "Titel bearbeiten"
    :statement/flag-statement "melden"
-   :statement/flag-statement-confirmation "Möchtest du diesen Beitrag wirklich den Administrator:innen melden?"
+   :statement/flag-statement-confirmation "Möchtest du diesen Beitrag wirklich den Administrator:innen und den Autor:innen dieses schnaqs melden?"
    :statement.notifications/statement-flagged-title "Beitrag wurde gemeldet!"
    :statement.notifications/statement-flagged-body "Vielen Dank für deine Meldung, wir kümmern uns."
    :statement.badges/more-posts "weitere Beiträge"
