@@ -1,8 +1,10 @@
 (ns schnaq.database.wordcloud
-  (:require [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
-            [schnaq.database.main :as db :refer [transact query]]
-            [schnaq.database.patterns :as patterns]
-            [schnaq.database.specs :as specs]))
+  (:require
+   [clojure.spec.alpha :as s]
+   [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
+   [schnaq.database.main :as db :refer [transact query]]
+   [schnaq.database.patterns :as patterns]
+   [schnaq.database.specs :as specs]))
 
 (>defn wordcloud-by-share-hash
   "Return wordcloud by a discussion's share-hash."
@@ -33,6 +35,16 @@
                                  :wordcloud.local/discussion [:discussion/share-hash share-hash]}]
                                temp-id
                                patterns/local-wordcloud)))
+
+(>defn local-wordclouds
+  "Returns all local wordclouds belonging to a discussion."
+  [share-hash]
+  [:discussion/share-hash => (s/coll-of ::specs/wordcloud)]
+  (query '[:find [(pull ?wordcloud pattern) ...]
+           :in $ ?share-hash pattern
+           :where [?discussion :discussion/share-hash ?share-hash]
+           [?wordcloud :wordcloud.local/discussion ?discussion]]
+         share-hash patterns/local-wordcloud))
 
 (>defn add-word-to-wordcloud
   "Adds a word to the wordcloud. If word already exists, increase count."

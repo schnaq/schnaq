@@ -154,16 +154,28 @@
  :schnaq.wordcloud.local/create
  (fn [{:keys [db]} [_ title]]
    {:fx [(http/xhrio-request db :post "/wordcloud/local"
-                             [:schnaq.wordclod.local.create/success]
+                             [:schnaq.wordcloud.local.create/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
                               :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
                               :title title})]}))
 
 (rf/reg-event-db
- :schnaq.wordclod.local.create/success
+ :schnaq.wordcloud.local.create/success
  (fn [db [_ return]]
    (update-in db [:schnaq :wordclouds] conj (:wordcloud return))))
 
 (rf/reg-sub
  :schnaq.wordclouds/local
  :-> #(get-in % [:schnaq :wordclouds]))
+
+(rf/reg-event-fx
+ :schnaq.wordclouds/load-from-backend
+ (fn [{:keys [db]} _]
+   {:fx [(http/xhrio-request db :get "/wordcloud/local"
+                             [:schnaq.wordclouds.local.load/success]
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
+
+(rf/reg-event-db
+ :schnaq.wordclouds.local.load/success
+ (fn [db [_ return]]
+   (assoc-in db [:schnaq :wordclouds] (:wordclouds return))))

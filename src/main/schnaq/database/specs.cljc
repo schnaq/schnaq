@@ -167,7 +167,7 @@
 (s/def :wordcloud/title ::non-blank-string)
 (s/def :wordcloud/discussion (s/or :id :db/id
                                    :discussion ::discussion))
-(s/def :wordcloud/words (s/coll-of (s/tuple :non-blank-string pos-int?)))
+(s/def :wordcloud/words (s/coll-of (s/tuple ::non-blank-string pos-int?)))
 (s/def ::wordcloud (s/keys :req [:wordcloud/title :wordcloud/discussion]
                            :opt [:wordcloud/words]))
 
