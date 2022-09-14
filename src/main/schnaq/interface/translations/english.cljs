@@ -737,7 +737,7 @@
    :tour.discussion/step-1-title "Current topic"
    :tour.discussion/step-1 "Here you will always find the post or topic that is currently being discussed."
    :tour.discussion/step-2-title "Your post"
-   :tour.discussion/step-2 "Now formulate your own contribution. See the bar above the input field? There you can style your post to fit and even insert drawings, pictures and files."
+   :tour.discussion/step-2 "Now formulate your own contribution. See the bar above the input field? There you can style your post and insert drawings, pictures and files."
    :tour.discussion/step-3-title "Other posts"
    :tour.discussion/step-3 "This is a post. You can respond to it directly or view reactions to this post."
    :tour.themes/step-1-title "Personal Designs"
