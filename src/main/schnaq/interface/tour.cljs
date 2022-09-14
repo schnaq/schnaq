@@ -1,6 +1,5 @@
 (ns schnaq.interface.tour
-  (:require ["react-bootstrap" :refer [Button]]
-            ["react-joyride" :refer [STATUS] :default Joyride]
+  (:require ["react-joyride" :refer [STATUS] :default Joyride]
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -54,28 +53,19 @@
         (fn [data]
           (let [{:keys [status]} (js->clj data :keywordize-keys true)]
             (when (= status finished) (rf/dispatch [:tour/stop true]))))]
-    [:<>
-     (when steps
-       [:> Joyride {:callback callback
-                    :continuous true
-                    :run true
-                    :showProgress true
-                    :steps steps
-                    :styles styles
-                    :locale {:back (labels :tour.buttons/back)
-                             :close (labels :tour.buttons/close)
-                             :last (labels :tour.buttons/last)
-                             :next (labels :tour.buttons/next)
-                             :open (labels :tour.buttons/open)
-                             :skip (labels :tour.buttons/skip)}}])
-     [:> Button {:variant "primary"
-                 :on-click #(rf/dispatch [:tour/start :discussion])} "Start Discussion Tour"]
-     [:> Button {:variant "primary"
-                 :on-click #(rf/dispatch [:tour/start :user])} "Start User Tour"]
-     [:> Button {:variant "primary"
-                 :on-click #(rf/dispatch [:tour/start :themes])} "Themes"]
-     [:> Button {:variant "primary"
-                 :on-click #(rf/dispatch [:tour/start :mindmap])} "Mindmap"]]))
+    (when steps
+      [:> Joyride {:callback callback
+                   :continuous true
+                   :run true
+                   :showProgress true
+                   :steps steps
+                   :styles styles
+                   :locale {:back (labels :tour.buttons/back)
+                            :close (labels :tour.buttons/close)
+                            :last (labels :tour.buttons/last)
+                            :next (labels :tour.buttons/next)
+                            :open (labels :tour.buttons/open)
+                            :skip (labels :tour.buttons/skip)}}])))
 
 ;; -----------------------------------------------------------------------------
 
