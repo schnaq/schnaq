@@ -148,8 +148,8 @@
   "Extracts the device-id and saves it to the known ids of the queries schnaq"
   [handler]
   (fn [request]
-    (when-let [device-id (get-in request [:headers "device-id"])]
-      (discussion-db/add-device-id
-       (extract-parameter-from-request request :share-hash)
-       (UUID/fromString device-id)))
+    (let [device-id (get-in request [:headers "device-id"])
+          share-hash (extract-parameter-from-request request :share-hash)]
+      (when (and device-id share-hash)
+        (discussion-db/add-device-id share-hash (UUID/fromString device-id))))
     (handler request)))
