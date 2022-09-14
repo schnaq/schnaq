@@ -1,5 +1,6 @@
 (ns schnaq.api.wordcloud-test
   (:require [clojure.test :refer [deftest is use-fixtures testing]]
+            [muuntaja.core :as m]
             [schnaq.api :as api]
             [schnaq.test.toolbelt :as toolbelt :refer [test-app]]))
 
@@ -44,3 +45,16 @@
                 test-share-hash
                 test-edit-hash
                 false)))))
+
+(deftest get-local-wordclouds-test
+  (let [response (-> {:request-method :get :uri (:path (api/route-by-name :wordcloud/local))
+                      :query-params {:share-hash "simple-hash"}}
+                     test-app
+                     m/decode-response-body)
+        wordclouds (:wordclouds response)
+        detailed-wordcloud (first (filter #(= "Nonsense" (:wordcloud/title %)) wordclouds))]
+    (testing "Were the correct word clouds returned?"
+      (is (= 2 (count wordclouds)))
+      (is (= 4 (count (:wordcloud/words detailed-wordcloud))))
+      (is (= (set [["foo" 13] ["fooo" 1] ["foobar" 5] ["barbar" 7]])
+             (set (:wordcloud/words detailed-wordcloud)))))))
