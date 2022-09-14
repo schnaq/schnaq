@@ -181,6 +181,7 @@
    :schnaq.wordcloud/hide "Hide Word Cloud"
    :schnaq.wordcloud/title "Word Cloud"
    :schnaq.wordcloud/label "Show the most common words from your schnaq as a word cloud."
+   :schnaq.wordcloud/download "Download Word Cloud"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"

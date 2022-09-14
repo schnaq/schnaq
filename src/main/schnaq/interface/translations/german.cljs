@@ -184,6 +184,7 @@
    :schnaq.wordcloud/hide "Wortwolke verbergen"
    :schnaq.wordcloud/title "Wortwolke"
    :schnaq.wordcloud/label "Zeige die häufigsten Wörter aus deinem schnaq als Wortwolke an."
+   :schnaq.wordcloud/download "Wortwolke herunterladen"
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"

@@ -1,15 +1,22 @@
 (ns schnaq.interface.components.wordcloud
-  (:require ["react-wordcloud" :default ReactWordcloud]
+  (:require ["react-bootstrap" :refer [Button]]
+            ["react-wordcloud" :default ReactWordcloud]
             ["stopword" :refer [deu eng]]
             [clojure.set :as set]
             [clojure.spec.alpha :as s]
             [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reagent.core :as r]
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.colors :refer [colors]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.preview :as preview]
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.file-download :as file-download]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.loading :refer [spinner-icon]]))
 
 (def ^:private stopwords
@@ -79,7 +86,18 @@
                       (sort-by :value)
                       reverse
                       (take words-to-be-wordclouded))]
-    [:> ReactWordcloud {:words words :options options}]
+    (let [wc (r/atom nil)]
+      (fn []
+        (let [svg (when @wc (-> @wc (oget :children) first (oget :children) first))]
+          [:div {:ref #(when-not @wc (reset! wc %))}
+           [:> ReactWordcloud {:words words :options options}]
+           (when @wc
+             [:> Button {:variant :link
+                         :class "text-muted float-end"
+                         :on-click #(file-download/download-svg-node svg "wordcloud.svg")}
+              [tooltip/text
+               (labels :schnaq.wordcloud/download)
+               [:span [icon :file-download "me-1"]]]])])))
     [:div.text-center.py-3 [spinner-icon]]))
 
 (defn wordcloud-preview
