@@ -789,7 +789,7 @@
    :editor.toolbar/code "Code"
    :editor.toolbar/quote "Quote"
    :editor.toolbar/file-upload "Upload a file"
-   :editor.toolbar.file-upload/submit "Insert Image"
+   :editor.toolbar.file-upload/submit "Insert"
    :editor.toolbar.file-upload/close "Close"
    :editor.toolbar/drawing "Create Drawing"
    :editor.toolbar/image-upload "Upload an image"
