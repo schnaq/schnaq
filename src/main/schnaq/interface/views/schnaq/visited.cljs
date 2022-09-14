@@ -75,10 +75,11 @@
        :archived-by-user (filter archived? visited-schnaqs)
        (filter #(not (archived? %)) visited-schnaqs)))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  :schnaqs.visited/store-from-backend
- (fn [db [_ {:keys [schnaqs]}]]
-   (assoc-in db [:schnaqs :visited] schnaqs)))
+ (fn [{:keys [db]} [_ {:keys [schnaqs]}]]
+   {:db (assoc-in db [:schnaqs :visited] schnaqs)
+    :fx [[:dispatch [:loading/toggle [:schnaqs? false]]]]}))
 
 (rf/reg-event-db
  :schnaqs.visited/remove-from-app-db!
@@ -119,7 +120,8 @@
               db :post "/schnaqs/by-hashes"
               [:schnaqs.visited/store-from-backend]
               {:share-hashes (if shared-config/production? visited-hashes-with-faq visited-hashes)
-               :display-name (tools/current-display-name db)})]}))))
+               :display-name (tools/current-display-name db)})
+             [:dispatch [:loading/toggle [:schnaqs? true]]]]}))))
 
 (rf/reg-event-fx
  :schnaqs.archived-and-visited/to-localstorage
