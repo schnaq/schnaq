@@ -40,6 +40,7 @@
                             :discussion/valid-credentials?]
                :name :wordcloud.local/create
                :parameters {:body {:share-hash :discussion/share-hash
-                                   :edit-hash :discussion/edit-hash}}
+                                   :edit-hash :discussion/edit-hash
+                                   :title :wordcloud/title}}
                :responses {200 {:body {:wordcloud ::specs/wordcloud}}
                            400 at/response-error-body}}]]])

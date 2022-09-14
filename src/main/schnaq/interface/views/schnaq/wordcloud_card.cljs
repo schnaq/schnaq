@@ -1,6 +1,8 @@
 (ns schnaq.interface.views.schnaq.wordcloud-card
-  (:require [re-frame.core :as rf]
+  (:require [oops.core :refer [oget]]
+            [re-frame.core :as rf]
             [schnaq.export :as export]
+            [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.wordcloud :as wordcloud]
             [schnaq.interface.matomo :as matomo]
@@ -10,22 +12,46 @@
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
             [schnaq.shared-toolbelt :as stools]))
 
+(defn- global-wordcloud
+  "Shows the controls for the global word cloud"
+  []
+  (let [display-wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])]
+    [:div.text-center.pt-5
+     [:div.text-start.pb-2 (labels :schnaq.wordcloud/label)]
+     (if display-wordcloud?
+       [:button.btn.btn-dark.w-75
+        {:on-click #(rf/dispatch [:schnaq.wordcloud/toggle false])}
+        (labels :schnaq.wordcloud/hide)]
+       [:button.btn.btn-primary.w-75
+        {:on-click (fn [_e]
+                     (rf/dispatch [:schnaq.wordcloud/toggle true])
+                     (matomo/track-event "Active User" "Action" "Create Wordcloud"))}
+        (labels :schnaq.wordcloud/show)])]))
+
+(defn- local-wordcloud
+  "The controls for local, interactive word clouds."
+  []
+  [:form.pt-2
+   {:on-submit (fn [event]
+                 (.preventDefault event)
+                 (let [form (oget event [:target :elements])]
+                   (rf/dispatch [:schnaq.wordcloud.local/create (oget form [:wordcloud-title :value])])
+                   (rf/dispatch [:form/should-clear form])))}
+   [:div.mb-3
+    [:p (labels :schnaq.wordcloud.local.create/heading)]
+    [inputs/floating (labels :schnaq.wordcloud.local.create/label) :wordcloud-title {:required true :autoFocus true}]]
+   [:div.text-center.pt-2
+    [:button.btn.btn-secondary.w-75
+     {:type "submit"
+      :on-click #(matomo/track-event "Active User" "Action" "Create Wordcloud")}
+     (labels :schnaq.wordcloud.local.create/button)]]])
+
 (defn wordcloud-tab
   "Wordcloud tab menu to hide and show a wordcloud."
   []
-  (let [display-wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])]
-    [:div.pt-2
-     [:div.text (labels :schnaq.wordcloud/label)]
-     [:div.text-center.pt-2
-      (if display-wordcloud?
-        [:button.btn.btn-dark.w-75
-         {:on-click #(rf/dispatch [:schnaq.wordcloud/toggle false])}
-         (labels :schnaq.wordcloud/hide)]
-        [:button.btn.btn-secondary.w-75
-         {:on-click (fn [_e]
-                      (rf/dispatch [:schnaq.wordcloud/toggle true])
-                      (matomo/track-event "Active User" "Action" "Create Wordcloud"))}
-         (labels :schnaq.wordcloud/show)])]]))
+  [:div.pt-2
+   [local-wordcloud]
+   [global-wordcloud]])
 
 (defn wordcloud-card
   "Displays a wordcloud in a card."
@@ -99,3 +125,19 @@
  (fn [db [_ {:keys [wordcloud]}]]
    (when wordcloud
      (assoc-in db [:schnaq :selected :discussion/wordcloud] wordcloud))))
+
+(rf/reg-event-fx
+ :schnaq.wordcloud.local/create
+ (fn [{:keys [db]} [_ title]]
+   (println title)
+   {:fx [(http/xhrio-request db :post "/wordcloud/local"
+                             [:schnaq.wordclod.local.create/success]
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
+                              :title title})]}))
+
+(rf/reg-event-db
+ :schnaq.wordclod.local.create/success
+ (fn [_db [_ return]]
+   ;; TODO show newly created wordcloud in activations
+   (println "neue wordcloud: " return)))

@@ -186,6 +186,9 @@
    :schnaq.wordcloud/hide "Hide Word Cloud for schnaq room"
    :schnaq.wordcloud/title "Word Cloud"
    :schnaq.wordcloud/label "Show the most common words from your schnaq as a word cloud."
+   :schnaq.wordcloud.local.create/heading "Start an interactive wordcloud that displays its inputs."
+   :schnaq.wordcloud.local.create/label "Question or Prompt"
+   :schnaq.wordcloud.local.create/button "Start Word Cloud"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
