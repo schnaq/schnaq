@@ -755,7 +755,7 @@
    :tour.themes/step-3-title "Live-Vorschau"
    :tour.themes/step-3 "Siehe hier eine Vorschau deiner Farben. Speichere, und dein Design steht dir für deine schnaqs zur Verfügung. Gehe dafür in deinem schnaq in die Einstellungen."
    :tour.mindmap/step-1-title "Mindmap"
-   :tour.mindmap/step-1 "Sieh dir hier all Beiträge in dieser Mindmap an. Du kannst die Knoten bewegen oder mit der Maus zoomen."
+   :tour.mindmap/step-1 "Sieh dir hier all Beiträge in dieser Mindmap an. Du kannst die Knoten bewegen oder mit der Maus zoomen. Springe zum Beitrag per Doppelklick auf einen Knoten."
    :tour.mindmap/step-2-title "Export"
    :tour.mindmap/step-2 "Die Mindmap kannst du so wie sie hier gerade dargestellt wird als Bild heruntergeladen werden."
    :tour.mindmap/step-3-title "Einstellungen"

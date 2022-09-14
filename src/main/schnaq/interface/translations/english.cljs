@@ -747,7 +747,7 @@
    :tour.themes/step-3-title "Live Preview"
    :tour.themes/step-3 "See a preview of your colors here. Save and your theme will be available for your schnaqs. To do this, go to the settings in your schnaq."
    :tour.mindmap/step-1-title "Mindmap"
-   :tour.mindmap/step-1 "Look at all the posts in this mindmap here. You can move the nodes around or zoom in with the mouse."
+   :tour.mindmap/step-1 "Look at all the posts in this mindmap here. You can move the nodes around or zoom in with the mouse. Jump to the statement by double-clicking on a node."
    :tour.mindmap/step-2-title "Export"
    :tour.mindmap/step-2 "You can download the mindmap as it is shown here as an image."
    :tour.mindmap/step-3-title "Settings"
