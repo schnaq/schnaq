@@ -14,7 +14,7 @@
 (defn root []
   (let [language @(rf/subscribe [:current-locale])]
     [:main#root.text-break {:key language}
-     [tour/tour]
      [base-page]
      [notifications/view]
-     [modal/modal-view]]))
+     [modal/modal-view]
+     [tour/tour]]))
