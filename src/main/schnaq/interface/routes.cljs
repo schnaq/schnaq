@@ -253,7 +253,8 @@
                                (rf/dispatch [:graph/load-data-for-discussion]))
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/graph false])
-                              (rf/dispatch [:notifications/reset]))}]}]]]
+                              (rf/dispatch [:notifications/reset])
+                              (rf/dispatch [:tour/stop false]))}]}]]]
    ["/subscription"
     ["/cancel" {:name :routes.subscription/cancel
                 :view subscription-views/cancel-view}]
