@@ -102,7 +102,7 @@
         [inputs/floating (labels :schnaq.wordcloud.local.add-words/label) input-id]
         [:button.btn.btn-primary {:type "submit"} [icon :plane "m-auto"]]]
        [common/hint-text (labels :schnaq.wordcloud.local.add-words/hint)]]]]))
-
+;; TODO wordcloud löschen können
 (>defn wordcloud-list
   "Displays all wordclouds of the current schnaq excluding the one in `exclude`."
   [exclude]

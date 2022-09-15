@@ -1,7 +1,7 @@
 (ns schnaq.database.main
   (:require [clojure.spec.alpha :as s]
             [clojure.walk :as walk]
-            [com.fulcrologic.guardrails.core :refer [>defn ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
             [datomic.api :as d]
             [schnaq.api.dto-specs :as dto]
             [schnaq.config :as config]
@@ -165,6 +165,12 @@
     (let [old-val (get (fast-pull entity [attribute]) attribute)
           new-val (max (if old-val (dec old-val) -1) minimum-value)]
       @(transact [[:db/cas entity attribute old-val new-val]])))))
+
+(>defn delete-entity!
+  "Retracts any entity from the db completely. Just pass any id along."
+  [id]
+  [:db/id => map?]
+  @(transact [[:db/retractEntity id]]))
 
 ;; -----------------------------------------------------------------------------
 ;; Feedback functions
