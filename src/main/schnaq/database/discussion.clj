@@ -493,7 +493,7 @@
   "Adds an admin user to a discussion."
   [share-hash keycloak-id]
   [:discussion/share-hash :user.registered/keycloak-id :ret future?]
-  (transact [[:db/add [:discussion/share-hash share-hash] :discussion/admins
+  (transact [[:db/add [:discussion/share-hash share-hash] :discussion/moderators
               [:user.registered/keycloak-id keycloak-id]]]))
 
 (>defn- build-secrets-map

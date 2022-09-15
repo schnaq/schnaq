@@ -87,7 +87,7 @@
                                      :discussion/edit-hash (.toString (UUID/randomUUID))
                                      :discussion/author author
                                      :discussion/mode :discussion.mode/qanda}
-                              keycloak-id (assoc :discussion/admins [author])
+                              keycloak-id (assoc :discussion/moderators [author])
                               (and hub-exclusive? authorized-for-hub?)
                               (assoc :discussion/hub-origin [:hub/keycloak-name hub]))
             new-discussion-id (discussion-db/new-discussion discussion-data)]

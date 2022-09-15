@@ -140,8 +140,8 @@
 (s/def :discussion/header-image-url string?)
 (s/def :discussion/hub-origin (s/or :reference :db/id
                                     :hub ::hub))
-(s/def :discussion/admins (s/coll-of (s/or :registered-user ::registered-user
-                                           :reference :db/id)))
+(s/def :discussion/moderators (s/coll-of (s/or :registered-user ::registered-user
+                                               :reference :db/id)))
 (s/def :discussion/creation-secret ::non-blank-string)
 (s/def :discussion/activation-focus :db/id)
 (s/def :discussion/states
@@ -159,7 +159,7 @@
                             :opt [:discussion/title :discussion/author
                                   :discussion/starting-statements :discussion/description
                                   :discussion/header-image-url :discussion/edit-hash
-                                  :discussion/admins :discussion/hub-origin :discussion/states
+                                  :discussion/moderators :discussion/hub-origin :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/admin-link
                                   :discussion/creation-secret :discussion/mode :discussion/access
                                   :discussion/activation-focus :discussion/wordcloud]))

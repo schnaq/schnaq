@@ -1,7 +1,7 @@
 (ns schnaq.database.main
   (:require [clojure.spec.alpha :as s]
             [clojure.walk :as walk]
-            [com.fulcrologic.guardrails.core :refer [>defn ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
             [datomic.api :as d]
             [schnaq.api.dto-specs :as dto]
             [schnaq.config :as config]
@@ -66,7 +66,10 @@
   ([datomic-uri]
    (reset! current-datomic-uri datomic-uri)
    (d/create-database datomic-uri)
-   (transact models/datomic-schema)))
+   (transact models/datomic-schema)
+   ;; IMPORTANT TODO: Remove this function after this Code is merged in in main after 15.09.2022.
+   (transact [{:db/id :discussion/admins
+               :db/ident :discussion/moderators}])))
 
 (defn init-and-seed!
   "Initializing the datomic database and feeding it with test-data.

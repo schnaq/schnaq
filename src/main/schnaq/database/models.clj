@@ -252,10 +252,6 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The author of a meeting."}
-   {:db/ident :discussion/admins
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "The registered users, that are allowed to administrate the discussion."}
    {:db/ident :discussion/header-image-url
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
@@ -468,3 +464,8 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "The user's activation message."}])
+
+
+(def ^:private no-use-list
+  ;; Those are attribute-names, that were used once already. Do not reuse those if possible.
+  #{:discussion/admins})
