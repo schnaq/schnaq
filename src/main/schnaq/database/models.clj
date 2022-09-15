@@ -252,10 +252,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The author of a meeting."}
-   {:db/ident :discussion/admins
+   {:db/ident :discussion/moderators
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
-    :db/doc "The registered users, that are allowed to administrate the discussion."}
+    :db/doc "The moderators of a schnaq. An author is implicitly treated as a moderator."}
    {:db/ident :discussion/header-image-url
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
@@ -468,3 +468,9 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "The user's activation message."}])
+
+
+#_:clj-kondo/ignore
+(def ^:private no-use-list
+  ;; Those are attribute-names, that were used once already. Do not reuse those if possible.
+  #{:discussion/admins})

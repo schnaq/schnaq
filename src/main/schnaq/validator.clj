@@ -44,9 +44,9 @@
   "Validate whether the user is a schnaq-admin or not."
   [share-hash keycloak-id]
   [:discussion/share-hash :user.registered/keycloak-id :ret boolean?]
-  (let [admins (:discussion/admins
+  (let [admins (:discussion/moderators
                 (fast-pull [:discussion/share-hash share-hash]
-                           [{:discussion/admins [:user.registered/keycloak-id]}]))]
+                           [{:discussion/moderators [:user.registered/keycloak-id]}]))]
     (not (nil? (some #(= keycloak-id (:user.registered/keycloak-id %)) admins)))))
 
 (defn deny-access
