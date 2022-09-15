@@ -1,9 +1,9 @@
 (ns schnaq.api.wordcloud
   (:require
    [clojure.spec.alpha :as s]
-   [ring.util.http-response :refer [ok forbidden]]
+   [ring.util.http-response :refer [ok]]
    [schnaq.api.toolbelt :as at]
-   [schnaq.database.main :refer [set-activation-focus fast-pull]]
+   [schnaq.database.main :as db :refer [set-activation-focus fast-pull]]
    [schnaq.database.patterns :as patterns]
    [schnaq.database.specs :as specs]
    [schnaq.database.wordcloud :as wordcloud-db]))
@@ -31,14 +31,14 @@
 
 (defn- add-words-to-local-cloud
   "Adds a list of words to some local wordcloud."
-  [{{{:keys [wordcloud-id share-hash words]} :body} :parameters}]
-  (if (wordcloud-db/matching-wordcloud wordcloud-id share-hash)
-    (do
-      (doseq [word words] (wordcloud-db/add-word-to-wordcloud wordcloud-id word))
-      (ok {:wordcloud (fast-pull wordcloud-id patterns/local-wordcloud)}))
-    (forbidden (at/build-error-body
-                :wordcloud-not-from-discussion
-                "The information you submitted did not match."))))
+  [{{{:keys [wordcloud-id words]} :body} :parameters}]
+  (doseq [word words] (wordcloud-db/add-word-to-wordcloud wordcloud-id word))
+  (ok {:wordcloud (fast-pull wordcloud-id patterns/local-wordcloud)}))
+
+(defn- delete-local-wordcloud
+  "Delete a single local wordcloud and all of its contents."
+  [{{{:keys [wordcloud-id]} :body} :parameters}]
+  (ok {:deleted? (not (nil? (db/delete-entity! wordcloud-id)))}))
 
 (def wordcloud-routes
   [["/wordcloud" {:swagger {:tags ["wordcloud"]}}
@@ -69,11 +69,22 @@
                 :middleware [:discussion/valid-share-hash?]
                 :parameters {:query {:share-hash :discussion/share-hash}}
                 :responses {200 {:body {:wordclouds (s/coll-of ::specs/wordcloud)}}
-                            400 at/response-error-body}}}]
+                            400 at/response-error-body}}
+          :delete {:handler delete-local-wordcloud
+                   :description (at/get-doc #'delete-local-wordcloud)
+                   :middleware [:user/authenticated?
+                                :user/pro?
+                                :discussion/valid-credentials?
+                                :discussion/wordcloud-matching?]
+                   :parameters {:body {:share-hash :discussion/share-hash
+                                       :edit-hash :discussion/edit-hash
+                                       :wordcloud-id :db/id}}
+                   :responses {200 {:body {:deleted? boolean?}}
+                               403 at/response-error-body}}}]
      ["/words" {:name :wordcloud.local/words
                 :put add-words-to-local-cloud
                 :description (at/get-doc #'add-words-to-local-cloud)
-                :middleware [:discussion/valid-share-hash?]
+                :middleware [:discussion/wordcloud-matching?]
                 :parameters {:body {:wordcloud-id :db/id
                                     :share-hash :discussion/share-hash
                                     :words (s/coll-of ::specs/non-blank-string)}}
