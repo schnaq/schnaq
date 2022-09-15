@@ -72,9 +72,7 @@
              ;; The starting-statement view is updated automatically anyway
              [:dispatch [:discussion.query.statement/by-id]])
            (when (and updated-schnaqs? (= current-route-name :routes.schnaq/start))
-             [:dispatch [:schnaq/load-by-share-hash share-hash]])
-           ;; TODO wenn ein schnaq selected, dann mache sachen
-           ]})))
+             [:dispatch [:schnaq/load-by-share-hash share-hash]])]})))
 
 ;; -----------------------------------------------------------------------------
 ;; Subscriptions
