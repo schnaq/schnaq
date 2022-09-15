@@ -252,6 +252,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The author of a meeting."}
+   {:db/ident :discussion/moderators
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The moderators of a schnaq. An author is implicitly treated as a moderator."}
    {:db/ident :discussion/header-image-url
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
