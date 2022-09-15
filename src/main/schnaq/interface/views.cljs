@@ -1,5 +1,6 @@
 (ns schnaq.interface.views
   (:require [re-frame.core :as rf]
+            [schnaq.interface.tour :as tour]
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.notifications :as notifications]))
 
@@ -15,4 +16,5 @@
     [:main#root.text-break {:key language}
      [base-page]
      [notifications/view]
-     [modal/modal-view]]))
+     [modal/modal-view]
+     [tour/tour]]))

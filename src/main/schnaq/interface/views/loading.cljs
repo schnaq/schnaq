@@ -27,7 +27,7 @@
   []
   [:div.statement-column
    [motion/fade-in-and-out
-    [:div.statement-card.p-2
+    [:div.shadow-card.p-2
      [loading-placeholder]]
     1]])
 
@@ -41,6 +41,6 @@
      (update db :loading dissoc field))))
 
 (rf/reg-sub
- :loading/schnaq?
- (fn [db]
-   (get-in db [:loading :schnaq?])))
+ :loading
+ (fn [db [_ field]]
+   (get-in db [:loading field])))

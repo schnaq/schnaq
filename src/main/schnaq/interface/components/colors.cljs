@@ -15,7 +15,7 @@
 (def ^:private graph-colors
   ;; Generated with https://learnui.design/tools/data-color-picker.html with primary as starting point
   ;; and secondary as endpoint
-  ["#1292ee" "#8389f2" "#c37ce5" "#f36cc8" "#ff64a1" "#ff6c75" "#ff8247" "#ff9e0d"])
+  [(:positive/default colors) "#8389f2" "#c37ce5" "#f36cc8" "#ff64a1" "#ff6c75" "#ff8247" "#ff9e0d"])
 
 (defn get-graph-color
   "Returns a graph color, given an index."

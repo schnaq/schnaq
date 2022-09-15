@@ -350,6 +350,8 @@
            (when top-level?
              (when (and (not read-only?) admin-access?)
                [:ul.selection-tab.nav.nav-tabs
+                {:ref (fn [_element]
+                        (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :discussion]) 1000))} ;; wait a second until tour appears
                 [:li.nav-item
                  [:button.nav-link {:class (active-class :question)
                                     :role "button"
@@ -435,7 +437,7 @@
   (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (doall (statements-list))
         top-level? @(rf/subscribe [:routes.schnaq/start?])
-        schnaq-loading? @(rf/subscribe [:loading/schnaq?])
+        schnaq-loading? @(rf/subscribe [:loading :schnaq?])
         access-code @(rf/subscribe [:schnaq.selected/access-code])
         hide-input? @(rf/subscribe [:ui/setting :hide-input])
         hide-activations? @(rf/subscribe [:ui/setting :hide-activations])

@@ -1,15 +1,5 @@
 @use "rounded" as rounded;
 
-.activation {
-  @extend .overflow-hidden;
-  @extend .statement-card;
-  @extend .p-3;
-  @extend .text-white;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 .activation-schnaqqi-space {
   margin-top: -100px;
   min-height: 150px;  

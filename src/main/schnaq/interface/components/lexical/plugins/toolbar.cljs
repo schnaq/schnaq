@@ -7,9 +7,10 @@
             ["@lexical/selection" :refer [$wrapLeafNodesInElements]]
             ["@lexical/utils" :refer [$getNearestNodeOfType mergeRegister]]
             ["lexical" :refer [$getSelection $isRangeSelection
-                               CAN_REDO_COMMAND CAN_UNDO_COMMAND FORMAT_TEXT_COMMAND REDO_COMMAND SELECTION_CHANGE_COMMAND
-                               UNDO_COMMAND]]
+                               CAN_REDO_COMMAND CAN_UNDO_COMMAND FORMAT_TEXT_COMMAND
+                               REDO_COMMAND SELECTION_CHANGE_COMMAND UNDO_COMMAND]]
             ["react" :refer [useCallback useEffect useState]]
+            [goog.string :as gstring]
             [oops.core :refer [ocall oget]]
             [re-frame.core :as rf]
             [reagent.core :as r]
@@ -108,7 +109,7 @@
 (rf/reg-event-fx
  :editor.upload.file/success
  (fn [_ [_ editor {:keys [url]}]]
-   {:fx [[:editor/command! [editor INSERT_LINK_COMMAND #js {:url url
+   {:fx [[:editor/command! [editor INSERT_LINK_COMMAND #js {:url (gstring/urlEncode url)
                                                             :text (tools/filename-from-url url)}]]]}))
 
 ;; -----------------------------------------------------------------------------

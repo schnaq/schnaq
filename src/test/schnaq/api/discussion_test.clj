@@ -173,3 +173,22 @@
         poll-id (:db/id (first (poll-db/polls share-hash)))]
     (testing "Users with moderator rights can toggle the focus."
       (is (= 200 (set-focus-request poll-id share-hash "cat-dog-edit-hash"))))))
+
+(deftest delete-statement-and-children!-test
+  (let [parent-id (:db/id (first (discussion-db/statements-by-content "we should get a cat")))
+        delete-fn
+        #(-> {:request-method :delete :uri (:path (api/route-by-name :api.discussion.statements/delete))
+              :body-params {:statement-id %
+                            :share-hash "cat-dog-hash"
+                            :edit-hash "cat-dog-edit-hash"}}
+             toolbelt/add-csrf-header
+             (toolbelt/mock-authorization-header toolbelt/token-schnaqqifant-user)
+             test-app)]
+    (testing "Are all children-statements deleted?"
+      (delete-fn parent-id)
+      (is (empty? (discussion-db/statements-by-content "we should get a cat")))
+      (is (empty? (discussion-db/statements-by-content "cats are very independent")))
+      (is (empty? (discussion-db/statements-by-content "this is not true for overbred races")))
+      (is (empty? (discussion-db/statements-by-content "this lies in their natural conditions"))))
+    (testing "With wrong statement-id"
+      (is (= 403 (:status (delete-fn (- parent-id 999))))))))

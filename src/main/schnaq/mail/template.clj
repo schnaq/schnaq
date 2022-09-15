@@ -23,7 +23,7 @@
              (str "\n" content))
            (when (seq additional-plain-content)
              (str "\n\n" additional-plain-content))
-           "\n\n\nGreetings,\n\nyour schnaq team")}
+           "\n\n\nSchöne Grüße\n\ndein schnaq Team")}
      {:type "text/html; charset=utf-8" :content
       (reduce replace-fn (slurp config/mail-template) format-map)}]))
 

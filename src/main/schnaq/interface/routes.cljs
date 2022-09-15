@@ -175,6 +175,7 @@
                               (rf/dispatch [:schnaq.statements.current/dissoc])
                               (rf/dispatch [:updates.periodic.discussion/starting false])
                               (rf/dispatch [:schnaq.activation/dissoc])
+                              (rf/dispatch [:tour/stop false])
                               (rf/dispatch [:statement.edit/reset-edits])
                               (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
                               (rf/dispatch [:toggle-statement-content/clear!]))}]
@@ -253,7 +254,8 @@
                                (rf/dispatch [:graph/load-data-for-discussion]))
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/graph false])
-                              (rf/dispatch [:notifications/reset]))}]}]]]
+                              (rf/dispatch [:notifications/reset])
+                              (rf/dispatch [:tour/stop false]))}]}]]]
    ["/subscription"
     ["/cancel" {:name :routes.subscription/cancel
                 :view subscription-views/cancel-view}]
@@ -273,7 +275,8 @@
                     :stop (fn []
                             (rf/dispatch [:schnaq.selected/dissoc])
                             (rf/dispatch [:themes/dissoc])
-                            (rf/dispatch [:theme/reset]))}]}]
+                            (rf/dispatch [:theme/reset])
+                            (rf/dispatch [:tour/stop false]))}]}]
    ["/register"
     ["" {:name :routes.user/register
          :controllers [{:start (fn [parameters]

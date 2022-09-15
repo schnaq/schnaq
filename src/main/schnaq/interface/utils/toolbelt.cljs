@@ -41,6 +41,16 @@
     (apply str (concat (take char-count text) "…"))
     text))
 
+(>defn truncate-in-the-middle
+  "Truncate string in the middle. Keeps on the left and right side `char-count`
+  characters."
+  [text char-count]
+  [(? string?) pos-int? => (? string?)]
+  (when (pos-int? char-count)
+    (if (< char-count (count text))
+      (apply str (concat (take char-count text) "…" (take-last char-count text)))
+      text)))
+
 (>defn truncate-to-n-chars
   "Truncate a string to the first x chars and return it in a tooltiped span."
   [text char-count]

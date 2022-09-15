@@ -114,11 +114,27 @@
   @extend .shadow;
 }
 
-.common-card {
+.shadow-card {
   @extend .statement-card;
   @extend .px-3;
   @extend .py-4;
   @extend .shadow;
+}
+
+.activation-card {
+  // Gives the class some semantics.
+  @extend .statement-card;
+}
+
+.blue-card {
+  // Card with blue background
+  @extend .overflow-hidden;
+  @extend .statement-card;
+  @extend .p-3;
+  @extend .text-white;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .selection-tab {
