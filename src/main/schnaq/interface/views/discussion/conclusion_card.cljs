@@ -437,7 +437,7 @@
   (let [search? (not= "" @(rf/subscribe [:schnaq.search.current/search-string]))
         statements (doall (statements-list))
         top-level? @(rf/subscribe [:routes.schnaq/start?])
-        schnaq-loading? @(rf/subscribe [:loading/schnaq?])
+        schnaq-loading? @(rf/subscribe [:loading :schnaq?])
         access-code @(rf/subscribe [:schnaq.selected/access-code])
         hide-input? @(rf/subscribe [:ui/setting :hide-input])
         hide-activations? @(rf/subscribe [:ui/setting :hide-activations])

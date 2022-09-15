@@ -5,7 +5,6 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.config :as config]
-            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]))
 
@@ -75,10 +74,11 @@
        :archived-by-user (filter archived? visited-schnaqs)
        (filter #(not (archived? %)) visited-schnaqs)))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  :schnaqs.visited/store-from-backend
- (fn [db [_ {:keys [schnaqs]}]]
-   (assoc-in db [:schnaqs :visited] schnaqs)))
+ (fn [{:keys [db]} [_ {:keys [schnaqs]}]]
+   {:db (assoc-in db [:schnaqs :visited] schnaqs)
+    :fx [[:dispatch [:loading/toggle [:schnaqs? false]]]]}))
 
 (rf/reg-event-db
  :schnaqs.visited/remove-from-app-db!
@@ -119,7 +119,8 @@
               db :post "/schnaqs/by-hashes"
               [:schnaqs.visited/store-from-backend]
               {:share-hashes (if shared-config/production? visited-hashes-with-faq visited-hashes)
-               :display-name (tools/current-display-name db)})]}))))
+               :display-name (tools/current-display-name db)})
+             [:dispatch [:loading/toggle [:schnaqs? true]]]]}))))
 
 (rf/reg-event-fx
  :schnaqs.archived-and-visited/to-localstorage
@@ -129,16 +130,12 @@
    (let [db-hashes-visited (get-in db [:schnaqs :visited-hashes])
          merged-visited-hashes (set (concat visited-hashes db-hashes-visited))
          db-hashes-archived (get-in db [:schnaqs :archived-hashes])
-         merged-archived-hashes (set (concat archived-hashes db-hashes-archived))
-         route-name (navigation/canonical-route-name (get-in db [:current-route :data :name]))]
+         merged-archived-hashes (set (concat archived-hashes db-hashes-archived))]
      {:db (-> db
               (assoc-in [:schnaqs :visited-hashes] merged-visited-hashes)
               (assoc-in [:schnaqs :archived-hashes] merged-archived-hashes))
       :fx [[:localstorage/assoc [:schnaqs/visited merged-visited-hashes]]
-           [:localstorage/assoc [:schnaqs/archived merged-archived-hashes]]
-           ;; reload visited schnaqs when we are inside the visited-schnaqs view, otherwise this happens with the controller
-           (when (= :routes.schnaqs/personal route-name)
-             [:dispatch [:schnaqs.visited/load]])]})))
+           [:localstorage/assoc [:schnaqs/archived merged-archived-hashes]]]})))
 
 (rf/reg-event-fx
  :schnaqs.visited/archive!

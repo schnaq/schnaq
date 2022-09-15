@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.feed.overview
-  (:require [com.fulcrologic.guardrails.core :refer [>defn- =>]]
+  (:require [com.fulcrologic.guardrails.core :refer [=> >defn-]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
@@ -12,6 +12,7 @@
             [schnaq.interface.views.feed.filters :as filters]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.hub.common :as hub]
+            [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user :as user]
             [schnaq.interface.views.user.settings :refer [user-info-box]]))
@@ -157,20 +158,23 @@
         sort-method @(rf/subscribe [:feed/sort])
         active-filters @(rf/subscribe [:filters.discussion/active])
         filtered-schnaqs (filters/filter-discussions schnaqs active-filters)
+        schnaqs-loading? @(rf/subscribe [:loading :schnaqs?])
         sorted-schnaqs (if (= :alphabetical sort-method)
                          (sort-by :discussion/title filtered-schnaqs)
                          (sort-by :discussion/created-at > filtered-schnaqs))]
-    (if (empty? schnaqs)
-      [no-schnaqs-found]
-      [:div.panel-white.rounded-1.p-4
-       [:div.d-flex.flex-row.mb-4
-        [:h6.text-typography.d-none.d-md-block (labels :router/visited-schnaqs)]
-        [:div.ms-auto
-         [sort-options]
-         [filters/filter-button]]]
-       (for [schnaq sorted-schnaqs]
-         [:div.py-3 {:key (:db/id schnaq)}
-          [schnaq-entry schnaq]])])))
+    (if schnaqs-loading?
+      [loading/loading-placeholder]
+      (if (empty? schnaqs)
+        [no-schnaqs-found]
+        [:div.panel-white.rounded-1.p-4
+         [:div.d-flex.flex-row.mb-4
+          [:h6.text-typography.d-none.d-md-block (labels :router/visited-schnaqs)]
+          [:div.ms-auto
+           [sort-options]
+           [filters/filter-button]]]
+         (for [schnaq sorted-schnaqs]
+           [:div.py-3 {:key (:db/id schnaq)}
+            [schnaq-entry schnaq]])]))))
 
 (defn- feed-button
   "Create a button for the feed list."

@@ -41,6 +41,6 @@
      (update db :loading dissoc field))))
 
 (rf/reg-sub
- :loading/schnaq?
- (fn [db]
-   (get-in db [:loading :schnaq?])))
+ :loading
+ (fn [db [_ field]]
+   (get-in db [:loading field])))
