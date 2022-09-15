@@ -192,12 +192,12 @@
 
 (rf/reg-event-db
  :schnaq.wordcloud.local.create/success
- (fn [db [_ return]]
-   (update-in db [:schnaq :wordclouds] conj (:wordcloud return))))
+ (fn [db [_ {:keys [wordcloud]}]]
+   (assoc-in db [:schnaq :wordclouds (:db/id wordcloud)] wordcloud)))
 
 (rf/reg-sub
  :schnaq.wordclouds/local
- :-> #(get-in % [:schnaq :wordclouds]))
+ :-> #(vals (get-in % [:schnaq :wordclouds] {})))
 
 (rf/reg-event-fx
  :schnaq.wordclouds/load-from-backend
@@ -209,7 +209,8 @@
 (rf/reg-event-db
  :schnaq.wordclouds.local.load/success
  (fn [db [_ return]]
-   (assoc-in db [:schnaq :wordclouds] (:wordclouds return))))
+   (when-let [wordclouds (:wordclouds return)]
+     (assoc-in db [:schnaq :wordclouds] (stools/normalize :db/id wordclouds)))))
 
 (rf/reg-event-fx
  :schnaq.wordcloud.local/send-words
@@ -231,15 +232,8 @@
 
 (rf/reg-event-db
  :schnaq.wordcloud.local.send-words/success
- (fn [db [_ return]]
-   (let [updated-wordcloud (:wordcloud return)]
-     (update-in db [:schnaq :wordclouds]
-                (fn [cloudlist]
-                  (map
-                   #(if (= (:db/id %) (:db/id updated-wordcloud))
-                      updated-wordcloud
-                      %)
-                   cloudlist))))))
+ (fn [db [_ {:keys [wordcloud]}]]
+   (assoc-in db [:schnaq :wordclouds (:db/id wordcloud)] wordcloud)))
 
 (rf/reg-event-fx
  :schnaq.wordcloud.local/delete
@@ -254,5 +248,4 @@
  :schnaq.wordcloud.local.delete/success
  (fn [db [_ wordcloud-id return]]
    (when (:deleted? return)
-     (update-in db [:schnaq :wordclouds]
-                (fn [wlist] (remove #(= (:db/id %) wordcloud-id) wlist))))))
+     (update-in db [:schnaq :wordclouds] dissoc wordcloud-id))))
