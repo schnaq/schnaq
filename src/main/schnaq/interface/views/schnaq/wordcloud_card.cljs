@@ -1,11 +1,14 @@
 (ns schnaq.interface.views.schnaq.wordcloud-card
   (:require
    [cljs.spec.alpha :as s]
+   [clojure.string :as str]
    [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
-   [oops.core :refer [oget]]
+   [oops.core :refer [oget oget+]]
    [re-frame.core :as rf]
    [schnaq.database.specs :as specs]
    [schnaq.export :as export]
+   [schnaq.interface.components.common :as common]
+   [schnaq.interface.components.icons :refer [icon]]
    [schnaq.interface.components.inputs :as inputs]
    [schnaq.interface.components.motion :as motion]
    [schnaq.interface.components.wordcloud :as wordcloud]
@@ -79,14 +82,26 @@
 
 (>defn- local-wordcloud-card
   "A single wordcloud with possibility for inputs."
-  [{:wordcloud/keys [title words]}]
+  [{:keys [wordcloud/title wordcloud/words db/id]}]
   [::specs/wordcloud => :re-frame/component]
   (let [formatted-words (map #(hash-map :text (first %)
                                         :value (second %))
-                             words)]
+                             words)
+        input-id (str "wordcloud-" id "-input")]
     [:div.text-center.pt-2.activation-card
      [:p title]
-     [wordcloud/wordcloud formatted-words]]))
+     [wordcloud/wordcloud formatted-words]
+     [:form.form
+      {:on-submit (fn [event]
+                    (.preventDefault event)
+                    (let [form (oget event [:target :elements])]
+                      (rf/dispatch [:schnaq.wordcloud.local/send-words id (oget+ form [input-id :value])])
+                      (rf/dispatch [:form/should-clear form])))}
+      [:div.text-start
+       [:div.input-group
+        [inputs/floating (labels :schnaq.wordcloud.local.add-words/label) input-id]
+        [:button.btn.btn-primary {:type "submit"} [icon :plane "m-auto"]]]
+       [common/hint-text (labels :schnaq.wordcloud.local.add-words/hint)]]]]))
 
 (>defn wordcloud-list
   "Displays all wordclouds of the current schnaq excluding the one in `exclude`."
@@ -179,3 +194,33 @@
  :schnaq.wordclouds.local.load/success
  (fn [db [_ return]]
    (assoc-in db [:schnaq :wordclouds] (:wordclouds return))))
+
+(rf/reg-event-fx
+ :schnaq.wordcloud.local/send-words
+ (fn [{:keys [db]} [_ wordcloud-id unprocessed-words]]
+   (let [words (->> (str/split (wordcloud/remove-md-links unprocessed-words) #"\s")
+                    (map wordcloud/extract-link-text-from-md)
+                    (map #(str/replace % #"[^A-z0-9äöüÄÖÜß]" "")) ;; remove all non-word characters
+                    (map str/lower-case)
+                    distinct
+                    ;; Experimentally deactivated stopwords,
+                    ;; since people are following prompts (for performance reasons)
+                    #_(remove #(wordcloud/stopwords %))
+                    (remove empty?))]
+     {:fx [(http/xhrio-request db :put "/wordcloud/local/words"
+                               [:schnaq.wordcloud.local.send-words/success]
+                               {:wordcloud-id wordcloud-id
+                                :share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+                                :words words})]})))
+
+(rf/reg-event-db
+ :schnaq.wordcloud.local.send-words/success
+ (fn [db [_ return]]
+   (let [updated-wordcloud (:wordcloud return)]
+     (update-in db [:schnaq :wordclouds]
+                (fn [cloudlist]
+                  (map
+                   #(if (= (:db/id %) (:db/id updated-wordcloud))
+                      updated-wordcloud
+                      %)
+                   cloudlist))))))

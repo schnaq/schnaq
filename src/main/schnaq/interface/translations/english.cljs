@@ -189,6 +189,8 @@
    :schnaq.wordcloud.local.create/heading "Start an interactive wordcloud that displays its inputs."
    :schnaq.wordcloud.local.create/label "Question or Prompt"
    :schnaq.wordcloud.local.create/button "Start Word Cloud"
+   :schnaq.wordcloud.local.add-words/label "Enter your words here"
+   :schnaq.wordcloud.local.add-words/hint "You can add multiple words, they will be split at the whitespace."
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"

@@ -4,7 +4,7 @@
             [clojure.set :as set]
             [clojure.spec.alpha :as s]
             [clojure.string :as str]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.colors :refer [colors]]
@@ -12,7 +12,7 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.loading :refer [spinner-icon]]))
 
-(def ^:private stopwords
+(def stopwords
   "Stopwords which should be removed from the wordcloud."
   (set/union (set deu) (set eng)))
 
@@ -25,7 +25,7 @@
 (s/def ::word
   (s/keys :req-un [::text ::value]))
 
-(>defn- extract-link-text-from-md
+(>defn extract-link-text-from-md
   "Check if text contains a markdown link. If yes, then return the link's name,
   else return the word."
   [word]
@@ -34,7 +34,7 @@
     (-> link first second)
     word))
 
-(>defn- remove-md-links
+(>defn remove-md-links
   "Remove all occurrences of markdown links."
   [s]
   [string? :ret string?]

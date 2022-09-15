@@ -63,3 +63,13 @@
       ;; Create the new word
       (transact [[:db/add wordcloud-id :wordcloud.local/words [word 1]]]))
     word))
+
+(>defn matching-wordcloud
+  "Returns the wordcloud if share-hash and wordcloud-id are matching and nil otherwise."
+  [wordcloud-id share-hash]
+  [:db/id :discussion/share-hash => (? ::specs/wordcloud)]
+  (query '[:find (pull ?wordcloud wordcloud-pattern) .
+           :in $ ?wordcloud ?share-hash wordcloud-pattern
+           :where [?wordcloud :wordcloud.local/discussion ?discussion]
+           [?discussion :discussion/share-hash ?share-hash]]
+         wordcloud-id share-hash patterns/local-wordcloud))

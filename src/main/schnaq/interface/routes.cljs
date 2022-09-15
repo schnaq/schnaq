@@ -168,7 +168,6 @@
                                (rf/dispatch [:updates.periodic.discussion/starting true])
                                (rf/dispatch [:discussion.query.conclusions/starting])
                                (rf/dispatch [:schnaq.polls/load-from-backend])
-                               ;; TODO add automatic refresh via websockets
                                (rf/dispatch [:schnaq.wordclouds/load-from-backend])
                                (rf/dispatch [:schnaq.activation/load-from-backend])
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))

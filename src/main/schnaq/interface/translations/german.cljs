@@ -192,6 +192,8 @@
    :schnaq.wordcloud.local.create/heading "Lege eine interaktive Wortwolke an, die nur auf neue Eingaben reagiert"
    :schnaq.wordcloud.local.create/label "Frage oder Überschrift"
    :schnaq.wordcloud.local.create/button "Lege Wortwolke an"
+   :schnaq.wordcloud.local.add-words/label "Wörter hier einfügen"
+   :schnaq.wordcloud.local.add-words/hint "Du kannst mehrere Wörter, per Leerzeichen getrennt, eintippen."
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"
