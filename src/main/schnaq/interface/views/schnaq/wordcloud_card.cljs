@@ -86,9 +86,9 @@
   [dropdown-menu/moderator
    {:id (str "wordcloud-dropdown-id-" wordcloud-id)}
    [:<>
-    #_[dropdown-menu/item :bullseye
-       :schnaq.admin.focus/button
-       #(rf/dispatch [:schnaq.admin.focus/entity poll-id])]
+    [dropdown-menu/item :bullseye
+     :schnaq.admin.focus/button
+     #(rf/dispatch [:schnaq.admin.focus/entity wordcloud-id])]
     [dropdown-menu/item :trash
      :schnaq.wordcloud.local/delete-button
      #(when (js/confirm (labels :schnaq.wordcloud.local/delete-confirmation))
@@ -249,3 +249,8 @@
  (fn [db [_ wordcloud-id return]]
    (when (:deleted? return)
      (update-in db [:schnaq :wordclouds] dissoc wordcloud-id))))
+
+(rf/reg-sub
+ :schnaq.wordcloud/local
+ (fn [db [_ id]]
+   (get-in db [:schnaq :wordclouds id])))
