@@ -194,6 +194,8 @@
    :schnaq.wordcloud.local.create/button "Lege Wortwolke an"
    :schnaq.wordcloud.local.add-words/label "Wörter hier einfügen"
    :schnaq.wordcloud.local.add-words/hint "Du kannst mehrere Wörter, per Leerzeichen getrennt, eintippen."
+   :schnaq.wordcloud.local/delete-button "Löschen"
+   :schnaq.wordcloud.local/delete-confirmation "Möchtest du die Wortwolke wirklich permanent löschen?"
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"

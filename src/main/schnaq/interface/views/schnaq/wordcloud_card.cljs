@@ -80,6 +80,20 @@
           #(rf/dispatch [:schnaq.wordcloud/toggle])]]]]
       [wordcloud/wordcloud @(rf/subscribe [:wordcloud/words])]]]))
 
+(defn- dropdown-menu
+  "Dropdown menu for wordcloud configuration."
+  [wordcloud-id]
+  [dropdown-menu/moderator
+   {:id (str "wordcloud-dropdown-id-" wordcloud-id)}
+   [:<>
+    #_[dropdown-menu/item :bullseye
+       :schnaq.admin.focus/button
+       #(rf/dispatch [:schnaq.admin.focus/entity poll-id])]
+    [dropdown-menu/item :trash
+     :schnaq.wordcloud.local/delete-button
+     #(when (js/confirm (labels :schnaq.wordcloud.local/delete-confirmation))
+        (rf/dispatch [:schnaq.wordcloud.local/delete wordcloud-id]))]]])
+
 (>defn- local-wordcloud-card
   "A single wordcloud with possibility for inputs."
   [{:keys [wordcloud/title wordcloud/words db/id]}]
@@ -89,7 +103,9 @@
                              words)
         input-id (str "wordcloud-" id "-input")]
     [:div.text-center.pt-2.activation-card
-     [:p title]
+     [:div.d-flex
+      [:p.text-center.mx-auto title]
+      [dropdown-menu id]]
      [wordcloud/wordcloud formatted-words]
      [:form.form
       {:on-submit (fn [event]
@@ -102,7 +118,7 @@
         [inputs/floating (labels :schnaq.wordcloud.local.add-words/label) input-id]
         [:button.btn.btn-primary {:type "submit"} [icon :plane "m-auto"]]]
        [common/hint-text (labels :schnaq.wordcloud.local.add-words/hint)]]]]))
-;; TODO wordcloud löschen können
+
 (>defn wordcloud-list
   "Displays all wordclouds of the current schnaq excluding the one in `exclude`."
   [exclude]
@@ -224,3 +240,19 @@
                       updated-wordcloud
                       %)
                    cloudlist))))))
+
+(rf/reg-event-fx
+ :schnaq.wordcloud.local/delete
+ (fn [{:keys [db]} [_ wordcloud-id]]
+   {:fx [(http/xhrio-request db :delete "/wordcloud/local"
+                             [:schnaq.wordcloud.local.delete/success wordcloud-id]
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
+                              :wordcloud-id wordcloud-id})]}))
+
+(rf/reg-event-db
+ :schnaq.wordcloud.local.delete/success
+ (fn [db [_ wordcloud-id return]]
+   (when (:deleted? return)
+     (update-in db [:schnaq :wordclouds]
+                (fn [wlist] (remove #(= (:db/id %) wordcloud-id) wlist))))))

@@ -191,6 +191,8 @@
    :schnaq.wordcloud.local.create/button "Start Word Cloud"
    :schnaq.wordcloud.local.add-words/label "Enter your words here"
    :schnaq.wordcloud.local.add-words/hint "You can add multiple words, they will be split at the whitespace."
+   :schnaq.wordcloud.local/delete-button "Delete"
+   :schnaq.wordcloud.local/delete-confirmation "Do you really want to delete the wordcloud permanently?"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
