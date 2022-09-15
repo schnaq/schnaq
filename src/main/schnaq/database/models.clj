@@ -466,6 +466,7 @@
     :db/doc "The user's activation message."}])
 
 
+#_:clj-kondo/ignore
 (def ^:private no-use-list
   ;; Those are attribute-names, that were used once already. Do not reuse those if possible.
   #{:discussion/admins})
