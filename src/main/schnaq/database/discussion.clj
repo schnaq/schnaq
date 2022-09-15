@@ -9,7 +9,6 @@
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.access-codes :as ac]
-            [schnaq.database.main :as db]
             [schnaq.database.main :refer [fast-pull query transact] :as main-db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
@@ -163,7 +162,7 @@
         :set-marker)
       (do
         (log/info "Statement id scheduled for deletion:" statement-id)
-        (db/delete-entity! statement-id)
+        (main-db/delete-entity! statement-id)
         (when (:statement/deleted? parent)
           (delete-statement! (:db/id parent)))
         :deleted))))

@@ -3,8 +3,7 @@
             [ring.util.http-response :refer [bad-request ok]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.activation :as activation-db]
-            [schnaq.database.main :as db]
-            [schnaq.database.main :refer [set-activation-focus]]
+            [schnaq.database.main :as db :refer [set-activation-focus]]
             [schnaq.database.specs :as specs]
             [taoensso.timbre :as log]))
 
