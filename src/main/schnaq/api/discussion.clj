@@ -152,11 +152,11 @@
 (defn- add-starting-statement!
   "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash edit-hash statement display-name locked?]} (:body parameters)
+  (let [{:keys [share-hash statement display-name locked?]} (:body parameters)
         keycloak-id (:sub identity)
         user-id (user-db/user-id display-name keycloak-id)
         ;; Only Moderators can lock
-        locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
+        locked? (if (validator/user-moderator? share-hash user-id) locked? false)]
     (log/info "Starting statement added for discussion" share-hash)
     (created "" {:starting-conclusion (discussion-db/add-starting-statement! share-hash user-id statement
                                                                              :registered-user? keycloak-id
@@ -480,8 +480,6 @@
                       :name :api.discussion.statements.starting/add
                       :middleware [:discussion/valid-writeable-discussion?]
                       :parameters {:body {:share-hash :discussion/share-hash
-                                          :edit-hash (s/or :edit-hash :discussion/edit-hash
-                                                           :nil nil?)
                                           :statement :statement/content
                                           :display-name ::specs/non-blank-string
                                           :locked? :statement/locked?}}
