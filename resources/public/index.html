@@ -114,7 +114,19 @@
     }
   }
 
-  if (!inIframe()) {
+  /**
+   * Check if currently in iframe.
+   */
+  function localstorageDisabled () {
+    try {
+      const ls = window.localStorage;
+      return false;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  if (!inIframe() && !localstorageDisabled()) {
     loadJS('/js/klaro/config.js', undefined, document.body);
     loadJS('/node_modules/klaro/dist/klaro-no-css.js', undefined, document.body);
   }
