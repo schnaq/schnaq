@@ -272,7 +272,7 @@
    [tooltip/text
     (labels :statement.locked/tooltip)
     [:span.badge.rounded-pill
-     (when (and statement-id @(rf/subscribe [:user/authenticated?]) @(rf/subscribe [:schnaq.current/admin-access]))
+     (when (and statement-id @(rf/subscribe [:user/moderator?]))
        {:class "clickable"
         :on-click #(rf/dispatch [:statement.lock/toggle statement-id false])})
      [icon :lock "text-primary"]]]))
@@ -283,7 +283,7 @@
   [tooltip/text
    (labels :statement.pinned/tooltip)
    [:span.badge.rounded-pill
-    (when (and statement-id @(rf/subscribe [:user/pro?]) @(rf/subscribe [:schnaq.current/admin-access]))
+    (when (and statement-id @(rf/subscribe [:user/pro?]) @(rf/subscribe [:user/moderator?]))
       {:class "clickable"
        :on-click #(rf/dispatch [:statement.pin/toggle statement-id false])})
     [icon :pin "text-primary"]]])

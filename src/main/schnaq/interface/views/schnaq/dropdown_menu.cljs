@@ -15,15 +15,13 @@
 (defn moderator
   "Dropdown menu for moderator elements (Polls, Activation, Wordcloud)."
   [{:keys [id] :as attributes} dropdown-menu-content]
-  (let [current-edit-hash @(rf/subscribe [:schnaq.current/admin-access])
-        pro-user? @(rf/subscribe [:user/pro?])]
-    (when (and pro-user? current-edit-hash)
-      [:div.dropdown.mx-2
-       [:button.btn.m-0.p-0
-        (merge
-         {:role "button" :data-bs-toggle "dropdown"
-          :aria-haspopup "true" :aria-expanded "false"}
-         attributes)
-        [icon :dots]]
-       [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby id}
-        dropdown-menu-content]])))
+  (when (and @(rf/subscribe [:user/pro?]) @(rf/subscribe [:user/moderator?]))
+    [:div.dropdown.mx-2
+     [:button.btn.m-0.p-0
+      (merge
+       {:role "button" :data-bs-toggle "dropdown"
+        :aria-haspopup "true" :aria-expanded "false"}
+       attributes)
+      [icon :dots]]
+     [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby id}
+      dropdown-menu-content]]))

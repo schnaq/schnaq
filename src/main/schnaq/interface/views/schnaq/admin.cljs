@@ -8,8 +8,8 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.file-download :as file-download]))
 
-(defn admin-center
-  "Button to access admin menu."
+(defn moderator-center
+  "Button to access moderator panel."
   []
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/selected])]
     [navbar-components/button-with-icon

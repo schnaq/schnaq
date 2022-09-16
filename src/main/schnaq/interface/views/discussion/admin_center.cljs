@@ -342,12 +342,4 @@
 (defn admin-center-view []
   [admin-center])
 
-(rf/reg-sub
- ;; TODO down
- :schnaq.current/admin-access
- ;; Returns the edit-hash, when there and nil otherwise
- :<- [:schnaq/selected]
- (fn [{:keys [discussion/share-hash]} _]
-   (get admin-access-map share-hash)))
-
 ;; TODO db [:schnaqs :admin-access] wird nicht mehr gepflegt. weg damit

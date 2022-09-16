@@ -66,15 +66,13 @@
   "Either display schnaq settings or graph settings button."
   []
   (let [{:discussion/keys [share-hash]} @(rf/subscribe [:schnaq/selected])
-        edit-hash @(rf/subscribe [:schnaq.current/admin-access])
         current-route @(rf/subscribe [:navigation/current-route-name])
         graph? (= current-route :routes/graph-view)]
     (if graph?
       [li-button {:on-click #(graph-settings/show-notification)} (labels :graph.settings/title)]
-      (when edit-hash
+      (when @(rf/subscribe [:user/moderator?])
         [:a.button.list-group-item.list-group-item-action
-         {:href (navigation/href :routes.schnaq/admin-center
-                                 {:share-hash share-hash :edit-hash edit-hash})}
+         {:href (navigation/href :routes.schnaq/admin-center {:share-hash share-hash})}
          (labels :schnaq.admin/tooltip)]))))
 
 (defn- views
