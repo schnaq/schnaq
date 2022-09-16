@@ -3,7 +3,7 @@
             [ring.util.http-response :refer [bad-request ok]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.activation :as activation-db]
-            [schnaq.database.main :refer [set-activation-focus]]
+            [schnaq.database.main :as db :refer [set-activation-focus]]
             [schnaq.database.specs :as specs]
             [taoensso.timbre :as log]))
 
@@ -21,7 +21,7 @@
   [{{{:keys [share-hash]} :body} :parameters}]
   (log/info "Deleting activation for" share-hash)
   (if-let [activation (activation-db/activation-by-share-hash share-hash)]
-    (do (activation-db/delete-activation! (:db/id activation))
+    (do (db/delete-entity! (:db/id activation))
         (ok {:deleted? true}))
     (bad-request (at/build-error-body :activation-not-found "No activation found to delete!"))))
 

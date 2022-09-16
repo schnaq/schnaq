@@ -58,12 +58,6 @@
     @(db/transact [(shared-tools/remove-nil-values-from-map prepared-theme)])
     (db/fast-pull (:db/id theme) patterns/theme)))
 
-(>defn delete-theme
-  "Delete a theme."
-  [theme-id]
-  [:db/id => map?]
-  @(db/transact [[:db/retractEntity theme-id]]))
-
 (>defn delete-header
   "Delete a header for a theme."
   [theme-id]

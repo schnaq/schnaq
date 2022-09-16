@@ -179,7 +179,7 @@
         :set-marker)
       (do
         (log/info "Statement id scheduled for deletion:" statement-id)
-        @(transact [[:db/retractEntity statement-id]])
+        (main-db/delete-entity! statement-id)
         (when (:statement/deleted? parent)
           (delete-statement! (:db/id parent)))
         :deleted))))

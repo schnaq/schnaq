@@ -297,6 +297,11 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The activation element which should be displayed in focus. E.g. first element in the activations card."}
+   {:db/ident :discussion/wordcloud-local
+    :db/isComponent true
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "A number of wordclouds that belong to the discussion."}
 
    {:db/ident :discussion.mode/qanda
     :db/doc "Q&A mode."}
@@ -424,7 +429,7 @@
     :db/cardinality :db.cardinality/one
     :db/doc "The discussion to which the activation belongs to."}
 
-   ;; Wordcloud
+   ;; Global Wordcloud
    {:db/ident :discussion/wordcloud
     :db/valueType :db.type/ref
     :db/isComponent true
@@ -434,6 +439,17 @@
     :db/valueType :db.type/boolean
     :db/cardinality :db.cardinality/one
     :db/doc "Hide or show the wordcloud."}
+
+   ;; Card-Local Wordcloud. Entity Prefix is `wordcloud.local` to not facilitate clashes with global wordcloud
+   {:db/ident :wordcloud.local/title
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The title / prompt of a wordcloud."}
+   {:db/ident :wordcloud.local/words
+    :db/valueType :db.type/tuple
+    :db/tupleTypes [:db.type/string :db.type/long]
+    :db/cardinality :db.cardinality/many
+    :db/doc "Tuples of words and how often they have been entered into the wordcloud."}
 
    ;; Themes
    {:db/ident :theme/title

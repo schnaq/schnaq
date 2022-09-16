@@ -2,6 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.test :refer [deftest is use-fixtures testing]]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.main :refer [delete-entity!]]
             [schnaq.database.specs :as specs]
             [schnaq.database.themes :as sut]
             [schnaq.test-data :refer [kangaroo christian theme-anti-social]]
@@ -46,7 +47,7 @@
 (deftest delete-theme-test
   (let [theme (first (sut/themes-by-keycloak-id kangaroo-keycloak-id))]
     (testing "Deleting themes is allowed for the theme authors."
-      (is (not (nil? (sut/delete-theme (:db/id theme))))))))
+      (is (not (nil? (delete-entity! (:db/id theme))))))))
 
 (deftest assign-theme-test
   (testing "Themes should be assignable to discussions."

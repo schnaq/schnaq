@@ -109,6 +109,7 @@
                         (rf/dispatch [:discussion.activations/focus response])
                         (rf/dispatch [:schnaq.polls.load-from-backend/success response])
                         (rf/dispatch [:discussion.query.conclusions/set-starting response])
+                        (rf/dispatch [:schnaq.wordclouds.local.load/success response])
                         (rf/dispatch [:schnaq.wordcloud/from-backend response]))]]]})))
 
 (rf/reg-event-db

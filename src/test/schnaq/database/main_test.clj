@@ -1,7 +1,7 @@
 (ns schnaq.database.main-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
-            [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.main :as db]
+            [schnaq.database.discussion :as discussion-db :refer [discussion-by-share-hash]]
+            [schnaq.database.main :as db :refer [set-activation-focus]]
             [schnaq.database.poll :as poll-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
@@ -66,3 +66,16 @@
     (testing "Do not allow decreasing lower than the minimum value"
       (db/decrement-number (:db/id option-without-vote-attr) :option/votes 0)
       (is (zero? (:option/votes (db/fast-pull (:db/id option-without-vote-attr) '[:option/votes])))))))
+
+(deftest set-activation-focus-empty-test
+  (testing "If no activation is set as focus, no id is stored in discussion."
+    (let [discussion (discussion-db/discussion-by-share-hash "cat-dog-hash")]
+      (is (nil? (:discussion/activation-focus discussion))))))
+
+(deftest set-activation-focus-test
+  (testing "Set a poll as a focus and its id is stored in the discussion."
+    (let [share-hash "cat-dog-hash"
+          poll-id (:db/id (first (poll-db/polls share-hash)))
+          _ (set-activation-focus [:discussion/share-hash share-hash] poll-id)]
+      (is (= poll-id
+             (-> share-hash discussion-by-share-hash :discussion/activation-focus))))))
