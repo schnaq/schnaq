@@ -97,6 +97,7 @@
               (hub-db/add-discussions-to-hub! [:hub/keycloak-name hub] [new-discussion-id]))
             (ac/add-access-code-to-discussion! new-discussion-id)
             (log/info "Discussion created: " discussion-data)
+            ;; TODO no secret data needed anymore
             (created "" {:new-schnaq (links/add-links-to-discussion (discussion-db/secret-discussion-data new-discussion-id))}))
           (bad-request-schnaq-creation parameters))))))
 

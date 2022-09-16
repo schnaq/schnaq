@@ -52,20 +52,22 @@
 
 (defn- deletable?
   "Checks if a statement can be deleted by the user."
-  [statement edit-hash user-id creation-secrets]
+  [statement user-moderator? user-id creation-secrets]
   (when-not (:statement/deleted? statement)
     (let [anonymous-owner? (contains? creation-secrets (:db/id statement))
           registered-owner? (= user-id (:db/id (:statement/author statement)))]
-      (or edit-hash anonymous-owner? registered-owner?))))
+      (or user-moderator? anonymous-owner? registered-owner?))))
 
 (defn- delete-dropdown-button
   "Give admin and author the ability to delete a statement."
-  [statement edit-hash]
+  [statement]
   (let [creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
+        user-moderator? @(rf/subscribe [:user/moderator?])
         anonymous-owner? (contains? creation-secrets (:db/id statement))
         confirmation-fn (fn [dispatch-fn label] (when (js/confirm (labels label)) (dispatch-fn)))
-        admin-delete-fn #(confirmation-fn (fn [] (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash]))
-                                          :discussion.badges/delete-statement-confirmation-admin)
+        moderator-delete-fn #(confirmation-fn
+                              (fn [] (rf/dispatch [:discussion.delete/statement (:db/id statement)]))
+                              :discussion.badges/delete-statement-confirmation-admin)
         user-delete-fn (if anonymous-owner?
                          #(rf/dispatch [:modal [anonymous-delete-modal]])
                          #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))
@@ -74,13 +76,14 @@
      {:tabIndex 60
       :on-click (fn [e]
                   (.stopPropagation e)
-                  (if edit-hash (admin-delete-fn) (user-delete-fn)))
+                  (if user-moderator? (moderator-delete-fn) (user-delete-fn)))
       :title (labels :discussion.badges/delete-statement)}
      [icon :trash "my-auto me-2"] (labels :discussion.badges/delete-statement)]))
 
 (rf/reg-event-fx
  :discussion.delete/statement
  ;; Function called by schnaq author / admin. Deletes all children as well
+ ;; TODO kill edit-hash
  (fn [{:keys [db]} [_ statement-id edit-hash]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [(http/xhrio-request db :delete "/discussion/statements/delete-with-children"
@@ -236,27 +239,27 @@
   "Dropdown menu for statements containing edit report and deletion."
   [{:keys [db/id] :as statement}]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
-        current-edit-hash @(rf/subscribe [:schnaq.current/admin-access])
+        user-moderator? @(rf/subscribe [:user/moderator?])
         admin? @(rf/subscribe [:user/administrator?])
         user-id @(rf/subscribe [:user/id])
         creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        deletable? (deletable? statement current-edit-hash user-id creation-secrets)
+        deletable? (deletable? statement user-moderator? user-id creation-secrets)
         editable? (editable? statement user-id creation-secrets)]
     [dropdown-menu dropdown-id
      [:<>
       [share-link-to-statement statement]
       [flag-dropdown-button-statement statement]
-      (when (and current-edit-hash @(rf/subscribe [:user/authenticated?]))
+      (when user-moderator?
         [lock-unlock-statement-dropdown-button statement])
-      (when (and current-edit-hash @(rf/subscribe [:user/pro?]))
+      (when (and user-moderator? @(rf/subscribe [:user/pro?]))
         [toggle-pin-statement-dropdown-button statement])
       (when-not read-only?
         [:<>
          (when editable?
            [edit-dropdown-button-statement statement])
          (when (or admin? deletable?)
-           [delete-dropdown-button statement current-edit-hash])])]]))
+           [delete-dropdown-button statement])])]]))
 
 (defn show-number-of-replies [statement]
   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])

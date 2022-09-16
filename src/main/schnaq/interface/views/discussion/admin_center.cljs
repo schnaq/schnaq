@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.discussion.admin-center
   (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
-            [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as button]
@@ -33,7 +32,7 @@
                                {:recipient (oget form ["admin-center-recipient" :value])
                                 :share-hash share-hash
                                 :edit-hash edit-hash
-                                :admin-center (links/get-admin-link share-hash edit-hash)}
+                                :admin-center (links/get-moderator-center-link share-hash)}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
@@ -343,29 +342,12 @@
 (defn admin-center-view []
   [admin-center])
 
-;; #### Events ####
-
 (rf/reg-sub
- :schnaqs/load-admin-access
- (fn [db [_]]
-   (get-in db [:schnaqs :admin-access])))
-
-(rf/reg-sub
+ ;; TODO down
  :schnaq.current/admin-access
  ;; Returns the edit-hash, when there and nil otherwise
  :<- [:schnaq/selected]
- :<- [:schnaqs/load-admin-access]
- (fn [[{:keys [discussion/share-hash]} admin-access-map] _]
+ (fn [{:keys [discussion/share-hash]} _]
    (get admin-access-map share-hash)))
 
-(rf/reg-event-fx
- :schnaqs.save-admin-access/to-localstorage-and-db
- (fn [{:keys [db]} [_ share-hash edit-hash]]
-   (let [admin-access-map (assoc (:schnaqs/admin-access local-storage) share-hash edit-hash)]
-     {:db (assoc-in db [:schnaqs :admin-access] admin-access-map)
-      :fx [[:localstorage/assoc [:schnaqs/admin-access admin-access-map]]]})))
-
-(rf/reg-event-db
- :schnaqs.save-admin-access/store-hashes-from-localstorage
- (fn [db _]
-   (update-in db [:schnaqs :admin-access] merge (:schnaqs/admin-access local-storage))))
+;; TODO db [:schnaqs :admin-access] wird nicht mehr gepflegt. weg damit

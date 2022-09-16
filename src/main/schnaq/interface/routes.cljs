@@ -205,19 +205,16 @@
                                (rf/dispatch [:discussion.query.conclusions/starting])
                                (rf/dispatch [:scheduler.after/login [:wordcloud/for-current-discussion]])
                                (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
-     ["/manage/:edit-hash"
+     ["/manage"
+      ;; TODO regel aufrufer
       {:name :routes.schnaq/admin-center
        :view discussion-admin/admin-center-view
        :link-text (labels :router/last-added-schnaq)
-       :parameters {:path {:edit-hash string?}}
-       :controllers [{:parameters {:path [:share-hash :edit-hash]}
-                      :start (fn [{:keys [path]}]
-                               (let [{:keys [share-hash edit-hash]} path]
+       :controllers [{:start (fn [{:keys [path]}]
+                               (let [{:keys [share-hash]} path]
                                  (rf/dispatch [:scheduler.after/login [:themes.load/personal]])
-                                 (rf/dispatch [:schnaq/check-admin-credentials share-hash edit-hash])
-                                 (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash])
-                                 (rf/dispatch [:schnaqs.save-admin-access/to-localstorage-and-db
-                                               share-hash edit-hash])))}]}]
+                                 (rf/dispatch [:schnaq/check-admin-credentials share-hash])
+                                 (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash])))}]}]
      ["/statement/:statement-id"
       {:name :routes.schnaq.select/statement
        :parameters {:path {:statement-id int?}}

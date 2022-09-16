@@ -48,7 +48,7 @@
                                {:image-url (oget+ form [image-form-name :value])
                                 :share-hash share-hash
                                 :edit-hash edit-hash
-                                :admin-center (links/get-admin-link share-hash edit-hash)}
+                                :admin-center (links/get-moderator-center-link share-hash)}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx

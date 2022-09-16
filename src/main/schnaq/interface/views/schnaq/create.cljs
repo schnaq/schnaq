@@ -128,8 +128,7 @@
                                       :context :success}]]
            [:localstorage/assoc [:schnaq.last-added/share-hash share-hash]]
            [:localstorage/assoc [:schnaq.last-added/edit-hash edit-hash]]
-           [:localstorage/assoc [:discussion.schnaqs/creation-secrets updated-secrets]]
-           [:dispatch [:schnaqs.save-admin-access/to-localstorage-and-db share-hash edit-hash]]]})))
+           [:localstorage/assoc [:discussion.schnaqs/creation-secrets updated-secrets]]]})))
 
 ;; -----------------------------------------------------------------------------
 ;; Create Demo schnaq

@@ -50,7 +50,6 @@
          [:dispatch [:keycloak/init]]
          [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
          [:dispatch [:visited.save-statement-ids/store-hashes-from-localstorage]]
-         [:dispatch [:schnaqs.save-admin-access/store-hashes-from-localstorage]]
          [:dispatch [:schnaqs.visited/from-localstorage]]
          [:dispatch [:schnaqs.archived/from-localstorage]]
          [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
@@ -213,6 +212,7 @@
 
 (rf/reg-event-fx
  :schnaq/check-admin-credentials
+ ;; TODO kein edit-hash mehr. Brauchen wir diese route noch? glaube schon
  (fn [{:keys [db]} [_ share-hash edit-hash]]
    {:fx [(http/xhrio-request db :post "/credentials/validate" [:schnaq/check-admin-credentials-success]
                              {:share-hash share-hash
@@ -239,6 +239,7 @@
 
 (rf/reg-event-fx
  :schnaq/load-by-hash-as-admin
+ ;; TODO kein edit-hash mehr. Glaube das brauche ich wirklich nicht mehr als route
  (fn [{:keys [db]} [_ share-hash edit-hash]]
    {:fx [(http/xhrio-request db :post "/schnaq/by-hash-as-admin" [:schnaq/save-as-last-added]
                              {:share-hash share-hash

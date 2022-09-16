@@ -29,9 +29,9 @@
   "Send URL to admin-center via mail to recipient."
   [{:keys [parameters]}]
   [:ring/request :ret :ring/response]
-  (let [{:keys [share-hash recipient edit-hash]} (:body parameters)
+  (let [{:keys [share-hash recipient]} (:body parameters)
         discussion-title (:discussion/title (discussion-db/discussion-by-share-hash share-hash))
-        admin-center (links/get-admin-link share-hash edit-hash)]
+        admin-center (links/get-moderator-center-link share-hash)]
     (log/debug "Send admin link for discussion " discussion-title " via E-Mail")
     (ok (merge
          {:message "Emails sent successfully"}
@@ -48,6 +48,7 @@
               :parameters {:body {:share-hash :discussion/share-hash
                                   :edit-hash :discussion/edit-hash}}
               :responses {403 at/response-error-body}}
+   ;; TODO edit-hash wird für diese unterroute nicht mehr gebraucht
    ["/send-admin-center-link" {:post send-admin-center-link
                                :description (at/get-doc #'send-admin-center-link)
                                :parameters {:body {:recipient string?}}
