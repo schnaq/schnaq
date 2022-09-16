@@ -124,11 +124,12 @@
 (>defn wordcloud-list
   "Displays all wordclouds of the current schnaq excluding the one in `exclude`."
   [exclude]
-  [:db/id :ret (s/coll-of :re-frame/component)]
-  (for [wordcloud (remove #(= exclude (:db/id %)) @(rf/subscribe [:schnaq.wordclouds/local]))]
-    [:article
-     {:key (str "wordcloud-card-" (:db/id wordcloud))}
-     [local-wordcloud-card wordcloud]]))
+  [::specs/wordcloud :ret (s/coll-of :re-frame/component)]
+  (for [wordcloud (remove #(= (:db/id exclude) (:db/id %)) @(rf/subscribe [:schnaq.wordclouds/local]))]
+    [motion/fade-in-and-out
+     [:article
+      {:key (str "wordcloud-card-" (:db/id wordcloud))}
+      [local-wordcloud-card wordcloud]]]))
 
 ;; -----------------------------------------------------------------------------
 
