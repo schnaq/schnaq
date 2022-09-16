@@ -1,10 +1,11 @@
 (ns schnaq.validator
   (:require [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn ? =>]]
             [ring.util.http-response :refer [forbidden]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.discussion :as db]
             [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]))
 
 (defn valid-discussion?
@@ -40,6 +41,16 @@
     (and (= edit-hash (:discussion/edit-hash complete-discussion))
          (not (db/discussion-deleted? share-hash)))))
 
+(>defn user-moderator?
+  "Validate, whether a user is a moderator. Authors are implicitly always the moderators."
+  [share-hash user-id]
+  [(? :discussion/share-hash) (? :db/id) => (? boolean?)]
+  (when (and share-hash user-id)
+    (let [discussion (fast-pull [:discussion/share-hash share-hash] patterns/discussion)]
+      (or (= user-id (:db/id (:discussion/author discussion)))
+          (contains? (set (:discussion/moderators discussion)) user-id)))))
+
+;; TODO remove this for user-moderator?
 (>defn user-schnaq-admin?
   "Validate whether the user is a schnaq-admin or not."
   [share-hash keycloak-id]

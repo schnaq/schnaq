@@ -360,7 +360,7 @@
 
 (deftest discussions-from-user-test
   (testing "If user has created discussions, return them."
-    (is (= 1 (count (db/discussions-from-user (:user.registered/keycloak-id test-data/alex)))))
+    (is (= 2 (count (db/discussions-from-user (:user.registered/keycloak-id test-data/alex)))))
     (is (zero? (count (db/discussions-from-user (:user.registered/keycloak-id test-data/kangaroo)))))))
 
 (deftest children-from-statements-test

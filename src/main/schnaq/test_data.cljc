@@ -160,7 +160,8 @@
     :discussion/states []
     :discussion/share-hash "cat-dog-hash"
     :discussion/edit-hash "cat-dog-edit-hash"
-    :discussion/author "user/wegi"
+    :discussion/author "user.registered/alex"
+    :discussion/moderators ["user.registered/christian" "user.registered/kangaroo"]
     :discussion/wordcloud {:db/id "wordcloud/cat-or-dog"
                            :wordcloud/visible? true}
     :discussion/created-at #inst "2019-01-01"
