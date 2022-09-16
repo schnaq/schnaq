@@ -84,7 +84,7 @@
   [svg]
   (when svg
     [:> Button {:variant :link
-                :class "text-muted p-0 pe-1 align-self-start"
+                :class "text-muted p-0 pe-2 align-self-end"
                 :on-click #(file-download/download-svg-node svg "wordcloud.svg")}
      [tooltip/text
       (labels :schnaq.wordcloud/download)

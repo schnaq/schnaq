@@ -115,8 +115,10 @@
                       (rf/dispatch [:form/should-clear form])))}
       [:div.text-start.p-3
        [:div.input-group
-        [inputs/floating (labels :schnaq.wordcloud.local.add-words/label) input-id]
-        [:button.btn.btn-primary {:type "submit"} [icon :plane "m-auto"]]]
+        [inputs/text (labels :schnaq.wordcloud.local.add-words/label) {:id input-id}]
+        [:button.btn.btn-dark.my-1
+         {:type "submit"}
+         [icon :plane "m-auto"]]]
        [common/hint-text (labels :schnaq.wordcloud.local.add-words/hint)]]]]))
 
 (>defn wordcloud-list
