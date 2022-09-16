@@ -73,6 +73,17 @@
         (handler request)
         (forbidden (at/build-error-body :credentials/invalid "Only the author is allowed to modify the schnaq."))))))
 
+(defn user-moderator?-middleware
+  "Verify the requesting user being the author or moderator of the discussion."
+  [handler]
+  (fn [request]
+    (let [share-hash (extract-parameter-from-request request :share-hash)
+          user-id (:db/id (extract-parameter-from-request request :user))]
+      (if (validator/user-moderator? share-hash user-id)
+        (handler request)
+        (forbidden (at/build-error-body :credentials/not-moderator
+                                        "This operation is only allowed for moderators."))))))
+
 (defn parent-unlocked?-middleware
   "Verify that the parent statement is unlocked and can be written to."
   [handler]
