@@ -2,12 +2,12 @@
   (:require [cljs.pprint :refer [pprint]]
             [cljs.spec.alpha :as s]
             [clojure.test.check.properties]
-            [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.pages :as pages]
             [schnaq.shared-toolbelt :as shared-tools]))
@@ -29,12 +29,13 @@
 (rf/reg-event-fx
  :schnaq.remove!/success
  (fn [{:keys [db]} [_ share-hash]]
-   (let [last-added-hash (:schnaq.last-added/share-hash local-storage)]
-     {:db (-> db
-              (update-in [:schnaqs :visited] (fn [schnaq-list]
-                                               (remove #(= share-hash (:discussion/share-hash %)) schnaq-list)))
-              (update-in [:user :meta :total-schnaqs] dec))
-      :fx [(when (= last-added-hash share-hash) [:localstorage/dissoc :schnaq.last-added/share-hash])]})))
+   {:db (-> db
+            (update-in [:schnaqs :visited] (fn [schnaq-list]
+                                             (remove #(= share-hash (:discussion/share-hash %)) schnaq-list)))
+            (update-in [:user :meta :total-schnaqs] dec))
+    :fx [(when-let [last-added-hash (from-localstorage :schnaq.last-added/share-hash)]
+           (when (= last-added-hash share-hash)
+             [:localstorage/dissoc :schnaq.last-added/share-hash]))]}))
 
 (rf/reg-event-fx
  :admin.delete.user/statements
