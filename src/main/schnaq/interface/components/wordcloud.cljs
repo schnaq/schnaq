@@ -81,13 +81,13 @@
 
 (defn wordcloud
   "Create a wordcloud based on the data that is passed in."
-  [input]
-  (if-let [words (->> input
-                      (sort-by :value)
-                      reverse
-                      (take words-to-be-wordclouded))]
-    (let [wc (r/atom nil)]
-      (fn []
+  [_input]
+  (let [wc (r/atom nil)]
+    (fn [input]
+      (if-let [words (->> input
+                          (sort-by :value)
+                          reverse
+                          (take words-to-be-wordclouded))]
         (let [svg (when @wc (-> @wc (oget :children) first (oget :children) first))]
           [:div {:ref #(when-not @wc (reset! wc %))}
            [:> ReactWordcloud {:words words :options options}]
@@ -97,8 +97,8 @@
                          :on-click #(file-download/download-svg-node svg "wordcloud.svg")}
               [tooltip/text
                (labels :schnaq.wordcloud/download)
-               [:span [icon :file-download "me-1"]]]])])))
-    [:div.text-center.py-3 [spinner-icon]]))
+               [:span [icon :file-download "me-1"]]]])])
+        [:div.text-center.py-3 [spinner-icon]]))))
 
 (defn wordcloud-preview
   "If user is pro-user display a wordcloud and if not show a preview instead."
