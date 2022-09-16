@@ -184,7 +184,7 @@
    :schnaq.wordcloud/hide "Wortwolke für schnaq Raum verbergen"
    :schnaq.wordcloud/title "Wortwolke"
    :schnaq.wordcloud/label "Zeige die häufigsten Wörter aus deinem schnaq als Wortwolke an."
-   :schnaq.wordcloud.local.create/heading "Lege eine interaktive Wortwolke an, die nur auf neue Eingaben reagiert"
+   :schnaq.wordcloud.local.create/heading "Lege eine interaktive Wortwolke an, die nur auf neue Eingaben reagiert."
    :schnaq.wordcloud.local.create/label "Frage oder Überschrift"
    :schnaq.wordcloud.local.create/button "Lege Wortwolke an"
    :schnaq.wordcloud.local.add-words/label "Wörter hier einfügen"
