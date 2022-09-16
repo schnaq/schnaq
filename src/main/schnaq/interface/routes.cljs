@@ -206,14 +206,15 @@
                                (rf/dispatch [:scheduler.after/login [:wordcloud/for-current-discussion]])
                                (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
      ["/manage"
-      ;; TODO regel aufrufer
-      {:name :routes.schnaq/admin-center
+      ;; TODO check references for admin and call them moderator where possible
+      {:name :routes.schnaq/moderation-center
        :view discussion-admin/admin-center-view
        :link-text (labels :router/last-added-schnaq)
        :controllers [{:start (fn [{:keys [path]}]
                                (let [{:keys [share-hash]} path]
                                  (rf/dispatch [:scheduler.after/login [:themes.load/personal]])
                                  (rf/dispatch [:schnaq/check-admin-credentials share-hash])
+                                 ;; TODO load-by-hash-as-admin überflÜssig?
                                  (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash])))}]}]
      ["/statement/:statement-id"
       {:name :routes.schnaq.select/statement

@@ -42,7 +42,7 @@
   [share-hash]
   [:discussion/share-hash :ret string?]
   #?(:clj (format "%s/schnaq/%s/manage" config/frontend-url share-hash)
-     :cljs (let [path (reitfe/href :routes.schnaq/admin-center {:share-hash share-hash})]
+     :cljs (let [path (reitfe/href :routes.schnaq/moderation-center {:share-hash share-hash})]
              (relative-to-absolute-url path))))
 
 (>defn get-summary-link

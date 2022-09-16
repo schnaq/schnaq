@@ -72,7 +72,7 @@
       [li-button {:on-click #(graph-settings/show-notification)} (labels :graph.settings/title)]
       (when @(rf/subscribe [:user/moderator?])
         [:a.button.list-group-item.list-group-item-action
-         {:href (navigation/href :routes.schnaq/admin-center {:share-hash share-hash})}
+         {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
          (labels :schnaq.admin/tooltip)]))))
 
 (defn- views

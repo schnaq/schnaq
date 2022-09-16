@@ -255,7 +255,7 @@
         [feed-button
          (labels :nav.schnaqs/last-added)
          [feed-button-icon :arrow-left]
-         (navigation/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
+         (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})
          "feed-button"])]
      [:div.panel-white.mb-4
       [feed-schnaqs]]
