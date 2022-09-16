@@ -1,62 +1,68 @@
 (ns schnaq.interface.views.schnaq.visited
   "Handling visited schnaqs."
-  (:require [hodgepodge.core :refer [local-storage]]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.config :as config]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]
             [schnaq.interface.utils.toolbelt :as tools]))
 
 (rf/reg-event-db
  :schnaqs.visited/from-localstorage
  (fn [db _]
-   (assoc-in db [:schnaqs :visited-hashes]
-             (set (remove nil? (:schnaqs/visited local-storage))))))
+   (when-let [visited-schnaqs (from-localstorage :schnaqs/visited)]
+     (assoc-in db [:schnaqs :visited-hashes]
+               (set (remove nil? visited-schnaqs))))))
 
 (rf/reg-event-fx
  :schnaq.visited/to-localstorage
  (fn [_ [_ share-hash]]
-   {:fx [(when share-hash
-           [:localstorage/assoc
-            [:schnaqs/visited
-             (set (remove nil? (conj (:schnaqs/visited local-storage) share-hash)))]])
-         [:dispatch [:schnaqs.visited/from-localstorage]]]}))
+   (when-let [visited-schnaqs (from-localstorage :schnaqs/visited)]
+     {:fx [(when share-hash
+             [:localstorage/assoc
+              [:schnaqs/visited
+               (set (remove nil? (conj visited-schnaqs share-hash)))]])
+           [:dispatch [:schnaqs.visited/from-localstorage]]]})))
 
 (rf/reg-event-fx
  :schnaq.visited/remove-from-localstorage!
  (fn [_ [_ share-hash]]
-   {:fx [(when share-hash
-           [:localstorage/assoc
-            [:schnaqs/visited
-             (set (remove #(= % share-hash) (:schnaqs/visited local-storage)))]])
-         [:dispatch [:schnaqs.visited/from-localstorage]]]}))
+   (when-let [visited-schnaqs (from-localstorage :schnaqs/visited)]
+     {:fx [(when share-hash
+             [:localstorage/assoc
+              [:schnaqs/visited
+               (set (remove #(= % share-hash) visited-schnaqs))]])
+           [:dispatch [:schnaqs.visited/from-localstorage]]]})))
 
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-db
  :schnaqs.archived/from-localstorage
  (fn [db]
-   (assoc-in db [:schnaqs :archived-hashes]
-             (set (remove nil? (:schnaqs/archived local-storage))))))
+   (when-let [archived-schnaqs (from-localstorage :schnaqs/archived)]
+     (assoc-in db [:schnaqs :archived-hashes]
+               (set (remove nil? archived-schnaqs))))))
 
 (rf/reg-event-fx
  :schnaq.archived/to-localstorage
  (fn [_ [_ share-hash]]
-   {:fx [(when share-hash
-           [:localstorage/assoc
-            [:schnaqs/archived
-             (set (remove nil? (conj (:schnaqs/archived local-storage) share-hash)))]])
-         [:dispatch [:schnaqs.archived/from-localstorage]]]}))
+   (when-let [archived-schnaqs (from-localstorage :schnaqs/archived)]
+     {:fx [(when share-hash
+             [:localstorage/assoc
+              [:schnaqs/archived
+               (set (remove nil? (conj archived-schnaqs share-hash)))]])
+           [:dispatch [:schnaqs.archived/from-localstorage]]]})))
 
 (rf/reg-event-fx
  :schnaq.archived/remove-from-localstorage!
  (fn [_ [_ share-hash]]
-   {:fx [(when share-hash
-           [:localstorage/assoc
-            [:schnaqs/archived
-             (set (remove #(= % share-hash) (:schnaqs/archived local-storage)))]])
-         [:dispatch [:schnaqs.archived/from-localstorage]]]}))
+   (when-let [archived-schnaqs (from-localstorage :schnaqs/archived)]
+     {:fx [(when share-hash
+             [:localstorage/assoc
+              [:schnaqs/archived
+               (set (remove #(= % share-hash) archived-schnaqs))]])
+           [:dispatch [:schnaqs.archived/from-localstorage]]]})))
 
 ;; -----------------------------------------------------------------------------
 
