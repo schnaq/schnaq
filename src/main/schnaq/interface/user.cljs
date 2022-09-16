@@ -131,14 +131,19 @@
  (fn [db]
    (get-in db [:controls :username-input :show?] false)))
 
+(defn user-moderator?
+  "Helper-function to check for moderators."
+  [selected-schnaq user-id]
+  (or (= user-id (:db/id (:discussion/author selected-schnaq)))
+      (contains? (set (:discussion/moderators selected-schnaq)) user-id)))
+
 (rf/reg-sub
  :user/moderator?
  ;; Checks whether the user is moderator of the current schnaq.
  :<- [:schnaq/selected]
  :<- [:user/id]
  (fn [[selected-schnaq user-id] _]
-   (or (= user-id (:db/id (:discussion/author selected-schnaq)))
-       (contains? (set (:discussion/moderators selected-schnaq)) user-id))))
+   (user-moderator? selected-schnaq user-id)))
 
 ;; -----------------------------------------------------------------------------
 ;; Events

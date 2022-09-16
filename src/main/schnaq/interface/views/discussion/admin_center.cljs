@@ -317,14 +317,15 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- admin-center
+(defn- moderation-center
   "This view is presented to the user after they have created a new meeting."
   []
-  (let [{:discussion/keys [share-hash title]} @(rf/subscribe [:schnaq/last-added])]
+  (let [{:discussion/keys [share-hash title]} @(rf/subscribe [:schnaq/selected])]
     ;; display admin center
     [pages/with-discussion-header
      {:page/heading (labels :schnaq.admin/heading)
-      :page/subheading (gstring/format (labels :schnaq.admin/subheading) title)}
+      :page/subheading (gstring/format (labels :schnaq.admin/subheading) title)
+      :condition/needs-moderator? true}
      [:div.container.px-3.px-md-5.py-3
       [administrator-tabs]
       [:div.text-center
@@ -338,6 +339,5 @@
          :href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
         (labels :schnaqs/continue-to-schnaq-button)]]]]))
 
-(defn admin-center-view []
-  ;; TODO lade view nur, wenn moderator, ansonsten fobidden [:dispatch [:navigation/navigate :routes/forbidden-page]]
-  [admin-center])
+(defn moderation-center-view []
+  [moderation-center])

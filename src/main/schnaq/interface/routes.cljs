@@ -208,7 +208,7 @@
      ["/manage"
       ;; TODO check references for admin and call them moderator where possible
       {:name :routes.schnaq/moderation-center
-       :view discussion-admin/admin-center-view
+       :view discussion-admin/moderation-center-view
        :link-text (labels :router/last-added-schnaq)
        :controllers [{:start (fn []
                                (rf/dispatch [:scheduler.after/login [:themes.load/personal]]))}]}]

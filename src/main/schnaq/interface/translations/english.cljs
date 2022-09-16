@@ -49,6 +49,11 @@
 
    :page.beta/heading "Beta-Feature"
    :page.beta/subheading "This feature is currently only enabled for beta-testers. Please log in if you are one."
+   :page.beta.modal/cta "If you want to be a beta user, contact"
+
+   :page.moderator/heading "Moderators Only"
+   :page.moderator/subheading "This feature is currently only enabled for moderators. Please log in if you are one."
+   :page.moderator/cta "You are forbidden from entering this page."
 
    :footer.buttons/about-us "About us"
    :footer.buttons/legal-note "Legal Note"

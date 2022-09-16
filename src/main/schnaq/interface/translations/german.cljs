@@ -53,6 +53,11 @@
 
    :page.beta/heading "Beta-Feature"
    :page.beta/subheading "Diese Funktion ist nur für Beta-Tester:innen freigeschaltet. Bitte logge dich ein, wenn du zu der Gruppe gehörst."
+   :page.beta.modal/cta "Wenn du bei der schnaq beta mitmachen willst, kontaktiere"
+
+   :page.moderator/heading "Nur für Moderator:innen"
+   :page.moderator/subheading "Diese Seite ist nur für Moderator:innen vorgesehen. Bitte logge dich mit dem entsprechenden Account ein, wenn du einer bist."
+   :page.moderator/cta "Normale Nutzer:innen können diese Seite nicht betreten."
 
    :footer.buttons/about-us "Über uns"
    :footer.buttons/legal-note "Impressum"
