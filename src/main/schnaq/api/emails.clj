@@ -10,7 +10,7 @@
             [schnaq.translations :refer [email-templates]]
             [taoensso.timbre :as log]))
 
-(>defn- send-admin-center-link
+(>defn- send-moderation-center-link
   "Send URL to admin-center via mail to recipient."
   [{:keys [parameters]}]
   [:ring/request :ret :ring/response]
@@ -32,8 +32,8 @@
               :middleware [:discussion/valid-share-hash?]
               :parameters {:body {:share-hash :discussion/share-hash}}
               :responses {403 at/response-error-body}}
-   ["/send-admin-center-link" {:post send-admin-center-link
-                               :description (at/get-doc #'send-admin-center-link)
-                               :parameters {:body {:recipient string?}}
-                               :responses {200 {:body {:message string?
-                                                       :failed-sendings (s/coll-of string?)}}}}]])
+   ["/send-moderation-center-link" {:post send-moderation-center-link
+                                    :description (at/get-doc #'send-moderation-center-link)
+                                    :parameters {:body {:recipient string?}}
+                                    :responses {200 {:body {:message string?
+                                                            :failed-sendings (s/coll-of string?)}}}}]])

@@ -86,7 +86,7 @@
  (fn [{:keys [db]} [_ statement-id]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [(http/xhrio-request db :delete "/discussion/statements/delete-with-children"
-                               [:discussion.admin/delete-statement-success statement-id]
+                               [:discussion.moderation/delete-statement-success statement-id]
                                {:statement-id statement-id
                                 :share-hash share-hash}
                                [:ajax.error/as-notification])]})))
@@ -347,7 +347,7 @@
  (fn [{:keys [db]} [_ statement-id]]
    (when-let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [(http/xhrio-request db :delete "/discussion/statement/delete"
-                               [:discussion.admin/delete-statement-success statement-id]
+                               [:discussion.moderation/delete-statement-success statement-id]
                                {:statement-id statement-id
                                 :share-hash share-hash}
                                [:ajax.error/as-notification])]})))

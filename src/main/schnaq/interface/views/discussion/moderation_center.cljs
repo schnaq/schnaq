@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.discussion.admin-center
+(ns schnaq.interface.views.discussion.moderation-center
   (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
@@ -25,52 +25,55 @@
    [:h5 heading]])
 
 (rf/reg-event-fx
- :discussion.admin/send-admin-center-link
+ :discussion.moderation/send-moderation-center-link
  (fn [{:keys [db]} [_ form]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-     {:fx [(http/xhrio-request db :post "/emails/send-admin-center-link" [:discussion.admin/send-email-success form]
-                               {:recipient (oget form ["admin-center-recipient" :value])
+     {:fx [(http/xhrio-request db :post "/emails/send-moderation-center-link"
+                               [:discussion.moderation/send-email-success form]
+                               {:recipient (oget form ["moderation-center-recipient" :value])
                                 :share-hash share-hash
                                 :admin-center (links/get-moderator-center-link share-hash)}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
- :discussion.admin/make-read-only
+ :discussion.moderation/make-read-only
  (fn [{:keys [db]} _]
    (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
-     {:fx [(http/xhrio-request db :put "/discussion/manage/make-read-only" [:discussion.admin/make-read-only-success]
+     {:fx [(http/xhrio-request db :put "/discussion/manage/make-read-only"
+                               [:discussion.moderation/make-read-only-success]
                                {:share-hash share-hash
                                 :edit-hash edit-hash}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
- :discussion.admin/make-read-only-success
+ :discussion.moderation/make-read-only-success
  (fn [db _]
    (update-in db [:schnaq :selected :discussion/states]
               #(distinct (conj % :discussion.state/read-only)))))
 
 (rf/reg-event-fx
- :discussion.admin/make-writeable
+ :discussion.moderation/make-writeable
  (fn [{:keys [db]} _]
    (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
-     {:fx [(http/xhrio-request db :put "/discussion/manage/make-writeable" [:discussion.admin/make-writeable-success]
+     {:fx [(http/xhrio-request db :put "/discussion/manage/make-writeable"
+                               [:discussion.moderation/make-writeable-success]
                                {:share-hash share-hash
                                 :edit-hash edit-hash}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
- :discussion.admin/make-writeable-success
+ :discussion.moderation/make-writeable-success
  (fn [db _]
    (update-in db [:schnaq :selected :discussion/states]
               #(-> % set (disj :discussion.state/read-only) vec))))
 
 (rf/reg-event-fx
  ;; Success event of deletion live in discussion - not from admin panel
- :discussion.admin/delete-statement-success
+ :discussion.moderation/delete-statement-success
  (fn [_ [_ statement-id return]]
    {:fx [[:dispatch [:notification/add
-                     #:notification{:title (labels :schnaq.admin.notifications/statements-deleted-title)
-                                    :body (labels :schnaq.admin.notifications/statements-deleted-lead)
+                     #:notification{:title (labels :schnaq.moderation.notifications/statements-deleted-title)
+                                    :body (labels :schnaq.moderation.notifications/statements-deleted-lead)
                                     :context :success}]]
          [:dispatch [:discussion.delete/purge-stores statement-id return]]]}))
 
@@ -96,26 +99,26 @@
          (assoc-in db [:schnaq :statements statement-id :statement/content] config/deleted-statement-text))))))
 
 (rf/reg-event-fx
- :discussion.admin/send-email-success
+ :discussion.moderation/send-email-success
  (fn [_ [_ form {:keys [failed-sendings]}]]
    {:fx [[:dispatch [:notification/add
-                     #:notification{:title (labels :schnaq.admin.notifications/emails-successfully-sent-title)
-                                    :body (labels :schnaq.admin.notifications/emails-successfully-sent-body-text)
+                     #:notification{:title (labels :schnaq.moderation.notifications/emails-successfully-sent-title)
+                                    :body (labels :schnaq.moderation.notifications/emails-successfully-sent-body-text)
                                     :context :success}]]
          [:form/clear form]
          (when (seq failed-sendings)
            [:dispatch [:notification/add
-                       #:notification{:title (labels :schnaq.admin.notifications/sending-failed-title)
+                       #:notification{:title (labels :schnaq.moderation.notifications/sending-failed-title)
                                       :body [:<>
-                                             (labels :schnaq.admin.notifications/sending-failed-lead)
+                                             (labels :schnaq.moderation.notifications/sending-failed-lead)
                                              [:ul
                                               (for [failed-sending failed-sendings]
                                                 [:li {:key failed-sending} failed-sending])]]
                                       :context :warning
                                       :stay-visible? true}]])]}))
 
-(defn- send-admin-center-link
-  "Send admin link via mail to the creator."
+(defn- send-moderation-center-link
+  "Send moderation center link via mail to the creator."
   []
   [:section
    [:p.lead (labels :schnaq.admin.edit.link/primer)]
@@ -124,38 +127,38 @@
     [:div.col-md-6
      [:div.share-link-icons
       [img-text (img-path :schnaqqifant/admin) :schnaqqifant/admin-alt-text
-       (labels :schnaq.admin.edit.link/admin)]]]
+       (labels :schnaq.moderation.edit.link/admin)]]]
     ;; elephant edit
     [:div.col-md-6.share-link-icons
      [img-text (img-path :schnaqqifant/erase) :schnaqqifant/erase-alt-text
-      (labels :schnaq.admin.edit.link/admin-privileges)]]]
+      (labels :schnaq.moderation.edit.link/admin-privileges)]]]
    ;; admin mail input
-   (let [input-id "admin-link-mail-address"]
+   (let [input-id "moderation-link-mail-address"]
      [:form.form.text-start.mb-5
       {:on-submit (fn [e]
                     (.preventDefault e)
-                    (rf/dispatch [:discussion.admin/send-admin-center-link
+                    (rf/dispatch [:discussion.moderation/send-moderation-center-link
                                   (oget e [:target :elements])]))}
       [:div.mb-3
-       [:label.form-label {:for input-id} (labels :schnaq.admin.edit.link.form/label)]
+       [:label.form-label {:for input-id} (labels :schnaq.moderation.edit.link.form/label)]
        [:input.form-control.m-1.rounded-3
         {:id input-id
-         :name "admin-center-recipient"
+         :name "moderation-center-recipient"
          :auto-complete "off"
          :required true
-         :placeholder (labels :schnaq.admin.edit.link.form/placeholder)}]
+         :placeholder (labels :schnaq.moderation.edit.link.form/placeholder)}]
        [:small.form-text.text-muted.float-end
-        (labels :schnaq.admin/addresses-privacy)]]
+        (labels :schnaq.moderation/addresses-privacy)]]
       [:button.btn.btn-outline-primary
-       (labels :schnaq.admin.edit.link.form/submit-button)]])])
+       (labels :schnaq.moderation.edit.link.form/submit-button)]])])
 
 (defn- enable-discussion-read-only
   "A Checkbox that makes the current discussion read-only or writeable."
   []
   (let [schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         dispatch (if schnaq-read-only?
-                   :discussion.admin/make-writeable
-                   :discussion.admin/make-read-only)
+                   :discussion.moderation/make-writeable
+                   :discussion.moderation/make-read-only)
         pro-user? @(rf/subscribe [:user/pro?])]
     [:div {:class (when-not pro-user? "text-muted")}
      [:input.big-checkbox
@@ -166,8 +169,8 @@
        :on-change (fn [e] (.preventDefault e)
                     (rf/dispatch [dispatch]))}]
      [:label.form-check-label.h5.ps-1 {:for :enable-read-only?}
-      (labels :schnaq.admin.configurations.read-only/checkbox)]
-     [:p (labels :schnaq.admin.configurations.read-only/explanation)]]))
+      (labels :schnaq.moderation.configurations.read-only/checkbox)]
+     [:p (labels :schnaq.moderation.configurations.read-only/explanation)]]))
 
 (defn- disable-pro-con []
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
@@ -181,10 +184,10 @@
        :on-change
        (fn [e]
          (.preventDefault e)
-         (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
+         (rf/dispatch [:schnaq.moderation/disable-pro-con (not pro-con-disabled?)]))}]
      [:label.form-check-label.h5.ps-1 {:for :disable-pro-con-checkbox?}
-      (labels :schnaq.admin.configurations.disable-pro-con/label)]
-     [:p (labels :schnaq.admin.configurations.disable-pro-con/explanation)]]))
+      (labels :schnaq.moderation.configurations.disable-pro-con/label)]
+     [:p (labels :schnaq.moderation.configurations.disable-pro-con/explanation)]]))
 
 (defn- only-moderators-mark-setting []
   (let [mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
@@ -198,10 +201,10 @@
        :on-change
        (fn [e]
          (.preventDefault e)
-         (rf/dispatch [:schnaq.admin.qa/mods-mark-only! (not mods-mark-only?)]))}]
+         (rf/dispatch [:schnaq.moderation.qa/mods-mark-only! (not mods-mark-only?)]))}]
      [:label.form-check-label.h5.ps-1 {:for :only-moderators-mark-checkbox}
-      (labels :schnaq.admin.configurations.mods-mark-only/label)]
-     [:p (labels :schnaq.admin.configurations.mods-mark-only/explanation)]]))
+      (labels :schnaq.moderation.configurations.mods-mark-only/label)]
+     [:p (labels :schnaq.moderation.configurations.mods-mark-only/explanation)]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -212,19 +215,19 @@
    (not (nil? (some #{:discussion.state/disable-pro-con} (:discussion/states selected-schnaq))))))
 
 (rf/reg-event-fx
- :schnaq.admin/disable-pro-con
+ :schnaq.moderation/disable-pro-con
  (fn [{:keys [db]} [_ disable-pro-con?]]
    (let [current-route (:current-route db)
          {:keys [share-hash edit-hash]} (:path-params current-route)]
      {:fx [(http/xhrio-request db :put "/discussion/manage/disable-pro-con"
-                               [:schnaq.admin/disable-pro-con-success disable-pro-con?]
+                               [:schnaq.moderation/disable-pro-con-success disable-pro-con?]
                                {:disable-pro-con? disable-pro-con?
                                 :share-hash share-hash
                                 :edit-hash edit-hash}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
- :schnaq.admin/disable-pro-con-success
+ :schnaq.moderation/disable-pro-con-success
  (fn [db [_ disable-pro-con?]]
    (if disable-pro-con?
      (update-in db [:schnaq :selected :discussion/states]
@@ -239,17 +242,17 @@
    (not (nil? (some #{:discussion.state.qa/mark-as-moderators-only} (:discussion/states selected-schnaq))))))
 
 (rf/reg-event-fx
- :schnaq.admin.qa/mods-mark-only!
+ :schnaq.moderation.qa/mods-mark-only!
  (fn [{:keys [db]} [_ mods-mark-only?]]
    {:fx [(http/xhrio-request db :put "/discussion/manage/mods-mark-only"
-                             [:schnaq.admin.qa/mods-mark-only-success mods-mark-only?]
+                             [:schnaq.moderation.qa/mods-mark-only-success mods-mark-only?]
                              {:mods-mark-only? mods-mark-only?
                               :share-hash (get-in db [:schnaq :selected :discussion/share-hash])
                               :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])}
                              [:ajax.error/as-notification])]}))
 
 (rf/reg-event-db
- :schnaq.admin.qa/mods-mark-only-success
+ :schnaq.moderation.qa/mods-mark-only-success
  (fn [db [_ mods-mark-only?]]
    (if mods-mark-only?
      (update-in db [:schnaq :selected :discussion/states]
@@ -258,15 +261,15 @@
                 #(-> % set (disj :discussion.state.qa/mark-as-moderators-only) vec)))))
 
 (rf/reg-event-fx
- :schnaq.admin.focus/entity
+ :schnaq.moderation.focus/entity
  (fn [{:keys [db]} [_ entity-id]]
-   {:fx [(http/xhrio-request db :put "/discussion/manage/focus" [:schnaq.admin.focus.entity/success]
+   {:fx [(http/xhrio-request db :put "/discussion/manage/focus" [:schnaq.moderation.focus.entity/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
                               :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
                               :entity-id entity-id})]}))
 
 (rf/reg-event-fx
- :schnaq.admin.focus.entity/success
+ :schnaq.moderation.focus.entity/success
  (fn [_ _]
    {:fx [[:dispatch [:notification/add
                      #:notification{:title (labels :schnaq.admin.focus.notification/title)
@@ -279,12 +282,12 @@
   "List all possible discussion settings."
   []
   [:<>
-   [:h4 (labels :schnaq.admin.configurations/heading)]
+   [:h4 (labels :schnaq.moderation.configurations/heading)]
    [only-moderators-mark-setting]
    [enable-discussion-read-only]
    [disable-pro-con]])
 
-(>defn- administrate-discussion
+(>defn- moderate-discussion
   "Settings for the discussion."
   []
   [:ret :re-frame/component]
@@ -296,24 +299,24 @@
      [:hr.my-5]
      [header-image/image-url-input]]
     [:div.pt-1
-     [:p.h4 [icon :lock] " " (labels :schnaq.admin.configurations.mods-mark-only/beta)]
+     [:p.h4 [icon :lock] " " (labels :schnaq.moderation.configurations.mods-mark-only/beta)]
      [button/upgrade]
      [:div.border.border-danger.p-3.mt-4
       [discussion-settings]
       [:div.pt-4
        [header-image/image-url-input]]]]))
 
-(defn- administrator-tabs
+(defn- moderation-tabs
   "Share link and invite via mail in a tabbed view."
   []
   [common/tab-builder
    "invite-participants"
    ;; Manage discussion settings
-   {:link (labels :schnaq.admin.edit/administrate)
-    :view [administrate-discussion]}
+   {:link (labels :schnaq.moderation.edit/administrate)
+    :view [moderate-discussion]}
    ;; admin access via mail
-   {:link (labels :schnaq.admin.edit.link/header)
-    :view [:div.text-center [send-admin-center-link]]}])
+   {:link (labels :schnaq.moderation.edit.link/header)
+    :view [:div.text-center [send-moderation-center-link]]}])
 
 ;; -----------------------------------------------------------------------------
 
@@ -323,11 +326,11 @@
   (let [{:discussion/keys [share-hash title]} @(rf/subscribe [:schnaq/selected])]
     ;; display admin center
     [pages/with-discussion-header
-     {:page/heading (labels :schnaq.admin/heading)
-      :page/subheading (gstring/format (labels :schnaq.admin/subheading) title)
+     {:page/heading (labels :schnaq.moderation/heading)
+      :page/subheading (gstring/format (labels :schnaq.moderation/subheading) title)
       :condition/needs-moderator? true}
      [:div.container.px-3.px-md-5.py-3
-      [administrator-tabs]
+      [moderation-tabs]
       [:div.text-center
        [:div.pb-5.mt-3]
        ;; stop image and hint to copy the link

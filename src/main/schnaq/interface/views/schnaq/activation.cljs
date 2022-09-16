@@ -72,7 +72,7 @@
      :schnaq.admin.focus/button
      (fn []
        (rf/dispatch [:activation/start])
-       (rf/dispatch [:schnaq.admin.focus.entity/success]))]
+       (rf/dispatch [:schnaq.moderation.focus.entity/success]))]
     [dropdown-menu/item :trash
      :schnaq.activation/delete-button
      #(rf/dispatch [:activation/delete])]]])

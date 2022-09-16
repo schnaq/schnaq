@@ -41,7 +41,7 @@
         [:<>
          [dropdown-menu/item :bullseye
           :schnaq.admin.focus/button
-          #(rf/dispatch [:schnaq.admin.focus/entity (:db/id @(rf/subscribe [:schnaq/wordcloud]))])]
+          #(rf/dispatch [:schnaq.moderation.focus/entity (:db/id @(rf/subscribe [:schnaq/wordcloud]))])]
          [dropdown-menu/item :trash
           :schnaq.wordcloud/hide
           #(rf/dispatch [:schnaq.wordcloud/toggle])]]]]

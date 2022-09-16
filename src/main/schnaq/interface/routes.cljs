@@ -17,7 +17,7 @@
             [schnaq.interface.utils.routing :as route-utils]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.admin.control-center :as admin-center]
-            [schnaq.interface.views.discussion.admin-center :as discussion-admin]
+            [schnaq.interface.views.discussion.moderation-center :as discussion-admin]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.discussion.dashboard :as dashboard]
             [schnaq.interface.views.errors :as error-views]

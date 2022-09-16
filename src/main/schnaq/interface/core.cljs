@@ -48,7 +48,7 @@
             [schnaq.interface.views :as views]
             [schnaq.interface.views.admin.control-center]
             [schnaq.interface.views.common]
-            [schnaq.interface.views.discussion.admin-center]
+            [schnaq.interface.views.discussion.moderation-center]
             [schnaq.interface.views.discussion.card-elements]
             [schnaq.interface.views.discussion.card-view]
             [schnaq.interface.views.discussion.conclusion-card]
