@@ -6,6 +6,7 @@
             [clojure.spec.alpha :as s]
             [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.database.specs :as specs]
