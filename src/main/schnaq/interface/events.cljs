@@ -204,20 +204,7 @@
                                [:no-op]
                                {:share-hash share-hash})]})))
 
-(rf/reg-event-db
- :schnaq/save-as-last-added
- (fn [db [_ {:keys [schnaq]}]]
-   (assoc-in db [:schnaq :last-added] schnaq)))
-
 (rf/reg-sub
  :schnaq/last-added
  (fn [db _]
    (get-in db [:schnaq :last-added])))
-
-(rf/reg-event-fx
- :schnaq/load-by-hash-as-admin
- ;; TODO kein edit-hash mehr. Glaube das brauche ich wirklich nicht mehr als route
- (fn [{:keys [db]} [_ share-hash edit-hash]]
-   {:fx [(http/xhrio-request db :post "/schnaq/by-hash-as-admin" [:schnaq/save-as-last-added]
-                             {:share-hash share-hash
-                              :edit-hash edit-hash})]}))
