@@ -32,7 +32,7 @@
   (let [temp-id "temp"]
     (db/transact-and-pull-temp [{:db/id temp-id
                                  :wordcloud.local/title title
-                                 :wordcloud.local/discussion [:discussion/share-hash share-hash]}]
+                                 :discussion/_wordcloud-local [:discussion/share-hash share-hash]}]
                                temp-id
                                patterns/local-wordcloud)))
 
@@ -43,7 +43,7 @@
   (query '[:find [(pull ?wordcloud pattern) ...]
            :in $ ?share-hash pattern
            :where [?discussion :discussion/share-hash ?share-hash]
-           [?wordcloud :wordcloud.local/discussion ?discussion]]
+           [?discussion :discussion/wordcloud-local ?wordcloud]]
          share-hash patterns/local-wordcloud))
 
 (>defn add-word-to-wordcloud
@@ -70,6 +70,6 @@
   [:db/id :discussion/share-hash => (? ::specs/wordcloud)]
   (query '[:find (pull ?wordcloud wordcloud-pattern) .
            :in $ ?wordcloud ?share-hash wordcloud-pattern
-           :where [?wordcloud :wordcloud.local/discussion ?discussion]
+           :where [?discussion :discussion/wordcloud-local ?wordcloud]
            [?discussion :discussion/share-hash ?share-hash]]
          wordcloud-id share-hash patterns/local-wordcloud))

@@ -297,6 +297,11 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The activation element which should be displayed in focus. E.g. first element in the activations card."}
+   {:db/ident :discussion/wordcloud-local
+    :db/isComponent true
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "A number of wordclouds that belong to the discussion."}
 
    {:db/ident :discussion.mode/qanda
     :db/doc "Q&A mode."}
@@ -440,10 +445,6 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "The title / prompt of a wordcloud."}
-   {:db/ident :wordcloud.local/discussion
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "The discussion that the wordcloud belongs to."}
    {:db/ident :wordcloud.local/words
     :db/valueType :db.type/tuple
     :db/tupleTypes [:db.type/string :db.type/long]
