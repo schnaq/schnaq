@@ -42,10 +42,14 @@
       (wordcloud-db/add-word-to-wordcloud wordcloud-id "Ä")
       (wordcloud-db/add-word-to-wordcloud wordcloud-id "Tuba")
       (is (contains? (get-words) ["Ä" 1]))
-      (is (contains? (get-words) ["Tuba" 1])))
-    (testing "Repeating a word should increment its cound. The old tuple should vanish."
-      (wordcloud-db/add-word-to-wordcloud wordcloud-id "Tuba")
-      (wordcloud-db/add-word-to-wordcloud wordcloud-id "Tuba")
+      (is (contains? (get-words) ["Tuba" 1])))))
+
+(deftest add-word-to-wordcloud-test-2
+  (let [wordcloud-id (:db/id (wordcloud-db/create-local-wordcloud "simple-hash" "Welche Buchstaben kennst du?"))
+        get-words #(set (:wordcloud/words (db/fast-pull wordcloud-id patterns/local-wordcloud)))]
+    (testing "Repeating a word should increment its count. The old tuple should vanish."
+      (wordcloud-db/add-word-to-wordcloud wordcloud-id "Ä")
+      (dotimes [_n 3] (wordcloud-db/add-word-to-wordcloud wordcloud-id "Tuba"))
       (is (not (contains? (get-words) ["Tuba" 1])))
       (is (not (contains? (get-words) ["Tuba" 2])))
       (is (contains? (get-words) ["Tuba" 3])))
