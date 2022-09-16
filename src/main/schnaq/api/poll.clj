@@ -111,13 +111,13 @@
        :description (at/get-doc #'toggle-hide-results)
        :name :api.poll/hide-results
        :middleware [:discussion/valid-writeable-discussion?
-                    :discussion/valid-credentials?]
+                    :discussion/user-moderator?]
        :parameters {:body {:share-hash :discussion/share-hash
-                           :edit-hash :discussion/edit-hash
                            :poll-id :db/id
                            :hide-results? :poll/hide-results?}}
        :responses {200 {:body {:hide-results? :poll/hide-results?}}
-                   400 at/response-error-body}}]
+                   400 at/response-error-body
+                   403 at/response-error-body}}]
      ["/delete" {:delete delete-poll
                  :description (at/get-doc #'delete-poll)
                  :name :poll/delete

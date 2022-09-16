@@ -485,8 +485,6 @@
       :fx [(http/xhrio-request db :put "/poll/hide-results"
                                [:schnaq.poll.hide-results/success hide-results?]
                                {:share-hash share-hash
-                                ;; TODO remove edit-hash for this route
-                                :edit-hash :foobar-remove
                                 :poll-id poll-id
                                 :hide-results? hide-results?})]})))
 
