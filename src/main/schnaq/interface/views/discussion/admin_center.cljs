@@ -341,5 +341,3 @@
 
 (defn admin-center-view []
   [admin-center])
-
-;; TODO db [:schnaqs :admin-access] wird nicht mehr gepflegt. weg damit

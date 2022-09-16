@@ -395,7 +395,8 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          params (assoc poll
                        :share-hash share-hash
-                       :edit-hash (get-in db [:schnaqs :admin-access share-hash]))]
+                       ;; TODO remove edit-hash for this route
+                       :edit-hash :foobar-remove)]
      {:fx [(http/xhrio-request db :post "/poll"
                                [:schnaq.poll.create/success]
                                params)]})))
@@ -487,7 +488,8 @@
       :fx [(http/xhrio-request db :put "/poll/hide-results"
                                [:schnaq.poll.hide-results/success hide-results?]
                                {:share-hash share-hash
-                                :edit-hash (get-in db [:schnaqs :admin-access share-hash])
+                                ;; TODO remove edit-hash for this route
+                                :edit-hash :foobar-remove
                                 :poll-id poll-id
                                 :hide-results? hide-results?})]})))
 
