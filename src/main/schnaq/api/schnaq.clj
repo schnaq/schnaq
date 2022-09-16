@@ -30,7 +30,7 @@
   (let [{:keys [share-hash display-name]} (:query parameters)
         keycloak-id (:sub identity)
         user-id (user-db/user-id display-name keycloak-id)]
-    (ok {:schnaq (-> (if (and keycloak-id (validator/user-schnaq-admin? share-hash keycloak-id))
+    (ok {:schnaq (-> (if (and keycloak-id (validator/user-moderator? share-hash user-id))
                        (discussion-db/discussion-by-share-hash-private share-hash)
                        (discussion-db/discussion-by-share-hash share-hash))
                      processors/schnaq-default

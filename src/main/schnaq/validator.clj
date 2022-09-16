@@ -50,16 +50,6 @@
       (or (= user-id (:db/id (:discussion/author discussion)))
           (contains? (set (:discussion/moderators discussion)) user-id)))))
 
-;; TODO remove this for user-moderator?
-(>defn user-schnaq-admin?
-  "Validate whether the user is a schnaq-admin or not."
-  [share-hash keycloak-id]
-  [:discussion/share-hash :user.registered/keycloak-id :ret boolean?]
-  (let [admins (:discussion/moderators
-                (fast-pull [:discussion/share-hash share-hash]
-                           [{:discussion/moderators [:user.registered/keycloak-id]}]))]
-    (not (nil? (some #(= keycloak-id (:user.registered/keycloak-id %)) admins)))))
-
 (defn deny-access
   "Return a 403 Forbidden to unauthorized access."
   ([]
