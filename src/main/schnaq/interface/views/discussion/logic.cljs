@@ -10,14 +10,12 @@
 (defn- react-to-statement-call!
   "A call to the route for adding a rection to a statement."
   [db statement-id premise-text statement-type locked? on-success-fx]
-  (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-        edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])]
+  (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
     (when share-hash
       (http/xhrio-request
        db :post "/discussion/react-to/statement"
        on-success-fx
        {:share-hash share-hash
-        :edit-hash edit-hash
         :conclusion-id statement-id
         :premise premise-text
         :statement-type statement-type
@@ -126,14 +124,14 @@
          new-conclusion (get-in db [:schnaq :statements statement-id])]
      ;; set new conclusion immediately if it's in db already, so loading times are reduced
      (cond->
-       {:fx [[:dispatch [:loading/toggle [:statements? true]]]
-             (http/xhrio-request
-              db :get "/discussion/statement/info"
-              [:discussion.query.statement/by-id-success]
-              {:statement-id statement-id
-               :share-hash share-hash
-               :display-name (tools/current-display-name db)}
-              [:discussion.redirect/to-root share-hash])]}
+      {:fx [[:dispatch [:loading/toggle [:statements? true]]]
+            (http/xhrio-request
+             db :get "/discussion/statement/info"
+             [:discussion.query.statement/by-id-success]
+             {:statement-id statement-id
+              :share-hash share-hash
+              :display-name (tools/current-display-name db)}
+             [:discussion.redirect/to-root share-hash])]}
        new-conclusion (update :db #(assoc-in db [:statements :focus] (:db/id new-conclusion))
                               :fx conj [:discussion.history/push new-conclusion])))))
 

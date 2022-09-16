@@ -167,11 +167,11 @@
   statement you want to react to. `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`.
   `nickname` is required if the user is not logged in."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash edit-hash conclusion-id premise statement-type locked? display-name]} (:body parameters)
+  (let [{:keys [share-hash conclusion-id premise statement-type locked? display-name]} (:body parameters)
         keycloak-id (:sub identity)
         user-id (user-db/user-id display-name keycloak-id)
         ;; Only Moderators can lock
-        locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
+        locked? (if (validator/user-moderator? share-hash user-id) locked? false)]
     (if (discussion-db/check-valid-statement-id-for-discussion conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (created
@@ -448,8 +448,6 @@
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
                                                :premise :statement/content
-                                               :edit-hash (s/or :edit-hash :discussion/edit-hash
-                                                                :nil nil?)
                                                :statement-type dto/statement-type
                                                :locked? :statement/locked?
                                                :display-name ::specs/non-blank-string}}
