@@ -27,12 +27,10 @@
 (rf/reg-event-fx
  :discussion.admin/send-admin-center-link
  (fn [{:keys [db]} [_ form]]
-   (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [(http/xhrio-request db :post "/emails/send-admin-center-link" [:discussion.admin/send-email-success form]
                                {:recipient (oget form ["admin-center-recipient" :value])
                                 :share-hash share-hash
-                                ;; TODO kick hash
-                                :edit-hash edit-hash
                                 :admin-center (links/get-moderator-center-link share-hash)}
                                [:ajax.error/as-notification])]})))
 
