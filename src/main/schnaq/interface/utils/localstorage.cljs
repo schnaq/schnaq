@@ -11,9 +11,9 @@
     true
     (catch js/Object _e false)))
 
-(defn get-value [key]
+(defn from-localstorage [key]
   (when (localstorage-available?)
-    (get key local-storage)))
+    (get local-storage key)))
 
 ;; -----------------------------------------------------------------------------
 
