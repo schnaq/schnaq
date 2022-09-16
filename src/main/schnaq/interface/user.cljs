@@ -1,24 +1,24 @@
 (ns schnaq.interface.user
   (:require [clojure.string :as clj-string]
-            [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [schnaq.config.shared :refer [default-anonymous-display-name] :as shared-config]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]
             [schnaq.interface.utils.toolbelt :as tools]))
 
 (rf/reg-event-fx
  :username/from-localstorage
  (fn [_ _]
-   (when-let [username (:username local-storage)]
+   (when-let [username (from-localstorage :username)]
      {:fx [[:dispatch [:user.name/store username]]]})))
 
 (rf/reg-event-fx
  :user/init-device-id
  (fn [{:keys [db]} _]
-   (if-let [device-id (:device-id local-storage)]
+   (if-let [device-id (from-localstorage :device-id)]
      {:db (assoc-in db [:user :device-id] device-id)}
      (let [new-device-id (random-uuid)]
        {:db (assoc-in db [:user :device-id] new-device-id)
@@ -144,7 +144,7 @@
 (rf/reg-event-fx
  :user.currency/from-localstorage
  (fn [{:keys [db]} _]
-   (when-let [currency (:user/currency local-storage)]
+   (when-let [currency (from-localstorage :user/currency)]
      {:db (assoc-in db [:user :currency] currency)})))
 
 (rf/reg-event-fx
