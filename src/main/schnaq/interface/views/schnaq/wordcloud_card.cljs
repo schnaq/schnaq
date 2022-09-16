@@ -102,9 +102,9 @@
                                         :value (second %))
                              words)
         input-id (str "wordcloud-" id "-input")]
-    [:div.text-center.pt-2.activation-card
+    [:div.text-center.pt-4.activation-card
      [:div.d-flex
-      [:p.text-center.mx-auto title]
+      [:h4.text-center.mx-auto title]
       [dropdown-menu id]]
      [wordcloud/wordcloud formatted-words]
      [:form.form
@@ -113,7 +113,7 @@
                     (let [form (oget event [:target :elements])]
                       (rf/dispatch [:schnaq.wordcloud.local/send-words id (oget+ form [input-id :value])])
                       (rf/dispatch [:form/should-clear form])))}
-      [:div.text-start
+      [:div.text-start.p-3
        [:div.input-group
         [inputs/floating (labels :schnaq.wordcloud.local.add-words/label) input-id]
         [:button.btn.btn-primary {:type "submit"} [icon :plane "m-auto"]]]

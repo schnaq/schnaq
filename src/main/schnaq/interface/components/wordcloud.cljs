@@ -89,11 +89,11 @@
                           reverse
                           (take words-to-be-wordclouded))]
         (let [svg (when @wc (-> @wc (oget :children) first (oget :children) first))]
-          [:div {:ref #(when-not @wc (reset! wc %))}
+          [:div.d-flex {:ref #(when-not @wc (reset! wc %))}
            [:> ReactWordcloud {:words words :options options}]
            (when @wc
              [:> Button {:variant :link
-                         :class "text-muted float-end"
+                         :class "text-muted p-0 pe-1 align-self-start"
                          :on-click #(file-download/download-svg-node svg "wordcloud.svg")}
               [tooltip/text
                (labels :schnaq.wordcloud/download)
