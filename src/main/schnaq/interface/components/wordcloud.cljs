@@ -79,6 +79,17 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- wordcloud-download-button
+  "Download wordcloud as svg."
+  [svg]
+  (when svg
+    [:> Button {:variant :link
+                :class "text-muted p-0 pe-1 align-self-start"
+                :on-click #(file-download/download-svg-node svg "wordcloud.svg")}
+     [tooltip/text
+      (labels :schnaq.wordcloud/download)
+      [:span [icon :file-download "me-1"]]]]))
+
 (defn wordcloud
   "Create a wordcloud based on the data that is passed in."
   [_input]
@@ -91,13 +102,7 @@
         (let [svg (when @wc (-> @wc (oget :children) first (oget :children) first))]
           [:div.d-flex {:ref #(when-not @wc (reset! wc %))}
            [:> ReactWordcloud {:words words :options options}]
-           (when @wc
-             [:> Button {:variant :link
-                         :class "text-muted p-0 pe-1 align-self-start"
-                         :on-click #(file-download/download-svg-node svg "wordcloud.svg")}
-              [tooltip/text
-               (labels :schnaq.wordcloud/download)
-               [:span [icon :file-download "me-1"]]]])])
+           [wordcloud-download-button svg]])
         [:div.text-center.py-3 [spinner-icon]]))))
 
 (defn wordcloud-preview
