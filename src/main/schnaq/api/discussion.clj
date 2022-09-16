@@ -459,9 +459,8 @@
     ["/delete-with-children" {:delete delete-statement-and-children!
                               :description (at/get-doc #'delete-statement-and-children!)
                               :name :api.discussion.statements/delete
-                              :middleware [:discussion/valid-credentials?]
+                              :middleware [:discussion/user-moderator?]
                               :parameters {:body {:share-hash :discussion/share-hash
-                                                  :edit-hash :discussion/edit-hash
                                                   :statement-id :db/id}}
                               :responses {200 {:body {:deleted-statements (s/coll-of :db/id)}}
                                           401 at/response-error-body

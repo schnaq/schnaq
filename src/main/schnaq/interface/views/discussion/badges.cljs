@@ -82,15 +82,13 @@
 
 (rf/reg-event-fx
  :discussion.delete/statement
- ;; Function called by schnaq author / admin. Deletes all children as well
- ;; TODO kill edit-hash
- (fn [{:keys [db]} [_ statement-id edit-hash]]
+ ;; Function called by schnaq author / moderator. Deletes all children as well
+ (fn [{:keys [db]} [_ statement-id]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [(http/xhrio-request db :delete "/discussion/statements/delete-with-children"
                                [:discussion.admin/delete-statement-success statement-id]
                                {:statement-id statement-id
-                                :share-hash share-hash
-                                :edit-hash edit-hash}
+                                :share-hash share-hash}
                                [:ajax.error/as-notification])]})))
 
 (defn- share-link-to-statement
