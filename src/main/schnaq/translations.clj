@@ -6,12 +6,7 @@
 (defn email-templates
   [identifier]
   (identifier
-   {:invitation/title "Invitation to schnaq: %s"
-    :invitation/body
-    (str "Hello,\n
-You were invited to participate in a schnaq: %s
-Follow this link to join: \n\n%s\n\n" email-footer)
-    :admin-center/title "Moderator link for the schnaq: %s"
+   {:admin-center/title "Moderator link for the schnaq: %s"
     :admin-center/body
     (str "Hello,\n
 You were invited to moderate the following schnaq: %s

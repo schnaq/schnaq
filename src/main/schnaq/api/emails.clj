@@ -10,21 +10,6 @@
             [schnaq.translations :refer [email-templates]]
             [taoensso.timbre :as log]))
 
-(>defn- send-invite-emails
-  "Expects a list of recipients and the meeting which shall be send."
-  [{:keys [parameters]}]
-  [:ring/request :ret :ring/response]
-  (let [{:keys [share-hash recipients]} (:body parameters)
-        discussion-title (:discussion/title (discussion-db/discussion-by-share-hash share-hash))
-        share-link (links/get-share-link share-hash)]
-    (log/debug "Invite Emails for some discussion sent")
-    (ok (merge
-         {:message "Emails sent successfully"}
-         (emails/send-mails
-          (format (email-templates :invitation/title) discussion-title)
-          (format (email-templates :invitation/body) discussion-title share-link)
-          recipients)))))
-
 (>defn- send-admin-center-link
   "Send URL to admin-center via mail to recipient."
   [{:keys [parameters]}]
@@ -44,18 +29,11 @@
 
 (def email-routes
   ["/emails" {:swagger {:tags ["emails"]}
-              :middleware [:discussion/valid-credentials?]
-              :parameters {:body {:share-hash :discussion/share-hash
-                                  :edit-hash :discussion/edit-hash}}
+              :middleware [:discussion/valid-share-hash?]
+              :parameters {:body {:share-hash :discussion/share-hash}}
               :responses {403 at/response-error-body}}
-   ;; TODO edit-hash wird für diese unterroute nicht mehr gebraucht
    ["/send-admin-center-link" {:post send-admin-center-link
                                :description (at/get-doc #'send-admin-center-link)
                                :parameters {:body {:recipient string?}}
                                :responses {200 {:body {:message string?
-                                                       :failed-sendings (s/coll-of string?)}}}}]
-   ["/send-invites" {:post send-invite-emails
-                     :description (at/get-doc #'send-invite-emails)
-                     :parameters {:body {:recipients (s/coll-of string?)}}
-                     :responses {200 {:body {:message string?
-                                             :failed-sendings (s/coll-of string?)}}}}]])
+                                                       :failed-sendings (s/coll-of string?)}}}}]])
