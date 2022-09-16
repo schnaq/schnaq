@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.discussion.logic
-  (:require [hodgepodge.core :refer [local-storage]]
-            [oops.core :refer [oget oget+]]
+  (:require [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.shared-toolbelt :as stools]))
 
@@ -72,9 +72,11 @@
 (rf/reg-event-db
  :schnaq.discussion-secrets/load-from-localstorage
  (fn [db _]
-   (-> db
-       (assoc-in [:discussion :statements :creation-secrets] (:discussion/creation-secrets local-storage))
-       (assoc-in [:discussion :schnaqs :creation-secrets] (:discussion.schnaqs/creation-secrets local-storage)))))
+   (let [discussion-creation-secrets (from-localstorage :discussion/creation-secrets)
+         discussion-schnaqs-creation-secrets (from-localstorage :discussion.schnaqs/creation-secrets)]
+     (cond-> db
+       discussion-creation-secrets (assoc-in [:discussion :statements :creation-secrets] discussion-creation-secrets)
+       discussion-schnaqs-creation-secrets (assoc-in [:discussion :schnaqs :creation-secrets] discussion-schnaqs-creation-secrets)))))
 
 (rf/reg-sub
  :schnaq.discussion.statements/creation-secrets
@@ -126,14 +128,14 @@
          new-conclusion (get-in db [:schnaq :statements statement-id])]
      ;; set new conclusion immediately if it's in db already, so loading times are reduced
      (cond->
-       {:fx [[:dispatch [:loading/toggle [:statements? true]]]
-             (http/xhrio-request
-              db :get "/discussion/statement/info"
-              [:discussion.query.statement/by-id-success]
-              {:statement-id statement-id
-               :share-hash share-hash
-               :display-name (tools/current-display-name db)}
-              [:discussion.redirect/to-root share-hash])]}
+      {:fx [[:dispatch [:loading/toggle [:statements? true]]]
+            (http/xhrio-request
+             db :get "/discussion/statement/info"
+             [:discussion.query.statement/by-id-success]
+             {:statement-id statement-id
+              :share-hash share-hash
+              :display-name (tools/current-display-name db)}
+             [:discussion.redirect/to-root share-hash])]}
        new-conclusion (update :db #(assoc-in db [:statements :focus] (:db/id new-conclusion))
                               :fx conj [:discussion.history/push new-conclusion])))))
 
