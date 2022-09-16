@@ -96,6 +96,7 @@
    :discussion/created-at
    [:discussion/activation-focus :xform 'schnaq.database.xforms/pull-up-db-id]
    {:discussion/author public-user}
+   [:discussion/moderators :xform 'schnaq.database.xforms/maps->ids]
    {:discussion/theme theme}
    :discussion/wordcloud
    {[:discussion/mode :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
