@@ -113,7 +113,7 @@
                     (let [form (oget event [:target :elements])]
                       (rf/dispatch [:schnaq.wordcloud.local/send-words id (oget+ form [input-id :value])])
                       (rf/dispatch [:form/should-clear form])))}
-      [:div.text-start.p-3
+      [:div.text-start.px-2.pb-2
        [:div.input-group
         [inputs/text (labels :schnaq.wordcloud.local.add-words/label) {:id input-id}]
         [:button.btn.btn-dark.my-1
