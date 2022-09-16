@@ -339,4 +339,5 @@
         (labels :schnaqs/continue-to-schnaq-button)]]]]))
 
 (defn admin-center-view []
+  ;; TODO lade view nur, wenn moderator, ansonsten fobidden [:dispatch [:navigation/navigate :routes/forbidden-page]]
   [admin-center])

@@ -489,13 +489,6 @@
       @(transact [[:db/add statement-id :statement/content new-content]]))
     (fast-pull statement-id patterns/statement)))
 
-(>defn add-admin-to-discussion
-  "Adds an admin user to a discussion."
-  [share-hash keycloak-id]
-  [:discussion/share-hash :user.registered/keycloak-id :ret future?]
-  (transact [[:db/add [:discussion/share-hash share-hash] :discussion/moderators
-              [:user.registered/keycloak-id keycloak-id]]]))
-
 (>defn- build-secrets-map
   "Creates a secrets map for a collection of statements.
   When there is no secret, the statement is skipped. When the author is not anonymous, the statement is also skipped."

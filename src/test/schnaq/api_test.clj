@@ -13,19 +13,6 @@
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
-(deftest check-credentials-test
-  (testing "Check if credentials are verified correctly."
-    (let [credential-request (fn [share-hash edit-hash]
-                               (schnaq-toolbelt/add-csrf-header
-                                {:request-method :post :uri "/credentials/validate"
-                                 :body-params {:share-hash share-hash :edit-hash edit-hash}}))
-          share-hash "simple-hash"
-          edit-hash "simple-hash-secret"]
-      (is (= 200 (-> (credential-request share-hash edit-hash) test-app :status)))
-      (is (= 403 (-> (credential-request "invalid" edit-hash) test-app :status)))
-      (is (= 403 (-> (credential-request share-hash "invalid") test-app :status)))
-      (is (= 403 (-> (credential-request "invalid" "invalid") test-app :status))))))
-
 (deftest graph-data-for-agenda-test
   (testing "Check if graph data is correct"
     (let [graph-data-for-agenda @#'discussion-api/graph-for-discussion

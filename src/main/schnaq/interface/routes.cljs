@@ -213,7 +213,6 @@
        :controllers [{:start (fn [{:keys [path]}]
                                (let [{:keys [share-hash]} path]
                                  (rf/dispatch [:scheduler.after/login [:themes.load/personal]])
-                                 (rf/dispatch [:schnaq/check-admin-credentials share-hash])
                                  ;; TODO load-by-hash-as-admin überflÜssig?
                                  (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash])))}]}]
      ["/statement/:statement-id"

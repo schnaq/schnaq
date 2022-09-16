@@ -203,23 +203,6 @@
                                [:no-op]
                                {:share-hash share-hash})]})))
 
-(rf/reg-event-fx
- :schnaq/check-admin-credentials
- ;; TODO kein edit-hash mehr. Brauchen wir diese route noch? glaube schon
- (fn [{:keys [db]} [_ share-hash edit-hash]]
-   {:fx [(http/xhrio-request db :post "/credentials/validate" [:schnaq/check-admin-credentials-success]
-                             {:share-hash share-hash
-                              :edit-hash edit-hash}
-                             [:ajax.error/as-notification])]}))
-
-(rf/reg-event-fx
- ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
- ;; the backend every time)
- :schnaq/check-admin-credentials-success
- (fn [_ [_ {:keys [valid-credentials?]}]]
-   (when-not valid-credentials?
-     {:fx [[:dispatch [:navigation/navigate :routes/forbidden-page]]]})))
-
 (rf/reg-event-db
  :schnaq/save-as-last-added
  (fn [db [_ {:keys [schnaq]}]]
