@@ -393,10 +393,7 @@
  :schnaq.poll/create
  (fn [{:keys [db]} [_ poll]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         params (assoc poll
-                       :share-hash share-hash
-                       ;; TODO remove edit-hash for this route
-                       :edit-hash :foobar-remove)]
+         params (assoc poll :share-hash share-hash)]
      {:fx [(http/xhrio-request db :post "/poll"
                                [:schnaq.poll.create/success]
                                params)]})))

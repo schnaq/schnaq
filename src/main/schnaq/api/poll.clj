@@ -80,17 +80,16 @@
      ["" {:name :api/poll
           :post {:handler new-poll
                  :description (at/get-doc #'new-poll)
-                 :middleware [:user/authenticated?
-                              :user/pro?
-                              :discussion/valid-credentials?]
+                 :middleware [:discussion/user-moderator?
+                              :user/pro?]
                  :parameters {:body {:title :poll/title
                                      :poll-type dto/poll-type
                                      :options (s/coll-of ::specs/non-blank-string)
                                      :share-hash :discussion/share-hash
-                                     :edit-hash :discussion/edit-hash
                                      :hide-results? :poll/hide-results?}}
                  :responses {200 {:body {:new-poll ::dto/poll}}
-                             400 at/response-error-body}}
+                             400 at/response-error-body
+                             403 at/response-error-body}}
           :get {:handler get-poll
                 :description (at/get-doc #'get-poll)
                 :parameters {:query {:share-hash :discussion/share-hash
