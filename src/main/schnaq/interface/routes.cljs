@@ -210,11 +210,8 @@
       {:name :routes.schnaq/moderation-center
        :view discussion-admin/admin-center-view
        :link-text (labels :router/last-added-schnaq)
-       :controllers [{:start (fn [{:keys [path]}]
-                               (let [{:keys [share-hash]} path]
-                                 (rf/dispatch [:scheduler.after/login [:themes.load/personal]])
-                                 ;; TODO load-by-hash-as-admin überflÜssig?
-                                 (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash])))}]}]
+       :controllers [{:start (fn []
+                               (rf/dispatch [:scheduler.after/login [:themes.load/personal]]))}]}]
      ["/statement/:statement-id"
       {:name :routes.schnaq.select/statement
        :parameters {:path {:statement-id int?}}

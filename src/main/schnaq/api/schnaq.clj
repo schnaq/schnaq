@@ -10,7 +10,6 @@
             [schnaq.database.user :as user-db]
             [schnaq.links :as links]
             [schnaq.processors :as processors]
-            [schnaq.validator :as validator]
             [spec-tools.core :as st]
             [taoensso.timbre :as log])
   (:import (java.util UUID)))
@@ -30,9 +29,7 @@
   (let [{:keys [share-hash display-name]} (:query parameters)
         keycloak-id (:sub identity)
         user-id (user-db/user-id display-name keycloak-id)]
-    (ok {:schnaq (-> (if (and keycloak-id (validator/user-moderator? share-hash user-id))
-                       (discussion-db/discussion-by-share-hash-private share-hash)
-                       (discussion-db/discussion-by-share-hash share-hash))
+    (ok {:schnaq (-> (discussion-db/discussion-by-share-hash share-hash)
                      processors/schnaq-default
                      (processors/with-sub-statement-count share-hash)
                      (processors/with-new-post-info share-hash keycloak-id)
@@ -102,13 +99,6 @@
           (bad-request-schnaq-creation parameters))))))
 
 ;; -----------------------------------------------------------------------------
-
-(defn- schnaq-by-hash-as-admin
-  "If user is authenticated, a meeting with an edit-hash is returned for further
-  processing in the frontend."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash]} (:body parameters)]
-    (ok {:schnaq (discussion-db/discussion-by-share-hash-private share-hash)})))
 
 (defn- delete-schnaq!
   "Sets the state of a schnaq to delete. Performed by admins and authors of the schnaq."
@@ -237,13 +227,6 @@
                      :parameters {:body {:share-hash :discussion/share-hash
                                          :new-title :discussion/title}}
                      :responses {201 {:body {:schnaq ::dto/discussion}}}}]
-     ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin
-                           :description (at/get-doc #'schnaq-by-hash-as-admin)
-                           :name :api.schnaq/by-hash-as-admin
-                           :middleware [:discussion/valid-credentials?]
-                           :parameters {:body {:share-hash :discussion/share-hash
-                                               :edit-hash :discussion/edit-hash}}
-                           :responses {200 {:body {:schnaq ::dto/discussion}}}}]
      ["/qa"
       ["/search" {:get search-qa
                   :description (at/get-doc #'search-qa)

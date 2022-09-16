@@ -28,9 +28,10 @@
  :load/last-added-schnaq
  (fn [_ _]
    (let [share-hash (:schnaq.last-added/share-hash local-storage)
+         ;; TODO kill edit-hash here
          edit-hash (:schnaq.last-added/edit-hash local-storage)]
-     (when (and (not (nil? edit-hash)) (not (nil? share-hash)))
-       {:fx [[:dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash]]]}))))
+     (when-not (nil? share-hash)
+       {:fx [[:dispatch [:schnaq/load-by-share-hash share-hash edit-hash]]]}))))
 
 (rf/reg-event-fx
  :re-frame-10x/hide-on-mobile

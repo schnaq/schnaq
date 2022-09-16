@@ -103,22 +103,12 @@
                  (transitive-child-5 ?statement-ids ?children)]
                transitive-7 statement-ids))))
 
-(defn- pull-discussion
-  "Pull a discussion from a database."
-  [share-hash pattern]
-  [:discussion/share-hash vector? :ret ::specs/discussion]
-  (ac/remove-invalid-and-pull-up-access-codes
-   (fast-pull [:discussion/share-hash share-hash] pattern)))
-
-(defn discussion-by-share-hash
+(>defn discussion-by-share-hash
   "Query discussion and apply public discussion pattern to it."
   [share-hash]
-  (pull-discussion share-hash patterns/discussion))
-
-(defn discussion-by-share-hash-private
-  "Query discussion and apply the private discussion pattern."
-  [share-hash]
-  (pull-discussion share-hash patterns/discussion-private))
+  [:discussion/share-hash :ret ::specs/discussion]
+  (ac/remove-invalid-and-pull-up-access-codes
+   (fast-pull [:discussion/share-hash share-hash] patterns/discussion)))
 
 (>defn discussions-by-share-hashes
   "Returns all discussions that are valid (non deleted e.g.). Input is a collection of share-hashes."
@@ -323,7 +313,7 @@
   [id]
   [int? :ret ::specs/discussion]
   (ac/remove-invalid-and-pull-up-access-codes
-   (fast-pull id (conj patterns/discussion-private :discussion/creation-secret))))
+   (fast-pull id (conj patterns/discussion :discussion/creation-secret))))
 
 (defn set-discussion-read-only
   "Sets a discussion as read-only."
@@ -462,7 +452,7 @@
   (query '[:find [(pull ?discussions discussion-pattern-private) ...]
            :in $ discussion-pattern-private
            :where [?discussions :discussion/title _]]
-         patterns/discussion-private))
+         patterns/discussion))
 
 (>defn check-valid-statement-id-for-discussion
   "Checks whether the statement-id matches the share-hash."

@@ -7,22 +7,6 @@
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
 
-(defn- schnaq-by-hash-as-admin-request [share-hash edit-hash]
-  (-> {:request-method :post :uri (:path (api/route-by-name :api.schnaq/by-hash-as-admin))
-       :body-params {:share-hash share-hash
-                     :edit-hash edit-hash}}
-      toolbelt/add-csrf-header
-      test-app))
-
-(deftest schnaq-by-hash-as-admin-test
-  (let [share-hash "graph-hash"
-        edit-hash "graph-edit-hash"]
-    (testing "Valid hashes are ok."
-      (is (= 200 (:status (schnaq-by-hash-as-admin-request share-hash edit-hash)))))
-    (testing "Wrong hashes are forbidden."
-      (is (= 403 (:status (schnaq-by-hash-as-admin-request share-hash "👾"))))
-      (is (= 403 (:status (schnaq-by-hash-as-admin-request "razupaltuff" edit-hash)))))))
-
 (defn- schnaqs-by-hashes-request [share-hashes]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.schnaqs/by-hashes))
        :headers {"accept" "application/edn"}
