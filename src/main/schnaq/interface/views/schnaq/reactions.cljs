@@ -1,12 +1,12 @@
 (ns schnaq.interface.views.schnaq.reactions
   (:require [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [goog.string :as gstring]
-            [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.matomo :as matomo]
-            [schnaq.interface.utils.http :as http]))
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]))
 
 (>defn calculate-votes
   "Calculates the votes without needing to reload."
@@ -143,7 +143,8 @@
 (rf/reg-event-fx
  :schnaq.votes/load-from-localstorage
  (fn [{:keys [db]} _]
-   {:db (assoc-in db [:votes :device] (:device.reactions/votes local-storage))}))
+   (when-let [votes (from-localstorage :device.reactions/votes)]
+     {:db (assoc-in db [:votes :device] votes)})))
 
 (rf/reg-event-db
  :upvote-success
