@@ -423,11 +423,9 @@
    ["/header-image" {:post media/set-preview-image
                      :description (at/get-doc #'media/set-preview-image)
                      :name :api.discussion/header-image
-                     :middleware [:discussion/valid-credentials?
-                                  :user/authenticated?
+                     :middleware [:discussion/user-moderator?
                                   :user/pro?]
                      :parameters {:body {:share-hash :discussion/share-hash
-                                         :edit-hash :discussion/edit-hash
                                          :image-url :discussion/header-image-url}}
                      :responses {201 {:body {:message string?}}
                                  403 at/response-error-body}}]

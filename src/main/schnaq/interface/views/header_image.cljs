@@ -42,12 +42,11 @@
  :schnaq.admin/set-header-image-url
  (fn [{:keys [db]} [_ form]]
    (let [current-route (:current-route db)
-         {:keys [share-hash edit-hash]} (:path-params current-route)]
+         {:keys [share-hash]} (:path-params current-route)]
      {:fx [(http/xhrio-request db :post "/discussion/header-image"
                                [:schnaq.admin/set-header-image-url-success form]
                                {:image-url (oget+ form [image-form-name :value])
                                 :share-hash share-hash
-                                :edit-hash edit-hash
                                 :admin-center (links/get-moderator-center-link share-hash)}
                                [:ajax.error/as-notification])]})))
 
