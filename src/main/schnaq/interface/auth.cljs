@@ -55,7 +55,7 @@
  (fn [{:keys [db]} [_ _]]
    (let [keycloak (Keycloak (clj->js config/keycloak))]
      {:db (assoc-in db [:user :keycloak] keycloak)
-      #_#_:fx [[:keycloak/silent-check keycloak]]}))) ;; WIP das hier läuft noch nicht
+      :fx [[:keycloak/silent-check keycloak]]}))) ;; WIP das hier läuft noch nicht
 
 (rf/reg-event-fx
  :keycloak.init/after-login
@@ -93,25 +93,26 @@
 (rf/reg-fx
  :keycloak/login-request
  (fn [[keycloak redirect-uri]]
-   (-> keycloak
-       (.login #js {:redirectUri redirect-uri})
-       (.catch #(rf/dispatch [:modal [request-login-modal]])))))
+   (when keycloak
+     (-> keycloak
+         (.login #js {:redirectUri redirect-uri})
+         (.catch #(rf/dispatch [:modal [request-login-modal]]))))))
 
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
  :keycloak/register
  (fn [{:keys [db]} [_ redirect-uri]]
-   (let [keycloak (get-in db [:user :keycloak])]
-     (when keycloak
-       {:fx [[:keycloak/register-request [keycloak redirect-uri]]]}))))
+   (when-let [keycloak (get-in db [:user :keycloak])]
+     {:fx [[:keycloak/register-request [keycloak redirect-uri]]]})))
 
 (rf/reg-fx
  :keycloak/register-request
  (fn [[keycloak redirect-uri]]
-   (-> keycloak
-       (.register #js {:redirectUri redirect-uri})
-       (.catch #(rf/dispatch [:modal [request-login-modal]])))))
+   (when keycloak
+     (-> keycloak
+         (.register #js {:redirectUri redirect-uri})
+         (.catch #(rf/dispatch [:modal [request-login-modal]]))))))
 
 ;; -----------------------------------------------------------------------------
 ;; If login / init was successful, ask in keycloak for the user's information.
@@ -119,26 +120,27 @@
 (rf/reg-event-fx
  :keycloak/load-user-profile
  (fn [{:keys [db]} _]
-   (let [keycloak (get-in db [:user :keycloak])]
-     (when (and keycloak (user-authenticated? db))
+   (when-let [keycloak (get-in db [:user :keycloak])]
+     (when (user-authenticated? db)
        {:fx [[:keycloak/load-user-profile-request keycloak]]}))))
 
 (rf/reg-fx
  :keycloak/load-user-profile-request
  (fn [keycloak]
-   (-> keycloak
-       (.loadUserProfile)
-       (.then #(let [keycloak-fields (js->clj % :keywordize-keys true)]
-                 (rf/dispatch [:keycloak/store-groups keycloak-fields])
-                 (matomo/set-user-id (:id keycloak-fields))))
-       (.catch #(rf/dispatch [:modal [request-login-modal]])))))
+   (when keycloak
+     (-> keycloak
+         (.loadUserProfile)
+         (.then #(let [keycloak-fields (js->clj % :keywordize-keys true)]
+                   (rf/dispatch [:keycloak/store-groups keycloak-fields])
+                   (matomo/set-user-id (:id keycloak-fields))))
+         (.catch #(rf/dispatch [:modal [request-login-modal]]))))))
 
 (rf/reg-event-db
  :keycloak/store-groups
  (fn [db _]
    (let [keycloak (get-in db [:user :keycloak])
          groups (js->clj (oget keycloak [:tokenParsed :groups]))]
-     (when (seq groups)
+     (when (and keycloak (seq groups))
        (assoc-in db [:user :groups] groups)))))
 
 ;; -----------------------------------------------------------------------------
@@ -147,21 +149,21 @@
 (rf/reg-event-fx
  :keycloak/logout
  (fn [{:keys [db]} [_ _]]
-   (let [keycloak (get-in db [:user :keycloak])]
-     (when keycloak
-       {:fx [[:keycloak/logout-request keycloak]]}))))
+   (when-let [keycloak (get-in db [:user :keycloak])]
+     {:fx [[:keycloak/logout-request keycloak]]})))
 
 (rf/reg-fx
  :keycloak/logout-request
  (fn [keycloak]
-   (-> keycloak
-       (.logout)
-       (.then (fn [_]
-                (rf/dispatch [:user/authenticated! false])
-                (matomo/reset-user-id)))
-       (.catch
-        #(error-to-console
-          "Logout not successful. Request could not be fulfilled.")))))
+   (when keycloak
+     (-> keycloak
+         (.logout)
+         (.then (fn [_]
+                  (rf/dispatch [:user/authenticated! false])
+                  (matomo/reset-user-id)))
+         (.catch
+          #(error-to-console
+            "Logout not successful. Request could not be fulfilled."))))))
 
 ;; -----------------------------------------------------------------------------
 ;; Refresh access token (the one, which is sent to the backend and stored in
@@ -170,24 +172,25 @@
 (rf/reg-event-fx
  :keycloak/check-token-validity
  (fn [{:keys [db]} [_ _]]
-   (let [keycloak (get-in db [:user :keycloak])]
-     (when (and keycloak (user-authenticated? db))
+   (when-let [keycloak (get-in db [:user :keycloak])]
+     (when (user-authenticated? db)
        {:fx [[:keycloak/loop-token-validity-check keycloak]]}))))
 
 (rf/reg-fx
  :keycloak/loop-token-validity-check
  (fn [keycloak]
-   (go (while true
-         (<! (timeout (* 1000 refresh-token-time)))
-         (-> keycloak
-             (.updateToken refresh-token-time)
-             (.then
-              #(when %
-                 (log/trace "Access Token for user validation refreshed")))
-             (.catch
-              (fn [e]
-                (rf/dispatch [:modal [request-login-modal]])
-                (log/error "Error when updating the keycloak access token." e))))))))
+   (when keycloak
+     (go (while true
+           (<! (timeout (* 1000 refresh-token-time)))
+           (-> keycloak
+               (.updateToken refresh-token-time)
+               (.then
+                #(when %
+                   (log/trace "Access Token for user validation refreshed")))
+               (.catch
+                (fn [e]
+                  (rf/dispatch [:modal [request-login-modal]])
+                  (log/error "Error when updating the keycloak access token." e)))))))))
 
 (defn- authorization-header [token]
   {:Authorization (gstring/format "Token %s" token)})
@@ -207,12 +210,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(rf/reg-sub
- :user/roles
- :<- [:user/current]
- (fn [user]
-   (:roles user)))
-
 (rf/reg-event-db
  :user/authenticated!
  (fn [db [_ toggle]]
@@ -227,39 +224,28 @@
 (rf/reg-sub
  :user/administrator?
  :<- [:user/roles]
- (fn [roles]
-   (shared-tools/admin? roles)))
+ :-> shared-tools/admin?)
 
 (rf/reg-sub
  :user/enterprise?
  :<- [:user/roles]
- (fn [roles]
-   (shared-tools/enterprise-user? roles)))
+ :-> shared-tools/enterprise-user?)
 
 (rf/reg-sub
  :user/analytics-admin?
  ;; Users that are allowed to see all analytics.
  :<- [:user/roles]
- (fn [roles]
-   (shared-tools/analytics-admin? roles)))
+ :-> shared-tools/analytics-admin?)
 
 (rf/reg-sub
  :user/beta-tester?
  :<- [:user/roles]
- (fn [roles]
-   (shared-tools/beta-tester? roles)))
+ :-> shared-tools/beta-tester?)
 
 (rf/reg-sub
  :user/pro?
  :<- [:user/roles]
- (fn [roles]
-   (shared-tools/pro-user? roles)))
-
-(rf/reg-sub
- :user/subscription
- :<- [:user/current]
- (fn [user]
-   (:subscription user)))
+ :-> shared-tools/pro-user?)
 
 (rf/reg-event-db
  :keycloak.roles/extract
@@ -272,5 +258,5 @@
 
 (rf/reg-sub
  :keycloak/object
- (fn [db]
-   (get-in db [:user :keycloak])))
+ :<- [:user/current]
+ :-> :keycloak)

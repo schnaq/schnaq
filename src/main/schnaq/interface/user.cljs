@@ -79,33 +79,39 @@
 
 (rf/reg-sub
  :user/current
- (fn [db _] (:user db)))
+ :-> :user)
 
 (rf/reg-sub
  :user/entity
  ;; The user at it was queried from the database
  :<- [:user/current]
- (fn [user]
-   (:entity user)))
+ :-> :entity)
 
 (rf/reg-sub
  :user/id
  :<- [:user/current]
- (fn [user]
-   (:id user)))
+ :-> :id)
 
 (rf/reg-sub
  :user/meta
  ;; The user at it was queried from the database
  :<- [:user/current]
- (fn [user]
-   (:meta user)))
+ :-> :meta)
 
 (rf/reg-sub
  :user/currency
  :<- [:user/current]
- (fn [user]
-   (:currency user)))
+ :-> :currency)
+
+(rf/reg-sub
+ :user/roles
+ :<- [:user/current]
+ :-> :roles)
+
+(rf/reg-sub
+ :user/subscription
+ :<- [:user/current]
+ :-> :subscription)
 
 (rf/reg-sub
  :user.currency/symbol
@@ -117,8 +123,7 @@
 
 (rf/reg-sub
  :user/display-name
- (fn [db _]
-   (tools/current-display-name db)))
+ :-> tools/current-display-name)
 
 (rf/reg-sub
  :user/groups
