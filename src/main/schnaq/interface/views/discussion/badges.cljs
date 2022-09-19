@@ -189,7 +189,6 @@
     :fx [(http/xhrio-request db :post "/discussion/statement/lock/toggle"
                              [:no-op]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
                               :statement-id statement-id
                               :lock? lock?})]}))
 

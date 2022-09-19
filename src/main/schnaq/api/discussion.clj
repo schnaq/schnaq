@@ -511,9 +511,8 @@
      ["/lock/toggle" {:post toggle-statement-lock
                       :description (at/get-doc #'toggle-statement-lock)
                       :name :api.discussion.statements/lock
-                      :middleware [:user/authenticated? :discussion/valid-credentials?]
-                      :parameters {:body {:edit-hash :discussion/edit-hash
-                                          :lock? boolean?}}
+                      :middleware [:discussion/user-moderator?]
+                      :parameters {:body {:lock? boolean?}}
                       :responses {200 {:body {:locked? boolean?}}}}]
      ["/pin/toggle" {:post toggle-pinned-statement
                      :description (at/get-doc #'toggle-pinned-statement)
