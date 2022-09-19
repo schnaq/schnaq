@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.navbar.user-management
-  (:require [oops.core :refer [oget]]
+  (:require ["react-bootstrap" :refer [Alert]]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
@@ -8,7 +9,8 @@
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.utils.toolbelt :as toolbelt :refer [session-storage-enabled?]]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.links :as links]))
 
@@ -141,6 +143,15 @@
    #(rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))])
    (if on-light-background? "btn-outline-secondary ms-2" "btn-dark ms-2")])
 
+(defn- login-not-possible
+  "Show a different component, if login is not possible."
+  []
+  [tooltip/html
+   [:<> [icon :cookie-bite "me-2"] (labels :login.not-possible/tooltip)]
+   [:> Alert {:variant "light" :class "m-0 p-2"}
+    [icon :exclamation-triangle "me-2"] (labels :login.not-possible/text)]
+   {:trigger :mouseenter}])
+
 (defn register-or-user-button
   "If not authenticated, show register button else show user menu."
   [on-light-background?]
@@ -148,6 +159,8 @@
     [:<>
      [buttons/upgrade]
      [user-dropdown-button on-light-background?]]
-    [:<>
-     [login-button on-light-background?]
-     [register-button on-light-background?]]))
+    (if session-storage-enabled?
+      [:<>
+       [login-button on-light-background?]
+       [register-button on-light-background?]]
+      [login-not-possible])))

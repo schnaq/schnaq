@@ -38,6 +38,9 @@
    :page.login/feature-1 "Create schnaqs"
    :page.login/feature-3 "Participation without registration"
 
+   :login.not-possible/text "Login not possible"
+   :login.not-possible/tooltip "Sorry, your browser settings don't allow cookies, so you can't login."
+
    ;; Register Page when creating a schnaq
    :page.register/heading "Register now and use schnaq"
    :page.register/register "Register For Free"
