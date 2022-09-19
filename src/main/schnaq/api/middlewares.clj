@@ -66,7 +66,7 @@
   [handler]
   (fn [request]
     (let [share-hash (extract-parameter-from-request request :share-hash)
-          user-id (:db/id (extract-parameter-from-request request :user))]
+          user-id (:db/id (:user request))]
       (if (validator/user-moderator? share-hash user-id)
         (handler request)
         (forbidden (at/build-error-body :credentials/not-moderator
