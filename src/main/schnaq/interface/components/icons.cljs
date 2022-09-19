@@ -11,8 +11,8 @@
              [faAngleDown faAngleRight faArchive faArrowDown faArrowLeft
               faArrowRight faArrowUp faBackspace faBell faBold faBriefcase
               faBullseye faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
-              faChevronLeft faChevronRight faCircle faCloud faCode faCog faComment faCopy
-              faEdit faEllipsisH faEllipsisV faExternalLinkAlt faFileDownload faFlask faGhost
+              faChevronLeft faChevronRight faCircle faCloud faCookieBite faCode faCog faComment faCopy
+              faEdit faEllipsisH faEllipsisV faExclamationTriangle faExternalLinkAlt faFileDownload faFlask faGhost
               faGraduationCap faInfinity faInfoCircle faItalic faLanguage faLaptop faList faListOl
               faLock faLockOpen faMagic faMapPin faMinus faPalette faPaperPlane faPenSquare faPencilRuler
               faPlayCircle faPlus faProjectDiagram faQrcode faQuestion faQuestionCircle
@@ -44,6 +44,7 @@
    :chevron/right faChevronRight
    :circle faCircle
    :cloud faCloud
+   :cookie-bite faCookieBite
    :code faCode
    :cog faCog
    :collapse-down faAngleDown
@@ -59,6 +60,7 @@
    :eye faEye
    :eye-slash faEyeSlash
    :envelope faEnvelope
+   :exclamation-triangle faExclamationTriangle
    :external-link-alt faExternalLinkAlt
    :facebook faFacebook
    :file-alt faFileAlt
