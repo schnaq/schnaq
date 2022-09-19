@@ -59,7 +59,7 @@
   [::specs/discussion :ret ::specs/discussion]
   (assoc discussion
          :discussion/share-link (get-share-link share-hash)
-         :discussion/admin-link (get-moderator-center-link share-hash)))
+         :discussion/moderation-link (get-moderator-center-link share-hash)))
 
 (>defn checkout-link
   "Get link to checkout page. This should be called after the login of a user."

@@ -134,7 +134,7 @@
 (s/def :discussion/share-hash ::non-blank-string)
 (s/def :discussion/edit-hash ::non-blank-string)
 (s/def :discussion/share-link ::non-blank-string)
-(s/def :discussion/admin-link ::non-blank-string)
+(s/def :discussion/moderation-link ::non-blank-string)
 (s/def :discussion/created-at inst?)
 (s/def :discussion/author ::user-or-reference)
 (s/def :discussion/header-image-url string?)
@@ -160,7 +160,7 @@
                                   :discussion/starting-statements :discussion/description
                                   :discussion/header-image-url :discussion/edit-hash
                                   :discussion/moderators :discussion/hub-origin :discussion/states
-                                  :discussion/created-at :discussion/share-link :discussion/admin-link
+                                  :discussion/created-at :discussion/share-link :discussion/moderation-link
                                   :discussion/creation-secret :discussion/mode :discussion/access
                                   :discussion/activation-focus :discussion/wordcloud]))
 
