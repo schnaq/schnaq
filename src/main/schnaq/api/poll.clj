@@ -122,12 +122,10 @@
                  :description (at/get-doc #'delete-poll)
                  :name :poll/delete
                  :parameters {:body {:poll-id :db/id
-                                     :share-hash :discussion/share-hash
-                                     :edit-hash :discussion/edit-hash}}
+                                     :share-hash :discussion/share-hash}}
                  :responses {200 {:body {:deleted? boolean?}}
                              400 at/response-error-body}
-                 :middleware [:user/authenticated?
-                              :discussion/valid-credentials?]}]]
+                 :middleware [:discussion/user-moderator?]}]]
     ["/polls" {:get polls-for-discussion
                :description (at/get-doc #'polls-for-discussion)
                :name :polls/get

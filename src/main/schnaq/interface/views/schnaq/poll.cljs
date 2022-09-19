@@ -550,7 +550,6 @@
           db :delete "/poll/delete"
           [:no-op]
           {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-           :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
            :poll-id poll-id})]}))
 
 (rf/reg-sub
