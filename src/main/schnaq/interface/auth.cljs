@@ -9,6 +9,7 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.toolbelt :refer [session-storage-enabled?]]
             [schnaq.interface.views.modal :as modal]
             [schnaq.shared-toolbelt :as shared-tools]
             [taoensso.timbre :as log]))
@@ -70,7 +71,7 @@
 (rf/reg-fx
  :keycloak/silent-check
  (fn [keycloak]
-   (-> keycloak
+   (-> (and keycloak session-storage-enabled?)
        (.init #js{:onLoad "check-sso"
                   :checkLoginIframe false
                   :silentCheckSsoRedirectUri (str (-> js/window .-location .-origin) "/silent-check-sso.html")})
@@ -86,14 +87,13 @@
 (rf/reg-event-fx
  :keycloak/login
  (fn [{:keys [db]} [_ redirect-uri]]
-   (let [keycloak (get-in db [:user :keycloak])]
-     (when keycloak
-       {:fx [[:keycloak/login-request [keycloak redirect-uri]]]}))))
+   (when-let [keycloak (get-in db [:user :keycloak])]
+     {:fx [[:keycloak/login-request [keycloak redirect-uri]]]})))
 
 (rf/reg-fx
  :keycloak/login-request
  (fn [[keycloak redirect-uri]]
-   (when keycloak
+   (when (and keycloak session-storage-enabled?)
      (-> keycloak
          (.login #js {:redirectUri redirect-uri})
          (.catch #(rf/dispatch [:modal [request-login-modal]]))))))
@@ -109,7 +109,7 @@
 (rf/reg-fx
  :keycloak/register-request
  (fn [[keycloak redirect-uri]]
-   (when keycloak
+   (when (and keycloak session-storage-enabled?)
      (-> keycloak
          (.register #js {:redirectUri redirect-uri})
          (.catch #(rf/dispatch [:modal [request-login-modal]]))))))
