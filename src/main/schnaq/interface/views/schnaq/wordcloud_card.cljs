@@ -1,23 +1,22 @@
 (ns schnaq.interface.views.schnaq.wordcloud-card
-  (:require
-   [cljs.spec.alpha :as s]
-   [clojure.string :as str]
-   [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
-   [oops.core :refer [oget oget+]]
-   [re-frame.core :as rf]
-   [schnaq.database.specs :as specs]
-   [schnaq.export :as export]
-   [schnaq.interface.components.common :as common]
-   [schnaq.interface.components.icons :refer [icon]]
-   [schnaq.interface.components.inputs :as inputs]
-   [schnaq.interface.components.motion :as motion]
-   [schnaq.interface.components.wordcloud :as wordcloud]
-   [schnaq.interface.matomo :as matomo]
-   [schnaq.interface.translations :refer [labels]]
-   [schnaq.interface.utils.http :as http]
-   [schnaq.interface.utils.toolbelt :as tools]
-   [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
-   [schnaq.shared-toolbelt :as stools]))
+  (:require [cljs.spec.alpha :as s]
+            [clojure.string :as str]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- => ?]]
+            [oops.core :refer [oget oget+]]
+            [re-frame.core :as rf]
+            [schnaq.database.specs :as specs]
+            [schnaq.export :as export]
+            [schnaq.interface.components.common :as common]
+            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.inputs :as inputs]
+            [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.components.wordcloud :as wordcloud]
+            [schnaq.interface.matomo :as matomo]
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
+            [schnaq.shared-toolbelt :as stools]))
 
 (defn- global-wordcloud
   "Shows the controls for the global word cloud"
@@ -124,12 +123,13 @@
 (>defn wordcloud-list
   "Displays all wordclouds of the current schnaq excluding the one in `exclude`."
   [exclude]
-  [::specs/wordcloud :ret (s/coll-of :re-frame/component)]
-  (for [wordcloud (remove #(= (:db/id exclude) (:db/id %)) @(rf/subscribe [:schnaq.wordclouds/local]))]
-    [motion/fade-in-and-out
-     [:article
-      {:key (str "wordcloud-card-" (:db/id wordcloud))}
-      [local-wordcloud-card wordcloud]]]))
+  [(? ::specs/wordcloud) :ret (? (s/coll-of :re-frame/component))]
+  (when exclude
+    (for [wordcloud (remove #(= (:db/id exclude) (:db/id %)) @(rf/subscribe [:schnaq.wordclouds/local]))]
+      [motion/fade-in-and-out
+       [:article
+        {:key (str "wordcloud-card-" (:db/id wordcloud))}
+        [local-wordcloud-card wordcloud]]])))
 
 ;; -----------------------------------------------------------------------------
 
