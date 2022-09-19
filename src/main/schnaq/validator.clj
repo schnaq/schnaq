@@ -33,15 +33,6 @@
   (and (valid-discussion? share-hash)
        (db/check-valid-statement-id-for-discussion statement-id share-hash)))
 
-(>defn valid-credentials?
-  ;; TODO this will not be needed
-  "Validate if share-hash and edit-hash match"
-  [share-hash edit-hash]
-  [(? :discussion/share-hash) (? :discussion/edit-hash) :ret boolean?]
-  (let [complete-discussion (db/discussion-by-share-hash share-hash)]
-    (and (= edit-hash (:discussion/edit-hash complete-discussion))
-         (not (db/discussion-deleted? share-hash)))))
-
 (>defn user-moderator?
   "Validate, whether a user is a moderator. Authors are implicitly always the moderators."
   [share-hash user-id]

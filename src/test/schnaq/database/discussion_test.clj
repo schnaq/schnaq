@@ -137,11 +137,6 @@
       (is (= 7 (count statements)))
       (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
 
-(deftest discussion-deleted?-test
-  (testing "Test whether deleted discussions are correctly recognized."
-    (is (db/discussion-deleted? "public-share-hash-deleted"))
-    (is (not (db/discussion-deleted? "public-share-hash")))))
-
 (deftest valid-statement-id-and-meeting?-test
   (testing "Test the function that checks whether a statement belongs to a certain meeting."
     (let [share-hash "Wegi-ist-der-schönste"

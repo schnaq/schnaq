@@ -255,20 +255,6 @@
        (format "Deletion of discussion with share-hash %s failed. Exception:\n%s"
                share-hash e)))))
 
-(>defn discussion-deleted?
-  "Returns whether a discussion has been marked as deleted."
-  [share-hash]
-  [:discussion/share-hash :ret boolean?]
-  (as-> (main-db/query
-         '[:find (pull ?states [*])
-           :in $ ?share-hash
-           :where [?discussion :discussion/share-hash ?share-hash]
-           [?discussion :discussion/states ?states]]
-         share-hash) q
-    (map #(:db/ident (first %)) q)
-    (into #{} q)
-    (contains? q :discussion.state/deleted)))
-
 (>defn- new-child-statement!
   "Creates a new child statement, that references a parent."
   [discussion-id parent-id new-content statement-type user-id registered-user? locked?]

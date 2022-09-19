@@ -517,9 +517,9 @@
      ["/pin/toggle" {:post toggle-pinned-statement
                      :description (at/get-doc #'toggle-pinned-statement)
                      :name :api.discussion.statements/pin
-                     :middleware [:user/authenticated? :user/pro? :discussion/valid-credentials?]
-                     :parameters {:body {:edit-hash :discussion/edit-hash
-                                         :pin? boolean?}}
+                     :middleware [:user/pro?
+                                  :discussion/user-moderator?]
+                     :parameters {:body {:pin? boolean?}}
                      :responses {200 {:body {:pinned? boolean?}}}}]
      ["/edit" {:put edit-statement!
                :description (at/get-doc #'edit-statement!)
