@@ -392,8 +392,7 @@
               :middleware [:discussion/valid-share-hash?]
               :parameters {:query {:share-hash :discussion/share-hash}}
               :responses {200 {:body {:graph ::specs/graph}}}}]
-   ["/manage" {:parameters {:body {:share-hash :discussion/share-hash
-                                   :edit-hash :discussion/edit-hash}}
+   ["/manage" {:parameters {:body {:share-hash :discussion/share-hash}}
                :responses {403 at/response-error-body}}
     ["" {:responses {200 {:body {:share-hash :discussion/share-hash}}}
          :middleware [:user/authenticated?

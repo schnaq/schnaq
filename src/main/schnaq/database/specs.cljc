@@ -132,7 +132,6 @@
 (s/def :discussion/title string?)
 (s/def :discussion/description string?)
 (s/def :discussion/share-hash ::non-blank-string)
-(s/def :discussion/edit-hash ::non-blank-string)
 (s/def :discussion/share-link ::non-blank-string)
 (s/def :discussion/moderation-link ::non-blank-string)
 (s/def :discussion/created-at inst?)
@@ -158,8 +157,8 @@
 (s/def ::discussion (s/keys :req [:discussion/share-hash]
                             :opt [:discussion/title :discussion/author
                                   :discussion/starting-statements :discussion/description
-                                  :discussion/header-image-url :discussion/edit-hash
-                                  :discussion/moderators :discussion/hub-origin :discussion/states
+                                  :discussion/header-image-url :discussion/hub-origin
+                                  :discussion/moderators :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/moderation-link
                                   :discussion/creation-secret :discussion/mode :discussion/access
                                   :discussion/activation-focus :discussion/wordcloud]))
