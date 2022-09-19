@@ -1,18 +1,11 @@
 (ns schnaq.interface.utils.localstorage
   (:require [hodgepodge.core :refer [local-storage]]
-            [oops.core :refer [oget]]
             [re-frame.core :as rf]))
 
-(defn- localstorage-available?
-  "Check that the localstorage is available."
-  []
-  (try
-    (oget js/window :localStorage)
-    true
-    (catch js/Object _e false)))
-
-(defn from-localstorage [key]
-  (when (localstorage-available?)
+(defn from-localstorage
+  "Load specified key from localstorage, if localstorage is available."
+  [key]
+  (when local-storage
     (get local-storage key)))
 
 ;; -----------------------------------------------------------------------------
@@ -21,17 +14,11 @@
  ;; Associates a value into local-storage. Can be retrieved as EDN via get or get-in.
  :localstorage/assoc
  (fn [[key value]]
-   (when (localstorage-available?)
+   (when local-storage
      (assoc! local-storage key value))))
 
 (rf/reg-fx
  :localstorage/dissoc
  (fn [key]
-   (when (localstorage-available?)
+   (when local-storage
      (dissoc! local-storage key))))
-
-;; WIP vllt unnötig
-(rf/reg-event-db
- :localstorage/availability
- (fn [db]
-   (assoc-in db [:localstorage :available?] (localstorage-available?))))
