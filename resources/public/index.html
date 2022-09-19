@@ -86,7 +86,6 @@
   function hasLocalStorage() {
     try {
       window.localStorage;
-      console.log("localStorage enabled in current client.")
       return true;
     } catch (e) {
       console.warn("localStorage disabled.");
@@ -100,7 +99,6 @@
   function hasSessionStorage() {
     try {
       window.sessionStorage;
-      console.log("sessionStorage enabled in current client.")
       return true;
     } catch (e) {
       console.warn("sessionStorage disabled.");
