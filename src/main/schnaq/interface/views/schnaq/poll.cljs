@@ -49,9 +49,8 @@
   "A graph displaying the results of the poll."
   [{:poll/keys [options type hide-results?]} cast-votes]
   (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        edit-hash @(rf/subscribe [:schnaq/edit-hash])
         voted? (or cast-votes read-only?)
-        show-results? (or edit-hash (not hide-results?))]
+        show-results? (or @(rf/subscribe [:user/moderator?]) (not hide-results?))]
     [:section.row
      (for [index (range (count options))]
        (let [{:keys [option/votes db/id option/value]} (get options index)
@@ -206,7 +205,6 @@
   [poll]
   (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        edit-hash @(rf/subscribe [:schnaq/edit-hash])
         voted? (or cast-votes read-only?)]
     [:form
      {:on-submit (fn [e]
@@ -219,7 +217,7 @@
          {:type :submit
           :on-click #(matomo/track-event "Active User" "Action" "Vote on Poll")}
          (labels :schnaq.poll/vote!)]])
-     (when edit-hash
+     (when @(rf/subscribe [:user/moderator?])
        [show-results-information (:poll/hide-results? poll)])]))
 
 (>defn input-or-results
@@ -228,9 +226,9 @@
   [::specs/poll => :re-frame/component]
   (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        edit-hash @(rf/subscribe [:schnaq/edit-hash])
+        user-moderator? @(rf/subscribe [:user/moderator?])
         voted? (or cast-votes read-only?)
-        show-results? (or edit-hash (not (:poll/hide-results? poll)))]
+        show-results? (or user-moderator? (not (:poll/hide-results? poll)))]
     [:<>
      (if (= :poll.type/ranking (:poll/type poll))
        (if voted?
@@ -239,7 +237,7 @@
            [results-hidden-message])
          [ranking-input poll])
        [poll-content poll])
-     (when edit-hash
+     (when user-moderator?
        [show-results-information (:poll/hide-results? poll)])]))
 
 (>defn- ranking-card

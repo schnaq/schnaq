@@ -118,12 +118,6 @@
    (:discussion/share-hash selected-schnaq)))
 
 (rf/reg-sub
- :schnaq/edit-hash
- :<- [:schnaq/selected]
- (fn [selected-schnaq _ _]
-   (:discussion/edit-hash selected-schnaq)))
-
-(rf/reg-sub
  :schnaq/share-link
  :<- [:schnaq/selected]
  (fn [selected-schnaq]

@@ -34,7 +34,7 @@
   "Full screen view of a component."
   []
   (let [{:poll/keys [title] :as poll} @(rf/subscribe [:present/poll])
-        admin-access? @(rf/subscribe [:schnaq/edit-hash])]
+        admin-access? @(rf/subscribe [:user/moderator?])]
     [pages/fullscreen
      {:page/title title}
      [:div.container.pt-5

@@ -84,11 +84,10 @@
   (let [statement-labels (set (:statement/labels statement))
         label ":check"
         checked? (statement-labels label)
-        authenticated? @(rf/subscribe [:user/authenticated?])
         mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
         show-button? (and (not @(rf/subscribe [:schnaq.selected/read-only?]))
                           (or (not mods-mark-only?)
-                              (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
+                              (and mods-mark-only? @(rf/subscribe [:user/moderator?]))))]
     (when show-button?
       [:section.w-100
        [:button.btn.btn-sm.btn-link.text-dark.pe-0
