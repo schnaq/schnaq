@@ -29,7 +29,7 @@
       (catch Exception e
         (let [error (ex-data e)]
           (log/error "Could not retrieve access token:" error)
-          (toolbelt/post-error-in-chat "CleverReach" (format "Could not retrieve access token: `%s`" error))
+          (toolbelt/post-error-in-mattermost "CleverReach" (format "Could not retrieve access token: `%s`" error))
           error)))))
 
 (defonce ^:private access-token
@@ -47,8 +47,8 @@
     (toolbelt/post-in-mattermost! "[CleverReach] Recovered last operation with fresh token")
     (catch Exception e
       (let [error (ex-data e)]
-        (toolbelt/post-error-in-chat "CleverReach"
-                                     (format "Could not recover with new token, Giving up. Error %s" error))
+        (toolbelt/post-error-in-mattermost "CleverReach"
+                                           (format "Could not recover with new token, Giving up. Error %s" error))
         error))))
 
 (>defn- wrap-catch-exception
@@ -64,7 +64,7 @@
         (let [error (ex-data e)
               response-body (m/decode-response-body error)
               formatted-error (format "%s mail: %s, body: `%s`" error-log email response-body)]
-          (toolbelt/post-error-in-chat "CleverReach" formatted-error)
+          (toolbelt/post-error-in-mattermost "CleverReach" formatted-error)
           (log/error formatted-error)
           (if (= "Unauthorized: token expired" (:message response-body))
             (retry-with-new-token fn)
