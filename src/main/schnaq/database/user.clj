@@ -192,8 +192,8 @@
   "Takes a collection of hosts and checks if the mail's host matches at least
   one of them."
   [mail hosts]
-  [string? (? (s/coll-of string?)) => (? boolean?)]
-  (when hosts
+  [(? string?) (? (s/coll-of string?)) => (? boolean?)]
+  (when (and mail hosts)
     (let [matches (map #(re-matches (re-pattern (format ".*@%s" %)) mail)
                        hosts)]
       (some string? matches))))
