@@ -47,3 +47,13 @@
   [keycloak-id roles]
   [:user.registered/keycloak-id (s/coll-of string?) => (s/coll-of string?)]
   (kc-user/remove-realm-roles! kc-client realm (.getUsername (get-user keycloak-id)) roles))
+
+(>defn get-users-by-email-regex
+  "List all users matching the email address pattern.
+  
+  Example: `(get-users-by-email-regex #\".*@schnaq.com\")`"
+  [re]
+  [::specs/regex => (s/coll-of string?)]
+  (let [users (kc-user/get-users kc-client realm)]
+    (filter #(re-find re %)
+            (map #(.getEmail %) users))))
