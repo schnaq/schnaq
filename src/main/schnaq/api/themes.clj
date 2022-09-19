@@ -180,17 +180,15 @@
                  :middleware [user-is-theme-author?-middleware]
                  :parameters {:body {:theme ::specs/theme}}
                  :responses {200 {:body {:themes (s/coll-of ::specs/theme)}}}}]
-     ["/discussion" {:middleware [:discussion/valid-credentials?]}
+     ["/discussion" {:middleware [:discussion/user-moderator?]}
       ["/assign" {:put assign-theme
                   :description (at/get-doc #'assign-theme)
                   :name :api.theme.discussion/assign
                   :parameters {:body {:theme ::specs/theme
-                                      :share-hash :discussion/share-hash
-                                      :edit-hash :discussion/edit-hash}}
+                                      :share-hash :discussion/share-hash}}
                   :responses {200 {:body {:assigned? boolean?}}}}]
       ["/unassign" {:delete unassign-theme
                     :description (at/get-doc #'unassign-theme)
                     :name :api.theme.discussion/unassign
-                    :parameters {:body {:share-hash :discussion/share-hash
-                                        :edit-hash :discussion/edit-hash}}
+                    :parameters {:body {:share-hash :discussion/share-hash}}
                     :responses {200 {:body {:unassigned? boolean?}}}}]]]]])
