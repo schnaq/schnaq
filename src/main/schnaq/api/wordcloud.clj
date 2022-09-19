@@ -17,11 +17,9 @@
   [["/wordcloud" {:swagger {:tags ["wordcloud"]}}
     ["/discussion" {:put toggle-wordcloud
                     :description (at/get-doc #'toggle-wordcloud)
-                    :middleware [:user/authenticated?
-                                 :user/pro?
-                                 :discussion/valid-credentials?]
+                    :middleware [:user/pro?
+                                 :discussion/user-moderator?]
                     :name :wordcloud/display
-                    :parameters {:body {:share-hash :discussion/share-hash
-                                        :edit-hash :discussion/edit-hash}}
+                    :parameters {:body {:share-hash :discussion/share-hash}}
                     :responses {200 {:body {:wordcloud :discussion/wordcloud}}
                                 400 at/response-error-body}}]]])

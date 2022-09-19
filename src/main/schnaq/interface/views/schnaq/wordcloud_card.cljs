@@ -65,8 +65,7 @@
  (fn [{:keys [db]} [_]]
    {:fx [(http/xhrio-request db :put "/wordcloud/discussion"
                              [:schnaq.wordcloud.toggle/success]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-fx
  :schnaq.wordcloud.toggle/success
