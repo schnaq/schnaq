@@ -38,11 +38,10 @@
 (rf/reg-event-fx
  :discussion.moderation/make-read-only
  (fn [{:keys [db]} _]
-   (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
+   (let [{:discussion/keys [share-hash]} (get-in db [:schnaq :selected])]
      {:fx [(http/xhrio-request db :put "/discussion/manage/make-read-only"
                                [:discussion.moderation/make-read-only-success]
-                               {:share-hash share-hash
-                                :edit-hash edit-hash}
+                               {:share-hash share-hash}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
@@ -54,11 +53,10 @@
 (rf/reg-event-fx
  :discussion.moderation/make-writeable
  (fn [{:keys [db]} _]
-   (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
+   (let [{:discussion/keys [share-hash]} (get-in db [:schnaq :selected])]
      {:fx [(http/xhrio-request db :put "/discussion/manage/make-writeable"
                                [:discussion.moderation/make-writeable-success]
-                               {:share-hash share-hash
-                                :edit-hash edit-hash}
+                               {:share-hash share-hash}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
@@ -218,12 +216,11 @@
  :schnaq.moderation/disable-pro-con
  (fn [{:keys [db]} [_ disable-pro-con?]]
    (let [current-route (:current-route db)
-         {:keys [share-hash edit-hash]} (:path-params current-route)]
+         {:keys [share-hash]} (:path-params current-route)]
      {:fx [(http/xhrio-request db :put "/discussion/manage/disable-pro-con"
                                [:schnaq.moderation/disable-pro-con-success disable-pro-con?]
                                {:disable-pro-con? disable-pro-con?
-                                :share-hash share-hash
-                                :edit-hash edit-hash}
+                                :share-hash share-hash}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
@@ -247,8 +244,7 @@
    {:fx [(http/xhrio-request db :put "/discussion/manage/mods-mark-only"
                              [:schnaq.moderation.qa/mods-mark-only-success mods-mark-only?]
                              {:mods-mark-only? mods-mark-only?
-                              :share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])}
+                              :share-hash (get-in db [:schnaq :selected :discussion/share-hash])}
                              [:ajax.error/as-notification])]}))
 
 (rf/reg-event-db
@@ -265,7 +261,6 @@
  (fn [{:keys [db]} [_ entity-id]]
    {:fx [(http/xhrio-request db :put "/discussion/manage/focus" [:schnaq.moderation.focus.entity/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
                               :entity-id entity-id})]}))
 
 (rf/reg-event-fx

@@ -397,7 +397,7 @@
                :responses {403 at/response-error-body}}
     ["" {:responses {200 {:body {:share-hash :discussion/share-hash}}}
          :middleware [:user/authenticated?
-                      :discussion/valid-credentials?]}
+                      :discussion/user-moderator?]}
      ["/disable-pro-con" {:put disable-pro-con!
                           :description (at/get-doc #'disable-pro-con!)
                           :middleware [:user/pro?]
