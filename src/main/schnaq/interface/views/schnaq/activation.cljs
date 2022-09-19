@@ -238,8 +238,7 @@
  (fn [{:keys [db]} _]
    {:fx [(http/xhrio-request db :delete "/activation/delete"
                              [:schnaq.activation.delete/success]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-db
  :schnaq.activation.delete/success

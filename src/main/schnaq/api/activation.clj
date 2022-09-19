@@ -56,12 +56,10 @@
                       403 at/response-error-body}}]
      ["/delete" {:delete delete-activation
                  :description (at/get-doc #'delete-activation)
-                 :middleware [:user/authenticated?
-                              :user/pro?
-                              :discussion/valid-credentials?]
+                 :middleware [:user/pro?
+                              :discussion/user-moderator?]
                  :name :activation/delete
-                 :parameters {:body {:share-hash :discussion/share-hash
-                                     :edit-hash :discussion/edit-hash}}
+                 :parameters {:body {:share-hash :discussion/share-hash}}
                  :responses {200 {:body {:deleted? boolean?}}
                              400 at/response-error-body}}]
      ["/by-share-hash" {:get get-activation
