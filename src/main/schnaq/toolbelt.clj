@@ -78,10 +78,10 @@
        :content-type :json
        :accept :json}))))
 
-(>defn post-error-in-chat
+(>defn post-error-in-mattermost
   "Takes the service's name and the error message to leave a message in our
   mattermost."
   [service message]
-  [string? string? => map?]
+  [string? string? => (? map?)]
   (when shared-config/production?
     (post-in-mattermost! (format "[💥 %s] %s" service message) "gitlabs-dirty-secrets")))
