@@ -159,7 +159,6 @@
     :discussion/description "Should a person looking for a pet rather buy a dog or a cat?"
     :discussion/states []
     :discussion/share-hash "cat-dog-hash"
-    :discussion/edit-hash "cat-dog-edit-hash"
     :discussion/author "user.registered/alex"
     :discussion/moderators ["user.registered/christian" "user.registered/kangaroo"]
     :discussion/wordcloud {:db/id "wordcloud/cat-or-dog"
@@ -181,7 +180,6 @@
     :discussion/title "Wetter Graph"
     :discussion/created-at #inst "2019-01-01"
     :discussion/share-hash "graph-hash"
-    :discussion/edit-hash "graph-edit-hash"
     :discussion/author "user/wegi"
     :discussion/description "Der Graph muss korrekt sein"
     :discussion/states []
@@ -245,7 +243,7 @@
     :discussion/created-at #inst "2019-01-01"
     :discussion/share-hash "simple-hash"
     :discussion/author "user.registered/alex"
-    :discussion/edit-hash "simple-hash-secret"
+    :discussion/moderators ["user.registered/kangaroo" "user.registered/schnaqqi"]
     :discussion/description "A very simple discussion"
     :discussion/states []
     :discussion/starting-statements ["statement/brainstorm"]}
@@ -277,7 +275,6 @@
 (def deleted-discussions
   [{:discussion/title "Deleted discussion"
     :discussion/share-hash "public-share-hash-deleted"
-    :discussion/edit-hash "secret-public-hash-deleted"
     :discussion/author "user/schredder"
     :discussion/states [:discussion.state/deleted]}])
 

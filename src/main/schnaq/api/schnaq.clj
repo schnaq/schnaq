@@ -81,7 +81,6 @@
             authorized-for-hub? (some #(= % hub) (:groups identity))
             discussion-data (cond-> {:discussion/title discussion-title
                                      :discussion/share-hash (.toString (UUID/randomUUID))
-                                     :discussion/edit-hash (.toString (UUID/randomUUID))
                                      :discussion/author author
                                      :discussion/mode :discussion.mode/qanda}
                               keycloak-id (assoc :discussion/moderators [author])

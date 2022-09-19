@@ -78,7 +78,7 @@
 
 (deftest get-starting-conclusions-test
   (testing "Query starting conclusions."
-    (is (not (zero? (count (:starting-conclusions (get-starting-conclusions-request toolbelt/token-wegi-no-beta-user "cat-dog-hash"))))))
+    (is (not (zero? (count (:starting-conclusions (get-starting-conclusions-request toolbelt/token-wegi-no-pro-user "cat-dog-hash"))))))
     (is (not (zero? (count (:starting-conclusions (get-starting-conclusions-request nil "cat-dog-hash"))))))
     (is (string? (:message (get-starting-conclusions-request nil ":shrug:"))))))
 
@@ -94,7 +94,7 @@
                    (dotimes [_ 10]
                      (p :starting-conclusion-api
                         (get-starting-conclusions-request
-                         toolbelt/token-wegi-no-beta-user
+                         toolbelt/token-wegi-no-pro-user
                          "cat-dog-hash")))))]
       ;; 500 ms
       (is (< (get-in stats [:stats :starting-conclusion-api :mean]) 500000000)))))
@@ -102,7 +102,6 @@
 (defn- react-to-conclusions-request [statement-id]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.discussion.react-to/statement))
        :body-params {:share-hash "cat-dog-hash"
-                     :edit-hash "cat-dog-edit-hash"
                      :conclusion-id statement-id
                      :premise "test"
                      :statement-type :statement.type/attack
@@ -122,14 +121,13 @@
   (let [statement-id (:db/id (first (discussion-db/starting-statements "cat-dog-hash")))
         request #(-> {:request-method :post :uri (:path (api/route-by-name :api.discussion.statements/pin))
                       :body-params {:share-hash "cat-dog-hash"
-                                    :edit-hash "cat-dog-edit-hash"
                                     :statement-id statement-id
                                     :pin? true}}
                      toolbelt/add-csrf-header
                      (toolbelt/mock-authorization-header %)
                      test-app)]
     (is (= 200 (:status (request toolbelt/token-schnaqqifant-user))))
-    (is (= 403 (:status (request toolbelt/token-wegi-no-beta-user))))))
+    (is (= 403 (:status (request toolbelt/token-wegi-no-pro-user))))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -158,13 +156,12 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- set-focus-request [entity-id share-hash edit-hash]
+(defn- set-focus-request [entity-id share-hash]
   (-> {:request-method :put :uri (:path (api/route-by-name :api.discussion.manage/focus))
        :body-params {:entity-id entity-id
-                     :share-hash share-hash
-                     :edit-hash edit-hash}}
+                     :share-hash share-hash}}
       toolbelt/add-csrf-header
-      (toolbelt/mock-authorization-header toolbelt/token-schnaqqifant-user)
+      (toolbelt/mock-authorization-header toolbelt/token-wegi-no-pro-user)
       test-app
       :status))
 
@@ -172,17 +169,16 @@
   (let [share-hash "cat-dog-hash"
         poll-id (:db/id (first (poll-db/polls share-hash)))]
     (testing "Users with moderator rights can toggle the focus."
-      (is (= 200 (set-focus-request poll-id share-hash "cat-dog-edit-hash"))))))
+      (is (= 200 (set-focus-request poll-id share-hash))))))
 
 (deftest delete-statement-and-children!-test
   (let [parent-id (:db/id (first (discussion-db/statements-by-content "we should get a cat")))
         delete-fn
         #(-> {:request-method :delete :uri (:path (api/route-by-name :api.discussion.statements/delete))
               :body-params {:statement-id %
-                            :share-hash "cat-dog-hash"
-                            :edit-hash "cat-dog-edit-hash"}}
+                            :share-hash "cat-dog-hash"}}
              toolbelt/add-csrf-header
-             (toolbelt/mock-authorization-header toolbelt/token-schnaqqifant-user)
+             (toolbelt/mock-authorization-header toolbelt/token-wegi-no-pro-user)
              test-app)]
     (testing "Are all children-statements deleted?"
       (delete-fn parent-id)

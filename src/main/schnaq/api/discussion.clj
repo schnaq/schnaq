@@ -139,7 +139,7 @@
 
 (defn- delete-statement-and-children!
   "Deletes the passed statement and all descendants.
-  Important: Needs to check whether the statement-id belongs to the discussion with the passed edit-hash."
+  Important: Needs to check whether the statement-id belongs to the discussion with the passed share-hash."
   [{:keys [parameters]}]
   (let [{:keys [share-hash statement-id]} (:body parameters)
         descendants (discussion-db/descendants-of-statement statement-id)
@@ -197,7 +197,7 @@
 ;; Discussion Options
 
 (defn- make-discussion-read-only!
-  "Makes a discussion read-only if share- and edit-hash are correct and present."
+  "Makes a discussion read-only."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:body parameters)]
     (log/info "Setting discussion to read-only:" share-hash)

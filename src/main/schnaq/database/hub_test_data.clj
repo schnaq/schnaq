@@ -3,13 +3,11 @@
 (def ^:private hub-schnaqs
   [{:discussion/title "Hub Discussion"
     :discussion/share-hash "public-share-hash"
-    :discussion/edit-hash "secret-public-hash"
     :discussion/author "user/hub-tester"
     :discussion/created-at #inst "2020-04-20"
     :discussion/states [:discussion.state/public]}
    {:discussion/title "Another Hub Discussion"
     :discussion/share-hash "public-share-hash-hubby"
-    :discussion/edit-hash "secret-public-hash-hubby"
     :discussion/author "user/hub-tester"
     :discussion/created-at #inst "2020-03-16"
     :discussion/states [:discussion.state/public]}])

@@ -243,11 +243,6 @@
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
     :db/doc "A unique hash that grants participation access to the discussion"}
-   {:db/ident :discussion/edit-hash
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/unique :db.unique/identity
-    :db/doc "A hash that grants edit access to the discussion"}
    {:db/ident :discussion/author
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one

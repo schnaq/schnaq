@@ -17,10 +17,9 @@
 (def ^:private christian-keycloak-id
   (:user.registered/keycloak-id christian))
 
-(defn- create-discussion [title share-hash edit-hash user-id]
+(defn- create-discussion [title share-hash user-id]
   {:discussion/title title
    :discussion/share-hash share-hash
-   :discussion/edit-hash edit-hash
    :discussion/author user-id})
 
 (defn- find-statement-in-list [statement-id statement-list]
@@ -93,8 +92,7 @@
         ;; add discussion
         discussion-title "Have you seen this discussion?"
         share-hash "share-hash-1"
-        edit-hash "secret-hash-1"
-        discussion-id (discussion-db/new-discussion (create-discussion discussion-title share-hash edit-hash user-id))
+        discussion-id (discussion-db/new-discussion (create-discussion discussion-title share-hash user-id))
         ;; add starting statements
         content-1 "'Ello, I wish to register a complaint. 'Ello, Miss?"
         content-2 "What do you mean miss?"

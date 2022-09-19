@@ -99,8 +99,8 @@
 (deftest delete-schnaq!-test
   (testing "Deleting a schnaq as a user."
     (is (= 403 (:status (delete-schnaq-request toolbelt/token-kangaroo-normal-user "simple-hash"))))
-    (is (= 200 (:status (delete-schnaq-request toolbelt/token-wegi-no-beta-user "simple-hash"))))
+    (is (= 200 (:status (delete-schnaq-request toolbelt/token-wegi-no-pro-user "simple-hash"))))
     (testing "Schnaq is already deleted, return a bad-request"
-      (is (= 404 (:status (delete-schnaq-request toolbelt/token-wegi-no-beta-user "simple-hash")))))
-    (is (= 403 (:status (delete-schnaq-request toolbelt/token-wegi-no-beta-user "some-fantasy-hash"))))))
+      (is (= 404 (:status (delete-schnaq-request toolbelt/token-wegi-no-pro-user "simple-hash")))))
+    (is (= 403 (:status (delete-schnaq-request toolbelt/token-wegi-no-pro-user "some-fantasy-hash"))))))
 

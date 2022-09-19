@@ -7,14 +7,11 @@
 (use-fixtures :once toolbelt/clean-database-fixture)
 
 (def test-share-hash "cat-dog-hash")
-(def test-edit-hash "cat-dog-edit-hash")
-(def wrong-edit-hash "wrong-edit-hash")
 
-(defn- toggle-wordcloud-request [user-token share-hash edit-hash display-wordcloud?]
+(defn- toggle-wordcloud-request [user-token share-hash display-wordcloud?]
   (-> {:request-method :put :uri (:path (api/route-by-name :wordcloud/display))
        :body-params {:display-wordcloud? display-wordcloud?
-                     :share-hash share-hash
-                     :edit-hash edit-hash}}
+                     :share-hash share-hash}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       test-app
@@ -23,24 +20,20 @@
 (deftest toggle-wordcloud-test
   (testing "Non Pro User can't toggle wordcloud."
     (is (= 403 (toggle-wordcloud-request
-                toolbelt/token-wegi-no-beta-user
+                toolbelt/token-wegi-no-pro-user
                 test-share-hash
-                test-edit-hash
                 true))))
-  (testing "Pro User without edit hash can't toggle wordcloud."
+  (testing "Pro User without moderator rights can't toggle wordcloud."
     (is (= 403 (toggle-wordcloud-request
                 toolbelt/token-schnaqqifant-user
                 test-share-hash
-                wrong-edit-hash
                 true))))
-  (testing "Admin and Pro User can toggle wordcloud."
+  (testing "Moderator and Pro User can toggle wordcloud."
     (is (= 200 (toggle-wordcloud-request
                 toolbelt/token-n2o-admin
                 test-share-hash
-                test-edit-hash
                 true)))
     (is (= 200 (toggle-wordcloud-request
                 toolbelt/token-n2o-admin
                 test-share-hash
-                test-edit-hash
                 false)))))
