@@ -222,8 +222,7 @@
  (fn [{:keys [db]} _]
    {:fx [(http/xhrio-request db :put "/activation/reset"
                              [:schnaq.activation.load-from-backend/success]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-fx
  :activation/activate

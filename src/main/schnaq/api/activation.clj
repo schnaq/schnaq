@@ -78,11 +78,9 @@
                                 400 at/response-error-body}}]
      ["/reset" {:put reset-activation
                 :description (at/get-doc #'reset-activation)
-                :middleware [:user/authenticated?
-                             :user/pro?
-                             :discussion/valid-credentials?]
+                :middleware [:user/pro?
+                             :discussion/user-moderator?]
                 :name :activation/reset
-                :parameters {:body {:share-hash :discussion/share-hash
-                                    :edit-hash :discussion/edit-hash}}
+                :parameters {:body {:share-hash :discussion/share-hash}}
                 :responses {200 {:body {:activation ::specs/activation}}
                             400 at/response-error-body}}]]]])
