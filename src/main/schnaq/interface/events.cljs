@@ -42,7 +42,8 @@
 (rf/reg-event-fx
  :initialize/schnaq
  (fn [_ _]
-   {:fx [[:dispatch [:username/from-localstorage]]
+   {:fx [[:dispatch [:localstorage/availability]] ;; WIP vllt unnötig
+         [:dispatch [:username/from-localstorage]]
          [:dispatch [:user/init-device-id]]
          [:dispatch [:user.currency/from-localstorage]]
          [:dispatch [:user.tours/from-localstorage]]
