@@ -71,15 +71,16 @@
 (rf/reg-fx
  :keycloak/silent-check
  (fn [keycloak]
-   (-> (and keycloak session-storage-enabled?)
-       (.init #js{:onLoad "check-sso"
-                  :checkLoginIframe false
-                  :silentCheckSsoRedirectUri (str (-> js/window .-location .-origin) "/silent-check-sso.html")})
-       (.then (fn [result]
-                (rf/dispatch [:keycloak.init/after-login result])))
-       (.catch (fn [_]
-                 (rf/dispatch [:user/authenticated! false])
-                 (error-to-console "Silent check with keycloak failed."))))))
+   (when (and keycloak session-storage-enabled?)
+     (-> keycloak
+         (.init #js{:onLoad "check-sso"
+                    :checkLoginIframe false
+                    :silentCheckSsoRedirectUri (str (-> js/window .-location .-origin) "/silent-check-sso.html")})
+         (.then (fn [result]
+                  (rf/dispatch [:keycloak.init/after-login result])))
+         (.catch (fn [_]
+                   (rf/dispatch [:user/authenticated! false])
+                   (error-to-console "Silent check with keycloak failed.")))))))
 
 ;; -----------------------------------------------------------------------------
 ;; Login request to the keycloak instance.
