@@ -116,15 +116,16 @@
  (fn [{:keys [db]}]
    (let [visited-hashes (get-in db [:schnaqs :visited-hashes])
          visited-hashes-with-faq (conj visited-hashes config/faq-share-hash)
+         share-hashes (if shared-config/production? visited-hashes-with-faq visited-hashes)
          schnaq-filter (keyword (get-in db [:current-route :parameters :query :filter]))]
-     (when-not (empty? visited-hashes-with-faq)
+     (when-not (empty? share-hashes)
        {:db (if schnaq-filter
               (assoc-in db [:schnaqs :filter] schnaq-filter)
               (update db :schnaqs dissoc :filter))
         :fx [(http/xhrio-request
               db :post "/schnaqs/by-hashes"
               [:schnaqs.visited/store-from-backend]
-              {:share-hashes (if shared-config/production? visited-hashes-with-faq visited-hashes)
+              {:share-hashes share-hashes
                :display-name (tools/current-display-name db)})
              [:dispatch [:loading/toggle [:schnaqs? true]]]]}))))
 
