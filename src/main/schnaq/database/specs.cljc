@@ -3,9 +3,12 @@
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]
             [schnaq.config.shared :as shared-config])
-  #?(:clj (:import (java.io InputStream))))
+  #?(:clj (:import [java.io InputStream]
+                   [java.util.regex Pattern])))
 
 #?(:cljs (s/def :re-frame/component (s/or :form-1 vector? :form-2 fn?)))
+
+#?(:clj (s/def ::regex (partial instance? Pattern)))
 
 ;; Common
 (s/def ::non-blank-string (s/and string? (complement string/blank?)))
