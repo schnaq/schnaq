@@ -56,7 +56,7 @@
  (fn [{:keys [db]} [_ _]]
    (let [keycloak (Keycloak (clj->js config/keycloak))]
      {:db (assoc-in db [:user :keycloak] keycloak)
-      :fx [[:keycloak/silent-check keycloak]]}))) ;; WIP das hier läuft noch nicht
+      :fx [[:keycloak/silent-check keycloak]]})))
 
 (rf/reg-event-fx
  :keycloak.init/after-login
