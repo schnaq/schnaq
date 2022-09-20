@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.discussion.admin-center
   (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
-            [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as button]
@@ -11,6 +10,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.pages :as pages]
@@ -361,11 +361,13 @@
 (rf/reg-event-fx
  :schnaqs.save-admin-access/to-localstorage-and-db
  (fn [{:keys [db]} [_ share-hash edit-hash]]
-   (let [admin-access-map (assoc (:schnaqs/admin-access local-storage) share-hash edit-hash)]
-     {:db (assoc-in db [:schnaqs :admin-access] admin-access-map)
-      :fx [[:localstorage/assoc [:schnaqs/admin-access admin-access-map]]]})))
+   (when-let [admin-access (from-localstorage :schnaqs/admin-access)]
+     (let [admin-access-map (assoc admin-access share-hash edit-hash)]
+       {:db (assoc-in db [:schnaqs :admin-access] admin-access-map)
+        :fx [[:localstorage/assoc [:schnaqs/admin-access admin-access-map]]]}))))
 
 (rf/reg-event-db
  :schnaqs.save-admin-access/store-hashes-from-localstorage
  (fn [db _]
-   (update-in db [:schnaqs :admin-access] merge (:schnaqs/admin-access local-storage))))
+   (when-let [admin-access (from-localstorage :schnaqs/admin-access)]
+     (update-in db [:schnaqs :admin-access] merge admin-access))))

@@ -1,10 +1,10 @@
 (ns schnaq.interface.tour
   (:require ["react-joyride" :refer [STATUS] :default Joyride]
-            [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.colors :refer [colors]]
-            [schnaq.interface.translations :refer [labels]]))
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]))
 
 (def ^:private finished
   (oget STATUS :FINISHED))
@@ -92,23 +92,17 @@
  (fn [{:keys [db]} [_ save-tour?]]
    (if save-tour?
      (when-let [current-tour (get-in db [:tour :current])]
-       {:db (-> db
-                (update :tour dissoc :current)
-                (update-in [:user :tours] conj current-tour))
-        :fx [[:tour/to-localstorage current-tour]]})
+       (let [new-tours (conj (or (from-localstorage :tours) #{}) current-tour)]
+         {:db (-> db
+                  (update :tour dissoc :current)
+                  (update-in [:user :tours] conj current-tour))
+          :fx [[:localstorage/assoc [:tours new-tours]]]}))
      {:db (update db :tour dissoc :current)})))
 
 (rf/reg-event-fx
  :user.tours/from-localstorage
  (fn [{:keys [db]}]
-   (if-let [tours (:tours local-storage)]
+   (if-let [tours (from-localstorage :tours)]
      {:db (assoc-in db [:user :tours] tours)}
      {:db (assoc-in db [:user :tours] #{})
       :fx [[:localstorage/assoc [:tours #{}]]]})))
-
-(rf/reg-fx
- :tour/to-localstorage
- (fn [tour]
-   (when tour
-     (let [new-tours (conj (or (:tours local-storage) #{}) tour)]
-       (assoc! local-storage :tours new-tours)))))

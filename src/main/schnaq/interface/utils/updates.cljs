@@ -99,11 +99,12 @@
 (rf/reg-event-fx
  :updates.periodic.discussion.starting/request
  (fn [{:keys [db]}]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         keycloak-object (get-in db [:user :keycloak])]
      {:fx [[:ws/send [:discussion.starting/update
-                      {:share-hash share-hash
-                       :display-name (toolbelt/current-display-name db)
-                       :jwt (.-token (get-in db [:user :keycloak]))}
+                      (cond-> {:share-hash share-hash
+                               :display-name (toolbelt/current-display-name db)}
+                        keycloak-object (assoc :jwt (.-token (get-in db [:user :keycloak]))))
                       (fn [response]
                         (rf/dispatch [:schnaq.activation.load-from-backend/success response])
                         (rf/dispatch [:discussion.activations/focus response])

@@ -1,13 +1,8 @@
 (ns schnaq.interface.notification.events
   (:require [clojure.set :refer [union]]
-            [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [schnaq.interface.utils.http :as http]))
-
-(rf/reg-sub
- :visited/statements
- (fn [db [_ discussion-hash]]
-   (get-in db [:visited :statement-ids discussion-hash])))
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]))
 
 (rf/reg-event-db
  :notification/set-visited-statements
@@ -19,14 +14,14 @@
  :visited.save-statement-ids/store-hashes-from-localstorage
  (fn [db _]
    ;; Without the or a nil can be written for fresh users, which breaks the default getter later on
-   (assoc-in db [:visited :statement-ids] (or (:discussion/visited-statement-ids local-storage)
+   (assoc-in db [:visited :statement-ids] (or (from-localstorage :discussion/visited-statement-ids)
                                               {}))))
 
 (rf/reg-event-fx
  :visited.statement-ids/to-localstorage-and-merge-with-app-db
  (fn [{:keys [db]} [_]]
    (let [statement-ids (get-in db [:visited :statement-ids])
-         visited-statement-ds (merge-with union (:discussion/statement-ids local-storage) statement-ids)]
+         visited-statement-ds (merge-with union (from-localstorage :discussion/statement-ids) statement-ids)]
      {:fx [[:localstorage/assoc [:discussion/visited-statement-ids visited-statement-ds]]
            [:dispatch [:visited.save-statement-ids/store-hashes-from-localstorage]]]})))
 

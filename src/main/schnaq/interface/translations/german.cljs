@@ -42,6 +42,9 @@
    :page.login/feature-1 "schnaqs erstellen"
    :page.login/feature-3 "Teilnahme per Link ohne Registrierung"
 
+   :login.not-possible/text "Login nicht möglich"
+   :login.not-possible/tooltip "Deine Browsereinstellungen erlauben leider keine Cookies, daher kannst du dich nicht einloggen."
+
    ;; Register Page when creating a schnaq
    :page.register/heading "Jetzt registrieren und direkt schnaqqen!"
    :page.register/register "Kostenlos registrieren"

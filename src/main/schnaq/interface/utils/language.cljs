@@ -1,8 +1,8 @@
 (ns schnaq.interface.utils.language
   (:require [clojure.string :as str]
-            [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :as config]))
+            [schnaq.interface.config :as config]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]))
 
 (defn- browser-language
   "Returns the user's browser language"
@@ -24,20 +24,9 @@
 (defn init-language
   "Initializes the language of the client (if a preference is saved in localstorage)."
   []
-  (let [language (or (:schnaq/language local-storage) (default-language))]
+  (let [language (or (from-localstorage :schnaq/language) (default-language))]
     (reset! config/user-language language)
     (rf/dispatch [:set-locale language])))
-
-(defn set-language
-  "Sets the language in the app and saves the selection for future reference.
-  Use keywords as locales.
-
-  e.g. `:en` for english or `:de` for german.
-  Saves the keyword in the localstorage and sets the key to the config."
-  [language]
-  (assoc! local-storage :schnaq/language language)
-  (reset! config/user-language language)
-  (rf/dispatch [:set-locale language]))
 
 (rf/reg-sub
  :current-locale
@@ -73,9 +62,11 @@
  ;; (But includes execution of set-locale)
  :switch-language
  (fn [locale]
-   (set-language locale)))
+   (reset! config/user-language locale)))
 
 (rf/reg-event-fx
  :language/switch
  (fn [_ [_ locale]]
-   {:fx [[:switch-language locale]]}))
+   {:fx [[:switch-language locale]
+         [:localstorage/assoc [:schnaq/language locale]]
+         [:dispatch [:set-locale locale]]]}))
