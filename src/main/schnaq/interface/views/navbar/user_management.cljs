@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.navbar.user-management
-  (:require ["react-bootstrap" :refer [Alert]]
+  (:require ["react-bootstrap" :refer [Alert Button]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
@@ -13,6 +13,15 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.links :as links]))
+
+(defn- login-not-possible
+  "Show a different component, if login is not possible."
+  []
+  [tooltip/html
+   [:<> [icon :cookie-bite "me-2"] (labels :login.not-possible/tooltip)]
+   [:> Alert {:variant "light" :class "m-0 p-2"}
+    [icon :exclamation-triangle "me-2"] (labels :login.not-possible/text)]
+   {:trigger :mouseenter}])
 
 (defn- name-input
   "An input, where the user can set their name. Happens automatically by typing."
@@ -125,10 +134,12 @@
          [login-dropdown-items]
          [:<>
           [namechange-menu-point]
-          [:button.btn.dropdown-item
-           {:role "button"
-            :on-click #(rf/dispatch [:keycloak/login])}
-           (labels :user/register)]])]]]))
+          (if session-storage-enabled?
+            [:> Button {:variant "link"
+                        :on-click #(rf/dispatch [:keycloak/login])
+                        :class "dropdown-item"}
+             (labels :user/register)]
+            [login-not-possible])])]]]))
 
 (defn- login-button
   "Show a login button."
@@ -142,15 +153,6 @@
   [buttons/button (labels :nav/register)
    #(rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))])
    (if on-light-background? "btn-outline-secondary ms-2" "btn-dark ms-2")])
-
-(defn- login-not-possible
-  "Show a different component, if login is not possible."
-  []
-  [tooltip/html
-   [:<> [icon :cookie-bite "me-2"] (labels :login.not-possible/tooltip)]
-   [:> Alert {:variant "light" :class "m-0 p-2"}
-    [icon :exclamation-triangle "me-2"] (labels :login.not-possible/text)]
-   {:trigger :mouseenter}])
 
 (defn register-or-user-button
   "If not authenticated, show register button else show user menu."
