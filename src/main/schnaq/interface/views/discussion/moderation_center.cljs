@@ -25,10 +25,10 @@
    [:h5 heading]])
 
 (rf/reg-event-fx
- :discussion.moderation/send-moderation-center-link
+ :discussion.moderation/promote-user-to-moderator
  (fn [{:keys [db]} [_ form]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-     {:fx [(http/xhrio-request db :post "/emails/send-moderation-center-link"
+     {:fx [(http/xhrio-request db :post "/moderation/promote-user"
                                [:discussion.moderation/send-email-success form]
                                {:recipient (oget form ["moderation-center-recipient" :value])
                                 :share-hash share-hash
@@ -135,7 +135,7 @@
      [:form.form.text-start.mb-5
       {:on-submit (fn [e]
                     (.preventDefault e)
-                    (rf/dispatch [:discussion.moderation/send-moderation-center-link
+                    (rf/dispatch [:discussion.moderation/promote-user-to-moderator
                                   (oget e [:target :elements])]))}
       [:div.mb-3
        [:label.form-label {:for input-id} (labels :schnaq.moderation.edit.link.form/label)]
