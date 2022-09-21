@@ -166,6 +166,12 @@
           new-val (max (if old-val (dec old-val) -1) minimum-value)]
       @(transact [[:db/cas entity attribute old-val new-val]])))))
 
+(>defn delete-entity!
+  "Retracts any entity from the db completely. Just pass any id along."
+  [id]
+  [:db/id => map?]
+  @(transact [[:db/retractEntity id]]))
+
 ;; -----------------------------------------------------------------------------
 ;; Feedback functions
 

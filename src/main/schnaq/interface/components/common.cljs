@@ -13,10 +13,9 @@
   "Info box to explain functionality."
   [text]
   [string? => :re-frame/component]
-  [:small.text-muted.text-start
-   [:div.d-flex.flex-row
-    [icon :info "my-auto me-3"]
-    text]])
+  [:small.text-muted
+   [icon :info "my-auto me-2"]
+   text])
 
 (>defn info-icon-with-tooltip
   "Display an info icon with a tooltip on mouse-over."

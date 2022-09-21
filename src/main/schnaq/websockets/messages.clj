@@ -26,6 +26,8 @@
         :polls polls
         :activation activation
         :wordcloud wordcloud
+        ;; below are the local wordclouds
+        :wordclouds (wordcloud-db/local-wordclouds share-hash)
         :activation-focus (get-in
                            (fast-pull [:discussion/share-hash share-hash] '[:discussion/activation-focus])
                            [:discussion/activation-focus :db/id])}))))

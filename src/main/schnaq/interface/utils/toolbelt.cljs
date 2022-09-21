@@ -162,3 +162,9 @@
                  (st/coerce spec (oget field :value) st/string-transformer)])))
        (remove #(= "" (second %)))
        (into {})))
+
+(def session-storage-enabled?
+  "Check if session storage is enabled in the user's client."
+  (try js/sessionStorage
+       true
+       (catch js/Object _e false)))

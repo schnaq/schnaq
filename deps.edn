@@ -19,7 +19,8 @@
         compojure/compojure {:mvn/version "1.7.0"}
         day8.re-frame/http-fx {:mvn/version "0.2.4"}
         expound/expound {:mvn/version "0.9.0"}
-        funcool/hodgepodge {:mvn/version "0.1.4"}
+        schnaq/hodgepodge {:git/url "https://github.com/schnaq/hodgepodge.git"
+                           :sha "de1b57165647e186e4a18873eb2a2e93fff36a4e"}
         funcool/promesa {:mvn/version "8.0.450"}
         http-kit/http-kit {:mvn/version "2.6.0"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}

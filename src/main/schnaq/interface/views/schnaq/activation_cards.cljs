@@ -46,9 +46,10 @@
  :<- [:schnaq/activation]
  :<- [:schnaq.wordcloud/show?]
  :<- [:schnaq/polls]
- (fn [[start? activation wordcloud? polls] _]
+ :<- [:schnaq.wordclouds/local]
+ (fn [[start? activation wordcloud? polls local-wordclouds] _]
    (and start?
-        (or wordcloud? (seq polls) activation))))
+        (or wordcloud? (seq polls) (seq local-wordclouds) activation))))
 
 (defn activation-cards
   "A single card containing all activations, which can be switched through."
@@ -62,11 +63,15 @@
         focus-wordcloud? @(rf/subscribe [:schnaq.wordcloud/focus?])
         polls (poll/poll-list (:db/id focus-poll))
         wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])
+        focus-local-wordcloud @(rf/subscribe [:schnaq.wordcloud/local activation-focus])
+        local-wordclouds (wordcloud-card/wordcloud-list focus-local-wordcloud)
         activations-seq (cond-> []
                           focus-poll (conj [poll/poll-list-item focus-poll])
+                          focus-local-wordcloud (conj [wordcloud-card/local-wordcloud-card focus-local-wordcloud])
                           focus-activation? (conj [activation/activation-card])
                           (and wordcloud? focus-wordcloud?) (conj [wordcloud-card/wordcloud-card])
                           ;; Add non focused elements in order
+                          (seq local-wordclouds) ((comp vec concat) local-wordclouds)
                           (seq polls) ((comp vec concat) polls)
                           (and (not focus-activation?) activation) (conj [activation/activation-card])
                           (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card]))

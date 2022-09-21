@@ -7,6 +7,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.patterns :as patterns]
+            [schnaq.database.wordcloud :as wordcloud-db]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log])
   (:import (java.util UUID)))
@@ -29,6 +30,18 @@
         (if (validator/valid-discussion? share-hash)
           (handler request)
           at/not-found-hash-invalid)))))
+
+(defn wordcloud-belongs-to-discussion
+  "Check whether a wordcloud and share-hash match."
+  [handler]
+  (fn [request]
+    (let [share-hash (extract-parameter-from-request request :share-hash)
+          wordcloud-id (extract-parameter-from-request request :wordcloud-id)]
+      (if (wordcloud-db/matching-wordcloud wordcloud-id share-hash)
+        (handler request)
+        (forbidden (at/build-error-body
+                    :wordcloud-not-from-discussion
+                    "The information you submitted did not match."))))))
 
 (defn valid-writeable-discussion?
   "Verify that a discussion is valid and writing to it / modifying it is allowed."
@@ -147,8 +160,8 @@
   "Extracts the device-id and saves it to the known ids of the queries schnaq"
   [handler]
   (fn [request]
-    (when-let [device-id (get-in request [:headers "device-id"])]
-      (discussion-db/add-device-id
-       (extract-parameter-from-request request :share-hash)
-       (UUID/fromString device-id)))
+    (let [device-id (get-in request [:headers "device-id"])
+          share-hash (extract-parameter-from-request request :share-hash)]
+      (when (and device-id share-hash)
+        (discussion-db/add-device-id share-hash (UUID/fromString device-id))))
     (handler request)))

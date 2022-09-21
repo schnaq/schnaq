@@ -3,9 +3,12 @@
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]
             [schnaq.config.shared :as shared-config])
-  #?(:clj (:import (java.io InputStream))))
+  #?(:clj (:import [java.io InputStream]
+                   [java.util.regex Pattern])))
 
 #?(:cljs (s/def :re-frame/component (s/or :form-1 vector? :form-2 fn?)))
+
+#?(:clj (s/def ::regex (partial instance? Pattern)))
 
 ;; Common
 (s/def ::non-blank-string (s/and string? (complement string/blank?)))
@@ -162,6 +165,13 @@
                                   :discussion/created-at :discussion/share-link :discussion/moderation-link
                                   :discussion/creation-secret :discussion/mode :discussion/access
                                   :discussion/activation-focus :discussion/wordcloud]))
+
+(s/def :wordcloud/title ::non-blank-string)
+(s/def :wordcloud/discussion (s/or :id :db/id
+                                   :discussion ::discussion))
+(s/def :wordcloud/words (s/coll-of (s/tuple ::non-blank-string pos-int?)))
+(s/def ::wordcloud (s/keys :req [:wordcloud/title :wordcloud/discussion]
+                           :opt [:wordcloud/words]))
 
 (s/def ::share-hash-statement-id-mapping
   (s/map-of :discussion/share-hash (s/coll-of :db/id)))
@@ -360,8 +370,8 @@
 (s/def :identity/locale string?)
 (s/def ::identity
   (s/keys
-   :req-un [:identity/sub :identity/preferred_username :identity/email]
-   :opt-un [:identity/given_name :identity/family_name :identity/groups :identity/locale]))
+   :opt-un [:identity/sub :identity/preferred_username :identity/email
+            :identity/given_name :identity/family_name :identity/groups :identity/locale]))
 
 ;; -----------------------------------------------------------------------------
 ;; Websockets

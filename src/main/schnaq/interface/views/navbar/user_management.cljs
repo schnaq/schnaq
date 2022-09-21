@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.navbar.user-management
-  (:require [oops.core :refer [oget]]
+  (:require ["react-bootstrap" :refer [Alert Button]]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
@@ -8,9 +9,19 @@
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.utils.toolbelt :as toolbelt :refer [session-storage-enabled?]]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.links :as links]))
+
+(defn- login-not-possible
+  "Show a different component, if login is not possible."
+  []
+  [tooltip/html
+   [:<> [icon :cookie-bite "me-2"] (labels :login.not-possible/tooltip)]
+   [:> Alert {:variant "light" :class "m-0 p-2"}
+    [icon :exclamation-triangle "me-2"] (labels :login.not-possible/text)]
+   {:trigger :mouseenter}])
 
 (defn- name-input
   "An input, where the user can set their name. Happens automatically by typing."
@@ -123,10 +134,12 @@
          [login-dropdown-items]
          [:<>
           [namechange-menu-point]
-          [:button.btn.dropdown-item
-           {:role "button"
-            :on-click #(rf/dispatch [:keycloak/login])}
-           (labels :user/register)]])]]]))
+          (if session-storage-enabled?
+            [:> Button {:variant "link"
+                        :on-click #(rf/dispatch [:keycloak/login])
+                        :class "dropdown-item"}
+             (labels :user/register)]
+            [login-not-possible])])]]]))
 
 (defn- login-button
   "Show a login button."
@@ -148,6 +161,8 @@
     [:<>
      [buttons/upgrade]
      [user-dropdown-button on-light-background?]]
-    [:<>
-     [login-button on-light-background?]
-     [register-button on-light-background?]]))
+    (if session-storage-enabled?
+      [:<>
+       [login-button on-light-background?]
+       [register-button on-light-background?]]
+      [login-not-possible])))

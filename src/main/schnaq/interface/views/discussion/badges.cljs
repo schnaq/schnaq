@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.badges
   (:require [goog.string :refer [format]]
-            [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [schnaq.interface.components.common :as common]
             [schnaq.interface.components.icons :refer [icon]]
@@ -8,6 +7,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.notifications :refer [notify!]]
@@ -358,13 +358,14 @@
 (rf/reg-event-db
  :visited.save-statement-nums/store-hashes-from-localstorage
  (fn [db _]
-   (assoc-in db [:visited :statement-nums] (:discussion/statement-nums local-storage))))
+   (when-let [statement-nums (from-localstorage :discussion/statement-nums)]
+     (assoc-in db [:visited :statement-nums] statement-nums))))
 
 (rf/reg-event-fx
  :visited.statement-nums/to-localstorage
  (fn [{:keys [db]} [_]]
    (let [statements-nums-map (get-in db [:visited :statement-nums])
-         current-visited-nums (:discussion/statement-nums local-storage)
+         current-visited-nums (from-localstorage :discussion/statement-nums)
          merged-visited-nums (merge current-visited-nums statements-nums-map)]
      {:fx [[:localstorage/assoc [:discussion/statement-nums merged-visited-nums]]
            [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]]})))

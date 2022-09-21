@@ -5,7 +5,7 @@
             [clojure.set :as set]
             [clojure.spec.alpha :as s]
             [clojure.string :as str]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn-]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as r]
@@ -19,7 +19,7 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.loading :refer [spinner-icon]]))
 
-(def ^:private stopwords
+(def stopwords
   "Stopwords which should be removed from the wordcloud."
   (set/union (set deu) (set eng)))
 
@@ -32,7 +32,7 @@
 (s/def ::word
   (s/keys :req-un [::text ::value]))
 
-(>defn- extract-link-text-from-md
+(>defn extract-link-text-from-md
   "Check if text contains a markdown link. If yes, then return the link's name,
   else return the word."
   [word]
@@ -41,7 +41,7 @@
     (-> link first second)
     word))
 
-(>defn- remove-md-links
+(>defn remove-md-links
   "Remove all occurrences of markdown links."
   [s]
   [string? :ret string?]
@@ -79,32 +79,37 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- wordcloud-download-button
+  "Download wordcloud as svg."
+  [svg]
+  (when svg
+    [:> Button {:variant :link
+                :class "text-muted p-0 pe-2 align-self-end"
+                :on-click #(file-download/download-svg-node svg "wordcloud.svg")}
+     [tooltip/text
+      (labels :schnaq.wordcloud/download)
+      [:span [icon :file-download "me-1"]]]]))
+
 (defn wordcloud
-  "Create a wordcloud based on the data in the db."
-  []
-  (if-let [words (->> @(rf/subscribe [:wordcloud/words])
-                      (sort-by :value)
-                      reverse
-                      (take words-to-be-wordclouded))]
-    (let [wc (r/atom nil)]
-      (fn []
+  "Create a wordcloud based on the data that is passed in."
+  [_input]
+  (let [wc (r/atom nil)]
+    (fn [input]
+      (if-let [words (->> input
+                          (sort-by :value)
+                          reverse
+                          (take words-to-be-wordclouded))]
         (let [svg (when @wc (-> @wc (oget :children) first (oget :children) first))]
-          [:div {:ref #(when-not @wc (reset! wc %))}
+          [:div.d-flex {:ref #(when-not @wc (reset! wc %))}
            [:> ReactWordcloud {:words words :options options}]
-           (when @wc
-             [:> Button {:variant :link
-                         :class "text-muted float-end"
-                         :on-click #(file-download/download-svg-node svg "wordcloud.svg")}
-              [tooltip/text
-               (labels :schnaq.wordcloud/download)
-               [:span [icon :file-download "me-1"]]]])])))
-    [:div.text-center.py-3 [spinner-icon]]))
+           [wordcloud-download-button svg]])
+        [:div.text-center.py-3 [spinner-icon]]))))
 
 (defn wordcloud-preview
   "If user is pro-user display a wordcloud and if not show a preview instead."
   []
   (if @(rf/subscribe [:user/pro?])
-    [wordcloud]
+    [wordcloud @(rf/subscribe [:wordcloud/words])]
     [preview/preview-image :preview/wordcloud]))
 
 ;; -----------------------------------------------------------------------------

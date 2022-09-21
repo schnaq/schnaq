@@ -150,6 +150,15 @@
   [:db/id
    :wordcloud/visible?])
 
+(def local-wordcloud
+  [:db/id
+   [:wordcloud.local/title :as :wordcloud/title]
+   [:wordcloud.local/words :as :wordcloud/words]
+   {[:discussion/_wordcloud-local
+     :xform 'schnaq.database.xforms/pull-up-db-id
+     :as :wordcloud/discussion]
+    [:db/id]}])
+
 (def survey-using-schnaq-for
   [:db/id
    :surveys.using-schnaq-for/user

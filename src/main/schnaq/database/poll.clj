@@ -45,17 +45,17 @@
   [share-hash poll-id]
   [:discussion/share-hash :db/id :ret (? map?)]
   (when (poll-belongs-to-discussion? share-hash poll-id)
-    @(db/transact [[:db/retractEntity poll-id]])))
+    (db/delete-entity! poll-id)))
 
 (>defn polls
   "Return all polls which reference the discussion from the passed `share-hash`."
   [share-hash]
   [:discussion/share-hash :ret (s/coll-of ::specs/poll)]
-  (db/query '[:find [(pull ?poll poll-pattern) ...]
-              :in $ ?share-hash poll-pattern
-              :where [?discussion :discussion/share-hash ?share-hash]
-              [?poll :poll/discussion ?discussion]]
-            share-hash patterns/poll))
+  (query '[:find [(pull ?poll poll-pattern) ...]
+           :in $ ?share-hash poll-pattern
+           :where [?discussion :discussion/share-hash ?share-hash]
+           [?poll :poll/discussion ?discussion]]
+         share-hash patterns/poll))
 
 (>defn vote!
   "Casts a vote for a certain option.
@@ -64,7 +64,7 @@
   [share-hash poll-id option-id]
   [:discussion/share-hash :db/id :db/id :ret (? map?)]
   (when-let [matching-option
-             (db/query
+             (query
               '[:find ?option .
                 :in $ ?option ?poll ?share-hash
                 :where [?poll :poll/options ?option]
@@ -76,7 +76,7 @@
 (defn- match-options
   "Check whether share-hash and poll-id match and return all option-ids that match as well."
   [share-hash poll-id option-ids]
-  (db/query
+  (query
    '[:find [?options ...]
      :in $ [?options ...] ?poll ?share-hash
      :where [?poll :poll/options ?options]

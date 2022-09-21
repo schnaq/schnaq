@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.discussion.logic
-  (:require [hodgepodge.core :refer [local-storage]]
-            [oops.core :refer [oget oget+]]
+  (:require [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.shared-toolbelt :as stools]))
 
@@ -70,9 +70,11 @@
 (rf/reg-event-db
  :schnaq.discussion-secrets/load-from-localstorage
  (fn [db _]
-   (-> db
-       (assoc-in [:discussion :statements :creation-secrets] (:discussion/creation-secrets local-storage))
-       (assoc-in [:discussion :schnaqs :creation-secrets] (:discussion.schnaqs/creation-secrets local-storage)))))
+   (let [discussion-creation-secrets (from-localstorage :discussion/creation-secrets)
+         discussion-schnaqs-creation-secrets (from-localstorage :discussion.schnaqs/creation-secrets)]
+     (cond-> db
+       discussion-creation-secrets (assoc-in [:discussion :statements :creation-secrets] discussion-creation-secrets)
+       discussion-schnaqs-creation-secrets (assoc-in [:discussion :schnaqs :creation-secrets] discussion-schnaqs-creation-secrets)))))
 
 (rf/reg-sub
  :schnaq.discussion.statements/creation-secrets

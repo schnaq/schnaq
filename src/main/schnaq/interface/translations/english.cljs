@@ -38,6 +38,9 @@
    :page.login/feature-1 "Create schnaqs"
    :page.login/feature-3 "Participation without registration"
 
+   :login.not-possible/text "Login not possible"
+   :login.not-possible/tooltip "Sorry, your browser settings don't allow cookies, so you can't login."
+
    ;; Register Page when creating a schnaq
    :page.register/heading "Register now and use schnaq"
    :page.register/register "Register For Free"
@@ -182,10 +185,17 @@
    :schnaq.activation/phrase "Torooo"
 
    ;; Word Cloud feature
-   :schnaq.wordcloud/show "Show Word Cloud"
-   :schnaq.wordcloud/hide "Hide Word Cloud"
+   :schnaq.wordcloud/show "Show Word Cloud for schnaq room"
+   :schnaq.wordcloud/hide "Hide Word Cloud for schnaq room"
    :schnaq.wordcloud/title "Word Cloud"
    :schnaq.wordcloud/label "Show the most common words from your schnaq as a word cloud."
+   :schnaq.wordcloud.local.create/heading "Start an interactive wordcloud that displays its inputs."
+   :schnaq.wordcloud.local.create/label "Question or Prompt"
+   :schnaq.wordcloud.local.create/button "Start Word Cloud"
+   :schnaq.wordcloud.local.add-words/label "Enter your words here"
+   :schnaq.wordcloud.local.add-words/hint "You can add multiple words, they will be split at the whitespace."
+   :schnaq.wordcloud.local/delete-button "Delete"
+   :schnaq.wordcloud.local/delete-confirmation "Do you really want to delete the wordcloud permanently?"
    :schnaq.wordcloud/download "Download Word Cloud"
 
    ;; schnaq creation

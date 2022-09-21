@@ -1,6 +1,7 @@
 (ns schnaq.database.activation-test
   (:require [clojure.test :refer [use-fixtures is deftest testing]]
             [schnaq.database.activation :as activation-db]
+            [schnaq.database.main :as db]
             [schnaq.test.toolbelt :as toolbelt]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
@@ -31,5 +32,5 @@
 (deftest delete-activation!-test
   (testing "Delete activation by share-hash."
     (let [activation (activation-db/activation-by-share-hash "simple-hash")]
-      (activation-db/delete-activation! (:db/id activation))
+      (db/delete-entity! (:db/id activation))
       (is (nil? (activation-db/activation-by-share-hash "simple-hash"))))))

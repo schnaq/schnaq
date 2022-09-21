@@ -199,8 +199,8 @@
   "Takes a collection of hosts and checks if the mail's host matches at least
   one of them."
   [mail hosts]
-  [string? (? (s/coll-of string?)) => (? boolean?)]
-  (when hosts
+  [(? string?) (? (s/coll-of string?)) => (? boolean?)]
+  (when (and mail hosts)
     (let [matches (map #(re-matches (re-pattern (format ".*@%s" %)) mail)
                        hosts)]
       (some string? matches))))
@@ -271,14 +271,17 @@
 
 (>defn create-visited-statements-for-discussion
   [keycloak-id discussion-hash visited-statements]
-  [:user.registered/keycloak-id :discussion/share-hash (s/coll-of :db/id) :ret map?]
+  [:user.registered/keycloak-id :discussion/share-hash (s/coll-of :db/id) :ret (? map?)]
   (let [queried-id (seen-statements-entity keycloak-id discussion-hash)
         temp-id (or queried-id (str "seen-statements-" keycloak-id "-" discussion-hash))
+        ;; Need to check in case  a schnaq has been deleted
+        schnaq-exists? (fast-pull [:discussion/share-hash discussion-hash])
         new-visited {:db/id temp-id
                      :seen-statements/user [:user.registered/keycloak-id keycloak-id]
                      :seen-statements/visited-schnaq [:discussion/share-hash discussion-hash]
                      :seen-statements/visited-statements visited-statements}]
-    @(transact [(remove-nil-values-from-map new-visited)])))
+    (when schnaq-exists?
+      @(transact [(remove-nil-values-from-map new-visited)]))))
 
 (>defn update-visited-statements
   "Updates the user's visited statements by adding the new ones."

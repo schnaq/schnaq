@@ -1,13 +1,13 @@
 (ns schnaq.interface.events
   (:require [goog.string :as gstring]
             [goog.userAgent :as gagent]
-            [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.links :as links]))
 
@@ -27,7 +27,7 @@
 (rf/reg-event-fx
  :load/last-added-schnaq
  (fn [_ _]
-   (let [share-hash (:schnaq.last-added/share-hash local-storage)]
+   (let [share-hash (from-localstorage :schnaq.last-added/share-hash)]
      (when-not (nil? share-hash)
        {:fx [[:dispatch [:schnaq/load-by-share-hash share-hash]]]}))))
 

@@ -42,6 +42,9 @@
    :page.login/feature-1 "schnaqs erstellen"
    :page.login/feature-3 "Teilnahme per Link ohne Registrierung"
 
+   :login.not-possible/text "Login nicht möglich"
+   :login.not-possible/tooltip "Deine Browsereinstellungen erlauben leider keine Cookies, daher kannst du dich nicht einloggen."
+
    ;; Register Page when creating a schnaq
    :page.register/heading "Jetzt registrieren und direkt schnaqqen!"
    :page.register/register "Kostenlos registrieren"
@@ -185,10 +188,17 @@
    :schnaq.activation/phrase "Törööö"
 
    ;; Word Cloud feature
-   :schnaq.wordcloud/show "Wortwolke anzeigen"
-   :schnaq.wordcloud/hide "Wortwolke verbergen"
+   :schnaq.wordcloud/show "Wortwolke für schnaq Raum anzeigen"
+   :schnaq.wordcloud/hide "Wortwolke für schnaq Raum verbergen"
    :schnaq.wordcloud/title "Wortwolke"
    :schnaq.wordcloud/label "Zeige die häufigsten Wörter aus deinem schnaq als Wortwolke an."
+   :schnaq.wordcloud.local.create/heading "Lege eine interaktive Wortwolke an, die nur auf neue Eingaben reagiert."
+   :schnaq.wordcloud.local.create/label "Frage oder Überschrift"
+   :schnaq.wordcloud.local.create/button "Lege Wortwolke an"
+   :schnaq.wordcloud.local.add-words/label "Wörter hier einfügen"
+   :schnaq.wordcloud.local.add-words/hint "Du kannst mehrere Wörter, per Leerzeichen getrennt, eintippen."
+   :schnaq.wordcloud.local/delete-button "Löschen"
+   :schnaq.wordcloud.local/delete-confirmation "Möchtest du die Wortwolke wirklich permanent löschen?"
    :schnaq.wordcloud/download "Wortwolke herunterladen"
 
    ;; schnaq creation

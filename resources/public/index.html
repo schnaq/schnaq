@@ -54,41 +54,7 @@
 
 <script async src="/js/compiled/base.js"></script>
 
-<script name="matomo" type="text/javascript">
-  var _paq = window._paq = window._paq || [];
-  _paq.push(['setCookieDomain', '*.schnaq.com']);
-  _paq.push(['requireCookieConsent']); // Require user to opt in - currently resolved via Klaro!
-  _paq.push(['setCookieConsentGiven']); // Matomo is obligatory, klaro informs about this.
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']); // Enable download and outlink tracking
-  (function () {
-    var u = '//analytics.schnaq.com/';
-    _paq.push(['setTrackerUrl', u + 'matomo.php']);
-    _paq.push(['setSiteId', '2']);
-    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-    g.type = 'text/javascript';
-    g.async = true;
-    g.defer = true;
-    g.src = u + 'matomo.js';
-    s.parentNode.insertBefore(g, s);
-  })();
-
-</script>
-<noscript>
-  <p><img alt="" src="//analytics.schnaq.com/matomo.php?idsite=2&amp;rec=1" style="border: 0;"/></p>
-</noscript>
-
-<!-- Matomo Tag Manager -->
-<script>
-  var _mtm = window._mtm = window._mtm || [];
-  _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
-  var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-  g.async = true;
-  g.src = 'https://analytics.schnaq.com/js/container_v6ZwPYIY.js';
-  s.parentNode.insertBefore(g, s);
-</script>
-<!-- End Matomo Tag Manager -->
-
+<!-- Library functions -->
 <script>
   /**
    * Load JS via JavaScript.
@@ -114,11 +80,78 @@
     }
   }
 
-  if (!inIframe()) {
-    loadJS('/js/klaro/config.js', undefined, document.body);
-    loadJS('/node_modules/klaro/dist/klaro-no-css.js', undefined, document.body);
+  /**
+   * Check if localStorage is enabled.
+   */
+  function hasLocalStorage() {
+    try {
+      window.localStorage;
+      return true;
+    } catch (e) {
+      console.warn("localStorage disabled.");
+      return false;
+    }
+  }
+
+  /**
+   * Check if sessionStorage is enabled.
+   */
+  function hasSessionStorage() {
+    try {
+      window.sessionStorage;
+      return true;
+    } catch (e) {
+      console.warn("sessionStorage disabled.");
+      return false;
+    }
+  }
+
+</script>
+
+<!-- Matomo -->
+<script name="matomo" type="text/javascript">
+  function initMatomo() {
+    var _paq = window._paq = window._paq || [];
+    _paq.push(['setCookieDomain', '*.schnaq.com']);
+    _paq.push(['requireCookieConsent']); // Require user to opt in - currently resolved via Klaro!
+    _paq.push(['setCookieConsentGiven']); // Matomo is obligatory, klaro informs about this.
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']); // Enable download and outlink tracking
+    (function () {
+      var u = '//analytics.schnaq.com/';
+      _paq.push(['setTrackerUrl', u + 'matomo.php']);
+      _paq.push(['setSiteId', '2']);
+      var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+      g.type = 'text/javascript';
+      g.async = true;
+      g.defer = true;
+      g.src = u + 'matomo.js';
+      s.parentNode.insertBefore(g, s);
+    })();
+  }
+
+  function initTagManager() {
+    var _mtm = window._mtm = window._mtm || [];
+    _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
+    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.async = true;
+    g.src = 'https://analytics.schnaq.com/js/container_v6ZwPYIY.js';
+    s.parentNode.insertBefore(g, s);
+  }
+
+  if (hasLocalStorage()) {
+    initMatomo();
+    initTagManager();
+    
+    if (!inIframe() && hasSessionStorage()) {
+      loadJS('/js/klaro/config.js', undefined, document.body);
+      loadJS('/node_modules/klaro/dist/klaro-no-css.js', undefined, document.body);
+    }
   }
 </script>
+<noscript>
+  <p><img alt="" src="//analytics.schnaq.com/matomo.php?idsite=2&amp;rec=1" style="border: 0;"/></p>
+</noscript>
 
 </body>
 

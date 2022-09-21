@@ -246,6 +246,7 @@
     :discussion/moderators ["user.registered/kangaroo" "user.registered/schnaqqi"]
     :discussion/description "A very simple discussion"
     :discussion/states []
+    :discussion/wordcloud-local ["wordcloud/first" "wordcloud/second"]
     :discussion/starting-statements ["statement/brainstorm"]}
    {:db/id "statement/denken"
     :statement/author "user/rambo"
@@ -282,6 +283,14 @@
   [{:db/id "activation/for-simple-discussion"
     :activation/count 42
     :activation/discussion "discussion/simple"}])
+
+(def ^:private wordclouds
+  [{:db/id "wordcloud/first"
+    :wordcloud.local/title "FLOWERS!"
+    :wordcloud.local/words [["PANSY" 4] ["Lilly" 2] ["Tuba" 1]]}
+   {:db/id "wordcloud/second"
+    :wordcloud.local/title "Nonsense"
+    :wordcloud.local/words [["foo" 13] ["fooo" 1] ["foobar" 5] ["barbar" 7]]}])
 
 (def alex
   {:db/id "user.registered/alex"
@@ -409,4 +418,4 @@
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
           deleted-discussions graph-discussion simple-discussion registered-users
-          themes activations polls))
+          themes activations polls wordclouds))

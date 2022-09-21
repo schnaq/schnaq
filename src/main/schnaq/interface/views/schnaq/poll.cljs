@@ -1,8 +1,7 @@
 (ns schnaq.interface.views.schnaq.poll
   (:require [cljs.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [=> >defn >defn-]]
-            [goog.string :as gstring]
-            [hodgepodge.core :refer [local-storage]]
+            [goog.string :as gstring] 
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
@@ -14,6 +13,7 @@
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
@@ -538,7 +538,8 @@
  :schnaq.polls/load-past-votes
  ;; Load past votes from localstorage
  (fn [db _]
-   (assoc-in db [:polls :past-votes] (:poll/cast-votes local-storage))))
+   (when-let [cast-votes (from-localstorage :poll/cast-votes)]
+     (assoc-in db [:polls :past-votes] cast-votes))))
 
 (rf/reg-event-fx
  :poll/delete

@@ -111,7 +111,7 @@
   [{{:keys [sub]} :identity
     {{:keys [theme]} :body} :parameters}]
   (delete-images! (:db/id theme))
-  (themes-db/delete-theme (:db/id theme))
+  (db/delete-entity! (:db/id theme))
   (ok {:themes (themes-db/themes-by-keycloak-id sub)}))
 
 (defn- assign-theme
