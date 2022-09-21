@@ -151,7 +151,6 @@
     <orderEntry type="library" name="Deps: org.slf4j/jul-to-slf4j:1.7.32" level="project" />
     <orderEntry type="library" name="Deps: cljs-ajax:0.8.4" level="project" />
     <orderEntry type="library" name="Deps: commons-collections:3.2.2" level="project" />
-    <orderEntry type="library" name="Deps: funcool/hodgepodge:0.1.4" level="project" />
     <orderEntry type="library" name="Deps: amperity/vault-clj:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-ring:0.5.18" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/tools.namespace:0.1.247" level="project" />
@@ -166,6 +165,7 @@
     <orderEntry type="library" name="Deps: clj-commons/fs:1.6.309" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ec2:1.11.22" level="project" />
     <orderEntry type="library" name="Deps: com.google.http-client/google-http-client:1.41.0" level="project" />
+    <orderEntry type="library" name="Deps: schnaq/hodgepodge:de1b57" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-js:0.8.874" level="project" />
     <orderEntry type="library" name="Deps: io.methvin/directory-watcher:0.16.1" level="project" />
     <orderEntry type="library" name="Deps: org.imgscalr/imgscalr-lib:4.2" level="project" />
