@@ -31,7 +31,7 @@
                       toolbelt/add-csrf-header
                       (toolbelt/mock-authorization-header user-token)))]
     (testing "Non logged in user can not create a poll."
-      (is (= 401 (-> toolbelt/token-timed-out request test-app :status))))
+      (is (= 403 (-> toolbelt/token-timed-out request test-app :status))))
     (testing "Logged in user without pro cannot create a poll."
       (is (= 403 (-> toolbelt/token-wegi-no-pro-user request test-app :status))))
     (testing "Pro user, that has no moderation rights cannot create poll."

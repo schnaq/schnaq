@@ -137,10 +137,10 @@
   (testing "Assigning a theme to a discussion"
     (let [theme-id (-> (themes-db/themes-by-keycloak-id schnaqqi-keycloak-id) first :db/id)]
       (testing "succeeds for users with valid credentials and pro-account."
-        (let [response (assign-theme-request toolbelt/token-wegi-no-pro-user theme-id "simple-hash")]
+        (let [response (assign-theme-request toolbelt/token-schnaqqifant-user theme-id "simple-hash")]
           (is (= 200 (:status response)))))
       (testing "fails if is not moderator."
-        (let [response (assign-theme-request toolbelt/token-schnaqqifant-user theme-id "simple-hash")]
+        (let [response (assign-theme-request toolbelt/token-n2o-admin theme-id "simple-hash")]
           (is (= 403 (:status response)))))
       (testing "fails if user has no pro access."
         (let [kangaroo-theme-id (-> (themes-db/themes-by-keycloak-id kangaroo-keycloak-id) first :db/id)

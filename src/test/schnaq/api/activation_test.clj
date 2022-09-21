@@ -115,7 +115,7 @@
                     test-share-hash
                     toolbelt/token-n2o-admin)))
         (is (= 200 (reset-activation-by-share-hash
-                    test-share-hash
+                    "simple-hash"
                     toolbelt/token-schnaqqifant-user))))
       (testing "Counter reset to 0"
         (is (= 0 (:activation/count

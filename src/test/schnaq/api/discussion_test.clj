@@ -126,7 +126,7 @@
                      toolbelt/add-csrf-header
                      (toolbelt/mock-authorization-header %)
                      test-app)]
-    (is (= 200 (:status (request toolbelt/token-schnaqqifant-user))))
+    (is (= 200 (:status (request toolbelt/token-n2o-admin))))
     (is (= 403 (:status (request toolbelt/token-wegi-no-pro-user))))))
 
 ;; -----------------------------------------------------------------------------
