@@ -5,13 +5,13 @@
         clj-fuzzy/clj-fuzzy {:mvn/version "0.4.1"}
         clj-http/clj-http {:mvn/version "3.12.3"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}
-        com.cognitect.aws/api {:mvn/version "0.8.589"}
-        com.cognitect.aws/endpoints {:mvn/version "1.1.12.280"}
+        com.cognitect.aws/api {:mvn/version "0.8.596"}
+        com.cognitect.aws/endpoints {:mvn/version "1.1.12.303"}
         com.cognitect.aws/s3 {:mvn/version "822.2.1145.0"}
         com.datomic/datomic-pro {:mvn/version "1.0.6397"}
         com.draines/postal {:mvn/version "2.0.5"}
         com.fulcrologic/guardrails {:mvn/version "1.1.11"}
-        com.stripe/stripe-java {:mvn/version "21.7.0"}
+        com.stripe/stripe-java {:mvn/version "21.8.0"}
         com.taoensso/sente {:mvn/version "1.17.0"}
         com.taoensso/tempura {:mvn/version "1.3.0"}
         com.taoensso/timbre {:mvn/version "5.2.1"}
@@ -40,14 +40,14 @@
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring/ring {:mvn/version "1.9.6"}
         ring/ring-mock {:mvn/version "0.4.0"}
-        thheller/shadow-cljs {:mvn/version "2.20.1"}}
+        thheller/shadow-cljs {:mvn/version "2.20.2"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}
              "my.datomic.com" {:url "https://my.datomic.com/repo"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.69.1069"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.70.1086"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
                   :main-opts ["-m" "kaocha.runner"]}
