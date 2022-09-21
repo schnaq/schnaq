@@ -91,8 +91,8 @@
    :schnaqs/continue-to-schnaq-button "Zum schnaq"
 
    :schnaq.moderation/addresses-privacy "Diese Adressen werden ausschließlich zum Mailversand genutzt und danach sofort von unseren Servern gelöscht."
-   :schnaq.moderation.notifications/emails-successfully-sent-title "Mail(s) verschickt!"
-   :schnaq.moderation.notifications/emails-successfully-sent-body-text "Deine Mail(s) wurden erfolgreich versendet."
+   :schnaq.moderation.notifications/emails-successfully-sent-title "Aktion durchgeführt!"
+   :schnaq.moderation.notifications/emails-successfully-sent-body-text "Nutzer:in zu Moderator:in befördert, falls existent."
    :schnaq.moderation.notifications/sending-failed-title "Fehler bei Zustellung!"
    :schnaq.moderation.notifications/sending-failed-lead "Die Einladung konnte an folgende Adressen nicht zugestellt werden:"
    :schnaq.moderation.notifications/statements-deleted-title "Nachrichten gelöscht!"

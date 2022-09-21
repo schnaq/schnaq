@@ -88,8 +88,8 @@
 
    :schnaq.moderation/addresses-privacy "These addresses are only used to send the invitation emails and are deleted from our
         servers immediately afterwards."
-   :schnaq.moderation.notifications/emails-successfully-sent-title "Mails sent!"
-   :schnaq.moderation.notifications/emails-successfully-sent-body-text "Your invitations were sent successfully."
+   :schnaq.moderation.notifications/emails-successfully-sent-title "Aktion done!"
+   :schnaq.moderation.notifications/emails-successfully-sent-body-text "The user has been promoted, if they exist."
    :schnaq.moderation.notifications/sending-failed-title "Error during mail delivery!"
    :schnaq.moderation.notifications/sending-failed-lead "The following invitations could not be delivered:"
    :schnaq.moderation.notifications/statements-deleted-title "Statements deleted!"
