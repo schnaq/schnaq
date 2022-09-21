@@ -189,7 +189,6 @@
    {:fx [(http/xhrio-request db :post "/wordcloud/local"
                              [:schnaq.wordcloud.local.create/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
                               :title title})]}))
 
 (rf/reg-event-db
@@ -243,7 +242,6 @@
    {:fx [(http/xhrio-request db :delete "/wordcloud/local"
                              [:schnaq.wordcloud.local.delete/success wordcloud-id]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
                               :wordcloud-id wordcloud-id})]}))
 
 (rf/reg-event-db

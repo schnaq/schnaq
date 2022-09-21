@@ -54,14 +54,13 @@
      ["" {:name :wordcloud/local
           :post {:handler create-local-wordcloud
                  :description (at/get-doc #'create-local-wordcloud)
-                 :middleware [:user/authenticated?
-                              :user/pro?
-                              :discussion/valid-credentials?]
+                 :middleware [:user/pro?
+                              :discussion/user-moderator?]
                  :parameters {:body {:share-hash :discussion/share-hash
-                                     :edit-hash :discussion/edit-hash
                                      :title :wordcloud/title}}
                  :responses {200 {:body {:wordcloud ::specs/wordcloud}}
-                             400 at/response-error-body}}
+                             400 at/response-error-body
+                             403 at/response-error-body}}
           :get {:handler get-local-wordclouds
                 :description (at/get-doc #'get-local-wordclouds)
                 :middleware [:discussion/valid-share-hash?]
@@ -70,12 +69,10 @@
                             400 at/response-error-body}}
           :delete {:handler delete-local-wordcloud
                    :description (at/get-doc #'delete-local-wordcloud)
-                   :middleware [:user/authenticated?
-                                :user/pro?
-                                :discussion/valid-credentials?
+                   :middleware [:user/pro?
+                                :discussion/user-moderator?
                                 :discussion/wordcloud-matching?]
                    :parameters {:body {:share-hash :discussion/share-hash
-                                       :edit-hash :discussion/edit-hash
                                        :wordcloud-id :db/id}}
                    :responses {200 {:body {:deleted? boolean?}}
                                403 at/response-error-body}}}]
