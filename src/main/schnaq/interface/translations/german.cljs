@@ -200,6 +200,7 @@
    :schnaq.wordcloud.local/delete-button "Löschen"
    :schnaq.wordcloud.local/delete-confirmation "Möchtest du die Wortwolke wirklich permanent löschen?"
    :schnaq.wordcloud/download "Wortwolke herunterladen"
+   :schnaq.wordcloud/no-words-yet "Noch sind keine Wörter in der Wortwolke vorhanden. Fang du doch an mit deinen ersten Gedanken"
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"

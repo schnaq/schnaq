@@ -4,7 +4,7 @@
   (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook
                                                           faFontAwesomeFlag faGithub
                                                           faInstagram faLinkedin faTwitter]]
-            ["@fortawesome/free-regular-svg-icons" :refer [faCalendar
+            ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faSmileBeam
                                                            faCommentAlt faEnvelope
                                                            faEye faEyeSlash faFileAlt faFileImage faFileVideo faHourglass faIdCard faImage]]
             ["@fortawesome/free-solid-svg-icons" :refer
@@ -106,6 +106,7 @@
    :sliders-h faSlidersH
    :share faShareAlt
    :shield faShieldAlt
+   :smile-beam faSmileBeam
    :star faStar
    :strike-through faStrikethrough
    :sun faSun

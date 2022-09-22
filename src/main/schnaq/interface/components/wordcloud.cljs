@@ -100,9 +100,13 @@
                           reverse
                           (take words-to-be-wordclouded))]
         (let [svg (when @wc (-> @wc (oget :children) first (oget :children) first))]
-          [:div.d-flex {:ref #(when-not @wc (reset! wc %))}
-           [:> ReactWordcloud {:words words :options options}]
-           [wordcloud-download-button svg]])
+          (if (empty? words)
+            [:div.p-3.m-3.p-lg-5.m-lg-5.text-muted
+             (labels :schnaq.wordcloud/no-words-yet)
+             [icon :smile-beam "ms-1"]]
+            [:div.d-flex {:ref #(when-not @wc (reset! wc %))}
+             [:> ReactWordcloud {:words words :options options}]
+             [wordcloud-download-button svg]]))
         [:div.text-center.py-3 [spinner-icon]]))))
 
 (defn wordcloud-preview
