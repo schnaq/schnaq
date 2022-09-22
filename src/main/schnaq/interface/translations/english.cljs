@@ -197,6 +197,7 @@
    :schnaq.wordcloud.local/delete-button "Delete"
    :schnaq.wordcloud.local/delete-confirmation "Do you really want to delete the wordcloud permanently?"
    :schnaq.wordcloud/download "Download Word Cloud"
+   :schnaq.wordcloud/no-words-yet "There are no words in the word cloud yet. Why don't you start with your first thoughts?"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
