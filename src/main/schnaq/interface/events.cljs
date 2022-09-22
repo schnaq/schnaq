@@ -53,7 +53,8 @@
          [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
          [:dispatch [:load/last-added-schnaq]]
          [:dispatch [:schnaq.polls/load-past-votes]]
-         [:dispatch [:schnaq.votes/load-from-localstorage]]]}))
+         [:dispatch [:schnaq.votes/load-from-localstorage]]
+         [:updates.periodic/loop]]}))
 
 (rf/reg-event-fx
  :form/should-clear

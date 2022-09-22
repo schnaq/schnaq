@@ -132,5 +132,4 @@
   (rf/dispatch-sync [:initialize/schnaq]) ;; put a value into application state
   (language/init-language)
   (render) ;; mount the application's ui into '<div id="app" />'
-  (say-hello)
-  (updates/init-periodic-updates))
+  (say-hello))
