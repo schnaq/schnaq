@@ -8,7 +8,7 @@
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
 
-(defn promote-moderator-request
+(defn- promote-moderator-request
   [user-mail token]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.moderation/promote-user))
        :body-params {:share-hash "simple-hash"
