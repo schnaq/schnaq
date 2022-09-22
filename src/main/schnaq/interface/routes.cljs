@@ -165,7 +165,7 @@
                       :start (fn []
                                (rf/dispatch [:schnaq.statements.current/dissoc])
                                (rf/dispatch [:discussion.history/clear])
-                               (rf/dispatch [:updates.periodic.discussion/starting true])
+                               (rf/dispatch [:updates/periodic :discussion/starting true])
                                (rf/dispatch [:discussion.query.conclusions/starting])
                                (rf/dispatch [:schnaq.polls/load-from-backend])
                                (rf/dispatch [:schnaq.wordclouds/load-from-backend])
@@ -173,7 +173,7 @@
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))
                       :stop (fn []
                               (rf/dispatch [:schnaq.statements.current/dissoc])
-                              (rf/dispatch [:updates.periodic.discussion/starting false])
+                              (rf/dispatch [:updates/periodic :discussion/starting false])
                               (rf/dispatch [:schnaq.activation/dissoc])
                               (rf/dispatch [:tour/stop false])
                               (rf/dispatch [:statement.edit/reset-edits])
@@ -192,9 +192,9 @@
        :link-text (labels :router/qanda)
        :controllers [{:start (fn []
                                (rf/dispatch [:schnaq.activation/load-from-backend])
-                               (rf/dispatch [:updates.periodic/activation true]))
+                               (rf/dispatch [:updates/periodic :activation true]))
                       :stop (fn []
-                              (rf/dispatch [:updates.periodic/activation false])
+                              (rf/dispatch [:updates/periodic :activation false])
                               (rf/dispatch [:schnaq.qa.search.results/reset]))}]}]
      ["/dashboard"
       {:name :routes.schnaq/dashboard
@@ -233,20 +233,19 @@
        :view presentation/view
        :controllers [{:parameters {:path [:share-hash :entity-id]}
                       :start (fn []
-                               (rf/dispatch [:updates.periodic.present/poll true])
+                               (rf/dispatch [:updates/periodic :present/poll true])
                                (rf/dispatch [:schnaq.poll/load-from-query]))
-                      :stop (fn []
-                              (rf/dispatch [:updates.periodic.present/poll false]))}]}]
+                      :stop #(rf/dispatch [:updates/periodic :present/poll false])}]}]
      ["/graph"
       {:name :routes/graph-view
        :view graph-view/graph-view-entrypoint
        :link-text (labels :router/graph-view)
        :controllers [{:identity (fn [] (random-uuid))
                       :start (fn []
-                               (rf/dispatch [:updates.periodic/graph true])
+                               (rf/dispatch [:updates/periodic :graph true])
                                (rf/dispatch [:graph/load-data-for-discussion]))
                       :stop (fn []
-                              (rf/dispatch [:updates.periodic/graph false])
+                              (rf/dispatch [:updates/periodic :graph false])
                               (rf/dispatch [:notifications/reset])
                               (rf/dispatch [:tour/stop false]))}]}]]]
    ["/subscription"
