@@ -44,7 +44,7 @@
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.localstorage]
             [schnaq.interface.utils.time]
-            [schnaq.interface.utils.updates :as updates]
+            [schnaq.interface.utils.updates]
             [schnaq.interface.views :as views]
             [schnaq.interface.views.admin.control-center]
             [schnaq.interface.views.common]
