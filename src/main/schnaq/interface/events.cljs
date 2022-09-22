@@ -27,9 +27,8 @@
 (rf/reg-event-fx
  :load/last-added-schnaq
  (fn [_ _]
-   (let [share-hash (from-localstorage :schnaq.last-added/share-hash)]
-     (when-not (nil? share-hash)
-       {:fx [[:dispatch [:schnaq/load-by-share-hash share-hash]]]}))))
+   (when-let [share-hash (from-localstorage :schnaq.last-added/share-hash)]
+     {:fx [[:dispatch [:schnaq/load-by-share-hash share-hash]]]})))
 
 (rf/reg-event-fx
  :re-frame-10x/hide-on-mobile
