@@ -27,10 +27,8 @@
 (rf/reg-event-fx
  :load/last-added-schnaq
  (fn [_ _]
-   (let [share-hash (from-localstorage :schnaq.last-added/share-hash)
-         edit-hash (from-localstorage :schnaq.last-added/edit-hash)]
-     (when (and (not (nil? edit-hash)) (not (nil? share-hash)))
-       {:fx [[:dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash]]]}))))
+   (when-let [share-hash (from-localstorage :schnaq.last-added/share-hash)]
+     {:fx [[:dispatch [:schnaq/load-by-share-hash share-hash]]]})))
 
 (rf/reg-event-fx
  :re-frame-10x/hide-on-mobile
@@ -50,7 +48,6 @@
          [:dispatch [:keycloak/init]]
          [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
          [:dispatch [:visited.save-statement-ids/store-hashes-from-localstorage]]
-         [:dispatch [:schnaqs.save-admin-access/store-hashes-from-localstorage]]
          [:dispatch [:schnaqs.visited/from-localstorage]]
          [:dispatch [:schnaqs.archived/from-localstorage]]
          [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
@@ -98,16 +95,9 @@
 
 (rf/reg-event-fx
  :schnaq/select-current
- (fn [{:keys [db]} [_ {:discussion/keys [share-hash edit-hash] :as schnaq}]]
-   (let [admin-access-map (get-in db [:schnaqs :admin-access] {})
-         updated-access-map (if edit-hash (assoc admin-access-map share-hash edit-hash) admin-access-map)
-         edit-hash-localstorage (or edit-hash (get admin-access-map share-hash))]
-     {:db (cond-> db
-            true (assoc-in [:schnaq :selected] schnaq)
-            edit-hash (assoc-in [:schnaqs :admin-access] updated-access-map)
-            edit-hash-localstorage (assoc-in [:schnaq :selected :discussion/edit-hash] edit-hash-localstorage))
-      :fx [[:dispatch [:schnaq.visited/to-localstorage share-hash]]
-           [:localstorage/assoc [:schnaqs/admin-access updated-access-map]]]})))
+ (fn [{:keys [db]} [_ {:discussion/keys [share-hash] :as schnaq}]]
+   {:db (assoc-in db [:schnaq :selected] schnaq)
+    :fx [[:dispatch [:schnaq.visited/to-localstorage share-hash]]]}))
 
 (rf/reg-sub
  :schnaq/selected
@@ -125,12 +115,6 @@
  :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
    (:discussion/share-hash selected-schnaq)))
-
-(rf/reg-sub
- :schnaq/edit-hash
- :<- [:schnaq/selected]
- (fn [selected-schnaq _ _]
-   (:discussion/edit-hash selected-schnaq)))
 
 (rf/reg-sub
  :schnaq/share-link
@@ -211,35 +195,7 @@
                                [:no-op]
                                {:share-hash share-hash})]})))
 
-(rf/reg-event-fx
- :schnaq/check-admin-credentials
- (fn [{:keys [db]} [_ share-hash edit-hash]]
-   {:fx [(http/xhrio-request db :post "/credentials/validate" [:schnaq/check-admin-credentials-success]
-                             {:share-hash share-hash
-                              :edit-hash edit-hash}
-                             [:ajax.error/as-notification])]}))
-
-(rf/reg-event-fx
- ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
- ;; the backend every time)
- :schnaq/check-admin-credentials-success
- (fn [_ [_ {:keys [valid-credentials?]}]]
-   (when-not valid-credentials?
-     {:fx [[:dispatch [:navigation/navigate :routes/forbidden-page]]]})))
-
-(rf/reg-event-db
- :schnaq/save-as-last-added
- (fn [db [_ {:keys [schnaq]}]]
-   (assoc-in db [:schnaq :last-added] schnaq)))
-
 (rf/reg-sub
  :schnaq/last-added
  (fn [db _]
    (get-in db [:schnaq :last-added])))
-
-(rf/reg-event-fx
- :schnaq/load-by-hash-as-admin
- (fn [{:keys [db]} [_ share-hash edit-hash]]
-   {:fx [(http/xhrio-request db :post "/schnaq/by-hash-as-admin" [:schnaq/save-as-last-added]
-                             {:share-hash share-hash
-                              :edit-hash edit-hash})]}))

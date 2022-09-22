@@ -15,7 +15,6 @@
   [share-hash]
   (discussion-db/new-discussion {:discussion/title "Test-Schnaq"
                                  :discussion/share-hash share-hash
-                                 :discussion/edit-hash "secret"
                                  :discussion/author (user-db/add-user-if-not-exists "Mike")}))
 
 (deftest cdn-restriction-test

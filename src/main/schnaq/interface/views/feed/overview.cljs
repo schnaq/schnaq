@@ -242,7 +242,7 @@
 (defn feed-navigation
   "Navigate between the feeds."
   []
-  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
+  (let [{:discussion/keys [share-hash]} @(rf/subscribe [:schnaq/last-added])
         hubs @(rf/subscribe [:hubs/all])]
     [:section
      [:div.d-flex.flex-column.panel-white.mx-0.mt-0.mb-4
@@ -251,11 +251,11 @@
        [feed-button-icon :plus]
        (navigation/href :routes.schnaq/create)
        "feed-button-create"]
-      (when-not (nil? edit-hash)
+      (when @(rf/subscribe [:user/moderator?])
         [feed-button
          (labels :nav.schnaqs/last-added)
          [feed-button-icon :arrow-left]
-         (navigation/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
+         (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})
          "feed-button"])]
      [:div.panel-white.mb-4
       [feed-schnaqs]]

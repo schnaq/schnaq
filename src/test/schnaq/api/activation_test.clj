@@ -11,42 +11,35 @@
 (use-fixtures :once toolbelt/clean-database-fixture)
 
 (def ^:private test-share-hash "cat-dog-hash")
-(def ^:private test-edit-hash "cat-dog-edit-hash")
 
-(defn- start-activation-request [share-hash edit-hash user-token]
+(defn- start-activation-request [share-hash user-token]
   (-> {:request-method :put :uri (:path (api/route-by-name :activation/start))
-       :body-params {:share-hash share-hash
-                     :edit-hash edit-hash}}
+       :body-params {:share-hash share-hash}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       test-app
       :status))
 
 (deftest start-activation-test
-  (let [wrong-edit-hash "wrong-edit-hash"]
-    (testing "Test activation features."
-      (testing "Non beta user cannot start activation."
-        (is (= 403 (start-activation-request
-                    test-share-hash
-                    test-edit-hash
-                    toolbelt/token-wegi-no-beta-user))))
-      (testing "Beta user with wrong edit hash cannot start activation."
-        (is (= 403 (start-activation-request
-                    test-share-hash
-                    wrong-edit-hash
-                    toolbelt/token-schnaqqifant-user))))
-      (testing "Admin and pro user can start activation."
-        (is (= 200 (start-activation-request
-                    test-share-hash
-                    test-edit-hash
-                    toolbelt/token-n2o-admin)))))))
+  (testing "Test activation features."
+    (testing "Non pro user cannot start activation."
+      (is (= 403 (start-activation-request
+                  test-share-hash
+                  toolbelt/token-wegi-no-pro-user))))
+    (testing "Pro user without mod rights cannot start activation."
+      (is (= 403 (start-activation-request
+                  test-share-hash
+                  toolbelt/token-schnaqqifant-user))))
+    (testing "Moderator and pro user can start activation."
+      (is (= 200 (start-activation-request
+                  test-share-hash
+                  toolbelt/token-n2o-admin))))))
 
 (deftest create-activation-test
   (testing "Create an Activation."
     (is (nil? (activation-db/activation-by-share-hash test-share-hash)))
     (is (= 200 (start-activation-request
                 test-share-hash
-                test-edit-hash
                 toolbelt/token-n2o-admin)))
     (is (not (nil? (activation-db/activation-by-share-hash test-share-hash))))))
 
@@ -66,7 +59,7 @@
 
 (deftest get-activation-with-activation-test
   (testing "If there is an activation, return it."
-    (start-activation-request test-share-hash test-edit-hash toolbelt/token-n2o-admin)
+    (start-activation-request test-share-hash toolbelt/token-n2o-admin)
     (let [response (get-activation-request test-share-hash)]
       (is (-> response
               m/decode-response-body
@@ -87,7 +80,6 @@
   (testing "Create an activation"
     (is (= 200 (start-activation-request
                 test-share-hash
-                test-edit-hash
                 toolbelt/token-n2o-admin)))
     (testing "and increment the counter."
       (is (= 200 (increment-activation-request
@@ -97,39 +89,33 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- reset-activation-by-share-hash [share-hash edit-hash user-token]
+(defn- reset-activation-by-share-hash [share-hash user-token]
   (-> {:request-method :put :uri (:path (api/route-by-name :activation/reset))
-       :body-params {:share-hash share-hash
-                     :edit-hash edit-hash}}
+       :body-params {:share-hash share-hash}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       test-app
       :status))
 
 (deftest reset-activation-test
-  (let [wrong-edit "wrong-edit"
-        _activation-0 (activation-db/start-activation! test-share-hash)
+  (let [_activation-0 (activation-db/start-activation! test-share-hash)
         activation-1 (activation-db/increment-activation! test-share-hash)]
     (testing "Test reset api."
       (is (= 1 (:activation/count activation-1)))
-      (testing "Non beta user cannot reset activation."
+      (testing "Non Pro user cannot reset activation."
         (is (= 403 (reset-activation-by-share-hash
                     test-share-hash
-                    test-edit-hash
-                    toolbelt/token-wegi-no-beta-user))))
-      (testing "Beta user with wrong edit hash cannot reset activation."
+                    toolbelt/token-wegi-no-pro-user))))
+      (testing "Pro user without moderator rights cannot reset activation."
         (is (= 403 (reset-activation-by-share-hash
                     test-share-hash
-                    wrong-edit
                     toolbelt/token-schnaqqifant-user))))
-      (testing "Admin and beta user can start activation."
+      (testing "Moderator and Pro user can start activation."
         (is (= 200 (reset-activation-by-share-hash
                     test-share-hash
-                    test-edit-hash
                     toolbelt/token-n2o-admin)))
         (is (= 200 (reset-activation-by-share-hash
-                    test-share-hash
-                    test-edit-hash
+                    "simple-hash"
                     toolbelt/token-schnaqqifant-user))))
       (testing "Counter reset to 0"
         (is (= 0 (:activation/count
@@ -137,10 +123,9 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn delete-activation-by-share-hash [share-hash edit-hash user-token]
+(defn delete-activation-by-share-hash [share-hash user-token]
   (-> {:request-method :delete :uri (:path (api/route-by-name :activation/delete))
-       :body-params {:share-hash share-hash
-                     :edit-hash edit-hash}}
+       :body-params {:share-hash share-hash}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       test-app
@@ -148,15 +133,12 @@
 
 (deftest delete-activation-test
   (testing "Delete activation"
-    (let [share-hash "simple-hash"
-          edit-hash "simple-hash-secret"]
-      (testing "succeeds for beta and admin users."
+    (let [share-hash "simple-hash"]
+      (testing "succeeds for pro and moderator users."
         (is (= 200 (delete-activation-by-share-hash
                     share-hash
-                    edit-hash
                     toolbelt/token-schnaqqifant-user))))
       (testing "fails for normal users."
         (is (= 403 (delete-activation-by-share-hash
                     test-share-hash
-                    test-edit-hash
-                    toolbelt/token-wegi-no-beta-user)))))))
+                    toolbelt/token-wegi-no-pro-user)))))))

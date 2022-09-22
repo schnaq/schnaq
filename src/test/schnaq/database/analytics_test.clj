@@ -17,7 +17,6 @@
   []
   (discussion-db/new-discussion {:discussion/title "Bla"
                                  :discussion/share-hash any-meeting-share-hash
-                                 :discussion/edit-hash (str any-meeting-share-hash "-secret")
                                  :discussion/author (user-db/add-user-if-not-exists "Wegi")}))
 
 (deftest number-of-discussions-test
@@ -43,7 +42,6 @@
     (let [user-id (user-db/add-user-if-not-exists "Wegi")
           share-hash "asd"]
       (discussion-db/new-discussion {:discussion/title "test"
-                                     :discussion/edit-hash "ahsdasd"
                                      :discussion/share-hash share-hash
                                      :discussion/author user-id})
       (discussion-db/add-starting-statement! share-hash user-id "test")

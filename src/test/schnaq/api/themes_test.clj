@@ -42,7 +42,7 @@
   (testing "Querying personal theme returns collection of themes."
     (is (= 1 (personal-themes-request toolbelt/token-schnaqqifant-user)))
     (is (zero? (personal-themes-request toolbelt/token-n2o-admin)))
-    (is (zero? (personal-themes-request toolbelt/token-wegi-no-beta-user)))))
+    (is (zero? (personal-themes-request toolbelt/token-wegi-no-pro-user)))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@
       (is (= 200 (:status (save-theme-request toolbelt/token-n2o-admin sample-theme))))
       (is (= 200 (:status (save-theme-request toolbelt/token-schnaqqifant-user sample-theme)))))
     (testing "fails for non-pro users"
-      (is (= 403 (:status (save-theme-request toolbelt/token-wegi-no-beta-user sample-theme)))))))
+      (is (= 403 (:status (save-theme-request toolbelt/token-wegi-no-pro-user sample-theme)))))))
 
 (deftest new-theme-with-images-test
   (testing "Image upload when adding a new theme should succeed."
@@ -124,11 +124,10 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- assign-theme-request [user-token theme-id share-hash edit-hash]
+(defn- assign-theme-request [user-token theme-id share-hash]
   (-> {:request-method :put :uri (:path (api/route-by-name :api.theme.discussion/assign))
        :body-params {:theme {:db/id theme-id}
-                     :share-hash share-hash
-                     :edit-hash edit-hash}}
+                     :share-hash share-hash}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       toolbelt/accept-edn-response-header
@@ -138,22 +137,21 @@
   (testing "Assigning a theme to a discussion"
     (let [theme-id (-> (themes-db/themes-by-keycloak-id schnaqqi-keycloak-id) first :db/id)]
       (testing "succeeds for users with valid credentials and pro-account."
-        (let [response (assign-theme-request toolbelt/token-schnaqqifant-user theme-id "simple-hash" "simple-hash-secret")]
+        (let [response (assign-theme-request toolbelt/token-schnaqqifant-user theme-id "simple-hash")]
           (is (= 200 (:status response)))))
-      (testing "fails if wrong credentials are provided."
-        (let [response (assign-theme-request toolbelt/token-schnaqqifant-user theme-id "simple-hash" "wrong-edit-hash")]
+      (testing "fails if is not moderator."
+        (let [response (assign-theme-request toolbelt/token-n2o-admin theme-id "simple-hash")]
           (is (= 403 (:status response)))))
       (testing "fails if user has no pro access."
         (let [kangaroo-theme-id (-> (themes-db/themes-by-keycloak-id kangaroo-keycloak-id) first :db/id)
-              response (assign-theme-request toolbelt/token-kangaroo-normal-user kangaroo-theme-id "simple-hash" "simple-hash-secret")]
+              response (assign-theme-request toolbelt/token-kangaroo-normal-user kangaroo-theme-id "simple-hash")]
           (is (= 403 (:status response))))))))
 
 ;; -----------------------------------------------------------------------------
 
-(defn- unassign-theme-request [user-token share-hash edit-hash]
+(defn- unassign-theme-request [user-token share-hash]
   (-> {:request-method :delete :uri (:path (api/route-by-name :api.theme.discussion/unassign))
-       :body-params {:share-hash share-hash
-                     :edit-hash edit-hash}}
+       :body-params {:share-hash share-hash}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       toolbelt/accept-edn-response-header
@@ -161,16 +159,16 @@
 
 (deftest unassign-theme-test
   (testing "Unassigning a theme from a discussion"
-    (testing "succeeds for users with valid credentials and pro-account."
-      (let [response (unassign-theme-request toolbelt/token-schnaqqifant-user "cat-dog-hash" "cat-dog-edit-hash")
+    (testing "succeeds for users with moderation rights and pro-account."
+      (let [response (unassign-theme-request toolbelt/token-n2o-admin "cat-dog-hash")
             discussion (discussion-db/discussion-by-share-hash "cat-dog-hash")]
         (is (= 200 (:status response)))
         (is (nil? (:discussion/theme discussion)))))
-    (testing "fails if wrong credentials are provided."
-      (let [response (unassign-theme-request toolbelt/token-schnaqqifant-user "cat-dog-hash" "razupaltuff")]
+    (testing "fails if user is not a moderator."
+      (let [response (unassign-theme-request toolbelt/token-schnaqqifant-user "cat-dog-hash")]
         (is (= 403 (:status response)))))
     (testing "fails if user has no pro access."
-      (let [response (unassign-theme-request toolbelt/token-kangaroo-normal-user "cat-dog-hash" "cat-dog-edit-hash")]
+      (let [response (unassign-theme-request toolbelt/token-kangaroo-normal-user "cat-dog-hash")]
         (is (= 403 (:status response)))))))
 
 ;; -----------------------------------------------------------------------------

@@ -17,9 +17,9 @@
             [schnaq.interface.utils.routing :as route-utils]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.admin.control-center :as admin-center]
-            [schnaq.interface.views.discussion.admin-center :as discussion-admin]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.discussion.dashboard :as dashboard]
+            [schnaq.interface.views.discussion.moderation-center :as discussion-admin]
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
@@ -206,19 +206,12 @@
                                (rf/dispatch [:discussion.query.conclusions/starting])
                                (rf/dispatch [:scheduler.after/login [:wordcloud/for-current-discussion]])
                                (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
-     ["/manage/:edit-hash"
-      {:name :routes.schnaq/admin-center
-       :view discussion-admin/admin-center-view
+     ["/manage"
+      {:name :routes.schnaq/moderation-center
+       :view discussion-admin/moderation-center-view
        :link-text (labels :router/last-added-schnaq)
-       :parameters {:path {:edit-hash string?}}
-       :controllers [{:parameters {:path [:share-hash :edit-hash]}
-                      :start (fn [{:keys [path]}]
-                               (let [{:keys [share-hash edit-hash]} path]
-                                 (rf/dispatch [:scheduler.after/login [:themes.load/personal]])
-                                 (rf/dispatch [:schnaq/check-admin-credentials share-hash edit-hash])
-                                 (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash])
-                                 (rf/dispatch [:schnaqs.save-admin-access/to-localstorage-and-db
-                                               share-hash edit-hash])))}]}]
+       :controllers [{:start (fn []
+                               (rf/dispatch [:scheduler.after/login [:themes.load/personal]]))}]}]
      ["/statement/:statement-id"
       {:name :routes.schnaq.select/statement
        :parameters {:path {:statement-id int?}}

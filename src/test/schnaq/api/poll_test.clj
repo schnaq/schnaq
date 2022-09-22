@@ -27,22 +27,20 @@
                                      :poll-type :poll.type/single-choice
                                      :options ["a" "b" "c"]
                                      :share-hash share-hash
-                                     :edit-hash "cat-dog-edit-hash"
                                      :hide-results? false}}
                       toolbelt/add-csrf-header
                       (toolbelt/mock-authorization-header user-token)))]
     (testing "Non logged in user can not create a poll."
-      (is (= 401 (-> toolbelt/token-timed-out request test-app :status))))
+      (is (= 403 (-> toolbelt/token-timed-out request test-app :status))))
     (testing "Logged in user without pro cannot create a poll."
-      (is (= 403 (-> toolbelt/token-wegi-no-beta-user request test-app :status))))
-    (testing "Pro user, that has wrong admin credentials cannot create poll."
-      (is (= 403 (-> toolbelt/token-schnaqqifant-user request (assoc-in [:body-params :edit-hash] "wrong-edit")
-                     test-app :status))))
-    (testing "User with correct pro status, credentials and admin, has provided no options."
-      (is (= 400 (-> toolbelt/token-schnaqqifant-user request (assoc-in [:body-params :options] [])
+      (is (= 403 (-> toolbelt/token-wegi-no-pro-user request test-app :status))))
+    (testing "Pro user, that has no moderation rights cannot create poll."
+      (is (= 403 (-> toolbelt/token-schnaqqifant-user request test-app :status))))
+    (testing "User with correct pro status and moderation rights, has provided no options."
+      (is (= 400 (-> toolbelt/token-n2o-admin request (assoc-in [:body-params :options] [])
                      test-app :status))))
     (testing "Adding a poll is allowed for the pro user with correct params."
-      (is (= 200 (-> toolbelt/token-schnaqqifant-user request test-app :status)))
+      (is (= 200 (-> toolbelt/token-n2o-admin request test-app :status)))
       (is (= 4 (count (poll-db/polls share-hash)))))))
 
 (deftest cast-vote-test
@@ -78,8 +76,7 @@
 (defn- delete-poll-request [poll-id user-token]
   (-> {:request-method :delete :uri (:path (api/route-by-name :poll/delete))
        :body-params {:poll-id poll-id
-                     :share-hash "cat-dog-hash"
-                     :edit-hash "cat-dog-edit-hash"}}
+                     :share-hash "cat-dog-hash"}}
       toolbelt/add-csrf-header
       (toolbelt/mock-authorization-header user-token)
       test-app
@@ -89,8 +86,8 @@
   (let [poll-id (-> (poll-db/polls "cat-dog-hash") first :db/id)]
     (testing "Delete polls with valid credentials."
       (is (= 200 (delete-poll-request poll-id toolbelt/token-n2o-admin)))
-      (is (= 200 (delete-poll-request poll-id toolbelt/token-schnaqqifant-user)))
-      (is (= 200 (delete-poll-request poll-id toolbelt/token-wegi-no-beta-user))))))
+      (is (= 200 (delete-poll-request poll-id toolbelt/token-kangaroo-normal-user)))
+      (is (= 200 (delete-poll-request poll-id toolbelt/token-wegi-no-pro-user))))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -113,20 +110,19 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- toggle-hide-results-request [share-hash edit-hash poll-id hide-results?]
+(defn- toggle-hide-results-request [share-hash poll-id hide-results? user-token]
   (-> {:request-method :put :uri (:path (api/route-by-name :api.poll/hide-results))
        :body-params {:poll-id poll-id
                      :share-hash share-hash
-                     :edit-hash edit-hash
                      :hide-results? hide-results?}}
       toolbelt/add-csrf-header
+      (toolbelt/mock-authorization-header user-token)
       test-app
       :status))
 
 (deftest toggle-hide-results-test
   (let [share-hash "cat-dog-hash"
-        edit-hash "cat-dog-edit-hash"
         poll-id (-> (poll-db/polls share-hash) first :db/id)]
     (testing "Toggle hide-results via api."
-      (is (= 200 (toggle-hide-results-request share-hash edit-hash poll-id true)))
-      (is (= 403 (toggle-hide-results-request share-hash "no-edit-hash" poll-id true))))))
+      (is (= 200 (toggle-hide-results-request share-hash poll-id true toolbelt/token-wegi-no-pro-user)))
+      (is (= 403 (toggle-hide-results-request share-hash poll-id true toolbelt/token-schnaqqifant-user))))))

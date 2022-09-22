@@ -10,16 +10,6 @@
   [_]
   (ok {:text "🧙‍♂️"}))
 
-(defn- check-credentials-opt-add-as-admin!
-  "The middleware calling this function checks for the validity of the credentials.
-  If the user is logged in, add them as admin."
-  [{:keys [parameters identity]}]
-  (let [{:keys [share-hash]} (:body parameters)
-        keycloak-id (:sub identity)]
-    (when keycloak-id
-      (discussion-db/add-admin-to-discussion share-hash keycloak-id))
-    (ok {:valid-credentials? true})))
-
 (defn- export-as-argdown
   "Exports the complete discussion in an argdown-formatted file."
   [{{{:keys [share-hash]} :query} :parameters}]
@@ -49,11 +39,4 @@
      ["/argdown" {:get export-as-argdown
                   :description (at/get-doc #'export-as-argdown)}]
      ["/fulltext" {:get export-as-fulltext
-                   :description (at/get-doc #'export-as-fulltext)}]]
-    ["/credentials/validate" {:post check-credentials-opt-add-as-admin!
-                              :description (at/get-doc #'check-credentials-opt-add-as-admin!)
-                              :middleware [:discussion/valid-credentials?]
-                              :responses {200 {:body {:valid-credentials? boolean?}}
-                                          403 at/response-error-body}
-                              :parameters {:body {:share-hash :discussion/share-hash
-                                                  :edit-hash :discussion/edit-hash}}}]]])
+                   :description (at/get-doc #'export-as-fulltext)}]]]])

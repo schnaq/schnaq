@@ -84,11 +84,10 @@
   (let [statement-labels (set (:statement/labels statement))
         label ":check"
         checked? (statement-labels label)
-        authenticated? @(rf/subscribe [:user/authenticated?])
         mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
         show-button? (and (not @(rf/subscribe [:schnaq.selected/read-only?]))
                           (or (not mods-mark-only?)
-                              (and mods-mark-only? authenticated? @(rf/subscribe [:schnaq/edit-hash]))))]
+                              (and mods-mark-only? @(rf/subscribe [:user/moderator?]))))]
     (when show-button?
       [:section.w-100
        [:button.btn.btn-sm.btn-link.text-dark.pe-0
@@ -341,14 +340,13 @@
             activation-tab [:span [iconed-heading :magic :schnaq.input-type/activation]]
             word-cloud-tab [:span [iconed-heading :cloud :schnaq.input-type/word-cloud]]
             pro-user? @(rf/subscribe [:user/pro?])
-            admin-access? @(rf/subscribe [:schnaq.current/admin-access])
             read-only? @(rf/subscribe [:schnaq.selected/read-only?])
             top-level? @(rf/subscribe [:routes.schnaq/start?])]
         [motion/fade-in-and-out
          [:section.selection-card
           [:div.card-view.card-body
            (when top-level?
-             (when (and (not read-only?) admin-access?)
+             (when (and (not read-only?) @(rf/subscribe [:user/moderator?]))
                [:ul.selection-tab.nav.nav-tabs
                 {:ref (fn [_element]
                         (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :discussion]) 1000))} ;; wait a second until tour appears

@@ -16,7 +16,7 @@
   (testing "Valid prefixes in namespace should be stripped off."
     (are [route-name canonical-route-name] (= canonical-route-name
                                               (navigation/canonical-route-name route-name))
-      :routes.schnaq/admin-center :routes.schnaq/admin-center
-      :de.routes.schnaq/admin-center :routes.schnaq/admin-center
-      :en.routes.schnaq/admin-center :routes.schnaq/admin-center
-      :foo.routes.schnaq/admin-center :foo.routes.schnaq/admin-center)))
+                                           :routes.schnaq/moderation-center :routes.schnaq/moderation-center
+                                           :de.routes.schnaq/moderation-center :routes.schnaq/moderation-center
+                                           :en.routes.schnaq/moderation-center :routes.schnaq/moderation-center
+                                           :foo.routes.schnaq/moderation-center :foo.routes.schnaq/moderation-center)))

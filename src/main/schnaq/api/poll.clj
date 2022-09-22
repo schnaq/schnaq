@@ -80,17 +80,16 @@
      ["" {:name :api/poll
           :post {:handler new-poll
                  :description (at/get-doc #'new-poll)
-                 :middleware [:user/authenticated?
-                              :user/pro?
-                              :discussion/valid-credentials?]
+                 :middleware [:discussion/user-moderator?
+                              :user/pro?]
                  :parameters {:body {:title :poll/title
                                      :poll-type dto/poll-type
                                      :options (s/coll-of ::specs/non-blank-string)
                                      :share-hash :discussion/share-hash
-                                     :edit-hash :discussion/edit-hash
                                      :hide-results? :poll/hide-results?}}
                  :responses {200 {:body {:new-poll ::dto/poll}}
-                             400 at/response-error-body}}
+                             400 at/response-error-body
+                             403 at/response-error-body}}
           :get {:handler get-poll
                 :description (at/get-doc #'get-poll)
                 :parameters {:query {:share-hash :discussion/share-hash
@@ -112,23 +111,21 @@
        :description (at/get-doc #'toggle-hide-results)
        :name :api.poll/hide-results
        :middleware [:discussion/valid-writeable-discussion?
-                    :discussion/valid-credentials?]
+                    :discussion/user-moderator?]
        :parameters {:body {:share-hash :discussion/share-hash
-                           :edit-hash :discussion/edit-hash
                            :poll-id :db/id
                            :hide-results? :poll/hide-results?}}
        :responses {200 {:body {:hide-results? :poll/hide-results?}}
-                   400 at/response-error-body}}]
+                   400 at/response-error-body
+                   403 at/response-error-body}}]
      ["/delete" {:delete delete-poll
                  :description (at/get-doc #'delete-poll)
                  :name :poll/delete
                  :parameters {:body {:poll-id :db/id
-                                     :share-hash :discussion/share-hash
-                                     :edit-hash :discussion/edit-hash}}
+                                     :share-hash :discussion/share-hash}}
                  :responses {200 {:body {:deleted? boolean?}}
                              400 at/response-error-body}
-                 :middleware [:user/authenticated?
-                              :discussion/valid-credentials?]}]]
+                 :middleware [:discussion/user-moderator?]}]]
     ["/polls" {:get polls-for-discussion
                :description (at/get-doc #'polls-for-discussion)
                :name :polls/get

@@ -83,7 +83,7 @@
 (def token-timed-out
   (let [payload (jwt-from-test-user test-data/christian)]
     (sjwt/create-signed-jwt (assoc payload :exp (inc (:iat payload))) config/testing-private-key)))
-(def token-wegi-no-beta-user
+(def token-wegi-no-pro-user
   (sjwt/create-signed-jwt (jwt-from-test-user test-data/alex) config/testing-private-key))
 (def token-kangaroo-normal-user
   (sjwt/create-signed-jwt (jwt-from-test-user test-data/kangaroo) config/testing-private-key))

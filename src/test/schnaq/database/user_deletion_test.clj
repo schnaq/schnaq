@@ -3,7 +3,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.user-deletion :as user-deletion]
-            [schnaq.test-data :as test-data :refer [kangaroo alex]]
+            [schnaq.test-data :refer [kangaroo alex]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -23,7 +23,7 @@
 (deftest delete-discussions-for-user-test
   (testing "Delete all discussions for a given user."
     (let [discussions #(map :discussion/share-hash (discussion-db/discussions-from-user alex-keycloak-id))]
-      (is (= 1 (count (discussions))))
+      (is (= 2 (count (discussions))))
       (user-deletion/delete-discussions-for-user alex-keycloak-id)
       (is (zero? (count (discussions)))))))
 

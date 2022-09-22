@@ -73,7 +73,7 @@
         [:<>
          [dropdown-menu/item :bullseye
           :schnaq.admin.focus/button
-          #(rf/dispatch [:schnaq.admin.focus/entity (:db/id @(rf/subscribe [:schnaq/wordcloud]))])]
+          #(rf/dispatch [:schnaq.moderation.focus/entity (:db/id @(rf/subscribe [:schnaq/wordcloud]))])]
          [dropdown-menu/item :trash
           :schnaq.wordcloud/hide
           #(rf/dispatch [:schnaq.wordcloud/toggle])]]]]
@@ -149,8 +149,7 @@
  (fn [{:keys [db]} [_]]
    {:fx [(http/xhrio-request db :put "/wordcloud/discussion"
                              [:schnaq.wordcloud.toggle/success]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-fx
  :schnaq.wordcloud.toggle/success
@@ -190,7 +189,6 @@
    {:fx [(http/xhrio-request db :post "/wordcloud/local"
                              [:schnaq.wordcloud.local.create/success]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
                               :title title})]}))
 
 (rf/reg-event-db
@@ -244,7 +242,6 @@
    {:fx [(http/xhrio-request db :delete "/wordcloud/local"
                              [:schnaq.wordcloud.local.delete/success wordcloud-id]
                              {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
                               :wordcloud-id wordcloud-id})]}))
 
 (rf/reg-event-db

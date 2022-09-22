@@ -96,14 +96,11 @@
    :discussion/created-at
    [:discussion/activation-focus :xform 'schnaq.database.xforms/pull-up-db-id]
    {:discussion/author public-user}
+   [:discussion/moderators :xform 'schnaq.database.xforms/maps->ids]
    {:discussion/theme theme}
    :discussion/wordcloud
    {[:discussion/mode :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {[:discussion.access/_discussion :as :discussion/access] access-code}])
-
-(def discussion-private
-  "Holds sensitive information as well."
-  (conj discussion :discussion/edit-hash))
 
 (def access-code-with-discussion
   "Return the access-code and directly query the discussion."

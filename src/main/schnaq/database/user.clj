@@ -22,6 +22,13 @@
         tx-result @(transact [user'])]
     (fast-pull [:user.registered/keycloak-id keycloak-id] patterns/private-user (:db-after tx-result))))
 
+(>defn promote-user-to-moderator
+  "Add a user to the moderation team of a schnaq."
+  [share-hash user-email]
+  [:discussion/share-hash ::specs/email => future?]
+  (transact [[:db/add [:discussion/share-hash share-hash] :discussion/moderators
+              [:user.registered/email user-email]]]))
+
 (>defn retract-user-attribute
   "Retract an attribute of a user."
   [{:user.registered/keys [keycloak-id]} attribute]

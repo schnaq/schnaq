@@ -49,9 +49,8 @@
   "A graph displaying the results of the poll."
   [{:poll/keys [options type hide-results?]} cast-votes]
   (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        edit-hash @(rf/subscribe [:schnaq/edit-hash])
         voted? (or cast-votes read-only?)
-        show-results? (or edit-hash (not hide-results?))]
+        show-results? (or @(rf/subscribe [:user/moderator?]) (not hide-results?))]
     [:section.row
      (for [index (range (count options))]
        (let [{:keys [option/votes db/id option/value]} (get options index)
@@ -133,7 +132,7 @@
                       {:share-hash share-hash :entity-id poll-id}])]
       [dropdown-menu/item :bullseye
        :schnaq.admin.focus/button
-       #(rf/dispatch [:schnaq.admin.focus/entity poll-id])]
+       #(rf/dispatch [:schnaq.moderation.focus/entity poll-id])]
       [dropdown-menu/item (if hide-results? :eye :eye-slash)
        (if hide-results? :schnaq.poll/show-results-button :schnaq.poll/hide-results-button)
        #(rf/dispatch [:schnaq.poll/hide-results poll-id (not hide-results?)])]
@@ -206,7 +205,6 @@
   [poll]
   (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        edit-hash @(rf/subscribe [:schnaq/edit-hash])
         voted? (or cast-votes read-only?)]
     [:form
      {:on-submit (fn [e]
@@ -219,7 +217,7 @@
          {:type :submit
           :on-click #(matomo/track-event "Active User" "Action" "Vote on Poll")}
          (labels :schnaq.poll/vote!)]])
-     (when edit-hash
+     (when @(rf/subscribe [:user/moderator?])
        [show-results-information (:poll/hide-results? poll)])]))
 
 (>defn input-or-results
@@ -228,9 +226,9 @@
   [::specs/poll => :re-frame/component]
   (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        edit-hash @(rf/subscribe [:schnaq/edit-hash])
+        user-moderator? @(rf/subscribe [:user/moderator?])
         voted? (or cast-votes read-only?)
-        show-results? (or edit-hash (not (:poll/hide-results? poll)))]
+        show-results? (or user-moderator? (not (:poll/hide-results? poll)))]
     [:<>
      (if (= :poll.type/ranking (:poll/type poll))
        (if voted?
@@ -239,7 +237,7 @@
            [results-hidden-message])
          [ranking-input poll])
        [poll-content poll])
-     (when edit-hash
+     (when user-moderator?
        [show-results-information (:poll/hide-results? poll)])]))
 
 (>defn- ranking-card
@@ -393,9 +391,7 @@
  :schnaq.poll/create
  (fn [{:keys [db]} [_ poll]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         params (assoc poll
-                       :share-hash share-hash
-                       :edit-hash (get-in db [:schnaqs :admin-access share-hash]))]
+         params (assoc poll :share-hash share-hash)]
      {:fx [(http/xhrio-request db :post "/poll"
                                [:schnaq.poll.create/success]
                                params)]})))
@@ -487,7 +483,6 @@
       :fx [(http/xhrio-request db :put "/poll/hide-results"
                                [:schnaq.poll.hide-results/success hide-results?]
                                {:share-hash share-hash
-                                :edit-hash (get-in db [:schnaqs :admin-access share-hash])
                                 :poll-id poll-id
                                 :hide-results? hide-results?})]})))
 
@@ -554,7 +549,6 @@
           db :delete "/poll/delete"
           [:no-op]
           {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-           :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])
            :poll-id poll-id})]}))
 
 (rf/reg-sub

@@ -8,15 +8,15 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.file-download :as file-download]))
 
-(defn admin-center
-  "Button to access admin menu."
+(defn moderator-center
+  "Button to access moderator panel."
   []
-  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/selected])]
-    [navbar-components/button-with-icon
-     :sliders-h
-     (labels :schnaq.admin/tooltip)
-     (labels :discussion.navbar/settings)
-     #(rf/dispatch [:navigation/navigate :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])]))
+  [navbar-components/button-with-icon
+   :sliders-h
+   (labels :schnaq.admin/tooltip)
+   (labels :discussion.navbar/settings)
+   #(rf/dispatch [:navigation/navigate :routes.schnaq/moderation-center
+                  {:share-hash @(rf/subscribe [:schnaq/share-hash])}])])
 
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."

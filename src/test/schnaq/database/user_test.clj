@@ -141,7 +141,7 @@
 (deftest created-discussions-test
   (testing "Count number of created discussions per user."
     (is (= 0 (db/created-discussions kangaroo-keycloak-id)))
-    (is (= 1 (db/created-discussions alex-keycloak-id)))
+    (is (= 2 (db/created-discussions alex-keycloak-id)))
     (is (= 0 (db/created-discussions "razupaltuff")))))
 
 ;; -----------------------------------------------------------------------------

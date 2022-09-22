@@ -103,22 +103,12 @@
                  (transitive-child-5 ?statement-ids ?children)]
                transitive-7 statement-ids))))
 
-(defn- pull-discussion
-  "Pull a discussion from a database."
-  [share-hash pattern]
-  [:discussion/share-hash vector? :ret ::specs/discussion]
-  (ac/remove-invalid-and-pull-up-access-codes
-   (fast-pull [:discussion/share-hash share-hash] pattern)))
-
-(defn discussion-by-share-hash
+(>defn discussion-by-share-hash
   "Query discussion and apply public discussion pattern to it."
   [share-hash]
-  (pull-discussion share-hash patterns/discussion))
-
-(defn discussion-by-share-hash-private
-  "Query discussion and apply the private discussion pattern."
-  [share-hash]
-  (pull-discussion share-hash patterns/discussion-private))
+  [:discussion/share-hash :ret ::specs/discussion]
+  (ac/remove-invalid-and-pull-up-access-codes
+   (fast-pull [:discussion/share-hash share-hash] patterns/discussion)))
 
 (>defn discussions-by-share-hashes
   "Returns all discussions that are valid (non deleted e.g.). Input is a collection of share-hashes."
@@ -265,20 +255,6 @@
        (format "Deletion of discussion with share-hash %s failed. Exception:\n%s"
                share-hash e)))))
 
-(>defn discussion-deleted?
-  "Returns whether a discussion has been marked as deleted."
-  [share-hash]
-  [:discussion/share-hash :ret boolean?]
-  (as-> (main-db/query
-         '[:find (pull ?states [*])
-           :in $ ?share-hash
-           :where [?discussion :discussion/share-hash ?share-hash]
-           [?discussion :discussion/states ?states]]
-         share-hash) q
-    (map #(:db/ident (first %)) q)
-    (into #{} q)
-    (contains? q :discussion.state/deleted)))
-
 (>defn- new-child-statement!
   "Creates a new child statement, that references a parent."
   [discussion-id parent-id new-content statement-type user-id registered-user? locked?]
@@ -323,7 +299,7 @@
   [id]
   [int? :ret ::specs/discussion]
   (ac/remove-invalid-and-pull-up-access-codes
-   (fast-pull id (conj patterns/discussion-private :discussion/creation-secret))))
+   (fast-pull id (conj patterns/discussion :discussion/creation-secret))))
 
 (defn set-discussion-read-only
   "Sets a discussion as read-only."
@@ -462,7 +438,7 @@
   (query '[:find [(pull ?discussions discussion-pattern-private) ...]
            :in $ discussion-pattern-private
            :where [?discussions :discussion/title _]]
-         patterns/discussion-private))
+         patterns/discussion))
 
 (>defn check-valid-statement-id-for-discussion
   "Checks whether the statement-id matches the share-hash."
@@ -488,13 +464,6 @@
                     [:db/add statement-id :statement/type new-type]]))
       @(transact [[:db/add statement-id :statement/content new-content]]))
     (fast-pull statement-id patterns/statement)))
-
-(>defn add-admin-to-discussion
-  "Adds an admin user to a discussion."
-  [share-hash keycloak-id]
-  [:discussion/share-hash :user.registered/keycloak-id :ret future?]
-  (transact [[:db/add [:discussion/share-hash share-hash] :discussion/moderators
-              [:user.registered/keycloak-id keycloak-id]]]))
 
 (>defn- build-secrets-map
   "Creates a secrets map for a collection of statements.

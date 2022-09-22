@@ -37,13 +37,12 @@
   (when (and share-hash statement-id)
     (format "%s/statement/%s" (get-share-link share-hash) statement-id)))
 
-(>defn get-admin-link
-  "Building a URL to the admin-center of a schnaq."
-  [share-hash edit-hash]
-  [:discussion/share-hash :discussion/edit-hash :ret string?]
-  #?(:clj (format "%s/schnaq/%s/manage/%s" config/frontend-url share-hash edit-hash)
-     :cljs (let [path (reitfe/href :routes.schnaq/admin-center {:share-hash share-hash
-                                                                :edit-hash edit-hash})]
+(>defn get-moderator-center-link
+  "Building a URL to the moderator-center of a schnaq."
+  [share-hash]
+  [:discussion/share-hash :ret string?]
+  #?(:clj (format "%s/schnaq/%s/manage" config/frontend-url share-hash)
+     :cljs (let [path (reitfe/href :routes.schnaq/moderation-center {:share-hash share-hash})]
              (relative-to-absolute-url path))))
 
 (>defn get-summary-link
@@ -56,11 +55,11 @@
 
 (>defn add-links-to-discussion
   "Takes a discussion and adds a share-link to the structure."
-  [{:discussion/keys [share-hash edit-hash] :as discussion}]
+  [{:discussion/keys [share-hash] :as discussion}]
   [::specs/discussion :ret ::specs/discussion]
   (assoc discussion
          :discussion/share-link (get-share-link share-hash)
-         :discussion/admin-link (get-admin-link share-hash edit-hash)))
+         :discussion/moderation-link (get-moderator-center-link share-hash)))
 
 (>defn checkout-link
   "Get link to checkout page. This should be called after the login of a user."

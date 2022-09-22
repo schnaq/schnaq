@@ -118,6 +118,17 @@
    [:div.container.text-center.pt-5
     [:p (labels :page.beta.modal/cta) " " [:a {:href "mailto:info@schnaq.com"} (tools/obfuscate-text "info@schnaq.com")] "."]]])
 
+(defn- moderators-only
+  "Default page indicating, that only moderators are allowed."
+  []
+  [with-nav-and-header
+   {:page/heading (labels :page.moderator/heading)
+    :page/subheading (labels :page.moderator/subheading)}
+   [:div.container.text-center.pt-5
+    [:img.w-25 {:src (img-path :schnaqqifant/stop)
+                :alt (labels :schnaqqifant/stop-alt-text)}]
+    [:p (labels :page.moderator/cta)]]])
+
 (defn loading-page
   "Show a loading page."
   []
@@ -131,18 +142,21 @@
 (>defn- validate-conditions-middleware
   "Takes the conditions and returns either the page or redirects to other views."
   [{:condition/keys
-    [needs-authentication? needs-administrator? needs-beta-tester? create-schnaq? needs-analytics-admin?]}
+    [needs-authentication? needs-administrator? needs-beta-tester? create-schnaq? needs-analytics-admin?
+     needs-moderator?]}
    page]
   [::page-options (s/+ vector?) :ret vector?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         admin? @(rf/subscribe [:user/administrator?])
         analytics-admin? @(rf/subscribe [:user/analytics-admin?])
-        beta-tester? @(rf/subscribe [:user/beta-tester?])]
+        beta-tester? @(rf/subscribe [:user/beta-tester?])
+        user-moderator? @(rf/subscribe [:user/moderator?])]
     (cond
       (and create-schnaq? (not authenticated?)) [register-cta]
-      (and (or needs-authentication? needs-administrator? needs-beta-tester? needs-analytics-admin?)
+      (and (or needs-authentication? needs-administrator? needs-beta-tester? needs-analytics-admin? needs-moderator?)
            (not authenticated?)) [please-login]
       (and needs-administrator? (not admin?)) [loading-page]
+      (and needs-moderator? (not user-moderator?)) [moderators-only]
       (and needs-beta-tester? (not beta-tester?)) [beta-only]
       (and needs-analytics-admin? (not analytics-admin?)) [loading-page]
       :else page)))

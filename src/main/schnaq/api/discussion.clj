@@ -139,7 +139,7 @@
 
 (defn- delete-statement-and-children!
   "Deletes the passed statement and all descendants.
-  Important: Needs to check whether the statement-id belongs to the discussion with the passed edit-hash."
+  Important: Needs to check whether the statement-id belongs to the discussion with the passed share-hash."
   [{:keys [parameters]}]
   (let [{:keys [share-hash statement-id]} (:body parameters)
         descendants (discussion-db/descendants-of-statement statement-id)
@@ -152,11 +152,11 @@
 (defn- add-starting-statement!
   "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash edit-hash statement display-name locked?]} (:body parameters)
+  (let [{:keys [share-hash statement display-name locked?]} (:body parameters)
         keycloak-id (:sub identity)
         user-id (user-db/user-id display-name keycloak-id)
         ;; Only Moderators can lock
-        locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
+        locked? (if (validator/user-moderator? share-hash user-id) locked? false)]
     (log/info "Starting statement added for discussion" share-hash)
     (created "" {:starting-conclusion (discussion-db/add-starting-statement! share-hash user-id statement
                                                                              :registered-user? keycloak-id
@@ -167,11 +167,11 @@
   statement you want to react to. `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`.
   `nickname` is required if the user is not logged in."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash edit-hash conclusion-id premise statement-type locked? display-name]} (:body parameters)
+  (let [{:keys [share-hash conclusion-id premise statement-type locked? display-name]} (:body parameters)
         keycloak-id (:sub identity)
         user-id (user-db/user-id display-name keycloak-id)
         ;; Only Moderators can lock
-        locked? (if (validator/valid-credentials? share-hash edit-hash) locked? false)]
+        locked? (if (validator/user-moderator? share-hash user-id) locked? false)]
     (if (discussion-db/check-valid-statement-id-for-discussion conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (created
@@ -197,7 +197,7 @@
 ;; Discussion Options
 
 (defn- make-discussion-read-only!
-  "Makes a discussion read-only if share- and edit-hash are correct and present."
+  "Makes a discussion read-only."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:body parameters)]
     (log/info "Setting discussion to read-only:" share-hash)
@@ -392,12 +392,11 @@
               :middleware [:discussion/valid-share-hash?]
               :parameters {:query {:share-hash :discussion/share-hash}}
               :responses {200 {:body {:graph ::specs/graph}}}}]
-   ["/manage" {:parameters {:body {:share-hash :discussion/share-hash
-                                   :edit-hash :discussion/edit-hash}}
+   ["/manage" {:parameters {:body {:share-hash :discussion/share-hash}}
                :responses {403 at/response-error-body}}
     ["" {:responses {200 {:body {:share-hash :discussion/share-hash}}}
          :middleware [:user/authenticated?
-                      :discussion/valid-credentials?]}
+                      :discussion/user-moderator?]}
      ["/disable-pro-con" {:put disable-pro-con!
                           :description (at/get-doc #'disable-pro-con!)
                           :middleware [:user/pro?]
@@ -423,11 +422,9 @@
    ["/header-image" {:post media/set-preview-image
                      :description (at/get-doc #'media/set-preview-image)
                      :name :api.discussion/header-image
-                     :middleware [:discussion/valid-credentials?
-                                  :user/authenticated?
+                     :middleware [:discussion/user-moderator?
                                   :user/pro?]
                      :parameters {:body {:share-hash :discussion/share-hash
-                                         :edit-hash :discussion/edit-hash
                                          :image-url :discussion/header-image-url}}
                      :responses {201 {:body {:message string?}}
                                  403 at/response-error-body}}]
@@ -448,8 +445,6 @@
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
                                                :premise :statement/content
-                                               :edit-hash (s/or :edit-hash :discussion/edit-hash
-                                                                :nil nil?)
                                                :statement-type dto/statement-type
                                                :locked? :statement/locked?
                                                :display-name ::specs/non-blank-string}}
@@ -459,9 +454,8 @@
     ["/delete-with-children" {:delete delete-statement-and-children!
                               :description (at/get-doc #'delete-statement-and-children!)
                               :name :api.discussion.statements/delete
-                              :middleware [:discussion/valid-credentials?]
+                              :middleware [:discussion/user-moderator?]
                               :parameters {:body {:share-hash :discussion/share-hash
-                                                  :edit-hash :discussion/edit-hash
                                                   :statement-id :db/id}}
                               :responses {200 {:body {:deleted-statements (s/coll-of :db/id)}}
                                           401 at/response-error-body
@@ -480,8 +474,6 @@
                       :name :api.discussion.statements.starting/add
                       :middleware [:discussion/valid-writeable-discussion?]
                       :parameters {:body {:share-hash :discussion/share-hash
-                                          :edit-hash (s/or :edit-hash :discussion/edit-hash
-                                                           :nil nil?)
                                           :statement :statement/content
                                           :display-name ::specs/non-blank-string
                                           :locked? :statement/locked?}}
@@ -518,16 +510,15 @@
      ["/lock/toggle" {:post toggle-statement-lock
                       :description (at/get-doc #'toggle-statement-lock)
                       :name :api.discussion.statements/lock
-                      :middleware [:user/authenticated? :discussion/valid-credentials?]
-                      :parameters {:body {:edit-hash :discussion/edit-hash
-                                          :lock? boolean?}}
+                      :middleware [:discussion/user-moderator?]
+                      :parameters {:body {:lock? boolean?}}
                       :responses {200 {:body {:locked? boolean?}}}}]
      ["/pin/toggle" {:post toggle-pinned-statement
                      :description (at/get-doc #'toggle-pinned-statement)
                      :name :api.discussion.statements/pin
-                     :middleware [:user/authenticated? :user/pro? :discussion/valid-credentials?]
-                     :parameters {:body {:edit-hash :discussion/edit-hash
-                                         :pin? boolean?}}
+                     :middleware [:user/pro?
+                                  :discussion/user-moderator?]
+                     :parameters {:body {:pin? boolean?}}
                      :responses {200 {:body {:pinned? boolean?}}}}]
      ["/edit" {:put edit-statement!
                :description (at/get-doc #'edit-statement!)

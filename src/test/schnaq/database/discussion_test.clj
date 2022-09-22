@@ -17,7 +17,6 @@
         author (user-db/add-user-if-not-exists "Wegi")
         new-discussion {:discussion/title "Bla"
                         :discussion/share-hash new-discussion-hash
-                        :discussion/edit-hash "secret-whatever"
                         :discussion/author author}
         filter-deleted (fn [discussions]
                          (filter #(not (some #{:discussion.state/deleted} (:discussion/states %))) discussions))
@@ -122,7 +121,6 @@
 (deftest new-discussion-test
   (let [minimal-discussion {:discussion/title "Whatevs"
                             :discussion/share-hash "oooooh"
-                            :discussion/edit-hash "secret-never-guessed"
                             :discussion/author (user-db/add-user-if-not-exists "Wegi")}]
     (testing "Whether a correct id is returned when valid discussions are transacted."
       (is (number? (db/new-discussion minimal-discussion)))
@@ -137,17 +135,11 @@
       (is (= 7 (count statements)))
       (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
 
-(deftest discussion-deleted?-test
-  (testing "Test whether deleted discussions are correctly recognized."
-    (is (db/discussion-deleted? "public-share-hash-deleted"))
-    (is (not (db/discussion-deleted? "public-share-hash")))))
-
 (deftest valid-statement-id-and-meeting?-test
   (testing "Test the function that checks whether a statement belongs to a certain meeting."
     (let [share-hash "Wegi-ist-der-schönste"
           _ (db/new-discussion {:discussion/title "test-meet"
                                 :discussion/share-hash share-hash
-                                :discussion/edit-hash (str "secret-" share-hash)
                                 :discussion/author (user-db/add-user-if-not-exists "Wegi")})
           christian-id (:db/id (user-db/user-by-nickname "Christian"))
           first-id (:db/id (db/add-starting-statement! share-hash christian-id "this is sparta"))
@@ -168,7 +160,6 @@
         author (user-db/add-user-if-not-exists "Christian")
         new-public-discussion {:discussion/title "Bla"
                                :discussion/share-hash new-discussion-hash
-                               :discussion/edit-hash ":shrug:"
                                :discussion/author author}
         _ (db/new-discussion new-public-discussion)]
     (testing "Valid discussions should be returned."
@@ -188,7 +179,6 @@
         author (user-db/add-user-if-not-exists "Mike")
         new-public-discussion {:discussion/title "Lord"
                                :discussion/share-hash share-hash
-                               :discussion/edit-hash "secret-whatever"
                                :discussion/author author}
         _ (db/new-discussion new-public-discussion)
         schnaq-before (db/discussion-by-share-hash share-hash)
@@ -360,7 +350,7 @@
 
 (deftest discussions-from-user-test
   (testing "If user has created discussions, return them."
-    (is (= 1 (count (db/discussions-from-user (:user.registered/keycloak-id test-data/alex)))))
+    (is (= 2 (count (db/discussions-from-user (:user.registered/keycloak-id test-data/alex)))))
     (is (zero? (count (db/discussions-from-user (:user.registered/keycloak-id test-data/kangaroo)))))))
 
 (deftest children-from-statements-test

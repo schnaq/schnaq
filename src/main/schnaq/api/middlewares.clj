@@ -1,6 +1,6 @@
 (ns schnaq.api.middlewares
   (:require [reitit.ring.middleware.exception :as exception]
-            [ring.util.http-response :refer [bad-request forbidden not-found]]
+            [ring.util.http-response :refer [forbidden not-found]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
@@ -62,18 +62,6 @@
         (handler request)
         (not-found (at/build-error-body :statement/invalid "Invalid parameters provided."))))))
 
-(defn valid-credentials?-middleware
-  "Verify valid share-hash and edit-hash via middleware."
-  [handler]
-  (fn [request]
-    (let [share-hash (extract-parameter-from-request request :share-hash)
-          edit-hash (extract-parameter-from-request request :edit-hash)]
-      (if (and share-hash edit-hash)
-        (if (validator/valid-credentials? share-hash edit-hash)
-          (handler request)
-          (forbidden (at/build-error-body :credentials/invalid "Your share-hash and edit-hash do not fit together.")))
-        (bad-request (at/build-error-body :parameters/missing (format "Share-hash oder edit-hash is missing, share-hash: %s, edit-hash: %s" share-hash edit-hash)))))))
-
 (defn valid-author?-middleware
   "Verify the requesting user being the author of the discussion."
   [handler]
@@ -85,6 +73,17 @@
       (if (= author-keycloak-id (-> request :user :user.registered/keycloak-id))
         (handler request)
         (forbidden (at/build-error-body :credentials/invalid "Only the author is allowed to modify the schnaq."))))))
+
+(defn user-moderator?-middleware
+  "Verify the requesting user being the author or moderator of the discussion."
+  [handler]
+  (fn [request]
+    (let [share-hash (extract-parameter-from-request request :share-hash)
+          user-id (:db/id (:user request))]
+      (if (validator/user-moderator? share-hash user-id)
+        (handler request)
+        (forbidden (at/build-error-body :credentials/not-moderator
+                                        "This operation is only allowed for moderators."))))))
 
 (defn parent-unlocked?-middleware
   "Verify that the parent statement is unlocked and can be written to."

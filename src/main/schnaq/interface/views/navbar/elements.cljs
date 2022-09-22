@@ -149,12 +149,11 @@
   "Either display schnaq or graph settings button"
   []
   (let [current-route @(rf/subscribe [:navigation/current-route-name])
-        graph? (= current-route :routes/graph-view)
-        admin? @(rf/subscribe [:schnaq.current/admin-access])]
+        graph? (= current-route :routes/graph-view)]
     (if graph?
       [graph-settings/open-settings]
-      (when admin?
-        [admin/admin-center]))))
+      (when @(rf/subscribe [:user/moderator?])
+        [admin/moderator-center]))))
 
 (defn navbar-download
   "Download button for either text or graph"

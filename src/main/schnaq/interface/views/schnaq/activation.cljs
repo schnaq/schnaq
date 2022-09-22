@@ -72,7 +72,7 @@
      :schnaq.admin.focus/button
      (fn []
        (rf/dispatch [:activation/start])
-       (rf/dispatch [:schnaq.admin.focus.entity/success]))]
+       (rf/dispatch [:schnaq.moderation.focus.entity/success]))]
     [dropdown-menu/item :trash
      :schnaq.activation/delete-button
      #(rf/dispatch [:activation/delete])]]])
@@ -188,8 +188,7 @@
  (fn [{:keys [db]} _]
    {:fx [(http/xhrio-request db :put "/activation"
                              [:schnaq.activation.created/success]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-fx
  :schnaq.activation/load-from-backend
@@ -223,8 +222,7 @@
  (fn [{:keys [db]} _]
    {:fx [(http/xhrio-request db :put "/activation/reset"
                              [:schnaq.activation.load-from-backend/success]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-fx
  :activation/activate
@@ -239,8 +237,7 @@
  (fn [{:keys [db]} _]
    {:fx [(http/xhrio-request db :delete "/activation/delete"
                              [:schnaq.activation.delete/success]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-db
  :schnaq.activation.delete/success

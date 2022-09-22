@@ -325,8 +325,7 @@
          (http/xhrio-request db :put "/user/theme/discussion/assign"
                              [:no-op]
                              {:theme theme
-                              :share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
+                              :share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-fx
  :theme.discussion/unassign
@@ -334,8 +333,7 @@
    {:fx [[:dispatch [:theme/reset]]
          (http/xhrio-request db :delete "/user/theme/discussion/unassign"
                              [:theme.discussion.unassign/success]
-                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                              :edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])})]}))
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])})]}))
 
 (rf/reg-event-fx
  :theme.discussion.unassign/success

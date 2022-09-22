@@ -66,10 +66,7 @@
   ([datomic-uri]
    (reset! current-datomic-uri datomic-uri)
    (d/create-database datomic-uri)
-   (transact models/datomic-schema)
-   ;; IMPORTANT TODO: Remove this function after this Code is merged in in main after 15.09.2022.
-   (transact [{:db/id :discussion/admins
-               :db/ident :discussion/moderators}])))
+   (transact models/datomic-schema)))
 
 (defn init-and-seed!
   "Initializing the datomic database and feeding it with test-data.

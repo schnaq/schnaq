@@ -10,14 +10,12 @@
 (defn- react-to-statement-call!
   "A call to the route for adding a rection to a statement."
   [db statement-id premise-text statement-type locked? on-success-fx]
-  (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-        edit-hash (get-in db [:schnaq :selected :discussion/edit-hash])]
+  (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
     (when share-hash
       (http/xhrio-request
        db :post "/discussion/react-to/statement"
        on-success-fx
        {:share-hash share-hash
-        :edit-hash edit-hash
         :conclusion-id statement-id
         :premise premise-text
         :statement-type statement-type

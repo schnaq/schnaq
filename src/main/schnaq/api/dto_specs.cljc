@@ -40,7 +40,7 @@
 (s/def ::discussion
   (s/keys :req [:discussion/title :discussion/share-hash :discussion/author
                 :discussion/created-at]
-          :opt [:discussion/share-link :discussion/admin-link :discussion/edit-hash
+          :opt [:discussion/share-link :discussion/moderation-link
                 :discussion/states :db/id :discussion/creation-secret :discussion/mode]
           :opt-un [:discussion/meta-info]))
 
