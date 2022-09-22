@@ -8,11 +8,11 @@
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (deftest user-moderator?-test
-  (let [user-wegi (user-db/user-id nil "59456d4a-6950-47e8-88d8-a1a6a8de9276")
-        user-kangaroo (user-db/user-id nil "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-        user-invalid (user-db/user-id nil "11111111-1111-1111-1111-111111111111")]
+  (let [user-id-wegi (user-db/user-id nil "59456d4a-6950-47e8-88d8-a1a6a8de9276")
+        user-id-kangaroo (user-db/user-id nil "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+        user-id-invalid (user-db/user-id nil "11111111-1111-1111-1111-111111111111")]
     (testing "Test whether the moderator is checked correctly."
-      (is (user-moderator? "cat-dog-hash" user-wegi))
-      (is (not (user-moderator? "cat-dog-hash" user-invalid))))
+      (is (user-moderator? "cat-dog-hash" user-id-wegi))
+      (is (not (user-moderator? "cat-dog-hash" user-id-invalid))))
     (testing "Authors are moderators also"
-      (is (user-moderator? "cat-dog-hash" user-kangaroo)))))
+      (is (user-moderator? "cat-dog-hash" user-id-kangaroo)))))
