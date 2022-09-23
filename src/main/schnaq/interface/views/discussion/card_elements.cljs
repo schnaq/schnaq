@@ -9,6 +9,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.markdown :refer [as-markdown]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
@@ -67,7 +68,7 @@
                          [:div.d-flex.flex-row
                           [:h6 (labels :history.statement/user) " " (toolbelt/truncate-to-n-chars nickname 20)]
                           [:div.ms-auto [common/avatar user 22]]]
-                         (toolbelt/truncate-to-n-words statement-content max-word-count)]]
+                         (as-markdown (toolbelt/truncate-to-n-words statement-content max-word-count))]]
     [:article
      [:div.history-thread-line]
      [:div.d-inline-block.d-md-block.text-dark.w-100
