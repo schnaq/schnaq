@@ -104,3 +104,9 @@ html {
 .tiny {
   font-size: 0.5em;
 }
+
+.graph-node {
+  max-width: 300px;
+  white-space: pre-line;
+  word-wrap: break-word;
+}
