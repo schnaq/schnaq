@@ -86,7 +86,7 @@
    :schnaq/link-copied-success "The link was copied to your clipboard!"
    :schnaq/created-success-heading "Your schnaq was created!"
    :schnaq/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
-   :schnaqs/continue-with-schnaq-after-creation "Did you invite everybody? Let's go!"
+   :schnaqs/continue-with-schnaq-after-creation "Everything set? Let's go!"
    :schnaqs/continue-to-schnaq-button "To the schnaq"
 
    :schnaq.moderation/addresses-privacy "These addresses are only used to send the invitation emails and are deleted from our

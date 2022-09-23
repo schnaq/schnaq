@@ -90,7 +90,7 @@
    :schnaq/link-copied-success "Der Link wurde in deine Zwischenablage kopiert!"
    :schnaq/created-success-heading "Dein schnaq wurde erstellt!"
    :schnaq/created-success-subheading "Nun kannst du den Zugangslink verteilen oder andere Personen per Mail einladen 🎉"
-   :schnaqs/continue-with-schnaq-after-creation "Alle eingeladen? Los geht's!"
+   :schnaqs/continue-with-schnaq-after-creation "Alles eingestellt? Los geht's!"
    :schnaqs/continue-to-schnaq-button "Zum schnaq"
 
    :schnaq.moderation/addresses-privacy "Diese Adressen werden ausschließlich zum Mailversand genutzt und danach sofort von unseren Servern gelöscht."
