@@ -1,117 +1,45 @@
 (ns schnaq.interface.utils.updates
   "Coordinating asynchronous updates."
-  (:require [cljs.core.async :refer [go <! timeout]]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
+  (:require [cljs.core.async :refer [<! go-loop timeout]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [periodic-update-time]]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
-(>defn- loop-builder
-  "Build looping functions for several update methods and subscriptions."
-  [subscription-key update-fn]
-  [keyword? fn? :ret any?]
-  (go (while true
-        (<! (timeout periodic-update-time))
-        (when @(rf/subscribe [subscription-key])
-          (update-fn)))))
-
-;; -----------------------------------------------------------------------------
-;; Looping functions
-
-(defn- loop-update-graph!
-  "Define loop to periodically update graph."
-  []
-  (loop-builder :updates.periodic/graph?
-                #(rf/dispatch [:updates.periodic.discussion.graph/request])))
-
-(defn- loop-periodic-discussion-start!
-  "Define loop to periodically update discussions."
-  []
-  (loop-builder :updates.periodic.discussion/starting?
-                #(rf/dispatch [:updates.periodic.discussion.starting/request])))
-
-(defn- loop-periodic-activation-start!
-  "Define loop to periodically update activations."
-  []
-  (loop-builder :updates.periodic/activation?
-                #(rf/dispatch [:updates.periodic.activation/request])))
-
-(defn- loop-periodic-poll!
-  "Define loop to periodically update polls."
-  []
-  (loop-builder :updates.periodic.present/poll?
-                #(rf/dispatch [:updates.periodic.present.poll/request])))
-
-;; -----------------------------------------------------------------------------
-;; Init
-
-(defn init-periodic-updates
-  "Initializing function to start the loops. Each looping function must be
-  called here once to start the endless loop."
-  []
-  (loop-periodic-discussion-start!)
-  (loop-update-graph!)
-  (loop-periodic-activation-start!)
-  (loop-periodic-poll!))
+(rf/reg-fx
+ :updates.periodic/loop
+ (fn []
+   (go-loop []
+     (<! (timeout periodic-update-time))
+     (rf/dispatch [:updates.periodic.discussion.graph/request])
+     (rf/dispatch [:updates.periodic.discussion.starting/request])
+     (rf/dispatch [:updates.periodic.activation/request])
+     (rf/dispatch [:updates.periodic.present.poll/request])
+     (recur))))
 
 ;; -----------------------------------------------------------------------------
 
-(rf/reg-sub
- :updates.periodic.discussion/starting?
- (fn [db _]
-   (get-in db [:updates/periodic :discussion/starting] false)))
-
 (rf/reg-event-db
- :updates.periodic.discussion/starting
- (fn [db [_ trigger?]]
-   (assoc-in db [:updates/periodic :discussion/starting] trigger?)))
-
-(rf/reg-sub
- :updates.periodic/activation?
- (fn [db _]
-   (get-in db [:updates/periodic :activation] false)))
-
-(rf/reg-event-db
- :updates.periodic/activation
- (fn [db [_ trigger?]]
-   (assoc-in db [:updates/periodic :activation] trigger?)))
-
-(rf/reg-sub
- :updates.periodic.present/poll?
- (fn [db _]
-   (get-in db [:updates/periodic :present/poll] false)))
-
-(rf/reg-event-db
- :updates.periodic.present/poll
- (fn [db [_ trigger?]]
-   (assoc-in db [:updates/periodic :present/poll] trigger?)))
-
-(rf/reg-sub
- :updates.periodic/graph?
- (fn [db _]
-   (get-in db [:updates/periodic :graph] false)))
-
-(rf/reg-event-db
- :updates.periodic/graph
- (fn [db [_ trigger?]]
-   (assoc-in db [:updates/periodic :graph] trigger?)))
+ :updates/periodic
+ (fn [db [_ key value]]
+   (assoc-in db [:updates/periodic key] value)))
 
 (rf/reg-event-fx
  :updates.periodic.discussion.starting/request
  (fn [{:keys [db]}]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         keycloak-object (get-in db [:user :keycloak])]
-     {:fx [[:ws/send [:discussion.starting/update
-                      (cond-> {:share-hash share-hash
-                               :display-name (toolbelt/current-display-name db)}
-                        keycloak-object (assoc :jwt (.-token (get-in db [:user :keycloak]))))
-                      (fn [response]
-                        (rf/dispatch [:schnaq.activation.load-from-backend/success response])
-                        (rf/dispatch [:discussion.activations/focus response])
-                        (rf/dispatch [:schnaq.polls.load-from-backend/success response])
-                        (rf/dispatch [:discussion.query.conclusions/set-starting response])
-                        (rf/dispatch [:schnaq.wordclouds.local.load/success response])
-                        (rf/dispatch [:schnaq.wordcloud/from-backend response]))]]]})))
+   (when (get-in db [:updates/periodic :discussion/starting])
+     (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+           keycloak-object (get-in db [:user :keycloak])]
+       {:fx [[:ws/send [:discussion.starting/update
+                        (cond-> {:share-hash share-hash
+                                 :display-name (toolbelt/current-display-name db)}
+                          keycloak-object (assoc :jwt (.-token (get-in db [:user :keycloak]))))
+                        (fn [response]
+                          (rf/dispatch [:schnaq.activation.load-from-backend/success response])
+                          (rf/dispatch [:discussion.activations/focus response])
+                          (rf/dispatch [:schnaq.polls.load-from-backend/success response])
+                          (rf/dispatch [:discussion.query.conclusions/set-starting response])
+                          (rf/dispatch [:schnaq.wordclouds.local.load/success response])
+                          (rf/dispatch [:schnaq.wordcloud/from-backend response]))]]]}))))
 
 (rf/reg-event-db
  :discussion.activations/focus
@@ -123,35 +51,32 @@
 (rf/reg-event-fx
  :updates.periodic.activation/request
  (fn [{:keys [db]}]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-     {:fx [[:ws/send [:discussion.activation/update
-                      {:share-hash share-hash}
-                      (fn [response]
-                        (rf/dispatch [:schnaq.activation.load-from-backend/success (:body response)]))]]]})))
+   (when (get-in db [:updates/periodic :activation])
+     (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+       {:fx [[:ws/send [:discussion.activation/update
+                        {:share-hash share-hash}
+                        (fn [response]
+                          (rf/dispatch [:schnaq.activation.load-from-backend/success (:body response)]))]]]}))))
 
 (rf/reg-event-fx
  :updates.periodic.discussion.graph/request
  (fn [{:keys [db]}]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-     {:fx [[:ws/send [:discussion.graph/update
-                      {:share-hash share-hash
-                       :display-name (toolbelt/current-display-name db)}
-                      (fn [response]
-                        (rf/dispatch [:graph/set-current response]))]]]})))
+   (when (get-in db [:updates/periodic :graph])
+     (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+       {:fx [[:ws/send [:discussion.graph/update
+                        {:share-hash share-hash
+                         :display-name (toolbelt/current-display-name db)}
+                        (fn [response]
+                          (rf/dispatch [:graph/set-current response]))]]]}))))
 
 (rf/reg-event-fx
  :updates.periodic.present.poll/request
  (fn [{:keys [db]}]
-   (let [share-hash (get-in db [:current-route :parameters :path :share-hash])
-         poll-id (get-in db [:current-route :parameters :path :entity-id])]
-     {:fx [[:ws/send [:schnaq.poll/update
-                      {:share-hash share-hash
-                       :poll-id poll-id}
-                      (fn [response]
-                        (rf/dispatch [:schnaq.poll.load-from-query/success response]))]]]})))
-
-(comment
-
-  (rf/dispatch [:updates.periodic.discussion.starting/request])
-
-  nil)
+   (when (get-in db [:updates/periodic :present/poll])
+     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])
+           poll-id (get-in db [:current-route :parameters :path :entity-id])]
+       {:fx [[:ws/send [:schnaq.poll/update
+                        {:share-hash share-hash
+                         :poll-id poll-id}
+                        (fn [response]
+                          (rf/dispatch [:schnaq.poll.load-from-query/success response]))]]]}))))
