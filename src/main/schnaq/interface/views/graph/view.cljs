@@ -200,7 +200,8 @@
 (rf/reg-event-db
  :graph/set-current
  (fn [db [_ graph-data]]
-   (assoc-in db [:graph :current] graph-data)))
+   (when graph-data
+     (assoc-in db [:graph :current] graph-data))))
 
 (rf/reg-sub
  :graph/current
