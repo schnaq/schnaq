@@ -1,13 +1,19 @@
 (ns schnaq.interface.views.graph.view
-  (:require ["vis-network/standalone/esm/vis-network" :refer [DataSet Network]]
+  (:require ["remove-markdown" :as remove-markdown]
+            ["vis-network/standalone/esm/vis-network" :refer [DataSet Network]]
             [clojure.set :as set]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [clojure.string :as str]
+            [com.fulcrologic.guardrails.core :refer [=> >defn-]]
+            [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
+            [reagent.dom.server :as rserver]
             [schnaq.interface.components.colors :refer [colors]]
-            [schnaq.interface.config :as conf]
+            [schnaq.interface.config :as conf :refer [graph-label-length]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.markdown :refer [as-markdown]]
+            [schnaq.interface.utils.toolbelt :refer [truncate-to-n-chars-string]]
             [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]))
@@ -36,7 +42,7 @@
 (>defn- mark-controversy
   "Marks controversy in nodes."
   [controversy-map nodes]
-  [:graph/controversy-values :graph/nodes :ret sequential?]
+  [:graph/controversy-values :graph/nodes => sequential?]
   (map
    #(let [controversy-score (get controversy-map (:id %))]
       (if (< (- 100 conf/graph-controversy-upper-bound)
@@ -51,7 +57,7 @@
 
 (>defn- node-content-color
   [nodes]
-  [:graph/nodes :ret :graph/nodes]
+  [:graph/nodes => :graph/nodes]
   (map
    #(let [text-color (case (:type %)
                        :agenda (colors :neutral/dark)
@@ -64,14 +70,52 @@
                 :margin 10}))
    nodes))
 
+(>defn- add-html-title-from-labels
+  "Take the original content of a node and render it to the title field."
+  [nodes]
+  [:graph/nodes => :graph/nodes]
+  (map (fn [node]
+         (let [dom-element (.createElement js/document "div")
+               label-html (rserver/render-to-string (as-markdown (:label node)))]
+           (oset! dom-element :innerHTML label-html)
+           (.add (oget dom-element :classList) "graph-node")
+           (assoc node :title dom-element)))
+       nodes))
+
+(>defn- remove-markdown-from-nodes
+  "Removes markdown from the label of a node."
+  [nodes]
+  [:graph/nodes => :graph/nodes]
+  (map (fn [node] (update node :label #(-> % remove-markdown str/trim))) nodes))
+
+(>defn- remove-empty-nodes
+  "Remove empty nodes, if the labels were reduced to an empty strings due to
+  processing steps."
+  [nodes]
+  [:graph/nodes => :graph/nodes]
+  (remove #(empty? (:label %)) nodes))
+
+(>defn- shorten-labels
+  "Shorten long statements."
+  [nodes]
+  [:graph/nodes => :graph/nodes]
+  (map (fn [node] (update node :label #(truncate-to-n-chars-string % graph-label-length)))
+       nodes))
+
 (>defn- convert-nodes-for-vis
   "Converts the nodes received from backend specifically for viz."
   [nodes controversy-values]
   [:graph/nodes :graph/controversy-values :ret :graph/nodes]
   (->> nodes
        node-types->colors
+       add-html-title-from-labels
+       remove-markdown-from-nodes
        (mark-controversy controversy-values)
-       node-content-color))
+       node-content-color
+       shorten-labels
+       remove-empty-nodes))
+
+;; -----------------------------------------------------------------------------
 
 (defn- graph-canvas
   "Visualization of Discussion Graph."
