@@ -26,9 +26,16 @@
 
 (rf/reg-event-fx
  :load/last-added-schnaq
- (fn [_ _]
+ (fn [{:keys [db]} _]
    (when-let [share-hash (from-localstorage :schnaq.last-added/share-hash)]
-     {:fx [[:dispatch [:schnaq/load-by-share-hash share-hash]]]})))
+     {:fx [(http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/set-last-added-info]
+                               {:share-hash share-hash
+                                :display-name (toolbelt/current-display-name db)})]})))
+
+(rf/reg-event-db
+ :schnaq/set-last-added-info
+ (fn [db [_ response]]
+   (assoc-in db [:schnaq :last-added] (:schnaq response))))
 
 (rf/reg-event-fx
  :re-frame-10x/hide-on-mobile
