@@ -251,7 +251,7 @@
        [feed-button-icon :plus]
        (navigation/href :routes.schnaq/create)
        "feed-button-create"]
-      (when @(rf/subscribe [:user/moderator?])
+      (when share-hash
         [feed-button
          (labels :nav.schnaqs/last-added)
          [feed-button-icon :arrow-left]
