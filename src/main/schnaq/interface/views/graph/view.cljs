@@ -171,8 +171,7 @@
           (.add edges-vis (clj->js new-edges))
           (reset! nodes-store nodes)
           (reset! edges-store edges)))
-      :component-will-unmount
-      (fn [_this] (rf/dispatch [:graph/set-current nil]))})))
+      :component-will-unmount #(rf/dispatch [:graph/reset])})))
 
 (defn- graph-view
   "The core Graph visualization wrapper."
@@ -202,6 +201,11 @@
  (fn [db [_ graph-data]]
    (when graph-data
      (assoc-in db [:graph :current] graph-data))))
+
+(rf/reg-event-db
+ :graph/reset
+ (fn [db]
+   (dissoc db :graph)))
 
 (rf/reg-sub
  :graph/current
