@@ -26,8 +26,9 @@
 
 (defn- dropdown-menu
   "Build a dropdown menu with dots."
-  [dropdown-id dropdown-items]
+  [dropdown-id dropdown-items extra-class]
   [:div.dropdown
+   {:class (if extra-class extra-class "")}
    [dropdown-dots dropdown-id]
    [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
     dropdown-items]])
@@ -233,7 +234,7 @@
 
 (defn statement-dropdown-menu
   "Dropdown menu for statements containing edit report and deletion."
-  [{:keys [db/id] :as statement}]
+  [{:keys [db/id] :as statement} extra-class]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
         user-moderator? @(rf/subscribe [:user/moderator?])
         admin? @(rf/subscribe [:user/administrator?])
@@ -255,7 +256,8 @@
          (when editable?
            [edit-dropdown-button-statement statement])
          (when (or admin? deletable?)
-           [delete-dropdown-button statement])])]]))
+           [delete-dropdown-button statement])])]
+     extra-class]))
 
 (defn show-number-of-replies [statement]
   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
