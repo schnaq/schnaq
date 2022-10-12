@@ -65,17 +65,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- statement-information-row [statement]
-  (let [statement-id (:db/id statement)]
-    [:div.d-flex.flex-wrap.align-items-center
-     (if (:statement/locked? statement)
-       [elements/locked-statement-icon statement-id]
-       [badges/show-number-of-replies statement])
-     (when (:statement/pinned? statement)
-       [elements/pinned-statement-icon statement-id])
-     (when ((set (:statement/labels statement)) ":question")
-       [labels/build-label ":question"])]))
-
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
   [statement]
@@ -96,6 +85,20 @@
                        (labels :qanda.button.mark/as-unanswered)
                        (labels :qanda.button.mark/as-answer))]
         [labels/build-label (if checked? label ":unchecked")]]])))
+
+(defn- statement-information-row [statement]
+  (let [statement-id (:db/id statement)]
+    [:div.d-flex.flex-wrap.align-items-center
+     (if (:statement/locked? statement)
+       [elements/locked-statement-icon statement-id]
+       [badges/show-number-of-replies statement])
+     (when (:statement/pinned? statement)
+       [elements/pinned-statement-icon statement-id])
+     (when ((set (:statement/labels statement)) ":question")
+       [labels/build-label ":question"])
+     (when-not @(rf/subscribe [:routes.schnaq/start?])
+       [:div.d-flex.flex-row.align-items-center.ms-auto
+        [mark-as-answer-button statement]])]))
 
 (>defn- card-highlighting
   "Add card-highlighting to a statement card."
@@ -206,11 +209,6 @@
       [:div.card-view.card-body.py-2.px-0
        [:div.row
         [:div.col-11.pe-0
-         (when-not @(rf/subscribe [:routes.schnaq/start?])
-           [:div.pt-2.d-flex.px-3
-            [:div.d-flex.flex-row.align-items-center.ms-auto
-             ;; TODO wohin kommt das mark as hin?
-             [mark-as-answer-button statement]]])
          [:div.text-typography.px-3.pt-2
           [truncated-content/statement statement]
           [statement-information-row statement]]]
