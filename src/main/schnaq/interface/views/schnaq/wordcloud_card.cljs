@@ -87,7 +87,7 @@
    [:<>
     [dropdown-menu/item :bullseye
      :schnaq.admin.focus/button
-     #(rf/dispatch [:schnaq.admin.focus/entity wordcloud-id])]
+     #(rf/dispatch [:schnaq.moderation.focus/entity wordcloud-id])]
     [dropdown-menu/item :trash
      :schnaq.wordcloud.local/delete-button
      #(when (js/confirm (labels :schnaq.wordcloud.local/delete-confirmation))
