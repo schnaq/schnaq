@@ -204,10 +204,6 @@
      [:div.d-flex.flex-row
       [card-highlighting statement]
       [:div.card-view.card-body.py-2.px-0
-       (when (:meta/new? statement)
-         ;; TODO new unter die Pfeile ziehen?
-         [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
-          (labels :discussion.badges/new)])
        [:div.row
         [:div.col-11.pe-0
          (when-not @(rf/subscribe [:routes.schnaq/start?])
@@ -220,7 +216,10 @@
           [statement-information-row statement]]]
         [:div.col-1.ps-0.align-items-center
          [badges/statement-dropdown-menu statement]
-         [reactions/up-down-vote-vertical statement]]]
+         [reactions/up-down-vote-vertical statement]
+         (when (:meta/new? statement)
+           [:div.bg-primary.px-1.rounded-1.d-inline-block.text-white.small
+            (labels :discussion.badges/new)])]]
        [:div.mx-3
         [input/reply-in-statement-input-form statement]
         [answers statement-id]
