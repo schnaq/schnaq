@@ -3,6 +3,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.colors :refer [colors]]
+            [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.localstorage :refer [from-localstorage]]))
 
@@ -84,7 +85,7 @@
  :tour/start-if-not-visited
  (fn [{:keys [db]} [_ current-tour]]
    (let [current-tours (get-in db [:user :tours])]
-     (when-not (current-tour current-tours)
+     (when-not (and (current-tour current-tours) config/in-iframe?)
        {:fx [[:dispatch [:tour/start current-tour]]]}))))
 
 (rf/reg-event-fx
