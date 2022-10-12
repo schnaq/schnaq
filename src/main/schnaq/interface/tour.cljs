@@ -85,7 +85,7 @@
  :tour/start-if-not-visited
  (fn [{:keys [db]} [_ current-tour]]
    (let [current-tours (get-in db [:user :tours])]
-     (when-not (and (current-tour current-tours) config/in-iframe?)
+     (when-not (or (current-tour current-tours) config/in-iframe?)
        {:fx [[:dispatch [:tour/start current-tour]]]}))))
 
 (rf/reg-event-fx

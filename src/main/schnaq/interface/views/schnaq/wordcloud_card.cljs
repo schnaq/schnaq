@@ -87,7 +87,7 @@
    [:<>
     [dropdown-menu/item :bullseye
      :schnaq.admin.focus/button
-     #(rf/dispatch [:schnaq.admin.focus/entity wordcloud-id])]
+     #(rf/dispatch [:schnaq.moderation.focus/entity wordcloud-id])]
     [dropdown-menu/item :trash
      :schnaq.wordcloud.local/delete-button
      #(when (js/confirm (labels :schnaq.wordcloud.local/delete-confirmation))
@@ -124,12 +124,11 @@
   "Displays all wordclouds of the current schnaq excluding the one in `exclude`."
   [exclude]
   [(? ::specs/wordcloud) :ret (? (s/coll-of :re-frame/component))]
-  (when exclude
-    (for [wordcloud (remove #(= (:db/id exclude) (:db/id %)) @(rf/subscribe [:schnaq.wordclouds/local]))]
-      [motion/fade-in-and-out
-       [:article
-        {:key (str "wordcloud-card-" (:db/id wordcloud))}
-        [local-wordcloud-card wordcloud]]])))
+  (for [wordcloud (remove #(= (:db/id exclude) (:db/id %)) @(rf/subscribe [:schnaq.wordclouds/local]))]
+    [motion/fade-in-and-out
+     [:article
+      {:key (str "wordcloud-card-" (:db/id wordcloud))}
+      [local-wordcloud-card wordcloud]]]))
 
 ;; -----------------------------------------------------------------------------
 
