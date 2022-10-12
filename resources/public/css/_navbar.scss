@@ -78,3 +78,11 @@ $height-of-components: 4.25rem;
     background: $white;
   }
 }
+
+.navbar-text {
+  max-width: 70%;
+  max-width: calc(80% - 4rem); // -4rem because of the navbar toggler
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
