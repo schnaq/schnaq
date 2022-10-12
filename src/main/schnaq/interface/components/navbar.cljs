@@ -1,7 +1,10 @@
 (ns schnaq.interface.components.navbar
-  (:require [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
+  (:require ["react-bootstrap/Container" :as Container]
+            ["react-bootstrap/Nav" :as Nav]
+            ["react-bootstrap/Navbar" :as Navbar]
+            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.common :as common-components]
+            [schnaq.interface.components.common :refer [schnaqqi-white]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -61,26 +64,38 @@
      button-content]
     dropdown-content]))
 
+(defn MobileNav []
+  [:> Navbar {:bg :dark :variant :dark :expand :lg}
+   [:> Container {:fluid true}
+    [:> (.-Brand Navbar) {:href "#"}
+     [schnaqqi-white {:class "img-fluid" :width "50"}]]
+    [:> (.-Text Navbar) {:class "truncate"} @(rf/subscribe [:schnaq/title])]
+    [:> (.-Toggle Navbar) {:aria-controls :basic-navbar-nav}]
+    [:> (.-Collapse Navbar) {:id "basic-navbar-nav"}
+     [:> Nav {:class "me-auto"}
+      [:> (.-Link Nav) {:href "#home"} "Home"]]]]])
+
 (defn collapsible-navbar
   "Collapsible navbar with split content header, collapsible-content-id must match id of collapsible-content."
   [brand-content collapse-content-id navbar-bg-class top-right-content collapsible-content]
-  (when-not @(rf/subscribe [:ui/setting :hide-navbar])
-    [:<>
-     [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
-      {:class navbar-bg-class}
-      [:div.container-fluid
-       [:div.navbar-brand.pt-0 brand-content]
-       [:button.navbar-toggler.mx-2.panel-white
-        {:type "button" :data-bs-toggle "collapse"
-         :data-bs-target (str "#" collapse-content-id)
-         :aria-controls collapse-content-id
-         :aria-expanded "false"
-         :aria-label "Toggle navigation"}
-        [:span.navbar-toggler-icon]]
-       [:div.d-md-none [common-components/theme-logo {:style {:max-width "100px"}}]]
-       [:div.ms-auto.d-none.d-lg-block
-        top-right-content]]]
-     collapsible-content]))
+  [MobileNav]
+  #_(when-not @(rf/subscribe [:ui/setting :hide-navbar])
+      [:<>
+       [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
+        {:class navbar-bg-class}
+        [:div.container-fluid
+         [:div.navbar-brand.pt-0 brand-content]
+         [:button.navbar-toggler.mx-2.panel-white
+          {:type "button" :data-bs-toggle "collapse"
+           :data-bs-target (str "#" collapse-content-id)
+           :aria-controls collapse-content-id
+           :aria-expanded "false"
+           :aria-label "Toggle navigation"}
+          [:span.navbar-toggler-icon]]
+         [:div.d-md-none [common-components/theme-logo {:style {:max-width "100px"}}]]
+         [:div.ms-auto.d-none.d-lg-block
+          top-right-content]]]
+       collapsible-content]))
 
 (>defn button-with-icon
   "Build a button for the navbar, with icon, text and tooltip."
