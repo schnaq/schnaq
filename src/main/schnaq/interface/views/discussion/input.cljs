@@ -183,19 +183,20 @@
         (fn [e]
           (.preventDefault e)
           (rf/dispatch [:editor/clear editor-id])
-          (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))]
-    (when-not (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?))
-      [:form.my-md-2
-       {:on-submit #(answer-to-statement-event %)
-        :on-key-down #(when (toolbelt/ctrl-press? % "Enter")
-                        (answer-to-statement-event %))}
-       [premise-card-editor statement editor-id]
-       [:div.d-flex
-        (when-not pro-con-disabled?
-          [statement-type-choose-button
-           [:form/statement-type statement-id]
-           [:form/statement-type! statement-id] true])
-        [:div.ms-auto.small.mt-2 [user/user-info statement 20 "w-100"]]]])))
+          (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))
+        forbidden-write? (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?))]
+    [:form.my-md-2
+     {:on-submit #(answer-to-statement-event %)
+      :on-key-down #(when (toolbelt/ctrl-press? % "Enter")
+                      (answer-to-statement-event %))}
+     (when-not forbidden-write?
+       [premise-card-editor statement editor-id])
+     [:div.d-flex
+      (when-not (or forbidden-write? pro-con-disabled?)
+        [statement-type-choose-button
+         [:form/statement-type statement-id]
+         [:form/statement-type! statement-id] true])
+      [:div.ms-auto.small.mt-2 [user/user-info statement 20 "w-100"]]]]))
 
 (rf/reg-event-db
  ;; Assoc statement-type with statement-id as key. The current topic is assigned via :selected

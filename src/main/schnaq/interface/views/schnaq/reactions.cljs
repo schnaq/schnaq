@@ -67,7 +67,6 @@
      [:span (get-down-votes statement votes)]]))
 
 (defn up-down-vote-vertical
-  ;; TODO Zahlen untereinander
   "Vertical panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])

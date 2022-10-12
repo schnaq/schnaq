@@ -200,7 +200,6 @@
   "Display a full interactive statement. Takes `additional-content`, e.g. the
   answer of a question."
   [statement-id]
-  ;; TODO locked fragen zeigen keine person an - refactor user raus aus argument-leiste
   (let [statement @(rf/subscribe [:schnaq/statement statement-id])]
     [:article.statement-card
      {:class (if (question? statement) "statement-question" "")}
