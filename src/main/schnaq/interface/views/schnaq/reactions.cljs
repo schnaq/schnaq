@@ -33,7 +33,6 @@
     (+ (:statement/downvotes statement) down-vote-change)))
 
 (defn up-down-vote
-  ;; TODO wird das noch überhaupt gebraucht?
   "Add inline panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])

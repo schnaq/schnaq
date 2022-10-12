@@ -212,7 +212,7 @@
          [:div.text-typography.px-3.pt-2
           [truncated-content/statement statement]
           [statement-information-row statement]]]
-        [:div.col-1.ps-0.align-items-center
+        [:div.col-1.ps-0.text-center
          [badges/statement-dropdown-menu statement]
          [reactions/up-down-vote-vertical statement]
          (when (:meta/new? statement)

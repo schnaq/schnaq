@@ -18,7 +18,6 @@
 (defn- dropdown-dots
   "Three dot menu which triggers a dropdown."
   [dropdown-id]
-  ;; TODO punkte mittig zentrieren
   [:button.btn.btn-link.text-dark.m-0.p-0
    {:id dropdown-id
     :role "button" :data-bs-toggle "dropdown"
@@ -28,7 +27,7 @@
 (defn- dropdown-menu
   "Build a dropdown menu with dots."
   [dropdown-id dropdown-items]
-  [:div.dropdown.ms-2
+  [:div.dropdown
    [dropdown-dots dropdown-id]
    [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
     dropdown-items]])
