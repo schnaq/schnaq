@@ -190,10 +190,12 @@
         :on-key-down #(when (toolbelt/ctrl-press? % "Enter")
                         (answer-to-statement-event %))}
        [premise-card-editor statement editor-id]
-       (when-not pro-con-disabled?
-         [statement-type-choose-button
-          [:form/statement-type statement-id]
-          [:form/statement-type! statement-id] true])])))
+       [:div.d-flex
+        (when-not pro-con-disabled?
+          [statement-type-choose-button
+           [:form/statement-type statement-id]
+           [:form/statement-type! statement-id] true])
+        [:div.ms-auto.small.mt-2 [user/user-info statement 20 "w-100"]]]])))
 
 (rf/reg-event-db
  ;; Assoc statement-type with statement-id as key. The current topic is assigned via :selected

@@ -18,6 +18,7 @@
 (defn- dropdown-dots
   "Three dot menu which triggers a dropdown."
   [dropdown-id]
+  ;; TODO punkte mittig zentrieren
   [:button.btn.btn-link.text-dark.m-0.p-0
    {:id dropdown-id
     :role "button" :data-bs-toggle "dropdown"
@@ -231,7 +232,7 @@
                                     :body (labels :statement.notifications/statement-flagged-body)
                                     :context :success}]]]}))
 
-(defn edit-statement-dropdown-menu
+(defn statement-dropdown-menu
   "Dropdown menu for statements containing edit report and deletion."
   [{:keys [db/id] :as statement}]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)

@@ -68,15 +68,13 @@
 (defn- statement-information-row [statement]
   (let [statement-id (:db/id statement)]
     [:div.d-flex.flex-wrap.align-items-center
-     [reactions/up-down-vote statement]
-     [:div.ms-sm-0.ms-lg-auto.d-flex.align-items-center
-      (when ((set (:statement/labels statement)) ":question")
-        [labels/build-label ":question"])
-      (if (:statement/locked? statement)
-        [elements/locked-statement-icon statement-id]
-        [badges/show-number-of-replies statement])
-      (when (:statement/pinned? statement)
-        [elements/pinned-statement-icon statement-id])]]))
+     (if (:statement/locked? statement)
+       [elements/locked-statement-icon statement-id]
+       [badges/show-number-of-replies statement])
+     (when (:statement/pinned? statement)
+       [elements/pinned-statement-icon statement-id])
+     (when ((set (:statement/labels statement)) ":question")
+       [labels/build-label ":question"])]))
 
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
@@ -150,7 +148,7 @@
         [:div.d-flex.justify-content-start.pt-2
          [:div.small
           [user/user-info statement 20 "w-100"]]
-         [badges/edit-statement-dropdown-menu statement]]
+         [badges/statement-dropdown-menu statement]]
         [:div.text-typography
          [truncated-content/statement statement]]
         [:div.d-flex.flex-wrap.align-items-center
@@ -199,6 +197,7 @@
   "Display a full interactive statement. Takes `additional-content`, e.g. the
   answer of a question."
   [statement-id]
+  ;; TODO locked fragen zeigen keine person an - refactor user raus aus argument-leiste
   (let [statement @(rf/subscribe [:schnaq/statement statement-id])]
     [:article.statement-card
      {:class (if (question? statement) "statement-question" "")}
@@ -206,22 +205,28 @@
       [card-highlighting statement]
       [:div.card-view.card-body.py-2.px-0
        (when (:meta/new? statement)
+         ;; TODO new unter die Pfeile ziehen?
          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
           (labels :discussion.badges/new)])
-       [:div.pt-2.d-flex.px-3
-        [:div.me-auto.small [user/user-info statement 20 "w-100"]]
-        [:div.d-flex.flex-row.align-items-center.ms-auto
+       [:div.row
+        [:div.col-11.pe-0
          (when-not @(rf/subscribe [:routes.schnaq/start?])
-           [mark-as-answer-button statement])
-         [badges/edit-statement-dropdown-menu statement]]]
-       [:div.my-4]
-       [:div.text-typography.px-3
-        [truncated-content/statement statement]
-        [statement-information-row statement]]
-       [:div.mx-3
-        [input/reply-in-statement-input-form statement]
-        [answers statement-id]
-        [replies statement-id]]]]]))
+           [:div.pt-2.d-flex.px-3
+            [:div.d-flex.flex-row.align-items-center.ms-auto
+             ;; TODO wohin kommt das mark as hin?
+             [mark-as-answer-button statement]]])
+         [:div.text-typography.px-3.pt-2
+          [truncated-content/statement statement]
+          [statement-information-row statement]]
+         [:div.mx-3
+          [input/reply-in-statement-input-form statement]
+          [answers statement-id]
+          [replies statement-id]]]
+        [:div.col-1.ps-0.align-items-center
+         [badges/statement-dropdown-menu statement]
+         [reactions/up-down-vote-vertical statement]]]]]]))
+
+;; TODO die spalte nur bis Eingabefeld bzw. innerhalb des statements?
 
 (defn- sort-statements
   "Sort statements according to the filter method."
@@ -253,7 +258,7 @@
        [:div.d-flex.flex-row
         [badges/show-number-of-replies statement]
         [reactions/up-down-vote statement]
-        [badges/edit-statement-dropdown-menu statement]])]))
+        [badges/statement-dropdown-menu statement]])]))
 
 (defn- title-view [statement]
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])

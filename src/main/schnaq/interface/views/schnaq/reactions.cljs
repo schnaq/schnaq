@@ -33,6 +33,7 @@
     (+ (:statement/downvotes statement) down-vote-change)))
 
 (defn up-down-vote
+  ;; TODO wird das noch überhaupt gebraucht?
   "Add inline panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])
@@ -55,6 +56,41 @@
       [icon :arrow-up "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
      [:span.me-2 (get-up-votes statement votes)]
      [:div.me-1
+      (cond->
+       {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")}
+        (not read-only?) (merge {:on-click (fn [e]
+                                             (.stopPropagation e)
+                                             (if authenticated?
+                                               (rf/dispatch [:discussion/toggle-downvote statement])
+                                               (rf/dispatch [:schnaq.vote/toggle-anonymous statement :downvote]))
+                                             (matomo/track-event "Active User", "Action", "Vote: Downvote"))}))
+      [icon :arrow-down "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
+     [:span (get-down-votes statement votes)]]))
+
+(defn up-down-vote-vertical
+  ;; TODO Zahlen untereinander
+  "Vertical panel for up and down votes."
+  [statement]
+  (let [votes @(rf/subscribe [:local-votes])
+        [local-upvote? local-downvote?] @(rf/subscribe [:votes/upvoted-or-downvoted (:db/id statement)])
+        ;; Do not use or shortcut, since the value can be false and should be preferably selected over backend value
+        upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
+        downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)
+        authenticated? @(rf/subscribe [:user/authenticated?])
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+    [:div.align-items-center.text-center
+     [:div
+      (cond->
+       {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")}
+        (not read-only?) (merge {:on-click (fn [e]
+                                             (.stopPropagation e)
+                                             (if authenticated?
+                                               (rf/dispatch [:discussion/toggle-upvote statement])
+                                               (rf/dispatch [:schnaq.vote/toggle-anonymous statement :upvote]))
+                                             (matomo/track-event "Active User", "Action", "Vote: Upvote"))}))
+      [icon :arrow-up "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
+     [:span (get-up-votes statement votes)]
+     [:div
       (cond->
        {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")}
         (not read-only?) (merge {:on-click (fn [e]
