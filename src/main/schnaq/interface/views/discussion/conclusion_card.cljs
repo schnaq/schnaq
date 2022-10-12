@@ -217,16 +217,14 @@
              [mark-as-answer-button statement]]])
          [:div.text-typography.px-3.pt-2
           [truncated-content/statement statement]
-          [statement-information-row statement]]
-         [:div.mx-3
-          [input/reply-in-statement-input-form statement]
-          [answers statement-id]
-          [replies statement-id]]]
+          [statement-information-row statement]]]
         [:div.col-1.ps-0.align-items-center
          [badges/statement-dropdown-menu statement]
-         [reactions/up-down-vote-vertical statement]]]]]]))
-
-;; TODO die spalte nur bis Eingabefeld bzw. innerhalb des statements?
+         [reactions/up-down-vote-vertical statement]]]
+       [:div.mx-3
+        [input/reply-in-statement-input-form statement]
+        [answers statement-id]
+        [replies statement-id]]]]]))
 
 (defn- sort-statements
   "Sort statements according to the filter method."
