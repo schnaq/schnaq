@@ -217,9 +217,9 @@
 
 (defn navbar-title
   "Brand logo and title with dynamic resizing."
-  ([title]
-   [navbar-title title true])
-  ([_title clickable-title?]
+  ([]
+   [navbar-title true])
+  ([clickable-title?]
    (let [title @(rf/subscribe [:page/title])]
      [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2.bg-white
       [:a.schnaq-logo-container.d-flex.h-100 (when clickable-title? {:href (navigation/href :routes.schnaqs/personal)})
@@ -392,12 +392,6 @@
   []
   [:div.dropdown
    [language-toggle-with-tooltip false true {:class "text-dark btn"}]])
-
-(defn discussion-title
-  "Display the schnaq title and info"
-  []
-  [navbar-title
-   [clickable-title]])
 
 (defn user-button
   "Display the user settings button"

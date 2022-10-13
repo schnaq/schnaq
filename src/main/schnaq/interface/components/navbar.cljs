@@ -85,11 +85,11 @@
 (defn MobileNav
   "Mobile navigation."
   []
-  [:> Navbar {:bg :primary :variant :dark :expand :xl :expanded true}
+  [:> Navbar {:bg :primary :variant :dark :expand false}
    [:> Container {:fluid true}
     [:> NavbarBrand {:href (toolbelt/current-overview-link)}
      [schnaqqi-white {:class "img-fluid" :width "50"}]]
-    [:> NavbarText [:h1.h5 @(rf/subscribe [:schnaq/title])]]
+    [:> NavbarText [:h1.h5 (or @(rf/subscribe [:schnaq/title]) @(rf/subscribe [:page/title]))]]
     [:> NavbarToggle {:aria-controls "mobile-navbar"}]
     [:> NavbarCollapse {:id "mobile-navbar"}
      [:> Nav
@@ -107,21 +107,22 @@
   "Collapsible navbar with split content header, collapsible-content-id must match id of collapsible-content."
   [brand-content collapse-content-id navbar-bg-class top-right-content collapsible-content]
   [:<>
-   [MobileNav]
    (when-not @(rf/subscribe [:ui/setting :hide-navbar])
      [:<>
-      [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
-       {:class navbar-bg-class}
-       [:div.container-fluid
-        [:div.navbar-brand.pt-0 brand-content]
-        [:button.navbar-toggler.mx-2.panel-white
-         {:type "button" :data-bs-toggle "collapse"
-          :data-bs-target (str "#" collapse-content-id)
-          :aria-controls collapse-content-id
-          :aria-expanded "false"
-          :aria-label "Toggle navigation"}
-         [:span.navbar-toggler-icon]]
-        [:div.d-md-none [common-components/theme-logo {:style {:max-width "100px"}}]]
-        [:div.ms-auto.d-none.d-lg-block
-         top-right-content]]]
-      collapsible-content])])
+      [:div.d-xl-none [MobileNav]]
+      [:div.d-none.d-xl-block
+       [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
+        {:class navbar-bg-class}
+        [:div.container-fluid
+         [:div.navbar-brand.pt-0 brand-content]
+         [:button.navbar-toggler.mx-2.panel-white
+          {:type "button" :data-bs-toggle "collapse"
+           :data-bs-target (str "#" collapse-content-id)
+           :aria-controls collapse-content-id
+           :aria-expanded "false"
+           :aria-label "Toggle navigation"}
+          [:span.navbar-toggler-icon]]
+         [:div.d-md-none [common-components/theme-logo {:style {:max-width "100px"}}]]
+         [:div.ms-auto.d-none.d-lg-block
+          top-right-content]]]
+       collapsible-content]])])
