@@ -17,20 +17,19 @@
 
 (defn- dropdown-dots
   "Three dot menu which triggers a dropdown."
-  [dropdown-id]
+  [{:keys [id]}]
   [:button.btn.btn-link.text-dark.m-0.p-0
-   {:id dropdown-id
+   {:id id
     :role "button" :data-bs-toggle "dropdown"
     :aria-haspopup "true" :aria-expanded "false"}
    [icon :dots]])
 
 (defn- dropdown-menu
   "Build a dropdown menu with dots."
-  [dropdown-id dropdown-items extra-class]
-  [:div.dropdown
-   {:class (if extra-class extra-class "")}
-   [dropdown-dots dropdown-id]
-   [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
+  [{:keys [id class]} dropdown-items]
+  [:div.dropdown {:class class}
+   [dropdown-dots {:id id}]
+   [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby id}
     dropdown-items]])
 
 ;; -----------------------------------------------------------------------------
@@ -160,7 +159,7 @@
         editable? (or anonymous-owner?
                       (= user-id (:db/id author)))]
     (when editable?
-      [dropdown-menu dropdown-id [edit-dropdown-button-discussion id share-hash]])))
+      [dropdown-menu {:id dropdown-id} [edit-dropdown-button-discussion id share-hash]])))
 
 (defn- flag-dropdown-button-statement [statement]
   (let [confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :statement/flag-statement-confirmation))
@@ -243,7 +242,8 @@
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         deletable? (deletable? statement user-moderator? user-id creation-secrets)
         editable? (editable? statement user-id creation-secrets)]
-    [dropdown-menu dropdown-id
+    [dropdown-menu {:id dropdown-id
+                    :class extra-class}
      [:<>
       [share-link-to-statement statement]
       [flag-dropdown-button-statement statement]
@@ -256,8 +256,7 @@
          (when editable?
            [edit-dropdown-button-statement statement])
          (when (or admin? deletable?)
-           [delete-dropdown-button statement])])]
-     extra-class]))
+           [delete-dropdown-button statement])])]]))
 
 (defn show-number-of-replies [statement]
   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
