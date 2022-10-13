@@ -5,7 +5,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.discussion.share :refer [share-schnaq-button]]
-            [schnaq.interface.views.navbar.elements :as nav-elements]
+            [schnaq.interface.views.navbar.elements :as nav-elements :refer [language-dropdown]]
             [schnaq.interface.views.navbar.user-management :as um]))
 
 (defn- list-element-href-button-builder
@@ -92,7 +92,7 @@
    [:div.fw-bold.mt-3 (labels :discussion.navbar/settings)]
    [:ul.list-group.list-group-flush
     [share-schnaq-button (fn [props] [li-button props (labels :sharing/tooltip)])]
-    [:li.list-group-item.dropdown [navbar/language-dropdown true {:class "p-0 text-dark"}]]
+    [:li.list-group-item.dropdown [language-dropdown true {:class "p-0 text-dark"}]]
     [settings-li-button]]])
 
 (defn- external-content [collapse-content-id content]
