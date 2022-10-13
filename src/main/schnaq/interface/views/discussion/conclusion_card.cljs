@@ -149,7 +149,7 @@
        [:div.card-view.card-body.p-2
         [:div.d-flex.justify-content-start.pt-2
          [mark-as-answer-button statement]
-         [badges/statement-dropdown-menu statement "ms-auto"]]
+         [badges/statement-dropdown-menu {:class "ms-auto"} statement]]
         [:div.text-typography
          [truncated-content/statement statement]]
         [:div.d-flex.flex-wrap.align-items-center
@@ -211,7 +211,7 @@
           [truncated-content/statement statement]
           [statement-information-row statement]]]
         [:div.col-1.ps-0.text-center
-         [badges/statement-dropdown-menu statement]
+         [badges/statement-dropdown-menu nil statement]
          [reactions/up-down-vote-vertical statement]
          (when (:meta/new? statement)
            [:div.bg-primary.px-1.rounded-1.d-inline-block.text-white.small
@@ -251,7 +251,7 @@
        [:div.d-flex.flex-row
         [badges/show-number-of-replies statement]
         [reactions/up-down-vote statement]
-        [badges/statement-dropdown-menu statement]])]))
+        [badges/statement-dropdown-menu nil statement]])]))
 
 (defn- title-view [statement]
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])

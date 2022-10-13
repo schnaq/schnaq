@@ -233,7 +233,7 @@
 
 (defn statement-dropdown-menu
   "Dropdown menu for statements containing edit report and deletion."
-  [{:keys [db/id] :as statement} extra-class]
+  [{:keys [class]} {:keys [db/id] :as statement}]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
         user-moderator? @(rf/subscribe [:user/moderator?])
         admin? @(rf/subscribe [:user/administrator?])
@@ -243,7 +243,7 @@
         deletable? (deletable? statement user-moderator? user-id creation-secrets)
         editable? (editable? statement user-id creation-secrets)]
     [dropdown-menu {:id dropdown-id
-                    :class extra-class}
+                    :class class}
      [:<>
       [share-link-to-statement statement]
       [flag-dropdown-button-statement statement]
