@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.navbar.elements
   (:require [ajax.core :as ajax]
-            [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
@@ -20,8 +20,8 @@
 (defn language-dropdown
   "Dropdown for bootstrap navbar to display the allowed languages."
   ([]
-   [language-dropdown true {}])
-  ([side-by-side? options]
+   [language-dropdown true false {}])
+  ([side-by-side? small? options]
    (let [icon-classes (if side-by-side? "" "d-block mx-auto")]
      [:<>
       [:button#schnaq-language-dropdown.btn.btn-link.nav-link.dropdown-toggle
@@ -30,7 +30,7 @@
          :aria-haspopup "true" :aria-expanded "false"}
         options)
        [icon :language icon-classes {:size "lg"}]
-       [:span.small " " @(rf/subscribe [:current-language])]]
+       [:span {:class (when small? "small")} " " @(rf/subscribe [:current-language])]]
       [:div.dropdown-menu {:aria-labelledby "schnaq-language-dropdown"}
        [:a.btn.dropdown-item
         {:href (navigation/switch-language-href :de)
@@ -43,10 +43,10 @@
 
 (defn language-toggle-with-tooltip
   "Uses language-dropdown and adds a mouse-over label."
-  [side-by-side? options]
+  [side-by-side? small? options]
   [tooltip/text
    (labels :nav.buttons/language-toggle)
-   [:span [language-dropdown side-by-side? options]]])
+   [:span [language-dropdown side-by-side? small? options]]])
 
 (>defn button-with-icon
   "Build a button for the navbar, with icon, text and tooltip."
@@ -142,35 +142,42 @@
 
 (defn graph-download-as-png
   "Download the current graph as a png file."
-  [surrounding-div]
-  [button-with-icon
-   :file-download
-   (labels :graph.download/as-png)
-   (labels :discussion.navbar/download)
-   #(let [canvas (.querySelector js/document (gstring/format "%s div canvas" surrounding-div))
-          anchor (.createElement js/document "a")]
-      (oset! anchor [:href] (.toDataURL canvas "image/png"))
-      (oset! anchor [:download] "graph.png")
-      (.click anchor))
-   {:id :graph-export}])
+  []
+  (let [surrounding-div (gstring/format "#%s" graph-id)]
+    [button-with-icon
+     :file-download
+     (labels :graph.download/as-png)
+     (labels :discussion.navbar/download)
+     #(let [canvas (.querySelector js/document (gstring/format "%s div canvas" surrounding-div))
+            anchor (.createElement js/document "a")]
+        (oset! anchor [:href] (.toDataURL canvas "image/png"))
+        (oset! anchor [:download] "graph.png")
+        (.click anchor))
+     {:id :graph-export}]))
+
+(>defn txt-export-request
+  "Initiate an export as a txt file for the currently selected schnaq."
+  [share-hash title]
+  [:discussion/share-hash string? => any?]
+  (ajax/ajax-request
+   {:method :get
+    :uri (str shared-config/api-url "/export/argdown")
+    :format (ajax/transit-request-format)
+    :params {:share-hash share-hash}
+    :response-format (ajax/transit-response-format)
+    :handler (partial create-txt-download-handler title)
+    :error-handler show-error}))
 
 (defn txt-export
   "Request a txt-export of the discussion."
-  [share-hash title]
-  (let [request-fn #(ajax/ajax-request
-                     {:method :get
-                      :uri (str shared-config/api-url "/export/argdown")
-                      :format (ajax/transit-request-format)
-                      :params {:share-hash share-hash}
-                      :response-format (ajax/transit-response-format)
-                      :handler (partial create-txt-download-handler title)
-                      :error-handler show-error})]
-    (when share-hash
+  []
+  (when-let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+    (let [title @(rf/subscribe [:schnaq/title])]
       [button-with-icon
        :file-download
        (labels :schnaq.export/as-text)
        (labels :discussion.navbar/download)
-       #(request-fn)])))
+       #(txt-export-request share-hash title)])))
 
 ;; -----------------------------------------------------------------------------
 
@@ -331,12 +338,11 @@
 (defn navbar-download
   "Download button for either text or graph"
   []
-  (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
-        current-route @(rf/subscribe [:navigation/current-route-name])
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])
         graph? (= current-route :routes/graph-view)]
     (if graph?
-      [graph-download-as-png (gstring/format "#%s" graph-id)]
-      [txt-export share-hash title])))
+      [graph-download-as-png]
+      [txt-export])))
 
 (defn statement-counter
   "A counter showing all statements and pulsing live."
@@ -368,7 +374,7 @@
   "Language Toggle dropdown button"
   []
   [:div.dropdown
-   [language-toggle-with-tooltip false {:class "text-dark btn"}]])
+   [language-toggle-with-tooltip false true {:class "text-dark btn"}]])
 
 (defn discussion-title
   "Display the schnaq title and info"

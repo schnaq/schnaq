@@ -7,9 +7,13 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.common :as common-components :refer [schnaqqi-white]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.views.discussion.share :refer [share-schnaq-button]]
+            [schnaq.interface.views.navbar.elements :refer [language-dropdown
+                                                            txt-export-request]]
             [schnaq.interface.views.navbar.user-management :refer [UserNavLinkDropdown]]))
 
 (def ^:private NavbarBrand (oget Navbar :Brand))
@@ -49,19 +53,21 @@
 (defn SchnaqSettings []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
         href #(navigation/href % {:share-hash share-hash})
-        img (fn [img-key] [:img {:height 25
-                                 :class "navbar-icon"
-                                 :src (img-path img-key)}])]
+        stacked-icon (fn [icon-key] [:div.fa-stack.small
+                                     [icon :square "fa-stack-2x"]
+                                     [icon icon-key "fa-stack-1x text-primary"]])]
     [:<>
      [:> NavLink {:disabled true} (labels :discussion.navbar/settings)]
-     [:> NavLink {:class "ms-3" :href (href :routes.schnaq/start)}
-      [img :icon-cards-dark] (labels :sharing/tooltip)]
-     [:> NavLink {:class "ms-3" :href (href :routes/graph-view)}
-      [img :icon-graph-dark] (labels :graph.button/text)]
-     [:> NavLink {:class "ms-3" :href (href :routes.schnaq/qanda)}
-      [img :icon-qanda-dark] (labels :qanda.button/text)]
-     [:> NavLink {:class "ms-3" :href (href :routes.schnaq/dashboard)}
-      [img :icon-summary-dark] (labels :summary.link.button/text)]]))
+     [share-schnaq-button (fn [props] [:> NavLink (merge props {:class "ms-2"})
+                                       [stacked-icon :share] (labels :discussion.navbar/share)])]
+     [:> NavLink {:class "ms-2" :on-click #(txt-export-request share-hash @(rf/subscribe [:schnaq/title]))}
+      [stacked-icon :file-download] (labels :discussion.navbar/download)]
+     [:> NavLink {:class "ms-2" :href (href :routes.schnaq/moderation-center)}
+      [stacked-icon :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]
+
+     [:div.ms-2 [language-dropdown true false {:class "text-white ms-1"}]]
+     #_[:> NavLink {:class "ms-2"}
+        [stacked-icon :sliders-h] (labels :schnaq.admin/tooltip)]]))
 
 (defn MobileNav []
   [:> Navbar {:bg :primary :variant :dark :expand :xl :expanded true}

@@ -5,7 +5,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
-            [schnaq.interface.views.navbar.elements :as elements]
+            [schnaq.interface.views.navbar.elements :as elements :refer [language-dropdown]]
             [schnaq.interface.views.navbar.user-management :as um]))
 
 ;; -----------------------------------------------------------------------------
@@ -32,7 +32,7 @@
    [privacy-button]
    [blog-link]
    [:div.nav-item.dropdown.ms-auto
-    [navbar-components/language-dropdown false {}]]
+    [language-dropdown false false {}]]
    [um/admin-dropdown "btn-outline-secondary"]
    [:div.mx-1.d-none.d-md-block
     [:div.d-flex.flex-row.align-items-center
@@ -74,6 +74,6 @@
       [:li.nav-item [privacy-button]]
       [:li.nav-item [blog-link]]
       [:li.nav-item.dropdown
-       [navbar-components/language-dropdown]]]
+       [language-dropdown]]]
      [um/admin-dropdown "btn-outline-secondary"]
      [um/register-or-user-button false]]]])
