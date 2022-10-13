@@ -36,9 +36,26 @@
                                  :class "navbar-icon"
                                  :src (img-path img-key)}])]
     [:<>
-     [:> NavLink {:disabled true} "Ansichten"]
+     [:> NavLink {:disabled true} (labels :discussion.navbar/views)]
      [:> NavLink {:class "ms-3" :href (href :routes.schnaq/start)}
       [img :icon-cards-dark] (labels :discussion.button/text)]
+     [:> NavLink {:class "ms-3" :href (href :routes/graph-view)}
+      [img :icon-graph-dark] (labels :graph.button/text)]
+     [:> NavLink {:class "ms-3" :href (href :routes.schnaq/qanda)}
+      [img :icon-qanda-dark] (labels :qanda.button/text)]
+     [:> NavLink {:class "ms-3" :href (href :routes.schnaq/dashboard)}
+      [img :icon-summary-dark] (labels :summary.link.button/text)]]))
+
+(defn SchnaqSettings []
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
+        href #(navigation/href % {:share-hash share-hash})
+        img (fn [img-key] [:img {:height 25
+                                 :class "navbar-icon"
+                                 :src (img-path img-key)}])]
+    [:<>
+     [:> NavLink {:disabled true} (labels :discussion.navbar/settings)]
+     [:> NavLink {:class "ms-3" :href (href :routes.schnaq/start)}
+      [img :icon-cards-dark] (labels :sharing/tooltip)]
      [:> NavLink {:class "ms-3" :href (href :routes/graph-view)}
       [img :icon-graph-dark] (labels :graph.button/text)]
      [:> NavLink {:class "ms-3" :href (href :routes.schnaq/qanda)}
@@ -52,11 +69,13 @@
     [:> NavbarBrand {:href "#"}
      [schnaqqi-white {:class "img-fluid" :width "50"}]]
     [:> NavbarText @(rf/subscribe [:schnaq/title])]
-    [:> NavbarToggle {:aria-controls :basic-navbar-nav}]
-    [:> NavbarCollapse {:id "basic-navbar-nav"}
-     [:> Nav {:class "me-auto"}
-      [DiscussionViews]
-      [UserNavLinkDropdown]]]]])
+    [:> NavbarToggle {:aria-controls "mobile-navbar"}]
+    [:> NavbarCollapse {:id "mobile-navbar"}
+     [:> Nav
+      [UserNavLinkDropdown]
+      [:div.row
+       [:div.col-6 [DiscussionViews]]
+       [:div.col-6 [SchnaqSettings]]]]]]])
 
 (defn collapsible-navbar
   "Collapsible navbar with split content header, collapsible-content-id must match id of collapsible-content."

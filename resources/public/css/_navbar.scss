@@ -96,7 +96,7 @@ $height-of-components: 4.25rem;
     color: $white;
   }
 
-  a {
+  a:not(.dropdown-item) {
     color: $white !important;
 
     &:hover {
