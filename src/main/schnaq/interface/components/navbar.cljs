@@ -26,7 +26,7 @@
    (labels label)])
 
 (defn MobileNav []
-  [:> Navbar {:bg :primary :variant :dark :expand :lg}
+  [:> Navbar {:bg :primary :variant :dark :expand :xl}
    [:> Container {:fluid true}
     [:> NavbarBrand {:href "#"}
      [schnaqqi-white {:class "img-fluid" :width "50"}]]
