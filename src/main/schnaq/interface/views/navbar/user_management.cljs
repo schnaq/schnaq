@@ -3,6 +3,7 @@
             ["react-bootstrap/NavDropdown" :as NavDropdown]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
@@ -15,6 +16,7 @@
             [schnaq.links :as links]))
 
 (def ^:private NavDropdownItem (oget NavDropdown :Item))
+(def ^:private NavDropdownDivider (oget NavDropdown :Divider))
 
 (defn- login-not-possible
   "Show a different component, if login is not possible."
@@ -97,6 +99,13 @@
            [:a.btn {:role "button" :href (navigation/href :routes.playground/editor)}
             (labels :routes.playground/editor)]])]])))
 
+(defn username-with-pro-indicator []
+  (let [username @(rf/subscribe [:user/display-name])
+        pro? @(rf/subscribe [:user/pro?])]
+    [:small.text-nowrap
+     (when pro? [icon :star "me-1"])
+     (toolbelt/truncate-to-n-chars username 15)]))
+
 (defn- profile-picture-in-nav
   "Show profile picture-element in the navbar."
   []
@@ -121,11 +130,12 @@
     (labels :user/logout)]])
 
 (defn UserNavLinkDropdown []
-  (let [username @(rf/subscribe [:user/display-name])
-        authenticated? @(rf/subscribe [:user/authenticated?])]
-    [:> NavDropdown {:title username}
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])]
+    [:> NavDropdown {:title (r/as-element [username-with-pro-indicator])}
      (if authenticated?
        [:<>
+        [:> NavDropdownItem {:disabled true} [common/avatar 32]]
+        [:> NavDropdownDivider]
         [:> NavDropdownItem {:href (navigation/href :routes.user.manage/account)}
          (labels :user.profile/settings)]
         [:> NavDropdownItem {:on-click #(rf/dispatch [:keycloak/logout])}
