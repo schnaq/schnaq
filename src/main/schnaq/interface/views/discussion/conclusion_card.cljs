@@ -64,7 +64,6 @@
      [small-share-schnaq-button]]]])
 
 ;; -----------------------------------------------------------------------------
-;; TODO weitere Beiträge nach unten drücken
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
   [statement]
@@ -88,7 +87,7 @@
 
 (defn- statement-information-row [statement]
   (let [statement-id (:db/id statement)]
-    [:div.d-flex.flex-wrap.align-items-center
+    [:div.d-flex.flex-wrap.align-items-center.pb-1
      (if (:statement/locked? statement)
        [elements/locked-statement-icon statement-id]
        [badges/show-number-of-replies statement])
@@ -208,7 +207,7 @@
       [:div.card-view.card-body.py-2.px-0
        [:div.row
         [:div.col-11.pe-0
-         [:div.text-typography.px-3.pt-2
+         [:div.text-typography.px-3.pt-2.h-100.d-flex.flex-column.justify-content-between
           [truncated-content/statement statement]
           [statement-information-row statement]]]
         [:div.col-1.ps-0.text-center
