@@ -64,20 +64,6 @@
      [small-share-schnaq-button]]]])
 
 ;; -----------------------------------------------------------------------------
-
-(defn- statement-information-row [statement]
-  (let [statement-id (:db/id statement)]
-    [:div.d-flex.flex-wrap.align-items-center
-     [reactions/up-down-vote statement]
-     [:div.ms-sm-0.ms-lg-auto.d-flex.align-items-center
-      (when ((set (:statement/labels statement)) ":question")
-        [labels/build-label ":question"])
-      (if (:statement/locked? statement)
-        [elements/locked-statement-icon statement-id]
-        [badges/show-number-of-replies statement])
-      (when (:statement/pinned? statement)
-        [elements/pinned-statement-icon statement-id])]]))
-
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
   [statement]
@@ -89,8 +75,8 @@
                           (or (not mods-mark-only?)
                               (and mods-mark-only? @(rf/subscribe [:user/moderator?]))))]
     (when show-button?
-      [:section.w-100
-       [:button.btn.btn-sm.btn-link.text-dark.pe-0
+      [:section
+       [:button.btn.btn-sm.btn-link.text-dark.px-0
         {:on-click #(if checked?
                       (rf/dispatch [:statement.labels/remove statement label])
                       (rf/dispatch [:statement.labels/add statement label]))}
@@ -98,6 +84,20 @@
                        (labels :qanda.button.mark/as-unanswered)
                        (labels :qanda.button.mark/as-answer))]
         [labels/build-label (if checked? label ":unchecked")]]])))
+
+(defn- statement-information-row [statement]
+  (let [statement-id (:db/id statement)]
+    [:div.d-flex.flex-wrap.align-items-center.pb-1
+     (if (:statement/locked? statement)
+       [elements/locked-statement-icon statement-id]
+       [badges/show-number-of-replies statement])
+     (when (:statement/pinned? statement)
+       [elements/pinned-statement-icon statement-id])
+     (when ((set (:statement/labels statement)) ":question")
+       [labels/build-label ":question"])
+     (when-not @(rf/subscribe [:routes.schnaq/start?])
+       [:div.d-flex.flex-row.align-items-center.ms-auto
+        [mark-as-answer-button statement]])]))
 
 (>defn- card-highlighting
   "Add card-highlighting to a statement card."
@@ -148,16 +148,16 @@
        [card-highlighting statement "me-2 highlight-card-reduced"]
        [:div.card-view.card-body.p-2
         [:div.d-flex.justify-content-start.pt-2
-         [:div.small
-          [user/user-info statement 20 "w-100"]]
-         [badges/edit-statement-dropdown-menu statement]]
+         [mark-as-answer-button statement]
+         [badges/statement-dropdown-menu {:class "ms-auto"} statement]]
         [:div.text-typography
          [truncated-content/statement statement]]
         [:div.d-flex.flex-wrap.align-items-center
          [discuss-answer-button statement]
          [reactions/up-down-vote statement]
          [:div.d-flex.flex-row.align-items-center.ms-auto
-          [mark-as-answer-button statement]]]]]]]))
+          [:div.small
+           [user/user-info statement 20 "w-100"]]]]]]]]))
 
 (defn- reduced-or-edit-card
   "Wrap reduced statement card to make it editable."
@@ -205,19 +205,17 @@
      [:div.d-flex.flex-row
       [card-highlighting statement]
       [:div.card-view.card-body.py-2.px-0
-       (when (:meta/new? statement)
-         [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-end
-          (labels :discussion.badges/new)])
-       [:div.pt-2.d-flex.px-3
-        [:div.me-auto.small [user/user-info statement 20 "w-100"]]
-        [:div.d-flex.flex-row.align-items-center.ms-auto
-         (when-not @(rf/subscribe [:routes.schnaq/start?])
-           [mark-as-answer-button statement])
-         [badges/edit-statement-dropdown-menu statement]]]
-       [:div.my-4]
-       [:div.text-typography.px-3
-        [truncated-content/statement statement]
-        [statement-information-row statement]]
+       [:div.row
+        [:div.col-11.pe-0
+         [:div.text-typography.px-3.pt-2.h-100.d-flex.flex-column.justify-content-between
+          [truncated-content/statement statement]
+          [statement-information-row statement]]]
+        [:div.col-1.ps-0.text-center
+         [badges/statement-dropdown-menu nil statement]
+         [reactions/up-down-vote-vertical statement]
+         (when (:meta/new? statement)
+           [:div.bg-primary.px-1.rounded-1.d-inline-block.text-white.small
+            (labels :discussion.badges/new)])]]
        [:div.mx-3
         [input/reply-in-statement-input-form statement]
         [answers statement-id]
@@ -253,7 +251,7 @@
        [:div.d-flex.flex-row
         [badges/show-number-of-replies statement]
         [reactions/up-down-vote statement]
-        [badges/edit-statement-dropdown-menu statement]])]))
+        [badges/statement-dropdown-menu nil statement]])]))
 
 (defn- title-view [statement]
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
