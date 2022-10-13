@@ -2,7 +2,6 @@
   (:require ["react-bootstrap/Container" :as Container]
             ["react-bootstrap/Nav" :as Nav]
             ["react-bootstrap/Navbar" :as Navbar]
-            ["react-bootstrap/NavDropdown" :as NavDropdown]
             [com.fulcrologic.guardrails.core :refer [=> >defn]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -15,14 +14,14 @@
             [schnaq.interface.views.discussion.share :refer [share-schnaq-button]]
             [schnaq.interface.views.navbar.elements :refer [LanguageDropdown
                                                             txt-export-request]]
-            [schnaq.interface.views.navbar.user-management :refer [UserNavLinkDropdown]]))
+            [schnaq.interface.views.navbar.user-management :refer [UserNavLinkDropdown]]
+            [schnaq.interface.views.navbar.user-management :as um]))
 
 (def ^:private NavbarBrand (oget Navbar :Brand))
 (def ^:private NavbarText (oget Navbar :Text))
 (def ^:private NavbarToggle (oget Navbar :Toggle))
 (def ^:private NavbarCollapse (oget Navbar :Collapse))
 (def ^:private NavLink (oget Nav :Link))
-(def ^:private NavDropdownItem (oget NavDropdown :Item))
 
 (>defn button
   "Build a button for the navbar. Takes a label as a keyword and anything, which
@@ -94,6 +93,7 @@
     [:> NavbarCollapse {:id "mobile-navbar"}
      [:> Nav
       [UserNavLinkDropdown]
+      [um/admin-dropdown]
       [LanguageDropdown]
       (if @(rf/subscribe [:schnaq/share-hash])
         [:div.row

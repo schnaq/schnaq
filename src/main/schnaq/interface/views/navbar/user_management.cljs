@@ -65,38 +65,26 @@
 
 (defn admin-dropdown
   "Show Admin pages when user is authenticated and has admin role."
-  [button-class]
+  []
   (let [admin? @(rf/subscribe [:user/administrator?])
-        analytics-admin? @(rf/subscribe [:user/analytics-admin?])
-        ul-id "admin-dropdown"]
+        analytics-admin? @(rf/subscribe [:user/analytics-admin?])]
     ;; Analytics-Admin also is true when user is super-admin
-    (when analytics-admin?
-      [:ul.navbar-nav.dropdown
-       [:button#admin-dropdown.nav-link.btn.dropdown-toggle
-        {:role "button" :data-bs-toggle "dropdown" :id ul-id
-         :class button-class
-         :aria-haspopup "true" :aria-expanded "false"}
-        (labels :nav/admin)]
-       [:ul.dropdown-menu.dropdown-menu-end {:aria-labelledby (str ul-id)}
+    [:<>
+     (when analytics-admin?
+       [:> NavDropdown {:title (r/as-element [:span.text-secondary "Admin"])}
+        [:> NavDropdownItem {:href (navigation/href :routes/analytics)}
+         (labels :router/analytics)]
         (when admin?
-          [:li.dropdown-item
-           [:a.btn {:role "button" :href (navigation/href :routes/admin-center)}
-            (labels :router/admin-center)]])
-        (when admin?
-          [:li.dropdown-item
-           [:a.btn {:role "button" :href (navigation/href :routes/feedbacks)}
-            (labels :router/all-feedbacks)]])
-        [:li.dropdown-item
-         [:a.btn {:role "button" :href (navigation/href :routes/analytics)}
-          (labels :router/analytics)]]
-        (when admin?
-          [:li.dropdown-item
-           [:a.btn {:role "button" :href (navigation/href :routes.admin/summaries)}
-            (labels :router/summaries)]])
-        (when (and admin? (not shared-config/production?))
-          [:li.dropdown-item
-           [:a.btn {:role "button" :href (navigation/href :routes.playground/editor)}
-            (labels :routes.playground/editor)]])]])))
+          [:<>
+           [:> NavDropdownItem {:href (navigation/href :routes/admin-center)}
+            (labels :router/admin-center)]
+           [:> NavDropdownItem {:href (navigation/href :routes/feedbacks)}
+            (labels :router/all-feedbacks)]
+           [:> NavDropdownItem {:href (navigation/href :routes.admin/summaries)}
+            (labels :router/summaries)]
+           (when-not shared-config/production?
+             [:> NavDropdownItem {:href (navigation/href :routes.playground/editor)}
+              (labels :routes.playground/editor)])])])]))
 
 (defn username-with-pro-indicator []
   (let [username @(rf/subscribe [:user/display-name])

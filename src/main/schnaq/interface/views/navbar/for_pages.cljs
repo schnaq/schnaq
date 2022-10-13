@@ -34,7 +34,7 @@
    [blog-link]
    [:div.nav-item.dropdown.ms-auto
     [language-dropdown false false {}]]
-   [um/admin-dropdown "btn-outline-secondary"]
+   [um/admin-dropdown]
    [:div.mx-1.d-none.d-md-block
     [:div.d-flex.flex-row.align-items-center
      [um/register-or-user-button true]]]])
@@ -74,5 +74,5 @@
       [:li.nav-item [blog-link]]
       [:li.nav-item.dropdown
        [language-dropdown]]]
-     [um/admin-dropdown "btn-outline-secondary"]
+     [um/admin-dropdown]
      [um/register-or-user-button false]]]])
