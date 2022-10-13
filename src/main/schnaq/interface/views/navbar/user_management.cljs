@@ -1,11 +1,11 @@
 (ns schnaq.interface.views.navbar.user-management
   (:require ["react-bootstrap" :refer [Alert Button]]
+            ["react-bootstrap/NavDropdown" :as NavDropdown]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.components.navbar :as nav-component]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -13,6 +13,8 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.links :as links]))
+
+(def ^:private NavDropdownItem (oget NavDropdown :Item))
 
 (defn- login-not-possible
   "Show a different component, if login is not possible."
@@ -118,13 +120,45 @@
      :on-click #(rf/dispatch [:keycloak/logout])}
     (labels :user/logout)]])
 
+(defn UserNavLinkDropdown []
+  (let [username @(rf/subscribe [:user/display-name])
+        authenticated? @(rf/subscribe [:user/authenticated?])]
+    [:> NavDropdown {:title username}
+     (if authenticated?
+       [:<>
+        [:> NavDropdownItem {:href (navigation/href :routes.user.manage/account)}
+         (labels :user.profile/settings)]
+        [:> NavDropdownItem {:on-click #(rf/dispatch [:keycloak/logout])}
+         (labels :user/logout)]]
+       [:<>
+        [namechange-menu-point]
+        (if session-storage-enabled?
+          [:> NavDropdownItem {:on-click #(rf/dispatch [:keycloak/login])}
+           (labels :user/register)]
+          [login-not-possible])])]))
+
+(defn- separated-button
+  "TODO REDUNDANT!"
+  ([button-content]
+   [separated-button button-content {}])
+  ([button-content attributes]
+   [separated-button button-content attributes nil])
+  ([button-content attributes dropdown-content]
+   [:<>
+    [:button.btn.discussion-navbar-button.text-decoration-none
+     (merge
+      {:type "button"}
+      attributes)
+     button-content]
+    dropdown-content]))
+
 (defn user-dropdown-button
   "The default user dropdown. It displays the avatar and a name with a droppable menu.
   The menu depends on the login-state of the user. Must be used as a child of a .dropdown."
   [on-white-background?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     [:div.dropdown
-     [nav-component/separated-button
+     [separated-button
       [profile-picture-in-nav]
       {:class (when-not on-white-background? "text-white")
        :data-bs-toggle "dropdown"

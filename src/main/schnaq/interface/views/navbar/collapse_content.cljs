@@ -5,7 +5,6 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.discussion.share :refer [share-schnaq-button]]
-            [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.navbar.elements :as nav-elements]
             [schnaq.interface.views.navbar.user-management :as um]))
 
@@ -69,7 +68,7 @@
         current-route @(rf/subscribe [:navigation/current-route-name])
         graph? (= current-route :routes/graph-view)]
     (if graph?
-      [li-button {:on-click #(graph-settings/show-notification)} (labels :graph.settings/title)]
+      [li-button {:on-click #(nav-elements/show-notification)} (labels :graph.settings/title)]
       (when @(rf/subscribe [:user/moderator?])
         [:a.button.list-group-item.list-group-item-action
          {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}

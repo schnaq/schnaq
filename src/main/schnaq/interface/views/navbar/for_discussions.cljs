@@ -4,6 +4,7 @@
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
             [schnaq.interface.views.navbar.elements :as nav-elements]))
 
+;; WIP
 (defn- interaction-elements []
   [:div.d-flex.schnaq-navbar.align-items-center.px-3
    [share/navbar-share-schnaq-button]

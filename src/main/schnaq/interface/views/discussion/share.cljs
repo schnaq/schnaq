@@ -2,12 +2,12 @@
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.buttons :refer [button]]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.modal :as modal]
+            [schnaq.interface.views.navbar.elements :refer [button-with-icon]]
             [schnaq.interface.views.notifications :refer [notify!]]))
 
 (defn- share-schnaq-via-access-code []
@@ -70,7 +70,7 @@
   []
   [share-schnaq-button
    (fn [props]
-     [navbar-components/button-with-icon
+     [button-with-icon
       :share
       (labels :sharing/tooltip)
       (labels :discussion.navbar/share)
