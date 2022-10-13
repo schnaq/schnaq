@@ -79,7 +79,9 @@
     [:div.align-items-center.text-center
      [:div
       (cond->
-       {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")}
+       {:class (if upvoted?
+                 "badge badge-upvote-selected px-1 me-2"
+                 "badge badge-upvote px-1 me-2")}
         (not read-only?) (merge {:on-click (fn [e]
                                              (.stopPropagation e)
                                              (if authenticated?
@@ -90,7 +92,9 @@
      [:span (get-up-votes statement votes)]
      [:div
       (cond->
-       {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")}
+       {:class (if downvoted?
+                 "badge badge-downvote-selected px-1 me-2"
+                 "badge badge-downvote px-1 me-2")}
         (not read-only?) (merge {:on-click (fn [e]
                                              (.stopPropagation e)
                                              (if authenticated?

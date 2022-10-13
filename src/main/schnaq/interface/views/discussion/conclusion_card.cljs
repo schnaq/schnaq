@@ -64,7 +64,7 @@
      [small-share-schnaq-button]]]])
 
 ;; -----------------------------------------------------------------------------
-
+;; TODO weitere Beiträge nach unten drücken
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
   [statement]
