@@ -97,23 +97,6 @@ $grid-breakpoints: map-merge($grid-breakpoints, $custom-breakpoints);
   }
 }
 
-.navbar-primary {
-  background: $primary;
-  color: $white;
-}
-
-.navbar-transparent {
-  @extend .navbar-dark;
-
-  .nav-link {
-    color: $gray-200 !important;
-  }
-
-  .nav-link:hover {
-    color: $white !important;
-  }
-}
-
 .badge.bg-white {
   color: $typography;
 }

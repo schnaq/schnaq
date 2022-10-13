@@ -3,10 +3,12 @@
             ["react-bootstrap/Nav" :as Nav]
             ["react-bootstrap/Navbar" :as Navbar]
             ["react-bootstrap/NavDropdown" :as NavDropdown]
-            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.common :as common-components :refer [schnaqqi-white]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.navbar.user-management :refer [UserNavLinkDropdown]]))
 
@@ -25,16 +27,35 @@
   [:a.nav-link.text-nowrap.btn.btn-link {:href href :role "button"}
    (labels label)])
 
+(defn DiscussionViews
+  "Toggle between different views in a discussion."
+  []
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
+        href #(navigation/href % {:share-hash share-hash})
+        img (fn [img-key] [:img {:height 25
+                                 :class "navbar-icon"
+                                 :src (img-path img-key)}])]
+    [:<>
+     [:> NavLink {:disabled true} "Ansichten"]
+     [:> NavLink {:class "ms-3" :href (href :routes.schnaq/start)}
+      [img :icon-cards-dark] (labels :discussion.button/text)]
+     [:> NavLink {:class "ms-3" :href (href :routes/graph-view)}
+      [img :icon-graph-dark] (labels :graph.button/text)]
+     [:> NavLink {:class "ms-3" :href (href :routes.schnaq/qanda)}
+      [img :icon-qanda-dark] (labels :qanda.button/text)]
+     [:> NavLink {:class "ms-3" :href (href :routes.schnaq/dashboard)}
+      [img :icon-summary-dark] (labels :summary.link.button/text)]]))
+
 (defn MobileNav []
-  [:> Navbar {:bg :primary :variant :dark :expand :xl}
+  [:> Navbar {:bg :primary :variant :dark :expand :xl :expanded true}
    [:> Container {:fluid true}
     [:> NavbarBrand {:href "#"}
      [schnaqqi-white {:class "img-fluid" :width "50"}]]
-    [:> NavbarText {:class "opacity-100 text-white"} @(rf/subscribe [:schnaq/title])]
+    [:> NavbarText @(rf/subscribe [:schnaq/title])]
     [:> NavbarToggle {:aria-controls :basic-navbar-nav}]
     [:> NavbarCollapse {:id "basic-navbar-nav"}
      [:> Nav {:class "me-auto"}
-      [:> NavLink {:href "#home"} "Home"]
+      [DiscussionViews]
       [UserNavLinkDropdown]]]]])
 
 (defn collapsible-navbar
