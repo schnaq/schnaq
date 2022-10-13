@@ -1,9 +1,11 @@
 (ns schnaq.interface.views.navbar.elements
-  (:require [ajax.core :as ajax]
-            [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
+  (:require ["react-bootstrap/NavDropdown" :as NavDropdown]
+            [ajax.core :as ajax]
+            [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
             [goog.string :as gstring]
-            [oops.core :refer [oset!]]
+            [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
+            [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.components.common :as common-components]
@@ -16,6 +18,17 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.navbar.user-management :as um]))
+
+(def ^:private NavDropdownItem (oget NavDropdown :Item))
+
+(defn LanguageDropdown []
+  [:> NavDropdown {:title (r/as-element [:<> [icon :language "me-1"] @(rf/subscribe [:current-language])])}
+   [:> NavDropdownItem {:href (navigation/switch-language-href :de)
+                        :lang "de-DE" :hrefLang "de-DE"}
+    "Deutsch"]
+   [:> NavDropdownItem {:href (navigation/switch-language-href :en)
+                        :lang "en-US" :hrefLang "en-US"}
+    "English"]])
 
 (defn language-dropdown
   "Dropdown for bootstrap navbar to display the allowed languages."

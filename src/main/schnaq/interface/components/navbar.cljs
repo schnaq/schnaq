@@ -13,6 +13,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.discussion.share :refer [share-schnaq-button]]
             [schnaq.interface.views.navbar.elements :refer [language-dropdown
+                                                            LanguageDropdown
                                                             txt-export-request]]
             [schnaq.interface.views.navbar.user-management :refer [UserNavLinkDropdown]]))
 
@@ -63,11 +64,7 @@
      [:> NavLink {:class "ms-2" :on-click #(txt-export-request share-hash @(rf/subscribe [:schnaq/title]))}
       [stacked-icon :file-download] (labels :discussion.navbar/download)]
      [:> NavLink {:class "ms-2" :href (href :routes.schnaq/moderation-center)}
-      [stacked-icon :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]
-
-     [:div.ms-2 [language-dropdown true false {:class "text-white ms-1"}]]
-     #_[:> NavLink {:class "ms-2"}
-        [stacked-icon :sliders-h] (labels :schnaq.admin/tooltip)]]))
+      [stacked-icon :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]]))
 
 (defn MobileNav []
   [:> Navbar {:bg :primary :variant :dark :expand :xl :expanded true}
@@ -79,9 +76,13 @@
     [:> NavbarCollapse {:id "mobile-navbar"}
      [:> Nav
       [UserNavLinkDropdown]
-      [:div.row
-       [:div.col-6 [DiscussionViews]]
-       [:div.col-6 [SchnaqSettings]]]]]]])
+      [LanguageDropdown]
+      (when @(rf/subscribe [:schnaq/share-hash])
+        [:div.row
+         [:div.col-6 [DiscussionViews]]
+         [:div.col-6 [SchnaqSettings]]])]]]])
+
+;; -----------------------------------------------------------------------------
 
 (defn collapsible-navbar
   "Collapsible navbar with split content header, collapsible-content-id must match id of collapsible-content."
