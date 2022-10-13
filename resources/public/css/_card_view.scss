@@ -141,6 +141,9 @@
   .nav-link {
     font-size: medium;
     padding: 0.5rem;
+    @include media-breakpoint-down(md) {
+      font-size: small;
+    }
   }
 }
 

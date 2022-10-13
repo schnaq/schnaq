@@ -104,9 +104,9 @@
             [:div.p-3.m-3.p-lg-5.m-lg-5.text-muted
              (labels :schnaq.wordcloud/no-words-yet)
              [icon :smile-beam "ms-1"]]
-            [:div.d-flex {:ref #(when-not @wc (reset! wc %))}
+            [:div {:ref #(when-not @wc (reset! wc %))}
              [:> ReactWordcloud {:words words :options options}]
-             [wordcloud-download-button svg]]))
+             [:div.text-end [wordcloud-download-button svg]]]))
         [:div.text-center.py-3 [spinner-icon]]))))
 
 (defn wordcloud-preview
