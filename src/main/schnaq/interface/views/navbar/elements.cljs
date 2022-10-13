@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.navbar.elements
-  (:require ["react-bootstrap/NavDropdown" :as NavDropdown]
+  (:require ["react-bootstrap/Navbar" :as Navbar]
+            ["react-bootstrap/NavDropdown" :as NavDropdown]
             [ajax.core :as ajax]
             [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
             [goog.string :as gstring]
@@ -19,6 +20,7 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.navbar.user-management :as um]))
 
+(def ^:private NavbarText (oget Navbar :Text))
 (def ^:private NavDropdownItem (oget NavDropdown :Item))
 
 (defn LanguageDropdown []
@@ -217,13 +219,15 @@
   "Brand logo and title with dynamic resizing."
   ([title]
    [navbar-title title true])
-  ([title clickable-title?]
-   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2.bg-white
-    [:a.schnaq-logo-container.d-flex.h-100 (when clickable-title? {:href (navigation/href :routes.schnaqs/personal)})
-     [schnaq-logo]]
-    [:div.mx-0.mx-md-4.text-wrap title]
-    [:div.h-100.d-none.d-md-block.p-2
-     [common-components/theme-logo {:style {:max-height "100%"}}]]]))
+  ([_title clickable-title?]
+   (let [title @(rf/subscribe [:page/title])]
+     [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2.bg-white
+      [:a.schnaq-logo-container.d-flex.h-100 (when clickable-title? {:href (navigation/href :routes.schnaqs/personal)})
+       [schnaq-logo]]
+      [:> NavbarText {:className "text-dark"}
+       [:h1.h6.text-wrap (toolbelt/truncate-to-n-chars title 50)]]
+      [:div.h-100.d-none.d-md-block.p-2
+       [common-components/theme-logo {:style {:max-height "100%"}}]]])))
 
 (defn navbar-qanda-title []
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2
