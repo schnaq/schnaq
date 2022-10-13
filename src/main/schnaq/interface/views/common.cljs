@@ -141,6 +141,7 @@
   "Set a document's website title."
   [title]
   [(? string?) :ret any?]
+  (rf/dispatch [:page/title title])
   (when title
     (let [new-title (gstring/format "%s – schnaq" title)]
       (oset! js/document [:title] new-title))))

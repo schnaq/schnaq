@@ -11,9 +11,9 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.share :refer [share-schnaq-button]]
-            [schnaq.interface.views.navbar.elements :refer [language-dropdown
-                                                            LanguageDropdown
+            [schnaq.interface.views.navbar.elements :refer [LanguageDropdown
                                                             txt-export-request]]
             [schnaq.interface.views.navbar.user-management :refer [UserNavLinkDropdown]]))
 
@@ -29,8 +29,22 @@
   can be passed to an anchor's href."
   [label href]
   [keyword? any? :ret vector?]
-  [:a.nav-link.text-nowrap.btn.btn-link {:href href :role "button"}
+  [:> NavLink {:href href :className "text-nowrap"}
    (labels label)])
+
+(defn CommonNavigationLinks
+  "Show default navigation links."
+  []
+  (let [external-icon [icon :external-link-alt "me-1" {:size :xs}]]
+    [:<>
+     [:> NavLink {:href (toolbelt/current-overview-link)}
+      (labels :nav/schnaqs)]
+     [:> NavLink {:href "https://schnaq.com/pricing"}
+      external-icon (labels :router/pricing)]
+     [:> NavLink {:href "https://schnaq.com/privacy"}
+      external-icon (labels :router/privacy)]
+     [:> NavLink {:href "https://schnaq.com/blog/"}
+      external-icon (labels :nav/blog)]]))
 
 (defn DiscussionViews
   "Toggle between different views in a discussion."
@@ -51,7 +65,9 @@
      [:> NavLink {:class "ms-3" :href (href :routes.schnaq/dashboard)}
       [img :icon-summary-dark] (labels :summary.link.button/text)]]))
 
-(defn SchnaqSettings []
+(defn SchnaqSettings
+  "Show the schnaq settings, export and share links."
+  []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
         href #(navigation/href % {:share-hash share-hash})
         stacked-icon (fn [icon-key] [:div.fa-stack.small
@@ -66,21 +82,24 @@
      [:> NavLink {:class "ms-2" :href (href :routes.schnaq/moderation-center)}
       [stacked-icon :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]]))
 
-(defn MobileNav []
+(defn MobileNav
+  "Mobile navigation."
+  []
   [:> Navbar {:bg :primary :variant :dark :expand :xl :expanded true}
    [:> Container {:fluid true}
-    [:> NavbarBrand {:href "#"}
+    [:> NavbarBrand {:href (toolbelt/current-overview-link)}
      [schnaqqi-white {:class "img-fluid" :width "50"}]]
-    [:> NavbarText @(rf/subscribe [:schnaq/title])]
+    [:> NavbarText [:h1.h5 @(rf/subscribe [:schnaq/title])]]
     [:> NavbarToggle {:aria-controls "mobile-navbar"}]
     [:> NavbarCollapse {:id "mobile-navbar"}
      [:> Nav
       [UserNavLinkDropdown]
       [LanguageDropdown]
-      (when @(rf/subscribe [:schnaq/share-hash])
+      (if @(rf/subscribe [:schnaq/share-hash])
         [:div.row
          [:div.col-6 [DiscussionViews]]
-         [:div.col-6 [SchnaqSettings]]])]]]])
+         [:div.col-6 [SchnaqSettings]]]
+        [CommonNavigationLinks])]]]])
 
 ;; -----------------------------------------------------------------------------
 

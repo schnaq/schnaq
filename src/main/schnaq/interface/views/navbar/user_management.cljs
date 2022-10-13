@@ -59,10 +59,9 @@
 (defn- namechange-menu-point
   "A bar containing all user related utilities and information."
   []
-  (let [show-input? @(rf/subscribe [:user/show-display-name-input?])]
-    (if show-input?
-      [name-input]
-      [change-name-button])))
+  (if @(rf/subscribe [:user/show-display-name-input?])
+    [name-input]
+    [change-name-button]))
 
 (defn admin-dropdown
   "Show Admin pages when user is authenticated and has admin role."
