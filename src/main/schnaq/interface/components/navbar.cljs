@@ -14,8 +14,7 @@
             [schnaq.interface.views.discussion.share :refer [share-schnaq-button]]
             [schnaq.interface.views.navbar.elements :refer [LanguageDropdown
                                                             txt-export-request]]
-            [schnaq.interface.views.navbar.user-management :refer [UserNavLinkDropdown]]
-            [schnaq.interface.views.navbar.user-management :as um]))
+            [schnaq.interface.views.navbar.user-management :refer [UserNavLinkDropdown admin-dropdown]]))
 
 (def ^:private NavbarBrand (oget Navbar :Brand))
 (def ^:private NavbarText (oget Navbar :Text))
@@ -93,7 +92,7 @@
     [:> NavbarCollapse {:id "mobile-navbar"}
      [:> Nav
       [UserNavLinkDropdown]
-      [um/admin-dropdown]
+      [admin-dropdown]
       [LanguageDropdown]
       (if @(rf/subscribe [:schnaq/share-hash])
         [:div.row
