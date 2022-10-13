@@ -44,7 +44,7 @@
   Clicking a button will dispatch the set-subscription with the button-type as parameter."
   [get-subscription set-event sm?]
   (let [additional-btn-class (if sm? "btn-group-sm" "")]
-    [:div.btn-group.mt-1.ms-1 {:class additional-btn-class}
+    [:div.btn-group.mt-1.me-2 {:class additional-btn-class}
      [statement-type-button :statement.type/support
       :discussion.add.button/support :discussion/add-premise-against
       get-subscription set-event]
@@ -183,17 +183,20 @@
         (fn [e]
           (.preventDefault e)
           (rf/dispatch [:editor/clear editor-id])
-          (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))]
-    (when-not (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?))
-      [:form.my-md-2
-       {:on-submit #(answer-to-statement-event %)
-        :on-key-down #(when (toolbelt/ctrl-press? % "Enter")
-                        (answer-to-statement-event %))}
-       [premise-card-editor statement editor-id]
-       (when-not pro-con-disabled?
-         [statement-type-choose-button
-          [:form/statement-type statement-id]
-          [:form/statement-type! statement-id] true])])))
+          (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))
+        forbidden-write? (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?))]
+    [:form.my-md-2
+     {:on-submit #(answer-to-statement-event %)
+      :on-key-down #(when (toolbelt/ctrl-press? % "Enter")
+                      (answer-to-statement-event %))}
+     (when-not forbidden-write?
+       [premise-card-editor statement editor-id])
+     [:div.d-flex.flex-wrap
+      (when-not (or forbidden-write? pro-con-disabled?)
+        [statement-type-choose-button
+         [:form/statement-type statement-id]
+         [:form/statement-type! statement-id] true])
+      [:div.ms-auto.small.mt-2.flex-shrink-1 [user/user-info statement 20 "w-100"]]]]))
 
 (rf/reg-event-db
  ;; Assoc statement-type with statement-id as key. The current topic is assigned via :selected
