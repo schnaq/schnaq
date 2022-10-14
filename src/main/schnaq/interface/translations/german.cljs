@@ -227,6 +227,7 @@
    :discussion.state/read-only-label "schreibgeschützt"
    :discussion.state/read-only-warning "Dieser schnaq ist schreibgeschützt. Du kannst hier nur lesen."
    :discussion.navbar/settings "Einstellungen"
+   :discussion.navbar/discussion-settings "Einstellungen"
    :discussion.navbar/download "Exportieren"
    :discussion.navbar/share "Teilen"
 

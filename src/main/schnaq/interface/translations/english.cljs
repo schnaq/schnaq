@@ -224,6 +224,7 @@
    :discussion.state/read-only-label "read-only"
    :discussion.state/read-only-warning "This schnaq is read-only. You can read, but not write."
    :discussion.navbar/settings "Settings"
+   :discussion.navbar/discussion-settings "Settings"
    :discussion.navbar/download "Export"
    :discussion.navbar/share "Share"
 
