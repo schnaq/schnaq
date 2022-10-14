@@ -87,7 +87,7 @@
    [:> Container {:fluid true}
     [:> NavbarBrand {:href (toolbelt/current-overview-link)}
      [schnaqqi-white {:class "img-fluid" :width "50"}]]
-    [:> NavbarText [:h1.h5 (or @(rf/subscribe [:schnaq/title]) @(rf/subscribe [:page/title]))]]
+    [:> NavbarText [:h1.h6.text-wrap.mb-0 (or @(rf/subscribe [:schnaq/title]) @(rf/subscribe [:page/title]))]]
     [:> NavbarToggle {:aria-controls "mobile-navbar"}]
     [:> NavbarCollapse {:id "mobile-navbar"}
      [:> Nav
