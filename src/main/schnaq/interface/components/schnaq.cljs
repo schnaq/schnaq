@@ -37,8 +37,7 @@
      [:label.btn.btn-sm.btn-outline-primary
       (cond-> {:for label-key}
         (not active-filters?) (assoc :class "active"))
-      [:small.d-md-none (labels label-key)]
-      [:div.d-none.d-md-block (labels label-key)]]
+      [:small (labels label-key)]]
      (for [{:keys [on-click label-key]} rest-buttons]
        [:<>
         {:key (str "discussion-options-button-group-item-" label-key)}
@@ -46,8 +45,7 @@
                            :onClick on-click :name :filter-discussion-options}]
         [:label.btn.btn-sm.btn-outline-primary.px-1.px-md-2
          {:for label-key}
-         [:small.d-md-none (labels label-key)]
-         [:div.d-none.d-md-block (labels label-key)]]])]))
+         [:small (labels label-key)]]])]))
 
 (defn qr-code
   ([link]
