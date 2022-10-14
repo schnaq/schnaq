@@ -317,7 +317,7 @@
 (rf/reg-event-db
  :schnaq.search.current/clear-search-string
  (fn [db _]
-   (assoc-in db [:search :schnaq :current :search-string] "")))
+   (update-in db [:search :schnaq :current] dissoc :search-string)))
 
 (rf/reg-sub
  :schnaq.search.current/result
