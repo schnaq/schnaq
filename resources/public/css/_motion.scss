@@ -33,12 +33,14 @@
   &.open img {
     height: auto;
     margin: auto;
+    max-height: 80%;
     max-width: 80%;
     position: fixed;
     width: auto;
 
     @include media-breakpoint-down(md) {
-      max-width: 100%;
+      max-height: 95%;
+      max-width: 95%;
     }
   }
 }
