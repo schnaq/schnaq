@@ -3,11 +3,11 @@
             ["remark-gfm" :as gfm]
             [goog.string :as gstring]
             [reagent.core :as r]
+            [schnaq.interface.components.motion :refer [zoom-image]]
             [schnaq.interface.utils.toolbelt :as tools]))
 
 (defn Image [props]
-  [:img (merge {:class "markdown-image"}
-               props)])
+  [zoom-image (merge {:className "markdown-image"} props)])
 
 (defn Anchor
   "Custom anchor when it is rendered from markdown. Decodes url and truncates
