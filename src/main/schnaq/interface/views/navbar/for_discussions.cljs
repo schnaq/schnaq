@@ -19,7 +19,7 @@
   []
   (let [navbar-content-id "Navbar-Content"]
     [navbar-components/collapsible-navbar
-     [nav-elements/discussion-title]
+     [nav-elements/navbar-title true]
      navbar-content-id
      "navbar-bg-transparent-sm-white"
      [interaction-elements]

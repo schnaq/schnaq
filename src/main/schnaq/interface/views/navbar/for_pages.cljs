@@ -5,7 +5,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
-            [schnaq.interface.views.navbar.elements :as elements]
+            [schnaq.interface.views.navbar.elements :as elements :refer [language-dropdown]]
             [schnaq.interface.views.navbar.user-management :as um]))
 
 ;; -----------------------------------------------------------------------------
@@ -32,20 +32,18 @@
    [privacy-button]
    [blog-link]
    [:div.nav-item.dropdown.ms-auto
-    [navbar-components/language-dropdown false {}]]
-   [um/admin-dropdown "btn-outline-secondary"]
+    [language-dropdown false false {}]]
+   [um/admin-dropdown]
    [:div.mx-1.d-none.d-md-block
     [:div.d-flex.flex-row.align-items-center
      [um/register-or-user-button true]]]])
 
 (defn navbar
   "Overview header for a discussion."
-  [title]
-  (let [navbar-content-id "Overview-Content"
-        navbar-title (toolbelt/truncate-to-n-chars title 64)]
+  []
+  (let [navbar-content-id "Overview-Content"]
     [navbar-components/collapsible-navbar
-     [elements/navbar-title
-      [:h1.h6.fw-bold.my-auto.text-dark navbar-title]]
+     [elements/navbar-title]
      navbar-content-id
      "navbar-bg-transparent-sm-white"
      [navbar-user]
@@ -74,6 +72,6 @@
       [:li.nav-item [privacy-button]]
       [:li.nav-item [blog-link]]
       [:li.nav-item.dropdown
-       [navbar-components/language-dropdown]]]
-     [um/admin-dropdown "btn-outline-secondary"]
+       [language-dropdown]]]
+     [um/admin-dropdown]
      [um/register-or-user-button false]]]])

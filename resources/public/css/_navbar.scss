@@ -78,3 +78,49 @@ $height-of-components: 4.25rem;
     background: $white;
   }
 }
+
+.navbar-transparent {
+  @extend .navbar-dark;
+
+  .nav-link {
+    color: $gray-200 !important;
+  }
+
+  .nav-link:hover {
+    color: $white !important;
+  }
+}
+
+.navbar-dark {
+  .navbar-text {
+    color: $white;
+  }
+
+  a:not(.dropdown-item) {
+    color: $white !important;
+
+    &:hover {
+      @extend .text-decoration-underline;
+      cursor: pointer;
+    }
+  }
+}
+
+.navbar-text {
+  max-width: 70%;
+  max-width: calc(80% - 4rem); // -4rem because of the navbar toggler
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navbar-icon {
+  @extend .bg-white;
+  @extend .rounded-1;
+  @extend .me-2;
+  padding: 0.2rem;
+}
+
+.nav-link.disabled {
+  @extend .fw-bold;
+}

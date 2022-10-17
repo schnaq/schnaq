@@ -1,11 +1,12 @@
 (ns schnaq.interface.views.navbar.user-management
   (:require ["react-bootstrap" :refer [Alert Button]]
+            ["react-bootstrap/NavDropdown" :as NavDropdown]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.components.navbar :as nav-component]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -13,6 +14,9 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.links :as links]))
+
+(def ^:private NavDropdownItem (oget NavDropdown :Item))
+(def ^:private NavDropdownDivider (oget NavDropdown :Divider))
 
 (defn- login-not-possible
   "Show a different component, if login is not possible."
@@ -55,45 +59,38 @@
 (defn- namechange-menu-point
   "A bar containing all user related utilities and information."
   []
-  (let [show-input? @(rf/subscribe [:user/show-display-name-input?])]
-    (if show-input?
-      [name-input]
-      [change-name-button])))
+  (if @(rf/subscribe [:user/show-display-name-input?])
+    [name-input]
+    [change-name-button]))
 
 (defn admin-dropdown
   "Show Admin pages when user is authenticated and has admin role."
-  [button-class]
+  []
   (let [admin? @(rf/subscribe [:user/administrator?])
-        analytics-admin? @(rf/subscribe [:user/analytics-admin?])
-        ul-id "admin-dropdown"]
+        analytics-admin? @(rf/subscribe [:user/analytics-admin?])]
     ;; Analytics-Admin also is true when user is super-admin
     (when analytics-admin?
-      [:ul.navbar-nav.dropdown
-       [:button#admin-dropdown.nav-link.btn.dropdown-toggle
-        {:role "button" :data-bs-toggle "dropdown" :id ul-id
-         :class button-class
-         :aria-haspopup "true" :aria-expanded "false"}
-        (labels :nav/admin)]
-       [:ul.dropdown-menu.dropdown-menu-end {:aria-labelledby (str ul-id)}
-        (when admin?
-          [:li.dropdown-item
-           [:a.btn {:role "button" :href (navigation/href :routes/admin-center)}
-            (labels :router/admin-center)]])
-        (when admin?
-          [:li.dropdown-item
-           [:a.btn {:role "button" :href (navigation/href :routes/feedbacks)}
-            (labels :router/all-feedbacks)]])
-        [:li.dropdown-item
-         [:a.btn {:role "button" :href (navigation/href :routes/analytics)}
-          (labels :router/analytics)]]
-        (when admin?
-          [:li.dropdown-item
-           [:a.btn {:role "button" :href (navigation/href :routes.admin/summaries)}
-            (labels :router/summaries)]])
-        (when (and admin? (not shared-config/production?))
-          [:li.dropdown-item
-           [:a.btn {:role "button" :href (navigation/href :routes.playground/editor)}
-            (labels :routes.playground/editor)]])]])))
+      [:> NavDropdown {:title (r/as-element [:span.text-secondary "Admin"])}
+       [:> NavDropdownItem {:href (navigation/href :routes/analytics)}
+        (labels :router/analytics)]
+       (when admin?
+         [:<>
+          [:> NavDropdownItem {:href (navigation/href :routes/admin-center)}
+           (labels :router/admin-center)]
+          [:> NavDropdownItem {:href (navigation/href :routes/feedbacks)}
+           (labels :router/all-feedbacks)]
+          [:> NavDropdownItem {:href (navigation/href :routes.admin/summaries)}
+           (labels :router/summaries)]
+          (when-not shared-config/production?
+            [:> NavDropdownItem {:href (navigation/href :routes.playground/editor)}
+             (labels :routes.playground/editor)])])])))
+
+(defn username-with-pro-indicator []
+  (let [username @(rf/subscribe [:user/display-name])
+        pro? @(rf/subscribe [:user/pro?])]
+    [:small.text-nowrap
+     (when pro? [icon :star "me-1"])
+     (toolbelt/truncate-to-n-chars username 15)]))
 
 (defn- profile-picture-in-nav
   "Show profile picture-element in the navbar."
@@ -118,13 +115,46 @@
      :on-click #(rf/dispatch [:keycloak/logout])}
     (labels :user/logout)]])
 
+(defn UserNavLinkDropdown []
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])]
+    [:> NavDropdown {:title (r/as-element [username-with-pro-indicator])}
+     (if authenticated?
+       [:<>
+        [:> NavDropdownItem {:disabled true} [common/avatar 32]]
+        [:> NavDropdownDivider]
+        [:> NavDropdownItem {:href (navigation/href :routes.user.manage/account)}
+         (labels :user.profile/settings)]
+        [:> NavDropdownItem {:on-click #(rf/dispatch [:keycloak/logout])}
+         (labels :user/logout)]]
+       [:<>
+        [namechange-menu-point]
+        (if session-storage-enabled?
+          [:> NavDropdownItem {:on-click #(rf/dispatch [:keycloak/login])}
+           (labels :user/register)]
+          [login-not-possible])])]))
+
+(defn- separated-button
+  "TODO REDUNDANT!"
+  ([button-content]
+   [separated-button button-content {}])
+  ([button-content attributes]
+   [separated-button button-content attributes nil])
+  ([button-content attributes dropdown-content]
+   [:<>
+    [:button.btn.discussion-navbar-button.text-decoration-none
+     (merge
+      {:type "button"}
+      attributes)
+     button-content]
+    dropdown-content]))
+
 (defn user-dropdown-button
   "The default user dropdown. It displays the avatar and a name with a droppable menu.
   The menu depends on the login-state of the user. Must be used as a child of a .dropdown."
   [on-white-background?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     [:div.dropdown
-     [nav-component/separated-button
+     [separated-button
       [profile-picture-in-nav]
       {:class (when-not on-white-background? "text-white")
        :data-bs-toggle "dropdown"

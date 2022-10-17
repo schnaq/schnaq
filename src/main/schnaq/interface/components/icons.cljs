@@ -15,7 +15,7 @@
               faEdit faEllipsisH faEllipsisV faExclamationTriangle faExternalLinkAlt faFileDownload faFlask faGhost
               faGraduationCap faInfinity faInfoCircle faItalic faLanguage faLaptop faList faListOl
               faLock faLockOpen faMagic faMapPin faMinus faPalette faPaperPlane faPenSquare faPencilRuler
-              faPlayCircle faPlus faProjectDiagram faQrcode faQuestion faQuestionCircle
+              faPlayCircle faPlus faProjectDiagram faSquare faQrcode faQuestion faQuestionCircle
               faQuoteRight faRedo faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar
               faStepBackward faStrikethrough faSun faTag faTerminal faTimes faTimes faTimesCircle
               faTrashAlt faUnderline faUndo faUniversity faUsers]]
@@ -107,6 +107,7 @@
    :share faShareAlt
    :shield faShieldAlt
    :smile-beam faSmileBeam
+   :square faSquare
    :star faStar
    :strike-through faStrikethrough
    :sun faSun

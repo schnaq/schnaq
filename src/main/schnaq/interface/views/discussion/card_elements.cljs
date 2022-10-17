@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.card-elements
-  (:require [clojure.string :as cstring]
+  (:require ["react-bootstrap" :refer [Button]]
+            [clojure.string :as cstring]
             [goog.functions :as gfun]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
@@ -246,6 +247,25 @@
  (fn [db [_ query]]
    (assoc-in db [:ui :settings] query)))
 
+(defn discussion-options-navigation-mobile
+  "Navigation bar on top of the discussion contents."
+  []
+  (when-not @(rf/subscribe [:ui/setting :hide-discussion-options])
+    [:div.d-flex.flex-row
+     (when-not config/in-iframe?
+       [:div.me-auto [back-button]])
+     [tooltip/html
+      [:section.px-1
+       [:div.d-flex.flex-row.py-2
+        [:div.pe-1 [sort-options]]
+        [question-filter-button]]
+       (when @(rf/subscribe [:routes.schnaq/start?])
+         [filters/filter-answered-statements])
+       [:div.py-3 [search-bar]]]
+      [:> Button {:variant "outline-primary" :size :sm :className "m-2 panel-white-sm"}
+       (labels :discussion.navbar/discussion-settings)]
+      {:appendTo js/document.body}]]))
+
 (defn discussion-options-navigation
   "Navigation bar on top of the discussion contents."
   []
@@ -297,7 +317,7 @@
 (rf/reg-event-db
  :schnaq.search.current/clear-search-string
  (fn [db _]
-   (assoc-in db [:search :schnaq :current :search-string] "")))
+   (update-in db [:search :schnaq :current] dissoc :search-string)))
 
 (rf/reg-sub
  :schnaq.search.current/result

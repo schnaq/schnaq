@@ -6,8 +6,7 @@
   overflow: hidden;
   padding: 1rem;
 
-  @include media-breakpoint-down(md) {
-    border-radius: 0;
+  @include media-breakpoint-down(xl) {
     padding: 0.5rem;
   }
 }

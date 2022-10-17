@@ -35,8 +35,8 @@
    [:div.container-fluid.px-0.px-md-3
     [:div.row
      [:div.col-md-12.py-0.pt-md-3
-      [:div.d-none.d-md-block [elements/discussion-options-navigation]]]]
-    [:div.d-md-none [elements/discussion-options-navigation]]]
+      [:div.d-none.d-xl-block [elements/discussion-options-navigation]]]]
+    [:div.d-xl-none [elements/discussion-options-navigation-mobile]]]
    [:div.container
     [cards/card-container]]
    [:div.container-fluid.px-0.px-md-3

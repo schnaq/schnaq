@@ -115,14 +115,17 @@
 (rf/reg-sub
  :schnaq/author
  :<- [:schnaq/selected]
- (fn [schnaq]
-   (:discussion/author schnaq)))
+ :-> :discussion/author)
 
 (rf/reg-sub
  :schnaq/share-hash
  :<- [:schnaq/selected]
- (fn [selected-schnaq _ _]
-   (:discussion/share-hash selected-schnaq)))
+ :-> :discussion/share-hash)
+
+(rf/reg-sub
+ :schnaq/title
+ :<- [:schnaq/selected]
+ :-> :discussion/title)
 
 (rf/reg-sub
  :schnaq/share-link

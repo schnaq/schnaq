@@ -220,11 +220,11 @@
 
 (>defn three-column-layout
   "Use three column layout to display page."
-  [{:page/keys [title heading] :as options} left middle right]
+  [options left middle right]
   [::page-options vector? vector? vector? :ret vector?]
   [page-builder
    options
-   [navbar-pages/navbar (or title heading)]
+   [navbar-pages/navbar]
    [:section.container-fluid.p-3
     [:div.row
      [:div.col-12.col-lg-3.px-0.px-md-3 left]
@@ -237,3 +237,13 @@
   [options body]
   [::page-options :re-frame/component => :re-frame/component]
   [page-builder options nil body nil])
+
+(rf/reg-event-db
+ :page/title
+ (fn [db [_ title]]
+   (assoc-in db [:page :title] title)))
+
+(rf/reg-sub
+ :page/title
+ (fn [db]
+   (get-in db [:page :title])))

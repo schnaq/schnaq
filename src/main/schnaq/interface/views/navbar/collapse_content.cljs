@@ -1,12 +1,10 @@
 (ns schnaq.interface.views.navbar.collapse-content
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.components.navbar :as navbar]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.discussion.share :refer [share-schnaq-button]]
-            [schnaq.interface.views.graph.settings :as graph-settings]
-            [schnaq.interface.views.navbar.elements :as nav-elements]
+            [schnaq.interface.views.navbar.elements :as nav-elements :refer [language-dropdown]]
             [schnaq.interface.views.navbar.user-management :as um]))
 
 (defn- list-element-href-button-builder
@@ -69,7 +67,7 @@
         current-route @(rf/subscribe [:navigation/current-route-name])
         graph? (= current-route :routes/graph-view)]
     (if graph?
-      [li-button {:on-click #(graph-settings/show-notification)} (labels :graph.settings/title)]
+      [li-button {:on-click nav-elements/show-notification} (labels :graph.settings/title)]
       (when @(rf/subscribe [:user/moderator?])
         [:a.button.list-group-item.list-group-item-action
          {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
@@ -93,7 +91,7 @@
    [:div.fw-bold.mt-3 (labels :discussion.navbar/settings)]
    [:ul.list-group.list-group-flush
     [share-schnaq-button (fn [props] [li-button props (labels :sharing/tooltip)])]
-    [:li.list-group-item.dropdown [navbar/language-dropdown true {:class "p-0 text-dark"}]]
+    [:li.list-group-item.dropdown [language-dropdown true false {:class "p-0 text-dark"}]]
     [settings-li-button]]])
 
 (defn- external-content [collapse-content-id content]
@@ -126,4 +124,4 @@
      [li-link-button :router/pricing "https://schnaq.com/pricing"]
      [li-link-button :router/privacy "https://schnaq.com/en/privacy"]
      [li-link-button :nav/blog "https://schnaq.com/blog/"]
-     [:li.list-group-item.dropdown [navbar/language-dropdown true {:class "p-0 text-dark"}]]]]])
+     [:li.list-group-item.dropdown [language-dropdown true false {:class "p-0 text-dark"}]]]]])

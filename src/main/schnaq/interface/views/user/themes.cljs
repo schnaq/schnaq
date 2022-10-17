@@ -81,9 +81,7 @@
      [:h3#theme-preview-title (labels :themes.personal.preview/heading)]
      [:section.theming-enabled
       [:div.base-wrapper.p-3
-       [elements/navbar-title
-        [:h1.h6.fw-bold.my-auto.text-dark "Welcome to schnaq"]
-        false]
+       [elements/navbar-title false]
        [activation/activation-card]
        [:div.d-flex.flex-row
         [buttons/button "primary button"]

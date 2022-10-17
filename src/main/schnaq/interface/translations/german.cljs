@@ -227,6 +227,7 @@
    :discussion.state/read-only-label "schreibgeschützt"
    :discussion.state/read-only-warning "Dieser schnaq ist schreibgeschützt. Du kannst hier nur lesen."
    :discussion.navbar/settings "Einstellungen"
+   :discussion.navbar/discussion-settings "Einstellungen"
    :discussion.navbar/download "Exportieren"
    :discussion.navbar/share "Teilen"
 
@@ -269,8 +270,9 @@
    :schnaq.moderation.edit.link.form/submit-button "Zu Moderator:in machen"
    :schnaq.admin.invite/via-link "Link verteilen"
    :schnaq.moderation.edit/administrate "schnaq verwalten"
+   :schnaq.moderation.edit/administrate-short "Verwalten"
    :schnaq.export/as-text "schnaq als Textdatei herunterladen"
-   :schnaq.admin/tooltip "Schnaq verwalten"
+   :schnaq.admin/tooltip "schnaq verwalten"
    :share-link/copy "Zugangslink kopieren"
    :share-link/via "Per Link"
    :share-access-code/via "Per Code"
