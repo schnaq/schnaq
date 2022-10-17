@@ -57,7 +57,8 @@
                       :main-opts ["-m" "antq.core"
                                   "--exclude=com.datomic/datomic-pro"
                                   "--exclude=clj-kondo/tools"
-                                  "--exclude=com.taoensso/tufte"]}
+                                  "--exclude=com.taoensso/tufte"
+                                  "--exclude=com.taoensso/tempura"]}
 
            :clj-kondo
            {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
