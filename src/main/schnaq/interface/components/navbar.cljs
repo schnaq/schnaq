@@ -30,7 +30,7 @@
   [:> NavLink {:href href :className "text-nowrap"}
    (labels label)])
 
-(defn CommonNavigationLinks
+(defn common-navigation-links
   "Show default navigation links."
   []
   (let [external-icon [icon :external-link-alt "me-1" {:size :xs}]]
@@ -44,7 +44,7 @@
      [:> NavLink {:href "https://schnaq.com/blog/"}
       external-icon (labels :nav/blog)]]))
 
-(defn DiscussionViews
+(defn links-to-discussion-views
   "Toggle between different views in a discussion."
   []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
@@ -63,7 +63,7 @@
      [:> NavLink {:class "ms-3" :href (href :routes.schnaq/dashboard)}
       [img :icon-summary-dark] (labels :summary.link.button/text)]]))
 
-(defn SchnaqSettings
+(defn schnaq-settings
   "Show the schnaq settings, export and share links."
   []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
@@ -80,7 +80,7 @@
      [:> NavLink {:class "ms-2" :href (href :routes.schnaq/moderation-center)}
       [stacked-icon :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]]))
 
-(defn MobileNav
+(defn mobile-navigation
   "Mobile navigation."
   []
   [:> Navbar {:bg :primary :variant :dark :expand false}
@@ -96,9 +96,9 @@
       [LanguageDropdown]
       (if @(rf/subscribe [:schnaq/share-hash])
         [:div.row
-         [:div.col-6 [DiscussionViews]]
-         [:div.col-6 [SchnaqSettings]]]
-        [CommonNavigationLinks])]]]])
+         [:div.col-6 [links-to-discussion-views]]
+         [:div.col-6 [schnaq-settings]]]
+        [common-navigation-links])]]]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -107,7 +107,7 @@
   [brand-content collapse-content-id navbar-bg-class top-right-content collapsible-content]
   (when-not @(rf/subscribe [:ui/setting :hide-navbar])
     [:<>
-     [:div.d-xl-none [MobileNav]]
+     [:div.d-xl-none [mobile-navigation]]
      [:div.d-none.d-xl-block
       [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
        {:class navbar-bg-class}
