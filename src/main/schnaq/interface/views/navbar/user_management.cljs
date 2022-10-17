@@ -69,22 +69,21 @@
   (let [admin? @(rf/subscribe [:user/administrator?])
         analytics-admin? @(rf/subscribe [:user/analytics-admin?])]
     ;; Analytics-Admin also is true when user is super-admin
-    [:<>
-     (when analytics-admin?
-       [:> NavDropdown {:title (r/as-element [:span.text-secondary "Admin"])}
-        [:> NavDropdownItem {:href (navigation/href :routes/analytics)}
-         (labels :router/analytics)]
-        (when admin?
-          [:<>
-           [:> NavDropdownItem {:href (navigation/href :routes/admin-center)}
-            (labels :router/admin-center)]
-           [:> NavDropdownItem {:href (navigation/href :routes/feedbacks)}
-            (labels :router/all-feedbacks)]
-           [:> NavDropdownItem {:href (navigation/href :routes.admin/summaries)}
-            (labels :router/summaries)]
-           (when-not shared-config/production?
-             [:> NavDropdownItem {:href (navigation/href :routes.playground/editor)}
-              (labels :routes.playground/editor)])])])]))
+    (when analytics-admin?
+      [:> NavDropdown {:title (r/as-element [:span.text-secondary "Admin"])}
+       [:> NavDropdownItem {:href (navigation/href :routes/analytics)}
+        (labels :router/analytics)]
+       (when admin?
+         [:<>
+          [:> NavDropdownItem {:href (navigation/href :routes/admin-center)}
+           (labels :router/admin-center)]
+          [:> NavDropdownItem {:href (navigation/href :routes/feedbacks)}
+           (labels :router/all-feedbacks)]
+          [:> NavDropdownItem {:href (navigation/href :routes.admin/summaries)}
+           (labels :router/summaries)]
+          (when-not shared-config/production?
+            [:> NavDropdownItem {:href (navigation/href :routes.playground/editor)}
+             (labels :routes.playground/editor)])])])))
 
 (defn username-with-pro-indicator []
   (let [username @(rf/subscribe [:user/display-name])
