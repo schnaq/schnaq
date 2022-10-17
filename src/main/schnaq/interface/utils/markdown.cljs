@@ -3,7 +3,6 @@
             ["remark-gfm" :as gfm]
             [goog.string :as gstring]
             [reagent.core :as r]
-            [schnaq.interface.components.motion :refer [zoom-image]]
             [schnaq.interface.utils.toolbelt :as tools]))
 
 (defn Image [props]
