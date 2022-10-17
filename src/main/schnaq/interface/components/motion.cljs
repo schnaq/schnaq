@@ -32,9 +32,9 @@
                      :damping 25
                      :stiffness 120}]
      (fn []
-       [:div.image-container {:class (when @open? "open")
-                              :style {:z-index (when @open? 1000)}}
-        [:> (.-div motion)
+       [:span.image-container {:class (when @open? "open")
+                               :style {:z-index (when @open? 1000)}}
+        [:> (.-span motion)
          {:animate {:opacity (if @open? 1 0)}
           :transition transition
           :class "shade"
