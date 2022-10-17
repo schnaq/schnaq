@@ -79,21 +79,6 @@ $height-of-components: 4.25rem;
   }
 }
 
-.navbar-dark {
-  .navbar-text {
-    color: $white;
-  }
-
-  a:not(.dropdown-item) {
-    color: $white !important;
-
-    &:hover {
-      @extend .text-decoration-underline;
-      cursor: pointer;
-    }
-  }
-}
-
 .navbar-text {
   max-width: 70%;
   max-width: calc(80% - 4rem); // -4rem because of the navbar toggler
