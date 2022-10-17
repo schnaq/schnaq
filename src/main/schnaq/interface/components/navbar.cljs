@@ -5,7 +5,7 @@
             [com.fulcrologic.guardrails.core :refer [=> >defn]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.common :as common-components :refer [schnaqqi-white]]
+            [schnaq.interface.components.common :as common-components :refer [schnaq-logo-white schnaqqi-white]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.navigation :as navigation]
@@ -14,7 +14,8 @@
             [schnaq.interface.views.discussion.share :refer [share-schnaq-button]]
             [schnaq.interface.views.navbar.elements :refer [LanguageDropdown
                                                             txt-export-request]]
-            [schnaq.interface.views.navbar.user-management :refer [UserNavLinkDropdown admin-dropdown]]))
+            [schnaq.interface.views.navbar.user-management :refer [admin-dropdown
+                                                                   user-navlink-dropdown]]))
 
 (def ^:private NavbarBrand (oget Navbar :Brand))
 (def ^:private NavbarText (oget Navbar :Text))
@@ -91,7 +92,7 @@
     [:> NavbarToggle {:aria-controls "mobile-navbar"}]
     [:> NavbarCollapse {:id "mobile-navbar"}
      [:> Nav
-      [UserNavLinkDropdown]
+      [user-navlink-dropdown]
       [admin-dropdown]
       [LanguageDropdown]
       (if @(rf/subscribe [:schnaq/share-hash])
@@ -99,6 +100,20 @@
          [:div.col-6 [links-to-discussion-views]]
          [:div.col-6 [schnaq-settings]]]
         [common-navigation-links])]]]])
+
+(defn page-navbar []
+  [:> Navbar {:bg :primary :variant :dark :expand :lg}
+   [:> Container {:fluid true}
+    [:> NavbarBrand {:href (toolbelt/current-overview-link)}
+     [schnaq-logo-white {:class "img-fluid" :width 150}]]
+    [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
+    [:> NavbarCollapse {:id "schnaq-navbar"
+                        :className "justify-content-end"}
+     [:> Nav
+      [common-navigation-links]
+      [LanguageDropdown]
+      [admin-dropdown]
+      [user-navlink-dropdown]]]]])
 
 ;; -----------------------------------------------------------------------------
 

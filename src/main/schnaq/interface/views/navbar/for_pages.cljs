@@ -1,8 +1,5 @@
 (ns schnaq.interface.views.navbar.for-pages
-  (:require [clojure.string :as str]
-            [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.components.navbar :as navbar-components]
-            [schnaq.interface.navigation :as navigation]
+  (:require [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
             [schnaq.interface.views.navbar.elements :as elements :refer [language-dropdown]]
@@ -48,30 +45,3 @@
      "navbar-bg-transparent-sm-white"
      [navbar-user]
      [collapse-content/collapsed-navbar navbar-content-id]]))
-
-(defn navbar-transparent
-  "Navbar definition for the default pages."
-  [wrapper-classes]
-  [:nav.navbar.navbar-expand-lg.py-3.navbar-transparent.bg-transparent.mb-4
-   [:section
-    {:class (if (str/blank? wrapper-classes) "container container-85" wrapper-classes)}
-    [:a.navbar-brand {:href (navigation/href :routes.schnaqs/personal)}
-     [:img.d-inline-block.align-middle.me-2
-      {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
-    ;; hamburger
-    [:button.navbar-toggler
-     {:type "button" :data-bs-toggle "collapse" :data-bs-target "#schnaq-navbar"
-      :aria-controls "schnaq-navbar" :aria-expanded "false" :aria-label "Toggle navigation"
-      :data-html2canvas-ignore true}
-     [:span.navbar-toggler-icon]]
-    ;; menu items
-    [:div#schnaq-navbar.collapse.navbar-collapse
-     [:ul.navbar-nav.ms-auto
-      [:li.nav-item [navbar-components/button :nav/schnaqs (toolbelt/current-overview-link)]]
-      [:li.nav-item [pricing-button]]
-      [:li.nav-item [privacy-button]]
-      [:li.nav-item [blog-link]]
-      [:li.nav-item.dropdown
-       [language-dropdown]]]
-     [um/admin-dropdown]
-     [um/register-or-user-button false]]]])

@@ -79,18 +79,6 @@ $height-of-components: 4.25rem;
   }
 }
 
-.navbar-transparent {
-  @extend .navbar-dark;
-
-  .nav-link {
-    color: $gray-200 !important;
-  }
-
-  .nav-link:hover {
-    color: $white !important;
-  }
-}
-
 .navbar-dark {
   .navbar-text {
     color: $white;

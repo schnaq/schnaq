@@ -1,12 +1,13 @@
 (ns schnaq.interface.views.pages
   "Defining page-layouts."
   (:require [cljs.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.components.videos :refer [video]]
             [schnaq.interface.config :as config]
             [schnaq.interface.scheduler :as scheduler]
@@ -198,9 +199,10 @@
   [::page-options (? :re-frame/component) :ret :re-frame/component]
   [page-builder
    options
-   [:div.masthead-layered
-    [navbar-pages/navbar-transparent (:page/wrapper-classes options)]
-    [base/header options]]
+   [:<>
+    [navbar-components/page-navbar]
+    [:div.masthead-layered
+     [base/header options]]]
    body
    (if wavy-footer?
      [base/footer-with-wave]

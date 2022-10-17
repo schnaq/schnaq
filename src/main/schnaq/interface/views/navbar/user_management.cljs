@@ -38,7 +38,6 @@
                       (oget e [:target :elements :name-input :value])]))}
      [:input#name-input.form-control.form-round-05
       {:type "text"
-       :name "name-input"
        :autoFocus true
        :required true
        :defaultValue username
@@ -70,7 +69,8 @@
         analytics-admin? @(rf/subscribe [:user/analytics-admin?])]
     ;; Analytics-Admin also is true when user is super-admin
     (when analytics-admin?
-      [:> NavDropdown {:title (r/as-element [:span.text-secondary "Admin"])}
+      [:> NavDropdown {:title (r/as-element [:span.text-secondary "Admin"])
+                       :align :end}
        [:> NavDropdownItem {:href (navigation/href :routes/analytics)}
         (labels :router/analytics)]
        (when admin?
@@ -115,9 +115,10 @@
      :on-click #(rf/dispatch [:keycloak/logout])}
     (labels :user/logout)]])
 
-(defn UserNavLinkDropdown []
+(defn user-navlink-dropdown []
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
-    [:> NavDropdown {:title (r/as-element [username-with-pro-indicator])}
+    [:> NavDropdown {:title (r/as-element [username-with-pro-indicator])
+                     :align :end}
      (if authenticated?
        [:<>
         [:> NavDropdownItem {:disabled true} [common/avatar 32]]
