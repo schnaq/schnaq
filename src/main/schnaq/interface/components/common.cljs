@@ -126,6 +126,15 @@
           :alt "schnaq logo"}
          attrs)])
 
+(>defn schnaq-logo-white
+  "Display a schnaq logo"
+  [attrs]
+  [(? map?) => :re-frame/component]
+  [:img (merge
+         {:src (img-path :logo-white)
+          :alt "schnaq logo"}
+         attrs)])
+
 (>defn schnaqqi-white
   "Display a schnaq logo"
   [attrs]
