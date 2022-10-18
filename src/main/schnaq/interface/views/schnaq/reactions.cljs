@@ -68,7 +68,7 @@
 
 (defn up-down-vote-vertical
   "Vertical panel for up and down votes."
-  [statement]
+  [props statement]
   (let [votes @(rf/subscribe [:local-votes])
         [local-upvote? local-downvote?] @(rf/subscribe [:votes/upvoted-or-downvoted (:db/id statement)])
         ;; Do not use or shortcut, since the value can be false and should be preferably selected over backend value
@@ -76,7 +76,7 @@
         downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)
         authenticated? @(rf/subscribe [:user/authenticated?])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
-    [:div.align-items-center.text-center
+    [:div props
      [:div.d-flex.flex-row
       [:div
        (cond->
