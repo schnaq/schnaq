@@ -173,9 +173,9 @@
            [reduced-or-edit-card answer-id]
            {:key (str "answer-" answer-id)}))])))
 
-(defn- replies [_statement-id]
+(defn- replies [_props _statement-id]
   (let [collapsed? (reagent/atom true)]
-    (fn [statement-id]
+    (fn [props statement-id]
       (let [reply-ids @(rf/subscribe [:statements/replies statement-id])
             rotation (if @collapsed? 0 180)
             button-icon [motion/rotate rotation [icon :collapse-down "my-auto"]]
@@ -183,7 +183,7 @@
                              (labels :qanda.button.show/replies)
                              (labels :qanda.button.hide/replies))]
         (when (not-empty reply-ids)
-          [:<>
+          [:div props
            [:button.btn.btn-transparent.btn-no-outline
             {:type "button" :aria-expanded "false"
              :on-click (fn [_] (swap! collapsed? not))}
@@ -219,7 +219,7 @@
        [:<>
         [input/reply-in-statement-input-form statement]
         [answers statement-id]
-        [replies statement-id]]]]]))
+        [replies {:class "text-left"} statement-id]]]]]))
 
 (defn- sort-statements
   "Sort statements according to the filter method."
@@ -251,7 +251,7 @@
        [:div.d-flex.flex-row
         [badges/show-number-of-replies statement]
         [reactions/up-down-vote statement]
-        [badges/statement-dropdown-menu nil statement]])]))
+        [badges/statement-dropdown-menu {:class "ms-3"} statement]])]))
 
 (defn- title-view [statement]
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
