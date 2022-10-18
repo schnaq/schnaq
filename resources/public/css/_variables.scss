@@ -103,3 +103,10 @@ $inner-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.1);
 
 $table-striped-bg-factor: 0.03;
 $table-cell-padding-y: 0.8rem;
+
+// Navbar
+$navbar-dark-color: rgba($white, 0.9);
+$navbar-dark-hover-color: $white;
+$navbar-dark-active-color: $white;
+$navbar-dark-disabled-color: $white;
+$navbar-dark-toggler-border-color: $white;
