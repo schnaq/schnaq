@@ -86,12 +86,9 @@
   @extend .card;
   @extend .my-2;
   @include rounded.rounded-1;
+
   border: 0;
   white-space: pre-line;
-
-  @include media-breakpoint-down(md) {
-    border-radius: 0;
-  }
 }
 
 .statement-question {
@@ -149,12 +146,13 @@
 .highlight-card {
   border-radius: 0 1rem 1rem 0;
   margin: 0.75rem 0;
+  margin-right: 0.5rem;
   min-height: 100%;
   min-width: 0.5rem;
   overflow: hidden;
 
   @include media-breakpoint-down(md) {
-    margin-right: 1rem;
+    margin-right: 0.5rem;
   }
 }
 
