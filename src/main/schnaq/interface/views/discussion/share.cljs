@@ -50,7 +50,7 @@
                               false))}
         (labels :share-link/copy)]]]]))
 
-(defn share-schnaq-button
+(defn share-schnaq-modal
   "Create component to copy access link and access code."
   [component]
   [modal/modal {:size :lg}
@@ -68,7 +68,7 @@
 (defn navbar-share-schnaq-button
   "Open modal, styled as a button for the navbar."
   []
-  [share-schnaq-button
+  [share-schnaq-modal
    (fn [props]
      [button-with-icon
       :share
@@ -80,6 +80,6 @@
 (defn small-share-schnaq-button
   "Small share button with an icon in it."
   []
-  [share-schnaq-button
+  [share-schnaq-modal
    (fn [props]
      [button [icon :share] nil "btn-outline-white ms-1" props])])

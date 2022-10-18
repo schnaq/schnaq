@@ -3,7 +3,7 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.views.discussion.share :refer [share-schnaq-button]]
+            [schnaq.interface.views.discussion.share :refer [share-schnaq-modal]]
             [schnaq.interface.views.navbar.elements :as nav-elements :refer [language-dropdown]]
             [schnaq.interface.views.navbar.user-management :as um]))
 
@@ -90,7 +90,7 @@
   [:<>
    [:div.fw-bold.mt-3 (labels :discussion.navbar/settings)]
    [:ul.list-group.list-group-flush
-    [share-schnaq-button (fn [props] [li-button props (labels :sharing/tooltip)])]
+    [share-schnaq-modal (fn [props] [li-button props (labels :sharing/tooltip)])]
     [:li.list-group-item.dropdown [language-dropdown true false {:class "p-0 text-dark"}]]
     [settings-li-button]]])
 
