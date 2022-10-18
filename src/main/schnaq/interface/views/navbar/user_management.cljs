@@ -85,10 +85,10 @@
             [:> NavDropdownItem {:href (navigation/href :routes.playground/editor)}
              (labels :routes.playground/editor)])])])))
 
-(defn username-with-pro-indicator []
+(defn username-with-pro-indicator [props]
   (let [username @(rf/subscribe [:user/display-name])
         pro? @(rf/subscribe [:user/pro?])]
-    [:span
+    [:span props
      (when pro? [icon :star "me-1"])
      (toolbelt/truncate-to-n-chars username 15)]))
 
@@ -115,10 +115,12 @@
      :on-click #(rf/dispatch [:keycloak/logout])}
     (labels :user/logout)]])
 
-(defn user-navlink-dropdown []
+(defn user-navlink-dropdown
+  [props]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
-    [:> NavDropdown {:title (r/as-element [username-with-pro-indicator])
-                     :align :end}
+    [:> NavDropdown (merge {:title (r/as-element [username-with-pro-indicator])
+                            :align :end}
+                           props)
      (if authenticated?
        [:<>
         [:> NavDropdownItem {:disabled true} [common/avatar 32]]
