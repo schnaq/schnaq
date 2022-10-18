@@ -24,7 +24,8 @@
 (def ^:private NavDropdownItem (oget NavDropdown :Item))
 
 (defn LanguageDropdown []
-  [:> NavDropdown {:title (r/as-element [:<> [icon :language "me-1"] @(rf/subscribe [:current-language])])}
+  [:> NavDropdown {:id "language-dropdown"
+                   :title (r/as-element [:<> [icon :language "me-1"] @(rf/subscribe [:current-language])])}
    [:> NavDropdownItem {:href (navigation/switch-language-href :de)
                         :lang "de-DE" :hrefLang "de-DE"}
     "Deutsch"]

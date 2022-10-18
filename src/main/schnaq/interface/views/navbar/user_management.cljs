@@ -88,7 +88,7 @@
 (defn username-with-pro-indicator []
   (let [username @(rf/subscribe [:user/display-name])
         pro? @(rf/subscribe [:user/pro?])]
-    [:small.text-nowrap
+    [:span
      (when pro? [icon :star "me-1"])
      (toolbelt/truncate-to-n-chars username 15)]))
 
