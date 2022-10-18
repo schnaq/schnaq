@@ -23,15 +23,18 @@
 (def ^:private NavbarText (oget Navbar :Text))
 (def ^:private NavDropdownItem (oget NavDropdown :Item))
 
-(defn LanguageDropdown []
-  [:> NavDropdown {:id "language-dropdown"
-                   :title (r/as-element [:<> [icon :language "me-1"] @(rf/subscribe [:current-language])])}
-   [:> NavDropdownItem {:href (navigation/switch-language-href :de)
-                        :lang "de-DE" :hrefLang "de-DE"}
-    "Deutsch"]
-   [:> NavDropdownItem {:href (navigation/switch-language-href :en)
-                        :lang "en-US" :hrefLang "en-US"}
-    "English"]])
+(defn LanguageDropdown [{:keys [vertical?] :as props}]
+  (let [current-language @(rf/subscribe [:current-language])
+        title-classes (if vertical? "d-block mx-auto" "me-1")]
+    [:> NavDropdown (merge {:id "language-dropdown"
+                            :title (r/as-element [:<> [icon :language title-classes] current-language])}
+                           props)
+     [:> NavDropdownItem {:href (navigation/switch-language-href :de)
+                          :lang "de-DE" :hrefLang "de-DE"}
+      "Deutsch"]
+     [:> NavDropdownItem {:href (navigation/switch-language-href :en)
+                          :lang "en-US" :hrefLang "en-US"}
+      "English"]]))
 
 (defn language-dropdown
   "Dropdown for bootstrap navbar to display the allowed languages."
