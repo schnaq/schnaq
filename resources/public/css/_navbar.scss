@@ -32,6 +32,22 @@ $height-of-components: 4.25rem;
   }
 }
 
+// This navbar is used in the react-bootstrap components.
+.navbar-dark {
+  .navbar-text {
+    color: $white;
+  }
+
+  a:not(.dropdown-item) {
+    color: $white !important;
+
+    &:hover {
+      @extend .text-decoration-underline;
+      cursor: pointer;
+    }
+  }
+}
+
 .schnaq-navbar-dynamic-padding {
   background: transparent;
   overflow: visible;
