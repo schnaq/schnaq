@@ -202,21 +202,21 @@
   (let [statement @(rf/subscribe [:schnaq/statement statement-id])]
     [:article.statement-card
      {:class (if (question? statement) "statement-question" "")}
-     [:div.d-flex.flex-row
+     [:div.d-flex
       [card-highlighting statement]
-      [:div.card-view.card-body.py-2.px-0
-       [:div.row
-        [:div.col-11.pe-0
-         [:div.text-typography.px-3.pt-2.h-100.d-flex.flex-column.justify-content-between
+      [:div.d-flex.flex-column.w-100.card-body.ps-0
+       [:div.d-flex.flex-row
+        [:div.flex-grow-1
+         [:div.text-typography
           [truncated-content/statement statement]
           [statement-information-row statement]]]
-        [:div.col-1.ps-0.text-center
-         [badges/statement-dropdown-menu nil statement]
+        [:div.px-md-2.px-1
+         [badges/statement-dropdown-menu {:class "ms-auto"} statement]
          [reactions/up-down-vote-vertical statement]
          (when (:meta/new? statement)
            [:div.bg-primary.px-1.rounded-1.d-inline-block.text-white.small
             (labels :discussion.badges/new)])]]
-       [:div.mx-3
+       [:<>
         [input/reply-in-statement-input-form statement]
         [answers statement-id]
         [replies statement-id]]]]]))
