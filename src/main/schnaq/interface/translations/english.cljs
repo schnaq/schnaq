@@ -7,7 +7,7 @@
 
    :view/present "Present"
 
-   :nav/schnaqs "schnaqs"
+   :nav/schnaqs "my schnaqs"
    :nav.schnaqs/show-all "All schnaqs"
    :nav.schnaqs/show-all-public "All public schnaqs"
    :nav.schnaqs/create-schnaq "Create schnaq"

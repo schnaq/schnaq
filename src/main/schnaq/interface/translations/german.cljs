@@ -7,7 +7,7 @@
 
    :view/present "Präsentieren"
 
-   :nav/schnaqs "schnaqs"
+   :nav/schnaqs "meine schnaqs"
    :nav.schnaqs/show-all "Alle schnaqs"
    :nav.schnaqs/show-all-public "Alle öffentlichen schnaqs"
    :nav.schnaqs/create-schnaq "schnaq anlegen"
