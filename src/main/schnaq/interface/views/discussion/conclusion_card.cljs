@@ -211,8 +211,8 @@
           [truncated-content/statement statement]
           [statement-information-row statement]]]
         [:div.px-md-2.px-1
-         [badges/statement-dropdown-menu {:class "ms-auto"} statement]
-         [reactions/up-down-vote-vertical statement]
+         [badges/statement-dropdown-menu nil statement]
+         [reactions/up-down-vote-vertical {:class "pt-1"} statement]
          (when (:meta/new? statement)
            [:div.bg-primary.px-1.rounded-1.d-inline-block.text-white.small
             (labels :discussion.badges/new)])]]
