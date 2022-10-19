@@ -45,16 +45,20 @@
 
 (defn common-navigation-links
   "Show default navigation links."
-  [& {:keys [props vertical?]}]
+  [& {:keys [props vertical? hide-icon?]}]
   [:<>
    [:> NavLink (merge {:href (toolbelt/current-overview-link)} props)
-    [stacked-icon :vertical? vertical? :icon-key :comments] (labels :nav/schnaqs)]
+    (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :comments])
+    (labels :nav/schnaqs)]
    [:> NavLink (merge {:href "https://schnaq.com/pricing"} props)
-    [stacked-icon :vertical? vertical? :icon-key :award] (labels :router/pricing)]
+    (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :award])
+    (labels :router/pricing)]
    [:> NavLink (merge {:href "https://schnaq.com/privacy"} props)
-    [stacked-icon :vertical? vertical? :icon-key :lock] (labels :router/privacy)]
+    (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :lock])
+    (labels :router/privacy)]
    [:> NavLink (merge {:href "https://schnaq.com/blog/"} props)
-    [stacked-icon :vertical? vertical? :icon-key :newspaper] (labels :nav/blog)]])
+    (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :newspaper])
+    (labels :nav/blog)]])
 
 (def ^:private discussion-views
   {:routes.schnaq/start {:icon :icon-cards-dark
@@ -199,8 +203,8 @@
     [:> NavbarCollapse {:id "schnaq-navbar"
                         :className "justify-content-end"}
      [:> Nav
-      [common-navigation-links]
-      [LanguageDropdown]
+      [common-navigation-links :hide-icon? true]
+      [LanguageDropdown :hide-icon? true]
       [upgrade-button]
       [admin-dropdown]
       [user-navlink-dropdown]]]]])
