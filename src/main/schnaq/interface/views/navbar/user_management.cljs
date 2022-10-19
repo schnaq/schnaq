@@ -87,15 +87,21 @@
 
 (defn- profile-picture-in-nav
   "Show profile picture-element in the navbar."
-  [props]
+  [& {:keys [props vertical?]}]
   (let [username @(rf/subscribe [:user/display-name])
         authenticated? @(rf/subscribe [:user/authenticated?])
         pro? @(rf/subscribe [:user/pro?])
         icon-size 32]
     [:span props
      (if authenticated?
-       [common/avatar :props {:className "d-block mx-auto"} :size icon-size]
-       [common/identicon :name username :size icon-size])
+       [common/avatar
+        :props (when vertical? {:className "d-block mx-auto"})
+        :size icon-size
+        :inline? (not vertical?)]
+       [common/identicon
+        :props (when vertical? {:className "d-block mx-auto"})
+        :name username
+        :size icon-size])
      [:span.text-nowrap
       (when pro? [icon :star "me-1"])
       (toolbelt/truncate-to-n-chars username 15)]]))
@@ -110,9 +116,9 @@
     (labels :user/logout)]])
 
 (defn user-navlink-dropdown
-  [& {:keys [props]}]
+  [& {:keys [props vertical?]}]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
-    [:> NavDropdown (merge {:title (r/as-element [profile-picture-in-nav props])
+    [:> NavDropdown (merge {:title (r/as-element [profile-picture-in-nav :props props :vertical? vertical?])
                             :align :end}
                            props)
      (if authenticated?

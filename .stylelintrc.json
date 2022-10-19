@@ -3,6 +3,7 @@
   "rules": {
     "scss/at-extend-no-missing-placeholder": null,
     "string-quotes": null,
-    "max-nesting-depth": 2
+    "max-nesting-depth": 2,
+    "selector-max-id": null
   }
 }

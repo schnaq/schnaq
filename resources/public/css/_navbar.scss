@@ -99,3 +99,7 @@ $height-of-components: 4.25rem;
 .nav-link.disabled {
   @extend .fw-bold;
 }
+
+#navbar-profile-picture {
+  padding: 0;
+}

@@ -128,7 +128,7 @@
   [& {:keys [props vertical?]}]
   [share-schnaq-modal
    (fn [modal-props]
-     [:> NavLink (merge props modal-props)
+     [:> NavLink (merge modal-props props)
       [stacked-icon :vertical? vertical? :icon-key :share] (labels :discussion.navbar/share)])])
 
 (defn manage-schnaq-button
@@ -197,7 +197,7 @@
         [LanguageDropdown :props {:className "p-0 me-2"} :vertical? true]
         [upgrade-button :vertical? true]
         [admin-dropdown]
-        [user-navlink-dropdown :vertical? true]]]]]))
+        [user-navlink-dropdown :vertical? true :props {:className "small" :id "navbar-profile-picture"}]]]]]))
 
 (defn page-navbar []
   [:> Navbar {:bg :primary :variant :dark :expand :lg}

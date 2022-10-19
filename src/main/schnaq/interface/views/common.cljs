@@ -40,11 +40,11 @@
 
 (defn avatar
   "Get a user's avatar."
-  [& {:keys [props size user]
+  [& {:keys [props size user inline?]
       :or {user @(rf/subscribe [:user/entity])}}]
   (let [{:user.registered/keys [profile-picture display-name]} user
         display-name (or display-name (:user/nickname user))]
-    [:div.avatar-image
+    [:div.avatar-image (when inline? {:className "d-inline-flex mx-1"})
      (if profile-picture
        [:div.profile-pic-fill
         [:img.profile-pic-image
