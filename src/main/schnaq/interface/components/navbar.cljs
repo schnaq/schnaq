@@ -8,7 +8,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.common :as common-components :refer [schnaq-logo-white schnaqqi-white]]
-            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.icons :refer [icon stacked-icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -106,15 +106,6 @@
                     :href (href route)}
          [:div [img icon]] [:small (labels label)]]))]))
 
-(defn- stacked-icon
-  "Build a stacked icon."
-  [& {:keys [props vertical? icon-key]}]
-  [:div.fa-stack.small (if vertical?
-                         (assoc props :className "d-block mx-auto")
-                         props)
-   [icon :square "fa-stack-2x text-white"]
-   [icon icon-key "fa-stack-1x text-dark"]])
-
 (defn download-schnaq-button
   "Button to download a schnaq."
   [& {:keys [props vertical?]}]
@@ -175,7 +166,7 @@
 
 (defn split-navbar []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [:> Navbar {:bg :transparent :variant :light :expand :lg}
+    [:> Navbar {:bg :transparent :variant :light :expand :lg :className "small"}
      [:> Container {:fluid true}
       [:div.d-flex.align-items-center.panel-white.py-0.ps-0
        [:> NavbarBrand {:className "p-0" :href (toolbelt/current-overview-link)}
@@ -194,10 +185,10 @@
            [share-schnaq-button :props {:className "p-0 me-2"} :vertical? true]
            [download-schnaq-button :props {:className "p-0 me-2"} :vertical? true]
            [manage-schnaq-button :props {:className "p-0 me-2"} :vertical? true]])
-        [LanguageDropdown :props {:className "p-0 me-2"} :vertical? true]
+        [LanguageDropdown :props {:className "nav-link-no-padding"} :vertical? true]
         [upgrade-button :vertical? true]
-        [admin-dropdown]
-        [user-navlink-dropdown :vertical? true :props {:className "small" :id "navbar-profile-picture"}]]]]]))
+        [admin-dropdown :vertical? true :props {:className "nav-link-no-padding"}]
+        [user-navlink-dropdown :vertical? true :props {:className "nav-link-no-padding"}]]]]]))
 
 (defn page-navbar []
   [:> Navbar {:bg :primary :variant :dark :expand :lg}

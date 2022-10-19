@@ -153,3 +153,12 @@
   ([identifier classes extras]
    [:span.icon-card
     [icon identifier classes extras]]))
+
+(defn stacked-icon
+  "Build a stacked icon."
+  [& {:keys [props vertical? icon-key]}]
+  [:div.fa-stack.small (if vertical?
+                         (assoc props :className "d-block mx-auto")
+                         props)
+   [icon :square "fa-stack-2x text-white"]
+   [icon icon-key "fa-stack-1x text-dark"]])

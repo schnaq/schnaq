@@ -6,7 +6,7 @@
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.buttons :as buttons]
-            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.icons :refer [icon stacked-icon]]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -64,13 +64,14 @@
 
 (defn admin-dropdown
   "Show Admin pages when user is authenticated and has admin role."
-  []
+  [& {:keys [vertical? props]}]
   (let [admin? @(rf/subscribe [:user/administrator?])
         analytics-admin? @(rf/subscribe [:user/analytics-admin?])]
     ;; Analytics-Admin also is true when user is super-admin
     (when analytics-admin?
-      [:> NavDropdown {:title (r/as-element [:span.text-secondary "Admin"])
-                       :align :end}
+      [:> NavDropdown (merge {:title (r/as-element [:span.text-secondary [stacked-icon :vertical? vertical? :icon-key :ghost] "Admin"])
+                              :align :end}
+                             props)
        [:> NavDropdownItem {:href (navigation/href :routes/analytics)}
         (labels :router/analytics)]
        (when admin?
@@ -118,7 +119,7 @@
 (defn user-navlink-dropdown
   [& {:keys [props vertical?]}]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
-    [:> NavDropdown (merge {:title (r/as-element [profile-picture-in-nav :props props :vertical? vertical?])
+    [:> NavDropdown (merge {:title (r/as-element [profile-picture-in-nav :vertical? vertical?])
                             :align :end}
                            props)
      (if authenticated?

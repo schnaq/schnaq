@@ -10,7 +10,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.components.common :as common-components]
-            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.icons :refer [icon stacked-icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.navigation :as navigation]
@@ -24,10 +24,10 @@
 (def ^:private NavDropdownItem (oget NavDropdown :Item))
 
 (defn LanguageDropdown [& {:keys [props vertical?]}]
-  (let [current-language @(rf/subscribe [:current-language])
-        title-classes (if vertical? "d-block mx-auto" "me-1")]
+  (let [current-language @(rf/subscribe [:current-language])]
     [:> NavDropdown (merge {:id "language-dropdown"
-                            :title (r/as-element [:<> [icon :language title-classes] current-language])}
+                            :align :end
+                            :title (r/as-element [:<> [stacked-icon :vertical? vertical? :icon-key :language] current-language])}
                            props)
      [:> NavDropdownItem {:href (navigation/switch-language-href :de)
                           :lang "de-DE" :hrefLang "de-DE"}
