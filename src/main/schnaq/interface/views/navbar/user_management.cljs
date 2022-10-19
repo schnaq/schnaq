@@ -92,7 +92,7 @@
   (let [username @(rf/subscribe [:user/display-name])
         authenticated? @(rf/subscribe [:user/authenticated?])
         pro? @(rf/subscribe [:user/pro?])
-        icon-size 32]
+        icon-size 25]
     [:span props
      (if authenticated?
        [common/avatar
