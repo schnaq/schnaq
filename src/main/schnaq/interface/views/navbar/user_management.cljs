@@ -85,24 +85,19 @@
             [:> NavDropdownItem {:href (navigation/href :routes.playground/editor)}
              (labels :routes.playground/editor)])])])))
 
-(defn username-with-pro-indicator [props]
-  (let [username @(rf/subscribe [:user/display-name])
-        pro? @(rf/subscribe [:user/pro?])]
-    [:span props
-     (when pro? [icon :star "me-1"])
-     (toolbelt/truncate-to-n-chars username 15)]))
-
 (defn- profile-picture-in-nav
   "Show profile picture-element in the navbar."
-  []
+  [props]
   (let [username @(rf/subscribe [:user/display-name])
         authenticated? @(rf/subscribe [:user/authenticated?])
         pro? @(rf/subscribe [:user/pro?])
         icon-size 32]
-    [:div.d-flex.flex-column
-     [:div.mx-auto.rounded-2.overflow-hidden
-      (if authenticated? [common/avatar icon-size] [common/identicon username icon-size])]
-     [:p.small.text-nowrap.dropdown-toggle
+    [:span props
+     (if authenticated?
+       [common/avatar {:size icon-size
+                       :className "d-block mx-auto"}]
+       [common/identicon username icon-size])
+     [:span.text-nowrap
       (when pro? [icon :star "me-1"])
       (toolbelt/truncate-to-n-chars username 15)]]))
 
@@ -118,12 +113,12 @@
 (defn user-navlink-dropdown
   [props]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
-    [:> NavDropdown (merge {:title (r/as-element [username-with-pro-indicator])
+    [:> NavDropdown (merge {:title (r/as-element [profile-picture-in-nav props])
                             :align :end}
                            props)
      (if authenticated?
        [:<>
-        [:> NavDropdownItem {:disabled true} [common/avatar 32]]
+        [:> NavDropdownItem {:disabled true} [common/avatar {:size 32}]]
         [:> NavDropdownDivider]
         [:> NavDropdownItem {:href (navigation/href :routes.user.manage/account)}
          (labels :user.profile/settings)]

@@ -40,7 +40,8 @@
     [:> NavLink (merge {:bsPrefix "btn btn-outline-secondary"
                         :on-click #(rf/dispatch [:navigation.redirect/follow {:redirect "https://schnaq.com/pricing"}])}
                        props)
-     [icon :star (if vertical? "d-block mx-auto" "me-1")] (labels :pricing.upgrade-nudge/button)]))
+     [icon :star (if vertical? "d-block mx-auto" "me-1")]
+     (labels :pricing.upgrade-nudge/button)]))
 
 (defn common-navigation-links
   "Show default navigation links."
