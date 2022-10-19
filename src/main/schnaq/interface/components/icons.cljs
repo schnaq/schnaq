@@ -5,13 +5,13 @@
                                                           faFontAwesomeFlag faGithub
                                                           faInstagram faLinkedin faTwitter]]
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faSmileBeam
-                                                           faCommentAlt faEnvelope
+                                                           faCommentAlt faEnvelope faNewspaper
                                                            faEye faEyeSlash faFileAlt faFileImage faFileVideo faHourglass faIdCard faImage]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faAngleDown faAngleRight faArchive faArrowDown faArrowLeft
+             [faAngleDown faAngleRight faArchive faArrowDown faArrowLeft faAward
               faArrowRight faArrowUp faBackspace faBell faBold faBriefcase
               faBullseye faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
-              faChevronLeft faChevronRight faCircle faCloud faCookieBite faCode faCog faComment faCopy
+              faChevronLeft faChevronRight faCircle faCloud faCookieBite faCode faCog faComment faComments faCopy
               faEdit faEllipsisH faEllipsisV faExclamationTriangle faExternalLinkAlt faFileDownload faFlask faGhost
               faGraduationCap faInfinity faInfoCircle faItalic faLanguage faLaptop faList faListOl
               faLock faLockOpen faMagic faMapPin faMinus faPalette faPaperPlane faPenSquare faPencilRuler
@@ -28,6 +28,7 @@
    :arrow-left faArrowLeft
    :arrow-right faArrowRight
    :arrow-up faArrowUp
+   :award faAward
    :backspace faBackspace
    :bell faBell
    :bold faBold
@@ -51,6 +52,7 @@
    :collapse-up faAngleRight
    :comment faComment
    :comment/alt faCommentAlt
+   :comments faComments
    :copy faCopy
    :cross faTimes
    :delete-icon faTimesCircle
@@ -89,6 +91,7 @@
    :lock/open faLockOpen
    :magic faMagic
    :minus faMinus
+   :newspaper faNewspaper
    :palette faPalette
    :pen faPenSquare
    :pencil-ruler faPencilRuler

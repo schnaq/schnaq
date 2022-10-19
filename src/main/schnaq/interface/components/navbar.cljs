@@ -45,17 +45,16 @@
 
 (defn common-navigation-links
   "Show default navigation links."
-  []
+  [& {:keys [props vertical?]}]
   [:<>
-   [:> NavLink {:className "text-decoration-underline"
-                :href (toolbelt/current-overview-link)}
-    (labels :nav/schnaqs)]
-   [:> NavLink {:href "https://schnaq.com/pricing"}
-    (labels :router/pricing)]
-   [:> NavLink {:href "https://schnaq.com/privacy"}
-    (labels :router/privacy)]
-   [:> NavLink {:href "https://schnaq.com/blog/"}
-    (labels :nav/blog)]])
+   [:> NavLink (merge {:href (toolbelt/current-overview-link)} props)
+    [stacked-icon :vertical? vertical? :icon-key :comments] (labels :nav/schnaqs)]
+   [:> NavLink (merge {:href "https://schnaq.com/pricing"} props)
+    [stacked-icon :vertical? vertical? :icon-key :award] (labels :router/pricing)]
+   [:> NavLink (merge {:href "https://schnaq.com/privacy"} props)
+    [stacked-icon :vertical? vertical? :icon-key :lock] (labels :router/privacy)]
+   [:> NavLink (merge {:href "https://schnaq.com/blog/"} props)
+    [stacked-icon :vertical? vertical? :icon-key :newspaper] (labels :nav/blog)]])
 
 (def ^:private discussion-views
   {:routes.schnaq/start {:icon :icon-cards-dark
@@ -146,8 +145,8 @@
 
 (defn mobile-navigation
   "Mobile navigation."
-  []
-  [:> Navbar {:bg :primary :variant :dark :expand false}
+  [& {:keys [props]}]
+  [:> Navbar (merge {:bg :primary :variant :dark :expand false} props)
    [:> Container {:fluid true}
     [:> NavbarBrand {:href (toolbelt/current-overview-link)}
      [schnaqqi-white {:class "img-fluid" :width 50}]]
@@ -164,11 +163,11 @@
          [:div.col-6 [schnaq-settings]]]
         [common-navigation-links])]]]])
 
-(defn split-navbar []
+(defn split-navbar [& {:keys [props]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [:> Navbar {:bg :transparent :variant :light :expand :lg :className "small"}
+    [:> Navbar (merge {:bg :transparent :variant :light :expand :lg :className "small"} props)
      [:> Container {:fluid true}
-      [:div.d-flex.align-items-center.panel-white.py-0.ps-0
+      [:div.d-flex.align-items-center.panel-white-sm.py-0.ps-0
        [:> NavbarBrand {:className "p-0" :href (toolbelt/current-overview-link)}
         [:div.schnaq-logo-container
          [schnaq-logo-white {:class "img-fluid" :width 150}]]]
@@ -180,11 +179,12 @@
          [:> Nav {:className "panel-white-sm me-2"}
           [discussion-view-group]])
        [:> Nav {:className "panel-white-sm"}
-        (when share-hash
+        (if share-hash
           [:<>
-           [share-schnaq-button :props {:className "p-0 me-2"} :vertical? true]
-           [download-schnaq-button :props {:className "p-0 me-2"} :vertical? true]
-           [manage-schnaq-button :props {:className "p-0 me-2"} :vertical? true]])
+           [share-schnaq-button :vertical? true]
+           [download-schnaq-button :vertical? true]
+           [manage-schnaq-button :vertical? true]]
+          [common-navigation-links :vertical? true])
         [LanguageDropdown :props {:className "nav-link-no-padding"} :vertical? true]
         [upgrade-button :vertical? true]
         [admin-dropdown :vertical? true :props {:className "nav-link-no-padding"}]

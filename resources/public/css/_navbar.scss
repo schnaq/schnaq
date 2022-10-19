@@ -101,7 +101,12 @@ $height-of-components: 4.25rem;
 }
 
 .nav-link-no-padding .nav-link {
-  
   padding: 0;
-  
+}
+
+.bg-transparent .nav-link {
+  @include media-breakpoint-up(md) {
+    padding-bottom: 0;
+    padding-top: 0;
+  }
 }
