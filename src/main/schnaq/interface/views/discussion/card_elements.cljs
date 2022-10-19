@@ -68,7 +68,7 @@
         history-content [:div
                          [:div.d-flex.flex-row
                           [:h6 (labels :history.statement/user) " " (toolbelt/truncate-to-n-chars nickname 20)]
-                          [:div.ms-auto [common/avatar {:size 22} user]]]
+                          [:div.ms-auto [common/avatar :size 22 :user user]]]
                          (as-markdown (toolbelt/truncate-to-n-words statement-content max-word-count))]]
     [:article
      [:div.history-thread-line]

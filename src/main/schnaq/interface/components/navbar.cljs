@@ -35,7 +35,7 @@
 
 (defn- upgrade-button
   "Show an upgrade button for non-pro users."
-  [{:keys [vertical?] :as props}]
+  [& {:keys [props vertical?]}]
   (when-not @(rf/subscribe [:user/pro?])
     [:> NavLink (merge {:bsPrefix "btn btn-outline-secondary"
                         :on-click #(rf/dispatch [:navigation.redirect/follow {:redirect "https://schnaq.com/pricing"}])}
@@ -108,7 +108,7 @@
 
 (defn- stacked-icon
   "Build a stacked icon."
-  [{:keys [vertical?] :as props} icon-key]
+  [& {:keys [props vertical? icon-key]}]
   [:div.fa-stack.small (if vertical?
                          (assoc props :className "d-block mx-auto")
                          props)
@@ -117,36 +117,36 @@
 
 (defn download-schnaq-button
   "Button to download a schnaq."
-  [{:keys [vertical?] :as props}]
+  [& {:keys [props vertical?]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [:> NavLink (merge {:on-click #(txt-export-request share-hash @(rf/subscribe [:schnaq/title]))}
                        props)
-     [stacked-icon {:vertical? vertical?} :file-download] (labels :discussion.navbar/download)]))
+     [stacked-icon :vertical? vertical? :icon-key :file-download] (labels :discussion.navbar/download)]))
 
 (defn share-schnaq-button
   "Share schnaq button opening a modal."
-  [{:keys [vertical?] :as props}]
+  [& {:keys [props vertical?]}]
   [share-schnaq-modal
    (fn [modal-props]
      [:> NavLink (merge props modal-props)
-      [stacked-icon {:vertical? vertical?} :share] (labels :discussion.navbar/share)])])
+      [stacked-icon :vertical? vertical? :icon-key :share] (labels :discussion.navbar/share)])])
 
 (defn manage-schnaq-button
   "Button to navigate to schnaq management page."
-  [{:keys [vertical?] :as props}]
+  [& {:keys [props vertical?]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [:> NavLink (merge {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
                        props)
-     [stacked-icon {:vertical? vertical?} :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]))
+     [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]))
 
 (defn schnaq-settings
   "Show the schnaq settings, export and share links."
   []
   [:<>
    [:> NavLink {:disabled true} (labels :discussion.navbar/settings)]
-   [share-schnaq-button {:className "ms-2"}]
-   [download-schnaq-button {:className "ms-2"}]
-   [manage-schnaq-button {:className "ms-2"}]])
+   [share-schnaq-button :props {:className "ms-2"}]
+   [download-schnaq-button :props {:className "ms-2"}]
+   [manage-schnaq-button :props {:className "ms-2"}]])
 
 (defn- page-title [props]
   [:> NavbarText
@@ -191,13 +191,13 @@
        [:> Nav {:className "panel-white-sm"}
         (when share-hash
           [:<>
-           [share-schnaq-button {:vertical? true :className "p-0 me-2"}]
-           [download-schnaq-button {:vertical? true :className "p-0 me-2"}]
-           [manage-schnaq-button {:vertical? true :className "p-0 me-2"}]])
-        [LanguageDropdown {:vertical? true :className "p-0 me-2"}]
-        [upgrade-button {:vertical? true}]
+           [share-schnaq-button :props {:className "p-0 me-2"} :vertical? true]
+           [download-schnaq-button :props {:className "p-0 me-2"} :vertical? true]
+           [manage-schnaq-button :props {:className "p-0 me-2"} :vertical? true]])
+        [LanguageDropdown :props {:className "p-0 me-2"} :vertical? true]
+        [upgrade-button :vertical? true]
         [admin-dropdown]
-        [user-navlink-dropdown {:vertical? true}]]]]]))
+        [user-navlink-dropdown :vertical? true]]]]]))
 
 (defn page-navbar []
   [:> Navbar {:bg :primary :variant :dark :expand :lg}

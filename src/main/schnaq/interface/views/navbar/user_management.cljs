@@ -94,9 +94,8 @@
         icon-size 32]
     [:span props
      (if authenticated?
-       [common/avatar {:size icon-size
-                       :className "d-block mx-auto"}]
-       [common/identicon username icon-size])
+       [common/avatar :props {:className "d-block mx-auto"} :size icon-size]
+       [common/identicon :name username :size icon-size])
      [:span.text-nowrap
       (when pro? [icon :star "me-1"])
       (toolbelt/truncate-to-n-chars username 15)]]))
@@ -111,14 +110,14 @@
     (labels :user/logout)]])
 
 (defn user-navlink-dropdown
-  [props]
+  [& {:keys [props]}]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     [:> NavDropdown (merge {:title (r/as-element [profile-picture-in-nav props])
                             :align :end}
                            props)
      (if authenticated?
        [:<>
-        [:> NavDropdownItem {:disabled true} [common/avatar {:size 32}]]
+        [:> NavDropdownItem {:disabled true} [common/avatar :size 32]]
         [:> NavDropdownDivider]
         [:> NavDropdownItem {:href (navigation/href :routes.user.manage/account)}
          (labels :user.profile/settings)]

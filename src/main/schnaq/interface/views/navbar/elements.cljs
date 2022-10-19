@@ -23,7 +23,7 @@
 (def ^:private NavbarText (oget Navbar :Text))
 (def ^:private NavDropdownItem (oget NavDropdown :Item))
 
-(defn LanguageDropdown [{:keys [vertical?] :as props}]
+(defn LanguageDropdown [& {:keys [props vertical?]}]
   (let [current-language @(rf/subscribe [:current-language])
         title-classes (if vertical? "d-block mx-auto" "me-1")]
     [:> NavDropdown (merge {:id "language-dropdown"
@@ -201,14 +201,12 @@
 ;; -----------------------------------------------------------------------------
 
 (defn- clickable-title
-  ([]
-   [clickable-title "text-dark"])
-  ([title-class]
-   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])]
-     [:a.link-unstyled
-      {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
-      [:h1.h6.d-none.d-md-block.text-wrap {:class title-class} (toolbelt/truncate-to-n-chars title 64)]
-      [:div.d-md-none {:class title-class} (toolbelt/truncate-to-n-chars title 32)]])))
+  [title-class]
+  (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])]
+    [:a.link-unstyled
+     {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
+     [:h1.h6.d-none.d-md-block.text-wrap {:class title-class} (toolbelt/truncate-to-n-chars title 64)]
+     [:div.d-md-none {:class title-class} (toolbelt/truncate-to-n-chars title 32)]]))
 
 (defn- schnaq-logo []
   [:<>

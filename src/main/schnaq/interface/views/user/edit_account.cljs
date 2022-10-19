@@ -21,8 +21,8 @@
         preview-image (or temporary-picture profile-picture)]
     [:div.d-flex.me-4
      [:div.d-flex.avatar-image
-      [common/avatar #:user.registered{:profile-picture preview-image
-                                       :display-name (get-in user [:names :display])} 80]]
+      [common/avatar :size 80 :user #:user.registered{:profile-picture preview-image
+                                                      :display-name (get-in user [:names :display])}]]
      [:div.mt-auto
       (if temporary-picture
         ;; delete temporary button
