@@ -142,10 +142,12 @@
    [download-schnaq-button :props {:className "ms-2"}]
    [manage-schnaq-button :props {:className "ms-2"}]])
 
-(defn- page-title [props]
-  [:> NavbarText
-   [:h1.h6.text-wrap.mb-0 props
-    (or @(rf/subscribe [:schnaq/title]) @(rf/subscribe [:page/title]))]])
+(defn- page-title
+  "Display the current title either of the schnaq or the page in the navbar."
+  [& {:keys [props]}]
+  (let [title (or @(rf/subscribe [:schnaq/title]) @(rf/subscribe [:page/title]))]
+    [:> NavbarText (merge {:class "navbar-title"} props)
+     [:h1.h6 title]]))
 
 (defn mobile-navigation
   "Mobile navigation."
@@ -153,7 +155,7 @@
   [:> Navbar (merge {:bg :primary :variant :dark :expand false} props)
    [:> Container {:fluid true}
     [:> NavbarBrand {:href (toolbelt/current-overview-link)}
-     [schnaqqi-white {:class "img-fluid" :width 50}]]
+     [schnaqqi-white :props {:className "img-fluid" :width 50}]]
     [page-title]
     [:> NavbarToggle {:aria-controls "mobile-navbar"}]
     [:> NavbarCollapse {:id "mobile-navbar"}
@@ -169,18 +171,18 @@
 
 (defn split-navbar [& {:keys [props]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [:> Navbar (merge {:bg :transparent :variant :light :expand :lg :className "small"} props)
+    [:> Navbar (merge {:bg :transparent :variant :light :expand :lg :className "small text-nowrap"} props)
      [:> Container {:fluid true}
       [:div.d-flex.align-items-center.panel-white-sm.py-0.ps-0
        [:> NavbarBrand {:className "p-0" :href (toolbelt/current-overview-link)}
         [:div.schnaq-logo-container
-         [schnaq-logo-white {:class "img-fluid" :width 150}]]]
+         [schnaqqi-white :props {:className "img-fluid" :width 50}]]]
        [page-title]]
       [:> NavbarToggle {:aria-controls "schnaq-navbar-big"}]
       [:> NavbarCollapse {:id "schnaq-navbar-big"
                           :className "justify-content-end"}
        (when share-hash
-         [:> Nav {:className "panel-white-sm me-2"}
+         [:> Nav {:className "panel-white-sm mx-2"}
           [discussion-view-group]])
        [:> Nav {:className "panel-white-sm"}
         (if share-hash
@@ -198,7 +200,7 @@
   [:> Navbar {:bg :primary :variant :dark :expand :lg}
    [:> Container
     [:> NavbarBrand {:href (toolbelt/current-overview-link)}
-     [schnaq-logo-white {:class "img-fluid" :width 150}]]
+     [schnaq-logo-white :props {:className "img-fluid" :width 150}]]
     [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
     [:> NavbarCollapse {:id "schnaq-navbar"
                         :className "justify-content-end"}

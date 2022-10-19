@@ -50,6 +50,7 @@ $height-of-components: 4.25rem;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   height: 100% !important;
+  min-width: 130px;
   overflow: hidden;
   padding: 1rem 4rem 1rem 1rem;
 
@@ -79,14 +80,24 @@ $height-of-components: 4.25rem;
   }
 }
 
-.navbar-text {
-  @include media-breakpoint-down(lg) {
+.navbar-title {
+  
+  -webkit-box-orient: vertical;
+  display: -webkit-box !important; /* stylelint-disable-line value-no-vendor-prefix */
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  padding-bottom: 0;
+  padding-top: 0;
+  text-overflow: ellipsis;
+  white-space: normal;
+  @include media-breakpoint-down(xl) {
     max-width: 70%;
     max-width: calc(80% - 4rem); // -4rem because of the navbar toggler
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: wrap;
   }
+  
 }
 
 .navbar-icon {
