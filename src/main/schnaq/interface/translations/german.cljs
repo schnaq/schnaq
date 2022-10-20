@@ -860,5 +860,4 @@
    :schnaqqifant/three-d-head-alt-text "Schnaqqis Kopf in 3D wie er dich anschaut"
    :icon.search/alt-text "Such-Symbol"
    :icon.posts/alt-text "Symbol für Anzahl Beiträge"
-   :icon.users/alt-text "Symbol für Anzahl Nutzer:innen"
-   :navbar.icon.views/alt-text "Icon für verschiedene Ansichten"})
+   :icon.users/alt-text "Symbol für Anzahl Nutzer:innen"})

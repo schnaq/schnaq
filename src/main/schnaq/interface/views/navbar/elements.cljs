@@ -2,17 +2,15 @@
   (:require ["react-bootstrap/Navbar" :as Navbar]
             ["react-bootstrap/NavDropdown" :as NavDropdown]
             [ajax.core :as ajax]
-            [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
             [goog.string :as gstring]
             [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [icon stacked-icon]]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.file-download :as file-download]
@@ -127,28 +125,8 @@
                    :context :info
                    :stay-visible? true}]))
 
-(defn open-settings
-  "Open Settings for the graph."
-  []
-  [button-with-icon
-   :sliders-h
-   (labels :graph.settings/title)
-   (labels :discussion.navbar/settings)
-   show-notification
-   {:id :graph-settings}])
-
 ;; -----------------------------------------------------------------------------
 ;; Admin Settings stuff. Refactor TODO
-
-(defn moderator-center
-  "Button to access moderator panel."
-  []
-  [button-with-icon
-   :sliders-h
-   (labels :schnaq.admin/tooltip)
-   (labels :discussion.navbar/settings)
-   #(rf/dispatch [:navigation/navigate :routes.schnaq/moderation-center
-                  {:share-hash @(rf/subscribe [:schnaq/share-hash])}])])
 
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."
@@ -242,127 +220,7 @@
      button-content]
     dropdown-content]))
 
-(>defn- discussion-button-builder
-  "Build buttons in the discussion navigation."
-  [label icon href]
-  [keyword? keyword? (? string?) :ret vector?]
-  [:a.dropdown-item {:href href}
-   [:div.text-center
-    [:img.navbar-view-toggle
-     {:src (img-path icon)
-      :alt "graph icon"}]
-    [:p.small.m-0.text-nowrap (labels label)]]])
-
-(defn graph-button
-  "Rounded square button to navigate to the graph view"
-  []
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [discussion-button-builder
-     :graph.button/text :icon-graph-dark
-     (navigation/href :routes/graph-view {:share-hash share-hash})]))
-
-(defn summary-button
-  "Button to navigate to the summary view."
-  []
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [discussion-button-builder
-     :summary.link.button/text :icon-summary-dark
-     (navigation/href :routes.schnaq/dashboard {:share-hash share-hash})]))
-
-(defn- standard-view-button
-  "Button to navigate to the standard overview."
-  []
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [discussion-button-builder
-     :discussion.button/text :icon-cards-dark
-     (navigation/href :routes.schnaq/start {:share-hash share-hash})]))
-
-(defn- qanda-view-button
-  "Button to navigate to the Q&A view."
-  []
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [discussion-button-builder
-     :qanda.button/text :icon-qanda-dark
-     (navigation/href :routes.schnaq/qanda {:share-hash share-hash})]))
-
-(defn dropdown-views
-  "Displays a Dropdown menu button for the available views"
-  ([]
-   [dropdown-views :icon-views-dark ""])
-  ([icon-id toggle-class]
-   (let [dropdown-id "schnaq-views-dropdown"
-         current-route @(rf/subscribe [:navigation/current-route-name])]
-     [tooltip/text
-      (labels :discussion.navbar/views)
-      [:div.dropdown
-       [separated-button
-        [:div.dropdown-toggle
-         {:class toggle-class}
-         [:img.navbar-view-toggle.d-block
-          {:src (img-path icon-id) :alt (labels :navbar.icon.views/alt-text)}]
-         [:span.small
-          (case current-route
-            :routes.schnaq/start (labels :discussion.button/text)
-            :routes.schnaq.select/statement (labels :discussion.button/text)
-            :routes/graph-view (labels :graph.button/text)
-            :routes.schnaq/dashboard (labels :summary.link.button/text)
-            :routes.schnaq/qanda (labels :qanda.button/text)
-            (labels :discussion.navbar/views))]]
-        {:id dropdown-id :data-bs-toggle "dropdown"
-         :aria-haspopup "true" :aria-expanded "false"}
-        [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby dropdown-id}
-         [standard-view-button]
-         [graph-button]
-         [summary-button]
-         [qanda-view-button]]]]])))
-
 ;; -----------------------------------------------------------------------------
-
-(defn navbar-upgrade-button
-  "Show an upgrade button in the navbar."
-  [on-white-background?]
-  (when-not @(rf/subscribe [:user/pro?])
-    [button-with-icon
-     :star
-     (labels :pricing.upgrade-nudge/tooltip)
-     (labels :pricing.upgrade-nudge/button)
-     #(rf/dispatch [:navigation.redirect/follow {:redirect "https://schnaq.com/pricing"}])
-     {:class (if on-white-background? "btn-outline-secondary" "btn-secondary")}]))
-
-(defn navbar-settings
-  "Either display schnaq or graph settings button"
-  []
-  (let [current-route @(rf/subscribe [:navigation/current-route-name])
-        graph? (= current-route :routes/graph-view)]
-    (if graph?
-      [open-settings]
-      (when @(rf/subscribe [:user/moderator?])
-        [moderator-center]))))
-
-(defn navbar-download
-  "Download button for either text or graph"
-  []
-  (let [current-route @(rf/subscribe [:navigation/current-route-name])
-        graph? (= current-route :routes/graph-view)]
-    (if graph?
-      [graph-download-as-png]
-      [txt-export])))
-
-(defn statement-counter
-  "A counter showing all statements and pulsing live."
-  []
-  (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])
-        share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [:a
-     {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
-     [separated-button
-      [:div.d-flex.text-white
-       [motion/pulse-once [icon :comment/alt]
-        [:schnaq.qa.new-question/pulse?]
-        [:schnaq.qa.new-question/pulse false]
-        (:white colors)
-        (:secondary colors)]
-       [:div.ms-2 number-of-questions]]]]))
 
 (rf/reg-event-db
  :schnaq.qa.new-question/pulse
