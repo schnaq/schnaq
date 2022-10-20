@@ -7,35 +7,6 @@
 
 $height-of-components: 4.25rem;
 
-
-// TODO kann das weg?
-.schnaq-navbar-skeleton {
-  @include rounded.rounded-1;
-  height: $height-of-components;
-
-  @include media-breakpoint-down(md) {
-    max-height: 8rem;
-    width: 100%;
-  }
-}
-
-
-// TODO kann das weg?
-.schnaq-navbar {
-  @extend .schnaq-navbar-skeleton;
-  background: vars.$white;
-  overflow: visible;
-  padding: 0;
-
-  @include media-breakpoint-down(md) {
-    border-radius: 0;
-  }
-
-  .nav-link {
-    @extend .p-2;
-  }
-}
-
 .schnaq-logo-container {
   @include rounded.rounded-1;
   background-image: url('https://s3.schnaq.com/schnaq-common/background/wave_background.svg');
@@ -59,20 +30,7 @@ $height-of-components: 4.25rem;
   min-width: 4rem;
 }
 
-.discussion-navbar-button {
-  @include rounded.rounded-1;
-  height: $height-of-components;
-}
-
-.navbar-bg-transparent-sm-white {
-  background: transparent;
-  @include media-breakpoint-down(md) {
-    background: $white;
-  }
-}
-
 .navbar-title {
-  
   -webkit-box-orient: vertical;
   display: -webkit-box !important; /* stylelint-disable-line value-no-vendor-prefix */
   -webkit-line-clamp: 2;
@@ -88,7 +46,6 @@ $height-of-components: 4.25rem;
     text-overflow: ellipsis;
     white-space: wrap;
   }
-  
 }
 
 .navbar-icon {
