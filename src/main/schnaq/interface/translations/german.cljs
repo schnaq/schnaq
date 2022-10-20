@@ -563,7 +563,9 @@
 
    ;; Graph Texts
    :graph.button/text "Mindmap"
+   :graph.download/button "Herunterladen"
    :graph.download/as-png "Mindmap als Bild herunterladen"
+   :graph.settings/button "Einstellungen"
    :graph.settings/title "Einstellungen für die Mindmap"
    :graph.settings/description "Finde hier Einstellungen für deine Mindmap! Spiele mit den Slidern herum und schau was passiert."
    :graph.settings.gravity/label "Stelle hier die Gravitation zwischen den Knoten ein."

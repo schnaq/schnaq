@@ -145,12 +145,13 @@
 (defn manage-schnaq-button
   "Button to navigate to schnaq management page."
   [& {:keys [props vertical?]}]
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [tooltip/text
-     (labels :schnaq.admin/tooltip)
-     [:> NavLink (merge {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
-                        props)
-      [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]]))
+  (when @(rf/subscribe [:user/moderator?])
+    (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+      [tooltip/text
+       (labels :schnaq.admin/tooltip)
+       [:> NavLink (merge {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
+                          props)
+        [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]])))
 
 (defn login-register-buttons [& {:keys [props vertical?]}]
   [:<>
@@ -177,6 +178,19 @@
    [share-schnaq-button :props {:className "ms-2"}]
    [download-schnaq-button :props {:className "ms-2"}]
    [manage-schnaq-button :props {:className "ms-2"}]])
+
+(defn graph-settings [& {:keys [props vertical?]}]
+  [:<>
+   [tooltip/text
+    (labels :graph.download/as-png)
+    [:> NavLink (merge {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
+                       props)
+     [stacked-icon :vertical? vertical? :icon-key :file-export] (labels :graph.download/button)]]
+   [tooltip/text
+    (labels :graph.settings/title)
+    [:> NavLink (merge {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
+                       props)
+     [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :graph.settings/button)]]])
 
 (defn- page-title
   "Display the current title either of the schnaq or the page in the navbar."
@@ -210,7 +224,7 @@
         share-hash @(rf/subscribe [:schnaq/share-hash])]
     [:> Navbar (merge {:bg :transparent :variant :light :expand :lg :className "small text-nowrap"} props)
      [:> Container {:fluid true}
-      [:div.d-flex.align-items-center.panel-white-sm.py-0.ps-0
+      [:div.d-flex.align-items-center.panel-white-sm.py-0.ps-0.me-2
        [:> NavbarBrand {:className "p-0" :href (toolbelt/current-overview-link)}
         [:div.schnaq-logo-container
          [schnaqqi-white :props {:className "img-fluid" :width 50}]]]
@@ -218,8 +232,11 @@
       [:> NavbarToggle {:aria-controls "schnaq-navbar-big"}]
       [:> NavbarCollapse {:id "schnaq-navbar-big"
                           :className "justify-content-end"}
+       (when @(rf/subscribe [:navigation/current-route? :routes/graph-view])
+         [:> Nav {:className "panel-white-sm me-2"}
+          [graph-settings :vertical? true]])
        (when share-hash
-         [:> Nav {:className "panel-white-sm p-1 mx-2"}
+         [:> Nav {:className "panel-white-sm p-1 me-2"}
           [discussion-view-group]])
        [:> Nav {:className "panel-white-sm"}
         (if share-hash

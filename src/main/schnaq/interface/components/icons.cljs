@@ -12,7 +12,7 @@
               faArrowRight faArrowUp faBackspace faBell faBold faBriefcase
               faBullseye faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
               faChevronLeft faChevronRight faCircle faCloud faCookieBite faCode faCog faComment faComments faCopy
-              faEdit faEllipsisH faEllipsisV faExclamationTriangle faExternalLinkAlt faFileDownload faFlask faGhost
+              faEdit faEllipsisH faEllipsisV faExclamationTriangle faExternalLinkAlt faFileDownload faFileExport faFlask faGhost
               faGraduationCap faInfinity faInfoCircle faItalic faLanguage faLaptop faList faListOl
               faLock faLockOpen faMagic faMapPin faMinus faPalette faPaperPlane faPenSquare faPencilRuler
               faPlayCircle faPlus faProjectDiagram faSquare faQrcode faQuestion faQuestionCircle
@@ -66,6 +66,7 @@
    :external-link-alt faExternalLinkAlt
    :facebook faFacebook
    :file-alt faFileAlt
+   :file-export faFileExport
    :file-download faFileDownload
    :flag faFontAwesomeFlag
    :flask faFlask
