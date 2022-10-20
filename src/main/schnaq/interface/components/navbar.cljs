@@ -179,7 +179,9 @@
    [download-schnaq-button :props {:className "ms-2"}]
    [manage-schnaq-button :props {:className "ms-2"}]])
 
-(defn graph-settings [& {:keys [props vertical?]}]
+(defn graph-settings
+  "Show graph settings."
+  [& {:keys [props vertical?]}]
   [:<>
    [tooltip/text
     (labels :graph.download/as-png)
