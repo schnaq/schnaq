@@ -20,17 +20,6 @@
       attrs (merge attrs))
     content]))
 
-(defn anchor-big
-  "The default big button as an anchor. By default, in primary colors. No target on default."
-  ([content]
-   [anchor-big content "#"])
-  ([content target]
-   [anchor-big content target "btn-primary"])
-  ([content target classes]
-   [anchor-big content target classes nil])
-  ([content target classes attrs]
-   [anchor content target (str "btn-lg " classes) attrs]))
-
 (defn button
   "Create a `button`-Tag styled. By default, styled in primary colors."
   ([content]

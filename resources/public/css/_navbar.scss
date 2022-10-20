@@ -7,6 +7,8 @@
 
 $height-of-components: 4.25rem;
 
+
+// TODO kann das weg?
 .schnaq-navbar-skeleton {
   @include rounded.rounded-1;
   height: $height-of-components;
@@ -17,6 +19,8 @@ $height-of-components: 4.25rem;
   }
 }
 
+
+// TODO kann das weg?
 .schnaq-navbar {
   @extend .schnaq-navbar-skeleton;
   background: vars.$white;
@@ -29,15 +33,6 @@ $height-of-components: 4.25rem;
 
   .nav-link {
     @extend .p-2;
-  }
-}
-
-.schnaq-navbar-dynamic-padding {
-  background: transparent;
-  overflow: visible;
-
-  @include media-breakpoint-down(md) {
-    padding: 0;
   }
 }
 
@@ -62,10 +57,6 @@ $height-of-components: 4.25rem;
 
 .schnaq-brand-logo {
   min-width: 4rem;
-}
-
-.schnaq-navbar-title {
-  @extend .schnaq-navbar-skeleton;
 }
 
 .discussion-navbar-button {

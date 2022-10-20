@@ -7,7 +7,6 @@
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.modal :as modal]
-            [schnaq.interface.views.navbar.elements :refer [button-with-icon]]
             [schnaq.interface.views.notifications :refer [notify!]]))
 
 (defn- share-schnaq-via-access-code []
@@ -64,18 +63,6 @@
      [common/schnaqqi-speech-bubble-blue
       "100px"
       (labels :sharing.modal/qanda-help)]]]])
-
-(defn navbar-share-schnaq-button
-  "Open modal, styled as a button for the navbar."
-  []
-  [share-schnaq-modal
-   (fn [props]
-     [button-with-icon
-      :share
-      (labels :sharing/tooltip)
-      (labels :discussion.navbar/share)
-      nil
-      props])])
 
 (defn small-share-schnaq-button
   "Small share button with an icon in it."

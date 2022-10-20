@@ -202,14 +202,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- clickable-title
-  [title-class]
-  (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])]
-    [:a.link-unstyled
-     {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
-     [:h1.h6.d-none.d-md-block.text-wrap {:class title-class} (toolbelt/truncate-to-n-chars title 64)]
-     [:div.d-md-none {:class title-class} (toolbelt/truncate-to-n-chars title 32)]]))
-
 (defn- schnaq-logo []
   [:<>
    [:img.schnaq-brand-logo.align-middle.me-2.d-md-none.d-none.d-xxl-block
@@ -225,22 +217,13 @@
    [navbar-title true])
   ([clickable-title?]
    (let [title @(rf/subscribe [:page/title])]
-     [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2.bg-white
+     [:div.d-flex.align-items-center.flex-row.me-2.bg-white
       [:a.schnaq-logo-container.d-flex.h-100 (when clickable-title? {:href (navigation/href :routes.schnaqs/personal)})
        [schnaq-logo]]
       [:> NavbarText {:className "text-dark"}
        [:h1.h6.text-wrap (toolbelt/truncate-to-n-chars title 50)]]
       [:div.h-100.d-none.d-md-block.p-2
        [common-components/theme-logo {:style {:max-height "100%"}}]]])))
-
-(defn navbar-qanda-title []
-  [:div.d-flex.align-items-center.flex-row.schnaq-navbar-title.me-2
-   [:a.p-3.d-flex.h-100 {:href (toolbelt/current-overview-link)}
-    [schnaq-logo]]
-   [:div.mx-1.mx-md-5.px-md-5.pt-2
-    [clickable-title "text-white"]]
-   [:div.d-none.d-md-inline
-    [common-components/theme-logo {:style {:max-width "150px"}}]]])
 
 ;; -----------------------------------------------------------------------------
 

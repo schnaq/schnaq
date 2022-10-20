@@ -53,7 +53,7 @@
   "Overview header for a discussion."
   []
   (let [navbar-content-id "Overview-Content"]
-    [navbar-components/collapsible-navbar
+    [navbar-components/discussion-navbar
      [elements/navbar-title]
      navbar-content-id
      "navbar-bg-transparent-sm-white"
