@@ -1,24 +1,38 @@
 (ns schnaq.interface.views.navbar.for-pages
-  (:require [schnaq.interface.components.navbar :as navbar-components]
+  (:require ["react-bootstrap/Nav" :as Nav]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
+            [oops.core :refer [oget]]
+            [schnaq.interface.components.navbar :as navbar-components]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.navbar.collapse-content :as collapse-content]
             [schnaq.interface.views.navbar.elements :as elements :refer [language-dropdown]]
             [schnaq.interface.views.navbar.user-management :as um]))
 
+(def ^:private NavLink (oget Nav :Link))
+
 ;; -----------------------------------------------------------------------------
 ;; Navbar Elements
 
+(>defn- button
+  "Build a button for the navbar. Takes a label as a keyword and anything, which
+  can be passed to an anchor's href."
+  [label href]
+  [keyword? any? :ret vector?]
+  [:> NavLink {:href href :className "text-nowrap"}
+   (labels label)])
+
 (defn- schnaqs-button []
-  [navbar-components/button :nav/schnaqs (toolbelt/current-overview-link)])
+  [button :nav/schnaqs (toolbelt/current-overview-link)])
 
 (defn- blog-link []
-  [navbar-components/button :nav/blog "https://schnaq.com/blog/"])
+  [button :nav/blog "https://schnaq.com/blog/"])
 
 (defn- pricing-button []
-  [navbar-components/button :router/pricing "https://schnaq.com/pricing"])
+  [button :router/pricing "https://schnaq.com/pricing"])
 
 (defn- privacy-button []
-  [navbar-components/button :router/privacy "https://schnaq.com/privacy"])
+  [button :router/privacy "https://schnaq.com/privacy"])
 
 ;; -----------------------------------------------------------------------------
 

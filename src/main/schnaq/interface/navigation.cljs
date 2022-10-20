@@ -40,7 +40,6 @@
  :navigation/current-route?
  :<- [:navigation/current-route]
  (fn [current-route [_ route]]
-   (prn (canonical-route-name (get-in current-route [:data :name])))
    (= route (canonical-route-name (get-in current-route [:data :name])))))
 
 (rf/reg-sub

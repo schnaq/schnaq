@@ -4,7 +4,6 @@
             ["react-bootstrap/Container" :as Container]
             ["react-bootstrap/Nav" :as Nav]
             ["react-bootstrap/Navbar" :as Navbar]
-            [com.fulcrologic.guardrails.core :refer [=> >defn]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.common :as common-components :refer [schnaq-logo-white schnaqqi-white]]
@@ -27,14 +26,6 @@
 (def ^:private NavbarCollapse (oget Navbar :Collapse))
 (def ^:private NavLink (oget Nav :Link))
 
-(>defn button
-  "Build a button for the navbar. Takes a label as a keyword and anything, which
-  can be passed to an anchor's href."
-  [label href]
-  [keyword? any? :ret vector?]
-  [:> NavLink {:href href :className "text-nowrap"}
-   (labels label)])
-
 (defn- upgrade-button
   "Show an upgrade button for non-pro users."
   [& {:keys [props vertical?]}]
@@ -48,7 +39,7 @@
       [icon :star (if vertical? "d-block mx-auto" "me-1") {:size :sm}]
       (labels :pricing.upgrade-nudge/button)]]))
 
-(defn common-navigation-links
+(defn- common-navigation-links
   "Show default navigation links."
   [& {:keys [props vertical? hide-icon?]}]
   [:<>
@@ -74,6 +65,7 @@
      (labels :nav/blog)]]])
 
 (def ^:private discussion-views
+  "Collection containing the discussion views."
   {:routes.schnaq/start {:icon :icon-cards-dark
                          :label (labels :discussion.button/text)}
    :routes/graph-view {:icon :icon-graph-dark
@@ -83,9 +75,9 @@
    :routes.schnaq/dashboard {:icon :icon-summary-dark
                              :label (labels :summary.link.button/text)}})
 
-(defn links-to-discussion-views
+(defn- links-to-discussion-views
   "Toggle between different views in a discussion."
-  []
+  [& {:keys [props]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
         href #(navigation/href % {:share-hash share-hash})
         img (fn [img-key] [:img {:height 25
@@ -95,16 +87,17 @@
      [:> NavLink {:disabled true} (labels :discussion.navbar/views)]
      (doall
       (for [[route {:keys [icon label]}] discussion-views]
-        [:> NavLink {:key (str "discussion-view-element-" route)
-                     :class "ms-3" :href (href route)}
+        [:> NavLink (merge {:key (str "discussion-view-element-" route)
+                            :class "ms-3" :href (href route)}
+                           props)
          [img icon] label]))]))
 
-(defn active-button? [current-route asked-route]
+(defn- active-button? [current-route asked-route]
   (if (= asked-route :routes.schnaq/start)
     (or (= current-route asked-route) (= current-route :routes.schnaq.select/statement))
     (= current-route asked-route)))
 
-(defn discussion-view-group
+(defn- discussion-view-group
   "Switch between different discussion views."
   [& {:keys [props]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
@@ -113,7 +106,7 @@
         img (fn [img-key] [:img {:height 20
                                  :class "bg-white rounded-1"
                                  :src (img-path img-key)}])]
-    [:> ButtonGroup (merge {:aria-label "TODO" :size :sm} props)
+    [:> ButtonGroup (merge {:aria-label "Cycle discussion views" :size :sm} props)
      (doall
       (for [[route {:keys [icon label]}] discussion-views]
         [:> Button {:key (str "discussion-view-element-" route)
@@ -201,6 +194,8 @@
     [:> NavbarText (merge {:class "navbar-title"} props)
      [:h1.h6 title]]))
 
+;; -----------------------------------------------------------------------------
+
 (defn mobile-navigation
   "Mobile navigation."
   [& {:keys [props]}]
@@ -221,7 +216,9 @@
          [:div.col-6 [schnaq-settings]]]
         [common-navigation-links])]]]])
 
-(defn split-navbar [& {:keys [props]}]
+(defn discussion-navbar
+  "Navbar for discussions."
+  [& {:keys [props]}]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         share-hash @(rf/subscribe [:schnaq/share-hash])]
     [:> Navbar (merge {:bg :transparent :variant :light :expand :lg :className "small text-nowrap"} props)
@@ -254,7 +251,9 @@
           [user-navlink-dropdown :vertical? true :props {:className "nav-link-no-padding"}]
           [login-register-buttons :vertical? true])]]]]))
 
-(defn page-navbar []
+(defn page-navbar
+  "Navbar for the static pages."
+  []
   [:> Navbar {:bg :primary :variant :dark :expand :lg}
    [:> Container
     [:> NavbarBrand {:href (toolbelt/current-overview-link)}
@@ -277,8 +276,7 @@
   (when-not @(rf/subscribe [:ui/setting :hide-navbar])
     [:<>
      [:div.d-xl-none [mobile-navigation]]
-     #_[split-navbar]
-     [:div.d-none.d-xl-block [split-navbar]]
+     [:div.d-none.d-xl-block [discussion-navbar]]
      [:div.d-none.d-xl-block
       [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
        {:class navbar-bg-class}
