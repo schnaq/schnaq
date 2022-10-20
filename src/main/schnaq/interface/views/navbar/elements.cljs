@@ -9,7 +9,7 @@
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.common :as common-components]
-            [schnaq.interface.components.icons :refer [icon stacked-icon]]
+            [schnaq.interface.components.icons :refer [stacked-icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -34,30 +34,6 @@
       [:> NavDropdownItem {:href (navigation/switch-language-href :en)
                            :lang "en-US" :hrefLang "en-US"}
        "English"]]]))
-
-(defn language-dropdown
-  "Dropdown for bootstrap navbar to display the allowed languages."
-  ([]
-   [language-dropdown true false {}])
-  ([side-by-side? small? options]
-   (let [icon-classes (if side-by-side? "" "d-block mx-auto")]
-     [:<>
-      [:button#schnaq-language-dropdown.btn.btn-link.nav-link.dropdown-toggle
-       (merge
-        {:role "button" :data-bs-toggle "dropdown"
-         :aria-haspopup "true" :aria-expanded "false"}
-        options)
-       [icon :language icon-classes {:size "lg"}]
-       [:span {:class (when small? "small")} " " @(rf/subscribe [:current-language])]]
-      [:div.dropdown-menu {:aria-labelledby "schnaq-language-dropdown"}
-       [:a.btn.dropdown-item
-        {:href (navigation/switch-language-href :de)
-         :lang "de-DE" :hrefLang "de-DE"}
-        "Deutsch"]
-       [:a.btn.dropdown-item
-        {:href (navigation/switch-language-href :en)
-         :lang "en-US" :hrefLang "en-US"}
-        "English"]]])))
 
 ;; -----------------------------------------------------------------------------
 ;; Graph stuff... Move to other ns TODO

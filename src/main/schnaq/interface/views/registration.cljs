@@ -10,7 +10,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.navbar.elements :refer [language-dropdown]]
+            [schnaq.interface.views.navbar.elements :refer [LanguageDropdown]]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.pricing :as pricing-view]))
 
@@ -24,7 +24,7 @@
   [string? :re-frame/component (? :re-frame/component) (? map?) => :re-frame/component]
   [:section.mx-auto.pt-5.position-relative {:class (or class "col-11 col-md-8 col-xxl-6")}
    [:div.shadow-card
-    [:div.position-absolute.top-0.end-0 [language-dropdown]]
+    [:div.position-absolute.top-0.end-0 [LanguageDropdown]]
     [:div.col-6.col-md-4.mx-auto
      [:a {:href (navigation/href :routes.schnaqs/personal)}
       [schnaq-logo]]
