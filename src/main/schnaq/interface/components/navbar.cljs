@@ -18,8 +18,8 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.share :refer [share-schnaq-modal]]
-            [schnaq.interface.views.navbar.elements :refer [LanguageDropdown
-                                                            txt-export-request]]
+            [schnaq.interface.views.navbar.elements :refer [graph-settings-notification
+                                                            LanguageDropdown txt-export-request]]
             [schnaq.interface.views.navbar.user-management :refer [admin-dropdown
                                                                    user-navlink-dropdown]]
             [schnaq.links :as links]))
@@ -212,7 +212,7 @@
      [stacked-icon :vertical? vertical? :icon-key :file-export] (labels :graph.download/button)]]
    [tooltip/text
     (labels :graph.settings/title)
-    [:> NavLink (merge {:on-click download-graph-as-png} props)
+    [:> NavLink (merge {:on-click graph-settings-notification} props)
      [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :graph.settings/button)]]])
 
 (defn- page-title

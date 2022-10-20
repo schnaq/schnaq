@@ -67,7 +67,7 @@
         current-route @(rf/subscribe [:navigation/current-route-name])
         graph? (= current-route :routes/graph-view)]
     (if graph?
-      [li-button {:on-click nav-elements/show-notification} (labels :graph.settings/title)]
+      [li-button {:on-click nav-elements/graph-settings-notification} (labels :graph.settings/title)]
       (when @(rf/subscribe [:user/moderator?])
         [:a.button.list-group-item.list-group-item-action
          {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}

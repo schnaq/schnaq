@@ -96,7 +96,7 @@
        :value (* 100 @(rf/subscribe [:graph.settings/gravity]))
        :type "range"}]]))
 
-(defn show-notification
+(defn graph-settings-notification
   "Configure the gravity of the nodes."
   []
   (rf/dispatch
