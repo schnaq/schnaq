@@ -2,16 +2,15 @@
   (:require ["react-bootstrap/Navbar" :as Navbar]
             ["react-bootstrap/NavDropdown" :as NavDropdown]
             [ajax.core :as ajax]
-            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn]]
             [goog.string :as gstring]
-            [oops.core :refer [oget oset!]]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [icon stacked-icon]]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.file-download :as file-download]
@@ -68,24 +67,8 @@
    (labels :nav.buttons/language-toggle)
    [:span [language-dropdown side-by-side? small? options]]])
 
-(>defn button-with-icon
-  "Build a button for the navbar, with icon, text and tooltip."
-  ([icon-key tooltip-text button-text on-click-fn]
-   [keyword? string? string? (? fn?) => :re-frame/component]
-   [button-with-icon icon-key tooltip-text button-text on-click-fn nil])
-  ([icon-key tooltip-text button-text on-click-fn attrs]
-   [keyword? string? string? (? fn?) (? map?) => :re-frame/component]
-   [tooltip/tooltip-button "bottom" tooltip-text
-    [:<>
-     [icon icon-key "m-auto d-block" {:size "lg"}]
-     [:span.small.text-nowrap button-text]]
-    on-click-fn
-    attrs]))
-
 ;; -----------------------------------------------------------------------------
 ;; Graph stuff... Move to other ns TODO
-
-(def graph-id "graph") ;; TODO REMOVE
 
 (defn- stabilize-graph
   "Stabilize the graph."
@@ -140,20 +123,6 @@
   [& _not-needed]
   (rf/dispatch [:ajax.error/as-notification (labels :error/export-failed)]))
 
-(defn graph-download-as-png ;; TODO REMOVE
-  "Download the current graph as a png file."
-  [] 
-  [button-with-icon
-   :file-download
-   (labels :graph.download/as-png)
-   (labels :discussion.navbar/download)
-   #(let [canvas (.querySelector js/document (gstring/format "#%s div canvas" config/graph-id))
-          anchor (.createElement js/document "a")]
-      (oset! anchor [:href] (.toDataURL canvas "image/png"))
-      (oset! anchor [:download] "graph.png")
-      (.click anchor))
-   {:id :graph-export}])
-
 (>defn txt-export-request
   "Initiate an export as a txt file for the currently selected schnaq."
   [share-hash title]
@@ -166,17 +135,6 @@
     :response-format (ajax/transit-response-format)
     :handler (partial create-txt-download-handler title)
     :error-handler show-error}))
-
-(defn txt-export
-  "Request a txt-export of the discussion."
-  []
-  (when-let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    (let [title @(rf/subscribe [:schnaq/title])]
-      [button-with-icon
-       :file-download
-       (labels :schnaq.export/as-text)
-       (labels :discussion.navbar/download)
-       #(txt-export-request share-hash title)])))
 
 ;; -----------------------------------------------------------------------------
 
@@ -202,23 +160,6 @@
        [:h1.h6.text-wrap (toolbelt/truncate-to-n-chars title 50)]]
       [:div.h-100.d-none.d-md-block.p-2
        [common-components/theme-logo {:style {:max-height "100%"}}]]])))
-
-;; -----------------------------------------------------------------------------
-
-(defn separated-button
-  "TODO Move this"
-  ([button-content]
-   [separated-button button-content {}])
-  ([button-content attributes]
-   [separated-button button-content attributes nil])
-  ([button-content attributes dropdown-content]
-   [:<>
-    [:button.btn.discussion-navbar-button.text-decoration-none
-     (merge
-      {:type "button"}
-      attributes)
-     button-content]
-    dropdown-content]))
 
 ;; -----------------------------------------------------------------------------
 
