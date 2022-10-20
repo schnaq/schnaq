@@ -36,11 +36,12 @@
 (defn- upgrade-button
   "Show an upgrade button for non-pro users."
   [& {:keys [props vertical?]}]
-  (when-not @(rf/subscribe [:user/pro?])
+  (when (and @(rf/subscribe [:user/authenticated?])
+             (not @(rf/subscribe [:user/pro?])))
     [:> NavLink (merge {:bsPrefix "btn btn-outline-secondary"
                         :on-click #(rf/dispatch [:navigation.redirect/follow {:redirect "https://schnaq.com/pricing"}])}
                        props)
-     [icon :star (if vertical? "d-block mx-auto" "me-1")]
+     [icon :star (if vertical? "d-block mx-auto" "me-1") {:size :sm}]
      (labels :pricing.upgrade-nudge/button)]))
 
 (defn common-navigation-links

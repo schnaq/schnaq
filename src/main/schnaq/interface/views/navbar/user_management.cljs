@@ -92,17 +92,18 @@
   (let [username @(rf/subscribe [:user/display-name])
         authenticated? @(rf/subscribe [:user/authenticated?])
         pro? @(rf/subscribe [:user/pro?])
-        icon-size 30]
+        icon-size 25] ;; wip 30
     [:span props
      (if authenticated?
        [common/avatar
         :props (when vertical? {:className "d-block mx-auto"})
         :size icon-size
         :inline? (not vertical?)]
-       [common/identicon
-        :props (when vertical? {:className "d-block mx-auto"})
-        :name username
-        :size icon-size])
+       [:span {:className (when vertical? "d-flex mx-auto")}
+        [common/identicon
+         :props {:className (if vertical? "d-block mx-auto" "me-1")}
+         :name username
+         :size icon-size]])
      [:span.text-nowrap
       (when pro? [icon :star "me-1"])
       (toolbelt/truncate-to-n-chars username 15)]]))
