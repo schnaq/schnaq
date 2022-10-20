@@ -25,16 +25,18 @@
 
 (defn LanguageDropdown [& {:keys [props vertical?]}]
   (let [current-language @(rf/subscribe [:current-language])]
-    [:> NavDropdown (merge {:id "language-dropdown"
-                            :align :end
-                            :title (r/as-element [:<> [stacked-icon :vertical? vertical? :icon-key :language] current-language])}
-                           props)
-     [:> NavDropdownItem {:href (navigation/switch-language-href :de)
-                          :lang "de-DE" :hrefLang "de-DE"}
-      "Deutsch"]
-     [:> NavDropdownItem {:href (navigation/switch-language-href :en)
-                          :lang "en-US" :hrefLang "en-US"}
-      "English"]]))
+    [tooltip/text
+     (labels :nav.buttons/language-toggle)
+     [:> NavDropdown (merge {:id "language-dropdown"
+                             :align :end
+                             :title (r/as-element [:<> [stacked-icon :vertical? vertical? :icon-key :language] current-language])}
+                            props)
+      [:> NavDropdownItem {:href (navigation/switch-language-href :de)
+                           :lang "de-DE" :hrefLang "de-DE"}
+       "Deutsch"]
+      [:> NavDropdownItem {:href (navigation/switch-language-href :en)
+                           :lang "en-US" :hrefLang "en-US"}
+       "English"]]]))
 
 (defn language-dropdown
   "Dropdown for bootstrap navbar to display the allowed languages."

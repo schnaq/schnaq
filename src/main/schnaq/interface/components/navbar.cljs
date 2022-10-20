@@ -13,6 +13,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.share :refer [share-schnaq-modal]]
             [schnaq.interface.views.navbar.elements :refer [LanguageDropdown
                                                             txt-export-request]]
@@ -38,38 +39,48 @@
   [& {:keys [props vertical?]}]
   (when (and @(rf/subscribe [:user/authenticated?])
              (not @(rf/subscribe [:user/pro?])))
-    [:> NavLink (merge {:bsPrefix "btn btn-outline-secondary"
-                        :on-click #(rf/dispatch [:navigation.redirect/follow {:redirect "https://schnaq.com/pricing"}])}
-                       props)
-     [icon :star (if vertical? "d-block mx-auto" "me-1") {:size :sm}]
-     (labels :pricing.upgrade-nudge/button)]))
+    [tooltip/text
+     (labels :pricing.upgrade-nudge/tooltip)
+     [:> NavLink (merge {:bsPrefix "btn btn-outline-secondary"
+                         :on-click #(rf/dispatch [:navigation.redirect/follow {:redirect "https://schnaq.com/pricing"}])}
+                        props)
+      [icon :star (if vertical? "d-block mx-auto" "me-1") {:size :sm}]
+      (labels :pricing.upgrade-nudge/button)]]))
 
 (defn common-navigation-links
   "Show default navigation links."
   [& {:keys [props vertical? hide-icon?]}]
   [:<>
-   [:> NavLink (merge {:href (toolbelt/current-overview-link)} props)
-    (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :comments])
-    (labels :nav/schnaqs)]
-   [:> NavLink (merge {:href "https://schnaq.com/pricing"} props)
-    (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :award])
-    (labels :router/pricing)]
-   [:> NavLink (merge {:href "https://schnaq.com/privacy"} props)
-    (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :lock])
-    (labels :router/privacy)]
-   [:> NavLink (merge {:href "https://schnaq.com/blog/"} props)
-    (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :newspaper])
-    (labels :nav/blog)]])
+   [tooltip/text
+    (labels :nav/schnaqs-tooltip)
+    [:> NavLink (merge {:href (toolbelt/current-overview-link)} props)
+     (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :comments])
+     (labels :nav/schnaqs)]]
+   [tooltip/text
+    (labels :router/pricing-tooltip)
+    [:> NavLink (merge {:href "https://schnaq.com/pricing"} props)
+     (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :award])
+     (labels :router/pricing)]]
+   [tooltip/text
+    (labels :router/pricing-tooltip)
+    [:> NavLink (merge {:href "https://schnaq.com/privacy"} props)
+     (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :lock])
+     (labels :router/privacy)]]
+   [tooltip/text
+    (labels :nav/blog-tooltip)
+    [:> NavLink (merge {:href "https://schnaq.com/blog/"} props)
+     (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :newspaper])
+     (labels :nav/blog)]]])
 
 (def ^:private discussion-views
   {:routes.schnaq/start {:icon :icon-cards-dark
-                         :label :discussion.button/text}
+                         :label (labels :discussion.button/text)}
    :routes/graph-view {:icon :icon-graph-dark
-                       :label :graph.button/text}
+                       :label (labels :graph.button/text)}
    :routes.schnaq/qanda {:icon :icon-qanda-dark
-                         :label :qanda.button/text}
+                         :label (labels :qanda.button/text)}
    :routes.schnaq/dashboard {:icon :icon-summary-dark
-                             :label :summary.link.button/text}})
+                             :label (labels :summary.link.button/text)}})
 
 (defn links-to-discussion-views
   "Toggle between different views in a discussion."
@@ -85,7 +96,7 @@
       (for [[route {:keys [icon label]}] discussion-views]
         [:> NavLink {:key (str "discussion-view-element-" route)
                      :class "ms-3" :href (href route)}
-         [img icon] (labels label)]))]))
+         [img icon] label]))]))
 
 (defn active-button? [current-route asked-route]
   (if (= asked-route :routes.schnaq/start)
@@ -94,7 +105,7 @@
 
 (defn discussion-view-group
   "Switch between different discussion views."
-  [props]
+  [& {:keys [props]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
         current-route @(rf/subscribe [:navigation/current-route-name])
         href #(navigation/href % {:share-hash share-hash})
@@ -108,31 +119,37 @@
                     :variant (if (active-button? current-route route) :primary :outline-primary)
                     :className "clickable"
                     :href (href route)}
-         [:div [img icon]] [:small (labels label)]]))]))
+         [:div [img icon]] [:small label]]))]))
 
 (defn download-schnaq-button
   "Button to download a schnaq."
   [& {:keys [props vertical?]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [:> NavLink (merge {:on-click #(txt-export-request share-hash @(rf/subscribe [:schnaq/title]))}
-                       props)
-     [stacked-icon :vertical? vertical? :icon-key :file-download] (labels :discussion.navbar/download)]))
+    [tooltip/text
+     (labels :schnaq.export/as-text)
+     [:> NavLink (merge {:on-click #(txt-export-request share-hash @(rf/subscribe [:schnaq/title]))}
+                        props)
+      [stacked-icon :vertical? vertical? :icon-key :file-download] (labels :discussion.navbar/download)]]))
 
 (defn share-schnaq-button
   "Share schnaq button opening a modal."
   [& {:keys [props vertical?]}]
   [share-schnaq-modal
    (fn [modal-props]
-     [:> NavLink (merge modal-props props)
-      [stacked-icon :vertical? vertical? :icon-key :share] (labels :discussion.navbar/share)])])
+     [tooltip/text
+      (labels :sharing/tooltip)
+      [:> NavLink (merge modal-props props)
+       [stacked-icon :vertical? vertical? :icon-key :share] (labels :discussion.navbar/share)]])])
 
 (defn manage-schnaq-button
   "Button to navigate to schnaq management page."
   [& {:keys [props vertical?]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [:> NavLink (merge {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
-                       props)
-     [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]))
+    [tooltip/text
+     (labels :schnaq.admin/tooltip)
+     [:> NavLink (merge {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
+                        props)
+      [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]]))
 
 (defn schnaq-settings
   "Show the schnaq settings, export and share links."
@@ -183,7 +200,7 @@
       [:> NavbarCollapse {:id "schnaq-navbar-big"
                           :className "justify-content-end"}
        (when share-hash
-         [:> Nav {:className "panel-white-sm mx-2"}
+         [:> Nav {:className "panel-white-sm p-1 mx-2"}
           [discussion-view-group]])
        [:> Nav {:className "panel-white-sm"}
         (if share-hash
