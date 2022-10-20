@@ -10,8 +10,7 @@
             [reagent.dom :as rdom]
             [reagent.dom.server :as rserver]
             [schnaq.interface.components.colors :refer [colors]]
-            [schnaq.interface.config :as conf :refer [graph-label-length]]
-            [schnaq.interface.config :as config]
+            [schnaq.interface.config :as config :refer [graph-label-length]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.markdown :refer [as-markdown]]
             [schnaq.interface.utils.toolbelt :refer [truncate-to-n-chars-string]]
@@ -45,9 +44,9 @@
   [:graph/controversy-values :graph/nodes => sequential?]
   (map
    #(let [controversy-score (get controversy-map (:id %))]
-      (if (< (- 100 conf/graph-controversy-upper-bound)
+      (if (< (- 100 config/graph-controversy-upper-bound)
              controversy-score
-             conf/graph-controversy-upper-bound)
+             config/graph-controversy-upper-bound)
         (-> %
             (assoc-in [:color :border] "#fab907")
             (assoc-in [:color :highlight :border] "#fab907")

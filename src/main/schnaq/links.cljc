@@ -60,11 +60,3 @@
   (assoc discussion
          :discussion/share-link (get-share-link share-hash)
          :discussion/moderation-link (get-moderator-center-link share-hash)))
-
-(>defn checkout-link
-  "Get link to checkout page. This should be called after the login of a user."
-  [price-id]
-  [:stripe.price/id :ret string?]
-  #?(:cljs (let [path (reitfe/href :routes.subscription.redirect/checkout {} {:price-id price-id})]
-             (relative-to-absolute-url path))
-     :clj (throw (ex-info "Not implemented" {:price-id price-id}))))

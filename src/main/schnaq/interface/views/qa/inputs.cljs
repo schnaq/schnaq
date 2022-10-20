@@ -64,8 +64,7 @@
 
 (>defn question-field-and-search-results
   "Combine input form and results list for uniform representation in ask-view
-  and in other usages, e.g. the startpage.
-  Backgroundtype can either be :light or :dark"
+  and in other usages, e.g. the startpage."
   [background-schema]
   [:background/schema :ret :re-frame/component]
   [:<>

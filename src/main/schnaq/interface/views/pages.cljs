@@ -15,8 +15,7 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.loading :as loading]
-            [schnaq.interface.views.navbar.for-pages :as navbar-pages]))
+            [schnaq.interface.views.loading :as loading]))
 
 (declare with-nav-and-header)
 
@@ -225,7 +224,7 @@
   [::page-options vector? vector? vector? :ret vector?]
   [page-builder
    options
-   [navbar-pages/navbar]
+   [discussion-navbar]
    [:section.container-fluid.p-3
     [:div.row
      [:div.col-12.col-lg-3.px-0.px-md-3 left]
