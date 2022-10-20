@@ -17,7 +17,9 @@
    :nav/blog-tooltip "Lerne mehr über uns im Blog"
    :nav/admin "Admin"
    :nav/register "Kostenlos ausprobieren"
+   :nav/register-tooltip "Erstelle deinen Account"
    :nav/login "Anmelden"
+   :nav/login-tooltip "Logge dich in deinen Account ein"
    :nav.buttons/language-toggle "Sprache ändern"
 
    ;; Call to contribute

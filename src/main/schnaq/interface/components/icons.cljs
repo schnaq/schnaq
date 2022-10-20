@@ -16,9 +16,9 @@
               faGraduationCap faInfinity faInfoCircle faItalic faLanguage faLaptop faList faListOl
               faLock faLockOpen faMagic faMapPin faMinus faPalette faPaperPlane faPenSquare faPencilRuler
               faPlayCircle faPlus faProjectDiagram faSquare faQrcode faQuestion faQuestionCircle
-              faQuoteRight faRedo faRocket faSearch faShareAlt faShieldAlt faSlidersH faStar
+              faQuoteRight faRedo faRocket faSearch faShareAlt faShieldAlt faSignInAlt faSlidersH faStar
               faStepBackward faStrikethrough faSun faTag faTerminal faTimes faTimes faTimesCircle
-              faTrashAlt faUnderline faUndo faUniversity faUsers]]
+              faTrashAlt faUnderline faUndo faUniversity faUsers faUserPlus]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
@@ -106,6 +106,7 @@
    :reset faStepBackward
    :rocket faRocket
    :search faSearch
+   :sign-in faSignInAlt
    :sliders-h faSlidersH
    :share faShareAlt
    :shield faShieldAlt
@@ -123,6 +124,7 @@
    :undo faUndo
    :university faUniversity
    :user/group faUsers
+   :user-plus faUserPlus
    :video-file faFileVideo})
 
 (defn icon

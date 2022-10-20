@@ -18,7 +18,8 @@
             [schnaq.interface.views.navbar.elements :refer [LanguageDropdown
                                                             txt-export-request]]
             [schnaq.interface.views.navbar.user-management :refer [admin-dropdown
-                                                                   user-navlink-dropdown]]))
+                                                                   user-navlink-dropdown]]
+            [schnaq.links :as links]))
 
 (def ^:private NavbarBrand (oget Navbar :Brand))
 (def ^:private NavbarText (oget Navbar :Text))
@@ -62,7 +63,7 @@
      (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :award])
      (labels :router/pricing)]]
    [tooltip/text
-    (labels :router/pricing-tooltip)
+    (labels :router/privacy-tooltip)
     [:> NavLink (merge {:href "https://schnaq.com/privacy"} props)
      (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :lock])
      (labels :router/privacy)]]
@@ -151,6 +152,23 @@
                         props)
       [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]]))
 
+(defn login-register-buttons [& {:keys [props vertical?]}]
+  [:<>
+   [tooltip/text
+    (labels :nav/login-tooltip)
+    [:> NavLink (merge {:bsPrefix "btn btn-sm btn-outline-dark me-2"
+                        :on-click #(rf/dispatch [:keycloak/login])}
+                       props)
+     [icon :sign-in (if vertical? "d-block mx-auto" "me-1") {:size :sm}]
+     (labels :nav/login)]]
+   [tooltip/text
+    (labels :nav/register-tooltip)
+    [:> NavLink (merge {:bsPrefix "btn btn-sm btn-outline-secondary"
+                        :on-click #(rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))])}
+                       props)
+     [icon :user-plus (if vertical? "d-block mx-auto" "me-1") {:size :sm}]
+     (labels :nav/register)]]])
+
 (defn schnaq-settings
   "Show the schnaq settings, export and share links."
   []
@@ -188,7 +206,8 @@
         [common-navigation-links])]]]])
 
 (defn split-navbar [& {:keys [props]}]
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])
+        share-hash @(rf/subscribe [:schnaq/share-hash])]
     [:> Navbar (merge {:bg :transparent :variant :light :expand :lg :className "small text-nowrap"} props)
      [:> Container {:fluid true}
       [:div.d-flex.align-items-center.panel-white-sm.py-0.ps-0
@@ -212,7 +231,9 @@
         [LanguageDropdown :props {:className "nav-link-no-padding"} :vertical? true]
         [upgrade-button :vertical? true]
         [admin-dropdown :vertical? true :props {:className "nav-link-no-padding"}]
-        [user-navlink-dropdown :vertical? true :props {:className "nav-link-no-padding"}]]]]]))
+        (if (or share-hash authenticated?)
+          [user-navlink-dropdown :vertical? true :props {:className "nav-link-no-padding"}]
+          [login-register-buttons :vertical? true])]]]]))
 
 (defn page-navbar []
   [:> Navbar {:bg :primary :variant :dark :expand :lg}
