@@ -15,8 +15,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.file-download :as file-download]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.views.navbar.user-management :as um]))
+            [schnaq.interface.utils.tooltip :as tooltip]))
 
 (def ^:private NavbarText (oget Navbar :Text))
 (def ^:private NavDropdownItem (oget NavDropdown :Item))
@@ -59,13 +58,6 @@
         {:href (navigation/switch-language-href :en)
          :lang "en-US" :hrefLang "en-US"}
         "English"]]])))
-
-(defn language-toggle-with-tooltip
-  "Uses language-dropdown and adds a mouse-over label."
-  [side-by-side? small? options]
-  [tooltip/text
-   (labels :nav.buttons/language-toggle)
-   [:span [language-dropdown side-by-side? small? options]]])
 
 ;; -----------------------------------------------------------------------------
 ;; Graph stuff... Move to other ns TODO
@@ -172,17 +164,3 @@
  :schnaq.qa.new-question/pulse?
  (fn [db _]
    (get-in db [:schnaq :qa :new-question :pulse] false)))
-
-(defn language-toggle
-  "Language Toggle dropdown button"
-  []
-  [:div.dropdown
-   [language-toggle-with-tooltip false true {:class "text-dark btn"}]])
-
-(defn user-button
-  "Display the user settings button"
-  ([]
-   [user-button false])
-  ([on-white-background?]
-   [:div.d-flex.align-items-center
-    [um/user-dropdown-button on-white-background?]]))

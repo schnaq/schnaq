@@ -1,19 +1,17 @@
 (ns schnaq.interface.views.navbar.user-management
-  (:require ["react-bootstrap" :refer [Alert Button]]
+  (:require ["react-bootstrap" :refer [Alert]]
             ["react-bootstrap/NavDropdown" :as NavDropdown]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon stacked-icon]]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt :refer [session-storage-enabled?]]
             [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.views.common :as common]
-            [schnaq.links :as links]))
+            [schnaq.interface.views.common :as common]))
 
 (def ^:private NavDropdownItem (oget NavDropdown :Item))
 (def ^:private NavDropdownDivider (oget NavDropdown :Divider))
@@ -108,15 +106,6 @@
       (when pro? [icon :star "me-1"])
       (toolbelt/truncate-to-n-chars username 15)]]))
 
-(defn- login-dropdown-items []
-  [:<>
-   [:a.dropdown-item {:href (navigation/href :routes.user.manage/account)}
-    (labels :user.profile/settings)]
-   [:button.dropdown-item
-    {:role "button"
-     :on-click #(rf/dispatch [:keycloak/logout])}
-    (labels :user/logout)]])
-
 (defn user-navlink-dropdown
   [& {:keys [props vertical?]}]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
@@ -137,67 +126,3 @@
           [:> NavDropdownItem {:on-click #(rf/dispatch [:keycloak/login])}
            (labels :user/register)]
           [login-not-possible])])]))
-
-(defn- separated-button
-  "TODO REDUNDANT!"
-  ([button-content]
-   [separated-button button-content {}])
-  ([button-content attributes]
-   [separated-button button-content attributes nil])
-  ([button-content attributes dropdown-content]
-   [:<>
-    [:button.btn.discussion-navbar-button.text-decoration-none
-     (merge
-      {:type "button"}
-      attributes)
-     button-content]
-    dropdown-content]))
-
-(defn user-dropdown-button
-  "The default user dropdown. It displays the avatar and a name with a droppable menu.
-  The menu depends on the login-state of the user. Must be used as a child of a .dropdown."
-  [on-white-background?]
-  (let [authenticated? @(rf/subscribe [:user/authenticated?])]
-    [:div.dropdown
-     [separated-button
-      [profile-picture-in-nav]
-      {:class (when-not on-white-background? "text-white")
-       :data-bs-toggle "dropdown"
-       :aria-expanded "false"}
-      [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby "profile-dropdown"}
-       (if authenticated?
-         [login-dropdown-items]
-         [:<>
-          [namechange-menu-point]
-          (if session-storage-enabled?
-            [:> Button {:variant "link"
-                        :on-click #(rf/dispatch [:keycloak/login])
-                        :class "dropdown-item"}
-             (labels :user/register)]
-            [login-not-possible])])]]]))
-
-(defn- login-button
-  "Show a login button."
-  [on-light-background?]
-  [buttons/button (labels :nav/login) #(rf/dispatch [:keycloak/login])
-   (if on-light-background? "btn-outline-dark" "btn-outline-white")])
-
-(defn- register-button
-  "Show registration button."
-  [on-light-background?]
-  [buttons/button (labels :nav/register)
-   #(rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))])
-   (if on-light-background? "btn-outline-secondary ms-2" "btn-dark ms-2")])
-
-(defn register-or-user-button
-  "If not authenticated, show register button else show user menu."
-  [on-light-background?]
-  (if @(rf/subscribe [:user/authenticated?])
-    [:<>
-     [buttons/upgrade]
-     [user-dropdown-button on-light-background?]]
-    (if session-storage-enabled?
-      [:<>
-       [login-button on-light-background?]
-       [register-button on-light-background?]]
-      [login-not-possible])))
