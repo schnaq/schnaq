@@ -6,9 +6,11 @@
             ["react-bootstrap/Navbar" :as Navbar]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.components.common :as common-components :refer [schnaq-logo-white schnaqqi-white]]
             [schnaq.interface.components.icons :refer [icon stacked-icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -97,15 +99,20 @@
     (or (= current-route asked-route) (= current-route :routes.schnaq.select/statement))
     (= current-route asked-route)))
 
+(defn- discussion-view-button-image
+  "Prepare the image for the discussion view button."
+  [& {:keys [props img-key]}]
+  [:img (merge {:height 25
+                :className "d-block mx-auto bg-white p-1 rounded-1"
+                :src (img-path img-key)}
+               props)])
+
 (defn- discussion-view-group
   "Switch between different discussion views."
   [& {:keys [props]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
         current-route @(rf/subscribe [:navigation/current-route-name])
-        href #(navigation/href % {:share-hash share-hash})
-        img (fn [img-key] [:img {:height 20
-                                 :class "bg-white rounded-1"
-                                 :src (img-path img-key)}])]
+        href #(navigation/href % {:share-hash share-hash})]
     [:> ButtonGroup (merge {:aria-label "Cycle discussion views" :size :sm} props)
      (doall
       (for [[route {:keys [icon label]}] discussion-views]
@@ -113,7 +120,7 @@
                     :variant (if (active-button? current-route route) :primary :outline-primary)
                     :className "clickable"
                     :href (href route)}
-         [:div [img icon]] [:small label]]))]))
+         [discussion-view-button-image :img-key icon] [:small label]]))]))
 
 (defn download-schnaq-button
   "Button to download a schnaq."
@@ -145,6 +152,18 @@
        [:> NavLink (merge {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
                           props)
         [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]])))
+
+(defn overview-page-button
+  "Return to the overview page."
+  [& {:keys [props]}]
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
+        {:keys [icon label]} (:routes.schnaq/start discussion-views)]
+    [tooltip/text
+     (labels :schnaq.export/as-text)
+     [:> NavLink (merge {:className "pt-2 mt-1"
+                         :href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
+                        props)
+      [discussion-view-button-image :img-key icon] label]]))
 
 (defn login-register-buttons [& {:keys [props vertical?]}]
   [:<>
@@ -192,11 +211,24 @@
   [& {:keys [props]}]
   (let [title (or @(rf/subscribe [:schnaq/title]) @(rf/subscribe [:page/title]))]
     [:> NavbarText (merge {:class "navbar-title"} props)
-     [:h1.h6 title]]))
+     [:h1.h6.mb-0 title]]))
+
+(defn statement-counter
+  "A counter showing all statements and pulsing live."
+  []
+  (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])]
+    [:> NavbarText {}
+     [:div.d-flex.flex-row.p-3
+      [motion/pulse-once [icon :comment/alt]
+       [:schnaq.qa.new-question/pulse?]
+       [:schnaq.qa.new-question/pulse false]
+       (:white colors)
+       (:secondary colors)]
+      [:div.ms-2 number-of-questions]]]))
 
 ;; -----------------------------------------------------------------------------
 
-(defn mobile-navigation
+(defn- mobile-navigation
   "Mobile navigation."
   [& {:keys [props]}]
   [:> Navbar (merge {:bg :primary :variant :dark :expand false} props)
@@ -216,7 +248,7 @@
          [:div.col-6 [schnaq-settings]]]
         [common-navigation-links])]]]])
 
-(defn discussion-navbar
+(defn- split-navbar
   "Navbar for discussions."
   [& {:keys [props]}]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
@@ -268,6 +300,23 @@
       [admin-dropdown]
       [user-navlink-dropdown]]]]])
 
+(defn qanda-navbar
+  "Navbar for the Q&A view."
+  []
+  [:> Navbar {:bg :primary :variant :dark :expand :lg}
+   [:> Container {:fluid true}
+    [:> NavbarBrand {:href (toolbelt/current-overview-link)}
+     [schnaq-logo-white :props {:className "img-fluid" :width 150}]]
+    [page-title]
+    [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
+    [:> NavbarCollapse {:id "schnaq-navbar"
+                        :className "justify-content-end"}
+     [:> Nav
+      [statement-counter]
+      [overview-page-button]
+      [LanguageDropdown :vertical? true]
+      [user-navlink-dropdown :vertical? true]]]]])
+
 ;; -----------------------------------------------------------------------------
 
 (defn collapsible-navbar
@@ -276,7 +325,7 @@
   (when-not @(rf/subscribe [:ui/setting :hide-navbar])
     [:<>
      [:div.d-xl-none [mobile-navigation]]
-     [:div.d-none.d-xl-block [discussion-navbar]]
+     [:div.d-none.d-xl-block [split-navbar]]
      [:div.d-none.d-xl-block
       [:nav.navbar.navbar-expand-lg.navbar-light.schnaq-navbar-dynamic-padding
        {:class navbar-bg-class}

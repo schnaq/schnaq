@@ -318,6 +318,7 @@
    :discussion.badges/statement-by "von"
    :discussion.badges/new "Neu"
    :discussion.button/text "Übersicht"
+   :discussion.button/tooltip "Zur schnaq-Übersicht"
 
    ;; Q & A
    :qanda/add-question-label "Stell deine Frage"

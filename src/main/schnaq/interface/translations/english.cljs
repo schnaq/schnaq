@@ -315,6 +315,7 @@
    :discussion.badges/statement-by "by"
    :discussion.badges/new "New"
    :discussion.button/text "Overview"
+   :discussion.button/tooltip "Go to schnaq overview"
 
    ;; Q & A
    :qanda/add-question-label "State your question"
