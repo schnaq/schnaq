@@ -11,11 +11,11 @@
             [reagent.dom.server :as rserver]
             [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.config :as conf :refer [graph-label-length]]
+            [schnaq.interface.config :as config]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.markdown :refer [as-markdown]]
             [schnaq.interface.utils.toolbelt :refer [truncate-to-n-chars-string]]
             [schnaq.interface.views.loading :as loading]
-            [schnaq.interface.views.navbar.elements :as nav-elements]
             [schnaq.interface.views.pages :as pages]))
 
 (>defn- node-types->colors
@@ -144,7 +144,7 @@
             ;; Disable gravitation / physics after graph is stabilized
             (.on graph-object "stabilizationIterationsDone"
                  #(.setOptions graph-object (clj->js {:physics false}))))
-          [:div {:id nav-elements/graph-id}]))
+          [:div {:id config/graph-id}]))
       :component-did-mount
       (fn [this]
         (.add nodes-vis (clj->js (convert-nodes-for-vis nodes controversy-values)))

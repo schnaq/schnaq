@@ -4,13 +4,15 @@
             ["react-bootstrap/Container" :as Container]
             ["react-bootstrap/Nav" :as Nav]
             ["react-bootstrap/Navbar" :as Navbar]
-            [oops.core :refer [oget]]
+            [goog.string :refer [format]]
+            [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.components.common :as common-components :refer [schnaq-logo-white schnaqqi-white]]
             [schnaq.interface.components.icons :refer [icon stacked-icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -182,7 +184,7 @@
      [icon :user-plus (if vertical? "d-block mx-auto" "me-1") {:size :sm}]
      (labels :nav/register)]]])
 
-(defn schnaq-settings
+(defn- schnaq-settings
   "Show the schnaq settings, export and share links."
   []
   [:<>
@@ -191,21 +193,27 @@
    [download-schnaq-button :props {:className "ms-2"}]
    [manage-schnaq-button :props {:className "ms-2"}]])
 
-(defn graph-settings
+(defn- download-graph-as-png
+  "Download the graph as a png file."
+  []
+  (let [canvas (.querySelector js/document (format "#%s div canvas" config/graph-id))
+        anchor (.createElement js/document "a")]
+    (oset! anchor [:href] (.toDataURL canvas "image/png"))
+    (oset! anchor [:download] "graph.png")
+    (.click anchor)))
+
+(defn- graph-settings
   "Show graph settings."
   [& {:keys [props vertical?]}]
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [:<>
-     [tooltip/text
-      (labels :graph.download/as-png)
-      [:> NavLink (merge {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
-                         props)
-       [stacked-icon :vertical? vertical? :icon-key :file-export] (labels :graph.download/button)]]
-     [tooltip/text
-      (labels :graph.settings/title)
-      [:> NavLink (merge {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
-                         props)
-       [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :graph.settings/button)]]]))
+  [:<>
+   [tooltip/text
+    (labels :graph.download/as-png)
+    [:> NavLink (merge {:on-click download-graph-as-png} props)
+     [stacked-icon :vertical? vertical? :icon-key :file-export] (labels :graph.download/button)]]
+   [tooltip/text
+    (labels :graph.settings/title)
+    [:> NavLink (merge {:on-click download-graph-as-png} props)
+     [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :graph.settings/button)]]])
 
 (defn- page-title
   "Display the current title either of the schnaq or the page in the navbar."

@@ -22,6 +22,10 @@
   "Check if schnaq is loaded in an iframe."
   (not= (. js/window -location) (.. js/window -parent -location)))
 
+(def graph-id
+  "ID if the graph canvas"
+  "graph")
+
 (def graph-label-length
   "Length of a label in the graph / mindmap. Sets number of characters."
   250)

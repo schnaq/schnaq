@@ -11,6 +11,7 @@
             [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [icon stacked-icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.file-download :as file-download]
@@ -84,7 +85,7 @@
 ;; -----------------------------------------------------------------------------
 ;; Graph stuff... Move to other ns TODO
 
-(def graph-id "graph")
+(def graph-id "graph") ;; TODO REMOVE
 
 (defn- stabilize-graph
   "Stabilize the graph."
@@ -139,20 +140,19 @@
   [& _not-needed]
   (rf/dispatch [:ajax.error/as-notification (labels :error/export-failed)]))
 
-(defn graph-download-as-png
+(defn graph-download-as-png ;; TODO REMOVE
   "Download the current graph as a png file."
-  []
-  (let [surrounding-div (gstring/format "#%s" graph-id)]
-    [button-with-icon
-     :file-download
-     (labels :graph.download/as-png)
-     (labels :discussion.navbar/download)
-     #(let [canvas (.querySelector js/document (gstring/format "%s div canvas" surrounding-div))
-            anchor (.createElement js/document "a")]
-        (oset! anchor [:href] (.toDataURL canvas "image/png"))
-        (oset! anchor [:download] "graph.png")
-        (.click anchor))
-     {:id :graph-export}]))
+  [] 
+  [button-with-icon
+   :file-download
+   (labels :graph.download/as-png)
+   (labels :discussion.navbar/download)
+   #(let [canvas (.querySelector js/document (gstring/format "#%s div canvas" config/graph-id))
+          anchor (.createElement js/document "a")]
+      (oset! anchor [:href] (.toDataURL canvas "image/png"))
+      (oset! anchor [:download] "graph.png")
+      (.click anchor))
+   {:id :graph-export}])
 
 (>defn txt-export-request
   "Initiate an export as a txt file for the currently selected schnaq."
