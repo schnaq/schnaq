@@ -332,59 +332,62 @@
         on-click #(reset! selected-option %)
         active-class #(when (= @selected-option %) "active")
         iconed-heading (fn [icon-key label]
-                         [:<> [icon icon-key] " " (labels label)])]
+                         [:<> [icon icon-key "me-1"] (labels label)])]
     (fn []
       (let [poll-tab [:span [iconed-heading :chart-pie :schnaq.input-type/poll]]
             activation-tab [:span [iconed-heading :magic :schnaq.input-type/activation]]
             word-cloud-tab [:span [iconed-heading :cloud :schnaq.input-type/word-cloud]]
             pro-user? @(rf/subscribe [:user/pro?])
+            moderator? @(rf/subscribe [:user/moderator?])
             read-only? @(rf/subscribe [:schnaq.state/read-only?])
+            posts-disabled? @(rf/subscribe [:schnaq.state/posts-disabled?])
             top-level? @(rf/subscribe [:routes.schnaq/start?])]
-        [motion/fade-in-and-out
-         [:section.selection-card
-          [:div.card-view.card-body
-           (when top-level?
-             (when (and (not read-only?) @(rf/subscribe [:user/moderator?]))
-               [:ul.selection-tab.nav.nav-tabs
-                {:ref (fn [_element]
-                        (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :discussion]) 1000))} ;; wait a second until tour appears
-                [:li.nav-item
-                 [:button.nav-link {:class (active-class :question)
-                                    :role "button"
-                                    :on-click #(on-click :question)}
-                  [iconed-heading :info-question :schnaq.input-type/statement]]]
-                (if pro-user?
-                  [:<>
-                   [:li.nav-item
-                    [:button.nav-link
-                     {:class (active-class :poll)
-                      :role "button"
-                      :on-click #(on-click :poll)}
-                     poll-tab]]
-                   [:li.nav-item
-                    [:button.nav-link
-                     {:class (active-class :activation)
-                      :role "button"
-                      :on-click #(on-click :activation)}
-                     activation-tab]]
-                   [:li.nav-item
-                    [:button.nav-link
-                     {:class (active-class :word-cloud)
-                      :role "button"
-                      :on-click #(on-click :word-cloud)}
-                     word-cloud-tab]]]
-                  [:<>
-                   [deactivated-selection-card-tab poll-tab]
-                   [deactivated-selection-card-tab activation-tab]
-                   [deactivated-selection-card-tab word-cloud-tab]])]))
-           (if top-level?
-             (case @selected-option
-               :question [input-form-or-disabled-alert]
-               :poll [poll/poll-form]
-               :activation [activation/activation-tab]
-               :word-cloud [wordcloud-card/wordcloud-tab])
-             [input-form-or-disabled-alert])]]
-         motion/card-fade-in-time]))))
+        (when (or moderator? (not posts-disabled?))
+          [motion/fade-in-and-out
+           [:section.selection-card
+            [:div.card-view.card-body
+             (when top-level?
+               (when (and (not read-only?) moderator?)
+                 [:ul.selection-tab.nav.nav-tabs
+                  {:ref (fn [_element]
+                          (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :discussion]) 1000))} ;; wait a second until tour appears
+                  [:li.nav-item
+                   [:button.nav-link {:class (active-class :question)
+                                      :role "button"
+                                      :on-click #(on-click :question)}
+                    [iconed-heading :info-question :schnaq.input-type/statement]]]
+                  (if pro-user?
+                    [:<>
+                     [:li.nav-item
+                      [:button.nav-link
+                       {:class (active-class :poll)
+                        :role "button"
+                        :on-click #(on-click :poll)}
+                       poll-tab]]
+                     [:li.nav-item
+                      [:button.nav-link
+                       {:class (active-class :activation)
+                        :role "button"
+                        :on-click #(on-click :activation)}
+                       activation-tab]]
+                     [:li.nav-item
+                      [:button.nav-link
+                       {:class (active-class :word-cloud)
+                        :role "button"
+                        :on-click #(on-click :word-cloud)}
+                       word-cloud-tab]]]
+                    [:<>
+                     [deactivated-selection-card-tab poll-tab]
+                     [deactivated-selection-card-tab activation-tab]
+                     [deactivated-selection-card-tab word-cloud-tab]])]))
+             (if top-level?
+               (case @selected-option
+                 :question [input-form-or-disabled-alert]
+                 :poll [poll/poll-form]
+                 :activation [activation/activation-tab]
+                 :word-cloud [wordcloud-card/wordcloud-tab])
+               [input-form-or-disabled-alert])]]
+           motion/card-fade-in-time])))))
 
 (defn- statement-list-item
   "The highest part of a statement-list."

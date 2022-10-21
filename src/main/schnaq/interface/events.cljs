@@ -150,6 +150,12 @@
    (contains? states :discussion.state/read-only)))
 
 (rf/reg-sub
+ :schnaq.state/posts-disabled?
+ :<- [:schnaq/states]
+ (fn [states _ _]
+   (contains? states :discussion.state/disable-posts)))
+
+(rf/reg-sub
  :schnaq/state?
  :<- [:schnaq/states]
  (fn [states [_ state]]
