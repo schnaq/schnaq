@@ -38,7 +38,7 @@
          {:on-click #(rf/dispatch navigation-target)}
          [:div.d-flex
           [icon :arrow-left "m-auto"]]]]
-       [:small.my-auto.ms-2.d-none.d-xxl-block back-label]])))
+       [:small.my-auto.ms-2 back-label]])))
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -251,7 +251,7 @@
   "Navigation bar on top of the discussion contents."
   []
   (when-not @(rf/subscribe [:ui/setting :hide-discussion-options])
-    [:div.d-flex.flex-row
+    [:div.d-flex.flex-row.pt-1.pt-xl-0
      (when-not config/in-iframe?
        [:div.me-auto [back-button]])
      [tooltip/html
@@ -262,7 +262,7 @@
        (when @(rf/subscribe [:routes.schnaq/start?])
          [filters/filter-answered-statements])
        [:div.py-3 [search-bar]]]
-      [:> Button {:variant "outline-primary" :size :sm :className "m-2 panel-white-sm"}
+      [:> Button {:variant "outline-primary" :size :sm :className "panel-white-sm"}
        (labels :discussion.navbar/discussion-settings)]
       {:appendTo js/document.body}]]))
 
