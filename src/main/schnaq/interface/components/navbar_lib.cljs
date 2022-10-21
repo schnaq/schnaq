@@ -179,10 +179,11 @@
   [& {:keys [props vertical?]}]
   (let [username @(rf/subscribe [:user/display-name])
         authenticated? @(rf/subscribe [:user/authenticated?])
+        profile-picture? @(rf/subscribe [:user/profile-picture])
         pro? @(rf/subscribe [:user/pro?])
         icon-size 25]
     [:span props
-     (if authenticated?
+     (if (and authenticated? profile-picture?)
        [common/avatar
         :props (when vertical? {:className "d-block mx-auto"})
         :size icon-size
