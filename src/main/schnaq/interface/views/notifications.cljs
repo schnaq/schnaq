@@ -124,9 +124,8 @@
 (rf/reg-event-db
  :notifications/reset
  (fn [db [_]]
-   (assoc db :notifications [])))
+   (dissoc db :notifications)))
 
 (rf/reg-sub
  :notifications/all
- (fn [db]
-   (get db :notifications)))
+ :-> :notifications)

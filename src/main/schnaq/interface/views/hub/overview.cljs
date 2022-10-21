@@ -116,7 +116,7 @@
 
 (rf/reg-sub
  :hubs/all
- :hubs)
+ :-> :hubs)
 
 (rf/reg-sub
  :hub/current
@@ -133,7 +133,7 @@
 
 (rf/reg-sub
  :hub/selected
- :hub-selected)
+ :-> :hub-selected)
 
 (rf/reg-sub
  :hub.current/members
