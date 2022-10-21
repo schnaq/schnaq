@@ -107,7 +107,7 @@
         [buttons/anchor button-text href :btn-white])])))
 
 (>defn schnaq-logo
-  "Display a schnaq logo"
+  "Display a schnaq logo."
   [attrs]
   [(? map?) => :re-frame/component]
   [:img (merge
@@ -116,7 +116,7 @@
          attrs)])
 
 (defn schnaq-logo-white
-  "Display a schnaq logo"
+  "Display a white schnaq logo."
   [& {:keys [props]}]
   [:img (merge
          {:src (img-path :logo-white)
@@ -124,7 +124,7 @@
          props)])
 
 (defn schnaqqi-white
-  "Display a schnaq logo"
+  "Display a white schnaqqi."
   [& {:keys [props]}]
   [:img (merge
          {:src (img-path :schnaqqifant/white)
