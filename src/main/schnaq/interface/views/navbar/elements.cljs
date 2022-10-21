@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.navbar.elements
-  (:require ["react-bootstrap/Navbar" :as Navbar]
-            ["react-bootstrap/NavDropdown" :as NavDropdown]
+  (:require ["react-bootstrap/NavDropdown" :as NavDropdown]
             [ajax.core :as ajax]
             [com.fulcrologic.guardrails.core :refer [=> >defn]]
             [goog.string :as gstring]
@@ -8,16 +7,12 @@
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.common :as common-components]
             [schnaq.interface.components.icons :refer [stacked-icon]]
-            [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.file-download :as file-download]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
-(def ^:private NavbarText (oget Navbar :Text))
 (def ^:private NavDropdownItem (oget NavDropdown :Item))
 
 (defn LanguageDropdown [& {:keys [props vertical?]}]
@@ -78,7 +73,7 @@
                    :stay-visible? true}]))
 
 ;; -----------------------------------------------------------------------------
-;; Admin Settings stuff. Refactor TODO
+;; Argdown Export  
 
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."
@@ -103,31 +98,6 @@
     :response-format (ajax/transit-response-format)
     :handler (partial create-txt-download-handler title)
     :error-handler show-error}))
-
-;; -----------------------------------------------------------------------------
-
-(defn- schnaq-logo []
-  [:<>
-   [:img.schnaq-brand-logo.align-middle.me-2.d-md-none.d-none.d-xxl-block
-    {:src (img-path :logo-white) :alt "schnaq logo"
-     :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]
-   [:img.schnaq-brand-logo.align-middle.me-2.d-xxl-none
-    {:src (img-path :schnaqqifant/white) :alt "schnaq logo"
-     :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]])
-
-(defn navbar-title
-  "Brand logo and title with dynamic resizing."
-  ([]
-   [navbar-title true])
-  ([clickable-title?]
-   (let [title @(rf/subscribe [:page/title])]
-     [:div.d-flex.align-items-center.flex-row.me-2.bg-white
-      [:a.schnaq-logo-container.d-flex.h-100 (when clickable-title? {:href (navigation/href :routes.schnaqs/personal)})
-       [schnaq-logo]]
-      [:> NavbarText {:className "text-dark"}
-       [:h1.h6.text-wrap (toolbelt/truncate-to-n-chars title 50)]]
-      [:div.h-100.d-none.d-md-block.p-2
-       [common-components/theme-logo {:style {:max-height "100%"}}]]])))
 
 ;; -----------------------------------------------------------------------------
 

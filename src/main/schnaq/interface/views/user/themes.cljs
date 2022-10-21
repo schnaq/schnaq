@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.user.themes
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as str]
-            [com.fulcrologic.guardrails.core :refer [>defn- =>]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
@@ -13,8 +13,8 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.discussion.conclusion-card :refer [info-card selection-card]]
-            [schnaq.interface.views.navbar.elements :as elements]
+            [schnaq.interface.views.discussion.conclusion-card :refer [info-card
+                                                                       selection-card]]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.user.settings :as settings]
@@ -81,7 +81,6 @@
      [:h3#theme-preview-title (labels :themes.personal.preview/heading)]
      [:section.theming-enabled
       [:div.base-wrapper.p-3
-       [elements/navbar-title false]
        [activation/activation-card]
        [:div.d-flex.flex-row
         [buttons/button "primary button"]
