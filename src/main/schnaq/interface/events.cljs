@@ -152,10 +152,9 @@
    (not (nil? (some #{:discussion.state/read-only} (:discussion/states selected-schnaq))))))
 
 (rf/reg-sub
- :schnaq.selected/theme
+ :schnaq/theme
  :<- [:schnaq/selected]
- (fn [selected-schnaq _ _]
-   (:discussion/theme selected-schnaq)))
+ :-> :discussion/theme)
 
 (rf/reg-event-db
  :schnaq/share-hash

@@ -60,7 +60,7 @@
   "Color picker for the theme colors."
   [theme-field label]
   [keyword? string? => :re-frame/component]
-  (let [color (get @(rf/subscribe [:schnaq.selected/theme]) theme-field)
+  (let [color (get @(rf/subscribe [:schnaq/theme]) theme-field)
         color-picker-id (str (name theme-field) "-color-picker")]
     [:div.row
      [:div.col
@@ -76,7 +76,7 @@
                        (rf/dispatch [:theme.selected/color theme-field color])))}]]]))
 
 (defn- preview []
-  (when @(rf/subscribe [:schnaq.selected/theme])
+  (when @(rf/subscribe [:schnaq/theme])
     [:<>
      [:h3#theme-preview-title (labels :themes.personal.preview/heading)]
      [:section.theming-enabled
@@ -96,7 +96,7 @@
   "Show all configured themes."
   [dispatch-event]
   (let [themes @(rf/subscribe [:themes/personal])
-        selected @(rf/subscribe [:schnaq.selected/theme])]
+        selected @(rf/subscribe [:schnaq/theme])]
     [:div.row.row-cols-2.row-cols-xl-4.g-2.g-lg-3
      (for [theme themes]
        [:div.col
@@ -151,7 +151,7 @@
   "Change the activation phrase.
   Schnaqqi won't like this #sadtorooo."
   []
-  (let [selected @(rf/subscribe [:schnaq.selected/theme])]
+  (let [selected @(rf/subscribe [:schnaq/theme])]
     [:div.form-floating.mb-3
      [:input.form-control
       {:id "theme-activation-phrase"
@@ -166,7 +166,7 @@
 (defn- input-title
   "Select a theme's title."
   []
-  (let [selected @(rf/subscribe [:schnaq.selected/theme])]
+  (let [selected @(rf/subscribe [:schnaq/theme])]
     [:div.form-floating.mb-3
      [:input.form-control
       {:id "theme-title"
@@ -206,7 +206,7 @@
 (defn- image-upload-with-preview
   "Add image inputs and provide a preview if image is present."
   []
-  (let [{:theme.images/keys [logo header]} @(rf/subscribe [:schnaq.selected/theme])]
+  (let [{:theme.images/keys [logo header]} @(rf/subscribe [:schnaq/theme])]
     [:<>
      [:div.row.pb-3
       [:div.col-md-8
@@ -244,7 +244,7 @@
 (defn- configure-theme
   "Form to configure theme."
   []
-  (when-let [selected @(rf/subscribe [:schnaq.selected/theme])]
+  (when-let [selected @(rf/subscribe [:schnaq/theme])]
     (let [pro-user? @(rf/subscribe [:user/pro?])
           theme-id (:db/id selected)]
       [:<>

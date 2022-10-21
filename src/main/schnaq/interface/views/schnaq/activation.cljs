@@ -79,7 +79,7 @@
 
 (defn- activation-view [background-class button-class]
   (when-let [activation @(rf/subscribe [:schnaq/activation])]
-    (let [theme @(rf/subscribe [:schnaq.selected/theme])
+    (let [theme @(rf/subscribe [:schnaq/theme])
           activation-phrase (or (:theme.texts/activation theme)
                                 (labels :schnaq.activation/phrase))
           background-image-url (or (:theme.images/header theme) default-activation-background)

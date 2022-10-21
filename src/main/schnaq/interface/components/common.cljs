@@ -91,17 +91,6 @@
      {:class (format "border-%s text-%s" stringed-variant stringed-variant)}
      content]))
 
-(defn theme-logo
-  "Show the current logo configured in a theme."
-  [attrs]
-  (let [{:theme.images/keys [logo]} @(rf/subscribe [:schnaq.selected/theme])]
-    (when logo
-      [:img.theme-logo
-       (merge
-        {:src logo
-         :alt "Theme Logo"}
-        attrs)])))
-
 (>defn next-step
   "Show next possible steps, with a heading, lead text and a CTA."
   ([icon title body button-text route-name]
