@@ -197,8 +197,8 @@
     (labels :schnaq.moderation.configurations.mods-mark-only/label)
     (labels :schnaq.moderation.configurations.mods-mark-only/explanation)]
    [toggle-schnaq-state :discussion.state/disable-posts
-    "Deaktiviere Beiträge"
-    "Deaktiviert die Beitragserstellung für alle, die nicht Moderator:innen sind."]
+    (labels :schnaq.moderation.configurations.disable-posts/label)
+    (labels :schnaq.moderation.configurations.disable-posts/explanation)]
    [toggle-schnaq-state :discussion.state/read-only
     (labels :schnaq.moderation.configurations.read-only/checkbox)
     (labels :schnaq.moderation.configurations.read-only/explanation)]
