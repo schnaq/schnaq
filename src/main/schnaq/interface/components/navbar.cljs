@@ -307,7 +307,7 @@
   []
   (when-not @(rf/subscribe [:ui/setting :hide-navbar])
     [:> Navbar {:bg :primary :variant :dark :expand :lg}
-     [:> Container
+     [:> Container {:fluid true}
       [:> NavbarBrand {:href (toolbelt/current-overview-link)}
        [schnaq-logo-white :props {:className "img-fluid" :width 150}]]
       [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
