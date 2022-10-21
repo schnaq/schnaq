@@ -12,16 +12,16 @@
             [schnaq.interface.components.icons :refer [icon stacked-icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.components.navbar-lib :refer [graph-settings-notification
+                                                            LanguageDropdown txt-export-request
+                                                            admin-dropdown
+                                                            user-navlink-dropdown]]
             [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.share :refer [share-schnaq-modal]]
-            [schnaq.interface.views.navbar.elements :refer [graph-settings-notification
-                                                            LanguageDropdown txt-export-request
-                                                            admin-dropdown
-                                                            user-navlink-dropdown]]
             [schnaq.links :as links]))
 
 (def ^:private NavbarBrand (oget Navbar :Brand))

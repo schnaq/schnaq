@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.navbar.elements
+(ns schnaq.interface.components.navbar-lib
   (:require ["react-bootstrap" :refer [Alert]]
             ["react-bootstrap/NavDropdown" :as NavDropdown]
             [ajax.core :as ajax]

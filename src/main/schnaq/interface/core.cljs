@@ -25,6 +25,7 @@
             [schnaq.interface.components.lexical.plugins.toolbar]
             [schnaq.interface.components.lexical.plugins.videos]
             [schnaq.interface.components.navbar]
+            [schnaq.interface.components.navbar-lib]
             [schnaq.interface.components.preview]
             [schnaq.interface.components.schnaq]
             [schnaq.interface.components.videos]

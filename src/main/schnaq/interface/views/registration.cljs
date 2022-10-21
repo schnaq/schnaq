@@ -6,11 +6,11 @@
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.common :refer [schnaq-logo]]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.navbar-lib :refer [LanguageDropdown]]
             [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.navbar.elements :refer [LanguageDropdown]]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.pricing :as pricing-view]))
 
