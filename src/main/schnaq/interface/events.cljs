@@ -133,6 +133,23 @@
    (links/get-share-link (:discussion/share-hash selected-schnaq))))
 
 (rf/reg-sub
+ :schnaq/states
+ :<- [:schnaq/selected]
+ :-> :discussion/states)
+
+(rf/reg-sub
+ :schnaq.state/pro-con?
+ :<- [:schnaq/states]
+ (fn [states]
+   (contains? states :discussion.state/disable-pro-con)))
+
+(rf/reg-sub
+ :schnaq/state?
+ :<- [:schnaq/states]
+ (fn [states [_ state]]
+   (contains? states state)))
+
+(rf/reg-sub
  :schnaq.selected/statement-number
  :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
