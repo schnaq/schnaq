@@ -124,7 +124,7 @@
                     :href (href route)}
          [discussion-view-button-image :img-key icon] [:small label]]))]))
 
-(defn download-schnaq-button
+(defn- download-schnaq-button
   "Button to download a schnaq."
   [& {:keys [props vertical?]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
@@ -134,7 +134,7 @@
                         props)
       [stacked-icon :vertical? vertical? :icon-key :file-download] (labels :discussion.navbar/download)]]))
 
-(defn share-schnaq-button
+(defn- share-schnaq-button
   "Share schnaq button opening a modal."
   [& {:keys [props vertical?]}]
   [share-schnaq-modal
@@ -144,7 +144,7 @@
       [:> NavLink (merge modal-props props)
        [stacked-icon :vertical? vertical? :icon-key :share] (labels :discussion.navbar/share)]])])
 
-(defn manage-schnaq-button
+(defn- manage-schnaq-button
   "Button to navigate to schnaq management page."
   [& {:keys [props vertical?]}]
   (when @(rf/subscribe [:user/moderator?])
@@ -155,7 +155,7 @@
                           props)
         [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]])))
 
-(defn overview-page-button
+(defn- overview-page-button
   "Return to the overview page."
   [& {:keys [props]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
@@ -167,7 +167,7 @@
                         props)
       [discussion-view-button-image :img-key icon] label]]))
 
-(defn login-register-buttons [& {:keys [props vertical?]}]
+(defn- login-register-buttons [& {:keys [props vertical?]}]
   [:<>
    [tooltip/text
     (labels :nav/login-tooltip)
@@ -222,7 +222,7 @@
     [:> NavbarText (merge {:class "navbar-title"} props)
      [:h1.h6.mb-0 title]]))
 
-(defn statement-counter
+(defn- statement-counter
   "A counter showing all statements and pulsing live."
   []
   (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])]
@@ -297,36 +297,38 @@
 (defn page-navbar
   "Navbar for the static pages."
   []
-  [:> Navbar {:bg :primary :variant :dark :expand :lg}
-   [:> Container
-    [:> NavbarBrand {:href (toolbelt/current-overview-link)}
-     [schnaq-logo-white :props {:className "img-fluid" :width 150}]]
-    [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
-    [:> NavbarCollapse {:id "schnaq-navbar"
-                        :className "justify-content-end"}
-     [:> Nav
-      [common-navigation-links :hide-icon? true]
-      [LanguageDropdown :hide-icon? true]
-      [upgrade-button]
-      [admin-dropdown]
-      [user-navlink-dropdown]]]]])
+  (when-not @(rf/subscribe [:ui/setting :hide-navbar])
+    [:> Navbar {:bg :primary :variant :dark :expand :lg}
+     [:> Container
+      [:> NavbarBrand {:href (toolbelt/current-overview-link)}
+       [schnaq-logo-white :props {:className "img-fluid" :width 150}]]
+      [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
+      [:> NavbarCollapse {:id "schnaq-navbar"
+                          :className "justify-content-end"}
+       [:> Nav
+        [common-navigation-links :hide-icon? true]
+        [LanguageDropdown :hide-icon? true]
+        [upgrade-button]
+        [admin-dropdown]
+        [user-navlink-dropdown]]]]]))
 
 (defn qanda-navbar
   "Navbar for the Q&A view."
   []
-  [:> Navbar {:bg :primary :variant :dark :expand :lg}
-   [:> Container {:fluid true}
-    [:> NavbarBrand {:href (toolbelt/current-overview-link)}
-     [schnaq-logo-white :props {:className "img-fluid" :width 150}]]
-    [page-title]
-    [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
-    [:> NavbarCollapse {:id "schnaq-navbar"
-                        :className "justify-content-end"}
-     [:> Nav
-      [statement-counter]
-      [overview-page-button]
-      [LanguageDropdown :vertical? true]
-      [user-navlink-dropdown :vertical? true]]]]])
+  (when-not @(rf/subscribe [:ui/setting :hide-navbar])
+    [:> Navbar {:bg :primary :variant :dark :expand :lg}
+     [:> Container {:fluid true}
+      [:> NavbarBrand {:href (toolbelt/current-overview-link)}
+       [schnaq-logo-white :props {:className "img-fluid" :width 150}]]
+      [page-title]
+      [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
+      [:> NavbarCollapse {:id "schnaq-navbar"
+                          :className "justify-content-end"}
+       [:> Nav
+        [statement-counter]
+        [overview-page-button]
+        [LanguageDropdown :vertical? true]
+        [user-navlink-dropdown :vertical? true]]]]]))
 
 (defn discussion-navbar
   "Default navbar for discussions and their views."
