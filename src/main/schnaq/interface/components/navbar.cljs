@@ -19,9 +19,9 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.share :refer [share-schnaq-modal]]
             [schnaq.interface.views.navbar.elements :refer [graph-settings-notification
-                                                            LanguageDropdown txt-export-request]]
-            [schnaq.interface.views.navbar.user-management :refer [admin-dropdown
-                                                                   user-navlink-dropdown]]
+                                                            LanguageDropdown txt-export-request
+                                                            admin-dropdown
+                                                            user-navlink-dropdown]]
             [schnaq.links :as links]))
 
 (def ^:private NavbarBrand (oget Navbar :Brand))

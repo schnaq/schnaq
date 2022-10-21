@@ -68,7 +68,6 @@
             [schnaq.interface.views.hub.settings]
             [schnaq.interface.views.loading]
             [schnaq.interface.views.modal]
-            [schnaq.interface.views.navbar.user-management]
             [schnaq.interface.views.notifications]
             [schnaq.interface.views.pages]
             [schnaq.interface.views.presentation]
