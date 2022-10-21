@@ -237,13 +237,18 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- schnaqqi-white-brand []
+  (if-let [theme-logo (:theme.images/logo @(rf/subscribe [:schnaq/theme]))]
+    [:img {:src theme-logo :height 50}]
+    [schnaqqi-white :props {:className "img-fluid" :width 50}]))
+
 (defn- mobile-navigation
   "Mobile navigation."
   [& {:keys [props]}]
   [:> Navbar (merge {:bg :primary :variant :dark :expand false} props)
    [:> Container {:fluid true}
     [:> NavbarBrand {:href (toolbelt/current-overview-link)}
-     [schnaqqi-white :props {:className "img-fluid" :width 50}]]
+     [schnaqqi-white-brand]]
     [page-title]
     [:> NavbarToggle {:aria-controls "mobile-navbar"}]
     [:> NavbarCollapse {:id "mobile-navbar"}
@@ -261,13 +266,16 @@
   "Navbar for discussions."
   [& {:keys [props]}]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
-        share-hash @(rf/subscribe [:schnaq/share-hash])]
+        share-hash @(rf/subscribe [:schnaq/share-hash])
+        theme-logo (:theme.images/logo @(rf/subscribe [:schnaq/theme]))]
     [:> Navbar (merge {:bg :transparent :variant :light :expand :lg :className "small text-nowrap"} props)
      [:> Container {:fluid true}
       [:div.d-flex.align-items-center.panel-white-sm.py-0.ps-0.me-2
        [:> NavbarBrand {:className "p-0" :href (toolbelt/current-overview-link)}
-        [:div.schnaq-logo-container
-         [schnaqqi-white :props {:className "img-fluid" :width 50}]]]
+        (if theme-logo
+          [:img.p-1 {:src theme-logo :height 65}]
+          [:div.schnaq-logo-container
+           [schnaqqi-white :props {:className "img-fluid" :width 50}]])]
        [page-title]]
       [:> NavbarToggle {:aria-controls "schnaq-navbar-big"}]
       [:> NavbarCollapse {:id "schnaq-navbar-big"
@@ -316,19 +324,22 @@
   "Navbar for the Q&A view."
   []
   (when-not @(rf/subscribe [:ui/setting :hide-navbar])
-    [:> Navbar {:bg :primary :variant :dark :expand :lg}
-     [:> Container {:fluid true}
-      [:> NavbarBrand {:href (toolbelt/current-overview-link)}
-       [schnaq-logo-white :props {:className "img-fluid" :width 150}]]
-      [page-title]
-      [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
-      [:> NavbarCollapse {:id "schnaq-navbar"
-                          :className "justify-content-end"}
-       [:> Nav
-        [statement-counter]
-        [overview-page-button]
-        [LanguageDropdown :vertical? true]
-        [user-navlink-dropdown :vertical? true]]]]]))
+    [:<>
+     [:div.d-xl-none [mobile-navigation]]
+     [:div.d-none.d-xl-block
+      [:> Navbar {:bg :primary :variant :dark :expand :lg}
+       [:> Container {:fluid true}
+        [:> NavbarBrand {:href (toolbelt/current-overview-link)}
+         [schnaqqi-white-brand]]
+        [page-title]
+        [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
+        [:> NavbarCollapse {:id "schnaq-navbar"
+                            :className "justify-content-end"}
+         [:> Nav
+          [statement-counter]
+          [overview-page-button]
+          [LanguageDropdown :vertical? true]
+          [user-navlink-dropdown :vertical? true]]]]]]]))
 
 (defn discussion-navbar
   "Default navbar for discussions and their views."
