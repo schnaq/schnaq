@@ -241,20 +241,6 @@
      :where [?statements :statement/content ?content]]
    patterns/statement content))
 
-(>defn delete-discussion
-  "Adds the deleted state to a discussion"
-  [share-hash]
-  [:discussion/share-hash :ret (? :discussion/share-hash)]
-  (try
-    @(transact [[:db/add [:discussion/share-hash share-hash]
-                 :discussion/states :discussion.state/deleted]])
-    (log/info (format "Schnaq with share-hash %s has been set to deleted." share-hash))
-    share-hash
-    (catch Exception e
-      (log/error
-       (format "Deletion of discussion with share-hash %s failed. Exception:\n%s"
-               share-hash e)))))
-
 (>defn- new-child-statement!
   "Creates a new child statement, that references a parent."
   [discussion-id parent-id new-content statement-type user-id registered-user? locked?]
@@ -305,6 +291,7 @@
   "Add a state to a discussion."
   [share-hash state]
   [:discussion/share-hash :discussion/valid-states => map?]
+  (log/debug (format "Adding state %s to discussion %s" state share-hash))
   @(main-db/transact [[:db/add [:discussion/share-hash share-hash]
                        :discussion/states state]]))
 
@@ -312,8 +299,21 @@
   "Remove a state from a discussion."
   [share-hash state]
   [:discussion/share-hash :discussion/valid-states => map?]
+  (log/debug (format "Removing state %s from discussion %s" state share-hash))
   @(main-db/transact [[:db/retract [:discussion/share-hash share-hash]
                        :discussion/states state]]))
+
+(>defn delete-discussion
+  "Adds the deleted state to a discussion"
+  [share-hash]
+  [:discussion/share-hash :ret (? :discussion/share-hash)]
+  (try
+    (add-state share-hash :discussion.state/deleted)
+    share-hash
+    (catch Exception e
+      (log/error
+       (format "Deletion of discussion with share-hash %s failed. Exception:\n%s"
+               share-hash e)))))
 
 (defn set-disable-pro-con
   "Sets or removes the pro/con button tag"
