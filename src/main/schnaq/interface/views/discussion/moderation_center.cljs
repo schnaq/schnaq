@@ -206,6 +206,27 @@
 
 ;; -----------------------------------------------------------------------------
 
+(rf/reg-event-fx
+ :schnaq.moderation/add-state
+ (fn [{:keys [db]} [_ state]]
+   (let [{:keys [share-hash]} (get-in db [:current-route :path-params])]
+     {:db (update-in db [:schnaq :selected :discussion/states] conj state)
+      :fx [(http/xhrio-request db :put "/discussion/manage/state"
+                               [:ajax.error/to-console]
+                               {:state state
+                                :share-hash share-hash}
+                               [:ajax.error/as-notification])]})))
+(rf/reg-event-fx
+ :schnaq.moderation/delete-state
+ (fn [{:keys [db]} [_ state]]
+   (let [{:keys [share-hash]} (get-in db [:current-route :path-params])]
+     {:db (update-in db [:schnaq :selected :discussion/states] disj state)
+      :fx [(http/xhrio-request db :delete "/discussion/manage/state"
+                               [:ajax.error/to-console]
+                               {:state state
+                                :share-hash share-hash}
+                               [:ajax.error/as-notification])]})))
+
 (rf/reg-sub
  :schnaq.selected/pro-con?
  :<- [:schnaq/selected]
@@ -215,8 +236,7 @@
 (rf/reg-event-fx
  :schnaq.moderation/disable-pro-con
  (fn [{:keys [db]} [_ disable-pro-con?]]
-   (let [current-route (:current-route db)
-         {:keys [share-hash]} (:path-params current-route)]
+   (let [{:keys [share-hash]} (get-in db [:current-route :path-params])]
      {:fx [(http/xhrio-request db :put "/discussion/manage/disable-pro-con"
                                [:schnaq.moderation/disable-pro-con-success disable-pro-con?]
                                {:disable-pro-con? disable-pro-con?
