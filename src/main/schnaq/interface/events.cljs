@@ -156,6 +156,13 @@
    (contains? states :discussion.state/disable-posts)))
 
 (rf/reg-sub
+ :schnaq/posts-disabled-for-non-moderators?
+ :<- [:schnaq.state/posts-disabled?]
+ :<- [:user/moderator?]
+ (fn [[posts-disabled? moderator?]]
+   (and posts-disabled? (not moderator?))))
+
+(rf/reg-sub
  :schnaq/state?
  :<- [:schnaq/states]
  (fn [states [_ state]]

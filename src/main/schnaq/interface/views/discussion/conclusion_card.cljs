@@ -340,9 +340,9 @@
             pro-user? @(rf/subscribe [:user/pro?])
             moderator? @(rf/subscribe [:user/moderator?])
             read-only? @(rf/subscribe [:schnaq.state/read-only?])
-            posts-disabled? @(rf/subscribe [:schnaq.state/posts-disabled?])
-            top-level? @(rf/subscribe [:routes.schnaq/start?])]
-        (when (or moderator? (not posts-disabled?))
+            top-level? @(rf/subscribe [:routes.schnaq/start?])
+            posts-disabled-for-non-moderators? @(rf/subscribe [:schnaq/posts-disabled-for-non-moderators?])]
+        (when-not posts-disabled-for-non-moderators?
           [motion/fade-in-and-out
            [:section.selection-card
             [:div.card-view.card-body

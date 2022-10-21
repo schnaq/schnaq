@@ -179,12 +179,13 @@
         locked? (:statement/locked? statement)
         hide-input-replies @(rf/subscribe [:ui/setting :hide-input-replies])
         editor-id (format "%s-%s" "premise-card-editor" (:db/id statement))
+        posts-disabled-for-non-moderators? @(rf/subscribe [:schnaq/posts-disabled-for-non-moderators?])
         answer-to-statement-event
         (fn [e]
           (.preventDefault e)
           (rf/dispatch [:editor/clear editor-id])
           (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))
-        forbidden-write? (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?))]
+        forbidden-write? (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?) posts-disabled-for-non-moderators?)]
     [:form.my-md-2
      {:on-submit answer-to-statement-event
       :on-key-down #(when (toolbelt/ctrl-press? % "Enter")
