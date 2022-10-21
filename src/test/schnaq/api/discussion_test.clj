@@ -35,16 +35,6 @@
       (is (= 200 (request-fn toolbelt/token-kangaroo-normal-user)))
       (is (= 200 (request-fn toolbelt/token-n2o-admin))))))
 
-(deftest add-label-mods-only-test
-  (let [share-hash "cat-dog-hash"
-        statement-id (:db/id (first (discussion-db/starting-statements share-hash)))
-        request-fn (partial statement-label-request :put share-hash statement-id)
-        _ @(discussion-db/mods-mark-only! share-hash true)]
-    (testing "Only moderators are allowed to set labels."
-      (is (= 403 (request-fn nil)))
-      (is (= 403 (request-fn toolbelt/token-kangaroo-normal-user)))
-      (is (= 200 (request-fn toolbelt/token-schnaqqifant-user))))))
-
 (deftest remove-label-no-restriction-test
   (let [share-hash "simple-hash"
         statement-id (:db/id (first (discussion-db/statements-by-content "Brainstorming ist total wichtig")))
@@ -54,16 +44,6 @@
       (is (= 200 (request-fn toolbelt/token-schnaqqifant-user)))
       (is (= 200 (request-fn toolbelt/token-kangaroo-normal-user)))
       (is (= 200 (request-fn toolbelt/token-n2o-admin))))))
-
-(deftest remove-label-mods-only-test
-  (let [share-hash "simple-hash"
-        statement-id (:db/id (first (discussion-db/statements-by-content "Brainstorming ist total wichtig")))
-        request-fn (partial statement-label-request :delete share-hash statement-id)
-        _ @(discussion-db/mods-mark-only! share-hash true)]
-    (testing "Only moderators are allowed to remove labels."
-      (is (= 403 (request-fn nil)))
-      (is (= 403 (request-fn toolbelt/token-kangaroo-normal-user)))
-      (is (= 200 (request-fn toolbelt/token-schnaqqifant-user))))))
 
 ;; -----------------------------------------------------------------------------
 

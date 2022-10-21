@@ -315,30 +315,6 @@
        (format "Deletion of discussion with share-hash %s failed. Exception:\n%s"
                share-hash e)))))
 
-(defn set-disable-pro-con
-  "Sets or removes the pro/con button tag"
-  [share-hash disable?]
-  (let [enable-transaction [[:db/retract [:discussion/share-hash share-hash]
-                             :discussion/states :discussion.state/disable-pro-con]]
-        disable-transaction [[:db/add [:discussion/share-hash share-hash]
-                              :discussion/states :discussion.state/disable-pro-con]]
-        db-transaction (if disable?
-                         disable-transaction
-                         enable-transaction)]
-    (main-db/transact db-transaction)))
-
-(defn mods-mark-only!
-  "Allow either mods or everybody to mark correct answers."
-  [share-hash mods-only?]
-  (let [disable-transaction [[:db/retract [:discussion/share-hash share-hash]
-                              :discussion/states :discussion.state.qa/mark-as-moderators-only]]
-        enable-transaction [[:db/add [:discussion/share-hash share-hash]
-                             :discussion/states :discussion.state.qa/mark-as-moderators-only]]
-        db-transaction (if mods-only?
-                         enable-transaction
-                         disable-transaction)]
-    (main-db/transact db-transaction)))
-
 (defn edit-title
   "Edits a schnaq title by share-hash"
   [share-hash title]
