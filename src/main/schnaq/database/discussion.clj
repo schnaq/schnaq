@@ -311,6 +311,20 @@
   [share-hash]
   (main-db/transact [[:db/retract [:discussion/share-hash share-hash] :discussion/states :discussion.state/read-only]]))
 
+(defn add-state
+  "Add a state to a discussion."
+  [share-hash state]
+  [:discussion/share-hash :discussion/valid-states => map?]
+  @(main-db/transact [[:db/add [:discussion/share-hash share-hash]
+                       :discussion/states state]]))
+
+(defn delete-state
+  "Remove a state from a discussion."
+  [share-hash state]
+  [:discussion/share-hash :discussion/valid-states => map?]
+  @(main-db/transact [[:db/retract [:discussion/share-hash share-hash]
+                       :discussion/states state]]))
+
 (defn set-disable-pro-con
   "Sets or removes the pro/con button tag"
   [share-hash disable?]
