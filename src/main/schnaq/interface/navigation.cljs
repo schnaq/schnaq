@@ -11,8 +11,7 @@
 
 (rf/reg-sub
  :navigation/current-route
- (fn [db]
-   (:current-route db)))
+ :-> :current-route)
 
 (rf/reg-sub
  :navigation/current-view
@@ -61,7 +60,7 @@
 
 (rf/reg-fx
  :navigation.navigated/push-matomo-tracker
- (fn [] (matomo/track-current-page)))
+ matomo/track-current-page)
 
 (rf/reg-event-fx
  :navigation/navigated

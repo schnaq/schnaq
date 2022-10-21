@@ -140,8 +140,7 @@
 (rf/reg-sub
  :schnaq.wordcloud/show?
  :<- [:schnaq/wordcloud]
- (fn [wordcloud]
-   (:wordcloud/visible? wordcloud)))
+ :-> :wordcloud/visible?)
 
 (rf/reg-event-fx
  :schnaq.wordcloud/toggle

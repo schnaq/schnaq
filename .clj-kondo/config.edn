@@ -9,5 +9,6 @@
            :aliased-namespace-symbol {:level :warning}
            :keyword-binding {:level :warning}
            :namespace-name-mismatch {:level :warning}
+           :redundant-fn-wrapper {:level :warning}
            :unused-referred-var {:exclude {com.fulcrologic.guardrails.core [=>]}}
            :unresolved-symbol {:exclude [(shadow.cljs.modern/defclass)]}}}

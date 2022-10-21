@@ -86,7 +86,7 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          new-type (get-in db [:statements :edit-type statement-id] :statement.type/neutral)]
      {:fx [(http/xhrio-request db :put "/discussion/statement/edit"
-                               [:statement.edit.send/success form]
+                               [:statement.edit.send/success]
                                {:statement-id statement-id
                                 :statement-type new-type
                                 :share-hash share-hash
@@ -96,10 +96,9 @@
 
 (rf/reg-event-fx
  :statement.edit.send/success
- (fn [{:keys [db]} [_ form {:keys [updated-statement]}]]
+ (fn [{:keys [db]} [_ {:keys [updated-statement]}]]
    {:db (assoc-in db [:schnaq :statements (:db/id updated-statement)] updated-statement)
-    :fx [[:form/clear form]
-         [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]}))
+    :fx [[:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]}))
 
 (rf/reg-event-fx
  :statement.edit.send/failure
@@ -114,19 +113,18 @@
  (fn [{:keys [db]} [_ html-selector form]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [(http/xhrio-request db :put "/schnaq/edit/title"
-                               [:discussion.edit.send/success form]
+                               [:discussion.edit.send/success]
                                {:share-hash share-hash
                                 :new-title (oget+ form [html-selector :value])}
                                [:statement.edit.send/failure])]})))
 
 (rf/reg-event-fx
  :discussion.edit.send/success
- (fn [{:keys [db]} [_ form response]]
+ (fn [{:keys [db]} [_ response]]
    (let [updated-discussion (:schnaq response)
          new-title (:discussion/title updated-discussion)]
      {:db (assoc-in db [:schnaq :selected :discussion/title] new-title)
-      :fx [[:form/clear form]
-           [:dispatch [:statement.edit/deactivate-edit (:db/id updated-discussion)]]]})))
+      :fx [[:dispatch [:statement.edit/deactivate-edit (:db/id updated-discussion)]]]})))
 
 (rf/reg-event-db
  :statement.edit/activate-edit

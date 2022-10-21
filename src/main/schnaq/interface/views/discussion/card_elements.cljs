@@ -234,7 +234,7 @@
         :aria-label "Search"
         :placeholder (labels :schnaq.search/input)
         :name "search-input"
-        :on-key-up #(throttled-in-schnaq-search %)}]
+        :on-key-up throttled-in-schnaq-search}]
       [search-clear-button search-input-id]]]))
 
 (rf/reg-sub

@@ -186,7 +186,7 @@
           (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))
         forbidden-write? (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?))]
     [:form.my-md-2
-     {:on-submit #(answer-to-statement-event %)
+     {:on-submit answer-to-statement-event
       :on-key-down #(when (toolbelt/ctrl-press? % "Enter")
                       (answer-to-statement-event %))}
      (when-not forbidden-write?

@@ -108,7 +108,7 @@
       :view welcome/welcome-pro-user-view
 
       :controllers [{:parameters {:query [:subbed]}
-                     :start (fn [query] (check-for-fresh-pro query))}]}]]
+                     :start check-for-fresh-pro}]}]]
    ["/admin"
     ["/center"
      {:name :routes/admin-center
@@ -240,7 +240,7 @@
       {:name :routes/graph-view
        :view graph-view/graph-view-entrypoint
        :link-text (labels :router/graph-view)
-       :controllers [{:identity (fn [] (random-uuid))
+       :controllers [{:identity random-uuid
                       :start (fn []
                                (rf/dispatch [:updates/periodic :graph true])
                                (rf/dispatch [:graph/load-data-for-discussion]))
@@ -288,7 +288,7 @@
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub
      :link-text (labels :router/not-found-label)
-     :controllers [{:identity #(random-uuid)
+     :controllers [{:identity random-uuid
                     :start #(.replace (.-location js/window) "/404")}]}]
    ["/beta-tester-only"
     {:name :routes/beta-only

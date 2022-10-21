@@ -116,7 +116,7 @@
 
 (rf/reg-sub
  :hubs/all
- (fn [db] (:hubs db)))
+ :hubs)
 
 (rf/reg-sub
  :hub/current
@@ -133,8 +133,7 @@
 
 (rf/reg-sub
  :hub/selected
- (fn [db]
-   (:hub-selected db)))
+ :hub-selected)
 
 (rf/reg-sub
  :hub.current/members

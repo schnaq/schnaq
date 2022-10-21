@@ -70,8 +70,7 @@
 
 (rf/reg-fx
  :form/clear
- (fn [form-elements]
-   (toolbelt/reset-form-fields! form-elements)))
+ toolbelt/reset-form-fields!)
 
 (rf/reg-event-fx
  :body.class/add
