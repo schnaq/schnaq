@@ -36,7 +36,7 @@
        "English"]]]))
 
 ;; -----------------------------------------------------------------------------
-;; Graph stuff... Move to other ns TODO
+;; Graph tools
 
 (defn- stabilize-graph
   "Stabilize the graph."
