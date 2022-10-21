@@ -13,7 +13,7 @@
         created (:statement/created-at statement)
         display-name (tools/truncate-to-n-chars (user-utils/display-name user) 20)]
     [:div.d-flex {:class additional-classes}
-     [common/avatar user avatar-size]
+     [common/avatar :size avatar-size :user user]
      [:div.mx-2.d-inline.my-auto [:span.text-sm.text-typography display-name]
       (when created
         [:small.fw-light.text-muted.ms-2.my-auto
@@ -27,9 +27,9 @@
         name-class (if authenticated? "text-typography" "text-muted")]
     [:div.d-flex.flex-row.text-muted
      [:div.d-md-none
-      [common/avatar user (* avatar-size 0.75)]]
+      [common/avatar :size (* avatar-size 0.75) :user user]]
      [:div.d-none.d-md-block
-      [common/avatar user avatar-size]]
+      [common/avatar :size avatar-size :user user]]
      [:small.mx-md-2.my-auto {:class name-class} (tools/truncate-to-n-chars display-name 20)]]))
 
 (defn current-user-info
@@ -39,7 +39,7 @@
         picture-component (if authenticated? common/avatar common/automatic-identicon)]
     [:div.d-flex.flex-row
      [:div.d-md-none
-      [picture-component (.floor js/Math (* avatar-size 0.75))]]
+      [picture-component :size (.floor js/Math (* avatar-size 0.75))]]
      [:div.d-none.d-md-block
-      [picture-component avatar-size]]
+      [picture-component :size avatar-size]]
      [:small.mx-2.my-auto {:class name-class} @(rf/subscribe [:user/display-name])]]))

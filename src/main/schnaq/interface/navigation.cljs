@@ -11,8 +11,7 @@
 
 (rf/reg-sub
  :navigation/current-route
- (fn [db]
-   (:current-route db)))
+ :-> :current-route)
 
 (rf/reg-sub
  :navigation/current-view
@@ -37,6 +36,12 @@
    (canonical-route-name (get-in current-route [:data :name]))))
 
 (rf/reg-sub
+ :navigation/current-route?
+ :<- [:navigation/current-route]
+ (fn [current-route [_ route]]
+   (= route (canonical-route-name (get-in current-route [:data :name])))))
+
+(rf/reg-sub
  :routes.schnaq/start?
  :<- [:navigation/current-route-name]
  (fn [route-name _]
@@ -55,7 +60,7 @@
 
 (rf/reg-fx
  :navigation.navigated/push-matomo-tracker
- (fn [] (matomo/track-current-page)))
+ matomo/track-current-page)
 
 (rf/reg-event-fx
  :navigation/navigated

@@ -7,15 +7,19 @@
 
    :view/present "Present"
 
-   :nav/schnaqs "schnaqs"
+   :nav/schnaqs "my schnaqs"
+   :nav/schnaqs-tooltip "Show your visited schnaqs"
    :nav.schnaqs/show-all "All schnaqs"
    :nav.schnaqs/show-all-public "All public schnaqs"
    :nav.schnaqs/create-schnaq "Create schnaq"
    :nav.schnaqs/last-added "Last created schnaq"
    :nav/blog "Blog"
+   :nav/blog-tooltip "Learn more about us in the blog"
    :nav/admin "Admin"
    :nav/register "Try for free"
+   :nav/register-tooltip "Create your account"
    :nav/login "Sign in"
+   :nav/login-tooltip "Sign into your account"
    :nav.buttons/language-toggle "Change language"
 
    ;; Call to contribute
@@ -311,6 +315,7 @@
    :discussion.badges/statement-by "by"
    :discussion.badges/new "New"
    :discussion.button/text "Overview"
+   :discussion.button/tooltip "Go to schnaq overview"
 
    ;; Q & A
    :qanda/add-question-label "State your question"
@@ -554,7 +559,9 @@
 
    ;; Graph Texts
    :graph.button/text "Mindmap"
+   :graph.download/button "Download"
    :graph.download/as-png "Download mindmap as image"
+   :graph.settings/button "Settings"
    :graph.settings/title "Settings for your Mindmap"
    :graph.settings/description "Here are some settings for your Mindmap! Play around with the sliders and let the magic happen."
    :graph.settings.gravity/label "Adjust the gravity between your nodes."
@@ -612,7 +619,9 @@
    :router/archived-schnaqs "Archived schnaqs"
    :router/not-found-label "Not found route redirect"
    :router/pricing "Pricing"
+   :router/pricing-tooltip "Unlock all features"
    :router/privacy "Privacy Policy"
+   :router/privacy-tooltip "Find out what happens with your data"
    :router/qanda "Q&A"
    :router/start-discussion "Start discussion"
    :router/true-404-view "404 error page"
@@ -843,5 +852,4 @@
    :schnaqqifant/three-d-head-alt-text "Schnaqqis Head in 3D looking at you"
    :icon.search/alt-text "Search Icon"
    :icon.posts/alt-text "Icon representing number of posts"
-   :icon.users/alt-text "Icon for number of users"
-   :navbar.icon.views/alt-text "Icon representing different views"})
+   :icon.users/alt-text "Icon for number of users"})

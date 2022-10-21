@@ -91,17 +91,6 @@
      {:class (format "border-%s text-%s" stringed-variant stringed-variant)}
      content]))
 
-(defn theme-logo
-  "Show the current logo configured in a theme."
-  [attrs]
-  (let [{:theme.images/keys [logo]} @(rf/subscribe [:schnaq.selected/theme])]
-    (when logo
-      [:img.theme-logo
-       (merge
-        {:src logo
-         :alt "Theme Logo"}
-        attrs)])))
-
 (>defn next-step
   "Show next possible steps, with a heading, lead text and a CTA."
   ([icon title body button-text route-name]
@@ -118,7 +107,7 @@
         [buttons/anchor button-text href :btn-white])])))
 
 (>defn schnaq-logo
-  "Display a schnaq logo"
+  "Display a schnaq logo."
   [attrs]
   [(? map?) => :re-frame/component]
   [:img (merge
@@ -126,11 +115,18 @@
           :alt "schnaq logo"}
          attrs)])
 
-(>defn schnaqqi-white
-  "Display a schnaq logo"
-  [attrs]
-  [(? map?) => :re-frame/component]
+(defn schnaq-logo-white
+  "Display a white schnaq logo."
+  [& {:keys [props]}]
+  [:img (merge
+         {:src (img-path :logo-white)
+          :alt "schnaq logo"}
+         props)])
+
+(defn schnaqqi-white
+  "Display a white schnaqqi."
+  [& {:keys [props]}]
   [:img (merge
          {:src (img-path :schnaqqifant/white)
           :alt "Image of schnaqqi"}
-         attrs)])
+         props)])

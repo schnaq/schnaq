@@ -1,12 +1,13 @@
 (ns schnaq.interface.views.pages
   "Defining page-layouts."
   (:require [cljs.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn >defn- ? =>]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.navbar :as navbar-components :refer [discussion-navbar qanda-navbar]]
             [schnaq.interface.components.videos :refer [video]]
             [schnaq.interface.config :as config]
             [schnaq.interface.scheduler :as scheduler]
@@ -14,9 +15,7 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.loading :as loading]
-            [schnaq.interface.views.navbar.for-discussions :as discussion-navbar]
-            [schnaq.interface.views.navbar.for-pages :as navbar-pages]))
+            [schnaq.interface.views.loading :as loading]))
 
 (declare with-nav-and-header)
 
@@ -198,9 +197,10 @@
   [::page-options (? :re-frame/component) :ret :re-frame/component]
   [page-builder
    options
-   [:div.masthead-layered
-    [navbar-pages/navbar-transparent (:page/wrapper-classes options)]
-    [base/header options]]
+   [:<>
+    [navbar-components/page-navbar]
+    [:div.masthead-layered
+     [base/header options]]]
    body
    (if wavy-footer?
      [base/footer-with-wave]
@@ -210,13 +210,13 @@
   "Page layout with discussion header."
   [options body]
   [::page-options (s/+ vector?) :ret vector?]
-  [page-builder options [discussion-navbar/header] body [base/footer]])
+  [page-builder options [discussion-navbar] body [base/footer]])
 
 (>defn with-qanda-header
   "Page layout with discussion header."
   [options body]
   [::page-options (s/+ vector?) :ret vector?]
-  [page-builder options [discussion-navbar/qanda-header] body [base/footer-with-wave]])
+  [page-builder options [qanda-navbar] body [base/footer-with-wave]])
 
 (>defn three-column-layout
   "Use three column layout to display page."
@@ -224,7 +224,7 @@
   [::page-options vector? vector? vector? :ret vector?]
   [page-builder
    options
-   [navbar-pages/navbar]
+   [discussion-navbar]
    [:section.container-fluid.p-3
     [:div.row
      [:div.col-12.col-lg-3.px-0.px-md-3 left]

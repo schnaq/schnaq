@@ -56,7 +56,7 @@
 
 (rf/reg-sub
  :modal
- (fn [db] (:modal db)))
+ :-> :modal)
 
 (rf/reg-event-db
  :modal

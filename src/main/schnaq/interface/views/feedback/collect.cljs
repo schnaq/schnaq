@@ -100,7 +100,7 @@
 
 (rf/reg-sub
  :feedbacks
- (fn [db _] (:feedbacks db)))
+ :-> :feedbacks)
 
 (rf/reg-event-fx
  :feedbacks/success

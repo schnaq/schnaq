@@ -28,7 +28,7 @@
         author @(rf/subscribe [:schnaq/author])
         schnaq @(rf/subscribe [:schnaq/selected])
         limit-reached? (posts-limit-reached? author schnaq)]
-    [:form {:on-submit #(submit-fn %)
+    [:form {:on-submit submit-fn
             :on-key-down #(when (toolbelt/ctrl-press? % "Enter") (submit-fn %))}
      [:label.form-label.h5.mb-3 {:for editor-id} (labels :qanda/add-question-label)]
      [:div.d-flex.flex-row.qanda-input-content.rounded-1
@@ -64,8 +64,7 @@
 
 (>defn question-field-and-search-results
   "Combine input form and results list for uniform representation in ask-view
-  and in other usages, e.g. the startpage.
-  Backgroundtype can either be :light or :dark"
+  and in other usages, e.g. the startpage."
   [background-schema]
   [:background/schema :ret :re-frame/component]
   [:<>

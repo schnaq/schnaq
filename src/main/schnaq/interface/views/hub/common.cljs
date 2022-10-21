@@ -12,7 +12,7 @@
      {:style {:height (str size "px") :width (str size "px")}}
      [:img.profile-pic-image {:src logo
                               :alt "Hub Logo"}]]
-    [common/identicon display-name size]))
+    [common/identicon :name display-name :size size]))
 
 (defn hub-logo-with-name
   "Hub logo with the name on the right side."

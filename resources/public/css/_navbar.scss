@@ -7,40 +7,6 @@
 
 $height-of-components: 4.25rem;
 
-.schnaq-navbar-skeleton {
-  @include rounded.rounded-1;
-  height: $height-of-components;
-
-  @include media-breakpoint-down(md) {
-    max-height: 8rem;
-    width: 100%;
-  }
-}
-
-.schnaq-navbar {
-  @extend .schnaq-navbar-skeleton;
-  background: vars.$white;
-  overflow: visible;
-  padding: 0;
-
-  @include media-breakpoint-down(md) {
-    border-radius: 0;
-  }
-
-  .nav-link {
-    @extend .p-2;
-  }
-}
-
-.schnaq-navbar-dynamic-padding {
-  background: transparent;
-  overflow: visible;
-
-  @include media-breakpoint-down(md) {
-    padding: 0;
-  }
-}
-
 .schnaq-logo-container {
   @include rounded.rounded-1;
   background-image: url('https://s3.schnaq.com/schnaq-common/background/wave_background.svg');
@@ -50,6 +16,7 @@ $height-of-components: 4.25rem;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   height: 100% !important;
+  min-width: 130px;
   overflow: hidden;
   padding: 1rem 4rem 1rem 1rem;
 
@@ -59,59 +26,22 @@ $height-of-components: 4.25rem;
   }
 }
 
-.schnaq-brand-logo {
-  min-width: 4rem;
-}
-
-.schnaq-navbar-title {
-  @extend .schnaq-navbar-skeleton;
-}
-
-.discussion-navbar-button {
-  @include rounded.rounded-1;
-  height: $height-of-components;
-}
-
-.navbar-bg-transparent-sm-white {
-  background: transparent;
-  @include media-breakpoint-down(md) {
-    background: $white;
-  }
-}
-
-.navbar-transparent {
-  @extend .navbar-dark;
-
-  .nav-link {
-    color: $gray-200 !important;
-  }
-
-  .nav-link:hover {
-    color: $white !important;
-  }
-}
-
-.navbar-dark {
-  .navbar-text {
-    color: $white;
-  }
-
-  a:not(.dropdown-item) {
-    color: $white !important;
-
-    &:hover {
-      @extend .text-decoration-underline;
-      cursor: pointer;
-    }
-  }
-}
-
-.navbar-text {
-  max-width: 70%;
-  max-width: calc(80% - 4rem); // -4rem because of the navbar toggler
+.navbar-title {
+  -webkit-box-orient: vertical;
+  display: -webkit-box !important; /* stylelint-disable-line value-no-vendor-prefix */
+  -webkit-line-clamp: 2;
   overflow: hidden;
+  padding-bottom: 0;
+  padding-top: 0;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  @include media-breakpoint-down(xl) {
+    max-width: 70%;
+    max-width: calc(80% - 4rem); // -4rem because of the navbar toggler
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: wrap;
+  }
 }
 
 .navbar-icon {
@@ -123,4 +53,15 @@ $height-of-components: 4.25rem;
 
 .nav-link.disabled {
   @extend .fw-bold;
+}
+
+.nav-link-no-padding .nav-link {
+  padding: 0;
+}
+
+.bg-transparent .nav-link {
+  @include media-breakpoint-up(md) {
+    padding-bottom: 0;
+    padding-top: 0;
+  }
 }

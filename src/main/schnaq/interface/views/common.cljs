@@ -25,38 +25,35 @@
            (str "data:image/svg+xml;base64,"
                 (js/btoa (generate-identicon display-name size))))))
 
-(>defn identicon
+(defn identicon
   "Generate unique identicon component."
-  ([display-name]
-   [string? :ret vector?]
-   [identicon display-name])
-  ([display-name size]
-   [(? string?) number? :ret vector?]
-   [:span.shadow-sm {:title display-name
-                     :dangerouslySetInnerHTML
-                     {:__html (generate-identicon display-name size)}}]))
+  [& {:keys [name size props]}]
+  [:span (merge {:title name
+                 :dangerouslySetInnerHTML
+                 {:__html (generate-identicon name size)}}
+                props)])
 
 (defn automatic-identicon
   "Generate the identicon without passing a name, just a size. Gets the name from the db"
-  [size]
-  [identicon @(rf/subscribe [:user/display-name]) size])
+  [& {:keys [props size]}]
+  [identicon :props props :name @(rf/subscribe [:user/display-name]) :size size])
 
-(>defn avatar
+(defn avatar
   "Get a user's avatar."
-  ([size]
-   [nat-int? :ret vector?]
-   [avatar @(rf/subscribe [:user/entity]) size])
-  ([{:user.registered/keys [profile-picture display-name] :as user} size]
-   [(? map?) nat-int? :ret vector?]
-   (let [display-name (or display-name (:user/nickname user))]
-     [:div.avatar-image.p-0
-      (if profile-picture
-        [:div.profile-pic-fill
-         [:img.profile-pic-image {:src profile-picture
-                                  :style {:height (str size "px") :width (str size "px")}
-                                  :alt (str "Profile Picture of " display-name)
-                                  :on-error (set-fallback-identicon display-name 50)}]]
-        [identicon display-name size])])))
+  [& {:keys [props size user inline?]
+      :or {user @(rf/subscribe [:user/entity])}}]
+  (let [{:user.registered/keys [profile-picture display-name]} user
+        display-name (or display-name (:user/nickname user))]
+    [:div.avatar-image (when inline? {:className "d-inline-flex mx-1"})
+     (if profile-picture
+       [:div.profile-pic-fill
+        [:img.profile-pic-image
+         (merge {:src profile-picture
+                 :style {:height (str size "px") :width (str size "px")}
+                 :alt (str "Profile Picture of " display-name)
+                 :on-error (set-fallback-identicon display-name size)}
+                props)]]
+       [identicon :name display-name :size size])]))
 
 (>defn avatar-with-nickname-right
   "Create an image based on the nickname and also print the nickname."
@@ -64,7 +61,7 @@
   [number? :ret vector?]
   (let [{:user.registered/keys [display-name]} @(rf/subscribe [:user/entity])]
     [:div.d-flex
-     [:div.me-4 [avatar size]]
+     [:div.me-4 [avatar :size size]]
      [:h4.my-auto display-name]]))
 
 (defn inline-avatar
@@ -72,7 +69,7 @@
   [{:user.registered/keys [display-name] :as user} size]
   [:<>
    [:div.d-inline-block.pe-1
-    [avatar user size]]
+    [avatar :size size :user user]]
    [:p.d-inline-block display-name]])
 
 (>defn add-namespace-to-keyword

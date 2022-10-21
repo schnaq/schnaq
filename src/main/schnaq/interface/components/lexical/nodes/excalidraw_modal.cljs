@@ -20,7 +20,7 @@
                      (.preventDefault event)
                      (discard-modal-open! true)
                      (onDelete))
-        on-change-fn #(elements! %)
+        on-change-fn elements!
         ShowDiscardDialog [:div.excalidraw-discard-modal
                            [:button {:on-click (fn []
                                                  (discard-modal-open! false)

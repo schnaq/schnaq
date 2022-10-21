@@ -55,7 +55,7 @@
                           (map extract-link-text-from-md)
                           (map #(str/replace % #"[^A-z0-9äöüÄÖÜß]" "")) ;; remove all non-word characters
                           (map str/lower-case)
-                          (remove #(stopwords %))
+                          (remove stopwords)
                           (remove empty?)
                           frequencies)]
     {:text word

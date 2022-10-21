@@ -72,7 +72,7 @@
 
 (defmulti ^:private stripe-event
   "Dispatch incoming stripe events."
-  (fn [event] (:type event)))
+  :type)
 
 (defmethod stripe-event "customer.subscription.created" [event]
   '"This event is triggered when a new user creates a subscription on stripe. We

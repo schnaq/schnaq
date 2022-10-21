@@ -154,7 +154,7 @@
   (testing "Retract a value from a set, returns the set without the value."
     (let [tester-admin-christian (db/update-user {:user.registered/keycloak-id christian-keycloak-id
                                                   :user.registered/roles :role/tester})
-          {:keys [:user.registered/roles]} (db/retract-user-attributes-value tester-admin-christian :user.registered/roles :role/tester)]
+          {:keys [user.registered/roles]} (db/retract-user-attributes-value tester-admin-christian :user.registered/roles :role/tester)]
       (is (= (:user.registered/roles christian) roles)))))
 
 (deftest retract-user-attributes-value-multiple-test

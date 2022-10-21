@@ -7,15 +7,19 @@
 
    :view/present "Präsentieren"
 
-   :nav/schnaqs "schnaqs"
+   :nav/schnaqs "meine schnaqs"
+   :nav/schnaqs-tooltip "Zeige deine besuchten schnaqs an"
    :nav.schnaqs/show-all "Alle schnaqs"
    :nav.schnaqs/show-all-public "Alle öffentlichen schnaqs"
    :nav.schnaqs/create-schnaq "schnaq anlegen"
    :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
    :nav/blog "Blog"
+   :nav/blog-tooltip "Lerne mehr über uns im Blog"
    :nav/admin "Admin"
    :nav/register "Kostenlos ausprobieren"
+   :nav/register-tooltip "Erstelle deinen Account"
    :nav/login "Anmelden"
+   :nav/login-tooltip "Logge dich in deinen Account ein"
    :nav.buttons/language-toggle "Sprache ändern"
 
    ;; Call to contribute
@@ -314,6 +318,7 @@
    :discussion.badges/statement-by "von"
    :discussion.badges/new "Neu"
    :discussion.button/text "Übersicht"
+   :discussion.button/tooltip "Zur schnaq-Übersicht"
 
    ;; Q & A
    :qanda/add-question-label "Stell deine Frage"
@@ -559,7 +564,9 @@
 
    ;; Graph Texts
    :graph.button/text "Mindmap"
+   :graph.download/button "Herunterladen"
    :graph.download/as-png "Mindmap als Bild herunterladen"
+   :graph.settings/button "Einstellungen"
    :graph.settings/title "Einstellungen für die Mindmap"
    :graph.settings/description "Finde hier Einstellungen für deine Mindmap! Spiele mit den Slidern herum und schau was passiert."
    :graph.settings.gravity/label "Stelle hier die Gravitation zwischen den Knoten ein."
@@ -619,7 +626,9 @@
    :router/archived-schnaqs "Archivierte schnaqs"
    :router/not-found-label "Not Found route redirect"
    :router/pricing "Preise"
+   :router/pricing-tooltip "Schalte alle Funktionen frei"
    :router/privacy "Datenschutz"
+   :router/privacy-tooltip "Erfahre, was mit deinen Daten geschieht"
    :router/qanda "Fragen & Antworten"
    :router/start-discussion "Starte Diskussion"
    :router/true-404-view "404 Fehlerseite"
@@ -851,5 +860,4 @@
    :schnaqqifant/three-d-head-alt-text "Schnaqqis Kopf in 3D wie er dich anschaut"
    :icon.search/alt-text "Such-Symbol"
    :icon.posts/alt-text "Symbol für Anzahl Beiträge"
-   :icon.users/alt-text "Symbol für Anzahl Nutzer:innen"
-   :navbar.icon.views/alt-text "Icon für verschiedene Ansichten"})
+   :icon.users/alt-text "Symbol für Anzahl Nutzer:innen"})

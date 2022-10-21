@@ -151,7 +151,7 @@
      #(mergeRegister
        (ocall active-editor "registerUpdateListener"
               (fn [editor]
-                (ocall (oget editor :editorState) "read" (fn [] (update-toolbar)))))
+                (ocall (oget editor :editorState) "read" update-toolbar)))
        (ocall editor "registerCommand" ;; here it is the initial editor to swap it when changed.
               SELECTION_CHANGE_COMMAND
               (fn [_payload new-editor] (update-toolbar) (active-editor! new-editor) false)

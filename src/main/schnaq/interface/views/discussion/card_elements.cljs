@@ -38,7 +38,7 @@
          {:on-click #(rf/dispatch navigation-target)}
          [:div.d-flex
           [icon :arrow-left "m-auto"]]]]
-       [:small.my-auto.ms-2.d-none.d-xxl-block back-label]])))
+       [:small.my-auto.ms-2 back-label]])))
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -68,7 +68,7 @@
         history-content [:div
                          [:div.d-flex.flex-row
                           [:h6 (labels :history.statement/user) " " (toolbelt/truncate-to-n-chars nickname 20)]
-                          [:div.ms-auto [common/avatar user 22]]]
+                          [:div.ms-auto [common/avatar :size 22 :user user]]]
                          (as-markdown (toolbelt/truncate-to-n-words statement-content max-word-count))]]
     [:article
      [:div.history-thread-line]
@@ -234,7 +234,7 @@
         :aria-label "Search"
         :placeholder (labels :schnaq.search/input)
         :name "search-input"
-        :on-key-up #(throttled-in-schnaq-search %)}]
+        :on-key-up throttled-in-schnaq-search}]
       [search-clear-button search-input-id]]]))
 
 (rf/reg-sub
@@ -247,11 +247,11 @@
  (fn [db [_ query]]
    (assoc-in db [:ui :settings] query)))
 
-(defn discussion-options-navigation-mobile
+(defn discussion-options-navigation
   "Navigation bar on top of the discussion contents."
   []
   (when-not @(rf/subscribe [:ui/setting :hide-discussion-options])
-    [:div.d-flex.flex-row
+    [:div.d-flex.flex-row.pt-1.pt-xl-0
      (when-not config/in-iframe?
        [:div.me-auto [back-button]])
      [tooltip/html
@@ -262,28 +262,9 @@
        (when @(rf/subscribe [:routes.schnaq/start?])
          [filters/filter-answered-statements])
        [:div.py-3 [search-bar]]]
-      [:> Button {:variant "outline-primary" :size :sm :className "m-2 panel-white-sm"}
+      [:> Button {:variant "outline-primary" :size :sm :className "panel-white-sm"}
        (labels :discussion.navbar/discussion-settings)]
       {:appendTo js/document.body}]]))
-
-(defn discussion-options-navigation
-  "Navigation bar on top of the discussion contents."
-  []
-  (when-not @(rf/subscribe [:ui/setting :hide-discussion-options])
-    [:div.text-dark.w-100.mb-1.mx-1.mx-md-0.d-flex.flex-row.flex-wrap.pb-2
-     (when-not config/in-iframe?
-       [:div.me-1.me-lg-2.me-xxl-5.pe-lg-2
-        [back-button]])
-     [:div.mt-2.mt-md-0.d-flex.flex-wrap.ms-auto.gy-5.panel-white-sm
-      [:div.ms-auto.ms-md-0.me-1.mx-lg-2.pe-0.pe-lg-2.order-0
-       [sort-options]]
-      [:section.ms-auto.ms-md-0.mt-2.mt-md-0.order-2.order-md-1
-       (when @(rf/subscribe [:routes.schnaq/start?])
-         [filters/filter-answered-statements])]
-      [:div.mx-lg-2.pe-1.pe-lg-2.order-1.order-md-2
-       [question-filter-button]]
-      [:div.mt-2.mt-md-0.ms-auto.ms-md-0.d-flex.align-items-center.order-3
-       [search-bar]]]]))
 
 (defn locked-statement-icon
   "Indicator that a statement is locked."

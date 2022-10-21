@@ -108,8 +108,7 @@
 
 (rf/reg-sub
  :local-votes
- (fn [db _]
-   (get db :votes)))
+ :-> :votes)
 
 (rf/reg-event-fx
  :discussion/toggle-upvote

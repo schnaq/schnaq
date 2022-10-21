@@ -7,7 +7,6 @@
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.modal :as modal]
-            [schnaq.interface.views.navbar.elements :refer [button-with-icon]]
             [schnaq.interface.views.notifications :refer [notify!]]))
 
 (defn- share-schnaq-via-access-code []
@@ -50,7 +49,7 @@
                               false))}
         (labels :share-link/copy)]]]]))
 
-(defn share-schnaq-button
+(defn share-schnaq-modal
   "Create component to copy access link and access code."
   [component]
   [modal/modal {:size :lg}
@@ -65,21 +64,9 @@
       "100px"
       (labels :sharing.modal/qanda-help)]]]])
 
-(defn navbar-share-schnaq-button
-  "Open modal, styled as a button for the navbar."
-  []
-  [share-schnaq-button
-   (fn [props]
-     [button-with-icon
-      :share
-      (labels :sharing/tooltip)
-      (labels :discussion.navbar/share)
-      nil
-      props])])
-
 (defn small-share-schnaq-button
   "Small share button with an icon in it."
   []
-  [share-schnaq-button
+  [share-schnaq-modal
    (fn [props]
      [button [icon :share] nil "btn-outline-white ms-1" props])])

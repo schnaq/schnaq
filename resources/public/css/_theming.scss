@@ -80,18 +80,18 @@
   // Text Color
 
   .text-primary {
-    color: var(--theming-primary);
+    color: var(--theming-primary) !important;
   }
 
   .text-secondary {
-    color: var(--theming-secondary);
+    color: var(--theming-secondary) !important;
   }
 
   // -----------------------------------------------------------------------------
   // Tabs
 
   .nav-tabs .nav-link {
-    color: var(--theming-primary);
+    color: var(--theming-primary) !important;
   }
 
   // -----------------------------------------------------------------------------
@@ -115,5 +115,9 @@
   .form-control:focus {
     border-color: var(--theming-primary);
     box-shadow: none;
+  }
+
+  .navbar-dark.bg-primary {
+    background-color: var(--theming-primary) !important;
   }
 }
