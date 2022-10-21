@@ -318,9 +318,8 @@
 (defn edit-title
   "Edits a schnaq title by share-hash"
   [share-hash title]
-  (let [enable-transaction [[:db/add [:discussion/share-hash share-hash]
-                             :discussion/title title]]]
-    (main-db/transact enable-transaction)))
+  (main-db/transact [[:db/add [:discussion/share-hash share-hash]
+                      :discussion/title title]]))
 
 ;; -----------------------------------------------------------------------------
 
