@@ -1,4 +1,4 @@
-(ns schnaq.interface.pages.start
+(ns schnaq.interface.start-page
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as button]

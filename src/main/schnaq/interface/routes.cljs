@@ -12,7 +12,7 @@
             [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
-            [schnaq.interface.pages.start :refer [startpage]]
+            [schnaq.interface.start-page :refer [startpage]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.routing :as route-utils]
             [schnaq.interface.utils.toolbelt :as tools]
