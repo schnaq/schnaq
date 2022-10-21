@@ -132,7 +132,7 @@
   "Input form with an option to chose statement type."
   [editor-id]
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
-        pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])]
+        pro-con-disabled? @(rf/subscribe [:schnaq.state/pro-con?])]
     [:<>
      [:div.pb-3
       [user/current-user-info 40 "text-primary fs-6"]]
@@ -174,7 +174,7 @@
         limit-reached? (posts-limit-reached? author schnaq)
         statement-id (:db/id statement)
         statement-type @(rf/subscribe [:form/statement-type statement-id])
-        pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
+        pro-con-disabled? @(rf/subscribe [:schnaq.state/pro-con?])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         locked? (:statement/locked? statement)
         hide-input-replies @(rf/subscribe [:ui/setting :hide-input-replies])

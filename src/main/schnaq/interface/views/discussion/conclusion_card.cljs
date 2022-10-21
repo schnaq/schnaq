@@ -70,7 +70,7 @@
   (let [statement-labels (set (:statement/labels statement))
         label ":check"
         checked? (statement-labels label)
-        mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
+        mods-mark-only? @(rf/subscribe [:schnaq/state? :discussion.state.qa/mark-as-moderators-only])
         show-button? (and (not @(rf/subscribe [:schnaq.selected/read-only?]))
                           (or (not mods-mark-only?)
                               (and mods-mark-only? @(rf/subscribe [:user/moderator?]))))]

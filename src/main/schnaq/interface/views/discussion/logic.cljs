@@ -99,7 +99,7 @@
   [form]
   (let [new-text-element (oget form [:statement])
         new-text (oget new-text-element [:value])
-        pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
+        pro-con-disabled? @(rf/subscribe [:schnaq.state/pro-con?])
         form-statement-type @(rf/subscribe [:form/statement-type :selected])
         statement-type (if pro-con-disabled?
                          :statement.type/neutral
