@@ -6,5 +6,8 @@
            shadow.cljs.modern/defclass clojure.core/def}
  :linters {:single-key-in {:level :warning}
            :unsorted-required-namespaces {:level :warning}
+           :aliased-namespace-symbol {:level :warning}
+           :keyword-binding {:level :warning}
+           :namespace-name-mismatch {:level :warning}
            :unused-referred-var {:exclude {com.fulcrologic.guardrails.core [=>]}}
            :unresolved-symbol {:exclude [(shadow.cljs.modern/defclass)]}}}
