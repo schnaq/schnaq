@@ -24,10 +24,11 @@
 
 (>defn promote-user-to-moderator
   "Add a user to the moderation team of a schnaq."
-  [share-hash user-email]
+  [share-hash email]
   [:discussion/share-hash ::specs/email => future?]
+  (log/debug (format "Promoting user %s to moderator for %s" email share-hash))
   (transact [[:db/add [:discussion/share-hash share-hash] :discussion/moderators
-              [:user.registered/email user-email]]]))
+              [:user.registered/email email]]]))
 
 (>defn retract-user-attribute
   "Retract an attribute of a user."

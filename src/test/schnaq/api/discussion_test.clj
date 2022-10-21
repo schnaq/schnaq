@@ -171,6 +171,8 @@
     (testing "Users with moderator rights can toggle the focus."
       (is (= 200 (set-focus-request poll-id share-hash))))))
 
+;; -----------------------------------------------------------------------------
+
 (deftest delete-statement-and-children!-test
   (let [parent-id (:db/id (first (discussion-db/statements-by-content "we should get a cat")))
         delete-fn
@@ -188,3 +190,36 @@
       (is (empty? (discussion-db/statements-by-content "this lies in their natural conditions"))))
     (testing "With wrong statement-id"
       (is (= 403 (:status (delete-fn (- parent-id 999))))))))
+
+;; -----------------------------------------------------------------------------
+
+(defn- manage-discussion-states [share-hash state verb token]
+  (-> {:request-method verb :uri (:path (api/route-by-name :api.discussion.manage/state))
+       :body-params {:state state
+                     :share-hash share-hash}}
+      toolbelt/add-csrf-header
+      (toolbelt/mock-authorization-header token)
+      test-app
+      :status))
+
+(deftest add-discussion-state-forbidden-test
+  (testing "Adding a state to a discussion is forbidden for normal users"
+    (is (= 403 (manage-discussion-states "cat-dog-hash" :discussion.state/disable-posts :put
+                                         toolbelt/token-schnaqqifant-user)))))
+
+(deftest add-discussion-state-test
+  (testing "Adding a state to a discussion is allowed for moderators."
+    (let [share-hash "cat-dog-hash"]
+      (is (= 200 (manage-discussion-states share-hash :discussion.state/disable-posts :put
+                                           toolbelt/token-kangaroo-normal-user))))))
+
+(deftest delete-discussion-state-forbidden-test
+  (testing "Removing a state from a discussion is forbidden for normal users"
+    (is (= 403 (manage-discussion-states "cat-dog-hash" :discussion.state/disable-posts :delete
+                                         toolbelt/token-schnaqqifant-user)))))
+
+(deftest delete-discussion-state-test
+  (testing "Removing a state from a discussion is allowed for moderators."
+    (let [share-hash "cat-dog-hash"]
+      (is (= 200 (manage-discussion-states share-hash :discussion.state/disable-posts :delete
+                                           toolbelt/token-kangaroo-normal-user))))))

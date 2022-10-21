@@ -381,7 +381,6 @@
                       :description (at/get-doc #'add-discussion-state)}
                 :delete {:handler delete-discussion-state
                          :description (at/get-doc #'delete-discussion-state)}
-                :middleware [:user/pro?]
                 :name :api.discussion.manage/state
                 :parameters {:body {:state :discussion/valid-states}}}]
      ["/focus" {:put set-focus

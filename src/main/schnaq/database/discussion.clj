@@ -301,16 +301,6 @@
   (ac/remove-invalid-and-pull-up-access-codes
    (fast-pull id (conj patterns/discussion :discussion/creation-secret))))
 
-(defn set-discussion-read-only
-  "Sets a discussion as read-only."
-  [share-hash]
-  (main-db/transact [[:db/add [:discussion/share-hash share-hash] :discussion/states :discussion.state/read-only]]))
-
-(defn remove-read-only
-  "Removes the read-only restriction from a discussion"
-  [share-hash]
-  (main-db/transact [[:db/retract [:discussion/share-hash share-hash] :discussion/states :discussion.state/read-only]]))
-
 (defn add-state
   "Add a state to a discussion."
   [share-hash state]
