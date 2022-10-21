@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.schnaq.poll
   (:require [cljs.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [=> >defn >defn-]]
-            [goog.string :as gstring] 
+            [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
@@ -48,7 +48,7 @@
 (defn- results-graph
   "A graph displaying the results of the poll."
   [{:poll/keys [options type hide-results?]} cast-votes]
-  (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+  (let [read-only? @(rf/subscribe [:schnaq.state/read-only?])
         voted? (or cast-votes read-only?)
         show-results? (or @(rf/subscribe [:user/moderator?]) (not hide-results?))]
     [:section.row
@@ -204,7 +204,7 @@
   "The content of a single or multiple choice poll. Can be either only the results or results and ability to vote."
   [poll]
   (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        read-only? @(rf/subscribe [:schnaq.state/read-only?])
         voted? (or cast-votes read-only?)]
     [:form
      {:on-submit (fn [e]
@@ -225,7 +225,7 @@
   [poll]
   [::specs/poll => :re-frame/component]
   (let [cast-votes @(rf/subscribe [:schnaq/vote-cast (:db/id poll)])
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        read-only? @(rf/subscribe [:schnaq.state/read-only?])
         user-moderator? @(rf/subscribe [:user/moderator?])
         voted? (or cast-votes read-only?)
         show-results? (or user-moderator? (not (:poll/hide-results? poll)))]

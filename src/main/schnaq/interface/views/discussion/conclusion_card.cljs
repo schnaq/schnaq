@@ -71,7 +71,7 @@
         label ":check"
         checked? (statement-labels label)
         mods-mark-only? @(rf/subscribe [:schnaq/state? :discussion.state.qa/mark-as-moderators-only])
-        show-button? (and (not @(rf/subscribe [:schnaq.selected/read-only?]))
+        show-button? (and (not @(rf/subscribe [:schnaq.state/read-only?]))
                           (or (not mods-mark-only?)
                               (and mods-mark-only? @(rf/subscribe [:user/moderator?]))))]
     (when show-button?
@@ -126,7 +126,7 @@
 (defn- discuss-answer-button [statement]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
         statement-num (:meta/sub-statement-count statement 0)
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        read-only? @(rf/subscribe [:schnaq.state/read-only?])
         locked? (:statement/locked? statement)
         button-label (if (or read-only? locked?) :statement/replies :statement/discuss)]
     [:a.btn.btn-sm.btn-outline-dark.me-3.px-1.py-0
@@ -233,7 +233,7 @@
   "Dispatch to show input form or an alert that it is currently not allowed to 
   add statements."
   []
-  (if @(rf/subscribe [:schnaq.selected/read-only?])
+  (if @(rf/subscribe [:schnaq.state/read-only?])
     [:<>
      [icon :lock "mx-2 text-primary"]
      [:span.small.text-muted (labels :discussion.state/read-only-warning)]]
@@ -338,7 +338,7 @@
             activation-tab [:span [iconed-heading :magic :schnaq.input-type/activation]]
             word-cloud-tab [:span [iconed-heading :cloud :schnaq.input-type/word-cloud]]
             pro-user? @(rf/subscribe [:user/pro?])
-            read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+            read-only? @(rf/subscribe [:schnaq.state/read-only?])
             top-level? @(rf/subscribe [:routes.schnaq/start?])]
         [motion/fade-in-and-out
          [:section.selection-card

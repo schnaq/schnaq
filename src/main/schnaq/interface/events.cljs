@@ -144,6 +144,12 @@
    (contains? states :discussion.state/disable-pro-con)))
 
 (rf/reg-sub
+ :schnaq.state/read-only?
+ :<- [:schnaq/states]
+ (fn [states _ _]
+   (contains? states :discussion.state/read-only)))
+
+(rf/reg-sub
  :schnaq/state?
  :<- [:schnaq/states]
  (fn [states [_ state]]
@@ -160,12 +166,6 @@
  :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
    (get-in selected-schnaq [:discussion/access :discussion.access/code])))
-
-(rf/reg-sub
- :schnaq.selected/read-only?
- :<- [:schnaq/selected]
- (fn [selected-schnaq _ _]
-   (not (nil? (some #{:discussion.state/read-only} (:discussion/states selected-schnaq))))))
 
 (rf/reg-sub
  :schnaq/theme

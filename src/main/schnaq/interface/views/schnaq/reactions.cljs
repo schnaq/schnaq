@@ -41,7 +41,7 @@
         upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
         downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)
         authenticated? @(rf/subscribe [:user/authenticated?])
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+        read-only? @(rf/subscribe [:schnaq.state/read-only?])]
     [:div.d-flex.flex-row.align-items-center
      [:div.me-1
       (cond->
@@ -75,7 +75,7 @@
         upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
         downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)
         authenticated? @(rf/subscribe [:user/authenticated?])
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+        read-only? @(rf/subscribe [:schnaq.state/read-only?])]
     [:div props
      [:div.d-flex.flex-row
       [:div
