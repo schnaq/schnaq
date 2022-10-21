@@ -234,6 +234,18 @@
   (set-activation-focus [:discussion/share-hash share-hash] entity-id)
   (ok {:share-hash share-hash}))
 
+(defn- add-discussion-state
+  "Add a valid discussion state to a discussion."
+  [{{{:keys [share-hash state]} :body} :parameters}]
+  (discussion-db/add-state share-hash state)
+  (ok {:share-hash share-hash}))
+
+(defn- delete-discussion-state
+  "Delete a valid discussion state from a discussion."
+  [{{{:keys [share-hash state]} :body} :parameters}]
+  (discussion-db/delete-state share-hash state)
+  (ok {:share-hash share-hash}))
+
 ;; -----------------------------------------------------------------------------
 ;; Votes
 
@@ -397,6 +409,13 @@
     ["" {:responses {200 {:body {:share-hash :discussion/share-hash}}}
          :middleware [:user/authenticated?
                       :discussion/user-moderator?]}
+     ["/state" {:put {:handler add-discussion-state
+                      :description (at/get-doc #'add-discussion-state)}
+                :delete {:handler delete-discussion-state
+                         :description (at/get-doc #'delete-discussion-state)}
+                :middleware [:user/pro?]
+                :name :api.discussion.manage/state
+                :parameters {:body {:state :discussion/valid-states}}}]
      ["/disable-pro-con" {:put disable-pro-con!
                           :description (at/get-doc #'disable-pro-con!)
                           :middleware [:user/pro?]
