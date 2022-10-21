@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.graph.view
+(ns schnaq.interface.views.graph
   (:require ["remove-markdown" :as remove-markdown]
             ["vis-network/standalone/esm/vis-network" :refer [DataSet Network]]
             [clojure.set :as set]

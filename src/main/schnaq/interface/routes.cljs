@@ -23,7 +23,7 @@
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
-            [schnaq.interface.views.graph.view :as graph-view]
+            [schnaq.interface.views.graph :as graph-view]
             [schnaq.interface.views.hub.overview :as hubs]
             [schnaq.interface.views.hub.settings :as hub-settings]
             [schnaq.interface.views.pages :as pages]

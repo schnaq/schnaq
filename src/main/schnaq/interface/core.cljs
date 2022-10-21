@@ -63,7 +63,7 @@
             [schnaq.interface.views.feed.overview]
             [schnaq.interface.views.feedback.admin]
             [schnaq.interface.views.feedback.collect]
-            [schnaq.interface.views.graph.view]
+            [schnaq.interface.views.graph]
             [schnaq.interface.views.hub.common]
             [schnaq.interface.views.hub.overview]
             [schnaq.interface.views.hub.settings]
