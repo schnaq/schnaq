@@ -1,3 +1,4 @@
+
 (ns schnaq.database.specs
   (:require #?(:clj [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
@@ -146,11 +147,13 @@
                                                :reference :db/id)))
 (s/def :discussion/creation-secret ::non-blank-string)
 (s/def :discussion/activation-focus :db/id)
+(s/def :discussion/valid-states #{:discussion.state/open :discussion.state/closed
+                                  :discussion.state/private :discussion.state/deleted
+                                  :discussion.state/public :discussion.state/read-only
+                                  :discussion.state/disable-pro-con :discussion.state/disable-posts
+                                  :discussion.state.qa/mark-as-moderators-only})
 (s/def :discussion/states
-  (s/coll-of #{:discussion.state/open :discussion.state/closed
-               :discussion.state/private :discussion.state/deleted
-               :discussion.state/public :discussion.state/read-only
-               :discussion.state/disable-pro-con :discussion.state.qa/mark-as-moderators-only}
+  (s/coll-of :discussion/valid-states
              :distinct true))
 (s/def :discussion/mode #{:discussion.mode/discussion :discussion.mode/qanda})
 (s/def :wordcloud/visible? boolean?)

@@ -239,7 +239,7 @@
         admin? @(rf/subscribe [:user/administrator?])
         user-id @(rf/subscribe [:user/id])
         creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        read-only? @(rf/subscribe [:schnaq.state/read-only?])
         deletable? (deletable? statement user-moderator? user-id creation-secrets)
         editable? (editable? statement user-id creation-secrets)]
     [dropdown-menu {:id dropdown-id

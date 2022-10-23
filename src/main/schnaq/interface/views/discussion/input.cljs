@@ -97,7 +97,7 @@
         editor-content @(rf/subscribe [:editor/content editor-id])]
     (if (and limit-reached? shared-config/enforce-limits?)
       [post-limit-reached-alert]
-      (when-not @(rf/subscribe [:schnaq.selected/read-only?])
+      (when-not @(rf/subscribe [:schnaq.state/read-only?])
         [:<>
          [:div.input-group
           [textarea-highlighting :selected]
@@ -132,7 +132,7 @@
   "Input form with an option to chose statement type."
   [editor-id]
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
-        pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])]
+        pro-con-disabled? @(rf/subscribe [:schnaq.state/pro-con?])]
     [:<>
      [:div.pb-3
       [user/current-user-info 40 "text-primary fs-6"]]
@@ -174,17 +174,18 @@
         limit-reached? (posts-limit-reached? author schnaq)
         statement-id (:db/id statement)
         statement-type @(rf/subscribe [:form/statement-type statement-id])
-        pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        pro-con-disabled? @(rf/subscribe [:schnaq.state/pro-con?])
+        read-only? @(rf/subscribe [:schnaq.state/read-only?])
         locked? (:statement/locked? statement)
         hide-input-replies @(rf/subscribe [:ui/setting :hide-input-replies])
         editor-id (format "%s-%s" "premise-card-editor" (:db/id statement))
+        posts-disabled-for-non-moderators? @(rf/subscribe [:schnaq/posts-disabled-for-non-moderators?])
         answer-to-statement-event
         (fn [e]
           (.preventDefault e)
           (rf/dispatch [:editor/clear editor-id])
           (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))
-        forbidden-write? (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?))]
+        forbidden-write? (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?) posts-disabled-for-non-moderators?)]
     [:form.my-md-2
      {:on-submit answer-to-statement-event
       :on-key-down #(when (toolbelt/ctrl-press? % "Enter")

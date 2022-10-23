@@ -196,42 +196,22 @@
 ;; -----------------------------------------------------------------------------
 ;; Discussion Options
 
-(defn- make-discussion-read-only!
-  "Makes a discussion read-only."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash]} (:body parameters)]
-    (log/info "Setting discussion to read-only:" share-hash)
-    (discussion-db/set-discussion-read-only share-hash)
-    (ok {:share-hash share-hash})))
-
-(defn- make-discussion-writeable!
-  "Makes a discussion writeable if discussion-admin credentials are there."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash]} (:body parameters)]
-    (log/info "Removing read-only from discussion:" share-hash)
-    (discussion-db/remove-read-only share-hash)
-    (ok {:share-hash share-hash})))
-
-(defn- disable-pro-con!
-  "Disable pro-con option for a schnaq."
-  [{:keys [parameters]}]
-  (let [{:keys [disable-pro-con? share-hash]} (:body parameters)]
-    (log/info "Setting \"disable-pro-con option\" to" disable-pro-con? "for schnaq:" share-hash)
-    (discussion-db/set-disable-pro-con share-hash disable-pro-con?)
-    (ok {:share-hash share-hash})))
-
-(defn- mods-mark-only!
-  "Only allow moderators to mark correct answers."
-  [{:keys [parameters]}]
-  (let [{:keys [mods-mark-only? share-hash]} (:body parameters)]
-    (log/info "Setting \"mods-mark-only option\" to" mods-mark-only? "for schnaq:" share-hash)
-    (discussion-db/mods-mark-only! share-hash mods-mark-only?)
-    (ok {:share-hash share-hash})))
-
 (defn- set-focus
   "Set the current focus of the discussion to a single entity."
   [{{{:keys [entity-id share-hash]} :body} :parameters}]
   (set-activation-focus [:discussion/share-hash share-hash] entity-id)
+  (ok {:share-hash share-hash}))
+
+(defn- add-discussion-state
+  "Add a valid discussion state to a discussion."
+  [{{{:keys [share-hash state]} :body} :parameters}]
+  (discussion-db/add-state share-hash state)
+  (ok {:share-hash share-hash}))
+
+(defn- delete-discussion-state
+  "Delete a valid discussion state from a discussion."
+  [{{{:keys [share-hash state]} :body} :parameters}]
+  (discussion-db/delete-state share-hash state)
   (ok {:share-hash share-hash}))
 
 ;; -----------------------------------------------------------------------------
@@ -397,24 +377,12 @@
     ["" {:responses {200 {:body {:share-hash :discussion/share-hash}}}
          :middleware [:user/authenticated?
                       :discussion/user-moderator?]}
-     ["/disable-pro-con" {:put disable-pro-con!
-                          :description (at/get-doc #'disable-pro-con!)
-                          :middleware [:user/pro?]
-                          :name :api.discussion.manage/disable-pro-con
-                          :parameters {:body {:disable-pro-con? boolean?}}}]
-     ["/mods-mark-only" {:put mods-mark-only!
-                         :description (at/get-doc #'mods-mark-only!)
-                         :name :api.discussion.manage/mods-mark-only
-                         :middleware [:user/pro?]
-                         :parameters {:body {:mods-mark-only? boolean?}}}]
-     ["/make-read-only" {:put make-discussion-read-only!
-                         :description (at/get-doc #'make-discussion-read-only!)
-                         :middleware [:user/pro?]
-                         :name :api.discussion.manage/make-read-only}]
-     ["/make-writeable" {:put make-discussion-writeable!
-                         :description (at/get-doc #'make-discussion-writeable!)
-                         :middleware [:user/pro?]
-                         :name :api.discussion.manage/make-writeable}]
+     ["/state" {:put {:handler add-discussion-state
+                      :description (at/get-doc #'add-discussion-state)}
+                :delete {:handler delete-discussion-state
+                         :description (at/get-doc #'delete-discussion-state)}
+                :name :api.discussion.manage/state
+                :parameters {:body {:state :discussion/valid-states}}}]
      ["/focus" {:put set-focus
                 :description (at/get-doc #'set-focus)
                 :name :api.discussion.manage/focus

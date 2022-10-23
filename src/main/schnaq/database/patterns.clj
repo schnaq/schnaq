@@ -90,7 +90,7 @@
   [:db/id
    :discussion/title
    :discussion/description
-   {[:discussion/states :xform 'schnaq.database.xforms/pull-up-ident-coll] [:db/ident]}
+   {[:discussion/states :xform 'schnaq.database.xforms/pull-up-ident-coll-to-set] [:db/ident]}
    :discussion/share-hash
    :discussion/header-image-url
    :discussion/created-at

@@ -241,20 +241,6 @@
      :where [?statements :statement/content ?content]]
    patterns/statement content))
 
-(>defn delete-discussion
-  "Adds the deleted state to a discussion"
-  [share-hash]
-  [:discussion/share-hash :ret (? :discussion/share-hash)]
-  (try
-    @(transact [[:db/add [:discussion/share-hash share-hash]
-                 :discussion/states :discussion.state/deleted]])
-    (log/info (format "Schnaq with share-hash %s has been set to deleted." share-hash))
-    share-hash
-    (catch Exception e
-      (log/error
-       (format "Deletion of discussion with share-hash %s failed. Exception:\n%s"
-               share-hash e)))))
-
 (>defn- new-child-statement!
   "Creates a new child statement, that references a parent."
   [discussion-id parent-id new-content statement-type user-id registered-user? locked?]
@@ -301,46 +287,39 @@
   (ac/remove-invalid-and-pull-up-access-codes
    (fast-pull id (conj patterns/discussion :discussion/creation-secret))))
 
-(defn set-discussion-read-only
-  "Sets a discussion as read-only."
+(defn add-state
+  "Add a state to a discussion."
+  [share-hash state]
+  [:discussion/share-hash :discussion/valid-states => map?]
+  (log/debug (format "Adding state %s to discussion %s" state share-hash))
+  @(main-db/transact [[:db/add [:discussion/share-hash share-hash]
+                       :discussion/states state]]))
+
+(defn delete-state
+  "Remove a state from a discussion."
+  [share-hash state]
+  [:discussion/share-hash :discussion/valid-states => map?]
+  (log/debug (format "Removing state %s from discussion %s" state share-hash))
+  @(main-db/transact [[:db/retract [:discussion/share-hash share-hash]
+                       :discussion/states state]]))
+
+(>defn delete-discussion
+  "Adds the deleted state to a discussion"
   [share-hash]
-  (main-db/transact [[:db/add [:discussion/share-hash share-hash] :discussion/states :discussion.state/read-only]]))
-
-(defn remove-read-only
-  "Removes the read-only restriction from a discussion"
-  [share-hash]
-  (main-db/transact [[:db/retract [:discussion/share-hash share-hash] :discussion/states :discussion.state/read-only]]))
-
-(defn set-disable-pro-con
-  "Sets or removes the pro/con button tag"
-  [share-hash disable?]
-  (let [enable-transaction [[:db/retract [:discussion/share-hash share-hash]
-                             :discussion/states :discussion.state/disable-pro-con]]
-        disable-transaction [[:db/add [:discussion/share-hash share-hash]
-                              :discussion/states :discussion.state/disable-pro-con]]
-        db-transaction (if disable?
-                         disable-transaction
-                         enable-transaction)]
-    (main-db/transact db-transaction)))
-
-(defn mods-mark-only!
-  "Allow either mods or everybody to mark correct answers."
-  [share-hash mods-only?]
-  (let [disable-transaction [[:db/retract [:discussion/share-hash share-hash]
-                              :discussion/states :discussion.state.qa/mark-as-moderators-only]]
-        enable-transaction [[:db/add [:discussion/share-hash share-hash]
-                             :discussion/states :discussion.state.qa/mark-as-moderators-only]]
-        db-transaction (if mods-only?
-                         enable-transaction
-                         disable-transaction)]
-    (main-db/transact db-transaction)))
+  [:discussion/share-hash :ret (? :discussion/share-hash)]
+  (try
+    (add-state share-hash :discussion.state/deleted)
+    share-hash
+    (catch Exception e
+      (log/error
+       (format "Deletion of discussion with share-hash %s failed. Exception:\n%s"
+               share-hash e)))))
 
 (defn edit-title
   "Edits a schnaq title by share-hash"
   [share-hash title]
-  (let [enable-transaction [[:db/add [:discussion/share-hash share-hash]
-                             :discussion/title title]]]
-    (main-db/transact enable-transaction)))
+  (main-db/transact [[:db/add [:discussion/share-hash share-hash]
+                      :discussion/title title]]))
 
 ;; -----------------------------------------------------------------------------
 

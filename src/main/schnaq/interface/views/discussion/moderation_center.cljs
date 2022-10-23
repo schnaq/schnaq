@@ -1,8 +1,10 @@
 (ns schnaq.interface.views.discussion.moderation-center
-  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
+  (:require ["react-bootstrap/Form" :as Form]
+            [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reagent.core :as r]
             [schnaq.interface.components.buttons :as button]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
@@ -15,6 +17,8 @@
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.themes :as themes]
             [schnaq.links :as links]))
+
+(def ^:private FormCheck (oget Form :Check))
 
 (defn- img-text
   "Create one icon in a grid"
@@ -34,36 +38,6 @@
                                 :share-hash share-hash
                                 :admin-center (links/get-moderator-center-link share-hash)}
                                [:ajax.error/as-notification])]})))
-
-(rf/reg-event-fx
- :discussion.moderation/make-read-only
- (fn [{:keys [db]} _]
-   (let [{:discussion/keys [share-hash]} (get-in db [:schnaq :selected])]
-     {:fx [(http/xhrio-request db :put "/discussion/manage/make-read-only"
-                               [:discussion.moderation/make-read-only-success]
-                               {:share-hash share-hash}
-                               [:ajax.error/as-notification])]})))
-
-(rf/reg-event-db
- :discussion.moderation/make-read-only-success
- (fn [db _]
-   (update-in db [:schnaq :selected :discussion/states]
-              #(distinct (conj % :discussion.state/read-only)))))
-
-(rf/reg-event-fx
- :discussion.moderation/make-writeable
- (fn [{:keys [db]} _]
-   (let [{:discussion/keys [share-hash]} (get-in db [:schnaq :selected])]
-     {:fx [(http/xhrio-request db :put "/discussion/manage/make-writeable"
-                               [:discussion.moderation/make-writeable-success]
-                               {:share-hash share-hash}
-                               [:ajax.error/as-notification])]})))
-
-(rf/reg-event-db
- :discussion.moderation/make-writeable-success
- (fn [db _]
-   (update-in db [:schnaq :selected :discussion/states]
-              #(-> % set (disj :discussion.state/read-only) vec))))
 
 (rf/reg-event-fx
  ;; Success event of deletion live in discussion - not from admin panel
@@ -150,111 +124,52 @@
       [:button.btn.btn-outline-primary
        (labels :schnaq.moderation.edit.link.form/submit-button)]])])
 
-(defn- enable-discussion-read-only
-  "A Checkbox that makes the current discussion read-only or writeable."
-  []
-  (let [schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])
-        dispatch (if schnaq-read-only?
-                   :discussion.moderation/make-writeable
-                   :discussion.moderation/make-read-only)
-        pro-user? @(rf/subscribe [:user/pro?])]
-    [:div {:class (when-not pro-user? "text-muted")}
-     [:input.big-checkbox
-      {:type :checkbox
-       :id :enable-read-only?
-       :disabled (not pro-user?)
-       :checked schnaq-read-only?
-       :on-change (fn [e] (.preventDefault e)
-                    (rf/dispatch [dispatch]))}]
-     [:label.form-check-label.h5.ps-1 {:for :enable-read-only?}
-      (labels :schnaq.moderation.configurations.read-only/checkbox)]
-     [:p (labels :schnaq.moderation.configurations.read-only/explanation)]]))
-
-(defn- disable-pro-con []
-  (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        pro-user? @(rf/subscribe [:user/pro?])]
-    [:div {:class (when-not pro-user? "text-muted")}
-     [:input.big-checkbox
-      {:type :checkbox
-       :id :disable-pro-con-checkbox?
-       :disabled (not pro-user?)
-       :checked pro-con-disabled?
-       :on-change
-       (fn [e]
-         (.preventDefault e)
-         (rf/dispatch [:schnaq.moderation/disable-pro-con (not pro-con-disabled?)]))}]
-     [:label.form-check-label.h5.ps-1 {:for :disable-pro-con-checkbox?}
-      (labels :schnaq.moderation.configurations.disable-pro-con/label)]
-     [:p (labels :schnaq.moderation.configurations.disable-pro-con/explanation)]]))
-
-(defn- only-moderators-mark-setting []
-  (let [mods-mark-only? @(rf/subscribe [:schnaq.selected.qa/mods-mark-only?])
-        pro-user? @(rf/subscribe [:user/pro?])]
-    [:div {:class (when-not pro-user? "text-muted")}
-     [:input.big-checkbox
-      {:type :checkbox
-       :disabled (not pro-user?)
-       :id :only-moderators-mark-checkbox
-       :checked mods-mark-only?
-       :on-change
-       (fn [e]
-         (.preventDefault e)
-         (rf/dispatch [:schnaq.moderation.qa/mods-mark-only! (not mods-mark-only?)]))}]
-     [:label.form-check-label.h5.ps-1 {:for :only-moderators-mark-checkbox}
-      (labels :schnaq.moderation.configurations.mods-mark-only/label)]
-     [:p (labels :schnaq.moderation.configurations.mods-mark-only/explanation)]]))
+(>defn- toggle-schnaq-state
+  "Show a toggle to switch between the schnaq states."
+  [state title description]
+  [:discussion/valid-states string? string? => :re-frame/component]
+  (let [checked? @(rf/subscribe [:schnaq/state? state])
+        pro? @(rf/subscribe [:user/pro?])]
+    [:> Form
+     [:> FormCheck
+      {:type :switch
+       :label (r/as-element [:<> [:span.fw-semibold title] [:p description]])
+       :checked checked?
+       :disabled (not pro?)
+       :onChange (fn [e] (.preventDefault e)
+                   (rf/dispatch [(if checked? :schnaq.moderation/delete-state :schnaq.moderation/add-state)
+                                 state]))}]]))
 
 ;; -----------------------------------------------------------------------------
 
-(rf/reg-sub
- :schnaq.selected/pro-con?
- :<- [:schnaq/selected]
- (fn [selected-schnaq _ _]
-   (not (nil? (some #{:discussion.state/disable-pro-con} (:discussion/states selected-schnaq))))))
-
 (rf/reg-event-fx
- :schnaq.moderation/disable-pro-con
- (fn [{:keys [db]} [_ disable-pro-con?]]
-   (let [current-route (:current-route db)
-         {:keys [share-hash]} (:path-params current-route)]
-     {:fx [(http/xhrio-request db :put "/discussion/manage/disable-pro-con"
-                               [:schnaq.moderation/disable-pro-con-success disable-pro-con?]
-                               {:disable-pro-con? disable-pro-con?
+ :schnaq.moderation/add-state
+ (fn [{:keys [db]} [_ state]]
+   (let [{:keys [share-hash]} (get-in db [:current-route :path-params])]
+     {:fx [(http/xhrio-request db :put "/discussion/manage/state"
+                               [:schnaq.moderation/add-state-success state]
+                               {:state state
+                                :share-hash share-hash}
+                               [:ajax.error/as-notification])]})))
+(rf/reg-event-fx
+ :schnaq.moderation/delete-state
+ (fn [{:keys [db]} [_ state]]
+   (let [{:keys [share-hash]} (get-in db [:current-route :path-params])]
+     {:fx [(http/xhrio-request db :delete "/discussion/manage/state"
+                               [:schnaq.moderation/delete-state-success state]
+                               {:state state
                                 :share-hash share-hash}
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
- :schnaq.moderation/disable-pro-con-success
- (fn [db [_ disable-pro-con?]]
-   (if disable-pro-con?
-     (update-in db [:schnaq :selected :discussion/states]
-                #(distinct (conj % :discussion.state/disable-pro-con)))
-     (update-in db [:schnaq :selected :discussion/states]
-                #(-> % set (disj :discussion.state/disable-pro-con) vec)))))
-
-(rf/reg-sub
- :schnaq.selected.qa/mods-mark-only?
- :<- [:schnaq/selected]
- (fn [selected-schnaq _ _]
-   (not (nil? (some #{:discussion.state.qa/mark-as-moderators-only} (:discussion/states selected-schnaq))))))
-
-(rf/reg-event-fx
- :schnaq.moderation.qa/mods-mark-only!
- (fn [{:keys [db]} [_ mods-mark-only?]]
-   {:fx [(http/xhrio-request db :put "/discussion/manage/mods-mark-only"
-                             [:schnaq.moderation.qa/mods-mark-only-success mods-mark-only?]
-                             {:mods-mark-only? mods-mark-only?
-                              :share-hash (get-in db [:schnaq :selected :discussion/share-hash])}
-                             [:ajax.error/as-notification])]}))
+ :schnaq.moderation/add-state-success
+ (fn [db [_ state]]
+   (update-in db [:schnaq :selected :discussion/states] conj state)))
 
 (rf/reg-event-db
- :schnaq.moderation.qa/mods-mark-only-success
- (fn [db [_ mods-mark-only?]]
-   (if mods-mark-only?
-     (update-in db [:schnaq :selected :discussion/states]
-                #(distinct (conj % :discussion.state.qa/mark-as-moderators-only)))
-     (update-in db [:schnaq :selected :discussion/states]
-                #(-> % set (disj :discussion.state.qa/mark-as-moderators-only) vec)))))
+ :schnaq.moderation/delete-state-success
+ (fn [db [_ state]]
+   (update-in db [:schnaq :selected :discussion/states] disj state)))
 
 (rf/reg-event-fx
  :schnaq.moderation.focus/entity
@@ -277,10 +192,19 @@
   "List all possible discussion settings."
   []
   [:<>
-   [:h4 (labels :schnaq.moderation.configurations/heading)]
-   [only-moderators-mark-setting]
-   [enable-discussion-read-only]
-   [disable-pro-con]])
+   [:h4.pb-2 (labels :schnaq.moderation.configurations/heading)]
+   [toggle-schnaq-state :discussion.state.qa/mark-as-moderators-only
+    (labels :schnaq.moderation.configurations.mods-mark-only/label)
+    (labels :schnaq.moderation.configurations.mods-mark-only/explanation)]
+   [toggle-schnaq-state :discussion.state/disable-posts
+    (labels :schnaq.moderation.configurations.disable-posts/label)
+    (labels :schnaq.moderation.configurations.disable-posts/explanation)]
+   [toggle-schnaq-state :discussion.state/read-only
+    (labels :schnaq.moderation.configurations.read-only/checkbox)
+    (labels :schnaq.moderation.configurations.read-only/explanation)]
+   [toggle-schnaq-state :discussion.state/disable-pro-con
+    (labels :schnaq.moderation.configurations.disable-pro-con/label)
+    (labels :schnaq.moderation.configurations.disable-pro-con/explanation)]])
 
 (>defn- moderate-discussion
   "Settings for the discussion."

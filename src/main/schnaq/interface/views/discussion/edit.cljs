@@ -48,7 +48,7 @@
   [statement-id]
   (let [statement @(rf/subscribe [:schnaq/statement statement-id])
         pro-con-enabled? (and (:statement/parent statement)
-                              (not @(rf/subscribe [:schnaq.selected/pro-con?])))
+                              (not @(rf/subscribe [:schnaq.state/pro-con?])))
         statement-html-id (str "statement-edit-" statement-id)
         dispatch-fn #(rf/dispatch
                       [:statement.edit/send statement-id statement-html-id (oget % [:currentTarget :elements])])]

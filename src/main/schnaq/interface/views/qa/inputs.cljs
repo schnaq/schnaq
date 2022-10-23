@@ -54,7 +54,7 @@
   "Either display input or read-only warning."
   [background-schema]
   [:background/schema :ret :re-frame/component]
-  (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+  (let [read-only? @(rf/subscribe [:schnaq.state/read-only?])]
     [:div.mx-3
      [:div.mx-md-5.px-md-5.py-3
       (when (= background-schema :dark) {:class "text-white"})

@@ -35,16 +35,6 @@
       (is (= 200 (request-fn toolbelt/token-kangaroo-normal-user)))
       (is (= 200 (request-fn toolbelt/token-n2o-admin))))))
 
-(deftest add-label-mods-only-test
-  (let [share-hash "cat-dog-hash"
-        statement-id (:db/id (first (discussion-db/starting-statements share-hash)))
-        request-fn (partial statement-label-request :put share-hash statement-id)
-        _ @(discussion-db/mods-mark-only! share-hash true)]
-    (testing "Only moderators are allowed to set labels."
-      (is (= 403 (request-fn nil)))
-      (is (= 403 (request-fn toolbelt/token-kangaroo-normal-user)))
-      (is (= 200 (request-fn toolbelt/token-schnaqqifant-user))))))
-
 (deftest remove-label-no-restriction-test
   (let [share-hash "simple-hash"
         statement-id (:db/id (first (discussion-db/statements-by-content "Brainstorming ist total wichtig")))
@@ -54,16 +44,6 @@
       (is (= 200 (request-fn toolbelt/token-schnaqqifant-user)))
       (is (= 200 (request-fn toolbelt/token-kangaroo-normal-user)))
       (is (= 200 (request-fn toolbelt/token-n2o-admin))))))
-
-(deftest remove-label-mods-only-test
-  (let [share-hash "simple-hash"
-        statement-id (:db/id (first (discussion-db/statements-by-content "Brainstorming ist total wichtig")))
-        request-fn (partial statement-label-request :delete share-hash statement-id)
-        _ @(discussion-db/mods-mark-only! share-hash true)]
-    (testing "Only moderators are allowed to remove labels."
-      (is (= 403 (request-fn nil)))
-      (is (= 403 (request-fn toolbelt/token-kangaroo-normal-user)))
-      (is (= 200 (request-fn toolbelt/token-schnaqqifant-user))))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -171,6 +151,8 @@
     (testing "Users with moderator rights can toggle the focus."
       (is (= 200 (set-focus-request poll-id share-hash))))))
 
+;; -----------------------------------------------------------------------------
+
 (deftest delete-statement-and-children!-test
   (let [parent-id (:db/id (first (discussion-db/statements-by-content "we should get a cat")))
         delete-fn
@@ -188,3 +170,36 @@
       (is (empty? (discussion-db/statements-by-content "this lies in their natural conditions"))))
     (testing "With wrong statement-id"
       (is (= 403 (:status (delete-fn (- parent-id 999))))))))
+
+;; -----------------------------------------------------------------------------
+
+(defn- manage-discussion-states [share-hash state verb token]
+  (-> {:request-method verb :uri (:path (api/route-by-name :api.discussion.manage/state))
+       :body-params {:state state
+                     :share-hash share-hash}}
+      toolbelt/add-csrf-header
+      (toolbelt/mock-authorization-header token)
+      test-app
+      :status))
+
+(deftest add-discussion-state-forbidden-test
+  (testing "Adding a state to a discussion is forbidden for normal users"
+    (is (= 403 (manage-discussion-states "cat-dog-hash" :discussion.state/disable-posts :put
+                                         toolbelt/token-schnaqqifant-user)))))
+
+(deftest add-discussion-state-test
+  (testing "Adding a state to a discussion is allowed for moderators."
+    (let [share-hash "cat-dog-hash"]
+      (is (= 200 (manage-discussion-states share-hash :discussion.state/disable-posts :put
+                                           toolbelt/token-kangaroo-normal-user))))))
+
+(deftest delete-discussion-state-forbidden-test
+  (testing "Removing a state from a discussion is forbidden for normal users"
+    (is (= 403 (manage-discussion-states "cat-dog-hash" :discussion.state/disable-posts :delete
+                                         toolbelt/token-schnaqqifant-user)))))
+
+(deftest delete-discussion-state-test
+  (testing "Removing a state from a discussion is allowed for moderators."
+    (let [share-hash "cat-dog-hash"]
+      (is (= 200 (manage-discussion-states share-hash :discussion.state/disable-posts :delete
+                                           toolbelt/token-kangaroo-normal-user))))))

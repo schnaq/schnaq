@@ -104,6 +104,12 @@
  :-> :currency)
 
 (rf/reg-sub
+ :user/profile-picture
+ :<- [:user/current]
+ (fn [user]
+   (get-in user [:profile-picture :display])))
+
+(rf/reg-sub
  :user/roles
  :<- [:user/current]
  :-> :roles)

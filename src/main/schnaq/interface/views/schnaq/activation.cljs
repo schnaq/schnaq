@@ -83,7 +83,7 @@
           activation-phrase (or (:theme.texts/activation theme)
                                 (labels :schnaq.activation/phrase))
           background-image-url (or (:theme.images/header theme) default-activation-background)
-          read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+          read-only? @(rf/subscribe [:schnaq.state/read-only?])]
       [motion-comp/fade-in-and-out
        [:section.activation-card.blue-card
         {:class background-class

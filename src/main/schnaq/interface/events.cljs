@@ -133,6 +133,42 @@
    (links/get-share-link (:discussion/share-hash selected-schnaq))))
 
 (rf/reg-sub
+ :schnaq/states
+ :<- [:schnaq/selected]
+ :-> :discussion/states)
+
+(rf/reg-sub
+ :schnaq.state/pro-con?
+ :<- [:schnaq/states]
+ (fn [states]
+   (contains? states :discussion.state/disable-pro-con)))
+
+(rf/reg-sub
+ :schnaq.state/read-only?
+ :<- [:schnaq/states]
+ (fn [states _ _]
+   (contains? states :discussion.state/read-only)))
+
+(rf/reg-sub
+ :schnaq.state/posts-disabled?
+ :<- [:schnaq/states]
+ (fn [states _ _]
+   (contains? states :discussion.state/disable-posts)))
+
+(rf/reg-sub
+ :schnaq/posts-disabled-for-non-moderators?
+ :<- [:schnaq.state/posts-disabled?]
+ :<- [:user/moderator?]
+ (fn [[posts-disabled? moderator?]]
+   (and posts-disabled? (not moderator?))))
+
+(rf/reg-sub
+ :schnaq/state?
+ :<- [:schnaq/states]
+ (fn [states [_ state]]
+   (contains? states state)))
+
+(rf/reg-sub
  :schnaq.selected/statement-number
  :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
@@ -143,12 +179,6 @@
  :<- [:schnaq/selected]
  (fn [selected-schnaq _ _]
    (get-in selected-schnaq [:discussion/access :discussion.access/code])))
-
-(rf/reg-sub
- :schnaq.selected/read-only?
- :<- [:schnaq/selected]
- (fn [selected-schnaq _ _]
-   (not (nil? (some #{:discussion.state/read-only} (:discussion/states selected-schnaq))))))
 
 (rf/reg-sub
  :schnaq/theme
