@@ -23,7 +23,6 @@ RUN apk add --no-cache yarn && \
 # Cache and install JavaScript dependencies
 COPY package.json .
 COPY yarn.lock .
-COPY resources/public/node_modules/ resources/public/node_modules/
 RUN yarn install
 
 COPY deps.edn .
