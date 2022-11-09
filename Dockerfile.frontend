@@ -1,4 +1,4 @@
-FROM clojure:temurin-19-tools-deps-bullseye-slim AS shadow-build
+FROM clojure:temurin-17-alpine AS shadow-build
 
 WORKDIR /code
 
@@ -17,18 +17,13 @@ ARG KEYCLOAK_CLIENT
 ARG KEYCLOAK_REALM
 ARG FAQ_SHARE_HASH
 
-RUN apt update && apt install -y curl gnupg2
-
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-
-RUN apt update
-
-RUN apt install -y yarn && \
+RUN apk add --no-cache yarn && \
     yarn global add sass
 
-# Cache and install dependencies. The `*` makes copying node_modules optional, if they exist.
-COPY package.json yarn.lock resources/public/node_modules* ./
+# Cache and install JavaScript dependencies
+COPY package.json .
+COPY yarn.lock .
+COPY resources/public/node_modules/ resources/public/node_modules/
 RUN yarn install
 
 COPY deps.edn .
