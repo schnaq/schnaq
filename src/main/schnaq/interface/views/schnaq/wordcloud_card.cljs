@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.schnaq.wordcloud-card
-  (:require [cljs.spec.alpha :as s]
+  (:require ["react-bootstrap" :refer [Button InputGroup Form]]
+            [cljs.spec.alpha :as s]
             [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- => ?]]
             [oops.core :refer [oget oget+]]
@@ -17,6 +18,8 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
             [schnaq.shared-toolbelt :as stools]))
+
+(def ^:private FormControl (oget Form :Control))
 
 (defn- global-wordcloud
   "Shows the controls for the global word cloud"
@@ -106,19 +109,19 @@
       [:h4.text-center.mx-auto title]
       [dropdown-menu id]]
      [wordcloud/wordcloud formatted-words]
-     [:form.form
-      {:on-submit (fn [event]
-                    (.preventDefault event)
-                    (let [form (oget event [:target :elements])]
-                      (rf/dispatch [:schnaq.wordcloud.local/send-words id (oget+ form [input-id :value])])
-                      (rf/dispatch [:form/should-clear form])))}
-      [:div.text-start.px-2.pb-2
-       [:div.input-group
-        [inputs/text (labels :schnaq.wordcloud.local.add-words/label) {:id input-id}]
-        [:button.btn.btn-dark.my-1
-         {:type "submit"}
-         [icon :plane "m-auto"]]]
-       [common/hint-text (labels :schnaq.wordcloud.local.add-words/hint)]]]]))
+     (when-not @(rf/subscribe [:schnaq.state/read-only?])
+       [:form.form
+        {:on-submit (fn [event]
+                      (.preventDefault event)
+                      (let [form (oget event [:target :elements])]
+                        (rf/dispatch [:schnaq.wordcloud.local/send-words id (oget+ form [input-id :value])])
+                        (rf/dispatch [:form/should-clear form])))}
+        [:div.text-start.px-2.pb-2
+         [:> InputGroup
+          [:> FormControl {:placeholder (labels :schnaq.wordcloud.local.add-words/label)
+                           :id input-id}]
+          [:> Button {:variant :dark :type :submit} [icon :plane "m-auto"]]]
+         [common/hint-text (labels :schnaq.wordcloud.local.add-words/hint)]]])]))
 
 (>defn wordcloud-list
   "Displays all wordclouds of the current schnaq excluding the one in `exclude`."
@@ -227,7 +230,8 @@
                                [:schnaq.wordcloud.local.send-words/success]
                                {:wordcloud-id wordcloud-id
                                 :share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-                                :words words})]})))
+                                :words words}
+                               [:schnaq.error/read-only])]})))
 
 (rf/reg-event-db
  :schnaq.wordcloud.local.send-words/success
