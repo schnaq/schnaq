@@ -18,12 +18,12 @@
 (rf/reg-event-fx
  :schnaq.visited/to-localstorage
  (fn [_ [_ share-hash]]
-   (when-let [visited-schnaqs (from-localstorage :schnaqs/visited)]
-     {:fx [(when share-hash
-             [:localstorage/assoc
+   (when share-hash
+     (let [visited-share-hashes (or (from-localstorage :schnaqs/visited) #{})]
+       {:fx [[:localstorage/assoc
               [:schnaqs/visited
-               (set (remove nil? (conj visited-schnaqs share-hash)))]])
-           [:dispatch [:schnaqs.visited/from-localstorage]]]})))
+               (set (remove nil? (conj visited-share-hashes share-hash)))]]
+             [:dispatch [:schnaqs.visited/from-localstorage]]]}))))
 
 (rf/reg-event-fx
  :schnaq.visited/remove-from-localstorage!
