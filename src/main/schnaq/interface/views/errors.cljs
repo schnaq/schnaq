@@ -85,5 +85,4 @@
                      #:notification{:title (labels :errors/generic)
                                     :body (labels :errors.schnaq/read-only)
                                     :context :danger
-                                    :stay-visible? true
                                     :on-close-fn #(rf/dispatch [:clear-error])}]]]}))
