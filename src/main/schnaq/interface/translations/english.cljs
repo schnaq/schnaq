@@ -546,6 +546,7 @@
 
    ;; Errors
    :errors/generic "An error occurred"
+   :errors.schnaq/read-only "The schnaq is set to read-only mode."
 
    :error.generic/contact-us
    [:<> "Did you end up here after clicking something on schnaq.com? Give us a hint at " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]

@@ -77,3 +77,12 @@
  :clear-error
  (fn [db _]
    (dissoc db :error)))
+
+(rf/reg-event-fx
+ :schnaq.error/read-only
+ (fn []
+   {:fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :errors/generic)
+                                    :body (labels :errors.schnaq/read-only)
+                                    :context :danger
+                                    :on-close-fn #(rf/dispatch [:clear-error])}]]]}))

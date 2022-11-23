@@ -551,6 +551,7 @@
 
    ;; Errors
    :errors/generic "Es ist ein Fehler aufgetreten"
+   :errors.schnaq/read-only "Dieser schnaq ist schreibgeschützt."
 
    :error.generic/contact-us [:span "Solltest du hier landen nachdem du etwas auf schnaq.com angeklickt hast, gib uns gerne Bescheid unter " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
 

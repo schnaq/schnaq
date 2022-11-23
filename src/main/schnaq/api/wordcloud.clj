@@ -79,7 +79,7 @@
      ["/words" {:name :wordcloud.local/words
                 :put add-words-to-local-cloud
                 :description (at/get-doc #'add-words-to-local-cloud)
-                :middleware [:discussion/wordcloud-matching?]
+                :middleware [:discussion/wordcloud-matching? :discussion/valid-writeable-discussion?]
                 :parameters {:body {:wordcloud-id :db/id
                                     :share-hash :discussion/share-hash
                                     :words (s/coll-of ::specs/non-blank-string)}}
