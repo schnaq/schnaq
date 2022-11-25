@@ -61,7 +61,24 @@
          [:dispatch [:load/last-added-schnaq]]
          [:dispatch [:schnaq.polls/load-past-votes]]
          [:dispatch [:schnaq.votes/load-from-localstorage]]
+         [:system/set-resize-listener]
          [:updates.periodic/loop]]}))
+
+(rf/reg-fx
+ :system/set-resize-listener
+ (fn []
+   (.addEventListener js/window "resize" #(rf/dispatch [:system.listener/on-window-resize]))))
+
+(rf/reg-event-db
+ :system.listener/on-window-resize
+ (fn [db _]
+   (assoc-in db [:dimensions :window] {:width (.-innerWidth js/window)
+                                       :height (.-innerHeight js/window)})))
+
+(rf/reg-sub
+ :dimensions/window
+ (fn [db _]
+   (get-in db [:dimensions :window] {:width 0 :height 0})))
 
 (rf/reg-event-fx
  :form/should-clear

@@ -443,20 +443,30 @@
         number-of-rows @(rf/subscribe [:ui/setting :num-rows])
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements))))
-        activations (when (and (not hide-activations?) @(rf/subscribe [:schnaq/activations?])) [activation-cards/activation-cards])]
+        activations (when (and (not hide-activations?) @(rf/subscribe [:schnaq/activations?])) [activation-cards/activation-cards])
+        mobile? (> 768 (:width @(rf/subscribe [:dimensions/window])))]
     (if schnaq-loading?
       [loading/loading-card]
-      [:div.row
-       [:> Masonry
-        {:autoArrange false ;; autoArrange is turned off, because it produces rendering issues and huge frame rate drops
-         :breakpoints config/breakpoints
-         :columns {:xs 1 :lg (or number-of-rows 2)}
-         :gap 10}
-        [:section
-         [info-card]
-         (when-not hide-input? [selection-card])]
-        activations
-        statements]
+      (let [options {:autoArrange false ;; autoArrange is turned off, because it produces rendering issues and huge frame rate drops
+                     :breakpoints config/breakpoints
+                     :columns {:xs 1 :lg (or number-of-rows 2)}
+                     :gap 10}]
+        (println mobile?)
+        [:div.row
+         (if mobile?
+           [:> Masonry
+            options
+            [info-card]
+            activations
+            (when-not hide-input? [selection-card])
+            statements]
+           [:> Masonry
+            options
+            [:section
+             [info-card]
+             (when-not hide-input? [selection-card])]
+            activations
+            statements])
 
-       (when show-call-to-share?
-         [call-to-share])])))
+         (when show-call-to-share?
+           [call-to-share])]))))
