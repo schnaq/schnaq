@@ -2,7 +2,7 @@
   (:require [clojure.test :refer [use-fixtures is deftest testing]]
             [schnaq.database.user :as user-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]
-            [schnaq.validator :refer [user-moderator?]]))
+            [schnaq.validator :refer [user-moderator? posts-allowed?]]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
@@ -16,3 +16,9 @@
       (is (not (user-moderator? "cat-dog-hash" user-id-invalid))))
     (testing "Authors are moderators also"
       (is (user-moderator? "cat-dog-hash" user-id-kangaroo)))))
+
+(deftest posts-allowed?-test
+  (testing "Write locked discussions need to be recognized."
+    (is (not (posts-allowed? "public-share-hash-locked")))
+    (is (posts-allowed? "cat-dog-hash"))
+    (is (not (posts-allowed? "nonsense-hash-a98sdauishd")))))

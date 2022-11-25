@@ -279,6 +279,12 @@
     :discussion/author "user/schredder"
     :discussion/states [:discussion.state/deleted]}])
 
+(def write-locked-discussions
+  [{:discussion/title "Deleted discussion"
+    :discussion/share-hash "public-share-hash-locked"
+    :discussion/author "user/schredder"
+    :discussion/states [:discussion.state/disable-posts]}])
+
 (def ^:private activations
   [{:db/id "activation/for-simple-discussion"
     :activation/count 42
@@ -417,5 +423,5 @@
 
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
-          deleted-discussions graph-discussion simple-discussion registered-users
+          deleted-discussions write-locked-discussions graph-discussion simple-discussion registered-users
           themes activations polls wordclouds))
