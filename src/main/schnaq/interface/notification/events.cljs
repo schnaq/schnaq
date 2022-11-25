@@ -13,16 +13,16 @@
 (rf/reg-event-db
  :visited.save-statement-ids/store-hashes-from-localstorage
  (fn [db _]
-   ;; Without the or a nil can be written for fresh users, which breaks the default getter later on
-   (assoc-in db [:visited :statement-ids] (or (from-localstorage :discussion/visited-statement-ids)
+   ;; Without the or a nil can be written for fresh users, which breaks the default getter later
+   (assoc-in db [:visited :statement-ids] (or (remove nil? (from-localstorage :discussion/visited-statement-ids))
                                               {}))))
 
 (rf/reg-event-fx
  :visited.statement-ids/to-localstorage-and-merge-with-app-db
  (fn [{:keys [db]} [_]]
    (let [statement-ids (get-in db [:visited :statement-ids])
-         visited-statement-ds (merge-with union (from-localstorage :discussion/statement-ids) statement-ids)]
-     {:fx [[:localstorage/assoc [:discussion/visited-statement-ids visited-statement-ds]]
+         visited-statement-ids (merge-with union (from-localstorage :discussion/statement-ids) statement-ids)]
+     {:fx [[:localstorage/assoc [:discussion/visited-statement-ids (remove nil? visited-statement-ids)]]
            [:dispatch [:visited.save-statement-ids/store-hashes-from-localstorage]]]})))
 
 (rf/reg-event-fx
