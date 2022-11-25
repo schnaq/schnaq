@@ -72,13 +72,25 @@
 (rf/reg-event-db
  :system.listener/on-window-resize
  (fn [db _]
-   (assoc-in db [:dimensions :window] {:width (.-innerWidth js/window)
-                                       :height (.-innerHeight js/window)})))
+   (-> db
+       (assoc-in [:dimensions :window] {:width (.-innerWidth js/window)
+                                        :height (.-innerHeight js/window)})
+       (assoc-in [:dimensions :embedded] {:width (-> js/document
+                                                     .-body
+                                                     .-offsetWidth)
+                                          :height (-> js/document
+                                                      .-body
+                                                      .-offsetHeight)}))))
 
 (rf/reg-sub
  :dimensions/window
  (fn [db _]
    (get-in db [:dimensions :window] {:width 0 :height 0})))
+
+(rf/reg-sub
+ :dimensions/embedded
+ (fn [db _]
+   (get-in db [:dimensions :embedded] {:width 0 :height 0})))
 
 (rf/reg-event-fx
  :form/should-clear
