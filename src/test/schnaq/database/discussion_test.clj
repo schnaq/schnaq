@@ -345,3 +345,7 @@
           both-parent-id (:db/id (first (db/statements-by-content "we could get both, a dog and a cat")))]
       (is (= 11 (count (db/descendants-of-statement parent-id))))
       (is (= 2 (count (db/descendants-of-statement both-parent-id)))))))
+
+(deftest discussion-by-share-hash-test
+  (testing "Return nil, when non existing discusison is queried."
+    (is (nil? (db/discussion-by-share-hash "nonsesnse-ads89yu13ehjskdi")))))

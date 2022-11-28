@@ -18,7 +18,7 @@
     (catch Exception _
       false)))
 
-(defn valid-writeable-discussion?
+(defn valid-open-discussion?
   "Check if a schnaq-hash ist valid and writeable. Returns false, when the discussion is deleted or
   should not be written to for any reason."
   [share-hash]
@@ -26,6 +26,13 @@
     (and discussion
          (not (some #{:discussion.state/deleted} (:discussion/states discussion)))
          (not (some #{:discussion.state/read-only} (:discussion/states discussion))))))
+
+(defn posts-allowed?
+  "Check whether it is permissible to write posts. (Not necessarily the same as read only,
+  since interactions can be allowed still)"
+  [share-hash]
+  (let [discussion (db/discussion-by-share-hash share-hash)]
+    (and discussion (not (some #{:discussion.state/disable-posts} (:discussion/states discussion))))))
 
 (defn valid-discussion-and-statement?
   "Checks whether a discussion is valid and also whether the statement belongs to the discussion."

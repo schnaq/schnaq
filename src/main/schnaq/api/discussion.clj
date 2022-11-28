@@ -409,7 +409,8 @@
                            :description (at/get-doc #'react-to-any-statement!)
                            :name :api.discussion.react-to/statement
                            :middleware [:discussion/parent-unlocked?
-                                        :discussion/valid-writeable-discussion?]
+                                        :discussion/valid-writeable-discussion?
+                                        :discussion/posts-allowed?]
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
                                                :premise :statement/content
@@ -440,7 +441,8 @@
     ["/starting/add" {:post add-starting-statement!
                       :description (at/get-doc #'add-starting-statement!)
                       :name :api.discussion.statements.starting/add
-                      :middleware [:discussion/valid-writeable-discussion?]
+                      :middleware [:discussion/valid-writeable-discussion?
+                                   :discussion/posts-allowed?]
                       :parameters {:body {:share-hash :discussion/share-hash
                                           :statement :statement/content
                                           :display-name ::specs/non-blank-string

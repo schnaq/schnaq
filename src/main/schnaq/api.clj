@@ -160,7 +160,8 @@
                             :discussion/valid-author? middlewares/valid-author?-middleware
                             :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
                             :discussion/valid-statement? middlewares/valid-statement?-middleware
-                            :discussion/valid-writeable-discussion? middlewares/valid-writeable-discussion?
+                            :discussion/valid-writeable-discussion? middlewares/valid-open-discussion?
+                            :discussion/posts-allowed? middlewares/posts-allowed?
                             :discussion/wordcloud-matching? middlewares/wordcloud-belongs-to-discussion
                             :user/admin? auth-middlewares/admin?-middleware
                             :user/analytics-admin? auth-middlewares/analytics-admin?-middleware

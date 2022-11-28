@@ -43,14 +43,23 @@
                     :wordcloud-not-from-discussion
                     "The information you submitted did not match."))))))
 
-(defn valid-writeable-discussion?
+(defn valid-open-discussion?
   "Verify that a discussion is valid and writing to it / modifying it is allowed."
   [handler]
   (fn [request]
     (let [share-hash (extract-parameter-from-request request :share-hash)]
-      (if (validator/valid-writeable-discussion? share-hash)
+      (if (validator/valid-open-discussion? share-hash)
         (handler request)
         (at/build-error-body :schnaq.error/discussion-invalid "You are not allowed to modify this discussion")))))
+
+(defn posts-allowed?
+  "Verify that a discussion allows posts."
+  [handler]
+  (fn [request]
+    (let [share-hash (extract-parameter-from-request request :share-hash)]
+      (if (validator/posts-allowed? share-hash)
+        (handler request)
+        (at/build-error-body :schnaq.error/discussion-invalid "You are not allowed to write any posts for this discussion")))))
 
 (defn valid-statement?-middleware
   "Verify, that a valid share-hash was provided matching the statement-id."
