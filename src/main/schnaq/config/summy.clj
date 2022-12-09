@@ -15,4 +15,4 @@
     (when url
       (format "%s/%s" base-url url))))
 
-(def app-code "***REMOVED***")
+(def app-code "summy-joins-schnaqqifantenparty")

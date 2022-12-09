@@ -165,6 +165,6 @@
 
 (def session-storage-enabled?
   "Check if session storage is enabled in the user's client."
-  (try js/sessionStorage
-       true
+  (try (let [_ js/sessionStorage]
+         true)
        (catch js/Object _e false)))
