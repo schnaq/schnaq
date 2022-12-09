@@ -21,9 +21,9 @@
   (format "%srealms/%s/protocol/openid-connect" server realm))
 
 (def ^:private backend-admin-id
-  (or (System/getenv "KEYCLOAK_ADMIN_ID") "info@schnaq.com"))
+  (System/getenv "KEYCLOAK_ADMIN_ID"))
 (def ^:private backend-admin-secret
-  (or (System/getenv "KEYCLOAK_ADMIN_SECRET") "***REMOVED***"))
+  (System/getenv "KEYCLOAK_ADMIN_SECRET"))
 
 (def kc-client
   "Client to interact with our keycloak instance."

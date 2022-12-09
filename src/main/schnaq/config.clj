@@ -70,8 +70,7 @@
 
 (def mattermost-webhook-url
   "URL to mattermost-webhook to post news to the chat."
-  (or (System/getenv "MATTERMOST_WEBHOOK_URL")
-      "***REMOVED***"))
+  (System/getenv "MATTERMOST_WEBHOOK_URL"))
 
 ;; -----------------------------------------------------------------------------
 ;; Images
@@ -96,10 +95,10 @@
 ;; S3 Configuration
 
 (def ^:private s3-access-key
-  (or (System/getenv "S3_ACCESS_KEY") "minio"))
+  (System/getenv "S3_ACCESS_KEY"))
 
 (def ^:private s3-secret-key
-  (or (System/getenv "S3_SECRET_KEY") "***REMOVED***"))
+  (System/getenv "S3_SECRET_KEY"))
 
 (def s3-credentials {:access-key s3-access-key
                      :secret-key s3-secret-key
@@ -120,8 +119,6 @@
 ;; Stripe
 
 (def stripe-secret-api-key
-  (or (System/getenv "STRIPE_SECRET_KEY")
-      "***REMOVED***"))
+  (System/getenv "STRIPE_SECRET_KEY"))
 (def stripe-webhook-access-key
-  (or (System/getenv "STRIPE_WEBHOOK_ACCESS_KEY")
-      "***REMOVED***"))
+  (System/getenv "STRIPE_WEBHOOK_ACCESS_KEY"))

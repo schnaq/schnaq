@@ -10,13 +10,12 @@
 (def receiver-group
   "Define the list of receivers. Defined in 
   https://eu2.cleverreach.com/admin/customer_groups.php."
-  (or (System/getenv "CLEVERREACH_RECEIVER_GROUP") ***REMOVED***))
+  (System/getenv "CLEVERREACH_RECEIVER_GROUP"))
 
 (def client-id
   "OAuth Client ID. Defined in https://eu2.cleverreach.com/admin/account_rest.php"
-  (or (System/getenv "CLEVERREACH_OAUTH_CLIENT_ID") "***REMOVED***"))
+  (System/getenv "CLEVERREACH_OAUTH_CLIENT_ID"))
 
 (def client-secret
   "OAuth Client Secret."
-  (or (System/getenv "CLEVERREACH_OAUTH_CLIENT_SECRET")
-      "***REMOVED***"))
+  (System/getenv "CLEVERREACH_OAUTH_CLIENT_SECRET"))
