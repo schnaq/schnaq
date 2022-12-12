@@ -1,11 +1,10 @@
-# Superfluous files
 .cpcache/
 target/
 .nrepl-port
 pom.xml
 out/
 .m2/
-
+dev/config.edn
 
 # Calva-related
 .lsp/
