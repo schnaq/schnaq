@@ -4,6 +4,7 @@
   (:require [buddy.core.keys :as keys]
             [clojure.java.io :as io]
             [clojure.string :as str]
+            [config.core :refer [env]]
             [schnaq.config.shared :as shared-config]
             [schnaq.config.summy :as summy-config]))
 
@@ -12,11 +13,11 @@
   Environment variable should be comma-separated to be parsable.
    
   Example: `hhu.de,schnaq.com,razupaltu.ff`"
-  (when-let [hosts (System/getenv "PRO_EMAIL_HOSTS")]
+  (when-let [hosts (:pro-email-hosts env)]
     (set (str/split hosts #", ?"))))
 
 (def frontend-url
-  (or (System/getenv "FRONTEND_URL") "http://localhost:8700"))
+  (or (:frontend-url env) "http://localhost:8700"))
 
 (def frontend-host
   "Parse the host (and port) from the url to allow it in CORS."
@@ -30,7 +31,7 @@
 (def additional-cors
   "Define additional allowed origins for CORS. (ONLY USE ONES THAT ARE TRUSTED)"
   (str/split
-   (or (System/getenv "ADDITIONAL_CORS_ORIGINS") "")
+   (or (:additional-cors-origins env) "")
    #","))
 
 (def routes-without-csrf-check
@@ -43,14 +44,14 @@
   "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
   #{summy-config/app-code})
 
-(def db-name (or (System/getenv "DATOMIC_DISCUSSION_DB_NAME") "dev-db"))
+(def db-name (or (:datomic-discussion-db-name env) "dev-db"))
 
 (def datomic-uri
-  (format (or (System/getenv "DATOMIC_URI") "datomic:dev://localhost:4334/%s")
+  (format (or (:datomic-url env) "datomic:dev://localhost:4334/%s")
           db-name))
 
 (def build-hash
-  (or (System/getenv "BUILD_HASH") "dev"))
+  (or (:build-hash env) "dev"))
 
 (def deleted-statement-text "[deleted]")
 
@@ -61,16 +62,16 @@
     })
 
 (def email
-  {:sender-address (or (System/getenv "EMAIL_SENDER_ADDRESS") "info@schnaq.com")
-   :sender-host (or (System/getenv "EMAIL_HOST") "smtp.ionos.de")
-   :sender-password (System/getenv "EMAIL_PASSWORD")})
+  {:sender-address (:email-sender-address env)
+   :sender-host (:email-host env)
+   :sender-password (:email-password env)})
 
 (def mail-template "https://s3.schnaq.com/email/templates/generic-mail.html")
 (def mail-content-button-right-template "https://s3.schnaq.com/email/templates/snippets/content-left-button-right.html")
 
 (def mattermost-webhook-url
   "URL to mattermost-webhook to post news to the chat."
-  (System/getenv "MATTERMOST_WEBHOOK_URL"))
+  (:mattermost-webhook-url env))
 
 ;; -----------------------------------------------------------------------------
 ;; Images
@@ -94,14 +95,8 @@
 ;; -----------------------------------------------------------------------------
 ;; S3 Configuration
 
-(def ^:private s3-access-key
-  (System/getenv "S3_ACCESS_KEY"))
-
-(def ^:private s3-secret-key
-  (System/getenv "S3_SECRET_KEY"))
-
-(def s3-credentials {:access-key s3-access-key
-                     :secret-key s3-secret-key
+(def s3-credentials {:access-key (:s3-access-key env)
+                     :secret-key (:s3-secret-key env)
                      :endpoint shared-config/s3-host
                      :client-config {:path-style-access-enabled true}})
 
@@ -119,6 +114,6 @@
 ;; Stripe
 
 (def stripe-secret-api-key
-  (System/getenv "STRIPE_SECRET_KEY"))
+  (:stripe-secret-key env))
 (def stripe-webhook-access-key
-  (System/getenv "STRIPE_WEBHOOK_ACCESS_KEY"))
+  (:stripe-webhook-access-key env))
