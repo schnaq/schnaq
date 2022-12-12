@@ -1,6 +1,7 @@
 (ns schnaq.config.keycloak
   (:require [buddy.core.keys :as keys]
             [clojure.string :as string]
+            [config.core :refer [env]]
             [keycloak.deployment :refer [keycloak-client client-conf]]
             [schnaq.config.shared :as shared-config]
             [taoensso.timbre :as log]))
@@ -14,16 +15,16 @@
 
 (def realm
   "Specify the realm you are connecting to."
-  (or (System/getenv "KEYCLOAK_REALM") "development"))
+  (:keycloak-realm env))
 
 (def openid-endpoint
   "OpenID Endpoint to authenticate using oauth2."
   (format "%srealms/%s/protocol/openid-connect" server realm))
 
 (def ^:private backend-admin-id
-  (System/getenv "KEYCLOAK_ADMIN_ID"))
+  (:keycloak-admin-id env))
 (def ^:private backend-admin-secret
-  (System/getenv "KEYCLOAK_ADMIN_SECRET"))
+  (:keycloak-admin-secret env))
 
 (def kc-client
   "Client to interact with our keycloak instance."
