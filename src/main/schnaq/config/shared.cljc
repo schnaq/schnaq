@@ -1,20 +1,21 @@
 (ns schnaq.config.shared
-  (:require [clojure.set :as cset]))
+  (:require [clojure.set :as cset]
+            #?(:clj [config.core :refer [env]])))
 
 #?(:clj (def api-port
-          (Integer/parseInt (or (System/getenv "API_PORT") "3000")))
-   :cljs (goog-define api-port "3000"))
+          (or (:api-port env) 3000))
+   :cljs (goog-define api-port 3000))
 
 #?(:clj (def api-url
-          (or (System/getenv "API_URL") (str "http://localhost:" api-port)))
+          (or (:api-url env) (format "http://localhost:%d" api-port)))
    :cljs (goog-define api-url "http://localhost:3000"))
 
 #?(:clj (def keycloak-host
-          (or (System/getenv "KEYCLOAK_SERVER") "https://auth.schnaq.com"))
+          (or (:keycloak-server env) "https://auth.schnaq.com"))
    :cljs (goog-define keycloak-host "https://auth.schnaq.com"))
 
 #?(:clj (def s3-host
-          (or (System/getenv "S3_HOST") "https://s3.schnaq.com"))
+          (or (:s3-host env) "https://s3.schnaq.com"))
    :cljs (goog-define s3-host "https://s3.schnaq.com"))
 
 (def default-anonymous-display-name "Anonymous")
@@ -30,7 +31,7 @@
     :feedbacks/screenshots "schnaq-feedback-screenshots"}
    bucket-name))
 
-#?(:clj (def environment (or (System/getenv "ENVIRONMENT") "development"))
+#?(:clj (def environment (or (:environment env) "development"))
    :cljs (goog-define environment "development"))
 
 (def production?

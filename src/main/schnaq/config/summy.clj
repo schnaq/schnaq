@@ -1,9 +1,10 @@
 (ns schnaq.config.summy
-  (:require [com.fulcrologic.guardrails.core :refer [>defn ?]]))
+  (:require [com.fulcrologic.guardrails.core :refer [>defn ?]]
+            [config.core :refer [env]]))
 
 (def base-url
   "URL to our machine-learning service."
-  (or (System/getenv "SUMMY_URL") "https://summy.schnaq.com"))
+  (:summy-url env))
 
 (>defn urls
   "Return the url to externally call machine learning functions."
@@ -15,4 +16,4 @@
     (when url
       (format "%s/%s" base-url url))))
 
-(def app-code "summy-joins-schnaqqifantenparty")
+(def app-code (:app-code env))

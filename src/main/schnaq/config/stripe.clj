@@ -1,9 +1,10 @@
 (ns schnaq.config.stripe
-  "Define the stripe prices. Fallbacks are the test prices.")
+  "Define the stripe prices. Fallbacks are the test prices."
+  (:require [config.core :refer [env]]))
 
 (def prices
   "Store stripe price-ids."
   {:eur
-   {:schnaq.pro/yearly (or (System/getenv "STRIPE_PRICE_PRO_YEARLY_ID") "price_1KP4MxFrKCGqvoMoa1JrkLOz")}
+   {:schnaq.pro/yearly (:stripe-price-pro-yearly-id env)}
    :usd
-   {:schnaq.pro/yearly (or (System/getenv "STRIPE_PRICE_PRO_USD_YEARLY_ID") "price_1KoPixFrKCGqvoMoZB4sQLvf")}})
+   {:schnaq.pro/yearly (:stripe-price-pro-usd-yearly-id env)}})
