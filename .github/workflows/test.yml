@@ -66,6 +66,7 @@ jobs:
   up-to-date-deps:
     runs-on: ubuntu-latest
     name: Check Clojure deps
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v3
       - id: setup-clojure
