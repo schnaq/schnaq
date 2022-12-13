@@ -27,7 +27,3 @@ runs:
           ~/.deps.clj
         key: cljdeps-${{ hashFiles('deps.edn') }}
         restore-keys: cljdeps-
-
-    - name: Execute clojure code
-      run: clojure -e "(+ 1 1)"
-      shell: bash
