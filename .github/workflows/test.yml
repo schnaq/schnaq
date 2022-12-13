@@ -1,13 +1,21 @@
 on: [push]
 
 env:
+  APP_CODE: ${{ secrets.APP_CODE }}
+  CLEVERREACH_ENABLED: false
   DATOMIC_REPO_USERNAME: ${{ secrets.DATOMIC_REPO_USERNAME }}
   DATOMIC_REPO_PASSWORD: ${{ secrets.DATOMIC_REPO_PASSWORD }}
+  KEYCLOAK_ADMIN_ID: ${{ secrets.KEYCLOAK_ADMIN_ID }}
+  KEYCLOAK_ADMIN_SECRET: ${{ secrets.KEYCLOAK_ADMIN_SECRET }}
+  KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+  S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+  S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+  SUMMY_URL: ${{ secrets.SUMMY_URL }}
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: Clojure Tests
     steps:
       - uses: actions/checkout@v3
       - id: setup-clojure
@@ -18,7 +26,7 @@ jobs:
 
   test-cljs:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: ClojureScript Tests
     steps:
       - uses: actions/checkout@v3
       - id: setup-clojure
