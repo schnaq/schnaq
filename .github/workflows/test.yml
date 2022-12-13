@@ -10,6 +10,8 @@ env:
   KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
   S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
   S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+  STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+  STRIPE_WEBHOOK_ACCESS_KEY: ${{ secrets.STRIPE_WEBHOOK_ACCESS_KEY }}
   SUMMY_URL: ${{ secrets.SUMMY_URL }}
 
 jobs:
