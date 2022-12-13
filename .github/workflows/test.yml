@@ -74,3 +74,21 @@ jobs:
 
       - name: Check if deps.edn is up to date
         run: clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -M:outdated
+
+  # ------------------------------------------------------------------------------
+
+  coverage-report:
+    name: Generate coverage report
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Report code coverage
+        uses: zgosalvez/github-actions-report-lcov@v2
+        with:
+          coverage-files: target/coverage/lcov.*.info
+          minimum-coverage: 85
+          artifact-name: coverage
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: .
