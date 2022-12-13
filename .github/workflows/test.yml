@@ -9,9 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-      - uses: actions/checkout@v3
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
-      - run: cat ~/.m2/settings.xml
+
       - name: Execute clojure code
         run: clojure -e "(+ 1 1)"
