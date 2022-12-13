@@ -52,7 +52,7 @@ jobs:
   #     - name: Run clj-kondo
   #       run: clj-kondo --lint src/
 
-  up-to-date?:
+  up-to-date-deps:
     runs-on: ubuntu-latest
     name: Check if deps.edn is up to date
     steps:
