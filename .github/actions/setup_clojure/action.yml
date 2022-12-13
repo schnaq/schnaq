@@ -2,6 +2,10 @@ name: Setup Clojure
 
 on: [push]
 
+env:
+  DATOMIC_REPO_USERNAME: ${{ secrets.DATOMIC_REPO_USERNAME }}
+  DATOMIC_REPO_PASSWORD: ${{ secrets.DATOMIC_REPO_PASSWORD }}
+
 runs:
   using: "composite"
   steps:
