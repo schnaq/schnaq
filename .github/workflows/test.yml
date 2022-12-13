@@ -79,10 +79,9 @@ jobs:
 
   # ------------------------------------------------------------------------------
 
-  # Push image to GitHub Packages.
   push:
-    # Ensure test job passes before pushing image.
-    needs: [test, test-cljs]
+    name: Push Docker image
+    # needs: [test, test-cljs]
 
     runs-on: ubuntu-latest
     # if: github.event_name != 'pull_request'
@@ -112,7 +111,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          # push: ${{ github.event_name != 'pull_request' }}
+          push: true # ${{ github.event_name != 'pull_request' }}
           pull: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
