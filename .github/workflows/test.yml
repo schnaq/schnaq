@@ -46,8 +46,8 @@ jobs:
     name: Lint code
     steps:
       - uses: actions/checkout@v3
-      # - id: setup-clojure
-      #   uses: ./.github/actions/setup_clojure
+      - id: setup-clojure
+        uses: ./.github/actions/setup_clojure
 
       - name: Run clj-kondo
         run: clj-kondo --lint src/
