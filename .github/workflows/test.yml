@@ -11,5 +11,6 @@ jobs:
         env:
           DATOMIC_REPO_USERNAME: ${{ secrets.DATOMIC_REPO_USERNAME }}
           DATOMIC_REPO_PASSWORD: ${{ secrets.DATOMIC_REPO_PASSWORD }}
+      - run: cat ~/.m2/settings.xml
       - name: Execute clojure code
         run: clojure -e "(+ 1 1)"
