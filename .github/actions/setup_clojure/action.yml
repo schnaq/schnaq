@@ -5,6 +5,7 @@ on: [push]
 runs:
   using: "composite"
   steps:
+    - uses: hmarr/debug-action@v2
     - name: Checkout
       uses: actions/checkout@v3
     - name: Prepare java
@@ -23,7 +24,6 @@ runs:
       with:
         path: |
           ~/.m2/repository
-          ~/.gitlibs
           ~/.deps.clj
         key: cljdeps-${{ hashFiles('deps.edn') }}
         restore-keys: cljdeps-
