@@ -15,16 +15,23 @@ env:
   SUMMY_URL: ${{ secrets.SUMMY_URL }}
 
 jobs:
-  # test:
-  #   runs-on: ubuntu-latest
-  #   name: Clojure Tests
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - id: setup-clojure
-  #       uses: ./.github/actions/setup_clojure
+  test:
+    runs-on: ubuntu-latest
+    name: Clojure Tests
+    steps:
+      - uses: actions/checkout@v3
+      - id: setup-clojure
+        uses: ./.github/actions/setup_clojure
 
-  #     - name: Start Clojure Tests
-  #       run: clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:test
+      - name: Start Clojure Tests
+        run: clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -M:test
+
+      - name: "Upload Artifact"
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage
+          path: target/coverage/lcov.info
+          retention-days: 1
 
   # test-cljs:
   #   runs-on: ubuntu-latest
