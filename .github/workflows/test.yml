@@ -8,5 +8,8 @@ jobs:
       - uses: actions/checkout@v3
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
+        env:
+          DATOMIC_REPO_USERNAME: ${{ secrets.DATOMIC_REPO_USERNAME }}
+          DATOMIC_REPO_PASSWORD: ${{ secrets.DATOMIC_REPO_PASSWORD }}
       - name: Execute clojure code
         run: clojure -e "(+ 1 1)"
