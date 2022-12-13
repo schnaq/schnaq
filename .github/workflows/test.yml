@@ -13,5 +13,20 @@ jobs:
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
 
-      - name: Execute clojure code
-        run: clojure -e "(+ 1 1)"
+      - name: Start Clojure Tests
+        run: clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:test
+
+  test-cljs:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      - uses: actions/checkout@v3
+      - id: setup-clojure
+        uses: ./.github/actions/setup_clojure
+
+      - name: Install yarn dependencies
+        run: yarn install
+
+      - name: Start ClojureScript Tests
+        run: clj -Sdeps '{:mvn/local-repo "./.m2/repository"}' -M:test-cljs
+      - run: yarn karma start --single-run
