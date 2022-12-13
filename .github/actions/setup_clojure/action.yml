@@ -16,7 +16,9 @@ runs:
     - name: Install clojure tools
       uses: DeLaGuardo/setup-clojure@10.1
       with:
-        cli: "latest" #1.10.1.693 # Clojure CLI based on tools.deps
+        bb: "latest"
+        cli: "latest"
+        clj-kondo: "latest"
 
     # Optional step:
     - name: Cache clojure dependencies
