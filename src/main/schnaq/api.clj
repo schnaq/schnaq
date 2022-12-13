@@ -68,8 +68,11 @@
   (log/info (format "[Stripe] Price IDs schnaq pro: %s" (flatten (map vals (map second prices)))))
   (log/info (format "[Stripe] Webhook access key (truncated): %s..." (subs config/stripe-webhook-access-key 0 15)))
   (log/info (format "[Stripe] Secret key (truncated): %s..." (subs config/stripe-secret-api-key 0 15)))
-  (log/info (format "[CleverReach] Enabled? %b, Receiver group: %d, client-id: %s, client-secret: %s..."
-                    cconfig/enabled? cconfig/receiver-group cconfig/client-id (subs cconfig/client-secret 0 10))))
+  (log/info (format "[CleverReach] Enabled? %b, Receiver group: %s, client-id: %s, client-secret: %s..."
+                    cconfig/enabled?
+                    (or cconfig/receiver-group "not configured")
+                    (or cconfig/client-id "not configured")
+                    (if cconfig/client-secret (subs cconfig/client-secret 0 10) "not configured"))))
 
 (def ^:private description
   "This is the main Backend for schnaq.
