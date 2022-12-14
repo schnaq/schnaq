@@ -2,8 +2,8 @@
   (:require ["react-chartjs-2" :refer [Chart]]
             [schnaq.interface.components.colors :refer [colors]]))
 
-(defn regular
-  "Creates a regular chart, that can be used for most visualisations."
+(defn line
+  "Creates a line chart, that can be used for most visualisations."
   [chart-name labels data]
   [:> Chart {:type "line"
              :data {:labels labels

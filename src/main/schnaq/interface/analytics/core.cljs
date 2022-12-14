@@ -70,7 +70,7 @@
      [:div.card-body
       [:h5.card-title (labels :analytics/statements-num-title)]
       [:p.card-text.display-5 "Overall: " statements-total " — change: " [percentage-change penultimate ultimate]]
-      [chart/regular "Statements" (map first statements-series) values]
+      [chart/line "Statements" (map first statements-series) values]
       [:p.card-text [:small.text-muted "Last updated ..."]]]]))
 
 (>defn- multi-arguments-card
