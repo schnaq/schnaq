@@ -51,7 +51,7 @@
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "@excalidraw/excalidraw": "^0.12.0",
+    "@excalidraw/excalidraw": "^0.13.0",
     "@types/react": "^18.0.26",
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.1",
