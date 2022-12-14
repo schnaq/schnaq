@@ -13,7 +13,6 @@
 
 (defn- dashboard-statement [statement-id]
   (let [statement @(rf/subscribe [:schnaq/statement statement-id])
-        chart-data (pie-chart/create-vote-chart-data statement)
         path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div.schnaq-entry.my-3.p-3
      [:a.link-unstyled
@@ -25,7 +24,8 @@
         [md/as-markdown (:statement/content statement)]]
        [:div.col-xl-3.col-5
         [:div.dashboard-pie-chart
-         [pie-chart/pie-chart-component chart-data]]]]]]))
+         (when statement
+           [pie-chart/create-vote-chart-data statement])]]]]]))
 
 (defn- schnaq-statistics []
   (let [starting-conclusion-ids @(rf/subscribe [:schnaq.statements/current-level])]
