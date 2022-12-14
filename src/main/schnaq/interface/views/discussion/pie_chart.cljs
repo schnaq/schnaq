@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.discussion.pie-chart
-  (:require ["chart.js"]
+  (:require ["chart.js/auto" :refer [Chart]]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
             [schnaq.interface.components.colors :refer [colors]]))
@@ -28,7 +28,7 @@
       :component-did-mount
       (fn [comp]
         (let [[_ chart-data] (reagent/argv comp)]
-          (reset! pie-chart (js/Chart. (rdom/dom-node comp) (clj->js chart-data)))))
+          (reset! pie-chart (Chart. (rdom/dom-node comp) (clj->js chart-data)))))
       :component-did-update
       (fn [comp]
         (let [[_ chart-data] (reagent/argv comp)]
