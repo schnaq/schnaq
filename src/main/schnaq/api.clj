@@ -68,6 +68,10 @@
   (log/info (format "[Stripe] Price IDs schnaq pro: %s" (flatten (map vals (map second prices)))))
   (log/info (format "[Stripe] Webhook access key (truncated): %s..." (subs config/stripe-webhook-access-key 0 15)))
   (log/info (format "[Stripe] Secret key (truncated): %s..." (subs config/stripe-secret-api-key 0 15)))
+  (log/info cconfig/enabled?)
+  (log/info cconfig/receiver-group)
+  (log/info cconfig/client-id)
+  (log/info (subs cconfig/client-secret 0 10))
   (log/info (format "[CleverReach] Enabled? %b, Receiver group: %s, client-id: %s, client-secret: %s..."
                     cconfig/enabled?
                     (or cconfig/receiver-group "not configured")
