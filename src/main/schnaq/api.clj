@@ -72,12 +72,7 @@
   (log/info cconfig/enabled?)
   (log/info cconfig/receiver-group)
   (log/info cconfig/client-id)
-  (log/info (subs cconfig/client-secret 0 10))
-  (log/info (format "[CleverReach] Enabled? %b, Receiver group: %s, client-id: %s, client-secret: %s..."
-                    cconfig/enabled?
-                    (or cconfig/receiver-group "not configured")
-                    (or cconfig/client-id "not configured")
-                    (if cconfig/client-secret (subs cconfig/client-secret 0 10) "not configured"))))
+  (log/info (subs cconfig/client-secret 0 10)))
 
 (def ^:private description
   "This is the main Backend for schnaq.

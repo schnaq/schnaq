@@ -14,7 +14,7 @@
   "Query an access token. Necessary to browse CleverReach's API."
   [client-id client-secret]
   [string? string? => (? map?)]
-  (log/info (format "[DEBUG CleverReach] Enabled? %b, Receiver group: %s, client-id: %s, client-secret: %s..."
+  (log/info (format "[CleverReach] Enabled? %b, Receiver group: %s, client-id: %s, client-secret: %s..."
                     cconfig/enabled?
                     (or cconfig/receiver-group "not configured")
                     (or cconfig/client-id "not configured")
