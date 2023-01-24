@@ -30,14 +30,18 @@
    (database/init-and-seed! datomic-test-uri test-data)
    (f)))
 
+;; A bug in kaocha seems to try to interpret the result of the fixture and not of the test. Which means, until it is
+;; fixed, we need to return the result of f and not end on any other function call.
 (defn init-test-delete-db-fixture
   "Fixture to initialize, test, and afterwards delete the database."
   ([f]
-   (init-db-test-fixture f)
-   (datomic/delete-database datomic-test-uri))
+   (let [result (init-db-test-fixture f)]
+     (datomic/delete-database datomic-test-uri)
+     result))
   ([f test-data]
-   (init-db-test-fixture f test-data)
-   (datomic/delete-database datomic-test-uri)))
+   (let [result (init-db-test-fixture f test-data)]
+     (datomic/delete-database datomic-test-uri)
+     result)))
 
 ;; -----------------------------------------------------------------------------
 ;; Generative Test Helpers
