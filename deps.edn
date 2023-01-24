@@ -5,15 +5,15 @@
         clj-fuzzy/clj-fuzzy {:mvn/version "0.4.1"}
         clj-http/clj-http {:mvn/version "3.12.3"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}
-        com.cognitect.aws/api {:mvn/version "0.8.630"}
-        com.cognitect.aws/endpoints {:mvn/version "1.1.12.358"}
+        com.cognitect.aws/api {:mvn/version "0.8.641"}
+        com.cognitect.aws/endpoints {:mvn/version "1.1.12.381"}
         com.cognitect.aws/s3 {:mvn/version "825.2.1250.0"}
         com.datomic/datomic-pro {:mvn/version "1.0.6397"}
         com.draines/postal {:mvn/version "2.0.5"}
         com.fulcrologic/guardrails {:mvn/version "1.1.11"}
         com.google.guava/guava {:mvn/version "31.1-jre"
                                 :doc "shadow-cljs needs this"}
-        com.stripe/stripe-java {:mvn/version "22.3.0"}
+        com.stripe/stripe-java {:mvn/version "22.6.0"}
         com.taoensso/sente {:mvn/version "1.17.0"}
         com.taoensso/tempura {:mvn/version "1.3.0"}
         com.taoensso/timbre {:mvn/version "6.0.4"}
@@ -23,7 +23,7 @@
         expound/expound {:mvn/version "0.9.0"}
         schnaq/hodgepodge {:git/url "https://github.com/schnaq/hodgepodge.git"
                            :sha "de1b57165647e186e4a18873eb2a2e93fff36a4e"}
-        funcool/promesa {:mvn/version "10.0.571"}
+        funcool/promesa {:mvn/version "10.0.594"}
         http-kit/http-kit {:mvn/version "2.6.0"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
         jarohen/chime {:mvn/version "0.3.3"}
@@ -31,7 +31,7 @@
         metosin/reitit {:mvn/version "0.5.18"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
         metosin/spec-tools {:mvn/version "0.10.5"}
-        mount/mount {:mvn/version "0.1.16"}
+        mount/mount {:mvn/version "0.1.17"}
         org.clojure/clojure {:mvn/version "1.11.1"}
         org.clojure/clojurescript {:mvn/version "1.11.60"}
         org.clojure/core.async {:mvn/version "1.6.673"}
@@ -43,7 +43,7 @@
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring/ring {:mvn/version "1.9.6"}
         ring/ring-mock {:mvn/version "0.4.0"}
-        thheller/shadow-cljs {:mvn/version "2.20.14"}
+        thheller/shadow-cljs {:mvn/version "2.20.20"}
         yogthos/config {:mvn/version "1.2.0"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
@@ -51,7 +51,7 @@
              "my.datomic.com" {:url "https://my.datomic.com/repo"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.71.1119"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.75.1190"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.1.89"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
                   :main-opts ["-m" "kaocha.runner"]}
