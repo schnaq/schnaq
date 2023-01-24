@@ -24,7 +24,7 @@
   (let [data (oget properties :data)
         ^NodeKey nodeKey (oget properties :nodeKey)
         [editor] (useLexicalComposerContext)
-        [modal-open? modal-open!] (useState (and (= data "[]") (not (.isReadOnly editor))))
+        [modal-open? modal-open!] (useState (and (= data "[]") (not ^boolean (.isReadOnly editor))))
         image-container-ref (useRef nil)
         button-ref (useRef nil)
         [selected? selected! clear-selection!] (useLexicalNodeSelection nodeKey)
@@ -52,7 +52,7 @@
                        false)
                      #js [editor modal-open! nodeKey])
         set-data (fn [new-data]
-                   (when-not (.isReadOnly editor)
+                   (when-not ^boolean (.isReadOnly editor)
                      (.update editor #(let [node ($getNodeByKey nodeKey)]
                                         (when ($excalidraw-node? node)
                                           (if (pos? (oget new-data :length))
@@ -89,7 +89,7 @@
                            :shown? modal-open?
                            :onDelete delete-node
                            :onSave (fn [new-data]
-                                     (.setReadOnly editor false)
+                                     ^void (.setReadOnly editor false)
                                      (set-data new-data)
                                      (modal-open! false))
                            :closeOnClickOutside? true}]
@@ -106,63 +106,63 @@
       {:node node})))
 
 (defclass ExcalidrawNode
-  (field ^string __data)
-  (field ^string __url)
-  (extends DecoratorNode)
-  (constructor [this ?data ?url ?key]
-               (super ?key)
-               (oset! this :!__data (or ?data "[]"))
-               (oset! this :!__url (or ?url "")))
-  Object
-  (createDOM [this config]
-             (let [span (.createElement js/document "span")
-                   class-name (oget config [:theme :image])]
-               (when class-name
-                 (oset! span :className class-name))
-               span))
-  (updateDOM [_this] false)
-  (exportDOM [this ^LexicalEditor editor]
-             (let [element (.createElement js/document "span")
-                   content (.getElementByKey editor (.getKey this))]
-               (when content
-                 (when-let [svg (.querySelector content "svg")]
-                   (oset! element :innerHTML (oget svg :outerHTML))))
-               (.setAttribute element data-excalidraw-attribute (oget this :__data))
-               element))
-  (setUrl [this url]
-          (let [self (ocall this "getWritable")]
-            (oset! self :__url url)))
-  (getUrl [this]
-          (oget this :__url))
-  (hasUrl [this]
-          (seq (oget this :__url)))
-  (setData [this data]
-           (let [self (ocall this "getWritable")]
-             (oset! self :__data data)))
-  (exportJSON [this]
-              {:data (oget this :__data)
-               :url (oget this :__url)
-               :type "excalidraw"
-               :version 1})
-  (decorate [this _editor]
-            (r/create-element ExcalidrawComponent
-                              #js {:data (oget this :__data) :url (oget this :__url) :nodeKey (.getKey this)})))
+          (field ^string __data)
+          (field ^string __url)
+          (extends DecoratorNode)
+          (constructor [this ?data ?url ?key]
+                       (super ?key)
+                       (oset! this :!__data (or ?data "[]"))
+                       (oset! this :!__url (or ?url "")))
+          Object
+          (createDOM [this config]
+                     (let [span (.createElement js/document "span")
+                           class-name (oget config [:theme :image])]
+                       (when class-name
+                         (oset! span :className class-name))
+                       span))
+          (updateDOM [_this] false)
+          (exportDOM [this ^LexicalEditor editor]
+                     (let [element (.createElement js/document "span")
+                           content (.getElementByKey editor (.getKey this))]
+                       (when content
+                         (when-let [svg (.querySelector content "svg")]
+                           (oset! element :innerHTML (oget svg :outerHTML))))
+                       (.setAttribute element data-excalidraw-attribute (oget this :__data))
+                       element))
+          (setUrl [this url]
+                  (let [self (ocall this "getWritable")]
+                    (oset! self :__url url)))
+          (getUrl [this]
+                  (oget this :__url))
+          (hasUrl [this]
+                  (seq (oget this :__url)))
+          (setData [this data]
+                   (let [self (ocall this "getWritable")]
+                     (oset! self :__data data)))
+          (exportJSON [this]
+                      {:data (oget this :__data)
+                       :url (oget this :__url)
+                       :type "excalidraw"
+                       :version 1})
+          (decorate [this _editor]
+                    (r/create-element ExcalidrawComponent
+                                      #js {:data (oget this :__data) :url (oget this :__url) :nodeKey (.getKey this)})))
 
 ;; Configure static methods on our new class, because it is not possible to do
 ;; this inline in the `defclass` macro.
 (oset! ExcalidrawNode "!importDOM"
-       (fn []
-         {:span (fn [^HTMLSpanElement domNode]
-                  (when (.hasAttribute domNode data-excalidraw-attribute)
-                    {:conversion convert-excalidraw-element
-                     :priority 1}))}))
+  (fn []
+    {:span (fn [^HTMLSpanElement domNode]
+             (when (.hasAttribute domNode data-excalidraw-attribute)
+               {:conversion convert-excalidraw-element
+                :priority 1}))}))
 (oset! ExcalidrawNode "getType" (fn [] "excalidraw"))
 (oset! ExcalidrawNode "clone"
-       (fn [^ExcalidrawNode node]
-         (ExcalidrawNode. (oget node :__data) (oget node :__url) (oget node :__key))))
+  (fn [^ExcalidrawNode node]
+    (ExcalidrawNode. (oget node :__data) (oget node :__url) (oget node :__key))))
 (oset! ExcalidrawNode "importJSON"
-       (fn [node]
-         (ExcalidrawNode. (oget node :data) (oget node :url) nil)))
+  (fn [node]
+    (ExcalidrawNode. (oget node :data) (oget node :url) nil)))
 
 (defn $create-excalidraw-node
   "Create an image node."
