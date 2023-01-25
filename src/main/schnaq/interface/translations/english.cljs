@@ -264,7 +264,7 @@
    ;; Admin Center
    :schnaq.moderation/heading "Admin-Center"
    :schnaq.moderation/subheading "schnaq: \"%s\""
-   :schnaq.moderation.edit.link/header "Invite moderators"
+   :schnaq.moderation.edit.link/header "Manage moderators"
    :schnaq.admin.edit.link/primer "Administration takes work, let others help!"
    :schnaq.moderation.edit.link/admin "Share moderator-access via mail"
    :schnaq.moderation.edit.link/admin-privileges "Edit and administer suggestions"

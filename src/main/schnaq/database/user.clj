@@ -30,6 +30,14 @@
   (transact [[:db/add [:discussion/share-hash share-hash] :discussion/moderators
               [:user.registered/email email]]]))
 
+(>defn demote-moderator
+  ;; TODO write test
+  "Removes a moderator from a schnaq."
+  [share-hash email]
+  [:discussion/share-hash ::specs/email => future?]
+  (log/debug (format "Removing moderator %s from schnaq %s" email share-hash))
+  (transact [[:db/retract [:discussion/share-hash share-hash] :discussion/moderators [:user.registered/email email]]]))
+
 (>defn retract-user-attribute
   "Retract an attribute of a user."
   [{:user.registered/keys [keycloak-id]} attribute]

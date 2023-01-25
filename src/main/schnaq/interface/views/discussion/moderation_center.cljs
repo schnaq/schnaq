@@ -89,11 +89,11 @@
                                       :context :warning
                                       :stay-visible? true}]])]}))
 
-(defn- send-moderation-center-link
-  "Send moderation center link via mail to the creator."
+(defn- manage-moderators
+  "Invite moderators via mail or remove them as the creator."
   []
   [:section
-   [:p.lead (labels :schnaq.admin.edit.link/primer)]
+   [:h5 (labels :schnaq.admin.edit.link/primer)]
    [:section.row.mb-3
     ;; elephant admin
     [:div.col-md-6
@@ -122,7 +122,14 @@
        [:small.form-text.text-muted.float-end
         (labels :schnaq.moderation/addresses-privacy)]]
       [:button.btn.btn-outline-primary
-       (labels :schnaq.moderation.edit.link.form/submit-button)]])])
+       (labels :schnaq.moderation.edit.link.form/submit-button)]])
+   ;; TODO diese funktion nur für Schnaq Creator anzeigen
+   ;; TODO i18n
+   [:hr]
+   [:h5 "Moderatoren entfernen"]
+   [:div.text-start
+    [:ul
+     [:li "dude@ranch.com" [:button.btn.btn-dark "no"]]]]])
 
 (>defn- toggle-schnaq-state
   "Show a toggle to switch between the schnaq states."
@@ -235,7 +242,7 @@
     :view [moderate-discussion]}
    ;; admin access via mail
    {:link (labels :schnaq.moderation.edit.link/header)
-    :view [:div.text-center [send-moderation-center-link]]}])
+    :view [:div.text-center [manage-moderators]]}])
 
 ;; -----------------------------------------------------------------------------
 
