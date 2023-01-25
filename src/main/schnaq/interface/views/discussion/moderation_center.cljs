@@ -40,6 +40,25 @@
                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
+ :discussion.moderation/load-moderators
+ (fn [{:keys [db]} _]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :get "/moderation/moderators"
+                               [:discussion.moderation/load-moderators-success]
+                               {:share-hash share-hash}
+                               [:ajax.error/as-notification])]})))
+
+(rf/reg-event-db
+ :discussion.moderation/load-moderators-success
+ (fn [db [_ response]]
+   (assoc-in db [:schnaq :moderation :moderators] (:moderators response))))
+
+(rf/reg-sub
+ :discussion.moderation/moderators
+ (fn [db _]
+   (get-in db [:schnaq :moderation :moderators] [])))
+
+(rf/reg-event-fx
  ;; Success event of deletion live in discussion - not from admin panel
  :discussion.moderation/delete-statement-success
  (fn [_ [_ statement-id return]]
@@ -123,13 +142,17 @@
         (labels :schnaq.moderation/addresses-privacy)]]
       [:button.btn.btn-outline-primary
        (labels :schnaq.moderation.edit.link.form/submit-button)]])
-   ;; TODO diese funktion nur für Schnaq Creator anzeigen
+   ;; TODO diese funktion nur für Schnaq Creator anzeigen, zumindest die löschen buttons!
    ;; TODO i18n
    [:hr]
    [:h5 "Moderatoren entfernen"]
    [:div.text-start
     [:ul
-     [:li "dude@ranch.com" [:button.btn.btn-dark "no"]]]]])
+     (for [moderator-mail @(rf/subscribe [:discussion.moderation/moderators])]
+       [:li moderator-mail
+        [:button.btn.btn-dark
+         {:on-click #(rf/dispatch [:discussion.moderation/demote-moderator moderator-mail])}
+         "no"]])]]])
 
 (>defn- toggle-schnaq-state
   "Show a toggle to switch between the schnaq states."

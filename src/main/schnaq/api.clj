@@ -22,10 +22,10 @@
             [schnaq.api.common :refer [other-routes]]
             [schnaq.api.debug :refer [debug-routes]]
             [schnaq.api.discussion :refer [discussion-routes]]
-            [schnaq.api.emails :refer [email-routes]]
             [schnaq.api.feedback :refer [feedback-routes]]
             [schnaq.api.hub :refer [hub-routes]]
             [schnaq.api.middlewares :as middlewares]
+            [schnaq.api.moderation :refer [moderation-routes]]
             [schnaq.api.poll :refer [poll-routes]]
             [schnaq.api.profiling :as profiling]
             [schnaq.api.schnaq :refer [schnaq-routes]]
@@ -103,7 +103,7 @@
      analytics-routes
      debug-routes
      discussion-routes
-     email-routes
+     moderation-routes
      feedback-routes
      hub-routes
      other-routes
