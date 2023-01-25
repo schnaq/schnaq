@@ -45,8 +45,7 @@
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      {:fx [(http/xhrio-request db :get "/moderation/moderators"
                                [:discussion.moderation/load-moderators-success]
-                               {:share-hash share-hash}
-                               [:ajax.error/as-notification])]})))
+                               {:share-hash share-hash})]})))
 
 (rf/reg-event-db
  :discussion.moderation/load-moderators-success
@@ -57,6 +56,22 @@
  :discussion.moderation/moderators
  (fn [db _]
    (get-in db [:schnaq :moderation :moderators] [])))
+
+(rf/reg-event-fx
+ :discussion.moderation/demote-moderator
+ (fn [{:keys [db]} [_ email]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :post "/schnaq/owner/demote-moderator"
+                               [:discussion.moderation/demote-moderator-success email]
+                               {:share-hash share-hash
+                                :email email}
+                               [:ajax.error/as-notification])]})))
+;; TODO beim erfolgreichen befördern, die Liste an mods direkt erweitern
+(rf/reg-event-db
+ :discussion.moderation/demote-moderator-success
+ (fn [db [_ email response]]
+   (when (:demoted? response)
+     (update-in db [:schnaq :moderation :moderators] #(remove (fn [moderator-mail] (= email moderator-mail)) %)))))
 
 (rf/reg-event-fx
  ;; Success event of deletion live in discussion - not from admin panel
@@ -111,48 +126,55 @@
 (defn- manage-moderators
   "Invite moderators via mail or remove them as the creator."
   []
-  [:section
-   [:h5 (labels :schnaq.admin.edit.link/primer)]
-   [:section.row.mb-3
-    ;; elephant admin
-    [:div.col-md-6
-     [:div.share-link-icons
-      [img-text (img-path :schnaqqifant/admin) :schnaqqifant/admin-alt-text
-       (labels :schnaq.moderation.edit.link/admin)]]]
-    ;; elephant edit
-    [:div.col-md-6.share-link-icons
-     [img-text (img-path :schnaqqifant/erase) :schnaqqifant/erase-alt-text
-      (labels :schnaq.moderation.edit.link/admin-privileges)]]]
-   ;; admin mail input
-   (let [input-id "moderation-link-mail-address"]
-     [:form.form.text-start.mb-5
-      {:on-submit (fn [e]
-                    (.preventDefault e)
-                    (rf/dispatch [:discussion.moderation/promote-user-to-moderator
-                                  (oget e [:target :elements])]))}
-      [:div.mb-3
-       [:label.form-label {:for input-id} (labels :schnaq.moderation.edit.link.form/label)]
-       [:input.form-control.m-1.rounded-3
-        {:id input-id
-         :name "moderation-center-recipient"
-         :auto-complete "off"
-         :required true
-         :placeholder (labels :schnaq.moderation.edit.link.form/placeholder)}]
-       [:small.form-text.text-muted.float-end
-        (labels :schnaq.moderation/addresses-privacy)]]
-      [:button.btn.btn-outline-primary
-       (labels :schnaq.moderation.edit.link.form/submit-button)]])
-   ;; TODO diese funktion nur für Schnaq Creator anzeigen, zumindest die löschen buttons!
-   ;; TODO i18n
-   [:hr]
-   [:h5 "Moderatoren entfernen"]
-   [:div.text-start
-    [:ul
-     (for [moderator-mail @(rf/subscribe [:discussion.moderation/moderators])]
-       [:li moderator-mail
-        [:button.btn.btn-dark
-         {:on-click #(rf/dispatch [:discussion.moderation/demote-moderator moderator-mail])}
-         "no"]])]]])
+  (let [current-schnaq @(rf/subscribe [:schnaq/selected])
+        current-user @(rf/subscribe [:user/current])
+        author? (= (:id current-user) (-> current-schnaq :discussion/author :db/id))
+        user-mail (:email current-user)]
+    [:section
+     [:h5 (labels :schnaq.admin.edit.link/primer)]
+     [:section.row.mb-3
+      ;; elephant admin
+      [:div.col-md-6
+       [:div.share-link-icons
+        [img-text (img-path :schnaqqifant/admin) :schnaqqifant/admin-alt-text
+         (labels :schnaq.moderation.edit.link/admin)]]]
+      ;; elephant edit
+      [:div.col-md-6.share-link-icons
+       [img-text (img-path :schnaqqifant/erase) :schnaqqifant/erase-alt-text
+        (labels :schnaq.moderation.edit.link/admin-privileges)]]]
+     ;; admin mail input
+     (let [input-id "moderation-link-mail-address"]
+       [:form.form.text-start.mb-5
+        {:on-submit (fn [e]
+                      (.preventDefault e)
+                      (rf/dispatch [:discussion.moderation/promote-user-to-moderator
+                                    (oget e [:target :elements])]))}
+        [:div.mb-3
+         [:label.form-label {:for input-id} (labels :schnaq.moderation.edit.link.form/label)]
+         [:input.form-control.m-1.rounded-3
+          {:id input-id
+           :name "moderation-center-recipient"
+           :auto-complete "off"
+           :required true
+           :placeholder (labels :schnaq.moderation.edit.link.form/placeholder)}]
+         [:small.form-text.text-muted.float-end
+          (labels :schnaq.moderation/addresses-privacy)]]
+        [:button.btn.btn-outline-primary
+         (labels :schnaq.moderation.edit.link.form/submit-button)]])
+     ;; TODO i18n
+     [:hr]
+     [:h5 "Aktuelle Moderatoren"]
+     [:div.text-start
+      (for [moderator-mail @(rf/subscribe [:discussion.moderation/moderators])]
+        [:div.pb-2
+         (when (or author? (= user-mail moderator-mail))
+           (if (= user-mail moderator-mail)
+             [:span.badge.me-2.bg-primary "Du"]
+             [:button.btn.btn-dark.btn-sm
+              {:on-click #(when (js/confirm "Moderator endgültig entfernen?")
+                            (rf/dispatch [:discussion.moderation/demote-moderator moderator-mail]))}
+              "Remove moderator"]))
+         " " moderator-mail])]]))
 
 (>defn- toggle-schnaq-state
   "Show a toggle to switch between the schnaq states."
