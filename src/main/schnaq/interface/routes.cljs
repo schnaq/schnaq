@@ -211,7 +211,8 @@
        :view discussion-admin/moderation-center-view
        :link-text (labels :router/last-added-schnaq)
        :controllers [{:start (fn []
-                               (rf/dispatch [:scheduler.after/login [:themes.load/personal]]))}]}]
+                               (rf/dispatch [:scheduler.after/login [:themes.load/personal]])
+                               (rf/dispatch [:scheduler.after/login [:discussion.moderation/load-moderators]]))}]}]
      ["/statement/:statement-id"
       {:name :routes.schnaq.select/statement
        :parameters {:path {:statement-id int?}}

@@ -35,10 +35,15 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn set-node-url
+  "Helper function to provide type for infer"
+  [node url]
+  ^void (.setUrl node url))
+
 (rf/reg-event-fx
  :excalidraw.elements.store/success
  (fn [_ [_ editor node {:keys [url]}]]
-   {:fx [[:editor/update! [editor #(.setUrl node url)]]]}))
+   {:fx [[:editor/update! [editor #(set-node-url node url)]]]}))
 
 (rf/reg-event-fx
  :excalidraw.elements/store-png

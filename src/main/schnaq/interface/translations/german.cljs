@@ -4,6 +4,7 @@
   {:error/export-failed "Export hat nicht geklappt, versuche es später erneut."
 
    :common/keycloak-id "keycloak-id"
+   :common/you "Du"
 
    :view/present "Präsentieren"
 
@@ -267,13 +268,16 @@
    ;; Admin Center
    :schnaq.moderation/heading "Admin-Center"
    :schnaq.moderation/subheading "schnaq: \"%s\""
-   :schnaq.moderation.edit.link/header "Moderator:innen einladen"
+   :schnaq.moderation.edit.link/header "Moderator:innen verwalten"
    :schnaq.admin.edit.link/primer "Verwaltung ist Arbeit, lass' dir dabei helfen!"
    :schnaq.moderation.edit.link/admin "Moderator:innen-Link per Mail verschicken"
    :schnaq.moderation.edit.link/admin-privileges "Editieren und Vorschläge verwalten"
    :schnaq.moderation.edit.link.form/label "E-Mail Adresse der einzuladenden Nutzer:in"
    :schnaq.moderation.edit.link.form/placeholder "Eine E-Mail Adresse eingeben"
    :schnaq.moderation.edit.link.form/submit-button "Zu Moderator:in machen"
+   :schnaq.moderation.overview/moderators-subheading "Aktuelle Moderator:innen"
+   :schnaq.moderation.demote/confirmation-text "Moderator:in endgültig entfernen?"
+   :schnaq.moderation.demote/button-label "Moderator:in entfernen"
    :schnaq.admin.invite/via-link "Link verteilen"
    :schnaq.moderation.edit/administrate "schnaq verwalten"
    :schnaq.moderation.edit/administrate-short "Verwalten"
