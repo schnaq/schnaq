@@ -106,47 +106,47 @@
       {:node node})))
 
 (defclass ExcalidrawNode
-          (field ^string __data)
-          (field ^string __url)
-          (extends DecoratorNode)
-          (constructor [this ?data ?url ?key]
-                       (super ?key)
-                       (oset! this :!__data (or ?data "[]"))
-                       (oset! this :!__url (or ?url "")))
-          Object
-          (createDOM [this config]
-                     (let [span (.createElement js/document "span")
-                           class-name (oget config [:theme :image])]
-                       (when class-name
-                         (oset! span :className class-name))
-                       span))
-          (updateDOM [_this] false)
-          (exportDOM [this ^LexicalEditor editor]
-                     (let [element (.createElement js/document "span")
-                           content (.getElementByKey editor (.getKey this))]
-                       (when content
-                         (when-let [svg (.querySelector content "svg")]
-                           (oset! element :innerHTML (oget svg :outerHTML))))
-                       (.setAttribute element data-excalidraw-attribute (oget this :__data))
-                       element))
-          (setUrl [this url]
-                  (let [self (ocall this "getWritable")]
-                    (oset! self :__url url)))
-          (getUrl [this]
-                  (oget this :__url))
-          (hasUrl [this]
-                  (seq (oget this :__url)))
-          (setData [this data]
-                   (let [self (ocall this "getWritable")]
-                     (oset! self :__data data)))
-          (exportJSON [this]
-                      {:data (oget this :__data)
-                       :url (oget this :__url)
-                       :type "excalidraw"
-                       :version 1})
-          (decorate [this _editor]
-                    (r/create-element ExcalidrawComponent
-                                      #js {:data (oget this :__data) :url (oget this :__url) :nodeKey (.getKey this)})))
+  (field ^string __data)
+  (field ^string __url)
+  (extends DecoratorNode)
+  (constructor [this ?data ?url ?key]
+               (super ?key)
+               (oset! this :!__data (or ?data "[]"))
+               (oset! this :!__url (or ?url "")))
+  Object
+  (createDOM [this config]
+             (let [span (.createElement js/document "span")
+                   class-name (oget config [:theme :image])]
+               (when class-name
+                 (oset! span :className class-name))
+               span))
+  (updateDOM [_this] false)
+  (exportDOM [this ^LexicalEditor editor]
+             (let [element (.createElement js/document "span")
+                   content (.getElementByKey editor (.getKey this))]
+               (when content
+                 (when-let [svg (.querySelector content "svg")]
+                   (oset! element :innerHTML (oget svg :outerHTML))))
+               (.setAttribute element data-excalidraw-attribute (oget this :__data))
+               element))
+  (setUrl [this url]
+          (let [self (ocall this "getWritable")]
+            (oset! self :__url url)))
+  (getUrl [this]
+          (oget this :__url))
+  (hasUrl [this]
+          (seq (oget this :__url)))
+  (setData [this data]
+           (let [self (ocall this "getWritable")]
+             (oset! self :__data data)))
+  (exportJSON [this]
+              {:data (oget this :__data)
+               :url (oget this :__url)
+               :type "excalidraw"
+               :version 1})
+  (decorate [this _editor]
+            (r/create-element ExcalidrawComponent
+                              #js {:data (oget this :__data) :url (oget this :__url) :nodeKey (.getKey this)})))
 
 ;; Configure static methods on our new class, because it is not possible to do
 ;; this inline in the `defclass` macro.
