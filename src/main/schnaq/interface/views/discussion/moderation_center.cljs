@@ -31,10 +31,11 @@
 (rf/reg-event-fx
  :discussion.moderation/promote-user-to-moderator
  (fn [{:keys [db]} [_ form]]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         recipient (oget form ["moderation-center-recipient" :value])]
      {:fx [(http/xhrio-request db :post "/moderation/promote-user"
-                               [:discussion.moderation/send-email-success form]
-                               {:recipient (oget form ["moderation-center-recipient" :value])
+                               [:discussion.moderation/send-email-success recipient form]
+                               {:recipient recipient
                                 :share-hash share-hash
                                 :admin-center (links/get-moderator-center-link share-hash)}
                                [:ajax.error/as-notification])]})))
@@ -66,7 +67,7 @@
                                {:share-hash share-hash
                                 :email email}
                                [:ajax.error/as-notification])]})))
-;; TODO beim erfolgreichen befördern, die Liste an mods direkt erweitern
+
 (rf/reg-event-db
  :discussion.moderation/demote-moderator-success
  (fn [db [_ email response]]
@@ -106,8 +107,9 @@
 
 (rf/reg-event-fx
  :discussion.moderation/send-email-success
- (fn [_ [_ form {:keys [failed-sendings]}]]
-   {:fx [[:dispatch [:notification/add
+ (fn [{:keys [db]} [_ recipient form {:keys [failed-sendings]}]]
+   {:db (if (empty? failed-sendings) (update-in db [:schnaq :moderation :moderators] conj recipient) db)
+    :fx [[:dispatch [:notification/add
                      #:notification{:title (labels :schnaq.moderation.notifications/emails-successfully-sent-title)
                                     :body (labels :schnaq.moderation.notifications/emails-successfully-sent-body-text)
                                     :context :success}]]
