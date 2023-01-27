@@ -1,5 +1,4 @@
 (ns schnaq.api.moderation
-  ;; TODO move the owner route here as well
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [ring.util.http-response :refer [ok bad-request]]

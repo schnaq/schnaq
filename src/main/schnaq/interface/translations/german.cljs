@@ -4,6 +4,7 @@
   {:error/export-failed "Export hat nicht geklappt, versuche es später erneut."
 
    :common/keycloak-id "keycloak-id"
+   :common/you "Du"
 
    :view/present "Präsentieren"
 
@@ -274,6 +275,9 @@
    :schnaq.moderation.edit.link.form/label "E-Mail Adresse der einzuladenden Nutzer:in"
    :schnaq.moderation.edit.link.form/placeholder "Eine E-Mail Adresse eingeben"
    :schnaq.moderation.edit.link.form/submit-button "Zu Moderator:in machen"
+   :schnaq.moderation.overview/moderators-subheading "Aktuelle Moderator:innen"
+   :schnaq.moderation.demote/confirmation-text "Moderator:in endgültig entfernen?"
+   :schnaq.moderation.demote/button-label "Moderator:in entfernen"
    :schnaq.admin.invite/via-link "Link verteilen"
    :schnaq.moderation.edit/administrate "schnaq verwalten"
    :schnaq.moderation.edit/administrate-short "Verwalten"

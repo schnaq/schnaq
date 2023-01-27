@@ -163,19 +163,18 @@
           (labels :schnaq.moderation/addresses-privacy)]]
         [:button.btn.btn-outline-primary
          (labels :schnaq.moderation.edit.link.form/submit-button)]])
-     ;; TODO i18n
      [:hr]
-     [:h5 "Aktuelle Moderatoren"]
+     [:h5 (labels :schnaq.moderation.overview/moderators-subheading)]
      [:div.text-start
       (for [moderator-mail @(rf/subscribe [:discussion.moderation/moderators])]
         [:div.pb-2
          (when (or author? (= user-mail moderator-mail))
            (if (= user-mail moderator-mail)
-             [:span.badge.me-2.bg-primary "Du"]
+             [:span.badge.me-2.bg-primary (labels :common/you)]
              [:button.btn.btn-dark.btn-sm
-              {:on-click #(when (js/confirm "Moderator endgültig entfernen?")
+              {:on-click #(when (js/confirm (labels :schnaq.moderation.demote/confirmation-text))
                             (rf/dispatch [:discussion.moderation/demote-moderator moderator-mail]))}
-              "Remove moderator"]))
+              (labels :schnaq.moderation.demote/button-label)]))
          " " moderator-mail])]]))
 
 (>defn- toggle-schnaq-state

@@ -4,6 +4,7 @@
   {:error/export-failed "Export failed. Please try again later."
 
    :common/keycloak-id "keycloak-id"
+   :common/you "You"
 
    :view/present "Present"
 
@@ -271,6 +272,9 @@
    :schnaq.moderation.edit.link.form/label "Email address of the user you promote"
    :schnaq.moderation.edit.link.form/placeholder "Enter an email address"
    :schnaq.moderation.edit.link.form/submit-button "Make user a moderator"
+   :schnaq.moderation.overview/moderators-subheading "Current Moderators"
+   :schnaq.moderation.demote/confirmation-text "Are you sure you want to remove this moderator?"
+   :schnaq.moderation.demote/button-label "Remove moderator"
    :schnaq.admin.invite/via-link "Distribute Link"
    :schnaq.moderation.edit/administrate "Manage schnaq"
    :schnaq.moderation.edit/administrate-short "Manage"
