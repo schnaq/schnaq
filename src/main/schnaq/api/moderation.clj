@@ -27,7 +27,7 @@
           (format (email-templates :admin-center/title) discussion-title)
           (format (email-templates :admin-center/body) discussion-title admin-center)
           [recipient])))))
-;; TODO add test
+
 (defn- load-moderators
   "Sends a list of all moderator emails to the frontend. Can only be queried by a moderator."
   [{:keys [parameters]}]
@@ -37,7 +37,6 @@
     (ok {:moderators (map :user.registered/email (:discussion/moderators schnaq-moderators))})))
 
 (defn- demote-moderator
-  ;; TODO write tests
   "Removes a moderator from the schnaq, if the requester is the owner."
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash email]} (:body parameters)

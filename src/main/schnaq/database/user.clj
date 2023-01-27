@@ -31,7 +31,6 @@
               [:user.registered/email email]]]))
 
 (>defn demote-moderator
-  ;; TODO write test
   "Removes a moderator from a schnaq."
   [share-hash email]
   [:discussion/share-hash ::specs/email => future?]
