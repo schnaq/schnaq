@@ -6,8 +6,6 @@
             [schnaq.database.access-codes :as ac]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :as hub-db]
-            [schnaq.database.main :as db]
-            [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.links :as links]
@@ -59,20 +57,6 @@
                      (processors/with-aggregated-votes user-id))
                 (discussion-db/discussions-by-share-hashes share-hashes-list))})
       at/not-found-hash-invalid)))
-
-(defn- demote-moderator
-  ;; TODO write tests
-  "Removes a moderator from the schnaq, if the requester is the owner."
-  [{:keys [parameters identity]}]
-  (let [{:keys [share-hash email]} (:body parameters)
-        requesting-user (:db/id (db/fast-pull [:user.registered/keycloak-id (:sub identity)] [:db/id]))
-        modified-discussion-author (get-in (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion)
-                                           [:discussion/author :db/id])]
-    (if (= requesting-user modified-discussion-author)
-      (do
-        (user-db/demote-moderator share-hash email)
-        (ok {:demoted? true}))
-      (bad-request (at/build-error-body :not-author "Only the author can demote users.")))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -250,15 +234,7 @@
                   :parameters {:query {:share-hash :discussion/share-hash
                                        :search-string string?
                                        :display-name ::specs/non-blank-string}}
-                  :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}}}]]
-     ["/owner/demote-moderator" {:post demote-moderator
-                                 :description (at/get-doc #'demote-moderator)
-                                 :name :api.schnaq.owner/demote-moderator
-                                 :middleware [:discussion/valid-share-hash? :user/authenticated?]
-                                 :parameters {:body {:share-hash :discussion/share-hash
-                                                     :email ::specs/email}}
-                                 :responses {200 {:body {:demoted? boolean?}}
-                                             400 at/response-error-body}}]]
+                  :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}}}]]]
     ["/schnaqs/by-hashes"
      {:post schnaqs-by-hashes
       :name :api.schnaqs/by-hashes

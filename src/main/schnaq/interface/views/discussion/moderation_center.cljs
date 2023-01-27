@@ -61,7 +61,7 @@
  :discussion.moderation/demote-moderator
  (fn [{:keys [db]} [_ email]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-     {:fx [(http/xhrio-request db :post "/schnaq/owner/demote-moderator"
+     {:fx [(http/xhrio-request db :post "/moderation/demote"
                                [:discussion.moderation/demote-moderator-success email]
                                {:share-hash share-hash
                                 :email email}

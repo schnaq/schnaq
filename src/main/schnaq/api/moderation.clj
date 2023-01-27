@@ -2,10 +2,11 @@
   ;; TODO move the owner route here as well
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
-            [ring.util.http-response :refer [ok]]
+            [ring.util.http-response :refer [ok bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
+            [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.mail.emails :as emails]
@@ -36,6 +37,20 @@
                                         [{:discussion/moderators [:user.registered/email]}])]
     (ok {:moderators (map :user.registered/email (:discussion/moderators schnaq-moderators))})))
 
+(defn- demote-moderator
+  ;; TODO write tests
+  "Removes a moderator from the schnaq, if the requester is the owner."
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash email]} (:body parameters)
+        requesting-user (:db/id (db/fast-pull [:user.registered/keycloak-id (:sub identity)] [:db/id]))
+        modified-discussion-author (get-in (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion)
+                                           [:discussion/author :db/id])]
+    (if (= requesting-user modified-discussion-author)
+      (do
+        (user-db/demote-moderator share-hash email)
+        (ok {:demoted? true}))
+      (bad-request (at/build-error-body :not-author "Only the author can demote users.")))))
+
 ;; -----------------------------------------------------------------------------
 
 (def moderation-routes
@@ -54,4 +69,12 @@
                    :description (at/get-doc #'load-moderators)
                    :name :api.moderation/moderators
                    :parameters {:query {:share-hash :discussion/share-hash}}
-                   :responses {200 {:body {:moderators (s/coll-of ::specs/email)}}}}]])
+                   :responses {200 {:body {:moderators (s/coll-of ::specs/email)}}}}]
+   ["/demote" {:post demote-moderator
+               :description (at/get-doc #'demote-moderator)
+               :name :api.schnaq.owner/demote-moderator
+               :middleware [:discussion/valid-share-hash? :user/authenticated?]
+               :parameters {:body {:share-hash :discussion/share-hash
+                                   :email ::specs/email}}
+               :responses {200 {:body {:demoted? boolean?}}
+                           400 at/response-error-body}}]])
