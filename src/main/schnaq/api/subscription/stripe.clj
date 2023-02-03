@@ -15,6 +15,9 @@
            [com.stripe.exception InvalidRequestException]
            [com.stripe.model.checkout Session]))
 
+;; Test-Subscription in dev:
+;; http://localhost:8700/subscription/redirect/checkout?price-id=<Your test price id>
+
 (def ^:private error-article-not-found
   (at/build-error-body :article/not-found "Article could not be found."))
 
