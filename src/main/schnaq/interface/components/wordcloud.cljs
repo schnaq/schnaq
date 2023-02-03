@@ -67,7 +67,7 @@
    :enableOptimizations true
    :deterministic true
    :fontFamily "Poppins"
-   :fontSizes [20 60]
+   :fontSizes [20 50]
    :fontStyle "normal"
    :fontWeight "normal"
    :padding 1

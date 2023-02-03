@@ -85,13 +85,13 @@
 ;; this inline in the `defclass` macro.
 (oset! ImageNode "getType" (fn [] "image"))
 (oset! ImageNode "clone"
-       (fn [^ImageNode node]
-         (ImageNode. (oget node :__src) (oget node :?__altText) (oget node :__key))))
+  (fn [^ImageNode node]
+    (ImageNode. (oget node :__src) (oget node :?__altText) (oget node :__key))))
 (oset! ImageNode "importJSON"
-       (fn [node]
-         (let [src (oget node :src)
-               alt-text (oget node :altText)]
-           ($create-image-node src alt-text))))
+  (fn [node]
+    (let [src (oget node :src)
+          alt-text (oget node :altText)]
+      ($create-image-node src alt-text))))
 
 (defn $create-image-node
   "Create an image node."
