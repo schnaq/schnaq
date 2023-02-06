@@ -141,6 +141,7 @@
 (s/def :discussion/created-at inst?)
 (s/def :discussion/author ::user-or-reference)
 (s/def :discussion/header-image-url string?)
+(s/def :discussion/device-ids (s/coll-of uuid?))
 (s/def :discussion/hub-origin (s/or :reference :db/id
                                     :hub ::hub))
 (s/def :discussion/moderators (s/coll-of (s/or :registered-user ::registered-user
@@ -167,7 +168,8 @@
                                   :discussion/moderators :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/moderation-link
                                   :discussion/creation-secret :discussion/mode :discussion/access
-                                  :discussion/activation-focus :discussion/wordcloud]))
+                                  :discussion/activation-focus :discussion/wordcloud
+                                  :discussion/device-ids]))
 
 (s/def :wordcloud/title ::non-blank-string)
 (s/def :wordcloud/discussion (s/or :id :db/id
