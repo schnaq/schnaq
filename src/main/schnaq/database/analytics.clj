@@ -1,10 +1,13 @@
 (ns schnaq.database.analytics
-  (:require [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
+  (:require [com.fulcrologic.guardrails.core :refer [=> >defn >defn-]]
+            [schnaq.database.activation :as activation-db]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db]
-            [schnaq.database.patterns :as patterns])
-  (:import (java.util Date)
+            [schnaq.database.patterns :as patterns]
+            [schnaq.database.user :as user-db])
+  (:import (java.text SimpleDateFormat)
            (java.time Instant)
-           (java.text SimpleDateFormat)))
+           (java.util Date)))
 
 (def ^:private max-time-back Instant/EPOCH)
 
@@ -160,7 +163,7 @@
       0)))
 
 (>defn statistical-statement-num-data
-  "Returns the median of statements per discusison."
+  "Returns the median of statements per discussion."
   ([]
    [:ret map?]
    (statistical-statement-num-data max-time-back))
@@ -270,3 +273,67 @@
      (Date/from since))
     (group-by second)
     (map #(vector (:db/ident (first %)) (count (second %)))))))
+
+;; -----------------------------------------------------------------------------
+
+(def users (user-db/users-filter-by-regex-on-email #".*@schnaq\.com"))
+
+(def user (first users))
+
+(defn total-statements [statements]
+  (->> statements (map count) (apply +)))
+
+(defn total-upvotes [statements]
+  (->> statements
+       (map #(->> %
+                  (map :statement/upvotes)
+                  (map count)
+                  (apply +)))
+       (apply +)))
+
+(defn total-downvotes [statements]
+  (->> statements
+       (map #(->> %
+                  (map :statement/downvotes)
+                  (map count)
+                  (apply +)))
+       (apply +)))
+
+(defn all-activations [share-hashes]
+  (remove nil? (map activation-db/activation-by-share-hash share-hashes)))
+(defn total-activation-count [activations]
+  (->> activations
+       (map :activation/count)
+       (apply +)))
+
+(defn stats-for-user [user]
+  (let [discussions (discussion-db/discussions-from-user (:user.registered/keycloak-id user))
+        share-hashes (map :discussion/share-hash discussions)
+        statements (map discussion-db/all-statements share-hashes)
+        activations (all-activations share-hashes)]
+    {:discussions {:total (count discussions)
+                   :statements (total-statements statements)
+                   :upvotes (total-upvotes statements)
+                   :downvotes (total-downvotes statements)}
+     :activations {:total (count activations)
+                   :total-count (total-activation-count activations)}}))
+
+(comment
+
+  users
+  user
+
+  (def discussions (discussion-db/discussions-from-user (:user.registered/keycloak-id user)))
+  (def share-hashes (map :discussion/share-hash discussions))
+  (def share-hash (first share-hashes))
+  (def all-statements-from-discussions-of-user
+    (map discussion-db/all-statements share-hashes))
+
+  (def activations (all-activations share-hashes))
+
+  (total-activation-count activations)
+
+  (stats-for-user user)
+  (map stats-for-user users)
+
+  nil)
