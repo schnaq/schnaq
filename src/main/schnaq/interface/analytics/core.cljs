@@ -133,7 +133,7 @@
         [:> FormControl {:name "patterns" :placeholder ".*@schnaq\\.com$, .*@schnaq\\.org$, schnaqqi@schnaq.com"}]
         [:> Button {:variant "primary" :type :submit} "Query"]]]]
      (when statistics
-       [:pre [:code (with-out-str (pprint statistics))]])]))
+       [:pre.bg-light.p-3.mt-3 [:code (with-out-str (pprint statistics))]])]))
 
 (defn- analytics-dashboard-view
   "The dashboard displaying all analytics."
