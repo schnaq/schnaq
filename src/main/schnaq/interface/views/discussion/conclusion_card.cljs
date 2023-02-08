@@ -455,13 +455,14 @@
          (if mobile?
            [:> Masonry
             options
-            [info-card]
             activations
-            (when-not hide-input? [selection-card])
+            [:div
+             [info-card]
+             (when-not hide-input? [selection-card])]
             statements]
            [:> Masonry
             options
-            [:section
+            [:div
              [info-card]
              (when-not hide-input? [selection-card])]
             activations
