@@ -1,5 +1,6 @@
 (ns schnaq.api.analytics
-  (:require [ring.util.http-response :refer [ok]]
+  (:require [clojure.spec.alpha :as s]
+            [ring.util.http-response :refer [ok]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.analytics :as analytics-db]
             [schnaq.database.specs :as specs]
@@ -45,4 +46,5 @@
    ["/by-emails"
     {:get by-emails
      :parameters {:query {:patterns any?}}
-     :responses {200 {:body {:statistics map?}}}}]])
+     :responses {200 {:body {:statistics (s/or :statistics map?
+                                               :nothing-found nil?)}}}}]])
