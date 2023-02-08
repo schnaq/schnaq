@@ -110,7 +110,7 @@
      {:type "number"
       :name "days-input"
       :placeholder "Stats for last X days"
-      ;; :autoFocus true ;; TODO re-add
+      :autoFocus true
       :required true
       :defaultValue 30}]]
    [:div.col
