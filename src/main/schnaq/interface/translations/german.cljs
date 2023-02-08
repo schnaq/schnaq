@@ -398,6 +398,7 @@
    :analytics.users.table/name "Name"
    :analytics.users.table/email "E-Mail"
    :analytics.patterns/title "Query Nutzer:innen per E-Mail"
+   :analytics.patterns.input/label "Wähle Nutzer:innen anhand ihrer E-Mails aus. Du kannst reguläre Ausdrücke verwenden und mehrere durch Komma getrennte Muster angeben. Die Statistiken werden aggregiert."
 
    ;; User related
    :user.button/set-name "Name speichern"

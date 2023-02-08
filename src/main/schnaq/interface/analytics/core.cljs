@@ -128,7 +128,7 @@
                                   split (map str/trim (str/split inputs #","))]
                               (rf/dispatch [:analytics.patterns/query split])))}
       [:> FormGroup
-       [:> FormLabel "Select users by their emails. You can use regular expressions and provide multiple patterns separated by commas. The statistics are then aggregated."]
+       [:> FormLabel (labels :analytics.patterns.input/label)]
        [:> InputGroup
         [:> FormControl {:name "patterns" :placeholder ".*@schnaq\\.com$, .*@schnaq\\.org$, schnaqqi@schnaq.com"}]
         [:> Button {:variant "primary" :type :submit} "Query"]]]]

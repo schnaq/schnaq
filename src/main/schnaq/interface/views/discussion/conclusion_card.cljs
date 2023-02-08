@@ -444,7 +444,7 @@
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements))))
         activations (when (and (not hide-activations?) @(rf/subscribe [:schnaq/activations?])) [activation-cards/activation-cards])
-        mobile? (> (:md config/breakpoints) (:width @(rf/subscribe [:dimensions/window])))]
+        mobile? @(rf/subscribe [:dimensions/mobile?]) #_(> (:md config/breakpoints) (:width @(rf/subscribe [:dimensions/window])))]
     (if schnaq-loading?
       [loading/loading-card]
       (let [options {:autoArrange false ;; autoArrange is turned off, because it produces rendering issues and huge frame rate drops
@@ -467,6 +467,5 @@
              (when-not hide-input? [selection-card])]
             activations
             statements])
-
          (when show-call-to-share?
            [call-to-share])]))))

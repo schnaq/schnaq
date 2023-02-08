@@ -392,6 +392,7 @@
    :analytics.users.table/name "Name"
    :analytics.users.table/email "Email"
    :analytics.patterns/title "Query users by email"
+   :analytics.patterns.input/label "Select users by their emails. You can use regular expressions and provide multiple patterns separated by commas. The statistics are then aggregated."
 
    ;; User related
    :user.button/set-name "Save name"
