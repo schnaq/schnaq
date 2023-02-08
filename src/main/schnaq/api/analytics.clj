@@ -24,6 +24,14 @@
           :usage (analytics-db/schnaq-usage timestamp-since)
           :users (analytics-db/users-created-since timestamp-since)}})))
 
+(defn- by-emails
+  "Takes a list of email patterns and returns statistics for all users matching."
+  [{:keys [parameters]}]
+  (let [patterns (get-in parameters [:query :patterns])
+        patterns-col (if (string? patterns) [patterns] patterns)
+        regexs (map re-pattern patterns-col)]
+    (ok {:statistics (analytics-db/statistics-for-users-by-email-patterns regexs)})))
+
 ;; -----------------------------------------------------------------------------
 
 (def analytics-routes
@@ -33,4 +41,8 @@
     :responses {401 at/response-error-body}}
    ["" {:get all-stats
         :parameters {:query {:days-since nat-int?}}
-        :responses {200 {:body {:statistics ::specs/statistics}}}}]])
+        :responses {200 {:body {:statistics ::specs/statistics}}}}]
+   ["/by-emails"
+    {:get by-emails
+     :parameters {:query {:patterns any?}}
+     :responses {200 {:body {:statistics map?}}}}]])
