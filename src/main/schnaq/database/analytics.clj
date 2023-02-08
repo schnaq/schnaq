@@ -319,7 +319,7 @@
 (>defn- total-activation-count
   "Count and sum up all button presses in an activation."
   [activations]
-  [(s/coll-of ::specs/statement) => int?]
+  [(s/coll-of map?) => int?]
   (->> activations
        (map :activation/count)
        (apply +)))
@@ -346,7 +346,7 @@
 (>defn- count-words-in-local-wordclouds
   "Count all words in local wordclouds."
   [local-wordclouds]
-  [(s/coll-of ::specs/local-wordcloud) => int?]
+  [(s/coll-of map?) => int?]
   (->> local-wordclouds
        (map :wordcloud/words)
        flatten
@@ -359,8 +359,8 @@
   [::specs/registered-user => map?]
   (let [discussions (discussion-db/discussions-from-user keycloak-id)
         share-hashes (map :discussion/share-hash discussions)
-        statements (map discussion-db/all-statements share-hashes)
-        activations (all-activations share-hashes)
+        statements (flatten (map discussion-db/all-statements share-hashes))
+        activations (flatten (all-activations share-hashes))
         polls (flatten (map poll-db/polls share-hashes))
         wordclouds (map wordcloud-db/wordcloud-by-share-hash share-hashes)
         local-wordclouds (flatten (map wordcloud-db/local-wordclouds share-hashes))]
