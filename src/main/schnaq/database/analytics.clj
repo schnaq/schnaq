@@ -282,21 +282,13 @@
 ;; -----------------------------------------------------------------------------
 ;; Aggregate analytics for a group of users, e.g. matched by their mail addresses
 
-(>defn- total-statements
-  "Count and sum up statements."
-  [statements]
-  [(s/coll-of ::specs/statement) => int?]
-  (->> statements (map count) (apply +)))
-
 (>defn- total-upvotes
   "Count and sum up all upvotes."
   [statements]
   [(s/coll-of ::specs/statement) => int?]
   (->> statements
-       (map #(->> %
-                  (map :statement/upvotes)
-                  (map count)
-                  (apply +)))
+       (map :statement/upvotes)
+       (map count)
        (apply +)))
 
 (>defn- total-downvotes
@@ -304,10 +296,8 @@
   [statements]
   [(s/coll-of ::specs/statement) => int?]
   (->> statements
-       (map #(->> %
-                  (map :statement/downvotes)
-                  (map count)
-                  (apply +)))
+       (map :statement/downvotes)
+       (map count)
        (apply +)))
 
 (>defn- all-activations
@@ -365,7 +355,7 @@
         wordclouds (map wordcloud-db/wordcloud-by-share-hash share-hashes)
         local-wordclouds (flatten (map wordcloud-db/local-wordclouds share-hashes))]
     {:discussions {:total (count discussions)
-                   :statements (total-statements statements)
+                   :statements (count statements)
                    :upvotes (total-upvotes statements)
                    :downvotes (total-downvotes statements)
                    :visitors (count-unique-visitors discussions)}
