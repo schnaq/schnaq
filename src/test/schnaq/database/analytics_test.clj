@@ -105,3 +105,8 @@
     (user-db/subscribe-pro-tier kangaroo-keycloak-id "sub_subscription-id" "cus_kangaroo" false)
     (user-db/unsubscribe-pro-tier kangaroo-keycloak-id false)
     (is (zero? (db/number-of-pro-users)))))
+
+(deftest statistics-for-users-by-email-patterns-test
+  (testing "Query users by email patterns and count their created discussions."
+    (is (zero? (get-in (db/statistics-for-users-by-email-patterns [#".*@schnaq\.com"]) [:discussions :total])))
+    (is (<= 2 (get-in (db/statistics-for-users-by-email-patterns [#".*@schneider\.gg"]) [:discussions :total])))))
