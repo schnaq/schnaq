@@ -1,5 +1,9 @@
 (ns schnaq.interface.analytics.core
-  (:require [clojure.string :as string]
+  (:require ["react-bootstrap/Button" :as Button]
+            ["react-bootstrap/Form" :as Form]
+            ["react-bootstrap/InputGroup" :as InputGroup]
+            [cljs.pprint :refer [pprint]]
+            [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
@@ -10,6 +14,10 @@
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.pages :as pages]))
+
+(def ^:private FormGroup (oget Form :Group))
+(def ^:private FormLabel (oget Form :Label))
+(def ^:private FormControl (oget Form :Control))
 
 (defn- analytics-card
   "A single card containing a metric and a title."
@@ -45,7 +53,7 @@
         :aria-controls "registered-users-table"}
        [icon :eye "me-1"] (labels :analytics.users/toggle-button)]
       [:button.btn.btn-sm.btn-outline-primary
-       {:on-click #(clipboard/copy-to-clipboard! (string/join ", " (map :user.registered/email users)))}
+       {:on-click #(clipboard/copy-to-clipboard! (str/join ", " (map :user.registered/email users)))}
        (labels :analytics.users/copy-button)]
       [:table#registered-users-table.table.table-striped.collapse.mt-3
        [:thead
@@ -85,7 +93,7 @@
        [:h5.card-title title]
        (for [[metric-name metric-value] content]
          [:div {:key metric-name}
-          [:p.card-text [:strong (string/capitalize (name metric-name))]]
+          [:p.card-text [:strong (str/capitalize (name metric-name))]]
           [:p.card-text.display-1 metric-value]
           [:hr]])
        [:p.card-text [:small.text-muted "Last updated ..."]]]]]))
@@ -109,6 +117,23 @@
     [:input.btn.btn-outline-primary.mt-1.mt-sm-0
      {:type "submit"
       :value (labels :analytics/fetch-data-button)}]]])
+
+(defn- query-statistics-by-email []
+  (let [statistics @(rf/subscribe [:analytics.patterns/by-email])]
+    [:section
+     [:h2 (labels :analytics.patterns/title)]
+     [:> Form {:on-submit (fn [e]
+                            (.preventDefault e)
+                            (let [inputs (oget e [:target :elements :patterns :value])
+                                  split (map str/trim (str/split inputs #","))]
+                              (rf/dispatch [:analytics.patterns/query split])))}
+      [:> FormGroup
+       [:> FormLabel (labels :analytics.patterns.input/label)]
+       [:> InputGroup
+        [:> FormControl {:name "patterns" :placeholder ".*@schnaq\\.com$, .*@schnaq\\.org$, schnaqqi@schnaq.com"}]
+        [:> Button {:variant "primary" :type :submit} "Query"]]]]
+     (when statistics
+       [:pre.bg-light.p-3.mt-3 [:code (with-out-str (pprint statistics))]])]))
 
 (defn- analytics-dashboard-view
   "The dashboard displaying all analytics."
@@ -136,7 +161,10 @@
       [multi-arguments-card (labels :analytics/statement-lengths-title) :analytics/statement-lengths-stats]
       [multi-arguments-card (labels :analytics/statement-types-title) :analytics/statement-type-stats]
       [multi-arguments-card (labels :analytics/statement-count-percentiles) :analytics/statement-percentiles]
-      [multi-arguments-card (labels "Schnaq Nutzung") :analytics/schnaq-usage-types]]]]])
+      [multi-arguments-card (labels :analytics/statement-survey-results) :analytics/schnaq-usage-types]]]
+    [:div.container.py-5
+     [:hr.pt-3]
+     [query-statistics-by-email]]]])
 
 (defn analytics-dashboard-entrypoint []
   [analytics-dashboard-view])
@@ -257,3 +285,24 @@
  :analytics/schnaq-usage-types
  (fn [db _]
    (get-in db [:analytics :usage])))
+
+;; -----------------------------------------------------------------------------
+;; Query statistics by user's email
+
+(rf/reg-event-fx
+ :analytics.patterns/query
+ (fn [{:keys [db]} [_ patterns]]
+   {:fx [(http/xhrio-request db :get "/admin/analytics/by-emails"
+                             [:analytics.patterns/success]
+                             {:patterns patterns}
+                             [:ajax.error/to-console])]}))
+
+(rf/reg-event-db
+ :analytics.patterns/success
+ (fn [db [_ {:keys [statistics]}]]
+   (assoc-in db [:analytics :by-email] statistics)))
+
+(rf/reg-sub
+ :analytics.patterns/by-email
+ (fn [db _]
+   (get-in db [:analytics :by-email])))

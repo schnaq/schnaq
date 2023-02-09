@@ -1,10 +1,18 @@
 (ns schnaq.database.analytics
-  (:require [com.fulcrologic.guardrails.core :refer [>defn >defn- =>]]
+  (:require [clojure.spec.alpha :as s]
+            [com.fulcrologic.guardrails.core :refer [=> >defn >defn-]]
+            [schnaq.database.activation :as activation-db]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db]
-            [schnaq.database.patterns :as patterns])
-  (:import (java.util Date)
+            [schnaq.database.patterns :as patterns]
+            [schnaq.database.poll :as poll-db]
+            [schnaq.database.specs :as specs]
+            [schnaq.database.user :as user-db]
+            [schnaq.database.wordcloud :as wordcloud-db]
+            [schnaq.shared-toolbelt :refer [deep-merge-with]])
+  (:import (java.text SimpleDateFormat)
            (java.time Instant)
-           (java.text SimpleDateFormat)))
+           (java.util Date)))
 
 (def ^:private max-time-back Instant/EPOCH)
 
@@ -160,7 +168,7 @@
       0)))
 
 (>defn statistical-statement-num-data
-  "Returns the median of statements per discusison."
+  "Returns the median of statements per discussion."
   ([]
    [:ret map?]
    (statistical-statement-num-data max-time-back))
@@ -270,3 +278,103 @@
      (Date/from since))
     (group-by second)
     (map #(vector (:db/ident (first %)) (count (second %)))))))
+
+;; -----------------------------------------------------------------------------
+;; Aggregate analytics for a group of users, e.g. matched by their mail addresses
+
+(>defn- total-upvotes
+  "Count and sum up all upvotes."
+  [statements]
+  [(s/coll-of ::specs/statement) => int?]
+  (->> statements
+       (map :statement/upvotes)
+       (map count)
+       (apply +)))
+
+(>defn- total-downvotes
+  "Count and sum up all downvotes."
+  [statements]
+  [(s/coll-of ::specs/statement) => int?]
+  (->> statements
+       (map :statement/downvotes)
+       (map count)
+       (apply +)))
+
+(>defn- all-activations
+  "Returns all activations for a list of share-hashes."
+  [share-hashes]
+  [(s/coll-of :discussion/share-hash) => (s/coll-of ::specs/activation)]
+  (remove nil? (map activation-db/activation-by-share-hash share-hashes)))
+
+(>defn- total-activation-count
+  "Count and sum up all button presses in an activation."
+  [activations]
+  [(s/coll-of map?) => int?]
+  (->> activations
+       (map :activation/count)
+       (apply +)))
+
+(>defn- count-unique-visitors
+  "Count all device ids for a list of discussions."
+  [discussions]
+  [(s/coll-of ::specs/discussion) => int?]
+  (->> discussions
+       (map :discussion/device-ids)
+       (map count)
+       (apply +)))
+
+(>defn- count-total-poll-votes
+  "Count all votes casted in a list of polls."
+  [polls]
+  [(s/coll-of ::specs/poll) => int?]
+  (->> polls
+       (map :poll/options)
+       flatten
+       (map :option/votes)
+       (apply +)))
+
+(>defn- count-words-in-local-wordclouds
+  "Count all words in local wordclouds."
+  [local-wordclouds]
+  [(s/coll-of map?) => int?]
+  (->> local-wordclouds
+       (map :wordcloud/words)
+       flatten
+       (filter number?)
+       (apply +)))
+
+(>defn- stats-for-user
+  "Returns aggregated statistics for a single user."
+  [{:user.registered/keys [keycloak-id]}]
+  [::specs/registered-user => map?]
+  (let [discussions (discussion-db/discussions-from-user keycloak-id)
+        share-hashes (map :discussion/share-hash discussions)
+        statements (flatten (map discussion-db/all-statements share-hashes))
+        activations (flatten (all-activations share-hashes))
+        polls (flatten (map poll-db/polls share-hashes))
+        wordclouds (map wordcloud-db/wordcloud-by-share-hash share-hashes)
+        local-wordclouds (flatten (map wordcloud-db/local-wordclouds share-hashes))]
+    {:discussions {:total (count discussions)
+                   :statements (count statements)
+                   :upvotes (total-upvotes statements)
+                   :downvotes (total-downvotes statements)
+                   :visitors (count-unique-visitors discussions)}
+     :activations {:total (count activations)
+                   :total-count (total-activation-count activations)}
+     :polls {:total (count polls)
+             :total-votes (count-total-poll-votes polls)}
+     :wordclouds {:total (count wordclouds)}
+     :local-wordclouds {:total (count local-wordclouds)
+                        :words (count-words-in-local-wordclouds local-wordclouds)}}))
+
+(defn statistics-for-users-by-email-patterns
+  "Aggregate statistics for a list of users found by their email patterns.
+   
+   Example:
+   `(statistics-for-users-by-email-patterns [#\".*@schnaq\\.com\" #\".*@hhu\\.de\"])`"
+  [patterns]
+  (->> patterns
+       (map user-db/users-filter-by-regex-on-email)
+       flatten
+       (map stats-for-user)
+       (apply deep-merge-with +)))

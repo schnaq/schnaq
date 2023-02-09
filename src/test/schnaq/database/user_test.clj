@@ -227,3 +227,8 @@
     (db/demote-moderator share-hash "whoever@nonsense.com")
     (testing "One moderator should be left after demotion, and nonsense moderator has no effect"
       (is (= 1 (count (:discussion/moderators (fast-pull [:discussion/share-hash share-hash] patterns/discussion))))))))
+
+(deftest users-filter-by-regex-on-email-test
+  (testing "Find users which are using a schnaq.com email address."
+    (is (zero? (count (db/users-filter-by-regex-on-email #".*@razupaltu\.ff$"))))
+    (is (= 2 (count (db/users-filter-by-regex-on-email #".*@schnaq\.com$"))))))
