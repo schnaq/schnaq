@@ -60,7 +60,7 @@
   /**
    * Load JS via JavaScript.
    */
-  function loadJS(url, onloadFn, location){
+  function loadJS(url, onloadFn, location) {
     var script = document.createElement('script');
     script.src = url;
 
@@ -68,12 +68,12 @@
     script.onreadystatechange = onloadFn;
 
     location.appendChild(script);
-  };
+  }
 
   /**
    * Check if currently in iframe.
    */
-  function inIframe () {
+  function inIframe() {
     try {
       return window.self !== window.top;
     } catch (e) {
@@ -143,10 +143,10 @@
   if (hasLocalStorage()) {
     initMatomo();
     initTagManager();
-    
+
     if (!inIframe() && hasSessionStorage()) {
-      loadJS('/js/klaro/config.js', undefined, document.body);
-      loadJS('/node_modules/klaro/dist/klaro-no-css.js', undefined, document.body);
+      loadJS('https://s3.schnaq.com/schnaq-common/js/klaro/config.js', undefined, document.body);
+      loadJS('https://s3.schnaq.com/schnaq-common/js/klaro/klaro-no-css.js', undefined, document.body);
     }
   }
 </script>

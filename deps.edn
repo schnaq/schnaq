@@ -13,7 +13,7 @@
         com.fulcrologic/guardrails {:mvn/version "1.1.11"}
         com.google.guava/guava {:mvn/version "31.1-jre"
                                 :doc "shadow-cljs needs this"}
-        com.stripe/stripe-java {:mvn/version "22.7.0"}
+        com.stripe/stripe-java {:mvn/version "22.8.0"}
         com.taoensso/sente {:mvn/version "1.17.0"}
         com.taoensso/tempura {:mvn/version "1.3.0"}
         com.taoensso/timbre {:mvn/version "6.0.4"}
@@ -27,7 +27,7 @@
         http-kit/http-kit {:mvn/version "2.6.0"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
         jarohen/chime {:mvn/version "0.3.3"}
-        keycloak-clojure/keycloak-clojure {:mvn/version "1.28.7"}
+        keycloak-clojure/keycloak-clojure {:mvn/version "1.29.1"}
         metosin/reitit {:mvn/version "0.5.18"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
         metosin/spec-tools {:mvn/version "0.10.5"}
