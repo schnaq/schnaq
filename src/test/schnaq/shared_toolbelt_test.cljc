@@ -94,3 +94,14 @@
       #{:role/admin :role/pro} true
       #{:role/analytics} true
       #{:role/tester} false)))
+
+(deftest deep-merge-with-test
+  (are [f m1 m2 result] (= result (tools/deep-merge-with f m1 m2))
+    + {:a 1} {:b 2} (merge-with + {:a 1} {:b 2})
+    + {:a 1} {:a 2} (merge-with + {:a 1} {:a 2})
+    merge {:a {:b 1}} {:a {:c 2}} {:a {:b 1 :c 2}}
+    + {:a {:b 1}} {:a {:b 2}} {:a {:b 3}}
+
+    + {:a {:b {:c 1 :d {:x 1 :y 2}} :e 3} :f 4}
+    {:a {:b {:c 2 :d {:z 9} :z 3} :e 100}}
+    {:a {:b {:z 3 :c 3 :d {:z 9 :x 1 :y 2}} :e 103} :f 4}))

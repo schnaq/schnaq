@@ -95,6 +95,7 @@
    :discussion/header-image-url
    :discussion/created-at
    [:discussion/activation-focus :xform 'schnaq.database.xforms/pull-up-db-id]
+   :discussion/device-ids
    {:discussion/author public-user}
    [:discussion/moderators :xform 'schnaq.database.xforms/maps->ids]
    {:discussion/theme theme}

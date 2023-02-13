@@ -2,6 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.test :refer [deftest is are testing use-fixtures]]
             [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as db]
             [schnaq.test-data :refer [alex christian kangaroo schnaqqi]]
@@ -219,3 +220,15 @@
         user (db/update-user (assoc user :user.registered/roles #{:role/pro :role/admin}))]
     (testing "User with two roles gets both roles removed if there are no matching roles from JWT."
       (is (= #{} (:user.registered/roles (db/update-roles user [])))))))
+
+(deftest demote-moderator-test
+  (let [share-hash "cat-dog-hash"]
+    (db/demote-moderator share-hash "k@ngar.oo")
+    (db/demote-moderator share-hash "whoever@nonsense.com")
+    (testing "One moderator should be left after demotion, and nonsense moderator has no effect"
+      (is (= 1 (count (:discussion/moderators (fast-pull [:discussion/share-hash share-hash] patterns/discussion))))))))
+
+(deftest users-filter-by-regex-on-email-test
+  (testing "Find users which are using a schnaq.com email address."
+    (is (zero? (count (db/users-filter-by-regex-on-email #".*@razupaltu\.ff$"))))
+    (is (= 2 (count (db/users-filter-by-regex-on-email #".*@schnaq\.com$"))))))

@@ -15,7 +15,7 @@
 
 (def client-id
   "OAuth Client ID. Defined in https://eu2.cleverreach.com/admin/account_rest.php"
-  (:cleverreach-oauth-client env))
+  (:cleverreach-oauth-client-id env))
 
 (def client-secret
   "OAuth Client Secret."

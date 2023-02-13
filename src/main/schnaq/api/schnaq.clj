@@ -235,7 +235,6 @@
                                        :search-string string?
                                        :display-name ::specs/non-blank-string}}
                   :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}}}]]]
-
     ["/schnaqs/by-hashes"
      {:post schnaqs-by-hashes
       :name :api.schnaqs/by-hashes

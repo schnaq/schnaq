@@ -5,6 +5,7 @@
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.auth :as auth]
+            [schnaq.interface.config :as config]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :refer [from-localstorage]]
@@ -61,16 +62,17 @@
          [:dispatch [:load/last-added-schnaq]]
          [:dispatch [:schnaq.polls/load-past-votes]]
          [:dispatch [:schnaq.votes/load-from-localstorage]]
-         [:system/set-resize-listener]
+         [:system/set-window-events]
          [:updates.periodic/loop]]}))
 
 (rf/reg-fx
- :system/set-resize-listener
+ :system/set-window-events
  (fn []
-   (.addEventListener js/window "resize" #(rf/dispatch [:system.listener/on-window-resize]))))
+   (.addEventListener js/window "resize" #(rf/dispatch [:system.listener/calculate-height-and-width]))
+   (.addEventListener js/window "load" #(rf/dispatch [:system.listener/calculate-height-and-width]))))
 
 (rf/reg-event-db
- :system.listener/on-window-resize
+ :system.listener/calculate-height-and-width
  (fn [db _]
    (-> db
        (assoc-in [:dimensions :window] {:width (.-innerWidth js/window)
@@ -91,6 +93,14 @@
  :dimensions/embedded
  (fn [db _]
    (get-in db [:dimensions :embedded] {:width 0 :height 0})))
+
+(rf/reg-sub
+ :dimensions/mobile?
+ :<- [:dimensions/window]
+ (fn [{:keys [width]}]
+   (> (:md config/breakpoints) width)))
+
+;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
  :form/should-clear

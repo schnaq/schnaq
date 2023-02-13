@@ -30,6 +30,13 @@
   (transact [[:db/add [:discussion/share-hash share-hash] :discussion/moderators
               [:user.registered/email email]]]))
 
+(>defn demote-moderator
+  "Removes a moderator from a schnaq."
+  [share-hash email]
+  [:discussion/share-hash ::specs/email => future?]
+  (log/debug (format "Removing moderator %s from schnaq %s" email share-hash))
+  (transact [[:db/retract [:discussion/share-hash share-hash] :discussion/moderators [:user.registered/email email]]]))
+
 (>defn retract-user-attribute
   "Retract an attribute of a user."
   [{:user.registered/keys [keycloak-id]} attribute]
@@ -71,15 +78,6 @@
      [(= ?lower-name ?user-name)]]
    (.toLowerCase ^String nickname) patterns/private-user))
 
-(>defn user-by-email
-  "Returns the registered user by email."
-  [user-email]
-  [:user.registered/email :ret (? ::specs/registered-user)]
-  (let [user (fast-pull [:user.registered/email user-email]
-                        patterns/public-user)]
-    (when (:db/id user)
-      user)))
-
 (>defn private-user-by-keycloak-id
   "Returns the registered user by email."
   [keycloak-id]
@@ -98,6 +96,23 @@
      :in $ user-pattern
      :where [?registered-user :user.registered/keycloak-id _]]
    patterns/private-user))
+
+(>defn user-by-email
+  "Returns the registered user by email."
+  [user-email]
+  [:user.registered/email :ret (? ::specs/registered-user)]
+  (let [user (fast-pull [:user.registered/email user-email]
+                        patterns/public-user)]
+    (when (:db/id user)
+      user)))
+
+(>defn users-filter-by-regex-on-email
+  "Filter all users by an regex applied on their email."
+  [email-regex]
+  [any? :ret (s/coll-of ::specs/registered-user)]
+  (->> (all-registered-users)
+       (filter :user.registered/email)
+       (filter #(re-matches email-regex (:user.registered/email %)))))
 
 (>defn users-by-notification-interval
   "Query users from database matching the notification interval."

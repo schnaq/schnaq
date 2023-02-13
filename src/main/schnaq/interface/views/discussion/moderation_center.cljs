@@ -31,13 +31,48 @@
 (rf/reg-event-fx
  :discussion.moderation/promote-user-to-moderator
  (fn [{:keys [db]} [_ form]]
-   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         recipient (oget form ["moderation-center-recipient" :value])]
      {:fx [(http/xhrio-request db :post "/moderation/promote-user"
-                               [:discussion.moderation/send-email-success form]
-                               {:recipient (oget form ["moderation-center-recipient" :value])
+                               [:discussion.moderation/send-email-success recipient form]
+                               {:recipient recipient
                                 :share-hash share-hash
                                 :admin-center (links/get-moderator-center-link share-hash)}
                                [:ajax.error/as-notification])]})))
+
+(rf/reg-event-fx
+ :discussion.moderation/load-moderators
+ (fn [{:keys [db]} _]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :get "/moderation/moderators"
+                               [:discussion.moderation/load-moderators-success]
+                               {:share-hash share-hash})]})))
+
+(rf/reg-event-db
+ :discussion.moderation/load-moderators-success
+ (fn [db [_ response]]
+   (assoc-in db [:schnaq :moderation :moderators] (:moderators response))))
+
+(rf/reg-sub
+ :discussion.moderation/moderators
+ (fn [db _]
+   (get-in db [:schnaq :moderation :moderators] [])))
+
+(rf/reg-event-fx
+ :discussion.moderation/demote-moderator
+ (fn [{:keys [db]} [_ email]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :post "/moderation/demote"
+                               [:discussion.moderation/demote-moderator-success email]
+                               {:share-hash share-hash
+                                :email email}
+                               [:ajax.error/as-notification])]})))
+
+(rf/reg-event-db
+ :discussion.moderation/demote-moderator-success
+ (fn [db [_ email response]]
+   (when (:demoted? response)
+     (update-in db [:schnaq :moderation :moderators] #(remove (fn [moderator-mail] (= email moderator-mail)) %)))))
 
 (rf/reg-event-fx
  ;; Success event of deletion live in discussion - not from admin panel
@@ -72,8 +107,9 @@
 
 (rf/reg-event-fx
  :discussion.moderation/send-email-success
- (fn [_ [_ form {:keys [failed-sendings]}]]
-   {:fx [[:dispatch [:notification/add
+ (fn [{:keys [db]} [_ recipient form {:keys [failed-sendings]}]]
+   {:db (if (empty? failed-sendings) (update-in db [:schnaq :moderation :moderators] conj recipient) db)
+    :fx [[:dispatch [:notification/add
                      #:notification{:title (labels :schnaq.moderation.notifications/emails-successfully-sent-title)
                                     :body (labels :schnaq.moderation.notifications/emails-successfully-sent-body-text)
                                     :context :success}]]
@@ -89,40 +125,57 @@
                                       :context :warning
                                       :stay-visible? true}]])]}))
 
-(defn- send-moderation-center-link
-  "Send moderation center link via mail to the creator."
+(defn- manage-moderators
+  "Invite moderators via mail or remove them as the creator."
   []
-  [:section
-   [:p.lead (labels :schnaq.admin.edit.link/primer)]
-   [:section.row.mb-3
-    ;; elephant admin
-    [:div.col-md-6
-     [:div.share-link-icons
-      [img-text (img-path :schnaqqifant/admin) :schnaqqifant/admin-alt-text
-       (labels :schnaq.moderation.edit.link/admin)]]]
-    ;; elephant edit
-    [:div.col-md-6.share-link-icons
-     [img-text (img-path :schnaqqifant/erase) :schnaqqifant/erase-alt-text
-      (labels :schnaq.moderation.edit.link/admin-privileges)]]]
-   ;; admin mail input
-   (let [input-id "moderation-link-mail-address"]
-     [:form.form.text-start.mb-5
-      {:on-submit (fn [e]
-                    (.preventDefault e)
-                    (rf/dispatch [:discussion.moderation/promote-user-to-moderator
-                                  (oget e [:target :elements])]))}
-      [:div.mb-3
-       [:label.form-label {:for input-id} (labels :schnaq.moderation.edit.link.form/label)]
-       [:input.form-control.m-1.rounded-3
-        {:id input-id
-         :name "moderation-center-recipient"
-         :auto-complete "off"
-         :required true
-         :placeholder (labels :schnaq.moderation.edit.link.form/placeholder)}]
-       [:small.form-text.text-muted.float-end
-        (labels :schnaq.moderation/addresses-privacy)]]
-      [:button.btn.btn-outline-primary
-       (labels :schnaq.moderation.edit.link.form/submit-button)]])])
+  (let [current-schnaq @(rf/subscribe [:schnaq/selected])
+        current-user @(rf/subscribe [:user/current])
+        author? (= (:id current-user) (-> current-schnaq :discussion/author :db/id))
+        user-mail (:email current-user)]
+    [:section
+     [:h5 (labels :schnaq.admin.edit.link/primer)]
+     [:section.row.mb-3
+      ;; elephant admin
+      [:div.col-md-6
+       [:div.share-link-icons
+        [img-text (img-path :schnaqqifant/admin) :schnaqqifant/admin-alt-text
+         (labels :schnaq.moderation.edit.link/admin)]]]
+      ;; elephant edit
+      [:div.col-md-6.share-link-icons
+       [img-text (img-path :schnaqqifant/erase) :schnaqqifant/erase-alt-text
+        (labels :schnaq.moderation.edit.link/admin-privileges)]]]
+     ;; admin mail input
+     (let [input-id "moderation-link-mail-address"]
+       [:form.form.text-start.mb-5
+        {:on-submit (fn [e]
+                      (.preventDefault e)
+                      (rf/dispatch [:discussion.moderation/promote-user-to-moderator
+                                    (oget e [:target :elements])]))}
+        [:div.mb-3
+         [:label.form-label {:for input-id} (labels :schnaq.moderation.edit.link.form/label)]
+         [:input.form-control.m-1.rounded-3
+          {:id input-id
+           :name "moderation-center-recipient"
+           :auto-complete "off"
+           :required true
+           :placeholder (labels :schnaq.moderation.edit.link.form/placeholder)}]
+         [:small.form-text.text-muted.float-end
+          (labels :schnaq.moderation/addresses-privacy)]]
+        [:button.btn.btn-outline-primary
+         (labels :schnaq.moderation.edit.link.form/submit-button)]])
+     [:hr]
+     [:h5 (labels :schnaq.moderation.overview/moderators-subheading)]
+     [:div.text-start
+      (for [moderator-mail @(rf/subscribe [:discussion.moderation/moderators])]
+        [:div.pb-2
+         (when (or author? (= user-mail moderator-mail))
+           (if (= user-mail moderator-mail)
+             [:span.badge.me-2.bg-primary (labels :common/you)]
+             [:button.btn.btn-dark.btn-sm
+              {:on-click #(when (js/confirm (labels :schnaq.moderation.demote/confirmation-text))
+                            (rf/dispatch [:discussion.moderation/demote-moderator moderator-mail]))}
+              (labels :schnaq.moderation.demote/button-label)]))
+         " " moderator-mail])]]))
 
 (>defn- toggle-schnaq-state
   "Show a toggle to switch between the schnaq states."
@@ -235,7 +288,7 @@
     :view [moderate-discussion]}
    ;; admin access via mail
    {:link (labels :schnaq.moderation.edit.link/header)
-    :view [:div.text-center [send-moderation-center-link]]}])
+    :view [:div.text-center [manage-moderators]]}])
 
 ;; -----------------------------------------------------------------------------
 

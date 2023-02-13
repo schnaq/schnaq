@@ -217,9 +217,11 @@
 (rf/reg-event-fx
  :schnaq.wordcloud.local/send-words
  (fn [{:keys [db]} [_ wordcloud-id unprocessed-words]]
-   (let [words (->> (str/split (wordcloud/remove-md-links unprocessed-words) #"\s")
+   (let [words (->> (str/split (wordcloud/remove-md-links unprocessed-words) #"[,|;]")
                     (map wordcloud/extract-link-text-from-md)
-                    (map #(str/replace % #"[^A-z0-9äöüÄÖÜß]" "")) ;; remove all non-word characters
+                    (map #(str/replace % #"[^A-z0-9äöüÄÖÜß\ ]" "")) ;; remove all non-word characters
+                    ;; remove leading and trailing whitespace
+                    (map str/trim)
                     (map str/lower-case)
                     distinct
                     ;; Experimentally deactivated stopwords,

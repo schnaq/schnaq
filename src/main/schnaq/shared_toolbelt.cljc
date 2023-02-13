@@ -67,6 +67,19 @@
         (str/join "/" [kw-ns kw])
         (str kw)))))
 
+(defn deep-merge-with
+  "Like merge-with, but merges maps recursively, applying the given fn
+  only when there's a non-map at a particular level.
+   
+  Taken from https://clojuredocs.org/clojure.core/merge-with#example-5b80843ae4b00ac801ed9e74"
+  [f & maps]
+  (apply
+   (fn m [& maps]
+     (if (every? map? maps)
+       (apply merge-with m maps)
+       (apply f maps)))
+   maps))
+
 ;; -----------------------------------------------------------------------------
 
 (>defn- intersection?

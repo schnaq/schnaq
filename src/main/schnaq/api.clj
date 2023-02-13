@@ -22,10 +22,10 @@
             [schnaq.api.common :refer [other-routes]]
             [schnaq.api.debug :refer [debug-routes]]
             [schnaq.api.discussion :refer [discussion-routes]]
-            [schnaq.api.emails :refer [email-routes]]
             [schnaq.api.feedback :refer [feedback-routes]]
             [schnaq.api.hub :refer [hub-routes]]
             [schnaq.api.middlewares :as middlewares]
+            [schnaq.api.moderation :refer [moderation-routes]]
             [schnaq.api.poll :refer [poll-routes]]
             [schnaq.api.profiling :as profiling]
             [schnaq.api.schnaq :refer [schnaq-routes]]
@@ -68,11 +68,11 @@
   (log/info (format "[Stripe] Price IDs schnaq pro: %s" (flatten (map vals (map second prices)))))
   (log/info (format "[Stripe] Webhook access key (truncated): %s..." (subs config/stripe-webhook-access-key 0 15)))
   (log/info (format "[Stripe] Secret key (truncated): %s..." (subs config/stripe-secret-api-key 0 15)))
-  (log/info (format "[CleverReach] Enabled? %b, Receiver group: %s, client-id: %s, client-secret: %s..."
-                    cconfig/enabled?
-                    (or cconfig/receiver-group "not configured")
-                    (or cconfig/client-id "not configured")
-                    (if cconfig/client-secret (subs cconfig/client-secret 0 10) "not configured"))))
+  (log/info "Cleverreach configuration:")
+  (log/info cconfig/enabled?)
+  (log/info cconfig/receiver-group)
+  (log/info cconfig/client-id)
+  (log/info (subs cconfig/client-secret 0 10)))
 
 (def ^:private description
   "This is the main Backend for schnaq.
@@ -103,7 +103,7 @@
      analytics-routes
      debug-routes
      discussion-routes
-     email-routes
+     moderation-routes
      feedback-routes
      hub-routes
      other-routes

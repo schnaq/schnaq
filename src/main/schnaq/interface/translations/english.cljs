@@ -4,6 +4,7 @@
   {:error/export-failed "Export failed. Please try again later."
 
    :common/keycloak-id "keycloak-id"
+   :common/you "You"
 
    :view/present "Present"
 
@@ -199,7 +200,7 @@
    :schnaq.wordcloud.local.create/label "Question or Prompt"
    :schnaq.wordcloud.local.create/button "Start Word Cloud"
    :schnaq.wordcloud.local.add-words/label "Enter your words here"
-   :schnaq.wordcloud.local.add-words/hint "You can add multiple words, they will be split at the whitespace."
+   :schnaq.wordcloud.local.add-words/hint "You can add multiple phrases, split at a comma."
    :schnaq.wordcloud.local/delete-button "Delete"
    :schnaq.wordcloud.local/delete-confirmation "Do you really want to delete the wordcloud permanently?"
    :schnaq.wordcloud/download "Download Word Cloud"
@@ -264,13 +265,16 @@
    ;; Admin Center
    :schnaq.moderation/heading "Admin-Center"
    :schnaq.moderation/subheading "schnaq: \"%s\""
-   :schnaq.moderation.edit.link/header "Invite moderators"
+   :schnaq.moderation.edit.link/header "Manage moderators"
    :schnaq.admin.edit.link/primer "Administration takes work, let others help!"
    :schnaq.moderation.edit.link/admin "Share moderator-access via mail"
    :schnaq.moderation.edit.link/admin-privileges "Edit and administer suggestions"
    :schnaq.moderation.edit.link.form/label "Email address of the user you promote"
    :schnaq.moderation.edit.link.form/placeholder "Enter an email address"
    :schnaq.moderation.edit.link.form/submit-button "Make user a moderator"
+   :schnaq.moderation.overview/moderators-subheading "Current Moderators"
+   :schnaq.moderation.demote/confirmation-text "Are you sure you want to remove this moderator?"
+   :schnaq.moderation.demote/button-label "Remove moderator"
    :schnaq.admin.invite/via-link "Distribute Link"
    :schnaq.moderation.edit/administrate "Manage schnaq"
    :schnaq.moderation.edit/administrate-short "Manage"
@@ -378,7 +382,8 @@
    :analytics/active-users-num-title "Active users"
    :analytics/statement-lengths-title "Length of statements"
    :analytics/statement-types-title "Argument types"
-   :analytics/statement-count-percentiles "Anzahl Statements pro schnaq"
+   :analytics/statement-count-percentiles "# of statements per schnaq"
+   :analytics/statement-survey-results "Schnaq Survey Results"
    :analytics/labels-stats "Marked Answers"
    :analytics/fetch-data-button "Retrieving data…"
    :analytics.users/title "Newly registered users"
@@ -386,6 +391,8 @@
    :analytics.users/copy-button "Copy"
    :analytics.users.table/name "Name"
    :analytics.users.table/email "Email"
+   :analytics.patterns/title "Query users by email"
+   :analytics.patterns.input/label "Select users by their emails. You can use regular expressions and provide multiple patterns separated by commas. The statistics are then aggregated."
 
    ;; User related
    :user.button/set-name "Save name"

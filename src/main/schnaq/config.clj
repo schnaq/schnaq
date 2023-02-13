@@ -47,7 +47,7 @@
 (def db-name (or (:datomic-discussion-db-name env) "dev-db"))
 
 (def datomic-uri
-  (format (or (:datomic-url env) "datomic:dev://localhost:4334/%s")
+  (format (or (:datomic-uri env) "datomic:dev://localhost:4334/%s")
           db-name))
 
 (def build-hash
