@@ -515,7 +515,7 @@
    {:db/ident :feedback.item.type/text
     :db/doc "A simple text-input without any special restrictions."}
    {:db/ident :feedback.item.type/scale-five
-    :db/dic "A typical scale going from 1 to 5."}
+    :db/doc "A typical scale going from 1 to 5."}
 
    {:db/ident :feedback.answer/item
     :db/valueType :db.type/ref
