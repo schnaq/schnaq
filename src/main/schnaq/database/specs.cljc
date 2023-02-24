@@ -1,4 +1,3 @@
-
 (ns schnaq.database.specs
   (:require #?(:clj [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
@@ -170,6 +169,21 @@
                                   :discussion/creation-secret :discussion/mode :discussion/access
                                   :discussion/activation-focus :discussion/wordcloud
                                   :discussion/device-ids]))
+
+(s/def :feedback.item/label ::non-blank-string)
+(s/def :feedback.item/ordinal pos-int?)
+(s/def :feedback.item/type #{:feedback.item.type/text :feedback.item.type/scale-five})
+(s/def ::feedback-item
+  (s/or :id :dn/id
+        :feedback-item (s/keys :req [:feedback.item/label :feedback.item/ordinal :feedback.item/type])))
+(s/def :feedback/items (s/coll-of ::feedback-item))
+(s/def :feedback.answer/item :db/id)
+(s/def :feedback.answer/text ::non-blank-string)
+(s/def :feedback.answer/scale-five (s/and pos-int? #(<= % 5)))
+(s/def ::feedback-answer (s/keys :req [:feedback.answer/item]
+                                 :opt [:feedback.answer/text :feedback.answer/scale-five]))
+(s/def :feedback/answers (s/coll-of ::feedback-answer))
+(s/def ::feedback-form (s/keys :req [:feedback/items :feedback/answers]))
 
 (s/def :wordcloud/title ::non-blank-string)
 (s/def :wordcloud/discussion (s/or :id :db/id
