@@ -168,7 +168,7 @@
                                   :discussion/created-at :discussion/share-link :discussion/moderation-link
                                   :discussion/creation-secret :discussion/mode :discussion/access
                                   :discussion/activation-focus :discussion/wordcloud
-                                  :discussion/device-ids]))
+                                  :discussion/device-ids :discussion/feedback]))
 
 (s/def :feedback.item/label ::non-blank-string)
 (s/def :feedback.item/ordinal pos-int?)
@@ -183,6 +183,7 @@
 (s/def :feedback/answers (s/coll-of ::feedback-answer))
 (s/def ::feedback-form (s/keys :req [:feedback/items]
                                :opt [:feedback/answers]))
+(s/def :discussion/feedback ::feedback-form)
 
 (s/def :wordcloud/title ::non-blank-string)
 (s/def :wordcloud/discussion (s/or :id :db/id

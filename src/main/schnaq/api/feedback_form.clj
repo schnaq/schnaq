@@ -1,15 +1,19 @@
 (ns schnaq.api.feedback-form
   (:require
    [com.fulcrologic.guardrails.core :refer [=> >defn-]]
-   [schnaq.api.toolbelt :as at]))
+   [ring.util.http-response :refer [ok bad-request]]
+   [schnaq.api.toolbelt :as at]
+   [schnaq.database.feedback-form :as feedback-db]))
 
 (>defn- create-form
   "Create a new feedback-form based on the items the user sends. Does not check amount of items."
   [{:keys [parameters]}]
   [:ring/request => :ring/response]
-  (let [{:keys [share-hash items]} (:body parameters)]
-    ;; TODO do the logic dance, bruv
-    ))
+  (let [{:keys [share-hash items]} (:body parameters)
+        new-feedback-id (feedback-db/new-feedback-form! share-hash items)]
+    (if new-feedback-id
+      (ok {:feedback-form-id new-feedback-id})
+      (bad-request (at/build-error-body :missing-items "Please provide items for the form")))))
 
 (def feedback-form-routes
   ["/feedback"
@@ -18,7 +22,7 @@
          :description (at/get-doc #'create-form)
          :name :api.discussion.feedback/form
          :middleware [:discussion/valid-share-hash? :discussion/user-moderator?]
-         :parameters {:query {:share-hash :discussion/share-hash
-                              :items :feedback/items}}
-         ;; TODO hier bei items muss eventuell ein dto ran, welches keywords umwandelt
-         :responses {200 {:body {:feedback-form-id :db/id}}}}]]])
+         :parameters {:body {:share-hash :discussion/share-hash
+                             :items :feedback/items}}
+         :responses {200 {:body {:feedback-form-id :db/id}}
+                     400 at/response-error-body}}]]])
