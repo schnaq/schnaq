@@ -19,13 +19,14 @@
 
 (>defn update-feedback-form-items!
   "Updates the feedback form items. Leaves the answers untouched."
-  [share-hash form-items]
-  [:discussion/share-hash :feedback/items => (? :db/id)]
+  [share-hash form-items visible]
+  [:discussion/share-hash :feedback/items boolean? => (? :db/id)]
   (when-not (empty? form-items)
     (when-let [feedback-id (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion))]
       (db/transact
        (vec (concat
-             [[:db/retract feedback-id :feedback/items]]
+             [[:db/retract feedback-id :feedback/items]
+              [:db/add feedback-id :feedback/visible visible]]
              (map #(vector :db/add feedback-id :feedback/items (str "item-" (:feedback.item/ordinal %))) form-items)
              (map #(merge % {:db/id (str "item-" (:feedback.item/ordinal %))}) form-items))))
       feedback-id)))

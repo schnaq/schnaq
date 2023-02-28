@@ -19,8 +19,9 @@
   "Set a new collection of items on a feedback form."
   [{:keys [parameters]}]
   [:ring/request => :ring/response]
-  (let [{:keys [share-hash items]} (:body parameters)
-        new-feedback-id (feedback-db/update-feedback-form-items! share-hash items)]
+  (let [{:keys [share-hash items visible]} (:body parameters)
+        visible (true? visible) ;; Coerce into boolean
+        new-feedback-id (feedback-db/update-feedback-form-items! share-hash items visible)]
     (if new-feedback-id
       (ok {:updated-form? true})
       (bad-request (at/build-error-body :malformed-update "No feedback created or empty items.")))))
@@ -47,6 +48,7 @@
                :responses {200 {:body {:updated-form? boolean?}}
                            400 at/response-error-body}
                :parameters {:body {:share-hash :discussion/share-hash
-                                   :items :feedback/items}}}
+                                   :items :feedback/items
+                                   :visible boolean?}}}
          :name :api.discussion.feedback/form
          :middleware [:discussion/valid-share-hash? :discussion/user-moderator?]}]]])
