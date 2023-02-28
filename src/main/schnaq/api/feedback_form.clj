@@ -19,18 +19,26 @@
   "Set a new collection of items on a feedback form."
   [{:keys [parameters]}]
   [:ring/request => :ring/response]
-  (let [{:keys [share-hash new-items]} (:body parameters)])
-  ;; TODO update in db here (when the new-items are not empty)
+  (let [{:keys [share-hash items]} (:body parameters)
+        new-feedback-id (feedback-db/update-feedback-form-items! share-hash items)]
+    (if new-feedback-id
+      (ok {:updated-form? true})
+      (bad-request (at/build-error-body :malformed-update "No feedback created or empty items."))))
+
   )
 
 (def feedback-form-routes
   ["/feedback"
    ["/form"
-    ["" {:post create-form
-         :description (at/get-doc #'create-form)
+    ["" {:post {:handler create-form
+                :description (at/get-doc #'create-form)
+                :responses {200 {:body {:feedback-form-id :db/id}}
+                            400 at/response-error-body}}
+         :put {:handler update-items
+               :description (at/get-doc #'update-items)
+               :responses {200 {:body {:updated-form? boolean?}}
+                           400 at/response-error-body}}
          :name :api.discussion.feedback/form
          :middleware [:discussion/valid-share-hash? :discussion/user-moderator?]
          :parameters {:body {:share-hash :discussion/share-hash
-                             :items :feedback/items}}
-         :responses {200 {:body {:feedback-form-id :db/id}}
-                     400 at/response-error-body}}]]])
+                             :items :feedback/items}}}]]])
