@@ -1,7 +1,8 @@
 (ns schnaq.database.feedback-form
   (:require
    [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
-   [schnaq.database.main :as db]))
+   [schnaq.database.main :as db]
+   [schnaq.database.patterns :as patterns]))
 
 (>defn new-feedback-form!
   "Create a feedback-form and return the id of the new one. Empty form-items are rejected."
@@ -15,3 +16,15 @@
        [:db/add [:discussion/share-hash share-hash] :discussion/feedback "new-feedback-form"]]
       "new-feedback-form"
       [:db/id]))))
+
+(>defn update-feedback-form-items!
+  "Updates the feedback form items. Leaves the answers untouched."
+  [share-hash form-items]
+  [:discussion/share-hash :feedback/items => (? :db/id)]
+  (when-not (empty? form-items)
+    (when-let [feedback-id (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion))]
+      (db/transact
+       (vec (concat
+             [[:db/retract feedback-id :feedback/items]]
+             (map #(vector :db/add feedback-id :feedback/items (str "item-" (:feedback.item/ordinal %))) form-items)
+             (map #(merge % {:db/id (str "item-" (:feedback.item/ordinal %))}) form-items)))))))

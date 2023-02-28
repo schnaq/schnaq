@@ -107,7 +107,6 @@
   "Query discussion and apply public discussion pattern to it."
   [share-hash]
   [:discussion/share-hash :ret ::specs/discussion]
-  (println "Share-Hash: " share-hash)
   (let [discussion (ac/remove-invalid-and-pull-up-access-codes
                     (fast-pull [:discussion/share-hash share-hash] patterns/discussion))]
     ;; When check needed, since walkers transform non-existing discussion into {:db/id nil, :discussion/states #{}}

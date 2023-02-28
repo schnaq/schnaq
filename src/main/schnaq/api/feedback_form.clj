@@ -15,6 +15,14 @@
       (ok {:feedback-form-id new-feedback-id})
       (bad-request (at/build-error-body :missing-items "Please provide items for the form")))))
 
+(>defn- update-items
+  "Set a new collection of items on a feedback form."
+  [{:keys [parameters]}]
+  [:ring/request => :ring/response]
+  (let [{:keys [share-hash new-items]} (:body parameters)])
+  ;; TODO update in db here (when the new-items are not empty)
+  )
+
 (def feedback-form-routes
   ["/feedback"
    ["/form"
