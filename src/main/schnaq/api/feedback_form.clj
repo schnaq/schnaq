@@ -26,13 +26,13 @@
       (ok {:updated-form? true})
       (bad-request (at/build-error-body :malformed-update "No feedback created or empty items.")))))
 
-(>defn- delete-feedback!
+(>defn- delete-feedback
   "Deletes the feedback-form including items and answers."
   [{:keys [parameters]}]
   [:ring/request => :ring/response]
   (let [{:keys [share-hash]} (:body parameters)
-        ;; TODO delete here
-        ]))
+        deleted? (true? (feedback-db/delete-feedback! share-hash))]
+    (ok {:deleted? deleted?})))
 
 (def feedback-form-routes
   ["/feedback"
@@ -50,5 +50,9 @@
                :parameters {:body {:share-hash :discussion/share-hash
                                    :items :feedback/items
                                    :visible boolean?}}}
+         :delete {:handler delete-feedback
+                  :description (at/get-doc #'delete-feedback)
+                  :parameters {:body {:share-hash :discussion/share-hash}}
+                  :responses {200 {:body {:deleted? boolean?}}}}
          :name :api.discussion.feedback/form
          :middleware [:discussion/valid-share-hash? :discussion/user-moderator?]}]]])
