@@ -498,6 +498,10 @@
     :db/isComponent true
     :db/cardinality :db.cardinality/many
     :db/doc "Submitted answers of the type `feedback.answer`"}
+   {:db/ident :feedback/visible
+    :db/valueType :db.type/boolean
+    :db/cardinality :db.cardinality/one
+    :db/doc "Indicates, whether the feedback can be seen and submitted to by users."}
 
    {:db/ident :feedback.item/label
     :db/valueType :db.type/string

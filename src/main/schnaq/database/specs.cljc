@@ -181,7 +181,7 @@
 (s/def ::feedback-answer (s/keys :req [:feedback.answer/item]
                                  :opt [:feedback.answer/text :feedback.answer/scale-five]))
 (s/def :feedback/answers (s/coll-of ::feedback-answer))
-(s/def ::feedback-form (s/keys :req [:feedback/items]
+(s/def ::feedback-form (s/keys :req [:feedback/items :feedback/visible]
                                :opt [:feedback/answers]))
 (s/def :discussion/feedback ::feedback-form)
 
