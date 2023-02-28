@@ -162,7 +162,8 @@
     [:db/id]}])
 
 (def feedback-items
-  [{[:feedback.item/type :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
+  [:db/id
+   {[:feedback.item/type :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    :feedback.item/label
    :feedback.item/ordinal])
 

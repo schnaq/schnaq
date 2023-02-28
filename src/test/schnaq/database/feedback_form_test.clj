@@ -32,10 +32,11 @@
                           [:discussion/feedback :feedback/items])]
       (is (pos-int? result))
       (is (= 2 (count feedback-items)))
-      (is (some #{{:feedback.item/type :feedback.item.type/text
-                   :feedback.item/label "What do you want to tell me?"
-                   :feedback.item/ordinal 1}}
-                feedback-items)))))
+      (is (= "What do you want to tell me?"
+             (->> feedback-items
+                  (filter #(= 1 (:feedback.item/ordinal %)))
+                  first
+                  :feedback.item/label))))))
 
 (deftest update-feedback-form-items!-empty-feedback-test
   (testing "Updating items for discussion without feedback does nothing"
@@ -87,17 +88,54 @@
                          :feedback.item/label))
       (is (:feedback/visible updated-feedback)))))
 
+(deftest update-feedback-form-items!-without-id-is-double-test
+  (testing "Updating items with id edits, without adds item"
+    (let [share-hash "cat-dog-hash"
+          first-item-id (->> @(transact [{:db/id "new-feedback"
+                                          :feedback/items {:feedback.item/type :feedback.item.type/text
+                                                           :feedback.item/label "bla"
+                                                           :feedback.item/ordinal 1
+                                                           :db/id "first-item"}}
+                                         [:db/add [:discussion/share-hash share-hash]
+                                          :discussion/feedback "new-feedback"]])
+                             :tempids
+                             (#(% "first-item")))
+          _ (println first-item-id)
+          feedback-id (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          result (update-feedback-form-items! share-hash
+                                              [{:feedback.item/type :feedback.item.type/text
+                                                :feedback.item/label "blubb"
+                                                :feedback.item/ordinal 1}
+                                               {:feedback.item/type :feedback.item.type/text
+                                                :feedback.item/label "foo"
+                                                :feedback.item/ordinal 2}
+                                               {:feedback.item/type :feedback.item.type/text
+                                                :feedback.item/label "blabla"
+                                                :feedback.item/ordinal 4
+                                                :db/id first-item-id}]
+                                              true)
+          updated-feedback (fast-pull feedback-id '[*])]
+      (is (not (nil? result)))
+      (is 3 (count (:feedback/items updated-feedback)))
+      (is "blubber" (->> (:feedback/items updated-feedback)
+                         (filter #(= 1 (:feedback.item/ordinal %)))
+                         first
+                         :feedback.item/label))
+      (is (:feedback/visible updated-feedback)))))
+
 (deftest delete-feedback!-test
   (testing "Deleting feedback works easy."
     (let [share-hash "cat-dog-hash"
-          _ (transact [{:db/id "new-feedback"
-                        :feedback/items {:feedback.item/type :feedback.item.type/text
-                                         :feedback.item/label "bla"
-                                         :feedback.item/ordinal 1}}
-                       [:db/add [:discussion/share-hash share-hash]
-                        :discussion/feedback "new-feedback"]])]
+          _ @(transact [{:db/id "new-feedback"
+                         :feedback/items {:feedback.item/type :feedback.item.type/text
+                                          :feedback.item/label "bla"
+                                          :feedback.item/ordinal 1}}
+                        [:db/add [:discussion/share-hash share-hash]
+                         :discussion/feedback "new-feedback"]])]
       (delete-feedback! share-hash)
-      (is (nil? (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion)))))))
+      (is (nil? (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))))
+      (testing "Discussion without feedback is not modified"
+        (is (nil? (delete-feedback! "simple-hash")))))))
 
 (deftest feedback-form-test
   (testing "Retrieve feedback-items"

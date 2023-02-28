@@ -17,26 +17,12 @@
       "new-feedback-form"
       [:db/id]))))
 
-(>defn update-feedback-form-items!
-  "Updates the feedback form items. Leaves the answers untouched."
-  [share-hash form-items visible]
-  [:discussion/share-hash :feedback/items boolean? => (? :db/id)]
-  (when-not (empty? form-items)
-    (when-let [feedback-id (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion))]
-      (db/transact
-       (vec (concat
-             [[:db/retract feedback-id :feedback/items]
-              [:db/add feedback-id :feedback/visible visible]]
-             (map #(vector :db/add feedback-id :feedback/items (str "item-" (:feedback.item/ordinal %))) form-items)
-             (map #(merge % {:db/id (str "item-" (:feedback.item/ordinal %))}) form-items))))
-      feedback-id)))
-
 (>defn delete-feedback!
   "Deletes the feedback specified."
   [share-hash]
-  [:discussion/share-hash => (? future?)]
-  (db/transact
-   [[:db/retract [:discussion/share-hash share-hash] :discussion/feedback]]))
+  [:discussion/share-hash => (? associative?)]
+  (when-let [feedback-id (:db/id (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] '[:discussion/feedback])))]
+    @(db/transact [[:db/retractEntity feedback-id]])))
 
 (>defn feedback-items
   "Query and return a feedback-items belonging to a schnaq, if feedback existing and visible."
@@ -49,3 +35,24 @@
               [?feedback :feedback/visible true]
               [?feedback :feedback/items ?items]]
             share-hash patterns/feedback-items))
+
+(>defn update-feedback-form-items!
+  "Updates the feedback form items. Leaves the answers untouched."
+  [share-hash form-items visible]
+  [:discussion/share-hash :feedback/items boolean? => (? :db/id)]
+  (when-not (empty? form-items)
+    (when-let [feedback-id (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion))]
+      (let [current-items (feedback-items share-hash)
+            new-item-ids (set (remove nil? (map :db/id form-items)))
+            items-to-remove (remove #(new-item-ids (:db/id %)) current-items)]
+        @(db/transact
+          (vec (concat
+                (map #(vector :db/retractEntity (:db/id %)) items-to-remove)
+                [[:db/add feedback-id :feedback/visible visible]]
+                (map #(vector :db/add feedback-id :feedback/items (if (:db/id %)
+                                                                    (:db/id %)
+                                                                    (str "item-" (:feedback.item/ordinal %))))
+                     form-items)
+                ;; IMPORTANT: The % must be second in merge, since we want to preserve existing :db/ids
+                (map #(merge {:db/id (str "item-" (:feedback.item/ordinal %))} %) form-items)))))
+      feedback-id)))

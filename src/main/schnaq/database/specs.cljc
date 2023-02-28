@@ -173,7 +173,8 @@
 (s/def :feedback.item/label ::non-blank-string)
 (s/def :feedback.item/ordinal pos-int?)
 (s/def :feedback.item/type #{:feedback.item.type/text :feedback.item.type/scale-five})
-(s/def ::feedback-item (s/keys :req [:feedback.item/label :feedback.item/ordinal :feedback.item/type]))
+(s/def ::feedback-item (s/keys :req [:feedback.item/label :feedback.item/ordinal :feedback.item/type]
+                               :opt [:db/id]))
 (s/def :feedback/items (s/coll-of ::feedback-item))
 (s/def :feedback.answer/item :db/id)
 (s/def :feedback.answer/text ::non-blank-string)

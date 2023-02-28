@@ -16,7 +16,7 @@
       (bad-request (at/build-error-body :missing-items "Please provide items for the form")))))
 
 (>defn- update-items
-  "Set a new collection of items on a feedback form."
+  "Set a new collection of items on a feedback form. Any item that has an id is edited. All others are dropped."
   [{:keys [parameters]}]
   [:ring/request => :ring/response]
   (let [{:keys [share-hash items visible]} (:body parameters)
