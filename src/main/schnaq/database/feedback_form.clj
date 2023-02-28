@@ -27,4 +27,12 @@
        (vec (concat
              [[:db/retract feedback-id :feedback/items]]
              (map #(vector :db/add feedback-id :feedback/items (str "item-" (:feedback.item/ordinal %))) form-items)
-             (map #(merge % {:db/id (str "item-" (:feedback.item/ordinal %))}) form-items)))))))
+             (map #(merge % {:db/id (str "item-" (:feedback.item/ordinal %))}) form-items))))
+      feedback-id)))
+
+(>defn delete-feedback!
+  "Deletes the feedback specified."
+  [share-hash]
+  [:discussion/share-hash => (? future?)]
+  (db/transact
+   [[:db/retract [:discussion/share-hash share-hash] :discussion/feedback]]))

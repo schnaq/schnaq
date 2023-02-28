@@ -1,6 +1,6 @@
 (ns schnaq.database.feedback-form-test
   (:require [clojure.test :refer [use-fixtures is deftest testing]]
-            [schnaq.database.feedback-form :refer [new-feedback-form! update-feedback-form-items!]]
+            [schnaq.database.feedback-form :refer [new-feedback-form! update-feedback-form-items! delete-feedback!]]
             [schnaq.database.main :refer [fast-pull transact]]
             [schnaq.database.patterns :as patterns]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -80,3 +80,15 @@
                          (filter #(= 1 (:feedback.item/ordinal %)))
                          first
                          :feedback.item/label)))))
+
+(deftest delete-feedback!-test
+  (testing "Deleting feedback works easy."
+    (let [share-hash "cat-dog-hash"
+          _ (transact [{:db/id "new-feedback"
+                        :feedback/items {:feedback.item/type :feedback.item.type/text
+                                         :feedback.item/label "bla"
+                                         :feedback.item/ordinal 1}}
+                       [:db/add [:discussion/share-hash share-hash]
+                        :discussion/feedback "new-feedback"]])]
+      (delete-feedback! share-hash)
+      (is (nil? (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion)))))))
