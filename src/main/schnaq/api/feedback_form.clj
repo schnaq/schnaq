@@ -34,10 +34,24 @@
         deleted? (true? (feedback-db/delete-feedback! share-hash))]
     (ok {:deleted? deleted?})))
 
+(>defn- feedback-form
+  "Returns the current feedback-items for a schnaq. (Do not show answers, this is for the user)."
+  [{:keys [parameters]}]
+  [:ring/request => :ring/response]
+  (let [{:keys [share-hash]} (:body parameters)]
+    (ok {:feedback-items (feedback-db/feedback-items share-hash)})))
+
 (def feedback-form-routes
-  ["/feedback"
+  ["/feedback" {:middleware [:discussion/valid-share-hash?]}
+   ["" {:name :api.discussion/feedback
+        :get {:handler feedback-form
+              :description (at/get-doc #'feedback-form)
+              :parameters {:query {:share-hash :discussion/share-hash}}
+              :responses {200 {:body {:feedback-items :feedback/items}}}}}]
    ["/form"
-    ["" {:post {:handler create-form
+    ["" {:name :api.discussion.feedback/form
+         :middleware [:discussion/user-moderator?]
+         :post {:handler create-form
                 :description (at/get-doc #'create-form)
                 :responses {200 {:body {:feedback-form-id :db/id}}
                             400 at/response-error-body}
@@ -53,6 +67,4 @@
          :delete {:handler delete-feedback
                   :description (at/get-doc #'delete-feedback)
                   :parameters {:body {:share-hash :discussion/share-hash}}
-                  :responses {200 {:body {:deleted? boolean?}}}}
-         :name :api.discussion.feedback/form
-         :middleware [:discussion/valid-share-hash? :discussion/user-moderator?]}]]])
+                  :responses {200 {:body {:deleted? boolean?}}}}}]]])

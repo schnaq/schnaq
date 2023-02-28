@@ -1,6 +1,7 @@
 (ns schnaq.database.feedback-form-test
   (:require [clojure.test :refer [use-fixtures is deftest testing]]
-            [schnaq.database.feedback-form :refer [new-feedback-form! update-feedback-form-items! delete-feedback!]]
+            [schnaq.database.feedback-form
+             :refer [new-feedback-form! update-feedback-form-items! delete-feedback! feedback-items]]
             [schnaq.database.main :refer [fast-pull transact]]
             [schnaq.database.patterns :as patterns]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -97,3 +98,28 @@
                         :discussion/feedback "new-feedback"]])]
       (delete-feedback! share-hash)
       (is (nil? (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion)))))))
+
+(deftest feedback-form-test
+  (testing "Retrieve feedback-items"
+    (let [share-hash "cat-dog-hash"
+          _ (transact [{:db/id "new-feedback"
+                        :feedback/items {:feedback.item/type :feedback.item.type/text
+                                         :feedback.item/label "bla"
+                                         :feedback.item/ordinal 1}}
+                       [:db/add [:discussion/share-hash share-hash]
+                        :discussion/feedback "new-feedback"]])
+          _ (update-feedback-form-items! share-hash
+                                         [{:feedback.item/type :feedback.item.type/text
+                                           :feedback.item/label "blubb"
+                                           :feedback.item/ordinal 1}
+                                          {:feedback.item/type :feedback.item.type/text
+                                           :feedback.item/label "foo"
+                                           :feedback.item/ordinal 2}]
+                                         true)
+          retrieved-items (feedback-items share-hash)]
+      (is (seq retrieved-items))
+      (is 2 (count retrieved-items))
+      (is "blubber" (->> retrieved-items
+                         (filter #(= 1 (:feedback.item/ordinal %)))
+                         first
+                         :feedback.item/label)))))

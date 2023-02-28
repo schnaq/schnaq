@@ -37,3 +37,15 @@
   [:discussion/share-hash => (? future?)]
   (db/transact
    [[:db/retract [:discussion/share-hash share-hash] :discussion/feedback]]))
+
+(>defn feedback-items
+  "Query and return a feedback-items belonging to a schnaq, if feedback existing and visible."
+  [share-hash]
+  [:discussion/share-hash => (? :feedback/items)]
+  (db/query '[:find [(pull ?items feedback-items-pattern) ...]
+              :in $ ?share-hash feedback-items-pattern
+              :where [?discussion :discussion/share-hash ?share-hash]
+              [?discussion :discussion/feedback ?feedback]
+              [?feedback :feedback/visible true]
+              [?feedback :feedback/items ?items]]
+            share-hash patterns/feedback-items))
