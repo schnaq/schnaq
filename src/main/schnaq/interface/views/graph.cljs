@@ -7,7 +7,6 @@
             [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [reagent.dom :as rdom]
             [reagent.dom.server :as rserver]
             [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.config :as config :refer [graph-label-length]]
@@ -121,6 +120,7 @@
   [{:keys [nodes edges controversy-values]}]
   (let [nodes-vis (DataSet.)
         edges-vis (DataSet.)
+        dom-node (atom nil)
         nodes-store (reagent/atom nodes)
         edges-store (reagent/atom edges)
         height (* 0.75 (.-innerHeight js/window))
@@ -143,15 +143,15 @@
             ;; Disable gravitation / physics after graph is stabilized
             (.on graph-object "stabilizationIterationsDone"
                  #(.setOptions graph-object (clj->js {:physics false}))))
-          [:div {:id config/graph-id}]))
+          [:div {:id config/graph-id
+                 :ref #(reset! dom-node %)}]))
       :component-did-mount
-      (fn [this]
+      (fn [_this]
         (.add nodes-vis (clj->js (convert-nodes-for-vis nodes controversy-values)))
         (.add edges-vis (clj->js edges))
-        (let [root-node (rdom/dom-node this)
-              data #js {:nodes nodes-vis
+        (let [data #js {:nodes nodes-vis
                         :edges edges-vis}
-              graph (Network. root-node data (clj->js options))]
+              graph (Network. @dom-node data (clj->js options))]
           (rf/dispatch [:graph/store-object graph])
           (rf/dispatch [:tour/start :mindmap])
           (.on graph "doubleClick"
