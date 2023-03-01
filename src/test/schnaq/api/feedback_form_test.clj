@@ -1,6 +1,5 @@
 (ns schnaq.api.feedback-form-test
   (:require
-   [clojure.spec.alpha :as s]
    [clojure.test :refer [use-fixtures is deftest testing]]
    [muuntaja.core :as m]
    [schnaq.database.main :as db]
@@ -30,7 +29,8 @@
       (testing "Adding items as a moderator is okay"
         (let [response (-> toolbelt/token-n2o-admin request test-app)]
           (is (= 200 (:status response)))
-          (is (s/valid? :db/id (:feedback-form-id (m/decode-response-body response)))))))))
+          ;; Returns an id
+          (is (pos-int? (:feedback-form-id (m/decode-response-body response)))))))))
 
 (deftest create-form-test-empty-items
   (testing "Creating a valid feedback form  wit no items is not allowed."
