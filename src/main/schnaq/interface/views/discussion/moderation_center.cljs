@@ -167,7 +167,7 @@
      [:h5 (labels :schnaq.moderation.overview/moderators-subheading)]
      [:div.text-start
       (for [moderator-mail @(rf/subscribe [:discussion.moderation/moderators])]
-        [:div.pb-2
+        [:div.pb-2 {:key moderator-mail}
          (when (or author? (= user-mail moderator-mail))
            (if (= user-mail moderator-mail)
              [:span.badge.me-2.bg-primary (labels :common/you)]
