@@ -161,7 +161,7 @@
      :as :wordcloud/discussion]
     [:db/id]}])
 
-(def feedback-items
+(def feedback-item
   [:db/id
    {[:feedback.item/type :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    :feedback.item/label
@@ -169,14 +169,19 @@
 
 (def feedback-form
   [:db/id
-   {:feedback/items feedback-items}
+   {:feedback/items feedback-item}
    :feedback/visible])
 
 (def feedback-answers
   [:db/id
-   {:feedback/answers [[:feedback.answer/item :xform 'schnaq.database.xforms/pull-up-db-id]
-                       :feedback.answer/text
-                       :feedback.answer/scale-five]}])
+   [:feedback.answer/item :xform 'schnaq.database.xforms/pull-up-db-id]
+   :feedback.answer/text
+   :feedback.answer/scale-five])
+
+(def feedback-form-results
+  (conj
+   feedback-form
+   {:feedback/answers feedback-answers}))
 
 (def survey-using-schnaq-for
   [:db/id

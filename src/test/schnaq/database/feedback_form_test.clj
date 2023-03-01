@@ -1,7 +1,8 @@
 (ns schnaq.database.feedback-form-test
   (:require [clojure.test :refer [use-fixtures is deftest testing]]
             [schnaq.database.feedback-form
-             :refer [new-feedback-form! update-feedback-form-items! delete-feedback! feedback-items add-answers]]
+             :refer [new-feedback-form! update-feedback-form-items! delete-feedback! feedback-items add-answers
+                     feedback-form-complete]]
             [schnaq.database.main :refer [fast-pull transact]]
             [schnaq.database.patterns :as patterns]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -187,3 +188,23 @@
       (is (not (add-answers share-hash {:some-other :key})))
       (is answer-result)
       (is (= "Foobar teach!" (:feedback.answer/text first-answer))))))
+
+(deftest feedback-form-complete-test
+  (testing "Returning answers with embedded items."
+    (let [share-hash "cat-dog-hash"
+          _ (transact [{:db/id "new-feedback"
+                        :feedback/items {:feedback.item/type :feedback.item.type/text
+                                         :feedback.item/label "bla"
+                                         :feedback.item/ordinal 1}}
+                       [:db/add [:discussion/share-hash share-hash]
+                        :discussion/feedback "new-feedback"]])
+          feedback-id (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          item-id (-> (fast-pull feedback-id '[*])
+                      :feedback/items
+                      first
+                      :db/id)
+          _ (add-answers share-hash [{:feedback.answer/item item-id
+                                      :feedback.answer/text "Foobar teach!"}])
+          feedback-result (feedback-form-complete share-hash)]
+      (is (= 1 (count (:feedback/answers feedback-result))))
+      (is (pos-int? (-> feedback-result :feedback/answers first :feedback.answer/item))))))

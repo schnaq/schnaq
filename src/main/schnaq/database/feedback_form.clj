@@ -3,7 +3,8 @@
    [clojure.spec.alpha :as s]
    [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
    [schnaq.database.main :as db]
-   [schnaq.database.patterns :as patterns]))
+   [schnaq.database.patterns :as patterns]
+   [schnaq.database.specs :as specs]))
 
 (>defn new-feedback-form!
   "Create a feedback-form and return the id of the new one. Empty form-items are rejected."
@@ -35,7 +36,7 @@
               [?discussion :discussion/feedback ?feedback]
               [?feedback :feedback/visible true]
               [?feedback :feedback/items ?items]]
-            share-hash patterns/feedback-items))
+            share-hash patterns/feedback-item))
 
 (>defn update-feedback-form-items!
   "Updates the feedback form items. Leaves the answers untouched."
@@ -73,3 +74,13 @@
              (map #(vector :db/add feedback-id :feedback/answers (:db/id %)) indexed-answers)
              ;; Add the answers themselves
              indexed-answers))))))))
+
+(>defn feedback-form-complete
+  "Returns the feedback form including all answers (and their questions)."
+  [share-hash]
+  [:discussion/share-hash => ::specs/feedback-form]
+  (db/query '[:find (pull ?feedback feedback-result-pattern) .
+              :in $ ?share-hash feedback-result-pattern
+              :where [?discussion :discussion/share-hash ?share-hash]
+              [?discussion :discussion/feedback ?feedback]]
+            share-hash patterns/feedback-form-results))
