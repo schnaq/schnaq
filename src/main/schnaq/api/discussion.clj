@@ -3,6 +3,7 @@
             [com.fulcrologic.guardrails.core :refer [=> >defn-]]
             [ring.util.http-response :refer [bad-request created forbidden ok]]
             [schnaq.api.dto-specs :as dto]
+            [schnaq.api.feedback-form :refer [feedback-form-routes]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
@@ -359,6 +360,7 @@
 (def discussion-routes
   ["/discussion" {:swagger {:tags ["discussions"]}
                   :middleware [:discussion/add-device-id]}
+   feedback-form-routes
    ["/conclusions/starting" {:get get-starting-conclusions
                              :description (at/get-doc #'get-starting-conclusions)
                              :name :api.discussion.conclusions/starting

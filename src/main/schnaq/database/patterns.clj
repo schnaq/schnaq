@@ -95,6 +95,7 @@
    :discussion/header-image-url
    :discussion/created-at
    [:discussion/activation-focus :xform 'schnaq.database.xforms/pull-up-db-id]
+   [:discussion/feedback :xform 'schnaq.database.xforms/pull-up-db-id]
    :discussion/device-ids
    {:discussion/author public-user}
    [:discussion/moderators :xform 'schnaq.database.xforms/maps->ids]
@@ -159,6 +160,28 @@
      :xform 'schnaq.database.xforms/pull-up-db-id
      :as :wordcloud/discussion]
     [:db/id]}])
+
+(def feedback-item
+  [:db/id
+   {[:feedback.item/type :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
+   :feedback.item/label
+   :feedback.item/ordinal])
+
+(def feedback-form
+  [:db/id
+   {:feedback/items feedback-item}
+   :feedback/visible])
+
+(def feedback-answers
+  [:db/id
+   [:feedback.answer/item :xform 'schnaq.database.xforms/pull-up-db-id]
+   :feedback.answer/text
+   :feedback.answer/scale-five])
+
+(def feedback-form-results
+  (conj
+   feedback-form
+   {:feedback/answers feedback-answers}))
 
 (def survey-using-schnaq-for
   [:db/id
