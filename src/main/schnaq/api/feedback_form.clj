@@ -21,9 +21,8 @@
   "Set a new collection of items on a feedback form. Any item that has an id is edited. All others are dropped."
   [{:keys [parameters]}]
   [:ring/request => :ring/response]
-  (let [{:keys [share-hash items visible]} (:body parameters)
-        visible (boolean visible) ;; Coerce into boolean
-        new-feedback-id (feedback-db/update-feedback-form-items! share-hash items visible)]
+  (let [{:keys [share-hash items visible?]} (:body parameters)
+        new-feedback-id (feedback-db/update-feedback-form-items! share-hash items visible?)]
     (if new-feedback-id
       (ok {:updated-form? true})
       (bad-request (at/build-error-body :malformed-update "No feedback created or empty items.")))))
