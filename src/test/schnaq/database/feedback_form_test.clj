@@ -1,7 +1,7 @@
 (ns schnaq.database.feedback-form-test
   (:require [clojure.test :refer [use-fixtures is deftest testing]]
             [schnaq.database.feedback-form
-             :refer [new-feedback-form! update-feedback-form-items! delete-feedback! feedback-items]]
+             :refer [new-feedback-form! update-feedback-form-items! delete-feedback! feedback-items add-answers]]
             [schnaq.database.main :refer [fast-pull transact]]
             [schnaq.database.patterns :as patterns]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -161,3 +161,29 @@
                          (filter #(= 1 (:feedback.item/ordinal %)))
                          first
                          :feedback.item/label)))))
+
+(deftest add-answers-test
+  (testing "Add answers to questions works as expected."
+    (let [share-hash "cat-dog-hash"
+          _ (transact [{:db/id "new-feedback"
+                        :feedback/items {:feedback.item/type :feedback.item.type/text
+                                         :feedback.item/label "bla"
+                                         :feedback.item/ordinal 1}}
+                       [:db/add [:discussion/share-hash share-hash]
+                        :discussion/feedback "new-feedback"]])
+          feedback-id (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          item-id (-> (fast-pull feedback-id '[*])
+                      :feedback/items
+                      first
+                      :db/id)
+          answer-result (add-answers share-hash [{:feedback.answer/item item-id
+                                                  :feedback.answer/text "Foobar teach!"}])
+          first-answer (-> (fast-pull feedback-id '[*])
+                           :feedback/answers
+                           first
+                           :db/id
+                           (fast-pull '[*]))]
+      (is (not (add-answers "simple-hash" {})))
+      (is (not (add-answers share-hash {:some-other :key})))
+      (is answer-result)
+      (is (= "Foobar teach!" (:feedback.answer/text first-answer))))))

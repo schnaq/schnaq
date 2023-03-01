@@ -1,5 +1,6 @@
 (ns schnaq.database.feedback-form
   (:require
+   [clojure.spec.alpha :as s]
    [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
    [schnaq.database.main :as db]
    [schnaq.database.patterns :as patterns]))
@@ -56,3 +57,19 @@
                 ;; IMPORTANT: The % must be second in merge, since we want to preserve existing :db/ids
                 (map #(merge {:db/id (str "item-" (:feedback.item/ordinal %))} %) form-items)))))
       feedback-id)))
+
+(>defn add-answers
+  "Add new answers to a feedback."
+  [share-hash answers]
+  [:discussion/share-hash :feedback/answers => boolean?]
+  (boolean
+   (when (s/valid? :feedback/answers answers)
+     (when-let [feedback-id (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion))]
+       (let [indexed-answers (map-indexed (fn [idx answer] (merge {:db/id (str "answer-" idx)} answer)) answers)]
+         @(db/transact
+           (vec
+            (concat
+             ;; Add the temp-ids to the answer set
+             (map #(vector :db/add feedback-id :feedback/answers (:db/id %)) indexed-answers)
+             ;; Add the answers themselves
+             indexed-answers))))))))

@@ -3,7 +3,8 @@
    [com.fulcrologic.guardrails.core :refer [=> >defn-]]
    [ring.util.http-response :refer [ok bad-request]]
    [schnaq.api.toolbelt :as at]
-   [schnaq.database.feedback-form :as feedback-db]))
+   [schnaq.database.feedback-form :as feedback-db]
+   [schnaq.database.main :as db]))
 
 (>defn- create-form
   "Create a new feedback-form based on the items the user sends. Does not check amount of items."
@@ -20,7 +21,7 @@
   [{:keys [parameters]}]
   [:ring/request => :ring/response]
   (let [{:keys [share-hash items visible]} (:body parameters)
-        visible (true? visible) ;; Coerce into boolean
+        visible (boolean visible) ;; Coerce into boolean
         new-feedback-id (feedback-db/update-feedback-form-items! share-hash items visible)]
     (if new-feedback-id
       (ok {:updated-form? true})
@@ -31,7 +32,7 @@
   [{:keys [parameters]}]
   [:ring/request => :ring/response]
   (let [{:keys [share-hash]} (:body parameters)
-        deleted? (true? (feedback-db/delete-feedback! share-hash))]
+        deleted? (boolean (feedback-db/delete-feedback! share-hash))]
     (ok {:deleted? deleted?})))
 
 (>defn- feedback-form
@@ -41,13 +42,33 @@
   (let [{:keys [share-hash]} (:body parameters)]
     (ok {:feedback-items (feedback-db/feedback-items share-hash)})))
 
+(defn- answer-feedback
+  "Return some answers to feedback questions anonymously."
+  [{:keys [parameters]}]
+  [:ring/request => :ring/response]
+  (let [{:keys [share-hash answers]} (:body parameters)
+        item-existing? #(db/query '[:find ?id .
+                                    :in $ ?id
+                                    :where [?id :feedback.item/type _]]
+                                  %)
+        verified-answers (filter #(item-existing? (:feedback.answer/item %)) answers)]
+    (if (empty? verified-answers)
+      (bad-request (at/build-error-body :no-answers "Add any valid answers, before you submit."))
+      (ok {:saved? (feedback-db/add-answers share-hash verified-answers)}))))
+
 (def feedback-form-routes
   ["/feedback" {:middleware [:discussion/valid-share-hash?]}
    ["" {:name :api.discussion/feedback
         :get {:handler feedback-form
               :description (at/get-doc #'feedback-form)
               :parameters {:query {:share-hash :discussion/share-hash}}
-              :responses {200 {:body {:feedback-items :feedback/items}}}}}]
+              :responses {200 {:body {:feedback-items :feedback/items}}}}
+        :post {:handler answer-feedback
+               :description (at/get-doc #'answer-feedback)
+               :parameters {:body {:share-hash :discussion/share-hash
+                                   :answers :feedback/answers}}
+               :responses {200 {:body {:saved? boolean?}}
+                           400 at/response-error-body}}}]
    ["/form"
     ["" {:name :api.discussion.feedback/form
          :middleware [:discussion/user-moderator?]

@@ -176,7 +176,10 @@
 (s/def ::feedback-item (s/keys :req [:feedback.item/label :feedback.item/ordinal :feedback.item/type]
                                :opt [:db/id]))
 (s/def :feedback/items (s/coll-of ::feedback-item))
-(s/def :feedback.answer/item :db/id)
+(s/def :feedback.answer/item (s/or :id :db/id
+                                   :item ::feedback-item))
+
+(s/valid? :feedback.answer/item {})
 (s/def :feedback.answer/text ::non-blank-string)
 (s/def :feedback.answer/scale-five (s/and pos-int? #(<= % 5)))
 (s/def ::feedback-answer (s/keys :req [:feedback.answer/item]
@@ -184,7 +187,8 @@
 (s/def :feedback/answers (s/coll-of ::feedback-answer))
 (s/def ::feedback-form (s/keys :req [:feedback/items :feedback/visible]
                                :opt [:feedback/answers]))
-(s/def :discussion/feedback ::feedback-form)
+(s/def :discussion/feedback (s/or :id :db/id
+                                  :feedback-form ::feedback-form))
 
 (s/def :wordcloud/title ::non-blank-string)
 (s/def :wordcloud/discussion (s/or :id :db/id
