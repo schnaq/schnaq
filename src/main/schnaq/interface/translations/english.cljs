@@ -207,6 +207,12 @@
    :schnaq.wordcloud/download "Download Word Cloud"
    :schnaq.wordcloud/no-words-yet "There are no words in the word cloud yet. Why don't you start with your first thoughts?"
 
+   ;; feedback
+   :schnaq.feedback.create/text "Text"
+   :schnaq.feedback.create/rating "Rating"
+   :feedback.create/add-button "Add"
+   :feedback.create/remove-button "Remove"
+
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
    :schnaq.create/heading "Start your schnaq"

@@ -210,6 +210,12 @@
    :schnaq.wordcloud/download "Wortwolke herunterladen"
    :schnaq.wordcloud/no-words-yet "Noch sind keine Wörter in der Wortwolke vorhanden. Fang du doch an mit deinen ersten Gedanken"
 
+      ;; feedback
+   :schnaq.feedback.create/text "Text"
+   :schnaq.feedback.create/rating "Bewertung"
+   :feedback.create/add-button "Hinzufügen"
+   :feedback.create/remove-button "Entfernen"
+
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"
    :schnaq.create/heading "Starte mit deinem schnaq."
