@@ -150,6 +150,7 @@
    :schnaq.input-type/poll "Poll"
    :schnaq.input-type/activation "Activation"
    :schnaq.input-type/word-cloud "Word Cloud"
+   :schnaq.input-type/feedback "Feedback"
    :schnaq.input-type/pro-only "Only for pro users"
 
    ;; Poll feature
