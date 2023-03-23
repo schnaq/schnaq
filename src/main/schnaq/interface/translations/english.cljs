@@ -210,8 +210,12 @@
    ;; feedback
    :schnaq.feedback.create/text "Text"
    :schnaq.feedback.create/rating "Rating"
+   :schnaq.feedback.create/which-type "How to respond?"
    :feedback.create/add-button "Add"
    :feedback.create/remove-button "Remove"
+   :feedback.create/placeholder-text "What do you want to ask your participants?"
+   :feedback.create/placeholder-scale-5 "What do you want your participants to evaluate?"
+   :feedback.create/submit-button "Create Feedback"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
