@@ -12,7 +12,7 @@
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.wordcloud :as wordcloud]
-            [schnaq.interface.matomo :as matomo]
+            [schnaq.interface.Matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
