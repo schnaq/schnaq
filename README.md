@@ -55,7 +55,7 @@ Set your database in the config namespace.
 
 Start the backend-server with one of these two options:
 
-*With REPL*
+_With REPL_
 
 Start the run configuration "CLJ REPL" and execute the `-main` method in
 `schnaq.api`.
@@ -66,7 +66,7 @@ To do this manually, you can put the following commands into the REPL in IDEA:
 (schnaq.api/-main)
 ```
 
-*Without REPL*
+_Without REPL_
 
 `clj -M:run-server` on the terminal
 
@@ -77,18 +77,20 @@ The Frontend works with shadow-cljs for hot code reload.
 1. Run `yarn install` to get javascript dependencies.
 2. Run `clj -M:frontend:dev` to compile the cljs and start the watcher.
 3. Shadow-cljs starts a nrepl-server.
-You can connect to localhost and the port output to the `.shadow-cljs/nrepl.port` file.
-4. In the opened *CLJ* REPL you can execute `(shadow/repl :app)` to switch to the hot development REPL for *CLJS*.
+   You can connect to localhost and the port output to the `.shadow-cljs/nrepl.port` file.
+4. In the opened _CLJ_ REPL you can execute `(shadow/repl :app)` to switch to the hot development REPL for _CLJS_.
 
 #### Stylesheets
 
-To automatically create the stylesheets, enable a file-watcher for the `public/css` directory.
-In the html we use the minimized version.
-So be sure to add `--style compressed` or similar as an option to your sass command.
+To automatically create the stylesheets, enable a file-watcher for the `resources/public/css` directory.
 
-Sample command:
+To do this and watch for changes, use this command:
 
-    sass --watch  ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed
+    yarn css:watch
+
+To make a minified build:
+
+    yarn css:minify
 
 ### Linting Styles locally
 
@@ -96,7 +98,7 @@ If you want to lint the style locally, you need to run `yarn install --dev` to i
 
 Then just execute `yarn stylelint "public/css/*.scss"` in the project root.
 
-### Testing 
+### Testing
 
 #### Backend
 
@@ -121,7 +123,7 @@ Purgecss will be installed as a dev dependency.
 You can run the following command from the schnaq route to find unused css in the app.
 (Build the app once before)
 
-    yarn purgecss -c purgecss.config.js
+    yarn css:purge
 
 This outputs all unused css classes.
 
@@ -131,7 +133,7 @@ This outputs all unused css classes.
 
 In the process of optimizations, the function names are reduced to a couple of
 unpredictable characters. Sometimes, when doing JavaScript-Interop, these
-functions are no longer accessible (e.g. when calling `(.getWritable this)`). 
+functions are no longer accessible (e.g. when calling `(.getWritable this)`).
 This can also happen to fields / constants, which are renamed during the
 compilation.
 
@@ -152,5 +154,5 @@ the root of this repository, e.g. with this call:
     docker run -it --rm -v $(pwd):/usr/share/nginx/html -v $(pwd)/nginx/schnaq.conf:/etc/nginx/conf.d/default.conf -p 8888:80 nginx
 
 ### License
-This code and all management code belonging to the schnaq repository is published under the AGPL 3.0 (GNU AFFERO GENERAL PUBLIC LICENSE 
-Version 3) 
+
+This code and all management code belonging to the schnaq repository is published under the AGPL 3.0 (GNU AFFERO GENERAL PUBLIC LICENSE Version 3)
