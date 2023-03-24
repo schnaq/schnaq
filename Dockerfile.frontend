@@ -31,7 +31,7 @@ RUN clojure -P -M:frontend
 
 COPY . .
 
-RUN sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed
+RUN yarn css:minify
 RUN yarn shadow-cljs release app
 
 # ------------------------------------------------------------------------------
