@@ -8,7 +8,7 @@
             [schnaq.shared-toolbelt :as stools]))
 
 (defn- react-to-statement-call!
-  "A call to the route for adding a rection to a statement."
+  "A call to the route for adding a reaction to a statement."
   [db statement-id premise-text statement-type locked? on-success-fx]
   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
     (when share-hash
@@ -134,7 +134,7 @@
               :share-hash share-hash
               :display-name (tools/current-display-name db)}
              [:discussion.redirect/to-root share-hash])]}
-       new-conclusion (update :db #(assoc-in db [:statements :focus] (:db/id new-conclusion))
+       new-conclusion (update :db (fn [_ _ _ _] (assoc-in db [:statements :focus] (:db/id new-conclusion)))
                               :fx conj [:discussion.history/push new-conclusion])))))
 
 (rf/reg-event-fx
