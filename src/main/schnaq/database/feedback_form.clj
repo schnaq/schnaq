@@ -43,7 +43,7 @@
   [share-hash form-items visible?]
   [:discussion/share-hash :feedback/items boolean? => (? :db/id)]
   (when-not (empty? form-items)
-    (when-let [feedback-id (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion))]
+    (when-let [feedback-id (:db/id (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion)))]
       (let [current-items (feedback-items share-hash)
             new-item-ids (set (remove nil? (map :db/id form-items)))
             items-to-remove (remove #(new-item-ids (:db/id %)) current-items)]
