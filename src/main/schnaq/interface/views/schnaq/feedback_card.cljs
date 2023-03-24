@@ -77,12 +77,13 @@
 (defn feedback-tab
   "Feedback tab menu to create a Feedback form."
   []
-  (let [feedback-count @(rf/subscribe [:feedback.create/item-count])]
+  (let [feedback-count @(rf/subscribe [:feedback.create/item-count])
+        current-feedback @(rf/subscribe [:feedback/current])
+        submit-event (if current-feedback :schnaq.feedback/update :schnaq.feedback/create)]
     [:> Form {:on-submit (fn [event]
                            (.preventDefault event)
                            (let [form (oget event [:target :elements])]
-                             (rf/dispatch [:schnaq.feedback/create (extract-all-feedback-from-form form feedback-count)])
-                             #_(rf/dispatch [:form/should-clear form])))}
+                             (rf/dispatch [submit-event (extract-all-feedback-from-form form feedback-count)])))}
      [feedback-tab-entries]
      [:div.text-center
       [feedback-tab-add-remove-entry-buttons]
@@ -91,6 +92,11 @@
                   :type :submit
                   :on-click #(matomo/track-event "Active User" "Action" "Create FeedbackForm")}
        (labels :feedback.create/submit-button)]]]))
+
+(rf/reg-sub
+ :feedback/current
+ (fn [db _]
+   (get-in db [:schnaq :selected :discussion/feedback] nil)))
 
 (rf/reg-sub
  :feedback.create/item-count
@@ -106,9 +112,17 @@
  :schnaq.feedback/create
  (fn [{:keys [db]} [_ feedback-items]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         params {:share-hash share-hash :items feedback-items}
-         _ (print params)]
+         params {:share-hash share-hash :items feedback-items}]
      {:fx [(http/xhrio-request db :post "/discussion/feedback/form"
+                               [:schnaq.feedback.create/success]
+                               params)]})))
+
+(rf/reg-event-fx
+ :schnaq.feedback/update
+ (fn [{:keys [db]} [_ feedback-items]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         params {:share-hash share-hash :items feedback-items :visible? true}]
+     {:fx [(http/xhrio-request db :put "/discussion/feedback/form"
                                [:schnaq.feedback.create/success]
                                params)]})))
 

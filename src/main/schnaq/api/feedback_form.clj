@@ -90,7 +90,7 @@
                                400 at/response-error-body}
                    :parameters {:body {:share-hash :discussion/share-hash
                                        :items :feedback/items
-                                       :visible boolean?}}}
+                                       :visible? boolean?}}}
              :delete {:handler delete-feedback
                       :description (at/get-doc #'delete-feedback)
                       :parameters {:body {:share-hash :discussion/share-hash}}
