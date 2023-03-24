@@ -123,7 +123,7 @@ Purgecss will be installed as a dev dependency.
 You can run the following command from the schnaq route to find unused css in the app.
 (Build the app once before)
 
-    yarn purgecss -c purgecss.config.js
+    yarn css:purge
 
 This outputs all unused css classes.
 
@@ -155,5 +155,4 @@ the root of this repository, e.g. with this call:
 
 ### License
 
-This code and all management code belonging to the schnaq repository is published under the AGPL 3.0 (GNU AFFERO GENERAL PUBLIC LICENSE
-Version 3)
+This code and all management code belonging to the schnaq repository is published under the AGPL 3.0 (GNU AFFERO GENERAL PUBLIC LICENSE Version 3)
