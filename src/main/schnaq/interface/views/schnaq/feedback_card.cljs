@@ -136,7 +136,6 @@
  ;; Update the temporary counter. Use this when changing the number of displayed
  ;; feedback items.
  (fn [db [_ new-count]]
-   (print new-count)
    (assoc-in db [:feedback-form :create :item-count] new-count)))
 
 (rf/reg-event-fx
@@ -144,7 +143,9 @@
  (fn [{:keys [db]} [_ feedback-items]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          params {:share-hash share-hash :items feedback-items}]
-     {:fx [(http/xhrio-request db :post "/discussion/feedback/form"
+     {:db (-> db
+              (assoc-in [:feedback-form :create :temp-items] feedback-items))
+      :fx [(http/xhrio-request db :post "/discussion/feedback/form"
                                [:schnaq.feedback.create/success]
                                params)]})))
 
@@ -153,14 +154,19 @@
  (fn [{:keys [db]} [_ feedback-items]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          params {:share-hash share-hash :items feedback-items :visible? true}]
-     {:fx [(http/xhrio-request db :put "/discussion/feedback/form"
+     {:db (-> db
+              (assoc-in [:feedback-form :create :temp-items] feedback-items))
+      :fx [(http/xhrio-request db :put "/discussion/feedback/form"
                                [:schnaq.feedback.create/success]
                                params)]})))
 
 (rf/reg-event-db
  :feedback.create/reset-item-count
  (fn [db _]
-   (assoc-in db [:feedback-form :create :item-count] 0)))
+   (let [temp-items (get-in db [:feedback-form :create :temp-items])]
+     (-> db
+         (assoc-in [:schnaq :selected :discussion/feedback :feedback/items] temp-items)
+         (assoc-in [:feedback-form :create :item-count] 0)))))
 
 (rf/reg-event-fx
  :schnaq.feedback.create/success
