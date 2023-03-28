@@ -16,9 +16,12 @@
   (let [radio-name (keyword (str "feedback-item-type-" item-count))
         id-text (str "radio-item-type-text-" item-count)
         id-scale-5 (str "radio-item-type-scale-five-" item-count)
-        placeholder (labels :feedback.create/placeholder-text)]
+        placeholder (labels :feedback.create/placeholder-text)
+        default-value @(rf/subscribe [:feedback.current/item-label item-count])]
     [:div.my-4
-     [inputs/floating placeholder (str "feedback-item-label-" item-count) {:required true}]
+     [inputs/floating placeholder (str "feedback-item-label-" item-count)
+      {:required true
+       :defaultValue default-value}]
      [:p.me-3.d-inline (labels :schnaq.feedback.create/which-type)]
      [:> FormCheck
       {:id id-text
@@ -37,25 +40,26 @@
        :label (labels :schnaq.feedback.create/rating)}]]))
 
 (defn- feedback-tab-entries []
-  (let [feedback-count @(rf/subscribe [:feedback.create/item-count])]
+  (let [feedback-count @(rf/subscribe [:feedback.create/total-item-count])]
     [:<>
-     (for [item-count (range 1 (inc feedback-count))]
+     (for [item-count (range 0 feedback-count)]
        (with-meta
          [feedback-entry item-count]
          {:key (str "feedback-entry-key-" item-count)}))]))
 
 (defn- feedback-tab-add-remove-entry-buttons []
-  (let [feedback-count @(rf/subscribe [:feedback.create/item-count])]
+  (let [feedback-count @(rf/subscribe [:feedback.create/total-item-count])
+        temp-feedback-count @(rf/subscribe [:feedback.create/temp-item-count])]
     [:<>
      [:> Button {:variant "dark"
                  :className "me-2"
                  :type :button
-                 :on-click #(rf/dispatch [:feedback.create/set-item-count (inc feedback-count)])}
+                 :on-click #(rf/dispatch [:feedback.create/set-item-count (inc temp-feedback-count)])}
       [icon :plus "me-1"] (labels :feedback.create/add-button)]
      (when (> feedback-count 1)
        [:> Button {:variant "dark"
                    :type :button
-                   :on-click #(rf/dispatch [:feedback.create/set-item-count (dec feedback-count)])}
+                   :on-click #(rf/dispatch [:feedback.create/set-item-count (dec temp-feedback-count)])}
         [icon :minus "me-1"] (labels :feedback.create/remove-button)])]))
 
 (defn- extract-feedback-from-form
@@ -67,18 +71,18 @@
         label (oget+ form (str "feedback-item-label-" ordinal) :value)]
     {:feedback.item/label label
      :feedback.item/type type
-     :feedback.item/ordinal ordinal}))
+     :feedback.item/ordinal (inc ordinal)})) ;; ordinal starts at 1 not 0
 
 (defn- extract-all-feedback-from-form
   "Map over all feedback form items and retrieve labels and types."
   [form item-count]
-  (map #(extract-feedback-from-form form %) (range 1 (inc item-count))))
+  (map #(extract-feedback-from-form form %) (range 0 item-count)))
 
 (defn feedback-tab
   "Feedback tab menu to create a Feedback form."
   []
-  (let [feedback-count @(rf/subscribe [:feedback.create/item-count])
-        current-feedback @(rf/subscribe [:feedback/current])
+  (let [current-feedback @(rf/subscribe [:feedback/current])
+        feedback-count @(rf/subscribe [:feedback.create/total-item-count])
         submit-event (if current-feedback :schnaq.feedback/update :schnaq.feedback/create)]
     [:> Form {:on-submit (fn [event]
                            (.preventDefault event)
@@ -99,13 +103,40 @@
    (get-in db [:schnaq :selected :discussion/feedback] nil)))
 
 (rf/reg-sub
- :feedback.create/item-count
+ :feedback.current/item-label
+ ;; Retrieve an item on position 'order' from the current feedback-items.
+ (fn [db [_ order]]
+   (let [feedback-items (get-in db [:schnaq :selected :discussion/feedback :feedback/items] [])
+         item (nth feedback-items order nil)]
+     (nth feedback-items order nil)
+     (get item :feedback.item/label ""))))
+
+(rf/reg-sub
+ :feedback.create/temp-item-count
+ ;; Get the temporary items count. This value is used to determine the number of
+ ;; feedback items when editing in relation to the number of items in the
+ ;; current feedback-form.
  (fn [db _]
-   (get-in db [:feedback-form :create :item-count] 1)))
+   (get-in db [:feedback-form :create :item-count] 0)))
+
+(rf/reg-sub
+ :feedback.create/total-item-count
+ ;; Get the number of feedback-items currently displayed in the editing tab.
+ ;; Consists of the number of items in the current feedback form and the
+ ;; temporary item count. If both are 0 (meaning no feedback-form exists
+ ;; for this schnaq) return a '1' to display at least one element.
+ (fn [db _]
+   (let [current-item-count (count (get-in db [:schnaq :selected :discussion/feedback :feedback/items] []))
+         temp-item-count (get-in db [:feedback-form :create :item-count] 0)
+         total-item-count (+ current-item-count temp-item-count)]
+     (max 1 total-item-count))))
 
 (rf/reg-event-db
  :feedback.create/set-item-count
+ ;; Update the temporary counter. Use this when changing the number of displayed
+ ;; feedback items.
  (fn [db [_ new-count]]
+   (print new-count)
    (assoc-in db [:feedback-form :create :item-count] new-count)))
 
 (rf/reg-event-fx
@@ -129,7 +160,7 @@
 (rf/reg-event-db
  :feedback.create/reset-item-count
  (fn [db _]
-   (assoc-in db [:feedback-form :create :item-count] 1)))
+   (assoc-in db [:feedback-form :create :item-count] 0)))
 
 (rf/reg-event-fx
  :schnaq.feedback.create/success
