@@ -65,7 +65,7 @@
   [:discussion/share-hash :feedback/answers => boolean?]
   (boolean
    (when (s/valid? :feedback/answers answers)
-     (when-let [feedback-id (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion))]
+     (when-let [feedback-id (:db/id (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion)))]
        (let [indexed-answers (map-indexed (fn [idx answer] (merge {:db/id (str "answer-" idx)} answer)) answers)]
          @(db/transact
            (vec

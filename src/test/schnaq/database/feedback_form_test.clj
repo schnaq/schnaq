@@ -61,7 +61,6 @@
           result (update-feedback-form-items! share-hash [] false)]
       (is (nil? result)))))
 
-
 (deftest update-feedback-form-items!-test
   (testing "Updating items works as expected"
     (let [share-hash "cat-dog-hash"
@@ -71,7 +70,8 @@
                                          :feedback.item/ordinal 1}}
                        [:db/add [:discussion/share-hash share-hash]
                         :discussion/feedback "new-feedback"]])
-          feedback-id (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          feedback (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          feedback-id (:db/id feedback)
           result (update-feedback-form-items! share-hash
                                               [{:feedback.item/type :feedback.item.type/text
                                                 :feedback.item/label "blubb"
@@ -101,8 +101,8 @@
                                           :discussion/feedback "new-feedback"]])
                              :tempids
                              (#(% "first-item")))
-          _ (println first-item-id)
-          feedback-id (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          feedback (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          feedback-id (:db/id feedback)
           result (update-feedback-form-items! share-hash
                                               [{:feedback.item/type :feedback.item.type/text
                                                 :feedback.item/label "blubb"
@@ -172,7 +172,8 @@
                                          :feedback.item/ordinal 1}}
                        [:db/add [:discussion/share-hash share-hash]
                         :discussion/feedback "new-feedback"]])
-          feedback-id (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          feedback (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          feedback-id (:db/id feedback)
           item-id (-> (fast-pull feedback-id '[*])
                       :feedback/items
                       first
@@ -198,7 +199,8 @@
                                          :feedback.item/ordinal 1}}
                        [:db/add [:discussion/share-hash share-hash]
                         :discussion/feedback "new-feedback"]])
-          feedback-id (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          feedback (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          feedback-id (:db/id feedback)
           item-id (-> (fast-pull feedback-id '[*])
                       :feedback/items
                       first
