@@ -70,8 +70,8 @@
                                          :feedback.item/ordinal 1}}
                        [:db/add [:discussion/share-hash share-hash]
                         :discussion/feedback "new-feedback"]])
-          feedback (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
-          feedback-id (:db/id feedback)
+          feedback-id (get-in (fast-pull [:discussion/share-hash share-hash] patterns/discussion)
+                              [:discussion/feedback :db/id])
           result (update-feedback-form-items! share-hash
                                               [{:feedback.item/type :feedback.item.type/text
                                                 :feedback.item/label "blubb"
@@ -101,8 +101,8 @@
                                           :discussion/feedback "new-feedback"]])
                              :tempids
                              (#(% "first-item")))
-          feedback (:discussion/feedback (fast-pull [:discussion/share-hash share-hash] patterns/discussion))
-          feedback-id (:db/id feedback)
+          feedback-id (get-in (fast-pull [:discussion/share-hash share-hash] patterns/discussion)
+                              [:discussion/feedback :db/id])
           result (update-feedback-form-items! share-hash
                                               [{:feedback.item/type :feedback.item.type/text
                                                 :feedback.item/label "blubb"
