@@ -24,6 +24,7 @@
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.schnaq.activation-cards :as activation-cards]
+            [schnaq.interface.views.schnaq.feedback-card :as feedback-card]
             [schnaq.interface.views.schnaq.poll :as poll]
             [schnaq.interface.views.schnaq.reactions :as reactions]
             [schnaq.interface.views.schnaq.wordcloud-card :as wordcloud-card]
@@ -331,12 +332,14 @@
   (let [selected-option (reagent/atom :question)
         on-click #(reset! selected-option %)
         active-class #(when (= @selected-option %) "active")
-        iconed-heading (fn [icon-key label]
-                         [:<> [icon icon-key "me-1"] (labels label)])]
+        iconed-heading (fn [class icon-key label]
+                         (if (active-class class) [:<> [icon icon-key "me-1"] (labels label)]
+                             [:<> [icon icon-key "mx-2"]]))]
     (fn []
-      (let [poll-tab [:span [iconed-heading :chart-pie :schnaq.input-type/poll]]
-            activation-tab [:span [iconed-heading :magic :schnaq.input-type/activation]]
-            word-cloud-tab [:span [iconed-heading :cloud :schnaq.input-type/word-cloud]]
+      (let [poll-tab [:span [iconed-heading :poll :chart-pie :schnaq.input-type/poll]]
+            activation-tab [:span [iconed-heading :activation :magic :schnaq.input-type/activation]]
+            word-cloud-tab [:span [iconed-heading :word-cloud :cloud :schnaq.input-type/word-cloud]]
+            feedback-tab [:span [iconed-heading :feedback :feedback :schnaq.input-type/feedback]]
             pro-user? @(rf/subscribe [:user/pro?])
             moderator? @(rf/subscribe [:user/moderator?])
             read-only? @(rf/subscribe [:schnaq.state/read-only?])
@@ -355,7 +358,7 @@
                    [:button.nav-link {:class (active-class :question)
                                       :role "button"
                                       :on-click #(on-click :question)}
-                    [iconed-heading :info-question :schnaq.input-type/statement]]]
+                    [iconed-heading :question :info-question :schnaq.input-type/statement]]]
                   (if pro-user?
                     [:<>
                      [:li.nav-item
@@ -375,17 +378,25 @@
                        {:class (active-class :word-cloud)
                         :role "button"
                         :on-click #(on-click :word-cloud)}
-                       word-cloud-tab]]]
+                       word-cloud-tab]]
+                     [:li.nav-item
+                      [:button.nav-link
+                       {:class (active-class :feedback)
+                        :role "button"
+                        :on-click #(on-click :feedback)}
+                       feedback-tab]]]
                     [:<>
                      [deactivated-selection-card-tab poll-tab]
                      [deactivated-selection-card-tab activation-tab]
-                     [deactivated-selection-card-tab word-cloud-tab]])]))
+                     [deactivated-selection-card-tab word-cloud-tab]
+                     [deactivated-selection-card-tab feedback-tab]])]))
              (if top-level?
                (case @selected-option
                  :question [input-form-or-disabled-alert]
                  :poll [poll/poll-form]
                  :activation [activation/activation-tab]
-                 :word-cloud [wordcloud-card/wordcloud-tab])
+                 :word-cloud [wordcloud-card/wordcloud-tab]
+                 :feedback [feedback-card/feedback-tab])
                [input-form-or-disabled-alert])]]
            motion/card-fade-in-time])))))
 

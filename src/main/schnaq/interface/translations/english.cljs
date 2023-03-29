@@ -150,6 +150,7 @@
    :schnaq.input-type/poll "Poll"
    :schnaq.input-type/activation "Activation"
    :schnaq.input-type/word-cloud "Word Cloud"
+   :schnaq.input-type/feedback "Feedback"
    :schnaq.input-type/pro-only "Only for pro users"
 
    ;; Poll feature
@@ -205,6 +206,16 @@
    :schnaq.wordcloud.local/delete-confirmation "Do you really want to delete the wordcloud permanently?"
    :schnaq.wordcloud/download "Download Word Cloud"
    :schnaq.wordcloud/no-words-yet "There are no words in the word cloud yet. Why don't you start with your first thoughts?"
+
+   ;; feedback
+   :schnaq.feedback.create/text "Text"
+   :schnaq.feedback.create/rating "Rating"
+   :schnaq.feedback.create/which-type "How to respond?"
+   :feedback.create/add-button "Add"
+   :feedback.create/remove-button "Remove"
+   :feedback.create/placeholder-text "What do you want to ask your participants?"
+   :feedback.create/placeholder-scale-5 "What do you want your participants to evaluate?"
+   :feedback.create/submit-button "Create Feedback"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"

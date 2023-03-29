@@ -41,6 +41,9 @@ Execute it in the schnaq folder and name it datomic-pro, or wherever you desire.
 
 Start the transactor to dev with: `bin/transactor dev-transactor.properties`.
 
+Please note that Java 11 is required to run the transactor.
+Either use a SDK manager or export Java 11 manually: `export JAVA_HOME=$(/PATH/TO/java_home -v11)`.
+
 #### Production
 
 To connect to a database, provide the proper connection string.

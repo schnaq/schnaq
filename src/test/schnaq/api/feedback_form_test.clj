@@ -58,7 +58,8 @@
                               '({:feedback.item/ordinal 1
                                  :feedback.item/label "Was würdest du mir gerne mitteilen?"
                                  :feedback.item/type :feedback.item.type/text}))
-          feedback-id (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          feedback (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion))
+          feedback-id (:db/id feedback)
           item-id (-> (db/fast-pull feedback-id '[*])
                       :feedback/items
                       first
