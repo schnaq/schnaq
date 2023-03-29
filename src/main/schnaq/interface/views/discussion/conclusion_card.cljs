@@ -332,13 +332,14 @@
   (let [selected-option (reagent/atom :question)
         on-click #(reset! selected-option %)
         active-class #(when (= @selected-option %) "active")
-        iconed-heading (fn [icon-key label]
-                         [:<> [icon icon-key "me-1"] (labels label)])]
+        iconed-heading (fn [class icon-key label]
+                         (if (active-class class) [:<> [icon icon-key "me-1"] (labels label)]
+                             [:<> [icon icon-key "mx-2"]]))]
     (fn []
-      (let [poll-tab [:span [iconed-heading :chart-pie :schnaq.input-type/poll]]
-            activation-tab [:span [iconed-heading :magic :schnaq.input-type/activation]]
-            word-cloud-tab [:span [iconed-heading :cloud :schnaq.input-type/word-cloud]]
-            feedback-tab [:span [iconed-heading :feedback :schnaq.input-type/feedback]]
+      (let [poll-tab [:span [iconed-heading :poll :chart-pie :schnaq.input-type/poll]]
+            activation-tab [:span [iconed-heading :activation :magic :schnaq.input-type/activation]]
+            word-cloud-tab [:span [iconed-heading :word-cloud :cloud :schnaq.input-type/word-cloud]]
+            feedback-tab [:span [iconed-heading :feedback :feedback :schnaq.input-type/feedback]]
             pro-user? @(rf/subscribe [:user/pro?])
             moderator? @(rf/subscribe [:user/moderator?])
             read-only? @(rf/subscribe [:schnaq.state/read-only?])
@@ -357,7 +358,7 @@
                    [:button.nav-link {:class (active-class :question)
                                       :role "button"
                                       :on-click #(on-click :question)}
-                    [iconed-heading :info-question :schnaq.input-type/statement]]]
+                    [iconed-heading :question :info-question :schnaq.input-type/statement]]]
                   (if pro-user?
                     [:<>
                      [:li.nav-item
