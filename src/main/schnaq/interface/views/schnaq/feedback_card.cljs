@@ -148,8 +148,7 @@
  (fn [{:keys [db]} [_ feedback-items]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          params {:share-hash share-hash :items feedback-items}]
-     {:db (-> db
-              (assoc-in [:feedback-form :create :temp-items] feedback-items))
+     {:db (assoc-in db [:feedback-form :create :temp-items] feedback-items)
       :fx [(http/xhrio-request db :post "/discussion/feedback/form"
                                [:schnaq.feedback.create/success]
                                params)]})))
@@ -159,8 +158,7 @@
  (fn [{:keys [db]} [_ feedback-items]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          params {:share-hash share-hash :items feedback-items :visible? true}]
-     {:db (-> db
-              (assoc-in [:feedback-form :create :temp-items] feedback-items))
+     {:db (assoc-in db [:feedback-form :create :temp-items] feedback-items)
       :fx [(http/xhrio-request db :put "/discussion/feedback/form"
                                [:schnaq.feedback.create/success]
                                params)]})))
