@@ -12,7 +12,9 @@
 
 (def ^:private FormCheck (oget Form :Check))
 
-(defn- feedback-entry [item-count]
+(defn- feedback-entry
+  "Render a single feedback entry."
+  [item-count]
   (let [radio-name (keyword (str "feedback-item-type-" item-count))
         id-text (str "radio-item-type-text-" item-count)
         id-scale-5 (str "radio-item-type-scale-five-" item-count)
@@ -39,7 +41,9 @@
        :value :scale-five
        :label (labels :schnaq.feedback.create/rating)}]]))
 
-(defn- feedback-tab-entries []
+(defn- feedback-tab-entries
+  "Render all feedback entries."
+  []
   (let [feedback-count @(rf/subscribe [:feedback.create/total-item-count])]
     [:<>
      (for [item-count (range 0 feedback-count)]
@@ -47,7 +51,9 @@
          [feedback-entry item-count]
          {:key (str "feedback-entry-key-" item-count)}))]))
 
-(defn- feedback-tab-add-remove-entry-buttons []
+(defn- feedback-tab-add-remove-entry-buttons
+  "Add and remove buttons for feedback entries."
+  []
   (let [feedback-count @(rf/subscribe [:feedback.create/total-item-count])
         temp-feedback-count @(rf/subscribe [:feedback.create/temp-item-count])]
     [:<>
@@ -108,8 +114,7 @@
  (fn [db [_ order]]
    (let [feedback-items (get-in db [:schnaq :selected :discussion/feedback :feedback/items] [])
          item (nth feedback-items order nil)]
-     (nth feedback-items order nil)
-     (get item :feedback.item/label ""))))
+     (get item :feedback.item/label))))
 
 (rf/reg-sub
  :feedback.create/temp-item-count
