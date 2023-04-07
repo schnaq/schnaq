@@ -110,18 +110,16 @@
 (defn feedback-dropdown-menu
   "Moderator Menu for the feedback card"
   []
-  [dropdown-menu/moderator
-   {:id "feedback-dropdown-id"}
-   ;; TODO correctly trigger the actions
-   [:<>
-    [dropdown-menu/item :bullseye
-     :schnaq.admin.focus/button
-     (fn []
-       (rf/dispatch [:activation/start])
-       (rf/dispatch [:schnaq.moderation.focus.entity/success]))]
-    [dropdown-menu/item :trash
-     :schnaq.activation/delete-button
-     #(rf/dispatch [:activation/delete])]]])
+  (let [feedback-id (:db/id @(rf/subscribe [:feedback/current]))]
+    [dropdown-menu/moderator
+     {:id "feedback-dropdown-id"}
+     [:<>
+      [dropdown-menu/item :bullseye
+       :schnaq.admin.focus/button
+       #(rf/dispatch [:schnaq.moderation.focus/entity feedback-id])]
+      [dropdown-menu/item :trash
+       :feedback.card.dropdown/delete-button
+       #(rf/dispatch [:schnaq.feedback/delete])]]]))
 
 (defn feedback-card
   "Displays the link to the Feedback Form."
@@ -197,6 +195,22 @@
                                [:schnaq.feedback.create/success]
                                params)]})))
 
+;; TODO add button to make Feedback Forms invisible
+(rf/reg-event-fx
+ :schnaq.feedback/delete
+ (fn [{:keys [db]} _]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :delete "/discussion/feedback/form"
+                               [:schnaq.feedback.delete/success]
+                               {:share-hash share-hash})]})))
+
+(rf/reg-event-db
+ :schnaq.feedback.delete/success
+ (fn [db [_ response]]
+   (if (:deleted? response)
+     (update-in db [:schnaq :selected] dissoc :discussion/feedback)
+     db)))
+
 (rf/reg-event-db
  :feedback.create/reset-item-count
  (fn [db _]
@@ -209,6 +223,6 @@
  :schnaq.feedback.create/success
  (fn [{:keys [db]} [_ {:keys [feedback-form-id]}]]
    {:db (-> db
-            (assoc-in [:schnaq :feedback-form :id] feedback-form-id)
+            (assoc-in [:schnaq :selected :discussion/feedback :db/id] feedback-form-id)
             (tools/new-activation-focus feedback-form-id))
     :fx [[:dispatch [:feedback.create/reset-item-count]]]}))

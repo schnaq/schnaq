@@ -219,6 +219,7 @@
    :feedback.card/title "Feedback"
    :feedback.card/primer "Please take some time to submit some feedback."
    :feedback.card/button-text "To Feedback Form"
+   :feedback.card.dropdown/delete-button "Delete"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
