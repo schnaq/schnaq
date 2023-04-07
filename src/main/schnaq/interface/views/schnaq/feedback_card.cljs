@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.schnaq.feedback-card
   (:require ["react-bootstrap/Button" :as Button]
             ["react-bootstrap/Form" :as Form]
+            [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
@@ -8,9 +9,12 @@
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.toolbelt :as tools]))
+            [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
 (def ^:private FormCheck (oget Form :Check))
+(def ^:private default-feedback-background
+  "https://s3.schnaq.com/schnaq-common/background/layered_background_secondary 1.png")
 
 (defn- feedback-entry
   "Render a single feedback entry."
@@ -103,10 +107,40 @@
                   :on-click #(matomo/track-event "Active User" "Action" "Create FeedbackForm")}
        (labels :feedback.create/submit-button)]]]))
 
+(defn feedback-dropdown-menu
+  "Moderator Menu for the feedback card"
+  []
+  [dropdown-menu/moderator
+   {:id "feedback-dropdown-id"}
+   ;; TODO correctly trigger the actions
+   [:<>
+    [dropdown-menu/item :bullseye
+     :schnaq.admin.focus/button
+     (fn []
+       (rf/dispatch [:activation/start])
+       (rf/dispatch [:schnaq.moderation.focus.entity/success]))]
+    [dropdown-menu/item :trash
+     :schnaq.activation/delete-button
+     #(rf/dispatch [:activation/delete])]]])
+
+(defn feedback-card
+  "Displays the link to the Feedback Form."
+  []
+  [:section.activation-card.card-with-background
+   {:style {:background-image (gstring/format "url('%s')" default-feedback-background)}}
+   [:div.mx-4.my-2
+    [:div.d-flex
+     [:h4.pb-2.text-center.mx-auto (labels :feedback.card/title)]
+     [feedback-dropdown-menu]]
+    [:div.text-center
+     [:p.text-center.my-5 (labels :feedback.card/primer)]
+     ;; TODO link the button
+     [:a.btn.btn-lg.btn-primary (labels :feedback.card/button-text)]]]])
+
 (rf/reg-sub
  :feedback/current
  (fn [db _]
-   (get-in db [:schnaq :selected :discussion/feedback] nil)))
+   (get-in db [:schnaq :selected :discussion/feedback])))
 
 (rf/reg-sub
  :feedback.current/item-label

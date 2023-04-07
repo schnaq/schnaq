@@ -219,6 +219,9 @@
    :feedback.create/placeholder-text "Was möchtest du die Teilnehmer:innen fragen?"
    :feedback.create/placeholder-scale-5 "Was sollen deine Teilnehmer:innen bewerten?"
    :feedback.create/submit-button "Feedback erstellen"
+   :feedback.card/title "Feedback"
+   :feedback.card/primer "Bitte nimm dir kurz Zeit, um Feedback abzugeben."
+   :feedback.card/button-text "Zum Feedback"
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"

@@ -121,15 +121,20 @@
   @extend .statement-card;
 }
 
-.blue-card {
-  // Card with blue background
+.card-with-background {
+  // Positions the background correctly
   @extend .overflow-hidden;
   @extend .statement-card;
   @extend .p-3;
-  @extend .text-white;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.blue-card {
+  // Card with blue background
+  @extend .card-with-background;
+  @extend .text-white;
 }
 
 .selection-tab {

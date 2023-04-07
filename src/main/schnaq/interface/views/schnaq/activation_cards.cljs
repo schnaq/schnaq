@@ -3,6 +3,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.views.schnaq.activation :as activation]
+            [schnaq.interface.views.schnaq.feedback-card :as feedback-card]
             [schnaq.interface.views.schnaq.poll :as poll]
             [schnaq.interface.views.schnaq.wordcloud-card :as wordcloud-card]))
 
@@ -65,16 +66,20 @@
         wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])
         focus-local-wordcloud @(rf/subscribe [:schnaq.wordcloud/local activation-focus])
         local-wordclouds (wordcloud-card/wordcloud-list focus-local-wordcloud)
+        feedback-form @(rf/subscribe [:feedback/current])
+        focus-feedback? (and activation-focus (= activation-focus (:db/id feedback-form)))
         activations-seq (cond-> []
                           focus-poll (conj [poll/poll-list-item focus-poll])
                           focus-local-wordcloud (conj [wordcloud-card/local-wordcloud-card focus-local-wordcloud])
                           focus-activation? (conj [activation/activation-card])
                           (and wordcloud? focus-wordcloud?) (conj [wordcloud-card/wordcloud-card])
+                          focus-feedback? (conj [feedback-card/feedback-card])
                           ;; Add non focused elements in order
                           (seq local-wordclouds) ((comp vec concat) local-wordclouds)
                           (seq polls) ((comp vec concat) polls)
                           (and (not focus-activation?) activation) (conj [activation/activation-card])
-                          (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card]))
+                          (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card])
+                          (and feedback-form (not focus-feedback?)) (conj [feedback-card/feedback-card]))
         activations-count (count activations-seq)
         active-index (mod show-index activations-count)]
     (when (and top-level? (seq activations-seq))
