@@ -14,7 +14,9 @@
   (let [{:keys [share-hash items]} (:body parameters)
         new-feedback-id (feedback-db/new-feedback-form! share-hash items)]
     (if new-feedback-id
-      (ok {:feedback-form-id new-feedback-id})
+      (do
+        (ok {:feedback-form-id new-feedback-id})
+        (db/set-activation-focus [:discussion/share-hash share-hash] new-feedback-id))
       (bad-request (at/build-error-body :missing-items "Please provide items for the form")))))
 
 (>defn- update-items

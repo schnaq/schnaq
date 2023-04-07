@@ -28,7 +28,7 @@
     <orderEntry type="library" name="Deps: io.smallrye.config/smallrye-config-common:2.3.0" level="project" />
     <orderEntry type="library" name="Deps: day8.re-frame/test:0.1.5" level="project" />
     <orderEntry type="library" name="Deps: commons-codec:1.15" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/api:0.8.652" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/api:0.8.656" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: amperity/envoy:0.3.3" level="project" />
     <orderEntry type="library" name="Deps: com.bhauman/cljs-test-display:0.1.1" level="project" />
@@ -36,7 +36,7 @@
     <orderEntry type="library" name="Deps: org.apache.tomcat/tomcat-juli:7.0.109" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-compress:1.21" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-devel:1.9.6" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.415" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.437" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.18.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.5" level="project" />
@@ -118,11 +118,11 @@
     <orderEntry type="library" name="Deps: com.cognitect/transit-cljs:0.8.280" level="project" />
     <orderEntry type="library" name="Deps: org.keycloak/keycloak-common:20.0.3" level="project" />
     <orderEntry type="library" name="Deps: com.github.java-json-tools/btf:1.3" level="project" />
-    <orderEntry type="library" name="Deps: org.clojure/google-closure-library:0.0-20211011-0726fdeb" level="project" />
+    <orderEntry type="library" name="Deps: org.clojure/google-closure-library:0.0-20230227-c7c0a541" level="project" />
     <orderEntry type="library" name="Deps: io.aviso/pretty:1.3" level="project" />
     <orderEntry type="library" name="Deps: com.h2database/h2:1.3.171" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-codec-socks:4.1.73.Final" level="project" />
-    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.21.0" level="project" />
+    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.22.9" level="project" />
     <orderEntry type="library" name="Deps: org.apache.johnzon/johnzon-core:0.9.5" level="project" />
     <orderEntry type="library" name="Deps: org.apache.activemq/artemis-commons:2.19.1" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.spec.javax.annotation/jboss-annotations-api_1.3_spec:2.0.1.Final" level="project" />
@@ -145,7 +145,7 @@
     <orderEntry type="library" name="Deps: io.grpc/grpc-context:1.52.1" level="project" />
     <orderEntry type="library" name="Deps: commons-io:2.11.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
-    <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.5.4" level="project" />
+    <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.6.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.namespace:1.3.0" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/tempura:1.3.0" level="project" />
     <orderEntry type="library" name="Deps: com.github.java-json-tools/msg-simple:1.2" level="project" />
@@ -189,7 +189,7 @@
     <orderEntry type="library" name="Deps: com.sun.mail/javax.mail:1.6.2" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/truss:1.8.0" level="project" />
     <orderEntry type="library" name="Deps: org.keycloak/keycloak-adapter-core:20.0.3" level="project" />
-    <orderEntry type="library" name="Deps: org.clojure/google-closure-library-third-party:0.0-20211011-0726fdeb" level="project" />
+    <orderEntry type="library" name="Deps: org.clojure/google-closure-library-third-party:0.0-20230227-c7c0a541" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-annotations:2.14.2" level="project" />
     <orderEntry type="library" name="Deps: talltale:0.5.8" level="project" />
     <orderEntry type="library" name="Deps: hiccup:1.0.5" level="project" />
@@ -265,7 +265,7 @@
     <orderEntry type="library" name="Deps: org.apache.ant/ant:1.10.11" level="project" />
     <orderEntry type="library" name="Deps: crypto-equality:1.0.1" level="project" />
     <orderEntry type="library" name="Deps: funcool/promesa:10.0.594" level="project" />
-    <orderEntry type="library" name="Deps: org.checkerframework/checker-qual:3.30.0" level="project" />
+    <orderEntry type="library" name="Deps: org.checkerframework/checker-qual:3.31.0" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-core:1.52.1" level="project" />
     <orderEntry type="library" name="Deps: org.wildfly.client/wildfly-client-config:1.0.1.Final" level="project" />
     <orderEntry type="library" name="Deps: cljs.java-time:0.1.9" level="project" />
@@ -309,7 +309,7 @@
     <orderEntry type="library" name="Deps: com.google.re2j/re2j:1.6" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.xnio/xnio-api:3.8.0.Final" level="project" />
     <orderEntry type="library" name="Deps: buddy/buddy-sign:3.4.333" level="project" />
-    <orderEntry type="library" name="Deps: com.google.javascript/closure-compiler-unshaded:v20230206" level="project" />
+    <orderEntry type="library" name="Deps: com.google.javascript/closure-compiler-unshaded:v20230228" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/test.check:1.1.1" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-frontend:0.6.0" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider:2.12.6" level="project" />
@@ -343,7 +343,7 @@
     <orderEntry type="library" name="Deps: borkdude/sci.impl.reflector:0.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.sun.mail/jakarta.mail:1.6.5" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.48.v20220622" level="project" />
-    <orderEntry type="library" name="Deps: com.stripe/stripe-java:22.10.0" level="project" />
+    <orderEntry type="library" name="Deps: com.stripe/stripe-java:22.14.0" level="project" />
     <orderEntry type="library" name="Deps: io.opencensus/opencensus-api:0.31.1" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-auth:1.52.1" level="project" />
     <orderEntry type="library" name="Deps: io.smallrye.config/smallrye-config:2.3.0" level="project" />
