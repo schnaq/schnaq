@@ -227,6 +227,10 @@
    :feedback.answer.submit.failure/message "Feedback konnte nicht gesendet werden. Überprüfe deine Internet-Verbindung und versuche es noch einmal."
    :feedback.answer.submit.success/title "Feedback abgesendet"
    :feedback.answer.submit.success/message "Vielen Dank für dein Feedback!"
+   :feedback.answer/title "Feedback für \"%s\""
+   :feedback.answer/title-hint "Das hier gesammelte Feedback ist anonym und kann nur von Moderator:innen eingesehen werden."
+   :feedback.answer.text/placeholder "Feedback…"
+   :feedback.answer.submit/button-text "Feedback absenden"
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"

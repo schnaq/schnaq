@@ -224,6 +224,10 @@
    :feedback.answer.submit.failure/message "Could not send feedback. Please check your connection and try again."
    :feedback.answer.submit.success/title "Feedback submitted"
    :feedback.answer.submit.success/message "Thank you for submitting your feedback!"
+   :feedback.answer/title "Feedback for \"%s\""
+   :feedback.answer/title-hint "The feedback collected here is anonymous and will be shown to the moderator of this schnaq"
+   :feedback.answer.text/placeholder "Feedback…"
+   :feedback.answer.submit/button-text "Submit Feedback"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"

@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.schnaq.feedback-form
   (:require ["react-bootstrap/Button" :as Button]
             ["react-bootstrap/Form" :as Form]
+            [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.translations :refer [labels]]
@@ -13,11 +14,13 @@
 (def ^:private FormCheck (oget Form :Check))
 
 (defn- scale-radio-button
+  "A typical text input for the feedback form."
   [name label]
   [:> FormCheck
    {:inline true :type "radio" :name name :label label :class "scale-radio-button" :id (str name "-" label) :data-value label}])
 
 (defn- scale-input
+  "A scale input with 5 radio buttons."
   [question-ordinal]
   [:div.border.rounded.p-3.text-center
    (for [label (range 1 6)]
@@ -25,18 +28,18 @@
        [scale-radio-button (str "feedback-item-" question-ordinal) (str label)]
        {:key (str "feedback-item-" question-ordinal "-" label)}))])
 
-(defn- feedback-form []
+(defn- feedback-form
+  "A dynamically generated form where the user can answer a few questions for feedback purposes."
+  []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
         feedback (:discussion/feedback current-discussion)
         items (sort-by :feedback.item/ordinal (:feedback/items feedback))]
     ;; TODO on submit send data to backend and set a flag that the user already participated
-    ;; TODO maybe direct them back to the overview
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
      [:div.panel-white.p-4.text-center
-      ;; TODO labelize
-      [:h1 "Feedback"]
-      [:p.text-muted "The feedback collected here is anonymous and will be shown to the moderator of this schnaq"]
+      [:h1 (gstring/format (labels :feedback.answer/title) (:discussion/title current-discussion))]
+      [:p.text-muted (labels :feedback.answer/title-hint)]
       [:div.text-start.centered-form
        [:> Form
         {:on-submit (fn [e]
@@ -49,11 +52,11 @@
             :key (str "feedback-item-" (:feedback.item/ordinal question))}
            [:> FormLabel (:feedback.item/label question)]
            (if (= (:feedback.item/type question) :feedback.item.type/text)
-             [:> FormControl {:placeholder "Feedback…"}]
+             [:> FormControl {:placeholder (labels :feedback.answer.text/placeholder)}]
              ;; Scale
              [scale-input (:feedback.item/ordinal question)])])
         [:div.text-center
-         [:> Button {:variant "primary" :type "submit" :class "mt-4"} "Submit Feedback"]]]]]]))
+         [:> Button {:variant "primary" :type "submit" :class "mt-4"} (labels :feedback.answer.submit/button-text)]]]]]]))
 
 (defn feedback-form-view []
   [feedback-form])
