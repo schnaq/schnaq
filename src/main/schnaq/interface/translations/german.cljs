@@ -210,7 +210,7 @@
    :schnaq.wordcloud/download "Wortwolke herunterladen"
    :schnaq.wordcloud/no-words-yet "Noch sind keine Wörter in der Wortwolke vorhanden. Fang du doch an mit deinen ersten Gedanken"
 
-      ;; feedback
+   ;; feedback
    :schnaq.feedback.create/text "Text"
    :schnaq.feedback.create/rating "Bewertung"
    :schnaq.feedback.create/which-type "Wie soll geantwortet werden?"
@@ -223,6 +223,10 @@
    :feedback.card/primer "Bitte nimm dir kurz Zeit, um Feedback abzugeben."
    :feedback.card/button-text "Zum Feedback"
    :feedback.card.dropdown/delete-button "Löschen"
+   :feedback.answer.submit.failure/title "Verbindungsfehler"
+   :feedback.answer.submit.failure/message "Feedback konnte nicht gesendet werden. Überprüfe deine Internet-Verbindung und versuche es noch einmal."
+   :feedback.answer.submit.success/title "Feedback abgesendet"
+   :feedback.answer.submit.success/message "Vielen Dank für dein Feedback!"
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"

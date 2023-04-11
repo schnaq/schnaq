@@ -1,8 +1,10 @@
 (ns schnaq.interface.views.schnaq.feedback-form
   (:require ["react-bootstrap/Button" :as Button]
             ["react-bootstrap/Form" :as Form]
-            [oops.core :refer [oget]]
+            [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.pages :as pages]))
 
 (def ^:private FormGroup (oget Form :Group))
@@ -10,38 +12,118 @@
 (def ^:private FormLabel (oget Form :Label))
 (def ^:private FormCheck (oget Form :Check))
 
-(defn- scala-radio-button
+(defn- scale-radio-button
   [name label]
   [:> FormCheck
-   {:inline true :type "radio" :name name :label label :class "scala-radio-button" :id (str "feedback-item-id-" label)}])
+   {:inline true :type "radio" :name name :label label :class "scale-radio-button" :id (str name "-" label) :data-value label}])
 
-(defn- scala-input
+(defn- scale-input
   [question-ordinal]
   [:div.border.rounded.p-3.text-center
    (for [label (range 1 6)]
-     [scala-radio-button (str "feedback-item-" question-ordinal) (str label)])])
+     (with-meta
+       [scale-radio-button (str "feedback-item-" question-ordinal) (str label)]
+       {:key (str "feedback-item-" question-ordinal "-" label)}))])
 
 (defn- feedback-form []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
-        feedback (:discussion/feedback current-discussion)]
+        feedback (:discussion/feedback current-discussion)
+        items (sort-by :feedback.item/ordinal (:feedback/items feedback))]
     ;; TODO on submit send data to backend and set a flag that the user already participated
     ;; TODO maybe direct them back to the overview
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
      [:div.panel-white.p-4.text-center
+      ;; TODO labelize
       [:h1 "Feedback"]
       [:p.text-muted "The feedback collected here is anonymous and will be shown to the moderator of this schnaq"]
       [:div.text-start.centered-form
        [:> Form
-        (for [question (sort-by :feedback.item/ordinal (:feedback/items feedback))]
-          [:> FormGroup {:controlId (str "feedback-item-" (:feedback.item/ordinal question)) :class "my-4"}
+        {:on-submit (fn [e]
+                      (.preventDefault e)
+                      (rf/dispatch [:schnaq.feedback/submit (oget e [:target :elements]) items]))}
+        (for [question items]
+          [:> FormGroup
+           {:controlId (str "feedback-item-" (:feedback.item/ordinal question))
+            :class "my-4"
+            :key (str "feedback-item-" (:feedback.item/ordinal question))}
            [:> FormLabel (:feedback.item/label question)]
            (if (= (:feedback.item/type question) :feedback.item.type/text)
              [:> FormControl {:placeholder "Feedback…"}]
-             ;; Scala
-             [scala-input (:feedback.item/ordinal question)])])
+             ;; Scale
+             [scale-input (:feedback.item/ordinal question)])])
         [:div.text-center
          [:> Button {:variant "primary" :type "submit" :class "mt-4"} "Submit Feedback"]]]]]]))
 
 (defn feedback-form-view []
   [feedback-form])
+
+(defn- extract-text
+  "Extracts text from a text input field that was built dynamically for the feedback form."
+  [item form index]
+  (let [raw-answer {:feedback.answer/item (:db/id item)}
+        form-answer (oget+ form (str "feedback-item-" index) [:value])]
+    (when (seq form-answer)
+      (assoc raw-answer :feedback.answer/text form-answer))))
+
+(defn- extract-scale
+  "Extracts a scale answer from a a form input field consisting of multiple radio buttons. Returns nil, when no answer
+  was given."
+  [item form index]
+  (let [raw-answer {:feedback.answer/item (:db/id item)}
+        form-answers (oget+ form (str "feedback-item-" index))
+        checked-answer (when (seq form-answers)
+                         (first (filter #(oget % :checked) form-answers)))]
+    (when checked-answer
+      (assoc raw-answer :feedback.answer/scale-five (js/parseInt (oget checked-answer [:dataset :value]))))))
+
+(defn- extract-answer
+  "Extracts a single answer from the input field. Checks, whether the answer was given or not and removes empty ones."
+  [item form index]
+  (if (= (:feedback.item/type item) :feedback.item.type/text)
+    (extract-text item form index)
+    (extract-scale item form index)))
+
+(rf/reg-event-fx
+ :schnaq.feedback/submit
+ (fn [{:keys [db]} [_ form items]]
+   (let [answers (remove nil? (map-indexed #(extract-answer %2 form (inc %1)) items))
+         share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     (when (seq answers)
+       {:db (assoc-in db [:schnaq :feedback-form :answer :loading] true)
+        :fx [(http/xhrio-request db :post "/discussion/feedback"
+                                 [:schnaq.feedback.submit/success]
+                                 {:share-hash share-hash
+                                  :answers answers}
+                                 [:schnaq.feedback.submit/failure])]}))))
+
+(rf/reg-event-fx
+ :schnaq.feedback.submit/failure
+ (fn [{:keys [db]} [_ _response]]
+   {:db (assoc-in db [:schnaq :feedback-form :answer :loading] false)
+    :fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :feedback.answer.submit.failure/title)
+                                    :body [:<>
+                                           (labels :feedback.answer.submit.failure/message)]
+                                    :context :warning
+                                    :stay-visible? false}]]]}))
+
+
+(rf/reg-event-fx
+ :schnaq.feedback.submit/success
+ (fn [{:keys [db]} [_ _response]]
+   {:db (assoc-in db [:schnaq :feedback-form :answer :loading] false)
+    :fx [[:dispatch [:navigation/navigate :routes.schnaq/start
+                     {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])}]]
+         [:dispatch [:notification/add
+                     #:notification{:title (labels :feedback.answer.submit.success/title)
+                                    :body [:<>
+                                           (labels :feedback.answer.submit.success/message)]
+                                    :context :warning
+                                    :stay-visible? false}]]]}))
+
+(rf/reg-sub
+ ;; TODO use the spinny somewhere
+ :schnaq.feedback.answer/loading?
+ (fn [db _]
+   (get-in db [:schnaq :feedback-form :answer :loading] false)))

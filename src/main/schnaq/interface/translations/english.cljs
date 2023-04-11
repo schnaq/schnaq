@@ -220,6 +220,10 @@
    :feedback.card/primer "Please take some time to submit some feedback."
    :feedback.card/button-text "To Feedback Form"
    :feedback.card.dropdown/delete-button "Delete"
+   :feedback.answer.submit.failure/title "Connection Error"
+   :feedback.answer.submit.failure/message "Could not send feedback. Please check your connection and try again."
+   :feedback.answer.submit.success/title "Feedback submitted"
+   :feedback.answer.submit.success/message "Thank you for submitting your feedback!"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"

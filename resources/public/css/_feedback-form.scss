@@ -1,11 +1,11 @@
 
-.scala-radio-button input[type="radio"] {
+.scale-radio-button input[type="radio"] {
   opacity: 0;
   position: fixed;
   width: 0;
 }
 
-.scala-radio-button label {
+.scale-radio-button label {
   display: inline-block;
   background-color: #ddd;
   padding: 10px 20px;
@@ -15,19 +15,19 @@
   border-radius: 4px;
 }
 
-.scala-radio-button-highlight {
+.scale-radio-button-highlight {
   background-color: #bfb;
   border-color: #4c4;
 }
 
-.scala-radio-button input[type="radio"]:checked + label {
-  @extend .scala-radio-button-highlight;
+.scale-radio-button input[type="radio"]:checked + label {
+  @extend .scale-radio-button-highlight;
 }
 
-.scala-radio-button input[type="radio"]:checked + label {
-  @extend .scala-radio-button-highlight;
+.scale-radio-button input[type="radio"]:checked + label {
+  @extend .scale-radio-button-highlight;
 }
 
-.scala-radio-button label:hover {
+.scale-radio-button label:hover {
   background-color: #dfd;
 }
