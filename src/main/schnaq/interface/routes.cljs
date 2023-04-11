@@ -210,10 +210,7 @@
      ["/feedback"
       {:name :routes.schnaq/feedback
        :view feedback-form/feedback-form-view
-       :link-text (labels :router/feedback)
-       :controllers [{:start (fn []
-                               ;; TODO load feedback
-                               (rf/dispatch [:schnaq.activation/load-from-backend]))}]}]
+       :link-text (labels :router/feedback)}]
      ["/manage"
       {:name :routes.schnaq/moderation-center
        :view discussion-admin/moderation-center-view

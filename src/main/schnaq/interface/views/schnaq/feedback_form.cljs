@@ -4,8 +4,11 @@
             [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :as localstorage]
+            [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]))
 
 (def ^:private FormGroup (oget Form :Group))
@@ -33,30 +36,42 @@
   []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
         feedback (:discussion/feedback current-discussion)
-        items (sort-by :feedback.item/ordinal (:feedback/items feedback))]
+        items (sort-by :feedback.item/ordinal (:feedback/items feedback))
+        loading? @(rf/subscribe [:schnaq.feedback.answer/loading?])
+        user-participated? (contains? (localstorage/from-localstorage :discussion/feedbacks) (:db/id current-discussion))]
     ;; TODO on submit send data to backend and set a flag that the user already participated
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
      [:div.panel-white.p-4.text-center
       [:h1 (gstring/format (labels :feedback.answer/title) (:discussion/title current-discussion))]
       [:p.text-muted (labels :feedback.answer/title-hint)]
-      [:div.text-start.centered-form
-       [:> Form
-        {:on-submit (fn [e]
-                      (.preventDefault e)
-                      (rf/dispatch [:schnaq.feedback/submit (oget e [:target :elements]) items]))}
-        (for [question items]
-          [:> FormGroup
-           {:controlId (str "feedback-item-" (:feedback.item/ordinal question))
-            :class "my-4"
-            :key (str "feedback-item-" (:feedback.item/ordinal question))}
-           [:> FormLabel (:feedback.item/label question)]
-           (if (= (:feedback.item/type question) :feedback.item.type/text)
-             [:> FormControl {:placeholder (labels :feedback.answer.text/placeholder)}]
-             ;; Scale
-             [scale-input (:feedback.item/ordinal question)])])
-        [:div.text-center
-         [:> Button {:variant "primary" :type "submit" :class "mt-4"} (labels :feedback.answer.submit/button-text)]]]]]]))
+      (if user-participated?
+        [:div.text-center.centered-form.alert-primary
+         [:h2 (labels :feedback.answer/already-participated)]
+         [:> Button
+          {:variant "primary" :href (navigation/href :schnaq.discussion/overview) :type "submit" :class "mt-4"}
+          (labels :feedback.answer.already-participated/button-text)]]
+        [:div.text-start.centered-form
+         [:> Form
+          {:on-submit (fn [e]
+                        (.preventDefault e)
+                        (when-not (or loading? user-participated?)
+                          (rf/dispatch [:schnaq.feedback/submit (oget e [:target :elements]) items])))}
+          (for [question items]
+            [:> FormGroup
+             {:controlId (str "feedback-item-" (:feedback.item/ordinal question))
+              :class "my-4"
+              :key (str "feedback-item-" (:feedback.item/ordinal question))}
+             [:> FormLabel (:feedback.item/label question)]
+             (if (= (:feedback.item/type question) :feedback.item.type/text)
+               [:> FormControl {:placeholder (labels :feedback.answer.text/placeholder)}]
+               ;; Scale
+               [scale-input (:feedback.item/ordinal question)])])
+          [:div.text-center
+           [:> Button {:variant "primary" :type "submit" :class "mt-4"}
+            (if @(rf/subscribe [:schnaq.feedback.answer/loading?])
+              [loading/spinner-icon]
+              (labels :feedback.answer.submit/button-text))]]]])]]))
 
 (defn feedback-form-view []
   [feedback-form])
@@ -115,18 +130,20 @@
 (rf/reg-event-fx
  :schnaq.feedback.submit/success
  (fn [{:keys [db]} [_ _response]]
-   {:db (assoc-in db [:schnaq :feedback-form :answer :loading] false)
-    :fx [[:dispatch [:navigation/navigate :routes.schnaq/start
-                     {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])}]]
-         [:dispatch [:notification/add
-                     #:notification{:title (labels :feedback.answer.submit.success/title)
-                                    :body [:<>
-                                           (labels :feedback.answer.submit.success/message)]
-                                    :context :warning
-                                    :stay-visible? false}]]]}))
+   (let [old-feedbacks (localstorage/from-localstorage :discussion/feedbacks)
+         share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:db (assoc-in db [:schnaq :feedback-form :answer :loading] false)
+      :fx [[:dispatch [:navigation/navigate :routes.schnaq/start
+                       {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])}]]
+           [:dispatch [:notification/add
+                       #:notification{:title (labels :feedback.answer.submit.success/title)
+                                      :body [:<>
+                                             (labels :feedback.answer.submit.success/message)]
+                                      :context :success
+                                      :stay-visible? false}]]
+           [:localstorage/assoc [:discussion/feedbacks (into #{} (conj old-feedbacks share-hash))]]]})))
 
 (rf/reg-sub
- ;; TODO use the spinny somewhere
  :schnaq.feedback.answer/loading?
  (fn [db _]
    (get-in db [:schnaq :feedback-form :answer :loading] false)))

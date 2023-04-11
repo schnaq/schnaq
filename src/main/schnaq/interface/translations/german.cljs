@@ -231,6 +231,8 @@
    :feedback.answer/title-hint "Das hier gesammelte Feedback ist anonym und kann nur von Moderator:innen eingesehen werden."
    :feedback.answer.text/placeholder "Feedback…"
    :feedback.answer.submit/button-text "Feedback absenden"
+   :feedback.answer/already-participated "Du hast dieses Feedback bereits ausgefüllt. Vielen Dank für deine Teilnahme!"
+   :feedback.answer.already-participated/button-text "Zurück zur Übersicht"
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"

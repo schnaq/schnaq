@@ -228,6 +228,8 @@
    :feedback.answer/title-hint "The feedback collected here is anonymous and will be shown to the moderator of this schnaq"
    :feedback.answer.text/placeholder "Feedback…"
    :feedback.answer.submit/button-text "Submit Feedback"
+   :feedback.answer/already-participated "You already submitted this feedback. Thanks for participating!"
+   :feedback.answer.already-participated/button-text "Back to schnaq overview"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"
