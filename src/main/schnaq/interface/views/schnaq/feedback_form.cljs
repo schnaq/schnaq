@@ -10,19 +10,16 @@
 (def ^:private FormLabel (oget Form :Label))
 (def ^:private FormCheck (oget Form :Check))
 
+(defn- scala-radio-button
+  [name label]
+  [:> FormCheck
+   {:inline true :type "radio" :name name :label label :class "scala-radio-button" :id (str "feedback-item-id-" label)}])
+
 (defn- scala-input
   [question-ordinal]
   [:div.border.rounded.p-3.text-center
-   [:> FormCheck
-    {:inline true :type "radio" :name (str "feedback-item-" question-ordinal) :label "1"}]
-   [:> FormCheck
-    {:inline true :type "radio" :name (str "feedback-item-" question-ordinal) :label "2"}]
-   [:> FormCheck
-    {:inline true :type "radio" :name (str "feedback-item-" question-ordinal) :label "3"}]
-   [:> FormCheck
-    {:inline true :type "radio" :name (str "feedback-item-" question-ordinal) :label "4"}]
-   [:> FormCheck
-    {:inline true :type "radio" :name (str "feedback-item-" question-ordinal) :label "5"}]])
+   (for [label (range 1 6)]
+     [scala-radio-button (str "feedback-item-" question-ordinal) (str label)])])
 
 (defn- feedback-form []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
