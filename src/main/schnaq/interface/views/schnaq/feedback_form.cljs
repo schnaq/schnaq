@@ -20,16 +20,20 @@
   "A typical text input for the feedback form."
   [name label]
   [:> FormCheck
-   {:inline true :type "radio" :name name :label label :class "scale-radio-button" :id (str name "-" label) :data-value label}])
+   {:inline true :type "radio"
+    :name name :label label :className "scale-radio-button position-relative" :id (str name "-" label) :data-value label
+    :style {:z-index 900}}])
 
 (defn- scale-input
   "A scale input with 5 radio buttons."
   [question-ordinal]
   [:div.border.rounded.p-3.text-center
-   (for [label (range 1 6)]
-     (with-meta
-       [scale-radio-button (str "feedback-item-" question-ordinal) (str label)]
-       {:key (str "feedback-item-" question-ordinal "-" label)}))])
+   [:div.d-inline-block.position-relative.bg-transparent.scale-wrapper
+    [:div.scale-gradient]
+    (for [label (range 1 6)]
+      (with-meta
+        [scale-radio-button (str "feedback-item-" question-ordinal) (str label)]
+        {:key (str "feedback-item-" question-ordinal "-" label)}))]])
 
 (defn- feedback-form
   "A dynamically generated form where the user can answer a few questions for feedback purposes."
@@ -42,18 +46,18 @@
                                       (:discussion/share-hash current-discussion))]
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
-     [:div.panel-white.p-4.text-center
+     [:div.p-4.text-center.panel-white.centered-form.mb-5.mt-2
       [:h1 (gstring/format (labels :feedback.answer/title) (:discussion/title current-discussion))]
       [:p.text-muted (labels :feedback.answer/title-hint)]
       (if user-participated?
-        [:div.text-center.centered-form.alert.alert-secondary
+        [:div.text-center.alert.alert-secondary
          [:h4 (labels :feedback.answer/already-participated)]
          [:> Button
           {:variant "primary"
            :href (navigation/href :routes.schnaq/start {:share-hash (:discussion/share-hash current-discussion)})
-           :class "mt-4"}
+           :className "mt-4"}
           (labels :feedback.answer.already-participated/button-text)]]
-        [:div.text-start.centered-form
+        [:div.text-start
          [:> Form
           {:on-submit (fn [e]
                         (.preventDefault e)
@@ -62,7 +66,7 @@
           (for [question items]
             [:> FormGroup
              {:controlId (str "feedback-item-" (:feedback.item/ordinal question))
-              :class "my-4"
+              :className "my-4"
               :key (str "feedback-item-" (:feedback.item/ordinal question))}
              [:> FormLabel (:feedback.item/label question)]
              (if (= (:feedback.item/type question) :feedback.item.type/text)
@@ -70,7 +74,7 @@
                ;; Scale
                [scale-input (:feedback.item/ordinal question)])])
           [:div.text-center
-           [:> Button {:variant "primary" :type "submit" :class "mt-4"}
+           [:> Button {:variant "primary" :type "submit" :className "mt-4"}
             (if @(rf/subscribe [:schnaq.feedback.answer/loading?])
               [loading/spinner-icon]
               (labels :feedback.answer.submit/button-text))]]]])]]))
