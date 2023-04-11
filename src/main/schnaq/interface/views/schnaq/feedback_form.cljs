@@ -38,18 +38,20 @@
         feedback (:discussion/feedback current-discussion)
         items (sort-by :feedback.item/ordinal (:feedback/items feedback))
         loading? @(rf/subscribe [:schnaq.feedback.answer/loading?])
-        user-participated? (contains? (localstorage/from-localstorage :discussion/feedbacks) (:db/id current-discussion))]
-    ;; TODO on submit send data to backend and set a flag that the user already participated
+        user-participated? (contains? (localstorage/from-localstorage :discussion/feedbacks)
+                                      (:discussion/share-hash current-discussion))]
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
      [:div.panel-white.p-4.text-center
       [:h1 (gstring/format (labels :feedback.answer/title) (:discussion/title current-discussion))]
       [:p.text-muted (labels :feedback.answer/title-hint)]
       (if user-participated?
-        [:div.text-center.centered-form.alert-primary
-         [:h2 (labels :feedback.answer/already-participated)]
+        [:div.text-center.centered-form.alert.alert-secondary
+         [:h4 (labels :feedback.answer/already-participated)]
          [:> Button
-          {:variant "primary" :href (navigation/href :schnaq.discussion/overview) :type "submit" :class "mt-4"}
+          {:variant "primary"
+           :href (navigation/href :routes.schnaq/start {:share-hash (:discussion/share-hash current-discussion)})
+           :class "mt-4"}
           (labels :feedback.answer.already-participated/button-text)]]
         [:div.text-start.centered-form
          [:> Form
