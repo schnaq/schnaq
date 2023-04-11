@@ -234,6 +234,10 @@
    :feedback.answer.submit/button-text "Feedback absenden"
    :feedback.answer/already-participated "Du hast dieses Feedback bereits ausgefüllt. Vielen Dank für deine Teilnahme!"
    :feedback.answer.already-participated/button-text "Zurück zur Übersicht"
+   :feedback.answer.results.scale/value "Wert"
+   :feedback.answer.results.scale/result "Ergebnis"
+   :feedback.answer.results.scale/average "Durchschnitt"
+   :feedback.answer.results.scale/median "Median"
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"

@@ -231,6 +231,10 @@
    :feedback.answer.submit/button-text "Submit Feedback"
    :feedback.answer/already-participated "You already submitted this feedback. Thanks for participating!"
    :feedback.answer.already-participated/button-text "Back to schnaq overview"
+   :feedback.answer.results.scale/value "Value"
+   :feedback.answer.results.scale/result "Result"
+   :feedback.answer.results.scale/average "Average"
+   :feedback.answer.results.scale/median "Median"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"

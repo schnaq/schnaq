@@ -208,9 +208,10 @@
                                (rf/dispatch [:scheduler.after/login [:wordcloud/for-current-discussion]])
                                (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
      ["/feedback"
-      {:name :routes.schnaq/feedback
-       :view feedback-form/feedback-form-view
-       :link-text (labels :router/feedback)}
+      [""
+       {:name :routes.schnaq/feedback
+        :view feedback-form/feedback-form-view
+        :link-text (labels :router/feedback)}]
       ["/results"
        {:name :routes.schnaq.feedback/results
         :view feedback-form/feedback-form-results

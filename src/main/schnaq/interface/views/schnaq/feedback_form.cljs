@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.schnaq.feedback-form
   (:require ["react-bootstrap/Button" :as Button]
             ["react-bootstrap/Form" :as Form]
+            ["react-bootstrap/Table" :as Table]
             [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
@@ -8,7 +9,6 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :as localstorage]
-            [schnaq.interface.user :as user]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]))
 
@@ -80,49 +80,67 @@
               [loading/spinner-icon]
               (labels :feedback.answer.submit/button-text))]]]])]]))
 
+(defn- text-results
+  "Display the results of the free form feedback field"
+  [question results]
+  (let [fitting-results (filter #(= (:db/id question) (:feedback.answer/item %)) results)]
+    (if (empty? fitting-results)
+      [:ul [:li "–"]]
+      [:ul
+       (for [answer fitting-results]
+         [:li {:key (str "text-result-" (:db/id answer))} (:feedback.answer/text answer)])])))
+
+(defn- scale-results
+  "Display the results of the scale rating feedback field"
+  [question results]
+  (let [fitting-results (filter #(= (:db/id question) (:feedback.answer/item %)) results)
+        grouped-results (group-by :feedback.answer/scale-five fitting-results)
+        rating-values (sort (map :feedback.answer/scale-five fitting-results))
+        average (when (seq fitting-results)
+                  (/ (reduce + rating-values)
+                     (count fitting-results)))
+        median (when (seq fitting-results) (nth rating-values (int (/ (count rating-values) 2))))]
+    (if (empty? fitting-results)
+      [:p "–"]
+      [:> Table {:striped true :hover true :bordered true :size "sm"}
+       [:thead
+        [:tr
+         [:th (labels :feedback.answer.results.scale/value)]
+         [:th (labels :feedback.answer.results.scale/result)]]]
+       [:tbody
+        (for [answer grouped-results]
+          [:tr {:key (str "text-result-" (:db/id question))}
+           [:td (first answer)]
+           [:td (count (second answer))]])
+        [:tr
+         [:td (labels :feedback.answer.results.scale/average)]
+         [:td (or average "–")]]
+        [:tr
+         [:td (labels :feedback.answer.results.scale/median)]
+         [:td (or median "–")]]]])))
+
 (defn feedback-form-results
   "Display the results of the feedback form for moderators."
   []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
         feedback (:discussion/feedback current-discussion)
         items (sort-by :feedback.item/ordinal (:feedback/items feedback))
-        loading? @(rf/subscribe [:schnaq.feedback.answer/loading?])
-        user-participated? (contains? (localstorage/from-localstorage :discussion/feedbacks)
-                                      (:discussion/share-hash current-discussion))]
+        results @(rf/subscribe [:feedback/results])]
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
      [:div.p-4.text-center.panel-white.centered-form.mb-5.mt-2
       [:h1 (gstring/format (labels :feedback.answer/title) (:discussion/title current-discussion))]
-      [:p.text-muted (labels :feedback.answer/title-hint)]
-      (if user-participated?
-        [:div.text-center.alert.alert-secondary
-         [:h4 (labels :feedback.answer/already-participated)]
-         [:> Button
-          {:variant "primary"
-           :href (navigation/href :routes.schnaq/start {:share-hash (:discussion/share-hash current-discussion)})
-           :className "mt-4"}
-          (labels :feedback.answer.already-participated/button-text)]]
-        [:div.text-start
-         [:> Form
-          {:on-submit (fn [e]
-                        (.preventDefault e)
-                        (when-not (or loading? user-participated?)
-                          (rf/dispatch [:schnaq.feedback/submit (oget e [:target :elements]) items])))}
-          (for [question items]
-            [:> FormGroup
-             {:controlId (str "feedback-item-" (:feedback.item/ordinal question))
-              :className "my-4"
-              :key (str "feedback-item-" (:feedback.item/ordinal question))}
-             [:> FormLabel (:feedback.item/label question)]
-             (if (= (:feedback.item/type question) :feedback.item.type/text)
-               [:> FormControl {:placeholder (labels :feedback.answer.text/placeholder)}]
-               ;; Scale
-               [scale-input (:feedback.item/ordinal question)])])
-          [:div.text-center
-           [:> Button {:variant "primary" :type "submit" :className "mt-4"}
-            (if @(rf/subscribe [:schnaq.feedback.answer/loading?])
-              [loading/spinner-icon]
-              (labels :feedback.answer.submit/button-text))]]]])]]))
+      [:div.text-start
+       (for [question items]
+         [:> FormGroup
+          {:controlId (str "feedback-item-" (:feedback.item/ordinal question))
+           :className "my-4"
+           :key (str "feedback-item-" (:feedback.item/ordinal question))}
+          [:> FormLabel {:className "h5"} (:feedback.item/label question)]
+          (if (= (:feedback.item/type question) :feedback.item.type/text)
+            [text-results question results]
+            ;; Scale
+            [scale-results question results])])]]]))
 
 (defn feedback-form-view []
   [feedback-form])
@@ -210,3 +228,8 @@
  :schnaq.feedback.load-moderator-results/success
  (fn [db [_ response]]
    (assoc-in db [:schnaq :feedback-form :results] (get-in response [:feedback-form :feedback/answers]))))
+
+(rf/reg-sub
+ :feedback/results
+ (fn [db _]
+   (get-in db [:schnaq :feedback-form :results])))
