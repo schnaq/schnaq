@@ -14,7 +14,8 @@
     (:db/id
      (db/transact-and-pull-temp
       [{:db/id "new-feedback-form"
-        :feedback/items form-items}
+        :feedback/items form-items
+        :feedback/visible true}
        [:db/add [:discussion/share-hash share-hash] :discussion/feedback "new-feedback-form"]]
       "new-feedback-form"
       [:db/id]))))

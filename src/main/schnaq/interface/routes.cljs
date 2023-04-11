@@ -210,9 +210,14 @@
      ["/feedback"
       {:name :routes.schnaq/feedback
        :view feedback-form/feedback-form-view
-       :link-text (labels :router/feedback)
-       :controllers [{:start (fn [{:keys [path]}]
-                               (rf/dispatch [:schnaq.feedback/load-moderator-results (:share-hash path)]))}]}]
+       :link-text (labels :router/feedback)}
+      ["/results"
+       {:name :routes.schnaq.feedback/results
+        :view feedback-form/feedback-form-results
+        :controllers [{:parameters {:path [:share-hash]}
+                       :start (fn [{:keys [path]}]
+                                (rf/dispatch [:scheduler.after/login
+                                              [:schnaq.feedback/load-moderator-results (:share-hash path)]]))}]}]]
      ["/manage"
       {:name :routes.schnaq/moderation-center
        :view discussion-admin/moderation-center-view

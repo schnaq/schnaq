@@ -134,7 +134,11 @@
     [:div.text-center
      [:p.text-center.my-5 (labels :feedback.card/primer)]
      [:a.btn.btn-lg.btn-primary
-      {:href (navigation/href :routes.schnaq/feedback {:share-hash @(rf/subscribe [:schnaq/share-hash])})}
+      {:href
+       (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+         (if @(rf/subscribe [:user/moderator?])
+           (navigation/href :routes.schnaq.feedback/results {:share-hash share-hash})
+           (navigation/href :routes.schnaq/feedback {:share-hash share-hash})))}
       (if @(rf/subscribe [:user/moderator?])
         (labels :feedback.card/button-text-moderator)
         (labels :feedback.card/button-text))]]]])

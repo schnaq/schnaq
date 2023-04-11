@@ -185,8 +185,8 @@
                                  :opt [:feedback.answer/text :feedback.answer/scale-five]))
 (s/def :feedback/answers (s/coll-of ::feedback-answer))
 (s/def :feedback/visible boolean?)
-(s/def ::feedback-form (s/keys :req [:feedback/items :feedback/visible]
-                               :opt [:feedback/answers]))
+(s/def ::feedback-form (s/keys :req [:feedback/items]
+                               :opt [:feedback/answers :feedback/visible]))
 (s/def :discussion/feedback (s/or :id :db/id
                                   :feedback-form ::feedback-form))
 

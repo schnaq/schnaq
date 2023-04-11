@@ -8,6 +8,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :as localstorage]
+            [schnaq.interface.user :as user]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]))
 
@@ -79,8 +80,8 @@
               [loading/spinner-icon]
               (labels :feedback.answer.submit/button-text))]]]])]]))
 
-(defn- feedback-form-results
-  "A dynamically generated form where the user can answer a few questions for feedback purposes."
+(defn feedback-form-results
+  "Display the results of the feedback form for moderators."
   []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
         feedback (:discussion/feedback current-discussion)
@@ -124,9 +125,7 @@
               (labels :feedback.answer.submit/button-text))]]]])]]))
 
 (defn feedback-form-view []
-  (if @(rf/subscribe [:user/moderator?])
-    [feedback-form-results]
-    [feedback-form]))
+  [feedback-form])
 
 (defn- extract-text
   "Extracts text from a text input field that was built dynamically for the feedback form."
@@ -203,7 +202,7 @@
 (rf/reg-event-fx
  :schnaq.feedback/load-moderator-results
  (fn [{:keys [db]} [_ share-hash]]
-   {:fx [(http/xhrio-request db :get "/discussion/feedback"
+   {:fx [(http/xhrio-request db :get "/discussion/feedback/results"
                              [:schnaq.feedback.load-moderator-results/success]
                              {:share-hash share-hash})]}))
 

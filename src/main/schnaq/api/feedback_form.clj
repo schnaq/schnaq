@@ -41,7 +41,7 @@
   "Returns the current feedback-items for a schnaq. (Do not show answers, this is for the user)."
   [{:keys [parameters]}]
   [:ring/request => :ring/response]
-  (let [{:keys [share-hash]} (:body parameters)]
+  (let [{:keys [share-hash]} (:query parameters)]
     (ok {:feedback-items (feedback-db/feedback-items share-hash)})))
 
 (>defn- answer-feedback
@@ -62,7 +62,7 @@
   "Returns the feedback with answers (and the items embedded in them)."
   [{:keys [parameters]}]
   [:ring/request => :ring/response]
-  (let [{:keys [share-hash]} parameters]
+  (let [{:keys [share-hash]} (:query parameters)]
     (ok {:feedback-form (feedback-db/feedback-form-complete share-hash)})))
 
 (def feedback-form-routes
