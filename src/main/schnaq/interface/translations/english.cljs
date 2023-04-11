@@ -219,6 +219,7 @@
    :feedback.card/title "Feedback"
    :feedback.card/primer "Please take some time to submit some feedback."
    :feedback.card/button-text "To Feedback Form"
+   :feedback.card/button-text-moderator "Show Feedback Results"
    :feedback.card.dropdown/delete-button "Delete"
    :feedback.answer.submit.failure/title "Connection Error"
    :feedback.answer.submit.failure/message "Could not send feedback. Please check your connection and try again."

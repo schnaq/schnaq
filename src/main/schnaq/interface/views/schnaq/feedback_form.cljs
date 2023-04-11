@@ -79,8 +79,54 @@
               [loading/spinner-icon]
               (labels :feedback.answer.submit/button-text))]]]])]]))
 
+(defn- feedback-form-results
+  "A dynamically generated form where the user can answer a few questions for feedback purposes."
+  []
+  (let [current-discussion @(rf/subscribe [:schnaq/selected])
+        feedback (:discussion/feedback current-discussion)
+        items (sort-by :feedback.item/ordinal (:feedback/items feedback))
+        loading? @(rf/subscribe [:schnaq.feedback.answer/loading?])
+        user-participated? (contains? (localstorage/from-localstorage :discussion/feedbacks)
+                                      (:discussion/share-hash current-discussion))]
+    [pages/with-discussion-header
+     {:page/heading (:discussion/title current-discussion)}
+     [:div.p-4.text-center.panel-white.centered-form.mb-5.mt-2
+      [:h1 (gstring/format (labels :feedback.answer/title) (:discussion/title current-discussion))]
+      [:p.text-muted (labels :feedback.answer/title-hint)]
+      (if user-participated?
+        [:div.text-center.alert.alert-secondary
+         [:h4 (labels :feedback.answer/already-participated)]
+         [:> Button
+          {:variant "primary"
+           :href (navigation/href :routes.schnaq/start {:share-hash (:discussion/share-hash current-discussion)})
+           :className "mt-4"}
+          (labels :feedback.answer.already-participated/button-text)]]
+        [:div.text-start
+         [:> Form
+          {:on-submit (fn [e]
+                        (.preventDefault e)
+                        (when-not (or loading? user-participated?)
+                          (rf/dispatch [:schnaq.feedback/submit (oget e [:target :elements]) items])))}
+          (for [question items]
+            [:> FormGroup
+             {:controlId (str "feedback-item-" (:feedback.item/ordinal question))
+              :className "my-4"
+              :key (str "feedback-item-" (:feedback.item/ordinal question))}
+             [:> FormLabel (:feedback.item/label question)]
+             (if (= (:feedback.item/type question) :feedback.item.type/text)
+               [:> FormControl {:placeholder (labels :feedback.answer.text/placeholder)}]
+               ;; Scale
+               [scale-input (:feedback.item/ordinal question)])])
+          [:div.text-center
+           [:> Button {:variant "primary" :type "submit" :className "mt-4"}
+            (if @(rf/subscribe [:schnaq.feedback.answer/loading?])
+              [loading/spinner-icon]
+              (labels :feedback.answer.submit/button-text))]]]])]]))
+
 (defn feedback-form-view []
-  [feedback-form])
+  (if @(rf/subscribe [:user/moderator?])
+    [feedback-form-results]
+    [feedback-form]))
 
 (defn- extract-text
   "Extracts text from a text input field that was built dynamically for the feedback form."
@@ -153,3 +199,15 @@
  :schnaq.feedback.answer/loading?
  (fn [db _]
    (get-in db [:schnaq :feedback-form :answer :loading] false)))
+
+(rf/reg-event-fx
+ :schnaq.feedback/load-moderator-results
+ (fn [{:keys [db]} [_ share-hash]]
+   {:fx [(http/xhrio-request db :get "/discussion/feedback"
+                             [:schnaq.feedback.load-moderator-results/success]
+                             {:share-hash share-hash})]}))
+
+(rf/reg-event-db
+ :schnaq.feedback.load-moderator-results/success
+ (fn [db [_ response]]
+   (assoc-in db [:schnaq :feedback-form :results] (get-in response [:feedback-form :feedback/answers]))))

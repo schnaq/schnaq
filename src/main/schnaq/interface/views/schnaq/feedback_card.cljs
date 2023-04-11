@@ -135,7 +135,9 @@
      [:p.text-center.my-5 (labels :feedback.card/primer)]
      [:a.btn.btn-lg.btn-primary
       {:href (navigation/href :routes.schnaq/feedback {:share-hash @(rf/subscribe [:schnaq/share-hash])})}
-      (labels :feedback.card/button-text)]]]])
+      (if @(rf/subscribe [:user/moderator?])
+        (labels :feedback.card/button-text-moderator)
+        (labels :feedback.card/button-text))]]]])
 
 (rf/reg-sub
  :feedback/current
