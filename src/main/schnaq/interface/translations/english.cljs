@@ -636,6 +636,7 @@
    :router/analytics "Analytics dashboard"
    :router/create-schnaq "Create schnaq"
    :router/dashboard "schnaq dashboard"
+   :router/feedback "Feedback"
    :router/graph-view "Graph view"
    :router/how-to "How do I use schnaq?"
    :router/last-added-schnaq "Last created schnaq"

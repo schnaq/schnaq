@@ -7,6 +7,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.matomo :as matomo]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -132,8 +133,9 @@
      [feedback-dropdown-menu]]
     [:div.text-center
      [:p.text-center.my-5 (labels :feedback.card/primer)]
-     ;; TODO link the button
-     [:a.btn.btn-lg.btn-primary (labels :feedback.card/button-text)]]]])
+     [:a.btn.btn-lg.btn-primary
+      {:href (navigation/href :routes.schnaq/feedback {:share-hash @(rf/subscribe [:schnaq/share-hash])})}
+      (labels :feedback.card/button-text)]]]])
 
 (rf/reg-sub
  :feedback/current
@@ -195,7 +197,6 @@
                                [:schnaq.feedback.create/success]
                                params)]})))
 
-;; TODO add button to make Feedback Forms invisible
 (rf/reg-event-fx
  :schnaq.feedback/delete
  (fn [{:keys [db]} _]

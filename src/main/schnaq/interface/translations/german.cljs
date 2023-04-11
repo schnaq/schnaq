@@ -643,6 +643,8 @@
    :router/all-feedbacks "Alle Feedbacks"
    :router/analytics "Analyse-Dashboard"
    :router/create-schnaq "Schnaq anlegen"
+   :router/dashboard "schnaq dashboard"
+   :router/feedback "Feedback"
    :router/graph-view "Graph View"
    :router/how-to "Wie benutze ich schnaq?"
    :router/last-added-schnaq "Zuletzt angelegter schnaq"
