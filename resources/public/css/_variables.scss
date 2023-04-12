@@ -3,9 +3,9 @@
 $weights: 100, 200, 300, 400, 500, 600, 700;
 @each $thickness in $weights {
   @include poppins.fontFace(
-          $weight: $thickness,
-          $display: fallback,
-          $fontDir: '../node_modules/@fontsource/#{poppins.$fontId}/files'
+    $weight: $thickness,
+    $display: fallback,
+    $fontDir: '../node_modules/@fontsource/#{poppins.$fontId}/files'
   );
 }
 
@@ -51,7 +51,7 @@ $yellow: #f9b756 !default;
 $red: #dc3545 !default;
 $green: #6aedac !default;
 $cyan: #17a2b8 !default;
-$schnaq-gray: #3A3A3A !default;
+$schnaq-gray: #3a3a3a !default;
 
 // Text Colors
 $typography: #001452 !default;
