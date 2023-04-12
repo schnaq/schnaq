@@ -251,10 +251,22 @@
    {:db (-> db
             (assoc-in [:schnaq :selected :discussion/feedback :db/id] feedback-form-id)
             (tools/new-activation-focus feedback-form-id))
-    :fx [[:dispatch [:feedback.create/reset-item-count]]]}))
+    :fx [[:dispatch [:feedback.create/reset-item-count]]
+         [:dispatch [:notification/add
+                     #:notification{:title (labels :feedback.create.success/title)
+                                    :body [:<>
+                                           (labels :feedback.create.success/message)]
+                                    :context :success
+                                    :stay-visible? false}]]]}))
 
 (rf/reg-event-fx
  :schnaq.feedback.update/success
  (fn [{:keys [db]} [_ {:keys [updated-form]}]]
    {:db (assoc-in db [:schnaq :selected :discussion/feedback] updated-form)
-    :fx [[:dispatch [:feedback.create/reset-item-count]]]}))
+    :fx [[:dispatch [:feedback.create/reset-item-count]]
+         [:dispatch [:notification/add
+                     #:notification{:title (labels :feedback.update.success/title)
+                                    :body [:<>
+                                           (labels :feedback.update.success/message)]
+                                    :context :success
+                                    :stay-visible? false}]]]}))
