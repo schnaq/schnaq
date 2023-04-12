@@ -172,7 +172,9 @@
  ;; feedback items when editing in relation to the number of items in the
  ;; current feedback-form.
  (fn [db _]
-   (get-in db [:feedback-form :create :item-count] 1)))
+   ;; If there are no non-temp items report the count  as 1, because at least one input is always shown.
+   (let [current-item-count (count (get-in db [:schnaq :selected :discussion/feedback :feedback/items] []))]
+     (get-in db [:feedback-form :create :item-count] (if (zero? current-item-count) 1 0)))))
 
 (rf/reg-sub
  :feedback.create/total-item-count
@@ -241,19 +243,23 @@
 (rf/reg-event-db
  :feedback.create/reset-item-count
  (fn [db _]
+   (assoc-in db [:feedback-form :create :item-count] 0)))
+
+(rf/reg-event-db
+ :feedback.create/set-temporary-as-items
+ (fn [db _]
    (let [temp-items (get-in db [:feedback-form :create :temp-items])]
-     (-> db
-         (assoc-in [:schnaq :selected :discussion/feedback :feedback/items] temp-items)
-         (assoc-in [:feedback-form :create :item-count] 0)))))
+     (assoc-in db [:schnaq :selected :discussion/feedback :feedback/items] temp-items))))
 
 (rf/reg-event-fx
  :schnaq.feedback.create/success
  (fn [{:keys [db]} [_ {:keys [feedback-form-id]}]]
    {:db (-> db
-            ;; TODO :feedback-form :create :temp-items
             (assoc-in [:schnaq :selected :discussion/feedback :db/id] feedback-form-id)
+            (assoc-in [:schnaq :selected :discussion/feedback :feedback/visible] true)
             (tools/new-activation-focus feedback-form-id))
-    :fx [[:dispatch [:feedback.create/reset-item-count]]
+    :fx [[:dispatch [:feedback.create/set-temporary-as-items]]
+         [:dispatch [:feedback.create/reset-item-count]]
          [:dispatch [:notification/add
                      #:notification{:title (labels :feedback.create.success/title)
                                     :body [:<>

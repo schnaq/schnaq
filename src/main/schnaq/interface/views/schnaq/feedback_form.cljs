@@ -184,7 +184,7 @@
    (let [answers (remove nil? (map-indexed #(extract-answer %2 form (inc %1)) items))
          share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
      (when (seq answers)
-       {:db (assoc-in db [:schnaq :feedback-form :answer :loading] true)
+       {:db (assoc-in db [:schnaq :feedback-form :answer :loading?] true)
         :fx [(http/xhrio-request db :post "/discussion/feedback"
                                  [:schnaq.feedback.submit/success]
                                  {:share-hash share-hash
@@ -194,7 +194,7 @@
 (rf/reg-event-fx
  :schnaq.feedback.submit/failure
  (fn [{:keys [db]} [_ _response]]
-   {:db (assoc-in db [:schnaq :feedback-form :answer :loading] false)
+   {:db (assoc-in db [:schnaq :feedback-form :answer :loading?] false)
     :fx [[:dispatch [:notification/add
                      #:notification{:title (labels :feedback.answer.submit.failure/title)
                                     :body [:<>
@@ -208,7 +208,7 @@
  (fn [{:keys [db]} [_ _response]]
    (let [old-feedbacks (localstorage/from-localstorage :discussion/feedbacks)
          feedback-id (get-in db [:schnaq :selected :discussion/feedback :db/id])]
-     {:db (assoc-in db [:schnaq :feedback-form :answer :loading] false)
+     {:db (assoc-in db [:schnaq :feedback-form :answer :loading?] false)
       :fx [[:dispatch [:navigation/navigate :routes.schnaq/start
                        {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])}]]
            [:dispatch [:notification/add
@@ -222,7 +222,7 @@
 (rf/reg-sub
  :schnaq.feedback.answer/loading?
  (fn [db _]
-   (get-in db [:schnaq :feedback-form :answer :loading] false)))
+   (get-in db [:schnaq :feedback-form :answer :loading?] false)))
 
 (rf/reg-event-fx
  :schnaq.feedback/load-moderator-results
