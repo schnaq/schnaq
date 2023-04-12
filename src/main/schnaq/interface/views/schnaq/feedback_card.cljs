@@ -111,13 +111,16 @@
 (defn feedback-dropdown-menu
   "Moderator Menu for the feedback card"
   []
-  (let [feedback-id (:db/id @(rf/subscribe [:feedback/current]))]
+  (let [{:keys [db/id feedback/visible]} @(rf/subscribe [:feedback/current])]
     [dropdown-menu/moderator
      {:id "feedback-dropdown-id"}
      [:<>
       [dropdown-menu/item :bullseye
        :schnaq.admin.focus/button
-       #(rf/dispatch [:schnaq.moderation.focus/entity feedback-id])]
+       #(rf/dispatch [:schnaq.moderation.focus/entity id])]
+      [dropdown-menu/item (if visible :eye :eye-slash)
+       (if visible :feedback.card.dropdown/make-invisible :feedback.card.dropdown/make-visible)
+       #(rf/dispatch [:schnaq.feedback.update/toggle-visibility])]
       [dropdown-menu/item :trash
        :feedback.card.dropdown/delete-button
        #(rf/dispatch [:schnaq.feedback/delete])]]]))
@@ -125,23 +128,29 @@
 (defn feedback-card
   "Displays the link to the Feedback Form."
   []
-  [:section.activation-card.card-with-background
-   {:style {:background-image (gstring/format "url('%s')" default-feedback-background)}}
-   [:div.mx-4.my-2
-    [:div.d-flex
-     [:h4.pb-2.text-center.mx-auto (labels :feedback.card/title)]
-     [feedback-dropdown-menu]]
-    [:div.text-center
-     [:p.text-center.my-5 (labels :feedback.card/primer)]
-     [:a.btn.btn-lg.btn-primary
-      {:href
-       (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-         (if @(rf/subscribe [:user/moderator?])
-           (navigation/href :routes.schnaq.feedback/results {:share-hash share-hash})
-           (navigation/href :routes.schnaq/feedback {:share-hash share-hash})))}
-      (if @(rf/subscribe [:user/moderator?])
-        (labels :feedback.card/button-text-moderator)
-        (labels :feedback.card/button-text))]]]])
+  (let [user-moderator? @(rf/subscribe [:user/moderator?])]
+    [:section.activation-card.card-with-background
+     {:style {:background-image (gstring/format "url('%s')" default-feedback-background)}}
+     [:div.mx-4.my-2
+      [:div.d-flex
+       [:h4.pb-2.text-center.mx-auto (labels :feedback.card/title)]
+       [feedback-dropdown-menu]]
+      [:div.text-center
+       [:p.text-center.my-5 (labels :feedback.card/primer)]
+       [:a.btn.btn-lg.btn-primary
+        {:href
+         (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+           (if user-moderator?
+             (navigation/href :routes.schnaq.feedback/results {:share-hash share-hash})
+             (navigation/href :routes.schnaq/feedback {:share-hash share-hash})))}
+        (if user-moderator?
+          (labels :feedback.card/button-text-moderator)
+          (labels :feedback.card/button-text))]
+       ;; Only mods see the card when its invisible anyways, so no need for additional mod check.
+       (when-not (:feedback/visible @(rf/subscribe [:feedback/current]))
+         [:div.d-inline-block.alert.alert-primary.mt-5
+          [icon :eye-slash "me-1"]
+          [:span (labels :feedback.card/invisibility-reminder)]])]]]))
 
 (rf/reg-sub
  :feedback/current
@@ -194,14 +203,25 @@
                                params)]})))
 
 (rf/reg-event-fx
+ ;; Update the feedback form with the given feedback-items. If no visibility is provided currently set visibility is used.
  :schnaq.feedback/update
- (fn [{:keys [db]} [_ feedback-items]]
+ (fn [{:keys [db]} [_ feedback-items visible?]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-         params {:share-hash share-hash :items feedback-items :visible? true}]
+         visible? (if (nil? visible?) (get-in db [:schnaq :selected :discussion/feedback :feedback/visible] false) visible?)
+         params {:share-hash share-hash :items feedback-items :visible? (true? visible?)}]
      {:db (assoc-in db [:feedback-form :create :temp-items] feedback-items)
       :fx [(http/xhrio-request db :put "/discussion/feedback/form"
-                               [:schnaq.feedback.create/success]
+                               [:schnaq.feedback.update/success]
                                params)]})))
+;; TODO add button muss immer zweimal gedrückt werden
+;; TODO merke die feedback-id, nicht die discussion-id
+(rf/reg-event-fx
+ ;; Leaves everything as is, just changes visibility to false if currently true and otherwise.
+ :schnaq.feedback.update/toggle-visibility
+ (fn [{:keys [db]} _]
+   (let [current-items (get-in db [:schnaq :selected :discussion/feedback :feedback/items] [])
+         toggled-visibility (not (get-in db [:schnaq :selected :discussion/feedback :feedback/visible] false))]
+     {:fx [[:dispatch [:schnaq.feedback/update current-items toggled-visibility]]]})))
 
 (rf/reg-event-fx
  :schnaq.feedback/delete
@@ -232,4 +252,10 @@
    {:db (-> db
             (assoc-in [:schnaq :selected :discussion/feedback :db/id] feedback-form-id)
             (tools/new-activation-focus feedback-form-id))
+    :fx [[:dispatch [:feedback.create/reset-item-count]]]}))
+
+(rf/reg-event-fx
+ :schnaq.feedback.update/success
+ (fn [{:keys [db]} [_ {:keys [updated-form]}]]
+   {:db (assoc-in db [:schnaq :selected :discussion/feedback] updated-form)
     :fx [[:dispatch [:feedback.create/reset-item-count]]]}))

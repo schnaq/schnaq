@@ -5,6 +5,7 @@
    [schnaq.api.toolbelt :as at]
    [schnaq.database.feedback-form :as feedback-db]
    [schnaq.database.main :as db]
+   [schnaq.database.patterns :as patterns]
    [schnaq.database.specs :as specs]))
 
 (>defn- create-form
@@ -26,7 +27,7 @@
   (let [{:keys [share-hash items visible?]} (:body parameters)
         new-feedback-id (feedback-db/update-feedback-form-items! share-hash items visible?)]
     (if new-feedback-id
-      (ok {:updated-form? true})
+      (ok {:updated-form (db/fast-pull new-feedback-id patterns/feedback-form)})
       (bad-request (at/build-error-body :malformed-update "No feedback created or empty items.")))))
 
 (>defn- delete-feedback
@@ -88,7 +89,7 @@
                                         :items :feedback/items}}}
              :put {:handler update-items
                    :description (at/get-doc #'update-items)
-                   :responses {200 {:body {:updated-form? boolean?}}
+                   :responses {200 {:body {:updated-form :discussion/feedback}}
                                400 at/response-error-body}
                    :parameters {:body {:share-hash :discussion/share-hash
                                        :items :feedback/items

@@ -70,8 +70,11 @@
         share-hash @(rf/subscribe [:schnaq/share-hash])
         user-moderator? @(rf/subscribe [:user/moderator?])
         user-participated-in-feedback? (contains? (localstorage/from-localstorage :discussion/feedbacks) share-hash)
+        current-feedback @(rf/subscribe [:feedback/current])
         ;; Admins always see the feedback-form. The rest only if they have not filled it our yet.
-        feedback-form (when (or user-moderator? (not user-participated-in-feedback?)) @(rf/subscribe [:feedback/current]))
+        feedback-form (when (or user-moderator?
+                                (and (not user-participated-in-feedback?) (:feedback/visible current-feedback)))
+                        current-feedback)
         focus-feedback? (and activation-focus (= activation-focus (:db/id feedback-form)))
         activations-seq (cond-> []
                           focus-poll (conj [poll/poll-list-item focus-poll])

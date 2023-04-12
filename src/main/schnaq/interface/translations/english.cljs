@@ -221,6 +221,8 @@
    :feedback.card/button-text "To Feedback Form"
    :feedback.card/button-text-moderator "Show Feedback Results"
    :feedback.card.dropdown/delete-button "Delete"
+   :feedback.card.dropdown/make-invisible "Hide feedback"
+   :feedback.card.dropdown/make-visible "Make feedback visible"
    :feedback.answer.submit.failure/title "Connection Error"
    :feedback.answer.submit.failure/message "Could not send feedback. Please check your connection and try again."
    :feedback.answer.submit.success/title "Feedback submitted"
@@ -235,6 +237,8 @@
    :feedback.answer.results.scale/result "Result"
    :feedback.answer.results.scale/average "Average"
    :feedback.answer.results.scale/median "Median"
+   :feedback.answer/feedback-invisible "There is currently no feedback session going on. Check back later!"
+   :feedback.card/invisibility-reminder "This feedback is currently invisible to participants."
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"

@@ -50,35 +50,43 @@
      [:div.p-4.text-center.panel-white.centered-form.mb-5.mt-2
       [:h1 (gstring/format (labels :feedback.answer/title) (:discussion/title current-discussion))]
       [:p.text-muted (labels :feedback.answer/title-hint)]
-      (if user-participated?
+      (if (:feedback/visible feedback)
+        (if user-participated?
+          [:div.text-center.alert.alert-secondary
+           [:h4 (labels :feedback.answer/already-participated)]
+           [:> Button
+            {:variant "primary"
+             :href (navigation/href :routes.schnaq/start {:share-hash (:discussion/share-hash current-discussion)})
+             :className "mt-4"}
+            (labels :feedback.answer.already-participated/button-text)]]
+          [:div.text-start
+           [:> Form
+            {:on-submit (fn [e]
+                          (.preventDefault e)
+                          (when-not (or loading? user-participated?)
+                            (rf/dispatch [:schnaq.feedback/submit (oget e [:target :elements]) items])))}
+            (for [question items]
+              [:> FormGroup
+               {:controlId (str "feedback-item-" (:feedback.item/ordinal question))
+                :className "my-4"
+                :key (str "feedback-item-" (:feedback.item/ordinal question))}
+               [:> FormLabel (:feedback.item/label question)]
+               (if (= (:feedback.item/type question) :feedback.item.type/text)
+                 [:> FormControl {:placeholder (labels :feedback.answer.text/placeholder)}]
+                 ;; Scale
+                 [scale-input (:feedback.item/ordinal question)])])
+            [:div.text-center
+             [:> Button {:variant "primary" :type "submit" :className "mt-4"}
+              (if @(rf/subscribe [:schnaq.feedback.answer/loading?])
+                [loading/spinner-icon]
+                (labels :feedback.answer.submit/button-text))]]]])
         [:div.text-center.alert.alert-secondary
-         [:h4 (labels :feedback.answer/already-participated)]
+         [:h4 (labels :feedback.answer/feedback-invisible)]
          [:> Button
           {:variant "primary"
            :href (navigation/href :routes.schnaq/start {:share-hash (:discussion/share-hash current-discussion)})
            :className "mt-4"}
-          (labels :feedback.answer.already-participated/button-text)]]
-        [:div.text-start
-         [:> Form
-          {:on-submit (fn [e]
-                        (.preventDefault e)
-                        (when-not (or loading? user-participated?)
-                          (rf/dispatch [:schnaq.feedback/submit (oget e [:target :elements]) items])))}
-          (for [question items]
-            [:> FormGroup
-             {:controlId (str "feedback-item-" (:feedback.item/ordinal question))
-              :className "my-4"
-              :key (str "feedback-item-" (:feedback.item/ordinal question))}
-             [:> FormLabel (:feedback.item/label question)]
-             (if (= (:feedback.item/type question) :feedback.item.type/text)
-               [:> FormControl {:placeholder (labels :feedback.answer.text/placeholder)}]
-               ;; Scale
-               [scale-input (:feedback.item/ordinal question)])])
-          [:div.text-center
-           [:> Button {:variant "primary" :type "submit" :className "mt-4"}
-            (if @(rf/subscribe [:schnaq.feedback.answer/loading?])
-              [loading/spinner-icon]
-              (labels :feedback.answer.submit/button-text))]]]])]]))
+          (labels :feedback.answer.already-participated/button-text)]])]]))
 
 (defn- text-results
   "Display the results of the free form feedback field"

@@ -224,6 +224,8 @@
    :feedback.card/button-text "Zum Feedback"
    :feedback.card/button-text-moderator "Zeige Feedback Resultate"
    :feedback.card.dropdown/delete-button "Löschen"
+   :feedback.card.dropdown/make-invisible "Feedback verstecken"
+   :feedback.card.dropdown/make-visible "Feedback sichtbar machen"
    :feedback.answer.submit.failure/title "Verbindungsfehler"
    :feedback.answer.submit.failure/message "Feedback konnte nicht gesendet werden. Überprüfe deine Internet-Verbindung und versuche es noch einmal."
    :feedback.answer.submit.success/title "Feedback abgesendet"
@@ -238,6 +240,8 @@
    :feedback.answer.results.scale/result "Ergebnis"
    :feedback.answer.results.scale/average "Durchschnitt"
    :feedback.answer.results.scale/median "Median"
+   :feedback.answer/feedback-invisible "Aktuell wird kein Feedback eingesammelt. Schaue später nochmal vorbei!"
+   :feedback.card/invisibility-reminder "Dieses Feedback ist aktuell nicht sichtbar für die Teilnehmer:innen."
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"
