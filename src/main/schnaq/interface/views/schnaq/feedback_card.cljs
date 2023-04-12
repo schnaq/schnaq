@@ -171,7 +171,7 @@
  ;; feedback items when editing in relation to the number of items in the
  ;; current feedback-form.
  (fn [db _]
-   (get-in db [:feedback-form :create :item-count] 0)))
+   (get-in db [:feedback-form :create :item-count] 1)))
 
 (rf/reg-sub
  :feedback.create/total-item-count
@@ -213,7 +213,7 @@
       :fx [(http/xhrio-request db :put "/discussion/feedback/form"
                                [:schnaq.feedback.update/success]
                                params)]})))
-;; TODO add button muss immer zweimal gedrückt werden
+
 (rf/reg-event-fx
  ;; Leaves everything as is, just changes visibility to false if currently true and otherwise.
  :schnaq.feedback.update/toggle-visibility
