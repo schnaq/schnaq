@@ -10,6 +10,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :as localstorage]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
@@ -249,6 +250,7 @@
  :schnaq.feedback.create/success
  (fn [{:keys [db]} [_ {:keys [feedback-form-id]}]]
    {:db (-> db
+            ;; TODO :feedback-form :create :temp-items
             (assoc-in [:schnaq :selected :discussion/feedback :db/id] feedback-form-id)
             (tools/new-activation-focus feedback-form-id))
     :fx [[:dispatch [:feedback.create/reset-item-count]]
@@ -270,3 +272,12 @@
                                            (labels :feedback.update.success/message)]
                                     :context :success
                                     :stay-visible? false}]]]}))
+
+(rf/reg-sub
+ :schnaq.feedback/exists-for-user?
+ :<- [:feedback/current]
+ :<- [:user/moderator?]
+ (fn [[feedback is-moderator?] _]
+   (or is-moderator?
+       (and (not (contains? (localstorage/from-localstorage :discussion/feedbacks) (:db/id feedback)))
+            (:feedback/visible feedback)))))
