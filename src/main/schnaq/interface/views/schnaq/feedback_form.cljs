@@ -43,8 +43,7 @@
         feedback (:discussion/feedback current-discussion)
         items (sort-by :feedback.item/ordinal (:feedback/items feedback))
         loading? @(rf/subscribe [:schnaq.feedback.answer/loading?])
-        user-participated? (contains? (localstorage/from-localstorage :discussion/feedbacks)
-                                      (:discussion/share-hash current-discussion))]
+        user-participated? (contains? (localstorage/from-localstorage :discussion/feedbacks) (:db/id feedback))]
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
      [:div.p-4.text-center.panel-white.centered-form.mb-5.mt-2
@@ -208,7 +207,7 @@
  :schnaq.feedback.submit/success
  (fn [{:keys [db]} [_ _response]]
    (let [old-feedbacks (localstorage/from-localstorage :discussion/feedbacks)
-         share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+         feedback-id (get-in db [:schnaq :selected :discussion/feedback :db/id])]
      {:db (assoc-in db [:schnaq :feedback-form :answer :loading] false)
       :fx [[:dispatch [:navigation/navigate :routes.schnaq/start
                        {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])}]]
@@ -218,7 +217,7 @@
                                              (labels :feedback.answer.submit.success/message)]
                                       :context :success
                                       :stay-visible? false}]]
-           [:localstorage/assoc [:discussion/feedbacks (into #{} (conj old-feedbacks share-hash))]]]})))
+           [:localstorage/assoc [:discussion/feedbacks (into #{} (conj old-feedbacks feedback-id))]]]})))
 
 (rf/reg-sub
  :schnaq.feedback.answer/loading?

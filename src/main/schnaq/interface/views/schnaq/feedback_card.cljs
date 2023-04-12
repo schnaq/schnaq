@@ -214,7 +214,6 @@
                                [:schnaq.feedback.update/success]
                                params)]})))
 ;; TODO add button muss immer zweimal gedrückt werden
-;; TODO merke die feedback-id, nicht die discussion-id
 (rf/reg-event-fx
  ;; Leaves everything as is, just changes visibility to false if currently true and otherwise.
  :schnaq.feedback.update/toggle-visibility

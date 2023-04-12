@@ -67,10 +67,9 @@
         wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])
         focus-local-wordcloud @(rf/subscribe [:schnaq.wordcloud/local activation-focus])
         local-wordclouds (wordcloud-card/wordcloud-list focus-local-wordcloud)
-        share-hash @(rf/subscribe [:schnaq/share-hash])
         user-moderator? @(rf/subscribe [:user/moderator?])
-        user-participated-in-feedback? (contains? (localstorage/from-localstorage :discussion/feedbacks) share-hash)
         current-feedback @(rf/subscribe [:feedback/current])
+        user-participated-in-feedback? (contains? (localstorage/from-localstorage :discussion/feedbacks) (:db/id current-feedback))
         ;; Admins always see the feedback-form. The rest only if they have not filled it our yet.
         feedback-form (when (or user-moderator?
                                 (and (not user-participated-in-feedback?) (:feedback/visible current-feedback)))
