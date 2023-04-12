@@ -1,3 +1,5 @@
+@use 'variables' as vars;
+
 
 .scale-radio-button input[type="radio"] {
   opacity: 0;
@@ -6,21 +8,21 @@
 }
 
 .scale-radio-button label {
-  background-color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-  border: 2px solid $schnaq-gray;
-  width: 50px;
-  height: 50px;
-  align-items: center;
   @extend .d-flex;
   @extend .justify-content-center;
   @extend .rounded-circle;
+  align-items: center;
+  background-color: #fff;
+  border: 2px solid vars.$schnaq-gray;
+  font-size: 16px;
+  font-weight: bold;
+  height: 50px;
+  width: 50px;
 }
 
 .scale-radio-button-highlight {
-  background-color: $schnaq-gray;
-  border-color: $schnaq-gray;
+  background-color: vars.$schnaq-gray;
+  border-color: vars.$schnaq-gray;
   color: #fff;
 }
 
@@ -33,18 +35,18 @@
 }
 
 .scale-radio-button label:hover {
-  background-color: $gray-200;
+  background-color: vars.$gray-200;
 }
 
 .scale-gradient {
-  background: linear-gradient(90deg, #F66490 0%, #1292EE 50.81%, #8DEAB1 100%);
-  border: 1px solid #000000;
+  background: linear-gradient(90deg, #f66490 0%, #1292ee 50.81%, #8deab1 100%);
+  border: 1px solid #000;
   height: 20px;
+  left: 10px;
   position: absolute;
   top: 15px;
-  left: 10px;
-  z-index: 1;
   width: 95%;
+  z-index: 1;
 }
 
 .scale-wrapper .form-check-inline:nth-child(2) {
