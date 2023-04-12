@@ -1,5 +1,5 @@
 @use 'variables' as vars;
-
+// stylelint-disable selector-no-qualifying-type
 
 .scale-radio-button input[type="radio"] {
   opacity: 0;
@@ -56,3 +56,4 @@
 .scale-wrapper .form-check-inline:last-child {
   margin-right: 0;
 }
+// stylelint-enable selector-no-qualifying-type
