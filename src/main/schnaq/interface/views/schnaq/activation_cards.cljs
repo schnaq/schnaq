@@ -2,7 +2,9 @@
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.utils.localstorage :as localstorage]
             [schnaq.interface.views.schnaq.activation :as activation]
+            [schnaq.interface.views.schnaq.feedback-card :as feedback-card]
             [schnaq.interface.views.schnaq.poll :as poll]
             [schnaq.interface.views.schnaq.wordcloud-card :as wordcloud-card]))
 
@@ -47,9 +49,10 @@
  :<- [:schnaq.wordcloud/show?]
  :<- [:schnaq/polls]
  :<- [:schnaq.wordclouds/local]
- (fn [[start? activation wordcloud? polls local-wordclouds] _]
+ :<- [:schnaq.feedback/exists-for-user?]
+ (fn [[start? activation wordcloud? polls local-wordclouds feedback-exists?] _]
    (and start?
-        (or wordcloud? (seq polls) (seq local-wordclouds) activation))))
+        (or wordcloud? (seq polls) (seq local-wordclouds) activation feedback-exists?))))
 
 (defn activation-cards
   "A single card containing all activations, which can be switched through."
@@ -65,16 +68,26 @@
         wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])
         focus-local-wordcloud @(rf/subscribe [:schnaq.wordcloud/local activation-focus])
         local-wordclouds (wordcloud-card/wordcloud-list focus-local-wordcloud)
+        user-moderator? @(rf/subscribe [:user/moderator?])
+        current-feedback @(rf/subscribe [:feedback/current])
+        user-participated-in-feedback? (contains? (localstorage/from-localstorage :discussion/feedbacks) (:db/id current-feedback))
+        ;; Admins always see the feedback-form. The rest only if they have not filled it our yet.
+        feedback-form (when (or user-moderator?
+                                (and (not user-participated-in-feedback?) (:feedback/visible current-feedback)))
+                        current-feedback)
+        focus-feedback? (and activation-focus (= activation-focus (:db/id feedback-form)))
         activations-seq (cond-> []
                           focus-poll (conj [poll/poll-list-item focus-poll])
                           focus-local-wordcloud (conj [wordcloud-card/local-wordcloud-card focus-local-wordcloud])
                           focus-activation? (conj [activation/activation-card])
                           (and wordcloud? focus-wordcloud?) (conj [wordcloud-card/wordcloud-card])
+                          focus-feedback? (conj [feedback-card/feedback-card])
                           ;; Add non focused elements in order
                           (seq local-wordclouds) ((comp vec concat) local-wordclouds)
                           (seq polls) ((comp vec concat) polls)
                           (and (not focus-activation?) activation) (conj [activation/activation-card])
-                          (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card]))
+                          (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card])
+                          (and feedback-form (not focus-feedback?)) (conj [feedback-card/feedback-card]))
         activations-count (count activations-seq)
         active-index (mod show-index activations-count)]
     (when (and top-level? (seq activations-seq))

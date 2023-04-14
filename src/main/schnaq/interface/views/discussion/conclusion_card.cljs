@@ -334,7 +334,7 @@
         active-class #(when (= @selected-option %) "active")
         iconed-heading (fn [class icon-key label]
                          (if (active-class class) [:<> [icon icon-key "me-1"] (labels label)]
-                             [:<> [icon icon-key "mx-2"]]))]
+                                                  [:<> [icon icon-key "mx-2"]]))]
     (fn []
       (let [poll-tab [:span [iconed-heading :poll :chart-pie :schnaq.input-type/poll]]
             activation-tab [:span [iconed-heading :activation :magic :schnaq.input-type/activation]]
@@ -454,6 +454,7 @@
         number-of-rows @(rf/subscribe [:ui/setting :num-rows])
         show-call-to-share? (and top-level? access-code
                                  (not (or search? (seq statements))))
+        ;; Need to check if there are any activations to not render an empty card
         activations (when (and (not hide-activations?) @(rf/subscribe [:schnaq/activations?])) [activation-cards/activation-cards])
         mobile? @(rf/subscribe [:dimensions/mobile?])]
     (if schnaq-loading?

@@ -5,6 +5,7 @@
    [schnaq.api.toolbelt :as at]
    [schnaq.database.feedback-form :as feedback-db]
    [schnaq.database.main :as db]
+   [schnaq.database.patterns :as patterns]
    [schnaq.database.specs :as specs]))
 
 (>defn- create-form
@@ -14,7 +15,9 @@
   (let [{:keys [share-hash items]} (:body parameters)
         new-feedback-id (feedback-db/new-feedback-form! share-hash items)]
     (if new-feedback-id
-      (ok {:feedback-form-id new-feedback-id})
+      (do
+        (db/set-activation-focus [:discussion/share-hash share-hash] new-feedback-id)
+        (ok {:feedback-form-id new-feedback-id}))
       (bad-request (at/build-error-body :missing-items "Please provide items for the form")))))
 
 (>defn- update-items
@@ -24,7 +27,7 @@
   (let [{:keys [share-hash items visible?]} (:body parameters)
         new-feedback-id (feedback-db/update-feedback-form-items! share-hash items visible?)]
     (if new-feedback-id
-      (ok {:updated-form? true})
+      (ok {:updated-form (db/fast-pull new-feedback-id patterns/feedback-form)})
       (bad-request (at/build-error-body :malformed-update "No feedback created or empty items.")))))
 
 (>defn- delete-feedback
@@ -39,7 +42,7 @@
   "Returns the current feedback-items for a schnaq. (Do not show answers, this is for the user)."
   [{:keys [parameters]}]
   [:ring/request => :ring/response]
-  (let [{:keys [share-hash]} (:body parameters)]
+  (let [{:keys [share-hash]} (:query parameters)]
     (ok {:feedback-items (feedback-db/feedback-items share-hash)})))
 
 (>defn- answer-feedback
@@ -60,7 +63,7 @@
   "Returns the feedback with answers (and the items embedded in them)."
   [{:keys [parameters]}]
   [:ring/request => :ring/response]
-  (let [{:keys [share-hash]} parameters]
+  (let [{:keys [share-hash]} (:query parameters)]
     (ok {:feedback-form (feedback-db/feedback-form-complete share-hash)})))
 
 (def feedback-form-routes
@@ -86,7 +89,7 @@
                                         :items :feedback/items}}}
              :put {:handler update-items
                    :description (at/get-doc #'update-items)
-                   :responses {200 {:body {:updated-form? boolean?}}
+                   :responses {200 {:body {:updated-form :discussion/feedback}}
                                400 at/response-error-body}
                    :parameters {:body {:share-hash :discussion/share-hash
                                        :items :feedback/items
