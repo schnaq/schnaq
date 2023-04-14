@@ -181,8 +181,7 @@
 
 (s/def :feedback.answer/text ::non-blank-string)
 (s/def :feedback.answer/scale-five (s/and pos-int? #(<= % 5)))
-(s/def ::feedback-answer (s/keys :req [:feedback.answer/item]
-                                 :opt [:feedback.answer/text :feedback.answer/scale-five]))
+(s/def ::feedback-answer (s/keys :opt [:feedback.answer/text :feedback.answer/scale-five :feedback.answer/item :db/id]))
 (s/def :feedback/answers (s/coll-of ::feedback-answer))
 (s/def :feedback/visible boolean?)
 (s/def ::feedback-form (s/keys :req [:feedback/items]
