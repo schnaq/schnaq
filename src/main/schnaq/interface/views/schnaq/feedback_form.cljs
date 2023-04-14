@@ -52,7 +52,7 @@
       (if (:feedback/visible feedback)
         (if user-participated?
           [:div.text-center.alert.alert-secondary
-           [:h4 (labels :feedback.answer/already-participated)]
+           [:p.h6 (labels :feedback.answer/already-participated)]
            [:> Button
             {:variant "primary"
              :href (navigation/href :routes.schnaq/start {:share-hash (:discussion/share-hash current-discussion)})
@@ -201,7 +201,6 @@
                                            (labels :feedback.answer.submit.failure/message)]
                                     :context :warning
                                     :stay-visible? false}]]]}))
-
 
 (rf/reg-event-fx
  :schnaq.feedback.submit/success

@@ -222,7 +222,7 @@
    :feedback.card/title "Feedback"
    :feedback.card/primer "Bitte nimm dir kurz Zeit, um Feedback abzugeben."
    :feedback.card/button-text "Zum Feedback"
-   :feedback.card/button-text-moderator "Zeige Feedback Resultate"
+   :feedback.card/button-text-moderator "Zeige Feedback Ergebnisse"
    :feedback.card.dropdown/delete-button "Löschen"
    :feedback.card.dropdown/make-invisible "Feedback verstecken"
    :feedback.card.dropdown/make-visible "Feedback sichtbar machen"
