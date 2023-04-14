@@ -6,6 +6,7 @@
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -130,28 +131,29 @@
   "Displays the link to the Feedback Form."
   []
   (let [user-moderator? @(rf/subscribe [:user/moderator?])]
-    [:section.activation-card.card-with-background
-     {:style {:background-image (gstring/format "url('%s')" default-feedback-background)}}
-     [:div.mx-4.my-2
-      [:div.d-flex
-       [:h4.pb-2.text-center.mx-auto (labels :feedback.card/title)]
-       [feedback-dropdown-menu]]
-      [:div.text-center
-       [:p.text-center.my-5 (labels :feedback.card/primer)]
-       [:a.btn.btn-lg.btn-primary
-        {:href
-         (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-           (if user-moderator?
-             (navigation/href :routes.schnaq.feedback/results {:share-hash share-hash})
-             (navigation/href :routes.schnaq/feedback {:share-hash share-hash})))}
-        (if user-moderator?
-          (labels :feedback.card/button-text-moderator)
-          (labels :feedback.card/button-text))]
+    [motion/fade-in-and-out
+     [:section.activation-card.card-with-background
+      {:style {:background-image (gstring/format "url('%s')" default-feedback-background)}}
+      [:div.mx-4.my-2
+       [:div.d-flex
+        [:h4.pb-2.text-center.mx-auto (labels :feedback.card/title)]
+        [feedback-dropdown-menu]]
+       [:div.text-center
+        [:p.text-center.my-5 (labels :feedback.card/primer)]
+        [:a.btn.btn-lg.btn-primary
+         {:href
+          (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+            (if user-moderator?
+              (navigation/href :routes.schnaq.feedback/results {:share-hash share-hash})
+              (navigation/href :routes.schnaq/feedback {:share-hash share-hash})))}
+         (if user-moderator?
+           (labels :feedback.card/button-text-moderator)
+           (labels :feedback.card/button-text))]
        ;; Only mods see the card when its invisible anyways, so no need for additional mod check.
-       (when-not (:feedback/visible @(rf/subscribe [:feedback/current]))
-         [:div.d-inline-block.alert.alert-primary.mt-5
-          [icon :eye-slash "me-1"]
-          [:span (labels :feedback.card/invisibility-reminder)]])]]]))
+        (when-not (:feedback/visible @(rf/subscribe [:feedback/current]))
+          [:div.d-inline-block.alert.alert-primary.mt-5
+           [icon :eye-slash "me-1"]
+           [:span (labels :feedback.card/invisibility-reminder)]])]]]]))
 
 (rf/reg-sub
  :feedback/current
