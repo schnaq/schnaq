@@ -126,18 +126,19 @@
          [:td (labels :feedback.answer.results.scale/median)]
          [:td (or median "–")]]]])))
 
-(defn feedback-form-results
+(defn- feedback-form-results
   "Display the results of the feedback form for moderators."
   []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
         feedback (:discussion/feedback current-discussion)
         items (sort-by :feedback.item/ordinal (:feedback/items feedback))
-        results @(rf/subscribe [:feedback/results])]
+        results @(rf/subscribe [:feedback/results])
+        title (gstring/format (labels :feedback.answer/title) (:discussion/title current-discussion))]
     [pages/with-discussion-header
-     {:page/heading (:discussion/title current-discussion)}
-     [:div.p-4.text-center.panel-white.centered-form.mb-5.mt-2
-      [:h1 (gstring/format (labels :feedback.answer/title) (:discussion/title current-discussion))]
-      [:div.text-start
+     {:page/heading title}
+     [:div.p-4.panel-white.centered-form.mb-5.mt-2
+      [:h1.text-center title]
+      [:div
        (for [question items]
          [:> FormGroup
           {:controlId (str "feedback-item-" (:feedback.item/ordinal question))
@@ -148,9 +149,6 @@
             [text-results question results]
             ;; Scale
             [scale-results question results])])]]]))
-
-(defn feedback-form-view []
-  [feedback-form])
 
 (defn- extract-text
   "Extracts text from a text input field that was built dynamically for the feedback form."
@@ -177,6 +175,16 @@
   (if (= (:feedback.item/type item) :feedback.item.type/text)
     (extract-text item form index)
     (extract-scale item form index)))
+
+;; -----------------------------------------------------------------------------
+
+(defn results-view []
+  [feedback-form-results])
+
+(defn feedback-form-view []
+  [feedback-form])
+
+;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
  :schnaq.feedback/submit

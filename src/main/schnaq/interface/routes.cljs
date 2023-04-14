@@ -214,7 +214,7 @@
         :link-text (labels :router/feedback)}]
       ["/results"
        {:name :routes.schnaq.feedback/results
-        :view feedback-form/feedback-form-results
+        :view feedback-form/results-view
         :controllers [{:parameters {:path [:share-hash]}
                        :start (fn [{:keys [path]}]
                                 (rf/dispatch [:scheduler.after/login
