@@ -110,3 +110,10 @@ html {
   white-space: pre-line;
   word-wrap: break-word;
 }
+
+// Create a centered container with a max width.
+.centered-form {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}

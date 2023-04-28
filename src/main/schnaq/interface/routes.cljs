@@ -31,6 +31,7 @@
             [schnaq.interface.views.qa.inputs :as qanda]
             [schnaq.interface.views.registration :as registration]
             [schnaq.interface.views.schnaq.create :as create]
+            [schnaq.interface.views.schnaq.feedback-form :as feedback-form]
             [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.subscription :as subscription-views]
             [schnaq.interface.views.user.edit-account :as edit-account]
@@ -206,6 +207,18 @@
                                (rf/dispatch [:discussion.query.conclusions/starting])
                                (rf/dispatch [:scheduler.after/login [:wordcloud/for-current-discussion]])
                                (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
+     ["/feedback"
+      [""
+       {:name :routes.schnaq/feedback
+        :view feedback-form/feedback-form-view
+        :link-text (labels :router/feedback)}]
+      ["/results"
+       {:name :routes.schnaq.feedback/results
+        :view feedback-form/results-view
+        :controllers [{:parameters {:path [:share-hash]}
+                       :start (fn [{:keys [path]}]
+                                (rf/dispatch [:scheduler.after/login
+                                              [:schnaq.feedback/load-moderator-results (:share-hash path)]]))}]}]]
      ["/manage"
       {:name :routes.schnaq/moderation-center
        :view discussion-admin/moderation-center-view

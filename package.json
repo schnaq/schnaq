@@ -1,5 +1,8 @@
 {
   "scripts": {
+    "css:watch": "sass --watch ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed",
+    "css:minify": "sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed",
+    "css:purge": "yarn purgecss -c purgecss.config.js",
     "watch": "shadow-cljs watch app;",
     "server": "shadow-cljs server;"
   },

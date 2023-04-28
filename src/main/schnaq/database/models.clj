@@ -299,6 +299,11 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "A number of wordclouds that belong to the discussion."}
+   {:db/ident :discussion/feedback
+    :db/isComponent true
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The feedback form component."}
 
    {:db/ident :discussion.mode/qanda
     :db/doc "Q&A mode."}
@@ -480,7 +485,54 @@
    {:db/ident :theme.texts/activation
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "The user's activation message."}])
+    :db/doc "The user's activation message."}
+
+   ;; Anonymous Feedback Forms
+   {:db/ident :feedback/items
+    :db/valueType :db.type/ref
+    :db/isComponent true
+    :db/cardinality :db.cardinality/many
+    :db/doc "A feedback form can have any amount of `feedback.item`s."}
+   {:db/ident :feedback/answers
+    :db/valueType :db.type/ref
+    :db/isComponent true
+    :db/cardinality :db.cardinality/many
+    :db/doc "Submitted answers of the type `feedback.answer`"}
+   {:db/ident :feedback/visible
+    :db/valueType :db.type/boolean
+    :db/cardinality :db.cardinality/one
+    :db/doc "Indicates, whether the feedback can be seen and submitted to by users."}
+
+   {:db/ident :feedback.item/label
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Label identifying the input for the user."}
+   {:db/ident :feedback.item/ordinal
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "Ordinal depicting the position of this item. Starts at one, does not need to be continuous."}
+   {:db/ident :feedback.item/type
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "Denote, which kind of input is expected by the user."}
+
+   {:db/ident :feedback.item.type/text
+    :db/doc "A simple text-input without any special restrictions."}
+   {:db/ident :feedback.item.type/scale-five
+    :db/doc "A typical scale going from 1 to 5."}
+
+   {:db/ident :feedback.answer/item
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The item entity this answer refers to."}
+   {:db/ident :feedback.answer/text
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Present if item is of type `text`. Some string."}
+   {:db/ident :feedback.answer/scale-five
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "Present if item is of type `scale-five`. Some string."}])
 
 #_:clj-kondo/ignore
 (def ^:private no-use-list
