@@ -5,33 +5,106 @@
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.animal-avatars :as animal-avatars]
             [schnaq.interface.components.images :refer [img-path]]))
 
 (def ^:private default-identicon-background-color
   "#fafafa")
+
+(def ^:private animals #{"alligator",
+                         "anteater",
+                         "armadillo",
+                         "auroch",
+                         "axolotl",
+                         "badger",
+                         "bat",
+                         "beaver",
+                         "buffalo",
+                         "camel",
+                         "capybara",
+                         "chameleon",
+                         "cheetah",
+                         "chinchilla",
+                         "chipmunk",
+                         "chupacabra",
+                         "cormorant",
+                         "coyote",
+                         "crow",
+                         "dingo",
+                         "dinosaur",
+                         "dolphin",
+                         "duck",
+                         "elephant",
+                         "ferret",
+                         "fox",
+                         "frog",
+                         "giraffe",
+                         "gopher",
+                         "grizzly",
+                         "hedgehog",
+                         "hippo",
+                         "hyena",
+                         "ibex",
+                         "ifrit",
+                         "iguana",
+                         "jackal",
+                         "kangaroo",
+                         "koala",
+                         "kraken",
+                         "lemur",
+                         "leopard",
+                         "liger",
+                         "llama",
+                         "manatee",
+                         "mink",
+                         "monkey",
+                         "moose",
+                         "narwhal",
+                         "orangutan",
+                         "otter",
+                         "panda",
+                         "penguin",
+                         "platypus",
+                         "pumpkin",
+                         "python",
+                         "quagga",
+                         "rabbit",
+                         "raccoon",
+                         "rhino",
+                         "sheep",
+                         "shrew",
+                         "skunk",
+                         "squirrel",
+                         "tiger",
+                         "turtle",
+                         "walrus",
+                         "wolf",
+                         "wolverine",
+                         "wombat"})
 
 (defn- generate-identicon
   "Generate an identicon. Returns xml-styled SVG."
   ([display-name size]
    (generate-identicon display-name size default-identicon-background-color))
   ([display-name size background-color]
-   (jdenticon/toSvg display-name size (clj->js {:backColor background-color}))))
+   (animal-avatars/generate-animal-avatar display-name size)
+   #_(jdenticon/toSvg display-name size (clj->js {:backColor background-color}))))
 
 (defn- set-fallback-identicon
   "If image loading fails, set an identicon."
   [display-name size]
   (fn [image]
     (oset! image [:target :src]
-           (str "data:image/svg+xml;base64,"
-                (js/btoa (generate-identicon display-name size))))))
+      (str "data:image/svg+xml;base64,"
+           (js/btoa (generate-identicon display-name size))))))
 
 (defn identicon
   "Generate unique identicon component."
   [& {:keys [name size props]}]
-  [:span (merge {:title name
-                 :dangerouslySetInnerHTML
-                 {:__html (generate-identicon name size)}}
-                props)])
+  [:span (generate-identicon name size) #_(merge {:title name
+                                                  :dangerouslySetInnerHTML
+                                                  {:__html (generate-identicon name size)}}
+                                                 props)])
 
 (defn automatic-identicon
   "Generate the identicon without passing a name, just a size. Gets the name from the db"
