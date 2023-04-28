@@ -48,7 +48,7 @@
 (rf/reg-event-fx
  :initialize/schnaq
  (fn [_ _]
-   {:fx [[:dispatch [:username/from-localstorage]]
+   {:fx [[:dispatch [:username/generate-or-load]]
          [:dispatch [:user/init-device-id]]
          [:dispatch [:user.currency/from-localstorage]]
          [:dispatch [:user.tours/from-localstorage]]

@@ -1,5 +1,6 @@
 (ns schnaq.interface.user
-  (:require [clojure.string :as clj-string]
+  (:require ["unique-names-generator" :refer [uniqueNamesGenerator, colors, animals]]
+            [clojure.string :as clj-string]
             [re-frame.core :as rf]
             [schnaq.config.shared :refer [default-anonymous-display-name] :as shared-config]
             [schnaq.interface.auth :as auth]
@@ -9,11 +10,20 @@
             [schnaq.interface.utils.localstorage :refer [from-localstorage]]
             [schnaq.interface.utils.toolbelt :as tools]))
 
+(defn- random-name
+  "Generate a random name for anonymous users."
+  []
+  (uniqueNamesGenerator #js {:dictionaries #js [colors animals]
+                             :separator " "
+                             :style "capital"}))
+
 (rf/reg-event-fx
- :username/from-localstorage
+ :username/generate-or-load
+ ;; Either load a name from localstorage, or if it is a new user generate a random name and set it.
  (fn [_ _]
-   (when-let [username (from-localstorage :username)]
-     {:fx [[:dispatch [:user.name/store username]]]})))
+   (if-let [username (from-localstorage :username)]
+     {:fx [[:dispatch [:user.name/store username]]]}
+     {:fx [[:dispatch [:user/set-display-name (random-name)]]]})))
 
 (rf/reg-event-fx
  :user/init-device-id
