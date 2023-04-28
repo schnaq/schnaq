@@ -1,7 +1,8 @@
 (ns schnaq.interface.components.animal-avatars
   (:require ["react-animals$default" :as Animal]
             [clojure.string :as str]
-            [goog.string :as gstring]))
+            [goog.string :as gstring]
+            [re-frame.core :as rf]))
 
 (def ^:private animals #{"alligator",
                          "anteater",
@@ -129,8 +130,8 @@
 
 (defn generate-animal-avatar
   "Generate an identicon. Returns xml-styled SVG."
-  [display-name size]
-  (let [name-parts (str/split display-name #" ")
+  [& {:keys [name size]}]
+  (let [name-parts (str/split name #" ")
         two-part? (= 2 (count name-parts))
         color-part (str/lower-case (first name-parts))
         animal-part (when two-part? (str/lower-case (second name-parts)))
@@ -141,3 +142,8 @@
     [:> Animal {:size (gstring/format "%spx" size)
                 :name animal
                 :color color}]))
+
+(defn automatic-animal-avatar
+  "Generate the avatar without passing a name, just a size. Gets the name from the db"
+  [& {:keys [size]}]
+  [generate-animal-avatar :name @(rf/subscribe [:user/display-name]) :size size])

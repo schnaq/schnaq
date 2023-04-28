@@ -8,6 +8,7 @@
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.animal-avatars :as animal-avatars]
             [schnaq.interface.components.icons :refer [icon stacked-icon]]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
@@ -189,10 +190,10 @@
         :size icon-size
         :inline? (not vertical?)]
        [:span {:className (when vertical? "d-flex mx-auto")}
-        [common/identicon
-         :props {:className (if vertical? "d-block mx-auto" "me-1")}
-         :name username
-         :size icon-size]])
+        [:span {:className (if vertical? "d-block mx-auto" "me-1")}
+         [animal-avatars/generate-animal-avatar
+          :name username
+          :size icon-size]]])
      [:span.text-nowrap
       (when pro? [icon :star "me-1"])
       (toolbelt/truncate-to-n-chars username 15)]]))

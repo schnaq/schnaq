@@ -11,84 +11,10 @@
 (def ^:private default-identicon-background-color
   "#fafafa")
 
-(def ^:private animals #{"alligator",
-                         "anteater",
-                         "armadillo",
-                         "auroch",
-                         "axolotl",
-                         "badger",
-                         "bat",
-                         "beaver",
-                         "buffalo",
-                         "camel",
-                         "capybara",
-                         "chameleon",
-                         "cheetah",
-                         "chinchilla",
-                         "chipmunk",
-                         "chupacabra",
-                         "cormorant",
-                         "coyote",
-                         "crow",
-                         "dingo",
-                         "dinosaur",
-                         "dolphin",
-                         "duck",
-                         "elephant",
-                         "ferret",
-                         "fox",
-                         "frog",
-                         "giraffe",
-                         "gopher",
-                         "grizzly",
-                         "hedgehog",
-                         "hippo",
-                         "hyena",
-                         "ibex",
-                         "ifrit",
-                         "iguana",
-                         "jackal",
-                         "kangaroo",
-                         "koala",
-                         "kraken",
-                         "lemur",
-                         "leopard",
-                         "liger",
-                         "llama",
-                         "manatee",
-                         "mink",
-                         "monkey",
-                         "moose",
-                         "narwhal",
-                         "orangutan",
-                         "otter",
-                         "panda",
-                         "penguin",
-                         "platypus",
-                         "pumpkin",
-                         "python",
-                         "quagga",
-                         "rabbit",
-                         "raccoon",
-                         "rhino",
-                         "sheep",
-                         "shrew",
-                         "skunk",
-                         "squirrel",
-                         "tiger",
-                         "turtle",
-                         "walrus",
-                         "wolf",
-                         "wolverine",
-                         "wombat"})
-
 (defn- generate-identicon
   "Generate an identicon. Returns xml-styled SVG."
-  ([display-name size]
-   (generate-identicon display-name size default-identicon-background-color))
-  ([display-name size background-color]
-   (animal-avatars/generate-animal-avatar display-name size)
-   #_(jdenticon/toSvg display-name size (clj->js {:backColor background-color}))))
+  [display-name size]
+  (jdenticon/toSvg display-name size (clj->js {:backColor default-identicon-background-color})))
 
 (defn- set-fallback-identicon
   "If image loading fails, set an identicon."
@@ -97,19 +23,6 @@
     (oset! image [:target :src]
       (str "data:image/svg+xml;base64,"
            (js/btoa (generate-identicon display-name size))))))
-
-(defn identicon
-  "Generate unique identicon component."
-  [& {:keys [name size props]}]
-  [:span (generate-identicon name size) #_(merge {:title name
-                                                  :dangerouslySetInnerHTML
-                                                  {:__html (generate-identicon name size)}}
-                                                 props)])
-
-(defn automatic-identicon
-  "Generate the identicon without passing a name, just a size. Gets the name from the db"
-  [& {:keys [props size]}]
-  [identicon :props props :name @(rf/subscribe [:user/display-name]) :size size])
 
 (defn avatar
   "Get a user's avatar."
@@ -126,7 +39,7 @@
                  :alt (str "Profile Picture of " display-name)
                  :on-error (set-fallback-identicon display-name size)}
                 props)]]
-       [identicon :name display-name :size size])]))
+       [animal-avatars/generate-animal-avatar :name display-name :size size])]))
 
 (>defn avatar-with-nickname-right
   "Create an image based on the nickname and also print the nickname."
