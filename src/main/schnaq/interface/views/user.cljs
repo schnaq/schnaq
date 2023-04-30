@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.user
   (:require [re-frame.core :as rf]
+            [schnaq.interface.components.animal-avatars :as animal-avatars]
             [schnaq.interface.utils.time :as util-time]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.common :as common]
@@ -36,7 +37,7 @@
   "Returns the current users profile picture and name as a component."
   [avatar-size name-class]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
-        picture-component (if authenticated? common/avatar common/automatic-identicon)]
+        picture-component (if authenticated? common/avatar animal-avatars/automatic-animal-avatar)]
     [:div.d-flex.flex-row
      [:div.d-md-none
       [picture-component :size (.floor js/Math (* avatar-size 0.75))]]

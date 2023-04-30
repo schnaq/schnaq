@@ -5,6 +5,7 @@
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.animal-avatars :as animal-avatars]
             [schnaq.interface.components.images :refer [img-path]]))
 
 (def ^:private default-identicon-background-color
@@ -12,31 +13,16 @@
 
 (defn- generate-identicon
   "Generate an identicon. Returns xml-styled SVG."
-  ([display-name size]
-   (generate-identicon display-name size default-identicon-background-color))
-  ([display-name size background-color]
-   (jdenticon/toSvg display-name size (clj->js {:backColor background-color}))))
+  [display-name size]
+  (jdenticon/toSvg display-name size (clj->js {:backColor default-identicon-background-color})))
 
 (defn- set-fallback-identicon
   "If image loading fails, set an identicon."
   [display-name size]
   (fn [image]
     (oset! image [:target :src]
-           (str "data:image/svg+xml;base64,"
-                (js/btoa (generate-identicon display-name size))))))
-
-(defn identicon
-  "Generate unique identicon component."
-  [& {:keys [name size props]}]
-  [:span (merge {:title name
-                 :dangerouslySetInnerHTML
-                 {:__html (generate-identicon name size)}}
-                props)])
-
-(defn automatic-identicon
-  "Generate the identicon without passing a name, just a size. Gets the name from the db"
-  [& {:keys [props size]}]
-  [identicon :props props :name @(rf/subscribe [:user/display-name]) :size size])
+      (str "data:image/svg+xml;base64,"
+           (js/btoa (generate-identicon display-name size))))))
 
 (defn avatar
   "Get a user's avatar."
@@ -53,7 +39,7 @@
                  :alt (str "Profile Picture of " display-name)
                  :on-error (set-fallback-identicon display-name size)}
                 props)]]
-       [identicon :name display-name :size size])]))
+       [animal-avatars/generate-animal-avatar :name display-name :size size])]))
 
 (>defn avatar-with-nickname-right
   "Create an image based on the nickname and also print the nickname."
