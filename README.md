@@ -25,11 +25,6 @@ include the `dev` alias when starting a REPL, e.g. `clj -M:dev:run-server`.
 ### Database
 
 We are using `datomic pro` as our database, which can be used during development and testing.
-Get a fresh license for datomic pro starter via this URL: https://my.datomic.com/
-
-Then, after registering visit: https://my.datomic.com/account.
-Follow the instructions to set your `~/.m2/settings.xml` server to contain credentials for my.datomic.com.
-You will need to create a new account after one year.
 
 #### Development: Starting the local transactor (for the database)
 

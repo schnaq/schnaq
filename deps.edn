@@ -8,7 +8,7 @@
         com.cognitect.aws/api {:mvn/version "0.8.666"}
         com.cognitect.aws/endpoints {:mvn/version "1.1.12.456"}
         com.cognitect.aws/s3 {:mvn/version "847.2.1365.0"}
-        com.datomic/datomic-pro {:mvn/version "1.0.6397"}
+        com.datomic/peer {:mvn/version "1.0.6726"}
         com.draines/postal {:mvn/version "2.0.5"}
         com.fulcrologic/guardrails {:mvn/version "1.1.11"}
         com.google.guava/guava {:mvn/version "31.1-jre"
@@ -47,8 +47,7 @@
         yogthos/config {:mvn/version "1.2.0"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
-             "clojars" {:url "https://repo.clojars.org/"}
-             "my.datomic.com" {:url "https://my.datomic.com/repo"}}
+             "clojars" {:url "https://repo.clojars.org/"}}
 
  :aliases {:test {:extra-paths ["src/test"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.82.1306"}

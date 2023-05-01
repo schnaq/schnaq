@@ -1,9 +1,5 @@
 on: [push]
 
-env:
-  DATOMIC_REPO_USERNAME: ${{ secrets.DATOMIC_REPO_USERNAME }}
-  DATOMIC_REPO_PASSWORD: ${{ secrets.DATOMIC_REPO_PASSWORD }}
-
 jobs:
   lint:
     runs-on: ubuntu-latest

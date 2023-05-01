@@ -2,13 +2,6 @@ FROM clojure:temurin-17-alpine AS shadow-build
 
 WORKDIR /code
 
-# Cache and install Clojure dependencies
-ARG DATOMIC_REPO_USERNAME
-ENV DATOMIC_REPO_USERNAME=$DATOMIC_REPO_USERNAME
-ARG DATOMIC_REPO_PASSWORD
-ENV DATOMIC_REPO_PASSWORD=$DATOMIC_REPO_PASSWORD
-COPY settings.xml /root/.m2/settings.xml
-
 # ------------------------------------------------------------------------------
 
 ARG REST_API_URL
