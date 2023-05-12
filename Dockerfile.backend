@@ -18,7 +18,7 @@ RUN clojure -X:uberjar
 
 # ------------------------------------------------------------------------------
 
-FROM amazoncorretto:17
+FROM eclipse-temurin:17-jammy
 
 WORKDIR /code
 COPY --from=backend-build /code/target/schnaq-standalone.jar .
