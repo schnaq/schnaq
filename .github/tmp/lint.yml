@@ -1,0 +1,25 @@
+# on: [push]
+
+# jobs:
+#   lint:
+#     runs-on: ubuntu-latest
+#     name: Lint code
+#     steps:
+#       - uses: actions/checkout@v3
+#       - id: setup-clojure
+#         uses: ./.github/actions/setup_clojure
+
+#       - name: Run clj-kondo
+#         run: clj-kondo --lint src/
+
+#   up-to-date-deps:
+#     runs-on: ubuntu-latest
+#     name: Check Clojure deps
+#     continue-on-error: true
+#     steps:
+#       - uses: actions/checkout@v3
+#       - id: setup-clojure
+#         uses: ./.github/actions/setup_clojure
+
+#       - name: Check if deps.edn is up to date
+#         run: clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -M:outdated

@@ -11,9 +11,6 @@ on:
     tags:
       - v*
 
-  # Run tests for any PRs.
-  pull_request:
-
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -22,7 +19,6 @@ jobs:
   # Push image to GitHub Packages.
   docker:
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
 
     steps:
       - uses: actions/checkout@v3
