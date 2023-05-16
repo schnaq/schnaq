@@ -45,7 +45,6 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value=staging,enable=${{ github.ref == 'refs/heads/develop' }}
-            type=raw,value=testing,enable=${{ github.ref == 'refs/heads/migrate/datomic' }}
             type=sha
 
       - name: Build and push Docker images
