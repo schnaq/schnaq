@@ -2,7 +2,7 @@ name: Delete old container images
 
 on:
   schedule:
-    - cron: "*/2 * * * *" # every day at midnight
+    - cron: "0 3 * * *"
 
 jobs:
   clean-ghcr:
