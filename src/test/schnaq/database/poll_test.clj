@@ -125,3 +125,19 @@
         poll (db/poll-from-discussion "cat-dog-hash" poll-id)]
     (testing "Flag to hide poll results can be set."
       (is (:poll/hide-results? poll)))))
+
+(deftest edit-poll-options-test
+  (testing "Check whether editing polls works as expected."
+    (let [share-hash "simple-hash"
+          poll (first (db/polls share-hash))
+          with-vote (first (filter #(= 1 (:option/votes %)) (:poll/options poll)))
+          without-vote (first (filter #(not= 1 (:option/votes %)) (:poll/options poll)))
+          new-poll (db/edit-poll-options share-hash (:db/id poll)
+                                         ["new" "new"]
+                                         [(:db/id with-vote)]
+                                         [{:id (:db/id without-vote) :value "very new"}])]
+      (is (= 3 (count (:poll/options new-poll))))
+      (is (= 2 (count (filter #(= "new" (:option/value %)) (:poll/options new-poll)))))
+      (is (not (first (filter #(= 1 (:option/votes %)) (:poll/options new-poll)))))
+      (is (= 1 (count (filter #(= "very new" (:option/value %)) (:poll/options new-poll)))))
+      (is (= 0 (count (filter #(= "Ohne Vote" (:option/value %)) (:poll/options new-poll))))))))
