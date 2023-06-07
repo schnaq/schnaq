@@ -50,7 +50,7 @@
              "clojars" {:url "https://repo.clojars.org/"}
              "my.datomic.com" {:url "https://my.datomic.com/repo"}}
 
- :aliases {:test {:extra-paths ["src/test"]
+ :aliases {:test {:extra-paths ["src/test" "resources"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.82.1306"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.1.89"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
