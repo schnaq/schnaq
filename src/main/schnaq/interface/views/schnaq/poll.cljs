@@ -274,14 +274,33 @@
      [poll-card poll])
    motion/card-fade-in-time])
 
+(defn poll-edit-card
+  "A card representing a poll being edited."
+  [poll-id]
+  [motion/fade-in-and-out
+   (let [poll-edit-data @(rf/subscribe [:schnaq.polls.edit/poll poll-id])]
+     [:section.statement-card
+      [:div.mx-4.my-2
+       [:div.d-flex
+        [:h6.pb-2.text-center.mx-auto (:poll/title poll-edit-data)]]
+       [:h1 "Edit mode is active."]]])
+   motion/card-fade-in-time])
+
 (>defn poll-list
   "Displays all polls of the current schnaq excluding the one in `exclude`."
   [exclude]
   [:db/id :ret (s/coll-of :re-frame/component)]
-  (for [poll (remove #(= exclude (:db/id %)) @(rf/subscribe [:schnaq/polls]))]
-    [:article
-     {:key (str "poll-card-" (:db/id poll))}
-     [poll-list-item poll]]))
+  (let [polls @(rf/subscribe [:schnaq/polls])
+        ;; Set containing all ids being currently edited by the user.
+        edit-polls @(rf/subscribe [:schnaq.polls.edit/actives])]
+    (for [poll (remove #(= exclude (:db/id %)) polls)]
+      (if (edit-polls (:db/id poll))
+        [:article
+         {:key (str "poll-edit-card-" (:db/id poll))}
+         [poll-edit-card (:db/id poll)]]
+        [:article
+         {:key (str "poll-card-" (:db/id poll))}
+         [poll-list-item poll]]))))
 
 (defn- poll-option
   "Returns a single option component. Can contain a button for removal of said component."
@@ -492,7 +511,18 @@
 (rf/reg-event-db
  :schnaq.poll.edit/activate
  (fn [db [_ poll-id]]
-   (assoc-in db [:schnaq :edit :polls poll-id] {})))
+   (assoc-in db [:schnaq :edit :polls poll-id]
+             (get-in db [:schnaq :polls poll-id] {}))))
+
+(rf/reg-sub
+ :schnaq.polls.edit/actives
+ (fn [db _]
+   (set (map first (get-in db [:schnaq :edit :polls] [])))))
+
+(rf/reg-sub
+ :schnaq.polls.edit/poll
+ (fn [db [_ poll-id]]
+   (get-in db [:schnaq :edit :polls poll-id])))
 
 (rf/reg-event-fx
  :schnaq.poll.hide-results/success
