@@ -136,6 +136,9 @@
       [dropdown-menu/item (if hide-results? :eye :eye-slash)
        (if hide-results? :schnaq.poll/show-results-button :schnaq.poll/hide-results-button)
        #(rf/dispatch [:schnaq.poll/hide-results poll-id (not hide-results?)])]
+      [dropdown-menu/item :pencil
+       :schnaq.poll/edit-button
+       #(rf/dispatch [:schnaq.poll.edit/activate poll-id])]
       [dropdown-menu/item :trash
        :schnaq.poll/delete-button
        #(when (js/confirm (labels :schnaq.poll/delete-confirmation))
@@ -485,6 +488,11 @@
                                {:share-hash share-hash
                                 :poll-id poll-id
                                 :hide-results? hide-results?})]})))
+
+(rf/reg-event-db
+ :schnaq.poll.edit/activate
+ (fn [db [_ poll-id]]
+   (assoc-in db [:schnaq :edit :polls poll-id] {})))
 
 (rf/reg-event-fx
  :schnaq.poll.hide-results/success
