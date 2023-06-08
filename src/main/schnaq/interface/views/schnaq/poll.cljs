@@ -274,16 +274,99 @@
      [poll-card poll])
    motion/card-fade-in-time])
 
+(defn- poll-option
+  "Returns a single option component. Can contain a button for removal of said component."
+  [placeholder rank]
+  [inputs/text placeholder {:id (str "poll-option-" rank)
+                            :required true}])
+
+(defn- edit-poll-option
+  "Return a component with edit button and potentially the possibility to remove it."
+  [option poll-id]
+  ;; TODO i18n
+  [:div.input-group
+   [inputs/text "Option" {:id (str "poll-option-" (:db/id option))
+                          :required true
+                          :defaultValue (or (:option/value option) "")}]
+   [:button.btn.btn-dark.my-1
+    {:type :button
+     ;; TODO was passiert, wenn man eine bestehende option löscht und eine neue mit text dadurch verschwindet?
+     ;; TODO man sollte jedenfalls durch das löschen nicht einfach leere Stellen erzeugen.
+     :on-click #(rf/dispatch [:schnaq.polls.edit/remove-option (:db/id option) poll-id])}
+    [icon :trash]]])
+
+(rf/reg-event-db
+ :schnaq.polls.edit/remove-option
+ (fn [db [_ option-id poll-id]]
+   (update-in db [:schnaq :edit :polls poll-id :poll/options]
+              (fn [options] (remove #(= (:db/id %) option-id) options)))))
+
+(defn- extract-poll-from-form
+  "Extract information from a poll form."
+  [form option-count]
+  (let [poll-type (case (oget form :radio-type-choice :value)
+                    "multiple" :poll.type/multiple-choice
+                    "single" :poll.type/single-choice
+                    "ranking" :poll.type/ranking)
+        options (mapv #(oget+ form (str "edit-poll-option-" %) :value)
+                      (range 1 (inc option-count)))
+        hide-results? (oget form :hide-results? :checked)]
+    {:title (oget form :poll-topic :value)
+     :poll-type poll-type
+     :options options
+     :hide-results? hide-results?}))
+
 (defn poll-edit-card
   "A card representing a poll being edited."
   [poll-id]
   [motion/fade-in-and-out
-   (let [poll-edit-data @(rf/subscribe [:schnaq.polls.edit/poll poll-id])]
+   (let [poll-edit-data @(rf/subscribe [:schnaq.polls.edit/poll poll-id])
+         option-count (or (:option-count poll-edit-data) (dec (count (:poll/options poll-edit-data))))]
      [:section.statement-card
       [:div.mx-4.my-2
-       [:div.d-flex
-        [:h6.pb-2.text-center.mx-auto (:poll/title poll-edit-data)]]
-       [:h1 "Edit mode is active."]]])
+       [:h6.pb-2.text-center.mx-auto "Editing poll"] ;; TODO i18n
+       [:form.pt-2
+        {:on-key-down (fn [event] (when (= "Enter" (oget event :key))
+                                    (.preventDefault event)
+                                    false))
+         ;; TODO
+         :on-submit (fn [event]
+                      (.preventDefault event)
+                      (let [form (oget event [:target :elements])]
+                        (rf/dispatch [:schnaq.poll/create (extract-poll-from-form form option-count)])
+                        (rf/dispatch [:form/should-clear form])))}
+        [:div.mb-3
+         [:p (labels :schnaq.poll.create/topic-label)]
+         [inputs/floating (labels :schnaq.poll.create/placeholder) :poll-topic
+          {:required true :autoFocus true :defaultValue (:poll/title poll-edit-data)}]
+         [:small.form-text.text-muted (labels :schnaq.poll.create/hint)]]
+        [:div.mb-3
+         [:label.form-label (labels :schnaq.poll.create/options-label)]
+         (for [option (:poll/options poll-edit-data)]
+           [edit-poll-option option (:db/id poll-edit-data)])
+         (for [rank (range (count (:poll/options poll-edit-data)) (inc option-count))]
+           (with-meta
+             [poll-option (str (labels :schnaq.poll.create/options-placeholder) " " rank) rank]
+             {:key (str "new-poll-option-key-" rank)}))]
+        [:div.text-center.mb-3
+         [:button.btn.btn-dark.me-2
+          {:type :button
+           :on-click #(rf/dispatch [:polls.edit/set-option-count (:db/id poll-edit-data) (inc option-count)])}
+          [icon :plus] " " (labels :schnaq.poll.create/add-button)]]
+
+        [:section.py-3
+         [inputs/checkbox
+          [:<>
+           (labels :schnaq.poll.create.hide-results/label)
+           [common/info-icon-with-tooltip (labels :schnaq.poll.create.hide-results/info)]]
+          :hide-results?
+          {:defaultChecked (:poll/hide-results? poll-edit-data)}]]
+
+        [:div.text-center.pt-2
+         [:button.btn.btn-primary.w-75
+          {:type "submit"
+           :on-click #(matomo/track-event "Active User" "Action" "Create Poll")}
+          (labels :schnaq.poll.create/submit-button)]]]]])
    motion/card-fade-in-time])
 
 (>defn poll-list
@@ -302,16 +385,15 @@
          {:key (str "poll-card-" (:db/id poll))}
          [poll-list-item poll]]))))
 
-(defn- poll-option
-  "Returns a single option component. Can contain a button for removal of said component."
-  [placeholder rank]
-  [inputs/text placeholder {:id (str "poll-option-" rank)
-                            :required true}])
-
 (rf/reg-event-db
  :polls.create/set-option-count
  (fn [db [_ new-count]]
    (assoc-in db [:poll :create :option-count] new-count)))
+
+(rf/reg-event-db
+ :polls.edit/set-option-count
+ (fn [db [_ poll-id new-count]]
+   (assoc-in db [:schnaq :edit :polls poll-id :option-count] new-count)))
 
 (rf/reg-event-db
  :polls.create/reset-option-count
@@ -322,21 +404,6 @@
  :polls.create/option-count
  (fn [db _]
    (get-in db [:poll :create :option-count] 2)))
-
-(defn- extract-poll-from-form
-  "Extract information from a poll form."
-  [form option-count]
-  (let [poll-type (case (oget form :radio-type-choice :value)
-                    "multiple" :poll.type/multiple-choice
-                    "single" :poll.type/single-choice
-                    "ranking" :poll.type/ranking)
-        options (mapv #(oget+ form (str "poll-option-" %) :value)
-                      (range 1 (inc option-count)))
-        hide-results? (oget form :hide-results? :checked)]
-    {:title (oget form :poll-topic :value)
-     :poll-type poll-type
-     :options options
-     :hide-results? hide-results?}))
 
 (defn poll-form
   "Input form to create a poll with multiple options."
