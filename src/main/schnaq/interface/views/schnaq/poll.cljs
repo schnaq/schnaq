@@ -290,16 +290,16 @@
                           :defaultValue (or (:option/value option) "")}]
    [:button.btn.btn-dark.my-1
     {:type :button
-     ;; TODO was passiert, wenn man eine bestehende option löscht und eine neue mit text dadurch verschwindet?
-     ;; TODO man sollte jedenfalls durch das löschen nicht einfach leere Stellen erzeugen.
      :on-click #(rf/dispatch [:schnaq.polls.edit/remove-option (:db/id option) poll-id])}
     [icon :trash]]])
 
 (rf/reg-event-db
  :schnaq.polls.edit/remove-option
  (fn [db [_ option-id poll-id]]
-   (update-in db [:schnaq :edit :polls poll-id :poll/options]
-              (fn [options] (remove #(= (:db/id %) option-id) options)))))
+   (-> db
+       (update-in [:schnaq :edit :polls poll-id :poll/options]
+                  (fn [options] (remove #(= (:db/id %) option-id) options)))
+       (update-in [:schnaq :edit :polls poll-id :poll/option-count] (fnil dec 0)))))
 
 (defn- extract-poll-from-form
   "Extract information from a poll form."
@@ -321,7 +321,7 @@
   [poll-id]
   [motion/fade-in-and-out
    (let [poll-edit-data @(rf/subscribe [:schnaq.polls.edit/poll poll-id])
-         option-count (or (:option-count poll-edit-data) (dec (count (:poll/options poll-edit-data))))]
+         new-option-count (or (:option-count poll-edit-data) 0)]
      [:section.statement-card
       [:div.mx-4.my-2
        [:h6.pb-2.text-center.mx-auto "Editing poll"] ;; TODO i18n
@@ -333,7 +333,7 @@
          :on-submit (fn [event]
                       (.preventDefault event)
                       (let [form (oget event [:target :elements])]
-                        (rf/dispatch [:schnaq.poll/create (extract-poll-from-form form option-count)])
+                        (rf/dispatch [:schnaq.poll/create (extract-poll-from-form form new-option-count)])
                         (rf/dispatch [:form/should-clear form])))}
         [:div.mb-3
          [:p (labels :schnaq.poll.create/topic-label)]
@@ -341,18 +341,24 @@
           {:required true :autoFocus true :defaultValue (:poll/title poll-edit-data)}]
          [:small.form-text.text-muted (labels :schnaq.poll.create/hint)]]
         [:div.mb-3
-         [:label.form-label (labels :schnaq.poll.create/options-label)]
+         [:label.form-label "Edit Options"]
          (for [option (:poll/options poll-edit-data)]
            [edit-poll-option option (:db/id poll-edit-data)])
-         (for [rank (range (count (:poll/options poll-edit-data)) (inc option-count))]
+         [:label.form-label.mt-3 "Add new Options"]
+         (for [rank (range 1 (inc new-option-count))]
            (with-meta
              [poll-option (str (labels :schnaq.poll.create/options-placeholder) " " rank) rank]
              {:key (str "new-poll-option-key-" rank)}))]
         [:div.text-center.mb-3
          [:button.btn.btn-dark.me-2
           {:type :button
-           :on-click #(rf/dispatch [:polls.edit/set-option-count (:db/id poll-edit-data) (inc option-count)])}
-          [icon :plus] " " (labels :schnaq.poll.create/add-button)]]
+           :on-click #(rf/dispatch [:polls.edit/set-option-count (:db/id poll-edit-data) (inc new-option-count)])}
+          [icon :plus] " " (labels :schnaq.poll.create/add-button)]
+         (when (> new-option-count 0)
+           [:button.btn.btn-dark
+            {:type :button
+             :on-click #(rf/dispatch [:polls.edit/set-option-count (:db/id poll-edit-data) (dec new-option-count)])}
+            [icon :minus] " " (labels :schnaq.poll.create/remove-button)])]
 
         [:section.py-3
          [inputs/checkbox
@@ -365,8 +371,8 @@
         [:div.text-center.pt-2
          [:button.btn.btn-primary.w-75
           {:type "submit"
-           :on-click #(matomo/track-event "Active User" "Action" "Create Poll")}
-          (labels :schnaq.poll.create/submit-button)]]]]])
+           :on-click #(matomo/track-event "Active User" "Action" "Edit Poll")}
+          "Edit Poll"]]]]])
    motion/card-fade-in-time])
 
 (>defn poll-list
