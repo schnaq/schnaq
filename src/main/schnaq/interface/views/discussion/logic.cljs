@@ -185,8 +185,6 @@
  ;; Returns a list of reply ids
  (fn [statements [_ parent-id]]
    (let [parent (get statements parent-id)]
-     (filter #(not-any? #{":check"} (:statement/labels %))
-             (stools/select-values statements (:statement/children parent)))
      (->> (:statement/children parent)
           (stools/select-values statements)
           (filter #(not-any? #{":check"} (:statement/labels %)))
