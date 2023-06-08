@@ -104,7 +104,7 @@
                                     :share-hash :discussion/share-hash
                                     :title :poll/title
                                     :hide-results? :poll/hide-results?
-                                    :edited-options (s/coll-of (s/keys :req-un [::id ::value]))
+                                    :edited-options (s/coll-of (s/keys :req [:db/id :option/value]))
                                     :removed-options (s/coll-of :db/id)
                                     :new-options (s/coll-of ::specs/non-blank-string)}}
                 :responses {200 {:body {:updated-poll ::dto/poll}}

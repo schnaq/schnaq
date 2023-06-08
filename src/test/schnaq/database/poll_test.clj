@@ -126,7 +126,7 @@
     (testing "Flag to hide poll results can be set."
       (is (:poll/hide-results? poll)))))
 
-(deftest edit-poll-options-test
+(deftest edit-poll-test
   (testing "Check whether editing polls works as expected."
     (let [share-hash "simple-hash"
           poll (first (db/polls share-hash))
@@ -135,7 +135,7 @@
           new-poll (db/edit-poll share-hash (:db/id poll) "polly" true
                                  ["new" "new"]
                                  [(:db/id with-vote)]
-                                 [{:id (:db/id without-vote) :value "very new"}])]
+                                 [{:db/id (:db/id without-vote) :option/value "very new"}])]
       (is (= "polly" (:poll/title new-poll)))
       (is (:poll/hide-results? new-poll))
       (is (= 3 (count (:poll/options new-poll))))

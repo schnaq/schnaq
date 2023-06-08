@@ -185,6 +185,14 @@
    :schnaq.poll/delete-button "Löschen"
    :schnaq.ranking/choose-place "Wähle Platz %s"
    :schnaq.rankings/delete-last-choice "Letzte Wahl löschen"
+   :schnaq.poll.edit/failed-title "Umfrage bearbeiten fehlgeschlagen"
+   :schnaq.poll.edit/failed-body "Etwas ist beim Bearbeiten schiefgelaufen. Bitte versuche es noch ein mal."
+   :schnaq.poll.edit/button "Umfrage bearbeiten"
+   :schnaq.poll.edit/cancel-button "Abbrechen"
+   :schnaq.poll.edit/new-options "Neue Optionen hinzufügen"
+   :schnaq.poll.edit/edit-options "Optionen bearbeiten"
+   :schnaq.poll.edit/heading "Umfrage bearbeiten"
+   :schnaq.poll.edit/option-placeholder "Option"
 
    ;; Activation feature
    :schnaq.activation.create/label "Präsentiere deinen Teilnehmer:innen eine Eingabe zur Aktivierung!"

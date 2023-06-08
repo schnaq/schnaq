@@ -44,7 +44,7 @@
   "Allow to remove, add and modify options of a poll."
   [share-hash poll-id title hide-results? new-options removed-options edit-options]
   [:discussion/share-hash :db/id ::specs/non-blank-string boolean? (s/coll-of ::specs/non-blank-string)
-   (s/coll-of :db/id) (s/coll-of (s/keys :req-un [::id ::value])) => (? ::specs/poll)]
+   (s/coll-of :db/id) (s/coll-of (s/keys :req [:db/id :option/value])) => (? ::specs/poll)]
   (when (poll-belongs-to-discussion? share-hash poll-id)
     (let [current-option-ids (set (map :db/id (:poll/options (db/fast-pull poll-id [{:poll/options [:db/id]}]))))
           new-transactions (mapv (fn [option]
@@ -56,10 +56,7 @@
                                  new-transactions)
           remove-transactions (mapv (fn [id] (vector :db/retractEntity id))
                                     (filter #(contains? current-option-ids %) removed-options))
-          edit-transactions (mapv (fn [{:keys [id value]}]
-                                    {:db/id id
-                                     :option/value value})
-                                  (filter #(contains? current-option-ids (:id %)) edit-options))
+          edit-transactions (filter #(contains? current-option-ids (:db/id %)) edit-options)
           concat-tx (concat new-transactions add-transactions remove-transactions edit-transactions
                             [[:db/add poll-id :poll/title title]]
                             [[:db/add poll-id :poll/hide-results? hide-results?]])]

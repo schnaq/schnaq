@@ -283,11 +283,11 @@
 (defn- edit-poll-option
   "Return a component with edit button and potentially the possibility to remove it."
   [option poll-id]
-  ;; TODO i18n
   [:div.input-group
-   [inputs/text "Option" {:id (str "poll-option-" (:db/id option))
-                          :required true
-                          :defaultValue (or (:option/value option) "")}]
+   [inputs/text (labels :schnaq.poll.edit/option-placeholder)
+    {:id (str "edit-poll-option-" (:db/id option))
+     :required true
+     :defaultValue (or (:option/value option) "")}]
    [:button.btn.btn-dark.my-1
     {:type :button
      :on-click #(rf/dispatch [:schnaq.polls.edit/remove-option (:db/id option) poll-id])}
@@ -299,21 +299,39 @@
    (-> db
        (update-in [:schnaq :edit :polls poll-id :poll/options]
                   (fn [options] (remove #(= (:db/id %) option-id) options)))
+       (update-in [:schnaq :edit :polls poll-id :deleted-options] conj option-id)
        (update-in [:schnaq :edit :polls poll-id :poll/option-count] (fnil dec 0)))))
 
-(defn- extract-poll-from-form
+(defn- extract-poll-from-create-form
   "Extract information from a poll form."
   [form option-count]
   (let [poll-type (case (oget form :radio-type-choice :value)
                     "multiple" :poll.type/multiple-choice
                     "single" :poll.type/single-choice
                     "ranking" :poll.type/ranking)
-        options (mapv #(oget+ form (str "edit-poll-option-" %) :value)
+        options (mapv #(oget+ form (str "poll-option-" %) :value)
                       (range 1 (inc option-count)))
         hide-results? (oget form :hide-results? :checked)]
     {:title (oget form :poll-topic :value)
      :poll-type poll-type
      :options options
+     :hide-results? hide-results?}))
+
+(defn- extract-poll-from-edit-form
+  "Extract information from a poll edit form."
+  [form old-option-ids option-count]
+  (let [new-options (mapv #(oget+ form (str "poll-option-" %) :value)
+                          (range 1 (inc option-count)))
+        edit-options (or (->> old-option-ids
+                              (mapv #(vector % (oget+ form (str "?edit-poll-option-" %) :value)))
+                              (remove #(nil? (first %)))
+                              (mapv (fn [tup] {:db/id (first tup)
+                                               :option/value (second tup)})))
+                         [])
+        hide-results? (oget form :hide-results? :checked)]
+    {:title (oget form :poll-topic :value)
+     :new-options (or new-options [])
+     :edited-options edit-options
      :hide-results? hide-results?}))
 
 (defn poll-edit-card
@@ -324,16 +342,20 @@
          new-option-count (or (:option-count poll-edit-data) 0)]
      [:section.statement-card
       [:div.mx-4.my-2
-       [:h6.pb-2.text-center.mx-auto "Editing poll"] ;; TODO i18n
+       [:h6.pb-2.text-center.mx-auto (labels :schnaq.poll.edit/heading)]
        [:form.pt-2
         {:on-key-down (fn [event] (when (= "Enter" (oget event :key))
                                     (.preventDefault event)
                                     false))
-         ;; TODO
          :on-submit (fn [event]
                       (.preventDefault event)
                       (let [form (oget event [:target :elements])]
-                        (rf/dispatch [:schnaq.poll/create (extract-poll-from-form form new-option-count)])
+                        (rf/dispatch [:schnaq.poll/edit
+                                      (extract-poll-from-edit-form
+                                       form
+                                       (map :db/id (:poll/options poll-edit-data))
+                                       new-option-count)
+                                      poll-id])
                         (rf/dispatch [:form/should-clear form])))}
         [:div.mb-3
          [:p (labels :schnaq.poll.create/topic-label)]
@@ -341,10 +363,12 @@
           {:required true :autoFocus true :defaultValue (:poll/title poll-edit-data)}]
          [:small.form-text.text-muted (labels :schnaq.poll.create/hint)]]
         [:div.mb-3
-         [:label.form-label "Edit Options"]
+         [:label.form-label (labels :schnaq.poll.edit/edit-options)]
          (for [option (:poll/options poll-edit-data)]
-           [edit-poll-option option (:db/id poll-edit-data)])
-         [:label.form-label.mt-3 "Add new Options"]
+           (with-meta
+             [edit-poll-option option (:db/id poll-edit-data)]
+             {:key (str "edit-poll-option-key-" (:db/id option))}))
+         [:label.form-label.mt-3 (labels :schnaq.poll.edit/new-options)]
          (for [rank (range 1 (inc new-option-count))]
            (with-meta
              [poll-option (str (labels :schnaq.poll.create/options-placeholder) " " rank) rank]
@@ -368,12 +392,68 @@
           :hide-results?
           {:defaultChecked (:poll/hide-results? poll-edit-data)}]]
 
+
         [:div.text-center.pt-2
-         [:button.btn.btn-primary.w-75
+         [:button.btn.btn-secondary.w-25.me-2
+          {:type :button
+           :on-click #(rf/dispatch [:schnaq.polls.edit/cancel (:db/id poll-edit-data)])}
+          (labels :schnaq.poll.edit/cancel-button)]
+         [:button.btn.btn-primary.w-50
           {:type "submit"
            :on-click #(matomo/track-event "Active User" "Action" "Edit Poll")}
-          "Edit Poll"]]]]])
+          (labels :schnaq.poll.edit/button)]]]]])
    motion/card-fade-in-time])
+
+;; :removed-options nil, :edited-options [{} {} {}]
+
+(rf/reg-event-db
+ :schnaq.polls.edit/cancel
+ (fn [db [_ poll-id]]
+   (update-in db [:schnaq :edit :polls] dissoc poll-id)))
+
+(defn- find-id-in-map-list
+  "Finds an id in a list of maps."
+  [id map-list]
+  (first (filter #(= id (:db/id %)) map-list)))
+
+(rf/reg-event-fx
+ :schnaq.poll/edit
+ (fn [{:keys [db]} [_ partial-edit-data poll-id]]
+   (let [full-data (assoc partial-edit-data
+                          :poll-id poll-id
+                          :share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+                          :removed-options (get-in db [:schnaq :edit :polls poll-id :deleted-options] []))
+         old-options (get-in db [:schnaq :polls poll-id :poll/options])
+         after-remove (remove #(contains? (set (:removed-options full-data)) (:db/id %)) old-options)
+         after-edit (map #(merge % (find-id-in-map-list (:db/id %) (:edited-options full-data))) after-remove)
+         prepared-new-options (map (fn [val] {:option/value val
+                                              :option/votes 0})
+                                   (:new-options full-data))
+         updated-options (vec (concat after-edit prepared-new-options))
+         new-db (-> db
+                    (update-in [:schnaq :polls poll-id] merge
+                               {:poll/title (:title full-data)
+                                :poll/hide-results? (:hide-results? full-data)
+                                :poll/options updated-options})
+                    (update-in [:schnaq :edit :polls] dissoc poll-id))]
+     {:db new-db
+      :fx [(http/xhrio-request db :put "/poll"
+                               [:schnaq.poll.edit/success]
+                               full-data
+                               [:schnaq.poll.edit/fail])]})))
+
+(rf/reg-event-db
+ :schnaq.poll.edit/success
+ (fn [db [_ {:keys [updated-poll]}]]
+   (assoc-in db [:schnaq :polls (:db/id updated-poll)] updated-poll)))
+
+(rf/reg-event-fx
+ :schnaq.poll.edit/fail
+ (fn [_ _]
+   {:fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :schnaq.poll.edit/failed-title)
+                                    :body (labels :schnaq.poll.edit/failed-body)
+                                    :context :danger}]]]}))
 
 (>defn poll-list
   "Displays all polls of the current schnaq excluding the one in `exclude`."
@@ -422,7 +502,7 @@
       :on-submit (fn [event]
                    (.preventDefault event)
                    (let [form (oget event [:target :elements])]
-                     (rf/dispatch [:schnaq.poll/create (extract-poll-from-form form option-count)])
+                     (rf/dispatch [:schnaq.poll/create (extract-poll-from-create-form form option-count)])
                      (rf/dispatch [:form/should-clear form])))}
      [:div.mb-3
       [:p (labels :schnaq.poll.create/topic-label)]
