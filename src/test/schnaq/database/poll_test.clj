@@ -132,10 +132,12 @@
           poll (first (db/polls share-hash))
           with-vote (first (filter #(= 1 (:option/votes %)) (:poll/options poll)))
           without-vote (first (filter #(not= 1 (:option/votes %)) (:poll/options poll)))
-          new-poll (db/edit-poll-options share-hash (:db/id poll)
-                                         ["new" "new"]
-                                         [(:db/id with-vote)]
-                                         [{:id (:db/id without-vote) :value "very new"}])]
+          new-poll (db/edit-poll share-hash (:db/id poll) "polly" true
+                                 ["new" "new"]
+                                 [(:db/id with-vote)]
+                                 [{:id (:db/id without-vote) :value "very new"}])]
+      (is (= "polly" (:poll/title new-poll)))
+      (is (:poll/hide-results? new-poll))
       (is (= 3 (count (:poll/options new-poll))))
       (is (= 2 (count (filter #(= "new" (:option/value %)) (:poll/options new-poll)))))
       (is (not (first (filter #(= 1 (:option/votes %)) (:poll/options new-poll)))))

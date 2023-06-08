@@ -40,11 +40,11 @@
   [:discussion/share-hash :db/id => boolean?]
   (some? (poll-from-discussion share-hash poll-id)))
 
-(>defn- edit-poll-options
+(>defn edit-poll
   "Allow to remove, add and modify options of a poll."
-  [share-hash poll-id new-options removed-options edit-options]
-  [:discussion/share-hash :db/id (s/coll-of ::specs/non-blank-string) (s/coll-of :db/id)
-   (s/coll-of (s/keys :req-un [::id ::value])) => (? ::specs/poll)]
+  [share-hash poll-id title hide-results? new-options removed-options edit-options]
+  [:discussion/share-hash :db/id ::specs/non-blank-string boolean? (s/coll-of ::specs/non-blank-string)
+   (s/coll-of :db/id) (s/coll-of (s/keys :req-un [::id ::value])) => (? ::specs/poll)]
   (when (poll-belongs-to-discussion? share-hash poll-id)
     (let [current-option-ids (set (map :db/id (:poll/options (db/fast-pull poll-id [{:poll/options [:db/id]}]))))
           new-transactions (mapv (fn [option]
@@ -60,7 +60,9 @@
                                     {:db/id id
                                      :option/value value})
                                   (filter #(contains? current-option-ids (:id %)) edit-options))
-          concat-tx (concat new-transactions add-transactions remove-transactions edit-transactions)]
+          concat-tx (concat new-transactions add-transactions remove-transactions edit-transactions
+                            [[:db/add poll-id :poll/title title]]
+                            [[:db/add poll-id :poll/hide-results? hide-results?]])]
       (when (not-empty concat-tx)
         (->> @(db/transact concat-tx)
              :db-after
