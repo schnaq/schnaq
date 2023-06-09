@@ -186,7 +186,7 @@
    :schnaq.ranking/choose-place "Wähle Platz %s"
    :schnaq.rankings/delete-last-choice "Letzte Wahl löschen"
    :schnaq.poll.edit/failed-title "Umfrage bearbeiten fehlgeschlagen"
-   :schnaq.poll.edit/failed-body "Etwas ist beim Bearbeiten schiefgelaufen. Bitte versuche es noch ein mal."
+   :schnaq.poll.edit/failed-body "Etwas ist beim Bearbeiten schiefgelaufen. Bitte versuche es noch einmal."
    :schnaq.poll.edit/button "Umfrage bearbeiten"
    :schnaq.poll.edit/cancel-button "Abbrechen"
    :schnaq.poll.edit/new-options "Neue Optionen hinzufügen"
