@@ -346,7 +346,7 @@
     <orderEntry type="library" name="Deps: borkdude/sci.impl.reflector:0.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.sun.mail/jakarta.mail:1.6.5" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.51.v20230217" level="project" />
-    <orderEntry type="library" name="Deps: com.stripe/stripe-java:22.23.0" level="project" />
+    <orderEntry type="library" name="Deps: com.stripe/stripe-java:22.23.1" level="project" />
     <orderEntry type="library" name="Deps: io.opencensus/opencensus-api:0.31.1" level="project" />
     <orderEntry type="library" name="Deps: io.grpc/grpc-auth:1.52.1" level="project" />
     <orderEntry type="library" name="Deps: io.smallrye.config/smallrye-config:2.3.0" level="project" />
