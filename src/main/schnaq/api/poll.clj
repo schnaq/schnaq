@@ -24,6 +24,13 @@
         (set-activation-focus [:discussion/share-hash share-hash] (:db/id poll-created))
         (ok {:new-poll poll-created})))))
 
+(defn- update-poll
+  "Update a poll. Can change its title and options."
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash poll-id title hide-results? edited-options removed-options new-options]} (:body parameters)]
+    (log/info (format "Updating poll %s for discussion %s" poll-id share-hash))
+    (ok {:updated-poll (poll-db/edit-poll share-hash poll-id title hide-results? new-options removed-options edited-options)})))
+
 (defn polls-for-discussion
   "Returns all polls belonging to the `share-hash` in the payload."
   [{:keys [parameters]}]
@@ -90,6 +97,18 @@
                  :responses {200 {:body {:new-poll ::dto/poll}}
                              400 at/response-error-body
                              403 at/response-error-body}}
+          :put {:handler update-poll
+                :description (at/get-doc #'update-poll)
+                :middleware [:discussion/user-moderator?]
+                :parameters {:body {:poll-id :db/id
+                                    :share-hash :discussion/share-hash
+                                    :title :poll/title
+                                    :hide-results? :poll/hide-results?
+                                    :edited-options (s/coll-of (s/keys :req [:db/id :option/value]))
+                                    :removed-options (s/coll-of :db/id)
+                                    :new-options (s/coll-of ::specs/non-blank-string)}}
+                :responses {200 {:body {:updated-poll ::dto/poll}}
+                            403 at/response-error-body}}
           :get {:handler get-poll
                 :description (at/get-doc #'get-poll)
                 :parameters {:query {:share-hash :discussion/share-hash

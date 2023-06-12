@@ -105,10 +105,10 @@
 
 (def testing-private-key
   (keys/str->private-key
-   (slurp "resources/testing/jwt.key")))
+   (slurp (io/resource "testing/jwt.key"))))
 (def testing-public-key
   (keys/str->public-key
-   (slurp "resources/testing/jwt.key.pub")))
+   (slurp (io/resource "testing/jwt.key.pub"))))
 
 ;; -----------------------------------------------------------------------------
 ;; Stripe
