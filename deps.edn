@@ -8,7 +8,7 @@
         com.cognitect.aws/api {:mvn/version "0.8.673"}
         com.cognitect.aws/endpoints {:mvn/version "1.1.12.478"}
         com.cognitect.aws/s3 {:mvn/version "847.2.1387.0"}
-        com.datomic/datomic-pro {:mvn/version "1.0.6397"}
+        com.datomic/peer {:mvn/version "1.0.6726"}
         com.draines/postal {:mvn/version "2.0.5"}
         com.fulcrologic/guardrails {:mvn/version "1.1.13"}
         com.google.guava/guava {:mvn/version "32.0.1-jre"
