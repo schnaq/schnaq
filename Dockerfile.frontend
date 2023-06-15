@@ -17,7 +17,6 @@ RUN apk add --no-cache yarn && \
 COPY package.json .
 COPY yarn.lock .
 
-RUN mkdir -p resources/public/node_modules; true
 COPY resources/public/node_modules/ resources/public/node_modules/
 RUN yarn install
 
