@@ -17,7 +17,7 @@ RUN apk add --no-cache yarn && \
 COPY package.json .
 COPY yarn.lock .
 
-COPY resources/public/node_modules/ resources/public/node_modules/
+# COPY resources/public/node_modules/ resources/public/node_modules/
 RUN yarn install
 
 COPY deps.edn .
