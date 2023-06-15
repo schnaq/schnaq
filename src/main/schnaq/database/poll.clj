@@ -40,6 +40,31 @@
   [:discussion/share-hash :db/id => boolean?]
   (some? (poll-from-discussion share-hash poll-id)))
 
+(>defn edit-poll
+  "Allow to remove, add and modify options of a poll."
+  [share-hash poll-id title hide-results? new-options removed-options edit-options]
+  [:discussion/share-hash :db/id ::specs/non-blank-string boolean? (s/coll-of ::specs/non-blank-string)
+   (s/coll-of :db/id) (s/coll-of (s/keys :req [:db/id :option/value])) => (? ::specs/poll)]
+  (when (poll-belongs-to-discussion? share-hash poll-id)
+    (let [current-option-ids (set (map :db/id (:poll/options (db/fast-pull poll-id [{:poll/options [:db/id]}]))))
+          new-transactions (mapv (fn [option]
+                                   {:db/id (str (random-uuid))
+                                    :option/value option})
+                                 new-options)
+          add-transactions (mapv (fn [tx-map]
+                                   (vector :db/add poll-id :poll/options (:db/id tx-map)))
+                                 new-transactions)
+          remove-transactions (mapv (fn [id] (vector :db/retractEntity id))
+                                    (filter #(contains? current-option-ids %) removed-options))
+          edit-transactions (filter #(contains? current-option-ids (:db/id %)) edit-options)
+          concat-tx (concat new-transactions add-transactions remove-transactions edit-transactions
+                            [[:db/add poll-id :poll/title title]]
+                            [[:db/add poll-id :poll/hide-results? hide-results?]])]
+      (when (not-empty concat-tx)
+        (->> @(db/transact concat-tx)
+             :db-after
+             (db/fast-pull poll-id patterns/poll))))))
+
 (>defn delete-poll!
   "Delete a poll"
   [share-hash poll-id]

@@ -61,6 +61,7 @@
         top-level? @(rf/subscribe [:routes.schnaq/start?])
         activation-focus @(rf/subscribe [:schnaq/activation-focus])
         focus-poll @(rf/subscribe [:schnaq/poll activation-focus])
+        edit-polls @(rf/subscribe [:schnaq.polls.edit/actives])
         activation @(rf/subscribe [:schnaq/activation])
         focus-activation? (and activation-focus (= activation-focus (:db/id activation)))
         focus-wordcloud? @(rf/subscribe [:schnaq.wordcloud/focus?])
@@ -77,7 +78,9 @@
                         current-feedback)
         focus-feedback? (and activation-focus (= activation-focus (:db/id feedback-form)))
         activations-seq (cond-> []
-                          focus-poll (conj [poll/poll-list-item focus-poll])
+                          focus-poll (conj (if (edit-polls (:db/id focus-poll))
+                                             [poll/poll-edit-card (:db/id focus-poll)]
+                                             [poll/poll-list-item focus-poll]))
                           focus-local-wordcloud (conj [wordcloud-card/local-wordcloud-card focus-local-wordcloud])
                           focus-activation? (conj [activation/activation-card])
                           (and wordcloud? focus-wordcloud?) (conj [wordcloud-card/wordcloud-card])

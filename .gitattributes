@@ -77,6 +77,7 @@
 *.dvi filter=lfs diff=lfs merge=lfs -text
 *.pages filter=lfs diff=lfs merge=lfs -text
 *.key filter=lfs diff=lfs merge=lfs -text
+resources/testing/jwt.key !filter !diff !merge text
 
 ## Audio/Video
 *.mpg filter=lfs diff=lfs merge=lfs -text

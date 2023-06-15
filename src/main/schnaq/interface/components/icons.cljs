@@ -14,7 +14,7 @@
               faChevronLeft faChevronRight faCircle faCloud faCookieBite faCode faCog faComment faComments faCopy
               faEdit faEllipsisH faEllipsisV faExclamationTriangle faExternalLinkAlt faFileDownload faFileExport faFlask faGhost
               faGraduationCap faInfinity faInfoCircle faItalic faLanguage faLaptop faList faListOl
-              faLock faLockOpen faMagic faMapPin faMinus faPalette faPaperPlane faPenSquare faPencilRuler
+              faLock faLockOpen faMagic faMapPin faMinus faPalette faPaperPlane faPenSquare faPencilAlt faPencilRuler
               faPlayCircle faPlus faProjectDiagram faSquare faQrcode faQuestion faQuestionCircle
               faQuoteRight faRedo faRocket faSearch faShareAlt faShieldAlt faSignInAlt faSlidersH faStar
               faStepBackward faStrikethrough faSun faTag faTerminal faTimes faTimes faTimesCircle
@@ -96,6 +96,7 @@
    :newspaper faNewspaper
    :palette faPalette
    :pen faPenSquare
+   :pencil faPencilAlt
    :pencil-ruler faPencilRuler
    :pin faMapPin
    :plane faPaperPlane

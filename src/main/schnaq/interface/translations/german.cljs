@@ -176,6 +176,7 @@
    :schnaq.poll.ranking/points "Punkte"
    :schnaq.poll/hide-results-button "Verstecke Ergebnisse vor Teilnehmer:innen"
    :schnaq.poll/show-results-button "Veröffentliche Ergebnisse"
+   :schnaq.poll/edit-button "Umfrage editieren"
    :schnaq.poll/delete-confirmation "Möchtest du die Umfrage wirklich löschen?"
    :schnaq.poll.hide-results.notification/title "Erfolgreich Sichtbarkeit der Ergebnisse geändert"
    :schnaq.poll.hide-results.notification/body-show "Die Ergebnisse können nun von allen Teilnehmer:innen eingesehen werden."
@@ -184,6 +185,14 @@
    :schnaq.poll/delete-button "Löschen"
    :schnaq.ranking/choose-place "Wähle Platz %s"
    :schnaq.rankings/delete-last-choice "Letzte Wahl löschen"
+   :schnaq.poll.edit/failed-title "Umfrage bearbeiten fehlgeschlagen"
+   :schnaq.poll.edit/failed-body "Etwas ist beim Bearbeiten schiefgelaufen. Bitte versuche es noch einmal."
+   :schnaq.poll.edit/button "Umfrage bearbeiten"
+   :schnaq.poll.edit/cancel-button "Abbrechen"
+   :schnaq.poll.edit/new-options "Neue Optionen hinzufügen"
+   :schnaq.poll.edit/edit-options "Optionen bearbeiten"
+   :schnaq.poll.edit/heading "Umfrage bearbeiten"
+   :schnaq.poll.edit/option-placeholder "Option"
 
    ;; Activation feature
    :schnaq.activation.create/label "Präsentiere deinen Teilnehmer:innen eine Eingabe zur Aktivierung!"
