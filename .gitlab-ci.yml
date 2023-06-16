@@ -21,16 +21,10 @@ variables:
   BACKEND_IMAGE_TAGGED: $CI_REGISTRY_IMAGE/backend:$CI_PIPELINE_IID
   FRONTEND_IMAGE_TAGGED: $CI_REGISTRY_IMAGE/frontend:$CI_PIPELINE_IID
 
-.with-datomic-pro:
-  before_script:
-    - mkdir -p ~/.m2
-    - cp settings.xml ~/.m2/settings.xml
-
 # ------------------------------------------------------------------------------
 # Stage "build-docker-images"
 
 build-frontend-image:
-  extends: .with-datomic-pro
   image: docker
   tags:
     - ht
@@ -46,8 +40,6 @@ build-frontend-image:
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT
       --build-arg FAQ_SHARE_HASH=$FAQ_SHARE_HASH
-      --build-arg DATOMIC_REPO_USERNAME
-      --build-arg DATOMIC_REPO_PASSWORD
       -t $FRONTEND_IMAGE_TAGGED .
     - docker tag $FRONTEND_IMAGE_TAGGED $FRONTEND_IMAGE:latest
     - docker push $FRONTEND_IMAGE_TAGGED
@@ -56,7 +48,6 @@ build-frontend-image:
     - deploy
 
 build-backend-image:
-  extends: .with-datomic-pro
   image: docker
   tags:
     - ht
@@ -68,8 +59,6 @@ build-backend-image:
     - >
       docker build -f Dockerfile.backend --pull
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
-      --build-arg DATOMIC_REPO_USERNAME
-      --build-arg DATOMIC_REPO_PASSWORD
       -t $BACKEND_IMAGE_TAGGED .
     - docker tag $BACKEND_IMAGE_TAGGED $BACKEND_IMAGE:latest
     - docker push $BACKEND_IMAGE_TAGGED
@@ -80,7 +69,6 @@ build-backend-image:
 # ------------------------------------------------------------------------------
 
 build-frontend-staging-image:
-  extends: .with-datomic-pro
   image: docker
   tags:
     - ht
@@ -95,8 +83,6 @@ build-frontend-staging-image:
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM_STAGING
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT_STAGING
-      --build-arg DATOMIC_REPO_USERNAME
-      --build-arg DATOMIC_REPO_PASSWORD
       --build-arg ROBOTS_TXT=./robots-staging.txt
       -t ${FRONTEND_IMAGE_TAGGED}-staging .
     - docker tag ${FRONTEND_IMAGE_TAGGED}-staging $FRONTEND_IMAGE:staging
@@ -106,7 +92,6 @@ build-frontend-staging-image:
     - develop
 
 build-backend-staging-image:
-  extends: .with-datomic-pro
   image: docker
   tags:
     - ht
@@ -118,8 +103,6 @@ build-backend-staging-image:
     - >
       docker build -f Dockerfile.backend --pull
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
-      --build-arg DATOMIC_REPO_USERNAME
-      --build-arg DATOMIC_REPO_PASSWORD
       -t ${BACKEND_IMAGE_TAGGED}-staging .
     - docker tag ${BACKEND_IMAGE_TAGGED}-staging $BACKEND_IMAGE:staging
     - docker push ${BACKEND_IMAGE_TAGGED}-staging

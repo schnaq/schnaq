@@ -1,14 +1,9 @@
-FROM clojure:temurin-17-alpine as backend-build
+FROM clojure:temurin-17-tools-deps-jammy as backend-build
 
 WORKDIR /code
 
 # Cache and install Clojure dependencies
-ARG DATOMIC_REPO_USERNAME
-ENV DATOMIC_REPO_USERNAME=$DATOMIC_REPO_USERNAME
-ARG DATOMIC_REPO_PASSWORD
-ENV DATOMIC_REPO_PASSWORD=$DATOMIC_REPO_PASSWORD
 COPY deps.edn .
-COPY settings.xml /root/.m2/settings.xml
 RUN clojure -P -M:run-server:uberjar
 
 
@@ -23,7 +18,7 @@ RUN clojure -X:uberjar
 
 # ------------------------------------------------------------------------------
 
-FROM amazoncorretto:17
+FROM eclipse-temurin:17-jammy
 
 WORKDIR /code
 COPY --from=backend-build /code/target/schnaq-standalone.jar .
