@@ -3,6 +3,8 @@ name: "Run Tests"
 on: [push]
 
 env:
+  S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+  S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
   APP_CODE: ${{ secrets.APP_CODE }}
   CLEVERREACH_ENABLED: false
   KEYCLOAK_ADMIN_ID: ${{ secrets.KEYCLOAK_ADMIN_ID }}
