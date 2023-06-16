@@ -5,7 +5,7 @@ $weights: 100, 200, 300, 400, 500, 600, 700;
   @include poppins.fontFace(
           $weight: $thickness,
           $display: fallback,
-          $fontDir: '../../../node_modules/@fontsource/poppins/files'
+          $fontDir: '../fonts/poppins'
   );
 }
 
