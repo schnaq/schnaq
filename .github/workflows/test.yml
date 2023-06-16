@@ -5,7 +5,7 @@ env:
   CLEVERREACH_ENABLED: false
   KEYCLOAK_ADMIN_ID: ${{ secrets.KEYCLOAK_ADMIN_ID }}
   KEYCLOAK_ADMIN_SECRET: ${{ secrets.KEYCLOAK_ADMIN_SECRET }}
-  KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+  KEYCLOAK_REALM: ${{ vars.KEYCLOAK_REALM }}
 
 jobs:
   test:
@@ -35,7 +35,7 @@ jobs:
         uses: ./.github/actions/setup_clojure
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: "yarn"
 
       - name: Install yarn dependencies
