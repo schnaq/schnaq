@@ -8,7 +8,7 @@
         com.cognitect.aws/api {:mvn/version "0.8.673"}
         com.cognitect.aws/endpoints {:mvn/version "1.1.12.478"}
         com.cognitect.aws/s3 {:mvn/version "847.2.1387.0"}
-        com.datomic/peer {:mvn/version "1.0.6726"}
+        com.datomic/peer {:mvn/version "1.0.6733"}
         com.draines/postal {:mvn/version "2.0.5"}
         com.fulcrologic/guardrails {:mvn/version "1.1.13"}
         com.google.guava/guava {:mvn/version "32.0.1-jre"
@@ -50,7 +50,7 @@
              "clojars" {:url "https://repo.clojars.org/"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.84.1335"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.85.1342"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.1.89"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
                   :main-opts ["-m" "kaocha.runner"]}
