@@ -62,7 +62,7 @@
              votes-set (if single-choice? #{cast-votes} (set cast-votes))
              option-voted? (votes-set id)]
          [:<>
-          {:key (str "option-" id)}
+          {:key (str "option-" id "-" value)}
           (when-not voted?
             [:div.col-1
              [:input.form-check-input.mx-auto
