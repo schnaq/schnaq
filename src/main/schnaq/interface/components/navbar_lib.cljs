@@ -189,8 +189,8 @@
         :props (when vertical? {:className "d-block mx-auto"})
         :size icon-size
         :inline? (not vertical?)]
-       [:span {:className (when vertical? "d-flex mx-auto")}
-        [:span {:className (if vertical? "d-block mx-auto" "me-1")}
+       [:span {:className "d-flex mx-auto"}
+        [:span {:className (if vertical? "d-block mx-auto" "mx-auto")}
          [animal-avatars/generate-animal-avatar
           :name username
           :size icon-size]]])
