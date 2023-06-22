@@ -28,7 +28,7 @@
     <orderEntry type="library" name="Deps: io.smallrye.config/smallrye-config-common:2.3.0" level="project" />
     <orderEntry type="library" name="Deps: day8.re-frame/test:0.1.5" level="project" />
     <orderEntry type="library" name="Deps: commons-codec:1.15" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/api:0.8.673" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/api:0.8.681" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: amperity/envoy:0.3.3" level="project" />
     <orderEntry type="library" name="Deps: com.bhauman/cljs-test-display:0.1.1" level="project" />
@@ -36,7 +36,7 @@
     <orderEntry type="library" name="Deps: org.apache.tomcat/tomcat-juli:7.0.109" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-compress:1.21" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-devel:1.10.0" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.478" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.489" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.18.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.5" level="project" />
@@ -123,7 +123,7 @@
     <orderEntry type="library" name="Deps: com.datomic/peer:1.0.6733" level="project" />
     <orderEntry type="library" name="Deps: com.h2database/h2:2.1.214" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-codec-socks:4.1.86.Final" level="project" />
-    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.23.3" level="project" />
+    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.24.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.activemq/artemis-commons:2.28.0" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.spec.javax.annotation/jboss-annotations-api_1.3_spec:2.0.1.Final" level="project" />
     <orderEntry type="library" name="Deps: ch.qos.logback/logback-core:1.3.0-alpha5" level="project" />
@@ -303,7 +303,7 @@
     <orderEntry type="library" name="Deps: org.apache.commons/commons-collections4:4.1" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-resolver:4.1.86.Final" level="project" />
     <orderEntry type="library" name="Deps: binaryage/oops:0.7.2" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/s3:847.2.1387.0" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/s3:848.2.1400.0" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/js-joda-timezone:2.0.1-0" level="project" />
     <orderEntry type="library" name="Deps: clj-stacktrace:0.2.8" level="project" />
     <orderEntry type="library" name="Deps: org.slf4j/slf4j-api:2.0.0-alpha1" level="project" />
