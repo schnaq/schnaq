@@ -1,12 +1,12 @@
-@use 'rounded' as rounded;
-@use 'variables' as vars;
+@use "rounded" as rounded;
+@use "variables" as vars;
 
 
 $var-blue1: vars.$gray-500;
 $var-green1: vars.$primary;
 $var-red1: vars.$red;
 
-@import '../node_modules/klaro/src/scss/klaro';
+@import "../../../node_modules/klaro/src/scss/klaro";
 
 // Cookie Modal
 .cm-btn-accept,

@@ -28,6 +28,3 @@ runs:
           ~/.deps.clj
         key: cljdeps-${{ hashFiles('deps.edn') }}
         restore-keys: cljdeps-
-    - name: Copy datomic settings
-      run: cp settings.xml ~/.m2/settings.xml
-      shell: bash

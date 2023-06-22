@@ -173,6 +173,7 @@
    :schnaq.poll.ranking/points "Points"
    :schnaq.poll/hide-results-button "Hide results for participants"
    :schnaq.poll/show-results-button "Show results for participants"
+   :schnaq.poll/edit-button "Edit poll"
    :schnaq.poll/delete-confirmation "Do you really want to delete this poll?"
    :schnaq.poll.hide-results.notification/title "Successfully changed result visibility"
    :schnaq.poll.hide-results.notification/body-show "The results can now be seen by the participants."
@@ -181,6 +182,14 @@
    :schnaq.poll/delete-button "Delete"
    :schnaq.ranking/choose-place "Choose Rank %s"
    :schnaq.rankings/delete-last-choice "Delete last choice"
+   :schnaq.poll.edit/failed-title "Edit Poll failed"
+   :schnaq.poll.edit/failed-body "Something went wrong editing the poll. Please try again."
+   :schnaq.poll.edit/button "Edit Poll"
+   :schnaq.poll.edit/cancel-button "Cancel"
+   :schnaq.poll.edit/new-options "Add new Options"
+   :schnaq.poll.edit/edit-options "Edit Options"
+   :schnaq.poll.edit/heading "Editing poll"
+   :schnaq.poll.edit/option-placeholder "Option"
 
    ;; Activation feature
    :schnaq.activation.create/label "Present your participants with an activation input!"

@@ -25,11 +25,6 @@ include the `dev` alias when starting a REPL, e.g. `clj -M:dev:run-server`.
 ### Database
 
 We are using `datomic pro` as our database, which can be used during development and testing.
-Get a fresh license for datomic pro starter via this URL: https://my.datomic.com/
-
-Then, after registering visit: https://my.datomic.com/account.
-Follow the instructions to set your `~/.m2/settings.xml` server to contain credentials for my.datomic.com.
-You will need to create a new account after one year.
 
 #### Development: Starting the local transactor (for the database)
 
@@ -156,6 +151,22 @@ the root of this repository, e.g. with this call:
 
     docker run -it --rm -v $(pwd):/usr/share/nginx/html -v $(pwd)/nginx/schnaq.conf:/etc/nginx/conf.d/default.conf -p 8888:80 nginx
 
-### License
+## Deployment
+
+This project is designed to be deployed to a kubernetes cluster. Pick the image
+tag you want to deploy, find your desired namespace. For https://app.schnaq.com,
+this is currently `schnaq-staging` for the staging environment and `schnaq-app`
+for the production environment:
+
+    kubectl -n <your-namespace> set image deployment backend backend=ghcr.io/schnaq/schnaq/backend:<backend-tag>
+    kubectl -n <your-namespace> set image deployment frontend frontend=ghcr.io/schnaq/schnaq/frontend:<frontend-tag>
+
+### Scaling
+
+Scale the relevant deployments with:
+
+    kubectl scale deployments backend -n <your-namespace> --replicas=5
+
+## License
 
 This code and all management code belonging to the schnaq repository is published under the AGPL 3.0 (GNU AFFERO GENERAL PUBLIC LICENSE Version 3)

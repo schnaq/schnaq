@@ -1,13 +1,6 @@
-FROM clojure:temurin-17-alpine AS shadow-build
+FROM clojure:tools-deps-jammy AS shadow-build
 
 WORKDIR /code
-
-# Cache and install Clojure dependencies
-ARG DATOMIC_REPO_USERNAME
-ENV DATOMIC_REPO_USERNAME=$DATOMIC_REPO_USERNAME
-ARG DATOMIC_REPO_PASSWORD
-ENV DATOMIC_REPO_PASSWORD=$DATOMIC_REPO_PASSWORD
-COPY settings.xml /root/.m2/settings.xml
 
 # ------------------------------------------------------------------------------
 
@@ -17,13 +10,27 @@ ARG KEYCLOAK_CLIENT
 ARG KEYCLOAK_REALM
 ARG FAQ_SHARE_HASH
 
-RUN apk add --no-cache yarn && \
+RUN apt update && \
+    apt install -y gnupg2 && \
+
+    # Install nodejs
+    curl -sL https://deb.nodesource.com/setup_18.x -o nodesource_setup.sh && \
+    bash nodesource_setup.sh && \
+    apt-get install -y nodejs && \
+    rm nodesource_setup.sh && \
+
+    # Install yarn
+    curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update && \
+    apt-get install -y yarn && \
     yarn global add sass
 
 # Cache and install JavaScript dependencies
 COPY package.json .
 COPY yarn.lock .
-COPY resources/public/node_modules/ resources/public/node_modules/
+COPY node_modules/ node_modules/
+
 RUN yarn install
 
 COPY deps.edn .

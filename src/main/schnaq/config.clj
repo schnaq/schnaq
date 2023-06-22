@@ -105,10 +105,10 @@
 
 (def testing-private-key
   (keys/str->private-key
-   (slurp "https://s3.schnaq.com/on-premise/testing/jwt.key")))
+   (slurp (io/resource "testing/jwt.key"))))
 (def testing-public-key
   (keys/str->public-key
-   (slurp "https://s3.schnaq.com/on-premise/testing/jwt.key.pub")))
+   (slurp (io/resource "testing/jwt.key.pub"))))
 
 ;; -----------------------------------------------------------------------------
 ;; Stripe

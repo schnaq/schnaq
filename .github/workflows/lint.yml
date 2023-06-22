@@ -1,8 +1,6 @@
-on: [push]
+name: "Lint Code and check dependencies"
 
-env:
-  DATOMIC_REPO_USERNAME: ${{ secrets.DATOMIC_REPO_USERNAME }}
-  DATOMIC_REPO_PASSWORD: ${{ secrets.DATOMIC_REPO_PASSWORD }}
+on: [push]
 
 jobs:
   lint:
