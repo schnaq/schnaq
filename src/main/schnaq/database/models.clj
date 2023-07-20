@@ -532,7 +532,41 @@
    {:db/ident :feedback.answer/scale-five
     :db/valueType :db.type/long
     :db/cardinality :db.cardinality/one
-    :db/doc "Present if item is of type `scale-five`. Some string."}])
+    :db/doc "Present if item is of type `scale-five`. Some string."}
+
+   ;; Q&A Box
+   {:db/ident :discussion/qa-box
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/isComponent true
+    :db/doc "Discussions reference to the Q&A box entity."}
+   {:db/ident :qa-box/visible
+    :db/valueType :db.type/boolean
+    :db/cardinality :db.cardinality/one
+    :db/doc "Indicates, whether the Q&A box can be seen and submitted to by users."}
+   {:db/ident :qa-box/label
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Optional label, identifying the qa box for the user."}
+   {:db/ident :qa-box/questions
+    :db/valueType :db.type/ref
+    :db/isComponent true
+    :db/cardinality :db.cardinality/many
+    :db/doc "A Q&A box can have any amount of `qa-box.question` references."}
+
+   {:db/ident :qa-box.question/value
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The question to be answered by the mods."}
+   {:db/ident :qa-box.question/upvotes
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "The amount of upvotes this question has received."}
+   {:db/ident :qa-box.question/answered
+    :db/valueType :db.type/boolean
+    :db/cardinality :db.cardinality/one
+    :db/doc "Indicates, whether this question has been answered by the mods."}
+   ])
 
 #_:clj-kondo/ignore
 (def ^:private no-use-list
