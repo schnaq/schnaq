@@ -160,6 +160,7 @@
 (s/def :discussion/wordcloud
   (s/keys :req [:db/id :wordcloud/visible?]))
 (s/def :discussion/starting-statements (s/coll-of ::statement))
+(s/def :discussion/qa-box ::qa-box)
 (s/def ::discussion (s/keys :req [:discussion/share-hash]
                             :opt [:discussion/title :discussion/author
                                   :discussion/starting-statements :discussion/description
@@ -168,6 +169,7 @@
                                   :discussion/created-at :discussion/share-link :discussion/moderation-link
                                   :discussion/creation-secret :discussion/mode :discussion/access
                                   :discussion/activation-focus :discussion/wordcloud
+                                  :discussion/qa-box
                                   :discussion/device-ids :discussion/feedback]))
 
 (s/def :feedback.item/label ::non-blank-string)
@@ -343,6 +345,19 @@
 (s/def ::poll
   (s/keys :req [:poll/title :poll/options :poll/type :poll/discussion]
           :opt [:poll/hide-results?]))
+
+;; Question Box
+(s/def :qa-box/label ::non-blank-string)
+(s/def :qa-box/visible boolean?)
+(s/def :qa-box.question/answered boolean?)
+(s/def :qa-box.question/value ::non-blank-string)
+(s/def :qa-box.question/upvotes nat-int?)
+(s/def :qa-box/question (s/keys :req-un [:qa-box.question/value :qa-box.question/answered]
+                                :opt-un [:qa-box.question/upvotes]))
+(s/def :qa-box/questions (s/coll-of :qa-box/question))
+(s/def ::qa-box
+  (s/keys :req [:qa-box/visible :qa-box/questions]
+          :opt [:qa-box/label]))
 
 ;; Activation
 (s/def :activation/discussion (s/or :id :db/id :discussion ::discussion))
