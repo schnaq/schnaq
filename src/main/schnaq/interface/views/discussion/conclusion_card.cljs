@@ -26,6 +26,7 @@
             [schnaq.interface.views.schnaq.activation-cards :as activation-cards]
             [schnaq.interface.views.schnaq.feedback-card :as feedback-card]
             [schnaq.interface.views.schnaq.poll :as poll]
+            [schnaq.interface.views.schnaq.qa-box :as qa-box]
             [schnaq.interface.views.schnaq.reactions :as reactions]
             [schnaq.interface.views.schnaq.wordcloud-card :as wordcloud-card]
             [schnaq.interface.views.user :as user]))
@@ -340,6 +341,8 @@
             activation-tab [:span [iconed-heading :activation :magic :schnaq.input-type/activation]]
             word-cloud-tab [:span [iconed-heading :word-cloud :cloud :schnaq.input-type/word-cloud]]
             feedback-tab [:span [iconed-heading :feedback :feedback :schnaq.input-type/feedback]]
+            qa-box-tab [:span [iconed-heading :qa-box :question :schnaq.input-type/qa-box ;; TODO i18n
+                               ]]
             pro-user? @(rf/subscribe [:user/pro?])
             moderator? @(rf/subscribe [:user/moderator?])
             read-only? @(rf/subscribe [:schnaq.state/read-only?])
@@ -384,19 +387,27 @@
                        {:class (active-class :feedback)
                         :role "button"
                         :on-click #(on-click :feedback)}
-                       feedback-tab]]]
+                       feedback-tab]]
+                     [:li.nav-item
+                      [:button.nav-link
+                       {:class (active-class :qa-box)
+                        :role "button"
+                        :on-click #(on-click :qa-box)}
+                       qa-box-tab]]]
                     [:<>
                      [deactivated-selection-card-tab poll-tab]
                      [deactivated-selection-card-tab activation-tab]
                      [deactivated-selection-card-tab word-cloud-tab]
-                     [deactivated-selection-card-tab feedback-tab]])]))
+                     [deactivated-selection-card-tab feedback-tab]
+                     [deactivated-selection-card-tab qa-box-tab]])]))
              (if top-level?
                (case @selected-option
                  :question [input-form-or-disabled-alert]
                  :poll [poll/poll-form]
                  :activation [activation/activation-tab]
                  :word-cloud [wordcloud-card/wordcloud-tab]
-                 :feedback [feedback-card/feedback-tab])
+                 :feedback [feedback-card/feedback-tab]
+                 :qa-box [qa-box/qa-box-tab])
                [input-form-or-disabled-alert])]]
            motion/card-fade-in-time])))))
 
