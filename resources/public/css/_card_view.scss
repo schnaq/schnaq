@@ -90,6 +90,11 @@
   white-space: pre-line;
 }
 
+.activation-card {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
 .statement-question {
   @extend .border;
   @extend .border-info;
