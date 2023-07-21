@@ -1,6 +1,7 @@
 (ns schnaq.database.question-box-test
   (:require [clojure.test :refer [use-fixtures is deftest testing]]
             [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.patterns :as patterns]
             [schnaq.database.question-box :as db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
@@ -34,3 +35,13 @@
           updated-qa-box @(db/update-qa-box qa-box-id false "New Label")]
       (is (false? (:qa-box/visible updated-qa-box)))
       (is (= "New Label" (:qa-box/label updated-qa-box))))))
+
+(deftest add-question-test
+  (testing "That a question is added to a qa-box."
+    (let [share-hash "simple-hash"
+          new-qa-box (db/create-qa-box! share-hash true "Questions about Testing")
+          added-question (db/add-question (:db/id new-qa-box) "What is love?")
+          qa-box (-> (fast-pull (:db/id new-qa-box) patterns/qa-box))]
+      (is (zero? (:qa-box.question/upvotes added-question)))
+      (is (= 1 (count (:qa-box/questions qa-box))))
+      (is (= "What is love?" (-> qa-box :qa-box/questions first :qa-box.question/value))))))
