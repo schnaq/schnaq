@@ -165,6 +165,15 @@
                       :discussion/share-hash
                       :discussion/title]}])
 
+(def qa-box
+  [:db/id
+   :qa-box/visible
+   :qa-box/label
+   {:qa-box/questions [:db/id
+                       :qa-box.question/value
+                       :qa-box.question/answered
+                       [:qa-box.question/upvotes :default 0]]}])
+
 (def activation
   [:db/id
    :activation/count
