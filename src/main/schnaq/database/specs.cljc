@@ -173,7 +173,7 @@
 (s/def :discussion/wordcloud
   (s/keys :req [:db/id :wordcloud/visible?]))
 (s/def :discussion/starting-statements (s/coll-of ::statement))
-(s/def :discussion/qa-box ::qa-box)
+(s/def :discussion/qa-boxes (s/coll-of ::qa-box))
 (s/def ::discussion (s/keys :req [:discussion/share-hash]
                             :opt [:discussion/title :discussion/author
                                   :discussion/starting-statements :discussion/description
@@ -182,7 +182,7 @@
                                   :discussion/created-at :discussion/share-link :discussion/moderation-link
                                   :discussion/creation-secret :discussion/mode :discussion/access
                                   :discussion/activation-focus :discussion/wordcloud
-                                  :discussion/qa-box
+                                  :discussion/qa-boxes
                                   :discussion/device-ids :discussion/feedback]))
 
 (s/def :feedback.item/label ::non-blank-string)

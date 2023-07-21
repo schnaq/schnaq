@@ -535,9 +535,9 @@
     :db/doc "Present if item is of type `scale-five`. Some string."}
 
    ;; Q&A Box
-   {:db/ident :discussion/qa-box
+   {:db/ident :discussion/qa-boxes
     :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
+    :db/cardinality :db.cardinality/many
     :db/isComponent true
     :db/doc "Discussions reference to the Q&A box entity."}
    {:db/ident :qa-box/visible
