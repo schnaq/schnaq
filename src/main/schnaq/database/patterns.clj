@@ -109,6 +109,18 @@
    :theme.images/header
    :theme.texts/activation])
 
+(def question
+  [:db/id
+   :qa-box.question/value
+   [:qa-box.question/answered :default false]
+   [:qa-box.question/upvotes :default 0]])
+
+(def qa-box
+  [:db/id
+   :qa-box/visible
+   :qa-box/label
+   {:qa-box/questions question}])
+
 (def discussion
   "Representation of a discussion."
   [:db/id
@@ -125,6 +137,7 @@
    [:discussion/moderators :xform 'schnaq.database.xforms/maps->ids]
    {:discussion/theme theme}
    :discussion/wordcloud
+   {:discussion/qa-boxes qa-box}
    {[:discussion/mode :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {[:discussion.access/_discussion :as :discussion/access] access-code}])
 
@@ -164,18 +177,6 @@
    {:poll/discussion [:db/id
                       :discussion/share-hash
                       :discussion/title]}])
-
-(def question
-  [:db/id
-   :qa-box.question/value
-   [:qa-box.question/answered :default false]
-   [:qa-box.question/upvotes :default 0]])
-
-(def qa-box
-  [:db/id
-   :qa-box/visible
-   :qa-box/label
-   {:qa-box/questions question}])
 
 (def activation
   [:db/id
