@@ -55,3 +55,11 @@
           _ (db/upvote-question (:db/id added-question))
           question (fast-pull (:db/id added-question) patterns/question)]
       (is (= 2 (:qa-box.question/upvotes question))))))
+
+(deftest mark-question-test
+  (testing "that a question is correctly marked as answered"
+    (let [share-hash "simple-hash"
+          new-qa-box (db/create-qa-box! share-hash true "Questions about Testing")
+          added-question (db/add-question (:db/id new-qa-box) "What is love?")
+          answered-question (db/mark-question (:db/id added-question))]
+      (is (:qa-box.question/answered answered-question)))))

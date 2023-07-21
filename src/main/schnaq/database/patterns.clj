@@ -168,7 +168,7 @@
 (def question
   [:db/id
    :qa-box.question/value
-   :qa-box.question/answered
+   [:qa-box.question/answered :default false]
    [:qa-box.question/upvotes :default 0]])
 
 (def qa-box

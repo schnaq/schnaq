@@ -59,3 +59,14 @@
   [:db/id => boolean?]
   (map?
    (db/increment-number question-id :qa-box.question/upvotes)))
+
+(>defn mark-question
+  "Mark a question as answered or unanswered. If no param besides question-id is passed, it is marked as answered."
+  ([question-id]
+   [:db/id => (? ::specs/question)]
+   (mark-question question-id true))
+  ([question-id answered?]
+   [:db/id :qa-box.question/answered => (? ::specs/question)]
+   (db/transact-and-pull [[:db/add question-id :qa-box.question/answered answered?]]
+                         question-id
+                         patterns/question)))
