@@ -63,3 +63,12 @@
           added-question (db/add-question (:db/id new-qa-box) "What is love?")
           answered-question (db/mark-question (:db/id added-question))]
       (is (:qa-box.question/answered answered-question)))))
+
+(deftest delete-question-test
+  (testing "That a question is deleted properly."
+    (let [share-hash "simple-hash"
+          new-qa-box (db/create-qa-box! share-hash true "Questions about Testing")
+          added-question (db/add-question (:db/id new-qa-box) "What is love?")
+          _ (db/delete-question (:db/id added-question))
+          qa-box (fast-pull (:db/id new-qa-box) patterns/qa-box)]
+      (is (zero? (count (:qa-box/questions qa-box)))))))

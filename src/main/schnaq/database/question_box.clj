@@ -70,3 +70,9 @@
    (db/transact-and-pull [[:db/add question-id :qa-box.question/answered answered?]]
                          question-id
                          patterns/question)))
+
+(>defn delete-question
+  "Delete a question."
+  [question-id]
+  [:db/id => future?]
+  (db/transact [[:db/retractEntity question-id]]))
