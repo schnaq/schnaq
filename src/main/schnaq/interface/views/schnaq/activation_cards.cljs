@@ -6,6 +6,7 @@
             [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.schnaq.feedback-card :as feedback-card]
             [schnaq.interface.views.schnaq.poll :as poll]
+            [schnaq.interface.views.schnaq.qa-box :as qa-box]
             [schnaq.interface.views.schnaq.wordcloud-card :as wordcloud-card]))
 
 (rf/reg-sub
@@ -61,11 +62,13 @@
         top-level? @(rf/subscribe [:routes.schnaq/start?])
         activation-focus @(rf/subscribe [:schnaq/activation-focus])
         focus-poll @(rf/subscribe [:schnaq/poll activation-focus])
+        focus-qa-box @(rf/subscribe [:qa-box activation-focus])
         edit-polls @(rf/subscribe [:schnaq.polls.edit/actives])
         activation @(rf/subscribe [:schnaq/activation])
         focus-activation? (and activation-focus (= activation-focus (:db/id activation)))
         focus-wordcloud? @(rf/subscribe [:schnaq.wordcloud/focus?])
         polls (poll/poll-list (:db/id focus-poll))
+        qa-boxes @(rf/subscribe [:qa-boxes])
         wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])
         focus-local-wordcloud @(rf/subscribe [:schnaq.wordcloud/local activation-focus])
         local-wordclouds (wordcloud-card/wordcloud-list focus-local-wordcloud)
@@ -81,6 +84,7 @@
                           focus-poll (conj (if (edit-polls (:db/id focus-poll))
                                              [poll/poll-edit-card (:db/id focus-poll)]
                                              [poll/poll-list-item focus-poll]))
+                          focus-qa-box (conj [qa-box/qa-box-card focus-qa-box])
                           focus-local-wordcloud (conj [wordcloud-card/local-wordcloud-card focus-local-wordcloud])
                           focus-activation? (conj [activation/activation-card])
                           (and wordcloud? focus-wordcloud?) (conj [wordcloud-card/wordcloud-card])
@@ -88,6 +92,11 @@
                           ;; Add non focused elements in order
                           (seq local-wordclouds) ((comp vec concat) local-wordclouds)
                           (seq polls) ((comp vec concat) polls)
+                          (seq qa-boxes) ((comp vec concat)
+                                          (for [question-box-data (remove #(= (:db/id focus-qa-box) (:db/id %)) qa-boxes)]
+                                            [:section
+                                             {:key (str "qa-box-" (:db/id question-box-data))}
+                                             [qa-box/qa-box-card question-box-data]]))
                           (and (not focus-activation?) activation) (conj [activation/activation-card])
                           (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card])
                           (and feedback-form (not focus-feedback?)) (conj [feedback-card/feedback-card]))

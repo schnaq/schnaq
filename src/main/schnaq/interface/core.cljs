@@ -79,6 +79,7 @@
             [schnaq.interface.views.schnaq.activation-cards]
             [schnaq.interface.views.schnaq.create]
             [schnaq.interface.views.schnaq.poll]
+            [schnaq.interface.views.schnaq.qa-box]
             [schnaq.interface.views.schnaq.reactions]
             [schnaq.interface.views.schnaq.summary]
             [schnaq.interface.views.schnaq.visited]
