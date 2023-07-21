@@ -122,8 +122,8 @@
 (s/def :qa-box.question/answered boolean?)
 (s/def :qa-box.question/value ::non-blank-string)
 (s/def :qa-box.question/upvotes nat-int?)
-(s/def :qa-box/question (s/keys :req-un [:qa-box.question/value :qa-box.question/answered]
-                                :opt-un [:qa-box.question/upvotes]))
+(s/def :qa-box/question (s/keys :req [:qa-box.question/value :qa-box.question/answered]
+                                :opt [:qa-box.question/upvotes]))
 (s/def :qa-box/questions (s/coll-of :qa-box/question))
 (s/def ::qa-box
   (s/keys :req [:qa-box/visible]
