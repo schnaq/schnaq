@@ -41,7 +41,17 @@
     (let [share-hash "simple-hash"
           new-qa-box (db/create-qa-box! share-hash true "Questions about Testing")
           added-question (db/add-question (:db/id new-qa-box) "What is love?")
-          qa-box (-> (fast-pull (:db/id new-qa-box) patterns/qa-box))]
+          qa-box (fast-pull (:db/id new-qa-box) patterns/qa-box)]
       (is (zero? (:qa-box.question/upvotes added-question)))
       (is (= 1 (count (:qa-box/questions qa-box))))
       (is (= "What is love?" (-> qa-box :qa-box/questions first :qa-box.question/value))))))
+
+(deftest upvote-question-test
+  (testing "that an upvote is registered correctly"
+    (let [share-hash "simple-hash"
+          new-qa-box (db/create-qa-box! share-hash true "Questions about Testing")
+          added-question (db/add-question (:db/id new-qa-box) "What is love?")
+          _ (db/upvote-question (:db/id added-question))
+          _ (db/upvote-question (:db/id added-question))
+          question (fast-pull (:db/id added-question) patterns/question)]
+      (is (= 2 (:qa-box.question/upvotes question))))))

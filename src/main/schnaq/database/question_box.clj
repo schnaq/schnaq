@@ -52,3 +52,10 @@
                                   [:db/add qa-box-id :qa-box/questions question-id]]
                                  question-id
                                  patterns/question))))
+
+(>defn upvote-question
+  "Add an upvote to a question. Return a truthy value, when transaction was successful."
+  [question-id]
+  [:db/id => boolean?]
+  (map?
+   (db/increment-number question-id :qa-box.question/upvotes)))
