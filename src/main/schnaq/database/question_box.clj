@@ -32,7 +32,7 @@
 (>defn update-qa-box
   "Change visibility and label of the qa-box."
   [entity-id visible? label]
-  [:db/id :qa-box/visible :qa-box/label => ::specs/qa-box]
+  [:db/id :qa-box/visible :qa-box/label => (? ::specs/qa-box)]
   (let [prepared-tx [[:db/add entity-id :qa-box/visible visible?]]
         tx @(db/transact (if label
                            (conj prepared-tx [:db/add entity-id :qa-box/label label])

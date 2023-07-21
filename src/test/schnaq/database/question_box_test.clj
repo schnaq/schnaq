@@ -32,7 +32,7 @@
     (let [share-hash "simple-hash"
           qa-box-id (-> (fast-pull [:discussion/share-hash share-hash] '[{:discussion/qa-boxes [:db/id]}])
                         :discussion/qa-boxes first :db/id)
-          updated-qa-box @(db/update-qa-box qa-box-id false "New Label")]
+          updated-qa-box (db/update-qa-box qa-box-id false "New Label")]
       (is (false? (:qa-box/visible updated-qa-box)))
       (is (= "New Label" (:qa-box/label updated-qa-box))))))
 
