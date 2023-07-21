@@ -126,8 +126,8 @@
                                 :opt-un [:qa-box.question/upvotes]))
 (s/def :qa-box/questions (s/coll-of :qa-box/question))
 (s/def ::qa-box
-  (s/keys :req [:qa-box/visible :qa-box/questions]
-          :opt [:qa-box/label]))
+  (s/keys :req [:qa-box/visible]
+          :opt [:qa-box/label :qa-box/questions]))
 
 ;; Access Codes
 (s/def :discussion.access/code

@@ -16,3 +16,21 @@
       (is (= 2 (count results)))
       (is (zero? (count (:qa-box/questions new-qa-box))))
       (is (nil? (:qa-box/label unlabeled-qa-box))))))
+
+(deftest delete-qa-box!-test
+  (testing "Deleting a question-box works as expected."
+    (let [share-hash "simple-hash"
+          qa-box-id (get-in (fast-pull [:discussion/share-hash share-hash] '[{:discussion/qa-boxes [:db/id]}])
+                            [:discussion/qa-boxes 0 :db/id])
+          _tx @(db/delete-qa-box! qa-box-id)
+          qa-boxes (:discussion/qa-boxes (fast-pull [:discussion/share-hash share-hash]))]
+      (is (zero? (count qa-boxes))))))
+
+(deftest update-qa-box-test
+  (testing "Properly change visibility and label of the qa-box."
+    (let [share-hash "simple-hash"
+          qa-box-id (-> (fast-pull [:discussion/share-hash share-hash] '[{:discussion/qa-boxes [:db/id]}])
+                        :discussion/qa-boxes first :db/id)
+          updated-qa-box @(db/update-qa-box qa-box-id false "New Label")]
+      (is (false? (:qa-box/visible updated-qa-box)))
+      (is (= "New Label" (:qa-box/label updated-qa-box))))))

@@ -22,3 +22,21 @@
                                    prepared-tx)
                                 entity-id
                                 patterns/qa-box))))
+
+(>defn delete-qa-box!
+  "Delete a question box by its entity id."
+  [entity-id]
+  [:db/id => future?]
+  (db/transact [[:db/retractEntity entity-id]]))
+
+(>defn update-qa-box
+  "Change visibility and label of the qa-box."
+  [entity-id visible? label]
+  [:db/id :qa-box/visible :qa-box/label => ::specs/qa-box]
+  (let [prepared-tx [[:db/add entity-id :qa-box/visible visible?]]
+        tx @(db/transact (if label
+                          (conj prepared-tx [:db/add entity-id :qa-box/label label])
+                          prepared-tx))]
+    (->> tx
+         :db-after
+         (db/fast-pull entity-id patterns/qa-box))))
