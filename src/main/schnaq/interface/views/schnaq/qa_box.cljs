@@ -43,37 +43,46 @@
 (defn qa-box-tab
   "QA box tab menu to create a qa-box."
   []
-  (let [label-name "qa-input"
-        checkbox-name "qa-checkbox"]
-    [:> Form {:className "mt-4"
-              :on-submit (fn [event]
-                           (.preventDefault event)
-                           (let [label (oget event [:target :elements label-name :value])
-                                 visible? (oget event [:target :elements checkbox-name :checked])]
-                             (rf/dispatch [:qa-box/create visible? label])))} ;; TODO
-     [inputs/floating "Überschrift (optional)" label-name]
-     [inputs/checkbox "Q&A sichtbar für Nutzer:innen" checkbox-name {:defaultChecked true}]
-     [:div.text-center
-      [:> Button {:variant "primary"
-                  :className "w-75 mt-3 mx-auto d-block"
-                  :type :submit
-                  :on-click #(matomo/track-event "Active User" "Action" "Create Q&A Box")}
-       "Q&A Box erstellen"]]]))
+  [:> Form {:className "mt-4"
+            :on-submit (fn [event]
+                         (.preventDefault event)
+                         (rf/dispatch [:qa-box/create (oget event [:target])]))}
+   [inputs/floating "Überschrift (optional)" "qa-input"]
+   [inputs/checkbox "Q&A sichtbar für Nutzer:innen" "qa-checkbox" {:defaultChecked true}]
+   [:div.text-center
+    [:> Button {:variant "primary"
+                :className "w-75 mt-3 mx-auto d-block"
+                :type :submit
+                :on-click #(matomo/track-event "Active User" "Action" "Create Q&A Box")}
+     "Q&A Box erstellen"]]])
 
 ;; TODO aktuell werden mit der Diskussion auch die unsichtbaren Boxen geladen
 
 (rf/reg-event-fx
  :qa-box/create
- (fn [db [_ visible? label]]
-   {:db (assoc-in db [:schnaq :selected :discussion/qa-boxes]
-                  (conj (:schnaq/qa-boxes db)
-                        {:qa-box/visible visible?
-                         :qa-box/label (or label "")}))
-    ;; TODO next continue here
-    :fx [(http/xhrio-request db :post "/qa-box" [:qa-box.create/success]
-                             {:label label
-                              :visible? visible?}
-                             [:qa-box.create/failure])]}))
+ (fn [{:keys [db]} [_ form]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         label (oget form [:elements "qa-input" :value])
+         visible? (oget form [:elements "qa-checkbox" :checked])]
+     {:db (assoc-in db [:schnaq :selected :discussion/qa-boxes]
+                    (conj (get-in db [:schnaq :selected :discussion/qa-boxes])
+                          {:db/id -1
+                           :qa-box/visible visible?
+                           :qa-box/label (or label "")}))
+      :fx [(http/xhrio-request db :post "/qa-box" [:qa-box.create/success]
+                               {:share-hash share-hash
+                                :label label
+                                :visible? visible?}
+                               [:qa-box.create/failure])
+           [:form/clear form]]})))
+
+(rf/reg-event-db
+ :qa-box.create/success
+ (fn [db [_ response]]
+   db ;; TODO nachdem das get drin ist
+   ))
+
+;; TODO mach einen eigenen get anstatt das in den discussions zu holen
 
 (rf/reg-sub
  :qa-boxes
