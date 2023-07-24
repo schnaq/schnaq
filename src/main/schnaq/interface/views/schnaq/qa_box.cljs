@@ -9,9 +9,9 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.matomo :as matomo]
-            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.toolbelt :as tools]))
+            [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.shared-toolbelt :as shared-tools]))
 
 (def ^:private FormGroup (oget Form :Group))
 (def ^:private FormLabel (oget Form :Label))
@@ -56,20 +56,18 @@
                 :on-click #(matomo/track-event "Active User" "Action" "Create Q&A Box")}
      "Q&A Box erstellen"]]])
 
-;; TODO aktuell werden mit der Diskussion auch die unsichtbaren Boxen geladen
-
 (rf/reg-event-fx
  :qa-box/create
  (fn [{:keys [db]} [_ form]]
    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          label (oget form [:elements "qa-input" :value])
-         visible? (oget form [:elements "qa-checkbox" :checked])]
-     {:db (assoc-in db [:schnaq :selected :discussion/qa-boxes]
-                    (conj (get-in db [:schnaq :selected :discussion/qa-boxes])
-                          {:db/id -1
-                           :qa-box/visible visible?
-                           :qa-box/label (or label "")}))
-      :fx [(http/xhrio-request db :post "/qa-box" [:qa-box.create/success]
+         visible? (oget form [:elements "qa-checkbox" :checked])
+         temp-id (- 0 (rand-int 1000000))]
+     {:db (assoc-in db [:schnaq :qa-boxes temp-id]
+                    {:db/id temp-id
+                     :qa-box/visible visible?
+                     :qa-box/label (or label "")})
+      :fx [(http/xhrio-request db :post "/qa-box" [:qa-box.create/success temp-id]
                                {:share-hash share-hash
                                 :label label
                                 :visible? visible?}
@@ -78,21 +76,30 @@
 
 (rf/reg-event-db
  :qa-box.create/success
- (fn [db [_ response]]
+ (fn [db [_ temp-id response]]
    db ;; TODO nachdem das get drin ist
    ))
-
-;; TODO mach einen eigenen get anstatt das in den discussions zu holen
 
 (rf/reg-sub
  :qa-boxes
  (fn [db _]
-   (get-in db [:schnaq :selected :discussion/qa-boxes])))
+   (vals (get-in db [:schnaq :qa-boxes]))))
 
 (rf/reg-sub
  :qa-box
  (fn [db [_ qa-box-id]]
-   (->>
-    (get-in db [:schnaq :selected :discussion/qa-boxes])
-    (filter #(= (:db/id %) qa-box-id))
-    first)))
+   (get-in db [:schnaq :qa-boxes qa-box-id])))
+
+(rf/reg-event-fx
+ :qa-boxes/load-from-backend
+ (fn [{:keys [db]} _]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :get (str "/qa-boxes/" share-hash)
+                               [:qa-boxes.load-from-backend/success]
+                               {})]})))
+
+(rf/reg-event-db
+ :qa-boxes.load-from-backend/success
+ (fn [db [_ response]]
+   (when-let [qa-boxes (:qa-boxes response)]
+     (assoc-in db [:schnaq :qa-boxes] (shared-tools/normalize :db/id qa-boxes)))))

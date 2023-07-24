@@ -1,5 +1,6 @@
 (ns schnaq.database.question-box
-  (:require [com.fulcrologic.guardrails.core :refer [>defn => ?]]
+  (:require [clojure.spec.alpha :as s]
+            [com.fulcrologic.guardrails.core :refer [>defn => ?]]
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]))
@@ -76,3 +77,11 @@
   [question-id]
   [:db/id => future?]
   (db/transact [[:db/retractEntity question-id]]))
+
+(>defn qa-boxes-for-share-hash
+  "Get all qa-boxes for a certain share-hash."
+  [share-hash]
+  [:discussion/share-hash => (s/coll-of ::specs/qa-box)]
+  (->> (db/fast-pull [:discussion/share-hash share-hash] [:discussion/qa-boxes])
+       :discussion/qa-boxes
+       (remove #(not (:qa-box/visible %)))))

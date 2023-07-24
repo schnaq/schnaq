@@ -137,7 +137,6 @@
    [:discussion/moderators :xform 'schnaq.database.xforms/maps->ids]
    {:discussion/theme theme}
    :discussion/wordcloud
-   {:discussion/qa-boxes qa-box}
    {[:discussion/mode :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {[:discussion.access/_discussion :as :discussion/access] access-code}])
 
