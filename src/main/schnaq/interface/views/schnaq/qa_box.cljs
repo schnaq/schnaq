@@ -71,14 +71,27 @@
                                {:share-hash share-hash
                                 :label label
                                 :visible? visible?}
-                               [:qa-box.create/failure])
+                               [:qa-box.create/failure temp-id])
            [:form/clear form]]})))
 
 (rf/reg-event-db
  :qa-box.create/success
  (fn [db [_ temp-id response]]
-   db ;; TODO nachdem das get drin ist
-   ))
+   (when-let [qa-box (:qa-box response)]
+     (-> db
+         (update-in [:schnaq :qa-boxes] dissoc temp-id)
+         (assoc-in [:schnaq :qa-boxes (:db/id qa-box)] qa-box)))))
+
+(rf/reg-event-fx
+ :qa-box.create/failure
+ (fn [{:keys [db]} [_ temp-id]]
+   {:db (update-in db [:schnaq :qa-boxes] dissoc temp-id)
+    :fx [[:dispatch [[:notification/add
+                      #:notification{:title "QA-Box Fehler"
+                                     :body [:<>
+                                            "Die QA-Box konnte nicht erstellt werden. Bitte versuche es noch einmal."]
+                                     :context :error
+                                     :stay-visible? false}]]]]}))
 
 (rf/reg-sub
  :qa-boxes
