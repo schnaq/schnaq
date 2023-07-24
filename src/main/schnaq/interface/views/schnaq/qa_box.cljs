@@ -9,15 +9,16 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.matomo :as matomo]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.shared-toolbelt :as shared-tools]))
 
+;; TODO show invisible boxes, if user is moderator
+
 (def ^:private FormGroup (oget Form :Group))
 (def ^:private FormLabel (oget Form :Label))
 (def ^:private FormControl (oget Form :Control))
-
-;; TODO i18n
 
 (>defn- qa-box-card
   "Show a qa box card, where users can ask questions of the presenter."
@@ -37,7 +38,7 @@
                                  (rf/dispatch [:TODO (oget e [:target :elements input-name :value])])))} ;;TODO
        [:> FormGroup
         [:> InputGroup
-         [:> FormControl {:name input-name :placeholder "Gib hier deine Frage ein"}]
+         [:> FormControl {:name input-name :placeholder (labels :qa-boxes.question-input/placeholder)}]
          [:> Button {:variant "primary" :type :submit} [icon :plane]]]]])]])
 
 (defn qa-box-tab
@@ -47,14 +48,14 @@
             :on-submit (fn [event]
                          (.preventDefault event)
                          (rf/dispatch [:qa-box/create (oget event [:target])]))}
-   [inputs/floating "Überschrift (optional)" "qa-input"]
-   [inputs/checkbox "Q&A sichtbar für Nutzer:innen" "qa-checkbox" {:defaultChecked true}]
+   [inputs/floating (labels :qa-boxes.label-input/placeholder) "qa-input"]
+   [inputs/checkbox (labels :qa-boxes.visibility-checkbox/label) "qa-checkbox" {:defaultChecked true}]
    [:div.text-center
     [:> Button {:variant "primary"
                 :className "w-75 mt-3 mx-auto d-block"
                 :type :submit
                 :on-click #(matomo/track-event "Active User" "Action" "Create Q&A Box")}
-     "Q&A Box erstellen"]]])
+     (labels :qa-boxes.create-button/label)]]])
 
 (rf/reg-event-fx
  :qa-box/create
@@ -87,9 +88,8 @@
  (fn [{:keys [db]} [_ temp-id]]
    {:db (update-in db [:schnaq :qa-boxes] dissoc temp-id)
     :fx [[:dispatch [[:notification/add
-                      #:notification{:title "QA-Box Fehler"
-                                     :body [:<>
-                                            "Die QA-Box konnte nicht erstellt werden. Bitte versuche es noch einmal."]
+                      #:notification{:title (labels :qa-boxes.create.error/heading)
+                                     :body [:<> (labels :qa-boxes.create.error/body)]
                                      :context :error
                                      :stay-visible? false}]]]]}))
 

@@ -341,8 +341,7 @@
             activation-tab [:span [iconed-heading :activation :magic :schnaq.input-type/activation]]
             word-cloud-tab [:span [iconed-heading :word-cloud :cloud :schnaq.input-type/word-cloud]]
             feedback-tab [:span [iconed-heading :feedback :feedback :schnaq.input-type/feedback]]
-            qa-box-tab [:span [iconed-heading :qa-box :question :schnaq.input-type/qa-box ;; TODO i18n
-                               ]]
+            qa-box-tab [:span [iconed-heading :qa-box :question :schnaq.input-type/qa-box]]
             pro-user? @(rf/subscribe [:user/pro?])
             moderator? @(rf/subscribe [:user/moderator?])
             read-only? @(rf/subscribe [:schnaq.state/read-only?])

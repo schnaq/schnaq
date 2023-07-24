@@ -151,6 +151,7 @@
    :schnaq.input-type/activation "Activation"
    :schnaq.input-type/word-cloud "Word Cloud"
    :schnaq.input-type/feedback "Feedback"
+   :schnaq.input-type/qa-box "Q&A box"
    :schnaq.input-type/pro-only "Only for pro users"
 
    ;; Poll feature
@@ -910,4 +911,13 @@
    :schnaqqifant/three-d-head-alt-text "Schnaqqis Head in 3D looking at you"
    :icon.search/alt-text "Search Icon"
    :icon.posts/alt-text "Icon representing number of posts"
-   :icon.users/alt-text "Icon for number of users"})
+   :icon.users/alt-text "Icon for number of users"
+
+   ;; QA-Boxes
+   :qa-boxes.question-input/placeholder "Enter your question here"
+   :qa-boxes.label-input/placeholder "Headline (optional)"
+   :qa-boxes.visibility-checkbox/label "Q&A visible for users"
+   :qa-boxes.create-button/label "Create Q&A Box"
+   :qa-boxes.create.error/heading "QA box error"
+   :qa-boxes.create.error/body "Q&A box could not be created. Please try again."
+   })
