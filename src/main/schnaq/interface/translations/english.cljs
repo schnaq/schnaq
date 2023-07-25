@@ -930,4 +930,5 @@
    :qa-boxes.dropdown/show "Publish Q&A"
    :qa-boxes.question.visibility.error/heading "Visibility Error"
    :qa-boxes.question.visibility.error/body "The visibility of the question could not be changed. Please try again."
-   :qa-boxes.card/invisible "This Q&A is currently invisible for users."})
+   :qa-boxes.card/invisible "This Q&A is currently invisible for users."
+   :qa-boxes.question/delete-confirmation "Do you really want to delete this question?"})

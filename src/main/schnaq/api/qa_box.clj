@@ -47,9 +47,9 @@
 (defn- upvote-question
   "Upvote a single question in a qa-box."
   [{:keys [parameters]}]
-  (let [qa-box-id (get-in parameters [:path :qa-box-id])
-        {:keys [question-id share-hash]} (:body parameters)]
-    (if (qa-box-db/question-id-plausibile? question-id qa-box-id share-hash)
+  (let [{:keys [question-id qa-box-id]} (:path parameters)
+        {:keys [share-hash]} (:body parameters)]
+    (if (qa-box-db/question-id-plausible? question-id qa-box-id share-hash)
       (ok {:upvoted? (qa-box-db/upvote-question question-id)})
       (forbidden (at/response-error-body :invalid-credentials "The ids and share-hash you provided do not match.")))))
 
@@ -63,6 +63,16 @@
     (if (qa-box-db/qa-box-moderator? user-id qa-box-id)
       (ok {:updated-qa-box (qa-box-db/update-qa-box qa-box-id (:make-visible? (:body parameters)))})
       (forbidden (at/response-error-body :not-a-moderator "You are not allowed to modify this Q&A box.")))))
+
+(defn- delete-question
+  "Delete a single question in a qa-box."
+  [{:keys [parameters]}]
+  (let [{:keys [question-id qa-box-id]} (:path parameters)
+        {:keys [share-hash]} (:body parameters)]
+    (if (qa-box-db/question-id-plausible? question-id qa-box-id share-hash)
+      (ok {:deleted? (map? @(qa-box-db/delete-question question-id))})
+      (forbidden (at/response-error-body :invalid-credentials "The ids and share-hash you provided do not match.")))))
+
 
 (def qa-box-routes
   [["" {:swagger {:tags ["qa-box"]}}
@@ -97,16 +107,27 @@
                               :responses {200 {:body {:updated-qa-box ::specs/qa-box}}
                                           400 at/response-error-body
                                           403 at/response-error-body}}}]
-      ["/question/upvote" {:name :api.qa-box.question/upvote
-                           :post {:handler upvote-question
-                                  :description (at/get-doc #'upvote-question)
-                                  :middleware [:discussion/valid-writeable-discussion?]
-                                  :parameters {:path {:qa-box-id :db/id}
-                                               :body {:question-id :db/id
-                                                      :share-hash :discussion/share-hash}}
-                                  :responses {200 {:body {:upvoted? boolean?}}
-                                              400 at/response-error-body
-                                              403 at/response-error-body}}}]
+      ["/question/:question-id"
+       ["" {:name :api.qa-box.question.delete
+            :delete {:handler delete-question
+                     :description (at/get-doc #'delete-question)
+                     :middleware [:discussion/user-moderator? :user/pro? :discussion/valid-writeable-discussion?]
+                     :parameters {:path {:qa-box-id :db/id
+                                         :question-id :db/id}
+                                  :body {:share-hash :discussion/share-hash}}
+                     :responses {200 {:body {:deleted? boolean?}}
+                                 400 at/response-error-body
+                                 403 at/response-error-body}}}]
+       ["/upvote" {:name :api.qa-box.question/upvote
+                   :post {:handler upvote-question
+                          :description (at/get-doc #'upvote-question)
+                          :middleware [:discussion/valid-writeable-discussion?]
+                          :parameters {:path {:qa-box-id :db/id
+                                              :question-id :db/id}
+                                       :body {:share-hash :discussion/share-hash}}
+                          :responses {200 {:body {:upvoted? boolean?}}
+                                      400 at/response-error-body
+                                      403 at/response-error-body}}}]]
       ["/questions" {:name :api.qa-box.questions/add
                      :post {:handler add-question
                             :description (at/get-doc #'add-question)

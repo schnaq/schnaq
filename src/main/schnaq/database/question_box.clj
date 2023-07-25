@@ -35,7 +35,7 @@
                             (get-in [:discussion/_qa-boxes :discussion/share-hash]))]
     (= share-hash real-share-hash)))
 
-(>defn question-id-plausibile?
+(>defn question-id-plausible?
   "Check whether a question id matches with a qa-box-id and share-hash."
   [question-id qa-box-id share-hash]
   [:db/id :db/id :discussion/share-hash => boolean?]

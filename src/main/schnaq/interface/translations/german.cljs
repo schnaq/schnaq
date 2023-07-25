@@ -939,4 +939,5 @@
    :qa-boxes.dropdown/show "Q&A Veröffentlichen"
    :qa-boxes.question.visibility.error/heading "Fehler bei Sichtbarkeitsänderung"
    :qa-boxes.question.visibility.error/body "Der Sichtbarkeitsstatus der Q&A-Box konnte nicht geändert werden. Bitte versuche es noch einmal."
-   :qa-boxes.card/invisible "Dieses Q&A ist aktuell für Benutzer versteckt."})
+   :qa-boxes.card/invisible "Dieses Q&A ist aktuell für Benutzer versteckt."
+   :qa-boxes.question/delete-confirmation "Willst du diese Frage wirklich löschen?"})

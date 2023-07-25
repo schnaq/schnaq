@@ -61,7 +61,8 @@
           question-dispatch #(rf/dispatch [:qa-box.question/add (:db/id qa-box) (oget % [:target]) input-name])
           partitioned-questions (group-by :qa-box.question/answered (:qa-box/questions qa-box))
           sorted-questions (sort-by :qa-box.question/upvotes > (concat [] (get partitioned-questions false) (get partitioned-questions true)))
-          cast-upvotes @(rf/subscribe [:qa-box/cast-upvotes (:db/id qa-box)])]
+          cast-upvotes @(rf/subscribe [:qa-box/cast-upvotes (:db/id qa-box)])
+          user-moderator? @(rf/subscribe [:user/moderator?])]
       [:<>
        [:> Form {:className "mb-3"
                  :on-submit (fn [e]
@@ -78,14 +79,24 @@
         (for [question sorted-questions]
           (with-meta
             [motion/animated-list-item
-             [:div.border.rounded.mb-2.p-2.d-flex.flex-row.justify-content-between.align-items-center
-              {:className (when (:qa-box.question/answered question) "bg-success bg-opacity-25")}
-              [:p.d-inline-block.mb-0 (:qa-box.question/value question)]
-              [:div.flex-shrink-0.ms-1
-               (if (cast-upvotes (:db/id question))
-                 [icon :smile-beam "mx-1 text-gray"]
-                 [icon :arrow-up "mx-1 text-primary clickable" {:on-click #(rf/dispatch [:qa-box.question/upvote (:db/id qa-box) (:db/id question)])}])
-               [:span (or (:qa-box.question/upvotes question) 0)]]]]
+             [:div.d-flex.flex-row.justify-content-between.align-items-center
+              [:div.border.rounded.mb-2.p-2.d-flex.flex-row.justify-content-between.align-items-center.flex-grow-1
+               {:className (when (:qa-box.question/answered question) "bg-success bg-opacity-25")}
+               [:p.d-inline-block.mb-0 (:qa-box.question/value question)]
+               [:div.flex-shrink-0.ms-1
+                (if (cast-upvotes (:db/id question))
+                  [icon :smile-beam "mx-1 text-gray"]
+                  [icon :arrow-up "mx-1 text-primary clickable" {:on-click #(rf/dispatch [:qa-box.question/upvote (:db/id qa-box) (:db/id question)])}])
+                [:span (or (:qa-box.question/upvotes question) 0)]]]
+              (when user-moderator?
+                [:div.row.g-0.flex-shrink-0
+                 [:div.col-6
+                  [icon :trash
+                   "border border-danger border-opacity-75 rounded text-danger clickable p-2 m-1 ms-2"
+                   {:on-click #(when (js/confirm (labels :qa-boxes.question/delete-confirmation))
+                                 (rf/dispatch [:qa-box.question/delete (:db/id qa-box) (:db/id question)]))}]]
+                 [:div.col-6
+                  [icon :check/normal "border border-primary border-opacity-75 rounded text-primary clickable p-2 my-1 ms-1"]]])]]
             {:key (str "question-" (:db/id question))}))]])]])
 
 (>defn qa-box-list
@@ -234,10 +245,9 @@
                                  %)
                               qs)))
             (update-in [:qa-boxes :upvotes qa-box-id] (fnil conj #{}) question-id))
-    :fx [(http/xhrio-request db :post (str "/qa-box/" qa-box-id "/question/upvote")
+    :fx [(http/xhrio-request db :post (str "/qa-box/" qa-box-id "/question/" question-id "/upvote")
                              [:qa-box.question.upvote/success]
-                             {:question-id question-id
-                              :share-hash (get-in db [:schnaq :selected :discussion/share-hash])}
+                             {:share-hash (get-in db [:schnaq :selected :discussion/share-hash])}
                              [:qa-box.question.upvote/failure qa-box-id question-id])]}))
 
 (rf/reg-event-fx
@@ -282,3 +292,18 @@
                                     :body [:<> (labels :qa-boxes.question.visibility.error/body)]
                                     :context :warning
                                     :stay-visible? false}]]]}))
+
+(rf/reg-event-fx
+ :qa-box.question/delete
+ (fn [{:keys [db]} [_ qa-box-id question-id]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:fx [(http/xhrio-request db :delete (str "/qa-box/" qa-box-id "/question/" question-id)
+                               [:qa-box.question.delete/success qa-box-id question-id]
+                               {:share-hash share-hash})]})))
+
+(rf/reg-event-db
+ :qa-box.question.delete/success
+ (fn [db [_ qa-box-id question-id]]
+   (update-in db [:schnaq :qa-boxes qa-box-id :qa-box/questions]
+              (fn [qs]
+                (remove #(= (:db/id %) question-id) qs)))))
