@@ -101,6 +101,6 @@
   "Get all qa-boxes for a certain share-hash."
   [share-hash]
   [:discussion/share-hash => (s/coll-of ::specs/qa-box)]
-  (->> (db/fast-pull [:discussion/share-hash share-hash] [:discussion/qa-boxes])
+  (->> (db/fast-pull [:discussion/share-hash share-hash] [{:discussion/qa-boxes patterns/qa-box}])
        :discussion/qa-boxes
        (remove #(not (:qa-box/visible %)))))
