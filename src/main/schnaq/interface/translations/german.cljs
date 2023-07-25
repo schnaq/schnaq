@@ -929,4 +929,5 @@
    :qa-boxes.create-button/label "Q&A Box erstellen"
    :qa-boxes.create.error/heading "QA-Box Fehler"
    :qa-boxes.create.error/body "Die QA-Box konnte nicht erstellt werden. Bitte versuche es noch einmal."
-   })
+   :qa-boxes.dropdown/delete "Q&A Löschen"
+   :qa-boxes.dropdown/delete-confirmation "Möchtest du dieses Q&A wirklich löschen?"})

@@ -12,13 +12,28 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
             [schnaq.shared-toolbelt :as shared-tools]))
 
 ;; TODO show invisible boxes, if user is moderator
 
 (def ^:private FormGroup (oget Form :Group))
-(def ^:private FormLabel (oget Form :Label))
 (def ^:private FormControl (oget Form :Control))
+
+(>defn- dropdown-menu
+  "Dropdown menu for poll configuration."
+  [qa-box]
+  [::specs/qa-box => :re-frame/component]
+  (when (pos? (:db/id qa-box))
+    (let [qa-box-id (:db/id qa-box)
+          {:qa-box/keys [visible]} qa-box]
+      [dropdown-menu/moderator
+       {:id (str "qa-dropdown-id-" qa-box-id)}
+       [:<>
+        [dropdown-menu/item :trash
+         :qa-boxes.dropdown/delete
+         #(when (js/confirm (labels :qa-boxes.dropdown/delete-confirmation))
+            (rf/dispatch [:qa-box/delete qa-box-id]))]]])))
 
 (>defn- qa-box-card
   "Show a qa box card, where users can ask questions of the presenter."
@@ -28,7 +43,7 @@
    [:div.mx-4.my-2
     [:div.d-flex
      [:h6.pb-2.text-center.mx-auto (:qa-box/label qa-box)]
-     [:p "TODO…"]]
+     [dropdown-menu qa-box]]
     (let [input-name (str "question-" (:db/id qa-box))]
       [:> Form {:on-submit (fn [e]
                              (.preventDefault e)
@@ -116,3 +131,19 @@
  (fn [db [_ response]]
    (when-let [qa-boxes (:qa-boxes response)]
      (assoc-in db [:schnaq :qa-boxes] (shared-tools/normalize :db/id qa-boxes)))))
+
+(rf/reg-event-fx
+ :qa-box/delete
+ (fn [{:keys [db]} [_ qa-box-id]]
+   (let [qa-box (get-in db [:schnaq :qa-boxes qa-box-id])
+         share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:db (update-in db [:schnaq :qa-boxes] dissoc qa-box-id)
+      :fx [(http/xhrio-request db :delete (str "/qa-box/" qa-box-id)
+                               [:no-op]
+                               {:share-hash share-hash}
+                               [:qa-box.delete/failure qa-box])]})))
+
+(rf/reg-event-db
+ :qa-box.delete/failure
+ (fn [db [_ qa-box]]
+   (assoc-in db [:schnaq :qa-boxes (:db/id qa-box)] qa-box)))

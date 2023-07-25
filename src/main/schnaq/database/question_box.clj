@@ -3,7 +3,8 @@
             [com.fulcrologic.guardrails.core :refer [>defn => ?]]
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
-            [schnaq.database.specs :as specs]))
+            [schnaq.database.specs :as specs]
+            [schnaq.validator :as validators]))
 
 (>defn create-qa-box!
   "Create an empty question box with an optional label if passed."
@@ -23,6 +24,15 @@
                                   prepared-tx)
                                 entity-id
                                 patterns/qa-box))))
+
+(>defn qa-box-moderator?
+  "Check whether a user is moderator of a qa-box."
+  [user-id qa-box-id]
+  [:db/id :db/id => boolean?]
+  (let [share-hash (-> qa-box-id
+                       (db/fast-pull '[{:discussion/_qa-boxes [:discussion/share-hash]}])
+                       (get-in [:discussion/_qa-boxes :discussion/share-hash]))]
+    (validators/user-moderator? share-hash user-id)))
 
 (>defn delete-qa-box!
   "Delete a question box by its entity id."
