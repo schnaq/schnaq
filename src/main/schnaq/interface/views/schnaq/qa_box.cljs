@@ -20,7 +20,6 @@
 
 ;; TODO edit of boxes
 ;; TODO show delete / answered controlls for moderators
-;; TODO Put in focus for QA Box
 
 (def ^:private FormGroup (oget Form :Group))
 (def ^:private FormControl (oget Form :Control))
@@ -38,6 +37,9 @@
         [dropdown-menu/item (if visible :eye-slash :eye)
          (if visible :qa-boxes.dropdown/hide :qa-boxes.dropdown/show)
          #(rf/dispatch [:qa-box/update-visibility qa-box-id (not visible)])]
+        [dropdown-menu/item :bullseye
+         :schnaq.admin.focus/button
+         #(rf/dispatch [:schnaq.moderation.focus/entity (:db/id qa-box)])]
         [dropdown-menu/item :trash
          :qa-boxes.dropdown/delete
          #(when (js/confirm (labels :qa-boxes.dropdown/delete-confirmation))
