@@ -30,9 +30,22 @@
   [qa-box-id share-hash]
   [:db/id :discussion/share-hash => boolean?]
   (let [real-share-hash (-> qa-box-id
-                       (db/fast-pull '[{:discussion/_qa-boxes [:discussion/share-hash]}])
-                       (get-in [:discussion/_qa-boxes :discussion/share-hash]))]
+                            (db/fast-pull '[{:discussion/_qa-boxes [:discussion/share-hash]}])
+                            (get-in [:discussion/_qa-boxes :discussion/share-hash]))]
     (= share-hash real-share-hash)))
+
+(>defn question-id-plausibile?
+  "Check whether a question id matches with a qa-box-id and share-hash."
+  [question-id qa-box-id share-hash]
+  [:db/id :db/id :discussion/share-hash => boolean?]
+  (let [real-qa-box-id (-> question-id
+                           (db/fast-pull '[:qa-box/_questions])
+                           (get-in [:qa-box/_questions :db/id]))
+        real-share-hash (-> qa-box-id
+                            (db/fast-pull '[{:discussion/_qa-boxes [:discussion/share-hash]}])
+                            (get-in [:discussion/_qa-boxes :discussion/share-hash]))]
+    (and (= qa-box-id real-qa-box-id)
+         (= share-hash real-share-hash))))
 
 (>defn qa-box-moderator?
   "Check whether a user is moderator of a qa-box."

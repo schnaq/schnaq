@@ -8,9 +8,11 @@
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
             [schnaq.shared-toolbelt :as shared-tools]))
@@ -47,7 +49,10 @@
      [:h6.pb-2.text-center.mx-auto (:qa-box/label qa-box)]
      [dropdown-menu qa-box]]
     (let [input-name (str "question-" (:db/id qa-box))
-          question-dispatch #(rf/dispatch [:qa-box.question/add (:db/id qa-box) (oget % [:target]) input-name])]
+          question-dispatch #(rf/dispatch [:qa-box.question/add (:db/id qa-box) (oget % [:target]) input-name])
+          partitioned-questions (group-by :qa-box.question/answered (:qa-box/questions qa-box))
+          sorted-questions (sort-by :qa-box.question/upvotes > (concat [] (get partitioned-questions false) (get partitioned-questions true)))
+          cast-upvotes @(rf/subscribe [:qa-box/cast-upvotes (:db/id qa-box)])]
       [:> Form {:className "mb-3"
                 :on-submit (fn [e]
                              (.preventDefault e)
@@ -58,15 +63,20 @@
        [:> FormGroup
         [:> InputGroup
          [:> FormControl {:name input-name :placeholder (labels :qa-boxes.question-input/placeholder)}]
-         [:> Button {:variant "primary" :type :submit} [icon :plane]]]]])
-    (for [question (sort-by :qa-box.question/value > (:qa-box/questions qa-box))]
-      [:div.border.rounded.mb-2.p-2.d-flex.flex-row.justify-content-between.align-items-center
-       {:key (str "question-" (:db/id question))
-        :className (when (:qa-box.question/answered question) "bg-success bg-opacity-25")}
-       [:p.d-inline-block.mb-0 (:qa-box.question/value question)]
-       [:div.flex-shrink-0.ms-2
-        [icon :arrow-up] ;; TODO make clickable for upvotes
-        [:span.ms-1 (or (:qa-box.question/upvotes question) 0)]]])]])
+         [:> Button {:variant "primary" :type :submit} [icon :plane]]]]]
+      [motion/animated-list
+       (for [question sorted-questions]
+         (with-meta
+           [motion/animated-list-item
+            [:div.border.rounded.mb-2.p-2.d-flex.flex-row.justify-content-between.align-items-center
+             {:className (when (:qa-box.question/answered question) "bg-success bg-opacity-25")}
+             [:p.d-inline-block.mb-0 (:qa-box.question/value question)]
+             [:div.flex-shrink-0.ms-1
+              (if (cast-upvotes (:db/id question))
+                [icon :smile-beam "mx-1 text-gray"]
+                [icon :arrow-up "mx-1 text-primary clickable" {:on-click #(rf/dispatch [:qa-box.question/upvote (:db/id qa-box) (:db/id question)])}])
+              [:span (or (:qa-box.question/upvotes question) 0)]]]]
+           {:key (str "question-" (:db/id question))}))])]])
 
 (defn qa-box-tab
   "QA box tab menu to create a qa-box."
@@ -192,3 +202,42 @@
                                     :body [:<> (labels :qa-boxes.question.add.error/body)]
                                     :context :warning
                                     :stay-visible? false}]]]}))
+
+(rf/reg-event-fx
+ :qa-box.question/upvote
+ (fn [{:keys [db]} [_ qa-box-id question-id]]
+   {:db (-> db
+            (update-in [:schnaq :qa-boxes qa-box-id :qa-box/questions]
+                       (fn [qs]
+                         (map #(if (= (:db/id %) question-id)
+                                 (assoc % :qa-box.question/upvotes ((fnil inc 0) (:qa-box.question/upvotes %)))
+                                 %)
+                              qs)))
+            (update-in [:qa-boxes :upvotes qa-box-id] (fnil conj #{}) question-id))
+    :fx [(http/xhrio-request db :post (str "/qa-box/" qa-box-id "/question/upvote")
+                             [:qa-box.question.upvote/success]
+                             {:question-id question-id
+                              :share-hash (get-in db [:schnaq :selected :discussion/share-hash])}
+                             [:qa-box.question.upvote/failure qa-box-id question-id])]}))
+
+(rf/reg-event-fx
+ :qa-box.question.upvote/success
+ (fn [{:keys [db]} _]
+   {:fx [[:localstorage/assoc [:qa-box/upvotes (get-in db [:qa-boxes :upvotes])]]]}))
+
+(rf/reg-event-db
+ :qa-box.question.upvote/failure
+ (fn [db [_ qa-box-id question-id]]
+   (update-in db [:qa-boxes :upvotes qa-box-id] disj question-id)))
+
+(rf/reg-event-db
+ :qa-box/load-upvotes
+ ;; Load qa-box upvotes from localstorage
+ (fn [db _]
+   (when-let [cast-upvotes (from-localstorage :qa-box/upvotes)]
+     (assoc-in db [:qa-boxes :upvotes] cast-upvotes))))
+
+(rf/reg-sub
+ :qa-box/cast-upvotes
+ (fn [db [_ qa-box-id]]
+   (get-in db [:qa-boxes :upvotes qa-box-id] #{})))

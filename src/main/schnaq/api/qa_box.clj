@@ -39,6 +39,15 @@
       (ok {:new-question (qa-box-db/add-question qa-box-id question)})
       (forbidden (at/response-error-body :invalid-share-hash "The share-hash does not match the qa-box.")))))
 
+(defn upvote-question
+  "Upvote a single question in a qa-box."
+  [{:keys [parameters]}]
+  (let [qa-box-id (get-in parameters [:path :qa-box-id])
+        {:keys [question-id share-hash]} (:body parameters)]
+    (if (qa-box-db/question-id-plausibile? question-id qa-box-id share-hash)
+      (ok {:upvoted? (qa-box-db/upvote-question question-id)})
+      (forbidden (at/response-error-body :invalid-credentials "The ids and share-hash you provided do not match.")))))
+
 (def qa-box-routes
   [["" {:swagger {:tags ["qa-box"]}}
     ["/qa-box"
@@ -62,6 +71,16 @@
                     :responses {200 {:body {:db/id :db/id}}
                                 400 at/response-error-body
                                 403 at/response-error-body}}}]
+      ["/question/upvote" {:name :api.qa-box.question/upvote
+                           :post {:handler upvote-question
+                                  :description (at/get-doc #'upvote-question)
+                                  :middleware [:discussion/valid-writeable-discussion?]
+                                  :parameters {:path {:qa-box-id :db/id}
+                                               :body {:question-id :db/id
+                                                      :share-hash :discussion/share-hash}}
+                                  :responses {200 {:body {:upvoted? boolean?}}
+                                              400 at/response-error-body
+                                              403 at/response-error-body}}}]
       ["/questions" {:name :api.qa-box.questions/add
                      :post {:handler add-question
                             :description (at/get-doc #'add-question)
