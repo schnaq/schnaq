@@ -204,7 +204,7 @@
        doall))
 
 (def allowed-http-verbs
-  #{:get :put :post :delete :options})
+  #{:get :put :post :delete :options :patch})
 
 (defstate api
   :start

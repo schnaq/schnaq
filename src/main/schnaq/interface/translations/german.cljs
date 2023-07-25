@@ -934,4 +934,9 @@
    :qa-boxes.question.add.error/heading "Fehler beim Hinzufügen der Frage"
    :qa-boxes.question.add.error/body "Deine Frage konnte wegen eines Fehlers nicht hinzugefügt werden. Bitte versuche es noch einmal."
    :qa-boxes.delete.error/heading "Fehler beim Löschen"
-   :qa-boxes.delete.error/body "Das Q&A konnte nicht gelöscht werden. Bitte versuche es noch einmal."})
+   :qa-boxes.delete.error/body "Das Q&A konnte nicht gelöscht werden. Bitte versuche es noch einmal."
+   :qa-boxes.dropdown/hide "Q&A Verstecken"
+   :qa-boxes.dropdown/show "Q&A Veröffentlichen"
+   :qa-boxes.question.visibility.error/heading "Fehler bei Sichtbarkeitsänderung"
+   :qa-boxes.question.visibility.error/body "Der Sichtbarkeitsstatus der Q&A-Box konnte nicht geändert werden. Bitte versuche es noch einmal."
+   :qa-boxes.card/invisible "Dieses Q&A ist aktuell für Benutzer versteckt."})

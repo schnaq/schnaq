@@ -4,7 +4,8 @@
             [schnaq.database.main :as db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
-            [schnaq.validator :as validators]))
+            [schnaq.validator :as validators]
+            [taoensso.timbre :as log]))
 
 (>defn create-qa-box!
   "Create an empty question box with an optional label if passed."
@@ -64,15 +65,18 @@
 
 (>defn update-qa-box
   "Change visibility and label of the qa-box."
-  [entity-id visible? label]
-  [:db/id :qa-box/visible :qa-box/label => (? ::specs/qa-box)]
-  (let [prepared-tx [[:db/add entity-id :qa-box/visible visible?]]
-        tx @(db/transact (if label
-                           (conj prepared-tx [:db/add entity-id :qa-box/label label])
-                           prepared-tx))]
-    (->> tx
-         :db-after
-         (db/fast-pull entity-id patterns/qa-box))))
+  ([entity-id visible?]
+   [:db/id :qa-box/visible => (? ::specs/qa-box)]
+   (update-qa-box entity-id visible? nil))
+  ([entity-id visible? label]
+   [:db/id :qa-box/visible (? :qa-box/label) => (? ::specs/qa-box)]
+   (let [prepared-tx [[:db/add entity-id :qa-box/visible visible?]]
+         tx @(db/transact (if label
+                            (conj prepared-tx [:db/add entity-id :qa-box/label label])
+                            prepared-tx))]
+     (->> tx
+          :db-after
+          (db/fast-pull entity-id patterns/qa-box)))))
 
 
 (>defn add-question
@@ -112,8 +116,11 @@
 
 (>defn qa-boxes-for-share-hash
   "Get all qa-boxes for a certain share-hash."
-  [share-hash]
-  [:discussion/share-hash => (s/coll-of ::specs/qa-box)]
-  (->> (db/fast-pull [:discussion/share-hash share-hash] [{:discussion/qa-boxes patterns/qa-box}])
-       :discussion/qa-boxes
-       (remove #(not (:qa-box/visible %)))))
+  [share-hash with-invisible?]
+  [:discussion/share-hash boolean? => (s/coll-of ::specs/qa-box)]
+  (let [all-qa-boxes (:discussion/qa-boxes
+                      (db/fast-pull [:discussion/share-hash share-hash] [{:discussion/qa-boxes patterns/qa-box}]))]
+    (log/debug "Retrieving qa-boxes for share-hash" share-hash "— Including invisible?" with-invisible?)
+    (if with-invisible?
+      all-qa-boxes
+      (remove #(not (:qa-box/visible %)) all-qa-boxes))))

@@ -68,7 +68,7 @@
         focus-activation? (and activation-focus (= activation-focus (:db/id activation)))
         focus-wordcloud? @(rf/subscribe [:schnaq.wordcloud/focus?])
         polls (poll/poll-list (:db/id focus-poll))
-        qa-boxes @(rf/subscribe [:qa-boxes])
+        qa-boxes (qa-box/qa-box-list (:db/id focus-qa-box))
         wordcloud? @(rf/subscribe [:schnaq.wordcloud/show?])
         focus-local-wordcloud @(rf/subscribe [:schnaq.wordcloud/local activation-focus])
         local-wordclouds (wordcloud-card/wordcloud-list focus-local-wordcloud)
@@ -92,16 +92,13 @@
                           ;; Add non focused elements in order
                           (seq local-wordclouds) ((comp vec concat) local-wordclouds)
                           (seq polls) ((comp vec concat) polls)
-                          (seq qa-boxes) ((comp vec concat)
-                                          (for [question-box-data (remove #(= (:db/id focus-qa-box) (:db/id %)) qa-boxes)]
-                                            [:section
-                                             {:key (str "qa-box-" (:db/id question-box-data))}
-                                             [qa-box/qa-box-card question-box-data]]))
+                          (seq qa-boxes) ((comp vec concat) qa-boxes)
                           (and (not focus-activation?) activation) (conj [activation/activation-card])
                           (and wordcloud? (not focus-wordcloud?)) (conj [wordcloud-card/wordcloud-card])
                           (and feedback-form (not focus-feedback?)) (conj [feedback-card/feedback-card]))
         activations-count (count activations-seq)
         active-index (mod show-index activations-count)]
+    (println "activation: " qa-boxes)
     (when (and top-level? (seq activations-seq))
       [:<>
        (nth activations-seq active-index)

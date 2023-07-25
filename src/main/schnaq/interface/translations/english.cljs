@@ -925,4 +925,9 @@
    :qa-boxes.question.add.error/heading "Error adding question"
    :qa-boxes.question.add.error/body "Your question could not be added, due to an error. Please try again."
    :qa-boxes.delete.error/heading "Delete error"
-   :qa-boxes.delete.error/body "The box could not be deleted. Please try again."})
+   :qa-boxes.delete.error/body "The box could not be deleted. Please try again."
+   :qa-boxes.dropdown/hide "Hide Q&A"
+   :qa-boxes.dropdown/show "Publish Q&A"
+   :qa-boxes.question.visibility.error/heading "Visibility Error"
+   :qa-boxes.question.visibility.error/body "The visibility of the question could not be changed. Please try again."
+   :qa-boxes.card/invisible "This Q&A is currently invisible for users."})

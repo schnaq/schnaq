@@ -4,21 +4,26 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.database.question-box :as qa-box-db]
             [schnaq.database.specs :as specs]
-            [schnaq.database.user :as user-db]))
+            [schnaq.database.user :as user-db]
+            [schnaq.validator :as validators]
+            [taoensso.timbre :as log]))
 
-(defn create-qa-box
+(defn- create-qa-box
   "Allow admins to create a qa-box"
   [{:keys [parameters]}]
   (let [{:keys [share-hash visible? label]} (:body parameters)]
     (ok {:qa-box (qa-box-db/create-qa-box! share-hash visible? label)})))
 
 (defn get-qa-boxes
-  "Get all qa-boxes for a discussion"
-  [{:keys [parameters]}]
-  (let [share-hash (get-in parameters [:path :share-hash])]
-    (ok {:qa-boxes (qa-box-db/qa-boxes-for-share-hash share-hash)})))
+  "Get all qa-boxes for a discussion. If moderator, also return the invisible ones."
+  [{:keys [parameters identity]}]
+  (let [share-hash (get-in parameters [:path :share-hash])
+        user-sub (:sub identity)
+        user-id (when user-sub (:db/id (user-db/private-user-by-keycloak-id user-sub)))
+        user-moderator? (true? (validators/user-moderator? share-hash user-id))]
+    (ok {:qa-boxes (qa-box-db/qa-boxes-for-share-hash share-hash user-moderator?)})))
 
-(defn delete-qa-box
+(defn- delete-qa-box
   "Delete a single qa-box from a discussion."
   [{:keys [parameters identity]}]
   (let [qa-box-id (get-in parameters [:path :qa-box-id])
@@ -30,7 +35,7 @@
         (ok {:db/id qa-box-id}))
       (forbidden (at/response-error-body :not-a-moderator "You are not allowed to delete this Q&A box.")))))
 
-(defn add-question
+(defn- add-question
   "Add a question to a qa-box"
   [{:keys [parameters]}]
   (let [qa-box-id (get-in parameters [:path :qa-box-id])
@@ -39,7 +44,7 @@
       (ok {:new-question (qa-box-db/add-question qa-box-id question)})
       (forbidden (at/response-error-body :invalid-share-hash "The share-hash does not match the qa-box.")))))
 
-(defn upvote-question
+(defn- upvote-question
   "Upvote a single question in a qa-box."
   [{:keys [parameters]}]
   (let [qa-box-id (get-in parameters [:path :qa-box-id])
@@ -47,6 +52,17 @@
     (if (qa-box-db/question-id-plausibile? question-id qa-box-id share-hash)
       (ok {:upvoted? (qa-box-db/upvote-question question-id)})
       (forbidden (at/response-error-body :invalid-credentials "The ids and share-hash you provided do not match.")))))
+
+(defn- update-qa-box-visibility
+  "Toggle visibility of a qa-box."
+  [{:keys [parameters identity]}]
+  (let [qa-box-id (get-in parameters [:path :qa-box-id])
+        user-sub (:sub identity)
+        user-id (:db/id (user-db/private-user-by-keycloak-id user-sub))]
+    (log/debug "Updating qa-box visibility for box" qa-box-id)
+    (if (qa-box-db/qa-box-moderator? user-id qa-box-id)
+      (ok {:updated-qa-box (qa-box-db/update-qa-box qa-box-id (:make-visible? (:body parameters)))})
+      (forbidden (at/response-error-body :not-a-moderator "You are not allowed to modify this Q&A box.")))))
 
 (def qa-box-routes
   [["" {:swagger {:tags ["qa-box"]}}
@@ -71,6 +87,16 @@
                     :responses {200 {:body {:db/id :db/id}}
                                 400 at/response-error-body
                                 403 at/response-error-body}}}]
+      ["/visibility" {:name :api.qa-box/visibility
+                      :patch {:handler update-qa-box-visibility
+                              :description (at/get-doc #'update-qa-box-visibility)
+                              :middleware [:discussion/user-moderator? :user/pro? :discussion/valid-writeable-discussion?]
+                              :parameters {:path {:qa-box-id :db/id}
+                                           :body {:share-hash :discussion/share-hash
+                                                  :make-visible? :qa-box/visible}}
+                              :responses {200 {:body {:updated-qa-box ::specs/qa-box}}
+                                          400 at/response-error-body
+                                          403 at/response-error-body}}}]
       ["/question/upvote" {:name :api.qa-box.question/upvote
                            :post {:handler upvote-question
                                   :description (at/get-doc #'upvote-question)

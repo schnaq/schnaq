@@ -170,6 +170,7 @@
                                (rf/dispatch [:discussion.query.conclusions/starting])
                                (rf/dispatch [:schnaq.polls/load-from-backend])
                                (rf/dispatch [:qa-boxes/load-from-backend])
+                               #_(rf/dispatch [:scheduler.after/login [:qa-boxes/load-from-backend]]) ;; TODO
                                (rf/dispatch [:schnaq.wordclouds/load-from-backend])
                                (rf/dispatch [:schnaq.activation/load-from-backend])
                                (rf/dispatch [:schnaq.search.current/clear-search-string]))
