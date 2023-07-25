@@ -17,6 +17,7 @@
 
 ;; TODO show invisible boxes, if user is moderator
 ;; TODO edit of boxes
+;; TODO show delete / answered controlls for moderators
 
 (def ^:private FormGroup (oget Form :Group))
 (def ^:private FormControl (oget Form :Control))
@@ -47,7 +48,8 @@
      [dropdown-menu qa-box]]
     (let [input-name (str "question-" (:db/id qa-box))
           question-dispatch #(rf/dispatch [:qa-box.question/add (:db/id qa-box) (oget % [:target]) input-name])]
-      [:> Form {:on-submit (fn [e]
+      [:> Form {:className "mb-3"
+                :on-submit (fn [e]
                              (.preventDefault e)
                              (question-dispatch e))
                 :on-key-down (fn [e]
@@ -56,7 +58,15 @@
        [:> FormGroup
         [:> InputGroup
          [:> FormControl {:name input-name :placeholder (labels :qa-boxes.question-input/placeholder)}]
-         [:> Button {:variant "primary" :type :submit} [icon :plane]]]]])]])
+         [:> Button {:variant "primary" :type :submit} [icon :plane]]]]])
+    (for [question (sort-by :qa-box.question/value > (:qa-box/questions qa-box))]
+      [:div.border.rounded.mb-2.p-2.d-flex.flex-row.justify-content-between.align-items-center
+       {:key (str "question-" (:db/id question))
+        :className (when (:qa-box.question/answered question) "bg-success bg-opacity-25")}
+       [:p.d-inline-block.mb-0 (:qa-box.question/value question)]
+       [:div.flex-shrink-0.ms-2
+        [icon :arrow-up] ;; TODO make clickable for upvotes
+        [:span.ms-1 (or (:qa-box.question/upvotes question) 0)]]])]])
 
 (defn qa-box-tab
   "QA box tab menu to create a qa-box."
