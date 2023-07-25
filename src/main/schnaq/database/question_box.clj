@@ -65,7 +65,7 @@
 (>defn add-question
   "Adds a single new question to the question box."
   [qa-box-id question]
-  [:db/id ::specs/non-blank-string => (? ::specs/question)]
+  [:db/id ::specs/non-blank-string => (? :qa-box/question)]
   (when (not-empty question)
     (let [question-id "new-question"]
       (db/transact-and-pull-temp [[:db/add question-id :qa-box.question/value question]
@@ -83,10 +83,10 @@
 (>defn mark-question
   "Mark a question as answered or unanswered. If no param besides question-id is passed, it is marked as answered."
   ([question-id]
-   [:db/id => (? ::specs/question)]
+   [:db/id => (? :qa-box/question)]
    (mark-question question-id true))
   ([question-id answered?]
-   [:db/id :qa-box.question/answered => (? ::specs/question)]
+   [:db/id :qa-box.question/answered => (? :qa-box/question)]
    (db/transact-and-pull [[:db/add question-id :qa-box.question/answered answered?]]
                          question-id
                          patterns/question)))
