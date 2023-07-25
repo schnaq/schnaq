@@ -53,30 +53,31 @@
           partitioned-questions (group-by :qa-box.question/answered (:qa-box/questions qa-box))
           sorted-questions (sort-by :qa-box.question/upvotes > (concat [] (get partitioned-questions false) (get partitioned-questions true)))
           cast-upvotes @(rf/subscribe [:qa-box/cast-upvotes (:db/id qa-box)])]
-      [:> Form {:className "mb-3"
-                :on-submit (fn [e]
-                             (.preventDefault e)
-                             (question-dispatch e))
-                :on-key-down (fn [e]
-                               (when (tools/ctrl-press? e "Enter")
-                                 (question-dispatch e)))}
-       [:> FormGroup
-        [:> InputGroup
-         [:> FormControl {:name input-name :placeholder (labels :qa-boxes.question-input/placeholder)}]
-         [:> Button {:variant "primary" :type :submit} [icon :plane]]]]]
-      [motion/animated-list
-       (for [question sorted-questions]
-         (with-meta
-           [motion/animated-list-item
-            [:div.border.rounded.mb-2.p-2.d-flex.flex-row.justify-content-between.align-items-center
-             {:className (when (:qa-box.question/answered question) "bg-success bg-opacity-25")}
-             [:p.d-inline-block.mb-0 (:qa-box.question/value question)]
-             [:div.flex-shrink-0.ms-1
-              (if (cast-upvotes (:db/id question))
-                [icon :smile-beam "mx-1 text-gray"]
-                [icon :arrow-up "mx-1 text-primary clickable" {:on-click #(rf/dispatch [:qa-box.question/upvote (:db/id qa-box) (:db/id question)])}])
-              [:span (or (:qa-box.question/upvotes question) 0)]]]]
-           {:key (str "question-" (:db/id question))}))])]])
+      [:<>
+       [:> Form {:className "mb-3"
+                 :on-submit (fn [e]
+                              (.preventDefault e)
+                              (question-dispatch e))
+                 :on-key-down (fn [e]
+                                (when (tools/ctrl-press? e "Enter")
+                                  (question-dispatch e)))}
+        [:> FormGroup
+         [:> InputGroup
+          [:> FormControl {:name input-name :placeholder (labels :qa-boxes.question-input/placeholder)}]
+          [:> Button {:variant "primary" :type :submit} [icon :plane]]]]]
+       [motion/animated-list
+        (for [question sorted-questions]
+          (with-meta
+            [motion/animated-list-item
+             [:div.border.rounded.mb-2.p-2.d-flex.flex-row.justify-content-between.align-items-center
+              {:className (when (:qa-box.question/answered question) "bg-success bg-opacity-25")}
+              [:p.d-inline-block.mb-0 (:qa-box.question/value question)]
+              [:div.flex-shrink-0.ms-1
+               (if (cast-upvotes (:db/id question))
+                 [icon :smile-beam "mx-1 text-gray"]
+                 [icon :arrow-up "mx-1 text-primary clickable" {:on-click #(rf/dispatch [:qa-box.question/upvote (:db/id qa-box) (:db/id question)])}])
+               [:span (or (:qa-box.question/upvotes question) 0)]]]]
+            {:key (str "question-" (:db/id question))}))]])]])
 
 (defn qa-box-tab
   "QA box tab menu to create a qa-box."
