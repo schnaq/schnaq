@@ -73,6 +73,14 @@
       (ok {:deleted? (map? @(qa-box-db/delete-question question-id))})
       (forbidden (at/response-error-body :invalid-credentials "The ids and share-hash you provided do not match.")))))
 
+(defn- answer-question
+  "Mark a single question as answered or unanswered in a qa-box."
+  [{:keys [parameters]}]
+  (let [{:keys [question-id qa-box-id]} (:path parameters)
+        {:keys [share-hash answered]} (:body parameters)]
+    (if (qa-box-db/question-id-plausible? question-id qa-box-id share-hash)
+      (ok {:answered? (map? (qa-box-db/mark-question question-id answered))})
+      (forbidden (at/response-error-body :invalid-credentials "The ids and share-hash you provided do not match.")))))
 
 (def qa-box-routes
   [["" {:swagger {:tags ["qa-box"]}}
@@ -118,6 +126,17 @@
                      :responses {200 {:body {:deleted? boolean?}}
                                  400 at/response-error-body
                                  403 at/response-error-body}}}]
+       ["/answer" {:name :api.qa-box.question/answer
+                   :post {:handler answer-question
+                          :description (at/get-doc #'answer-question)
+                          :middleware [:discussion/user-moderator? :user/pro? :discussion/valid-writeable-discussion?]
+                          :parameters {:path {:qa-box-id :db/id
+                                              :question-id :db/id}
+                                       :body {:share-hash :discussion/share-hash
+                                              :answered :qa-box.question/answered}}
+                          :responses {200 {:body {:answered? boolean?}}
+                                      400 at/response-error-body
+                                      403 at/response-error-body}}}]
        ["/upvote" {:name :api.qa-box.question/upvote
                    :post {:handler upvote-question
                           :description (at/get-doc #'upvote-question)

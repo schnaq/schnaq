@@ -19,7 +19,7 @@
             [schnaq.shared-toolbelt :as shared-tools]))
 
 ;; TODO edit of boxes
-;; TODO show delete / answered controlls for moderators
+;; TODO sort marked answers to the bottom
 
 (def ^:private FormGroup (oget Form :Group))
 (def ^:private FormControl (oget Form :Control))
@@ -96,7 +96,9 @@
                    {:on-click #(when (js/confirm (labels :qa-boxes.question/delete-confirmation))
                                  (rf/dispatch [:qa-box.question/delete (:db/id qa-box) (:db/id question)]))}]]
                  [:div.col-6
-                  [icon :check/normal "border border-primary border-opacity-75 rounded text-primary clickable p-2 my-1 ms-1"]]])]]
+                  [icon :check/normal
+                   "border border-primary border-opacity-75 rounded text-primary clickable p-2 my-1 ms-1"
+                   {:on-click #(rf/dispatch [:qa-box.question/answer (:db/id qa-box) (:db/id question)])}]]])]]
             {:key (str "question-" (:db/id question))}))]])]])
 
 (>defn qa-box-list
@@ -307,3 +309,18 @@
    (update-in db [:schnaq :qa-boxes qa-box-id :qa-box/questions]
               (fn [qs]
                 (remove #(= (:db/id %) question-id) qs)))))
+
+(rf/reg-event-fx
+ :qa-box.question/answer
+ (fn [{:keys [db]} [_ qa-box-id question-id]]
+   (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+     {:db (update-in db [:schnaq :qa-boxes qa-box-id :qa-box/questions]
+                     (fn [qs]
+                       (map #(if (= (:db/id %) question-id)
+                               (assoc % :qa-box.question/answered true)
+                               %)
+                            qs)))
+      :fx [(http/xhrio-request db :post (str "/qa-box/" qa-box-id "/question/" question-id "/answer")
+                               [:no-op]
+                               {:share-hash share-hash
+                                :answered true})]})))

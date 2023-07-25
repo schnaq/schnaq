@@ -138,7 +138,7 @@
   "Syntactic sugar to transact and then synchronously pull an id from the resulting database.
   Takes a live-id."
   [transaction-vector live-id pattern]
-  [vector? ::specs/non-blank-string coll? :ret map?]
+  [vector? :db/id coll? :ret map?]
   (let [tx @(transact transaction-vector)
         db-after (:db-after tx)]
     (fast-pull live-id pattern db-after)))

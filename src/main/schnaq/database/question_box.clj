@@ -105,8 +105,8 @@
   ([question-id answered?]
    [:db/id :qa-box.question/answered => (? :qa-box/question)]
    (db/transact-and-pull [[:db/add question-id :qa-box.question/answered answered?]]
-                         question-id
-                         patterns/question)))
+                          question-id
+                          patterns/question)))
 
 (>defn delete-question
   "Delete a question."
