@@ -930,4 +930,8 @@
    :qa-boxes.create.error/heading "QA-Box Fehler"
    :qa-boxes.create.error/body "Die QA-Box konnte nicht erstellt werden. Bitte versuche es noch einmal."
    :qa-boxes.dropdown/delete "Q&A Löschen"
-   :qa-boxes.dropdown/delete-confirmation "Möchtest du dieses Q&A wirklich löschen?"})
+   :qa-boxes.dropdown/delete-confirmation "Möchtest du dieses Q&A wirklich löschen?"
+   :qa-boxes.question.add.error/heading "Fehler beim Hinzufügen der Frage"
+   :qa-boxes.question.add.error/body "Deine Frage konnte wegen eines Fehlers nicht hinzugefügt werden. Bitte versuche es noch einmal."
+   :qa-boxes.delete.error/heading "Fehler beim Löschen"
+   :qa-boxes.delete.error/body "Das Q&A konnte nicht gelöscht werden. Bitte versuche es noch einmal."})

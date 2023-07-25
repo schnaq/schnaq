@@ -25,6 +25,15 @@
                                 entity-id
                                 patterns/qa-box))))
 
+(>defn qa-box-id-matches-hash?
+  "Check whether a qa-box-id matches a share-hash."
+  [qa-box-id share-hash]
+  [:db/id :discussion/share-hash => boolean?]
+  (let [real-share-hash (-> qa-box-id
+                       (db/fast-pull '[{:discussion/_qa-boxes [:discussion/share-hash]}])
+                       (get-in [:discussion/_qa-boxes :discussion/share-hash]))]
+    (= share-hash real-share-hash)))
+
 (>defn qa-box-moderator?
   "Check whether a user is moderator of a qa-box."
   [user-id qa-box-id]

@@ -30,6 +30,15 @@
         (ok {:db/id qa-box-id}))
       (forbidden (at/response-error-body :not-a-moderator "You are not allowed to delete this Q&A box.")))))
 
+(defn add-question
+  "Add a question to a qa-box"
+  [{:keys [parameters]}]
+  (let [qa-box-id (get-in parameters [:path :qa-box-id])
+        {:keys [question share-hash]} (:body parameters)]
+    (if (qa-box-db/qa-box-id-matches-hash? qa-box-id share-hash)
+      (ok {:new-question (qa-box-db/add-question qa-box-id question)})
+      (forbidden (at/response-error-body :invalid-share-hash "The share-hash does not match the qa-box.")))))
+
 (def qa-box-routes
   [["" {:swagger {:tags ["qa-box"]}}
     ["/qa-box"
@@ -43,15 +52,25 @@
                  :responses {200 {:body {:qa-box ::specs/qa-box}}
                              400 at/response-error-body
                              403 at/response-error-body}}}]
-     ["/:qa-box-id" {:name :api.qa-box/delete
-                     :delete {:handler delete-qa-box
-                              :description (at/get-doc #'delete-qa-box)
-                              :middleware [:discussion/user-moderator? :user/pro? :discussion/valid-writeable-discussion?]
-                              :parameters {:path {:qa-box-id :db/id}
-                                           :body {:share-hash :discussion/share-hash}}
-                              :responses {200 {:body {:db/id :db/id}}
-                                          400 at/response-error-body
-                                          403 at/response-error-body}}}]]
+     ["/:qa-box-id"
+      ["" {:name :api.qa-box/delete
+           :delete {:handler delete-qa-box
+                    :description (at/get-doc #'delete-qa-box)
+                    :middleware [:discussion/user-moderator? :user/pro? :discussion/valid-writeable-discussion?]
+                    :parameters {:path {:qa-box-id :db/id}
+                                 :body {:share-hash :discussion/share-hash}}
+                    :responses {200 {:body {:db/id :db/id}}
+                                400 at/response-error-body
+                                403 at/response-error-body}}}]
+      ["/questions" {:name :api.qa-box.questions/add
+                     :post {:handler add-question
+                            :description (at/get-doc #'add-question)
+                            :middleware [:discussion/valid-writeable-discussion?]
+                            :parameters {:path {:qa-box-id :db/id}
+                                         :body {:question :qa-box.question/value
+                                                :share-hash :discussion/share-hash}}
+                            :responses {200 {:body {:new-question :qa-box/question}}
+                                        400 at/response-error-body}}}]]]
     ["/qa-boxes/:share-hash" {:name :api.qa-box/get-by-hash
                               :get {:handler get-qa-boxes
                                     :description (at/get-doc #'get-qa-boxes)

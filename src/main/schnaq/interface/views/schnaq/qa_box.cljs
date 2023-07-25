@@ -16,6 +16,7 @@
             [schnaq.shared-toolbelt :as shared-tools]))
 
 ;; TODO show invisible boxes, if user is moderator
+;; TODO edit of boxes
 
 (def ^:private FormGroup (oget Form :Group))
 (def ^:private FormControl (oget Form :Control))
@@ -44,13 +45,14 @@
     [:div.d-flex
      [:h6.pb-2.text-center.mx-auto (:qa-box/label qa-box)]
      [dropdown-menu qa-box]]
-    (let [input-name (str "question-" (:db/id qa-box))]
+    (let [input-name (str "question-" (:db/id qa-box))
+          question-dispatch #(rf/dispatch [:qa-box.question/add (:db/id qa-box) (oget % [:target]) input-name])]
       [:> Form {:on-submit (fn [e]
                              (.preventDefault e)
-                             (rf/dispatch [:TODO (oget e [:target :elements input-name :value])]))
+                             (question-dispatch e))
                 :on-key-down (fn [e]
                                (when (tools/ctrl-press? e "Enter")
-                                 (rf/dispatch [:TODO (oget e [:target :elements input-name :value])])))} ;;TODO
+                                 (question-dispatch e)))}
        [:> FormGroup
         [:> InputGroup
          [:> FormControl {:name input-name :placeholder (labels :qa-boxes.question-input/placeholder)}]
@@ -102,11 +104,11 @@
  :qa-box.create/failure
  (fn [{:keys [db]} [_ temp-id]]
    {:db (update-in db [:schnaq :qa-boxes] dissoc temp-id)
-    :fx [[:dispatch [[:notification/add
-                      #:notification{:title (labels :qa-boxes.create.error/heading)
-                                     :body [:<> (labels :qa-boxes.create.error/body)]
-                                     :context :error
-                                     :stay-visible? false}]]]]}))
+    :fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :qa-boxes.create.error/heading)
+                                    :body [:<> (labels :qa-boxes.create.error/body)]
+                                    :context :error
+                                    :stay-visible? false}]]]}))
 
 (rf/reg-sub
  :qa-boxes
@@ -145,5 +147,38 @@
 
 (rf/reg-event-db
  :qa-box.delete/failure
- (fn [db [_ qa-box]]
-   (assoc-in db [:schnaq :qa-boxes (:db/id qa-box)] qa-box)))
+ (fn [{:keys [db]} [_ qa-box]]
+   {:db (assoc-in db [:schnaq :qa-boxes (:db/id qa-box)] qa-box)
+    :fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :qa-boxes.delete.error/heading)
+                                    :body [:<> (labels :qa-boxes.delete.error/body)]
+                                    :context :error
+                                    :stay-visible? false}]]]}))
+
+(rf/reg-event-fx
+ :qa-box.question/add
+ (fn [{:keys [db]} [_ qa-box-id input-form input-name]]
+   (let [question (oget input-form [:elements input-name :value])
+         share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         temp-id (- (rand-int 10000000))]
+     {:db (update-in db [:schnaq :qa-boxes qa-box-id :qa-box/questions] conj {:db/id temp-id
+                                                                              :qa-box.question/value question
+                                                                              :qa-box.question/answered false
+                                                                              :qa-box.question/upvotes 0})
+      :fx [(http/xhrio-request db :post (str "/qa-box/" qa-box-id "/questions")
+                               [:no-op]
+                               {:question question
+                                :share-hash share-hash}
+                               [:qa-box.question.add/failure qa-box-id temp-id])
+           [:form/clear input-form]]})))
+
+(rf/reg-event-fx
+ :qa-box.question.add/failure
+ (fn [{:keys [db]} [_ qa-box-id temp-id]]
+   {:db (update-in db [:schnaq :qa-boxes qa-box-id :qa-box/questions] (fn [qs]
+                                                                        (remove #(= (:db/id %) temp-id) qs)))
+    :fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :qa-boxes.question.add.error/heading)
+                                    :body [:<> (labels :qa-boxes.question.add.error/body)]
+                                    :context :warning
+                                    :stay-visible? false}]]]}))
