@@ -49,11 +49,12 @@
  :<- [:schnaq/activation]
  :<- [:schnaq.wordcloud/show?]
  :<- [:schnaq/polls]
+ :<- [:schnaq/qa-boxes]
  :<- [:schnaq.wordclouds/local]
  :<- [:schnaq.feedback/exists-for-user?]
- (fn [[start? activation wordcloud? polls local-wordclouds feedback-exists?] _]
+ (fn [[start? activation wordcloud? polls qa-boxes local-wordclouds feedback-exists?] _]
    (and start?
-        (or wordcloud? (seq polls) (seq local-wordclouds) activation feedback-exists?))))
+        (or wordcloud? (seq polls) (seq qa-boxes) (seq local-wordclouds) activation feedback-exists?))))
 
 (defn activation-cards
   "A single card containing all activations, which can be switched through."
@@ -62,7 +63,7 @@
         top-level? @(rf/subscribe [:routes.schnaq/start?])
         activation-focus @(rf/subscribe [:schnaq/activation-focus])
         focus-poll @(rf/subscribe [:schnaq/poll activation-focus])
-        focus-qa-box @(rf/subscribe [:qa-box activation-focus])
+        focus-qa-box @(rf/subscribe [:schnaq/qa-box activation-focus])
         edit-polls @(rf/subscribe [:schnaq.polls.edit/actives])
         activation @(rf/subscribe [:schnaq/activation])
         focus-activation? (and activation-focus (= activation-focus (:db/id activation)))
@@ -98,7 +99,6 @@
                           (and feedback-form (not focus-feedback?)) (conj [feedback-card/feedback-card]))
         activations-count (count activations-seq)
         active-index (mod show-index activations-count)]
-    (println "activation: " qa-boxes)
     (when (and top-level? (seq activations-seq))
       [:<>
        (nth activations-seq active-index)

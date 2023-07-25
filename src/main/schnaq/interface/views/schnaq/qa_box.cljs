@@ -18,9 +18,9 @@
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
             [schnaq.shared-toolbelt :as shared-tools]))
 
-;; TODO show invisible boxes, if user is moderator
 ;; TODO edit of boxes
 ;; TODO show delete / answered controlls for moderators
+;; TODO Put in focus for QA Box
 
 (def ^:private FormGroup (oget Form :Group))
 (def ^:private FormControl (oget Form :Control))
@@ -90,13 +90,11 @@
   "Displays all qa-boxes of the current schnaq excluding the one in `exclude-id`."
   [exclude-id]
   [:db/id :ret (s/coll-of :re-frame/component)]
-  (let [qa-boxes @(rf/subscribe [:qa-boxes])]
+  (let [qa-boxes @(rf/subscribe [:schnaq/qa-boxes])]
     (for [question-box-data (remove #(= exclude-id (:db/id %)) qa-boxes)]
-      (do
-        (println "question-box-data: " question-box-data)
-        [:section
-         {:key (str "qa-box-" (:db/id question-box-data))}
-         [qa-box-card question-box-data]]))))
+      [:section
+       {:key (str "qa-box-" (:db/id question-box-data))}
+       [qa-box-card question-box-data]])))
 
 (defn qa-box-tab
   "QA box tab menu to create a qa-box."
@@ -151,13 +149,12 @@
                                     :stay-visible? false}]]]}))
 
 (rf/reg-sub
- :qa-boxes
+ :schnaq/qa-boxes
  (fn [db _]
-   (println "qa-boxes sub:" (vals (get-in db [:schnaq :qa-boxes] {})))
    (vals (get-in db [:schnaq :qa-boxes] {}))))
 
 (rf/reg-sub
- :qa-box
+ :schnaq/qa-box
  (fn [db [_ qa-box-id]]
    (get-in db [:schnaq :qa-boxes qa-box-id])))
 
@@ -173,7 +170,6 @@
  :qa-boxes.load-from-backend/success
  (fn [db [_ response]]
    (when-let [qa-boxes (shared-tools/normalize :db/id (:qa-boxes response))]
-     (println "success: " qa-boxes)
      (assoc-in db [:schnaq :qa-boxes] qa-boxes))))
 
 (rf/reg-event-fx
