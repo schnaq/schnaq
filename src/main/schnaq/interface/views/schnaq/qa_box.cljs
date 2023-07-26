@@ -27,7 +27,8 @@
   [::specs/qa-box => :re-frame/component]
   (when (pos? (:db/id qa-box))
     (let [qa-box-id (:db/id qa-box)
-          {:qa-box/keys [visible]} qa-box]
+          {:qa-box/keys [visible]} qa-box
+          box-editing? @(rf/subscribe [:qa-box/edit? (:db/id qa-box)])]
       [dropdown-menu/moderator
        {:id (str "qa-dropdown-id-" qa-box-id)}
        [:<>
@@ -37,6 +38,11 @@
         [dropdown-menu/item :bullseye
          :schnaq.admin.focus/button
          #(rf/dispatch [:schnaq.moderation.focus/entity (:db/id qa-box)])]
+        [dropdown-menu/item :pencil
+         (if box-editing? :qa-boxes.dropdown/edit-cancel :qa-boxes.dropdown/edit)
+         #(rf/dispatch (if box-editing?
+                         [:qa-box.edit/deactivate qa-box-id]
+                         [:qa-box.edit/activate qa-box-id]))]
         [dropdown-menu/item :trash
          :qa-boxes.dropdown/delete
          #(when (js/confirm (labels :qa-boxes.dropdown/delete-confirmation))
@@ -74,37 +80,54 @@
   "Show a qa box card, where users can ask questions of the presenter."
   [qa-box]
   [::specs/qa-box => :re-frame/component]
-  [:section.statement-card.activation-card
-   [:div.mx-4.my-2
-    [:div.d-flex
-     [:h6.pb-2.text-center.mx-auto (:qa-box/label qa-box)]
-     [dropdown-menu qa-box]]
-    (when (not (:qa-box/visible qa-box))
-      [:div.text-center
-       [:p.text-muted (labels :qa-boxes.card/invisible)]])
-    (let [input-name (str "question-" (:db/id qa-box))
-          question-dispatch #(rf/dispatch [:qa-box.question/add (:db/id qa-box) (oget % [:target]) input-name])
-          partitioned-questions (group-by :qa-box.question/answered (:qa-box/questions qa-box))
-          sorted-questions (concat []
-                                   (sort-by :qa-box.question/upvotes > (get partitioned-questions false))
-                                   (sort-by :qa-box.question/upvotes > (get partitioned-questions true)))]
-      [:<>
-       [:> Form {:className "mb-3"
-                 :on-submit (fn [e]
-                              (.preventDefault e)
-                              (question-dispatch e))
-                 :on-key-down (fn [e]
-                                (when (tools/ctrl-press? e "Enter")
-                                  (question-dispatch e)))}
-        [:> FormGroup
-         [:> InputGroup
-          [:> FormControl {:name input-name :placeholder (labels :qa-boxes.question-input/placeholder)}]
-          [:> Button {:variant "primary" :type :submit} [icon :plane]]]]]
-       [motion/animated-list
-        (for [question sorted-questions]
-          (with-meta
-            [single-question question (:db/id qa-box)]
-            {:key (str "question-" (:db/id question))}))]])]])
+  (let [input-name (str "question-" (:db/id qa-box))
+        edit-input-name (str "edit-label-" (:db/id qa-box))
+        question-dispatch #(rf/dispatch [:qa-box.question/add (:db/id qa-box) (oget % [:target]) input-name])
+        edit-dispatch #(rf/dispatch [:qa-box.question/edit (:db/id qa-box) (oget % [:target]) edit-input-name])
+        partitioned-questions (group-by :qa-box.question/answered (:qa-box/questions qa-box))
+        sorted-questions (concat []
+                                 (sort-by :qa-box.question/upvotes > (get partitioned-questions false))
+                                 (sort-by :qa-box.question/upvotes > (get partitioned-questions true)))
+        box-editing? @(rf/subscribe [:qa-box/edit? (:db/id qa-box)])]
+    [:section.statement-card.activation-card
+     [:div.mx-4.my-2
+      [:div.d-flex
+       (if box-editing?
+         [:> Form {:className "w-75 mb-2 mx-auto"
+                   :on-submit (fn [e]
+                                (.preventDefault e)
+                                (edit-dispatch e))
+                   :on-key-down (fn [e]
+                                  (when (tools/ctrl-press? e "Enter")
+                                    (edit-dispatch e)))}
+          [:> FormGroup
+           [:> InputGroup
+            [:> FormControl
+             {:name edit-input-name
+              :defaultValue (:qa-box/label qa-box)
+              :placeholder (labels :qa-boxes.label-edit-input/placeholder)}]
+            [:> Button {:variant "primary" :type :submit} [icon :pencil]]]]]
+         [:h6.pb-2.text-center.mx-auto (:qa-box/label qa-box)])
+       [dropdown-menu qa-box]]
+      (when (not (:qa-box/visible qa-box))
+        [:div.text-center
+         [:p.text-muted (labels :qa-boxes.card/invisible)]])
+      [:> Form {:className "mb-3"
+                :on-submit (fn [e]
+                             (.preventDefault e)
+                             (question-dispatch e))
+                :on-key-down (fn [e]
+                               (when (tools/ctrl-press? e "Enter")
+                                 (question-dispatch e)))}
+       [:> FormGroup
+        [:> InputGroup
+         [:> FormControl {:name input-name :placeholder (labels :qa-boxes.question-input/placeholder)}]
+         [:> Button {:variant "primary" :type :submit} [icon :plane]]]]]
+      [motion/animated-list
+       (for [question sorted-questions]
+         (with-meta
+           [single-question question (:db/id qa-box)]
+           {:key (str "question-" (:db/id question))}))]]]))
 
 (>defn qa-box-list
   "Displays all qa-boxes of the current schnaq excluding the one in `exclude-id`."
@@ -242,6 +265,31 @@
                                     :stay-visible? false}]]]}))
 
 (rf/reg-event-fx
+ :qa-box.question/edit
+ (fn [{:keys [db]} [_ qa-box-id input-form input-name]]
+   (let [label (oget+ input-form [:elements input-name :value])
+         share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+         old-label (get-in db [:schnaq :qa-boxes qa-box-id :qa-box/label])]
+     {:db (assoc-in db [:schnaq :qa-boxes qa-box-id :qa-box/label] label)
+      :fx [(http/xhrio-request db :patch (str "/qa-box/" qa-box-id "/label")
+                               [:no-op]
+                               {:new-label label
+                                :share-hash share-hash}
+                               [:qa-box.question.edit/failure qa-box-id old-label])
+           [:form/clear input-form]
+           [:dispatch [:qa-box.edit/deactivate qa-box-id]]]})))
+
+(rf/reg-event-fx
+ :qa-box.question.edit/failure
+ (fn [{:keys [db]} [_ qa-box-id old-label]]
+   {:db (assoc-in db [:schnaq :qa-boxes qa-box-id :qa-box/label] old-label)
+    :fx [[:dispatch [:notification/add
+                     #:notification{:title (labels :qa-boxes.question.edit.error/heading)
+                                    :body [:<> (labels :qa-boxes.question.edit.error/body)]
+                                    :context :warning
+                                    :stay-visible? false}]]]}))
+
+(rf/reg-event-fx
  :qa-box.question/upvote
  (fn [{:keys [db]} [_ qa-box-id question-id]]
    {:db (-> db
@@ -329,3 +377,18 @@
                                [:no-op]
                                {:share-hash share-hash
                                 :answered true})]})))
+
+(rf/reg-event-db
+ :qa-box.edit/activate
+ (fn [db [_ qa-box-id]]
+   (update-in db [:qa-boxes :editing] (fnil conj #{}) qa-box-id)))
+
+(rf/reg-event-db
+ :qa-box.edit/deactivate
+ (fn [db [_ qa-box-id]]
+   (update-in db [:qa-boxes :editing] disj qa-box-id)))
+
+(rf/reg-sub
+ :qa-box/edit?
+ (fn [db [_ qa-box-id]]
+   ((get-in db [:qa-boxes :editing] #{}) qa-box-id)))

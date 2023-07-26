@@ -931,4 +931,9 @@
    :qa-boxes.question.visibility.error/heading "Visibility Error"
    :qa-boxes.question.visibility.error/body "The visibility of the question could not be changed. Please try again."
    :qa-boxes.card/invisible "This Q&A is currently invisible for users."
-   :qa-boxes.question/delete-confirmation "Do you really want to delete this question?"})
+   :qa-boxes.question/delete-confirmation "Do you really want to delete this question?"
+   :qa-boxes.dropdown/edit "Edit Q&A box"
+   :qa-boxes.dropdown/edit-cancel "Cancel editing"
+   :qa-boxes.label-edit-input/placeholder "Heading (optional)"
+   :qa-boxes.question.edit.error/heading "Error editing question"
+   :qa-boxes.question.edit.error/body "Heading could not be changed due to an error. Please try again."})

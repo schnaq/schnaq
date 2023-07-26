@@ -940,4 +940,9 @@
    :qa-boxes.question.visibility.error/heading "Fehler bei Sichtbarkeitsänderung"
    :qa-boxes.question.visibility.error/body "Der Sichtbarkeitsstatus der Q&A-Box konnte nicht geändert werden. Bitte versuche es noch einmal."
    :qa-boxes.card/invisible "Dieses Q&A ist aktuell für Benutzer versteckt."
-   :qa-boxes.question/delete-confirmation "Willst du diese Frage wirklich löschen?"})
+   :qa-boxes.question/delete-confirmation "Willst du diese Frage wirklich löschen?"
+   :qa-boxes.dropdown/edit "Q&A Box bearbeiten"
+   :qa-boxes.dropdown/edit-cancel "Bearbeiten abbrechen"
+   :qa-boxes.label-edit-input/placeholder "Überschrift (optional)"
+   :qa-boxes.question.edit.error/heading "Fehler beim Bearbeiten des Q&A"
+   :qa-boxes.question.edit.error/body "Die Überschrift konnte durch einen Fehler nicht geändert werden. Bitte versuche es noch einmal."})

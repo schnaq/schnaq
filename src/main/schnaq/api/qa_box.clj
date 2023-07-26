@@ -2,6 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [ring.util.http-response :refer [ok forbidden]]
             [schnaq.api.toolbelt :as at]
+            [schnaq.database.main :as db]
             [schnaq.database.question-box :as qa-box-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
@@ -64,6 +65,18 @@
       (ok {:updated-qa-box (qa-box-db/update-qa-box qa-box-id (:make-visible? (:body parameters)))})
       (forbidden (at/response-error-body :not-a-moderator "You are not allowed to modify this Q&A box.")))))
 
+(defn- update-qa-box-label
+  "Change label of a qa-box."
+  [{:keys [parameters identity]}]
+  (let [qa-box-id (get-in parameters [:path :qa-box-id])
+        user-sub (:sub identity)
+        user-id (:db/id (user-db/private-user-by-keycloak-id user-sub))
+        visibility (:qa-box/visible (db/fast-pull qa-box-id [:qa-box/visible]))]
+    (log/debug "Updating qa-box label for box" qa-box-id)
+    (if (qa-box-db/qa-box-moderator? user-id qa-box-id)
+      (ok {:updated-qa-box (qa-box-db/update-qa-box qa-box-id visibility (:new-label (:body parameters)))})
+      (forbidden (at/response-error-body :not-a-moderator "You are not allowed to modify this Q&A box.")))))
+
 (defn- delete-question
   "Delete a single question in a qa-box."
   [{:keys [parameters]}]
@@ -105,6 +118,16 @@
                     :responses {200 {:body {:db/id :db/id}}
                                 400 at/response-error-body
                                 403 at/response-error-body}}}]
+      ["/label" {:name :api.qa-box/label
+                 :patch {:handler update-qa-box-label
+                         :description (at/get-doc #'update-qa-box-label)
+                         :middleware [:discussion/user-moderator? :user/pro? :discussion/valid-writeable-discussion?]
+                         :parameters {:path {:qa-box-id :db/id}
+                                      :body {:share-hash :discussion/share-hash
+                                             :new-label :qa-box/label}}
+                         :responses {200 {:body {:updated-qa-box ::specs/qa-box}}
+                                     400 at/response-error-body
+                                     403 at/response-error-body}}}]
       ["/visibility" {:name :api.qa-box/visibility
                       :patch {:handler update-qa-box-visibility
                               :description (at/get-doc #'update-qa-box-visibility)
