@@ -18,8 +18,6 @@
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
             [schnaq.shared-toolbelt :as shared-tools]))
 
-;; TODO edit of boxes
-
 (def ^:private FormGroup (oget Form :Group))
 (def ^:private FormControl (oget Form :Control))
 
@@ -44,7 +42,35 @@
          #(when (js/confirm (labels :qa-boxes.dropdown/delete-confirmation))
             (rf/dispatch [:qa-box/delete qa-box-id]))]]])))
 
-(>defn- qa-box-card
+(>defn- single-question
+  "A single row displaying one question of a qa-box."
+  [question qa-box-id]
+  [:qa-box/question :db/id => :re-frame/component]
+  (let [cast-upvotes @(rf/subscribe [:qa-box/cast-upvotes qa-box-id])
+        user-moderator? @(rf/subscribe [:user/moderator?])]
+    [motion/animated-list-item
+     [:div.d-flex.flex-row.justify-content-between.align-items-center
+      [:div.border.rounded.mb-2.p-2.d-flex.flex-row.justify-content-between.align-items-center.flex-grow-1
+       {:className (when (:qa-box.question/answered question) "bg-success bg-opacity-25")}
+       [:p.d-inline-block.mb-0 (:qa-box.question/value question)]
+       [:div.flex-shrink-0.ms-1
+        (if (cast-upvotes (:db/id question))
+          [icon :smile-beam "mx-1 text-gray"]
+          [icon :arrow-up "mx-1 text-primary clickable" {:on-click #(rf/dispatch [:qa-box.question/upvote qa-box-id (:db/id question)])}])
+        [:span (or (:qa-box.question/upvotes question) 0)]]]
+      (when user-moderator?
+        [:div.row.g-0.flex-shrink-0
+         [:div.col-6
+          [icon :trash
+           "border border-danger border-opacity-75 rounded text-danger clickable p-2 m-1 ms-2"
+           {:on-click #(when (js/confirm (labels :qa-boxes.question/delete-confirmation))
+                         (rf/dispatch [:qa-box.question/delete qa-box-id (:db/id question)]))}]]
+         [:div.col-6
+          [icon :check/normal
+           "border border-primary border-opacity-75 rounded text-primary clickable p-2 my-1 ms-1"
+           {:on-click #(rf/dispatch [:qa-box.question/answer qa-box-id (:db/id question)])}]]])]]))
+
+(>defn qa-box-card
   "Show a qa box card, where users can ask questions of the presenter."
   [qa-box]
   [::specs/qa-box => :re-frame/component]
@@ -61,9 +87,7 @@
           partitioned-questions (group-by :qa-box.question/answered (:qa-box/questions qa-box))
           sorted-questions (concat []
                                    (sort-by :qa-box.question/upvotes > (get partitioned-questions false))
-                                   (sort-by :qa-box.question/upvotes > (get partitioned-questions true)))
-          cast-upvotes @(rf/subscribe [:qa-box/cast-upvotes (:db/id qa-box)])
-          user-moderator? @(rf/subscribe [:user/moderator?])]
+                                   (sort-by :qa-box.question/upvotes > (get partitioned-questions true)))]
       [:<>
        [:> Form {:className "mb-3"
                  :on-submit (fn [e]
@@ -79,27 +103,7 @@
        [motion/animated-list
         (for [question sorted-questions]
           (with-meta
-            [motion/animated-list-item
-             [:div.d-flex.flex-row.justify-content-between.align-items-center
-              [:div.border.rounded.mb-2.p-2.d-flex.flex-row.justify-content-between.align-items-center.flex-grow-1
-               {:className (when (:qa-box.question/answered question) "bg-success bg-opacity-25")}
-               [:p.d-inline-block.mb-0 (:qa-box.question/value question)]
-               [:div.flex-shrink-0.ms-1
-                (if (cast-upvotes (:db/id question))
-                  [icon :smile-beam "mx-1 text-gray"]
-                  [icon :arrow-up "mx-1 text-primary clickable" {:on-click #(rf/dispatch [:qa-box.question/upvote (:db/id qa-box) (:db/id question)])}])
-                [:span (or (:qa-box.question/upvotes question) 0)]]]
-              (when user-moderator?
-                [:div.row.g-0.flex-shrink-0
-                 [:div.col-6
-                  [icon :trash
-                   "border border-danger border-opacity-75 rounded text-danger clickable p-2 m-1 ms-2"
-                   {:on-click #(when (js/confirm (labels :qa-boxes.question/delete-confirmation))
-                                 (rf/dispatch [:qa-box.question/delete (:db/id qa-box) (:db/id question)]))}]]
-                 [:div.col-6
-                  [icon :check/normal
-                   "border border-primary border-opacity-75 rounded text-primary clickable p-2 my-1 ms-1"
-                   {:on-click #(rf/dispatch [:qa-box.question/answer (:db/id qa-box) (:db/id question)])}]]])]]
+            [single-question question (:db/id qa-box)]
             {:key (str "question-" (:db/id question))}))]])]])
 
 (>defn qa-box-list
