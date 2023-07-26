@@ -19,7 +19,6 @@
             [schnaq.shared-toolbelt :as shared-tools]))
 
 ;; TODO edit of boxes
-;; TODO sort marked answers to the bottom
 
 (def ^:private FormGroup (oget Form :Group))
 (def ^:private FormControl (oget Form :Control))
@@ -60,7 +59,9 @@
     (let [input-name (str "question-" (:db/id qa-box))
           question-dispatch #(rf/dispatch [:qa-box.question/add (:db/id qa-box) (oget % [:target]) input-name])
           partitioned-questions (group-by :qa-box.question/answered (:qa-box/questions qa-box))
-          sorted-questions (sort-by :qa-box.question/upvotes > (concat [] (get partitioned-questions false) (get partitioned-questions true)))
+          sorted-questions (concat []
+                                   (sort-by :qa-box.question/upvotes > (get partitioned-questions false))
+                                   (sort-by :qa-box.question/upvotes > (get partitioned-questions true)))
           cast-upvotes @(rf/subscribe [:qa-box/cast-upvotes (:db/id qa-box)])
           user-moderator? @(rf/subscribe [:user/moderator?])]
       [:<>
