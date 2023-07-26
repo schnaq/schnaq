@@ -28,6 +28,7 @@
             [schnaq.api.moderation :refer [moderation-routes]]
             [schnaq.api.poll :refer [poll-routes]]
             [schnaq.api.profiling :as profiling]
+            [schnaq.api.qa-box :refer [qa-box-routes]]
             [schnaq.api.schnaq :refer [schnaq-routes]]
             [schnaq.api.subscription.stripe :refer [stripe-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
@@ -108,6 +109,7 @@
      hub-routes
      other-routes
      poll-routes
+     qa-box-routes
      schnaq-routes
      stripe-routes
      summary-routes
@@ -202,7 +204,7 @@
        doall))
 
 (def allowed-http-verbs
-  #{:get :put :post :delete :options})
+  #{:get :put :post :delete :options :patch})
 
 (defstate api
   :start

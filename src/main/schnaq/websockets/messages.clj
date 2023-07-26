@@ -2,6 +2,7 @@
   (:require [schnaq.api.activation :as activation-api]
             [schnaq.api.discussion :as discussion-api]
             [schnaq.api.poll :as poll-api]
+            [schnaq.api.qa-box :as qa-box-api]
             [schnaq.auth.jwt :as jwt]
             [schnaq.config.keycloak :as kc]
             [schnaq.database.main :refer [fast-pull]]
@@ -15,15 +16,20 @@
     (let [request {:parameters {:query ?data}
                    :identity (when-let [jwt (get ?data :jwt)]
                                (jwt/validate-signed-jwt jwt kc/keycloak-public-key))}
+          path-request {:parameters {:path ?data}
+                        :identity (when-let [jwt (get ?data :jwt)]
+                                    (jwt/validate-signed-jwt jwt kc/keycloak-public-key))}
           {{:keys [starting-conclusions children]} :body} (discussion-api/get-starting-conclusions request)
           {{:keys [polls]} :body} (poll-api/polls-for-discussion request)
           {{:keys [activation]} :body} (activation-api/get-activation request)
+          {{:keys [qa-boxes]} :body} (qa-box-api/get-qa-boxes path-request)
           share-hash (:share-hash ?data)
           wordcloud (wordcloud-db/wordcloud-by-share-hash share-hash)]
       (shared-tools/remove-nil-values-from-map
        {:starting-conclusions starting-conclusions
         :children children
         :polls polls
+        :qa-boxes qa-boxes
         :activation activation
         :wordcloud wordcloud
         ;; below are the local wordclouds

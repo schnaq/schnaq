@@ -109,6 +109,18 @@
    :theme.images/header
    :theme.texts/activation])
 
+(def question
+  [:db/id
+   :qa-box.question/value
+   [:qa-box.question/answered :default false]
+   [:qa-box.question/upvotes :default 0]])
+
+(def qa-box
+  [:db/id
+   :qa-box/visible
+   :qa-box/label
+   {:qa-box/questions question}])
+
 (def discussion
   "Representation of a discussion."
   [:db/id

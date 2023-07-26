@@ -151,6 +151,7 @@
    :schnaq.input-type/activation "Activation"
    :schnaq.input-type/word-cloud "Word Cloud"
    :schnaq.input-type/feedback "Feedback"
+   :schnaq.input-type/qa-box "Q&A box"
    :schnaq.input-type/pro-only "Only for pro users"
 
    ;; Poll feature
@@ -910,4 +911,29 @@
    :schnaqqifant/three-d-head-alt-text "Schnaqqis Head in 3D looking at you"
    :icon.search/alt-text "Search Icon"
    :icon.posts/alt-text "Icon representing number of posts"
-   :icon.users/alt-text "Icon for number of users"})
+   :icon.users/alt-text "Icon for number of users"
+
+   ;; QA-Boxes
+   :qa-boxes.question-input/placeholder "Enter your question here"
+   :qa-boxes.label-input/placeholder "Headline (optional)"
+   :qa-boxes.visibility-checkbox/label "Q&A visible for users"
+   :qa-boxes.create-button/label "Create Q&A Box"
+   :qa-boxes.create.error/heading "QA box error"
+   :qa-boxes.create.error/body "Q&A box could not be created. Please try again."
+   :qa-boxes.dropdown/delete "Delete Q&A"
+   :qa-boxes.dropdown/delete-confirmation "Do you really want to delete this Q&A?"
+   :qa-boxes.question.add.error/heading "Error adding question"
+   :qa-boxes.question.add.error/body "Your question could not be added, due to an error. Please try again."
+   :qa-boxes.delete.error/heading "Delete error"
+   :qa-boxes.delete.error/body "The box could not be deleted. Please try again."
+   :qa-boxes.dropdown/hide "Hide Q&A"
+   :qa-boxes.dropdown/show "Publish Q&A"
+   :qa-boxes.question.visibility.error/heading "Visibility Error"
+   :qa-boxes.question.visibility.error/body "The visibility of the question could not be changed. Please try again."
+   :qa-boxes.card/invisible "This Q&A is currently invisible for users."
+   :qa-boxes.question/delete-confirmation "Do you really want to delete this question?"
+   :qa-boxes.dropdown/edit "Edit Q&A box"
+   :qa-boxes.dropdown/edit-cancel "Cancel editing"
+   :qa-boxes.label-edit-input/placeholder "Heading (optional)"
+   :qa-boxes.question.edit.error/heading "Error editing question"
+   :qa-boxes.question.edit.error/body "Heading could not be changed due to an error. Please try again."})

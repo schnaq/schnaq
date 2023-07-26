@@ -116,6 +116,19 @@
 (s/def :meta/authors (s/coll-of :user/nickname))
 (s/def :meta/sub-statement-count number?)
 
+;; Question Box
+(s/def :qa-box/label ::non-blank-string)
+(s/def :qa-box/visible boolean?)
+(s/def :qa-box.question/answered boolean?)
+(s/def :qa-box.question/value ::non-blank-string)
+(s/def :qa-box.question/upvotes nat-int?)
+(s/def :qa-box/question (s/keys :req [:qa-box.question/value :qa-box.question/answered]
+                                :opt [:qa-box.question/upvotes]))
+(s/def :qa-box/questions (s/coll-of :qa-box/question))
+(s/def ::qa-box
+  (s/keys :req [:qa-box/visible]
+          :opt [:qa-box/label :qa-box/questions]))
+
 ;; Access Codes
 (s/def :discussion.access/code
   (s/and nat-int?
@@ -160,6 +173,7 @@
 (s/def :discussion/wordcloud
   (s/keys :req [:db/id :wordcloud/visible?]))
 (s/def :discussion/starting-statements (s/coll-of ::statement))
+(s/def :discussion/qa-boxes (s/coll-of ::qa-box))
 (s/def ::discussion (s/keys :req [:discussion/share-hash]
                             :opt [:discussion/title :discussion/author
                                   :discussion/starting-statements :discussion/description
@@ -168,6 +182,7 @@
                                   :discussion/created-at :discussion/share-link :discussion/moderation-link
                                   :discussion/creation-secret :discussion/mode :discussion/access
                                   :discussion/activation-focus :discussion/wordcloud
+                                  :discussion/qa-boxes
                                   :discussion/device-ids :discussion/feedback]))
 
 (s/def :feedback.item/label ::non-blank-string)
