@@ -31,7 +31,7 @@
   "Normalize a collection of maps to a map with the key as its identity, e.g. the
   db/id, and the value is the original map."
   [ident coll]
-  [keyword? (s/? (s/coll-of map?)) => map?]
+  [keyword? (s/or :maps (s/coll-of map?) :nil nil?) => map?]
   (into {} (map (juxt ident identity) coll)))
 
 (defn- alphanumeric?
