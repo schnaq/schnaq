@@ -78,7 +78,6 @@
           :db-after
           (db/fast-pull entity-id patterns/qa-box)))))
 
-
 (>defn add-question
   "Adds a single new question to the question box."
   [qa-box-id question]
@@ -105,8 +104,8 @@
   ([question-id answered?]
    [:db/id :qa-box.question/answered => (? :qa-box/question)]
    (db/transact-and-pull [[:db/add question-id :qa-box.question/answered answered?]]
-                          question-id
-                          patterns/question)))
+                         question-id
+                         patterns/question)))
 
 (>defn delete-question
   "Delete a question."
@@ -120,7 +119,7 @@
   [:discussion/share-hash boolean? => (s/? (s/coll-of ::specs/qa-box))]
   (let [all-qa-boxes (:discussion/qa-boxes
                       (db/fast-pull [:discussion/share-hash share-hash] [{:discussion/qa-boxes patterns/qa-box}]))]
-    (log/debug "Retrieving qa-boxes for share-hash" share-hash "— Including invisible?" with-invisible?)
+    (log/trace "Retrieving qa-boxes for share-hash" share-hash "— Including invisible?" with-invisible?)
     (if with-invisible?
       all-qa-boxes
       (remove #(not (:qa-box/visible %)) all-qa-boxes))))
