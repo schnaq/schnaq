@@ -117,7 +117,7 @@
 (>defn qa-boxes-for-share-hash
   "Get all qa-boxes for a certain share-hash."
   [share-hash with-invisible?]
-  [:discussion/share-hash boolean? => (s/coll-of ::specs/qa-box)]
+  [:discussion/share-hash boolean? => (s/? (s/coll-of ::specs/qa-box))]
   (let [all-qa-boxes (:discussion/qa-boxes
                       (db/fast-pull [:discussion/share-hash share-hash] [{:discussion/qa-boxes patterns/qa-box}]))]
     (log/debug "Retrieving qa-boxes for share-hash" share-hash "— Including invisible?" with-invisible?)
