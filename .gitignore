@@ -69,3 +69,5 @@ resources/public/css/.sass-cache
 
 yarn-error.log
 .vercel
+
+.DS_Store
