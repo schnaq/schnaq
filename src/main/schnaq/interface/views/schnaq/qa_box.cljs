@@ -55,25 +55,30 @@
   (let [cast-upvotes @(rf/subscribe [:qa-box/cast-upvotes qa-box-id])
         user-moderator? @(rf/subscribe [:user/moderator?])]
     [motion/animated-list-item
-     [:div.d-flex.flex-row.justify-content-between.align-items-center
-      [:div.border.rounded.mb-2.p-2.d-flex.flex-row.justify-content-between.align-items-center.flex-grow-1
+     [:div.d-flex.flex-row.justify-content-between.align-items-start.mb-2
+      [:div.border.rounded.mb-2.p-2.d-flex.flex-row.justify-content-between.flex-grow-1
        {:className (when (:qa-box.question/answered question) "bg-success bg-opacity-25")}
-       [:p.d-inline-block.mb-0 (:qa-box.question/value question)]
-       [:div.flex-shrink-0.ms-1
-        (if (cast-upvotes (:db/id question))
-          [icon :smile-beam "mx-1 text-gray"]
-          [icon :arrow-up "mx-1 text-primary clickable" {:on-click #(rf/dispatch [:qa-box.question/upvote qa-box-id (:db/id question)])}])
-        [:span (or (:qa-box.question/upvotes question) 0)]]]
+       [:p.d-inline-block.mb-0.me-1 (:qa-box.question/value question)]
+       [:div.d-flex.flex-row.flex-shrink-0.badge.rounded-pill.align-self-start.justify-content-between
+        {:className (if (cast-upvotes (:db/id question))
+                      "bg-primary"
+                      "bg-gray-light text-typography clickable")
+         :style {:min-width "3.6rem"}
+         :on-click (when (not (cast-upvotes (:db/id question)))
+                     #(rf/dispatch [:qa-box.question/upvote qa-box-id (:db/id question)]))}
+        [icon :arrow-up (str "mx-1 me-1 fs-6"
+                             (when (cast-upvotes (:db/id question)) " text-white"))]
+        [:span.fs-6 (or (:qa-box.question/upvotes question) 0)]]]
       (when user-moderator?
-        [:div.row.g-0.flex-shrink-0
+        [:div.row.g-0.flex-shrink-0.py-2
          [:div.col-6
           [icon :trash
-           "border border-danger border-opacity-75 rounded text-danger clickable p-2 m-1 ms-2"
+           "rounded text-danger clickable px-2 ms-2"
            {:on-click #(when (js/confirm (labels :qa-boxes.question/delete-confirmation))
                          (rf/dispatch [:qa-box.question/delete qa-box-id (:db/id question)]))}]]
          [:div.col-6
           [icon :check/normal
-           "border border-primary border-opacity-75 rounded text-primary clickable p-2 my-1 ms-1"
+           "rounded text-primary clickable px-2 ms-1"
            {:on-click #(rf/dispatch [:qa-box.question/answer qa-box-id (:db/id question)])}]]])]]))
 
 (>defn qa-box-card
@@ -91,28 +96,29 @@
         box-editing? @(rf/subscribe [:qa-box/edit? (:db/id qa-box)])]
     [:section.statement-card.activation-card
      [:div.mx-4.my-2
-      [:div.d-flex
-       (if box-editing?
-         [:> Form {:className "w-75 mb-2 mx-auto"
-                   :on-submit (fn [e]
-                                (.preventDefault e)
-                                (edit-dispatch e))
-                   :on-key-down (fn [e]
-                                  (when (tools/ctrl-press? e "Enter")
-                                    (edit-dispatch e)))}
-          [:> FormGroup
-           [:> InputGroup
-            [:> FormControl
-             {:name edit-input-name
-              :defaultValue (:qa-box/label qa-box)
-              :placeholder (labels :qa-boxes.label-edit-input/placeholder)}]
-            [:> Button {:variant "primary" :type :submit} [icon :pencil]]]]]
-         [:h6.pb-2.text-center.mx-auto (:qa-box/label qa-box)])
+      [:div.d-flex.justify-content-between.mt-2
+       [:div.d-flex
+        [icon :question "me-2 text-primary"]
+        [:h6.pb-2.fw-bold.text-primary (labels :schnaq.input-type/qa-box)]]
        [dropdown-menu qa-box]]
+      (if box-editing?
+        [:> Form {:on-submit (fn [e]
+                               (.preventDefault e)
+                               (edit-dispatch e))
+                  :on-key-down (fn [e]
+                                 (when (tools/ctrl-press? e "Enter")
+                                   (edit-dispatch e)))}
+         [:> FormGroup
+          [:> InputGroup
+           [:> FormControl
+            {:name edit-input-name
+             :defaultValue (:qa-box/label qa-box)
+             :placeholder (labels :qa-boxes.label-edit-input/placeholder)}]
+           [:> Button {:variant "primary" :type :submit} [icon :pencil]]]]]
+        [:h6 {:className (when (:qa-box/visible qa-box) "mb-4")} (:qa-box/label qa-box)])
       (when (not (:qa-box/visible qa-box))
-        [:div.text-center
-         [:p.text-muted (labels :qa-boxes.card/invisible)]])
-      [:> Form {:className "mb-3"
+        [:p.text-muted.mb-4 (labels :qa-boxes.card/invisible)])
+      [:> Form {:className "mb-4"
                 :on-submit (fn [e]
                              (.preventDefault e)
                              (question-dispatch e))
@@ -122,7 +128,7 @@
        [:> FormGroup
         [:> InputGroup
          [:> FormControl {:name input-name :placeholder (labels :qa-boxes.question-input/placeholder)}]
-         [:> Button {:variant "primary" :type :submit} [icon :plane]]]]]
+         [:> Button {:variant "primary" :type :submit} "Absenden"]]]]
       [motion/animated-list
        (for [question sorted-questions]
          (with-meta
