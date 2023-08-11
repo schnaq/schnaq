@@ -147,7 +147,8 @@
                          (.preventDefault event)
                          (rf/dispatch [:qa-box/create (oget event [:target])]))}
    [inputs/floating (labels :qa-boxes.label-input/placeholder) "qa-input"]
-   [inputs/checkbox (labels :qa-boxes.visibility-checkbox/label) "qa-checkbox" {:defaultChecked true}]
+   [:div.mt-2
+    [inputs/checkbox (labels :qa-boxes.visibility-checkbox/label) "qa-checkbox" {:defaultChecked true}]]
    [:div.text-center
     [:> Button {:variant "primary"
                 :className "w-75 mt-3 mx-auto d-block"
