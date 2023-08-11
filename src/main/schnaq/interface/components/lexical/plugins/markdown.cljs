@@ -3,8 +3,8 @@
             ["@lexical/react/LexicalMarkdownShortcutPlugin" :refer [MarkdownShortcutPlugin]]
             [goog.string :refer [format]]
             [oops.core :refer [ocall]]
-            [schnaq.interface.components.lexical.nodes.image :refer [$create-image-node $image-node?]]
-            [schnaq.interface.components.lexical.nodes.video :refer [$create-video-node $video-node?]]
+            [schnaq.interface.components.lexical.nodes.image :refer [$create-image-node $image-node? ImageNode]]
+            [schnaq.interface.components.lexical.nodes.video :refer [$create-video-node $video-node? VideoNode]]
             [schnaq.interface.components.lexical.plugins.excalidraw :refer [excalidraw-transformer]]))
 
 (def ^:private markdown-image-import-regex
@@ -12,7 +12,8 @@
 
 (def ^:private image-transformer
   "Export / import image nodes."
-  #js {:export (fn [^ImageNode node, _export-children, _export-format]
+  #js {:dependencies [ImageNode]
+       :export (fn [^ImageNode node, _export-children, _export-format]
                  (when ($image-node? node)
                    (format "![%s](%s)" (or (.getAltText node) "") (or (.getSrc node) ""))))
        :importRegExp markdown-image-import-regex
@@ -26,7 +27,8 @@
 
 (def ^:private video-transformer
   "Export / Import video nodes."
-  #js {:export (fn [^VideoNode node, _export-children, _export-format]
+  #js {:dependencies [VideoNode]
+       :export (fn [^VideoNode node, _export-children, _export-format]
                  (when ($video-node? node)
                    (format "![Video](%s)" (.getURL node))))
        :importRegExp markdown-image-import-regex

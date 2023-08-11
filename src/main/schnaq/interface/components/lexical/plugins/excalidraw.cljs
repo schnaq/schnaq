@@ -24,7 +24,8 @@
 
 (def excalidraw-transformer
   "Export / import excalidraw nodes as markdown."
-  #js {:export (fn [^ExcalidrawNode node, _export-children, _export-format]
+  #js {:dependencies [ExcalidrawNode]
+       :export (fn [^ExcalidrawNode node, _export-children, _export-format]
                  (when ($excalidraw-node? node)
                    (format "![%s](%s)" "Excalidraw drawing" (.getUrl node))))
        :importRegExp nil
