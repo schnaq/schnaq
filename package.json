@@ -18,7 +18,6 @@
     "@lexical/react": "^0.3.9",
     "@popperjs/core": "^2.11.6",
     "@tippyjs/react": "^4.2.6",
-    "bootstrap": "^5.2.3",
     "chart.js": "^4.0.1",
     "component-emitter": "^1.3.0",
     "create-react-class": "^15.6.3",
@@ -57,6 +56,7 @@
   "devDependencies": {
     "@excalidraw/excalidraw": "^0.13.0",
     "@types/react": "^18.0.26",
+    "bootstrap": "^5.3.1",
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.1",
     "karma-cljs-test": "^0.1.0",
@@ -69,8 +69,10 @@
     "@types/react": "peer dependency for react-markdown",
     "@popperjs/core": "peer dependency for bootstrap 5",
     "@egjs/hammerjs": "peer dependency for vis-network and vis-util",
+    "bootstrap": "Needed to build our css templates",
     "keycharm": "peer dependency for vis-network",
     "shadow-cljs": "Needed to polyfill for some packages",
+    "vis-network": "Last checked: v 9.1.6. Did not load with shadow-cljs. Retry with more current versions",
     "uuid": "peer dependency for vis-network and vis-util"
   }
 }
