@@ -1979,10 +1979,10 @@ keycharm@^0.4.0:
   resolved "https://registry.yarnpkg.com/keycharm/-/keycharm-0.4.0.tgz#8d684ea9cc01379a07fbddee33ff32d97f5ae2a7"
   integrity sha512-TyQTtsabOVv3MeOpR92sIKk/br9wxS+zGj4BG7CR8YbK4jM3tyIBaF0zhzeBUMx36/Q/iQLOKKOT+3jOQtemRQ==
 
-keycloak-js@^20.0.2:
-  version "20.0.5"
-  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-20.0.5.tgz#8dd94d2c813170db5381dabfbe3a3327ce5ed6db"
-  integrity sha512-7+M5Uni4oNlAmbjM/lDJzFHu2+PGqU6/bvmTBuQssE1fJ7ZyNeCRHgFoaVfFpIU3m6aAFwPUko4lVcn4kPXP5Q==
+keycloak-js@^22.0.1:
+  version "22.0.1"
+  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-22.0.1.tgz#7c7a14ddad6103f7675d1ea068e09606628e25bd"
+  integrity sha512-5cwOzMTMW2HuKGaIHv50BJHz2o8ID+YgzaaXKNwOk0XqD6ZOPD/jQXvqTz+Z8ID5cP46zVWnNiTouFK41NbPOQ==
   dependencies:
     base64-js "^1.5.1"
     js-sha256 "^0.9.0"
