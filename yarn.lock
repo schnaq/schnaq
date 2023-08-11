@@ -74,10 +74,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.4.tgz#19bf0f5af19149111c40d98bb0cf82119f5d9eeb"
   integrity sha512-Ja/Vfqe3HpuzRsG1oBtWTHk2PGZ7GR+2Vz5iYGelAw8dx32K0y7PjVuxK6z1nMpZOqAFsRUPCkK1YjJ56qJlgw==
 
-"@excalidraw/excalidraw@^0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@excalidraw/excalidraw/-/excalidraw-0.13.0.tgz#db17041be09d7e9da72e3ae6cd3a2e1ceb5d2ff9"
-  integrity sha512-TTi1hiUczfIj/kLQshh1EHUrXziEa5cwLF74TrlFQWwW9jhJIF73HplmqEMrfwwqt7CrypXRZtMzH1hhmZ3vbg==
+"@excalidraw/excalidraw@^0.15.0":
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/@excalidraw/excalidraw/-/excalidraw-0.15.2.tgz#7dba4f6e10c52015a007efb75a9fc1afe598574c"
+  integrity sha512-rTI02kgWSTXiUdIkBxt9u/581F3eXcqQgJdIxmz54TFtG3ughoxO5fr4t7Fr2LZIturBPqfocQHGKZ0t2KLKgw==
 
 "@fontsource/poppins@^5.0.0":
   version "5.0.8"

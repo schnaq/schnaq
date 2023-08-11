@@ -53,7 +53,7 @@
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "@excalidraw/excalidraw": "^0.13.0",
+    "@excalidraw/excalidraw": "^0.15.0",
     "@fontsource/poppins": "^5.0.0",
     "@types/react": "^18.0.26",
     "bootstrap": "^5.3.1",
