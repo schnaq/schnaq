@@ -184,6 +184,6 @@
                                     :description (at/get-doc #'get-qa-boxes)
                                     :middleware [:discussion/valid-share-hash?]
                                     :parameters {:path {:share-hash :discussion/share-hash}}
-                                    :responses {200 {:body {:qa-boxes (s/? (s/coll-of ::specs/qa-box))}}
+                                    :responses {200 {:body {:qa-boxes (s/coll-of ::specs/qa-box)}}
                                                 400 at/response-error-body
                                                 403 at/response-error-body}}}]]])
