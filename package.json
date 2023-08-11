@@ -44,12 +44,13 @@
     "react-wordcloud": "^1.2.7",
     "remark-gfm": "^3.0.1",
     "remove-markdown": "^0.5.0",
+    "shadow-cljs": "^2.25.2",
     "stopword": "^2.0.5",
     "timsort": "^0.3.0",
     "unique-names-generator": "^4.7.1",
     "uuid": "^8.3.2",
     "vis-data": "^7.1.4",
-    "vis-network": "^9.1.2",
+    "vis-network": "9.1.2",
     "vis-util": "^5.0.3",
     "xmlhttprequest": "^1.8.0"
   },
@@ -61,7 +62,6 @@
     "karma-cljs-test": "^0.1.0",
     "postcss": "^8.4.20",
     "purgecss": "^4.1.3",
-    "shadow-cljs": "^2.20.14",
     "stylelint": "^14.16.0",
     "stylelint-config-sass-guidelines": "^9.0.1"
   },
@@ -70,6 +70,7 @@
     "@popperjs/core": "peer dependency for bootstrap 5",
     "@egjs/hammerjs": "peer dependency for vis-network and vis-util",
     "keycharm": "peer dependency for vis-network",
+    "shadow-cljs": "Needed to polyfill for some packages",
     "uuid": "peer dependency for vis-network and vis-util"
   }
 }
