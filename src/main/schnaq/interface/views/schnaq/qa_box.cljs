@@ -63,12 +63,12 @@
         {:className (if (cast-upvotes (:db/id question))
                       "bg-primary"
                       "bg-gray-light text-typography clickable")
-         :style {:min-width "3.6rem"}
+         :style {:min-width "3.7rem"}
          :on-click (when (not (cast-upvotes (:db/id question)))
                      #(rf/dispatch [:qa-box.question/upvote qa-box-id (:db/id question)]))}
         [icon :arrow-up (str "mx-1 me-1 fs-6"
                              (when (cast-upvotes (:db/id question)) " text-white"))]
-        [:span.fs-6 (or (:qa-box.question/upvotes question) 0)]]]
+        [:span.fs-6.me-1 (or (:qa-box.question/upvotes question) 0)]]]
       (when user-moderator?
         [:div.row.g-0.flex-shrink-0.py-2
          [:div.col-6
