@@ -48,9 +48,9 @@
     "stopword": "^2.0.5",
     "timsort": "^0.3.0",
     "unique-names-generator": "^4.7.1",
-    "uuid": "^8.3.2",
+    "uuid": "^9.0.0",
     "vis-data": "^7.1.4",
-    "vis-network": "9.1.2",
+    "vis-network": "9.1.4",
     "vis-util": "^5.0.3",
     "xmlhttprequest": "^1.8.0"
   },
