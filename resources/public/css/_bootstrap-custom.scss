@@ -13,11 +13,11 @@
 // I.e.: If you add the key "indigo" to this map, there will also be btn-indigo
 // etc. available for use.
 $custom-colors: (
-        'white': $white,
-        'typography': $typography,
-        'gray': $gray-base,
-        'gray-light': $gray-300,
-        'white-shade' :$white-shade,
+  'white': $white,
+  'typography': $typography,
+  'gray': $gray-base,
+  'gray-light': $gray-300,
+  'white-shade' :$white-shade,
 );
 
 @import "../../../node_modules/bootstrap/scss/variables";
@@ -27,9 +27,9 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 
 $custom-breakpoints: (
-        xxxl: 1600px,
-        hd: 1900px,
-        qhd: 2560px
+  xxxl: 1600px,
+  hd: 1900px,
+  qhd: 2560px
 );
 
 $grid-breakpoints: map-merge($grid-breakpoints, $custom-breakpoints);
