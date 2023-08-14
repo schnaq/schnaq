@@ -1,13 +1,11 @@
 @use '../../../node_modules/@fontsource/poppins/scss/mixins.scss' as poppins;
 
-$weights: 100, 200, 300, 400, 500, 600, 700;
-@each $thickness in $weights {
-  @include poppins.fontFace(
-          $weight: $thickness,
-          $display: fallback,
-          $fontDir: '../fonts/poppins'
-  );
-}
+@include poppins.faces(
+        $weights: (100, 200, 300, 400, 500, 600, 700, 800, 900),
+        $display: fallback,
+        $styles: all,
+        $directory: '../fonts/poppins'
+);
 
 // Variables
 $img-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
