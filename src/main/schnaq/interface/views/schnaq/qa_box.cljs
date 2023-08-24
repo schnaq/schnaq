@@ -186,7 +186,8 @@
    (when-let [qa-box (:qa-box response)]
      (-> db
          (update-in [:schnaq :qa-boxes] dissoc temp-id)
-         (assoc-in [:schnaq :qa-boxes (:db/id qa-box)] qa-box)))))
+         (assoc-in [:schnaq :qa-boxes (:db/id qa-box)] qa-box)
+         (tools/new-activation-focus (:db/id qa-box))))))
 
 (rf/reg-event-fx
  :qa-box.create/failure

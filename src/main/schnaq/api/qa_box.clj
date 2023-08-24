@@ -12,8 +12,10 @@
 (defn- create-qa-box
   "Allow admins to create a qa-box"
   [{:keys [parameters]}]
-  (let [{:keys [share-hash visible? label]} (:body parameters)]
-    (ok {:qa-box (qa-box-db/create-qa-box! share-hash visible? label)})))
+  (let [{:keys [share-hash visible? label]} (:body parameters)
+        new-qa-box (qa-box-db/create-qa-box! share-hash visible? label)]
+    (db/set-activation-focus [:discussion/share-hash share-hash] (:db/id new-qa-box))
+    (ok {:qa-box new-qa-box})))
 
 (defn get-qa-boxes
   "Get all qa-boxes for a discussion. If moderator, also return the invisible ones."
