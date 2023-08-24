@@ -254,11 +254,20 @@
                                                                               :qa-box.question/answered false
                                                                               :qa-box.question/upvotes 0})
       :fx [(http/xhrio-request db :post (str "/qa-box/" qa-box-id "/questions")
-                               [:no-op]
+                               [:qa-box.question.add/success qa-box-id temp-id]
                                {:question question
                                 :share-hash share-hash}
                                [:qa-box.question.add/failure qa-box-id temp-id])
            [:form/clear input-form]]})))
+
+(rf/reg-event-db
+ :qa-box.question.add/success
+ (fn [db [_ qa-box-id temp-id {:keys [new-question]}]]
+   (-> db
+       (update-in [:schnaq :qa-boxes qa-box-id :qa-box/questions] (fn [qs]
+                                                                    (remove #(= (:db/id %) temp-id) qs)))
+       (update-in [:schnaq :qa-boxes qa-box-id :qa-box/questions] (fn [qs]
+                                                                    (conj qs new-question))))))
 
 (rf/reg-event-fx
  :qa-box.question.add/failure
