@@ -3,7 +3,7 @@
             ["react-bootstrap/Form" :as Form]
             ["react-bootstrap/InputGroup" :as InputGroup]
             [cljs.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [=> >defn- >defn]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn- >defn ?]]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
@@ -24,7 +24,7 @@
 (>defn- dropdown-menu
   "Dropdown menu for poll configuration."
   [qa-box]
-  [::specs/qa-box => :re-frame/component]
+  [::specs/qa-box => (? :re-frame/component)]
   (when (pos? (:db/id qa-box))
     (let [qa-box-id (:db/id qa-box)
           {:qa-box/keys [visible]} qa-box

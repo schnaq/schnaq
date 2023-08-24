@@ -12,6 +12,8 @@
   [component]
   [:> (.-ul motion)
    {:layout true
+    :layoutRoot true
+    :layoutScroll true
     :style {:list-style-type "none"
             :padding-left "0"}}
    component])
