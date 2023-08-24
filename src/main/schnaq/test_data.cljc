@@ -246,6 +246,7 @@
     :discussion/moderators ["user.registered/kangaroo" "user.registered/schnaqqi"]
     :discussion/description "A very simple discussion"
     :discussion/states []
+    :discussion/qa-boxes ["qa-box/unlabeled"]
     :discussion/wordcloud-local ["wordcloud/first" "wordcloud/second"]
     :discussion/starting-statements ["statement/brainstorm"]}
    {:db/id "statement/denken"
@@ -272,6 +273,13 @@
     :statement/parent "statement/denken"
     :statement/type :statement.type/attack
     :statement/discussions ["discussion/simple"]}])
+
+(def qa-boxes
+  [{:db/id "qa-box/unlabeled"
+    :qa-box/visible true
+    :qa-box/questions [{:db/id "qa-box.question.unlabeled/first"
+                        :qa-box.question/value "What is love?"
+                        :qa-box.question/answered false}]}])
 
 (def deleted-discussions
   [{:discussion/title "Deleted discussion"
@@ -424,4 +432,4 @@
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-discussion
           deleted-discussions write-locked-discussions graph-discussion simple-discussion registered-users
-          themes activations polls wordclouds))
+          themes activations polls wordclouds qa-boxes))

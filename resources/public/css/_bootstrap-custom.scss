@@ -16,12 +16,15 @@ $custom-colors: (
   'white': $white,
   'typography': $typography,
   'gray': $gray-base,
+  'gray-light': $gray-300,
   'white-shade' :$white-shade,
 );
 
 @import "../../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/variables-dark";
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
+
 
 $custom-breakpoints: (
   xxxl: 1600px,

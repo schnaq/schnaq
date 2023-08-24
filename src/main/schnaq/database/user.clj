@@ -79,7 +79,7 @@
    (.toLowerCase ^String nickname) patterns/private-user))
 
 (>defn private-user-by-keycloak-id
-  "Returns the registered user by email."
+  "Returns the registered user by keycloak-id."
   [keycloak-id]
   [:user.registered/keycloak-id => (? ::specs/registered-user)]
   (let [user (fast-pull [:user.registered/keycloak-id keycloak-id]

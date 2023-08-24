@@ -12,7 +12,10 @@
   [component]
   [:> (.-ul motion)
    {:layout true
-    :style {:list-style-type "none"}}
+    :layoutRoot true
+    :layoutScroll true
+    :style {:list-style-type "none"
+            :padding-left "0"}}
    component])
 
 (defn animated-list-item

@@ -58,8 +58,7 @@ projectFilesBackup/
 
 ## node / shadow-cljs
 node_modules/
-resources/public/node_modules/
-!resources/public/node_modules/.gitkeep
+!node_modules/.gitkeep
 .shadow-cljs/
 resources/public/js/compiled/
 
@@ -70,3 +69,5 @@ resources/public/css/.sass-cache
 
 yarn-error.log
 .vercel
+
+.DS_Store

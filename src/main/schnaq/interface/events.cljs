@@ -61,6 +61,7 @@
          [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
          [:dispatch [:load/last-added-schnaq]]
          [:dispatch [:schnaq.polls/load-past-votes]]
+         [:dispatch [:qa-box/load-upvotes]]
          [:dispatch [:schnaq.votes/load-from-localstorage]]
          [:system/set-window-events]
          [:updates.periodic/loop]]}))

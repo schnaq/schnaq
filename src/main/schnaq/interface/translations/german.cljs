@@ -154,6 +154,7 @@
    :schnaq.input-type/activation "Aktivierung"
    :schnaq.input-type/word-cloud "Wortwolke"
    :schnaq.input-type/feedback "Feedback"
+   :schnaq.input-type/qa-box "Fragenbox"
    :schnaq.input-type/pro-only "Nur für Pro User"
 
    ;; Poll feature
@@ -919,4 +920,29 @@
    :schnaqqifant/three-d-head-alt-text "Schnaqqis Kopf in 3D wie er dich anschaut"
    :icon.search/alt-text "Such-Symbol"
    :icon.posts/alt-text "Symbol für Anzahl Beiträge"
-   :icon.users/alt-text "Symbol für Anzahl Nutzer:innen"})
+   :icon.users/alt-text "Symbol für Anzahl Nutzer:innen"
+
+   ;; QA-Boxes
+   :qa-boxes.question-input/placeholder "Gib hier deine Frage ein"
+   :qa-boxes.label-input/placeholder "Überschrift (optional)"
+   :qa-boxes.visibility-checkbox/label "Q&A sichtbar für Nutzer:innen"
+   :qa-boxes.create-button/label "Q&A Box erstellen"
+   :qa-boxes.create.error/heading "QA-Box Fehler"
+   :qa-boxes.create.error/body "Die QA-Box konnte nicht erstellt werden. Bitte versuche es noch einmal."
+   :qa-boxes.dropdown/delete "Q&A löschen"
+   :qa-boxes.dropdown/delete-confirmation "Möchtest du dieses Q&A wirklich löschen?"
+   :qa-boxes.question.add.error/heading "Fehler beim Hinzufügen der Frage"
+   :qa-boxes.question.add.error/body "Deine Frage konnte wegen eines Fehlers nicht hinzugefügt werden. Bitte versuche es noch einmal."
+   :qa-boxes.delete.error/heading "Fehler beim Löschen"
+   :qa-boxes.delete.error/body "Das Q&A konnte nicht gelöscht werden. Bitte versuche es noch einmal."
+   :qa-boxes.dropdown/hide "Q&A verstecken"
+   :qa-boxes.dropdown/show "Q&A veröffentlichen"
+   :qa-boxes.question.visibility.error/heading "Fehler bei Sichtbarkeitsänderung"
+   :qa-boxes.question.visibility.error/body "Der Sichtbarkeitsstatus der Q&A-Box konnte nicht geändert werden. Bitte versuche es noch einmal."
+   :qa-boxes.card/invisible "Dieses Q&A ist aktuell für Nutzer:innen versteckt."
+   :qa-boxes.question/delete-confirmation "Willst du diese Frage wirklich löschen?"
+   :qa-boxes.dropdown/edit "Q&A Box bearbeiten"
+   :qa-boxes.dropdown/edit-cancel "Bearbeiten abbrechen"
+   :qa-boxes.label-edit-input/placeholder "Überschrift (optional)"
+   :qa-boxes.question.edit.error/heading "Fehler beim Bearbeiten des Q&As"
+   :qa-boxes.question.edit.error/body "Die Überschrift konnte durch einen Fehler nicht geändert werden. Bitte versuche es noch einmal."})

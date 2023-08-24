@@ -3,6 +3,7 @@
             ["@lexical/link" :refer [AutoLinkNode LinkNode]]
             ["@lexical/list" :refer [ListItemNode ListNode]]
             ["@lexical/markdown" :refer [$convertFromMarkdownString]]
+            ["@lexical/react/LexicalHorizontalRuleNode" :refer [HorizontalRuleNode]]
             ["@lexical/rich-text" :refer [HeadingNode QuoteNode]]
             ["@lexical/table" :refer [TableCellNode TableNode TableRowNode]]
             ["lexical" :refer [$createParagraphNode]]
@@ -100,6 +101,7 @@
                    CodeHighlightNode
                    ExcalidrawNode
                    HeadingNode
+                   HorizontalRuleNode,
                    ImageNode
                    VideoNode
                    LinkNode
