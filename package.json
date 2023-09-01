@@ -24,7 +24,6 @@
     "date-fns-tz": "^2.0.0",
     "framer-motion": "^6.3.11",
     "html2canvas": "^1.0.0-rc.7",
-    "jdenticon": "^3.2.0",
     "keycharm": "^0.4.0",
     "keycloak-js": "^22.0.1",
     "klaro": "^0.7.18",
