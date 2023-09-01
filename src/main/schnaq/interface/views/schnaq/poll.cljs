@@ -334,7 +334,7 @@
   (letfn [(get-new-option [id] (get-option form (poll-option-id-str id)))
           (get-existing-option [id]
             (when-some [option (get-option form (poll-option-id-str id "edit"))]
-              {:db/id % :option/value option}))]
+              {:db/id id :option/value option}))]
     {:title (oget form :poll-topic :value)
      :new-options (keep get-new-option new-option-ids)
      :edited-options (keep get-existing-option existing-option-ids)
