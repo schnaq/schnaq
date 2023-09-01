@@ -311,7 +311,7 @@
 (defn hide-results? [form]
   (or (oget form :hide-results? :checked) false))
 
-(def poll-type 
+(def poll-type
   {"multiple" :poll.type/multiple-choice
    "single" :poll.type/single-choice
    "ranking" :poll.type/ranking})
@@ -325,16 +325,16 @@
   (letfn [(get-new-option [id] (get-option form (poll-option-id-str id)))]
     {:title (oget form :poll-topic :value)
      :poll-type (get-poll-type form)
-     :options (keep get-new-option new-option-ids)
+     :options (keep get-new-option option-ids)
      :hide-results? (hide-results? form)}))
 
 (defn- extract-poll-from-edit-form
   "Extract information from a poll edit form."
   [form existing-option-ids new-option-ids]
   (letfn [(get-new-option [id] (get-option form (poll-option-id-str id)))
-          (get-existing-option [id] 
+          (get-existing-option [id]
             (when-some [option (get-option form (poll-option-id-str id "edit"))]
-              {:db/id %, :option/value option}))]
+              {:db/id % :option/value option}))]
     {:title (oget form :poll-topic :value)
      :new-options (keep get-new-option new-option-ids)
      :edited-options (keep get-existing-option existing-option-ids)
