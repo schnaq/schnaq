@@ -15,7 +15,7 @@
 
 (def realm
   "Specify the realm you are connecting to."
-  (:keycloak-realm env))
+  (or (:keycloak-realm env) "debug"))
 
 (def openid-endpoint
   "OpenID Endpoint to authenticate using oauth2."
