@@ -90,12 +90,10 @@
 
            :dev {:extra-paths ["dev"]}
 
-           :uberjar
-           {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.1.303"}}
-            :exec-fn hf.depstar/uberjar
-            :exec-args {:main-class schnaq.api
-                        :verbose true
-                        :jar "target/schnaq-standalone.jar"}}
+           :build
+           ;; Run with clj -T:build
+           {:replace-deps {io.github.clojure/tools.build {:mvn/version "0.9.6"}}
+            :ns-default build}
 
            :run-server {:main-opts ["-m" "schnaq.api"]}
            :notification-service {:main-opts ["-m" "schnaq.notification-service.core"]}

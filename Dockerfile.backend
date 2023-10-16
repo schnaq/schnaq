@@ -4,7 +4,7 @@ WORKDIR /code
 
 # Cache and install Clojure dependencies
 COPY deps.edn .
-RUN clojure -P -M:run-server:uberjar
+RUN clojure -P -M:run-server:build
 
 
 # ------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ ARG BUILD_HASH
 ENV BUILD_HASH=$BUILD_HASH
 
 COPY . .
-RUN clojure -X:uberjar
+RUN clojure -T:build uber
 
 
 # ------------------------------------------------------------------------------
