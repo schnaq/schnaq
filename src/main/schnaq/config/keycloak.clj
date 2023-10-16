@@ -22,9 +22,9 @@
   (format "%srealms/%s/protocol/openid-connect" server realm))
 
 (def ^:private backend-admin-id
-  (:keycloak-admin-id env))
+  (or (:keycloak-admin-id env) "debug"))
 (def ^:private backend-admin-secret
-  (:keycloak-admin-secret env))
+  (or (:keycloak-admin-secret env) "debug"))
 
 (def kc-client
   "Client to interact with our keycloak instance."
