@@ -1,13 +1,13 @@
 name: "Lint Code and check dependencies"
 
-on: [push]
+on: [ push ]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     name: Lint code
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.1.0
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
 
@@ -19,7 +19,7 @@ jobs:
     name: Check Clojure deps
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.1.0
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
 

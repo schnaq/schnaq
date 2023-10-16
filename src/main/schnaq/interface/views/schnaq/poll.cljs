@@ -11,11 +11,14 @@
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.matomo :as matomo]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :refer [from-localstorage]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
+            [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]
             [schnaq.shared-toolbelt :as shared-tools]))
 
@@ -142,6 +145,18 @@
       [dropdown-menu/item :pencil
        :schnaq.poll/edit-button
        #(rf/dispatch [:schnaq.poll.edit/activate poll-id])]
+      [dropdown-menu/item :copy
+       :schnaq.poll/copy-direct-link (fn []
+                                       (clipboard/copy-to-clipboard!
+                                        (gstring/format
+                                         "%s%s"
+                                         (.-origin (new js/URL (oget js/window [:location :href])))
+                                         (navigation/href :routes.present/entity
+                                                          {:share-hash share-hash :entity-id poll-id})))
+                                       (notify! (labels :schnaq/link-copied-heading)
+                                                (labels :schnaq/link-copied-success)
+                                                :info
+                                                false))]
       [dropdown-menu/item :trash
        :schnaq.poll/delete-button
        #(when (js/confirm (labels :schnaq.poll/delete-confirmation))

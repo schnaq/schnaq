@@ -175,6 +175,7 @@
    :schnaq.poll/hide-results-button "Hide results for participants"
    :schnaq.poll/show-results-button "Show results for participants"
    :schnaq.poll/edit-button "Edit poll"
+   :schnaq.poll/copy-direct-link "Copy direct link"
    :schnaq.poll/delete-confirmation "Do you really want to delete this poll?"
    :schnaq.poll.hide-results.notification/title "Successfully changed result visibility"
    :schnaq.poll.hide-results.notification/body-show "The results can now be seen by the participants."
