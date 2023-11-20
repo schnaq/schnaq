@@ -52,5 +52,5 @@
 (defmethod handle-message :schnaq.poll/update [{:keys [?data]}]
   (when ?data
     (let [parameters {:parameters {:query ?data}}
-          {{:keys [poll]} :body} (poll-api/get-poll parameters)]
-      {:poll poll})))
+          {{:keys [polls]} :body} (poll-api/polls-for-discussion parameters)]
+      {:polls polls})))

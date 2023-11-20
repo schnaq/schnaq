@@ -81,10 +81,8 @@
 (rf/reg-event-fx
  :updates.periodic.present.poll/request
  (fn [{:keys [db]}]
-   (let [share-hash (get-in db [:current-route :parameters :path :share-hash])
-         poll-id (get-in db [:current-route :parameters :path :entity-id])]
+   (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
      {:fx [[:ws/send [:schnaq.poll/update
-                      {:share-hash share-hash
-                       :poll-id poll-id}
+                      {:share-hash share-hash}
                       (fn [response]
-                        (rf/dispatch [:schnaq.poll.load-from-query/success response]))]]]})))
+                        (rf/dispatch [:schnaq.polls.load-from-backend/success response]))]]]})))
