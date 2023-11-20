@@ -74,7 +74,7 @@
         (if admin-access?
           [:section.row
            [:div.col-12.col-md-3 [share-options]]
-           [:div.offset-1.col-md-8
+           [:div.offset-1.col-md-8.d-flex.flex-column.justify-content-between.min-h-100
             [poll/ranking-results poll]
             (when (> (count all-poll-ids) 1)
               [present-poll-controls (:db/id poll) all-poll-ids])]]
