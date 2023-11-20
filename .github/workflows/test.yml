@@ -1,6 +1,6 @@
 name: "Run Tests"
 
-on: [ push ]
+on: [push]
 
 env:
   APP_CODE: ${{ secrets.APP_CODE }}
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Clojure Tests
     steps:
-      - uses: actions/checkout@v4.1.1
+      - uses: actions/checkout@v4
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
 
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     name: ClojureScript Tests
     steps:
-      - uses: actions/checkout@v4.1.1
+      - uses: actions/checkout@v4
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
       - uses: actions/setup-node@v4
