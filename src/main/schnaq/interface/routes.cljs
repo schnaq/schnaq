@@ -249,8 +249,9 @@
        :view presentation/view
        :controllers [{:parameters {:path [:share-hash :entity-id]}
                       :start (fn []
-                               (rf/dispatch [:updates/periodic :present/poll true])
-                               (rf/dispatch [:schnaq.poll/load-from-query]))
+                               (rf/dispatch [:schnaq.polls/load-from-backend])
+                               (rf/dispatch [:schnaq.poll/load-from-query])
+                               (rf/dispatch [:updates/periodic :present/poll true]))
                       :stop #(rf/dispatch [:updates/periodic :present/poll false])}]}]
      ["/graph"
       {:name :routes/graph-view
