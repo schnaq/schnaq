@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Clojure Tests
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
 
@@ -38,10 +38,10 @@ jobs:
     runs-on: ubuntu-latest
     name: ClojureScript Tests
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: "yarn"

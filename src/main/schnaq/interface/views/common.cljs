@@ -1,45 +1,31 @@
 (ns schnaq.interface.views.common
-  (:require ["jdenticon" :as jdenticon]
-            [cljs.spec.alpha :as s]
+  (:require [cljs.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn ?]]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
+            [reagent.core :as reagent]
             [schnaq.interface.components.animal-avatars :as animal-avatars]
             [schnaq.interface.components.images :refer [img-path]]))
-
-(def ^:private default-identicon-background-color
-  "#fafafa")
-
-(defn- generate-identicon
-  "Generate an identicon. Returns xml-styled SVG."
-  [display-name size]
-  (jdenticon/toSvg display-name size (clj->js {:backColor default-identicon-background-color})))
-
-(defn- set-fallback-identicon
-  "If image loading fails, set an identicon."
-  [display-name size]
-  (fn [image]
-    (oset! image [:target :src]
-      (str "data:image/svg+xml;base64,"
-           (js/btoa (generate-identicon display-name size))))))
 
 (defn avatar
   "Get a user's avatar."
   [& {:keys [props size user inline?]
       :or {user @(rf/subscribe [:user/entity])}}]
-  (let [{:user.registered/keys [profile-picture display-name]} user
-        display-name (or display-name (:user/nickname user))]
-    [:div.avatar-image (when inline? {:className "d-inline-flex mx-1"})
-     (if profile-picture
-       [:div.profile-pic-fill
-        [:img.profile-pic-image
-         (merge {:src profile-picture
-                 :style {:height (str size "px") :width (str size "px")}
-                 :alt (str "Profile Picture of " display-name)
-                 :on-error (set-fallback-identicon display-name size)}
-                props)]]
-       [animal-avatars/generate-animal-avatar :name display-name :size size])]))
+  (let [show-fallback-avatar? (reagent/atom false)]
+    (fn []
+      (let [{:user.registered/keys [profile-picture display-name]} user
+            display-name (or display-name (:user/nickname user))]
+        [:div.avatar-image (when inline? {:className "d-inline-flex mx-1"})
+         (if (and profile-picture (not @show-fallback-avatar?))
+           [:div.profile-pic-fill
+            [:img.profile-pic-image
+             (merge {:src profile-picture
+                     :style {:height (str size "px") :width (str size "px")}
+                     :alt (str "Profile Picture of " display-name)
+                     :on-error #(reset! show-fallback-avatar? true)}
+                    props)]]
+           [animal-avatars/generate-animal-avatar :name display-name :size size])]))))
 
 (>defn avatar-with-nickname-right
   "Create an image based on the nickname and also print the nickname."

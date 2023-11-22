@@ -8,15 +8,15 @@
         com.cognitect.aws/api {:mvn/version "0.8.686"}
         com.cognitect.aws/endpoints {:mvn/version "1.1.12.504"}
         com.cognitect.aws/s3 {:mvn/version "848.2.1413.0"}
-        com.datomic/peer {:mvn/version "1.0.6735"}
+        com.datomic/peer {:mvn/version "1.0.7021"}
         com.draines/postal {:mvn/version "2.0.5"}
         com.fulcrologic/guardrails {:mvn/version "1.1.13"}
-        com.google.guava/guava {:mvn/version "32.1.2-jre"
+        com.google.guava/guava {:mvn/version "32.1.3-jre"
                                 :doc "shadow-cljs needs this"}
-        com.stripe/stripe-java {:mvn/version "23.1.1"}
-        com.taoensso/sente {:mvn/version "1.19.1"}
+        com.stripe/stripe-java {:mvn/version "24.3.0"}
+        com.taoensso/sente {:mvn/version "1.19.2"}
         com.taoensso/tempura {:mvn/version "1.3.0"}
-        com.taoensso/timbre {:mvn/version "6.2.2"}
+        com.taoensso/timbre {:mvn/version "6.3.1"}
         com.taoensso/tufte {:mvn/version "2.3.0"}
         compojure/compojure {:mvn/version "1.7.0"}
         day8.re-frame/http-fx {:mvn/version "0.2.4"}
@@ -27,30 +27,30 @@
         http-kit/http-kit {:mvn/version "2.7.0"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
         jarohen/chime {:mvn/version "0.3.3"}
-        keycloak-clojure/keycloak-clojure {:mvn/version "1.30.1"}
+        keycloak-clojure/keycloak-clojure {:mvn/version "1.30.2"}
         metosin/reitit {:mvn/version "0.6.0"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
-        metosin/spec-tools {:mvn/version "0.10.5"}
+        metosin/spec-tools {:mvn/version "0.10.6"}
         mount/mount {:mvn/version "0.1.17"}
         org.clojure/clojure {:mvn/version "1.11.1"}
-        org.clojure/clojurescript {:mvn/version "1.11.60"}
+        org.clojure/clojurescript {:mvn/version "1.11.121"}
         org.clojure/core.async {:mvn/version "1.6.681"}
         org.clojure/test.check {:mvn/version "1.1.1"}
         org.postgresql/postgresql {:mvn/version "42.6.0"
                                    :doc "Necessary for our production transactor"}
-        re-frame/re-frame {:mvn/version "1.3.0"}
+        re-frame/re-frame {:mvn/version "1.4.0"}
         reagent/reagent {:mvn/version "1.2.0"}
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring/ring {:mvn/version "1.10.0"}
         ring/ring-mock {:mvn/version "0.4.0"}
-        thheller/shadow-cljs {:mvn/version "2.25.3"}
+        thheller/shadow-cljs {:mvn/version "2.26.0"}
         yogthos/config {:mvn/version "1.2.0"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.85.1342"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.87.1366"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.1.89"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
                   :main-opts ["-m" "kaocha.runner"]}
@@ -90,12 +90,10 @@
 
            :dev {:extra-paths ["dev"]}
 
-           :uberjar
-           {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.1.303"}}
-            :exec-fn hf.depstar/uberjar
-            :exec-args {:main-class schnaq.api
-                        :verbose true
-                        :jar "target/schnaq-standalone.jar"}}
+           :build
+           ;; Run with clj -T:build
+           {:replace-deps {io.github.clojure/tools.build {:mvn/version "0.9.6"}}
+            :ns-default build}
 
            :run-server {:main-opts ["-m" "schnaq.api"]}
            :notification-service {:main-opts ["-m" "schnaq.notification-service.core"]}

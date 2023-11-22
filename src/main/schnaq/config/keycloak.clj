@@ -15,16 +15,16 @@
 
 (def realm
   "Specify the realm you are connecting to."
-  (:keycloak-realm env))
+  (or (:keycloak-realm env) "development"))
 
 (def openid-endpoint
   "OpenID Endpoint to authenticate using oauth2."
   (format "%srealms/%s/protocol/openid-connect" server realm))
 
 (def ^:private backend-admin-id
-  (:keycloak-admin-id env))
+  (or (:keycloak-admin-id env) "debug"))
 (def ^:private backend-admin-secret
-  (:keycloak-admin-secret env))
+  (or (:keycloak-admin-secret env) "debug"))
 
 (def kc-client
   "Client to interact with our keycloak instance."

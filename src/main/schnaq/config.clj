@@ -95,8 +95,8 @@
 ;; -----------------------------------------------------------------------------
 ;; S3 Configuration
 
-(def s3-credentials {:access-key (:s3-access-key env)
-                     :secret-key (:s3-secret-key env)
+(def s3-credentials {:access-key (or (:s3-access-key env) "debug")
+                     :secret-key (or (:s3-secret-key env) "debug")
                      :endpoint shared-config/s3-host
                      :client-config {:path-style-access-enabled true}})
 
