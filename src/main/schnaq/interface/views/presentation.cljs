@@ -14,7 +14,7 @@
 (defn- footer
   "Add footer links."
   []
-  [:div.text-center
+  [:div.text-center.statement-card.p-3
    [:hr.w-50.mx-auto]
    [:a.btn.btn-sm.btn-link.text-dark
     {:href "https://schnaq.com/legal-note"}
@@ -26,7 +26,7 @@
 (defn- share-options
   "Show share-options, e.g. link and QR code."
   []
-  [:section.text-center
+  [:section.text-center.statement-card.p-3
    [:div.display-6.text-center.pb-3
     (labels :presentation.access/code)
     [:span.h1 [sc/access-code]]]
@@ -66,7 +66,7 @@
     [pages/fullscreen
      {:page/title title}
      [:div.container.pt-5
-      [:div.d-flex.flex-row.pb-5
+      [:div.d-flex.flex-row.p-2.mb-5.statement-card
        [:h1 title]
        [schnaq-logo {:style {:width "200px"}
                      :class "pb-3 ms-auto"}]]
@@ -75,7 +75,8 @@
           [:section.row
            [:div.col-12.col-md-3 [share-options]]
            [:div.offset-1.col-md-8.d-flex.flex-column.justify-content-between.min-h-100
-            [poll/ranking-results poll]
+            [:div.statement-card.p-3.ps-5
+             [poll/ranking-results poll]]
             (when (> (count all-poll-ids) 1)
               [present-poll-controls (:db/id poll) all-poll-ids])]]
           [:section
