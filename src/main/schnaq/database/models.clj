@@ -285,7 +285,8 @@
    {:db/ident :discussion/creation-secret
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "A secret to claim ownership of a discussion as an anonymous user."}
+    :db/doc "DEPRECATED. Anonymous users are not able to create discussions. Was originally a secret to claim ownership
+    of a discussion as an anonymous user."}
    {:db/ident :discussion/mode
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one

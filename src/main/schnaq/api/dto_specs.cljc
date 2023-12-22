@@ -41,7 +41,7 @@
   (s/keys :req [:discussion/title :discussion/share-hash :discussion/author
                 :discussion/created-at]
           :opt [:discussion/share-link :discussion/moderation-link
-                :discussion/states :db/id :discussion/creation-secret :discussion/mode]
+                :discussion/states :db/id :discussion/mode]
           :opt-un [:discussion/meta-info]))
 
 (s/def ::discussion-title :discussion/title)

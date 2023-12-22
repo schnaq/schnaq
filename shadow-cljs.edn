@@ -20,7 +20,7 @@
                                             schnaq.config.shared/s3-host #shadow/env "S3_HOST"}
                           :build-options {:ns-aliases {com.fulcrologic.guardrails.core com.fulcrologic.guardrails.noop
                                                        day8.re-frame.tracing day8.re-frame.tracing-stubs}}}
-                :devtools {:preloads [devtools.preload day8.re-frame-10x.preload]}}
+                :devtools {:preloads [devtools.preload day8.re-frame-10x.preload.react-18]}}
           :test-headless {:target :karma
                           :output-to "target/ci.js"
                           :ns-regexp "-test$"}
