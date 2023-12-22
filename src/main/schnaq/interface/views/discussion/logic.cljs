@@ -84,6 +84,7 @@
 (rf/reg-sub
  :schnaq.discussion/creation-secrets
  (fn [db _]
+   ;; TODO remove schnaq creation-secrets. User need to be registered to create schnaqs.
    (get-in db [:discussion :schnaqs :creation-secrets])))
 
 (rf/reg-event-fx

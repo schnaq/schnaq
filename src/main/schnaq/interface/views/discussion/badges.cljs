@@ -132,11 +132,13 @@
     [edit-dropdown-button on-click-fn]))
 
 (defn- edit-dropdown-button-discussion
-  "Give the registered user the ability to edit their discussion title."
+  "Give the registered user the ability to edit their schnaq title."
   [discussion-id share-hash]
   (let [creation-secrets @(rf/subscribe [:schnaq.discussion/creation-secrets])
+        user-moderator? @(rf/subscribe [:user/moderator?])
         anonymous-owner? (contains? creation-secrets share-hash)
-        on-click-fn (if anonymous-owner?
+        _ (println "user moderator? " user-moderator?)
+        on-click-fn (if (and anonymous-owner? (not user-moderator?))
                       #(rf/dispatch [:modal [anonymous-edit-modal]])
                       (fn []
                         (rf/dispatch [:statement.edit/activate-edit discussion-id])))]
