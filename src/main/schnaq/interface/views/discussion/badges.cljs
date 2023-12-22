@@ -133,13 +133,9 @@
 
 (defn- edit-dropdown-button-discussion
   "Give the registered user the ability to edit their schnaq title."
-  [discussion-id share-hash]
-  (let [creation-secrets @(rf/subscribe [:schnaq.discussion/creation-secrets])
-        user-moderator? @(rf/subscribe [:user/moderator?])
-        anonymous-owner? (contains? creation-secrets share-hash)
-        _ (println "user moderator? " user-moderator?)
-        on-click-fn (if (and anonymous-owner? (not user-moderator?))
-                      #(rf/dispatch [:modal [anonymous-edit-modal]])
+  [discussion-id]
+  (let [user-moderator? @(rf/subscribe [:user/moderator?])
+        on-click-fn (when user-moderator?
                       (fn []
                         (rf/dispatch [:statement.edit/activate-edit discussion-id])))]
     [edit-dropdown-button on-click-fn]))
@@ -153,15 +149,11 @@
              (= user-id (:db/id (:statement/author statement)))))))
 
 (defn- edit-discussion-dropdown-menu []
-  (let [{:keys [db/id discussion/share-hash discussion/author]} @(rf/subscribe [:schnaq/selected])
+  (let [{:keys [db/id]} @(rf/subscribe [:schnaq/selected])
         dropdown-id (str "drop-down-conclusion-card-" id)
-        creation-secrets @(rf/subscribe [:schnaq.discussion/creation-secrets])
-        user-id @(rf/subscribe [:user/id])
-        anonymous-owner? (contains? creation-secrets share-hash)
-        editable? (or anonymous-owner?
-                      (= user-id (:db/id author)))]
-    (when editable?
-      [dropdown-menu {:id dropdown-id} [edit-dropdown-button-discussion id share-hash]])))
+        user-moderator? @(rf/subscribe [:user/moderator?])]
+    (when user-moderator?
+      [dropdown-menu {:id dropdown-id} [edit-dropdown-button-discussion id]])))
 
 (defn- flag-dropdown-button-statement [statement]
   (let [confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :statement/flag-statement-confirmation))

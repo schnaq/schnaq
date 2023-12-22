@@ -40,22 +40,19 @@
  (fn [{:keys [db]}]
    (when (auth/user-authenticated? db)
      (let [creation-secrets (get-in db [:discussion :statements :creation-secrets])
-           schnaq-creation-secrets (get-in db [:discussion :schnaqs :creation-secrets])
            visited-hashes (get-in db [:schnaqs :visited-hashes])
            visited-statements (get-in db [:visited :statement-ids] {})]
        {:fx [(http/xhrio-request db :put "/user/register" [:user.register/success]
                                  (cond-> {:locale (get db :locale :en)}
                                    visited-hashes (assoc :visited-hashes visited-hashes)
                                    visited-statements (assoc :visited-statement-ids visited-statements)
-                                   creation-secrets (assoc :creation-secrets creation-secrets)
-                                   schnaq-creation-secrets (assoc :schnaq-creation-secrets schnaq-creation-secrets)))]}))))
+                                   creation-secrets (assoc :creation-secrets creation-secrets)))]}))))
 
 (rf/reg-event-fx
  :user.register/success
- (fn [{:keys [db]} [_ {:keys [registered-user updated-statements? updated-schnaqs? new-user? meta]}]]
+ (fn [{:keys [db]} [_ {:keys [registered-user updated-statements? new-user? meta]}]]
    (let [{:user.registered/keys [display-name first-name last-name email profile-picture visited-schnaqs archived-schnaqs keycloak-id notification-mail-interval roles]} registered-user
          current-route-name (navigation/canonical-route-name (get-in db [:current-route :data :name]))
-         share-hash (get-in db [:schnaq :selected :discussion/share-hash])
          visited-hashes (map :discussion/share-hash visited-schnaqs)
          archived-hashes (map :discussion/share-hash archived-schnaqs)]
      {:db (-> db
@@ -71,18 +68,14 @@
               (cond-> first-name (assoc-in [:user :names :first] first-name))
               (cond-> last-name (assoc-in [:user :names :last] last-name))
               ;; Clear secrets, they have been persisted.
-              (assoc-in [:discussion :statements :creation-secrets] {})
-              (assoc-in [:discussion :schnaqs :creation-secrets] {}))
+              (assoc-in [:discussion :statements :creation-secrets] {}))
       :fx [[:localstorage/dissoc :discussion/creation-secrets]
-           [:localstorage/dissoc :discussion.schnaqs/creation-secrets]
            [:dispatch [:schnaqs.archived-and-visited/to-localstorage visited-hashes archived-hashes]]
            (when new-user?
              [:matomo/track-event ["User Registration" "Registration" "Account Creation Free"]])
            (when (and updated-statements? (= current-route-name :routes.schnaq.select/statement))
              ;; The starting-statement view is updated automatically anyway
-             [:dispatch [:discussion.query.statement/by-id]])
-           (when (and updated-schnaqs? (= current-route-name :routes.schnaq/start))
-             [:dispatch [:schnaq/load-by-share-hash share-hash]])]})))
+             [:dispatch [:discussion.query.statement/by-id]])]})))
 
 ;; -----------------------------------------------------------------------------
 ;; Subscriptions
