@@ -158,7 +158,6 @@
                                     :hub ::hub))
 (s/def :discussion/moderators (s/coll-of (s/or :registered-user ::registered-user
                                                :reference :db/id)))
-(s/def :discussion/creation-secret ::non-blank-string)
 (s/def :discussion/activation-focus :db/id)
 (s/def :discussion/valid-states #{:discussion.state/open :discussion.state/closed
                                   :discussion.state/private :discussion.state/deleted
@@ -180,9 +179,8 @@
                                   :discussion/header-image-url :discussion/hub-origin
                                   :discussion/moderators :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/moderation-link
-                                  :discussion/creation-secret :discussion/mode :discussion/access
-                                  :discussion/activation-focus :discussion/wordcloud
-                                  :discussion/qa-boxes
+                                  :discussion/mode :discussion/access :discussion/activation-focus
+                                  :discussion/wordcloud :discussion/qa-boxes
                                   :discussion/device-ids :discussion/feedback]))
 
 (s/def :feedback.item/label ::non-blank-string)

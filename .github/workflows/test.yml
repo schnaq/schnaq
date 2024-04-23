@@ -1,6 +1,6 @@
 name: "Run Tests"
 
-on: [push]
+on: [ push ]
 
 env:
   APP_CODE: ${{ secrets.APP_CODE }}
@@ -28,7 +28,7 @@ jobs:
         run: clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -M:test
 
       - name: "Upload Artifact"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: target/coverage/lcov.info

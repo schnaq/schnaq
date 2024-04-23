@@ -94,7 +94,7 @@
             (ac/add-access-code-to-discussion! new-discussion-id)
             (log/info "Discussion created: " discussion-data)
             (created "" {:new-schnaq (links/add-links-to-discussion
-                                      (discussion-db/secret-discussion-data new-discussion-id))}))
+                                      (discussion-db/discussion-data new-discussion-id))}))
           (bad-request-schnaq-creation parameters))))))
 
 ;; -----------------------------------------------------------------------------

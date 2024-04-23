@@ -277,17 +277,16 @@
   "Adds a new discussion to the database."
   [discussion-data]
   [map? :ret :db/id]
-  (main-db/clean-and-add-to-db! (assoc discussion-data
-                                       :discussion/created-at (Date.)
-                                       :discussion/creation-secret (.toString (UUID/randomUUID)))
-                                ::specs/discussion))
+  (main-db/clean-and-add-to-db!
+   (assoc discussion-data :discussion/created-at (Date.))
+   ::specs/discussion))
 
-(>defn secret-discussion-data
-  "Return non-public discussion data by id."
+(>defn discussion-data
+  "Return discussion data by id."
   [id]
   [int? :ret ::specs/discussion]
   (ac/remove-invalid-and-pull-up-access-codes
-   (fast-pull id (conj patterns/discussion :discussion/creation-secret))))
+   (fast-pull id patterns/discussion)))
 
 (defn add-state
   "Add a state to a discussion."
@@ -675,33 +674,6 @@
     (user-db/update-visited-statements keycloak-id new-statements-with-share-hash)))
 
 ;; -----------------------------------------------------------------------------
-
-(>defn- build-schnaq-secrets-map
-  "Creates a secrets map for a collection of statements.
-  When there is no secret, the statement is skipped. Also skip, when the author is not anonymous."
-  [share-hashes]
-  [(? (s/coll-of :db/id)) :ret (? map?)]
-  (when share-hashes
-    (into {}
-          (query
-           '[:find ?share-hash ?secret
-             :in $ [?share-hash ...]
-             :where [?schnaq :discussion/share-hash ?share-hash]
-             [?schnaq :discussion/creation-secret ?secret]
-             [?schnaq :discussion/author ?author]
-             [(missing? $ ?author :user.registered/keycloak-id)]]
-           share-hashes))))
-
-(>defn update-schnaq-authors
-  "Takes a dictionary of share-hashes mapped to creation secrets and sets the passed author
-  as their author, if the secrets are correct."
-  [secrets-map author-id]
-  [(? map?) :db/id :ret any?]
-  (let [validated-secrets-map (build-schnaq-secrets-map (keys secrets-map))
-        [_ _ valid-secrets] (cdata/diff secrets-map validated-secrets-map)]
-    (when valid-secrets
-      @(transact
-        (mapv #(vector :db/add [:discussion/share-hash %] :discussion/author author-id) (keys valid-secrets))))))
 
 (>defn toggle-statement-lock
   "Lock or unlock a statement."

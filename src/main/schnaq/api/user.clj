@@ -17,19 +17,17 @@
 (defn- register-user-if-they-not-exist
   "Register a new user if they do not exist. In all cases return the user. New
   users will receive a welcome mail. `creation-secrets` can optionally be provided
-  to associate previous created entities with the registered user. Same goes for `schnaq-creation-secrets`"
+  to associate previous created entities with the registered user."
   [{:keys [identity parameters]}]
   (log/info "User-Registration queried for" (:id identity)
             ", username:" (:preferred_username identity))
-  (let [{:keys [creation-secrets visited-hashes visited-statement-ids schnaq-creation-secrets locale]} (:body parameters)
+  (let [{:keys [creation-secrets visited-hashes visited-statement-ids locale]} (:body parameters)
         visited-schnaqs (if visited-hashes (map :db/id (discussion-db/discussions-by-share-hashes visited-hashes)) [])
         [new-user? queried-user] (user-db/register-new-user identity visited-schnaqs visited-statement-ids)
         updated-statements? (associative? (discussion-db/update-authors-from-secrets
                                            creation-secrets (:db/id queried-user)))
-        updated-schnaqs? (associative? (discussion-db/update-schnaq-authors schnaq-creation-secrets (:db/id queried-user)))
         response {:registered-user queried-user
                   :updated-statements? updated-statements?
-                  :updated-schnaqs? updated-schnaqs?
                   :meta (remove-nil-values-from-map
                          {:total-schnaqs (user-db/created-discussions (:user.registered/keycloak-id queried-user))})}]
     (if new-user?
@@ -134,12 +132,10 @@
 (s/def ::creation-secrets map?)
 (s/def ::visited-hashes (s/coll-of :discussion/share-hash))
 (s/def ::visited-statement-ids map?)
-(s/def ::schnaq-creation-secrets map?)
 (s/def ::locale keyword?)
 (s/def ::user-register (s/keys :opt-un [::visited-hashes
                                         ::creation-secrets
                                         ::visited-statement-ids
-                                        ::schnaq-creation-secrets
                                         ::locale]))
 
 (def user-routes
@@ -153,11 +149,9 @@
                    :description (at/get-doc #'register-user-if-they-not-exist)
                    :parameters {:body ::user-register}
                    :responses {201 {:body {:registered-user ::specs/registered-user
-                                           :updated-statements? boolean?
-                                           :updated-schnaqs? boolean?}}
+                                           :updated-statements? boolean?}}
                                200 {:body {:registered-user ::specs/registered-user
-                                           :updated-statements? boolean?
-                                           :updated-schnaqs? boolean?}}}}]
+                                           :updated-statements? boolean?}}}}]
      ["/picture" {:put change-profile-picture
                   :description (at/get-doc #'change-profile-picture)
                   :parameters {:body {:image ::specs/image}}

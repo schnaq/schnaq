@@ -32,7 +32,11 @@
    {:db (-> db
             (update-in [:schnaqs :visited] (fn [schnaq-list]
                                              (remove #(= share-hash (:discussion/share-hash %)) schnaq-list)))
-            (update-in [:user :meta :total-schnaqs] dec))
+            (update-in [:user :meta :total-schnaqs] dec)
+            (update-in [:schnaq :last-added] (fn [added-schnaq]
+                                               (if (= (:discussion/share-hash added-schnaq) share-hash)
+                                                 nil
+                                                 added-schnaq))))
     :fx [(when-let [last-added-hash (from-localstorage :schnaq.last-added/share-hash)]
            (when (= last-added-hash share-hash)
              [:localstorage/dissoc :schnaq.last-added/share-hash]))]}))

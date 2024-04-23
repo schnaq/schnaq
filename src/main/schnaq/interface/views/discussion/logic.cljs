@@ -70,21 +70,13 @@
 (rf/reg-event-db
  :schnaq.discussion-secrets/load-from-localstorage
  (fn [db _]
-   (let [discussion-creation-secrets (from-localstorage :discussion/creation-secrets)
-         discussion-schnaqs-creation-secrets (from-localstorage :discussion.schnaqs/creation-secrets)]
-     (cond-> db
-       discussion-creation-secrets (assoc-in [:discussion :statements :creation-secrets] discussion-creation-secrets)
-       discussion-schnaqs-creation-secrets (assoc-in [:discussion :schnaqs :creation-secrets] discussion-schnaqs-creation-secrets)))))
+   (when-let [discussion-creation-secrets (from-localstorage :discussion/creation-secrets)]
+     (assoc-in db [:discussion :statements :creation-secrets] discussion-creation-secrets))))
 
 (rf/reg-sub
  :schnaq.discussion.statements/creation-secrets
  (fn [db _]
    (get-in db [:discussion :statements :creation-secrets])))
-
-(rf/reg-sub
- :schnaq.discussion/creation-secrets
- (fn [db _]
-   (get-in db [:discussion :schnaqs :creation-secrets])))
 
 (rf/reg-event-fx
  :notification/new-content
