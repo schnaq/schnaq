@@ -86,9 +86,6 @@
   {:pattern "HH:mm dd.MM.yyy"
    :timezone "Europe/Berlin"})
 
-;; -----------------------------------------------------------------------------
-;; Stripe
-
 (def currencies
   "Define the accepted currencies."
   #{:eur :usd})

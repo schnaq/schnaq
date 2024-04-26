@@ -104,14 +104,6 @@
      [:hr]
      [:small features]]]])
 
-(defn- pro-tier-cta-button
-  "Button to open the checkout page."
-  []
-  (let [price-id (:id @(rf/subscribe [:pricing.pro/yearly]))]
-    [buttons/button (labels :registration.pricing/subscribe-pro)
-     #(rf/dispatch [:subscription/create-checkout-session price-id])
-     "btn-secondary"]))
-
 (defn- free-tier-card
   "Show a free tier card."
   []
@@ -136,7 +128,6 @@
    (labels :pricing.pro-tier/title)
    (labels :pricing.pro-tier/subtitle)
    [pricing-view/price-tag-pro-tier "display-6"]
-   [pro-tier-cta-button]
    [:<>
     [:strong (labels :registration.pricing.pro/all-from-free)]
     [:ul.fa-ul.list-group.list-group-flush
@@ -171,6 +162,7 @@
    (labels :registration.pricing/heading)
    [:<>
     [:div.row
+     ;; TODO rework tiers. We do not need those anymore in the community edition.
      [free-tier-card]
      [pro-tier-card]
      [enterprise-tier-card]]

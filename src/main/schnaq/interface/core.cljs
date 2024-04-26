@@ -87,7 +87,6 @@
             [schnaq.interface.views.user]
             [schnaq.interface.views.user.edit-account]
             [schnaq.interface.views.user.settings]
-            [schnaq.interface.views.user.subscription]
             [schnaq.interface.views.user.themes]
             [schnaq.interface.views.user.welcome]
             [schnaq.interface.websockets]

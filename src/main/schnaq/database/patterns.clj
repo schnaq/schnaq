@@ -18,9 +18,7 @@
    :user.registered/first-name
    {[:user.registered/notification-mail-interval :xform 'schnaq.database.xforms/pull-up-db-ident] [:db/ident]}
    {:user.registered/visited-schnaqs [:discussion/share-hash]}
-   {:user.registered/archived-schnaqs [:discussion/share-hash]}
-   :user.registered.subscription/stripe-id
-   :user.registered.subscription/stripe-customer-id])
+   {:user.registered/archived-schnaqs [:discussion/share-hash]}])
 
 (def seen-statements
   [:seen-statements/user

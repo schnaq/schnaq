@@ -81,16 +81,6 @@
     :db/cardinality :db.cardinality/one
     :db/doc "Set custom number of posts per schnaq."}
 
-   ;; Subscriptions
-   {:db/ident :user.registered.subscription/stripe-id
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/doc "Store the subscription id of stripe."}
-   {:db/ident :user.registered.subscription/stripe-customer-id
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/doc "Store the customer id from stripe."}
-
    ;; Seen statements
    {:db/ident :seen-statements/user
     :db/valueType :db.type/ref

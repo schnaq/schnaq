@@ -118,11 +118,7 @@
  :-> :roles)
 
 (rf/reg-sub
- :user/subscription
- :<- [:user/current]
- :-> :subscription)
-
-(rf/reg-sub
+ ;; TODO remove with pricing
  :user.currency/symbol
  :<- [:user/currency]
  (fn [currency]
@@ -163,6 +159,7 @@
 ;; Events
 
 (rf/reg-event-fx
+ ;; todo remove in pricing removal
  :user.currency/store
  (fn [{:keys [db]} [_ currency]]
    (when (shared-config/currencies currency)

@@ -4,7 +4,6 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.loading :refer [spinner-icon]]))
 
 ;; -----------------------------------------------------------------------------
@@ -34,6 +33,7 @@
    (labels :pricing.enterprise-tier/call-to-action)])
 
 (defn one-time-information [smaller?]
+  ;; TODO remove pricing hier
   [:div.text-center.pt-3 {:class (if smaller? "" "fs-4")}
    [:p (labels :pricing.one-time/question)]
    [:p (gstring/format (labels :pricing.one-time/offer) config/max-concurrent-users-pro-tier config/price-event-tier-euro)]
@@ -42,19 +42,6 @@
     [:a {:href "mailto:hello@schnaq.com"} "hello@schnaq.com"]]])
 
 ;; -----------------------------------------------------------------------------
-
-(rf/reg-event-fx
- :subscription/create-checkout-session
- (fn [{:keys [db]} [_ price-id]]
-   {:fx [(http/xhrio-request db :get "/stripe/create-checkout-session"
-                             [:navigation.redirect/follow]
-                             {:price-id price-id})]}))
-
-(rf/reg-event-fx
- :pricing/get-prices
- (fn [{:keys [db]}]
-   {:fx [(http/xhrio-request db :get "/stripe/prices"
-                             [:pricing/store-prices])]}))
 
 (rf/reg-event-db
  :pricing/store-prices

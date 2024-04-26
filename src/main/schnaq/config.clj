@@ -36,9 +36,8 @@
 
 (def routes-without-csrf-check
   "Collection of route-names, where the middleware does not check for our csrf
-  header. Commonly used for incoming requests from external services, like
-  stripe."
-  #{:api.stripe/webhook :api.ws/post})
+  header. Commonly used for incoming requests from external services."
+  #{:api.ws/post})
 
 (def app-codes
   "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
@@ -109,11 +108,3 @@
 (def testing-public-key
   (keys/str->public-key
    (slurp (io/resource "testing/jwt.key.pub"))))
-
-;; -----------------------------------------------------------------------------
-;; Stripe
-
-(def stripe-secret-api-key
-  (:stripe-secret-key env))
-(def stripe-webhook-access-key
-  (:stripe-webhook-access-key env))
