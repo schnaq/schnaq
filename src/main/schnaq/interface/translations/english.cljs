@@ -432,7 +432,6 @@
    :analytics/statement-lengths-title "Length of statements"
    :analytics/statement-types-title "Argument types"
    :analytics/statement-count-percentiles "# of statements per schnaq"
-   :analytics/statement-survey-results "Schnaq Survey Results"
    :analytics/labels-stats "Marked Answers"
    :analytics/fetch-data-button "Retrieving data…"
    :analytics.users/title "Newly registered users"

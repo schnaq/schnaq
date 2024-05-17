@@ -194,8 +194,3 @@
      :xform 'schnaq.database.xforms/pull-up-db-id
      :as :wordcloud/discussion]
     [:db/id]}])
-
-(def survey-using-schnaq-for
-  [:db/id
-   :surveys.using-schnaq-for/user
-   {[:surveys.using-schnaq-for/topics :xform 'schnaq.database.xforms/pull-up-ident-coll] [:db/ident]}])

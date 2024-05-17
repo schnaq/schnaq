@@ -31,7 +31,6 @@
             [schnaq.api.qa-box :refer [qa-box-routes]]
             [schnaq.api.schnaq :refer [schnaq-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
-            [schnaq.api.surveys :refer [survey-routes]]
             [schnaq.api.themes :refer [theme-routes]]
             [schnaq.api.user :refer [user-routes]]
             [schnaq.api.wordcloud :refer [wordcloud-routes]]
@@ -107,7 +106,6 @@
      qa-box-routes
      schnaq-routes
      summary-routes
-     survey-routes
      theme-routes
      user-routes
      (when with-websockets? (websocket-routes))

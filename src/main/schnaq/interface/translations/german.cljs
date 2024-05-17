@@ -438,7 +438,6 @@
    :analytics/statement-lengths-title "Beitragslängen"
    :analytics/statement-types-title "Argumenttypen"
    :analytics/statement-count-percentiles "Anzahl Statements pro schnaq"
-   :analytics/statement-survey-results "Schnaq-Umfrageergebnisse"
    :analytics/labels-stats "Markierte Antworten"
    :analytics/fetch-data-button "Hole Daten"
    :analytics.users/title "Neue registrierte Nutzer:innen"

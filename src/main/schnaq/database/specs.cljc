@@ -303,15 +303,13 @@
 (s/def :statistics/labels-stats map?)
 (s/def :statistics/statement-percentiles map?)
 (s/def :statistics/users (s/coll-of ::registered-user))
-(s/def :statistics/usage (s/coll-of (s/tuple keyword? nat-int?)))
 
 (s/def ::statistics
   (s/keys :req-un [:statistics/discussions-sum :statistics/usernames-sum
                    :statistics/average-statements-num :statistics/statements-num
                    :statistics/active-users-num :statistics/statement-length-stats
                    :statistics/statement-type-stats :statistics/registered-users-num
-                   :statistics/labels-stats :statistics/users :statistics/statement-percentiles
-                   :statistics/usage]))
+                   :statistics/labels-stats :statistics/users :statistics/statement-percentiles]))
 
 ;; Polls
 (s/def :poll/title ::non-blank-string)
@@ -399,22 +397,6 @@
             :ws.message/uid :ws.message/event :ws.message/id
             :ws.message/send-buffers :ws.message/ring-req :ws.message/send-fn]
    :opt-un [:ws.message/?reply-fn :ws.message/?data]))
-
-;; -----------------------------------------------------------------------------
-;; Surveys
-
-(s/def :surveys.using-schnaq-for/user ::user-or-reference)
-(s/def :surveys.using-schnaq-for/topics
-  (s/coll-of #{:surveys.using-schnaq-for.topics/education
-               :surveys.using-schnaq-for.topics/coachings
-               :surveys.using-schnaq-for.topics/seminars
-               :surveys.using-schnaq-for.topics/fairs
-               :surveys.using-schnaq-for.topics/meetings
-               :surveys.using-schnaq-for.topics/other}))
-(s/def :surveys/using-schnaq-for
-  (s/keys :req [:surveys.using-schnaq-for/user
-                :surveys.using-schnaq-for/topics]
-          :opt [:db/id]))
 
 ;; -----------------------------------------------------------------------------
 ;; UI Settings
