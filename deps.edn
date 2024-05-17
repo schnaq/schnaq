@@ -40,7 +40,8 @@
         re-frame/re-frame {:mvn/version "1.4.3"}
         reagent/reagent {:mvn/version "1.2.0"}
         ring-cors/ring-cors {:mvn/version "0.1.13"}
-        ring/ring {:mvn/version "1.12.1"}
+        ring/ring {:mvn/version "1.10.0"
+                   :doc "WARNING: Upgrading causes an error, since com.cognitect.aws uses an incompatible jetty version. Wait for them to upgrade and test again with our test suite."}
         ring/ring-mock {:mvn/version "0.4.0"}
         thheller/shadow-cljs {:mvn/version "2.28.6"}
         yogthos/config {:mvn/version "1.2.0"}}
