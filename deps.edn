@@ -57,9 +57,9 @@
 
            :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
                       :main-opts ["-m" "antq.core"
-                                  "--exclude=com.datomic/datomic-pro"
                                   "--exclude=clj-kondo/tools"
                                   "--exclude=com.taoensso/tufte"
+                                  "--exclude=ring/ring"
                                   "--exclude=com.taoensso/tempura"]}
 
            :clj-kondo
