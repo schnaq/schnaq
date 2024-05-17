@@ -500,12 +500,6 @@
    :feature.limit.schnaqs/alert-2 "To create more schnaqs, you need to upgrade."
 
    ;; Welcome
-   :welcome.free/heading "Welcome to schnaq"
-   :welcome.free/subheading "These are now your available functions"
-   :welcome.free/pro-features "When you become a Pro user, you can also use the following features"
-   :welcome.free.features.schnaq/title "Create a schnaq"
-   :welcome.free.features.schnaq/lead "You can start right away. With your personal account you can create your own schnaqs and invite other people to join."
-   :welcome.free.features.schnaq/button "Enjoy schnaq"
    :welcome.free.features.profile/title "Update your profile"
    :welcome.free.features.profile/lead "A professional appearance is important. Set up your profile, upload a picture and give yourself a name. This way, all participants will recognize you at a glance in schnaq."
    :welcome.free.features.profile/button "Edit profile"

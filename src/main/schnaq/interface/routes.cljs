@@ -92,13 +92,8 @@
       :link-text (labels :user/edit-notifications)
       :controllers [{:stop (fn [] (rf/dispatch [:user.settings.temporary/reset]))}]}]]
    ["/welcome"
-    ["" {:name :routes.welcome/free
-         :view welcome/welcome-free-user-view}]
-    ["/pro"
-     {:name :routes.welcome/pro
-      :view welcome/welcome-pro-user-view
-      ;; todo remove when cutting pro state
-      :controllers [{:parameters {:query [:subbed]}}]}]]
+    {:name :routes.welcome
+     :view welcome/welcome-pro-user-view}]
    ["/admin"
     ["/center"
      {:name :routes/admin-center

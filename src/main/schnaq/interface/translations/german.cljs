@@ -506,12 +506,6 @@
    :feature.limit.schnaqs/alert-2 "Um weitere schnaqs zu erstellen, musst ein Upgrade durchführen."
 
    ;; Welcome user
-   :welcome.free/heading "Willkommen bei schnaq"
-   :welcome.free/subheading "Hier sind deine freigeschalteten Funktionen"
-   :welcome.free/pro-features "Wenn du ein Pro-User wirst, kannst du auch folgende Features nutzen"
-   :welcome.free.features.schnaq/title "Erstelle einen schnaq"
-   :welcome.free.features.schnaq/lead "Du kannst direkt loslegen. Mit deinem persönlichen Account kannst du eigene schnaqs erstellen und andere Menschen dazu einladen."
-   :welcome.free.features.schnaq/button "Erlebe schnaq"
    :welcome.free.features.profile/title "Aktualisiere dein Profil"
    :welcome.free.features.profile/lead "Ein professioneller Auftritt ist wichtig. Stelle dein Profil ein, lade ein Bild hoch und gib dir einen Namen. So erkennen dich alle Teilnehmenden auf einen Blick wieder im schnaq."
    :welcome.free.features.profile/button "Profil bearbeiten"
