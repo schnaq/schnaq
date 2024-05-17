@@ -28,7 +28,6 @@
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.presentation :as presentation]
             [schnaq.interface.views.qa.inputs :as qanda]
-            [schnaq.interface.views.registration :as registration]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.feedback-form :as feedback-form]
             [schnaq.interface.views.schnaq.summary :as summary]
@@ -268,14 +267,10 @@
                             (rf/dispatch [:theme/reset])
                             (rf/dispatch [:tour/stop false]))}]}]
    ["/register"
-    ["" {:name :routes.user/register
-         :controllers [{:start (fn [parameters]
-                                 (rf/dispatch [:user.currency/store (keyword (get-in parameters [:query :currency]))])
-                                 (rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))]))}]}]
-    ["/step-2" {:name :routes.user.register/step-2
-                :view registration/registration-step-2-view}]
-    ["/step-3" {:name :routes.user.register/step-3
-                :view registration/registration-step-3-view}]]
+    {:name :routes.user/register
+     :controllers [{:start (fn [parameters]
+                             (rf/dispatch [:user.currency/store (keyword (get-in parameters [:query :currency]))])
+                             (rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.schnaqs/personal))]))}]}]
    (when-not shared-config/production?
      ["/playground/editor"
       {:name :routes.playground/editor

@@ -224,3 +224,7 @@
   (mount/start)
   (mount/stop)
   :end)
+
+;; TODO required company / institution kicken / phone number kicken
+;; TODO redirect after login tauschen
+;; todo add demo somewhere else: #(rf/dispatch [:schnaq.create/demo])

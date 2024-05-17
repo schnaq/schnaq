@@ -16,6 +16,7 @@
   [["/surveys" {:swagger {:tags ["surveys"]}
                 :responses {400 at/response-error-body}}
     ["/participate"
+     ;; todo remove
      ["/using-schnaq-for"
       {:post using-schnaq-for
        :description (at/get-doc #'using-schnaq-for)

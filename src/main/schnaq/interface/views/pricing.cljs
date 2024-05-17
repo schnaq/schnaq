@@ -25,6 +25,7 @@
       [spinner-icon])))
 
 (defn enterprise-cta-button
+  ;; todo remove
   "Show enterprise inquiry button."
   []
   [:a.btn.btn-primary
