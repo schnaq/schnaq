@@ -161,7 +161,9 @@
    [tooltip/text
     (labels :nav/register-tooltip)
     [:> NavLink (merge {:bsPrefix "btn btn-sm btn-outline-secondary"
-                        :on-click #(rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.schnaqs/personal))])}
+                        :on-click #(rf/dispatch [:keycloak/register
+                                                 (str (links/relative-to-absolute-url (navigation/href :routes.schnaqs/personal))
+                                                      "?create-demo=true")])}
                        props)
      [icon :user-plus (if vertical? "d-block mx-auto" "me-1") {:size :sm}]
      (labels :nav/register)]]])

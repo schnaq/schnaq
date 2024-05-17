@@ -117,10 +117,13 @@
     {:name :routes.schnaqs/personal
      :view feed/page
      :link-text (labels :router/visited-schnaqs)
-     :controllers [{:parameters {:query [:filter]}
-                    :start (fn []
+     :controllers [{:parameters {:query [:filter :create-demo]}
+                    :start (fn [{:keys [query]}]
+                             (print "Query: " query)
                              (rf/dispatch [:schnaqs.visited/load])
-                             (rf/dispatch [:hub/select! nil]))}]}]
+                             (rf/dispatch [:hub/select! nil])
+                             (when (:create-demo query)
+                               (rf/dispatch [:scheduler.after/login [:schnaq.create/demo]])))}]}]
    ["/schnaq"
     ["/create"
      {:name :routes.schnaq/create
@@ -263,7 +266,9 @@
                             (rf/dispatch [:tour/stop false]))}]}]
    ["/register"
     {:name :routes.user/register
-     :controllers [{:start #(rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.schnaqs/personal))])}]}]
+     :controllers [{:start #(rf/dispatch [:keycloak/register
+                                          (str (links/relative-to-absolute-url (navigation/href :routes.schnaqs/personal))
+                                               "?create-demo=true")])}]}]
    (when-not shared-config/production?
      ["/playground/editor"
       {:name :routes.playground/editor

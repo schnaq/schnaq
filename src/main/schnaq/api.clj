@@ -222,6 +222,3 @@
   (mount/start)
   (mount/stop)
   :end)
-
-;; TODO required company / institution kicken / phone number kicken
-;; todo add demo somewhere else: #(rf/dispatch [:schnaq.create/demo])

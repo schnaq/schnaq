@@ -100,7 +100,6 @@
 
 (>defn number-of-pro-users
   "Returns the number of pro users in the database."
-  ;; todo remove after pro users have been converted
   ([]
    [:ret :statistics/registered-users-num]
    (number-of-entities-with-value-since :user.registered/roles :role/pro))

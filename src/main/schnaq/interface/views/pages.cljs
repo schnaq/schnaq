@@ -7,12 +7,14 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components :refer [discussion-navbar qanda-navbar]]
             [schnaq.interface.components.videos :refer [video]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.loading :as loading]))
+            [schnaq.interface.views.loading :as loading]
+            [schnaq.links :as links]))
 
 (declare with-nav-and-header)
 
@@ -72,7 +74,9 @@
         [:div.text-center
          [:div
           [:button.btn.btn-lg.btn-dark.mb-3
-           {:on-click #(rf/dispatch [:keycloak/register])}
+           {:on-click #(rf/dispatch [:keycloak/register
+                                     (str (links/relative-to-absolute-url (navigation/href :routes.schnaqs/personal))
+                                          "?create-demo=true")])}
            [:div.display-5 (labels :page.register/register)]]]
          (labels :page.login/or)
          [:div
