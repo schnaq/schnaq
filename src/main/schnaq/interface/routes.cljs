@@ -263,9 +263,7 @@
                             (rf/dispatch [:tour/stop false]))}]}]
    ["/register"
     {:name :routes.user/register
-     :controllers [{:start (fn [parameters]
-                             (rf/dispatch [:user.currency/store (keyword (get-in parameters [:query :currency]))])
-                             (rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.schnaqs/personal))]))}]}]
+     :controllers [{:start #(rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.schnaqs/personal))])}]}]
    (when-not shared-config/production?
      ["/playground/editor"
       {:name :routes.playground/editor

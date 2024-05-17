@@ -2,7 +2,7 @@
   (:require ["unique-names-generator" :refer [uniqueNamesGenerator, colors, animals]]
             [clojure.string :as clj-string]
             [re-frame.core :as rf]
-            [schnaq.config.shared :refer [default-anonymous-display-name] :as shared-config]
+            [schnaq.config.shared :refer [default-anonymous-display-name]]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
@@ -102,11 +102,6 @@
  :-> :meta)
 
 (rf/reg-sub
- :user/currency
- :<- [:user/current]
- :-> :currency)
-
-(rf/reg-sub
  :user/profile-picture
  :<- [:user/current]
  (fn [user]
@@ -116,15 +111,6 @@
  :user/roles
  :<- [:user/current]
  :-> :roles)
-
-(rf/reg-sub
- ;; TODO remove with pricing
- :user.currency/symbol
- :<- [:user/currency]
- (fn [currency]
-   (if (= :usd currency)
-     "$"
-     "€")))
 
 (rf/reg-sub
  :user/display-name
@@ -157,20 +143,6 @@
 
 ;; -----------------------------------------------------------------------------
 ;; Events
-
-(rf/reg-event-fx
- ;; todo remove in pricing removal
- :user.currency/store
- (fn [{:keys [db]} [_ currency]]
-   (when (shared-config/currencies currency)
-     {:db (assoc-in db [:user :currency] currency)
-      :fx [[:localstorage/assoc [:user/currency currency]]]})))
-
-(rf/reg-event-fx
- :user.currency/from-localstorage
- (fn [{:keys [db]} _]
-   (when-let [currency (from-localstorage :user/currency)]
-     {:db (assoc-in db [:user :currency] currency)})))
 
 (rf/reg-event-fx
  :user/set-display-name

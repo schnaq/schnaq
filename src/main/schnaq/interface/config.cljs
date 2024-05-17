@@ -50,13 +50,6 @@
   "Maximal allowed image size of a file in megabytes."
   5)
 
-;; -----------------------------------------------------------------------------
-;; Pricing
-
-(def price-event-tier-euro 49)
-(def max-concurrent-users-free-tier 100)
-(def max-concurrent-users-pro-tier 250)
-
 (def breakpoints
   "Mirrors the breakpoints used in the bootstrap css."
   {:xs 0

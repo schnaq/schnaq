@@ -86,10 +86,6 @@
   {:pattern "HH:mm dd.MM.yyy"
    :timezone "Europe/Berlin"})
 
-(def currencies
-  "Define the accepted currencies."
-  #{:eur :usd})
-
 ;; -----------------------------------------------------------------------------
 ;; Feature limits
 ;;

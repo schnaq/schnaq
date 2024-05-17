@@ -598,22 +598,6 @@
    :graph.settings.gravity/label "Stelle hier die Gravitation zwischen den Knoten ein."
    :graph.settings/stabilize "Stabilisiere Mindmap"
 
-   ;; Pricing Page
-   :pricing.pro-tier/title "Pro"
-   :pricing.pro-tier/subtitle "Aktiviere dein Potenzial"
-   :pricing.enterprise-tier/call-to-action "Anfrage senden"
-   :pricing.features/number-of-users "Bis zu %d Personen im Publikum"
-   :pricing.schnaq.pro.yearly/payment-method "jährliche Zahlweise"
-   :pricing.schnaq.pro.yearly/cancel-period "jährlich kündbar"
-   :pricing.units/per-month "pro Monat pro Moderator:in"
-   :pricing.notes/with-vat "zzgl. MwSt."
-   :pricing.one-time/question "Möchtest du schnaq für ein Event ohne Abo nutzen?"
-   :pricing.one-time/offer "Erhalte einen Pro Account für eine Veranstaltung mit bis zu %d Leuten für %d € zzgl. MwSt.*"
-   :pricing.one-time/contact "Schreibe uns dazu eine Mail an"
-
-   :pricing.table.number/infinite "Unbegrenzt"
-   :pricing.table.contact/sales "Kontaktiere Sales für mehr"
-
    :pricing.upgrade-nudge/button "Upgrade"
    :pricing.upgrade-nudge/tooltip "Upgrade deinen Account"
 

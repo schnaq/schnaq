@@ -2,14 +2,12 @@
   "Defining page-layouts."
   (:require [cljs.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
-            [goog.string :as gstring]
             [re-frame.core :as rf]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components :refer [discussion-navbar qanda-navbar]]
             [schnaq.interface.components.videos :refer [video]]
-            [schnaq.interface.config :as config]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -52,7 +50,6 @@
   []
   [:ul.fa-ul
    [:li.h4 [icon :check/normal "me-3"] (labels :page.login/feature-1)]
-   [:li.h4 [icon :check/normal "me-3"] (gstring/format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]
    [:li.h4 [icon :check/normal "me-3"] (labels :page.login/feature-3)]])
 
 (defn- login-page-base
@@ -211,7 +208,7 @@
   [options body]
   [::page-options (s/+ vector?) :ret vector?]
   [page-builder options [discussion-navbar] body [base/footer]])
-
+;; todo remove all /pricing
 (>defn with-qanda-header
   "Page layout with discussion header."
   [options body]

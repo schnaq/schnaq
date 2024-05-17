@@ -592,19 +592,6 @@
    :graph.settings.gravity/label "Adjust the gravity between your nodes."
    :graph.settings/stabilize "Stabilize Mindmap"
 
-   ;; Pricing Page
-   :pricing.pro-tier/title "Pro"
-   :pricing.pro-tier/subtitle "Activate your potential"
-   :pricing.enterprise-tier/call-to-action "Send Inquiry"
-   :pricing.features/number-of-users "Up to %d users in the audience"
-   :pricing.schnaq.pro.yearly/payment-method "billed annually"
-   :pricing.schnaq.pro.yearly/cancel-period "annually cancellable"
-   :pricing.units/per-month "per month per moderator"
-   :pricing.notes/with-vat "plus VAT"
-   :pricing.one-time/question "Do you want to use schnaq for an event without a subscription?"
-   :pricing.one-time/offer "Get a pro account for your event with up to %d participants for %d € plus VAT.*"
-   :pricing.one-time/contact "Write us for the event pass at"
-
    :pricing.upgrade-nudge/button "Upgrade"
    :pricing.upgrade-nudge/tooltip "Upgrade your account"
 
