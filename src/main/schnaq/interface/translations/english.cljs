@@ -37,9 +37,6 @@
    :page.login/subheading "100% free forever"
    :page.login/login "Sign In"
    :page.login/or "or"
-   :page.login.alert/text-1 "Check out all benefits of a registered user"
-   :page.login.alert/button "here"
-   :page.login.alert/text-2 ""
    :page.login/feature-1 "Create schnaqs"
    :page.login/feature-3 "Participation without registration"
 
@@ -299,10 +296,6 @@
    :discussion.anonymous-delete.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."
    :discussion.anonymous-delete.modal/cta "Sign in / Sign up"
 
-   ;; Preview
-   :preview.image-overlay/title "This is a pro function."
-   :preview.image-overlay/body "To use it, you need a Pro or Beta account."
-
    ;; Presentation View
    :presentation.access/code [:p "Go to " [:a.text-nowrap {:href "https://schnaq.app"} "schnaq.app"] " and use code: "]
    :presentation.access/qr-alternative "Or scan the QR-Code"
@@ -496,8 +489,6 @@
    ;; Feature limits
    :feature.limit.posts/alert "The maximum number of posts has been reached in this schnaq. The following person has created the schnaq and needs to upgrade to enable more posts:"
    :feature.limit.posts/alert-tooltip "The maximum number of posts has been reached in this schnaq."
-   :feature.limit.schnaqs/alert "You have created the maximum number of your allowed schnaqs. That's great, you seem to like schnaq 🎉"
-   :feature.limit.schnaqs/alert-2 "To create more schnaqs, you need to upgrade."
 
    ;; Welcome
    :welcome.free.features.profile/title "Update your profile"
@@ -592,9 +583,6 @@
    :graph.settings.gravity/label "Adjust the gravity between your nodes."
    :graph.settings/stabilize "Stabilize Mindmap"
 
-   :pricing.upgrade-nudge/button "Upgrade"
-   :pricing.upgrade-nudge/tooltip "Upgrade your account"
-
    ;; tooltips
    :tooltip/history-statement "Back to statement made by"
    :tooltip/history-statement-current "Current statement"
@@ -623,8 +611,6 @@
    :router/created-schnaqs "Created schnaqs"
    :router/archived-schnaqs "Archived schnaqs"
    :router/not-found-label "Not found route redirect"
-   :router/pricing "Pricing"
-   :router/pricing-tooltip "Unlock all features"
    :router/privacy "Privacy Policy"
    :router/privacy-tooltip "Find out what happens with your data"
    :router/qanda "Q&A"

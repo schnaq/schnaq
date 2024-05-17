@@ -8,7 +8,7 @@
             [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [schnaq.interface.components.colors :refer [colors]]
-            [schnaq.interface.components.common :as common-components :refer [schnaq-logo-white schnaqqi-white]]
+            [schnaq.interface.components.common :refer [schnaq-logo-white schnaqqi-white]]
             [schnaq.interface.components.icons :refer [icon stacked-icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -30,19 +30,6 @@
 (def ^:private NavbarCollapse (oget Navbar :Collapse))
 (def ^:private NavLink (oget Nav :Link))
 
-(defn- upgrade-button
-  "Show an upgrade button for non-pro users."
-  [& {:keys [props vertical?]}]
-  (when (and @(rf/subscribe [:user/authenticated?])
-             (not @(rf/subscribe [:user/pro?])))
-    [tooltip/text
-     (labels :pricing.upgrade-nudge/tooltip)
-     [:> NavLink (merge {:bsPrefix "btn btn-outline-secondary"
-                         :on-click #(rf/dispatch [:navigation.redirect/follow {:redirect "https://schnaq.com/pricing"}])}
-                        props)
-      [icon :star (if vertical? "d-block mx-auto" "me-1") {:size :sm}]
-      (labels :pricing.upgrade-nudge/button)]]))
-
 (defn- common-navigation-links
   "Show default navigation links."
   [& {:keys [props vertical? hide-icon?]}]
@@ -52,11 +39,6 @@
     [:> NavLink (merge {:href (toolbelt/current-overview-link)} props)
      (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :comments])
      (labels :nav/schnaqs)]]
-   [tooltip/text
-    (labels :router/pricing-tooltip)
-    [:> NavLink (merge {:href "https://schnaq.com/pricing"} props)
-     (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :award])
-     (labels :router/pricing)]]
    [tooltip/text
     (labels :router/privacy-tooltip)
     [:> NavLink (merge {:href "https://schnaq.com/privacy"} props)
@@ -294,7 +276,6 @@
            [manage-schnaq-button :vertical? true]]
           [common-navigation-links :vertical? true])
         [LanguageDropdown :props {:className "nav-link-no-padding"} :vertical? true]
-        [upgrade-button :vertical? true]
         [admin-dropdown :vertical? true :props {:className "nav-link-no-padding"}]
         (if (or share-hash authenticated?)
           [user-navlink-dropdown :vertical? true :props {:className "nav-link-no-padding"}]
@@ -316,7 +297,6 @@
        [:> Nav
         [common-navigation-links :hide-icon? true]
         [LanguageDropdown :hide-icon? true]
-        [upgrade-button]
         [admin-dropdown]
         [user-navlink-dropdown]]]]]))
 

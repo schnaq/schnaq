@@ -3,7 +3,6 @@
   (:require [cljs.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components :refer [discussion-navbar qanda-navbar]]
@@ -81,13 +80,6 @@
            {:on-click #(rf/dispatch [:keycloak/login])}
            (labels :page.login/login)]]]
         [:div.my-5 [bullet-points]]
-        [:div.mt-3.text-center
-         (labels :page.login.alert/text-1)
-         [buttons/anchor
-          (labels :page.login.alert/button)
-          "https://schnaq.com/pricing"
-          "btn-sm btn-outline-white mx-2"]
-         (labels :page.login.alert/text-2)]
         [:img.w-50.align-self-center.d-lg-none {:src (img-path :schnaqqifant/three-d-bubble)
                                                 :alt (labels :schnaqqi/pointing-right)}]]]]]}])
 
@@ -208,7 +200,7 @@
   [options body]
   [::page-options (s/+ vector?) :ret vector?]
   [page-builder options [discussion-navbar] body [base/footer]])
-;; todo remove all /pricing
+
 (>defn with-qanda-header
   "Page layout with discussion header."
   [options body]

@@ -41,9 +41,6 @@
    :page.login/subheading "100% kostenlos für immer"
    :page.login/login "Anmelden"
    :page.login/or "oder"
-   :page.login.alert/text-1 "Sieh dir"
-   :page.login.alert/button "hier"
-   :page.login.alert/text-2 "alle Vorteile als registrierte:r Nutzer:in an."
    :page.login/feature-1 "schnaqs erstellen"
    :page.login/feature-3 "Teilnahme per Link ohne Registrierung"
 
@@ -302,10 +299,6 @@
    :discussion.anonymous-delete.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei deinem Konto hinzugefügt."
    :discussion.anonymous-delete.modal/cta "Anmelden / Registrieren"
 
-   ;; Preview
-   :preview.image-overlay/title "Dies ist eine Pro-Funktion."
-   :preview.image-overlay/body "Um sie nutzen zu können, benötigst du einen Pro- oder Beta-Zugang."
-
    ;; Presentation View
    :presentation.access/code [:p "Gehe auf " [:a.text-nowrap {:href "https://schnaq.app"} "schnaq.app"] " und nutze den Code: "]
    :presentation.access/qr-alternative "Oder scanne den QR-Code"
@@ -502,8 +495,6 @@
    ;; Feature limits
    :feature.limit.posts/alert "Die maximale Anzahl von Beiträgen wurde in diesem schnaq erreicht. Folgende Person hat den schnaq erstellt und muss ein Upgrade vornehmen, um weitere Beiträge zu aktivieren:"
    :feature.limit.posts/alert-tooltip "Die maximale Anzahl von Beiträgen für diesen schnaq."
-   :feature.limit.schnaqs/alert "Du hast die maximale Anzahl deiner erlaubten schnaqs erstellt. Das ist super, dir scheint schnaq zu gefallen 🎉"
-   :feature.limit.schnaqs/alert-2 "Um weitere schnaqs zu erstellen, musst ein Upgrade durchführen."
 
    ;; Welcome user
    :welcome.free.features.profile/title "Aktualisiere dein Profil"
@@ -598,9 +589,6 @@
    :graph.settings.gravity/label "Stelle hier die Gravitation zwischen den Knoten ein."
    :graph.settings/stabilize "Stabilisiere Mindmap"
 
-   :pricing.upgrade-nudge/button "Upgrade"
-   :pricing.upgrade-nudge/tooltip "Upgrade deinen Account"
-
    ;; Tooltips
    :tooltip/history-statement "Zurück zum Beitrag von"
    :tooltip/history-statement-current "Aktueller Beitrag"
@@ -629,8 +617,6 @@
    :router/created-schnaqs "Erstellte schnaqs"
    :router/archived-schnaqs "Archivierte schnaqs"
    :router/not-found-label "Not Found route redirect"
-   :router/pricing "Preise"
-   :router/pricing-tooltip "Schalte alle Funktionen frei"
    :router/privacy "Datenschutz"
    :router/privacy-tooltip "Erfahre, was mit deinen Daten geschieht"
    :router/qanda "Fragen & Antworten"

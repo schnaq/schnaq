@@ -91,6 +91,7 @@
 ;;
 ;; Feature limits are defined in schnaq.user.cljc
 
+;; todo remove limits
 (def enforce-limits?
   "Enable limits. If false, shows only warnings, but does not restrict adding more posts."
-  (not production?))
+  false)
