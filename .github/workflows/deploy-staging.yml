@@ -5,7 +5,6 @@ on:
     branches:
       - vercel/deploy
 
-
 jobs:
   Deploy-Preview:
     name: "Vercel: Deploy Preview Environment"
@@ -15,6 +14,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+      - id: setup-clojure
+        uses: ./.github/actions/setup_clojure
 
       - name: Install Deps
         run: |
@@ -23,7 +24,7 @@ jobs:
           clojure -P -M:frontend
           yarn css:minify
           yarn shadow-cljs release app
-      
+
       # - name: Install Vercel CLI
       #   run: yarn global add vercel@latest
       # - name: Pull Vercel Environment Information
