@@ -12,6 +12,7 @@ env:
   KEYCLOAK_CLIENT: ${{ secrets.KEYCLOAK_CLIENT }}
   KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
   FAQ_SHARE_HASH: ${{ secrets.FAQ_SHARE_HASH }}
+  REST_API_URL: ${{ vars.REST_API_URL }}
 
 jobs:
   Deploy-Preview:
