@@ -4,7 +4,8 @@
     "css:minify": "sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed",
     "css:purge": "yarn purgecss -c purgecss.config.js",
     "watch": "shadow-cljs watch app;",
-    "server": "shadow-cljs server;"
+    "server": "shadow-cljs server;",
+    "build": "clojure -P -M:frontend && yarn css:minify && yarn shadow-cljs release app"
   },
   "dependencies": {
     "@egjs/hammerjs": "^2.0.17",
