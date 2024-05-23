@@ -8,7 +8,6 @@ on:
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-  REST_API_URL: ${{ env.REST_API_URL }}
   BUILD_HASH: ${{ github.sha }}
   KEYCLOAK_CLIENT: ${{ secrets.KEYCLOAK_CLIENT }}
   KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
