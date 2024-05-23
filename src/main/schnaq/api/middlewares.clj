@@ -106,7 +106,7 @@
 
 (defn wrap-custom-schnaq-csrf-header
   "A handler, that checks for a custom schnaq-csrf header. This can only be present when sent from an allowed origin
-  via XMLHttpRequest. Allows whitelists for incoming requests, e.g. from the Stripe API."
+  via XMLHttpRequest. Allows whitelists for incoming requests, e.g. from other APIs."
   [handler]
   (fn [request]
     ;; Only relevant for those three verbs

@@ -2,20 +2,19 @@
   "Defining page-layouts."
   (:require [cljs.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
-            [goog.string :as gstring]
             [re-frame.core :as rf]
-            [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components :refer [discussion-navbar qanda-navbar]]
             [schnaq.interface.components.videos :refer [video]]
-            [schnaq.interface.config :as config]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.loading :as loading]))
+            [schnaq.interface.views.loading :as loading]
+            [schnaq.links :as links]))
 
 (declare with-nav-and-header)
 
@@ -52,7 +51,6 @@
   []
   [:ul.fa-ul
    [:li.h4 [icon :check/normal "me-3"] (labels :page.login/feature-1)]
-   [:li.h4 [icon :check/normal "me-3"] (gstring/format (labels :pricing.features/number-of-users) config/max-concurrent-users-free-tier)]
    [:li.h4 [icon :check/normal "me-3"] (labels :page.login/feature-3)]])
 
 (defn- login-page-base
@@ -76,7 +74,9 @@
         [:div.text-center
          [:div
           [:button.btn.btn-lg.btn-dark.mb-3
-           {:on-click #(rf/dispatch [:keycloak/register])}
+           {:on-click #(rf/dispatch [:keycloak/register
+                                     (str (links/relative-to-absolute-url (navigation/href :routes.schnaqs/personal))
+                                          "?create-demo=true")])}
            [:div.display-5 (labels :page.register/register)]]]
          (labels :page.login/or)
          [:div
@@ -84,13 +84,6 @@
            {:on-click #(rf/dispatch [:keycloak/login])}
            (labels :page.login/login)]]]
         [:div.my-5 [bullet-points]]
-        [:div.mt-3.text-center
-         (labels :page.login.alert/text-1)
-         [buttons/anchor
-          (labels :page.login.alert/button)
-          "https://schnaq.com/pricing"
-          "btn-sm btn-outline-white mx-2"]
-         (labels :page.login.alert/text-2)]
         [:img.w-50.align-self-center.d-lg-none {:src (img-path :schnaqqifant/three-d-bubble)
                                                 :alt (labels :schnaqqi/pointing-right)}]]]]]}])
 

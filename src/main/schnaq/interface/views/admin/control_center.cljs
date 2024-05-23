@@ -191,10 +191,6 @@
       [input-field :user.registered.features/concurrent-users]
       [input-field :user.registered.features/total-schnaqs]
       [input-field :user.registered.features/posts-per-schnaq]]
-     [:div.row
-      [:p.lead.pt-3.mb-0 "Stripe"]
-      [input-field :user.registered.subscription/stripe-customer-id]
-      [input-field :user.registered.subscription/stripe-id]]
      [:button.btn.btn-primary.mt-3 {:type :submit}
       (labels :admin.center.user.save/button)]]))
 

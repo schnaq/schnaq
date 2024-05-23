@@ -5,8 +5,6 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as r]
-            [schnaq.interface.components.buttons :as button]
-            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
@@ -263,20 +261,12 @@
   "Settings for the discussion."
   []
   [:ret :re-frame/component]
-  (if @(rf/subscribe [:user/pro?])
-    [:<>
-     [themes/assign-theme-to-schnaq]
-     [:hr.my-5]
-     [discussion-settings]
-     [:hr.my-5]
-     [header-image/image-url-input]]
-    [:div.pt-1
-     [:p.h4 [icon :lock] " " (labels :schnaq.moderation.configurations.mods-mark-only/beta)]
-     [button/upgrade]
-     [:div.border.border-danger.p-3.mt-4
-      [discussion-settings]
-      [:div.pt-4
-       [header-image/image-url-input]]]]))
+  [:<>
+   [themes/assign-theme-to-schnaq]
+   [:hr.my-5]
+   [discussion-settings]
+   [:hr.my-5]
+   [header-image/image-url-input]])
 
 (defn- moderation-tabs
   "Share link and invite via mail in a tabbed view."

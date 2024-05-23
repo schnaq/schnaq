@@ -11,8 +11,7 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user.settings :as settings]
-            [schnaq.interface.views.user.subscription :as user-subscription]))
+            [schnaq.interface.views.user.settings :as settings]))
 
 (defn- avatar-input [input-id]
   (let [user @(rf/subscribe [:user/current])
@@ -70,7 +69,6 @@
    (labels :user.settings/header)
    [:<>
     [change-user-info]
-    [user-subscription/stripe-management]
     [hub-common/list-hubs-with-heading]]])
 
 (defn view []

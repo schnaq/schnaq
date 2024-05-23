@@ -41,9 +41,6 @@
    :page.login/subheading "100% kostenlos für immer"
    :page.login/login "Anmelden"
    :page.login/or "oder"
-   :page.login.alert/text-1 "Sieh dir"
-   :page.login.alert/button "hier"
-   :page.login.alert/text-2 "alle Vorteile als registrierte:r Nutzer:in an."
    :page.login/feature-1 "schnaqs erstellen"
    :page.login/feature-3 "Teilnahme per Link ohne Registrierung"
 
@@ -302,10 +299,6 @@
    :discussion.anonymous-delete.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei deinem Konto hinzugefügt."
    :discussion.anonymous-delete.modal/cta "Anmelden / Registrieren"
 
-   ;; Preview
-   :preview.image-overlay/title "Dies ist eine Pro-Funktion."
-   :preview.image-overlay/body "Um sie nutzen zu können, benötigst du einen Pro- oder Beta-Zugang."
-
    ;; Presentation View
    :presentation.access/code [:p "Gehe auf " [:a.text-nowrap {:href "https://schnaq.app"} "schnaq.app"] " und nutze den Code: "]
    :presentation.access/qr-alternative "Oder scanne den QR-Code"
@@ -438,7 +431,6 @@
    :analytics/statement-lengths-title "Beitragslängen"
    :analytics/statement-types-title "Argumenttypen"
    :analytics/statement-count-percentiles "Anzahl Statements pro schnaq"
-   :analytics/statement-survey-results "Schnaq-Umfrageergebnisse"
    :analytics/labels-stats "Markierte Antworten"
    :analytics/fetch-data-button "Hole Daten"
    :analytics.users/title "Neue registrierte Nutzer:innen"
@@ -503,16 +495,8 @@
    ;; Feature limits
    :feature.limit.posts/alert "Die maximale Anzahl von Beiträgen wurde in diesem schnaq erreicht. Folgende Person hat den schnaq erstellt und muss ein Upgrade vornehmen, um weitere Beiträge zu aktivieren:"
    :feature.limit.posts/alert-tooltip "Die maximale Anzahl von Beiträgen für diesen schnaq."
-   :feature.limit.schnaqs/alert "Du hast die maximale Anzahl deiner erlaubten schnaqs erstellt. Das ist super, dir scheint schnaq zu gefallen 🎉"
-   :feature.limit.schnaqs/alert-2 "Um weitere schnaqs zu erstellen, musst ein Upgrade durchführen."
 
    ;; Welcome user
-   :welcome.free/heading "Willkommen bei schnaq"
-   :welcome.free/subheading "Hier sind deine freigeschalteten Funktionen"
-   :welcome.free/pro-features "Wenn du ein Pro-User wirst, kannst du auch folgende Features nutzen"
-   :welcome.free.features.schnaq/title "Erstelle einen schnaq"
-   :welcome.free.features.schnaq/lead "Du kannst direkt loslegen. Mit deinem persönlichen Account kannst du eigene schnaqs erstellen und andere Menschen dazu einladen."
-   :welcome.free.features.schnaq/button "Erlebe schnaq"
    :welcome.free.features.profile/title "Aktualisiere dein Profil"
    :welcome.free.features.profile/lead "Ein professioneller Auftritt ist wichtig. Stelle dein Profil ein, lade ein Bild hoch und gib dir einen Namen. So erkennen dich alle Teilnehmenden auf einen Blick wieder im schnaq."
    :welcome.free.features.profile/button "Profil bearbeiten"
@@ -573,32 +557,6 @@
    :themes.save.notification/body "Dein Design kann nun von dir in deinen schnaqs verwendet werden"
    :themes.pro-carrot/text "Möchtest du dieses Feature verwenden? Dann buche doch einen Pro-Account und genieße dein persönliches Branding in deinen schnaqs"
 
-   ;; Subscriptions
-   :subscription.cancel/button "Abonnement beenden"
-   :subscription.cancel/button-hint "Hier kannst du dein Abonnement zum nächstmöglichen Zeitpunkt beenden. Du hast bist zum Ablauf der Frist noch die Möglichkeit alle Pro-Funktionen zu nutzen. Du kannst jederzeit dein Abo hier wieder aktivieren."
-   :subscription.cancel/confirmation "Möchtest du dein Abonnement wirklich zum Ablauf des Bezahlzeitraums kündigen?"
-   :subscription.cancel.error/title "Problem beim Kündigen"
-   :subscription.cancel.error/body "Bei der Kündigung deines Abonnements ist ein Fehler aufgetreten. Bitte kontaktiere uns, damit wir dir schnellstmöglich helfen können"
-   :subscription.cancel.success/title "Abonnement erfolgreich gekündigt"
-   :subscription.cancel.success/body "Schade, dass du die Pro-Funktionen von schnaq nicht mehr verwenden möchtest. Bis zum Ablauf der aktuellen Bezahlperiode kannst du dich noch umentscheiden. Schreib uns gerne unter hello@schnaq.com, was wir besser machen können."
-   :subscription.reactivate/button "Abonnement reaktivieren"
-   :subscription.reactivate/button-hint "Möchtest du dein Abonnement wieder aktivieren? Schade, dass du es beenden möchtest. Bis zum Ende der Laufzeit hast du noch Zugang zu Pro-Funktionen."
-   :subscription.reactivate/confirmation "Möchtest du dein Abo wieder aktivieren?"
-   :subscription.reactivated.success/title "Abonnement erneut aktiviert"
-   :subscription.reactivated.success/body "Willkommen zurück! Schön, dass du es dir anders überlegt hast."
-   :subscription.overview/title "Abonnementeinstellungen"
-   :subscription.overview/status "Status"
-   :subscription.overview/type "Typ"
-   :subscription.overview/started-at "Abonnement gestartet"
-   :subscription.overview/stops-at "Abonnement endet"
-   :subscription.overview/next-invoice "Nächste Abrechnung"
-   :subscription.overview/cancelled? "Gekündigt?"
-   :subscription.page.cancel/heading "Vorgang abgebrochen"
-   :subscription.page.cancel/title "Schade, dass du den Vorgang nicht abgeschlossen hast"
-   :subscription.page.cancel/lead "Dir entgeht damit die Möglichkeit das volle Potenzial aus den Interaktionen mit deinen Teilnehmer:innen auszuschöpfen."
-   :subscription.page.cancel/body "Im kostenfreien Plan stehen dir weiterhin alle Basisfunktionen zur Verfügung. Wir würden uns sehr freuen von dir zu hören, warum du doch nicht die Pro-Funktionen verwenden möchtest. Kontaktiere uns dazu gerne unter hello@schnaq.com 👍 Fehlt dir vielleicht eine Funktion? Lass es uns wissen – wir finden eine Lösung!"
-   :subscription.page.cancel/button "Anders überlegt?"
-
    ;; mail interval
    :notification-mail-interval/every-minute "Prüfe jede Minute"
    :notification-mail-interval/daily "Täglich"
@@ -631,33 +589,6 @@
    :graph.settings.gravity/label "Stelle hier die Gravitation zwischen den Knoten ein."
    :graph.settings/stabilize "Stabilisiere Mindmap"
 
-   ;; Pricing Page
-   :pricing.free-tier/title "Frei"
-   :pricing.free-tier/subtitle "für immer"
-   :pricing.pro-tier/title "Pro"
-   :pricing.pro-tier/subtitle "Aktiviere dein Potenzial"
-   :pricing.enterprise-tier/title "Enterprise"
-   :pricing.enterprise-tier/subtitle "Großes vor?"
-   :pricing.enterprise-tier/call-to-action "Anfrage senden"
-   :pricing.enterprise-tier/on-request "Auf Anfrage"
-   :pricing.features/number-of-users "Bis zu %d Personen im Publikum"
-   :pricing.features.number-of-users/unlimited "Unbeschränktes Publikum"
-   :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling"]
-   :pricing.schnaq.pro.yearly/payment-method "jährliche Zahlweise"
-   :pricing.schnaq.pro.yearly/cancel-period "jährlich kündbar"
-   :pricing.units/per-month "pro Monat pro Moderator:in"
-   :pricing.notes/with-vat "zzgl. MwSt."
-   :pricing.billing/info-4-one-time "* Der Veranstaltungsaccount ist für drei Tage gültig."
-   :pricing.one-time/question "Möchtest du schnaq für ein Event ohne Abo nutzen?"
-   :pricing.one-time/offer "Erhalte einen Pro Account für eine Veranstaltung mit bis zu %d Leuten für %d € zzgl. MwSt.*"
-   :pricing.one-time/contact "Schreibe uns dazu eine Mail an"
-
-   :pricing.table.number/infinite "Unbegrenzt"
-   :pricing.table.contact/sales "Kontaktiere Sales für mehr"
-
-   :pricing.upgrade-nudge/button "Upgrade"
-   :pricing.upgrade-nudge/tooltip "Upgrade deinen Account"
-
    ;; Tooltips
    :tooltip/history-statement "Zurück zum Beitrag von"
    :tooltip/history-statement-current "Aktueller Beitrag"
@@ -686,8 +617,6 @@
    :router/created-schnaqs "Erstellte schnaqs"
    :router/archived-schnaqs "Archivierte schnaqs"
    :router/not-found-label "Not Found route redirect"
-   :router/pricing "Preise"
-   :router/pricing-tooltip "Schalte alle Funktionen frei"
    :router/privacy "Datenschutz"
    :router/privacy-tooltip "Erfahre, was mit deinen Daten geschieht"
    :router/qanda "Fragen & Antworten"
@@ -850,32 +779,6 @@
    :tour.mindmap/step-2 "Die Mindmap kannst du so wie sie hier gerade dargestellt wird als Bild heruntergeladen werden."
    :tour.mindmap/step-3-title "Einstellungen"
    :tour.mindmap/step-3 "Stelle deine Mindmap ein. Zum Beispiel kannst du die stabilisieren sollte sie sich bewegen oder die Abstoßungskraft der Knoten einstellen."
-
-   ;; Registration
-   :registration/heading "Willkommen bei der Accounterstellung"
-   :registration.steps/heading "Schritt %d von 3"
-   :registration.email/lead "Oder nutze deine Mail"
-   :registration.survey/heading "Wobei wird schnaq dich unterstützen?"
-   :registration.survey/select-all "Wähle alles passende aus"
-   :registration.survey.options/education "Lehre"
-   :registration.survey.options/coachings "Coachings"
-   :registration.survey.options/seminars "Seminare"
-   :registration.survey.options/fairs "Events"
-   :registration.survey.options/meetings "(Online) Meetings"
-   :registration.survey.options/other "Anderes"
-   :registration.survey.input/submit-button "Weiter"
-   :registration.pricing/heading "Wählen deinen Plan"
-   :registration.pricing/compare-plans "Pläne vergleichen"
-   :registration.pricing/subscribe-pro "Pro abonnieren"
-   :registration.pricing/start-with-free "Fortsetzen mit Free"
-   :registration.pricing.free/dynamic-qa "Dynamisches Q&A"
-   :registration.pricing.free/shareable "Teilbar per QR Code und Link"
-   :registration.pricing.pro/all-from-free "Alle Free-Features, plus:"
-   :registration.pricing.pro/polls "Umfragen"
-   :registration.pricing.pro/activations "Schnellaktivierungen"
-   :registration.pricing.pro/mods "Moderationsoptionen"
-   :registration.pricing.pro/themes "Persönliches Design"
-   :registration.pricing.enterprise/all-from-pro "Alle Pro-Features, plus:"
 
    ;; Editor
    :routes.playground/editor "Playground: Lexical"

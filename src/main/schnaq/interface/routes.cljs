@@ -10,7 +10,6 @@
             [schnaq.database.specs]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.components.lexical.editor :as lexical]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.start-page :refer [startpage]]
             [schnaq.interface.translations :refer [labels]]
@@ -29,11 +28,9 @@
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.presentation :as presentation]
             [schnaq.interface.views.qa.inputs :as qanda]
-            [schnaq.interface.views.registration :as registration]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.feedback-form :as feedback-form]
             [schnaq.interface.views.schnaq.summary :as summary]
-            [schnaq.interface.views.subscription :as subscription-views]
             [schnaq.interface.views.user.edit-account :as edit-account]
             [schnaq.interface.views.user.edit-notifications :as edit-notifications]
             [schnaq.interface.views.user.themes :as themes]
@@ -47,12 +44,6 @@
   "Returns controllers for the desired locale switch and redirect."
   [locale]
   [{:start #(rf/dispatch [:language/switch locale])}])
-
-(defn- check-for-fresh-pro
-  "Checks whether a user is freshly subbed (via query in the success url in Stripe) and fire an event for matomo."
-  [query]
-  (when (= "true" (-> query :query :subbed))
-    (matomo/track-event "User Upgrade" "Pro-Upgrade" "Stripe Transaction Success")))
 
 ;; IMPORTANT: Routes called here as views do not hot-reload for some reason. Only
 ;; components inside do regularly. So just use components here that wrap the view you
@@ -94,22 +85,15 @@
      {:name :routes.user.manage/account
       :view edit-account/view
       :link-text (labels :user/edit-account)
-      :controllers [{:start #(rf/dispatch [:scheduler.after/login [:user.subscription/status]])
-                     :stop #(rf/dispatch [:user.picture/reset])}]}]
+      :controllers [{:stop #(rf/dispatch [:user.picture/reset])}]}]
     ["/notifications"
      {:name :routes.user.manage/notifications
       :view edit-notifications/view
       :link-text (labels :user/edit-notifications)
       :controllers [{:stop (fn [] (rf/dispatch [:user.settings.temporary/reset]))}]}]]
    ["/welcome"
-    ["" {:name :routes.welcome/free
-         :view welcome/welcome-free-user-view}]
-    ["/pro"
-     {:name :routes.welcome/pro
-      :view welcome/welcome-pro-user-view
-
-      :controllers [{:parameters {:query [:subbed]}
-                     :start check-for-fresh-pro}]}]]
+    {:name :routes.welcome
+     :view welcome/welcome-pro-user-view}]
    ["/admin"
     ["/center"
      {:name :routes/admin-center
@@ -133,10 +117,13 @@
     {:name :routes.schnaqs/personal
      :view feed/page
      :link-text (labels :router/visited-schnaqs)
-     :controllers [{:parameters {:query [:filter]}
-                    :start (fn []
+     :controllers [{:parameters {:query [:filter :create-demo]}
+                    :start (fn [{:keys [query]}]
+                             (print "Query: " query)
                              (rf/dispatch [:schnaqs.visited/load])
-                             (rf/dispatch [:hub/select! nil]))}]}]
+                             (rf/dispatch [:hub/select! nil])
+                             (when (:create-demo query)
+                               (rf/dispatch [:scheduler.after/login [:schnaq.create/demo]])))}]}]
    ["/schnaq"
     ["/create"
      {:name :routes.schnaq/create
@@ -265,15 +252,6 @@
                               (rf/dispatch [:updates/periodic :graph false])
                               (rf/dispatch [:notifications/reset])
                               (rf/dispatch [:tour/stop false]))}]}]]]
-   ["/subscription"
-    ["/cancel" {:name :routes.subscription/cancel
-                :view subscription-views/cancel-view}]
-    ["/redirect/checkout"
-     {:view pages/loading-page
-      :name :routes.subscription.redirect/checkout
-      :controllers [{:parameters {:query [:price-id]}
-                     :start (fn [parameters]
-                              (rf/dispatch [:scheduler.after/login [:subscription/create-checkout-session (get-in parameters [:query :price-id])]]))}]}]]
    ["/themes"
     {:name :routes.user.manage/themes
      :view themes/view
@@ -287,15 +265,10 @@
                             (rf/dispatch [:theme/reset])
                             (rf/dispatch [:tour/stop false]))}]}]
    ["/register"
-    ["" {:name :routes.user/register
-         :controllers [{:start (fn [parameters]
-                                 (rf/dispatch [:user.currency/store (keyword (get-in parameters [:query :currency]))])
-                                 (rf/dispatch [:keycloak/register (links/relative-to-absolute-url (navigation/href :routes.user.register/step-2))]))}]}]
-    ["/step-2" {:name :routes.user.register/step-2
-                :view registration/registration-step-2-view}]
-    ["/step-3" {:name :routes.user.register/step-3
-                :view registration/registration-step-3-view
-                :controllers [{:start #(rf/dispatch [:pricing/get-prices])}]}]]
+    {:name :routes.user/register
+     :controllers [{:start #(rf/dispatch [:keycloak/register
+                                          (str (links/relative-to-absolute-url (navigation/href :routes.schnaqs/personal))
+                                               "?create-demo=true")])}]}]
    (when-not shared-config/production?
      ["/playground/editor"
       {:name :routes.playground/editor

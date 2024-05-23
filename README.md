@@ -11,11 +11,12 @@
 
 <img width="1348" alt="product" src="https://user-images.githubusercontent.com/1507474/213150339-c281ef4d-3759-4085-bd99-935f025eb2e6.png">
 
-This is the official repository of the schnaq project. We are constantly working on improving the platform and adding new features. Please feel free to contribute to the project by opening issues or pull requests.
+This is the official repository of the schnaq project. We are constantly working on improving the platform and adding
+new features. Please feel free to contribute to the project by opening issues or pull requests.
 
 Find the project at https://app.schnaq.com
 
-We are working on a minimal version of schnaq without the dependencies to external systems (e.g. Stripe or CleverReach).
+We are working on a minimal version of schnaq without the dependencies to external systems (e.g. CleverReach).
 
 ## Development
 
@@ -32,7 +33,8 @@ Go to https://my.datomic.com/account and copy the `wget` command with the desire
 Execute it in the schnaq folder and name it datomic-pro, or wherever you desire.
 
 - unzip
-- Enter your license-key into the datomic-pro/dev-transactor.properties (Copy it over from datomic-pro/config/samples/dev-transactor-template.properties)
+- Enter your license-key into the datomic-pro/dev-transactor.properties (Copy it over from
+  datomic-pro/config/samples/dev-transactor-template.properties)
 
 Start the transactor to dev with: `bin/transactor dev-transactor.properties`.
 
@@ -169,4 +171,5 @@ Scale the relevant deployments with:
 
 ## License
 
-This code and all management code belonging to the schnaq repository is published under the AGPL 3.0 (GNU AFFERO GENERAL PUBLIC LICENSE Version 3)
+This code and all management code belonging to the schnaq repository is published under the AGPL 3.0 (GNU AFFERO GENERAL
+PUBLIC LICENSE Version 3)

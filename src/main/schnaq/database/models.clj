@@ -81,16 +81,6 @@
     :db/cardinality :db.cardinality/one
     :db/doc "Set custom number of posts per schnaq."}
 
-   ;; Subscriptions
-   {:db/ident :user.registered.subscription/stripe-id
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/doc "Store the subscription id of stripe."}
-   {:db/ident :user.registered.subscription/stripe-customer-id
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/doc "Store the customer id from stripe."}
-
    ;; Seen statements
    {:db/ident :seen-statements/user
     :db/valueType :db.type/ref
@@ -104,23 +94,7 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The statements that are known to the registered user, i.e. visited statements."}
-
-   ;; Surveys
-   {:db/ident :surveys.using-schnaq-for/user
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "The keycloak id of a registered user."}
-   {:db/ident :surveys.using-schnaq-for/topics
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "Reference the selections of the user."}
-   {:db/ident :surveys.using-schnaq-for.topics/education}
-   {:db/ident :surveys.using-schnaq-for.topics/coachings}
-   {:db/ident :surveys.using-schnaq-for.topics/seminars}
-   {:db/ident :surveys.using-schnaq-for.topics/fairs}
-   {:db/ident :surveys.using-schnaq-for.topics/meetings}
-   {:db/ident :surveys.using-schnaq-for.topics/other}
-
+   
    ;; Feedback
    {:db/ident :feedback/contact-name
     :db/valueType :db.type/string
