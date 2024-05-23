@@ -17,6 +17,7 @@ jobs:
   Deploy-Preview:
     name: "Vercel: Deploy Preview Environment"
     runs-on: ubuntu-latest
+    environment: staging
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,8 +28,6 @@ jobs:
 
       - name: Install Deps
         run: |
-          echo $REST_API_URL
-          echo ${{ env.REST_API_URL }}
           yarn global add sass
           yarn install --frozen-lockfile
 
