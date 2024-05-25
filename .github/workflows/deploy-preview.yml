@@ -1,9 +1,10 @@
-name: "Vercel: Build Staging"
+name: "Vercel: Build Preview"
 
 on:
   push:
-    branches:
+    branches-ignore:
       - develop
+      - main
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -15,8 +16,8 @@ env:
   REST_API_URL: ${{ vars.REST_API_URL }}
 
 jobs:
-  Deploy-Staging:
-    name: "Vercel: Deploy Staging Environment"
+  Deploy-Preview:
+    name: "Vercel: Deploy Preview Environment"
     runs-on: ubuntu-latest
     environment: staging
     steps:
@@ -40,5 +41,3 @@ jobs:
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Assign Custom Domain
-        run: vercel alias set ${{ secrets.VERCEL_PROJECT_ID }} app.staging.schnaq.com --token=${{ secrets.VERCEL_TOKEN }}
