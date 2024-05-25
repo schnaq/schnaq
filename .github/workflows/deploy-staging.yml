@@ -41,4 +41,4 @@ jobs:
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
       - name: Assign Custom Domain
-        run: vercel alias set ${{ secrets.VERCEL_PROJECT_ID }} app.staging.schnaq.com --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel alias set ${{ secrets.VERCEL_PROJECT_ID }} app.staging.schnaq.com --token=${{ secrets.VERCEL_TOKEN }} --scope=schnaq
