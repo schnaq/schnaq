@@ -1,9 +1,9 @@
-name: "Vercel: Build Staging Preview"
+name: "Vercel: Build Preview"
 
 on:
   push:
-    branches:
-      - vercel/deploy
+    branches-ignore:
+      - main
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
