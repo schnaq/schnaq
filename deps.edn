@@ -10,7 +10,7 @@
         com.cognitect.aws/s3 {:mvn/version "868.2.1580.0"}
         com.datomic/peer {:mvn/version "1.0.7075"}
         com.draines/postal {:mvn/version "2.0.5"}
-        com.fulcrologic/guardrails {:mvn/version "1.2.7"}
+        com.fulcrologic/guardrails {:mvn/version "1.2.9"}
         com.google.guava/guava {:mvn/version "33.2.0-jre"
                                 :doc "shadow-cljs needs this"}
         com.taoensso/sente {:mvn/version "1.19.2"}
@@ -43,14 +43,14 @@
         ring/ring {:mvn/version "1.10.0"
                    :doc "WARNING: Upgrading causes an error, since com.cognitect.aws uses an incompatible jetty version. Wait for them to upgrade and test again with our test suite."}
         ring/ring-mock {:mvn/version "0.4.0"}
-        thheller/shadow-cljs {:mvn/version "2.28.6"}
+        thheller/shadow-cljs {:mvn/version "2.28.8"}
         yogthos/config {:mvn/version "1.2.0"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.90.1383"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.91.1392"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.1.89"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
                   :main-opts ["-m" "kaocha.runner"]}
