@@ -1,8 +1,8 @@
-name: "Vercel: Build Preview Deployment"
+name: "Vercel: Build Production Deployment"
 
 on:
   push:
-    branches-ignore:
+    branches:
       - main
 
 env:
@@ -15,10 +15,10 @@ env:
   REST_API_URL: ${{ vars.REST_API_URL }}
 
 jobs:
-  deploy-preview:
-    name: "Vercel: Build Preview Deployment"
+  deploy-production:
+    name: "Vercel: Build Production Deployment"
     runs-on: ubuntu-latest
-    environment: staging
+    environment: production
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -35,16 +35,8 @@ jobs:
       - name: Install Vercel CLI
         run: yarn global add vercel@latest
       - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
       - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy Project Artifacts to Vercel
-        if: github.ref == 'refs/heads/develop'
-        run: |
-          url="$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})"
-          vercel alias set "$url" ${{ vars.CUSTOM_DOMAIN }} --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy Project Artifacts to Vercel
-        if: github.ref != 'refs/heads/develop'
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
