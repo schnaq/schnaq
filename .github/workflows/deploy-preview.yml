@@ -3,7 +3,7 @@ name: "Vercel: Build Preview Deployment"
 on:
   push:
     branches-ignore:
-      - main
+      - deploy
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
