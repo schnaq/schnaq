@@ -160,8 +160,7 @@
       [multi-arguments-card (labels :analytics/active-users-num-title) :analytics/number-of-active-users-overall]
       [multi-arguments-card (labels :analytics/statement-lengths-title) :analytics/statement-lengths-stats]
       [multi-arguments-card (labels :analytics/statement-types-title) :analytics/statement-type-stats]
-      [multi-arguments-card (labels :analytics/statement-count-percentiles) :analytics/statement-percentiles]
-      [multi-arguments-card (labels :analytics/statement-survey-results) :analytics/schnaq-usage-types]]]
+      [multi-arguments-card (labels :analytics/statement-count-percentiles) :analytics/statement-percentiles]]]
     [:div.container.py-5
      [:hr.pt-3]
      [query-statistics-by-email]]]])
@@ -205,7 +204,6 @@
                                       :percentiles (:statement-percentiles statistics)}
                          :active-users-nums (:active-users-num statistics)
                          :labels (:labels-stats statistics)
-                         :usage (:usage statistics)
                          :users {:registered (:users statistics)}})))
 
 ;; #### Subs ####
@@ -280,11 +278,6 @@
  :analytics/registered-users
  (fn [db _]
    (get-in db [:analytics :users :registered])))
-
-(rf/reg-sub
- :analytics/schnaq-usage-types
- (fn [db _]
-   (get-in db [:analytics :usage])))
 
 ;; -----------------------------------------------------------------------------
 ;; Query statistics by user's email

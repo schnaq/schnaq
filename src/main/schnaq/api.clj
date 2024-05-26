@@ -30,9 +30,7 @@
             [schnaq.api.profiling :as profiling]
             [schnaq.api.qa-box :refer [qa-box-routes]]
             [schnaq.api.schnaq :refer [schnaq-routes]]
-            [schnaq.api.subscription.stripe :refer [stripe-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
-            [schnaq.api.surveys :refer [survey-routes]]
             [schnaq.api.themes :refer [theme-routes]]
             [schnaq.api.user :refer [user-routes]]
             [schnaq.api.wordcloud :refer [wordcloud-routes]]
@@ -42,7 +40,6 @@
             [schnaq.config.cleverreach :as cconfig]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.shared :as shared-config]
-            [schnaq.config.stripe :refer [prices]]
             [schnaq.config.summy :as summy-config]
             [schnaq.core] ;; Keep this import to activate database etc.
             [schnaq.toolbelt :as toolbelt]
@@ -66,9 +63,6 @@
   (log/info (format "Frontend URL: %s, host: %s" config/frontend-url config/frontend-host))
   (log/info (if (:sender-password config/email) "E-Mail configured" "E-Mail not configured"))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm))
-  (log/info (format "[Stripe] Price IDs schnaq pro: %s" (flatten (map vals (map second prices)))))
-  (log/info (format "[Stripe] Webhook access key (truncated): %s..." (subs config/stripe-webhook-access-key 0 15)))
-  (log/info (format "[Stripe] Secret key (truncated): %s..." (subs config/stripe-secret-api-key 0 15)))
   (log/info "Cleverreach configuration:")
   (log/info cconfig/enabled?)
   (log/info cconfig/receiver-group)
@@ -111,9 +105,7 @@
      poll-routes
      qa-box-routes
      schnaq-routes
-     stripe-routes
      summary-routes
-     survey-routes
      theme-routes
      user-routes
      (when with-websockets? (websocket-routes))

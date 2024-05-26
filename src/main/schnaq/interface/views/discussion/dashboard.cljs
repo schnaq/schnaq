@@ -1,8 +1,7 @@
 (ns schnaq.interface.views.discussion.dashboard
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.components.preview :as preview]
-            [schnaq.interface.components.wordcloud :refer [wordcloud-preview]]
+            [schnaq.interface.components.wordcloud :refer [wordcloud]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.markdown :as md]
@@ -36,13 +35,10 @@
          {:key (str "dashboard-statement-" statement-id)}))]))
 
 (defn- summary-view []
-  (let [pro-user? @(rf/subscribe [:user/pro?])
-        current-schnaq @(rf/subscribe [:schnaq/selected])]
+  (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
     [:div.panel-white.p-3
      [:h3.mb-3.text-break (labels :dashboard/summary)]
-     (if pro-user?
-       [summary/summary-body current-schnaq]
-       [preview/preview-image :preview/summary])]))
+     [summary/summary-body current-schnaq]]))
 
 (defn- count-information [icon icon-alt-text number-of unit]
   [:div.panel-white.px-5.mb-3
@@ -69,7 +65,7 @@
   [:section.panel-white.mb-3
    [:h3 (labels :dashboard.wordcloud/title)]
    [:small.text-muted (labels :dashboard.wordcloud/subtitle)]
-   [wordcloud-preview]])
+   [wordcloud @(rf/subscribe [:wordcloud/words])]])
 
 (defn- dashboard-view []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]

@@ -1,6 +1,5 @@
 (ns schnaq.mail.cleverreach
   (:require [clj-http.client :as client]
-            [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- => ?]]
             [muuntaja.core :as m]
             [schnaq.config.cleverreach :as cconfig]
@@ -97,52 +96,3 @@
                                       family_name (assoc :lastname family_name))})
       :content-type :json
       :accept :json})))
-
-(>defn add-tag!
-  "Adds a tag to the user's entry in cleverreach."
-  [email tags]
-  [::specs/email (s/and vector? (s/coll-of string?)) => (? map?)]
-  (wrap-catch-exception
-   email "Added tag to mail %s." "Could not add tag to mail."
-   #(client/post
-     (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags?token=%s" email @access-token)
-     {:body (m/encode "application/json" {:tags tags
-                                          :group_id cconfig/receiver-group})
-      :content-type :json
-      :accept :json})))
-
-(>defn add-pro-tag!
-  "Adds a pro tag to the user's entry."
-  [email]
-  [::specs/email => (? map?)]
-  (add-tag! email ["customer-pro"]))
-
-(>defn add-free-tag!
-  "Adds free tag to the user's entry."
-  [email]
-  [::specs/email => (? map?)]
-  (add-tag! email ["customer-free"]))
-
-(>defn remove-tag!
-  "Remove one tag information from user."
-  [email tag]
-  [::specs/email string? => (? map?)]
-  (wrap-catch-exception
-   email "Removed tag from mail %s." "Could not remove tag from mail."
-   #(client/delete
-     ;; The tags, which should be removed, must be a single tag or a comma separated list of tags.
-     (format "https://rest.cleverreach.com/v3/receivers.json/%s/tags/%s?token=%s" email tag @access-token)
-     {:content-type :json
-      :accept :json})))
-
-(>defn remove-pro-tag!
-  "Remove pro tag information from user."
-  [email]
-  [::specs/email => (? map?)]
-  (remove-tag! email "customer-pro"))
-
-(>defn remove-free-tag!
-  "Remove free tag information from user."
-  [email]
-  [::specs/email => (? map?)]
-  (remove-tag! email "customer-free"))

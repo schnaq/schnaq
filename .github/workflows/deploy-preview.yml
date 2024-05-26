@@ -1,0 +1,50 @@
+name: "Vercel: Build Preview Deployment"
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  BUILD_HASH: ${{ github.sha }}
+  KEYCLOAK_CLIENT: ${{ secrets.KEYCLOAK_CLIENT }}
+  KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+  FAQ_SHARE_HASH: ${{ secrets.FAQ_SHARE_HASH }}
+  REST_API_URL: ${{ vars.REST_API_URL }}
+
+jobs:
+  deploy-preview:
+    name: "Vercel: Build Preview Deployment"
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - id: setup-clojure
+        uses: ./.github/actions/setup_clojure
+
+      - name: Install Deps
+        run: |
+          yarn global add sass
+          yarn install --frozen-lockfile
+
+      - name: Install Vercel CLI
+        run: yarn global add vercel@latest
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
+      - name: Build Project Artifacts
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
+
+      - name: Deploy Project Artifacts to Vercel
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          url="$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})"
+          vercel alias set "$url" ${{ vars.CUSTOM_DOMAIN }} --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
+
+      - name: Deploy Project Artifacts to Vercel
+        if: github.ref != 'refs/heads/develop'
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}

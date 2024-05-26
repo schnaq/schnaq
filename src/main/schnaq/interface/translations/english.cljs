@@ -37,9 +37,6 @@
    :page.login/subheading "100% free forever"
    :page.login/login "Sign In"
    :page.login/or "or"
-   :page.login.alert/text-1 "Check out all benefits of a registered user"
-   :page.login.alert/button "here"
-   :page.login.alert/text-2 ""
    :page.login/feature-1 "Create schnaqs"
    :page.login/feature-3 "Participation without registration"
 
@@ -299,10 +296,6 @@
    :discussion.anonymous-delete.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."
    :discussion.anonymous-delete.modal/cta "Sign in / Sign up"
 
-   ;; Preview
-   :preview.image-overlay/title "This is a pro function."
-   :preview.image-overlay/body "To use it, you need a Pro or Beta account."
-
    ;; Presentation View
    :presentation.access/code [:p "Go to " [:a.text-nowrap {:href "https://schnaq.app"} "schnaq.app"] " and use code: "]
    :presentation.access/qr-alternative "Or scan the QR-Code"
@@ -432,7 +425,6 @@
    :analytics/statement-lengths-title "Length of statements"
    :analytics/statement-types-title "Argument types"
    :analytics/statement-count-percentiles "# of statements per schnaq"
-   :analytics/statement-survey-results "Schnaq Survey Results"
    :analytics/labels-stats "Marked Answers"
    :analytics/fetch-data-button "Retrieving data…"
    :analytics.users/title "Newly registered users"
@@ -497,16 +489,8 @@
    ;; Feature limits
    :feature.limit.posts/alert "The maximum number of posts has been reached in this schnaq. The following person has created the schnaq and needs to upgrade to enable more posts:"
    :feature.limit.posts/alert-tooltip "The maximum number of posts has been reached in this schnaq."
-   :feature.limit.schnaqs/alert "You have created the maximum number of your allowed schnaqs. That's great, you seem to like schnaq 🎉"
-   :feature.limit.schnaqs/alert-2 "To create more schnaqs, you need to upgrade."
 
    ;; Welcome
-   :welcome.free/heading "Welcome to schnaq"
-   :welcome.free/subheading "These are now your available functions"
-   :welcome.free/pro-features "When you become a Pro user, you can also use the following features"
-   :welcome.free.features.schnaq/title "Create a schnaq"
-   :welcome.free.features.schnaq/lead "You can start right away. With your personal account you can create your own schnaqs and invite other people to join."
-   :welcome.free.features.schnaq/button "Enjoy schnaq"
    :welcome.free.features.profile/title "Update your profile"
    :welcome.free.features.profile/lead "A professional appearance is important. Set up your profile, upload a picture and give yourself a name. This way, all participants will recognize you at a glance in schnaq."
    :welcome.free.features.profile/button "Edit profile"
@@ -567,33 +551,6 @@
    :themes.save.notification/body "Your theme can now be used by you in your schnaqs."
    :themes.pro-carrot/text "Would you like to use this feature? Then book a Pro account and enjoy your personal branding in your schnaqs"
 
-   ;; Subscriptions
-   :subscription.cancel/button "Cancel subscription"
-   :subscription.cancel/button-hint "Here you can cancel your subscription at the next possible time. You can still use all Pro functions until the end of the period. You can reactivate your subscription here at any time."
-   :subscription.cancel/confirmation "Do you really want to cancel your subscription at the end of the payment period?"
-   :subscription.cancel.error/title "Problem cancelling"
-   :subscription.cancel.error/body "There was an error cancelling your subscription. Please contact us at hello@schnaq.com so we can help you as soon as possible."
-   :subscription.cancel.success/title "Subscription cancelled successfully"
-   :subscription.cancel.success/body "We are sorry that you no longer want to use the Pro features of schnaq. You can still change your mind until the end of the current payment period. We would love to know how we could do better at hello@schnaq.com"
-   :subscription.reactivate/button "Reactivate Subscription"
-   :subscription.reactivate/button-hint "Do you want to reactivate your subscription? We are sorry to hear that schnaq is not to your liking. Help us understand how we can do better with a message to hello@schnaq.com. You still have access to Pro features until the end of the term."
-   :subscription.reactivate/confirmation "Would you like to reactivate your subscription?"
-   :subscription.reactivated.success/title "Subscription reactivated"
-   :subscription.reactivated.success/body "Welcome back! Glad you changed your mind."
-   :subscription.overview/title "Subscription Settings"
-   :subscription.overview/status "Status"
-   :subscription.overview/type "Type"
-   :subscription.overview/started-at "Subscription started"
-   :subscription.overview/stops-at "Subscription ends"
-   :subscription.overview/next-invoice "Next billing"
-   :subscription.overview/cancelled "Subscription cancelled"
-   :subscription.overview/cancelled? "Cancelled?"
-   :subscription.page.cancel/heading "Cancelled"
-   :subscription.page.cancel/title "Too bad you didn't complete the process"
-   :subscription.page.cancel/lead "You're missing out on the opportunity to realise the full potential from your interactions with your subscribers."
-   :subscription.page.cancel/body "In the free plan, all basic features are still available to you. We would be very happy to hear from you why you do not want to use the Pro functions. Feel free to contact us 👍 Are you missing a function? Let us know at hello@schnaq.com - we'll find a solution!"
-   :subscription.page.cancel/button "Change your mind?"
-
    ;; mail interval
    :notification-mail-interval/every-minute "Check every Minute"
    :notification-mail-interval/daily "Daily"
@@ -626,30 +583,6 @@
    :graph.settings.gravity/label "Adjust the gravity between your nodes."
    :graph.settings/stabilize "Stabilize Mindmap"
 
-   ;; Pricing Page
-   :pricing.free-tier/title "Free"
-   :pricing.free-tier/subtitle "Forever"
-   :pricing.pro-tier/title "Pro"
-   :pricing.pro-tier/subtitle "Activate your potential"
-   :pricing.enterprise-tier/title "Enterprise"
-   :pricing.enterprise-tier/subtitle "Big plans?"
-   :pricing.enterprise-tier/call-to-action "Send Inquiry"
-   :pricing.enterprise-tier/on-request "On Request"
-   :pricing.features/number-of-users "Up to %d users in the audience"
-   :pricing.features.number-of-users/unlimited "Unlimited audience"
-   :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling"]
-   :pricing.schnaq.pro.yearly/payment-method "billed annually"
-   :pricing.schnaq.pro.yearly/cancel-period "annually cancellable"
-   :pricing.units/per-month "per month per moderator"
-   :pricing.notes/with-vat "plus VAT"
-   :pricing.billing/info-4-one-time "* The event pass is valid for three days."
-   :pricing.one-time/question "Do you want to use schnaq for an event without a subscription?"
-   :pricing.one-time/offer "Get a pro account for your event with up to %d participants for %d € plus VAT.*"
-   :pricing.one-time/contact "Write us for the event pass at"
-
-   :pricing.upgrade-nudge/button "Upgrade"
-   :pricing.upgrade-nudge/tooltip "Upgrade your account"
-
    ;; tooltips
    :tooltip/history-statement "Back to statement made by"
    :tooltip/history-statement-current "Current statement"
@@ -678,8 +611,6 @@
    :router/created-schnaqs "Created schnaqs"
    :router/archived-schnaqs "Archived schnaqs"
    :router/not-found-label "Not found route redirect"
-   :router/pricing "Pricing"
-   :router/pricing-tooltip "Unlock all features"
    :router/privacy "Privacy Policy"
    :router/privacy-tooltip "Find out what happens with your data"
    :router/qanda "Q&A"
@@ -841,32 +772,6 @@
    :tour.mindmap/step-2 "You can download the mindmap as it is shown here as an image."
    :tour.mindmap/step-3-title "Settings"
    :tour.mindmap/step-3 "Make settings for the mindmap. For example, you can stabilize it if it moves or set the repulsive force of the nodes."
-
-   ;; Registration
-   :registration/heading "Welcome to the account creation"
-   :registration.steps/heading "Step %d of 3"
-   :registration.email/lead "Or use your email"
-   :registration.survey/heading "What will schnaq support you with?"
-   :registration.survey/select-all "Select anything that fits"
-   :registration.survey.options/education "Teach"
-   :registration.survey.options/coachings "Coachings"
-   :registration.survey.options/seminars "Seminars"
-   :registration.survey.options/fairs "Events"
-   :registration.survey.options/meetings "(Online) Meetings"
-   :registration.survey.options/other "Other"
-   :registration.survey.input/submit-button "Next"
-   :registration.pricing/heading "Choose your plan"
-   :registration.pricing/compare-plans "Compare Plans"
-   :registration.pricing/subscribe-pro "Subscribe to Pro"
-   :registration.pricing/start-with-free "Continue with Free"
-   :registration.pricing.free/dynamic-qa "Dynamic Q&A"
-   :registration.pricing.free/shareable "Shareable via QR code and link"
-   :registration.pricing.pro/all-from-free "All Free features, plus:"
-   :registration.pricing.pro/polls "Polls"
-   :registration.pricing.pro/activations "Quick activations"
-   :registration.pricing.pro/mods "Moderation Options"
-   :registration.pricing.pro/themes "Personal Design"
-   :registration.pricing.enterprise/all-from-pro "All Pro Features, plus:"
 
    ;; Editor
    :routes.playground/editor "Playground: Lexical"

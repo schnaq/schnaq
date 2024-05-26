@@ -12,7 +12,6 @@
             [schnaq.database.specs :as specs]
             [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.components.preview :as preview]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.file-download :as file-download]
             [schnaq.interface.utils.http :as http]
@@ -108,13 +107,6 @@
              [:> ReactWordcloud {:words words :options options}]
              [:div.text-end [wordcloud-download-button svg]]]))
         [:div.text-center.py-3 [spinner-icon]]))))
-
-(defn wordcloud-preview
-  "If user is pro-user display a wordcloud and if not show a preview instead."
-  []
-  (if @(rf/subscribe [:user/pro?])
-    [wordcloud @(rf/subscribe [:wordcloud/words])]
-    [preview/preview-image :preview/wordcloud]))
 
 ;; -----------------------------------------------------------------------------
 

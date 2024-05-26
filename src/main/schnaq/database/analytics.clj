@@ -262,23 +262,6 @@
     :arrow-right (number-of-entities-with-value-since :statement/labels ":arrow-right" since)
     :comment (number-of-entities-with-value-since :statement/labels ":comment" since)}))
 
-(defn schnaq-usage
-  ([]
-   [:ret :statistics/usage]
-   (schnaq-usage max-time-back))
-  ([since]
-   [:statistics/since :ret :statistics/usage]
-   (->>
-    (main-db/query
-     '[:find ?entities (pull ?values [:db/ident])
-       :in $ ?since
-       :where [?entities :surveys.using-schnaq-for/topics ?values ?tx]
-       [?tx :db/txInstant ?start-date]
-       [(< ?since ?start-date)]]
-     (Date/from since))
-    (group-by second)
-    (map #(vector (:db/ident (first %)) (count (second %)))))))
-
 ;; -----------------------------------------------------------------------------
 ;; Aggregate analytics for a group of users, e.g. matched by their mail addresses
 

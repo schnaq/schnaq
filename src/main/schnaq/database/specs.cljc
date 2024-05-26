@@ -30,30 +30,6 @@
 (s/def :api.response/error-body
   (s/keys :req-un [:api.response/error :api.response/message]))
 
-;; Stripe
-(s/def :stripe/customer-id (s/and string? #(.startsWith % "cus_")))
-
-(s/def :stripe.price/cost number?)
-(s/def :stripe.price/id (s/and string? #(.startsWith % "price_")))
-(s/def :stripe.price/interval #{:month :year})
-(s/def :stripe/price
-  (s/or :valid (s/keys :req-un [:stripe.price/id :stripe.price/cost :stripe.price/interval])
-        :request-failed :api.response/error-body))
-(s/def :stripe/kw-to-price (s/map-of keyword? :stripe/price))
-(s/def :stripe/prices (s/map-of keyword? :stripe/kw-to-price))
-
-(s/def :stripe.subscription/id (s/and #(.startsWith % "sub_") string?))
-(s/def :stripe.subscription/status #{:incomplete :incomplete_expired :trialing :active :past_due :canceled :unpaid})
-(s/def :stripe.subscription/cancelled? boolean?)
-(s/def :stripe.subscription/period-start nat-int?)
-(s/def :stripe.subscription/period-end nat-int?)
-(s/def :stripe.subscription/cancel-at nat-int?)
-(s/def :stripe.subscription/cancelled-at nat-int?)
-(s/def :stripe/subscription
-  (s/keys :req-un [:stripe.subscription/status :stripe.subscription/cancelled?
-                   :stripe.subscription/period-start :stripe.subscription/period-end]
-          :opt-un [:stripe.subscription/cancel-at :stripe.subscription/cancelled-at]))
-
 ;; User
 (s/def :user/nickname string?)
 (s/def ::user (s/keys :opt [:user/nickname]))
@@ -79,9 +55,6 @@
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)
                                               :schnaqs (s/coll-of ::discussion)))
 
-(s/def :user.registered.subscription/stripe-id :stripe.subscription/id)
-(s/def :user.registered.subscription/stripe-customer-id :stripe/customer-id)
-
 (s/def :user.registered.features/concurrent-users nat-int?)
 (s/def :user.registered.features/total-schnaqs nat-int?)
 (s/def :user.registered.features/posts-per-schnaq nat-int?)
@@ -93,8 +66,6 @@
                                        :user.registered/roles
                                        :user.registered/email :user.registered/notification-mail-interval
                                        :user.registered/visited-schnaqs
-                                       :user.registered.subscription/stripe-id
-                                       :user.registered.subscription/stripe-customer-id
                                        :user.registered.features/concurrent-users
                                        :user.registered.features/total-schnaqs
                                        :user.registered.features/posts-per-schnaq]))
@@ -332,15 +303,13 @@
 (s/def :statistics/labels-stats map?)
 (s/def :statistics/statement-percentiles map?)
 (s/def :statistics/users (s/coll-of ::registered-user))
-(s/def :statistics/usage (s/coll-of (s/tuple keyword? nat-int?)))
 
 (s/def ::statistics
   (s/keys :req-un [:statistics/discussions-sum :statistics/usernames-sum
                    :statistics/average-statements-num :statistics/statements-num
                    :statistics/active-users-num :statistics/statement-length-stats
                    :statistics/statement-type-stats :statistics/registered-users-num
-                   :statistics/labels-stats :statistics/users :statistics/statement-percentiles
-                   :statistics/usage]))
+                   :statistics/labels-stats :statistics/users :statistics/statement-percentiles]))
 
 ;; Polls
 (s/def :poll/title ::non-blank-string)
@@ -428,22 +397,6 @@
             :ws.message/uid :ws.message/event :ws.message/id
             :ws.message/send-buffers :ws.message/ring-req :ws.message/send-fn]
    :opt-un [:ws.message/?reply-fn :ws.message/?data]))
-
-;; -----------------------------------------------------------------------------
-;; Surveys
-
-(s/def :surveys.using-schnaq-for/user ::user-or-reference)
-(s/def :surveys.using-schnaq-for/topics
-  (s/coll-of #{:surveys.using-schnaq-for.topics/education
-               :surveys.using-schnaq-for.topics/coachings
-               :surveys.using-schnaq-for.topics/seminars
-               :surveys.using-schnaq-for.topics/fairs
-               :surveys.using-schnaq-for.topics/meetings
-               :surveys.using-schnaq-for.topics/other}))
-(s/def :surveys/using-schnaq-for
-  (s/keys :req [:surveys.using-schnaq-for/user
-                :surveys.using-schnaq-for/topics]
-          :opt [:db/id]))
 
 ;; -----------------------------------------------------------------------------
 ;; UI Settings
