@@ -7,10 +7,10 @@
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
+            [schnaq.interface.analytics.tracking :as tracking]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :refer [from-localstorage]]
@@ -159,7 +159,7 @@
     [:> Button {:variant "primary"
                 :className "w-75 mt-3 mx-auto d-block"
                 :type :submit
-                :on-click #(matomo/track-event "Active User" "Action" "Create Q&A Box")}
+                :on-click #(tracking/track-event "Active User" "Action" "Create Q&A Box")}
      (labels :qa-boxes.create-button/label)]]])
 
 (rf/reg-event-fx

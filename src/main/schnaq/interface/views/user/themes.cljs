@@ -5,11 +5,11 @@
             [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
+            [schnaq.interface.analytics.tracking :as tracking]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -126,7 +126,7 @@
          (rf/dispatch [:theme/reset])
          (rf/dispatch [:theme.selected/update :theme/title
                        (gstring/format (labels :themes.personal.creation/theme-placeholder) user-name)])
-         (matomo/track-event "Active User", "Secondary Action", "Design New Theme"))
+         (tracking/track-event "Active User", "Secondary Action", "Design New Theme"))
        "btn-outline-primary h-100"
        {:id "design-create-new"}]]]))
 

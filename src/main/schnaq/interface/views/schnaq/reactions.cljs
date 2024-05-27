@@ -2,9 +2,9 @@
   (:require [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
+            [schnaq.interface.analytics.tracking :as tracking]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.components.icons :refer [icon]]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :refer [from-localstorage]]))
 
@@ -51,7 +51,7 @@
                                              (if authenticated?
                                                (rf/dispatch [:discussion/toggle-upvote statement])
                                                (rf/dispatch [:schnaq.vote/toggle-anonymous statement :upvote]))
-                                             (matomo/track-event "Active User", "Action", "Vote: Upvote"))}))
+                                             (tracking/track-event "Active User", "Action", "Vote: Upvote"))}))
       [icon :arrow-up "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
      [:span.me-2 (get-up-votes statement votes)]
      [:div.me-1
@@ -62,7 +62,7 @@
                                              (if authenticated?
                                                (rf/dispatch [:discussion/toggle-downvote statement])
                                                (rf/dispatch [:schnaq.vote/toggle-anonymous statement :downvote]))
-                                             (matomo/track-event "Active User", "Action", "Vote: Downvote"))}))
+                                             (tracking/track-event "Active User", "Action", "Vote: Downvote"))}))
       [icon :arrow-down "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
      [:span (get-down-votes statement votes)]]))
 
@@ -88,7 +88,7 @@
                                               (if authenticated?
                                                 (rf/dispatch [:discussion/toggle-upvote statement])
                                                 (rf/dispatch [:schnaq.vote/toggle-anonymous statement :upvote]))
-                                              (matomo/track-event "Active User", "Action", "Vote: Upvote"))}))
+                                              (tracking/track-event "Active User", "Action", "Vote: Upvote"))}))
        [icon :arrow-up "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
       [:div (get-up-votes statement votes)]]
      [:div.d-flex.flex-row
@@ -102,7 +102,7 @@
                                               (if authenticated?
                                                 (rf/dispatch [:discussion/toggle-downvote statement])
                                                 (rf/dispatch [:schnaq.vote/toggle-anonymous statement :downvote]))
-                                              (matomo/track-event "Active User", "Action", "Vote: Downvote"))}))
+                                              (tracking/track-event "Active User", "Action", "Vote: Downvote"))}))
        [icon :arrow-down "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
       [:div (get-down-votes statement votes)]]]))
 

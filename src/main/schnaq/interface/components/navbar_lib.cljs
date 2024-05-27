@@ -8,9 +8,9 @@
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.analytics.tracking :as analytics]
             [schnaq.interface.components.animal-avatars :as animal-avatars]
             [schnaq.interface.components.icons :refer [icon stacked-icon]]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.file-download :as file-download]
@@ -93,17 +93,17 @@
   (rf/dispatch [:ajax.error/as-notification (labels :error/export-failed)]))
 
 (>defn txt-export-request
-       "Initiate an export as a txt file for the currently selected schnaq."
-       [share-hash title]
-       [:discussion/share-hash string? => any?]
-       (ajax/ajax-request
-        {:method :get
-         :uri (str shared-config/api-url "/export/argdown")
-         :format (ajax/transit-request-format)
-         :params {:share-hash share-hash}
-         :response-format (ajax/transit-response-format)
-         :handler (partial create-txt-download-handler title)
-         :error-handler show-error}))
+  "Initiate an export as a txt file for the currently selected schnaq."
+  [share-hash title]
+  [:discussion/share-hash string? => any?]
+  (ajax/ajax-request
+   {:method :get
+    :uri (str shared-config/api-url "/export/argdown")
+    :format (ajax/transit-request-format)
+    :params {:share-hash share-hash}
+    :response-format (ajax/transit-response-format)
+    :handler (partial create-txt-download-handler title)
+    :error-handler show-error}))
 
 ;; -----------------------------------------------------------------------------
 
@@ -142,7 +142,7 @@
     :on-submit #(.preventDefault %)}
    [:input.btn.dropdown-item {:type "submit"
                               :value (labels :user.button/change-name)
-                              :on-click #(matomo/track-event "Active User", "Secondary Action", "Create User-Name")}]])
+                              :on-click #(analytics/track-event "Active User", "Secondary Action", "Create User-Name")}]])
 
 (defn- namechange-menu-point
   "A bar containing all user related utilities and information."
