@@ -5,12 +5,12 @@
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
+            [schnaq.interface.analytics.tracking :as tracking]
             [schnaq.interface.components.colors :as colors]
             [schnaq.interface.components.common :as common]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
@@ -218,7 +218,7 @@
          [icon :backspace] " " (labels :schnaq.rankings/delete-last-choice)]])
      [:button.btn.btn-dark.mt-3.mx-auto.d-block
       {:disabled (not (and selected-options (seq selected-options)))
-       :on-click #(matomo/track-event "Active User", "Action", "Vote on Poll")}
+       :on-click #(tracking/track-event "Active User", "Action", "Vote on Poll")}
       (labels :schnaq.poll/vote!)]]))
 
 (defn- poll-content
@@ -236,7 +236,7 @@
        [:div.text-center
         [:button.btn.btn-primary.btn-sm
          {:type :submit
-          :on-click #(matomo/track-event "Active User" "Action" "Vote on Poll")}
+          :on-click #(tracking/track-event "Active User" "Action" "Vote on Poll")}
          (labels :schnaq.poll/vote!)]])
      (when @(rf/subscribe [:user/moderator?])
        [show-results-information (:poll/hide-results? poll)])]))
@@ -420,7 +420,7 @@
           (labels :schnaq.poll.edit/cancel-button)]
          [:button.btn.btn-primary.w-50
           {:type "submit"
-           :on-click #(matomo/track-event "Active User" "Action" "Edit Poll")}
+           :on-click #(tracking/track-event "Active User" "Action" "Edit Poll")}
           (labels :schnaq.poll.edit/button)]]]]])
    motion/card-fade-in-time])
 
@@ -580,7 +580,7 @@
      [:div.text-center.pt-2
       [:button.btn.btn-primary.w-75
        {:type "submit"
-        :on-click #(matomo/track-event "Active User" "Action" "Create Poll")}
+        :on-click #(tracking/track-event "Active User" "Action" "Create Poll")}
        (labels :schnaq.poll.create/submit-button)]]]))
 
 (rf/reg-event-fx

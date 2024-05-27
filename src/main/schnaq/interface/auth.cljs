@@ -7,7 +7,6 @@
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :refer [session-storage-enabled?]]
             [schnaq.interface.views.modal :as modal]
@@ -132,8 +131,7 @@
      (-> keycloak
          (.loadUserProfile)
          (.then #(let [keycloak-fields (js->clj % :keywordize-keys true)]
-                   (rf/dispatch [:keycloak/store-groups keycloak-fields])
-                   (matomo/set-user-id (:id keycloak-fields))))
+                   (rf/dispatch [:keycloak/store-groups keycloak-fields])))
          (.catch #(rf/dispatch [:modal [request-login-modal]]))))))
 
 (rf/reg-event-db
@@ -160,8 +158,7 @@
      (-> keycloak
          (.logout)
          (.then (fn [_]
-                  (rf/dispatch [:user/authenticated! false])
-                  (matomo/reset-user-id)))
+                  (rf/dispatch [:user/authenticated! false])))
          (.catch
           #(error-to-console
             "Logout not successful. Request could not be fulfilled."))))))

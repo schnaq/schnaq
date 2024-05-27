@@ -4,10 +4,10 @@
             [goog.string :as gstring]
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
+            [schnaq.interface.analytics.tracking :as tracking]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -107,7 +107,7 @@
       [:> Button {:variant "primary"
                   :className "w-75 mt-3 mx-auto d-block"
                   :type :submit
-                  :on-click #(matomo/track-event "Active User" "Action" "Create FeedbackForm")}
+                  :on-click #(tracking/track-event "Active User" "Action" "Create FeedbackForm")}
        (labels :feedback.create/submit-button)]]]))
 
 (defn feedback-dropdown-menu

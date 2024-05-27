@@ -7,12 +7,12 @@
             [re-frame.core :as rf]
             [schnaq.database.specs :as specs]
             [schnaq.export :as export]
+            [schnaq.interface.analytics.tracking :as tracking]
             [schnaq.interface.components.common :as common]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.inputs :as inputs]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.wordcloud :as wordcloud]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -34,7 +34,7 @@
        [:button.btn.btn-primary.w-75
         {:on-click (fn [_e]
                      (rf/dispatch [:schnaq.wordcloud/toggle true])
-                     (matomo/track-event "Active User" "Action" "Create Wordcloud"))}
+                     (tracking/track-event "Active User" "Action" "Create Wordcloud"))}
         (labels :schnaq.wordcloud/show)])]))
 
 (defn- local-wordcloud
@@ -52,7 +52,7 @@
    [:div.text-center.pt-2
     [:button.btn.btn-secondary.w-75
      {:type "submit"
-      :on-click #(matomo/track-event "Active User" "Action" "Create Wordcloud")}
+      :on-click #(tracking/track-event "Active User" "Action" "Create Wordcloud")}
      (labels :schnaq.wordcloud.local.create/button)]]])
 
 (defn wordcloud-tab

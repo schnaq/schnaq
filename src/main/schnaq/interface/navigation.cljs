@@ -6,7 +6,6 @@
             [re-frame.core :as rf]
             [reitit.frontend.controllers :as reitit-front-controllers]
             [reitit.frontend.easy :as reitit-front-easy]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.utils.routing :as route-utils]))
 
 (rf/reg-sub
@@ -58,10 +57,6 @@
  (fn [route]
    (apply reitit-front-easy/push-state route)))
 
-(rf/reg-fx
- :navigation.navigated/push-matomo-tracker
- matomo/track-current-page)
-
 (rf/reg-event-fx
  :navigation/navigated
  (fn [{:keys [db]} [_ new-match]]
@@ -69,10 +64,8 @@
               controllers (reitit-front-controllers/apply-controllers (:controllers old-match) new-match)]
           (assoc db
                  :current-route (assoc new-match :controllers controllers)
-                 ;; Set this variable after first load, so we do not submit matomo tracking twice on hard reload
                  :hard-reload-done? true))
-    :fx [[:navigation.navigated/write-hreflang]
-         (when (:hard-reload-done? db) [:navigation.navigated/push-matomo-tracker])]}))
+    :fx [[:navigation.navigated/write-hreflang]]}))
 
 (rf/reg-fx
  :navigation.redirect/follow!
