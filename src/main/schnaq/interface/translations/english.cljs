@@ -270,7 +270,6 @@
    ;; Discussion Dashboard
    :dashboard/posts "Posts"
    :dashboard/members "Members"
-   :dashboard/summary "Summary"
    :dashboard/top-posts "Top Posts"
 
    :discussion.navbar/views "Views"
@@ -616,7 +615,6 @@
    :router/qanda "Q&A"
    :router/start-discussion "Start discussion"
    :router/true-404-view "404 error page"
-   :router/summaries "Summaries"
 
    :admin.center.start/heading "Admin Center"
    :admin.center.start/subheading "Administrate schnaqs as a superuser"
@@ -729,23 +727,6 @@
    :schnaq.search/new-search-title "No results"
 
    :summary.link.button/text "Dashboard"
-   :summary.user.request-succeeded/label "Summary requested, please wait."
-   :summary.user/computation-time "The creation of the summary can take a few minutes."
-   :summary.user.requested/label "Requesting summary"
-   :summary.user.not-requested/label "Request summary"
-   :summary.user.abort/confirm "The calculation can take several minutes. Do you really want to cancel?"
-   :summary.user.abort/label "Problems with the calculation?"
-   :summary.user.abort/button "Cancel"
-   :summary.user/privacy-warning "For improvement, schnaq employees will be able to view and review summary content confidentially."
-   :summary.user/last-updated "Last updated:"
-   :summary.admin/open-summaries "Open Summaries: %s"
-   :summary.admin/closed-summaries "Closed Summaries: %s"
-   :summary.admin/discussion "Discussion"
-   :summary.admin/requester "Requester"
-   :summary.admin/requested-at "Requested at"
-   :summary.admin/summary "Summary"
-   :summary.admin/submit "Submit"
-   :summary.admin/closed-at "Closed at"
 
    ;; Tour
    :tour.buttons/back "Back"

@@ -30,7 +30,6 @@
             [schnaq.interface.views.qa.inputs :as qanda]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.feedback-form :as feedback-form]
-            [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.user.edit-account :as edit-account]
             [schnaq.interface.views.user.edit-notifications :as edit-notifications]
             [schnaq.interface.views.user.themes :as themes]
@@ -108,18 +107,13 @@
      {:name :routes/analytics
       :view analytics/analytics-dashboard-entrypoint
       :link-text (labels :router/analytics)
-      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:analytics/load-dashboard]]))}]}]
-    ["/summaries"
-     {:name :routes.admin/summaries
-      :view summary/admin-summaries-view
-      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:summaries/load-all]]))}]}]]
+      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:analytics/load-dashboard]]))}]}]]
    ["/schnaqs"
     {:name :routes.schnaqs/personal
      :view feed/page
      :link-text (labels :router/visited-schnaqs)
      :controllers [{:parameters {:query [:filter :create-demo]}
                     :start (fn [{:keys [query]}]
-                             (print "Query: " query)
                              (rf/dispatch [:schnaqs.visited/load])
                              (rf/dispatch [:hub/select! nil])
                              (when (:create-demo query)
@@ -194,8 +188,7 @@
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
                                (rf/dispatch [:discussion.query.conclusions/starting])
-                               (rf/dispatch [:scheduler.after/login [:wordcloud/for-current-discussion]])
-                               (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
+                               (rf/dispatch [:scheduler.after/login [:wordcloud/for-current-discussion]]))}]}]
      ["/feedback"
       [""
        {:name :routes.schnaq/feedback

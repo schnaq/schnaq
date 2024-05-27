@@ -3,10 +3,10 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.analytics.tracking :as tracking]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.lexical.editor :as lexical]
             [schnaq.interface.config :as config]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.card-elements :as card-elements]
@@ -83,7 +83,7 @@
        {:type :submit
         :disabled (empty? editor-content)
         :title (labels :discussion/create-argument-action)
-        :on-click #(matomo/track-event "Active User" "Action" "Submit Post")}
+        :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
        [:div.d-flex.flex-row
         [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
         [icon :plane "m-auto"]]]]]))
@@ -114,7 +114,7 @@
            {:type :submit
             :disabled (empty? editor-content)
             :title (labels :discussion/create-argument-action)
-            :on-click #(matomo/track-event "Active User" "Action" "Submit Post")}
+            :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
            [:div.d-flex.flex-row
             [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
             [icon :plane "m-auto"]]]]

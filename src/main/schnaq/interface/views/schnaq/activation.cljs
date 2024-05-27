@@ -2,8 +2,8 @@
   (:require ["framer-motion" :refer [motion]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
+            [schnaq.interface.analytics.tracking :as tracking]
             [schnaq.interface.components.motion :as motion-comp]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -101,7 +101,7 @@
             {:class button-class
              :on-click (fn [_e]
                          (rf/dispatch [:activation/activate])
-                         (matomo/track-event "Active User", "Action", "Use Quick-Activation"))}
+                         (tracking/track-event "Active User", "Action", "Use Quick-Activation"))}
             activation-phrase
             "!"]])]
        motion-comp/card-fade-in-time])))
@@ -138,7 +138,7 @@
         [:button.btn.btn-secondary.w-75
          {:on-click (fn [_e]
                       (rf/dispatch [:activation/start])
-                      (matomo/track-event "Active User", "Action", "Create Quick-Activation"))}
+                      (tracking/track-event "Active User", "Action", "Create Quick-Activation"))}
          (labels :schnaq.activation.create/start-button)])]]))
 
 ;; events and subscriptions

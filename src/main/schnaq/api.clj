@@ -30,7 +30,6 @@
             [schnaq.api.profiling :as profiling]
             [schnaq.api.qa-box :refer [qa-box-routes]]
             [schnaq.api.schnaq :refer [schnaq-routes]]
-            [schnaq.api.summaries :refer [summary-routes]]
             [schnaq.api.themes :refer [theme-routes]]
             [schnaq.api.user :refer [user-routes]]
             [schnaq.api.wordcloud :refer [wordcloud-routes]]
@@ -40,7 +39,6 @@
             [schnaq.config.cleverreach :as cconfig]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.shared :as shared-config]
-            [schnaq.config.summy :as summy-config]
             [schnaq.core] ;; Keep this import to activate database etc.
             [schnaq.toolbelt :as toolbelt]
             [schnaq.websockets.handler :refer [websocket-routes]]
@@ -59,7 +57,6 @@
   (log/info (format "Environment: %s" shared-config/environment))
   (log/info (format "Database Name: %s" config/db-name))
   (log/info (format "Database URI (truncated): %s..." (subs config/datomic-uri 0 30)))
-  (log/info (format "Summy URL: %s" summy-config/base-url))
   (log/info (format "Frontend URL: %s, host: %s" config/frontend-url config/frontend-host))
   (log/info (if (:sender-password config/email) "E-Mail configured" "E-Mail not configured"))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm))
@@ -105,7 +102,6 @@
      poll-routes
      qa-box-routes
      schnaq-routes
-     summary-routes
      theme-routes
      user-routes
      (when with-websockets? (websocket-routes))

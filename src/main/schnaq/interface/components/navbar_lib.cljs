@@ -8,9 +8,9 @@
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.analytics.tracking :as analytics]
             [schnaq.interface.components.animal-avatars :as animal-avatars]
             [schnaq.interface.components.icons :refer [icon stacked-icon]]
-            [schnaq.interface.matomo :as matomo]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.file-download :as file-download]
@@ -142,7 +142,7 @@
     :on-submit #(.preventDefault %)}
    [:input.btn.dropdown-item {:type "submit"
                               :value (labels :user.button/change-name)
-                              :on-click #(matomo/track-event "Active User", "Secondary Action", "Create User-Name")}]])
+                              :on-click #(analytics/track-event "Active User", "Secondary Action", "Create User-Name")}]])
 
 (defn- namechange-menu-point
   "A bar containing all user related utilities and information."
@@ -169,8 +169,6 @@
            (labels :router/admin-center)]
           [:> NavDropdownItem {:href (navigation/href :routes/feedbacks)}
            (labels :router/all-feedbacks)]
-          [:> NavDropdownItem {:href (navigation/href :routes.admin/summaries)}
-           (labels :router/summaries)]
           (when-not shared-config/production?
             [:> NavDropdownItem {:href (navigation/href :routes.playground/editor)}
              (labels :routes.playground/editor)])])])))
