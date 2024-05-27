@@ -336,28 +336,6 @@
     :db/cardinality :db.cardinality/one
     :db/doc "URL to where the hub logo was uploaded to."}
 
-   ;; Extractive summaries
-   {:db/ident :summary/discussion
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "The discussion which is summarized."}
-   {:db/ident :summary/requested-at
-    :db/valueType :db.type/instant
-    :db/cardinality :db.cardinality/one
-    :db/doc "When was this summary requested?"}
-   {:db/ident :summary/created-at
-    :db/valueType :db.type/instant
-    :db/cardinality :db.cardinality/one
-    :db/doc "When has the summary been successfully created. Can be empty when there is no summary yet. Represents the creation time of the newest summary for that discussion."}
-   {:db/ident :summary/text
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/doc "The most current summary, if there is one."}
-   {:db/ident :summary/requester
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "The last requester (registered user) of a summary."}
-
    ;; Polls
    {:db/ident :poll/title
     :db/valueType :db.type/string

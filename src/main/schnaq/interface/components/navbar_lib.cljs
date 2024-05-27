@@ -93,17 +93,17 @@
   (rf/dispatch [:ajax.error/as-notification (labels :error/export-failed)]))
 
 (>defn txt-export-request
-  "Initiate an export as a txt file for the currently selected schnaq."
-  [share-hash title]
-  [:discussion/share-hash string? => any?]
-  (ajax/ajax-request
-   {:method :get
-    :uri (str shared-config/api-url "/export/argdown")
-    :format (ajax/transit-request-format)
-    :params {:share-hash share-hash}
-    :response-format (ajax/transit-response-format)
-    :handler (partial create-txt-download-handler title)
-    :error-handler show-error}))
+       "Initiate an export as a txt file for the currently selected schnaq."
+       [share-hash title]
+       [:discussion/share-hash string? => any?]
+       (ajax/ajax-request
+        {:method :get
+         :uri (str shared-config/api-url "/export/argdown")
+         :format (ajax/transit-request-format)
+         :params {:share-hash share-hash}
+         :response-format (ajax/transit-response-format)
+         :handler (partial create-txt-download-handler title)
+         :error-handler show-error}))
 
 ;; -----------------------------------------------------------------------------
 
@@ -169,8 +169,6 @@
            (labels :router/admin-center)]
           [:> NavDropdownItem {:href (navigation/href :routes/feedbacks)}
            (labels :router/all-feedbacks)]
-          [:> NavDropdownItem {:href (navigation/href :routes.admin/summaries)}
-           (labels :router/summaries)]
           (when-not shared-config/production?
             [:> NavDropdownItem {:href (navigation/href :routes.playground/editor)}
              (labels :routes.playground/editor)])])])))
