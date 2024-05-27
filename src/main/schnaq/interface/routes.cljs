@@ -114,7 +114,6 @@
      :link-text (labels :router/visited-schnaqs)
      :controllers [{:parameters {:query [:filter :create-demo]}
                     :start (fn [{:keys [query]}]
-                             (print "Query: " query)
                              (rf/dispatch [:schnaqs.visited/load])
                              (rf/dispatch [:hub/select! nil])
                              (when (:create-demo query)
