@@ -81,14 +81,6 @@
    [:a.social-media-icon {:href "https://github.com/schnaq" :target :_blank}
     [icon :github "" {:size "2x"}]]])
 
-(defn- sponsors []
-  [:section.sponsors
-   [:small (labels :footer.sponsors/heading)]
-   [:article
-    [:a {:href "https://www.hetzner.com/cloud" :target :_blank}
-     [:img {:src (img-path :logos/hetzner)
-            :alt "Logo of Hetzner"}]]]])
-
 (defn- registered-trademark []
   [:section
    [:small
@@ -148,8 +140,7 @@
         [developed-in-nrw]
         [registered-trademark]]
        [:div.col-md-6.col-12.text-md-end.pt-3.pt-md-0
-        [social-media]
-        [sponsors]]]]]))
+        [social-media]]]]]))
 
 (defn footer
   "Footer to display at the bottom the page."
