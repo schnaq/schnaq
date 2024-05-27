@@ -45,14 +45,6 @@
      :cljs (let [path (reitfe/href :routes.schnaq/moderation-center {:share-hash share-hash})]
              (relative-to-absolute-url path))))
 
-(>defn get-summary-link
-  "Takes a share-hash and returns the link to the summary view."
-  [share-hash]
-  [:discussion/share-hash :ret string?]
-  #?(:clj (format "%s/schnaq/%s/dashboard" config/frontend-url share-hash)
-     :cljs (let [path (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})]
-             (relative-to-absolute-url path))))
-
 (>defn add-links-to-discussion
   "Takes a discussion and adds a share-link to the structure."
   [{:discussion/keys [share-hash] :as discussion}]

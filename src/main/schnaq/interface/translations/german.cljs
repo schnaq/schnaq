@@ -273,7 +273,6 @@
    ;; Discussion Dashboard
    :dashboard/posts "Beiträge"
    :dashboard/members "Mitglieder"
-   :dashboard/summary "Kurzzusammenfassung"
    :dashboard/top-posts "Top Beiträge"
 
    :discussion.navbar/views "Ansichten"
@@ -622,7 +621,6 @@
    :router/qanda "Fragen & Antworten"
    :router/start-discussion "Starte Diskussion"
    :router/true-404-view "404 Fehlerseite"
-   :router/summaries "Zusammenfassungen"
 
    :admin.center.start/heading "Admin-Center"
    :admin.center.start/subheading "Administration von schnaqs als Superuser"
@@ -736,23 +734,6 @@
    :schnaq.search/new-search-title "Keine Ergebnisse"
 
    :summary.link.button/text "Analyse"
-   :summary.user.request-succeeded/label "Zusammenfassung angefordert. Bitte warte kurz."
-   :summary.user/computation-time "Die Erstellung der Zusammenfassung kann einige Minuten dauern."
-   :summary.user.requested/label "Zusammenfassung wird angefordert"
-   :summary.user.not-requested/label "Zusammenfassung anfordern"
-   :summary.user.abort/confirm "Die Berechnung kann mehrere Minuten dauern. Möchtest du wirklich abbrechen?"
-   :summary.user.abort/label "Probleme bei der Berechnung?"
-   :summary.user.abort/button "Abbrechen"
-   :summary.user/privacy-warning "Zur Verbesserung werden Mitarbeiter:innen des schnaq-Teams Inhalte der Zusammenfassung vertraulich einsehen und überprüfen können."
-   :summary.user/last-updated "Zuletzt aktualisiert:"
-   :summary.admin/open-summaries "Offene Zusammenfassungen: %s"
-   :summary.admin/closed-summaries "Geschlossene Zusammenfassungen: %s"
-   :summary.admin/discussion "Diskussion"
-   :summary.admin/requester "Angefragt von"
-   :summary.admin/requested-at "Angefragt am"
-   :summary.admin/summary "Zusammenfassung"
-   :summary.admin/submit "Abschicken"
-   :summary.admin/closed-at "Geschlossen am"
 
    ;; Tour
    :tour.buttons/back "Zurück"

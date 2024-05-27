@@ -5,8 +5,7 @@
             [clojure.java.io :as io]
             [clojure.string :as str]
             [config.core :refer [env]]
-            [schnaq.config.shared :as shared-config]
-            [schnaq.config.summy :as summy-config]))
+            [schnaq.config.shared :as shared-config]))
 
 (def pro-email-hosts
   "Define email-hosts which should automatically be assigned a pro-role.
@@ -41,7 +40,7 @@
 
 (def app-codes
   "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
-  #{summy-config/app-code})
+  #{(:app-code env)})
 
 (def db-name (or (:datomic-discussion-db-name env) "dev-db"))
 

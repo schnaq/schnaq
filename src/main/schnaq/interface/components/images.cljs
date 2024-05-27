@@ -24,7 +24,6 @@
     :logo-white "https://s3.schnaq.com/schnaq-common/logos/schnaq_white.webp"
     :logo.square.schnaqqi/blue "https://s3.schnaq.com/schnaq-common/logos/schnaqqi-qr.png"
     :logos/hetzner "https://s3.schnaq.com/schnaq-common/logos/logo-hetzner.svg"
-    :preview/summary "https://s3.schnaq.com/schnaq-common/blurred/blurred_summary.png"
     :preview/wordcloud "https://s3.schnaq.com/schnaq-common/blurred/blurred_wordcloud.png"
     :schnaqqifant/admin "https://s3.schnaq.com/schnaq-schnaqqifanten/admin.png"
     :schnaqqifant/erase "https://s3.schnaq.com/schnaq-schnaqqifanten/erase.png"

@@ -55,8 +55,3 @@
 (s/def ::feedback
   (s/keys :req [:feedback/description :feedback/has-image?]
           :opt [:feedback/contact-name :feedback/contact-mail]))
-
-;; Summaries
-(s/def ::summary
-  (s/keys :req [:summary/requested-at]
-          :opt [:summary/discussion :summary/text :summary/created-at :summary/requester]))

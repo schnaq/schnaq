@@ -7,7 +7,6 @@
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.views.discussion.pie-chart :as pie-chart]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.user :as user]))
 
 (defn- dashboard-statement [statement-id]
@@ -33,12 +32,6 @@
      (for [statement-id starting-conclusion-ids]
        (with-meta [dashboard-statement statement-id]
          {:key (str "dashboard-statement-" statement-id)}))]))
-
-(defn- summary-view []
-  (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
-    [:div.panel-white.p-3
-     [:h3.mb-3.text-break (labels :dashboard/summary)]
-     [summary/summary-body current-schnaq]]))
 
 (defn- count-information [icon icon-alt-text number-of unit]
   [:div.panel-white.px-5.mb-3
@@ -75,8 +68,7 @@
       [:div.col-lg-3.p-0.p-md-3
        [schnaq-infos]]
       [:div.col-lg-5.col-12.mb-3.p-0.p-md-3
-       [wordcloud-view]
-       [summary-view]]
+       [wordcloud-view]]
       [:div.col-lg-4.col-12.mb-3.p-0.p-md-3
        [schnaq-statistics]]]]))
 

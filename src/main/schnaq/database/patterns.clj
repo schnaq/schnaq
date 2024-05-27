@@ -144,25 +144,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(def ^:private minimal-summary
-  [:db/id
-   :summary/requested-at
-   :summary/text
-   :summary/created-at])
-
-(def summary
-  (conj minimal-summary :summary/discussion))
-
-(def summary-with-discussion
-  (conj
-   minimal-summary
-   {:summary/discussion [:discussion/title
-                         :discussion/share-hash
-                         :db/id]}
-   {:summary/requester [:user.registered/email
-                        :user.registered/display-name
-                        :user.registered/keycloak-id]}))
-
 (def poll
   [:db/id
    :poll/title
