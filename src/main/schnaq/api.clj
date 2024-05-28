@@ -60,10 +60,6 @@
   (log/info (format "Frontend URL: %s, host: %s" config/frontend-url config/frontend-host))
   (log/info (if (:sender-password config/email) "E-Mail configured" "E-Mail not configured"))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm))
-  (log/info "Cleverreach configuration:")
-  (log/info cconfig/enabled?)
-  (log/info cconfig/receiver-group)
-  (log/info cconfig/client-id)
   (log/info (subs cconfig/client-secret 0 10)))
 
 (def ^:private description
