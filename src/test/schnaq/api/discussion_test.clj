@@ -107,7 +107,7 @@
                      (toolbelt/mock-authorization-header %)
                      test-app)]
     (is (= 200 (:status (request toolbelt/token-n2o-admin))))
-    (is (= 403 (:status (request toolbelt/token-wegi-no-pro-user))))))
+    (is (= 200 (:status (request toolbelt/token-wegi-no-pro-user))))))
 
 ;; -----------------------------------------------------------------------------
 

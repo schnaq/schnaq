@@ -5,16 +5,10 @@
             [ring.util.http-response :refer [ok]]
             [schnaq.auth :as auth]
             [schnaq.auth.middlewares :as auth-middlewares]
-            [schnaq.database.user :as user-db]
-            [schnaq.test-data :refer [schnaqqi alex kangaroo]]
             [schnaq.test.toolbelt :as schnaq-toolbelt :refer [token-schnaqqifant-user token-n2o-admin token-wrong-signature token-timed-out mock-authorization-header]]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
-
-(def ^:private alex-keycloak-id (:user.registered/keycloak-id alex))
-(def ^:private schnaqqi-keycloak-id (:user.registered/keycloak-id schnaqqi))
-(def ^:private kangaroo-keycloak-id (:user.registered/keycloak-id kangaroo))
 
 (def ^:private test-routes
   "Define own routes just for testing."
@@ -57,16 +51,3 @@
       (is (= 401 (:status (response token-timed-out))))
       (is (= 401 (:status (response token-wrong-signature))))
       (is (= 401 (:status (test-routes (mock/request :get path))))))))
-
-(deftest pro-user?-middleware-test
-  (let [alex (user-db/update-user {:user.registered/keycloak-id alex-keycloak-id
-                                   :user.registered/roles :role/pro})
-        mw (auth-middlewares/pro-user?-middleware (constantly :success))]
-    (testing "Non-existent user is no pro user."
-      (is (= 403 (:status (mw {:identity {:sub "non-existent-user"}})))))
-    (testing "Normal registered users have no access."
-      (is (= 403 (:status (mw {:user (user-db/private-user-by-keycloak-id kangaroo-keycloak-id)})))))
-    (testing "Pro-User shall pass."
-      (is (= :success (mw {:user alex}))))
-    (testing "Beta-Users also have access to pro-features."
-      (is (= :success (mw {:user (user-db/private-user-by-keycloak-id schnaqqi-keycloak-id)}))))))

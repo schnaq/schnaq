@@ -155,8 +155,7 @@
                             :user/admin? auth-middlewares/admin?-middleware
                             :user/analytics-admin? auth-middlewares/analytics-admin?-middleware
                             :user/authenticated? auth-middlewares/authenticated?-middleware
-                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
-                            :user/pro? auth-middlewares/pro-user?-middleware}})))
+                            :user/beta-tester? auth-middlewares/beta-tester?-middleware}})))
 
 (defn route-by-name
   "Return a route by its name."

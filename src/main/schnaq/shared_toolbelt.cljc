@@ -102,13 +102,6 @@
   (when roles
     (intersection? roles shared-config/enterprise-roles)))
 
-(>defn pro-user?
-  "Check if a user has one of the valid pro-roles."
-  [roles]
-  [(? :user.registered/roles) => (? boolean?)]
-  (when roles
-    (intersection? roles shared-config/pro-roles)))
-
 (>defn admin?
   "Check if a user has one of the valid admin-roles."
   [roles]

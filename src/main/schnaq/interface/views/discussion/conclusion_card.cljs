@@ -13,7 +13,6 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.markdown :as md]
-            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.edit :as edit]
@@ -316,19 +315,8 @@
           [search-info])]]]
      motion/card-fade-in-time]))
 
-(defn- deactivated-selection-card-tab
-  "A single tab that is deactivated."
-  [tab-content]
-  [:li.nav-item
-   [:button.nav-link.text-muted
-    {:role "button"}
-    [tooltip/text
-     (labels :schnaq.input-type/pro-only)
-     tab-content]]])
-
 (defn selection-card
-  "Dispatch the different input options, e.g. questions, poll or activation.
-  The poll and activation feature are not available for free plan users."
+  "Dispatch the different input options, e.g. questions, poll or activation."
   []
   (let [selected-option (reagent/atom :question)
         on-click #(reset! selected-option %)
@@ -342,7 +330,6 @@
             word-cloud-tab [:span [iconed-heading :word-cloud :cloud :schnaq.input-type/word-cloud]]
             feedback-tab [:span [iconed-heading :feedback :feedback :schnaq.input-type/feedback]]
             qa-box-tab [:span [iconed-heading :qa-box :question :schnaq.input-type/qa-box]]
-            pro-user? @(rf/subscribe [:user/pro?])
             moderator? @(rf/subscribe [:user/moderator?])
             read-only? @(rf/subscribe [:schnaq.state/read-only?])
             top-level? @(rf/subscribe [:routes.schnaq/start?])
@@ -361,44 +348,36 @@
                                       :role "button"
                                       :on-click #(on-click :question)}
                     [iconed-heading :question :info-question :schnaq.input-type/statement]]]
-                  (if pro-user?
-                    [:<>
-                     [:li.nav-item
-                      [:button.nav-link
-                       {:class (active-class :poll)
-                        :role "button"
-                        :on-click #(on-click :poll)}
-                       poll-tab]]
-                     [:li.nav-item
-                      [:button.nav-link
-                       {:class (active-class :activation)
-                        :role "button"
-                        :on-click #(on-click :activation)}
-                       activation-tab]]
-                     [:li.nav-item
-                      [:button.nav-link
-                       {:class (active-class :word-cloud)
-                        :role "button"
-                        :on-click #(on-click :word-cloud)}
-                       word-cloud-tab]]
-                     [:li.nav-item
-                      [:button.nav-link
-                       {:class (active-class :feedback)
-                        :role "button"
-                        :on-click #(on-click :feedback)}
-                       feedback-tab]]
-                     [:li.nav-item
-                      [:button.nav-link
-                       {:class (active-class :qa-box)
-                        :role "button"
-                        :on-click #(on-click :qa-box)}
-                       qa-box-tab]]]
-                    [:<>
-                     [deactivated-selection-card-tab poll-tab]
-                     [deactivated-selection-card-tab activation-tab]
-                     [deactivated-selection-card-tab word-cloud-tab]
-                     [deactivated-selection-card-tab feedback-tab]
-                     [deactivated-selection-card-tab qa-box-tab]])]))
+                  [:li.nav-item
+                   [:button.nav-link
+                    {:class (active-class :poll)
+                     :role "button"
+                     :on-click #(on-click :poll)}
+                    poll-tab]]
+                  [:li.nav-item
+                   [:button.nav-link
+                    {:class (active-class :activation)
+                     :role "button"
+                     :on-click #(on-click :activation)}
+                    activation-tab]]
+                  [:li.nav-item
+                   [:button.nav-link
+                    {:class (active-class :word-cloud)
+                     :role "button"
+                     :on-click #(on-click :word-cloud)}
+                    word-cloud-tab]]
+                  [:li.nav-item
+                   [:button.nav-link
+                    {:class (active-class :feedback)
+                     :role "button"
+                     :on-click #(on-click :feedback)}
+                    feedback-tab]]
+                  [:li.nav-item
+                   [:button.nav-link
+                    {:class (active-class :qa-box)
+                     :role "button"
+                     :on-click #(on-click :qa-box)}
+                    qa-box-tab]]]))
              (if top-level?
                (case @selected-option
                  :question [input-form-or-disabled-alert]
