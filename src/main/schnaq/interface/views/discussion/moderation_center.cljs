@@ -179,14 +179,12 @@
   "Show a toggle to switch between the schnaq states."
   [state title description]
   [:discussion/valid-states string? string? => :re-frame/component]
-  (let [checked? @(rf/subscribe [:schnaq/state? state])
-        pro? @(rf/subscribe [:user/pro?])]
+  (let [checked? @(rf/subscribe [:schnaq/state? state])]
     [:> Form
      [:> FormCheck
       {:type :switch
        :label (r/as-element [:<> [:span.fw-semibold title] [:p description]])
        :checked checked?
-       :disabled (not pro?)
        :onChange (fn [e] (.preventDefault e)
                    (rf/dispatch [(if checked? :schnaq.moderation/delete-state :schnaq.moderation/add-state)
                                  state]))}]]))

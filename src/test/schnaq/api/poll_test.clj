@@ -32,16 +32,16 @@
                       (toolbelt/mock-authorization-header user-token)))]
     (testing "Non logged in user can not create a poll."
       (is (= 403 (-> toolbelt/token-timed-out request test-app :status))))
-    (testing "Logged in user without pro cannot create a poll."
-      (is (= 403 (-> toolbelt/token-wegi-no-pro-user request test-app :status))))
+    (testing "Logged in user without pro can create a poll."
+      (is (= 200 (-> toolbelt/token-wegi-no-pro-user request test-app :status))))
     (testing "Pro user, that has no moderation rights cannot create poll."
       (is (= 403 (-> toolbelt/token-schnaqqifant-user request test-app :status))))
     (testing "User with correct pro status and moderation rights, has provided no options."
       (is (= 400 (-> toolbelt/token-n2o-admin request (assoc-in [:body-params :options] [])
                      test-app :status))))
-    (testing "Adding a poll is allowed for the pro user with correct params."
+    (testing "Adding a poll is allowed for the any mod user with correct params."
       (is (= 200 (-> toolbelt/token-n2o-admin request test-app :status)))
-      (is (= 4 (count (poll-db/polls share-hash)))))))
+      (is (= 5 (count (poll-db/polls share-hash)))))))
 
 (deftest cast-vote-test
   (testing "Casting a vote works always, as long as poll-id, option-id and discussion share-hash match."

@@ -15,7 +15,7 @@
 (defn moderator
   "Dropdown menu for moderator elements (Polls, Activation, Wordcloud)."
   [{:keys [id] :as attributes} dropdown-menu-content]
-  (when (and @(rf/subscribe [:user/pro?]) @(rf/subscribe [:user/moderator?]))
+  (when @(rf/subscribe [:user/moderator?])
     [:div.dropdown.mx-2
      [:button.btn.m-0.p-0
       (merge

@@ -86,7 +86,7 @@
                       limit [unlimited-icon])]
 
       [:dt.col-sm-7 (labels :user.settings.features/pro)]
-      [:dd.col-sm-5 (if @(rf/subscribe [:user/pro?]) [check-icon] [cross-icon])]
+      [:dd.col-sm-5 [check-icon]]
 
       [:dt.col-sm-7 (labels :user.settings.features/mail-notifications)]
       [:dd.col-sm-5
@@ -139,7 +139,7 @@
       [:a.text-decoration-none {:href (navigation/href :routes.user.manage/account)}
        [:div.d-flex.d-row
         [common/avatar-with-nickname-right 40]
-        [:div.align-self-center [role-indicator true]]]]
+        [:div.align-self-center [role-indicator]]]]
       [feature-overview]
       [:hr.my-4]])
    [feature-and-coc-buttons]])

@@ -22,8 +22,8 @@
 
 (deftest start-activation-test
   (testing "Test activation features."
-    (testing "Non pro user cannot start activation."
-      (is (= 403 (start-activation-request
+    (testing "Non pro mods can start activation."
+      (is (= 200 (start-activation-request
                   test-share-hash
                   toolbelt/token-wegi-no-pro-user))))
     (testing "Pro user without mod rights cannot start activation."
@@ -102,8 +102,8 @@
         activation-1 (activation-db/increment-activation! test-share-hash)]
     (testing "Test reset api."
       (is (= 1 (:activation/count activation-1)))
-      (testing "Non Pro user cannot reset activation."
-        (is (= 403 (reset-activation-by-share-hash
+      (testing "Non Pro mod user can reset activation."
+        (is (= 200 (reset-activation-by-share-hash
                     test-share-hash
                     toolbelt/token-wegi-no-pro-user))))
       (testing "Pro user without moderator rights cannot reset activation."
@@ -137,8 +137,4 @@
       (testing "succeeds for pro and moderator users."
         (is (= 200 (delete-activation-by-share-hash
                     share-hash
-                    toolbelt/token-schnaqqifant-user))))
-      (testing "fails for normal users."
-        (is (= 403 (delete-activation-by-share-hash
-                    test-share-hash
-                    toolbelt/token-wegi-no-pro-user)))))))
+                    toolbelt/token-schnaqqifant-user)))))))

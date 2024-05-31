@@ -49,14 +49,6 @@
       (handler request)
       (forbidden (at/build-error-body :auth/not-a-beta-tester "You are not a beta tester.")))))
 
-(defn pro-user?-middleware
-  "Validate, that user has a subscription in our database or is a beta user."
-  [handler]
-  (fn [request]
-    (if (shared-tools/pro-user? (:user.registered/roles (:user request)))
-      (handler request)
-      (forbidden (at/build-error-body :auth/no-pro-subscription "You have no valid pro-subscription.")))))
-
 (defn valid-app-code?-middleware
   "Validate the app code provided by the application. Only registered
   microservices should be allowed to post data to our servers."

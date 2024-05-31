@@ -152,7 +152,6 @@
    :schnaq.input-type/word-cloud "Wortwolke"
    :schnaq.input-type/feedback "Feedback"
    :schnaq.input-type/qa-box "Fragenbox"
-   :schnaq.input-type/pro-only "Nur für Pro User"
 
    ;; Poll feature
    :schnaq.poll.create/topic-label "Umfragethema"
@@ -525,7 +524,6 @@
    :themes.personal/lead "Gib schnaq deinen persönlichen Touch."
    :themes.personal.creation/heading "Deine Designs"
    :themes.personal.creation/lead "Stelle hier die Farbgebung für deine schnaqs ein. Nachdem du hier deine Designvorlage erstellt hast, kannst du in den Einstellungen deines schnaqs das Design auswählen."
-   :themes.personal.creation/pro-hint "Dies ist ein Pro-Feature. Du kannst damit herumspielen und das Ergebnis im Vorschaubereich sehen, aber du kannst deine Designvorlage nicht speichern."
    :themes.personal.creation.title/label "Gib deinem Design einen eindeutigen Titel"
    :themes.personal.creation/theme-placeholder "%s's persönliches Design"
    :themes.personal.creation.images.logo/title "Logo"
@@ -554,7 +552,6 @@
    :themes.schnaq.unassign.notification/body "Dein schnaq hat nun kein eigenes Design mehr, sondern verwendet nun wieder die Standard-Farbeinstellungen."
    :themes.save.notification/title "Designvorlage erfolgreich gespeichert"
    :themes.save.notification/body "Dein Design kann nun von dir in deinen schnaqs verwendet werden"
-   :themes.pro-carrot/text "Möchtest du dieses Feature verwenden? Dann buche doch einen Pro-Account und genieße dein persönliches Branding in deinen schnaqs"
 
    ;; mail interval
    :notification-mail-interval/every-minute "Prüfe jede Minute"

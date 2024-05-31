@@ -103,7 +103,7 @@
      ["" {:name :api.qa-box/create
           :post {:handler create-qa-box
                  :description (at/get-doc #'create-qa-box)
-                 :middleware [:discussion/user-moderator? :user/pro? :discussion/valid-writeable-discussion?]
+                 :middleware [:discussion/user-moderator? :discussion/valid-writeable-discussion?]
                  :parameters {:body {:share-hash :discussion/share-hash
                                      :visible? :qa-box/visible
                                      :label (s/nilable :qa-box/label)}}
@@ -114,7 +114,7 @@
       ["" {:name :api.qa-box/delete
            :delete {:handler delete-qa-box
                     :description (at/get-doc #'delete-qa-box)
-                    :middleware [:discussion/user-moderator? :user/pro? :discussion/valid-writeable-discussion?]
+                    :middleware [:discussion/user-moderator? :discussion/valid-writeable-discussion?]
                     :parameters {:path {:qa-box-id :db/id}
                                  :body {:share-hash :discussion/share-hash}}
                     :responses {200 {:body {:db/id :db/id}}
@@ -123,7 +123,7 @@
       ["/label" {:name :api.qa-box/label
                  :patch {:handler update-qa-box-label
                          :description (at/get-doc #'update-qa-box-label)
-                         :middleware [:discussion/user-moderator? :user/pro? :discussion/valid-writeable-discussion?]
+                         :middleware [:discussion/user-moderator? :discussion/valid-writeable-discussion?]
                          :parameters {:path {:qa-box-id :db/id}
                                       :body {:share-hash :discussion/share-hash
                                              :new-label :qa-box/label}}
@@ -133,7 +133,7 @@
       ["/visibility" {:name :api.qa-box/visibility
                       :patch {:handler update-qa-box-visibility
                               :description (at/get-doc #'update-qa-box-visibility)
-                              :middleware [:discussion/user-moderator? :user/pro? :discussion/valid-writeable-discussion?]
+                              :middleware [:discussion/user-moderator? :discussion/valid-writeable-discussion?]
                               :parameters {:path {:qa-box-id :db/id}
                                            :body {:share-hash :discussion/share-hash
                                                   :make-visible? :qa-box/visible}}
@@ -144,7 +144,7 @@
        ["" {:name :api.qa-box.question.delete
             :delete {:handler delete-question
                      :description (at/get-doc #'delete-question)
-                     :middleware [:discussion/user-moderator? :user/pro? :discussion/valid-writeable-discussion?]
+                     :middleware [:discussion/user-moderator? :discussion/valid-writeable-discussion?]
                      :parameters {:path {:qa-box-id :db/id
                                          :question-id :db/id}
                                   :body {:share-hash :discussion/share-hash}}
@@ -154,7 +154,7 @@
        ["/answer" {:name :api.qa-box.question/answer
                    :post {:handler answer-question
                           :description (at/get-doc #'answer-question)
-                          :middleware [:discussion/user-moderator? :user/pro? :discussion/valid-writeable-discussion?]
+                          :middleware [:discussion/user-moderator? :discussion/valid-writeable-discussion?]
                           :parameters {:path {:qa-box-id :db/id
                                               :question-id :db/id}
                                        :body {:share-hash :discussion/share-hash

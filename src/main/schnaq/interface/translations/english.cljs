@@ -149,7 +149,6 @@
    :schnaq.input-type/word-cloud "Word Cloud"
    :schnaq.input-type/feedback "Feedback"
    :schnaq.input-type/qa-box "Q&A box"
-   :schnaq.input-type/pro-only "Only for pro users"
 
    ;; Poll feature
    :schnaq.poll.create/topic-label "Poll Topic"
@@ -519,7 +518,6 @@
    :themes.personal/lead "Give schnaq your personal touch."
    :themes.personal.creation/heading "Your themes"
    :themes.personal.creation/lead "Set the color scheme for your schnaqs here. After you have created your theme here, you can select the theme in your schnaq's settings."
-   :themes.personal.creation/pro-hint "This is a Pro plan feature. You can play around with it and see the result in the preview section, but you can not save your theme until you upgrade your plan."
    :themes.personal.creation.title/label "Give your theme a unique title"
    :themes.personal.creation/theme-placeholder "%s's personal theme"
    :themes.personal.creation.images.logo/title "Logo"
@@ -548,7 +546,6 @@
    :themes.schnaq.unassign.notification/body "Your schnaq no longer has its own theme, but now uses the default color settings again."
    :themes.save.notification/title "Theme saved successfully."
    :themes.save.notification/body "Your theme can now be used by you in your schnaqs."
-   :themes.pro-carrot/text "Would you like to use this feature? Then book a Pro account and enjoy your personal branding in your schnaqs"
 
    ;; mail interval
    :notification-mail-interval/every-minute "Check every Minute"

@@ -40,13 +40,11 @@
   [(? ::specs/any-user) ::specs/feature-limits => (s/or :boolean boolean? :number number? :nil nil?)]
   (when user
     (let [admin? (shared-tools/admin? roles)
-          pro? (shared-tools/pro-user? roles)
           fq-feature (keyword "user.registered.features" (str (name feature)))]
       (if (s/valid? ::specs/feature-limits feature)
         (cond
           admin? nil
-          pro? (or (get user fq-feature) (get-in feature-limits [:pro feature]))
-          :else (or (get user fq-feature) (get-in feature-limits [:free feature])))
+          :else (or (get user fq-feature) (get-in feature-limits [:pro feature])))
         (throw
          (let [valid-values (s/form ::specs/feature-limits)
                error-msg (format "Your queried feature is not defined. Queried: %s, valid values: %s" feature valid-values)]

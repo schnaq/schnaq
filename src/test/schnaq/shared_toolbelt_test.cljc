@@ -39,20 +39,6 @@
     :foo/bar "foo/bar"
     :foo.bar/baz "foo.bar/baz"))
 
-(deftest pro-user?-test
-  (testing "Valid pro user roles are true."
-    (are [roles result] (= result (tools/pro-user? roles))
-      #{} false
-      #{:foo} false
-      #{:foo :bar} false
-      #{:role/pro} true
-      #{:role/pro :role/foo} true
-      #{:role/enterprise} true
-      #{:role/tester} true
-      #{:role/admin} true
-      #{:role/analytics} true
-      #{:role/admin :role/pro} true)))
-
 (deftest beta-tester?-test
   (testing "Check valid beta-tester roles"
     (are [roles result] (= result (tools/beta-tester? roles))

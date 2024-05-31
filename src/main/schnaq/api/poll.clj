@@ -87,8 +87,7 @@
      ["" {:name :api/poll
           :post {:handler new-poll
                  :description (at/get-doc #'new-poll)
-                 :middleware [:discussion/user-moderator?
-                              :user/pro?]
+                 :middleware [:discussion/user-moderator?]
                  :parameters {:body {:title :poll/title
                                      :poll-type dto/poll-type
                                      :options (s/coll-of ::specs/non-blank-string)
