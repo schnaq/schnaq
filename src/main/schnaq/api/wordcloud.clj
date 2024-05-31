@@ -44,8 +44,7 @@
   [["/wordcloud" {:swagger {:tags ["wordcloud"]}}
     ["/discussion" {:put toggle-wordcloud
                     :description (at/get-doc #'toggle-wordcloud)
-                    :middleware [:user/pro?
-                                 :discussion/user-moderator?]
+                    :middleware [:discussion/user-moderator?]
                     :name :wordcloud/display
                     :parameters {:body {:share-hash :discussion/share-hash}}
                     :responses {200 {:body {:wordcloud :discussion/wordcloud}}
@@ -54,8 +53,7 @@
      ["" {:name :wordcloud/local
           :post {:handler create-local-wordcloud
                  :description (at/get-doc #'create-local-wordcloud)
-                 :middleware [:user/pro?
-                              :discussion/user-moderator?]
+                 :middleware [:discussion/user-moderator?]
                  :parameters {:body {:share-hash :discussion/share-hash
                                      :title :wordcloud/title}}
                  :responses {200 {:body {:wordcloud ::specs/wordcloud}}
@@ -69,8 +67,7 @@
                             400 at/response-error-body}}
           :delete {:handler delete-local-wordcloud
                    :description (at/get-doc #'delete-local-wordcloud)
-                   :middleware [:user/pro?
-                                :discussion/user-moderator?
+                   :middleware [:discussion/user-moderator?
                                 :discussion/wordcloud-matching?]
                    :parameters {:body {:share-hash :discussion/share-hash
                                        :wordcloud-id :db/id}}

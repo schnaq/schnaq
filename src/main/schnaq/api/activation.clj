@@ -48,7 +48,6 @@
      ["" {:put start-activation
           :description (at/get-doc #'start-activation)
           :middleware [:user/authenticated?
-                       :user/pro?
                        :discussion/user-moderator?]
           :name :activation/start
           :parameters {:body {:share-hash :discussion/share-hash}}
@@ -56,8 +55,7 @@
                       403 at/response-error-body}}]
      ["/delete" {:delete delete-activation
                  :description (at/get-doc #'delete-activation)
-                 :middleware [:user/pro?
-                              :discussion/user-moderator?]
+                 :middleware [:discussion/user-moderator?]
                  :name :activation/delete
                  :parameters {:body {:share-hash :discussion/share-hash}}
                  :responses {200 {:body {:deleted? boolean?}}
@@ -78,8 +76,7 @@
                                 400 at/response-error-body}}]
      ["/reset" {:put reset-activation
                 :description (at/get-doc #'reset-activation)
-                :middleware [:user/pro?
-                             :discussion/user-moderator?]
+                :middleware [:discussion/user-moderator?]
                 :name :activation/reset
                 :parameters {:body {:share-hash :discussion/share-hash}}
                 :responses {200 {:body {:activation ::specs/activation}}

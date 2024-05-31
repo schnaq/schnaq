@@ -242,9 +242,9 @@
       [share-link-to-statement statement]
       [flag-dropdown-button-statement statement]
       (when user-moderator?
-        [lock-unlock-statement-dropdown-button statement])
-      (when (and user-moderator? @(rf/subscribe [:user/pro?]))
-        [toggle-pin-statement-dropdown-button statement])
+        [:<>
+         [lock-unlock-statement-dropdown-button statement]
+         [toggle-pin-statement-dropdown-button statement]])
       (when-not read-only?
         [:<>
          (when editable?

@@ -240,11 +240,6 @@
  :<- [:user/roles]
  :-> shared-tools/beta-tester?)
 
-(rf/reg-sub
- :user/pro?
- :<- [:user/roles]
- :-> shared-tools/pro-user?)
-
 (rf/reg-event-db
  :keycloak.roles/extract
  (fn [db [_ _]]

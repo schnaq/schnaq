@@ -285,7 +285,7 @@
   [tooltip/text
    (labels :statement.pinned/tooltip)
    [:span.badge.rounded-pill
-    (when (and statement-id @(rf/subscribe [:user/pro?]) @(rf/subscribe [:user/moderator?]))
+    (when (and statement-id @(rf/subscribe [:user/moderator?]))
       {:class "clickable"
        :on-click #(rf/dispatch [:statement.pin/toggle statement-id false])})
     [icon :pin "text-primary"]]])

@@ -21,11 +21,6 @@
       :status))
 
 (deftest toggle-wordcloud-test
-  (testing "Non Pro User can't toggle wordcloud."
-    (is (= 403 (toggle-wordcloud-request
-                toolbelt/token-wegi-no-pro-user
-                test-share-hash
-                true))))
   (testing "Pro User without moderator rights can't toggle wordcloud."
     (is (= 403 (toggle-wordcloud-request
                 toolbelt/token-schnaqqifant-user

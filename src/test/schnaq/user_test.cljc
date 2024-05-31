@@ -35,7 +35,7 @@
 
 (deftest feature-limit-concurrent-users-test
   (testing "Test valid concurrent user lookup."
-    (is (= (get-in feature-limits [:free :concurrent-users])
+    (is (= (get-in feature-limits [:pro :concurrent-users])
            (feature-limit free-user :concurrent-users)))
     (is (= (get-in feature-limits [:pro :concurrent-users])
            (feature-limit pro-user :concurrent-users)))
@@ -46,21 +46,15 @@
 
 (deftest feature-limit-wordcloud-test
   (testing "Test wordcloud availability."
-    (is (= (get-in feature-limits [:free :wordcloud?])
+    (is (= (get-in feature-limits [:pro :wordcloud?])
            (feature-limit free-user :wordcloud?)))
     (is (= (get-in feature-limits [:pro :wordcloud?])
            (feature-limit pro-user :wordcloud?)))))
 
 (deftest usage-warning-level-test
   (is (nil? (usage-warning-level free-user :posts-per-schnaq (/ posts-per-schnaq-free 3))))
-  (is (= :warning (usage-warning-level free-user :posts-per-schnaq (- posts-per-schnaq-free 10))))
-  (is (= :danger (usage-warning-level free-user :posts-per-schnaq (dec posts-per-schnaq-free)))))
-
-(deftest posts-limit-reached?-free-user-test
-  (testing "Free users have limits."
-    (is (not (posts-limit-reached? free-user {:meta-info {:all-statements 10}})))
-    (is (not (posts-limit-reached? free-user {:meta-info {:all-statements (dec (get-in feature-limits [:free :posts-per-schnaq]))}})))
-    (is (posts-limit-reached? free-user {:meta-info {:all-statements (get-in feature-limits [:free :posts-per-schnaq])}}))))
+  (is (= nil (usage-warning-level free-user :posts-per-schnaq (- posts-per-schnaq-free 10))))
+  (is (= nil (usage-warning-level free-user :posts-per-schnaq (dec posts-per-schnaq-free)))))
 
 (deftest posts-limit-reached?-pro-user-test
   (testing "Pro users have other limits."

@@ -111,13 +111,10 @@
 (defn- loaded-themes
   "Display all available themes."
   []
-  (let [user-name @(rf/subscribe [:user/display-name])
-        pro-user? @(rf/subscribe [:user/pro?])]
+  (let [user-name @(rf/subscribe [:user/display-name])]
     [:section.pb-5
      [:h3 (labels :themes.personal.creation/heading)]
      [:p (labels :themes.personal.creation/lead)]
-     (when-not pro-user?
-       [:div.alert.alert-info (labels :themes.personal.creation/pro-hint)])
      [list-personal-themes :theme/select]
      [:div.pt-3
       [buttons/button
@@ -131,21 +128,6 @@
        {:id "design-create-new"}]]]))
 
 ;; -----------------------------------------------------------------------------
-
-(defn- save-button-or-carrot
-  "Activate save-button only for pro-users. Other users see an subscription 
-  information."
-  []
-  (let [pro-user? @(rf/subscribe [:user/pro?])]
-    [:<>
-     (when-not pro-user?
-       [:div.alert.alert-info
-        (labels :themes.pro-carrot/text)
-        " 🚀"])
-     [:button.btn.btn-outline-primary
-      {:type :submit
-       :disabled (not pro-user?)}
-      (labels :themes.personal.creation.buttons/save)]]))
 
 (defn- input-activation-phrase
   "Change the activation phrase.
@@ -245,8 +227,7 @@
   "Form to configure theme."
   []
   (when-let [selected @(rf/subscribe [:schnaq/theme])]
-    (let [pro-user? @(rf/subscribe [:user/pro?])
-          theme-id (:db/id selected)]
+    (let [theme-id (:db/id selected)]
       [:<>
        [:form
         {:ref (fn [_element]
@@ -266,8 +247,10 @@
           [input-activation-phrase]]]
         [image-upload-with-preview]
         [:input {:type :hidden :name "theme-id" :value (or theme-id "")}]
-        [save-button-or-carrot]]
-       (when (and theme-id pro-user?)
+        [:button.btn.btn-outline-primary
+         {:type :submit}
+         (labels :themes.personal.creation.buttons/save)]]
+       (when theme-id
          [delete-button
           (labels :themes.personal.creation.buttons/delete)
           (labels :themes.personal.creation.delete/confirmation)

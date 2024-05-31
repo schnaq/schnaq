@@ -16,7 +16,6 @@
             [schnaq.mail.emails :as emails]
             [schnaq.media :as media]
             [schnaq.processors :as processors]
-            [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
@@ -275,15 +274,15 @@
 
 (>defn- user-allowed-to-label?
   "Helper function checking, whether the user is allowed to use labels in the discussion."
-  [{:user.registered/keys [roles]} share-hash]
+  [{:user.registered/keys [keycloak-id]} share-hash]
   [::specs/registered-user :discussion/share-hash => boolean?]
-  (let [pro-user? (shared-tools/pro-user? roles)
+  (let [moderator? (validator/user-moderator? share-hash (:db/id (user-db/private-user-by-keycloak-id keycloak-id)))
         mods-only? (-> (discussion-db/discussion-by-share-hash share-hash)
                        :discussion/states
                        set
                        (contains? :discussion.state.qa/mark-as-moderators-only))]
     (or (not mods-only?)
-        (and mods-only? pro-user?))))
+        (and mods-only? moderator?))))
 
 (defn- add-label
   "Add a label to a statement. Only pre-approved labels can be set. Custom labels have no effect.
@@ -392,8 +391,7 @@
    ["/header-image" {:post media/set-preview-image
                      :description (at/get-doc #'media/set-preview-image)
                      :name :api.discussion/header-image
-                     :middleware [:discussion/user-moderator?
-                                  :user/pro?]
+                     :middleware [:discussion/user-moderator?]
                      :parameters {:body {:share-hash :discussion/share-hash
                                          :image-url :discussion/header-image-url}}
                      :responses {201 {:body {:message string?}}
@@ -488,8 +486,7 @@
      ["/pin/toggle" {:post toggle-pinned-statement
                      :description (at/get-doc #'toggle-pinned-statement)
                      :name :api.discussion.statements/pin
-                     :middleware [:user/pro?
-                                  :discussion/user-moderator?]
+                     :middleware [:discussion/user-moderator?]
                      :parameters {:body {:pin? boolean?}}
                      :responses {200 {:body {:pinned? boolean?}}}}]
      ["/edit" {:put edit-statement!

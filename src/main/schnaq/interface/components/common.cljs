@@ -56,30 +56,21 @@
   [props]
   [badge-builder (merge {:class "bg-primary"} props) "pro"])
 
-(defn free-badge
-  "Display a free badge."
-  [props]
-  [badge-builder (merge {:class "bg-white"} props) "free"])
-
 (defn role-indicator
   "Show an icon if the user has special roles."
-  ([]
-   [role-indicator false])
-  ([with-free-badge?]
-   (let [admin? @(rf/subscribe [:user/administrator?])
-         analytics-admin? @(rf/subscribe [:user/analytics-admin?])
-         beta-tester? @(rf/subscribe [:user/beta-tester?])
-         pro-user? @(rf/subscribe [:user/pro?])
-         enterprise-user? @(rf/subscribe [:user/enterprise?])
-         indicator (cond
-                     admin? [admin-badge]
-                     analytics-admin? [analytics-admin-badge]
-                     (and enterprise-user? (not beta-tester?)) [enterprise-badge]
-                     (and pro-user? (not beta-tester?)) [pro-badge]
-                     beta-tester? [tester-badge]
-                     with-free-badge? [free-badge])]
-     (when indicator
-       [:span.px-1 indicator]))))
+  []
+  (let [admin? @(rf/subscribe [:user/administrator?])
+        analytics-admin? @(rf/subscribe [:user/analytics-admin?])
+        beta-tester? @(rf/subscribe [:user/beta-tester?])
+        enterprise-user? @(rf/subscribe [:user/enterprise?])
+        indicator (cond
+                    admin? [admin-badge]
+                    analytics-admin? [analytics-admin-badge]
+                    (and enterprise-user? (not beta-tester?)) [enterprise-badge]
+                    beta-tester? [tester-badge]
+                    :else [pro-badge])]
+    (when indicator
+      [:span.px-1 indicator])))
 
 ;; -----------------------------------------------------------------------------
 

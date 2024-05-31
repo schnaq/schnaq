@@ -59,8 +59,8 @@
     (testing "succeeds for eligible users."
       (is (= 200 (:status (save-theme-request toolbelt/token-n2o-admin sample-theme))))
       (is (= 200 (:status (save-theme-request toolbelt/token-schnaqqifant-user sample-theme)))))
-    (testing "fails for non-pro users"
-      (is (= 403 (:status (save-theme-request toolbelt/token-wegi-no-pro-user sample-theme)))))))
+    (testing "works also for every user"
+      (is (= 200 (:status (save-theme-request toolbelt/token-wegi-no-pro-user sample-theme)))))))
 
 (deftest new-theme-with-images-test
   (testing "Image upload when adding a new theme should succeed."
@@ -142,10 +142,10 @@
       (testing "fails if is not moderator."
         (let [response (assign-theme-request toolbelt/token-n2o-admin theme-id "simple-hash")]
           (is (= 403 (:status response)))))
-      (testing "fails if user has no pro access."
+      (testing "works for every moderator user"
         (let [kangaroo-theme-id (-> (themes-db/themes-by-keycloak-id kangaroo-keycloak-id) first :db/id)
               response (assign-theme-request toolbelt/token-kangaroo-normal-user kangaroo-theme-id "simple-hash")]
-          (is (= 403 (:status response))))))))
+          (is (= 200 (:status response))))))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -167,9 +167,9 @@
     (testing "fails if user is not a moderator."
       (let [response (unassign-theme-request toolbelt/token-schnaqqifant-user "cat-dog-hash")]
         (is (= 403 (:status response)))))
-    (testing "fails if user has no pro access."
+    (testing "works for every moderator"
       (let [response (unassign-theme-request toolbelt/token-kangaroo-normal-user "cat-dog-hash")]
-        (is (= 403 (:status response)))))))
+        (is (= 200 (:status response)))))))
 
 ;; -----------------------------------------------------------------------------
 

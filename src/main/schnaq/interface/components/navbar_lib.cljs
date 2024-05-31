@@ -179,7 +179,6 @@
   (let [username @(rf/subscribe [:user/display-name])
         authenticated? @(rf/subscribe [:user/authenticated?])
         profile-picture? @(rf/subscribe [:user/profile-picture])
-        pro? @(rf/subscribe [:user/pro?])
         icon-size 25]
     [:span props
      (if (and authenticated? profile-picture?)
@@ -193,7 +192,7 @@
           :name username
           :size icon-size]]])
      [:span.text-nowrap
-      (when pro? [icon :star "me-1"])
+      [icon :star "me-1"]
       (toolbelt/truncate-to-n-chars username 15)]]))
 
 (defn user-navlink-dropdown
