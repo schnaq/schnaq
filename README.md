@@ -4,10 +4,22 @@
       <source media="(prefers-color-scheme: dark)" srcset="https://s3.schnaq.com/schnaq-common/logos/schnaq_white.webp">
       <img src="https://s3.schnaq.com/schnaq-common/logos/schnaq.webp" height="80">
     </picture>
-    <h1 align="center">schnaq</h1>
     <div align="center">Education as interactive, as it's supposed to be!</div>
   </a>
 </p>
+
+<div style="display: flex; justify-content: space-between;" align="center">
+    <a href="https://buymeacoffee.com/schnaq">
+      <picture>
+        <img src="https://github.com/schnaq/schnaq/assets/1507474/5366f560-2459-4eda-8b19-1f59864cf987" height="40">
+      </picture>
+    </a>
+    <a href="https://www.paypal.com/donate/?hosted_button_id=QH39XMQ9UMGPS">
+      <picture>
+        <img src="https://github.com/schnaq/schnaq/assets/1507474/5006b66b-75bf-48a7-9456-fcd9288e8f41" height="40">
+      </picture>
+    </a>
+</div>
 
 <img width="1348" alt="product" src="https://user-images.githubusercontent.com/1507474/213150339-c281ef4d-3759-4085-bd99-935f025eb2e6.png">
 
@@ -16,7 +28,11 @@ new features. Please feel free to contribute to the project by opening issues or
 
 Find the project at https://app.schnaq.com
 
-We are working on a minimal version of schnaq without the dependencies to external systems (e.g. CleverReach).
+## Support this project
+
+This software is maintained and run on the infrastructure of the [schnaq company](https://schnaq.consulting). If you
+like the project and want to support us, please consider donating to us. This pays the infrastructure and new features
+for this project.
 
 ## Development
 
