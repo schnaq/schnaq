@@ -52,10 +52,6 @@
   "Admins and testers have beta-access."
   (cset/union analytics-roles #{"beta-tester" :role/tester}))
 
-(def pro-roles
-  "All beta testers, admins, pro and enterprise users have pro access."
-  (cset/union beta-tester-roles #{:role/pro :role/enterprise}))
-
 (def enterprise-roles
   "All beta testers, admins and enterprise users have enterprise access."
   (cset/union beta-tester-roles #{:role/enterprise}))
