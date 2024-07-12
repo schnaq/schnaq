@@ -1,6 +1,5 @@
 (ns schnaq.s3
-  (:require [clojure.java.io :as io]
-            [clojure.string :as str]
+  (:require [clojure.string :as str]
             [cognitect.aws.client.api :as aws]
             [cognitect.aws.credentials :as credentials]
             [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
