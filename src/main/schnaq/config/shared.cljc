@@ -15,8 +15,8 @@
    :cljs (goog-define keycloak-host "https://auth.schnaq.com"))
 
 #?(:clj (def s3-host
-          (or (:s3-host env) "https://s3.schnaq.com"))
-   :cljs (goog-define s3-host "https://s3.schnaq.com"))
+          (or (:s3-host env) "https://snq-app-dev.s3.nl-ams.scw.cloud"))
+   :cljs (goog-define s3-host "https://snq-app-dev.s3.nl-ams.scw.cloud"))
 
 (def default-anonymous-display-name "Anonymous")
 
