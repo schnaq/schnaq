@@ -1,8 +1,8 @@
 <p align="center">
   <a href="https://app.schnaq.com">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://s3.schnaq.com/schnaq-common/logos/schnaq_white.webp">
-      <img src="https://s3.schnaq.com/schnaq-common/logos/schnaq.webp" height="80">
+      <source media="(prefers-color-scheme: dark)" srcset="https://snq-common.s3.nl-ams.scw.cloud/logos/schnaq_white.webp">
+      <img src="https://snq-common.s3.nl-ams.scw.cloud/logos/schnaq.webp" height="80">
     </picture>
     <div align="center">Education as interactive, as it's supposed to be!</div>
   </a>
