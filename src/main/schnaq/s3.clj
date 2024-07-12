@@ -1,5 +1,6 @@
 (ns schnaq.s3
-  (:require [clojure.string :as str]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
             [cognitect.aws.client.api :as aws]
             [cognitect.aws.credentials :as credentials]
             [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
@@ -15,8 +16,8 @@
   (let [{:keys [access-key secret-key endpoint region]} config/s3-credentials
         hostname (second (str/split endpoint #"://"))]
     (aws/client {:api :s3
-                 :region region
-                 :endpoint-override {:hostname hostname}
+                 :endpoint-override {:hostname hostname
+                                     :region region}
                  :credentials-provider (credentials/basic-credentials-provider
                                         {:access-key-id access-key
                                          :secret-access-key secret-key})})))
@@ -33,14 +34,14 @@
   [keyword? :type/input-stream :file/name map? => string?]
   (if-let [resolved-bucket (shared-config/s3-buckets bucket)]
     (do
-      (aws/invoke s3-client
-                  {:op :PutObject
-                   :request (remove-nil-values-from-map
-                             {:Bucket resolved-bucket
-                              :Key file-name
-                              :Body stream
-                              :ContentLength content-length
-                              :ContentType content-type})})
+      (log/debug (aws/invoke s3-client
+                             {:op :PutObject
+                              :request (remove-nil-values-from-map
+                                        {:Bucket resolved-bucket
+                                         :Key file-name
+                                         :Body stream
+                                         :ContentLength content-length
+                                         :ContentType content-type})}))
       (log/info (format "Uploaded file under the key %s to bucket %s, content-type: %s, content-length: %s" file-name resolved-bucket content-type content-length))
       (absolute-file-url bucket file-name))
     (throw (ex-info (format "[upload-stream] No bucket registered for key `%s`" bucket)
