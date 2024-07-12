@@ -56,8 +56,8 @@
    :sender-host (:email-host env)
    :sender-password (:email-password env)})
 
-(def mail-template "https://s3.schnaq.com/email/templates/generic-mail.html")
-(def mail-content-button-right-template "https://s3.schnaq.com/email/templates/snippets/content-left-button-right.html")
+(def mail-template "https://snq-common.s3.nl-ams.scw.cloud/email/templates/generic-mail.html")
+(def mail-content-button-right-template "https://snq-common.s3.nl-ams.scw.cloud/email/templates/snippets/content-left-button-right.html")
 
 (def mattermost-webhook-url
   "URL to mattermost-webhook to post news to the chat."

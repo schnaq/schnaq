@@ -411,8 +411,8 @@
    :theme.colors/primary "#123456"
    :theme.colors/secondary "#7890ab"
    :theme.colors/background "#cdef01"
-   :theme.images/logo "https://s3.schnaq.com/user-media/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/themes/00000000000000/logo.png"
-   :theme.images/header "https://s3.schnaq.com/user-media/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/themes/00000000000000/header.png"
+   :theme.images/logo "https://snq-app-dev.s3.nl-ams.scw.cloud/user-media/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/themes/00000000000000/logo.png"
+   :theme.images/header "https://snq-app-dev.s3.nl-ams.scw.cloud/user-media/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/themes/00000000000000/header.png"
    :theme.texts/activation "🦘"})
 
 (def theme-schnaqqi
@@ -422,8 +422,8 @@
    :theme.colors/primary "#123456"
    :theme.colors/secondary "#7890ab"
    :theme.colors/background "#cdef01"
-   :theme.images/logo "https://s3.schnaq.com/user-media/11111111-1111-1111-1111-111111111111/themes/00000000000000/logo.png"
-   :theme.images/header "https://s3.schnaq.com/user-media/11111111-1111-1111-1111-111111111111/themes/00000000000000/header.png"
+   :theme.images/logo "https://snq-app-dev.s3.nl-ams.scw.cloud/user-media/11111111-1111-1111-1111-111111111111/themes/00000000000000/logo.png"
+   :theme.images/header "https://snq-app-dev.s3.nl-ams.scw.cloud/user-media/11111111-1111-1111-1111-111111111111/themes/00000000000000/header.png"
    :theme.texts/activation "🦘"})
 
 (def ^:private themes

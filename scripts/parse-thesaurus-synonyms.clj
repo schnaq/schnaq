@@ -13,7 +13,7 @@
                                    (cstring/ends-with? % ")"))
                               synonym)))))
 
-(let [raw-synonyms (slurp "https://s3.schnaq.com/synonyms/synonyms_german.txt")
+(let [raw-synonyms (slurp "https://snq-common.s3.nl-ams.scw.cloud/synonyms/synonyms_german.txt")
       lines (remove #(cstring/starts-with? %1 "#")
                     (cstring/split raw-synonyms #"\n"))
       cleaned-synonyms (map clean-synonym-line lines)

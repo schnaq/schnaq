@@ -10,7 +10,7 @@
       nil "https://schnaq.com"
       "foo" "https://schnaq.com/foo"
       "foo.bar" "https://schnaq.com/foo.bar"
-      "sample-file.txt" "https://s3.schnaq.com/schnaq-media/CAFECAFE-CAFE-CAFE-CAFE-CAFECAFECAFE/files/dbaa17e8-2374-4abb-b996-e2f679f141e2/sample-file.txt")))
+      "sample-file.txt" "https://snq-app.s3.nl-ams.scw.cloud/schnaq-media/CAFECAFE-CAFE-CAFE-CAFE-CAFECAFECAFE/files/dbaa17e8-2374-4abb-b996-e2f679f141e2/sample-file.txt")))
 
 (deftest truncate-in-the-middle-test
   (testing "Truncate string in the middle."

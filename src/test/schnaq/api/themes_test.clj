@@ -175,4 +175,4 @@
 
 (deftest s3-url->path-to-file-test
   (is (= "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/themes/00000000000000/logo.png"
-         (#'themes-api/url->path-to-file "https://s3.schnaq.com/user-media/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/themes/00000000000000/logo.png"))))
+         (#'themes-api/url->path-to-file "https://snq-app.s3.nl-ams.scw.cloud/user-media/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/themes/00000000000000/logo.png"))))
