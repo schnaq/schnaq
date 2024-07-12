@@ -3,7 +3,7 @@
 (require '[clojure.string :as cstring])
 
 (defn clean-synonym-line
-  "Takes a synonym and removes paranthesis content.
+  "Takes a synonym and removes parenthesis content.
   Also remove all synonyms with multiple tokens."
   [synonym-line]
   (->>
