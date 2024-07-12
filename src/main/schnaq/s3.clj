@@ -12,10 +12,10 @@
 (def s3-client
   "Define a client to connect to our own s3 server. Despite the name, we are not
   using aws, just their libraries."
-  (let [{:keys [access-key secret-key endpoint]} config/s3-credentials
+  (let [{:keys [access-key secret-key endpoint region]} config/s3-credentials
         hostname (second (str/split endpoint #"://"))]
     (aws/client {:api :s3
-                 :region "eu-central-1"
+                 :region region
                  :endpoint-override {:hostname hostname}
                  :credentials-provider (credentials/basic-credentials-provider
                                         {:access-key-id access-key
