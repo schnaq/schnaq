@@ -7,14 +7,6 @@
             [config.core :refer [env]]
             [schnaq.config.shared :as shared-config]))
 
-(def pro-email-hosts
-  "Define email-hosts which should automatically be assigned a pro-role.
-  Environment variable should be comma-separated to be parsable.
-   
-  Example: `hhu.de,schnaq.com,razupaltu.ff`"
-  (when-let [hosts (:pro-email-hosts env)]
-    (set (str/split hosts #", ?"))))
-
 (def frontend-url
   (or (:frontend-url env) "http://localhost:8700"))
 
@@ -93,8 +85,9 @@
 ;; -----------------------------------------------------------------------------
 ;; S3 Configuration
 
-(def s3-credentials {:access-key (or (:s3-access-key env) "debug")
-                     :secret-key (or (:s3-secret-key env) "debug")
+(def s3-credentials {:access-key (:s3-access-key env)
+                     :secret-key (:s3-secret-key env)
+                     :region (:s3-region env)
                      :endpoint shared-config/s3-host
                      :client-config {:path-style-access-enabled true}})
 
