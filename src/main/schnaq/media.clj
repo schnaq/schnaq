@@ -6,7 +6,7 @@
             [image-resizer.core :as resizer-core]
             [image-resizer.format :as resizer-format]
             [ring.util.http-response :refer [bad-request created forbidden]]
-            [schnaq.config.shared :as shared-config]
+            [schnaq.config.shared :as shared-config :refer [s3-host]]
             [schnaq.database.main :as d]
             [schnaq.database.specs :as specs]
             [schnaq.s3 :as s3]
@@ -15,7 +15,7 @@
            (javax.imageio ImageIO)))
 
 (def ^:private trusted-cdn-url-regex
-  (re-pattern "https://cdn\\.pixabay\\.com/photo(.+)|https://s3\\.(disqtec|schnaq)\\.com/(.+)"))
+  (re-pattern (format "https://cdn\\.pixabay\\.com/photo(.+)|%s(/.+)" s3-host)))
 
 (def ^:private error-cdn "prohibited cdn")
 (def ^:private error-img "Setting image failed")

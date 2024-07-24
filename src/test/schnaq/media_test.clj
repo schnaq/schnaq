@@ -43,10 +43,12 @@
       (is (not (nil? (-> request-1 :db-after)))))))
 
 (deftest cdn-regex-test
-  (testing "Test that only pixabay's cdn url is allowed"
+  (testing "Test that only certain URLs are allowed"
     (let [valid-url? #'media/valid-url?
           allowed-url (valid-url?
                        "https://cdn.pixabay.com/photo/2020/10/23/17/47/girl-5679419_960_720.jpg")
+          allowed-url-2 (valid-url?
+                         "https://snq-app-dev.s3.nl-ams.scw.cloud/some/file.webp")
           bad-url-1 (valid-url?
                      "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png")
           bad-url-2 (valid-url?
@@ -54,6 +56,7 @@
           bad-url-3 (valid-url?
                      "https://pixabay.com/foo.jpg")]
       (is allowed-url)
+      (is allowed-url-2)
       (is (not bad-url-1))
       (is (not bad-url-2))
       (is (not bad-url-3)))))
