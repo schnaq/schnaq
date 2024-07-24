@@ -36,7 +36,6 @@
             [schnaq.auth :as auth]
             [schnaq.auth.middlewares :as auth-middlewares]
             [schnaq.config :as config]
-            [schnaq.config.cleverreach :as cconfig]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.shared :as shared-config]
             [schnaq.core] ;; Keep this import to activate database etc.
