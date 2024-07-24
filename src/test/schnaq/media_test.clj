@@ -49,6 +49,8 @@
                        "https://cdn.pixabay.com/photo/2020/10/23/17/47/girl-5679419_960_720.jpg")
           allowed-url-2 (valid-url?
                          "https://snq-app-dev.s3.nl-ams.scw.cloud/some/file.webp")
+          allowed-url-3 (valid-url?
+                         "https://snq-app-dev.s3.nl-ams.scw.cloud/schnaq-header-images/for-testing-image-do-not-delete")
           bad-url-1 (valid-url?
                      "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png")
           bad-url-2 (valid-url?
@@ -57,6 +59,7 @@
                      "https://pixabay.com/foo.jpg")]
       (is allowed-url)
       (is allowed-url-2)
+      (is allowed-url-3)
       (is (not bad-url-1))
       (is (not bad-url-2))
       (is (not bad-url-3)))))
