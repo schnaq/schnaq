@@ -14,13 +14,13 @@
   using aws, just their libraries."
   (let [{:keys [access-key secret-key endpoint region]} config/s3-credentials
         hostname (second (str/split endpoint #"://"))]
-    (prn "S3 client config:" config/s3-credentials)
     (aws/client {:api :s3
                  :endpoint-override {:hostname hostname
                                      :region region}
                  :credentials-provider (credentials/basic-credentials-provider
                                         {:access-key-id access-key
-                                         :secret-access-key secret-key})})))
+                                         :secret-access-key secret-key
+                                         :region region})})))
 
 (>defn absolute-file-url
   "Return absolute URL to bucket."

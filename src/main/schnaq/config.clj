@@ -7,8 +7,6 @@
             [config.core :refer [env]]
             [schnaq.config.shared :as shared-config]))
 
-(println "Loaded env:" env)
-
 (def frontend-url
   (or (:frontend-url env) "http://localhost:8700"))
 
