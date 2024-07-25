@@ -3,7 +3,7 @@
             [cognitect.aws.client.api :as aws]
             [cognitect.aws.credentials :as credentials]
             [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
-            [schnaq.config :as config]
+            [schnaq.config :as config :refer [s3-credentials]]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.specs]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
@@ -34,6 +34,7 @@
   [keyword? :type/input-stream :file/name map? => string?]
   (if-let [resolved-bucket (shared-config/s3-buckets bucket)]
     (do
+      (println s3-credentials)
       (log/debug (aws/invoke s3-client
                              {:op :PutObject
                               :request (remove-nil-values-from-map
