@@ -33,7 +33,7 @@
   [keyword? :type/input-stream :file/name map? => string?]
   (if-let [resolved-bucket (shared-config/s3-buckets bucket)]
     (do
-      (log/debug (aws/invoke (s3-client)
+      (log/debug (aws/invoke s3-client
                              {:op :PutObject
                               :request (remove-nil-values-from-map
                                         {:Bucket resolved-bucket
