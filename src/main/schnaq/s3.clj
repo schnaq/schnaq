@@ -20,9 +20,9 @@
   (let [{:keys [access-key secret-key endpoint region]} config/s3-credentials
         hostname (second (str/split endpoint #"://"))]
     (println "Creating S3 client with region:" region)
+    (println config/s3-credentials)
     (aws/client {:api :s3
-                 :region region
-                 :endpoint-override {:hostname hostname}
+                 :endpoint-override {:hostname hostname :region region :protocol :https}
                  :credentials-provider (credentials/basic-credentials-provider
                                         {:access-key-id access-key
                                          :secret-access-key secret-key})})))
