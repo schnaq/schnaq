@@ -20,7 +20,6 @@
             [schnaq.interface.components.lexical.plugins.excalidraw :refer [INSERT_EXCALIDRAW_COMMAND]]
             [schnaq.interface.components.lexical.plugins.images :refer [INSERT_IMAGE_COMMAND]]
             [schnaq.interface.components.lexical.plugins.links :refer [INSERT_LINK_COMMAND]]
-            [schnaq.interface.components.lexical.plugins.videos :refer [INSERT_VIDEO_COMMAND]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]))
@@ -46,13 +45,7 @@
       [:button.toolbar-item.spaced.text-secondary
        {:type :button
         :on-click #(rf/dispatch [:editor/command editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "Elephant in a forest"}])}
-       [icon :image-file]]]
-     [tooltip/text
-      "[Dev] Insert Video"
-      [:button.toolbar-item.spaced.text-secondary
-       {:type :button
-        :on-click #(rf/dispatch [:editor/command editor INSERT_VIDEO_COMMAND #js {:url "https://s3.schnaq.com/startpage/videos/above_the_fold.webm"}])}
-       [icon :video-file]]]]))
+       [icon :image-file]]]]))
 
 (defn- file-upload-button
   "Show a button and a modal to upload own images."

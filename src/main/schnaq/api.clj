@@ -36,7 +36,6 @@
             [schnaq.auth :as auth]
             [schnaq.auth.middlewares :as auth-middlewares]
             [schnaq.config :as config]
-            [schnaq.config.cleverreach :as cconfig]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.shared :as shared-config]
             [schnaq.core] ;; Keep this import to activate database etc.
@@ -59,8 +58,7 @@
   (log/info (format "Database URI (truncated): %s..." (subs config/datomic-uri 0 30)))
   (log/info (format "Frontend URL: %s, host: %s" config/frontend-url config/frontend-host))
   (log/info (if (:sender-password config/email) "E-Mail configured" "E-Mail not configured"))
-  (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm))
-  (log/info (subs cconfig/client-secret 0 10)))
+  (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
 
 (def ^:private description
   "This is the main Backend for schnaq.

@@ -17,7 +17,7 @@
 
 (def ^:private FormCheck (oget Form :Check))
 (def ^:private default-feedback-background
-  "https://s3.schnaq.com/schnaq-common/background/layered_background_secondary.webp")
+  "https://snq-common.s3.nl-ams.scw.cloud/background/layered_background_secondary.webp")
 
 (defn- feedback-entry
   "Render a single feedback entry."

@@ -16,7 +16,7 @@
   Time must be in milliseconds."
   3000)
 
-(def place-holder-header-img "https://s3.schnaq.com/schnaq-header-images/header-placeholder.jpg")
+(def place-holder-header-img "https://snq-app.s3.nl-ams.scw.cloud/schnaq-header-images/header-placeholder.jpg")
 
 (def in-iframe?
   "Check if schnaq is loaded in an iframe."

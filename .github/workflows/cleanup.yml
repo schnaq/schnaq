@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Delete 'dev' containers older than a week
-        uses: snok/container-retention-policy@v2
+        uses: snok/container-retention-policy@v3
         with:
           image-names: sha-*
           cut-off: A week ago UTC

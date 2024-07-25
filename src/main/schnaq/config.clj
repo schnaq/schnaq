@@ -7,14 +7,6 @@
             [config.core :refer [env]]
             [schnaq.config.shared :as shared-config]))
 
-(def pro-email-hosts
-  "Define email-hosts which should automatically be assigned a pro-role.
-  Environment variable should be comma-separated to be parsable.
-   
-  Example: `hhu.de,schnaq.com,razupaltu.ff`"
-  (when-let [hosts (:pro-email-hosts env)]
-    (set (str/split hosts #", ?"))))
-
 (def frontend-url
   (or (:frontend-url env) "http://localhost:8700"))
 
@@ -64,8 +56,8 @@
    :sender-host (:email-host env)
    :sender-password (:email-password env)})
 
-(def mail-template "https://s3.schnaq.com/email/templates/generic-mail.html")
-(def mail-content-button-right-template "https://s3.schnaq.com/email/templates/snippets/content-left-button-right.html")
+(def mail-template "https://snq-common.s3.nl-ams.scw.cloud/email/templates/generic-mail.html")
+(def mail-content-button-right-template "https://snq-common.s3.nl-ams.scw.cloud/email/templates/snippets/content-left-button-right.html")
 
 (def mattermost-webhook-url
   "URL to mattermost-webhook to post news to the chat."
@@ -93,8 +85,9 @@
 ;; -----------------------------------------------------------------------------
 ;; S3 Configuration
 
-(def s3-credentials {:access-key (or (:s3-access-key env) "debug")
-                     :secret-key (or (:s3-secret-key env) "debug")
+(def s3-credentials {:access-key (or (:s3-access-key env) "configureme")
+                     :secret-key (or (:s3-secret-key env) "configureme")
+                     :region (or (:s3-region env) "configureme")
                      :endpoint shared-config/s3-host
                      :client-config {:path-style-access-enabled true}})
 

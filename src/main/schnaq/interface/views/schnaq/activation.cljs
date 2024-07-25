@@ -10,7 +10,7 @@
             [schnaq.interface.views.schnaq.dropdown-menu :as dropdown-menu]))
 
 (def ^:private default-activation-background
-  "https://s3.schnaq.com/schnaq-common/background/layered_background_square.svg")
+  "https://snq-common.s3.nl-ams.scw.cloud/background/layered_background_square.svg")
 
 (defn- schnaqqis
   "Walking schnaqqis with varying x and y positions."

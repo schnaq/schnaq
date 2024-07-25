@@ -9,7 +9,7 @@
   :start (db/init!))
 
 (defstate synonyms
-  :start (->> (slurp "https://s3.schnaq.com/synonyms/synonyms_german.edn")
+  :start (->> (slurp "https://snq-common.s3.nl-ams.scw.cloud/synonyms/synonyms_german.edn")
               read-string
               (reset! toolbelt/synonyms-german)))
 

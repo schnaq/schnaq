@@ -15,8 +15,8 @@
    :cljs (goog-define keycloak-host "https://auth.schnaq.com"))
 
 #?(:clj (def s3-host
-          (or (:s3-host env) "https://s3.schnaq.com"))
-   :cljs (goog-define s3-host "https://s3.schnaq.com"))
+          (or (:s3-host env) "https://snq-app-dev.s3.nl-ams.scw.cloud"))
+   :cljs (goog-define s3-host "https://snq-app-dev.s3.nl-ams.scw.cloud"))
 
 (def default-anonymous-display-name "Anonymous")
 
@@ -51,10 +51,6 @@
 (def beta-tester-roles
   "Admins and testers have beta-access."
   (cset/union analytics-roles #{"beta-tester" :role/tester}))
-
-(def pro-roles
-  "All beta testers, admins, pro and enterprise users have pro access."
-  (cset/union beta-tester-roles #{:role/pro :role/enterprise}))
 
 (def enterprise-roles
   "All beta testers, admins and enterprise users have enterprise access."

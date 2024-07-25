@@ -9,14 +9,14 @@
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
             [taoensso.timbre :as log]))
 
-(def s3-client
+(def ^:private s3-client
   "Define a client to connect to our own s3 server. Despite the name, we are not
   using aws, just their libraries."
-  (let [{:keys [access-key secret-key endpoint]} config/s3-credentials
+  (let [{:keys [access-key secret-key endpoint region]} config/s3-credentials
         hostname (second (str/split endpoint #"://"))]
     (aws/client {:api :s3
-                 :region "eu-central-1"
-                 :endpoint-override {:hostname hostname}
+                 :region "eu-central-1" ;; provide any valid AWS region
+                 :endpoint-override {:hostname hostname :region region :protocol :https}
                  :credentials-provider (credentials/basic-credentials-provider
                                         {:access-key-id access-key
                                          :secret-access-key secret-key})})))
@@ -33,14 +33,14 @@
   [keyword? :type/input-stream :file/name map? => string?]
   (if-let [resolved-bucket (shared-config/s3-buckets bucket)]
     (do
-      (aws/invoke s3-client
-                  {:op :PutObject
-                   :request (remove-nil-values-from-map
-                             {:Bucket resolved-bucket
-                              :Key file-name
-                              :Body stream
-                              :ContentLength content-length
-                              :ContentType content-type})})
+      (log/debug (aws/invoke s3-client
+                             {:op :PutObject
+                              :request (remove-nil-values-from-map
+                                        {:Bucket resolved-bucket
+                                         :Key file-name
+                                         :Body stream
+                                         :ContentLength content-length
+                                         :ContentType content-type})}))
       (log/info (format "Uploaded file under the key %s to bucket %s, content-type: %s, content-length: %s" file-name resolved-bucket content-type content-length))
       (absolute-file-url bucket file-name))
     (throw (ex-info (format "[upload-stream] No bucket registered for key `%s`" bucket)
