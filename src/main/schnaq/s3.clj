@@ -3,7 +3,8 @@
             [cognitect.aws.client.api :as aws]
             [cognitect.aws.credentials :as credentials]
             [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
-            [schnaq.config :as config :refer [s3-credentials]]
+            [config.core :refer [env]]
+            [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.specs]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
@@ -19,8 +20,7 @@
                                      :region region}
                  :credentials-provider (credentials/basic-credentials-provider
                                         {:access-key-id access-key
-                                         :secret-access-key secret-key
-                                         :region region})})))
+                                         :secret-access-key secret-key})})))
 
 (>defn absolute-file-url
   "Return absolute URL to bucket."
@@ -34,7 +34,8 @@
   [keyword? :type/input-stream :file/name map? => string?]
   (if-let [resolved-bucket (shared-config/s3-buckets bucket)]
     (do
-      (println s3-credentials)
+      (println env)
+      (println config/s3-credentials)
       (log/debug (aws/invoke s3-client
                              {:op :PutObject
                               :request (remove-nil-values-from-map
