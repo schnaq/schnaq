@@ -171,19 +171,7 @@ the root of this repository, e.g. with this call:
 
 ## Deployment
 
-This project is designed to be deployed to a kubernetes cluster. Pick the image
-tag you want to deploy, find your desired namespace. For https://app.schnaq.com,
-this is currently `schnaq-staging` for the staging environment and `schnaq-app`
-for the production environment:
-
-    kubectl -n <your-namespace> set image deployment backend backend=ghcr.io/schnaq/schnaq/backend:<backend-tag>
-    kubectl -n <your-namespace> set image deployment frontend frontend=ghcr.io/schnaq/schnaq/frontend:<frontend-tag>
-
-### Scaling
-
-Scale the relevant deployments with:
-
-    kubectl scale deployments backend -n <your-namespace> --replicas=5
+This project is designed to be deployed on a Kubernetes cluster. We are using a helm chart to deploy the application in a separate charts repository.
 
 ## License
 

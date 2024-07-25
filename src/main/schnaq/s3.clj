@@ -3,24 +3,17 @@
             [cognitect.aws.client.api :as aws]
             [cognitect.aws.credentials :as credentials]
             [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
-            [config.core :refer [env]]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.specs]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
             [taoensso.timbre :as log]))
 
-(println "Loaded env:" env)
-(println "S3 Credentials:" config/s3-credentials)
-
-(defn- s3-client
+(def ^:private s3-client
   "Define a client to connect to our own s3 server. Despite the name, we are not
   using aws, just their libraries."
-  []
   (let [{:keys [access-key secret-key endpoint region]} config/s3-credentials
         hostname (second (str/split endpoint #"://"))]
-    (println "Creating S3 client with region:" region)
-    (println config/s3-credentials)
     (aws/client {:api :s3
                  :region "eu-central-1" ;; provide any valid AWS region
                  :endpoint-override {:hostname hostname :region region :protocol :https}
@@ -40,8 +33,6 @@
   [keyword? :type/input-stream :file/name map? => string?]
   (if-let [resolved-bucket (shared-config/s3-buckets bucket)]
     (do
-      (println env)
-      (println config/s3-credentials)
       (log/debug (aws/invoke (s3-client)
                              {:op :PutObject
                               :request (remove-nil-values-from-map
@@ -62,7 +53,7 @@
   [keyword? (? :file/name) => (? map?)]
   (when file-name
     (aws/invoke
-     (s3-client)
+     s3-client
      {:op :DeleteObject
       :request {:Bucket (shared-config/s3-buckets bucket-key)
                 :Key file-name}})))
