@@ -10,9 +10,10 @@
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
             [taoensso.timbre :as log]))
 
-(def s3-client
+(defn- s3-client
   "Define a client to connect to our own s3 server. Despite the name, we are not
   using aws, just their libraries."
+  []
   (let [{:keys [access-key secret-key endpoint region]} config/s3-credentials
         hostname (second (str/split endpoint #"://"))]
     (aws/client {:api :s3
@@ -36,7 +37,7 @@
     (do
       (println env)
       (println config/s3-credentials)
-      (log/debug (aws/invoke s3-client
+      (log/debug (aws/invoke (s3-client)
                              {:op :PutObject
                               :request (remove-nil-values-from-map
                                         {:Bucket resolved-bucket
