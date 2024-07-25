@@ -21,8 +21,8 @@
         hostname (second (str/split endpoint #"://"))]
     (println "Creating S3 client with region:" region)
     (aws/client {:api :s3
-                 :endpoint-override {:hostname hostname
-                                     :region region}
+                 :region region
+                 :endpoint-override {:hostname hostname}
                  :credentials-provider (credentials/basic-credentials-provider
                                         {:access-key-id access-key
                                          :secret-access-key secret-key})})))
