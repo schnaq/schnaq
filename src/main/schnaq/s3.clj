@@ -10,12 +10,16 @@
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
             [taoensso.timbre :as log]))
 
+(println "Loaded env:" env)
+(println "S3 Credentials:" config/s3-credentials)
+
 (defn- s3-client
   "Define a client to connect to our own s3 server. Despite the name, we are not
   using aws, just their libraries."
   []
   (let [{:keys [access-key secret-key endpoint region]} config/s3-credentials
         hostname (second (str/split endpoint #"://"))]
+    (println "Creating S3 client with region:" region)
     (aws/client {:api :s3
                  :endpoint-override {:hostname hostname
                                      :region region}
@@ -57,7 +61,7 @@
   [keyword? (? :file/name) => (? map?)]
   (when file-name
     (aws/invoke
-     s3-client
+     (s3-client)
      {:op :DeleteObject
       :request {:Bucket (shared-config/s3-buckets bucket-key)
                 :Key file-name}})))
