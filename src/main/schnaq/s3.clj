@@ -22,6 +22,7 @@
     (println "Creating S3 client with region:" region)
     (println config/s3-credentials)
     (aws/client {:api :s3
+                 :region "eu-central-1" ;; provide any valid AWS region
                  :endpoint-override {:hostname hostname :region region :protocol :https}
                  :credentials-provider (credentials/basic-credentials-provider
                                         {:access-key-id access-key
