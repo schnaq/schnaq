@@ -1,7 +1,9 @@
 name: Delete old container images
 
 on:
-  branch: fix/cleanup
+  push:
+    branches:
+      - fix/cleanup
   # schedule:
   #   - cron: "0 3 * * *"
 
@@ -14,9 +16,9 @@ jobs:
         uses: snok/container-retention-policy@v3.0.0
         with:
           account: schnaq
-          image-names: *
-          image-tags: !latest !staging  # don't delete package versions tagged with these tags
+          image-names: "*"
+          image-tags: "!latest !staging" # don't delete package versions tagged with these tags
           cut-off: 4w
           keep-n-most-recent: 5
           token: ${{ secrets.PAT }}
-          dry-run: true  # consider toggling this to true on your first run
+          dry-run: true # consider toggling this to true on your first run
