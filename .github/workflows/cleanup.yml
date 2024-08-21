@@ -1,21 +1,22 @@
 name: Delete old container images
 
 on:
-  schedule:
-    - cron: "0 3 * * *"
+  branch: fix/cleanup
+  # schedule:
+  #   - cron: "0 3 * * *"
 
 jobs:
   clean-ghcr:
     name: Delete old unused container images
     runs-on: ubuntu-latest
     steps:
-      - name: Delete 'dev' containers older than a week
-        uses: snok/container-retention-policy@v3
+      - name: Delete old containers
+        uses: snok/container-retention-policy@v3.0.0
         with:
-          image-names: sha-*
-          cut-off: A week ago UTC
-          account-type: org
-          org-name: schnaq
-          keep-at-least: 5
-          untagged-only: true
+          account: schnaq
+          image-names: *
+          image-tags: !latest !staging  # don't delete package versions tagged with these tags
+          cut-off: 4w
+          keep-n-most-recent: 5
           token: ${{ secrets.PAT }}
+          dry-run: true  # consider toggling this to true on your first run
