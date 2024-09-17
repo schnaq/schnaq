@@ -1,7 +1,7 @@
 (ns schnaq.database.user
   (:require [clojure.data :as data]
             [clojure.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
+            [com.fulcrologic.guardrails.core :refer [=> >defn >defn- ?]]
             [schnaq.database.main :refer [fast-pull query transact
                                           transact-and-pull-temp]]
             [schnaq.database.patterns :as patterns]
@@ -301,7 +301,7 @@
     (when (seq transaction)
       @(transact transaction))))
 
-(defn- update-user-via-jwt
+(>defn- update-user-via-jwt
   "Update the schnaq user in our database based on external information from our
   auth system and the visited schnaqs / statements. Returns the updated user."
   [{:user.registered/keys [keycloak-id] :as user} {:keys [groups roles] :as identity} visited-schnaqs visited-statements]
