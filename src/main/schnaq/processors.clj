@@ -92,7 +92,7 @@
          statement))
      data)))
 
-(defn statement-default
+(>defn statement-default
   "Receives a datastructure and enriches all statements found inside. Use this processor if you do not want to
   explicitly hide information."
   [data share-hash user-identity author-id]

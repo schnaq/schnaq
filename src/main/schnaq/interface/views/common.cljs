@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.common
   (:require [cljs.spec.alpha :as s]
-            [com.fulcrologic.guardrails.core :refer [>defn ?]]
+            [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
@@ -128,10 +128,10 @@
 ;; -----------------------------------------------------------------------------
 ;; schnaqqi speak
 
-(defn- schnaqqi-speech-bubble-builder
+(>defn- schnaqqi-speech-bubble-builder
   "Build a schnaqqi-speech composition."
   [schnaqqi-size bubble-content css-classes image-key]
-  [number? vector? string? keyword?]
+  [number? vector? string? keyword? :ret any?]
   [:section.d-flex
    [:div.speech-bubble.text-center.text-gray {:class css-classes} bubble-content]
    [:img.ms-3 {:style {:width schnaqqi-size

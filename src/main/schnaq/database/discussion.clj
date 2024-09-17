@@ -28,34 +28,34 @@
      (not [?statements :statement/deleted? true])]])
 
 (>defn starting-statements
-       "Returns all starting-statements belonging to a discussion."
-       [share-hash]
-       [:db/id :ret (s/coll-of ::specs/statement)]
-       (query
-        '[:find [(pull ?statements pattern) ...]
-          :in $ ?share-hash pattern
-          :where [?discussion :discussion/share-hash ?share-hash]
-          [?discussion :discussion/starting-statements ?statements]]
-        share-hash patterns/statement))
+  "Returns all starting-statements belonging to a discussion."
+  [share-hash]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (query
+   '[:find [(pull ?statements pattern) ...]
+     :in $ ?share-hash pattern
+     :where [?discussion :discussion/share-hash ?share-hash]
+     [?discussion :discussion/starting-statements ?statements]]
+   share-hash patterns/statement))
 
 (>defn statements-by-id
-       "Returns fully queried statements from a list of id inputs."
-       [children-ids]
-       [(s/coll-of :db/id) => (s/coll-of ::specs/statement)]
-       (query
-        '[:find [(pull ?child-ids pattern) ...]
-          :in $ [?child-ids ...] pattern]
-        children-ids patterns/statement))
+  "Returns fully queried statements from a list of id inputs."
+  [children-ids]
+  [(s/coll-of :db/id) => (s/coll-of ::specs/statement)]
+  (query
+   '[:find [(pull ?child-ids pattern) ...]
+     :in $ [?child-ids ...] pattern]
+   children-ids patterns/statement))
 
 (>defn children-from-statements
-       "Takes a collection of statements and returns all their children in a flat collection."
-       [statements]
-       [(s/coll-of ::specs/statement) => (s/coll-of ::specs/statement)]
-       (->> statements
-            (map :statement/children)
-            flatten
-            (remove nil?)
-            statements-by-id))
+  "Takes a collection of statements and returns all their children in a flat collection."
+  [statements]
+  [(s/coll-of ::specs/statement) => (s/coll-of ::specs/statement)]
+  (->> statements
+       (map :statement/children)
+       flatten
+       (remove nil?)
+       statements-by-id))
 
 (defn- transitive-child-rules
   "Returns a set of rules for finding transitive children entities of a given
@@ -104,56 +104,56 @@
                transitive-7 statement-ids))))
 
 (>defn discussion-by-share-hash
-       "Query discussion and apply public discussion pattern to it."
-       [share-hash]
-       [:discussion/share-hash :ret ::specs/discussion]
-       (let [discussion (ac/remove-invalid-and-pull-up-access-codes
-                         (fast-pull [:discussion/share-hash share-hash] patterns/discussion))]
+  "Query discussion and apply public discussion pattern to it."
+  [share-hash]
+  [:discussion/share-hash :ret ::specs/discussion]
+  (let [discussion (ac/remove-invalid-and-pull-up-access-codes
+                    (fast-pull [:discussion/share-hash share-hash] patterns/discussion))]
     ;; When check needed, since walkers transform non-existing discussion into {:db/id nil, :discussion/states #{}}
-         (when (:db/id discussion) discussion)))
+    (when (:db/id discussion) discussion)))
 
 (>defn discussions-by-share-hashes
-       "Returns all discussions that are valid (non deleted e.g.). Input is a collection of share-hashes."
-       [share-hashes]
-       [(s/coll-of :discussion/share-hash) :ret (s/coll-of ::specs/discussion)]
-       (query
-        '[:find [(pull ?discussions discussion-pattern) ...]
-          :in $ [?share-hashes ...] discussion-pattern
-          :where [?discussions :discussion/share-hash ?share-hashes]
-          (not-join [?discussions]
-                    [?discussions :discussion/states :discussion.state/deleted])]
-        share-hashes patterns/discussion))
+  "Returns all discussions that are valid (non deleted e.g.). Input is a collection of share-hashes."
+  [share-hashes]
+  [(s/coll-of :discussion/share-hash) :ret (s/coll-of ::specs/discussion)]
+  (query
+   '[:find [(pull ?discussions discussion-pattern) ...]
+     :in $ [?share-hashes ...] discussion-pattern
+     :where [?discussions :discussion/share-hash ?share-hashes]
+     (not-join [?discussions]
+               [?discussions :discussion/states :discussion.state/deleted])]
+   share-hashes patterns/discussion))
 
 (>defn discussions-from-user
-       "Return all discussions created by a user."
-       [keycloak-id]
-       [:user.registered/keycloak-id => (s/coll-of ::specs/discussion)]
-       (query
-        '[:find [(pull ?discussions pattern) ...]
-          :in $ ?keycloak-id pattern
-          :where [?user :user.registered/keycloak-id ?keycloak-id]
-          [?discussions :discussion/author ?user]
-          (not-join [?discussions]
-                    [?discussions :discussion/states :discussion.state/deleted])]
-        keycloak-id patterns/discussion))
+  "Return all discussions created by a user."
+  [keycloak-id]
+  [:user.registered/keycloak-id => (s/coll-of ::specs/discussion)]
+  (query
+   '[:find [(pull ?discussions pattern) ...]
+     :in $ ?keycloak-id pattern
+     :where [?user :user.registered/keycloak-id ?keycloak-id]
+     [?discussions :discussion/author ?user]
+     (not-join [?discussions]
+               [?discussions :discussion/states :discussion.state/deleted])]
+   keycloak-id patterns/discussion))
 
 (>defn children-for-statement
-       "Returns all children for a statement. (Statements that have the input set as a parent)."
-       [parent-id]
-       [:db/id :ret (s/coll-of ::specs/statement)]
-       (query '[:find [(pull ?children statement-pattern) ...]
-                :in $ ?parent statement-pattern
-                :where [?children :statement/parent ?parent]]
-              parent-id patterns/statement))
+  "Returns all children for a statement. (Statements that have the input set as a parent)."
+  [parent-id]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (query '[:find [(pull ?children statement-pattern) ...]
+           :in $ ?parent statement-pattern
+           :where [?children :statement/parent ?parent]]
+         parent-id patterns/statement))
 
 (>defn descendants-of-statement
-       "Returns all descendants of a certain statement."
-       [parent-id]
-       [:db/id :ret (s/coll-of :db/id)]
-       (query '[:find [?children ...]
-                :in $ % ?parent
-                :where (descendants-of? ?parent ?children)]
-              descendants-of-rules parent-id))
+  "Returns all descendants of a certain statement."
+  [parent-id]
+  [:db/id :ret (s/coll-of :db/id)]
+  (query '[:find [?children ...]
+           :in $ % ?parent
+           :where (descendants-of? ?parent ?children)]
+         descendants-of-rules parent-id))
 
 (defn delete-statement!
   "Deletes a statement. Hard delete if there are no children, delete flag if there are.
@@ -177,17 +177,17 @@
         :deleted))))
 
 (>defn delete-statements!
-       "Deletes all statements, without explicitly checking anything. Heeds the delete marker."
-       [statement-ids]
-       [(s/coll-of :db/id) :ret (s/coll-of keyword?)]
-       (log/info "Statement ids scheduled for deletion:" statement-ids)
-       (doall (map delete-statement! statement-ids)))
+  "Deletes all statements, without explicitly checking anything. Heeds the delete marker."
+  [statement-ids]
+  [(s/coll-of :db/id) :ret (s/coll-of keyword?)]
+  (log/info "Statement ids scheduled for deletion:" statement-ids)
+  (doall (map delete-statement! statement-ids)))
 
 (>defn delete-entities!
-       "Deletes entities from the db."
-       [entity-ids]
-       [(s/coll-of :db/id) :ret any?]
-       (transact (mapv #(vector :db/retractEntity %) entity-ids)))
+  "Deletes entities from the db."
+  [entity-ids]
+  [(s/coll-of :db/id) :ret any?]
+  (transact (mapv #(vector :db/retractEntity %) entity-ids)))
 
 (defn- build-new-statement
   "Builds a new statement for transaction."
@@ -206,89 +206,89 @@
        question? (assoc :statement/labels #{":question"})))))
 
 (>defn add-starting-statement!
-       "Adds a new starting-statement and returns the newly created id."
-       [share-hash user-id statement-content & {:keys [locked? registered-user?]}]
-       [:discussion/share-hash :db/id :statement/content (s/* any?) :ret ::specs/statement]
-       (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
+  "Adds a new starting-statement and returns the newly created id."
+  [share-hash user-id statement-content & {:keys [locked? registered-user?]}]
+  [:discussion/share-hash :db/id :statement/content (s/* any?) :ret ::specs/statement]
+  (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
         ;; Only registered users are allowed to lock their cards
-             locked? (if registered-user? (boolean locked?) false)
-             minimum-statement (build-new-statement user-id statement-content discussion-id locked?)
-             new-statement (if registered-user?
-                             minimum-statement
-                             (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))
-             temporary-id (:db/id new-statement)
-             tx-result @(transact [new-statement [:db/add discussion-id :discussion/starting-statements temporary-id]])
-             new-id (get-in tx-result [:tempids temporary-id])
-             pattern (if registered-user? patterns/statement patterns/statement-with-secret)]
-         (fast-pull new-id pattern (:db-after tx-result))))
+        locked? (if registered-user? (boolean locked?) false)
+        minimum-statement (build-new-statement user-id statement-content discussion-id locked?)
+        new-statement (if registered-user?
+                        minimum-statement
+                        (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))
+        temporary-id (:db/id new-statement)
+        tx-result @(transact [new-statement [:db/add discussion-id :discussion/starting-statements temporary-id]])
+        new-id (get-in tx-result [:tempids temporary-id])
+        pattern (if registered-user? patterns/statement patterns/statement-with-secret)]
+    (fast-pull new-id pattern (:db-after tx-result))))
 
 (>defn all-discussions-by-title
-       "Query all discussions based on the title. Could possible be multiple
+  "Query all discussions based on the title. Could possible be multiple
   entities."
-       [title]
-       [string? :ret (s/coll-of ::specs/discussion)]
-       (query
-        '[:find [(pull ?discussions discussion-pattern) ...]
-          :in $ discussion-pattern ?title
-          :where [?discussions :discussion/title ?title]]
-        patterns/discussion title))
+  [title]
+  [string? :ret (s/coll-of ::specs/discussion)]
+  (query
+   '[:find [(pull ?discussions discussion-pattern) ...]
+     :in $ discussion-pattern ?title
+     :where [?discussions :discussion/title ?title]]
+   patterns/discussion title))
 
 (>defn statements-by-content
-       "Returns all statements that have the matching `content`."
-       [content]
-       [:statement/content :ret (s/coll-of ::specs/statement)]
-       (query
-        '[:find [(pull ?statements statement-pattern) ...]
-          :in $ statement-pattern ?content
-          :where [?statements :statement/content ?content]]
-        patterns/statement content))
+  "Returns all statements that have the matching `content`."
+  [content]
+  [:statement/content :ret (s/coll-of ::specs/statement)]
+  (query
+   '[:find [(pull ?statements statement-pattern) ...]
+     :in $ statement-pattern ?content
+     :where [?statements :statement/content ?content]]
+   patterns/statement content))
 
 (>defn- new-child-statement!
-        "Creates a new child statement, that references a parent."
-        [discussion-id parent-id new-content statement-type user-id registered-user? locked?]
-        [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id any? boolean? :ret associative?]
-        (let [question? (cstring/includes? new-content "?")]
-          @(transact
-            [(cond-> {:db/id (str "new-child-" new-content)
-                      :statement/author user-id
-                      :statement/content new-content
-                      :statement/version 1
-                      :statement/created-at (Date.)
-                      :statement/parent parent-id
-                      :statement/locked? locked?
-                      :statement/discussions [discussion-id]
-                      :statement/type statement-type}
-               (not registered-user?) (assoc :statement/creation-secret (.toString (UUID/randomUUID)))
-               question? (assoc :statement/labels #{":question"}))])))
+  "Creates a new child statement, that references a parent."
+  [discussion-id parent-id new-content statement-type user-id registered-user? locked?]
+  [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id any? boolean? :ret associative?]
+  (let [question? (cstring/includes? new-content "?")]
+    @(transact
+      [(cond-> {:db/id (str "new-child-" new-content)
+                :statement/author user-id
+                :statement/content new-content
+                :statement/version 1
+                :statement/created-at (Date.)
+                :statement/parent parent-id
+                :statement/locked? locked?
+                :statement/discussions [discussion-id]
+                :statement/type statement-type}
+         (not registered-user?) (assoc :statement/creation-secret (.toString (UUID/randomUUID)))
+         question? (assoc :statement/labels #{":question"}))])))
 
 (>defn react-to-statement!
-       "Create a new statement reacting to another statement. Returns the newly created statement."
-       [share-hash user-id statement-id reacting-string reaction & {:keys [locked? registered-user?]}]
-       [:discussion/share-hash :db/id :db/id :statement/content keyword? (s/* any?) :ret ::specs/statement]
-       (let [;; Only registered users are allowed to lock their cards
-             locked? (if registered-user? (boolean locked?) false)
-             result (new-child-statement! [:discussion/share-hash share-hash] statement-id reacting-string
-                                          reaction user-id registered-user? locked?)
-             db-after (:db-after result)
-             new-child-id (get-in result [:tempids (str "new-child-" reacting-string)])]
-         (fast-pull new-child-id patterns/statement-with-secret db-after)))
+  "Create a new statement reacting to another statement. Returns the newly created statement."
+  [share-hash user-id statement-id reacting-string reaction & {:keys [locked? registered-user?]}]
+  [:discussion/share-hash :db/id :db/id :statement/content keyword? (s/* any?) :ret ::specs/statement]
+  (let [;; Only registered users are allowed to lock their cards
+        locked? (if registered-user? (boolean locked?) false)
+        result (new-child-statement! [:discussion/share-hash share-hash] statement-id reacting-string
+                                     reaction user-id registered-user? locked?)
+        db-after (:db-after result)
+        new-child-id (get-in result [:tempids (str "new-child-" reacting-string)])]
+    (fast-pull new-child-id patterns/statement-with-secret db-after)))
 
 (>defn new-discussion
-       "Adds a new discussion to the database."
-       [discussion-data]
-       [map? :ret :db/id]
-       (main-db/clean-and-add-to-db!
-        (assoc discussion-data :discussion/created-at (Date.))
-        ::specs/discussion))
+  "Adds a new discussion to the database."
+  [discussion-data]
+  [map? :ret :db/id]
+  (main-db/clean-and-add-to-db!
+   (assoc discussion-data :discussion/created-at (Date.))
+   ::specs/discussion))
 
 (>defn discussion-data
-       "Return discussion data by id."
-       [id]
-       [int? :ret ::specs/discussion]
-       (ac/remove-invalid-and-pull-up-access-codes
-        (fast-pull id patterns/discussion)))
+  "Return discussion data by id."
+  [id]
+  [int? :ret ::specs/discussion]
+  (ac/remove-invalid-and-pull-up-access-codes
+   (fast-pull id patterns/discussion)))
 
-(defn add-state
+(>defn add-state
   "Add a state to a discussion."
   [share-hash state]
   [:discussion/share-hash :discussion/valid-states => map?]
@@ -296,7 +296,7 @@
   @(main-db/transact [[:db/add [:discussion/share-hash share-hash]
                        :discussion/states state]]))
 
-(defn delete-state
+(>defn delete-state
   "Remove a state from a discussion."
   [share-hash state]
   [:discussion/share-hash :discussion/valid-states => map?]
@@ -305,16 +305,16 @@
                        :discussion/states state]]))
 
 (>defn delete-discussion
-       "Adds the deleted state to a discussion"
-       [share-hash]
-       [:discussion/share-hash :ret (? :discussion/share-hash)]
-       (try
-         (add-state share-hash :discussion.state/deleted)
-         share-hash
-         (catch Exception e
-           (log/error
-            (format "Deletion of discussion with share-hash %s failed. Exception:\n%s"
-                    share-hash e)))))
+  "Adds the deleted state to a discussion"
+  [share-hash]
+  [:discussion/share-hash :ret (? :discussion/share-hash)]
+  (try
+    (add-state share-hash :discussion.state/deleted)
+    share-hash
+    (catch Exception e
+      (log/error
+       (format "Deletion of discussion with share-hash %s failed. Exception:\n%s"
+               share-hash e)))))
 
 (defn edit-title
   "Edits a schnaq title by share-hash"
@@ -325,34 +325,34 @@
 ;; -----------------------------------------------------------------------------
 
 (>defn all-statements
-       "Returns all statements belonging to a discussion."
-       [share-hash]
-       [:discussion/share-hash :ret (s/coll-of ::specs/statement)]
-       (query '[:find [(pull ?statements statement-pattern) ...]
-                :in $ % ?share-hash statement-pattern
-                :where (all-statements ?share-hash ?statements)]
-              rules share-hash patterns/statement))
+  "Returns all statements belonging to a discussion."
+  [share-hash]
+  [:discussion/share-hash :ret (s/coll-of ::specs/statement)]
+  (query '[:find [(pull ?statements statement-pattern) ...]
+           :in $ % ?share-hash statement-pattern
+           :where (all-statements ?share-hash ?statements)]
+         rules share-hash patterns/statement))
 
 (>defn all-statements-from-user
-       "Returns all statements where `keycloak-id` is the author."
-       [keycloak-id]
-       [:user.registered/keycloak-id :ret (s/coll-of ::specs/statement)]
-       (query '[:find [(pull ?statements pattern) ...]
-                :in $ ?keycloak-id pattern
-                :where [?user :user.registered/keycloak-id ?keycloak-id]
-                [?statements :statement/author ?user]]
-              keycloak-id patterns/statement))
+  "Returns all statements where `keycloak-id` is the author."
+  [keycloak-id]
+  [:user.registered/keycloak-id :ret (s/coll-of ::specs/statement)]
+  (query '[:find [(pull ?statements pattern) ...]
+           :in $ ?keycloak-id pattern
+           :where [?user :user.registered/keycloak-id ?keycloak-id]
+           [?statements :statement/author ?user]]
+         keycloak-id patterns/statement))
 
 (>defn all-statements-from-others
-       "Returns all statements belonging to a discussion which are not from a user."
-       [keycloak-id share-hash]
-       [:user.registered/keycloak-id :discussion/share-hash :ret (s/coll-of ::specs/statement)]
-       (query '[:find [(pull ?statements statement-pattern) ...]
-                :in $ % ?keycloak-id ?share-hash statement-pattern
-                :where (all-statements ?share-hash ?statements)
-                [?statements :statement/author ?author]
-                (not [?author :user.registered/keycloak-id ?keycloak-id])]
-              rules keycloak-id share-hash patterns/statement))
+  "Returns all statements belonging to a discussion which are not from a user."
+  [keycloak-id share-hash]
+  [:user.registered/keycloak-id :discussion/share-hash :ret (s/coll-of ::specs/statement)]
+  (query '[:find [(pull ?statements statement-pattern) ...]
+           :in $ % ?keycloak-id ?share-hash statement-pattern
+           :where (all-statements ?share-hash ?statements)
+           [?statements :statement/author ?author]
+           (not [?author :user.registered/keycloak-id ?keycloak-id])]
+         rules keycloak-id share-hash patterns/statement))
 
 (defn- new-statements-for-user
   "Retrieve new statements of a discussion for a user"
@@ -364,52 +364,52 @@
             all-statements)))
 
 (>defn new-statements-within-time-slot
-       "Returns all new statements, which were created between now and the provided
+  "Returns all new statements, which were created between now and the provided
   timestamp. Looks up the discussion in the current `db` and creates a
   difference between now and the timestamp, which contains all new datoms
   created in this time slot."
-       [share-hash timestamp]
-       [:discussion/share-hash inst? :ret (s/coll-of ::specs/statement)]
-       (let [db (d/db (main-db/new-connection))]
-         (d/q '[:find [(pull ?statements pattern) ...]
-                :in $ $time-slot ?share-hash pattern
-                :where
-                [?discussion :discussion/share-hash ?share-hash]
-                [$time-slot ?statements :statement/discussions ?discussion]
-                (not [?statements :statement/deleted? true])]
-              db (d/since db timestamp) share-hash patterns/statement)))
+  [share-hash timestamp]
+  [:discussion/share-hash inst? :ret (s/coll-of ::specs/statement)]
+  (let [db (d/db (main-db/new-connection))]
+    (d/q '[:find [(pull ?statements pattern) ...]
+           :in $ $time-slot ?share-hash pattern
+           :where
+           [?discussion :discussion/share-hash ?share-hash]
+           [$time-slot ?statements :statement/discussions ?discussion]
+           (not [?statements :statement/deleted? true])]
+         db (d/since db timestamp) share-hash patterns/statement)))
 
 (>defn- new-statements+author->discussion
-        "Check for new statements and the corresponding authors in the discussion."
-        [discussion timestamp]
-        [::specs/discussion inst? :ret ::specs/discussion]
-        (let [new-statements (new-statements-within-time-slot (:discussion/share-hash discussion) timestamp)
-              from-these-authors (set (map #(get-in % [:statement/author :db/id]) new-statements))]
-          (assoc discussion :new-statements {:total (count new-statements)
-                                             :authors from-these-authors})))
+  "Check for new statements and the corresponding authors in the discussion."
+  [discussion timestamp]
+  [::specs/discussion inst? :ret ::specs/discussion]
+  (let [new-statements (new-statements-within-time-slot (:discussion/share-hash discussion) timestamp)
+        from-these-authors (set (map #(get-in % [:statement/author :db/id]) new-statements))]
+    (assoc discussion :new-statements {:total (count new-statements)
+                                       :authors from-these-authors})))
 
 (>defn discussions-with-new-statements
-       "Return all discussions and count their statements, if they received new
+  "Return all discussions and count their statements, if they received new
   statements between now and the given timestamp."
-       [discussions timestamp]
-       [(s/coll-of ::specs/discussion) inst? :ret (s/coll-of ::specs/discussion)]
-       (->> discussions
-            (map #(new-statements+author->discussion % timestamp))
-            (remove #(zero? (:total (:new-statements %))))))
+  [discussions timestamp]
+  [(s/coll-of ::specs/discussion) inst? :ret (s/coll-of ::specs/discussion)]
+  (->> discussions
+       (map #(new-statements+author->discussion % timestamp))
+       (remove #(zero? (:total (:new-statements %))))))
 
 (>defn all-statements-for-graph
-       "Returns all statements for a discussion. Specially prepared for node and edge generation."
-       [share-hash]
-       [:discussion/share-hash :ret sequential?]
-       (map
-        (fn [statement]
-          {:author (user/statement-author statement)
-           :id (:db/id statement)
-           :label (if (:statement/deleted? statement)
-                    config/deleted-statement-text
-                    (:statement/content statement))
-           :type (:statement/type statement)})
-        (all-statements share-hash)))
+  "Returns all statements for a discussion. Specially prepared for node and edge generation."
+  [share-hash]
+  [:discussion/share-hash :ret sequential?]
+  (map
+   (fn [statement]
+     {:author (user/statement-author statement)
+      :id (:db/id statement)
+      :label (if (:statement/deleted? statement)
+               config/deleted-statement-text
+               (:statement/content statement))
+      :type (:statement/type statement)})
+   (all-statements share-hash)))
 
 (defn all-discussions
   "Shows all discussions currently in the db. The route is only for development purposes.
@@ -421,55 +421,55 @@
          patterns/discussion))
 
 (>defn check-valid-statement-id-for-discussion
-       "Checks whether the statement-id matches the share-hash."
-       [statement-id share-hash]
-       [:db/id :discussion/share-hash :ret (? :db/id)]
-       (query
-        '[:find ?discussion .
-          :in $ ?statement ?hash
-          :where [?discussion :discussion/share-hash ?hash]
-          [?statement :statement/discussions ?discussion]]
-        statement-id share-hash))
+  "Checks whether the statement-id matches the share-hash."
+  [statement-id share-hash]
+  [:db/id :discussion/share-hash :ret (? :db/id)]
+  (query
+   '[:find ?discussion .
+     :in $ ?statement ?hash
+     :where [?discussion :discussion/share-hash ?hash]
+     [?statement :statement/discussions ?discussion]]
+   statement-id share-hash))
 
 (>defn change-statement-text-and-type
-       "Changes the content of a statement to `new-content` and the type to `new-type` if it has a parent."
-       [statement new-type new-content]
-       [map? (? :statement/type) :statement/content :ret ::specs/statement]
-       (let [statement-id (:db/id statement)]
-         (log/info "Statement" statement-id "edited with new content.")
-         (if (:statement/parent statement)
-           (do
-             (log/info "Statement" statement-id "updated to new type " new-type)
-             @(transact [[:db/add statement-id :statement/content new-content]
-                         [:db/add statement-id :statement/type new-type]]))
-           @(transact [[:db/add statement-id :statement/content new-content]]))
-         (fast-pull statement-id patterns/statement)))
+  "Changes the content of a statement to `new-content` and the type to `new-type` if it has a parent."
+  [statement new-type new-content]
+  [map? (? :statement/type) :statement/content :ret ::specs/statement]
+  (let [statement-id (:db/id statement)]
+    (log/info "Statement" statement-id "edited with new content.")
+    (if (:statement/parent statement)
+      (do
+        (log/info "Statement" statement-id "updated to new type " new-type)
+        @(transact [[:db/add statement-id :statement/content new-content]
+                    [:db/add statement-id :statement/type new-type]]))
+      @(transact [[:db/add statement-id :statement/content new-content]]))
+    (fast-pull statement-id patterns/statement)))
 
 (>defn- build-secrets-map
-        "Creates a secrets map for a collection of statements.
+  "Creates a secrets map for a collection of statements.
   When there is no secret, the statement is skipped. When the author is not anonymous, the statement is also skipped."
-        [statement-ids]
-        [(? (s/coll-of :db/id)) :ret (? map?)]
-        (when statement-ids
-          (into {}
-                (query
-                 '[:find ?statement ?secret
-                   :in $ [?statement ...]
-                   :where [?statement :statement/creation-secret ?secret]
-                   [?statement :statement/author ?author]
-                   [(missing? $ ?author :user.registered/keycloak-id)]]
-                 statement-ids))))
+  [statement-ids]
+  [(? (s/coll-of :db/id)) :ret (? map?)]
+  (when statement-ids
+    (into {}
+          (query
+           '[:find ?statement ?secret
+             :in $ [?statement ...]
+             :where [?statement :statement/creation-secret ?secret]
+             [?statement :statement/author ?author]
+             [(missing? $ ?author :user.registered/keycloak-id)]]
+           statement-ids))))
 
 (>defn update-authors-from-secrets
-       "Takes a dictionary of statement-ids mapped to creation secrets and sets the passed author
+  "Takes a dictionary of statement-ids mapped to creation secrets and sets the passed author
   as their author, if the secrets are correct."
-       [secrets-map author-id]
-       [(? map?) :db/id :ret any?]
-       (let [validated-secrets-map (build-secrets-map (keys secrets-map))
-             [_ _ valid-secrets] (cdata/diff secrets-map validated-secrets-map)]
-         (when valid-secrets
-           @(transact
-             (mapv #(vector :db/add % :statement/author author-id) (keys valid-secrets))))))
+  [secrets-map author-id]
+  [(? map?) :db/id :ret any?]
+  (let [validated-secrets-map (build-secrets-map (keys secrets-map))
+        [_ _ valid-secrets] (cdata/diff secrets-map validated-secrets-map)]
+    (when valid-secrets
+      @(transact
+        (mapv #(vector :db/add % :statement/author author-id) (keys valid-secrets))))))
 
 (defn levenshtein-max?
   "Levenshtein-Helper for datomic to have a maximum distance."
@@ -503,49 +503,49 @@
             [(schnaq.database.discussion/levenshtein-max? ?distance ?search-tokens ?tokenized-content)]]))
 
 (>defn- search-similar-with-n-levenshtein
-        "Searches for similar content with a levenshtein distance of n.
+  "Searches for similar content with a levenshtein distance of n.
   One of the bound params needs to be `?statements`.\n `custom-part needs to be a quoted vector."
-        [share-hash search-tokens distance custom-part pattern]
-        [:discussion/share-hash (s/coll-of ::specs/non-blank-string) int? (s/coll-of vector?) vector?
-         :ret (s/coll-of (s/tuple ::specs/statement nat-int?))]
-        (let [tokens-with-synonyms (add-synonyms-to-list search-tokens)]
+  [share-hash search-tokens distance custom-part pattern]
+  [:discussion/share-hash (s/coll-of ::specs/non-blank-string) int? (s/coll-of vector?) vector?
+   :ret (s/coll-of (s/tuple ::specs/statement nat-int?))]
+  (let [tokens-with-synonyms (add-synonyms-to-list search-tokens)]
     ;; Für Synonyme wird ebenfalls eine Distanz berechnet. Wenn dabei zu viel Müll rauskommt, sollte
     ;; das geändert werden.
-          (frequencies
-           (query (dynamic-search-query custom-part) pattern share-hash tokens-with-synonyms distance))))
+    (frequencies
+     (query (dynamic-search-query custom-part) pattern share-hash tokens-with-synonyms distance))))
 
 (>defn- generic-statement-search
-        "A generic search for statements. Provide which statements you want to search. (quoted vector)"
-        [share-hash search-string custom-part pattern]
-        [:discussion/share-hash ::specs/non-blank-string (s/coll-of vector?) vector? :ret (s/coll-of ::specs/statement)]
-        (let [search-tokens (shared-tools/tokenize-string search-string)
-              two-and-less-tokens (filter #(>= 2 (count %)) search-tokens)
-              three-four-tokens (filter #(or (= 3 (count %))
-                                             (= 4 (count %))) search-tokens)
-              five-and-more-tokens (filter #(< 4 (count %)) search-tokens)
-              results<=2 (search-similar-with-n-levenshtein share-hash two-and-less-tokens 0 custom-part pattern)
-              results=3or4 (search-similar-with-n-levenshtein share-hash three-four-tokens 1 custom-part pattern)
-              results>5 (search-similar-with-n-levenshtein share-hash five-and-more-tokens 2 custom-part pattern)]
-          (->>
-           (merge-with + results<=2 results=3or4 results>5)
-           (sort-by val >)
-           (map first))))
+  "A generic search for statements. Provide which statements you want to search. (quoted vector)"
+  [share-hash search-string custom-part pattern]
+  [:discussion/share-hash ::specs/non-blank-string (s/coll-of vector?) vector? :ret (s/coll-of ::specs/statement)]
+  (let [search-tokens (shared-tools/tokenize-string search-string)
+        two-and-less-tokens (filter #(>= 2 (count %)) search-tokens)
+        three-four-tokens (filter #(or (= 3 (count %))
+                                       (= 4 (count %))) search-tokens)
+        five-and-more-tokens (filter #(< 4 (count %)) search-tokens)
+        results<=2 (search-similar-with-n-levenshtein share-hash two-and-less-tokens 0 custom-part pattern)
+        results=3or4 (search-similar-with-n-levenshtein share-hash three-four-tokens 1 custom-part pattern)
+        results>5 (search-similar-with-n-levenshtein share-hash five-and-more-tokens 2 custom-part pattern)]
+    (->>
+     (merge-with + results<=2 results=3or4 results>5)
+     (sort-by val >)
+     (map first))))
 
 (>defn search-statements
-       "Searches the content of statements in a discussion and returns the corresponding statements."
-       [share-hash search-string]
-       [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
-       (generic-statement-search share-hash search-string
-                                 '[[?statements :statement/discussions ?discussion]]
-                                 patterns/statement))
+  "Searches the content of statements in a discussion and returns the corresponding statements."
+  [share-hash search-string]
+  [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
+  (generic-statement-search share-hash search-string
+                            '[[?statements :statement/discussions ?discussion]]
+                            patterns/statement))
 
 (>defn search-similar-questions
-       "Search starting Conclusions (Questions in QA) and try to provide answers if there are any."
-       [share-hash search-string]
-       [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
-       (generic-statement-search share-hash search-string
-                                 '[[?discussion :discussion/starting-statements ?statements]]
-                                 patterns/statement))
+  "Search starting Conclusions (Questions in QA) and try to provide answers if there are any."
+  [share-hash search-string]
+  [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
+  (generic-statement-search share-hash search-string
+                            '[[?discussion :discussion/starting-statements ?statements]]
+                            patterns/statement))
 
 ;; -----------------------------------------------------------------------------
 
@@ -560,85 +560,85 @@
         (conj history full-statement)))))
 
 (>defn add-label
-       "Adds a label to a statement. If label is already applied, nothing changes."
-       [statement-id label]
-       [:db/id :statement/label :ret ::specs/statement]
-       (if (shared-config/allowed-labels label)
-         (->> @(transact [[:db/add statement-id :statement/labels label]])
-              :db-after
-              (fast-pull statement-id patterns/statement))
-         (fast-pull statement-id patterns/statement)))
+  "Adds a label to a statement. If label is already applied, nothing changes."
+  [statement-id label]
+  [:db/id :statement/label :ret ::specs/statement]
+  (if (shared-config/allowed-labels label)
+    (->> @(transact [[:db/add statement-id :statement/labels label]])
+         :db-after
+         (fast-pull statement-id patterns/statement))
+    (fast-pull statement-id patterns/statement)))
 
 (>defn remove-label
-       "Deletes a label if it is in the statement-set. Otherwise, nothing changes."
-       [statement-id label]
-       [:db/id :statement/label :ret ::specs/statement]
-       (->> @(transact [[:db/retract statement-id :statement/labels label]])
-            :db-after
-            (fast-pull statement-id patterns/statement)))
+  "Deletes a label if it is in the statement-set. Otherwise, nothing changes."
+  [statement-id label]
+  [:db/id :statement/label :ret ::specs/statement]
+  (->> @(transact [[:db/retract statement-id :statement/labels label]])
+       :db-after
+       (fast-pull statement-id patterns/statement)))
 
 ;; -----------------------------------------------------------------------------
 
 (>defn new-statement-ids-for-user
-       "Retrieve ids of new statements of a discussion for a user"
-       [keycloak-id discussion-hash]
-       [:user.registered/keycloak-id :discussion/share-hash :ret (s/coll-of :db/id)]
-       (map :db/id (new-statements-for-user keycloak-id discussion-hash)))
+  "Retrieve ids of new statements of a discussion for a user"
+  [keycloak-id discussion-hash]
+  [:user.registered/keycloak-id :discussion/share-hash :ret (s/coll-of :db/id)]
+  (map :db/id (new-statements-for-user keycloak-id discussion-hash)))
 
 (>defn- build-discussion-diff-list
-        "Build a map of discussion hashes with new statements as values"
-        [keycloak-id discussion-hashes]
-        [:user.registered/keycloak-id (s/coll-of :discussion/share-hash) :ret ::specs/share-hash-statement-id-mapping]
-        (reduce conj
-                (map (fn [discussion-hash]
-                       {discussion-hash (new-statement-ids-for-user
-                                         keycloak-id discussion-hash)})
-                     discussion-hashes)))
+  "Build a map of discussion hashes with new statements as values"
+  [keycloak-id discussion-hashes]
+  [:user.registered/keycloak-id (s/coll-of :discussion/share-hash) :ret ::specs/share-hash-statement-id-mapping]
+  (reduce conj
+          (map (fn [discussion-hash]
+                 {discussion-hash (new-statement-ids-for-user
+                                   keycloak-id discussion-hash)})
+               discussion-hashes)))
 
 (>defn new-statements-by-discussion-hash
-       "Returns a map containing tuples with the share-hash and a list of all new statements.
+  "Returns a map containing tuples with the share-hash and a list of all new statements.
    
    Example: `{\"ad508972-5e33-4b9b-b446-d5a33c81ab8d\" (17592186047296 17592186047298 17592186047318 17592186047324 17592186047326)}`"
-       [{:user.registered/keys [keycloak-id visited-schnaqs]}]
-       [::specs/registered-user :ret ::specs/share-hash-statement-id-mapping]
-       (let [discussion-hashes (map :discussion/share-hash visited-schnaqs)]
-         (into {}
-               (filter
-                (fn [[_ statements]] (seq statements))
-                (build-discussion-diff-list keycloak-id discussion-hashes)))))
+  [{:user.registered/keys [keycloak-id visited-schnaqs]}]
+  [::specs/registered-user :ret ::specs/share-hash-statement-id-mapping]
+  (let [discussion-hashes (map :discussion/share-hash visited-schnaqs)]
+    (into {}
+          (filter
+           (fn [[_ statements]] (seq statements))
+           (build-discussion-diff-list keycloak-id discussion-hashes)))))
 
 (>defn mark-all-statements-as-read!
-       [keycloak-id]
-       [:user.registered/keycloak-id :ret ::specs/share-hash-statement-id-mapping]
-       (let [user (user-db/private-user-by-keycloak-id keycloak-id)
-             unread (new-statements-by-discussion-hash user)]
-         (user-db/update-visited-statements keycloak-id unread)
-         unread))
+  [keycloak-id]
+  [:user.registered/keycloak-id :ret ::specs/share-hash-statement-id-mapping]
+  (let [user (user-db/private-user-by-keycloak-id keycloak-id)
+        unread (new-statements-by-discussion-hash user)]
+    (user-db/update-visited-statements keycloak-id unread)
+    unread))
 
 (>defn mark-all-statements-of-discussion-as-read
-       "Query all new statements for a user and mark them as read."
-       [keycloak-id share-hash]
-       [:user.registered/keycloak-id :discussion/share-hash :ret any?]
-       (let [new-statements-with-share-hash (build-discussion-diff-list keycloak-id [share-hash])]
-         (user-db/update-visited-statements keycloak-id new-statements-with-share-hash)))
+  "Query all new statements for a user and mark them as read."
+  [keycloak-id share-hash]
+  [:user.registered/keycloak-id :discussion/share-hash :ret any?]
+  (let [new-statements-with-share-hash (build-discussion-diff-list keycloak-id [share-hash])]
+    (user-db/update-visited-statements keycloak-id new-statements-with-share-hash)))
 
 ;; -----------------------------------------------------------------------------
 
 (>defn toggle-statement-lock
-       "Lock or unlock a statement."
-       [statement-id lock?]
-       [:db/id boolean? :ret any?]
-       @(transact [[:db/add statement-id :statement/locked? lock?]]))
+  "Lock or unlock a statement."
+  [statement-id lock?]
+  [:db/id boolean? :ret any?]
+  @(transact [[:db/add statement-id :statement/locked? lock?]]))
 
 (>defn toggle-pinned-statement
-       "Pin or unpin a statement."
-       [statement-id pin?]
-       [:db/id boolean? :ret any?]
-       @(transact [[:db/add statement-id :statement/pinned? pin?]]))
+  "Pin or unpin a statement."
+  [statement-id pin?]
+  [:db/id boolean? :ret any?]
+  @(transact [[:db/add statement-id :statement/pinned? pin?]]))
 
 (>defn add-device-id
-       "Adds a device-id to a schnaq. No need to deref, as it can run in the async."
-       [share-hash device-id]
-       [:discussion/share-hash uuid? :ret any?]
-       (transact [[:db/add [:discussion/share-hash share-hash]
-                   :discussion/device-ids device-id]]))
+  "Adds a device-id to a schnaq. No need to deref, as it can run in the async."
+  [share-hash device-id]
+  [:discussion/share-hash uuid? :ret any?]
+  (transact [[:db/add [:discussion/share-hash share-hash]
+              :discussion/device-ids device-id]]))
