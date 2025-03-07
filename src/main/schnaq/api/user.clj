@@ -8,7 +8,6 @@
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.database.user-deletion :as user-deletion]
-            [schnaq.mail.cleverreach :as cleverreach]
             [schnaq.media :as media]
             [schnaq.shared-toolbelt :refer [remove-nil-values-from-map]]
             [spec-tools.data-spec :as ds]
@@ -21,7 +20,7 @@
   [{:keys [identity parameters]}]
   (log/info "User-Registration queried for" (:id identity)
             ", username:" (:preferred_username identity))
-  (let [{:keys [creation-secrets visited-hashes visited-statement-ids locale]} (:body parameters)
+  (let [{:keys [creation-secrets visited-hashes visited-statement-ids]} (:body parameters)
         visited-schnaqs (if visited-hashes (map :db/id (discussion-db/discussions-by-share-hashes visited-hashes)) [])
         [new-user? queried-user] (user-db/register-new-user identity visited-schnaqs visited-statement-ids)
         updated-statements? (associative? (discussion-db/update-authors-from-secrets
@@ -31,8 +30,7 @@
                   :meta (remove-nil-values-from-map
                          {:total-schnaqs (user-db/created-discussions (:user.registered/keycloak-id queried-user))})}]
     (if new-user?
-      (do (cleverreach/add-user-to-customer-group! identity (str (name locale)))
-          (created "" (assoc response :new-user? true)))
+      (created "" (assoc response :new-user? true))
       (ok response))))
 
 ;; -----------------------------------------------------------------------------
@@ -135,8 +133,7 @@
 (s/def ::locale keyword?)
 (s/def ::user-register (s/keys :opt-un [::visited-hashes
                                         ::creation-secrets
-                                        ::visited-statement-ids
-                                        ::locale]))
+                                        ::visited-statement-ids]))
 
 (def user-routes
   [["/user" {:swagger {:tags ["user"]}}
