@@ -43,7 +43,7 @@
            visited-hashes (get-in db [:schnaqs :visited-hashes])
            visited-statements (get-in db [:visited :statement-ids] {})]
        {:fx [(http/xhrio-request db :put "/user/register" [:user.register/success]
-                                 (cond-> {:locale (get db :locale :en)}
+                                 (cond-> {}
                                    visited-hashes (assoc :visited-hashes visited-hashes)
                                    visited-statements (assoc :visited-statement-ids visited-statements)
                                    creation-secrets (assoc :creation-secrets creation-secrets)))]}))))
