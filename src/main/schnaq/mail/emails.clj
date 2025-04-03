@@ -1,4 +1,5 @@
 (ns schnaq.mail.emails
+  "Handle sending emails to users."
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [hiccup.util :as hiccup-util]
