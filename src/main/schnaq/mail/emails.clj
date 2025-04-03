@@ -11,7 +11,8 @@
 
 (def ^:private conn {:host (:sender-host config/email)
                      :ssl true
-                     :user (:sender-address config/email)
+                     :port (:sender-port config/email)
+                     :user (:sender-username config/email)
                      :pass (:sender-password config/email)})
 
 (def ^:private mail-configured?
