@@ -14,19 +14,6 @@
                      :user (:sender-username config/email)
                      :pass (:sender-password config/email)})
 
-(comment
-
-  (let [conn2 {:host (:sender-host config/email)
-               :ssl true
-               :user "13feec76-9761-4010-a131-ab6b1b1d81e5"
-               :pass "577d8b5d-25d2-481c-913c-83b51da9693e"}]
-    (send-message conn2 {:from (:sender-address config/email)
-                         :to "christian@schnaq.com"
-                         :subject "huhuhuhu"
-                         :body "huhuhuhuhuhuhuhuhuhuhuhu"}))
-
-  :fin)
-
 (def ^:private mail-configured?
   (every? not-empty (vals config/email)))
 
