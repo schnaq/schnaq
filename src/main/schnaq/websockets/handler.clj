@@ -32,6 +32,7 @@
 
 (defmulti handle-message (fn [{:keys [id]}] id))
 (defmethod handle-message :chsk/ws-ping [_message])
+(defmethod handle-message :chsk/ws-pong [_message])
 (defmethod handle-message :chsk/uidport-open [_message])
 
 (defmethod handle-message :chsk/uidport-close [{:keys [uid]}]
