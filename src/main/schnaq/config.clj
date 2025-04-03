@@ -54,7 +54,6 @@
 (def email
   {:sender-address (:email-sender-address env)
    :sender-host (:email-host env)
-   :sender-port (Integer/parseInt (or (:email-port env) "465"))
    :sender-username (:email-username env)
    :sender-password (:email-password env)})
 
