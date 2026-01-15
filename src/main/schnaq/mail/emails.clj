@@ -1,4 +1,5 @@
 (ns schnaq.mail.emails
+  "Handle sending emails to users."
   (:require [clojure.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [hiccup.util :as hiccup-util]
@@ -11,7 +12,7 @@
 
 (def ^:private conn {:host (:sender-host config/email)
                      :ssl true
-                     :user (:sender-address config/email)
+                     :user (:sender-username config/email)
                      :pass (:sender-password config/email)})
 
 (def ^:private mail-configured?

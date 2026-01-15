@@ -54,6 +54,7 @@
 (def email
   {:sender-address (:email-sender-address env)
    :sender-host (:email-host env)
+   :sender-username (:email-username env)
    :sender-password (:email-password env)})
 
 (def mail-template "https://snq-common.s3.nl-ams.scw.cloud/email/templates/generic-mail.html")
