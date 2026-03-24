@@ -17,7 +17,7 @@
               faLock faLockOpen faMagic faMapPin faMinus faPalette faPaperPlane faPenSquare faPencilAlt faPencilRuler
               faPlayCircle faPlus faProjectDiagram faSquare faQrcode faQuestion faQuestionCircle
               faQuoteRight faRedo faRocket faSearch faShareAlt faShieldAlt faSignInAlt faSlidersH faStar
-              faStepBackward faStrikethrough faSun faTag faTerminal faTimes faTimes faTimesCircle
+              faStepBackward faStrikethrough faSun faTag faTerminal faTimes faTimesCircle
               faTrashAlt faUnderline faUndo faUniversity faUsers faUserPlus]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]
             [schnaq.interface.utils.tooltip :as tooltip]))
