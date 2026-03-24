@@ -3,48 +3,48 @@
         buddy/buddy-auth {:mvn/version "3.0.323"}
         buddy/buddy-core {:mvn/version "1.12.0-430"}
         clj-fuzzy/clj-fuzzy {:mvn/version "0.4.1"}
-        clj-http/clj-http {:mvn/version "3.13.0"}
+        clj-http/clj-http {:mvn/version "3.13.1"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}
-        com.cognitect.aws/api {:mvn/version "0.8.692"}
+        com.cognitect.aws/api {:mvn/version "0.8.800"}
         com.cognitect.aws/endpoints {:mvn/version "1.1.12.718"}
         com.cognitect.aws/s3 {:mvn/version "868.2.1580.0"}
-        com.datomic/peer {:mvn/version "1.0.7180"}
+        com.datomic/peer {:mvn/version "1.0.7556"}
         com.draines/postal {:mvn/version "2.0.5"}
-        com.fulcrologic/guardrails {:mvn/version "1.2.9"}
-        com.google.guava/guava {:mvn/version "33.2.1-jre"
+        com.fulcrologic/guardrails {:mvn/version "1.2.16"}
+        com.google.guava/guava {:mvn/version "33.5.0-jre"
                                 :doc "shadow-cljs needs this"}
         com.taoensso/sente {:mvn/version "1.19.2"}
         com.taoensso/tempura {:mvn/version "1.3.0"}
-        com.taoensso/timbre {:mvn/version "6.5.0"}
+        com.taoensso/timbre {:mvn/version "6.8.0"}
         com.taoensso/tufte {:mvn/version "2.3.0"}
-        compojure/compojure {:mvn/version "1.7.1"}
+        compojure/compojure {:mvn/version "1.7.2"}
         day8.re-frame/http-fx {:mvn/version "0.2.4"}
         expound/expound {:mvn/version "0.9.0"}
         schnaq/hodgepodge {:git/url "https://github.com/schnaq/hodgepodge.git"
                            :sha "de1b57165647e186e4a18873eb2a2e93fff36a4e"}
         funcool/promesa {:mvn/version "11.0.678"}
-        http-kit/http-kit {:mvn/version "2.8.0"}
+        http-kit/http-kit {:mvn/version "2.8.1"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
         jarohen/chime {:mvn/version "0.3.3"}
-        keycloak-clojure/keycloak-clojure {:mvn/version "1.31.1"}
+        keycloak-clojure/keycloak-clojure {:mvn/version "1.31.5"}
         metosin/reitit {:mvn/version "0.7.1"}
-        metosin/ring-http-response {:mvn/version "0.9.4"}
-        metosin/spec-tools {:mvn/version "0.10.7"}
-        mount/mount {:mvn/version "0.1.18"}
+        metosin/ring-http-response {:mvn/version "0.9.5"}
+        metosin/spec-tools {:mvn/version "0.10.8"}
+        mount/mount {:mvn/version "0.1.23"}
         org.clojure/clojure {:mvn/version "1.11.3"}
         org.clojure/clojurescript {:mvn/version "1.11.132"}
         org.clojure/core.async {:mvn/version "1.6.681"}
-        org.clojure/test.check {:mvn/version "1.1.1"}
-        org.postgresql/postgresql {:mvn/version "42.7.3"
+        org.clojure/test.check {:mvn/version "1.1.3"}
+        org.postgresql/postgresql {:mvn/version "42.7.10"
                                    :doc "Necessary for our production transactor"}
-        re-frame/re-frame {:mvn/version "1.4.3"}
+        re-frame/re-frame {:mvn/version "1.4.4"}
         reagent/reagent {:mvn/version "1.2.0"}
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring/ring {:mvn/version "1.10.0"
                    :doc "WARNING: Upgrading causes an error, since com.cognitect.aws uses an incompatible jetty version. Wait for them to upgrade and test again with our test suite."}
         ring/ring-mock {:mvn/version "0.4.0"}
         thheller/shadow-cljs {:mvn/version "2.28.11"}
-        yogthos/config {:mvn/version "1.2.0"}}
+        yogthos/config {:mvn/version "1.2.1"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
@@ -52,7 +52,7 @@
  :aliases {:test {:extra-paths ["src/test"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.91.1392"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.1.89"}
-                               day8.re-frame/test {:mvn/version "0.1.5"}}
+                               day8.re-frame/test {:mvn/version "0.1.7"}}
                   :main-opts ["-m" "kaocha.runner"]}
 
            :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
@@ -82,8 +82,8 @@
            :frontend
            {:extra-deps {binaryage/devtools {:mvn/version "1.0.7"}
                          day8.re-frame/tracing {:mvn/version "0.6.2"}
-                         day8.re-frame/re-frame-10x {:mvn/version "1.9.9"}
-                         day8.re-frame/test {:mvn/version "0.1.5"}}
+                         day8.re-frame/re-frame-10x {:mvn/version "1.11.0"}
+                         day8.re-frame/test {:mvn/version "0.1.7"}}
             :main-opts ["-m" "shadow.cljs.devtools.cli"
                         "watch" ":app"]
             :jvm-opts ["-Dguardrails.enabled=true"]}
@@ -92,7 +92,7 @@
 
            :build
            ;; Run with clj -T:build
-           {:replace-deps {io.github.clojure/tools.build {:mvn/version "0.10.5"}}
+           {:replace-deps {io.github.clojure/tools.build {:mvn/version "0.10.13"}}
             :ns-default build}
 
            :run-server {:main-opts ["-m" "schnaq.api"]}
