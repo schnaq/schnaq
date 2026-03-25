@@ -49,17 +49,17 @@
 (defn- footer-nav []
   [:<>
    [:ul.list-inline
-    [footer-button "https://schnaq.com/code-of-conduct" :coc/heading]
-    [footer-button "https://schnaq.com/about" :footer.buttons/about-us]
-    [footer-button "https://schnaq.com/press" :footer.buttons/press-kit]
-    [footer-button "https://schnaq.com/publications" :footer.buttons/publications]]
+    [footer-button "https://landing.schnaq.com/code-of-conduct" :coc/heading]
+    [footer-button "https://landing.schnaq.com/about" :footer.buttons/about-us]
+    [footer-button "https://landing.schnaq.com/press" :footer.buttons/press-kit]
+    [footer-button "https://landing.schnaq.com/publications" :footer.buttons/publications]]
    [:ul.list-inline
     [:li.list-inline-item
      [feedback-modal
       (fn [props] [:button.btn.btn-sm.btn-outline-white props
                    (labels :feedbacks/button)])]]
-    [footer-button "https://schnaq.com/privacy" :router/privacy]
-    [footer-button "https://schnaq.com/legal-note" :footer.buttons/legal-note]]])
+    [footer-button "https://landing.schnaq.com/privacy" :router/privacy]
+    [footer-button "https://landing.schnaq.com/legal-note" :footer.buttons/legal-note]]])
 
 (defn- developed-in-nrw []
   [:section.pt-3
@@ -98,16 +98,16 @@
    [:ul {:style {:list-style :none
                  :padding-left 0}}
     [:li
-     [:a.btn.btn-link.text-white {:href "https://schnaq.com/blog/de/online-meetings-moderieren/"}
+     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/blog/de/online-meetings-moderieren/"}
       "für Meetings"]]
     [:li
-     [:a.btn.btn-link.text-white {:href "https://schnaq.com/blog/de/online-diskussionsplattform/"}
+     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/blog/de/online-diskussionsplattform/"}
       "für Diskussionen"]]
     [:li
-     [:a.btn.btn-link.text-white {:href "https://schnaq.com/blog/de/ama-ask-me-anything-fragerunden/"}
+     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/blog/de/ama-ask-me-anything-fragerunden/"}
       "für AMAs"]]
     [:li
-     [:a.btn.btn-link.text-white {:href "https://schnaq.com/blog/de/online-workshop-moderation/"}
+     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/blog/de/online-workshop-moderation/"}
       "für Online Workshops"]]]])
 
 (defn- alternatives
@@ -117,7 +117,7 @@
    ;; Remove hardcode, when there are german versions around!
    [:h3.h5 "schnaq vs."]
    [:p
-    [:a.btn.btn-link.text-white {:href "https://schnaq.com/blog/en/best-alternative-to-slido/"}
+    [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/blog/en/best-alternative-to-slido/"}
      "Alternative to Slido"]]])
 
 ;; -----------------------------------------------------------------------------

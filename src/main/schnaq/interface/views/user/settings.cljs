@@ -128,7 +128,7 @@
     [:div.btn-group-vertical
      [outline-info-button :user/features
       (navigation/href :routes.welcome)]
-     [outline-info-button :coc/heading "https://schnaq.com/code-of-conduct"]]]])
+     [outline-info-button :coc/heading "https://landing.schnaq.com/code-of-conduct"]]]])
 
 (defn user-info-box
   "Display an overview of a user's features."

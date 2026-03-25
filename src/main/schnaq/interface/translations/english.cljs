@@ -558,7 +558,7 @@
    :errors.schnaq/read-only "The schnaq is set to read-only mode."
 
    :error.generic/contact-us
-   [:<> "Did you end up here after clicking something on schnaq.com? Give us a hint at " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
+   [:<> "Did you end up here after clicking something on landing.schnaq.com? Give us a hint at " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
 
    :error.404/heading "This site does not exist 🙉"
    :error.404/body "The URL that you followed does not exist. Maybe there is a typo."
@@ -691,7 +691,7 @@
    :hub.add.schnaq.error/title "schnaq was not added!"
    :hub.add.schnaq.error/body "The schnaq could not be added or found. Please check your input and try again."
    :hub.add.schnaq.input/button "Add schnaq"
-   :hub.add.schnaq.input/placeholder "schnaq-URL e.g. https://schnaq.com/schnaq/… or share-code"
+   :hub.add.schnaq.input/placeholder "schnaq-URL e.g. https://app.schnaq.com/schnaq/… or share-code"
    :hub.remove.schnaq.success/title "schnaq removed!"
    :hub.remove.schnaq.success/body "The schnaq has been removed from your hub."
    :hub.remove.schnaq.error/title "Removal failed!"

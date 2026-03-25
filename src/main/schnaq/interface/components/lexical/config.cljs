@@ -124,5 +124,5 @@
 ![](https://snq-common.s3.nl-ams.scw.cloud/logos/schnaq.webp)
 <a href=\"javascript:alert('XSS')\">Click Me</a>
 [Click Me](javascript:alert('Uh oh...'))
-[Some Link](https://schnaq.com)
-<a href=\"https://schnaq.com\">Click Me</a>")
+[Some Link](https://landing.schnaq.com)
+<a href=\"https://landing.schnaq.com\">Click Me</a>")
