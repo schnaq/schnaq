@@ -11,7 +11,7 @@ runs:
         distribution: "temurin"
         java-version: "17"
     - name: Install clojure tools
-      uses: DeLaGuardo/setup-clojure@13.6
+      uses: DeLaGuardo/setup-clojure@13.6.0
       with:
         bb: "latest"
         cli: "latest"
