@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Clojure Tests
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
 
@@ -25,7 +25,7 @@ jobs:
         run: clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -M:test
 
       - name: "Upload Artifact"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage
           path: target/coverage/lcov.info
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     name: ClojureScript Tests
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
       - uses: actions/setup-node@v6

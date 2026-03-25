@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Delete old containers
-        uses: snok/container-retention-policy@v3.0.0
+        uses: snok/container-retention-policy@v3.0.1
         with:
           account: schnaq
           image-names: "*"
