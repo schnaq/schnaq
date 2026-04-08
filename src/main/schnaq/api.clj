@@ -178,7 +178,7 @@
 (def allowed-origins
   "Calculate valid origins based on the environment configuration and the
   allowed frontend host."
-  (->> ["schnaq.com" "schnaq.de" "schnaq.app" config/frontend-host]
+  (->> ["schnaq.com" "schnaq.de" "schnaq.app" "app.schnaq.com" config/frontend-host]
        (concat config/additional-cors)
        (remove empty?)
        (mapv toolbelt/build-allowed-origin)
