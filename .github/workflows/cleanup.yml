@@ -1,11 +1,15 @@
 name: Delete old container images
 
 on:
-  push:
-    branches:
-      - fix/cleanup
-  # schedule:
-  #   - cron: "0 3 * * *"
+  schedule:
+    # Weekly, Monday 03:00 UTC
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Run without deleting (preview only)
+        type: boolean
+        default: false
 
 jobs:
   clean-ghcr:
@@ -17,8 +21,11 @@ jobs:
         with:
           account: schnaq
           image-names: "*"
-          image-tags: "!latest !staging" # don't delete package versions tagged with these tags
+          # Never delete the canonical tags that production / staging
+          # currently point at; everything else is fair game past the
+          # retention cutoff.
+          image-tags: "!latest !staging"
           cut-off: 4w
           keep-n-most-recent: 5
           token: ${{ secrets.PAT }}
-          dry-run: true # consider toggling this to true on your first run
+          dry-run: ${{ inputs.dry-run || false }}
