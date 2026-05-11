@@ -118,3 +118,47 @@ Files with `.cljc` extension are shared between backend and frontend: `schnaq.co
 - Share hashes (UUIDs) identify discussions publicly; `share-hash` is the primary lookup key for discussions
 - The `>defn` macro from guardrails is used extensively for runtime spec checking in development (disabled in production builds)
 - Frontend re-frame events/subscriptions are keyword-namespaced by domain
+
+## Linear Project
+
+All planning, dependency-refresh, modernization and tech-debt work for this repository is tracked in the Linear project **"schnaq app"**.
+
+- URL: https://linear.app/schnaq/project/schnaq-app-44e326ace3f8/overview
+- Project ID: `15fbe12c-2114-432f-b515-4d82515b1c07`
+- Team: `schnaq` (key `SNQ`, ID `b65a624c-9070-4383-af64-77bd30e48c21`)
+- Status workflow: Backlog → Todo → In Progress → In Review → Done
+- Default assignee/lead: Christian (`christian@schnaq.com`)
+
+When creating new issues for this repository, attach them to this project unless explicitly told otherwise.
+
+### Label conventions
+
+Use these labels on Linear issues that touch this repo. Combine freely:
+
+- `dependencies` — any dependency bump (npm, deps.edn)
+- `tooling` — CI, build pipeline, hooks, linters, Dockerfiles
+- `security` — auth, CodeQL, secrets, supply-chain
+- `tech-debt` — code cleanup, redundancies, refactors
+- `frontend` — CLJS/JS/CSS scope
+- `backend` — Clojure/Datomic scope
+- `infra` (existing) — Docker, nginx, deploy
+- `spike` (existing) — research/eval issues, no implementation expected
+- `docs` (existing) — documentation updates
+- Priority: `prio::high` / `prio::medium` / `prio::low`
+
+## Modernization & Dependency Refresh
+
+The repo is undergoing a coordinated modernization pass (Linear project above). Phased plan:
+
+1. **Foundation & Tooling** — Renovate, CodeQL, dependency-review, Dockerfile Node 22, shadow-cljs sync, ESLint/Prettier, pre-commit hooks.
+2. **Safe Bumps** — Minor/patch sweeps for npm and `deps.edn`.
+3. **Major Bumps** — Each major version jump (Lexical, Keycloak-js, framer-motion, FontAwesome, js-joda, date-fns, uuid, react-markdown, vis-network, …) as an isolated issue with its own QA plan.
+4. **Tech-Debt & Research** — Drop Compojure, resolve Ring 1.10 pin, evaluate Karma → modern test runner, Datomic on-prem evaluation.
+
+### Branching & PR conventions for this work
+
+- Feature branches: `claude/<short-scope>` (e.g., `claude/update-dependencies-9RX65`, `claude/bump-lexical`).
+- Base branch: `develop`.
+- One Linear issue ↔ one branch ↔ one PR where possible. Link the Linear issue in the PR description (Linear auto-detects `SNQ-<n>` mentions).
+- Each dependency-bump PR must run a green `yarn build` and `clojure -M:test` locally before opening.
+- For UI-relevant frontend bumps, manually smoke-test the affected views via `clojure -M:frontend` on `http://localhost:8700`.
