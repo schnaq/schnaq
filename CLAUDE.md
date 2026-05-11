@@ -160,5 +160,19 @@ The repo is undergoing a coordinated modernization pass (Linear project above). 
 - Feature branches: `claude/<short-scope>` (e.g., `claude/update-dependencies-9RX65`, `claude/bump-lexical`).
 - Base branch: `develop`.
 - One Linear issue ↔ one branch ↔ one PR where possible. Link the Linear issue in the PR description (Linear auto-detects `SNQ-<n>` mentions).
-- Each dependency-bump PR must run a green `yarn build` and `clojure -M:test` locally before opening.
-- For UI-relevant frontend bumps, manually smoke-test the affected views via `clojure -M:frontend` on `http://localhost:8700`.
+
+### Mandatory local verification per issue
+
+Every dependency-bump or modernization issue MUST be locally verified before opening a PR. No exceptions — CI is a safety net, not the primary check.
+
+Run, in order:
+
+1. `yarn install` — confirms the lockfile is sane.
+2. `clojure -M:test` — backend Kaocha suite must be green.
+3. `clojure -M:test-cljs && yarn karma start --single-run` — CLJS tests must be green.
+4. `yarn build` — full production build (this also runs `clojure -P -M:frontend` and `yarn css:minify`).
+5. `clj-kondo --lint src/` — no new warnings.
+
+For UI-relevant frontend bumps (Lexical, framer-motion, FontAwesome, vis-network, react-bootstrap, react-markdown, react-joyride, Excalidraw, Keycloak-js): additionally run `clojure -M:frontend` and manually smoke-test the affected views on `http://localhost:8700`.
+
+If any of the above cannot be run in the current environment (e.g., Clojars unreachable in a sandbox), state this explicitly in the PR description — do not silently skip.
