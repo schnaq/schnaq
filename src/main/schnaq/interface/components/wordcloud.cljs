@@ -89,6 +89,20 @@
       (labels :schnaq.wordcloud/download)
       [:span [icon :file-download "me-1"]]]]))
 
+(defn- wordcloud-csv-button
+  "Download wordcloud words as CSV."
+  [words]
+  (when (seq words)
+    [:> Button {:variant :link
+                :class "text-muted p-0 pe-2 align-self-end"
+                :on-click #(file-download/download-csv
+                            (into [["word" "count"]]
+                                  (map (juxt :text :value) words))
+                            "wordcloud.csv")}
+     [tooltip/text
+      (labels :schnaq.wordcloud/download-csv)
+      [:span [icon :file-export "me-1"]]]]))
+
 (defn wordcloud
   "Create a wordcloud based on the data that is passed in."
   [_input]
@@ -105,7 +119,9 @@
              [icon :smile-beam "ms-1"]]
             [:div {:ref #(when-not @wc (reset! wc %))}
              [:> ReactWordcloud {:words words :options options}]
-             [:div.text-end [wordcloud-download-button svg]]]))
+             [:div.text-end
+              [wordcloud-csv-button words]
+              [wordcloud-download-button svg]]]))
         [:div.text-center.py-3 [spinner-icon]]))))
 
 ;; -----------------------------------------------------------------------------
