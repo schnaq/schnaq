@@ -11,21 +11,18 @@ ARG KEYCLOAK_REALM
 ARG FAQ_SHARE_HASH
 ARG S3_HOST
 
-RUN apt update && \
-    apt install -y gnupg2 && \
-
-    # Install nodejs
-    curl -sL https://deb.nodesource.com/setup_18.x -o nodesource_setup.sh && \
-    bash nodesource_setup.sh && \
-    apt-get install -y nodejs && \
-    rm nodesource_setup.sh && \
-
-    # Install yarn
-    curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl gnupg ca-certificates && \
+    # Install Node.js 22 (NodeSource) — Node 18 EOL April 2025
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y --no-install-recommends nodejs && \
+    # Install yarn with modern keyring (apt-key is deprecated)
+    curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor -o /usr/share/keyrings/yarn-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/yarn-keyring.gpg] https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     apt-get update && \
-    apt-get install -y yarn && \
-    yarn global add sass
+    apt-get install -y --no-install-recommends yarn && \
+    yarn global add sass && \
+    rm -rf /var/lib/apt/lists/*
 
 # Cache and install JavaScript dependencies
 COPY package.json .
@@ -44,7 +41,7 @@ RUN yarn shadow-cljs release app
 
 # ------------------------------------------------------------------------------
 
-FROM nginx:alpine
+FROM nginx:1.27-alpine
 # Default value is robots.txt, only on other environments a custom var is needed
 ARG ROBOTS_TXT=./robots.txt
 RUN apk add --no-cache tzdata
