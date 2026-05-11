@@ -1,0 +1,84 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    "schedule:weekly"
+  ],
+  "timezone": "Europe/Berlin",
+  "labels": ["dependencies"],
+  "rangeStrategy": "bump",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 4am on monday"]
+  },
+  "vulnerabilityAlerts": {
+    "labels": ["security", "dependencies"]
+  },
+  "osvVulnerabilityAlerts": true,
+  "prHourlyLimit": 4,
+  "prConcurrentLimit": 10,
+  "packageRules": [
+    {
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "npm minor + patch",
+      "addLabels": ["frontend"]
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["frontend"]
+    },
+    {
+      "matchManagers": ["deps-edn"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "deps.edn minor + patch",
+      "addLabels": ["backend"]
+    },
+    {
+      "matchManagers": ["deps-edn"],
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["backend"]
+    },
+    {
+      "matchManagers": ["dockerfile"],
+      "addLabels": ["infra"]
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "addLabels": ["tooling"],
+      "groupName": "github-actions"
+    },
+    {
+      "matchPackageNames": ["org.clojure/clojure", "org.clojure/clojurescript"],
+      "schedule": ["before 4am on the first day of the month"]
+    },
+    {
+      "matchPackageNames": ["ring/ring-core", "ring/ring-jetty-adapter"],
+      "enabled": false,
+      "description": "Pinned to 1.10.0 due to cognitect.aws / Jetty conflict — tracked in SNQ-127"
+    },
+    {
+      "matchPackageNames": ["com.taoensso/tempura", "com.taoensso/tufte"],
+      "enabled": false,
+      "description": "Excluded pending review — tracked in SNQ-128"
+    },
+    {
+      "matchPackageNames": ["lexical", "@lexical/react"],
+      "enabled": false,
+      "description": "Major rewrite tracked in SNQ-124"
+    },
+    {
+      "matchPackageNames": ["keycloak-js"],
+      "enabled": false,
+      "description": "Server-side coordination required — tracked in SNQ-123"
+    },
+    {
+      "matchPackageNames": ["react", "react-dom", "@types/react"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false,
+      "description": "React 19 tracked in SNQ-125"
+    }
+  ]
+}
