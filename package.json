@@ -5,7 +5,10 @@
     "css:purge": "yarn purgecss -c purgecss.config.js",
     "watch": "shadow-cljs watch app;",
     "server": "shadow-cljs server;",
-    "build": "clojure -P -M:frontend && yarn css:minify && yarn shadow-cljs release app"
+    "build": "clojure -P -M:frontend && yarn css:minify && yarn shadow-cljs release app",
+    "lint:js": "eslint .",
+    "format:write": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@egjs/hammerjs": "^2.0.17",
@@ -64,7 +67,11 @@
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.1",
     "karma-cljs-test": "^0.1.0",
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
     "postcss": "^8.4.20",
+    "prettier": "^3.0.0",
     "purgecss": "^5.0.0",
     "stylelint": "^15.10.0",
     "stylelint-config-sass-guidelines": "^10.0.0"

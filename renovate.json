@@ -1,10 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":semanticCommits",
-    "schedule:weekly"
-  ],
+  "extends": ["config:recommended", ":semanticCommits", "schedule:weekly"],
   "timezone": "Europe/Berlin",
   "labels": ["dependencies"],
   "rangeStrategy": "bump",
