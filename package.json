@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@excalidraw/excalidraw": "^0.15.3",
-    "@fontsource/poppins": "^5.0.0",
+    "@fontsource/poppins": "^5.2.7",
     "@types/react": "^18.0.26",
     "bootstrap": "^5.3.8",
     "karma": "^6.4.1",
@@ -70,10 +70,10 @@
     "@eslint/js": "^9.0.0",
     "eslint": "^9.0.0",
     "globals": "^15.0.0",
-    "postcss": "^8.4.20",
+    "postcss": "^8.5.14",
     "prettier": "^3.0.0",
     "purgecss": "^5.0.0",
-    "stylelint": "^15.10.0",
+    "stylelint": "^15.11.0",
     "stylelint-config-sass-guidelines": "^10.0.0"
   },
   "dependenciesComments": {
