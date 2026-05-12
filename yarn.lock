@@ -4770,20 +4770,20 @@ vfile@^5.0.0:
     unist-util-stringify-position "^3.0.0"
     vfile-message "^3.0.0"
 
-vis-data@^7.1.4:
-  version "7.1.6"
-  resolved "https://registry.yarnpkg.com/vis-data/-/vis-data-7.1.6.tgz#81dcf4d024d23183cacb680ad605e644cdd6ee6c"
-  integrity sha512-lG7LJdkawlKSXsdcEkxe/zRDyW29a4r7N7PMwxCPxK12/QIdqxJwcMxwjVj9ozdisRhP5TyWDHZwsgjmj0g6Dg==
+vis-data@^7.1.10:
+  version "7.1.10"
+  resolved "https://registry.yarnpkg.com/vis-data/-/vis-data-7.1.10.tgz#70970baf2e0c219565673b1e322eb1b7293b807e"
+  integrity sha512-23juM9tdCaHTX5vyIQ7XBzsfZU0Hny+gSTwniLrfFcmw9DOm7pi3+h9iEBsoZMp5rX6KNqWwc1MF0fkAmWVuoQ==
 
 vis-network@9.1.4:
   version "9.1.4"
   resolved "https://registry.yarnpkg.com/vis-network/-/vis-network-9.1.4.tgz#202883557e62919dc5e8beb090a22b2ca5a086f4"
   integrity sha512-B+BrPXkxu7AiqQpxVjjRpMBenVJvdB8y1D8J9NseXC8f/Z7U8dknFYZpcPFZzHh3bypj9/25GsycwE4p5my3dw==
 
-vis-util@^5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/vis-util/-/vis-util-5.0.3.tgz#6a9d67c6ed92f2bfa67e50c20166bb5f59ac07bf"
-  integrity sha512-Wf9STUcFrDzK4/Zr7B6epW2Kvm3ORNWF+WiwEz2dpf5RdWkLUXFSbLcuB88n1W6tCdFwVN+v3V4/Xmn9PeL39g==
+vis-util@^5.0.7:
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/vis-util/-/vis-util-5.0.7.tgz#05fdc1b2ce8f58bfd5635de5de3f152b4b7b0c63"
+  integrity sha512-E3L03G3+trvc/X4LXvBfih3YIHcKS2WrP0XTdZefr6W6Qi/2nNCqZfe4JFfJU6DcQLm6Gxqj2Pfl+02859oL5A==
 
 vm-browserify@^1.0.1:
   version "1.1.2"
