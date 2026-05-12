@@ -72,7 +72,7 @@
     "globals": "^15.0.0",
     "postcss": "^8.5.14",
     "prettier": "^3.0.0",
-    "purgecss": "^5.0.0",
+    "purgecss": "^8.0.0",
     "stylelint": "^15.11.0",
     "stylelint-config-sass-guidelines": "^10.0.0"
   },
