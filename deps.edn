@@ -46,7 +46,11 @@
         thheller/shadow-cljs {:mvn/version "2.28.11"}
         yogthos/config {:mvn/version "1.2.1"}}
 
- :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
+ ;; Google's read-only Maven Central mirror — repo1.maven.org rate-limits
+ ;; with HTTP 429 under heavy parallel CI traffic, the mirror does not.
+ ;; Falls back to repo1.maven.org if an artifact is missing.
+ :mvn/repos {"central" {:url "https://maven-central.storage-download.googleapis.com/maven2/"}
+             "central-fallback" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
 
  :aliases {:test {:extra-paths ["src/test"]
