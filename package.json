@@ -54,9 +54,9 @@
     "timsort": "^0.3.0",
     "unique-names-generator": "^4.7.1",
     "uuid": "^14.0.0",
-    "vis-data": "^7.1.10",
-    "vis-network": "9.1.4",
-    "vis-util": "^5.0.7",
+    "vis-data": "^8.0.4",
+    "vis-network": "^10.0.3",
+    "vis-util": "^6.0.0",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
@@ -83,7 +83,6 @@
     "bootstrap": "Needed to build our css templates",
     "keycharm": "peer dependency for vis-network",
     "shadow-cljs": "Needed to polyfill for some packages",
-    "vis-network": "Last checked: v 9.1.6. Did not load with shadow-cljs. Retry with more current versions",
     "uuid": "peer dependency for vis-network and vis-util"
   }
 }
