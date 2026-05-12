@@ -73,8 +73,8 @@
     "postcss": "^8.5.14",
     "prettier": "^3.0.0",
     "purgecss": "^8.0.0",
-    "stylelint": "^15.11.0",
-    "stylelint-config-sass-guidelines": "^10.0.0"
+    "stylelint": "^17.11.0",
+    "stylelint-config-sass-guidelines": "^13.0.0"
   },
   "dependenciesComments": {
     "@types/react": "peer dependency for react-markdown",
