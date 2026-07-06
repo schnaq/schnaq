@@ -10,6 +10,11 @@
     "format:write": "prettier --write .",
     "format:check": "prettier --check ."
   },
+  "resolutions": {
+    "shadow-cljs/ws": "^7.5.11",
+    "karma/socket.io/socket.io-adapter/ws": "^8.21.0",
+    "karma/socket.io/engine.io/ws": "^8.21.0"
+  },
   "dependencies": {
     "@egjs/hammerjs": "^2.0.17",
     "@fortawesome/fontawesome-free": "^7.2.0",
