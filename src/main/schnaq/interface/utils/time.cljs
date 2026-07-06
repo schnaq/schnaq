@@ -1,14 +1,15 @@
 (ns schnaq.interface.utils.time
   (:require ["date-fns" :as df]
             ["date-fns-tz" :as df-tz]
-            ["date-fns/locale" :as df-locale]
+            ["date-fns/locale/de" :default de-locale]
+            ["date-fns/locale/en-US" :default en-locale]
             [com.fulcrologic.guardrails.core :refer [>defn]]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (def ^:private select-locale
-  {:de df-locale/de
-   :en df-locale/en})
+  {:de de-locale
+   :en en-locale})
 
 (>defn format-distance
   "Return a string containing a description when the timestamp occurred compared
@@ -18,7 +19,7 @@
   (if timestamp
     (df/formatDistance timestamp (js/Date.)
                        #js {:addSuffix true
-                            :locale (get select-locale locale df-locale/en)})
+                            :locale (get select-locale locale en-locale)})
     ""))
 
 (>defn formatted-with-timezone
@@ -27,7 +28,7 @@
   [timestamp]
   [inst? :ret string?]
   (if timestamp
-    (df-tz/format (df-tz/utcToZonedTime timestamp (:timezone shared-config/time-settings))
+    (df-tz/format (df-tz/toZonedTime timestamp (:timezone shared-config/time-settings))
                   (:pattern shared-config/time-settings)
                   #js {:timeZone (:timezone shared-config/time-settings)})
     ""))

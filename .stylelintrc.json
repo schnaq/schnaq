@@ -2,7 +2,8 @@
   "extends": "stylelint-config-sass-guidelines",
   "rules": {
     "scss/at-extend-no-missing-placeholder": null,
-    "string-quotes": null,
+    "scss/no-global-function-names": null,
+    "@stylistic/string-quotes": null,
     "max-nesting-depth": 2,
     "selector-max-id": null
   }

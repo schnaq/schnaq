@@ -1,6 +1,6 @@
 (ns schnaq.auth.middlewares-test
   (:require [clojure.test :refer [deftest is testing use-fixtures]]
-            [compojure.core :refer [routes GET wrap-routes]]
+            [reitit.ring :as ring]
             [ring.mock.request :as mock]
             [ring.util.http-response :refer [ok]]
             [schnaq.auth :as auth]
@@ -10,20 +10,26 @@
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
+(defn- identity-handler
+  "Return the JWT-parsed preferred_username for the authenticated request."
+  [request]
+  (ok (get-in request [:identity :preferred_username])))
+
 (def ^:private test-routes
-  "Define own routes just for testing."
-  (routes
-   (-> (GET "/test/admin/authentication" []
-         (fn [request] (ok (get-in request [:identity :preferred_username]))))
-       (wrap-routes auth-middlewares/admin?-middleware)
-       (wrap-routes auth-middlewares/authenticated?-middleware)
-       (wrap-routes auth-middlewares/parse-jwt-middleware)
-       (wrap-routes auth/wrap-jwt-authentication))
-   (-> (GET "/test/user/authentication" []
-         (fn [request] (ok (get-in request [:identity :preferred_username]))))
-       (wrap-routes auth-middlewares/authenticated?-middleware)
-       (wrap-routes auth-middlewares/parse-jwt-middleware)
-       (wrap-routes auth/wrap-jwt-authentication))))
+  "Reitit-based handler exercising the auth middleware stack."
+  (ring/ring-handler
+   (ring/router
+    [["/test/admin/authentication"
+      {:get {:middleware [auth/wrap-jwt-authentication
+                          auth-middlewares/parse-jwt-middleware
+                          auth-middlewares/authenticated?-middleware
+                          auth-middlewares/admin?-middleware]
+             :handler identity-handler}}]
+     ["/test/user/authentication"
+      {:get {:middleware [auth/wrap-jwt-authentication
+                          auth-middlewares/parse-jwt-middleware
+                          auth-middlewares/authenticated?-middleware]
+             :handler identity-handler}}]])))
 
 (deftest valid-jwt-in-header-test
   (let [path "/test/user/authentication"

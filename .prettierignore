@@ -1,0 +1,18 @@
+resources/public/js/lexical/
+.claude/
+yarn.lock
+
+# Owned by stylelint
+*.scss
+*.css
+
+# Hand-edited / templated / not in Prettier scope
+*.html
+*.yml
+*.yaml
+*.toml
+*.md
+src/
+
+# Auto-generated
+package-lock.json
