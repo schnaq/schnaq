@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Lint code
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
 
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Lint JS / check Prettier
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version: "24"
@@ -32,7 +32,7 @@ jobs:
     name: Check Clojure deps
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
 
