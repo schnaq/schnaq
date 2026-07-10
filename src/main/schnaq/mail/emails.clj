@@ -17,12 +17,17 @@
    :sender-username "EMAIL_USERNAME"
    :sender-password "EMAIL_PASSWORD"})
 
+(defn- email-value-missing?
+  [v]
+  (or (nil? v) (and (string? v) (empty? v))))
+
 (defn missing-email-config-keys
   "Return env var names for unset email configuration values."
   []
-  (->> config/email
-       (filter (fn [[_ v]] (empty? v)))
-       (map (fn [[k _]] (get email-config->env-var k (name k))))
+  (->> email-config->env-var
+       (keep (fn [[config-key env-var]]
+               (when (email-value-missing? (get config/email config-key))
+                 env-var)))
        vec))
 
 (defn mail-configured?
