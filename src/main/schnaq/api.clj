@@ -1,5 +1,6 @@
 (ns schnaq.api
-  (:require [expound.alpha :as expound]
+  (:require [clojure.string :as str]
+            [expound.alpha :as expound]
             [mount.core :as mount :refer [defstate]]
             [muuntaja.core :as m]
             [org.httpkit.server :as server]
@@ -39,6 +40,7 @@
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.shared :as shared-config]
             [schnaq.core] ;; Keep this import to activate database etc.
+            [schnaq.mail.emails :as emails]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.websockets.handler :refer [websocket-routes]]
             [schnaq.websockets.messages]
@@ -57,7 +59,10 @@
   (log/info (format "Database Name: %s" config/db-name))
   (log/info (format "Database URI (truncated): %s..." (subs config/datomic-uri 0 30)))
   (log/info (format "Frontend URL: %s, host: %s" config/frontend-url config/frontend-host))
-  (log/info (if (:sender-password config/email) "E-Mail configured" "E-Mail not configured"))
+  (log/info (if (emails/mail-configured?)
+              "E-Mail configured"
+              (str "E-Mail not configured. Missing: "
+                   (str/join ", " (emails/missing-email-config-keys)))))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
 
 (def ^:private description
