@@ -10,6 +10,9 @@
  *
  */
 
+// Excalidraw 0.18+ ships its own stylesheet (ESM package).
+@import "../../../node_modules/@excalidraw/excalidraw/dist/prod/index.css";
+
 @font-face {
   font-family: "Virgil";
   src: url("https://snq-common.s3.nl-ams.scw.cloud/fonts/excalidraw/Virgil.woff2") format("woff2");

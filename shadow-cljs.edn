@@ -6,6 +6,10 @@
                 :modules {:base {:init-fn schnaq.interface.core/init}}
                 :output-dir "resources/public/js/compiled"
                 :asset-path "/js/compiled"
+                ;; Excalidraw 0.18 is ESM-only (import.meta). Pre-bundle via
+                ;; `yarn vendor:excalidraw` into a CJS file Closure can consume.
+                :js-options {:resolve {"@excalidraw/excalidraw" {:target :file
+                                                                 :file "target/vendor/excalidraw.cjs.js"}}}
                 :compiler-options {:warnings {:undeclared-var false
                                               :redef false}}
                 :dev {:compiler-options {:closure-defines {re-frame.trace.trace-enabled? true

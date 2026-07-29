@@ -15,11 +15,17 @@ module.exports = [
   },
   js.configs.recommended,
   {
-    files: ['**/*.js'],
+    files: ['**/*.{js,mjs,cjs}'],
     languageOptions: {
       ecmaVersion: 2022,
-      sourceType: 'commonjs',
+      sourceType: 'module',
       globals: { ...globals.node, ...globals.browser },
+    },
+  },
+  {
+    files: ['**/*.cjs', 'eslint.config.js'],
+    languageOptions: {
+      sourceType: 'commonjs',
     },
   },
 ];

@@ -4,7 +4,7 @@
                                      REMOVE_LIST_COMMAND]]
             ["@lexical/react/LexicalComposerContext" :refer [useLexicalComposerContext]]
             ["@lexical/rich-text" :refer [$createQuoteNode $isHeadingNode]]
-            ["@lexical/selection" :refer [$wrapLeafNodesInElements]]
+            ["@lexical/selection" :refer [$setBlocksType]]
             ["@lexical/utils" :refer [$getNearestNodeOfType mergeRegister]]
             ["lexical" :refer [$getSelection $isRangeSelection
                                CAN_REDO_COMMAND CAN_UNDO_COMMAND FORMAT_TEXT_COMMAND
@@ -33,7 +33,7 @@
     (ocall editor "update"
            #(let [selection ($getSelection)]
               (when ($isRangeSelection selection)
-                ($wrapLeafNodesInElements selection (fn [] ($createQuoteNode))))))))
+                ($setBlocksType selection (fn [] ($createQuoteNode))))))))
 
 (defn development-buttons
   "Some buttons only for development, e.g. to fast insert an image."
