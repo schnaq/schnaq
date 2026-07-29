@@ -30,15 +30,15 @@
                      (labels :history.all-schnaqs/label))
         navigation-target (if has-history? back-history back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
-    (when navigation-target
-      [:div.d-flex.flex-row.panel-white-sm
-       [tooltip/text
-        (labels tooltip)
-        [:button.btn.btn-dark
-         {:on-click #(rf/dispatch navigation-target)}
-         [:div.d-flex
-          [icon :arrow-left "m-auto"]]]]
-       [:small.my-auto.ms-2 back-label]])))
+    ;; `navigation-target` is always a vector (history event or overview route)
+    [:div.d-flex.flex-row.panel-white-sm
+     [tooltip/text
+      (labels tooltip)
+      [:button.btn.btn-dark
+       {:on-click #(rf/dispatch navigation-target)}
+       [:div.d-flex
+        [icon :arrow-left "m-auto"]]]]
+     [:small.my-auto.ms-2 back-label]]))
 
 (defn- discussion-start-button
   "Discussion start button for history view"

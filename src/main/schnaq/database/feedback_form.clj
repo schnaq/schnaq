@@ -44,8 +44,11 @@
   [share-hash form-items visible?]
   [:discussion/share-hash :feedback/items boolean? => (? :db/id)]
   (when-not (empty? form-items)
-    (when-let [feedback-id (:db/id (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion)))]
-      (let [current-items (feedback-items share-hash)
+    ;; Pull feedback directly — do not use `feedback-items`, which only
+    ;; returns items when the form is already visible.
+    (when-let [feedback (:discussion/feedback (db/fast-pull [:discussion/share-hash share-hash] patterns/discussion))]
+      (let [feedback-id (:db/id feedback)
+            current-items (:feedback/items feedback)
             new-item-ids (set (remove nil? (map :db/id form-items)))
             items-to-remove (remove #(new-item-ids (:db/id %)) current-items)]
         @(db/transact
@@ -57,8 +60,8 @@
                                                                     (str "item-" (:feedback.item/ordinal %))))
                      form-items)
                 ;; IMPORTANT: The % must be second in merge, since we want to preserve existing :db/ids
-                (map #(merge {:db/id (str "item-" (:feedback.item/ordinal %))} %) form-items)))))
-      feedback-id)))
+                (map #(merge {:db/id (str "item-" (:feedback.item/ordinal %))} %) form-items))))
+        feedback-id))))
 
 (>defn add-answers
   "Add new answers to a feedback."
