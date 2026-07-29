@@ -6,6 +6,7 @@
             ["@lexical/react/LexicalHorizontalRuleNode" :refer [HorizontalRuleNode]]
             ["@lexical/rich-text" :refer [HeadingNode QuoteNode]]
             ["@lexical/table" :refer [TableCellNode TableNode TableRowNode]]
+            ["lexical" :refer [$createParagraphNode $getRoot]]
             [re-frame.core :as rf]
             [schnaq.interface.components.lexical.nodes.excalidraw :refer [ExcalidrawNode]]
             [schnaq.interface.components.lexical.nodes.image :refer [ImageNode]]
@@ -81,13 +82,15 @@
 
 (defn- initialize-editor-state
   "Initial editor state. Called only once when the editor is loaded.
-  Convert initial-content from markdown to lexical nodes when provided."
+  Convert initial-content from markdown to lexical nodes, or seed an empty
+  paragraph so the selection has a valid insert target (Lexical 0.48+)."
   [id initial-content]
   (fn [editor]
     (rf/dispatch [:editor/register id editor])
     (rf/dispatch [:editor/content id initial-content])
-    (when initial-content
-      ($convertFromMarkdownString initial-content schnaq-transformers))))
+    (if (seq initial-content)
+      ($convertFromMarkdownString initial-content schnaq-transformers)
+      (.append ($getRoot) ($createParagraphNode)))))
 
 (defn initial-config
   "Initial configuration for all editor instances."
