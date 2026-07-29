@@ -71,7 +71,7 @@
       (is (< (:min stats) (:median stats)))
       (is (> (:max stats) (:median stats)))
       (is (> (:max stats) (:average stats)))
-      (is float? (:average stats)))))
+      (is (float? (:average stats))))))
 
 (deftest statement-type-stats-test
   (testing "Statistics about statement types should be working."

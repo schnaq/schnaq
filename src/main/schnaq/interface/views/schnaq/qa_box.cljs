@@ -220,7 +220,8 @@
 (rf/reg-event-db
  :qa-boxes.load-from-backend/success
  (fn [db [_ response]]
-   (when-let [qa-boxes (shared-tools/normalize :db/id (:qa-boxes response))]
+   ;; `normalize` always returns a map (possibly empty)
+   (let [qa-boxes (shared-tools/normalize :db/id (:qa-boxes response))]
      (assoc-in db [:schnaq :qa-boxes] qa-boxes))))
 
 (rf/reg-event-fx
