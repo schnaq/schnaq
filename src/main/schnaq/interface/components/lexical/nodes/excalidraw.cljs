@@ -128,7 +128,8 @@
                  (when-let [svg (.querySelector content "svg")]
                    (oset! element :innerHTML (oget svg :outerHTML))))
                (.setAttribute element data-excalidraw-attribute (oget this :__data))
-               element))
+               #js {:element element}))
+  (isInline [_this] false)
   (setUrl [this url]
           (let [self (ocall this "getWritable")]
             (oset! self :__url url)))
@@ -140,11 +141,11 @@
            (let [self (ocall this "getWritable")]
              (oset! self :__data data)))
   (exportJSON [this]
-              {:data (oget this :__data)
-               :url (oget this :__url)
-               :type "excalidraw"
-               :version 1})
-  (decorate [this _editor]
+              #js {:data (oget this :__data)
+                   :url (oget this :__url)
+                   :type "excalidraw"
+                   :version 1})
+  (decorate [this _editor _config]
             (r/create-element ExcalidrawComponent
                               #js {:data (oget this :__data) :url (oget this :__url) :nodeKey (.getKey this)})))
 

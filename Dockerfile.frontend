@@ -37,6 +37,7 @@ RUN clojure -P -M:frontend
 COPY . .
 
 RUN yarn css:minify
+RUN yarn vendor:excalidraw
 RUN yarn shadow-cljs release app
 
 # ------------------------------------------------------------------------------
