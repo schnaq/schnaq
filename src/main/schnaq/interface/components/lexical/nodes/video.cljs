@@ -30,10 +30,10 @@
   (setURL [this url]
           (let [writable (.getWritable this)]
             (oset! writable "__url" url)))
-  (exportJSON [this] {:url (oget this :__url)
-                      :type "video"
-                      :version 1})
-  (decorate [this ^LexicalEditor editor]
+  (exportJSON [this] #js {:url (oget this :__url)
+                          :type "video"
+                          :version 1})
+  (decorate [this ^LexicalEditor _editor _config]
             (VideoPlayer (oget this "__url"))))
 (oset! VideoNode "getType" (fn [] "video"))
 (oset! VideoNode "clone"

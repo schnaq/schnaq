@@ -5,6 +5,7 @@
             ["@lexical/react/LexicalClearEditorPlugin" :refer [ClearEditorPlugin]]
             ["@lexical/react/LexicalComposer" :refer [LexicalComposer]]
             ["@lexical/react/LexicalContentEditable" :refer [ContentEditable]]
+            ["@lexical/react/LexicalErrorBoundary" :refer [LexicalErrorBoundary]]
             ["@lexical/react/LexicalHistoryPlugin" :refer [HistoryPlugin]]
             ["@lexical/react/LexicalLinkPlugin" :refer [LinkPlugin]]
             ["@lexical/react/LexicalListPlugin" :refer [ListPlugin]]
@@ -41,7 +42,8 @@
      (when toolbar? [:f> ToolbarPlugin options])
      [:div.editor-inner
       [:> RichTextPlugin
-       (cond-> {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}
+       (cond-> {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])
+                :ErrorBoundary LexicalErrorBoundary}
          placeholder (assoc :placeholder (r/as-element [:div.editor-placeholder placeholder])))]
       [:> HistoryPlugin {}]
       [autolink-plugin]
