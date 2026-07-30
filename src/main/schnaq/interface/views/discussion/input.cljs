@@ -68,7 +68,8 @@
 (defn- premise-card-editor
   "Input, where users provide premises."
   [{:keys [db/id]} editor-id]
-  (let [editor-content @(rf/subscribe [:editor/content editor-id])]
+  (let [editor-content @(rf/subscribe [:editor/content editor-id])
+        submittable? @(rf/subscribe [:editor/submittable? editor-id])]
     [:<>
      [:div.input-group [textarea-highlighting id]
       [:input {:type :hidden
@@ -81,7 +82,7 @@
        {:className "flex-grow-1 lexical-editor-sm"}]
       [:button.btn.btn-sm.btn-outline-dark
        {:type :submit
-        :disabled (empty? editor-content)
+        :disabled (not submittable?)
         :title (labels :discussion/create-argument-action)
         :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
        [:div.d-flex.flex-row
@@ -94,7 +95,8 @@
   (let [author @(rf/subscribe [:schnaq/author])
         schnaq @(rf/subscribe [:schnaq/selected])
         limit-reached? (posts-limit-reached? author schnaq)
-        editor-content @(rf/subscribe [:editor/content editor-id])]
+        editor-content @(rf/subscribe [:editor/content editor-id])
+        submittable? @(rf/subscribe [:editor/submittable? editor-id])]
     (if (and limit-reached? shared-config/enforce-limits?)
       [post-limit-reached-alert]
       (when-not @(rf/subscribe [:schnaq.state/read-only?])
@@ -112,7 +114,7 @@
            {:className "flex-grow-1"}]
           [:button.btn.btn-outline-secondary
            {:type :submit
-            :disabled (empty? editor-content)
+            :disabled (not submittable?)
             :title (labels :discussion/create-argument-action)
             :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
            [:div.d-flex.flex-row
