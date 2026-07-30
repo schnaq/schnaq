@@ -10,8 +10,11 @@
  *
  */
 
-// Excalidraw 0.18+ ships its own stylesheet (ESM package).
-@import "../../../node_modules/@excalidraw/excalidraw/dist/prod/index.css";
+// Excalidraw 0.18+ ships its own stylesheet (ESM package). The `.css`
+// extension is omitted on purpose: with it, Sass emits a plain CSS `@import`
+// pointing into `node_modules`, which is not deployed. Without it, Sass inlines
+// the stylesheet into `main.min.css`.
+@import "../../../node_modules/@excalidraw/excalidraw/dist/prod/index";
 
 @font-face {
   font-family: "Virgil";

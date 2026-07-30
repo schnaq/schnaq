@@ -24,7 +24,7 @@
   (let [data (oget properties :data)
         ^NodeKey nodeKey (oget properties :nodeKey)
         [editor] (useLexicalComposerContext)
-        [modal-open? modal-open!] (useState (and (= data "[]") ^boolean (.isEditable editor)))
+        [modal-open? modal-open!] (useState (and (= data "[]") (ocall editor "isEditable")))
         image-container-ref (useRef nil)
         button-ref (useRef nil)
         [selected? selected! clear-selection!] (useLexicalNodeSelection nodeKey)
@@ -52,7 +52,7 @@
                        false)
                      #js [editor modal-open! nodeKey])
         set-data (fn [new-data]
-                   (when ^boolean (.isEditable editor)
+                   (when (ocall editor "isEditable")
                      (.update editor #(let [node ($getNodeByKey nodeKey)]
                                         (when ($excalidraw-node? node)
                                           (if (pos? (oget new-data :length))
@@ -89,7 +89,7 @@
                            :shown? modal-open?
                            :onDelete delete-node
                            :onSave (fn [new-data]
-                                     ^void (.setEditable editor true)
+                                     (ocall editor "setEditable" true)
                                      (set-data new-data)
                                      (modal-open! false))
                            :closeOnClickOutside? true}]
