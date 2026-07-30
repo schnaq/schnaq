@@ -10,7 +10,13 @@
                 ;; `yarn vendor:excalidraw` into a CJS file Closure can consume.
                 :js-options {:resolve {"@excalidraw/excalidraw" {:target :file
                                                                  :file "target/vendor/excalidraw.cjs.js"}}}
-                :compiler-options {:warnings {:undeclared-var false
+                ;; :es-unstable keeps class fields untranspiled. Closure
+                ;; (v20240317) lowers them into the constructor *before* the
+                ;; super() call, which makes Lexical 0.48's caret classes throw
+                ;; "Must call super constructor in derived class" on every
+                ;; keystroke in release builds.
+                :compiler-options {:output-feature-set :es-unstable
+                                   :warnings {:undeclared-var false
                                               :redef false}}
                 :dev {:compiler-options {:closure-defines {re-frame.trace.trace-enabled? true
                                                            day8.re-frame.tracing.trace-enabled? true}
