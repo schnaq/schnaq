@@ -11,11 +11,12 @@
  * package-exports resolution (@upsetjs/venn.js).
  */
 import * as esbuild from 'esbuild';
-import { mkdirSync } from 'node:fs';
+import { cpSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const excalidrawDist = join(root, 'node_modules/@excalidraw/excalidraw/dist/prod');
 const outfile = join(root, 'target/vendor/excalidraw.cjs.js');
 
 mkdirSync(dirname(outfile), { recursive: true });
@@ -51,3 +52,11 @@ await esbuild.build({
 });
 
 console.log(`Wrote ${outfile}`);
+
+// `_excalidraw.scss` inlines Excalidraw's stylesheet, whose only `url()` font
+// references point at `./fonts/Assistant`, resolved relative to `main.min.css`.
+// Mirror that folder next to the stylesheet so the UI font is actually served.
+const fontsTarget = join(root, 'resources/public/css/fonts/Assistant');
+cpSync(join(excalidrawDist, 'fonts/Assistant'), fontsTarget, { recursive: true });
+
+console.log(`Wrote ${fontsTarget}`);
