@@ -4,8 +4,8 @@ module.exports = function (config) {
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',
-        flags: ['--no-sandbox']
-      }
+        flags: ['--no-sandbox'],
+      },
     },
     // The directory where the output file lives
     basePath: 'target',
@@ -16,8 +16,8 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     client: {
-      args: ["shadow.test.karma.init"],
-      singleRun: true
-    }
-  })
+      args: ['shadow.test.karma.init'],
+      singleRun: true,
+    },
+  });
 };

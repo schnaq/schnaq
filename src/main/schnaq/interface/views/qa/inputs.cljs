@@ -18,6 +18,7 @@
   []
   (let [editor-id "qanda-input"
         editor-content @(rf/subscribe [:editor/content editor-id])
+        submittable? @(rf/subscribe [:editor/submittable? editor-id])
         submit-fn (fn [e] (.preventDefault e)
                     (let [form (oget e [:currentTarget :elements])
                           statement-text (oget form [:statement :value])
@@ -44,7 +45,7 @@
      (when-not (and limit-reached? shared-config/enforce-limits?)
        [:button.btn.btn-lg.btn-secondary.w-100.shadow-sm.mt-3.rounded-1
         {:type "submit"
-         :disabled (empty? editor-content)
+         :disabled (not submittable?)
          :title (labels :qanda.button/submit)
          :on-click #(tracking/track-event "Active User" "Action" "Submit Question")}
         (labels :qanda.button/submit)

@@ -8,7 +8,7 @@
             [goog.string.format] ;; required for goog.string. We need to require it once in our project.
             [mount.core :as mount]
             [re-frame.core :as rf]
-            [reagent.dom]
+            [reagent.dom.client :as rdom-client]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.specs]
             [schnaq.interface.analytics.core]
@@ -94,9 +94,13 @@
 
 ;; -- Entry Point -------------------------------------------------------------
 
+(defonce ^:private root (atom nil))
+
 (defn render
   []
-  (reagent.dom/render [views/root] (gdom/getElement "app")))
+  (when-not @root
+    (reset! root (rdom-client/create-root (gdom/getElement "app"))))
+  (rdom-client/render @root [views/root]))
 
 (defn ^:dev/after-load clear-cache-and-render!
   []

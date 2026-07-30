@@ -1,6 +1,17 @@
 (ns schnaq.mail.template
   (:require [clojure.string :as cstring]
-            [schnaq.config :as config]))
+            [schnaq.config :as config]
+            [taoensso.timbre :as log]))
+
+(defn- load-template
+  "Load an HTML mail template from `url`, logging and rethrowing on failure."
+  [url]
+  (try
+    (slurp url)
+    (catch Exception e
+      (log/error "Failed to load mail template from" url)
+      (log/error e)
+      (throw e))))
 
 (defn mail
   "Basic html mail template with a schnaq logo and passed heading.
@@ -25,7 +36,7 @@
              (str "\n\n" additional-plain-content))
            "\n\n\nSchöne Grüße\n\ndein schnaq Team")}
      {:type "text/html; charset=utf-8" :content
-      (reduce replace-fn (slurp config/mail-template) format-map)}]))
+      (reduce replace-fn (load-template config/mail-template) format-map)}]))
 
 (defn mail-content-left-button-right
   "Additional html content to display content on the left side and a button on the right side"
@@ -35,4 +46,4 @@
                     "$$$LEFT-CONTENT-BOTTOM$$$" content-subtitle
                     "$$$BUTTON-TEXT$$$" button-text
                     "$$$BUTTON-LINK$$$" button-link}]
-    (reduce replace-fn (slurp config/mail-content-button-right-template) format-map)))
+    (reduce replace-fn (load-template config/mail-content-button-right-template) format-map)))

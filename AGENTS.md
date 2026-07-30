@@ -13,7 +13,7 @@ This document provides guidance for AI agents (like Claude Code, GitHub Copilot,
 ## Technology Stack
 
 ### Backend (Clojure)
-- **Language**: Clojure 1.11.3
+- **Language**: Clojure 1.12.4
 - **Web Framework**: Reitit 0.7.1 (routing + middleware)
 - **HTTP Server**: http-kit 2.8.0
 - **Database**: Datomic Pro (immutable, time-travel DB)
@@ -439,7 +439,7 @@ Key environment variables (defined in [config.clj](src/main/schnaq/config.clj)):
 - `DATOMIC_URI` - Database connection string
 - `KEYCLOAK_*` - Keycloak authentication config
 - `AWS_*` - AWS S3 credentials
-- `SMTP_*` - Email server configuration
+- `EMAIL_SENDER_ADDRESS`, `EMAIL_HOST`, `EMAIL_USERNAME`, `EMAIL_PASSWORD` - Email server configuration (optional `EMAIL_PORT`, default 465)
 - `API_URL` - Backend API URL
 - `BUILD_HASH` - Version identifier
 

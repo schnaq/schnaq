@@ -22,17 +22,32 @@
 
 ;; -----------------------------------------------------------------------------
 
+(def ^:private never-matching-regexp
+  "Element transformers must provide a regexp for markdown imports and shortcuts.
+  A drawing cannot be reconstructed from its markdown representation, therefore
+  this transformer only exports and its regexp never matches."
+  #"(?!)")
+
 (def excalidraw-transformer
-  "Export / import excalidraw nodes as markdown."
+  "Export excalidraw nodes as markdown.
+
+  Must be an `element` transformer: `ExcalidrawNode` is a block-level
+  `DecoratorNode` and therefore a direct child of the root. Lexical's markdown
+  export only offers root children to `element` transformers, `text-match`
+  transformers are exclusively applied to children of element nodes. A
+  `text-match` transformer would never be called and the drawing would silently
+  export as an empty string.
+
+  Exports nothing until the PNG has been uploaded and the node knows its url.
+  Otherwise a drawing submitted right after saving would result in a markdown
+  image without a target."
   #js {:dependencies [ExcalidrawNode]
-       :export (fn [^ExcalidrawNode node, _export-children, _export-format]
-                 (when ($excalidraw-node? node)
+       :export (fn [^ExcalidrawNode node, _traverse-children, _selection]
+                 (when (and ($excalidraw-node? node) (.hasUrl node))
                    (format "![%s](%s)" "Excalidraw drawing" (.getUrl node))))
-       :importRegExp nil
-       :regExp nil
-       :replace nil
-       :trigger nil
-       :type "text-match"})
+       :regExp never-matching-regexp
+       :replace (constantly false)
+       :type "element"})
 
 ;; -----------------------------------------------------------------------------
 

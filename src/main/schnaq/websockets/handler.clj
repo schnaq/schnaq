@@ -86,7 +86,7 @@
   (send! (first (:any @(:connected-uids socket)))
          [:message/add "huhu"])
 
-  (log/set-level! :debug)
-  (log/set-level! :info)
+  (log/set-min-level! :debug)
+  (log/set-min-level! :info)
 
   nil)

@@ -6,7 +6,7 @@
             ["@lexical/react/LexicalHorizontalRuleNode" :refer [HorizontalRuleNode]]
             ["@lexical/rich-text" :refer [HeadingNode QuoteNode]]
             ["@lexical/table" :refer [TableCellNode TableNode TableRowNode]]
-            ["lexical" :refer [$createParagraphNode]]
+            ["lexical" :refer [$createParagraphNode $getRoot]]
             [re-frame.core :as rf]
             [schnaq.interface.components.lexical.nodes.excalidraw :refer [ExcalidrawNode]]
             [schnaq.interface.components.lexical.nodes.image :refer [ImageNode]]
@@ -82,26 +82,28 @@
 
 (defn- initialize-editor-state
   "Initial editor state. Called only once when the editor is loaded.
-  Convert initial-content from markdown to lexical nodes or create an empty
-  paragraph node."
+  Convert initial-content from markdown to lexical nodes, or seed an empty
+  paragraph so the selection has a valid insert target (Lexical 0.48+)."
   [id initial-content]
   (fn [editor]
     (rf/dispatch [:editor/register id editor])
     (rf/dispatch [:editor/content id initial-content])
-    (if initial-content
+    (if (seq initial-content)
       ($convertFromMarkdownString initial-content schnaq-transformers)
-      ($createParagraphNode))))
+      (.append ($getRoot) ($createParagraphNode)))))
 
 (defn initial-config
   "Initial configuration for all editor instances."
   [id initial-content]
-  #js {:theme theme :onError #(log/error %)
+  #js {:namespace "SchnaqEditor"
+       :theme theme
+       :onError #(log/error %)
        :nodes #js [AutoLinkNode
                    CodeNode
                    CodeHighlightNode
                    ExcalidrawNode
                    HeadingNode
-                   HorizontalRuleNode,
+                   HorizontalRuleNode
                    ImageNode
                    VideoNode
                    LinkNode
@@ -112,7 +114,6 @@
                    TableNode
                    TableRowNode]
        :editorState (initialize-editor-state id initial-content)})
-
 (def sample-markdown-input
   "**Bold** *Italic* ~~Strikethrough~~ `Code`
 > Quote
@@ -124,5 +125,5 @@
 ![](https://snq-common.s3.nl-ams.scw.cloud/logos/schnaq.webp)
 <a href=\"javascript:alert('XSS')\">Click Me</a>
 [Click Me](javascript:alert('Uh oh...'))
-[Some Link](https://schnaq.com)
-<a href=\"https://schnaq.com\">Click Me</a>")
+[Some Link](https://landing.schnaq.com)
+<a href=\"https://landing.schnaq.com\">Click Me</a>")

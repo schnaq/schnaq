@@ -41,12 +41,12 @@
      (labels :nav/schnaqs)]]
    [tooltip/text
     (labels :router/privacy-tooltip)
-    [:> NavLink (merge {:href "https://schnaq.com/privacy"} props)
+    [:> NavLink (merge {:href "https://landing.schnaq.com/privacy"} props)
      (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :lock])
      (labels :router/privacy)]]
    [tooltip/text
     (labels :nav/blog-tooltip)
-    [:> NavLink (merge {:href "https://schnaq.com/blog/"} props)
+    [:> NavLink (merge {:href "https://landing.schnaq.com/blog/"} props)
      (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :newspaper])
      (labels :nav/blog)]]])
 

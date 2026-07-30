@@ -5,21 +5,35 @@
             ["@lexical/react/LexicalClearEditorPlugin" :refer [ClearEditorPlugin]]
             ["@lexical/react/LexicalComposer" :refer [LexicalComposer]]
             ["@lexical/react/LexicalContentEditable" :refer [ContentEditable]]
+            ["@lexical/react/LexicalErrorBoundary" :refer [LexicalErrorBoundary]]
             ["@lexical/react/LexicalHistoryPlugin" :refer [HistoryPlugin]]
             ["@lexical/react/LexicalLinkPlugin" :refer [LinkPlugin]]
             ["@lexical/react/LexicalListPlugin" :refer [ListPlugin]]
             ["@lexical/react/LexicalOnChangePlugin" :refer [OnChangePlugin]]
             ["@lexical/react/LexicalRichTextPlugin" :refer [RichTextPlugin]]
-            ["lexical" :refer [CLEAR_EDITOR_COMMAND CLEAR_HISTORY_COMMAND]]
+            ["lexical" :refer [$getRoot CLEAR_EDITOR_COMMAND
+                               CLEAR_HISTORY_COMMAND]]
+            [clojure.string :as string]
             [oops.core :refer [ocall]]
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.interface.components.lexical.config :refer [initial-config sample-markdown-input]]
+            [schnaq.interface.components.lexical.nodes.excalidraw :refer [$excalidraw-node? ExcalidrawNode]]
             [schnaq.interface.components.lexical.plugins.autolink :refer [autolink-plugin]]
             [schnaq.interface.components.lexical.plugins.markdown :refer [markdown-shortcut-plugin schnaq-transformers]]
             [schnaq.interface.components.lexical.plugins.node-changed :refer [NodeChangedPlugin]]
             [schnaq.interface.components.lexical.plugins.toolbar :refer [ToolbarPlugin]]
             [schnaq.interface.components.lexical.plugins.tree-view :refer [TreeViewPlugin]]))
+
+(defn- $drawing-upload-pending?
+  "Whether the editor holds a drawing whose image has not been uploaded yet. Such
+  a drawing has no url and thus cannot be exported to markdown, submitting now
+  would silently drop it. Must be called inside an editor-state's `read`."
+  []
+  (boolean
+   (some (fn [^ExcalidrawNode node]
+           (and ($excalidraw-node? node) (not (.hasUrl node))))
+         (.getChildren ($getRoot)))))
 
 (defn editor
   "Create a lexical editor instance.
@@ -41,7 +55,8 @@
      (when toolbar? [:f> ToolbarPlugin options])
      [:div.editor-inner
       [:> RichTextPlugin
-       (cond-> {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])}
+       (cond-> {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])
+                :ErrorBoundary LexicalErrorBoundary}
          placeholder (assoc :placeholder (r/as-element [:div.editor-placeholder placeholder])))]
       [:> HistoryPlugin {}]
       [autolink-plugin]
@@ -55,7 +70,9 @@
       (when id [:> OnChangePlugin
                 {:onChange (fn [editor-state _editor]
                              (ocall editor-state "read"
-                                    #(rf/dispatch [:editor/content id ($convertToMarkdownString schnaq-transformers)])))}])]]]])
+                                    #(rf/dispatch [:editor/content id
+                                                   ($convertToMarkdownString schnaq-transformers)
+                                                   ($drawing-upload-pending?)])))}])]]]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -112,14 +129,16 @@
 
 (rf/reg-event-db
  :editor/content
- (fn [db [_ editor-id content]]
-   (assoc-in db [:editors editor-id :content] content)))
+ (fn [db [_ editor-id content upload-pending?]]
+   (update-in db [:editors editor-id] assoc
+              :content content
+              :upload-pending? (boolean upload-pending?))))
 
 (rf/reg-event-fx
  :editor/clear
  (fn [{:keys [db]} [_ editor-id]]
    (let [editor (get-in db [:editors editor-id :editor])]
-     {:db (update-in db [:editors editor-id] dissoc :content)
+     {:db (update-in db [:editors editor-id] dissoc :content :upload-pending?)
       :fx [[:editor/command! [editor CLEAR_EDITOR_COMMAND nil]]
            [:editor/command! [editor CLEAR_HISTORY_COMMAND nil]]]})))
 
@@ -137,6 +156,15 @@
  :editor/content
  (fn [db [_ editor-id]]
    (get-in db [:editors editor-id :content])))
+
+(rf/reg-sub
+ ;; The editor holds content worth submitting: it is not blank and no drawing is
+ ;; still waiting for its image upload.
+ :editor/submittable?
+ (fn [db [_ editor-id]]
+   (let [{:keys [content upload-pending?]} (get-in db [:editors editor-id])]
+     (and (not (string/blank? content))
+          (not upload-pending?)))))
 
 (rf/reg-fx
  :editor/update!

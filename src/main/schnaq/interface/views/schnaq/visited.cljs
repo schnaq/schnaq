@@ -118,10 +118,12 @@
            visited-hashes-with-faq (conj visited-hashes config/faq-share-hash)
            share-hashes (if shared-config/production? visited-hashes-with-faq visited-hashes)
            share-hashes (->> share-hashes (remove nil?) (remove #(= % "")))
-           schnaq-filter (keyword (get-in db [:current-route :parameters :query :filter]))]
-          (when-not (empty? share-hashes)
+           ;; Check raw query value before `keyword` — `(keyword nil)` is nil, but
+           ;; clj-kondo treats `keyword` as always truthy (:constant-condition).
+           schnaq-filter (get-in db [:current-route :parameters :query :filter])]
+          (when (seq share-hashes)
                     {:db (if schnaq-filter
-                             (assoc-in db [:schnaqs :filter] schnaq-filter)
+                             (assoc-in db [:schnaqs :filter] (keyword schnaq-filter))
                              (update db :schnaqs dissoc :filter))
                      :fx [(http/xhrio-request
                            db :post "/schnaqs/by-hashes"

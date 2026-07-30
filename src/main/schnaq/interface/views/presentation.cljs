@@ -17,10 +17,10 @@
   [:div.text-center.statement-card.p-3
    [:hr.w-50.mx-auto]
    [:a.btn.btn-sm.btn-link.text-dark
-    {:href "https://schnaq.com/legal-note"}
+    {:href "https://landing.schnaq.com/legal-note"}
     (labels :footer.buttons/legal-note)]
    [:a.btn.btn-sm.btn-link.text-dark
-    {:href "https://schnaq.com/privacy"}
+    {:href "https://landing.schnaq.com/privacy"}
     (labels :router/privacy)]])
 
 (defn- share-options

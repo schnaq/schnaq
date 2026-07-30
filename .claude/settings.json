@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(clojure*)",
+      "Bash(yarn karma:*)",
+      "Bash(clj-kondo --lint src/)"
+    ]
+  }
+}

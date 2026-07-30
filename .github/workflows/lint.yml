@@ -1,27 +1,43 @@
 name: "Lint Code and check dependencies"
 
-on: [ push ]
+on: [push]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     name: Lint code
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
 
       - name: Run clj-kondo
         run: clj-kondo --lint src/
 
+  lint-js:
+    runs-on: ubuntu-latest
+    name: Lint JS / check Prettier
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn lint:js
+      - run: yarn format:check
+
   up-to-date-deps:
     runs-on: ubuntu-latest
     name: Check Clojure deps
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: setup-clojure
         uses: ./.github/actions/setup_clojure
 
       - name: Check if deps.edn is up to date
-        run: clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -M:outdated
+        # Informational only: antq exits 1 when anything is outdated. Deferred
+        # majors (reitit, reagent, clojurescript, guardrails, shadow-cljs, …)
+        # are tracked as separate Linear issues, so keep this green.
+        run: clojure -M:outdated || true

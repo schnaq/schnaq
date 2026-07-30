@@ -1,6 +1,7 @@
 (ns schnaq.mail.emails
   "Handle sending emails to users."
   (:require [clojure.spec.alpha :as s]
+            [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [hiccup.util :as hiccup-util]
             [postal.core :refer [send-message]]
@@ -10,13 +11,43 @@
             [schnaq.mail.template :as template]
             [taoensso.timbre :as log]))
 
+(def ^:private email-config->env-var
+  {:sender-address "EMAIL_SENDER_ADDRESS"
+   :sender-host "EMAIL_HOST"
+   :sender-username "EMAIL_USERNAME"
+   :sender-password "EMAIL_PASSWORD"})
+
+(defn- email-value-missing?
+  [v]
+  (or (nil? v) (and (string? v) (empty? v))))
+
+(defn missing-email-config-keys
+  "Return env var names for unset email configuration values."
+  []
+  (->> email-config->env-var
+       (keep (fn [[config-key env-var]]
+               (when (email-value-missing? (get config/email config-key))
+                 env-var)))
+       vec))
+
+(defn mail-configured?
+  "True when all required email configuration values are set."
+  []
+  (empty? (missing-email-config-keys)))
+
 (def ^:private conn {:host (:sender-host config/email)
+                     :port (:sender-port config/email)
                      :ssl true
                      :user (:sender-username config/email)
                      :pass (:sender-password config/email)})
 
-(def ^:private mail-configured?
-  (every? not-empty (vals config/email)))
+(def ^:private missing-config-logged? (atom false))
+
+(defn- log-missing-email-config-once!
+  []
+  (when (compare-and-set! missing-config-logged? false true)
+    (log/warn "E-Mail not configured. Missing environment variables:"
+              (str/join ", " (missing-email-config-keys)))))
 
 (>defn- valid-mail
   "Check valid mail"
@@ -28,25 +59,36 @@
 
 (def ^:private failed-sendings (atom '()))
 
+(defn- postal-send-success?
+  [result]
+  (zero? (:code result 99)))
+
 (>defn- send-mail-with-custom-body
   "Sends a single mail to a recipient with a passed body."
   [title recipient body]
   [string? string? coll? :ret (? coll?)]
-  (if mail-configured?
+  (if (mail-configured?)
     (if (valid-mail recipient)
       (try
-        (send-message conn {:from (:sender-address config/email)
-                            :to recipient
-                            :subject title
-                            :body body})
-        (log/info "Sent mail to" recipient)
-        (Thread/sleep 100)
+        (let [result (send-message conn {:from (:sender-address config/email)
+                                         :to recipient
+                                         :subject title
+                                         :body body})]
+          (if (postal-send-success? result)
+            (do
+              (log/info "Sent mail to" recipient)
+              (Thread/sleep 100))
+            (do
+              (log/error "Failed to send mail to" recipient "postal returned" result)
+              (swap! failed-sendings conj recipient))))
         (catch Exception exception
           (log/error "Failed to send mail to" recipient)
           (log/error exception)
           (swap! failed-sendings conj recipient)))
       (swap! failed-sendings conj recipient))
-    (log/info (format "Should send an email to %s now, but email is not configured." recipient))))
+    (do
+      (log-missing-email-config-once!)
+      (log/info (format "Should send an email to %s now, but email is not configured." recipient)))))
 
 (>defn send-mail
   "Sends a single mail to the recipient. Title and content are used as passed."

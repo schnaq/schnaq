@@ -1,5 +1,9 @@
 (ns schnaq.interface.config
   (:require [goog.string :as gstring]
+            ;; `gstring/format` is only defined when this module is loaded. This
+            ;; namespace formats at load time, so it cannot rely on another
+            ;; namespace pulling it in.
+            [goog.string.format]
             [schnaq.config.shared :as shared-config]))
 
 ;; Second parameter is a default value

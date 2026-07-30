@@ -38,8 +38,8 @@
      "[FEEDBACK] Es wurde ein neues Feedback hinterlegt 🐳"
      "[FEEDBACK]"
      "Es wurde ein neues Feedback hinterlegt 🐳"
-     (format "Feedback kann hier angeschaut werden: https://schnaq.com/admin/feedbacks")
-     "info@schnaq.com")
+     (format "Feedback kann hier angeschaut werden: https://app.schnaq.com/admin/feedbacks")
+     "christian@schnaq.com")
     (log/info "Feedback created")
     (created "" {:feedback feedback})))
 

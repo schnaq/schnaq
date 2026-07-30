@@ -69,8 +69,8 @@
                     (and enterprise-user? (not beta-tester?)) [enterprise-badge]
                     beta-tester? [tester-badge]
                     :else [pro-badge])]
-    (when indicator
-      [:span.px-1 indicator])))
+    ;; `cond` always returns a badge via `:else`
+    [:span.px-1 indicator]))
 
 ;; -----------------------------------------------------------------------------
 

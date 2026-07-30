@@ -74,11 +74,11 @@
   (updateDOM [_this] false)
   (getSrc [this] (oget this :__src))
   (getAltText [this] (or (oget this :__altText) ""))
-  (exportJSON [this] {:altText (or (oget this :__altText) "")
-                      :src (oget this :__src)
-                      :type "image"
-                      :version 1})
-  (decorate [this _editor]
+  (exportJSON [this] #js {:altText (or (oget this :__altText) "")
+                          :src (oget this :__src)
+                          :type "image"
+                          :version 1})
+  (decorate [this _editor _config]
             (r/create-element ImageComponent #js {:src (oget this :__src) :altText (oget this :__altText) :nodeKey (.getKey this)})))
 
 ;; Configure static methods on our new class, because it is not possible to do

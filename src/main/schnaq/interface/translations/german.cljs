@@ -215,6 +215,7 @@
    :schnaq.wordcloud.local/delete-button "Löschen"
    :schnaq.wordcloud.local/delete-confirmation "Möchtest du die Wortwolke wirklich permanent löschen?"
    :schnaq.wordcloud/download "Wortwolke herunterladen"
+   :schnaq.wordcloud/download-csv "Als CSV herunterladen"
    :schnaq.wordcloud/no-words-yet "Noch sind keine Wörter in der Wortwolke vorhanden. Fang du doch an mit deinen ersten Gedanken"
 
    ;; feedback
@@ -563,7 +564,7 @@
    :errors/generic "Es ist ein Fehler aufgetreten"
    :errors.schnaq/read-only "Dieser schnaq ist schreibgeschützt."
 
-   :error.generic/contact-us [:span "Solltest du hier landen nachdem du etwas auf schnaq.com angeklickt hast, gib uns gerne Bescheid unter " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
+   :error.generic/contact-us [:span "Solltest du hier landen nachdem du etwas auf landing.schnaq.com angeklickt hast, gib uns gerne Bescheid unter " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
 
    :error.404/heading "Diese Seite existiert nicht 🙉"
    :error.404/body "Die URL, der du gefolgt bist, existiert leider nicht. Möglicherweise hat sich ein Tippfehler
@@ -697,7 +698,7 @@
    :hub.add.schnaq.error/title "Fehler beim Hinzufügen!"
    :hub.add.schnaq.error/body "Der schnaq konnte nicht gefunden oder hinzugefügt werden. Bitte versuche es noch einmal."
    :hub.add.schnaq.input/label "schnaq hinzufügen"
-   :hub.add.schnaq.input/placeholder "Schnaq-URL z.B. https://schnaq.com/schnaq/… oder Teil-Code"
+   :hub.add.schnaq.input/placeholder "Schnaq-URL z.B. https://app.schnaq.com/schnaq/… oder Teil-Code"
    :hub.add.schnaq.input/button "schnaq hinzufügen"
    :hub.remove.schnaq.success/title "schnaq entfernt!"
    :hub.remove.schnaq.success/body "Der schnaq wurde erfolgreich aus deinem Hub entfernt."

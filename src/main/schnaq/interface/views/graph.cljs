@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.graph
   (:require ["remove-markdown" :as remove-markdown]
-            ["vis-network/standalone/esm/vis-network" :refer [DataSet Network]]
+            ["vis-network/standalone" :refer [DataSet Network]]
             [clojure.set :as set]
             [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [=> >defn-]]

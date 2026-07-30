@@ -1,5 +1,6 @@
 (ns schnaq.interface.utils.file-download
-  (:require [oops.core :refer [oset!]]))
+  (:require [clojure.string :as str]
+            [oops.core :refer [oset!]]))
 
 (defn file-blob [data mimetype]
   (js/Blob. [data] {"type" mimetype}))
@@ -45,3 +46,24 @@
         svgBlob (new js/Blob #js [data] #js {:type "image/svg+xml;charset=utf-8"})
         url (.createObjectURL js/URL svgBlob)]
     (trigger-download url filename)))
+
+(defn- csv-escape
+  "Escape a value per RFC 4180: wrap in quotes if it contains comma, quote,
+   or newline; double internal quotes."
+  [v]
+  (let [s (str v)]
+    (if (re-find #"[,\"\r\n]" s)
+      (str "\"" (str/replace s "\"" "\"\"") "\"")
+      s)))
+
+(defn rows->csv
+  "Convert rows (seq of seqs) to a CSV string. First row is the header."
+  [rows]
+  (->> rows
+       (map (fn [row] (str/join "," (map csv-escape row))))
+       (str/join "\n")))
+
+(defn download-csv
+  "Trigger CSV file download for the given rows."
+  [rows filename]
+  (download-data (rows->csv rows) filename "text/csv;charset=utf-8"))

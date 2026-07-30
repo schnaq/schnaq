@@ -34,7 +34,7 @@
   "Print profiling results on the console."
   []
   (when stats-accumulator
-    (when-let [stats (not-empty @stats-accumulator)]
+    (when-let [stats (not-empty #_{:clj-kondo/ignore [:type-mismatch]} @stats-accumulator)]
       (println (tufte/format-grouped-pstats stats)))))
 
 (defn post-profiling-to-mattermost
@@ -42,7 +42,7 @@
   channel, e.g. `gitlabs-dirty-secrets`"
   [channel]
   (when stats-accumulator
-    (when-let [stats (not-empty @stats-accumulator)]
+    (when-let [stats (not-empty #_{:clj-kondo/ignore [:type-mismatch]} @stats-accumulator)]
       (toolbelt/post-in-mattermost!
        (format "```%n%s%n```"
                (tufte/format-grouped-pstats stats))

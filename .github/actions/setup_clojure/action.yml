@@ -5,26 +5,43 @@ on: [push]
 runs:
   using: "composite"
   steps:
-    - name: Checkout
-      uses: actions/checkout@v3
     - name: Prepare java
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v5
       with:
         distribution: "temurin"
         java-version: "17"
     - name: Install clojure tools
-      uses: DeLaGuardo/setup-clojure@10.2
+      uses: DeLaGuardo/setup-clojure@13.6.1
       with:
         bb: "latest"
         cli: "latest"
         clj-kondo: "latest"
 
-    # Optional step:
     - name: Cache clojure dependencies
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: |
           ~/.m2/repository
           ~/.deps.clj
         key: cljdeps-${{ hashFiles('deps.edn') }}
         restore-keys: cljdeps-
+
+    # Populate ~/.m2 so the cache action above actually has something
+    # to save. Maven Central rate-limits aggressive parallel fetches
+    # with HTTP 429; on a cache hit this is a near-zero no-op, on a
+    # miss it downloads once for every alias a consumer might need.
+    - name: Prefetch Clojure dependencies
+      shell: bash
+      run: |
+        set -uo pipefail
+        for attempt in 1 2 3 4; do
+          if clojure -P -M:test:frontend:run-server:outdated; then
+            echo "Prefetch succeeded on attempt $attempt"
+            exit 0
+          fi
+          sleep_for=$((attempt * 30))
+          echo "::warning::Prefetch attempt $attempt failed (likely Maven 429). Sleeping ${sleep_for}s before retry."
+          sleep "$sleep_for"
+        done
+        echo "::error::Could not fetch Clojure dependencies after 4 attempts."
+        exit 1

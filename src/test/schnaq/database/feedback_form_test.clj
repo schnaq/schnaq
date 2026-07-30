@@ -82,11 +82,11 @@
                                               true)
           updated-feedback (fast-pull feedback-id '[*])]
       (is (not (nil? result)))
-      (is 2 (count (:feedback/items updated-feedback)))
-      (is "blubber" (->> (:feedback/items updated-feedback)
-                         (filter #(= 1 (:feedback.item/ordinal %)))
-                         first
-                         :feedback.item/label))
+      (is (= 2 (count (:feedback/items updated-feedback))))
+      (is (= "blubb" (->> (:feedback/items updated-feedback)
+                          (filter #(= 1 (:feedback.item/ordinal %)))
+                          first
+                          :feedback.item/label)))
       (is (:feedback/visible updated-feedback)))))
 
 (deftest update-feedback-form-items!-without-id-is-double-test
@@ -117,11 +117,11 @@
                                               true)
           updated-feedback (fast-pull feedback-id '[*])]
       (is (not (nil? result)))
-      (is 3 (count (:feedback/items updated-feedback)))
-      (is "blubber" (->> (:feedback/items updated-feedback)
-                         (filter #(= 1 (:feedback.item/ordinal %)))
-                         first
-                         :feedback.item/label))
+      (is (= 3 (count (:feedback/items updated-feedback))))
+      (is (= "blubb" (->> (:feedback/items updated-feedback)
+                          (filter #(= 1 (:feedback.item/ordinal %)))
+                          first
+                          :feedback.item/label)))
       (is (:feedback/visible updated-feedback)))))
 
 (deftest delete-feedback!-test
@@ -157,11 +157,11 @@
                                          true)
           retrieved-items (feedback-items share-hash)]
       (is (seq retrieved-items))
-      (is 2 (count retrieved-items))
-      (is "blubber" (->> retrieved-items
-                         (filter #(= 1 (:feedback.item/ordinal %)))
-                         first
-                         :feedback.item/label)))))
+      (is (= 2 (count retrieved-items)))
+      (is (= "blubb" (->> retrieved-items
+                          (filter #(= 1 (:feedback.item/ordinal %)))
+                          first
+                          :feedback.item/label))))))
 
 (deftest add-answers-test
   (testing "Add answers to questions works as expected."

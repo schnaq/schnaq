@@ -24,7 +24,7 @@
   (let [data (oget properties :data)
         ^NodeKey nodeKey (oget properties :nodeKey)
         [editor] (useLexicalComposerContext)
-        [modal-open? modal-open!] (useState (and (= data "[]") ^boolean (.isEditable editor)))
+        [modal-open? modal-open!] (useState (and (= data "[]") (ocall editor "isEditable")))
         image-container-ref (useRef nil)
         button-ref (useRef nil)
         [selected? selected! clear-selection!] (useLexicalNodeSelection nodeKey)
@@ -52,7 +52,7 @@
                        false)
                      #js [editor modal-open! nodeKey])
         set-data (fn [new-data]
-                   (when ^boolean (.isEditable editor)
+                   (when (ocall editor "isEditable")
                      (.update editor #(let [node ($getNodeByKey nodeKey)]
                                         (when ($excalidraw-node? node)
                                           (if (pos? (oget new-data :length))
@@ -89,7 +89,7 @@
                            :shown? modal-open?
                            :onDelete delete-node
                            :onSave (fn [new-data]
-                                     ^void (.setEditable editor true)
+                                     (ocall editor "setEditable" true)
                                      (set-data new-data)
                                      (modal-open! false))
                            :closeOnClickOutside? true}]
@@ -128,7 +128,8 @@
                  (when-let [svg (.querySelector content "svg")]
                    (oset! element :innerHTML (oget svg :outerHTML))))
                (.setAttribute element data-excalidraw-attribute (oget this :__data))
-               element))
+               #js {:element element}))
+  (isInline [_this] false)
   (setUrl [this url]
           (let [self (ocall this "getWritable")]
             (oset! self :__url url)))
@@ -140,11 +141,11 @@
            (let [self (ocall this "getWritable")]
              (oset! self :__data data)))
   (exportJSON [this]
-              {:data (oget this :__data)
-               :url (oget this :__url)
-               :type "excalidraw"
-               :version 1})
-  (decorate [this _editor]
+              #js {:data (oget this :__data)
+                   :url (oget this :__url)
+                   :type "excalidraw"
+                   :version 1})
+  (decorate [this _editor _config]
             (r/create-element ExcalidrawComponent
                               #js {:data (oget this :__data) :url (oget this :__url) :nodeKey (.getKey this)})))
 
