@@ -33,7 +33,13 @@
                 :devtools {:preloads [devtools.preload day8.re-frame-10x.preload.react-18]}}
           :test-headless {:target :karma
                           :output-to "target/ci.js"
-                          :ns-regexp "-test$"}
+                          :ns-regexp "-test$"
+                          ;; Same reasoning as for the :app build: Excalidraw
+                          ;; 0.18 is ESM-only, so tests touching the editor need
+                          ;; the pre-bundled CJS file as well.
+                          :js-options {:resolve {"@excalidraw/excalidraw" {:target :file
+                                                                           :file "target/vendor/excalidraw.cjs.js"}}}
+                          :compiler-options {:output-feature-set :es-unstable}}
           :test {:target :node-test
                  :output-dir "target/test/compiled/"
                  :output-to "target/test/compiled/test.js"
