@@ -12,6 +12,10 @@
 ;; An empty Sentry DSN disables all error reporting, e.g. in development.
 (goog-define sentry-dsn "")
 
+;; Kept apart from `shared-config/environment`, which gates whether dev-only
+;; routes and UI are compiled in and is therefore "production" on staging too.
+(goog-define sentry-environment "development")
+
 (def deleted-statement-text "[deleted]")
 
 (def user-language (atom :en))

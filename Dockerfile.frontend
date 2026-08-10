@@ -11,6 +11,7 @@ ARG KEYCLOAK_REALM
 ARG FAQ_SHARE_HASH
 ARG S3_HOST
 ARG SENTRY_DSN
+ARG SENTRY_ENVIRONMENT
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends curl gnupg ca-certificates && \

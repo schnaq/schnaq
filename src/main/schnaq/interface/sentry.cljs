@@ -5,7 +5,6 @@
             [clojure.string :as str]
             [re-frame.core :as rf]
             [re-frame.interceptor :as rf-interceptor]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.config :as config]
             [taoensso.timbre :as log]))
 
@@ -79,7 +78,7 @@
   (if enabled?
     (do
       (Sentry/init #js {:dsn config/sentry-dsn
-                        :environment shared-config/environment
+                        :environment config/sentry-environment
                         :release release})
       (rf/reg-event-error-handler report-event-error)
       (log/info (str "[Sentry] Error tracking active for " release)))

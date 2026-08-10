@@ -4,7 +4,6 @@
   (:require [clojure.string :as str]
             [mount.core :refer [defstate]]
             [schnaq.config :as config]
-            [schnaq.config.shared :as shared-config]
             [sentry-clj.core :as sentry-clj]
             [taoensso.timbre :as log])
   (:import (java.lang Thread$UncaughtExceptionHandler)))
@@ -52,13 +51,13 @@
   (if (sentry-configured?)
     (do
       (sentry-clj/init! config/sentry-dsn
-                        {:environment shared-config/environment
+                        {:environment config/sentry-environment
                          :release (str "schnaq-backend@" config/build-hash)
                          :in-app-includes ["schnaq"]
                          :enable-uncaught-exception-handler false})
       (reset! enabled? true)
       (register-uncaught-exception-handler!)
-      (log/info (format "Sentry enabled for environment %s" shared-config/environment))
+      (log/info (format "Sentry enabled for environment %s" config/sentry-environment))
       true)
     (do
       (reset! enabled? false)

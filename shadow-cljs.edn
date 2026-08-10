@@ -29,6 +29,7 @@
                                             schnaq.interface.config/faq-share-hash #shadow/env "FAQ_SHARE_HASH"
                                             ;; The DSN is a public identifier, it may be shipped to clients.
                                             schnaq.interface.config/sentry-dsn #shadow/env ["SENTRY_DSN" :default "https://95539f7ec8f77f63a9bb4c3f0d1e171a@o4508488483471360.ingest.de.sentry.io/4511835799486544"]
+                                            schnaq.interface.config/sentry-environment #shadow/env ["SENTRY_ENVIRONMENT" :default "production"]
                                             schnaq.config.shared/s3-host #shadow/env "S3_HOST"}
                           ;; Source maps are uploaded to Sentry and stripped
                           ;; from the deployed artifacts, see

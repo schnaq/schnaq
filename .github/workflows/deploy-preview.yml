@@ -17,6 +17,7 @@ env:
   SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT || 'schnaq-frontend' }}
   SENTRY_URL: https://de.sentry.io
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+  SENTRY_ENVIRONMENT: staging
 
 jobs:
   deploy-preview:
