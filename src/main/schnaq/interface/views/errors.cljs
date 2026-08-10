@@ -55,7 +55,8 @@
  :ajax.error/as-notification
  (fn [{:keys [db]} [_ failure]]
    {:db (assoc db :error {:ajax failure})
-    :fx [[:dispatch [:notification/add
+    :fx [[:sentry.error/http-failure failure]
+         [:dispatch [:notification/add
                      #:notification{:title (labels :errors/generic)
                                     :body [:pre
                                            [:code
@@ -67,7 +68,8 @@
 (rf/reg-event-fx
  :ajax.error/to-console
  (fn [_ [_ failure]]
-   {:fx [[:console.log/error failure]]}))
+   {:fx [[:console.log/error failure]
+         [:sentry.error/http-failure failure]]}))
 
 (rf/reg-fx
  :console.log/error

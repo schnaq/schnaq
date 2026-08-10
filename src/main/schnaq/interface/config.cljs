@@ -9,6 +9,9 @@
 ;; Second parameter is a default value
 (goog-define build-hash "dev")
 
+;; An empty Sentry DSN disables all error reporting, e.g. in development.
+(goog-define sentry-dsn "")
+
 (def deleted-statement-text "[deleted]")
 
 (def user-language (atom :en))

@@ -61,6 +61,11 @@
 (def mail-template "https://snq-common.s3.nl-ams.scw.cloud/email/templates/generic-mail.html")
 (def mail-content-button-right-template "https://snq-common.s3.nl-ams.scw.cloud/email/templates/snippets/content-left-button-right.html")
 
+(def sentry-dsn
+  "DSN of the Sentry project collecting the backend's errors. Error tracking is
+  disabled when this is not configured."
+  (:sentry-dsn env))
+
 (def mattermost-webhook-url
   "URL to mattermost-webhook to post news to the chat."
   (:mattermost-webhook-url env))

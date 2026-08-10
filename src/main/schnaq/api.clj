@@ -41,6 +41,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.core] ;; Keep this import to activate database etc.
             [schnaq.mail.emails :as emails]
+            [schnaq.sentry :as sentry]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.websockets.handler :refer [websocket-routes]]
             [schnaq.websockets.messages]
@@ -63,6 +64,9 @@
               "E-Mail configured"
               (str "E-Mail not configured. Missing: "
                    (str/join ", " (emails/missing-email-config-keys)))))
+  (log/info (if (sentry/sentry-configured?)
+              "Sentry configured"
+              "Sentry not configured. Missing: SENTRY_DSN"))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
 
 (def ^:private description

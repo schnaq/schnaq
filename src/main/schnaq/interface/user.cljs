@@ -70,6 +70,8 @@
               ;; Clear secrets, they have been persisted.
               (assoc-in [:discussion :statements :creation-secrets] {}))
       :fx [[:localstorage/dissoc :discussion/creation-secrets]
+           [:sentry.user/set (cond-> {:id (str (or keycloak-id (get-in db [:user :device-id])))}
+                               keycloak-id (assoc :email email))]
            [:dispatch [:schnaqs.archived-and-visited/to-localstorage visited-hashes archived-hashes]]
            (when new-user?
              [:analytics/track-event ["User Registration" "Registration" "Account Creation Free"]])

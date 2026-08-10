@@ -8,6 +8,7 @@
     "watch": "yarn vendor:excalidraw && shadow-cljs watch app;",
     "server": "shadow-cljs server;",
     "build": "yarn vendor:excalidraw && clojure -P -M:frontend && yarn css:minify && yarn shadow-cljs release app",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject ${SENTRY_ARTIFACT_DIR:-resources/public/js/compiled} && sentry-cli sourcemaps upload --release=schnaq-frontend@$BUILD_HASH ${SENTRY_ARTIFACT_DIR:-resources/public/js/compiled}",
     "lint:js": "eslint .",
     "format:write": "prettier --write .",
     "format:check": "prettier --check ."
@@ -39,6 +40,7 @@
     "@lexical/table": "^0.48.0",
     "@lexical/utils": "^0.48.0",
     "@popperjs/core": "^2.11.6",
+    "@sentry/browser": "^10.69.0",
     "@tippyjs/react": "^4.2.6",
     "@vercel/analytics": "^1.6.1",
     "chart.js": "^4.5.1",
@@ -78,6 +80,7 @@
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@fontsource/poppins": "^5.2.7",
+    "@sentry/cli": "^3.6.2",
     "@types/react": "^19.2.14",
     "bootstrap": "^5.3.8",
     "esbuild": "^0.28.1",

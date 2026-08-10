@@ -24,6 +24,9 @@
         funcool/promesa {:mvn/version "11.0.678"}
         http-kit/http-kit {:mvn/version "2.8.1"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
+        io.sentry/sentry-clj {:mvn/version "8.34.247"
+                              :exclusions [ring/ring-core]
+                              :doc "Only needed for its unused ring middleware, but would bump ring-core beyond our pinned ring version."}
         jarohen/chime {:mvn/version "0.3.3"}
         keycloak-clojure/keycloak-clojure {:mvn/version "1.31.5"}
         metosin/reitit {:mvn/version "0.7.1"}
