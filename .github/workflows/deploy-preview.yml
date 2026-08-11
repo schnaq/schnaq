@@ -15,7 +15,8 @@ env:
   REST_API_URL: ${{ vars.REST_API_URL }}
   SENTRY_ORG: ${{ vars.SENTRY_ORG || 'schnaq' }}
   SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT || 'schnaq-frontend' }}
-  SENTRY_URL: https://de.sentry.io
+  # No SENTRY_URL: an organisation auth token carries its own region, and
+  # setting the variable anyway only makes sentry-cli warn that it ignores it.
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
   SENTRY_ENVIRONMENT: staging
 
