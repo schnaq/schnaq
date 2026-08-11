@@ -34,6 +34,7 @@
             [schnaq.interface.notification.events]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.scheduler]
+            [schnaq.interface.sentry :as sentry]
             [schnaq.interface.start-page]
             [schnaq.interface.tour]
             [schnaq.interface.translations]
@@ -124,6 +125,7 @@
 (defn init
   "Entrypoint into the application."
   []
+  (sentry/init!)
   (mount/start)
   (routes/init-routes!)
   (rf/dispatch-sync [:initialize/schnaq]) ;; put a value into application state

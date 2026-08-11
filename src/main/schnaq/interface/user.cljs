@@ -70,6 +70,8 @@
               ;; Clear secrets, they have been persisted.
               (assoc-in [:discussion :statements :creation-secrets] {}))
       :fx [[:localstorage/dissoc :discussion/creation-secrets]
+           ;; Only the id, never the e-mail. Users are looked up internally.
+           [:sentry.user/set {:id (str (or keycloak-id (get-in db [:user :device-id])))}]
            [:dispatch [:schnaqs.archived-and-visited/to-localstorage visited-hashes archived-hashes]]
            (when new-user?
              [:analytics/track-event ["User Registration" "Registration" "Account Creation Free"]])

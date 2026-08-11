@@ -8,6 +8,7 @@
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.wordcloud :as wordcloud-db]
+            [schnaq.sentry :as sentry]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log])
   (:import (java.util UUID)))
@@ -147,6 +148,22 @@
           :data (ex-data exception)
           :uri (:uri request)}})
 
+(defn- report-exception-to-sentry!
+  "Enrich the exception with information about the failing request."
+  [exception request]
+  (let [request-method (some-> (:request-method request) name)
+        uri (:uri request)]
+    (sentry/capture-exception!
+     exception
+     {:request (cond-> {}
+                 uri (assoc :url uri)
+                 request-method (assoc :method request-method))
+      :tags (cond-> {}
+              uri (assoc :uri uri)
+              request-method (assoc :request-method request-method))
+      :extra (cond-> {}
+               (ex-data exception) (assoc :ex-data (pr-str (ex-data exception))))})))
+
 (def exception-printing-middleware
   "Ring middleware to print stacktrace to stdout and return a valid response to
   the client."
@@ -163,6 +180,7 @@
      ::exception/wrap (fn [handler e request]
                         (log/error "ERROR" (pr-str (:uri request)))
                         (.printStackTrace e)
+                        (report-exception-to-sentry! e request)
                         (handler e request))})))
 
 (defn add-device-id

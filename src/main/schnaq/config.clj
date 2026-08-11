@@ -61,6 +61,18 @@
 (def mail-template "https://snq-common.s3.nl-ams.scw.cloud/email/templates/generic-mail.html")
 (def mail-content-button-right-template "https://snq-common.s3.nl-ams.scw.cloud/email/templates/snippets/content-left-button-right.html")
 
+(def sentry-dsn
+  "DSN of the Sentry project collecting the backend's errors. Error tracking is
+  disabled when this is not configured."
+  (:sentry-dsn env))
+
+(def sentry-environment
+  "Environment reported to Sentry. Falls back to the general environment, but is
+  configurable on its own: a staging deployment may need to run as
+  `production` to keep the dev-only routes disabled, while its errors should
+  still be told apart from the real production ones in Sentry."
+  (or (:sentry-environment env) shared-config/environment))
+
 (def mattermost-webhook-url
   "URL to mattermost-webhook to post news to the chat."
   (:mattermost-webhook-url env))
