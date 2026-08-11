@@ -13,6 +13,11 @@ env:
   KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
   FAQ_SHARE_HASH: ${{ secrets.FAQ_SHARE_HASH }}
   REST_API_URL: ${{ vars.REST_API_URL }}
+  SENTRY_ORG: ${{ vars.SENTRY_ORG || 'schnaq' }}
+  SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT || 'schnaq-frontend' }}
+  SENTRY_URL: https://de.sentry.io
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+  SENTRY_ENVIRONMENT: production
 
 jobs:
   deploy-production:
@@ -38,5 +43,16 @@ jobs:
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
       - name: Build Project Artifacts
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
+
+      - name: Upload Source Maps to Sentry
+        if: env.SENTRY_AUTH_TOKEN != ''
+        run: |
+          if [ -d .vercel/output/static/js/compiled ]; then
+            export SENTRY_ARTIFACT_DIR=.vercel/output/static/js/compiled
+          fi
+          yarn sentry:sourcemaps
+      - name: Strip Source Maps from the Deployment
+        run: find .vercel/output resources/public -name '*.js.map' -delete || true
+
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}

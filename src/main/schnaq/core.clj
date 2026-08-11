@@ -3,6 +3,7 @@
             [mount.core :refer [defstate]]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.main :as db]
+            [schnaq.sentry] ;; Keep this import to start the error tracking first
             [schnaq.toolbelt :as toolbelt]))
 
 (defstate database

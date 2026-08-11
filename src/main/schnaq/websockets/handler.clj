@@ -6,6 +6,7 @@
             [mount.core :refer [defstate] :as mount]
             [ring.middleware.keyword-params :as keyword-params]
             [schnaq.database.specs]
+            [schnaq.sentry :as sentry]
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
             [taoensso.timbre :as log]))
@@ -49,11 +50,15 @@
 
 (defn receive-message!
   "Process the message in `handle-message` and send a response if `?reply-fn` is
-  specified."
-  [{:keys [?reply-fn] :as message}]
+  specified. Exceptions must not escape, otherwise sente's router loop dies."
+  [{:keys [id ?reply-fn] :as message}]
   (let [reply-fn (or ?reply-fn (fn [_]))]
-    (when-some [response (handle-message message)]
-      (reply-fn response))))
+    (try
+      (when-some [response (handle-message message)]
+        (reply-fn response))
+      (catch Throwable e
+        (log/error e "Handling the websocket message failed:" id)
+        (sentry/capture-exception! e {:tags {:websocket-message-id (str id)}})))))
 
 ;; Receive and dispatch incoming websocket messages
 (defstate channel-router

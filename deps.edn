@@ -24,6 +24,10 @@
         funcool/promesa {:mvn/version "11.0.678"}
         http-kit/http-kit {:mvn/version "2.8.1"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
+        ;; ring-core is only pulled in by sentry-clj's ring middleware, which we do
+        ;; not use. Without the exclusion it bumps ring-core beyond our pinned version.
+        io.sentry/sentry-clj {:mvn/version "8.34.247"
+                              :exclusions [ring/ring-core]}
         jarohen/chime {:mvn/version "0.3.3"}
         keycloak-clojure/keycloak-clojure {:mvn/version "1.31.5"}
         metosin/reitit {:mvn/version "0.7.1"}

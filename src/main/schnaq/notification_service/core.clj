@@ -11,6 +11,7 @@
             [schnaq.notification-service.mail-builder :as mail-builder]
             [schnaq.notification-service.schedule :as schedule]
             [schnaq.notification-service.specs]
+            [schnaq.sentry :as sentry]
             [schnaq.shared-toolbelt :as tools]
             [taoensso.timbre :as log]))
 
@@ -94,7 +95,11 @@
   (go-loop []
     (when-let [_current-time (<! @channel)]
       (log/info (format "Checking for changes in interval [%s]" interval))
-      (run! send-schnaq-diffs (users-with-changed-discussions (time-fn) interval))
+      (try
+        (run! send-schnaq-diffs (users-with-changed-discussions (time-fn) interval))
+        (catch Throwable e
+          (log/error e "Sending notification mails failed for interval" interval)
+          (sentry/capture-exception! e {:tags {:notification-mail-interval (str interval)}})))
       (recur))))
 
 ;; -----------------------------------------------------------------------------
@@ -102,6 +107,7 @@
 (defn -main
   [& _args]
   (log/info "Initializing mail notification service")
+  (sentry/init!)
   (when (main-db/connection-possible?)
     (start-mail-schedule schedule/every-minute #(main-db/minutes-ago 1) :notification-mail-interval/every-minute)
     (start-mail-schedule schedule/daily #(main-db/days-ago 1) :notification-mail-interval/daily)
