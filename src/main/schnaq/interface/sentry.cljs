@@ -65,8 +65,10 @@
   [original-error re-frame-error]
   (let [{:keys [event-v interceptor direction]} (ex-data re-frame-error)]
     (capture-exception original-error
+                       ;; Only the event id, never its arguments: they routinely
+                       ;; carry share hashes and whatever the user typed.
                        {:event-id (str (first event-v))
-                        :event-v (truncate (pr-str event-v))
+                        :event-argument-count (count (rest event-v))
                         :interceptor (str interceptor)
                         :direction (str direction)}))
   (rf-interceptor/default-error-handler original-error re-frame-error))
@@ -87,12 +89,39 @@
 ;; -----------------------------------------------------------------------------
 ;; Effects
 
+(defn request-path
+  "The path of `uri` without its query string. `day8.re-frame.http-fx` reports
+  the full URL, and GET parameters carry share hashes and access codes. Those
+  are the credentials to a discussion and must never reach Sentry."
+  [uri]
+  (when-not (str/blank? uri)
+    (first (str/split uri #"\?"))))
+
+(defn report-http-failure?
+  "Decide whether a failed request is worth an event. Client errors are answers,
+  not defects: a missing schnaq, an expired token or a forbidden action all
+  arrive as 4xx and say nothing about the health of the application. Aborted,
+  timed out and failed requests describe the client's network and would drown
+  everything else on mobile connections."
+  [{:keys [status failure]}]
+  (case failure
+    :error (>= (or status 0) 500)
+    (:parse :exception) true
+    false))
+
 (rf/reg-fx
  :sentry.error/http-failure
- (fn [failure]
-   (let [{:keys [uri status]} failure]
-     (capture-message (str "HTTP request failed: " (or status "no status") " " (or uri "unknown uri"))
-                      {:http-failure (truncate (pr-str failure))}))))
+ (fn [{:keys [uri status status-text failure] :as http-failure}]
+   (when (report-http-failure? http-failure)
+     (let [path (request-path uri)]
+       ;; The response body stays out on purpose. The backend reports its own
+       ;; server errors with a full stacktrace, so the frontend only has to
+       ;; contribute the signal that a request failed.
+       (capture-message (str "HTTP " (or status "?") " " (or path "unknown path"))
+                        {:status status
+                         :status-text (truncate status-text)
+                         :failure (str failure)
+                         :path path})))))
 
 (rf/reg-fx
  :sentry.user/set
