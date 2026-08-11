@@ -1,6 +1,7 @@
 name: "Vercel: Build Production Deployment"
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - deploy

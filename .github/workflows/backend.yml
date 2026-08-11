@@ -1,15 +1,15 @@
 name: "Docker: Build Backend Images"
 
 on:
+  # Deploy no longer builds automatically: the charts repository pins backend
+  # images by their develop SHA, so merging develop into deploy produced an
+  # image nobody pulled. Use this trigger to build a one-off ref by hand.
+  workflow_dispatch:
   push:
     branches:
       - develop
     tags:
       - v*
-  # Deploy no longer builds automatically: the charts repository pins backend
-  # images by their develop SHA, so merging develop into deploy produced an
-  # image nobody pulled. Use this trigger to build a one-off ref by hand.
-  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
