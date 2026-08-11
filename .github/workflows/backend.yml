@@ -1,7 +1,6 @@
 name: "Docker: Build Backend Images"
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - develop
