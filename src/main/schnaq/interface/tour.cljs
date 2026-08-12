@@ -7,12 +7,17 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.localstorage :refer [from-localstorage]]))
 
-(def ^:private finished
-  (oget STATUS :FINISHED))
+(def ^:private tour-over?
+  "Statuses which mean the user is done with the tour, either by finishing or by
+  dismissing it."
+  #{(oget STATUS :FINISHED) (oget STATUS :SKIPPED)})
 
 ;; -----------------------------------------------------------------------------
 
-(def styles {:options {:primaryColor (:secondary colors)}})
+(def options
+  "Joyride's shared step options, e.g. theming."
+  {:primaryColor (:secondary colors)
+   :showProgress true})
 
 (def ^:private tours
   {:user []
@@ -50,17 +55,16 @@
 
 (defn tour []
   (let [steps @(rf/subscribe [:tour/steps])
-        callback
+        on-event
         (fn [data]
-          (let [{:keys [status]} (js->clj data :keywordize-keys true)]
-            (when (= status finished) (rf/dispatch [:tour/stop true]))))]
+          (let [status (oget data "?status")]
+            (when (tour-over? status) (rf/dispatch [:tour/stop true]))))]
     (when (seq steps)
-      [:> Joyride {:callback callback
+      [:> Joyride {:onEvent on-event
                    :continuous true
                    :run true
-                   :showProgress true
                    :steps steps
-                   :styles styles
+                   :options options
                    :locale {:back (labels :tour.buttons/back)
                             :close (labels :tour.buttons/close)
                             :last (labels :tour.buttons/last)
