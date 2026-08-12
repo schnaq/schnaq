@@ -1,5 +1,5 @@
 (ns schnaq.interface.tour
-  (:require ["react-joyride" :refer [STATUS] :default Joyride]
+  (:require ["react-joyride" :refer [Joyride STATUS]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.colors :refer [colors]]
@@ -54,7 +54,7 @@
         (fn [data]
           (let [{:keys [status]} (js->clj data :keywordize-keys true)]
             (when (= status finished) (rf/dispatch [:tour/stop true]))))]
-    (when steps
+    (when (seq steps)
       [:> Joyride {:callback callback
                    :continuous true
                    :run true
