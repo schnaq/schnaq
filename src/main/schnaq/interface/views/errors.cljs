@@ -6,8 +6,13 @@
             [schnaq.interface.views.pages :as pages]
             [taoensso.timbre :as log]))
 
-(defn not-found-view-stub []
-  [])
+(defn not-found-view-stub
+  "Placeholder view for the `/error` route, which immediately redirects to
+  `/404`. Renders nothing, which has to be `nil`: an empty vector is invalid
+  hiccup, and reagent only guards against it with an assertion, which is elided
+  in the release build."
+  []
+  nil)
 
 (defn- error-page-layout
   "Template to build generic error pages."
