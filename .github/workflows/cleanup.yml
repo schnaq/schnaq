@@ -21,11 +21,10 @@ jobs:
         with:
           account: schnaq
           image-names: "*"
-          # Never delete the canonical tags that production / staging
-          # currently point at; everything else is fair game past the
-          # retention cutoff.
-          image-tags: "!latest !staging"
+          # Only delete untagged versions. The charts pin images by their
+          # sha-* tag, so deleting tagged versions pulled the image out from
+          # under a running production pod (ImagePullBackOff on restart).
+          tag-selection: untagged
           cut-off: 4w
-          keep-n-most-recent: 5
           token: ${{ secrets.PAT }}
           dry-run: ${{ inputs.dry-run || false }}
