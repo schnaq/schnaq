@@ -1,7 +1,14 @@
 (ns schnaq.interface.analytics.tracking
   "Helper functions to easily track events."
   (:require ["@vercel/analytics" :refer [track]]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [schnaq.shared-toolbelt :as tools]))
+
+(defn before-send
+  "Masks share-hashes in the URL before an event goes to Vercel Analytics.
+  The share-hash is the access credential of a schnaq."
+  [^js event]
+  (js/Object.assign #js {} event #js {:url (tools/mask-uuids (.-url event))}))
 
 (defn track-event
   "Creates an event and tracks it."

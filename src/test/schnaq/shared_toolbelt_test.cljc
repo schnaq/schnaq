@@ -91,3 +91,13 @@
     + {:a {:b {:c 1 :d {:x 1 :y 2}} :e 3} :f 4}
     {:a {:b {:c 2 :d {:z 9} :z 3} :e 100}}
     {:a {:b {:z 3 :c 3 :d {:z 9 :x 1 :y 2}} :e 103} :f 4}))
+
+(deftest mask-uuids-test
+  (testing "UUIDs keep their first and last four characters, everything else stays."
+    (are [masked input] (= masked (tools/mask-uuids input))
+      "https://app.schnaq.com/de/schnaq/3f2a…9c1d/dashboard"
+      "https://app.schnaq.com/de/schnaq/3f2a1b4c-5d6e-4f70-8a9b-0c1da1b29c1d/dashboard"
+      "/schnaq/ABCD…WXYZ-not-hex/x" "/schnaq/ABCD…WXYZ-not-hex/x"
+      "/a/3f2a…9c1d/b/0000…ffff" "/a/3f2a1b4c-5d6e-4f70-8a9b-0c1da1b29c1d/b/00000000-0000-0000-0000-00000000ffff"
+      "/schnaq/12345/statement/678" "/schnaq/12345/statement/678"
+      "" "")))

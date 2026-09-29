@@ -18,6 +18,16 @@
         tokens (map str/lower-case reduced-string)]
     (str/join "-" (take (count tokens) tokens))))
 
+(>defn mask-uuids
+  "Masks every UUID in a string, e.g. share-hashes in URLs, keeping the first
+  and last four characters so they can still be told apart:
+  `(mask-uuids \"/schnaq/3f2a1b4c-5d6e-4f70-8a9b-0c1da1b29c1d\") => \"/schnaq/3f2a…9c1d\"`"
+  [string]
+  [string? => string?]
+  (str/replace string
+               #"([0-9a-fA-F]{4})[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{8}([0-9a-fA-F]{4})"
+               "$1…$2"))
+
 (>defn remove-nil-values-from-map
   "Removes all entries from a map that have a value of nil or empty string."
   [data]
