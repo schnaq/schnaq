@@ -43,12 +43,7 @@
     (labels :router/privacy-tooltip)
     [:> NavLink (merge {:href "https://landing.schnaq.com/privacy"} props)
      (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :lock])
-     (labels :router/privacy)]]
-   [tooltip/text
-    (labels :nav/blog-tooltip)
-    [:> NavLink (merge {:href "https://landing.schnaq.com/blog/"} props)
-     (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :newspaper])
-     (labels :nav/blog)]]])
+     (labels :router/privacy)]]])
 
 (def ^:private discussion-views
   "Collection containing the discussion views."

@@ -14,8 +14,6 @@
    :nav.schnaqs/show-all-public "Alle öffentlichen schnaqs"
    :nav.schnaqs/create-schnaq "schnaq anlegen"
    :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
-   :nav/blog "Blog"
-   :nav/blog-tooltip "Lerne mehr über uns im Blog"
    :nav/admin "Admin"
    :nav/register "Kostenlos ausprobieren"
    :nav/register-tooltip "Erstelle deinen Account"
