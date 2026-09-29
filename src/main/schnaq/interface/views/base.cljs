@@ -46,11 +46,11 @@
    [:a.btn.btn-sm.btn-outline-white {:href url}
     (labels content-label)]])
 
-(defn- footer-nav []
+(defn- footer-nav [locale]
   [:<>
    [:ul.list-inline
     [footer-button "https://landing.schnaq.com/code-of-conduct" :coc/heading]
-    [footer-button "https://landing.schnaq.com/about" :footer.buttons/about-us]
+    [footer-button (str "https://schnaq.com/" (if (= :en locale) "en" "de") "/about") :footer.buttons/about-us]
     [footer-button "https://landing.schnaq.com/press" :footer.buttons/press-kit]
     [footer-button "https://landing.schnaq.com/publications" :footer.buttons/publications]]
    [:ul.list-inline
@@ -98,17 +98,17 @@
    [:ul {:style {:list-style :none
                  :padding-left 0}}
     [:li
-     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/blog/de/online-meetings-moderieren/"}
-      "für Meetings"]]
+     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/de/schulen/"}
+      "für Schulen"]]
     [:li
-     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/blog/de/online-diskussionsplattform/"}
-      "für Diskussionen"]]
+     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/de/universitaeten/"}
+      "für Universitäten"]]
     [:li
-     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/blog/de/ama-ask-me-anything-fragerunden/"}
-      "für AMAs"]]
+     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/de/weiterbildungen/"}
+      "für Weiterbildungen"]]
     [:li
-     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/blog/de/online-workshop-moderation/"}
-      "für Online Workshops"]]]])
+     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/de/online-diskussionsplattform/"}
+      "für Diskussionen"]]]])
 
 (defn- alternatives
   "Show schnaq use-cases for the users. Only in german."
@@ -117,7 +117,7 @@
    ;; Remove hardcode, when there are german versions around!
    [:h3.h5 "schnaq vs."]
    [:p
-    [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/blog/en/best-alternative-to-slido/"}
+    [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/de/alternative-slido-mentimeter/"}
      "Alternative to Slido"]]])
 
 ;; -----------------------------------------------------------------------------
@@ -134,7 +134,7 @@
           [alternatives]
           [product-use-cases])]
        [:div.col-md-6.col-xl-6.col-12.text-xl-end.pt-3.pt-md-0
-        [footer-nav]]]
+        [footer-nav locale]]]
       [:div.row
        [:div.col-md-6.col-12
         [developed-in-nrw]
