@@ -1,6 +1,7 @@
 (ns schnaq.interface.views
     (:require ["@vercel/analytics/react" :refer [Analytics]]
               [re-frame.core :as rf]
+              [schnaq.interface.analytics.tracking :as tracking]
               [schnaq.interface.tour :as tour]
               [schnaq.interface.views.modal :as modal]
               [schnaq.interface.views.notifications :as notifications]))
@@ -19,4 +20,4 @@
             [notifications/view]
             [modal/modal-view]
             [tour/tour]
-            [:> Analytics]]))
+            [:> Analytics {:before-send tracking/before-send}]]))
