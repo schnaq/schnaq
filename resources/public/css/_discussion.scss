@@ -1,10 +1,6 @@
 @import 'rounded';
 @import 'variables';
 
-.label-set {
-  border: 2px solid $gray-600;
-}
-
 .label {
   cursor: pointer;
   transition: font-size 0.15s ease, padding 0.15s ease;

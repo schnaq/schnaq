@@ -14,15 +14,6 @@ $roundings: (
   'rounded-50': 50%
 );
 
-@each $rounded, $value in $roundings {
-  .#{$rounded} {
-    border-radius: #{$value};
-  }
-  .#{$rounded}-important {
-    border-radius: #{$value} !important;
-  }
-}
-
 @mixin rounded-0 {
   border-radius: map.get($roundings, 'rounded-0');
 }

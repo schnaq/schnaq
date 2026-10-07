@@ -1,20 +1,5 @@
 @import 'variables';
 
-.vote {
-  border-radius: 0 2rem 2rem 0;
-  box-shadow: $regular-shadow;
-  cursor: pointer;
-  min-height: 3.5rem;
-  padding: 1rem 0 0;
-
-  @include media-breakpoint-down(md) {
-    border-radius: 0 0 1rem 1rem;
-    min-height: 0;
-    min-width: 3rem;
-    padding: 0;
-  }
-}
-
 .vote-arrow {
   cursor: pointer;
   max-height: 1.25rem;
