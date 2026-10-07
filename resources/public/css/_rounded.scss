@@ -1,8 +1,6 @@
 @use 'sass:map';
 
-// Create rounded-classes and corresponding mixins.
-// For example: rounded-0 .. rounded-5
-// rounded-0-important .. rounded-5-important
+// Border radii shared by the stylesheets, use them via the mixins below.
 
 $roundings: (
   'rounded-0': 0,
@@ -14,28 +12,12 @@ $roundings: (
   'rounded-50': 50%
 );
 
-@mixin rounded-0 {
-  border-radius: map.get($roundings, 'rounded-0');
-}
-
 @mixin rounded-1 {
   border-radius: map.get($roundings, 'rounded-1');
 }
 
 @mixin rounded-2 {
   border-radius: map.get($roundings, 'rounded-2');
-}
-
-@mixin rounded-3 {
-  border-radius: map.get($roundings, 'rounded-3');
-}
-
-@mixin rounded-4 {
-  border-radius: map.get($roundings, 'rounded-4');
-}
-
-@mixin rounded-5 {
-  border-radius: map.get($roundings, 'rounded-5');
 }
 
 @mixin rounded-50 {

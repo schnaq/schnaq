@@ -84,13 +84,10 @@
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."
   [title [ok response]]
-  (when ok
+  (if ok
     (file-download/export-data
-     (gstring/format "# %s\n%s" title (:string-representation response)))))
-
-(defn- show-error
-  [& _not-needed]
-  (rf/dispatch [:ajax.error/as-notification (labels :error/export-failed)]))
+     (gstring/format "# %s\n%s" title (:string-representation response)))
+    (rf/dispatch [:ajax.error/as-notification response])))
 
 (>defn txt-export-request
   "Initiate an export as a txt file for the currently selected schnaq."
@@ -102,8 +99,7 @@
     :format (ajax/transit-request-format)
     :params {:share-hash share-hash}
     :response-format (ajax/transit-response-format)
-    :handler (partial create-txt-download-handler title)
-    :error-handler show-error}))
+    :handler (partial create-txt-download-handler title)}))
 
 ;; -----------------------------------------------------------------------------
 
