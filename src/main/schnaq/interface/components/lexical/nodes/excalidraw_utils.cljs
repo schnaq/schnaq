@@ -3,6 +3,11 @@
             [oops.core :refer [ocall oget oset!]]
             [promesa.core :as p]))
 
+;; Serve Excalidraw's fonts ourselves, see `scripts/bundle-excalidraw.mjs`.
+;; Otherwise they are fetched from esm.sh. Excalidraw only falls back to esm.sh
+;; when a font is missing here.
+(oset! js/window "!EXCALIDRAW_ASSET_PATH" "/css/")
+
 ;; -----------------------------------------------------------------------------
 ;; SVG conversion of excalidraw nodes
 
