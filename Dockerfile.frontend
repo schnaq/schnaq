@@ -23,7 +23,6 @@ RUN apt-get update && \
     echo "deb [signed-by=/usr/share/keyrings/yarn-keyring.gpg] https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends yarn && \
-    yarn global add sass && \
     rm -rf /var/lib/apt/lists/*
 
 # Cache and install JavaScript dependencies

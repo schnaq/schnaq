@@ -23,8 +23,6 @@
    :call-to-contribute/lead "There are currently no contributions"
    :call-to-contribute/body "Start with your first post"
 
-   ;; code of conduct
-
    :startpage/slogan "Events as interactive as they should be!"
 
    ;; Login page

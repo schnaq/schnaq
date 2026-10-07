@@ -48,13 +48,13 @@
 (def ^:private discussion-views
   "Collection containing the discussion views."
   {:routes.schnaq/start {:icon :icon-cards-dark
-                         :label (labels :discussion.button/text)}
+                         :label :discussion.button/text}
    :routes/graph-view {:icon :icon-graph-dark
-                       :label (labels :graph.button/text)}
+                       :label :graph.button/text}
    :routes.schnaq/qanda {:icon :icon-qanda-dark
-                         :label (labels :qanda.button/text)}
+                         :label :qanda.button/text}
    :routes.schnaq/dashboard {:icon :icon-summary-dark
-                             :label (labels :summary.link.button/text)}})
+                             :label :summary.link.button/text}})
 
 (defn- links-to-discussion-views
   "Toggle between different views in a discussion."
@@ -71,7 +71,7 @@
         [:> NavLink (merge {:key (str "discussion-view-element-" route)
                             :class "ms-3" :href (href route)}
                            props)
-         [img icon] label]))]))
+         [img icon] (labels label)]))]))
 
 (defn- active-button? [current-route asked-route]
   (if (= asked-route :routes.schnaq/start)
@@ -97,7 +97,7 @@
         [:> Button {:key (str "discussion-view-element-" route)
                     :variant (if (active-button? current-route route) :primary :outline-primary)
                     :href (href route)}
-         [discussion-view-button-image icon "me-1"] label]))]))
+         [discussion-view-button-image icon "me-1"] (labels label)]))]))
 
 (defn- download-schnaq-button
   "Button to download a schnaq."
@@ -135,11 +135,9 @@
   [& {:keys [props]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
         {:keys [icon label]} (:routes.schnaq/start discussion-views)]
-    [tooltip/text
-     (labels :schnaq.export/as-text)
-     [:> NavLink (merge {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
-                        props)
-      [discussion-view-button-image icon "d-block mx-auto"] label]]))
+    [:> NavLink (merge {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
+                       props)
+     [discussion-view-button-image icon "d-block mx-auto"] (labels label)]))
 
 (defn- login-register-buttons [& {:keys [props vertical?]}]
   [:<>
