@@ -3,9 +3,9 @@
   namespace is a no-op, which is the case in local development."
   (:require ["@sentry/browser" :as Sentry]
             [clojure.string :as str]
+            [goog.object :as gobj]
             [re-frame.core :as rf]
             [re-frame.interceptor :as rf-interceptor]
-            [goog.object :as gobj]
             [schnaq.interface.config :as config]
             [schnaq.shared-toolbelt :as tools]
             [taoensso.timbre :as log]))
