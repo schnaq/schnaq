@@ -3,12 +3,8 @@
 // Border radii shared by the stylesheets, use them via the mixins below.
 
 $roundings: (
-  'rounded-0': 0,
-  'rounded-1': 0.5rem,
-  'rounded-2': 1rem,
-  'rounded-3': 1.5rem,
-  'rounded-4': 2rem,
-  'rounded-5': 3rem,
+  'rounded-1': 0.375rem,
+  'rounded-2': 0.5rem,
   'rounded-50': 50%
 );
 

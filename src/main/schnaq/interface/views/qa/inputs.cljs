@@ -43,7 +43,7 @@
                        :placeholder (labels :statement.new/placeholder)}
        {:className "flex-grow-1"}]]
      (when-not (and limit-reached? shared-config/enforce-limits?)
-       [:button.btn.btn-lg.btn-secondary.w-100.shadow-sm.mt-3.rounded-1
+       [:button.btn.btn-lg.btn-secondary.w-100.mt-3
         {:type "submit"
          :disabled (not submittable?)
          :title (labels :qanda.button/submit)

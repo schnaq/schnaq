@@ -31,7 +31,7 @@
                        :initial-content content
                        :file-storage :schnaq/by-share-hash
                        :toolbar? true}]]
-     [:div.d-flex.justify-content-between.flex-wrap
+     [:div.d-flex.justify-content-between.align-items-center.flex-wrap
       [:div.d-flex.mb-3
        (when pro-con-enabled?
          [input/statement-type-choose-button statement-type change-statement-type])]

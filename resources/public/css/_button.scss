@@ -1,56 +1,17 @@
-@use 'rounded' as rounded;
-@import 'variables';
-
-@mixin button-template {
-  @extend .shadow-sm;
-  border: 0;
-  color: $white;
-}
-
+// Bootstrap's contrast check would put dark labels on the brand orange. schnaq
+// has always used white ones, so keep them until the orange itself is revisited.
 .btn-secondary {
-  @include button-template;
-  color: $white;
-
-  &:hover,
-  &:focus {
-    color: $white;
-  }
+  @include button-variant(
+    $secondary,
+    $secondary,
+    $color: $white,
+    $hover-color: $white,
+    $active-color: $white
+  );
 }
 
-.btn-primary {
-  @include button-template;
-  color: $white;
-
-  &:hover,
-  &:focus {
-    color: $white;
-  }
-}
-
-.btn-outline-secondary:hover {
-  color: $white;
-}
-
-.btn-outline-secondary.active {
-  color: $white !important;
-}
-
-@each $rounded, $value in rounded.$roundings {
-  .btn-#{$rounded} {
-    /* stylelint-disable */
-    @extend .btn;
-    /* stylelint-enable */
-    border-radius: #{$value};
-  }
-}
-
-// Buttons
-.btn-outline-primary {
-  &:hover,
-  &:active,
-  &.active {
-    color: $white;
-  }
+.btn-outline-secondary {
+  @include button-outline-variant($secondary, $color-hover: $white, $active-color: $white);
 }
 
 .font-150 {
@@ -73,9 +34,4 @@
     box-shadow: none;
     outline: none;
   }
-}
-
-.btn-invisible-border {
-  // Adds an invisible border to be the same size as outline buttons
-  border: $btn-border-width solid transparent;
 }

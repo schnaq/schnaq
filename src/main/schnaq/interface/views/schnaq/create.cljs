@@ -35,7 +35,7 @@
 
 (defn- create-schnaq-button []
   [:div.text-end
-   [:button.btn.btn-dark.p-3.rounded-1
+   [:button.btn.btn-lg.btn-dark
     {:on-click #(tracking/track-event "Active User", "Action", "Create Schnaq")}
     (labels :schnaq.create.button/save)
     [icon :arrow-right "ms-2"]]])

@@ -37,7 +37,7 @@
      [:div.mx-2
       [add-schnaq-to-hub-form]]
      [:div.text-center
-      [:a.btn.btn-outline-dark.btn-rounded-2
+      [:a.btn.btn-outline-dark
        {:href (navigation/href :routes.hub/edit {:keycloak-name (:hub/keycloak-name hub)})}
        [icon :cog "me-1"]
        (labels :hub/settings)]]]))

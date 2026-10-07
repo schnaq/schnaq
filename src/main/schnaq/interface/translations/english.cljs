@@ -644,6 +644,7 @@
    :filters.option.answered/answered "Answered"
    :filters.option.answered/unanswered "Unanswered"
    :filters.option/questions "Questions"
+   :filters.option.questions/tooltip "Only show questions"
    :filters.buttons/clear "Clear all filters"
    :filters.heading/active "Active Filters"
 

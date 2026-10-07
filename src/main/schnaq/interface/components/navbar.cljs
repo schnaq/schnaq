@@ -97,9 +97,8 @@
       (for [[route {:keys [icon label]}] discussion-views]
         [:> Button {:key (str "discussion-view-element-" route)
                     :variant (if (active-button? current-route route) :primary :outline-primary)
-                    :className "clickable"
                     :href (href route)}
-         [discussion-view-button-image :img-key icon] [:small label]]))]))
+         [discussion-view-button-image :img-key icon :props {:className "bg-white p-1 rounded-1 me-1"}] label]))]))
 
 (defn- download-schnaq-button
   "Button to download a schnaq."
@@ -139,8 +138,7 @@
         {:keys [icon label]} (:routes.schnaq/start discussion-views)]
     [tooltip/text
      (labels :schnaq.export/as-text)
-     [:> NavLink (merge {:className "pt-2 mt-1"
-                         :href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
+     [:> NavLink (merge {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
                         props)
       [discussion-view-button-image :img-key icon] label]]))
 
@@ -206,7 +204,7 @@
   []
   (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])]
     [:> NavbarText {}
-     [:div.d-flex.flex-row.p-3
+     [:div.d-flex.flex-row.px-3
       [motion/pulse-once [icon :comment/alt]
        [:schnaq.qa.new-question/pulse?]
        [:schnaq.qa.new-question/pulse false]
@@ -312,7 +310,7 @@
         [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
         [:> NavbarCollapse {:id "schnaq-navbar"
                             :className "justify-content-end"}
-         [:> Nav
+         [:> Nav {:className "align-items-center"}
           [statement-counter]
           [overview-page-button]
           [LanguageDropdown :vertical? true]
