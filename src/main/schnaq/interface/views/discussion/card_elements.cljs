@@ -212,7 +212,7 @@
   [clear-id]
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
         action-icon (if (cstring/blank? search-string) :search :times)]
-    [:button.btn.button-muted.py-0
+    [:button.btn.py-0
      {:on-click (fn [_e]
                   (toolbelt/clear-input clear-id)
                   (rf/dispatch [:schnaq.search.current/clear-search-string]))}

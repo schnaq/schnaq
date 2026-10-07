@@ -28,13 +28,3 @@ a.badge-clickable {
   // stylelint-enable selector-no-qualifying-type
   text-decoration: none !important;
 }
-
-.badge-primary-outline {
-  background-color: transparent;
-  border: solid 1px $primary;
-}
-
-.badge-secondary-outline {
-  background-color: transparent;
-  border: solid 1px $secondary;
-}
