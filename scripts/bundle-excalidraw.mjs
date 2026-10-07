@@ -55,8 +55,10 @@ console.log(`Wrote ${outfile}`);
 
 // `_excalidraw.scss` inlines Excalidraw's stylesheet, whose only `url()` font
 // references point at `./fonts/Assistant`, resolved relative to `main.min.css`.
-// Mirror that folder next to the stylesheet so the UI font is actually served.
-const fontsTarget = join(root, 'resources/public/css/fonts/Assistant');
-cpSync(join(excalidrawDist, 'fonts/Assistant'), fontsTarget, { recursive: true });
+// The drawing fonts (Excalifont, Virgil, …) are loaded at runtime from
+// `window.EXCALIDRAW_ASSET_PATH`, which the app points at `/css/`. Without
+// them here, Excalidraw fetches them from esm.sh and leaks visitors' IPs.
+const fontsTarget = join(root, 'resources/public/css/fonts');
+cpSync(join(excalidrawDist, 'fonts'), fontsTarget, { recursive: true });
 
 console.log(`Wrote ${fontsTarget}`);

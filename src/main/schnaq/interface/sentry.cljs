@@ -5,7 +5,9 @@
             [clojure.string :as str]
             [re-frame.core :as rf]
             [re-frame.interceptor :as rf-interceptor]
+            [goog.object :as gobj]
             [schnaq.interface.config :as config]
+            [schnaq.shared-toolbelt :as tools]
             [taoensso.timbre :as log]))
 
 (def ^:private enabled?
@@ -73,6 +75,41 @@
                         :direction (str direction)}))
   (rf-interceptor/default-error-handler original-error re-frame-error))
 
+(defn request-path
+  "The path of `uri` without its query string. `day8.re-frame.http-fx` reports
+  the full URL, and GET parameters carry share hashes and access codes. Those
+  are the credentials to a discussion and must never reach Sentry."
+  [uri]
+  (when-not (str/blank? uri)
+    (first (str/split uri #"\?"))))
+
+(defn scrub-url
+  "`uri` without query string and with masked share hashes. Page URLs carry the
+  share hash in their path, e.g. `/schnaq/<share-hash>`."
+  [uri]
+  (some-> (request-path uri) tools/mask-uuids))
+
+(defn scrub-breadcrumb
+  "Drop console breadcrumbs, log lines may contain whatever the user typed.
+  Scrub the URLs of navigation and request breadcrumbs."
+  [^js breadcrumb]
+  (when-not (= "console" (.-category breadcrumb))
+    (when-let [data (.-data breadcrumb)]
+      (doseq [k ["url" "from" "to"]]
+        (when-let [url (gobj/get data k)]
+          (gobj/set data k (scrub-url url)))))
+    breadcrumb))
+
+(defn scrub-event
+  "Scrub the page URL and drop the referrer before an event leaves the browser."
+  [^js event]
+  (when-let [request (.-request event)]
+    (when-let [url (.-url request)]
+      (set! (.-url request) (scrub-url url)))
+    (when-let [headers (.-headers request)]
+      (gobj/remove headers "Referer")))
+  event)
+
 (defn init!
   "Start error tracking. Registers a global handler for errors thrown while
   handling re-frame events."
@@ -81,21 +118,15 @@
     (do
       (Sentry/init #js {:dsn config/sentry-dsn
                         :environment config/sentry-environment
-                        :release release})
+                        :release release
+                        :beforeSend scrub-event
+                        :beforeBreadcrumb scrub-breadcrumb})
       (rf/reg-event-error-handler report-event-error)
       (log/info (str "[Sentry] Error tracking active for " release)))
     (log/info "[Sentry] No DSN configured, error tracking is disabled")))
 
 ;; -----------------------------------------------------------------------------
 ;; Effects
-
-(defn request-path
-  "The path of `uri` without its query string. `day8.re-frame.http-fx` reports
-  the full URL, and GET parameters carry share hashes and access codes. Those
-  are the credentials to a discussion and must never reach Sentry."
-  [uri]
-  (when-not (str/blank? uri)
-    (first (str/split uri #"\?"))))
 
 (defn report-http-failure?
   "Decide whether a failed request is worth an event. Client errors are answers,
