@@ -150,10 +150,10 @@ Use these labels on Linear issues that touch this repo. Combine freely:
 
 The repo is undergoing a coordinated modernization pass (Linear project above). Phased plan:
 
-1. **Foundation & Tooling** — Renovate, CodeQL, dependency-review, Dockerfile Node 22, shadow-cljs sync, ESLint/Prettier.
+1. **Foundation & Tooling** — Renovate, CodeQL, dependency-review, Dockerfile Node 24, shadow-cljs sync, ESLint/Prettier.
 2. **Safe Bumps** — Minor/patch sweeps for npm and `deps.edn`.
 3. **Major Bumps** — Each major version jump (Lexical, Keycloak-js, framer-motion, FontAwesome, js-joda, date-fns, uuid, react-markdown, vis-network, …) as an isolated issue with its own QA plan.
-4. **Tech-Debt & Research** — Drop Compojure, resolve Ring 1.10 pin, evaluate Karma → modern test runner, Datomic on-prem evaluation.
+4. **Tech-Debt & Research** — resolve Ring 1.10 pin, evaluate Karma → modern test runner, Datomic on-prem evaluation.
 
 ### Branching & PR conventions for this work
 
