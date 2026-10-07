@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.errors
-  (:require [cljs.pprint :refer [pprint]]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]
@@ -56,16 +55,26 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- failure-message
+  "Readable message of a failed request. Prefers the message the backend sent
+  along (`{:error ... :message ...}`), falls back to a generic text."
+  [failure]
+  (let [message (if (string? failure)
+                  failure
+                  (get-in failure [:response :message]))]
+    (if (and (string? message) (seq message))
+      message
+      (labels :errors.generic/body))))
+
 (rf/reg-event-fx
  :ajax.error/as-notification
  (fn [{:keys [db]} [_ failure]]
    {:db (assoc db :error {:ajax failure})
-    :fx [[:sentry.error/http-failure failure]
+    :fx [[:console.log/error failure]
+         [:sentry.error/http-failure failure]
          [:dispatch [:notification/add
                      #:notification{:title (labels :errors/generic)
-                                    :body [:pre
-                                           [:code
-                                            (with-out-str (pprint failure))]]
+                                    :body (failure-message failure)
                                     :context :danger
                                     :stay-visible? true
                                     :on-close-fn #(rf/dispatch [:clear-error])}]]]}))
