@@ -1,12 +1,3 @@
-@use '../../../node_modules/@fontsource/poppins/scss/mixins.scss' as poppins;
-
-@include poppins.faces(
-  $weights: (100, 200, 300, 400, 500, 600, 700, 800, 900),
-  $display: fallback,
-  $styles: all,
-  $directory: '../fonts/poppins'
-);
-
 // Variables
 $img-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
@@ -78,14 +69,17 @@ $dark: $dark-base !default;
 
 $input-background: $gray-200 !default;
 
-$font-family-sans-serif: 'Poppins', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
-$badge-font-weight: 400;
+// Typography follows the schnaq.com CI: Inter for text, Space Grotesk for headings.
+$font-family-sans-serif: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !default;
+$headings-font-family: 'Space Grotesk', $font-family-sans-serif;
+$display-font-family: $headings-font-family;
+$badge-font-weight: 500;
 $font-weight-normal: 400;
 $font-weight-bold: 600;
 $font-weight-bolder: 700;
-$btn-font-weight: 400;
-$display-font-weight: 400;
-$headings-font-weight: 400;
+$btn-font-weight: 500;
+$display-font-weight: 700;
+$headings-font-weight: 600;
 
 // Shadows
 // This overrides Bootstrap's default shadow-classes, e.g. .shadow
