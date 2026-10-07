@@ -40,26 +40,25 @@
    [:div.lead.fst-italic.pb-1
     (labels :startpage/slogan)]])
 
-(defn- footer-button
+(def ^:private footer-link-classes
+  "link-light link-underline-opacity-0 link-underline-opacity-100-hover")
+
+(defn- footer-link
   [url content-label]
   [:li.list-inline-item
-   [:a.btn.btn-sm.btn-outline-white {:href url}
+   [:a {:class footer-link-classes :href url}
     (labels content-label)]])
 
 (defn- footer-nav [locale]
-  [:<>
-   [:ul.list-inline
-    [footer-button "https://landing.schnaq.com/code-of-conduct" :coc/heading]
-    [footer-button (str "https://schnaq.com/" (if (= :en locale) "en" "de") "/about") :footer.buttons/about-us]
-    [footer-button "https://landing.schnaq.com/press" :footer.buttons/press-kit]
-    [footer-button "https://landing.schnaq.com/publications" :footer.buttons/publications]]
-   [:ul.list-inline
-    [:li.list-inline-item
-     [feedback-modal
-      (fn [props] [:button.btn.btn-sm.btn-outline-white props
-                   (labels :feedbacks/button)])]]
-    [footer-button "https://landing.schnaq.com/privacy" :router/privacy]
-    [footer-button "https://landing.schnaq.com/legal-note" :footer.buttons/legal-note]]])
+  [:ul.list-inline
+   [footer-link (str "https://schnaq.com/" (if (= :en locale) "en" "de") "/about") :footer.buttons/about-us]
+   [:li.list-inline-item
+    [feedback-modal
+     (fn [props] [:button.btn.btn-link.p-0.align-baseline
+                  (assoc props :class footer-link-classes)
+                  (labels :feedbacks/button)])]]
+   [footer-link "https://landing.schnaq.com/privacy" :router/privacy]
+   [footer-link "https://landing.schnaq.com/legal-note" :footer.buttons/legal-note]])
 
 (defn- developed-in-nrw []
   [:section.pt-3
