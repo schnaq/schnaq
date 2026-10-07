@@ -65,7 +65,7 @@
    :enableTooltip true
    :enableOptimizations true
    :deterministic true
-   :fontFamily "Poppins"
+   :fontFamily "Space Grotesk"
    :fontSizes [20 50]
    :fontStyle "normal"
    :fontWeight "normal"

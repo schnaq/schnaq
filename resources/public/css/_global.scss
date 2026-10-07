@@ -1,6 +1,5 @@
 @use 'variables' as vars;
 
-
 html {
   scroll-behavior: smooth;
 }
@@ -24,14 +23,25 @@ html {
 
 .display-5 {
   font-size: 2.5rem;
-  font-weight: 300;
   line-height: 1.2;
 }
 
 .display-6 {
   font-size: 1.5rem;
-  font-weight: 300;
+  font-weight: 500;
   line-height: 1.2;
+}
+
+// Space Grotesk runs wide, the CI tightens it slightly.
+h1,
+h2,
+h3,
+.h1,
+.h2,
+.h3,
+.display-5,
+.display-6 {
+  letter-spacing: -0.01em;
 }
 
 @media (min-width: 2560px) {
