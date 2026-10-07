@@ -20,7 +20,7 @@
   (not-found
    (build-error-body error-type error-message)))
 
-(def invalid-rights-message "You to not have enough permissions to access this data.")
+(def invalid-rights-message "You do not have enough permissions to access this data.")
 (def invalid-share-hash-message "Invalid share-hash.")
 (def invalid-access-code-message "Invalid access code.")
 (def not-found-hash-invalid

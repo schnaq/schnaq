@@ -12,7 +12,6 @@ module.exports = {
       'product-page-feature-image',
       'speech-bubble-bordered',
       'vote-arrow',
-      'wave-bottom-primary-and-secondary',
       /^highlight-card/,
       /^label-/,
       /^masthead/,

@@ -81,13 +81,16 @@
 ;; -----------------------------------------------------------------------------
 ;; Argdown Export  
 
+(def ^:private argdown-export-uri (str shared-config/api-url "/export/argdown"))
+
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."
   [title [ok response]]
   (if ok
     (file-download/export-data
      (gstring/format "# %s\n%s" title (:string-representation response)))
-    (rf/dispatch [:ajax.error/as-notification response])))
+    ;; Unlike http-fx, cljs-ajax doesn't put the uri into its failures.
+    (rf/dispatch [:ajax.error/as-notification (assoc response :uri argdown-export-uri)])))
 
 (>defn txt-export-request
   "Initiate an export as a txt file for the currently selected schnaq."
@@ -95,7 +98,7 @@
   [:discussion/share-hash string? => any?]
   (ajax/ajax-request
    {:method :get
-    :uri (str shared-config/api-url "/export/argdown")
+    :uri argdown-export-uri
     :format (ajax/transit-request-format)
     :params {:share-hash share-hash}
     :response-format (ajax/transit-response-format)

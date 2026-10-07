@@ -56,10 +56,11 @@
 ;; -----------------------------------------------------------------------------
 
 (defn- failure-message
-  "The message the backend sent along with a failed request, or a generic text."
+  "The message of a backend error response, or a generic text. Only responses
+  with an `:error` carry a message meant for users, a crash only says \"default\"."
   [failure]
-  (let [message (get-in failure [:response :message])]
-    (if (and (string? message) (seq message))
+  (let [{:keys [error message]} (:response failure)]
+    (if (and error (string? message) (seq message))
       message
       (labels :errors.generic/body))))
 
