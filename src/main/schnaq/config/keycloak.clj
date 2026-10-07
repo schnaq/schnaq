@@ -6,12 +6,19 @@
             [schnaq.config.shared :as shared-config]
             [taoensso.timbre :as log]))
 
+(defn- with-trailing-slash [url]
+  (if (string/ends-with? url "/")
+    url
+    (format "%s/" url)))
+
 (def server
   "Define your keycloak server's base url."
-  (let [server shared-config/keycloak-host]
-    (if (string/ends-with? server "/")
-      server
-      (format "%s/" server))))
+  (with-trailing-slash shared-config/keycloak-host))
+
+(def ^:private admin-server
+  "Base url for the admin API. The admin API is not exposed publicly, so in the
+  cluster this points at keycloak's internal service. Defaults to `server`."
+  (with-trailing-slash (or (:keycloak-admin-server env) shared-config/keycloak-host)))
 
 (def realm
   "Specify the realm you are connecting to."
@@ -28,7 +35,7 @@
 
 (def kc-client
   "Client to interact with our keycloak instance."
-  (-> (client-conf {:auth-server-url server
+  (-> (client-conf {:auth-server-url admin-server
                     :realm realm
                     :client-id "admin-cli"})
       (keycloak-client backend-admin-id backend-admin-secret)))

@@ -11,6 +11,11 @@ on:
         type: boolean
         default: false
 
+# The job token may delete versions of packages this repository administers,
+# so no personal access token has to be kept alive.
+permissions:
+  packages: write
+
 jobs:
   clean-ghcr:
     name: Delete old unused container images
@@ -20,11 +25,13 @@ jobs:
         uses: snok/container-retention-policy@v3.1.0
         with:
           account: schnaq
-          image-names: "*"
+          # The job token cannot list packages, so names must be exact.
+          # Packages of other repositories need their own cleanup.
+          image-names: "schnaq/backend"
           # Only delete untagged versions. The charts pin images by their
           # sha-* tag, so deleting tagged versions pulled the image out from
           # under a running production pod (ImagePullBackOff on restart).
           tag-selection: untagged
           cut-off: 4w
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           dry-run: ${{ inputs.dry-run || false }}
