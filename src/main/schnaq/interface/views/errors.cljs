@@ -55,15 +55,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- failure-message
-  "The message of a backend error response, or a generic text. Only responses
-  with an `:error` carry a message meant for users, a crash only says \"default\"."
-  [failure]
-  (let [{:keys [error message]} (:response failure)]
-    (if (and error (string? message) (seq message))
-      message
-      (labels :errors.generic/body))))
-
 (rf/reg-event-fx
  :ajax.error/as-notification
  (fn [{:keys [db]} [_ failure]]
@@ -71,7 +62,7 @@
     :fx [[:dispatch [:ajax.error/to-console failure]]
          [:dispatch [:notification/add
                      #:notification{:title (labels :errors/generic)
-                                    :body (failure-message failure)
+                                    :body (labels :errors.generic/body)
                                     :context :danger
                                     :stay-visible? true
                                     :on-close-fn #(rf/dispatch [:clear-error])}]]]}))

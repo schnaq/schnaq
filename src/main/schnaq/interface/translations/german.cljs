@@ -23,11 +23,7 @@
    :call-to-contribute/lead "Bisher gibt es hier noch keine Beiträge"
    :call-to-contribute/body "Starte mit deinem ersten Beitrag"
 
-   ;; code of conduct
-
    :startpage/slogan "Veranstaltungen so interaktiv, wie sie sein sollen!"
-
-   ;; Product Pages
 
    ;; Login Page
    :page.login/heading "Nicht warten, schnaqqen!"

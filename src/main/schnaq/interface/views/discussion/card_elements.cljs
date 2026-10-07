@@ -262,7 +262,7 @@
        (when @(rf/subscribe [:routes.schnaq/start?])
          [filters/filter-answered-statements])
        [:div.py-3 [search-bar]]]
-      [:> Button {:variant "outline-primary" :size :sm :className "bg-white"}
+      [:> Button {:variant "outline-primary" :size :sm :className "panel-white-sm"}
        (labels :discussion.navbar/discussion-settings)]
       {:appendTo js/document.body}]]))
 
