@@ -56,12 +56,9 @@
 ;; -----------------------------------------------------------------------------
 
 (defn- failure-message
-  "Readable message of a failed request. Prefers the message the backend sent
-  along (`{:error ... :message ...}`), falls back to a generic text."
+  "The message the backend sent along with a failed request, or a generic text."
   [failure]
-  (let [message (if (string? failure)
-                  failure
-                  (get-in failure [:response :message]))]
+  (let [message (get-in failure [:response :message])]
     (if (and (string? message) (seq message))
       message
       (labels :errors.generic/body))))
@@ -70,8 +67,7 @@
  :ajax.error/as-notification
  (fn [{:keys [db]} [_ failure]]
    {:db (assoc db :error {:ajax failure})
-    :fx [[:console.log/error failure]
-         [:sentry.error/http-failure failure]
+    :fx [[:dispatch [:ajax.error/to-console failure]]
          [:dispatch [:notification/add
                      #:notification{:title (labels :errors/generic)
                                     :body (failure-message failure)

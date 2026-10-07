@@ -1,9 +1,7 @@
 (ns schnaq.interface.translations.german)
 
 (def labels
-  {:error/export-failed "Export hat nicht geklappt, versuche es später erneut."
-
-   :common/keycloak-id "keycloak-id"
+  {:common/keycloak-id "keycloak-id"
    :common/you "Du"
 
    :view/present "Präsentieren"
