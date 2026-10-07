@@ -80,11 +80,10 @@
 
 (defn- discussion-view-button-image
   "Prepare the image for the discussion view button."
-  [& {:keys [props img-key]}]
-  [:img (merge {:height 25
-                :className "d-block mx-auto bg-white p-1 rounded-1"
-                :src (img-path img-key)}
-               props)])
+  [img-key class]
+  [:img {:height 25
+         :className (str "bg-white p-1 rounded-1 " class)
+         :src (img-path img-key)}])
 
 (defn- discussion-view-group
   "Switch between different discussion views."
@@ -98,7 +97,7 @@
         [:> Button {:key (str "discussion-view-element-" route)
                     :variant (if (active-button? current-route route) :primary :outline-primary)
                     :href (href route)}
-         [discussion-view-button-image :img-key icon :props {:className "bg-white p-1 rounded-1 me-1"}] label]))]))
+         [discussion-view-button-image icon "me-1"] label]))]))
 
 (defn- download-schnaq-button
   "Button to download a schnaq."
@@ -140,7 +139,7 @@
      (labels :schnaq.export/as-text)
      [:> NavLink (merge {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
                         props)
-      [discussion-view-button-image :img-key icon] label]]))
+      [discussion-view-button-image icon "d-block mx-auto"] label]]))
 
 (defn- login-register-buttons [& {:keys [props vertical?]}]
   [:<>

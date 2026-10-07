@@ -1,21 +1,15 @@
-@use 'sass:map';
+@use 'variables' as vars;
 
-// Border radii shared by the stylesheets, use them via the mixins below.
-
-$roundings: (
-  'rounded-1': 0.375rem,
-  'rounded-2': 0.5rem,
-  'rounded-50': 50%
-);
+// Border radii shared by the stylesheets, based on Bootstrap's radii.
 
 @mixin rounded-1 {
-  border-radius: map.get($roundings, 'rounded-1');
+  border-radius: vars.$border-radius-lg;
 }
 
 @mixin rounded-2 {
-  border-radius: map.get($roundings, 'rounded-2');
+  border-radius: vars.$border-radius-xl;
 }
 
 @mixin rounded-50 {
-  border-radius: map.get($roundings, 'rounded-50');
+  border-radius: 50%;
 }
