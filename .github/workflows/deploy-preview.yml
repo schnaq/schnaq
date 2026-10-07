@@ -36,7 +36,6 @@ jobs:
 
       - name: Install Deps
         run: |
-          yarn global add sass
           yarn install --frozen-lockfile
 
       - name: Install Vercel CLI

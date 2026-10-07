@@ -45,7 +45,6 @@
     "@vercel/analytics": "^1.6.1",
     "chart.js": "^4.5.1",
     "component-emitter": "^2.0.0",
-    "create-react-class": "^15.6.3",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "framer-motion": "^12.38.0",
@@ -59,7 +58,6 @@
     "react-bootstrap": "^2.10.10",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.6",
-    "react-flip-move": "^3.0.5",
     "react-joyride": "^3.1.0",
     "react-markdown": "^8.0.4",
     "react-qrcode-logo": "^4.1.0",
@@ -69,7 +67,6 @@
     "remove-markdown": "^0.6.4",
     "shadow-cljs": "^2.28.11",
     "stopword": "^3.1.5",
-    "timsort": "^0.3.0",
     "unique-names-generator": "^4.7.1",
     "uuid": "^14.0.0",
     "vis-data": "^8.0.4",
@@ -91,16 +88,24 @@
     "postcss": "^8.5.14",
     "prettier": "^3.0.0",
     "purgecss": "^8.0.0",
+    "sass": "^1.105.1",
     "stylelint": "^17.11.0",
     "stylelint-config-sass-guidelines": "^13.0.0"
   },
   "dependenciesComments": {
-    "@types/react": "peer dependency for react-markdown",
+    "@egjs/hammerjs": "peer dependency for vis-network",
+    "@js-joda/core": "required by shadow-cljs via the deps.cljs of cljs.java-time and tick (transitive Clojure dependencies)",
+    "@js-joda/locale_en-us": "required by shadow-cljs via the deps.cljs of cljs.java-time and tick (transitive Clojure dependencies)",
+    "@js-joda/timezone": "required by shadow-cljs via the deps.cljs of cljs.java-time and tick (transitive Clojure dependencies)",
     "@popperjs/core": "peer dependency for bootstrap 5",
-    "@egjs/hammerjs": "peer dependency for vis-network and vis-util",
+    "@types/react": "peer dependency for react-markdown",
     "bootstrap": "Needed to build our css templates",
+    "component-emitter": "peer dependency for vis-network",
     "keycharm": "peer dependency for vis-network",
     "shadow-cljs": "Needed to polyfill for some packages",
-    "uuid": "peer dependency for vis-network and vis-util"
+    "uuid": "peer dependency for vis-network",
+    "vis-data": "peer dependency for vis-network",
+    "vis-util": "peer dependency for vis-network",
+    "xmlhttprequest": "cljs-ajax needs it in the node test build"
   }
 }
