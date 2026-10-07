@@ -17,7 +17,7 @@
   background-color: var(--theming-primary);
   color: $white;
 
-  :hover {
+  &:hover {
     color: $light;
   }
 }
@@ -33,7 +33,7 @@
   background-color: var(--theming-secondary);
   color: $white;
 
-  :hover {
+  &:hover {
     color: $light;
   }
 }

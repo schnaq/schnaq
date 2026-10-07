@@ -77,7 +77,7 @@
         authenticated? @(rf/subscribe [:user/authenticated?])
         read-only? @(rf/subscribe [:schnaq.state/read-only?])]
     [:div props
-     [:div.d-flex.flex-row
+     [:div.d-flex.flex-row.align-items-center
       [:div
        (cond->
         {:class (if upvoted?
@@ -91,7 +91,7 @@
                                               (tracking/track-event "Active User", "Action", "Vote: Upvote"))}))
        [icon :arrow-up "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
       [:div (get-up-votes statement votes)]]
-     [:div.d-flex.flex-row
+     [:div.d-flex.flex-row.align-items-center
       [:div
        (cond->
         {:class (if downvoted?

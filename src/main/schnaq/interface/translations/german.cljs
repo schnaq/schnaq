@@ -648,6 +648,7 @@
    :filters.option.answered/answered "Beantwortete"
    :filters.option.answered/unanswered "Unbeantwortete"
    :filters.option/questions "Fragen"
+   :filters.option.questions/tooltip "Nur Fragen anzeigen"
    :filters.buttons/clear "Alle Filter löschen"
    :filters.heading/active "Aktive Filter"
 

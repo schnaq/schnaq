@@ -77,7 +77,7 @@
            {:on-click #(rf/dispatch [:keycloak/register
                                      (str (links/relative-to-absolute-url (navigation/href :routes.schnaqs/personal))
                                           "?create-demo=true")])}
-           [:div.display-5 (labels :page.register/register)]]]
+           (labels :page.register/register)]]
          (labels :page.login/or)
          [:div
           [:button.btn.btn-lg.btn-outline-white.mt-3

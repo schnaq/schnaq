@@ -176,17 +176,16 @@
         authenticated? @(rf/subscribe [:user/authenticated?])
         profile-picture? @(rf/subscribe [:user/profile-picture])
         icon-size 25]
-    [:span props
+    [:span (merge {:className (when-not vertical? "d-inline-flex align-items-center gap-2")} props)
      (if (and authenticated? profile-picture?)
        [common/avatar
         :props (when vertical? {:className "d-block mx-auto"})
         :size icon-size
         :inline? (not vertical?)]
-       [:span {:className "d-flex mx-auto"}
-        [:span {:className (if vertical? "d-block mx-auto" "mx-auto")}
-         [animal-avatars/generate-animal-avatar
-          :name username
-          :size icon-size]]])
+       [:span {:className (if vertical? "d-flex justify-content-center" "d-flex")}
+        [animal-avatars/generate-animal-avatar
+         :name username
+         :size icon-size]])
      [:span.text-nowrap
       [icon :star "me-1"]
       (toolbelt/truncate-to-n-chars username 15)]]))

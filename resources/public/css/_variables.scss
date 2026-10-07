@@ -69,6 +69,15 @@ $dark: $dark-base !default;
 
 $input-background: $gray-200 !default;
 
+// White labels on the brand blue, as on schnaq.com.
+$min-contrast-ratio: 3;
+
+// Crisper corners, a step towards the angular schnaq.com look.
+$border-radius: 0.25rem;
+$border-radius-sm: 0.2rem;
+$border-radius-lg: 0.375rem;
+$border-radius-xl: 0.5rem;
+
 // Typography follows the schnaq.com CI: Inter for text, Space Grotesk for headings.
 $font-family-sans-serif: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !default;
 $headings-font-family: 'Space Grotesk', $font-family-sans-serif;

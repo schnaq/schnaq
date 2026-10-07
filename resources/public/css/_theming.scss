@@ -23,6 +23,7 @@
   // Button
   .btn-primary {
     background-color: var(--theming-primary) !important;
+    border-color: var(--theming-primary) !important;
 
     &:hover,
     &:active,
@@ -33,6 +34,7 @@
 
   .btn-secondary {
     background-color: var(--theming-secondary) !important;
+    border-color: var(--theming-secondary) !important;
 
     &:hover,
     &:active,
