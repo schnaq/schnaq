@@ -224,3 +224,15 @@
   (testing "Find users which are using a schnaq.com email address."
     (is (zero? (count (db/users-filter-by-regex-on-email #".*@razupaltu\.ff$"))))
     (is (= 2 (count (db/users-filter-by-regex-on-email #".*@schnaq\.com$"))))))
+
+(deftest register-new-user-race-test
+  (testing "A concurrent request registered the user between lookup and insert."
+    (let [lookup db/private-user-by-keycloak-id
+          first-lookup? (atom true)]
+      (with-redefs [db/private-user-by-keycloak-id (fn [keycloak-id]
+                                                     (if (compare-and-set! first-lookup? true false)
+                                                       nil
+                                                       (lookup keycloak-id)))]
+        (let [[new-user? user] (db/register-new-user {:sub kangaroo-keycloak-id} [] [])]
+          (is (false? new-user?))
+          (is (= kangaroo-keycloak-id (:user.registered/keycloak-id user))))))))
