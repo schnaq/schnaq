@@ -14,7 +14,7 @@
   (not (str/blank? config/sentry-dsn)))
 
 (def ^:private release
-  (str "schnaq-frontend@" config/build-hash))
+  (str "schnaq-frontend@" config/app-version))
 
 (def ^:private max-context-length
   "Cut off long context values before sending them to Sentry."

@@ -1,10 +1,11 @@
 name: "Vercel: Build Production Deployment"
 
+# A release is a pushed tag like v1.3.0, see .claude/skills/release/SKILL.md.
 on:
   workflow_dispatch:
   push:
-    branches:
-      - deploy
+    tags:
+      - "v*"
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}

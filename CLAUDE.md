@@ -119,6 +119,14 @@ Files with `.cljc` extension are shared between backend and frontend: `schnaq.co
 - The `>defn` macro from guardrails is used extensively for runtime spec checking in development (disabled in production builds)
 - Frontend re-frame events/subscriptions are keyword-namespaced by domain
 
+## Releases
+
+Production runs tagged releases. A release is a semver tag `vX.Y.Z` on `develop`; frontend and backend always share the version. Follow `.claude/skills/release/SKILL.md`.
+
+- Pushing the tag builds `ghcr.io/schnaq/schnaq/backend:vX.Y.Z` and deploys the frontend to Vercel production. The `deploy` branch is no longer used.
+- The backend goes live through a PR in `schnaq/charts` that sets `image.tag: "vX.Y.Z"` for `schnaqbackend` and `schnaqstagingbackend`. Merge it only after the image exists.
+- Builds take their version from `git describe --tags --always`. The footer shows the frontend and backend version, `GET /version` returns the backend's. Sentry releases are `schnaq-frontend@<version>` / `schnaq-backend@<version>`.
+
 ## Linear Project
 
 All planning, dependency-refresh, modernization and tech-debt work for this repository is tracked in the Linear project **"schnaq app"**.

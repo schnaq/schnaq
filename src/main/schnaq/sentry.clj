@@ -52,7 +52,7 @@
     (do
       (sentry-clj/init! config/sentry-dsn
                         {:environment config/sentry-environment
-                         :release (str "schnaq-backend@" config/build-hash)
+                         :release (str "schnaq-backend@" config/app-version)
                          :in-app-includes ["schnaq"]
                          :enable-uncaught-exception-handler false})
       (reset! enabled? true)
