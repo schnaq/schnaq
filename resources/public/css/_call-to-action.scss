@@ -2,6 +2,8 @@
 @use 'variables' as vars;
 
 .layered-wave-background {
+  // Keeps the white text readable while the image loads or if it fails.
+  background-color: var(--primary);
   background-image: url('https://snq-common.s3.nl-ams.scw.cloud/background/layered_background_square.svg');
   background-position: bottom;
   background-repeat: no-repeat;

@@ -41,10 +41,10 @@
   [motion/fade-in-and-out
    [:article.call-to-contribute.m-3
     [:div.alert.alert-light.text-light.row.layered-wave-background.p-md-5.rounded-1
-     [:div.col-2.py-md-5.d-flex
+     [:div.col-md-2.d-none.d-md-flex.py-md-5
       [:img.w-75.align-self-center {:src (img-path :schnaqqifant/three-d-head)
                                     :alt (labels :schnaqqifant/three-d-head-alt-text)}]]
-     [:div.col-10.py-md-5
+     [:div.col-12.col-md-10.py-md-5
       body]]]])
 
 (defn- call-to-share
@@ -61,7 +61,7 @@
      " "
      (labels :qanda.call-to-action/intro-2)]
     [:p.pt-3 [icon :info "me-1"]
-     (labels :qanda.call-to-action/help)
+     (labels :qanda.call-to-action/share-options)
      [small-share-schnaq-button]]]])
 
 ;; -----------------------------------------------------------------------------
@@ -88,13 +88,14 @@
 
 (defn- statement-information-row [statement]
   (let [statement-id (:db/id statement)]
-    [:div.d-flex.flex-wrap.align-items-center.pb-1
-     (if (:statement/locked? statement)
-       [elements/locked-statement-icon statement-id]
-       [badges/show-number-of-replies statement])
+    [:div.meta-row.d-flex.flex-wrap.align-items-center.gap-2.pb-2
+     [:div.small [user/user-info statement 20 nil]]
+     (when (:statement/locked? statement)
+       [elements/locked-statement-icon statement-id])
+     [badges/show-number-of-replies statement]
      (when (:statement/pinned? statement)
        [elements/pinned-statement-icon statement-id])
-     (when ((set (:statement/labels statement)) ":question")
+     (when (question? statement)
        [labels/build-label ":question"])
      (when-not @(rf/subscribe [:routes.schnaq/start?])
        [:div.d-flex.flex-row.align-items-center.ms-auto
@@ -185,16 +186,19 @@
                              (labels :qanda.button.hide/replies))]
         (when (not-empty reply-ids)
           [:div props
-           [:button.btn.btn-transparent.btn-no-outline
-            {:type "button" :aria-expanded "false"
+           [:button.btn.btn-transparent.ps-0
+            {:type "button"
+             :aria-expanded (not @collapsed?)
+             :aria-controls (str "replies-" statement-id)
              :on-click (fn [_] (swap! collapsed? not))}
             [:span.me-2 button-content] button-icon]
-           [motion/collapse-in-out
-            @collapsed?
-            (for [reply-id reply-ids]
-              (with-meta
-                [reduced-or-edit-card reply-id]
-                {:key (str "reply-" reply-id)}))]])))))
+           [:div {:id (str "replies-" statement-id) :inert @collapsed?}
+            [motion/collapse-in-out
+             @collapsed?
+             (for [reply-id reply-ids]
+               (with-meta
+                 [reduced-or-edit-card reply-id]
+                 {:key (str "reply-" reply-id)}))]]])))))
 
 (defn statement-card
   "Display a full interactive statement. Takes `additional-content`, e.g. the
@@ -242,18 +246,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- current-topic-badges
-  "Badges which are shown if a statement is selected."
-  [statement]
-  (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])]
-    [:div.ms-auto
-     (if starting-route?
-       [badges/static-info-badges-discussion]
-       [:div.d-flex.flex-row
-        [badges/show-number-of-replies statement]
-        [reactions/up-down-vote statement]
-        [badges/statement-dropdown-menu {:class "ms-3"} statement]])]))
-
 (defn- title-view [statement]
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
         title [md/as-markdown (:statement/content statement)]
@@ -271,14 +263,26 @@
                  :statement/author author
                  :statement/created-at created-at}
         starting-route? @(rf/subscribe [:routes.schnaq/start?])
-        statement-or-topic (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))]
+        statement-or-topic (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))
+        edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement-or-topic)])]
     [motion/fade-in-and-out
      [:<>
-      [:div.d-flex.flex-wrap.mb-3
-       [:div.small
+      [:div.d-flex.align-items-center.gap-2.mb-2
+       [:div.small.flex-grow-1 {:style {:min-width 0}}
         [user/user-info statement-or-topic 20 nil]]
-       [current-topic-badges statement-or-topic]]
-      [title-view statement-or-topic]]]))
+       [:div.flex-shrink-0
+        (if starting-route?
+          [badges/edit-discussion-dropdown-menu]
+          [badges/statement-dropdown-menu nil statement-or-topic])]]
+      [title-view statement-or-topic]
+      (when-not edit-active?
+        [:div.meta-row.d-flex.flex-wrap.align-items-center.gap-2
+         (if starting-route?
+           [badges/number-of-remaining-posts]
+           [:<>
+            ;; The focused statement is the open page, so its replies are no link.
+            [badges/show-number-of-replies statement-or-topic {:link? false}]
+            [reactions/up-down-vote statement-or-topic]])])]]))
 
 (defn- search-info []
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
@@ -319,18 +323,19 @@
   "Dispatch the different input options, e.g. questions, poll or activation."
   []
   (let [selected-option (reagent/atom :question)
-        on-click #(reset! selected-option %)
-        active-class #(when (= @selected-option %) "active")
-        iconed-heading (fn [class icon-key label]
-                         (if (active-class class) [:<> [icon icon-key "me-1"] (labels label)]
-                                                  [:<> [icon icon-key "mx-2"]]))]
+        ;; Start the tour a second after mounting, cancel it when unmounting.
+        start-tour-ref (fn [element]
+                         (when element
+                           (let [timer (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :discussion]) 1000)]
+                             #(js/clearTimeout timer))))
+        input-types [[:question :info-question :schnaq.input-type/statement]
+                     [:poll :chart-pie :schnaq.input-type/poll]
+                     [:activation :magic :schnaq.input-type/activation]
+                     [:word-cloud :cloud :schnaq.input-type/word-cloud]
+                     [:feedback :feedback :schnaq.input-type/feedback]
+                     [:qa-box :question :schnaq.input-type/qa-box]]]
     (fn []
-      (let [poll-tab [:span [iconed-heading :poll :chart-pie :schnaq.input-type/poll]]
-            activation-tab [:span [iconed-heading :activation :magic :schnaq.input-type/activation]]
-            word-cloud-tab [:span [iconed-heading :word-cloud :cloud :schnaq.input-type/word-cloud]]
-            feedback-tab [:span [iconed-heading :feedback :feedback :schnaq.input-type/feedback]]
-            qa-box-tab [:span [iconed-heading :qa-box :question :schnaq.input-type/qa-box]]
-            moderator? @(rf/subscribe [:user/moderator?])
+      (let [moderator? @(rf/subscribe [:user/moderator?])
             read-only? @(rf/subscribe [:schnaq.state/read-only?])
             top-level? @(rf/subscribe [:routes.schnaq/start?])
             posts-disabled-for-non-moderators? @(rf/subscribe [:schnaq/posts-disabled-for-non-moderators?])]
@@ -341,43 +346,19 @@
              (when top-level?
                (when (and (not read-only?) moderator?)
                  [:ul.selection-tab.nav.nav-tabs
-                  {:ref (fn [_element]
-                          (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :discussion]) 1000))} ;; wait a second until tour appears
-                  [:li.nav-item
-                   [:button.nav-link {:class (active-class :question)
-                                      :role "button"
-                                      :on-click #(on-click :question)}
-                    [iconed-heading :question :info-question :schnaq.input-type/statement]]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :poll)
-                     :role "button"
-                     :on-click #(on-click :poll)}
-                    poll-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :activation)
-                     :role "button"
-                     :on-click #(on-click :activation)}
-                    activation-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :word-cloud)
-                     :role "button"
-                     :on-click #(on-click :word-cloud)}
-                    word-cloud-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :feedback)
-                     :role "button"
-                     :on-click #(on-click :feedback)}
-                    feedback-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :qa-box)
-                     :role "button"
-                     :on-click #(on-click :qa-box)}
-                    qa-box-tab]]]))
+                  {:ref start-tour-ref}
+                  ;; Toggle buttons, not ARIA tabs: only the active one shows its label,
+                  ;; the others are named for assistive tech.
+                  (for [[input-type icon-key label] input-types
+                        :let [active? (= @selected-option input-type)]]
+                    [:li.nav-item {:key input-type}
+                     [:button.nav-link {:type "button"
+                                        :class (when active? "active")
+                                        :aria-pressed active?
+                                        :aria-label (labels label)
+                                        :on-click #(reset! selected-option input-type)}
+                      [icon icon-key (when active? "me-1")]
+                      (when active? (labels label))]])]))
              (if top-level?
                (case @selected-option
                  :question [input-form-or-disabled-alert]
@@ -404,7 +385,7 @@
  :<- [:filters/questions?]
  (fn [[sort-method local-votes shown-statements questions-only?] _]
    (let [question-filtered-statements (if questions-only?
-                                        (filter #((set (:statement/labels %)) ":question") shown-statements)
+                                        (filter question? shown-statements)
                                         shown-statements)
          sorted-conclusions (sort-statements question-filtered-statements sort-method local-votes)
          grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)

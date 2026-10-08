@@ -60,11 +60,11 @@
     (when (seq search-results)
       [:div.mt-3
        [motion/fade-in-and-out
-        [:h5.mx-3.mx-md-0
+        [:h5
          (when dark? {:class "text-white"})
          (labels :qanda.search/similar-results)]]
        [motion/fade-in-and-out
-        [:div.mx-3.mx-md-0
+        [:div
          [:text-sm
           (when dark? {:class "text-white"})
           (labels :qanda.search/similar-results-explanation-1)

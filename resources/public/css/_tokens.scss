@@ -1,0 +1,144 @@
+// Design tokens in the style of shadcn/ui: semantic CSS custom properties from
+// the schnaq.com CI. Stylesheets use these instead of colour literals, and
+// Bootstrap's --bs-* variables and component hooks are wired to them below, so
+// a user theme reaches every component without !important.
+//
+// Each brand colour comes in three flavours:
+//   --x            fills and decorative surfaces (navbar, highlight bars)
+//   --x-strong     text, icons and button backgrounds on white (WCAG AA)
+//   --x-foreground the label colour on top of --x-strong
+// Compile-time copies live in _variables.scss.
+
+:root {
+  // Inputs for user themes. themes.cljs overrides them inline on <html> and
+  // reads them back, so they stay literal hex values. The -rgb, -strong and
+  // -foreground companions only exist while a theme is applied.
+  --theming-primary: #{$primary};
+  --theming-secondary: #{$secondary};
+  --theming-background: #{$light};
+
+  --background: #{$light};
+  --foreground: #{$typography};
+  --card: #{$white};
+  --primary: #{$primary};
+  --primary-rgb: #{to-rgb($primary)};
+  --primary-strong: #{$primary-strong};
+  --primary-foreground: #{$white};
+  --secondary: #{$secondary};
+  --secondary-rgb: #{to-rgb($secondary)};
+  --secondary-strong: #{$secondary-strong};
+  --secondary-foreground: #{$typography};
+  --muted: #{$gray-200};
+  --muted-foreground: #{$gray-600};
+  --border: #{$gray-300};
+  --link: #{$link-color};
+  --radius: #{$border-radius-lg};
+}
+
+.theming-enabled {
+  --primary: var(--theming-primary);
+  --primary-rgb: var(--theming-primary-rgb, #{to-rgb($primary)});
+  --primary-strong: var(--theming-primary-strong, #{$primary-strong});
+  --primary-foreground: var(--theming-primary-foreground, #{$white});
+  --secondary: var(--theming-secondary);
+  --secondary-rgb: var(--theming-secondary-rgb, #{to-rgb($secondary)});
+  --secondary-strong: var(--theming-secondary-strong, #{$secondary-strong});
+  --secondary-foreground: var(--theming-secondary-foreground, #{$typography});
+  --background: var(--theming-background);
+}
+
+// Derived tokens and the Bootstrap wiring. Custom properties resolve where they
+// are declared, so they are repeated on .theming-enabled to pick up a theme.
+:root,
+.theming-enabled {
+  --ring: var(--primary-strong);
+  --support: var(--primary);
+  --attack: var(--secondary);
+  --bs-primary: var(--primary);
+  --bs-primary-rgb: var(--primary-rgb);
+  --bs-secondary: var(--secondary);
+  --bs-secondary-rgb: var(--secondary-rgb);
+  --bs-focus-ring-color: color-mix(in srgb, var(--ring) 35%, transparent);
+}
+
+// -----------------------------------------------------------------------------
+// Component hooks
+
+// Primary fills with its strong shade, the brand orange is a fill colour itself
+// and carries the navy foreground.
+@each $color, $fill in (primary: var(--primary-strong), secondary: var(--secondary)) {
+  .btn-#{$color} {
+    --bs-btn-color: var(--#{$color}-foreground);
+    --bs-btn-bg: #{$fill};
+    --bs-btn-border-color: #{$fill};
+    --bs-btn-hover-color: var(--#{$color}-foreground);
+    --bs-btn-hover-bg: color-mix(in srgb, #{$fill} 85%, #000);
+    --bs-btn-hover-border-color: color-mix(in srgb, #{$fill} 85%, #000);
+    --bs-btn-active-color: var(--#{$color}-foreground);
+    --bs-btn-active-bg: color-mix(in srgb, #{$fill} 75%, #000);
+    --bs-btn-active-border-color: color-mix(in srgb, #{$fill} 75%, #000);
+    --bs-btn-disabled-color: var(--#{$color}-foreground);
+    --bs-btn-disabled-bg: #{$fill};
+    --bs-btn-disabled-border-color: #{$fill};
+    --bs-btn-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+  }
+
+  .btn-outline-#{$color} {
+    --bs-btn-color: var(--#{$color}-strong);
+    --bs-btn-border-color: var(--#{$color}-strong);
+    --bs-btn-hover-color: var(--#{$color}-foreground);
+    --bs-btn-hover-bg: #{$fill};
+    --bs-btn-hover-border-color: #{$fill};
+    --bs-btn-active-color: var(--#{$color}-foreground);
+    --bs-btn-active-bg: #{$fill};
+    --bs-btn-active-border-color: #{$fill};
+    --bs-btn-disabled-color: var(--#{$color}-strong);
+    --bs-btn-disabled-border-color: var(--#{$color}-strong);
+    --bs-btn-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+  }
+}
+
+// Opaque, so a disabled orange button on a coloured page stays light orange.
+.btn-secondary {
+  --bs-btn-disabled-opacity: 1;
+  --bs-btn-disabled-bg: color-mix(in srgb, var(--secondary) 65%, #fff);
+  --bs-btn-disabled-border-color: color-mix(in srgb, var(--secondary) 65%, #fff);
+  --bs-btn-disabled-color: color-mix(in srgb, var(--secondary-foreground) 65%, #fff);
+}
+
+.form-check-input:checked,
+.form-check-input[type='checkbox']:indeterminate {
+  background-color: var(--primary-strong);
+  border-color: var(--primary-strong);
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+}
+
+.form-range::-webkit-slider-thumb {
+  background-color: var(--primary-strong);
+}
+
+// A combined selector list with the -webkit- rule would be dropped by Firefox.
+.form-range::-moz-range-thumb {
+  background-color: var(--primary-strong);
+}
+
+.dropdown-menu {
+  --bs-dropdown-link-active-bg: var(--primary-strong);
+  --bs-dropdown-link-active-color: var(--primary-foreground);
+}
+
+.nav-tabs {
+  --bs-nav-link-color: var(--primary-strong);
+  --bs-nav-tabs-link-active-color: var(--primary-strong);
+  --bs-nav-link-hover-color: color-mix(in srgb, var(--primary-strong) 80%, #000);
+}
+
+.base-wrapper {
+  background: var(--background);
+}

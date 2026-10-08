@@ -106,7 +106,7 @@
 
    :schnaq.join.access-code/heading "Tritt einem schnaq bei"
    :schnaq.join.access-code/access-code "Zugangscode"
-   :schnaq.join.access-code/enter-code "Bitte gib den den achtstelligen Code ein."
+   :schnaq.join.access-code/enter-code "Bitte gib den achtstelligen Code ein."
    :schnaq.join.access-code/invalid "Dein Zugangscode ist ungültig. Bitte überprüfe deine Eingabe."
    :schnaq.join.access-code/join "Beitreten"
    :schnaq.join.access-code/existing-user "Schon mal hier gewesen?"
@@ -363,7 +363,6 @@
    :qanda.call-to-action/display-code "Dein Zugangscode:"
    :qanda.call-to-action/intro-1 "Lade weitere Menschen ein, indem sie zu"
    :qanda.call-to-action/intro-2 "navigieren und den Code dort eingeben."
-   :qanda.call-to-action/help "Alle Optionen zum Teilen deines schnaqs findest du oben rechts in der Navigationsleiste"
    :qanda.search/similar-results "Ähnliche Fragen"
    :qanda.search/similar-results-explanation-1 "Bereits gestellte ähnliche Fragen erscheinen hier. Du kannst diese mit "
    :qanda.search/similar-results-explanation-2 "für dich als relevant markieren."
@@ -418,7 +417,7 @@
    :analytics/statement-types-title "Argumenttypen"
    :analytics/statement-count-percentiles "Anzahl Statements pro schnaq"
    :analytics/labels-stats "Markierte Antworten"
-   :analytics/fetch-data-button "Hole Daten"
+   :analytics/fetch-data-button "Daten laden"
    :analytics.users/title "Neue registrierte Nutzer:innen"
    :analytics.users/toggle-button "Zeige neue Nutzer:innen"
    :analytics.users/copy-button "Kopieren"
@@ -426,6 +425,22 @@
    :analytics.users.table/email "E-Mail"
    :analytics.patterns/title "Query Nutzer:innen per E-Mail"
    :analytics.patterns.input/label "Wähle Nutzer:innen anhand ihrer E-Mails aus. Du kannst reguläre Ausdrücke verwenden und mehrere durch Komma getrennte Muster angeben. Die Statistiken werden aggregiert."
+   :analytics.statements/change "Veränderung"
+   :analytics.statements/chart-label "Statements"
+   :analytics.controls/days-placeholder "Statistiken der letzten X Tage"
+   :analytics.controls/days-unit "Tage"
+   :analytics.patterns/query-button "Abfragen"
+   :analytics.metric/overall "Gesamt"
+   :analytics.metric/registered "Registriert"
+   :analytics.metric/anonymous "Anonym"
+   :analytics.metric/max "Maximum"
+   :analytics.metric/min "Minimum"
+   :analytics.metric/average "Durchschnitt"
+   :analytics.metric/median "Median"
+   :analytics.metric/supports "Dafür"
+   :analytics.metric/attacks "Dagegen"
+   :analytics.metric/neutrals "Neutral"
+   :analytics.metric/percentile "%1. Perzentil"
 
    ;; User related
    :user.button/set-name "Name speichern"
@@ -436,7 +451,7 @@
    :user.set-name.modal/primer "Der Name wird den anderen Teilnehmer:innen im schnaq angezeigt."
    :user/login "Anmelden"
    :user/logout "Logout"
-   :user/register "Einloggen / Registrieren"
+   :user/login-register "Einloggen / Registrieren"
    :user.profile/settings "Einstellungen"
    :user.action/link-copied "Link kopiert!"
    :user.action/link-copied-body "Teile den Link mit anderen, um ihnen Zugriff zu geben."
@@ -531,6 +546,11 @@
    :themes.personal.creation.delete/confirmation "Möchtest du die Designvorlage wirklich löschen?"
    :themes.personal.edit.image/delete-confirmation "Möchtest du das Bild wirklich löschen? (Du musst das Design speichern, damit das Bild entfernt wird)"
    :themes.personal.preview/heading "Vorschau"
+   :themes.personal.preview.buttons/primary "Primärer Button"
+   :themes.personal.preview.buttons/secondary "Sekundärer Button"
+   :themes.personal.preview.buttons/primary-outline "Primärer Button mit Rahmen"
+   :themes.personal.preview.buttons/secondary-outline "Sekundärer Button mit Rahmen"
+   :themes.personal.preview/statement "Willkommen bei schnaq"
    :themes.schnaq.settings/heading "Design festlegen"
    :themes.schnaq.settings/lead "Sobald du ein Design ausgewählt hast, wird es für diesen schnaq gespeichert. Deine Besucher:innen sehen dann beim nächsten Laden des schnaqs das neue Farbschema."
    :themes.schnaq.settings.buttons/edit "Designs bearbeiten"
@@ -554,14 +574,14 @@
 
    :error.generic/contact-us [:span "Solltest du hier landen nachdem du etwas auf landing.schnaq.com angeklickt hast, gib uns gerne Bescheid unter " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
 
-   :error.404/heading "Diese Seite existiert nicht 🙉"
+   :error.404/heading "Diese Seite existiert nicht\u00a0🙉"
    :error.404/body "Die URL, der du gefolgt bist, existiert leider nicht. Möglicherweise hat sich ein Tippfehler
      oder ein Zeichen zu viel eingeschlichen."
 
-   :error.403/heading "Du hast nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"
+   :error.403/heading "Du hast nicht die Berechtigung diese Seite aufzurufen\u00a0🧙‍♂️"
    :error.403/body "Dir fehlt die Berechtigung diese Seite aufzurufen oder es handelt sich um einen Tippfehler in deiner URL."
 
-   :error.beta/heading "Du hast nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"
+   :error.beta/heading "Du hast nicht die Berechtigung diese Seite aufzurufen\u00a0🧙‍♂️"
    :error.beta/body "Dieses Feature ist nur für Beta-Tester:innen verfügbar. Wenn du zu den Tester:innen gehörst, melde dich bitte an. Wenn du Beta-Tester:in werden möchtest, dann schreibe uns eine E-Mail an hello@schnaq.com."
 
    ;; Graph Texts
@@ -817,4 +837,24 @@
    :qa-boxes.dropdown/edit-cancel "Bearbeiten abbrechen"
    :qa-boxes.label-edit-input/placeholder "Überschrift (optional)"
    :qa-boxes.question.edit.error/heading "Fehler beim Bearbeiten des Q&As"
-   :qa-boxes.question.edit.error/body "Die Überschrift konnte durch einen Fehler nicht geändert werden. Bitte versuche es noch einmal."})
+   :qa-boxes.question.edit.error/body "Die Überschrift konnte durch einen Fehler nicht geändert werden. Bitte versuche es noch einmal."
+
+   ;; Accessibility names and small labels
+   :editor.toolbar/label "Formatierung"
+   :discussion.badges/more-options "Weitere Optionen"
+   :discussion.badges/post "Beitrag"
+   :discussion.add.button/attitude "Haltung"
+   :schnaq.search/label "Suche"
+   :qanda.call-to-action/share-options "Weitere Optionen zum Teilen findest du hier:"
+   :schnaq.activations/previous "Vorherige Aktivierung"
+   :schnaq.activations/next "Nächste Aktivierung"
+   :qa-boxes.question/upvote "Für diese Frage stimmen"
+   :qa-boxes.question/delete "Frage löschen"
+   :tour.buttons/next-with-progress "Weiter ({current} von {total})"
+   :common/more-info "Mehr Informationen"
+   :a11y/skip-to-content "Zum Inhalt springen"
+   :notifications/close "Schließen"
+   :schnaq.options/menu "schnaq-Optionen"
+   :footer.tagline/location "in NRW, Deutschland"
+   :statement.vote/up "Positiv bewerten"
+   :statement.vote/down "Negativ bewerten"})

@@ -11,7 +11,7 @@
   "The form to enter a schnaq via access code."
   []
   (let [valid-form @(rf/subscribe [:schnaq.join/form])]
-    [:div.card.shadow.me-5.text-dark.text-center
+    [:div.card.shadow.me-lg-5.text-dark.text-center
      [:div.card-body
       [:div.card-title
        [:h1 {:style {:font-size "2rem"}}
@@ -21,7 +21,7 @@
                      (.preventDefault e)
                      (let [access-code (oget e [:target :elements :access-code :value])]
                        (rf/dispatch [:schnaq.join/access-code access-code])))}
-       [:div.form-group
+       [:div.mb-3
         [:label.d-block.display-6
          (labels :schnaq.join.access-code/access-code)
          [:input.form-control.form-control-lg.text-center.my-2.has-validation
@@ -49,7 +49,7 @@
    [:h2.pb-3 (labels :schnaq.join.access-code/existing-user)]
    [button/anchor (labels :schnaq.join.access-code/go-to-schnaqs)
     (navigation/href :routes.schnaqs/personal)
-    "btn-outline-secondary btn-lg text-white"]])
+    "btn-outline-light btn-lg"]])
 
 (defn- start
   "Show a form to a user to join a schnaq via access-code."

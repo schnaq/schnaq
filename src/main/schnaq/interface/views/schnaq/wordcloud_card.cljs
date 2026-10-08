@@ -69,7 +69,7 @@
     [motion/fade-in-and-out
      [:section.activation-card
       [:div.d-flex.mt-3
-       [:h4.mx-auto.mt-3
+       [:h2.h4.mx-auto.mt-3
         (labels :schnaq.wordcloud/title)]
        [dropdown-menu/moderator
         {:id "wordcloud-dropdown-id"}
@@ -106,7 +106,7 @@
         input-id (str "wordcloud-" id "-input")]
     [:div.text-center.pt-4.activation-card
      [:div.d-flex
-      [:h4.text-center.mx-auto title]
+      [:h2.h4.text-center.mx-auto title]
       [dropdown-menu id]]
      [wordcloud/wordcloud formatted-words]
      (when-not @(rf/subscribe [:schnaq.state/read-only?])
@@ -119,8 +119,12 @@
         [:div.text-start.px-2.pb-2
          [:> InputGroup
           [:> FormControl {:placeholder (labels :schnaq.wordcloud.local.add-words/label)
+                           :aria-label (labels :schnaq.wordcloud.local.add-words/label)
                            :id input-id}]
-          [:> Button {:variant :dark :type :submit} [icon :plane "m-auto"]]]
+          [:> Button {:variant :dark
+                      :type :submit
+                      :aria-label (labels :statement.edit.button/submit)}
+           [icon :plane "m-auto"]]]
          [common/hint-text (labels :schnaq.wordcloud.local.add-words/hint)]]])]))
 
 (>defn wordcloud-list

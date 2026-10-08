@@ -19,7 +19,7 @@
         button-class (if (= current-route route) "feed-button-focused" "feed-button")]
     [:article
      [:a.btn.btn-link.text-start {:class button-class
-                                  :role "button"
+                                  :aria-current (when (= current-route route) "page")
                                   :href (navigation/href route)}
       [:div.row.text-start
        [:div.col-1
@@ -30,7 +30,8 @@
   [tooltip/text
    (labels :history.all-schnaqs/tooltip)
    [:a.button.btn.btn-dark.p-3
-    {:href (toolbelt/current-overview-link)}
+    {:href (toolbelt/current-overview-link)
+     :aria-label (labels :history.all-schnaqs/tooltip)}
     [:div.d-flex
      [icon :arrow-left "m-auto"]]]])
 
@@ -54,8 +55,11 @@
 (defn- external-link-icon []
   [icon :external-link-alt "ms-2" {:size "xs"}])
 
-(defn- settings-link [attrs body]
-  [:a attrs
+(defn- settings-link
+  "Link to a feature's settings. The label names the link for assistive technology,
+  because its content consists of icons only."
+  [label attrs body]
+  [:a (assoc attrs :aria-label label)
    body
    [external-link-icon]])
 
@@ -66,64 +70,63 @@
         disabled? (= false (user/feature-limit user feature))]
     (if disabled? [cross-icon] [check-icon])))
 
+(defn- feature-row
+  "A feature's label with its value, as one row of the overview."
+  [label value]
+  [:<>
+   [:dt.col-7 label]
+   [:dd.col-5 value]])
+
+(defn- limit-or-unlimited
+  "A feature's limit or, if it has none, the unlimited icon."
+  [user feature]
+  (or (user/feature-limit user feature) [unlimited-icon]))
+
 (defn- feature-overview []
   (let [user @(rf/subscribe [:user/entity])
         {:keys [total-schnaqs]} @(rf/subscribe [:user/meta])]
     [:section.pt-4
      [:dl.row
-      [:dt.col-sm-7 (labels :user.settings.features/schnaqs-created)]
-      [:dd.col-sm-5 (let [limit (user/feature-limit user :total-schnaqs)
-                          warning-class (warning-level-class (usage-warning-level user :total-schnaqs total-schnaqs))]
-                      [:span {:class warning-class}
-                       total-schnaqs " " (labels :user.settings.features/of) " " (or limit [unlimited-icon])])]
-
-      [:dt.col-sm-7 (labels :user.settings.features/posts-per-schnaq)]
-      [:dd.col-sm-5 (if-let [limit (user/feature-limit user :posts-per-schnaq)]
-                      limit [unlimited-icon])]
-
-      [:dt.col-sm-7 (labels :user.settings.features/concurrent-users)]
-      [:dd.col-sm-5 (if-let [limit (user/feature-limit user :concurrent-users)]
-                      limit [unlimited-icon])]
-
-      [:dt.col-sm-7 (labels :user.settings.features/pro)]
-      [:dd.col-sm-5 [check-icon]]
-
-      [:dt.col-sm-7 (labels :user.settings.features/mail-notifications)]
-      [:dd.col-sm-5
-       [settings-link {:href (navigation/href :routes.user.manage/notifications)}
-        [check-icon]]]
-
-      [:dt.col-sm-7 (labels :user.settings.features/theming)]
-      [:dd.col-sm-5
-       [settings-link {:href (navigation/href :routes.user.manage/themes)}
-        [feature-available :theming?]]]
-
-      [:dt.col-sm-7 (labels :user.settings.features/embeddings)]
-      [:dd.col-sm-5
-       [settings-link {:href "https://academy.schnaq.com" :target :_blank}
-        [feature-available :embeddings?]]]]
+      [feature-row (labels :user.settings.features/schnaqs-created)
+       [:span {:class (warning-level-class (usage-warning-level user :total-schnaqs total-schnaqs))}
+        total-schnaqs " " (labels :user.settings.features/of) " " (limit-or-unlimited user :total-schnaqs)]]
+      [feature-row (labels :user.settings.features/posts-per-schnaq)
+       (limit-or-unlimited user :posts-per-schnaq)]
+      [feature-row (labels :user.settings.features/concurrent-users)
+       (limit-or-unlimited user :concurrent-users)]
+      [feature-row (labels :user.settings.features/pro) [check-icon]]
+      (let [label (labels :user.settings.features/mail-notifications)]
+        [feature-row label
+         [settings-link label
+          {:href (navigation/href :routes.user.manage/notifications)}
+          [check-icon]]])
+      (let [label (labels :user.settings.features/theming)]
+        [feature-row label
+         [settings-link label
+          {:href (navigation/href :routes.user.manage/themes)}
+          [feature-available :theming?]]])
+      (let [label (labels :user.settings.features/embeddings)]
+        [feature-row label
+         [settings-link label
+          {:href "https://academy.schnaq.com" :target :_blank}
+          [feature-available :embeddings?]]])]
 
      [:strong (labels :user.settings.features/interactions)]
      [:dl.row
-      [:dt.col-sm-7 (labels :user.settings.features/polls)]
-      [:dd.col-sm-5 (if-let [limit (user/feature-limit user :polls)]
-                      limit [unlimited-icon])]
-
-      [:dt.col-sm-7 (labels :user.settings.features/rankings)]
-      [:dd.col-sm-5 [feature-available :rankings?]]
-
-      [:dt.col-sm-7 (labels :user.settings.features/wordclouds)]
-      [:dd.col-sm-5 [feature-available :wordcloud?]]]]))
+      [feature-row (labels :user.settings.features/polls)
+       (limit-or-unlimited user :polls)]
+      [feature-row (labels :user.settings.features/rankings) [feature-available :rankings?]]
+      [feature-row (labels :user.settings.features/wordclouds) [feature-available :wordcloud?]]]]))
 
 (defn- features-button []
-  [:section.panel-white.text-center
+  [:section.text-center
    [:a.feed-button-outlined {:href (navigation/href :routes.welcome)}
     (labels :user/features)]])
 
 (defn user-info-box
   "Display an overview of a user's features."
   []
-  [:section.panel-white
+  [:section.panel-white.p-3
    (when @(rf/subscribe [:user/authenticated?])
      [:<>
       [:a.text-decoration-none {:href (navigation/href :routes.user.manage/account)}
@@ -131,7 +134,7 @@
         [common/avatar-with-nickname-right 40]
         [:div.align-self-center [role-indicator]]]]
       [feature-overview]
-      [:hr.my-4]])
+      [:hr.mt-4.mb-3]])
    [features-button]])
 
 (defn user-view [page-heading-label content]

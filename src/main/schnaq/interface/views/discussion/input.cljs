@@ -9,7 +9,6 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.discussion.card-elements :as card-elements]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]
             [schnaq.user :refer [display-name posts-limit-reached?]]))
@@ -25,18 +24,15 @@
   "Button to select the attitude of a statement. Current attitude is subscribed via get-subscription.
   On-Click triggers the set-event with statement-type as last parameter."
   [statement-type label tooltip get-subscription set-event]
-  (let [current-attitude @(rf/subscribe get-subscription)
-        checked? (= statement-type current-attitude)
-        uuid (random-uuid)]
+  (let [checked? (= statement-type @(rf/subscribe get-subscription))
+        group-name (str "statement-type-" (hash set-event))
+        id (str group-name "-" (name statement-type))]
     [:<>
-     [:input.btn-check {:id uuid
-                        :type "radio" :name "options" :autoComplete "off"
-                        :title (labels tooltip)
-                        :on-click (fn [e] (.preventDefault e)
-                                    (rf/dispatch (conj set-event statement-type)))}]
-     [:label.btn.btn-outline-dark
-      (cond-> {:for uuid}
-        checked? (assoc :class "active"))
+     [:input.btn-check {:id id
+                        :type "radio" :name group-name :autoComplete "off"
+                        :checked checked?
+                        :on-change #(rf/dispatch (conj set-event statement-type))}]
+     [:label.btn.btn-outline-dark {:for id :title (labels tooltip)}
       (labels label)]]))
 
 (defn statement-type-choose-button
@@ -44,15 +40,17 @@
   Clicking a button will dispatch the set-subscription with the button-type as parameter."
   [get-subscription set-event sm?]
   (let [additional-btn-class (if sm? "btn-group-sm" "")]
-    [:div.btn-group.me-2 {:class additional-btn-class}
+    [:div.btn-group.me-2 {:class additional-btn-class
+                          :role "radiogroup"
+                          :aria-label (labels :discussion.add.button/attitude)}
      [statement-type-button :statement.type/support
-      :discussion.add.button/support :discussion/add-premise-against
+      :discussion.add.button/support :discussion/add-premise-supporting
       get-subscription set-event]
      [statement-type-button :statement.type/neutral
       :discussion.add.button/neutral :discussion/add-premise-neutral
       get-subscription set-event]
      [statement-type-button :statement.type/attack
-      :discussion.add.button/attack :discussion/add-premise-supporting
+      :discussion.add.button/attack :discussion/add-premise-against
       get-subscription set-event]]))
 
 (defn- textarea-highlighting
@@ -64,6 +62,20 @@
                    "neutral")]
     [:div.highlight-card-reduced.highlight-card-reverse
      {:class (str "highlight-card-" attitude)}]))
+
+(defn- send-button
+  "Submit button of the composers. `class` sets the variant, `label-class` the
+  visibility of the label next to the icon."
+  [submittable? {:keys [class label-class]}]
+  [:button.btn.px-3
+   {:type :submit
+    :class class
+    :disabled (not submittable?)
+    :title (labels :discussion/create-argument-action)
+    :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
+   [:div.d-flex.flex-row
+    [:div.me-1 {:class label-class} (labels :statement/new)]
+    [icon :plane "m-auto"]]])
 
 (defn- premise-card-editor
   "Input, where users provide premises."
@@ -80,17 +92,12 @@
                        :placeholder (labels :statement.new/placeholder)
                        :toolbar? false}
        {:className "flex-grow-1 lexical-editor-sm"}]
-      [:button.btn.btn-sm.btn-outline-dark
-       {:type :submit
-        :disabled (not submittable?)
-        :title (labels :discussion/create-argument-action)
-        :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
-       [:div.d-flex.flex-row
-        [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
-        [icon :plane "m-auto"]]]]]))
+      [send-button submittable? {:class "btn-sm btn-outline-dark"
+                                 :label-class "d-none d-lg-block"}]]]))
 
 (defn- conclusion-card-editor
-  "Input, where users provide (starting) conclusions."
+  "Input, where users provide (starting) conclusions. On phones the send button
+  moves below the editor, so the toolbar keeps the full width."
   [editor-id]
   (let [author @(rf/subscribe [:schnaq/author])
         schnaq @(rf/subscribe [:schnaq/selected])
@@ -112,23 +119,18 @@
                            :focus? (not config/in-iframe?)
                            :placeholder (labels :statement.new/placeholder)}
            {:className "flex-grow-1"}]
-          [:button.btn.btn-outline-secondary
-           {:type :submit
-            :disabled (not submittable?)
-            :title (labels :discussion/create-argument-action)
-            :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
-           [:div.d-flex.flex-row
-            [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
-            [icon :plane "m-auto"]]]]
-         (when @(rf/subscribe [:user/moderator?])
-           [:div.form-check.pt-2
-            [:input.form-check-input
-             {:type :checkbox
-              :name "lock-card?"
-              :id "lock-card?"}]
-            [:label.form-check-label
-             {:for "lock-card?"}
-             (labels :discussion/lock-statement)]])]))))
+          [send-button submittable? {:class "btn-primary d-none d-sm-block align-self-end align-self-lg-stretch"}]]
+         [:div.d-flex.flex-wrap.align-items-center.column-gap-2
+          (when @(rf/subscribe [:user/moderator?])
+            [:div.form-check.small.text-muted.mt-2
+             [:input.form-check-input
+              {:type :checkbox
+               :name "lock-card?"
+               :id "lock-card?"}]
+             [:label.form-check-label
+              {:for "lock-card?"}
+              (labels :discussion/lock-statement)]])
+          [send-button submittable? {:class "btn-primary d-sm-none mt-2 ms-auto"}]]]))))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
@@ -161,9 +163,10 @@
                     (rf/dispatch [:editor/clear editor-id])
                     (event-to-send e))]
     (if (:statement/locked? @(rf/subscribe [:schnaq.statements/focus]))
-      [:div.pt-3.ps-1
-       [card-elements/locked-statement-icon]]
-      [:form.my-md-2
+      [:p.d-flex.align-items-center.gap-2.small.text-muted.mb-0
+       [icon :lock "text-primary"]
+       (labels :statement.locked/tooltip)]
+      [:form.mt-2.mb-md-2
        {:on-submit submit-fn
         :on-key-down #(when (toolbelt/ctrl-press? % "Enter") (submit-fn %))}
        [topic-input-area editor-id]])))
@@ -188,18 +191,17 @@
           (rf/dispatch [:editor/clear editor-id])
           (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))
         forbidden-write? (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?) posts-disabled-for-non-moderators?)]
-    [:form.my-md-2
-     {:on-submit answer-to-statement-event
-      :on-key-down #(when (toolbelt/ctrl-press? % "Enter")
-                      (answer-to-statement-event %))}
-     (when-not forbidden-write?
-       [premise-card-editor statement editor-id])
-     [:div.d-flex.flex-wrap.align-items-center
-      (when-not (or forbidden-write? pro-con-disabled?)
-        [statement-type-choose-button
-         [:form/statement-type statement-id]
-         [:form/statement-type! statement-id] true])
-      [:div.ms-auto.small.flex-shrink-1 [user/user-info statement 20 "w-100"]]]]))
+    (when-not forbidden-write?
+      [:form.my-md-2
+       {:on-submit answer-to-statement-event
+        :on-key-down #(when (toolbelt/ctrl-press? % "Enter")
+                        (answer-to-statement-event %))}
+       [premise-card-editor statement editor-id]
+       (when-not pro-con-disabled?
+         [:div.d-flex.flex-wrap.align-items-center.mt-2
+          [statement-type-choose-button
+           [:form/statement-type statement-id]
+           [:form/statement-type! statement-id] true]])])))
 
 (rf/reg-event-db
  ;; Assoc statement-type with statement-id as key. The current topic is assigned via :selected

@@ -5,6 +5,7 @@
             [oops.core :refer [oget oget+ oset!]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.tooltip :as tooltip]
             [spec-tools.core :as st]))
@@ -112,6 +113,22 @@
   [checkboxes]
   (map #(js/parseInt (oget % :value))
        (filter #(oget % :checked) checkboxes)))
+
+(def ^:private percent-formatter
+  "Building an `Intl.NumberFormat` is expensive, so build one per language."
+  (memoize
+   (fn [language]
+     (js/Intl.NumberFormat. language #js {:style "percent" :maximumFractionDigits 1}))))
+
+(defn format-percent
+  "Format a ratio between 0 and 1 as a percentage in the user's language."
+  [ratio]
+  (.format (percent-formatter (name @config/user-language)) ratio))
+
+(defn prefers-reduced-motion?
+  "True if the user asked the system to minimise animations."
+  []
+  (.-matches (js/matchMedia "(prefers-reduced-motion: reduce)")))
 
 (>defn ctrl-press?
   "Check for a ctrl + `key` combination in `event`. Don't use keyCode, as it is 

@@ -31,13 +31,13 @@
         limit-reached? (posts-limit-reached? author schnaq)]
     [:form {:on-submit submit-fn
             :on-key-down #(when (toolbelt/ctrl-press? % "Enter") (submit-fn %))}
-     [:label.form-label.h5.mb-3 {:for editor-id} (labels :qanda/add-question-label)]
-     [:div.d-flex.flex-row.qanda-input-content.rounded-1
-      [:div.highlight-card-neutral]
+     [:label.form-label.h5.mb-3 {:id "qanda-input-label"} (labels :qanda/add-question-label)]
+     [:div.d-flex.flex-row.qanda-input-content.rounded-1.ps-1.ps-md-2
       [:input {:type :hidden
                :name "statement"
                :value (or editor-content "")}]
       [lexical/editor {:id editor-id
+                       :aria-labelledby "qanda-input-label"
                        :focus? true
                        :on-text-change throttled-search
                        :placeholder (labels :statement.new/placeholder)}
@@ -71,7 +71,7 @@
   [:<>
    [:div.container.p-0.px-md-5
     [ask-question background-schema]]
-   [:div.container-fluid.p-0.px-md-5
+   [:div.container-fluid.px-3.px-md-5
     [search/results-list background-schema]]])
 
 (defn- qanda-content []

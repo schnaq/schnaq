@@ -32,13 +32,12 @@
   "Displays a history  and input field on the left and conclusions in its center"
   []
   [:<>
-   [:div.container-fluid.px-0.px-md-3
+   [:div.container-fluid.px-md-3
     [elements/discussion-options-navigation]]
    [:div.container
     [cards/card-container]]
-   [:div.container-fluid.px-0.px-md-3
-    [:div.d-md-none [elements/history-view]]
-    [:div.d-none.d-md-block [elements/history-view]]]])
+   [:div.container-fluid.px-1.px-md-3
+    [elements/history-view]]])
 
 (rf/reg-sub
  :discussion.statements/show

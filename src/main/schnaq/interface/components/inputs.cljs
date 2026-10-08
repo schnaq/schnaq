@@ -60,9 +60,10 @@
    [:label {:for id} placeholder]])
 
 (>defn checkbox
-  "Create a checkbox."
+  "Create a checkbox. `:after-label` in attrs renders next to the label, e.g. an info button."
   [label id attrs]
   [::specs/component-or-string ::specs/keyword-or-string (? map?) => :re-frame/component]
   [:div.form-check
-   [:input.form-check-input (merge {:id id :type :checkbox :name id} attrs)]
-   [:label.form-check-label {:for id} label]])
+   [:input.form-check-input (merge {:id id :type :checkbox :name id} (dissoc attrs :after-label))]
+   [:label.form-check-label {:for id} label]
+   (:after-label attrs)])

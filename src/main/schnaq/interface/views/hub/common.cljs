@@ -11,7 +11,7 @@
     [:span.profile-pic-fill
      {:style {:height (str size "px") :width (str size "px")}}
      [:img.profile-pic-image {:src logo
-                              :alt "Hub Logo"}]]
+                              :alt ""}]]
     [animal-avatars/generate-animal-avatar :name display-name :size size]))
 
 (defn hub-logo-with-name

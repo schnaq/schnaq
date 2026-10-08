@@ -21,13 +21,16 @@
 (def ^:private NavDropdownDivider (oget NavDropdown :Divider))
 (def ^:private NavDropdownItem (oget NavDropdown :Item))
 
-(defn LanguageDropdown [& {:keys [props vertical?]}]
+(defn LanguageDropdown
+  "Language switch. Mobile and desktop navbars mount one each, so the vertical
+  variant gets its own id."
+  [& {:keys [props vertical? hide-icon?]}]
   (let [current-language @(rf/subscribe [:current-language])]
     [tooltip/text
      (labels :nav.buttons/language-toggle)
-     [:> NavDropdown (merge {:id "language-dropdown"
+     [:> NavDropdown (merge {:id (if vertical? "language-dropdown-vertical" "language-dropdown")
                              :align :end
-                             :title (r/as-element [:<> [stacked-icon :vertical? vertical? :icon-key :language] current-language])}
+                             :title (r/as-element [:<> (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :language]) current-language])}
                             props)
       [:> NavDropdownItem {:href (navigation/switch-language-href :de)
                            :lang "de-DE" :hrefLang "de-DE"}
@@ -57,7 +60,7 @@
     [:div.mb-3
      [:label.form-label {:for slider-id}
       (labels :graph.settings.gravity/label)]
-     [:input.form-control-range.graph-settings-gravity.d-block
+     [:input.form-range.graph-settings-gravity
       {:id slider-id
        :on-input set-gravity! ;; For browser compatibility, set both events
        :on-change set-gravity!
@@ -157,7 +160,7 @@
         analytics-admin? @(rf/subscribe [:user/analytics-admin?])]
     ;; Analytics-Admin also is true when user is super-admin
     (when analytics-admin?
-      [:> NavDropdown (merge {:title (r/as-element [:span.text-secondary [stacked-icon :vertical? vertical? :icon-key :ghost] "Admin"])
+      [:> NavDropdown (merge {:title (r/as-element [:span [stacked-icon :vertical? vertical? :icon-key :ghost] "Admin"])
                               :align :end}
                              props)
        [:> NavDropdownItem {:href (navigation/href :routes/analytics)}
@@ -201,7 +204,7 @@
                            props)
      (if authenticated?
        [:<>
-        [:> NavDropdownItem {:disabled true} [common/avatar :size 32]]
+        [:> NavDropdownItem {:disabled true :aria-hidden true} [common/avatar :size 32]]
         [:> NavDropdownDivider]
         [:> NavDropdownItem {:href (navigation/href :routes.user.manage/account)}
          (labels :user.profile/settings)]
@@ -211,7 +214,7 @@
         [namechange-menu-point]
         (if session-storage-enabled?
           [:> NavDropdownItem {:on-click #(rf/dispatch [:keycloak/login])}
-           (labels :user/register)]
+           (labels :user/login-register)]
           [login-not-possible])])]))
 
 ;; -----------------------------------------------------------------------------

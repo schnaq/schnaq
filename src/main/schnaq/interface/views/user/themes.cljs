@@ -56,6 +56,41 @@
    (.. js/document -documentElement -style)
    css-variable))
 
+(def ^:private derived-suffixes
+  "Companions of a themed brand colour that _tokens.scss reads."
+  ["-rgb" "-strong" "-foreground"])
+
+(defn- hex->rgb
+  "Parse a #rrggbb colour into its red, green and blue channels."
+  [hex]
+  (mapv #(js/parseInt (subs hex % (+ % 2)) 16) [1 3 5]))
+
+(defn- relative-luminance
+  "WCAG relative luminance of a #rrggbb colour."
+  [hex]
+  (let [linear (fn [channel]
+                 (let [c (/ channel 255)]
+                   (if (<= c 0.03928) (/ c 12.92) (js/Math.pow (/ (+ c 0.055) 1.055) 2.4))))
+        [r g b] (map linear (hex->rgb hex))]
+    (+ (* 0.2126 r) (* 0.7152 g) (* 0.0722 b))))
+
+(defn- foreground-for
+  "White or the CI navy, whichever contrasts more with the background colour."
+  [hex]
+  (let [luminance (relative-luminance hex)
+        on-white (/ 1.05 (+ luminance 0.05))
+        on-navy (/ (+ luminance 0.05) (+ (relative-luminance "#001452") 0.05))]
+    (if (>= on-white on-navy) "#ffffff" "#001452")))
+
+(defn- set-derived-colors!
+  "Set the companions of a themed brand colour, see _tokens.scss."
+  [css-variable hex]
+  (when (re-matches #"#[0-9a-fA-F]{6}" hex)
+    (let [style (.. js/document -documentElement -style)]
+      (.setProperty style (str css-variable "-rgb") (str/join ", " (hex->rgb hex)))
+      (.setProperty style (str css-variable "-strong") hex)
+      (.setProperty style (str css-variable "-foreground") (foreground-for hex)))))
+
 (>defn- color-picker
   "Color picker for the theme colors."
   [theme-field label]
@@ -78,15 +113,16 @@
 (defn- preview []
   (when @(rf/subscribe [:schnaq/theme])
     [:<>
+     [:hr.my-5]
      [:h3#theme-preview-title (labels :themes.personal.preview/heading)]
      [:section.theming-enabled
       [:div.base-wrapper.p-3
        [activation/activation-card]
-       [:div.d-flex.flex-row
-        [buttons/button "primary button"]
-        [buttons/button "secondary button" nil "btn-secondary ms-2"]
-        [buttons/button "primary outlined button" nil "btn-outline-primary ms-2"]
-        [buttons/button "secondary outlined button" nil "btn-outline-secondary ms-2"]]
+       [:div.d-flex.flex-wrap.gap-2
+        [buttons/button (labels :themes.personal.preview.buttons/primary)]
+        [buttons/button (labels :themes.personal.preview.buttons/secondary) nil "btn-secondary"]
+        [buttons/button (labels :themes.personal.preview.buttons/primary-outline) nil "btn-outline-primary"]
+        [buttons/button (labels :themes.personal.preview.buttons/secondary-outline) nil "btn-outline-secondary"]]
        [info-card]
        [selection-card]]]]))
 
@@ -112,7 +148,7 @@
   "Display all available themes."
   []
   (let [user-name @(rf/subscribe [:user/display-name])]
-    [:section.pb-5
+    [:section
      [:h3 (labels :themes.personal.creation/heading)]
      [:p (labels :themes.personal.creation/lead)]
      [list-personal-themes :theme/select]
@@ -188,7 +224,8 @@
 (defn- image-upload-with-preview
   "Add image inputs and provide a preview if image is present."
   []
-  (let [{:theme.images/keys [logo header]} @(rf/subscribe [:schnaq/theme])]
+  (let [{:theme.images/keys [logo header]} @(rf/subscribe [:schnaq/theme])
+        version @(rf/subscribe [:themes/images-version])]
     [:<>
      [:div.row.pb-3
       [:div.col-md-8
@@ -199,7 +236,7 @@
       [:div.col-md-4.pt-4
        (when logo
          [:<>
-          [:img.img-fluid {:src (gstring/format "%s?%s" logo (.getTime (js/Date.)))
+          [:img.img-fluid {:src (str logo "?v=" version)
                            :alt (labels :themes.personal.creation.images.logo/alt)}]
           [delete-button
            (labels :themes.personal.edit.image/delete)
@@ -216,7 +253,7 @@
       [:div.col-md-4.pt-4
        (when header
          [:<>
-          [:img.img-fluid {:src (gstring/format "%s?%s" header (.getTime (js/Date.)))
+          [:img.img-fluid {:src (str header "?v=" version)
                            :alt (labels :themes.personal.creation.images.header/title)}]
           [delete-button
            (labels :themes.personal.edit.image/delete)
@@ -229,7 +266,7 @@
   (when-let [selected @(rf/subscribe [:schnaq/theme])]
     (let [theme-id (:db/id selected)]
       [:<>
-       [:form
+       [:form.mt-5
         {:ref (fn [_element]
                 (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :themes]) 1000))
          :on-submit (fn [e]
@@ -266,7 +303,6 @@
     [:p.lead.pb-3 (labels :themes.personal/lead)]]
    [loaded-themes]
    [motion/fade-in-and-out [configure-theme]]
-   [:hr.my-5]
    [motion/fade-in-and-out [preview]]])
 
 (defn view []
@@ -290,7 +326,7 @@
     [buttons/button
      (labels :themes.schnaq.settings.buttons/edit)
      #(rf/dispatch [:navigation/navigate :routes.user.manage/themes])
-     "btn-outline-info"]
+     "btn-outline-primary"]
     [buttons/button
      (labels :themes.schnaq.settings.buttons/unassign)
      (fn [_e]
@@ -337,12 +373,18 @@
  :page.root/set-color
  (fn [[theme-field color]]
    (when color
-     (set-root-color (theme-field->css-variable theme-field) color))))
+     (let [css-variable (theme-field->css-variable theme-field)]
+       (set-root-color css-variable color)
+       (when (#{"primary" "secondary"} (name theme-field))
+         (set-derived-colors! css-variable color))))))
 
 (rf/reg-fx
  :page.root/remove-color
  (fn [theme-field]
-   (remove-root-color (theme-field->css-variable theme-field))))
+   (let [css-variable (theme-field->css-variable theme-field)]
+     (remove-root-color css-variable)
+     (doseq [suffix derived-suffixes]
+       (remove-root-color (str css-variable suffix))))))
 
 (rf/reg-event-fx
  :theme.selected/color
@@ -368,11 +410,10 @@
  ;; Add dummy data to the selected schnaq, e.g. for preview functions
  (fn [{:keys [db]}]
    (let [discussion #:discussion{:author {:user.registered/display-name "schnaqqi"}
-                                 :title "Welcome to schnaq"
                                  :states #{:discussion.state/read-only}}
          dummy-conclusion-id :dummy-conclusion
          conclusion #:statement{:db/id dummy-conclusion-id
-                                :content "Welcome to schnaq"
+                                :content (labels :themes.personal.preview/statement)
                                 :author {:user.registered/display-name "schnaqqi"}
                                 :created-at nil}]
      {:db (-> db
@@ -418,7 +459,9 @@
 (rf/reg-event-fx
  :theme.save/success
  (fn [{:keys [db]} [_ {:keys [theme]}]]
-   {:db (assoc-in db [:schnaq :selected :discussion/theme] theme)
+   {:db (-> db
+            (assoc-in [:schnaq :selected :discussion/theme] theme)
+            (assoc :themes.images/version (.now js/Date)))
     :fx [[:dispatch [:notification/add
                      #:notification{:title (labels :themes.save.notification/title)
                                     :body [:<> (labels :themes.save.notification/body) " 🎉"]
@@ -451,6 +494,14 @@
  :themes/personal
  (fn [db]
    (get-in db [:themes :all])))
+
+(defonce ^:private app-start-ts (.now js/Date))
+
+(rf/reg-sub
+ :themes/images-version
+ ;; Cache-buster for theme images. Lives outside :themes, which is dropped on leaving the page.
+ (fn [db]
+   (get db :themes.images/version app-start-ts)))
 
 (rf/reg-event-db
  :themes/dissoc

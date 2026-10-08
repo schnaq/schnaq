@@ -31,14 +31,14 @@
         navigation-target (if has-history? back-history back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
     ;; `navigation-target` is always a vector (history event or overview route)
-    [:div.d-flex.flex-row.panel-white-sm
-     [tooltip/text
-      (labels tooltip)
-      [:button.btn.btn-dark
-       {:on-click #(rf/dispatch navigation-target)}
-       [:div.d-flex
-        [icon :arrow-left "m-auto"]]]]
-     [:small.my-auto.ms-2 back-label]]))
+    [tooltip/text
+     (labels tooltip)
+     [:button.btn.btn-light.panel-white-sm.d-flex.align-items-center.gap-2.text-start.mw-100
+      {:type "button"
+       :on-click #(rf/dispatch navigation-target)
+       :style {:min-height "2.75rem"}}
+      [:span.btn.btn-dark.btn-sm.py-0.pe-none [icon :arrow-left]]
+      [:small.text-truncate back-label]]]))
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -51,7 +51,7 @@
       [tooltip/text
        (labels :history.home/tooltip)
        [:div.text-center
-        [:h6 title]
+        [:h3.h6 title]
         [:p.text-muted.mb-0 (labels :history.home/text)]
         [badges/static-info-badges]]
        {:placement :right}]]]))
@@ -67,15 +67,18 @@
         tooltip-text (gstring/format "%s %s" (labels :tooltip/history-statement) nickname)
         history-content [:div
                          [:div.d-flex.flex-row
-                          [:h6 (labels :history.statement/user) " " (toolbelt/truncate-to-n-chars nickname 20)]
+                          [:h3.h6
+                           [:button.stretched-link.border-0.bg-transparent.p-0.text-reset.text-start.fw-semibold
+                            {:type "button"
+                             :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+                            (labels :history.statement/user) " " (toolbelt/truncate-to-n-chars nickname 20)]]
                           [:div.ms-auto [common/avatar :size 22 :user user]]]
                          (as-markdown (toolbelt/truncate-to-n-words statement-content max-word-count))]]
     [:article
      [:div.history-thread-line]
      [:div.d-inline-block.d-md-block.text-dark.w-100
       (let [attitude (name (or (:statement/type statement) :neutral))]
-        [:div.card-history.clickable.w-100
-         {:on-click #(rf/dispatch [:discussion.history/time-travel index])}
+        [:div.card-history.clickable.w-100.position-relative
          [:div.d-flex.flex-row
           [:div {:class (str "highlight-card-" attitude)}]
           [:div.history-card-content
@@ -91,7 +94,7 @@
         has-history? (seq indexed-history)]
     (when has-history?
       [:section.history-wrapper
-       [:h5.p-2.text-center (labels :history/title)]
+       [:h2.h5.p-2.text-center (labels :history/title)]
        [discussion-start-button]
        ;; history
        (for [[index statement-id] indexed-history]
@@ -231,7 +234,7 @@
       [:input.form-control.my-auto.search-bar-input.py-0
        {:id search-input-id
         :type "text"
-        :aria-label "Search"
+        :aria-label (labels :schnaq.search/label)
         :placeholder (labels :schnaq.search/input)
         :name "search-input"
         :on-key-up throttled-in-schnaq-search}]
@@ -251,9 +254,9 @@
   "Navigation bar on top of the discussion contents."
   []
   (when-not @(rf/subscribe [:ui/setting :hide-discussion-options])
-    [:div.d-flex.flex-row.align-items-center.pt-1.pt-xl-0
+    [:div.d-flex.flex-row.align-items-center.gap-2.pt-1.pt-xl-0
      (when-not config/in-iframe?
-       [:div.me-auto [back-button]])
+       [:div.me-auto {:style {:min-width 0}} [back-button]])
      [tooltip/html
       [:section.px-1
        [:div.d-flex.flex-row.py-2
@@ -262,9 +265,10 @@
        (when @(rf/subscribe [:routes.schnaq/start?])
          [filters/filter-answered-statements])
        [:div.py-3 [search-bar]]]
-      [:> Button {:variant "outline-primary" :size :sm :className "panel-white-sm"}
-       (labels :discussion.navbar/discussion-settings)]
-      {:appendTo js/document.body}]]))
+      [:> Button {:variant "outline-primary" :size :sm
+                  :className "panel-white-sm flex-shrink-0 text-nowrap"
+                  :style {:min-height "2.75rem"}}
+       (labels :discussion.navbar/discussion-settings)]]]))
 
 (defn locked-statement-icon
   "Indicator that a statement is locked."
@@ -277,7 +281,8 @@
      (when (and statement-id @(rf/subscribe [:user/moderator?]))
        {:class "clickable"
         :on-click #(rf/dispatch [:statement.lock/toggle statement-id false])})
-     [icon :lock "text-primary"]]]))
+     [icon :lock "text-primary"]
+     [:span.visually-hidden (labels :statement.locked/tooltip)]]]))
 
 (defn pinned-statement-icon
   "Indicator that a statement is pinned. Click it to unpin, if moderator and beta-user."
@@ -288,7 +293,8 @@
     (when (and statement-id @(rf/subscribe [:user/moderator?]))
       {:class "clickable"
        :on-click #(rf/dispatch [:statement.pin/toggle statement-id false])})
-    [icon :pin "text-primary"]]])
+    [icon :pin "text-primary"]
+    [:span.visually-hidden (labels :statement.pinned/tooltip)]]])
 
 (rf/reg-sub
  :schnaq.search.current/search-string

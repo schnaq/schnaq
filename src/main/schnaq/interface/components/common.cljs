@@ -7,6 +7,7 @@
             [schnaq.interface.components.icons :refer [icon icon-card]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.navigation :as navigation]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (>defn hint-text
@@ -18,18 +19,20 @@
    text])
 
 (>defn info-icon-with-tooltip
-  "Display an info icon with a tooltip on mouse-over."
+  "Display an info icon with a tooltip on hover and keyboard focus."
   [label attrs]
   [(s/or :string string? :component :re-frame/component) (? map?) => :re-frame/component]
   [tooltip/text
    label
-   [:span attrs [icon :info-question "small ms-1" {:style {:cursor :help}}]]])
+   [:button.btn.btn-link.p-0.align-baseline.lh-1
+    (merge {:type "button" :aria-label (labels :common/more-info)} attrs)
+    [icon :info-question "small ms-1"]]])
 
 ;; -----------------------------------------------------------------------------
 
 (defn- badge-builder
   [props child]
-  [:span.badge.rounded-pill.bg-gradient props child])
+  [:span.badge.rounded-pill props child])
 
 (defn admin-badge
   "Display an admin badge."
@@ -54,7 +57,7 @@
 (defn pro-badge
   "Display a pro badge."
   [props]
-  [badge-builder (merge {:class "bg-primary"} props) "pro"])
+  [badge-builder (merge {:class "badge-pro"} props) "pro"])
 
 (defn role-indicator
   "Show an icon if the user has special roles."
@@ -90,8 +93,8 @@
   ([icon title body button-text route-name disabled?]
    [keyword? string? string? string? keyword? (? boolean?) => :re-frame/component]
    (let [href (navigation/href route-name)]
-     [:article.pb-3.pe-3
-      [:a {:href href} [icon-card icon "text-typography" {:size :lg}]]
+     [:article.pb-4.pe-md-3
+      [:a {:href href :tab-index -1 :aria-hidden true} [icon-card icon "text-typography" {:size :lg}]]
       [:p.fw-bold.my-2 title]
       [:p body]
       (when-not disabled?
@@ -119,5 +122,5 @@
   [& {:keys [props]}]
   [:img (merge
          {:src (img-path :schnaqqifant/white)
-          :alt "Image of schnaqqi"}
+          :alt ""}
          props)])

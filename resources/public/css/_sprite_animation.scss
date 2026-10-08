@@ -15,12 +15,17 @@
   width: 175px;
 }
 
-@media only screen and (min-width: 175px) {
+@include media-breakpoint-up(md) {
   .schnaqqi-walk {
     transform: scale(1);
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .schnaqqi-walk {
+    animation: none;
+  }
+}
 
 .schnaqqi-walk-container {
   height: 150px;

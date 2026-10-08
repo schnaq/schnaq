@@ -16,7 +16,7 @@
           ":ghost" ["label-dark" :ghost]
           ":question" ["label-cyan" :question]
           ":times" ["label-red" :cross]
-          ":unchecked" ["label-teal" :check/normal])]
+          ":unchecked" ["label-outline" :check/normal])]
     [:span.badge.rounded-pill.px-3
      {:class badge-color}
      [icon icon-name "m-auto"]]))

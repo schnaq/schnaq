@@ -66,7 +66,10 @@
      [:div.row.pt-lg-5
       [:div.col-12.col-lg-7.col-xl-6
        [:video.w-75.rounded-5.my-auto.d-none.d-lg-block
-        {:auto-play true :loop true :muted true :plays-inline true}
+        {:aria-hidden true
+         :poster (img-path :schnaqqifant/three-d-bubble)
+         :auto-play (not (tools/prefers-reduced-motion?))
+         :loop true :muted true :plays-inline true}
         [:source {:src (video :register.point-right/webm) :type "video/webm"}]
         [:source {:src (video :register.point-right/mp4) :type "video/mp4"}]]]
       [:div.col-12.col-lg-5.col-xl-6
@@ -160,7 +163,7 @@
   "Construct a common panel for the middle in a feed."
   [heading body]
   [string? vector? :ret vector?]
-  [:div.panel-white.p-5
+  [:div.panel-white.p-3.p-md-5
    [:h2.text-center heading] ;; h1 is set in the navbar
    body])
 
@@ -180,8 +183,11 @@
    [validate-conditions-middleware
     options
     [:div.d-flex.flex-column.min-vh-100 {:class classes}
+     [:a.visually-hidden-focusable.position-absolute.top-0.start-0.z-3.m-2.btn.btn-light
+      {:href "#main-content"}
+      (labels :a11y/skip-to-content)]
      header
-     [:div.flex-grow-1 body]
+     [:main#main-content.flex-grow-1 {:tab-index -1} body]
      footer]]])
 
 (>defn with-nav-and-header
@@ -190,11 +196,11 @@
   [::page-options (? :re-frame/component) :ret :re-frame/component]
   [page-builder
    options
+   [navbar-components/page-navbar]
    [:<>
-    [navbar-components/page-navbar]
     [:div.masthead-layered
-     [base/header options]]]
-   body
+     [base/header options]]
+    body]
    (if wavy-footer?
      [base/footer-with-wave]
      [base/footer])])
@@ -219,10 +225,10 @@
    options
    [discussion-navbar]
    [:section.container-fluid.p-3
-    [:div.row
-     [:div.col-12.col-lg-3.px-0.px-md-3 left]
-     [:div.col-12.col-lg-6.px-0.px-md-3 middle]
-     [:div.col-12.col-lg-3.px-0.px-md-3 right]]]
+    [:div.row.gx-0.gx-md-4.gy-3.gy-lg-0
+     [:div.col-12.col-lg-3.px-md-3 left]
+     [:div.col-12.col-lg-6.px-md-3 middle]
+     [:div.col-12.col-lg-3.px-md-3 right]]]
    [base/footer]])
 
 (>defn fullscreen
