@@ -6,7 +6,8 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
             [schnaq.database.user :as user-db]
-            [schnaq.shared-toolbelt :as shared-tools]))
+            [schnaq.shared-toolbelt :as shared-tools]
+            [taoensso.timbre :as log]))
 
 (defn- valid-app-code?
   "Check if an app-code was provided via the request-body."
@@ -60,17 +61,36 @@
 
 ;; -----------------------------------------------------------------------------
 
+(>defn- assoc-user
+  "Add the registered user to the request. Users who are not in our database yet
+  are registered here, because the frontend's registration call can lose the
+  race against the first authenticated request."
+  [{:keys [identity] :as request}]
+  [map? => map?]
+  (if (string/blank? (:sub identity))
+    request
+    (if-let [user (user-db/private-user-by-keycloak-id (:sub identity))]
+      (assoc request :user user)
+      (try
+        (let [[new-user? user] (user-db/register-new-user identity [] [])]
+          (assoc request :user user :new-user? new-user?))
+        (catch Exception e
+          ;; E.g. the email belongs to another account. Do not lock the user
+          ;; out of every endpoint, only the ones that need the user entity.
+          (log/error e "Could not register user" (:sub identity))
+          request)))))
+
 (>defn- extract-user-information-from-jwt
   "Extend identity map parsed from JWT and convert types."
   [request]
   [map? => map?]
   (-> request
-      (assoc :user (user-db/private-user-by-keycloak-id (get-in request [:identity :sub])))
       (update-in [:identity :sub] str)
       (assoc-in [:identity :id] (str (get-in request [:identity :sub])))
       (assoc-in [:identity :preferred_username] (or (get-in request [:identity :preferred_username])
                                                     (get-in request [:identity :name])))
-      (assoc-in [:identity :roles] (get-in request [:identity :realm_access :roles]))))
+      (assoc-in [:identity :roles] (get-in request [:identity :realm_access :roles]))
+      assoc-user))
 
 (defn parse-jwt-middleware
   "Always update identity-map, if provided. Else just passes the request through."

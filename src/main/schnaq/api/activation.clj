@@ -7,6 +7,9 @@
             [schnaq.database.specs :as specs]
             [taoensso.timbre :as log]))
 
+(def ^:private activation-not-found
+  (bad-request (at/build-error-body :activation-not-found "No activation found for this schnaq.")))
+
 (defn- start-activation
   "Start activation-feature for a discussion. Only creates a new one if none
   exists."
@@ -23,7 +26,7 @@
   (if-let [activation (activation-db/activation-by-share-hash share-hash)]
     (do (db/delete-entity! (:db/id activation))
         (ok {:deleted? true}))
-    (bad-request (at/build-error-body :activation-not-found "No activation found to delete!"))))
+    activation-not-found))
 
 (defn get-activation
   "Get the current activation for a discussion."
@@ -34,13 +37,17 @@
   "Increment activation counter."
   [{{{:keys [share-hash]} :body} :parameters}]
   (log/info "Increment activation counter for" share-hash)
-  (ok {:activation (activation-db/increment-activation! share-hash)}))
+  (if-let [activation (activation-db/increment-activation! share-hash)]
+    (ok {:activation activation})
+    activation-not-found))
 
 (defn- reset-activation
   "Reset activation counter."
   [{{{:keys [share-hash]} :body} :parameters}]
   (log/info "Reset activation counter for" share-hash)
-  (ok {:activation (activation-db/reset-activation! share-hash)}))
+  (if-let [activation (activation-db/reset-activation! share-hash)]
+    (ok {:activation activation})
+    activation-not-found))
 
 (def activation-routes
   [["" {:swagger {:tags ["activation"]}}

@@ -17,7 +17,7 @@
   "Register a new user if they do not exist. In all cases return the user. New
   users will receive a welcome mail. `creation-secrets` can optionally be provided
   to associate previous created entities with the registered user."
-  [{:keys [identity parameters]}]
+  [{:keys [identity parameters] :as request}]
   (log/info "User-Registration queried for" (:id identity)
             ", username:" (:preferred_username identity))
   (let [{:keys [creation-secrets visited-hashes visited-statement-ids]} (:body parameters)
@@ -29,7 +29,8 @@
                   :updated-statements? updated-statements?
                   :meta (remove-nil-values-from-map
                          {:total-schnaqs (user-db/created-discussions (:user.registered/keycloak-id queried-user))})}]
-    (if new-user?
+    ;; parse-jwt-middleware registers new users before this handler runs.
+    (if (or new-user? (:new-user? request))
       (created "" (assoc response :new-user? true))
       (ok response))))
 

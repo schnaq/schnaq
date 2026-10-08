@@ -350,10 +350,16 @@
                        :user.registered/visited-schnaqs visited-schnaqs}]
     (if (:db/id existing-user)
       [false (update-user-via-jwt existing-user identity visited-schnaqs visited-statements)]
-      (let [new-user (-> @(transact [(remove-nil-values-from-map user-template)])
-                         (get-in [:tempids temp-id])
-                         (fast-pull patterns/public-user))]
-        [true (update-user-via-jwt new-user identity visited-schnaqs visited-statements)]))))
+      (try
+        (let [new-user (-> @(transact [(remove-nil-values-from-map user-template)])
+                           (get-in [:tempids temp-id])
+                           (fast-pull patterns/public-user))]
+          [true (update-user-via-jwt new-user identity visited-schnaqs visited-statements)])
+        (catch Exception e
+          ;; A concurrent request registered the same user first.
+          (if-let [user (and (unique-conflict? e) (private-user-by-keycloak-id id))]
+            [false (update-user-via-jwt user identity visited-schnaqs visited-statements)]
+            (throw e)))))))
 
 (>defn members-of-group
   "Returns all members of a certain group."
