@@ -34,7 +34,7 @@
                 [:a {:href (gstring/format "mailto:%s" (:feedback/contact-mail feedback))}
                  [icon :envelope "ps-1"]])]
              [:td (util-time/format-distance (:feedback/created-at feedback) locale)]
-             [:td (:feedback/description feedback)]
+             [:td.text-break (:feedback/description feedback)]
              [:td.image
               (when (:feedback/has-image? feedback)
                 (let [img-src (gstring/format "%s/%s/%s.png"

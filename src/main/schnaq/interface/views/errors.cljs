@@ -22,8 +22,6 @@
     [:img.w-25 {:src (img-path :schnaqqifant/stop)
                 :alt (labels :schnaqqifant/stop-alt-text)}]
     [:div.alert.alert-danger.mt-4 {:role "alert"}
-     [:h4.alert-heading heading]
-     [:hr]
      [:p body]
      [:p (labels :error.generic/contact-us)]]]])
 

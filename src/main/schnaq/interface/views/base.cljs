@@ -16,7 +16,7 @@
     {:class (if (str/blank? wrapper-classes) "container container-85" wrapper-classes)}
     (if vertical-header?
       [:<> [:h1 heading] [:h2.display-6 subheading]]
-      [:div.row.mt-5.mb-2
+      [:div.row.mt-md-5.mb-2
        ;; If split header is configured, but the screen is too small, display
        ;; the headings one below the other
        [:div.col-12.col-md-6 [:h1 heading]]
@@ -60,20 +60,22 @@
    [icon :terminal]
    " " (labels :footer.tagline/developed-with) " "
    [icon :flask "m-auto"]
-   (gstring/format " in NRW, Germany © schnaq GmbH %d" (.getFullYear (js/Date.)))])
+   " " (labels :footer.tagline/location)
+   (gstring/format " © schnaq GmbH %d" (.getFullYear (js/Date.)))])
+
+(defn- social-link
+  "Icon-only link to one of our profiles, named by the brand."
+  [href brand icon-key]
+  [:a.social-media-icon {:href href :target :_blank :rel "noopener noreferrer" :aria-label brand}
+   [icon icon-key "" {:size "2x"}]])
 
 (defn- social-media []
   [:section
-   [:a.social-media-icon {:href "https://facebook.com/schnaq" :target :_blank}
-    [icon :facebook "" {:size "2x"}]]
-   [:a.social-media-icon {:href "https://instagram.com/schnaqqi" :target :_blank}
-    [icon :instagram "" {:size "2x"}]]
-   [:a.social-media-icon {:href "https://www.linkedin.com/company/schnaq" :target :_blank}
-    [icon :linkedin "" {:size "2x"}]]
-   [:a.social-media-icon {:href "https://twitter.com/getschnaq" :target :_blank}
-    [icon :twitter "" {:size "2x"}]]
-   [:a.social-media-icon {:href "https://github.com/schnaq" :target :_blank}
-    [icon :github "" {:size "2x"}]]])
+   [social-link "https://facebook.com/schnaq" "Facebook" :facebook]
+   [social-link "https://instagram.com/schnaqqi" "Instagram" :instagram]
+   [social-link "https://www.linkedin.com/company/schnaq" "LinkedIn" :linkedin]
+   [social-link "https://twitter.com/getschnaq" "Twitter" :twitter]
+   [social-link "https://github.com/schnaq" "GitHub" :github]])
 
 (defn- registered-trademark []
   [:section
@@ -86,7 +88,7 @@
 (defn- product-use-cases
   "Show schnaq use-cases for the users. Only in german."
   []
-  [:section.px-2
+  [:section
    ;; Remove hardcode, when there are english versions around!
    [:h3.h5 "schnaq Lösungen"]
    [:ul.list-unstyled
@@ -106,7 +108,7 @@
 (defn- alternatives
   "Show schnaq compared to its alternatives. Only in english."
   []
-  [:section.px-2
+  [:section
    ;; Remove hardcode, when there are german versions around!
    [:h3.h5 "schnaq vs."]
    [:p
@@ -118,7 +120,7 @@
 (defn- footer-common []
   (let [locale @(rf/subscribe [:current-locale])]
     [:footer.footer
-     [:div.container-fluid.px-5
+     [:div.container-fluid.px-md-5
       [:div.row
        [:div.col-md-6.col-xl-3.col-12
         [logo-and-slogan]]

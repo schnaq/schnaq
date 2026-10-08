@@ -3,10 +3,9 @@
   background-color: transparent;
   border: 0;
   border-radius: 1.5rem;
-  box-shadow: none !important;
   color: $white;
   padding: 0.5rem 1.5rem;
-  text-decoration: none !important; // Avoid ugly styling when clicking again on an already selected feed-item
+  text-decoration: none; // Avoid ugly styling when clicking again on an already selected feed-item
 
   &:hover {
     background-color: var(--muted);
@@ -16,7 +15,6 @@
 
   &:focus {
     color: $primary;
-    outline: none !important;
   }
 }
 
@@ -37,19 +35,13 @@
   @extend .my-2;
   @extend .w-100;
   @include rounded.rounded-2;
-  color: $primary !important;
-
-  &:hover {
-    color: $white !important;
-  }
 }
 
 .feed-button-create {
   @include feed-button-base;
-  color: $secondary;
+  color: var(--secondary-strong);
 
   &:hover {
-    color: rgba($secondary, 0.9);
+    color: color-mix(in srgb, var(--secondary-strong) 85%, #000);
   }
-
 }

@@ -57,9 +57,9 @@
   "Adds a dropdown with deletion options to schnaqs, e.g. when displayed in the
   list of schnaqs in a hub."
   [schnaq]
-  (let [options-id "options-dropdown-menu"
-        dropdown-id "options-dropdown-elements"
-        share-hash (:discussion/share-hash schnaq)
+  (let [share-hash (:discussion/share-hash schnaq)
+        options-id (str "options-dropdown-menu-" share-hash)
+        dropdown-id (str "options-dropdown-elements-" share-hash)
         current-hub @(rf/subscribe [:hub/current])
         current-user-id @(rf/subscribe [:user/id])
         archived? @(rf/subscribe [:schnaq.visited/archived? share-hash])
@@ -67,7 +67,8 @@
     [:div.dropdown
      [:button.btn.btn-transparent
       {:id options-id :type "button" :data-bs-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}
+       :aria-haspopup "true" :aria-expanded "false"
+       :aria-label (labels :schnaq.options/menu) :title (labels :schnaq.options/menu)}
       [icon :dots-v]]
      [:div.dropdown-menu.dropdown-menu-end {:id dropdown-id :aria-labelledby options-id}
       (when current-hub

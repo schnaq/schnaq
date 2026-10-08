@@ -3,6 +3,8 @@
 }
 
 .btn-transparent {
+  // Without a variant .btn has no focus ring colour of its own.
+  --bs-btn-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
   border: 0;
 
   &:hover {
@@ -12,10 +14,4 @@
 
 .btn-no-outline {
   border: 0;
-
-  &:active,
-  &:focus {
-    box-shadow: none;
-    outline: none;
-  }
 }

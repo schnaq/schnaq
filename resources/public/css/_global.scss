@@ -8,6 +8,15 @@ html {
   min-height: 85vh;
 }
 
+#root {
+  overflow-wrap: break-word;
+}
+
+// Target of the skip link, focused programmatically.
+#main-content:focus {
+  outline: 0;
+}
+
 .min-height-85 {
   min-height: 85vh;
 }
@@ -64,7 +73,7 @@ html {
 
 .container-85 {
   @include media-breakpoint-up(xl) {
-    max-width: 85% !important;
+    max-width: 85%;
   }
 }
 

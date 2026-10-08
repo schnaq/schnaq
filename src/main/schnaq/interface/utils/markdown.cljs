@@ -29,13 +29,15 @@
         (seq (:children props)) (update-in [:children 0] decode-and-truncate))])
 
 (defn as-markdown
-  "Renders any string as markdown."
+  "Renders any string as markdown. Long words and URLs break inside the
+  wrapper, so user content cannot widen flex or table layouts."
   [content]
-  [:> ReactMarkdown
-   {:remarkPlugins [gfm]
-    :components {:a (fn [props]
-                      (r/as-element [Anchor (dissoc (js->clj props :keywordize-keys true) :node)]))
-                 :img (fn [props]
-                        (r/as-element
-                         [Image (dissoc (js->clj props :keywordize-keys true) :node)]))}}
-   content])
+  [:div.text-break
+   [:> ReactMarkdown
+    {:remarkPlugins [gfm]
+     :components {:a (fn [props]
+                       (r/as-element [Anchor (dissoc (js->clj props :keywordize-keys true) :node)]))
+                  :img (fn [props]
+                         (r/as-element
+                          [Image (dissoc (js->clj props :keywordize-keys true) :node)]))}}
+    content]])

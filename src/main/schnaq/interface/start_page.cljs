@@ -11,7 +11,7 @@
   "The form to enter a schnaq via access code."
   []
   (let [valid-form @(rf/subscribe [:schnaq.join/form])]
-    [:div.card.shadow.me-5.text-dark.text-center
+    [:div.card.shadow.me-lg-5.text-dark.text-center
      [:div.card-body
       [:div.card-title
        [:h1 {:style {:font-size "2rem"}}
