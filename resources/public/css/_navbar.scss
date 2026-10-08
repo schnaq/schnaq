@@ -51,10 +51,6 @@ $height-of-components: 4.25rem;
   padding: 0.2rem;
 }
 
-.nav-link.disabled {
-  @extend .fw-bold;
-}
-
 .nav-link-no-padding .nav-link {
   padding: 0;
 }

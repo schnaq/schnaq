@@ -62,6 +62,7 @@
         [logo-input logo-input-id]
         [common/form-input {:id input-id
                             :default-value name
+                            :aria-label (labels :hub.settings/change-name)
                             :css "font-150"}]]
        [:div.text-end.my-3
         [:button.btn.btn-lg.btn-outline-primary {:type :submit}
@@ -76,6 +77,7 @@
        [:div.d-flex.flex-row
         [common/form-input {:id :add-member-input
                             :placeholder "contact@email.com"
+                            :aria-label (labels :hub.members.add.form/title)
                             :css "font-150"}]]
        [:div.text-end.my-3
         [:button.btn.btn-lg.btn-outline-primary {:type :submit}

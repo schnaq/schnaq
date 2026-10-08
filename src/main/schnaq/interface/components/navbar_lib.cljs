@@ -201,7 +201,7 @@
                            props)
      (if authenticated?
        [:<>
-        [:> NavDropdownItem {:disabled true} [common/avatar :size 32]]
+        [:> NavDropdownItem {:disabled true :aria-hidden true} [common/avatar :size 32]]
         [:> NavDropdownDivider]
         [:> NavDropdownItem {:href (navigation/href :routes.user.manage/account)}
          (labels :user.profile/settings)]

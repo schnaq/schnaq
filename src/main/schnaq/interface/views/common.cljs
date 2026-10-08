@@ -160,6 +160,5 @@
            :type "text"
            :autoComplete "off"
            :required true
-           :class css
-           :aria-label placeholder}
+           :class css}
           (dissoc properties :css))])
