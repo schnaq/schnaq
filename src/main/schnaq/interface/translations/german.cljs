@@ -417,7 +417,7 @@
    :analytics/statement-types-title "Argumenttypen"
    :analytics/statement-count-percentiles "Anzahl Statements pro schnaq"
    :analytics/labels-stats "Markierte Antworten"
-   :analytics/fetch-data-button "Hole Daten"
+   :analytics/fetch-data-button "Daten laden"
    :analytics.users/title "Neue registrierte Nutzer:innen"
    :analytics.users/toggle-button "Zeige neue Nutzer:innen"
    :analytics.users/copy-button "Kopieren"
@@ -553,14 +553,14 @@
 
    :error.generic/contact-us [:span "Solltest du hier landen nachdem du etwas auf landing.schnaq.com angeklickt hast, gib uns gerne Bescheid unter " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
 
-   :error.404/heading "Diese Seite existiert nicht 🙉"
+   :error.404/heading "Diese Seite existiert nicht\u00a0🙉"
    :error.404/body "Die URL, der du gefolgt bist, existiert leider nicht. Möglicherweise hat sich ein Tippfehler
      oder ein Zeichen zu viel eingeschlichen."
 
-   :error.403/heading "Du hast nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"
+   :error.403/heading "Du hast nicht die Berechtigung diese Seite aufzurufen\u00a0🧙‍♂️"
    :error.403/body "Dir fehlt die Berechtigung diese Seite aufzurufen oder es handelt sich um einen Tippfehler in deiner URL."
 
-   :error.beta/heading "Du hast nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"
+   :error.beta/heading "Du hast nicht die Berechtigung diese Seite aufzurufen\u00a0🧙‍♂️"
    :error.beta/body "Dieses Feature ist nur für Beta-Tester:innen verfügbar. Wenn du zu den Tester:innen gehörst, melde dich bitte an. Wenn du Beta-Tester:in werden möchtest, dann schreibe uns eine E-Mail an hello@schnaq.com."
 
    ;; Graph Texts

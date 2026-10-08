@@ -415,7 +415,7 @@
    :analytics/statement-types-title "Argument types"
    :analytics/statement-count-percentiles "# of statements per schnaq"
    :analytics/labels-stats "Marked Answers"
-   :analytics/fetch-data-button "Retrieving data…"
+   :analytics/fetch-data-button "Load data"
    :analytics.users/title "Newly registered users"
    :analytics.users/toggle-button "Show new users"
    :analytics.users/copy-button "Copy"
@@ -552,13 +552,13 @@
    :error.generic/contact-us
    [:<> "Did you end up here after clicking something on landing.schnaq.com? Give us a hint at " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
 
-   :error.404/heading "This site does not exist 🙉"
+   :error.404/heading "This site does not exist\u00a0🙉"
    :error.404/body "The URL that you followed does not exist. Maybe there is a typo."
 
-   :error.403/heading "You do not have the rights to view this site 🧙‍♂️"
+   :error.403/heading "You do not have the rights to view this site\u00a0🧙‍♂️"
    :error.403/body "You either have insufficient rights to view this site, or a typo happened."
 
-   :error.beta/heading "You do not have the rights to view this site 🧙‍♂️"
+   :error.beta/heading "You do not have the rights to view this site\u00a0🧙‍♂️"
    :error.beta/body "Only schnaq beta-testers can access this page. If you are one, please log in. If you would like to be a beta-tester, write us an email at hello@schnaq.com."
 
    ;; Graph Texts

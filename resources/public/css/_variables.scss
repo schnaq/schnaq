@@ -46,6 +46,11 @@ $link-color: #1565c0;
 // Navy instead of black wherever Bootstrap picks a dark label for contrast.
 $color-contrast-dark: $typography;
 
+// Form control borders need 3:1 against white (WCAG 1.4.11).
+$input-border-color: #8494a5;
+$form-check-input-border: 1px solid $input-border-color;
+$form-switch-color: $input-border-color;
+
 // Crisper corners, a step towards the angular schnaq.com look.
 $border-radius: 0.25rem;
 $border-radius-sm: 0.2rem;

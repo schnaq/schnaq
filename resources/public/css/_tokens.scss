@@ -36,7 +36,7 @@
   --destructive: #{$danger};
   --destructive-foreground: #{$white};
   --border: #{$gray-300};
-  --input: #8494a5;
+  --input: #{$input-border-color};
   --link: #{$link-color};
   --link-rgb: #{to-rgb($link-color)};
   --radius: #{$border-radius-lg};
@@ -114,8 +114,11 @@
   --bs-btn-hover-border-color: color-mix(in srgb, var(--secondary) 85%, #000);
   --bs-btn-active-bg: color-mix(in srgb, var(--secondary) 75%, #000);
   --bs-btn-active-border-color: color-mix(in srgb, var(--secondary) 75%, #000);
-  --bs-btn-disabled-bg: var(--secondary);
-  --bs-btn-disabled-border-color: var(--secondary);
+  // Opaque, so a disabled button on a coloured page stays a light orange.
+  --bs-btn-disabled-opacity: 1;
+  --bs-btn-disabled-bg: color-mix(in srgb, var(--secondary) 65%, #fff);
+  --bs-btn-disabled-border-color: color-mix(in srgb, var(--secondary) 65%, #fff);
+  --bs-btn-disabled-color: color-mix(in srgb, var(--secondary-foreground) 65%, #fff);
 }
 
 .btn-outline-secondary {
@@ -154,6 +157,7 @@
 
 .nav-tabs {
   --bs-nav-link-color: var(--primary-strong);
+  --bs-nav-tabs-link-active-color: var(--primary-strong);
   --bs-nav-link-hover-color: color-mix(in srgb, var(--primary-strong) 80%, #000);
 }
 
