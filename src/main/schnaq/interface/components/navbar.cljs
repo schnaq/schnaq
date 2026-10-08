@@ -40,7 +40,7 @@
      (labels :nav/schnaqs)]]
    [tooltip/text
     (labels :router/privacy-tooltip)
-    [:> NavLink (merge {:href "https://landing.schnaq.com/privacy"} props)
+    [:> NavLink (merge {:href "https://schnaq.com/privacy"} props)
      (when-not hide-icon? [icon :lock "fa-fw me-2"])
      (labels :router/privacy)]]])
 

@@ -48,13 +48,14 @@
     (labels content-label)]])
 
 (defn- footer-nav [locale]
-  [:ul.list-inline
-   [footer-link (str "https://schnaq.com/" (if (= :en locale) "en" "de") "/about") :footer.buttons/about-us]
-   [:li.list-inline-item
-    [feedback-modal
-     (fn [props] [:button.btn.btn-link props (labels :feedbacks/button)])]]
-   [footer-link "https://landing.schnaq.com/privacy" :router/privacy]
-   [footer-link "https://landing.schnaq.com/legal-note" :footer.buttons/legal-note]])
+  (let [lang (if (= :en locale) "en" "de")]
+    [:ul.list-inline
+     [footer-link (str "https://schnaq.com/" lang "/about") :footer.buttons/about-us]
+     [:li.list-inline-item
+      [feedback-modal
+       (fn [props] [:button.btn.btn-link props (labels :feedbacks/button)])]]
+     [footer-link (str "https://schnaq.com/" lang "/privacy") :router/privacy]
+     [footer-link (str "https://schnaq.com/" lang "/legal-note") :footer.buttons/legal-note]]))
 
 (defn- developed-in-nrw []
   [:section.pt-3
@@ -73,10 +74,7 @@
 
 (defn- social-media []
   [:section
-   [social-link "https://facebook.com/schnaq" "Facebook" :facebook]
-   [social-link "https://instagram.com/schnaqqi" "Instagram" :instagram]
    [social-link "https://www.linkedin.com/company/schnaq" "LinkedIn" :linkedin]
-   [social-link "https://twitter.com/getschnaq" "Twitter" :twitter]
    [social-link "https://github.com/schnaq" "GitHub" :github]])
 
 (defn- versions
@@ -97,36 +95,6 @@
     (labels :footer.registered/is-registered)
     "."]])
 
-(defn- product-use-cases
-  "Show schnaq use-cases for the users. Only in german."
-  []
-  [:section
-   ;; Remove hardcode, when there are english versions around!
-   [:h3.h5 "schnaq Lösungen"]
-   [:ul.list-unstyled
-    [:li.py-1
-     [:a {:href "https://landing.schnaq.com/de/schulen/"}
-      "für Schulen"]]
-    [:li.py-1
-     [:a {:href "https://landing.schnaq.com/de/universitaeten/"}
-      "für Universitäten"]]
-    [:li.py-1
-     [:a {:href "https://landing.schnaq.com/de/weiterbildungen/"}
-      "für Weiterbildungen"]]
-    [:li.py-1
-     [:a {:href "https://landing.schnaq.com/de/online-diskussionsplattform/"}
-      "für Diskussionen"]]]])
-
-(defn- alternatives
-  "Show schnaq compared to its alternatives. Only in english."
-  []
-  [:section
-   ;; Remove hardcode, when there are german versions around!
-   [:h3.h5 "schnaq vs."]
-   [:p
-    [:a {:href "https://landing.schnaq.com/de/alternative-slido-mentimeter/"}
-     "Alternative to Slido"]]])
-
 ;; -----------------------------------------------------------------------------
 
 (defn- footer-common []
@@ -136,11 +104,7 @@
       [:div.row
        [:div.col-md-6.col-xl-3.col-12
         [logo-and-slogan]]
-       [:div.col-md-6.col-xl-3.col-12.pt-3.pt-md-0
-        (if (= :en locale)
-          [alternatives]
-          [product-use-cases])]
-       [:div.col-md-6.col-xl-6.col-12.text-xl-end.pt-3.pt-md-0
+       [:div.col-md-6.col-xl-9.col-12.text-xl-end.pt-3.pt-md-0
         [footer-nav locale]]]
       [:div.row
        [:div.col-md-6.col-12

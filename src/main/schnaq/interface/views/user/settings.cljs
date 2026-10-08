@@ -106,10 +106,7 @@
           {:href (navigation/href :routes.user.manage/themes)}
           [feature-available :theming?]]])
       (let [label (labels :user.settings.features/embeddings)]
-        [feature-row label
-         [settings-link label
-          {:href "https://academy.schnaq.com" :target :_blank}
-          [feature-available :embeddings?]]])]
+        [feature-row label [feature-available :embeddings?]])]
 
      [:strong (labels :user.settings.features/interactions)]
      [:dl.row
