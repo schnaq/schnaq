@@ -26,7 +26,8 @@
 
 .badge-upvote {
   background: none;
-  color: var(--primary-strong);
+  // Gray until voted, the selected classes carry the colour.
+  color: var(--muted-foreground);
 }
 
 .badge-upvote-selected {
@@ -36,7 +37,8 @@
 
 .badge-downvote {
   background: none;
-  color: var(--secondary-strong);
+  // Gray until voted, the selected classes carry the colour.
+  color: var(--muted-foreground);
 }
 
 .badge-downvote-selected {

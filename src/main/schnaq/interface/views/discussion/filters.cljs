@@ -9,25 +9,7 @@
 
    This filter filters for statements that include the label :check."
   (:require [clojure.set :as cset]
-            [re-frame.core :as rf]
-            [schnaq.interface.components.schnaq :as sc]))
-
-(defn filter-answered-statements
-  "Show buttons to toggle between answered / unanswered statements."
-  []
-  [sc/schnaq-statement-filter-button-group
-   [{:on-click #(rf/dispatch [:filters/clear])
-     :label-key :filters.option.answered/all}
-    {:on-click (fn [] (rf/dispatch [:filters.deactivate/answered? false])
-                 (rf/dispatch [:filters.activate/answered? true]))
-     :label-key :filters.option.answered/answered}
-    {:on-click (fn [] (rf/dispatch [:filters.deactivate/answered? true])
-                 (rf/dispatch [:filters.activate/answered? false]))
-     :label-key :filters.option.answered/unanswered}]])
-
-
-;; -----------------------------------------------------------------------------
-
+            [re-frame.core :as rf]))
 
 (defn- register-new-filter [db new-filter]
   (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))
@@ -36,18 +18,13 @@
   (update-in db [:discussion :filters] disj old-filter))
 
 (rf/reg-event-db
- :filters.activate/answered?
- (fn [db [_ toggle]]
-   (let [new-filter {:type :answered?
-                     :criteria toggle}]
-     (register-new-filter db new-filter))))
-
-(rf/reg-event-db
- :filters.deactivate/answered?
- (fn [db [_ toggle]]
-   (let [old-filter {:type :answered?
-                     :criteria toggle}]
-     (remove-filter db old-filter))))
+ :filters.answered/set
+ ;; Show only answered (true) or unanswered (false) statements. nil shows all.
+ (fn [db [_ answered?]]
+   (cond-> (-> db
+               (remove-filter {:type :answered? :criteria true})
+               (remove-filter {:type :answered? :criteria false}))
+     (some? answered?) (register-new-filter {:type :answered? :criteria answered?}))))
 
 (rf/reg-event-db
  :filters.activate/questions
@@ -82,9 +59,3 @@
  ;; Shows whether the questions filter is active
  (fn [db _]
    (contains? (get-in db [:discussion :filters]) {:type :question})))
-
-(rf/reg-sub
- :filters/active?
- :<- [:filters/active]
- (fn [active-filters _]
-   (seq active-filters)))

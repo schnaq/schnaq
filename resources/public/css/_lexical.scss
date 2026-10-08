@@ -264,10 +264,16 @@
   .toolbar {
     background: var(--card);
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-bottom: 1px;
+    overflow-x: auto;
     padding: 4px;
+    scrollbar-width: none; // keep the toolbar on one line, scroll if too narrow
     vertical-align: middle;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .toolbar-item {
       background: none;
@@ -275,7 +281,8 @@
       border-radius: 10px;
       cursor: pointer;
       display: flex;
-      padding: 8px;
+      flex-shrink: 0;
+      padding: 6px;
       vertical-align: middle;
 
       @include media-breakpoint-down(md) {
@@ -296,6 +303,13 @@
 
     .toolbar-item:hover:not([disabled]) {
       background-color: var(--muted);
+    }
+
+    .divider {
+      background-color: var(--border);
+      flex-shrink: 0;
+      margin: 4px;
+      width: 1px;
     }
 
     // After the hover rule, so a pressed toggle stays marked under the pointer.

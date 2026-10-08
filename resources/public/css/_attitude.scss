@@ -1,0 +1,104 @@
+// Segmented control to choose the attitude (support / neutral / attack) of a reply.
+// The selected attitude tints the reply field and submit button. The -strong
+// tokens keep text on white above 4.5:1 contrast.
+.attitude-toned {
+  --tone: var(--muted-foreground);
+  --tone-fill: var(--muted-foreground);
+  --tone-foreground: var(--card);
+
+  &[data-attitude="support"] {
+    --tone: var(--primary-strong);
+    --tone-fill: var(--primary-strong);
+    --tone-foreground: var(--primary-foreground);
+  }
+
+  &[data-attitude="attack"] {
+    --tone: var(--secondary-strong);
+    --tone-fill: var(--secondary);
+    --tone-foreground: var(--secondary-foreground);
+  }
+
+  .lexical-editor,
+  .attitude-submit {
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  .lexical-editor {
+    border-color: var(--tone-fill);
+
+    &:focus-within {
+      box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--tone-fill) 25%, transparent);
+    }
+  }
+
+  .attitude-submit {
+    background-color: var(--tone-fill);
+    border-color: var(--tone-fill);
+    color: var(--tone-foreground);
+
+    &:hover:not(:disabled),
+    &:focus-visible {
+      background-color: color-mix(in srgb, var(--tone-fill) 85%, #000);
+      border-color: color-mix(in srgb, var(--tone-fill) 85%, #000);
+      color: var(--tone-foreground);
+    }
+  }
+}
+
+.attitude-control {
+  background: var(--background);
+  border-radius: 0.6rem;
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.2rem;
+}
+
+.attitude-option {
+  --option-tone: var(--muted-foreground);
+  align-items: center;
+  background: transparent;
+  border-radius: 0.45rem;
+  color: $gray-700;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.3rem 0.7rem;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+
+  @include media-breakpoint-down(md) {
+    min-height: 2.75rem; // phone touch target
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  &:hover {
+    color: var(--option-tone);
+  }
+
+  &.attitude-support {
+    --option-tone: var(--primary-strong);
+  }
+
+  &.attitude-attack {
+    --option-tone: var(--secondary-strong);
+  }
+}
+
+.btn-check:checked + .attitude-option {
+  background: var(--card);
+  box-shadow: 0 1px 3px rgba($typography, 0.12);
+  color: var(--option-tone);
+}
+
+.btn-check:focus-visible + .attitude-option {
+  outline: 2px solid var(--option-tone);
+  outline-offset: 1px;
+}

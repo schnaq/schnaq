@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.discussion.card-elements
-  (:require ["react-bootstrap" :refer [Button]]
+  (:require ["react-bootstrap/Dropdown" :as Dropdown]
             [clojure.string :as cstring]
             [goog.functions :as gfun]
             [goog.string :as gstring]
@@ -15,9 +15,13 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
-            [schnaq.interface.views.discussion.filters :as filters]
             [schnaq.shared-toolbelt :as shared-tools]
             [schnaq.user :as user-utils]))
+
+(def ^:private DropdownToggle (oget Dropdown :Toggle))
+(def ^:private DropdownMenu (oget Dropdown :Menu))
+(def ^:private DropdownItem (oget Dropdown :Item))
+(def ^:private DropdownDivider (oget Dropdown :Divider))
 
 (defn- back-button
   "Return to your schnaqs Button"
@@ -173,26 +177,41 @@
   "Displays the different sort options for card elements."
   []
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
-    [tooltip/text (labels :badges/sort)
-     (if (= :newest sort-method)
-       [:button.btn.btn-sm.btn-primary
-        {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
-        (labels :badges.sort/newest)]
-       [:button.btn.btn-sm.btn-primary
-        {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
-        (labels :badges.sort/popular)])]))
+    [:select.form-select.nav-control.w-auto
+     {:aria-label (labels :badges/sort)
+      :title (labels :badges/sort)
+      :value (name sort-method)
+      :on-change #(rf/dispatch [:discussion.statements.sort/set (keyword (oget % [:target :value]))])}
+     [:option {:value "newest"} (labels :badges.sort/newest)]
+     [:option {:value "popular"} (labels :badges.sort/popular)]]))
 
-(defn- question-filter-button
-  "Question filter."
+(defn- filter-dropdown
+  "Filter the statements, e.g. show only questions or answered statements."
   []
-  (let [active? @(rf/subscribe [:filters/questions?])]
-    [tooltip/text (labels :filters.option.questions/tooltip)
-     [:button.btn.btn-sm
-      {:on-click (if active?
-                   #(rf/dispatch [:filters.deactivate/questions])
-                   #(rf/dispatch [:filters.activate/questions]))
-       :class (if active? "btn-primary" "btn-outline-primary")}
-      (labels :filters.option/questions)]]))
+  (let [questions? @(rf/subscribe [:filters/questions?])
+        answered? @(rf/subscribe [:filters/answered? true])
+        unanswered? @(rf/subscribe [:filters/answered? false])
+        active-filters (count @(rf/subscribe [:filters/active]))]
+    [:> Dropdown {:autoClose "outside" :align "end"}
+     [:> DropdownToggle {:variant "outline-dark" :className "nav-control"}
+      [icon :filter "fa-fw me-2"] (labels :badges.filters/button)
+      (when (pos? active-filters)
+        [:span.badge.rounded-pill.text-bg-primary.ms-2 active-filters])]
+     [:> DropdownMenu
+      [:> DropdownItem {:as "button" :active questions?
+                        :on-click #(rf/dispatch (if questions?
+                                                  [:filters.deactivate/questions]
+                                                  [:filters.activate/questions]))}
+       (labels :filters.option.questions/tooltip)]
+      (when @(rf/subscribe [:routes.schnaq/start?])
+        [:<>
+         [:> DropdownDivider]
+         (for [[label-key active? criteria] [[:filters.option.answered/all (not (or answered? unanswered?)) nil]
+                                             [:filters.option.answered/answered answered? true]
+                                             [:filters.option.answered/unanswered unanswered? false]]]
+           [:> DropdownItem {:key label-key :as "button" :active active?
+                             :on-click #(rf/dispatch [:filters.answered/set criteria])}
+            (labels label-key)])])]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -221,16 +240,15 @@
                   (rf/dispatch [:schnaq.search.current/clear-search-string]))}
      [icon action-icon]]))
 
-(defn search-bar
+(defn- search-bar
   "A search-bar to search inside a schnaq."
-  []
-  (let [search-input-id "search-bar"
-        route-name @(rf/subscribe [:navigation/current-route-name])
+  [search-input-id]
+  (let [route-name @(rf/subscribe [:navigation/current-route-name])
         selected-statement-id (get-in @(rf/subscribe [:navigation/current-route]) [:path-params :statement-id])]
     [:form.my-auto
      {:on-submit #(.preventDefault %)
       :key (str route-name selected-statement-id)}
-     [:div.input-group.search-bar.panel-white.p-0
+     [:div.input-group.search-bar.nav-control.border
       [:input.form-control.my-auto.search-bar-input.py-0
        {:id search-input-id
         :type "text"
@@ -250,25 +268,24 @@
  (fn [db [_ query]]
    (assoc-in db [:ui :settings] query)))
 
+(defn discussion-tools
+  "Search, sort and filter the statements of a discussion."
+  [search-input-id]
+  (when-not @(rf/subscribe [:ui/setting :hide-discussion-options])
+    [:div.d-flex.flex-wrap.align-items-center.gap-2
+     [search-bar search-input-id]
+     [sort-options]
+     [filter-dropdown]]))
+
 (defn discussion-options-navigation
-  "Navigation bar on top of the discussion contents."
+  "Back button and, where the desktop navbar does not show them, the discussion tools."
   []
   (when-not @(rf/subscribe [:ui/setting :hide-discussion-options])
-    [:div.d-flex.flex-row.align-items-center.gap-2.pt-1.pt-xl-0
+    [:div.d-flex.flex-wrap.align-items-center.gap-2.pt-1.pt-xl-0
      (when-not config/in-iframe?
        [:div.me-auto {:style {:min-width 0}} [back-button]])
-     [tooltip/html
-      [:section.px-1
-       [:div.d-flex.flex-row.py-2
-        [:div.pe-1 [sort-options]]
-        [question-filter-button]]
-       (when @(rf/subscribe [:routes.schnaq/start?])
-         [filters/filter-answered-statements])
-       [:div.py-3 [search-bar]]]
-      [:> Button {:variant "outline-primary" :size :sm
-                  :className "panel-white-sm flex-shrink-0 text-nowrap"
-                  :style {:min-height "2.75rem"}}
-       (labels :discussion.navbar/discussion-settings)]]]))
+     [:div {:class (when-not @(rf/subscribe [:ui/setting :hide-navbar]) "d-xl-none")}
+      [discussion-tools "search-bar-content"]]]))
 
 (defn locked-statement-icon
   "Indicator that a statement is locked."

@@ -1,7 +1,5 @@
 (ns schnaq.interface.components.navbar
-  (:require ["react-bootstrap/Button" :as Button]
-            ["react-bootstrap/ButtonGroup" :as ButtonGroup]
-            ["react-bootstrap/Container" :as Container]
+  (:require ["react-bootstrap/Container" :as Container]
             ["react-bootstrap/Nav" :as Nav]
             ["react-bootstrap/Navbar" :as Navbar]
             [goog.string :refer [format]]
@@ -10,8 +8,7 @@
             [reagent.core :as r]
             [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.components.common :refer [schnaq-logo-white schnaqqi-white]]
-            [schnaq.interface.components.icons :refer [icon stacked-icon]]
-            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.navbar-lib :refer [graph-settings-notification
                                                             LanguageDropdown txt-export-request
@@ -22,6 +19,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
+            [schnaq.interface.views.discussion.card-elements :as card-elements]
             [schnaq.interface.views.discussion.share :refer [share-schnaq-modal]]
             [schnaq.links :as links]))
 
@@ -33,28 +31,28 @@
 
 (defn- common-navigation-links
   "Show default navigation links."
-  [& {:keys [props vertical? hide-icon?]}]
+  [& {:keys [props hide-icon?]}]
   [:<>
    [tooltip/text
     (labels :nav/schnaqs-tooltip)
     [:> NavLink (merge {:href (toolbelt/current-overview-link)} props)
-     (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :comments])
+     (when-not hide-icon? [icon :comments "fa-fw me-2"])
      (labels :nav/schnaqs)]]
    [tooltip/text
     (labels :router/privacy-tooltip)
     [:> NavLink (merge {:href "https://landing.schnaq.com/privacy"} props)
-     (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :lock])
+     (when-not hide-icon? [icon :lock "fa-fw me-2"])
      (labels :router/privacy)]]])
 
 (def ^:private discussion-views
   "Collection containing the discussion views."
-  {:routes.schnaq/start {:icon :icon-cards-dark
+  {:routes.schnaq/start {:icon-key :table-cells-large
                          :label :discussion.button/text}
-   :routes/graph-view {:icon :icon-graph-dark
+   :routes/graph-view {:icon-key :graph
                        :label :graph.button/text}
-   :routes.schnaq/qanda {:icon :icon-qanda-dark
+   :routes.schnaq/qanda {:icon-key :info-question
                          :label :qanda.button/text}
-   :routes.schnaq/dashboard {:icon :icon-summary-dark
+   :routes.schnaq/dashboard {:icon-key :layer-group
                              :label :summary.link.button/text}})
 
 (defn- active-button? [current-route asked-route]
@@ -67,13 +65,6 @@
   [label]
   [:span.nav-link.fw-bold.pe-none {:role "heading" :aria-level 2} label])
 
-(defn- discussion-view-button-image
-  "Prepare the image for the discussion view button."
-  [img-key class]
-  [:img {:height 25 :width 25 :alt ""
-         :className (str "bg-white p-1 rounded-1 " class)
-         :src (img-path img-key)}])
-
 (defn- links-to-discussion-views
   "Toggle between different views in a discussion."
   [& {:keys [props]}]
@@ -83,7 +74,7 @@
     [:<>
      [menu-heading (labels :discussion.navbar/views)]
      (doall
-      (for [[route {:keys [icon label]}] discussion-views]
+      (for [[route {:keys [icon-key label]}] discussion-views]
         (let [active? (active-button? current-route route)]
           [:> NavLink (merge {:key (str "discussion-view-element-" route)
                               :class (str "ms-3 px-2 rounded" (when active? " fw-bold bg-white bg-opacity-25"))
@@ -91,79 +82,80 @@
                               :active active?
                               :aria-current (when active? "page")}
                              props)
-           [discussion-view-button-image icon "me-2"] (labels label)])))]))
+           [icon icon-key "fa-fw me-2"] (labels label)])))]))
 
 (defn- discussion-view-group
   "Switch between different discussion views."
-  [& {:keys [props]}]
+  []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
-        current-route @(rf/subscribe [:navigation/current-route-name])
-        href #(navigation/href % {:share-hash share-hash})]
-    [:> ButtonGroup (merge {:aria-label "Cycle discussion views" :size :sm} props)
+        current-route @(rf/subscribe [:navigation/current-route-name])]
+    [:nav.view-switcher {:aria-label (labels :discussion.navbar/views)}
      (doall
-      (for [[route {:keys [icon label]}] discussion-views]
-        [:> Button {:key (str "discussion-view-element-" route)
-                    :variant (if (active-button? current-route route) :primary :outline-primary)
-                    :href (href route)}
-         [discussion-view-button-image icon "me-1"] (labels label)]))]))
+      (for [[route {:keys [icon-key label]}] discussion-views
+            :let [active? (active-button? current-route route)]]
+        [:a {:key (str "discussion-view-element-" route)
+             :href (navigation/href route {:share-hash share-hash})
+             :class (when active? "active")
+             :aria-current (when active? "page")}
+         [icon icon-key "fa-fw me-2"] (labels label)]))]))
 
 (defn- download-schnaq-button
   "Button to download a schnaq."
-  [& {:keys [props vertical?]}]
+  [& {:keys [props]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [tooltip/text
      (labels :schnaq.export/as-text)
      [:> NavLink (merge {:on-click #(txt-export-request share-hash @(rf/subscribe [:schnaq/title]))}
                         props)
-      [stacked-icon :vertical? vertical? :icon-key :file-download] (labels :discussion.navbar/download)]]))
+      [icon :file-download "fa-fw me-2"] (labels :discussion.navbar/download)]]))
 
 (defn- share-schnaq-button
   "Share schnaq button opening a modal."
-  [& {:keys [props vertical?]}]
+  [& {:keys [props]}]
   [share-schnaq-modal
    (fn [modal-props]
      [tooltip/text
       (labels :sharing/tooltip)
       [:> NavLink (merge modal-props props)
-       [stacked-icon :vertical? vertical? :icon-key :share] (labels :discussion.navbar/share)]])])
+       [icon :share "fa-fw me-2"] (labels :discussion.navbar/share)]])])
 
 (defn- manage-schnaq-button
   "Button to navigate to schnaq management page."
-  [& {:keys [props vertical?]}]
+  [& {:keys [props]}]
   (when @(rf/subscribe [:user/moderator?])
     (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
       [tooltip/text
        (labels :schnaq.admin/tooltip)
        [:> NavLink (merge {:href (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})}
                           props)
-        [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :schnaq.moderation.edit/administrate-short)]])))
+        [icon :sliders-h "fa-fw me-2"] (labels :schnaq.moderation.edit/administrate-short)]])))
 
 (defn- overview-page-button
   "Return to the overview page."
   [& {:keys [props]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
-        {:keys [icon label]} (:routes.schnaq/start discussion-views)]
+        {:keys [icon-key label]} (:routes.schnaq/start discussion-views)]
     [:> NavLink (merge {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
                        props)
-     [discussion-view-button-image icon "d-block mx-auto"] (labels label)]))
+     [icon icon-key "fa-fw me-2"] (labels label)]))
 
-(defn- login-register-buttons [& {:keys [props vertical?]}]
+(defn- login-register-buttons [& {:keys [props]}]
   [:<>
    [tooltip/text
     (labels :nav/login-tooltip)
-    [:> NavLink (merge {:bsPrefix "btn btn-sm btn-outline-dark me-2"
+    [:> NavLink (merge {:bsPrefix "btn btn-outline-dark nav-control me-2"
                         :on-click #(rf/dispatch [:keycloak/login])}
                        props)
-     [icon :sign-in (if vertical? "d-block mx-auto" "me-1") {:size :sm}]
+     [icon :sign-in "fa-fw me-2"]
      (labels :nav/login)]]
    [tooltip/text
     (labels :nav/register-tooltip)
-    [:> NavLink (merge {:bsPrefix "btn btn-sm btn-outline-secondary"
+    [:> NavLink (merge {:bsPrefix "btn btn-outline-secondary nav-control"
                         :on-click #(rf/dispatch [:keycloak/register
                                                  (str (links/relative-to-absolute-url (navigation/href :routes.schnaqs/personal))
                                                       "?create-demo=true")])}
                        props)
-     [icon :user-plus (if vertical? "d-block mx-auto" "me-1") {:size :sm}]
+     [icon :user-plus "fa-fw me-2"]
      (labels :nav/register)]]])
 
 (defn- schnaq-settings
@@ -186,18 +178,18 @@
 
 (defn- graph-settings
   "Show graph settings. `ids?` adds the anchors for the mindmap tour."
-  [& {:keys [props vertical? ids?]}]
+  [& {:keys [props ids?]}]
   [:<>
    [tooltip/text
     (labels :graph.download/as-png)
     [:> NavLink (merge props {:on-click download-graph-as-png
                               :id (when ids? "graph-export")})
-     [stacked-icon :vertical? vertical? :icon-key :file-export] (labels :graph.download/button)]]
+     [icon :file-export "fa-fw me-2"] (labels :graph.download/button)]]
    [tooltip/text
     (labels :graph.settings/title)
     [:> NavLink (merge props {:on-click graph-settings-notification
                               :id (when ids? "graph-settings")})
-     [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :graph.settings/button)]]])
+     [icon :sliders-h "fa-fw me-2"] (labels :graph.settings/button)]]])
 
 (defn- page-title
   "Display the current title either of the schnaq or the page in the navbar."
@@ -262,41 +254,47 @@
              [graph-settings :props {:className "ms-2"}]])]]
         [common-navigation-links])]]]])
 
+(defn- discussion-context-bar
+  "Second navigation row of a discussion: switch views and use the tools of the current view."
+  []
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])]
+    [:div.discussion-context-bar.panel-white-sm.d-flex.align-items-center.gap-2.small.text-nowrap
+     [discussion-view-group]
+     [:div.ms-auto.d-flex.align-items-center
+      (cond
+        (= current-route :routes/graph-view) [graph-settings :ids? true]
+        (active-button? current-route :routes.schnaq/start) [card-elements/discussion-tools "search-bar"])]]))
+
 (defn- split-navbar
   "Navbar for discussions."
-  [& {:keys [props]}]
+  []
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [:> Navbar (merge {:bg :transparent :variant :light :expand :lg :className "small text-nowrap"} props)
-     [:> Container {:fluid true}
-      [:div.d-flex.align-items-center.panel-white-sm.py-0.ps-0.me-2
-       [:> NavbarBrand {:className "p-0" :href (toolbelt/current-overview-link)
-                        :aria-label (labels :nav/schnaqs)}
-        [theme-logo {:class "p-1" :height 65 :style {:max-width "12rem"}}
-         [:div.schnaq-logo-container
-          [schnaqqi-white :props {:className "img-fluid" :width 50}]]]]
-       [page-title]]
-      [:> NavbarToggle {:aria-controls "schnaq-navbar-big"}]
-      [:> NavbarCollapse {:id "schnaq-navbar-big"
-                          :className "justify-content-end"}
-       (when @(rf/subscribe [:navigation/current-route? :routes/graph-view])
-         [:> Nav {:className "panel-white-sm me-2"}
-          [graph-settings :vertical? true :ids? true]])
-       (when share-hash
-         [:> Nav {:className "panel-white-sm p-1 me-2"}
-          [discussion-view-group]])
-       [:> Nav {:className "panel-white-sm"}
-        (if share-hash
-          [:<>
-           [share-schnaq-button :vertical? true]
-           [download-schnaq-button :vertical? true]
-           [manage-schnaq-button :vertical? true]]
-          [common-navigation-links :vertical? true])
-        [LanguageDropdown :props {:className "nav-link-no-padding"} :vertical? true]
-        [admin-dropdown :vertical? true :props {:className "nav-link-no-padding"}]
-        (if (or share-hash authenticated?)
-          [user-navlink-dropdown :vertical? true :props {:className "nav-link-no-padding"}]
-          [login-register-buttons :vertical? true])]]]]))
+    [:<>
+     [:> Navbar {:bg :transparent :variant :light :expand :lg :className "split-navbar small text-nowrap"}
+      [:> Container {:fluid true}
+       [:div.d-flex.align-items-center.panel-white-sm.p-0.w-100
+        [:> NavbarBrand {:className "p-0" :href (toolbelt/current-overview-link)
+                         :aria-label (labels :nav/schnaqs)}
+         [theme-logo {:class "p-1" :height 65 :style {:max-width "12rem"}}
+          [:div.schnaq-logo-container
+           [schnaqqi-white :props {:className "img-fluid" :width 50}]]]]
+        [page-title]
+        [:> Nav {:className "ms-auto align-items-center px-2"}
+         (if share-hash
+           [:<>
+            [share-schnaq-button]
+            [download-schnaq-button]
+            [manage-schnaq-button]]
+           [common-navigation-links])
+         [:div.navbar-separator {:aria-hidden true}]
+         [LanguageDropdown :props {:id "language-dropdown-desktop"}]
+         [admin-dropdown]
+         (if (or share-hash authenticated?)
+           [user-navlink-dropdown]
+           [login-register-buttons])]]]]
+     (when share-hash
+       [:div.container-fluid.pb-2 [discussion-context-bar]])]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -335,8 +333,8 @@
          [:> Nav {:className "align-items-center"}
           [statement-counter]
           [overview-page-button]
-          [LanguageDropdown :vertical? true]
-          [user-navlink-dropdown :vertical? true]]]]]]]))
+          [LanguageDropdown :props {:id "language-dropdown-desktop"}]
+          [user-navlink-dropdown]]]]]]]))
 
 (defn discussion-navbar
   "Default navbar for discussions and their views."

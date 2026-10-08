@@ -146,6 +146,7 @@
     }
     font-size: medium;
     padding: 0.5rem;
+    width: 100%;
     @include media-breakpoint-down(md) {
       font-size: small;
       min-height: 2.75rem; // Touch height like the toolbar. The width stays content-sized, so the row fits 360px.

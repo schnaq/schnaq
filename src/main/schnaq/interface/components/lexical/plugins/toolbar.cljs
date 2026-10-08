@@ -190,6 +190,7 @@
        :active? code?}]
      [toolbar-button (labels :editor.toolbar/quote) :quote-right
       {:on-click #(format-quote active-editor block-type)}]
+     [:span.divider {:aria-hidden true}]
      (when file-storage
        [:<>
         [toolbar-button (labels :editor.toolbar/drawing) :pencil-ruler
@@ -208,7 +209,8 @@
           {:required true
            :form "form-upload-a-file"}]
          [icon :file-alt]
-         [:editor.upload/file id active-editor file-storage]]])
+         [:editor.upload/file id active-editor file-storage]]
+        [:span.divider {:aria-hidden true}]])
      (let [unordered-list? (= block-type "ul")]
        [toolbar-button (labels :editor.toolbar/list-ul) :list
         {:on-click #(rf/dispatch [:editor/command active-editor
@@ -219,6 +221,7 @@
         {:on-click #(rf/dispatch [:editor/command active-editor
                                   (if ordered-list? REMOVE_LIST_COMMAND INSERT_ORDERED_LIST_COMMAND)])
          :active? ordered-list?}])
+     [:span.divider {:aria-hidden true}]
      [toolbar-button (labels :editor.toolbar/undo) :undo
       {:on-click #(rf/dispatch [:editor/command active-editor UNDO_COMMAND])
        :disabled? (not can-undo?)}]

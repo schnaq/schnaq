@@ -26,11 +26,12 @@
      (reset! screenshot-url (.toDataURL e)))))
 
 (defn- form-input
-  "Show a form in a modal, which is presented to the user."
-  []
+  "Show a form in a modal, which is presented to the user. Calls `on-submit`
+  after the feedback has been sent."
+  [_on-submit]
   (let [with-screenshot? (reagent/atom false)
         nickname @(rf/subscribe [:user/display-name])]
-    (fn []
+    (fn [on-submit]
       [:form.form
        {:on-submit
         (fn [e]
@@ -43,7 +44,8 @@
                           :feedback/description (oget description [:value])
                           :feedback/has-image? @with-screenshot?}]
             (rf/dispatch [:feedback/new feedback (when @with-screenshot? @screenshot-url)
-                          [contact-name contact-mail description]])))}
+                          [contact-name contact-mail description]])
+            (on-submit)))}
        [:div.mb-3
         [:label.form-label {:for "feedback-contact-name"}
          (labels :feedbacks.modal/contact-name)]
@@ -89,13 +91,15 @@
 
 (defn feedback-modal
   "Create a modal to fetch user's feedback."
-  [component]
-  [modal/modal {:size :lg}
-   component
-   (labels :feedbacks.overview/header)
-   [:div.tab-pane.fade.show.active
-    [:p (labels :feedbacks.modal/primer)]
-    [form-input]]])
+  [_component]
+  (let [show (reagent/atom false)]
+    (fn [component]
+      [modal/modal {:size :lg :show-atom show}
+       component
+       (labels :feedbacks.overview/header)
+       [:div.tab-pane.fade.show.active
+        [:p (labels :feedbacks.modal/primer)]
+        [form-input #(reset! show false)]]])))
 
 ;; -----------------------------------------------------------------------------
 
@@ -106,8 +110,7 @@
 (rf/reg-event-fx
  :feedbacks/success
  (fn [_ _]
-   {:fx [[:dispatch [:modal {:show? false :child nil}]]
-         [:dispatch [:notification/add
+   {:fx [[:dispatch [:notification/add
                      #:notification{:title (labels :feedbacks.notification/title)
                                     :body (labels :feedbacks.notification/body)
                                     :context :success}]]]}))

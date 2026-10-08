@@ -8,16 +8,16 @@
                                                            faCommentAlt faEnvelope faNewspaper
                                                            faEye faEyeSlash faFileAlt faFileImage faFileVideo faHourglass faIdCard faImage]]
             ["@fortawesome/free-solid-svg-icons" :refer
-             [faAngleDown faAngleRight faArchive faArrowDown faArrowLeft faAward
+             [faAngleDown faAngleRight faArchive faArrowDown faArrowDownWideShort faArrowLeft faAward
               faArrowRight faArrowUp faBackspace faBell faBold faBriefcase
-              faBalanceScaleRight faBullseye faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
+              faBalanceScale faBalanceScaleRight faBullseye faCalendarAlt faCamera faChalkboardTeacher faChartPie faCheck faCheckCircle
               faChevronLeft faChevronRight faCircle faCloud faCookieBite faCode faCog faComment faComments faCopy
-              faEdit faEllipsisH faEllipsisV faExclamationTriangle faExternalLinkAlt faFileDownload faFileExport faFlask faGhost
-              faGraduationCap faInfinity faInfoCircle faItalic faLanguage faLaptop faList faListOl
+              faEdit faEllipsisH faEllipsisV faExclamationTriangle faExternalLinkAlt faFileDownload faFileExport faFilter faFlask faGhost
+              faGraduationCap faInfinity faInfoCircle faItalic faLanguage faLayerGroup faLaptop faList faListOl
               faLock faLockOpen faMagic faMapPin faMinus faPalette faPaperPlane faPenSquare faPencilAlt faPencilRuler
-              faPlayCircle faPlus faProjectDiagram faSquare faQrcode faQuestion faQuestionCircle
-              faQuoteRight faRedo faRocket faSearch faShareAlt faShieldAlt faSignInAlt faSlidersH faStar
-              faStepBackward faStrikethrough faSun faTag faTerminal faTimes faTimesCircle
+              faPlayCircle faPlus faProjectDiagram faQrcode faQuestion faQuestionCircle
+              faQuoteRight faRedo faRocket faSearch faShareAlt faShieldAlt faSignInAlt faSlidersH
+              faStepBackward faStrikethrough faSun faTableCellsLarge faTag faTerminal faThumbsDown faThumbsUp faTimes faTimesCircle
               faTrashAlt faUnderline faUndo faUniversity faUsers faUserPlus]]
             ["@fortawesome/react-fontawesome" :refer [FontAwesomeIcon]]
             [schnaq.interface.utils.tooltip :as tooltip]))
@@ -25,6 +25,7 @@
 (def ^:private icons
   {:archive faArchive
    :arrow-down faArrowDown
+   :arrow-down-wide-short faArrowDownWideShort
    :arrow-left faArrowLeft
    :arrow-right faArrowRight
    :arrow-up faArrowUp
@@ -69,6 +70,7 @@
    :file-alt faFileAlt
    :file-export faFileExport
    :file-download faFileDownload
+   :filter faFilter
    :flag faFontAwesomeFlag
    :flask faFlask
    :ghost faGhost
@@ -85,6 +87,7 @@
    :instagram faInstagram
    :italic faItalic
    :language faLanguage
+   :layer-group faLayerGroup
    :laptop faLaptop
    :linkedin faLinkedin
    :list faList
@@ -114,10 +117,12 @@
    :share faShareAlt
    :shield faShieldAlt
    :smile-beam faSmileBeam
-   :square faSquare
-   :star faStar
    :strike-through faStrikethrough
+   :scale faBalanceScale
    :sun faSun
+   :table-cells-large faTableCellsLarge
+   :thumbs-down faThumbsDown
+   :thumbs-up faThumbsUp
    :tag faTag
    :terminal faTerminal
    :times faTimes
@@ -161,12 +166,3 @@
   ([identifier classes extras]
    [:span.icon-card
     [icon identifier classes extras]]))
-
-(defn stacked-icon
-  "Build a stacked icon."
-  [& {:keys [props vertical? icon-key]}]
-  [:div.fa-stack.small (if vertical?
-                         (assoc props :className "d-block mx-auto")
-                         props)
-   [icon :square "fa-stack-2x text-white"]
-   [icon icon-key "fa-stack-1x text-dark"]])

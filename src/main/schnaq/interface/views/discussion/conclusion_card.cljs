@@ -13,6 +13,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.markdown :as md]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.edit :as edit]
@@ -345,20 +346,21 @@
             [:div.card-view.card-body
              (when top-level?
                (when (and (not read-only?) moderator?)
-                 [:ul.selection-tab.nav.nav-tabs
+                 [:ul.selection-tab.nav.nav-tabs.nav-fill.mb-4
                   {:ref start-tour-ref}
-                  ;; Toggle buttons, not ARIA tabs: only the active one shows its label,
-                  ;; the others are named for assistive tech.
+                  ;; Icon-only toggle buttons, not ARIA tabs: named for assistive tech,
+                  ;; the tooltip shows the name on hover.
                   (for [[input-type icon-key label] input-types
                         :let [active? (= @selected-option input-type)]]
                     [:li.nav-item {:key input-type}
-                     [:button.nav-link {:type "button"
-                                        :class (when active? "active")
-                                        :aria-pressed active?
-                                        :aria-label (labels label)
-                                        :on-click #(reset! selected-option input-type)}
-                      [icon icon-key (when active? "me-1")]
-                      (when active? (labels label))]])]))
+                     [tooltip/text
+                      (labels label)
+                      [:button.nav-link {:type "button"
+                                         :class (when active? "active")
+                                         :aria-pressed active?
+                                         :aria-label (labels label)
+                                         :on-click #(reset! selected-option input-type)}
+                       [icon icon-key]]]])]))
              (if top-level?
                (case @selected-option
                  :question [input-form-or-disabled-alert]
