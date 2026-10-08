@@ -20,7 +20,7 @@
     {:href "https://schnaq.com/legal-note"}
     (labels :footer.buttons/legal-note)]
    [:a.btn.btn-sm.btn-link.text-dark
-    {:href "https://schnaq.com/privacy"}
+    {:href "https://schnaq.app/privacy/"}
     (labels :router/privacy)]])
 
 (defn- share-options

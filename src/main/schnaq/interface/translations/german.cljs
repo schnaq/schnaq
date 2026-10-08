@@ -569,7 +569,7 @@
    :errors.generic/body "Etwas ist schiefgelaufen. Bitte versuche es später erneut."
    :errors.schnaq/read-only "Dieser schnaq ist schreibgeschützt."
 
-   :error.generic/contact-us [:span "Solltest du hier landen nachdem du etwas auf landing.schnaq.com angeklickt hast, gib uns gerne Bescheid unter " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
+   :error.generic/contact-us [:span "Solltest du hier landen nachdem du etwas auf schnaq.app angeklickt hast, gib uns gerne Bescheid unter " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
 
    :error.404/heading "Diese Seite existiert nicht\u00a0🙉"
    :error.404/body "Die URL, der du gefolgt bist, existiert leider nicht. Möglicherweise hat sich ein Tippfehler

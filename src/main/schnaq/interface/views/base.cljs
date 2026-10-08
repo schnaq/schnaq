@@ -54,7 +54,7 @@
      [:li.list-inline-item
       [feedback-modal
        (fn [props] [:button.btn.btn-link props (labels :feedbacks/button)])]]
-     [footer-link (str "https://schnaq.com/" lang "/privacy") :router/privacy]
+     [footer-link (str "https://schnaq.app/" lang "/privacy/") :router/privacy]
      [footer-link (str "https://schnaq.com/" lang "/legal-note") :footer.buttons/legal-note]]))
 
 (defn- developed-in-nrw []
