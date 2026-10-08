@@ -78,7 +78,7 @@
                        :placeholder (labels :statement.new/placeholder)
                        :toolbar? false}
        {:className "flex-grow-1 lexical-editor-sm"}]
-      [:button.btn.btn-outline-dark.px-3
+      [:button.btn.btn-sm.btn-outline-dark.px-3
        {:type :submit
         :disabled (not submittable?)
         :title (labels :discussion/create-argument-action)
@@ -171,7 +171,7 @@
       [:p.d-flex.align-items-center.gap-2.small.text-muted.mb-0
        [icon :lock "text-primary"]
        (labels :statement.locked/tooltip)]
-      [:form.my-md-2
+      [:form.mt-2.mb-md-2
        {:on-submit submit-fn
         :on-key-down #(when (toolbelt/ctrl-press? % "Enter") (submit-fn %))}
        [topic-input-area editor-id]])))

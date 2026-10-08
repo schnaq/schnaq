@@ -32,3 +32,10 @@ a.badge-clickable {
   // stylelint-enable selector-no-qualifying-type
   text-decoration: none;
 }
+
+// Badges in a meta row line their content up with the text of the card. The
+// badge padding is pulled out of the row, so the gap between items stays the
+// row gap. Filled label pills keep their outer edge.
+.meta-row > .badge:not([class*='label-']) {
+  margin-inline: calc(-1 * var(--bs-badge-padding-x));
+}

@@ -28,13 +28,14 @@
 (defn- percentage-bar
   "An springy-animated percentage bar for graphs"
   [votes width label-key color-index]
-  [motion/spring-transition
-   [tooltip/text
-    (str votes " " (labels label-key))
-    [:span.d-block.percentage-bar.rounded-1
-     {:style {:background-color (colors/get-graph-color color-index)
-              :height "35px"}}]]
-   {:width width}])
+  [:span.d-block.percentage-track.rounded-1.overflow-hidden
+   [motion/spring-transition
+    [tooltip/text
+     (str votes " " (labels label-key))
+     [:span.d-block.percentage-bar.rounded-1
+      {:style {:background-color (colors/get-graph-color color-index)
+               :height "35px"}}]]
+    {:width width}]])
 
 (defn- results-hidden-message
   "Show a message to the user, that the she voted, but is not allowed to see the

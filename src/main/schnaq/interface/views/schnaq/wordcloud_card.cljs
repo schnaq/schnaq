@@ -119,8 +119,12 @@
         [:div.text-start.px-2.pb-2
          [:> InputGroup
           [:> FormControl {:placeholder (labels :schnaq.wordcloud.local.add-words/label)
+                           :aria-label (labels :schnaq.wordcloud.local.add-words/label)
                            :id input-id}]
-          [:> Button {:variant :dark :type :submit} [icon :plane "m-auto"]]]
+          [:> Button {:variant :dark
+                      :type :submit
+                      :aria-label (labels :statement.edit.button/submit)}
+           [icon :plane "m-auto"]]]
          [common/hint-text (labels :schnaq.wordcloud.local.add-words/hint)]]])]))
 
 (>defn wordcloud-list

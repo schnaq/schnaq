@@ -137,6 +137,7 @@
     padding: 0.5rem;
     @include media-breakpoint-down(md) {
       font-size: small;
+      min-height: 2.75rem; // Touch height like the toolbar. The width stays content-sized, so the row fits 360px.
     }
   }
 }
@@ -204,6 +205,11 @@
 // An inset ring instead of a border, so a bar at 0% draws nothing.
 .percentage-bar {
   box-shadow: inset 0 0 0 1px var(--border);
+}
+
+// The full-width row behind the bar, so an option without votes still has a row.
+.percentage-track {
+  background: var(--muted);
 }
 
 .card-view img {

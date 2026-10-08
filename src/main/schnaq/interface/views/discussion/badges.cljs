@@ -18,7 +18,7 @@
 (defn- dropdown-dots
   "Three dot menu which triggers a dropdown."
   [{:keys [id]}]
-  [:button.btn.btn-link.text-dark.m-0.py-0.px-1
+  [:button.btn.btn-link.touch-target.text-dark.m-0.py-0.px-1
    {:id id
     :type "button" :data-bs-toggle "dropdown"
     :aria-haspopup "true" :aria-expanded "false"

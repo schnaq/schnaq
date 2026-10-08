@@ -307,16 +307,27 @@
   }
 }
 
-// Reply editor in statement cards, 44px high like the send button next to it.
+// Reply editor in statement cards: compact on desktop, 44px high on phones like the attitude toggle below it.
 .lexical-editor-sm {
   .editor-input {
-    min-height: 2.75rem;
-    padding: 0.625rem 0.5rem;
+    min-height: 0;
+    padding: 0.25rem 0.5rem;
   }
 
   .editor-placeholder {
     left: 0.5rem;
-    top: 0.625rem;
+    top: 0.25rem;
+  }
+
+  @include media-breakpoint-down(md) {
+    .editor-input {
+      min-height: 2.75rem;
+      padding: 0.625rem 0.5rem;
+    }
+
+    .editor-placeholder {
+      top: 0.625rem;
+    }
   }
 }
 

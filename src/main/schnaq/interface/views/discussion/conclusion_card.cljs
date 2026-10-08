@@ -88,7 +88,8 @@
 
 (defn- statement-information-row [statement]
   (let [statement-id (:db/id statement)]
-    [:div.d-flex.flex-wrap.align-items-center.pb-1
+    [:div.meta-row.d-flex.flex-wrap.align-items-center.gap-2.pb-2
+     [:div.small [user/user-info statement 20 nil]]
      (when (:statement/locked? statement)
        [elements/locked-statement-icon statement-id])
      [badges/show-number-of-replies statement]
@@ -185,7 +186,7 @@
                              (labels :qanda.button.hide/replies))]
         (when (not-empty reply-ids)
           [:div props
-           [:button.btn.btn-transparent.btn-no-outline
+           [:button.btn.btn-transparent.ps-0
             {:type "button"
              :aria-expanded (not @collapsed?)
              :aria-controls (str "replies-" statement-id)
@@ -213,8 +214,7 @@
         [:div.flex-grow-1
          [:div.text-typography
           [truncated-content/statement statement]
-          [statement-information-row statement]
-          [:div.small.mb-2 [user/user-info statement 20 nil]]]]
+          [statement-information-row statement]]]
         [:div.px-md-2.px-1
          [badges/statement-dropdown-menu nil statement]
          [reactions/up-down-vote-vertical {:class "pt-1"} statement]
@@ -267,7 +267,7 @@
         edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement-or-topic)])]
     [motion/fade-in-and-out
      [:<>
-      [:div.d-flex.align-items-start.gap-2.mb-2
+      [:div.d-flex.align-items-center.gap-2.mb-2
        [:div.small.flex-grow-1 {:style {:min-width 0}}
         [user/user-info statement-or-topic 20 nil]]
        [:div.flex-shrink-0
@@ -276,11 +276,17 @@
           [badges/statement-dropdown-menu nil statement-or-topic])]]
       [title-view statement-or-topic]
       (when-not edit-active?
-        [:div.d-flex.flex-wrap.align-items-center.gap-2
+        [:div.meta-row.d-flex.flex-wrap.align-items-center.gap-2
          (if starting-route?
            [badges/number-of-remaining-posts]
            [:<>
-            [badges/show-number-of-replies statement-or-topic]
+            ;; The focused statement is the open page, so its replies are no link.
+            (let [reply-count (:meta/sub-statement-count statement-or-topic 0)]
+              (when (pos? reply-count)
+                [:span.badge.badge-transparent
+                 [icon :comment/alt "m-auto me-1"]
+                 reply-count " "
+                 (labels (if (= 1 reply-count) :statement.badges/more-post :statement.badges/more-posts))]))
             [reactions/up-down-vote statement-or-topic]])])]]))
 
 (defn- search-info []
