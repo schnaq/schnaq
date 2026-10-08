@@ -19,30 +19,31 @@
      (if feedbacks
        [:<>
         [:h4 (gstring/format (labels :feedbacks.overview/table-header) (count feedbacks))]
-        [:table.table.table-striped
-         [:thead
-          [:tr
-           [:th {:width "10%"} (labels :feedbacks.overview/contact-name)]
-           [:th {:width "10%"} (labels :feedbacks.overview/when?)]
-           [:th {:width "60%"} (labels :feedbacks.overview/description)]
-           [:th {:width "20%"} (labels :feedbacks/screenshot)]]]
-         [:tbody
-          (for [feedback feedbacks]
-            [:tr {:key (:db/id feedback)}
-             [:td (:feedback/contact-name feedback)
-              (when-not (string/blank? (:feedback/contact-mail feedback))
-                [:a {:href (gstring/format "mailto:%s" (:feedback/contact-mail feedback))}
-                 [icon :envelope "ps-1"]])]
-             [:td (util-time/format-distance (:feedback/created-at feedback) locale)]
-             [:td.text-break (:feedback/description feedback)]
-             [:td.image
-              (when (:feedback/has-image? feedback)
-                (let [img-src (gstring/format "%s/%s/%s.png"
-                                              shared-config/s3-host
-                                              (shared-config/s3-buckets :feedbacks/screenshots)
-                                              (:db/id feedback))]
-                  [:a {:href img-src}
-                   [:img.img-fluid.img-thumbnail {:src img-src}]]))]])]]]
+        [:div.table-responsive
+         [:table.table.table-striped
+          [:thead
+           [:tr
+            [:th {:width "10%"} (labels :feedbacks.overview/contact-name)]
+            [:th {:width "10%"} (labels :feedbacks.overview/when?)]
+            [:th {:width "60%"} (labels :feedbacks.overview/description)]
+            [:th {:width "20%"} (labels :feedbacks/screenshot)]]]
+          [:tbody
+           (for [feedback feedbacks]
+             [:tr {:key (:db/id feedback)}
+              [:td (:feedback/contact-name feedback)
+               (when-not (string/blank? (:feedback/contact-mail feedback))
+                 [:a {:href (gstring/format "mailto:%s" (:feedback/contact-mail feedback))}
+                  [icon :envelope "ps-1"]])]
+              [:td (util-time/format-distance (:feedback/created-at feedback) locale)]
+              [:td.text-break (:feedback/description feedback)]
+              [:td.image
+               (when (:feedback/has-image? feedback)
+                 (let [img-src (gstring/format "%s/%s/%s.png"
+                                               shared-config/s3-host
+                                               (shared-config/s3-buckets :feedbacks/screenshots)
+                                               (:db/id feedback))]
+                   [:a {:href img-src}
+                    [:img.img-fluid.img-thumbnail {:src img-src}]]))]])]]]]
        [loading/loading-placeholder]))])
 
 (defn- overview
