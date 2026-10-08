@@ -181,7 +181,8 @@
             :where [?discussion :discussion/created-at ?timestamp]
             [(< ?since ?timestamp)]
             (not [?discussion :discussion/states :discussion.state/deleted])
-            [?statements :statement/discussions ?discussion]]
+            [?statements :statement/discussions ?discussion]
+            (not [?statements :statement/deleted? true])]
           (Date/from since))
          sorted-data (sort (map second statement-data))]
      {:25-percentile (percentile-of sorted-data 25)

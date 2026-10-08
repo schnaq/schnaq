@@ -26,28 +26,13 @@
     (.toFixed value 1)
     value))
 
-(def ^:private metric-labels
-  "Translation keys for the sub-metrics sent by the backend."
-  {"overall" :analytics.metric/overall
-   "registered" :analytics.metric/registered
-   "anonymous" :analytics.metric/anonymous
-   "max" :analytics.metric/max
-   "min" :analytics.metric/min
-   "average" :analytics.metric/average
-   "median" :analytics.metric/median
-   "supports" :analytics.metric/supports
-   "attacks" :analytics.metric/attacks
-   "neutrals" :analytics.metric/neutrals})
-
 (defn- metric-label
   "Translated heading of a sub-metric, e.g. :25-percentile."
   [metric-name]
   (let [metric (name metric-name)]
     (if-let [[_ percentile] (re-matches #"(\d+)-percentile" metric)]
       (labels :analytics.metric/percentile percentile)
-      (if-let [label-key (get metric-labels metric)]
-        (labels label-key)
-        metric))))
+      (labels (keyword "analytics.metric" metric)))))
 
 (defn- analytics-card
   "A single card containing a metric and a title."
