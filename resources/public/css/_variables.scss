@@ -1,34 +1,29 @@
 // Variables
 
-// Restated Bootstrap Variables
+// Compile-time copies of the design tokens in _tokens.scss. Bootstrap's Sass
+// functions (shade-color, color-contrast) need real colours, so keep both
+// files in sync.
+
 $white: #fff !default;
-$white-shade: #f8fbfe !default;
-$gray-100: #f8f9fa !default;
-$gray-200: #e9ecef !default;
-$gray-300: #dee2e6 !default;
-$gray-400: #ced4da !default;
-$gray-500: #adb5bd !default;
-$gray-600: #868e96 !default;
-$gray-700: #495057 !default;
-$gray-800: #343a40 !default;
-$gray-900: #212529 !default;
 $black: #000 !default;
 
-// Base Color Palette
-$light-base: #fffdfd !default;
-$gray-neutal: #e8e8f1 !default;
-$light-background: #f6f8ff !default;
-$gray-base: #919ca4 !default;
-$dark-base: #343a40 !default;
-$blue-base: #1292ee !default;
-$orange-base: #ff9901 !default;
+// Blue-tinted grays like schnaq.com (hue 248) instead of Bootstrap's neutral ones.
+$gray-100: #f6f9fd !default;
+$gray-200: #e6edf4 !default;
+$gray-300: #dce2e9 !default;
+$gray-400: #c9d5e0 !default;
+$gray-500: #aab5c0 !default;
+$gray-600: #5b7084 !default;
+$gray-700: #42515f !default;
+$gray-800: #2d3b48 !default;
+$gray-900: #192633 !default;
+
 $yellow: #f9b756 !default;
 $red: #dc3545 !default;
 $green: #6aedac !default;
 $cyan: #17a2b8 !default;
-$schnaq-gray: #3a3a3a !default;
 
-// Text Colors
+// CI navy, used for body text.
 $typography: #001452 !default;
 
 // Label  specific Colors
@@ -37,22 +32,20 @@ $label-purple: #727ee7 !default;
 $label-red: #f66490 !default;
 $label-teal: #20c997 !default;
 
-// discussion Colors
-$positive: $blue-base !default;
-$negative: $orange-base !default;
-$neutral: $gray-neutal !default;
-
 // Bootstrap overrides
-$primary: $blue-base !default;
-$secondary: $orange-base !default;
+$primary: #1292ee !default;
+$secondary: #ff9901 !default;
 $success: $green !default;
 $info: $cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
-$light: $light-base !default;
-$dark: $dark-base !default;
+$light: #f6f8fc !default;
+$dark: $typography !default;
 
-$input-background: $gray-200 !default;
+$body-color: $typography;
+$link-color: #1565c0;
+// Navy instead of black wherever Bootstrap picks a dark label for contrast.
+$color-contrast-dark: $typography;
 
 // Crisper corners, a step towards the angular schnaq.com look.
 $border-radius: 0.25rem;
@@ -78,8 +71,6 @@ $headings-font-weight: 600;
 $box-shadow-sm: 0 0.125rem 0.25rem rgba($black, 0.075) !default;
 $box-shadow: 0 0.5rem 1rem rgba($black, 0.15) !default;
 $box-shadow-lg: 0 1rem 3rem rgba($black, 0.175) !default;
-
-$regular-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
 
 $table-striped-bg-factor: 0.03;
 $table-cell-padding-y: 0.8rem;

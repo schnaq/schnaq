@@ -49,7 +49,7 @@
    [:h2.pb-3 (labels :schnaq.join.access-code/existing-user)]
    [button/anchor (labels :schnaq.join.access-code/go-to-schnaqs)
     (navigation/href :routes.schnaqs/personal)
-    "btn-outline-secondary btn-lg text-white"]])
+    "btn-outline-light btn-lg"]])
 
 (defn- start
   "Show a form to a user to join a schnaq via access-code."

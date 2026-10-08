@@ -56,6 +56,41 @@
    (.. js/document -documentElement -style)
    css-variable))
 
+(def ^:private derived-suffixes
+  "Companions of a themed brand colour that _tokens.scss reads."
+  ["-rgb" "-strong" "-foreground"])
+
+(defn- hex->rgb
+  "Parse a #rrggbb colour into its red, green and blue channels."
+  [hex]
+  (mapv #(js/parseInt (subs hex % (+ % 2)) 16) [1 3 5]))
+
+(defn- relative-luminance
+  "WCAG relative luminance of a #rrggbb colour."
+  [hex]
+  (let [linear (fn [channel]
+                 (let [c (/ channel 255)]
+                   (if (<= c 0.03928) (/ c 12.92) (js/Math.pow (/ (+ c 0.055) 1.055) 2.4))))
+        [r g b] (map linear (hex->rgb hex))]
+    (+ (* 0.2126 r) (* 0.7152 g) (* 0.0722 b))))
+
+(defn- foreground-for
+  "White or the CI navy, whichever contrasts more with the background colour."
+  [hex]
+  (let [luminance (relative-luminance hex)
+        on-white (/ 1.05 (+ luminance 0.05))
+        on-navy (/ (+ luminance 0.05) (+ (relative-luminance "#001452") 0.05))]
+    (if (>= on-white on-navy) "#ffffff" "#001452")))
+
+(defn- set-derived-colors!
+  "Set the companions of a themed brand colour, see _tokens.scss."
+  [css-variable hex]
+  (when (re-matches #"#[0-9a-fA-F]{6}" hex)
+    (let [style (.. js/document -documentElement -style)]
+      (.setProperty style (str css-variable "-rgb") (str/join ", " (hex->rgb hex)))
+      (.setProperty style (str css-variable "-strong") hex)
+      (.setProperty style (str css-variable "-foreground") (foreground-for hex)))))
+
 (>defn- color-picker
   "Color picker for the theme colors."
   [theme-field label]
@@ -337,12 +372,18 @@
  :page.root/set-color
  (fn [[theme-field color]]
    (when color
-     (set-root-color (theme-field->css-variable theme-field) color))))
+     (let [css-variable (theme-field->css-variable theme-field)]
+       (set-root-color css-variable color)
+       (when (#{:primary :secondary} theme-field)
+         (set-derived-colors! css-variable color))))))
 
 (rf/reg-fx
  :page.root/remove-color
  (fn [theme-field]
-   (remove-root-color (theme-field->css-variable theme-field))))
+   (let [css-variable (theme-field->css-variable theme-field)]
+     (remove-root-color css-variable)
+     (doseq [suffix derived-suffixes]
+       (remove-root-color (str css-variable suffix))))))
 
 (rf/reg-event-fx
  :theme.selected/color

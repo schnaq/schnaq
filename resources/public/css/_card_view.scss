@@ -17,7 +17,7 @@
 
 .panel-grey {
   @extend .panel-white;
-  background: $input-background;
+  background: var(--muted);
 }
 
 .card-history {
@@ -28,7 +28,7 @@
   padding: 0;
 
   &:hover {
-    background: $white-shade;
+    background: var(--muted);
   }
 }
 
@@ -42,7 +42,7 @@
   padding: 1.5rem 1rem;
 
   &:hover {
-    background: $white-shade;
+    background: var(--muted);
   }
 }
 
@@ -177,19 +177,17 @@
 
 .highlight-card-neutral {
   @extend .highlight-card;
-  background: $neutral;
+  background: var(--border);
 }
 
 .highlight-card-support {
   @extend .highlight-card;
-  background: $positive;
-  background: var(--theming-primary);
+  background: var(--support);
 }
 
 .highlight-card-attack {
   @extend .highlight-card;
-  background: $negative;
-  background: var(--theming-secondary);
+  background: var(--attack);
 }
 
 .highlight-card-answered {

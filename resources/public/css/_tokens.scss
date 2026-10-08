@@ -1,0 +1,162 @@
+// Design tokens in the style of shadcn/ui: semantic CSS custom properties from
+// the schnaq.com CI. Stylesheets use these instead of colour literals, and
+// Bootstrap's --bs-* variables and component hooks are wired to them below, so
+// a user theme reaches every component without !important.
+//
+// Each brand colour comes in three flavours:
+//   --x            fills and decorative surfaces (navbar, highlight bars)
+//   --x-strong     text, icons and button backgrounds on white (WCAG AA)
+//   --x-foreground the label colour on top of --x-strong
+// Compile-time copies live in _variables.scss.
+
+:root {
+  // Inputs for user themes. themes.cljs overrides them inline on <html> and
+  // reads them back, so they stay literal hex values. The -rgb, -strong and
+  // -foreground companions only exist while a theme is applied.
+  --theming-primary: #{$primary};
+  --theming-secondary: #{$secondary};
+  --theming-background: #{$light};
+
+  --background: #{$light};
+  --foreground: #{$typography};
+  --card: #{$white};
+  --card-foreground: #{$typography};
+  --primary: #{$primary};
+  --primary-rgb: #{to-rgb($primary)};
+  --primary-strong: #1976d2;
+  --primary-foreground: #{$white};
+  --secondary: #{$secondary};
+  --secondary-rgb: #{to-rgb($secondary)};
+  --secondary-strong: #b35c00;
+  --secondary-foreground: #{$typography};
+  --muted: #{$gray-200};
+  --muted-foreground: #{$gray-600};
+  --accent: #8e40c4;
+  --accent-foreground: #{$white};
+  --destructive: #{$danger};
+  --destructive-foreground: #{$white};
+  --border: #{$gray-300};
+  --input: #8494a5;
+  --link: #{$link-color};
+  --link-rgb: #{to-rgb($link-color)};
+  --radius: #{$border-radius-lg};
+}
+
+.theming-enabled {
+  --primary: var(--theming-primary);
+  --primary-rgb: var(--theming-primary-rgb, #{to-rgb($primary)});
+  --primary-strong: var(--theming-primary-strong, #1976d2);
+  --primary-foreground: var(--theming-primary-foreground, #{$white});
+  --secondary: var(--theming-secondary);
+  --secondary-rgb: var(--theming-secondary-rgb, #{to-rgb($secondary)});
+  --secondary-strong: var(--theming-secondary-strong, #b35c00);
+  --secondary-foreground: var(--theming-secondary-foreground, #{$typography});
+  --background: var(--theming-background);
+}
+
+// Derived tokens and the Bootstrap wiring. Custom properties resolve where they
+// are declared, so they are repeated on .theming-enabled to pick up a theme.
+:root,
+.theming-enabled {
+  --ring: var(--primary-strong);
+  --support: var(--primary);
+  --attack: var(--secondary);
+  --bs-primary: var(--primary);
+  --bs-primary-rgb: var(--primary-rgb);
+  --bs-secondary: var(--secondary);
+  --bs-secondary-rgb: var(--secondary-rgb);
+  --bs-link-color: var(--link);
+  --bs-link-color-rgb: var(--link-rgb);
+  --bs-link-hover-color-rgb: var(--link-rgb);
+  --bs-focus-ring-color: color-mix(in srgb, var(--ring) 35%, transparent);
+}
+
+// -----------------------------------------------------------------------------
+// Component hooks
+
+@each $color in (primary, secondary) {
+  .btn-#{$color} {
+    --bs-btn-color: var(--#{$color}-foreground);
+    --bs-btn-bg: var(--#{$color}-strong);
+    --bs-btn-border-color: var(--#{$color}-strong);
+    --bs-btn-hover-color: var(--#{$color}-foreground);
+    --bs-btn-hover-bg: color-mix(in srgb, var(--#{$color}-strong) 85%, #000);
+    --bs-btn-hover-border-color: color-mix(in srgb, var(--#{$color}-strong) 85%, #000);
+    --bs-btn-active-color: var(--#{$color}-foreground);
+    --bs-btn-active-bg: color-mix(in srgb, var(--#{$color}-strong) 75%, #000);
+    --bs-btn-active-border-color: color-mix(in srgb, var(--#{$color}-strong) 75%, #000);
+    --bs-btn-disabled-color: var(--#{$color}-foreground);
+    --bs-btn-disabled-bg: var(--#{$color}-strong);
+    --bs-btn-disabled-border-color: var(--#{$color}-strong);
+    --bs-btn-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+  }
+
+  .btn-outline-#{$color} {
+    --bs-btn-color: var(--#{$color}-strong);
+    --bs-btn-border-color: var(--#{$color}-strong);
+    --bs-btn-hover-color: var(--#{$color}-foreground);
+    --bs-btn-hover-bg: var(--#{$color}-strong);
+    --bs-btn-hover-border-color: var(--#{$color}-strong);
+    --bs-btn-active-color: var(--#{$color}-foreground);
+    --bs-btn-active-bg: var(--#{$color}-strong);
+    --bs-btn-active-border-color: var(--#{$color}-strong);
+    --bs-btn-disabled-color: var(--#{$color}-strong);
+    --bs-btn-disabled-border-color: var(--#{$color}-strong);
+    --bs-btn-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+  }
+}
+
+// The brand orange is a fill colour; as a fill it carries the navy foreground.
+.btn-secondary {
+  --bs-btn-bg: var(--secondary);
+  --bs-btn-border-color: var(--secondary);
+  --bs-btn-hover-bg: color-mix(in srgb, var(--secondary) 85%, #000);
+  --bs-btn-hover-border-color: color-mix(in srgb, var(--secondary) 85%, #000);
+  --bs-btn-active-bg: color-mix(in srgb, var(--secondary) 75%, #000);
+  --bs-btn-active-border-color: color-mix(in srgb, var(--secondary) 75%, #000);
+  --bs-btn-disabled-bg: var(--secondary);
+  --bs-btn-disabled-border-color: var(--secondary);
+}
+
+.btn-outline-secondary {
+  --bs-btn-hover-bg: var(--secondary);
+  --bs-btn-hover-border-color: var(--secondary);
+  --bs-btn-active-bg: var(--secondary);
+  --bs-btn-active-border-color: var(--secondary);
+}
+
+.form-check-input:checked,
+.form-check-input[type='checkbox']:indeterminate {
+  background-color: var(--primary-strong);
+  border-color: var(--primary-strong);
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+}
+
+.form-range::-webkit-slider-thumb {
+  background-color: var(--primary-strong);
+}
+
+// A combined selector list with the -webkit- rule would be dropped by Firefox.
+.form-range::-moz-range-thumb {
+  background-color: var(--primary-strong);
+}
+
+.dropdown-menu {
+  --bs-dropdown-link-active-bg: var(--primary-strong);
+  --bs-dropdown-link-active-color: var(--primary-foreground);
+}
+
+.nav-tabs {
+  --bs-nav-link-color: var(--primary-strong);
+  --bs-nav-link-hover-color: color-mix(in srgb, var(--primary-strong) 80%, #000);
+}
+
+.base-wrapper {
+  background: var(--background);
+}

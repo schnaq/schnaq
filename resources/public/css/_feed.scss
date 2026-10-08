@@ -9,7 +9,7 @@
   text-decoration: none !important; // Avoid ugly styling when clicking again on an already selected feed-item
 
   &:hover {
-    background-color: $white-shade;
+    background-color: var(--muted);
     color: $primary;
     text-decoration: none;
   }

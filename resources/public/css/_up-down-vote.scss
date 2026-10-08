@@ -6,32 +6,20 @@
 
 .badge-upvote {
   background: none;
-  color: $positive;
-  color: var(--theming-primary);
+  color: var(--primary-strong);
 }
 
 .badge-upvote-selected {
-  background-color: $positive;
-  background-color: var(--theming-primary);
-  color: $white;
-
-  &:hover {
-    color: $light;
-  }
+  background-color: var(--primary-strong);
+  color: var(--primary-foreground);
 }
 
 .badge-downvote {
   background: none;
-  color: $negative;
-  color: var(--theming-secondary);
+  color: var(--secondary-strong);
 }
 
 .badge-downvote-selected {
-  background-color: $negative;
-  background-color: var(--theming-secondary);
-  color: $white;
-
-  &:hover {
-    color: $light;
-  }
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
 }

@@ -33,7 +33,7 @@
 }
 
 .change-profile-pic-button {
-  box-shadow: vars.$regular-shadow;
+  box-shadow: var(--bs-box-shadow-sm);
   margin-bottom: -1rem !important;
   margin-left: -2rem !important;
 }

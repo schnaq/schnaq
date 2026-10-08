@@ -13,7 +13,7 @@
   @extend .rounded-circle;
   align-items: center;
   background-color: #fff;
-  border: 2px solid vars.$schnaq-gray;
+  border: 2px solid var(--foreground);
   font-size: 16px;
   font-weight: bold;
   height: 50px;
@@ -21,8 +21,8 @@
 }
 
 .scale-radio-button input[type="radio"]:checked + label {
-  background-color: vars.$schnaq-gray;
-  border-color: vars.$schnaq-gray;
+  background-color: var(--foreground);
+  border-color: var(--foreground);
   color: #fff;
 }
 
