@@ -35,17 +35,19 @@
     (new-activation! share-hash)))
 
 (>defn reset-activation!
-  "Reset activation by share hash and return activation entity."
+  "Reset activation by share hash and return activation entity. Returns nil
+  when the schnaq has no activation."
   [share-hash]
-  [:discussion/share-hash :ret ::specs/activation]
-  (let [activation-id (:db/id (activation-by-share-hash share-hash))]
+  [:discussion/share-hash :ret (? ::specs/activation)]
+  (when-let [activation-id (:db/id (activation-by-share-hash share-hash))]
     (db/transact [[:db/add activation-id :activation/count 0]])
     (db/fast-pull activation-id patterns/activation)))
 
 (>defn increment-activation!
-  "Increment activation by share hash and return activation entity."
+  "Increment activation by share hash and return activation entity. Returns nil
+  when the schnaq has no activation."
   [share-hash]
-  [:discussion/share-hash :ret ::specs/activation]
-  (let [activation-id (:db/id (activation-by-share-hash share-hash))]
+  [:discussion/share-hash :ret (? ::specs/activation)]
+  (when-let [activation-id (:db/id (activation-by-share-hash share-hash))]
     (db/increment-number activation-id :activation/count)
     (db/fast-pull activation-id patterns/activation)))

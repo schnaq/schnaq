@@ -37,16 +37,16 @@
   "Increment activation counter."
   [{{{:keys [share-hash]} :body} :parameters}]
   (log/info "Increment activation counter for" share-hash)
-  (if (activation-db/activation-by-share-hash share-hash)
-    (ok {:activation (activation-db/increment-activation! share-hash)})
+  (if-let [activation (activation-db/increment-activation! share-hash)]
+    (ok {:activation activation})
     activation-not-found))
 
 (defn- reset-activation
   "Reset activation counter."
   [{{{:keys [share-hash]} :body} :parameters}]
   (log/info "Reset activation counter for" share-hash)
-  (if (activation-db/activation-by-share-hash share-hash)
-    (ok {:activation (activation-db/reset-activation! share-hash)})
+  (if-let [activation (activation-db/reset-activation! share-hash)]
+    (ok {:activation activation})
     activation-not-found))
 
 (def activation-routes
