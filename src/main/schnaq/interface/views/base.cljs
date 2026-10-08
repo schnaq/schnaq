@@ -15,12 +15,12 @@
    [:div
     {:class (if (str/blank? wrapper-classes) "container container-85" wrapper-classes)}
     (if vertical-header?
-      [:<> [:h1 heading] [:h2.display-6 subheading]]
+      [:<> (when heading [:h1 heading]) (when subheading [:h2.display-6 subheading])]
       [:div.row.mt-md-5.mb-2
        ;; If split header is configured, but the screen is too small, display
        ;; the headings one below the other
-       [:div.col-12.col-md-6 [:h1 heading]]
-       [:div.col-12.col-md-6 [:h2.h4 subheading]]])
+       [:div.col-12.col-md-6 (when heading [:h1 heading])]
+       [:div.col-12.col-md-6 (when subheading [:h2.h4 subheading])]])
     more-for-heading]
    (cond
      (gstring/contains (str classes) "bg-white") [:div.wave-bottom-white]
@@ -61,7 +61,8 @@
    " " (labels :footer.tagline/developed-with) " "
    [icon :flask "m-auto"]
    " " (labels :footer.tagline/location)
-   (gstring/format " © schnaq GmbH %d" (.getFullYear (js/Date.)))])
+   ;; Keep the notice in one piece, so the © never ends a line on its own.
+   " " [:span.text-nowrap (gstring/format "© schnaq GmbH %d" (.getFullYear (js/Date.)))]])
 
 (defn- social-link
   "Icon-only link to one of our profiles, named by the brand."
@@ -124,7 +125,7 @@
       [:div.row
        [:div.col-md-6.col-xl-3.col-12
         [logo-and-slogan]]
-       [:div.col-md-6.col-xl-3.col-12
+       [:div.col-md-6.col-xl-3.col-12.pt-3.pt-md-0
         (if (= :en locale)
           [alternatives]
           [product-use-cases])]

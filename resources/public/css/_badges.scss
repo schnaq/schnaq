@@ -12,6 +12,12 @@
   }
 }
 
+// The pro badge is a fill, so it carries the strong brand colour and its foreground.
+.badge.badge-pro {
+  background-color: var(--primary-strong);
+  color: var(--primary-foreground);
+}
+
 .badge-clickable {
   &:hover,
   &:active,

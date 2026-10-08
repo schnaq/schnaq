@@ -32,7 +32,7 @@
 
 (defn- badge-builder
   [props child]
-  [:span.badge.rounded-pill.bg-gradient props child])
+  [:span.badge.rounded-pill props child])
 
 (defn admin-badge
   "Display an admin badge."
@@ -57,7 +57,7 @@
 (defn pro-badge
   "Display a pro badge."
   [props]
-  [badge-builder (merge {:class "bg-primary"} props) "pro"])
+  [badge-builder (merge {:class "badge-pro"} props) "pro"])
 
 (defn role-indicator
   "Show an icon if the user has special roles."
@@ -93,7 +93,7 @@
   ([icon title body button-text route-name disabled?]
    [keyword? string? string? string? keyword? (? boolean?) => :re-frame/component]
    (let [href (navigation/href route-name)]
-     [:article.pb-3.pe-3
+     [:article.pb-4.pe-md-3
       [:a {:href href :tab-index -1 :aria-hidden true} [icon-card icon "text-typography" {:size :lg}]]
       [:p.fw-bold.my-2 title]
       [:p body]

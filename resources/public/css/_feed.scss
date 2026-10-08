@@ -9,18 +9,18 @@
 
   &:hover {
     background-color: var(--muted);
-    color: $primary;
+    color: var(--link);
     text-decoration: none;
   }
 
   &:focus {
-    color: $primary;
+    color: var(--link);
   }
 }
 
 .feed-button-focused {
   @include feed-button-base;
-  color: $primary;
+  color: var(--link);
 }
 
 .feed-button {

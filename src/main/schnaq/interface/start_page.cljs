@@ -21,7 +21,7 @@
                      (.preventDefault e)
                      (let [access-code (oget e [:target :elements :access-code :value])]
                        (rf/dispatch [:schnaq.join/access-code access-code])))}
-       [:div.form-group
+       [:div.mb-3
         [:label.d-block.display-6
          (labels :schnaq.join.access-code/access-code)
          [:input.form-control.form-control-lg.text-center.my-2.has-validation

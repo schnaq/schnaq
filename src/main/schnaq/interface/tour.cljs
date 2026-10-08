@@ -56,7 +56,11 @@
    [{:target "#graph"
      :content (labels :tour.mindmap/step-1)
      :title (labels :tour.mindmap/step-1-title)
-     :placement :auto}
+     :placement :auto
+     ;; Joyride hands this to floating-ui's offset(), which accepts an object. It
+     ;; keeps the corner beacon 12px inside the full-width canvas instead of on
+     ;; the footer seam and the screen edge.
+     :floatingOptions {:beaconOptions {:offset {:mainAxis -36 :alignmentAxis 12}}}}
     {:target "#graph-export"
      :content (labels :tour.mindmap/step-2)
      :title (labels :tour.mindmap/step-2-title)}
@@ -91,7 +95,13 @@
  :tour/steps
  (fn [db]
    (when-let [current-tour (get-in db [:tour :current])]
-     (get tours current-tour))))
+     (let [steps (get tours current-tour)]
+       ;; Below Bootstrap xl the split navbar holding #graph-export and
+       ;; #graph-settings is display:none, so Joyride would skip those steps.
+       (if (and (= :mindmap current-tour)
+                (not (.-matches (js/matchMedia "(min-width: 1200px)"))))
+         (subvec steps 0 1)
+         steps)))))
 
 (rf/reg-event-db
  :tour/start

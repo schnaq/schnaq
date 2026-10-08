@@ -45,6 +45,7 @@ html {
 .h3,
 [class*='display-'] {
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 @media (min-width: 2560px) {

@@ -182,6 +182,7 @@
   [text image-div href button-class]
   [:a.btn.btn-link.text-start {:class button-class
                                :role "button"
+                               :aria-current (when (= button-class "feed-button-focused") "page")
                                :href href}
    [:div.d-flex.flex-row
     image-div
@@ -245,8 +246,8 @@
   []
   (let [{:discussion/keys [share-hash]} @(rf/subscribe [:schnaq/last-added])
         hubs @(rf/subscribe [:hubs/all])]
-    [:section
-     [:div.d-flex.flex-column.panel-white.mx-0.mt-0.mb-4
+    [:section.d-flex.flex-column.gap-3.gap-lg-4
+     [:div.d-flex.flex-column.panel-white
       [feed-button
        (labels :nav.schnaqs/create-schnaq)
        [feed-button-icon :plus]
@@ -258,10 +259,10 @@
          [feed-button-icon :arrow-left]
          (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})
          "feed-button"])]
-     [:div.panel-white.mb-4
+     [:div.panel-white
       [feed-schnaqs]]
      (when hubs
-       [:div.panel-white.mb-4
+       [:div.panel-white
         [feed-hubs]])]))
 
 (defn- personal-discussions-view

@@ -23,7 +23,7 @@
                 :alt (labels :schnaqqifant/stop-alt-text)}]
     [:div.alert.alert-danger.mt-4 {:role "alert"}
      [:p body]
-     [:p (labels :error.generic/contact-us)]]]])
+     [:p.mb-0 (labels :error.generic/contact-us)]]]])
 
 (defn only-beta-tester
   "Show a page that explains only beta users can access page"
