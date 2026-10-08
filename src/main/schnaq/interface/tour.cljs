@@ -19,6 +19,14 @@
   {:primaryColor (:secondary colors)
    :showProgress true})
 
+(defn- reduced-motion-styles
+  "Stop the pulsing beacon for users who prefer reduced motion."
+  []
+  (if (.-matches (js/matchMedia "(prefers-reduced-motion: reduce)"))
+    {:beaconInner {:animation "none"}
+     :beaconOuter {:animation "none"}}
+    {}))
+
 (def ^:private tours
   {:user []
    :discussion
@@ -65,10 +73,12 @@
                    :run true
                    :steps steps
                    :options options
+                   :styles (reduced-motion-styles)
                    :locale {:back (labels :tour.buttons/back)
                             :close (labels :tour.buttons/close)
                             :last (labels :tour.buttons/last)
                             :next (labels :tour.buttons/next)
+                            :nextWithProgress (labels :tour.buttons/next-with-progress)
                             :open (labels :tour.buttons/open)
                             :skip (labels :tour.buttons/skip)}}])))
 
