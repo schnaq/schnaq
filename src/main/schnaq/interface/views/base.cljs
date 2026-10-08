@@ -84,7 +84,8 @@
   []
   (let [backend-version @(rf/subscribe [:app.version/backend])]
     [:section.pt-2
-     [:small.text-muted
+     ;; Muted by opacity: the footer is dark, .text-muted would be navy on navy.
+     [:small.opacity-75
       "Version " config/app-version
       (when backend-version (str " · API " backend-version))]]))
 
