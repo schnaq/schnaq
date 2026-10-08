@@ -12,12 +12,12 @@
   @extend .justify-content-center;
   @extend .rounded-circle;
   align-items: center;
+  aspect-ratio: 1;
   background-color: #fff;
   border: 2px solid var(--foreground);
   font-size: 16px;
   font-weight: bold;
-  height: 50px;
-  width: 50px;
+  width: 100%;
 }
 
 .scale-radio-button input[type="radio"]:checked + label {
@@ -36,16 +36,24 @@
   height: 20px;
   left: 10px;
   position: absolute;
-  top: 15px;
-  width: 95%;
+  right: 10px;
+  top: 50%;
+  translate: 0 -50%;
   z-index: 1;
 }
 
-.scale-wrapper .form-check-inline:nth-child(2) {
-  padding-left: 0;
+// The five circles share one row at any phone width: they shrink from 50px
+// instead of wrapping, and the gradient bar is centred behind them.
+.scale-wrapper {
+  gap: 0.25rem;
+  margin-inline: auto;
+  max-width: 26rem;
 }
 
-.scale-wrapper .form-check-inline:last-child {
+.scale-wrapper .form-check-inline {
+  flex: 0 1 50px;
   margin-right: 0;
+  min-width: 0;
+  padding-left: 0;
 }
 // stylelint-enable selector-no-qualifying-type

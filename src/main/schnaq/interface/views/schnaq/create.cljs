@@ -25,16 +25,17 @@
           :defaultChecked checked?}]
         [:select.form-control.form-select
          {:id :exclusive-hub-select
+          :aria-label (labels :hubs/heading)
           :defaultValue selected-hub
           :style {:max-width "80%"}}
          (for [group-id user-groups]
            [:option {:value group-id
                      :key group-id}
             (get-in hubs [group-id :hub/name])])]]
-       [:p.small.form-text.text-muted.ms-4 (labels :schnaq.create.hub/help-text)]])))
+       [:label.small.form-text.text-muted.d-block.ms-4 {:for :hub-exclusive} (labels :schnaq.create.hub/help-text)]])))
 
 (defn- create-schnaq-button []
-  [:div.text-end
+  [:div.d-grid.d-md-block.text-md-end
    [:button.btn.btn-lg.btn-dark
     {:on-click #(tracking/track-event "Active User", "Action", "Create Schnaq")}
     (labels :schnaq.create.button/save)

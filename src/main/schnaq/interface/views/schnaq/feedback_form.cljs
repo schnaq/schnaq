@@ -29,7 +29,7 @@
   "A scale input with 5 radio buttons."
   [question-ordinal]
   [:div.border.rounded.p-3.text-center
-   [:div.d-inline-block.position-relative.bg-transparent.scale-wrapper
+   [:div.d-flex.justify-content-between.position-relative.bg-transparent.scale-wrapper
     [:div.scale-gradient]
     (for [label (range 1 6)]
       (with-meta
@@ -46,12 +46,12 @@
         user-participated? (contains? (localstorage/from-localstorage :discussion/feedbacks) (:db/id feedback))]
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
-     [:div.p-4.text-center.panel-white.centered-form.mb-5.mt-2
+     [:div.p-4.text-center.panel-white.centered-form.mb-5.mt-3.mt-xl-2
       [:h1 (gstring/format (labels :feedback.answer/title) (:discussion/title current-discussion))]
       [:p.text-muted (labels :feedback.answer/title-hint)]
       (if (:feedback/visible feedback)
         (if user-participated?
-          [:div.text-center.alert.alert-secondary
+          [:div.text-center.alert.alert-secondary.mb-0
            [:p.h6 (labels :feedback.answer/already-participated)]
            [:> Button
             {:variant "primary"
@@ -79,8 +79,8 @@
               (if @(rf/subscribe [:schnaq.feedback.answer/loading?])
                 [loading/spinner-icon]
                 (labels :feedback.answer.submit/button-text))]]]])
-        [:div.text-center.alert.alert-secondary
-         [:h4 (labels :feedback.answer/feedback-invisible)]
+        [:div.text-center.alert.alert-secondary.mb-0
+         [:p.h6 (labels :feedback.answer/feedback-invisible)]
          [:> Button
           {:variant "primary"
            :href (navigation/href :routes.schnaq/start {:share-hash (:discussion/share-hash current-discussion)})
@@ -136,7 +136,7 @@
         title (gstring/format (labels :feedback.answer/title) (:discussion/title current-discussion))]
     [pages/with-discussion-header
      {:page/heading title}
-     [:div.p-4.panel-white.centered-form.mb-5.mt-2
+     [:div.p-4.panel-white.centered-form.mb-5.mt-3.mt-xl-2
       [:h1.text-center title]
       [:div
        (for [question items]

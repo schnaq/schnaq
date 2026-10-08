@@ -147,13 +147,13 @@
                                     (oget e [:target :elements])]))}
         [:div.mb-3
          [:label.form-label {:for input-id} (labels :schnaq.moderation.edit.link.form/label)]
-         [:input.form-control.m-1.rounded-3
+         [:input.form-control.mt-1.rounded-3
           {:id input-id
            :name "moderation-center-recipient"
            :auto-complete "off"
            :required true
            :placeholder (labels :schnaq.moderation.edit.link.form/placeholder)}]
-         [:small.form-text.text-muted.float-end
+         [:small.form-text.text-muted.d-block.float-md-end
           (labels :schnaq.moderation/addresses-privacy)]]
         [:button.btn.btn-outline-primary
          (labels :schnaq.moderation.edit.link.form/submit-button)]])
@@ -178,7 +178,7 @@
   (let [checked? @(rf/subscribe [:schnaq/state? state])
         id (str "schnaq-state-" (name state))
         desc-id (str id "-desc")]
-    [:div.form-check.form-switch.mb-3
+    [:div.form-check.form-switch.mb-3.position-relative
      [:input.form-check-input
       {:id id
        :type :checkbox
@@ -188,7 +188,7 @@
        :on-change (fn [e] (.preventDefault e)
                     (rf/dispatch [(if checked? :schnaq.moderation/delete-state :schnaq.moderation/add-state)
                                   state]))}]
-     [:label.form-check-label.fw-semibold {:for id} title]
+     [:label.form-check-label.fw-semibold.stretched-link {:for id} title]
      [:div.form-text.mt-0 {:id desc-id} description]]))
 
 ;; -----------------------------------------------------------------------------
@@ -263,9 +263,9 @@
   [:ret :re-frame/component]
   [:<>
    [themes/assign-theme-to-schnaq]
-   [:hr.my-5]
+   [:hr.my-4.my-md-5]
    [discussion-settings]
-   [:hr.my-5]
+   [:hr.my-4.my-md-5]
    [header-image/image-url-input]])
 
 (defn- moderation-tabs

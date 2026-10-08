@@ -33,7 +33,7 @@
   [number? :ret vector?]
   (let [{:user.registered/keys [display-name]} @(rf/subscribe [:user/entity])]
     [:div.d-flex
-     [:div.me-4 [avatar :size size]]
+     [:div.me-3 [avatar :size size]]
      [:h4.my-auto display-name]]))
 
 (defn inline-avatar
@@ -57,40 +57,44 @@
    [tab-builder tab-prefix first-tab second-tab nil nil])
   ([tab-prefix first-tab second-tab third-tab fourth-tab]
    (let [tab-prefix# (str "#" tab-prefix)]
-     [:div.panel-white
+     [:div.panel-white.p-3
       [:nav.nav-justified
        [:div.nav.nav-tabs {:role "tablist"}
-        [:a.nav-item.nav-link.active {:data-bs-toggle "tab"
-                                      :href (str tab-prefix# "-home")
-                                      :role "tab"
-                                      :id (str tab-prefix "-home-tab")
-                                      :aria-controls (str tab-prefix "-home")
-                                      :aria-selected "true"}
+        [:a.nav-item.nav-link.d-flex.align-items-center.justify-content-center.active
+         {:data-bs-toggle "tab"
+          :href (str tab-prefix# "-home")
+          :role "tab"
+          :id (str tab-prefix "-home-tab")
+          :aria-controls (str tab-prefix "-home")
+          :aria-selected "true"}
          (:link first-tab)]
-        [:a.nav-item.nav-link {:data-bs-toggle "tab"
-                               :href (str tab-prefix# "-link")
-                               :role "tab"
-                               :id (str tab-prefix "-link-tab")
-                               :aria-controls (str tab-prefix "-link")
-                               :aria-selected "false"}
+        [:a.nav-item.nav-link.d-flex.align-items-center.justify-content-center
+         {:data-bs-toggle "tab"
+          :href (str tab-prefix# "-link")
+          :role "tab"
+          :id (str tab-prefix "-link-tab")
+          :aria-controls (str tab-prefix "-link")
+          :aria-selected "false"}
          (:link second-tab)]
         (when third-tab
-          [:a.nav-item.nav-link {:data-bs-toggle "tab"
-                                 :href (str tab-prefix# "-link-3")
-                                 :role "tab"
-                                 :id (str tab-prefix "-link-tab-3")
-                                 :aria-controls (str tab-prefix "-link-3")
-                                 :aria-selected "false"}
+          [:a.nav-item.nav-link.d-flex.align-items-center.justify-content-center
+           {:data-bs-toggle "tab"
+            :href (str tab-prefix# "-link-3")
+            :role "tab"
+            :id (str tab-prefix "-link-tab-3")
+            :aria-controls (str tab-prefix "-link-3")
+            :aria-selected "false"}
            (:link third-tab)])
         (when fourth-tab
-          [:a.nav-item.nav-link {:data-bs-toggle "tab"
-                                 :href (str tab-prefix# "-link-4")
-                                 :role "tab"
-                                 :id (str tab-prefix "-link-tab-4")
-                                 :aria-controls (str tab-prefix "-link-4")
-                                 :aria-selected "false"}
+          [:a.nav-item.nav-link.d-flex.align-items-center.justify-content-center
+           {:data-bs-toggle "tab"
+            :href (str tab-prefix# "-link-4")
+            :role "tab"
+            :id (str tab-prefix "-link-tab-4")
+            :aria-controls (str tab-prefix "-link-4")
+            :aria-selected "false"}
            (:link fourth-tab)])]]
-      [:div.tab-content.mt-5
+      [:div.tab-content.mt-4.mt-md-5
        [:div.tab-pane.fade.show.active
         {:id (str tab-prefix "-home")
          :role "tabpanel" :aria-labelledby (str tab-prefix "-home-tab")}

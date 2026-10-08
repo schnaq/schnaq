@@ -27,7 +27,7 @@
 
 (defn- schnaq-statistics []
   (let [starting-conclusion-ids @(rf/subscribe [:schnaq.statements/current-level])]
-    [:div.panel-white
+    [:div.panel-white.px-3
      [:h3.mb-3 (labels :dashboard/top-posts)]
      (for [statement-id starting-conclusion-ids]
        (with-meta [dashboard-statement statement-id]
@@ -55,7 +55,7 @@
 (defn- wordcloud-view
   "Display a word cloud with common words of the discussion."
   []
-  [:section.panel-white.mb-3
+  [:section.panel-white.px-3
    [:h3 (labels :dashboard.wordcloud/title)]
    [:small.text-muted (labels :dashboard.wordcloud/subtitle)]
    [wordcloud @(rf/subscribe [:wordcloud/words])]])

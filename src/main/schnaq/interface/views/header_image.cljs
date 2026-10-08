@@ -28,7 +28,7 @@
         :auto-complete "off"
         :required true
         :placeholder (labels :schnaq.header-image.url/placeholder)}]
-      [:small.form-text.text-muted.float-end
+      [:small.form-text.text-muted.d-block.float-md-end
        (labels :schnaq.header-image.url/note)]]
      [:button.btn.btn-outline-primary
       (labels :schnaq.header-image.url/button)]]))
