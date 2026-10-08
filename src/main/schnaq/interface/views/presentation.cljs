@@ -9,7 +9,8 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.schnaq.poll :as poll]))
+            [schnaq.interface.views.schnaq.poll :as poll]
+            [schnaq.links :as links]))
 
 (defn- footer
   "Add footer links."
@@ -20,7 +21,7 @@
     {:href "https://schnaq.com/legal-note"}
     (labels :footer.buttons/legal-note)]
    [:a.btn.btn-sm.btn-link.text-dark
-    {:href "https://schnaq.app/privacy/"}
+    {:href (links/privacy-policy @(rf/subscribe [:current-locale]))}
     (labels :router/privacy)]])
 
 (defn- share-options

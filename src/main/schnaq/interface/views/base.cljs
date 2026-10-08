@@ -7,7 +7,8 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.feedback.collect :refer [feedback-modal]]))
+            [schnaq.interface.views.feedback.collect :refer [feedback-modal]]
+            [schnaq.links :as links]))
 
 (defn header
   "Build a header with a curly bottom for a page. Heading, subheading and more will be included in the header."
@@ -54,7 +55,7 @@
      [:li.list-inline-item
       [feedback-modal
        (fn [props] [:button.btn.btn-link props (labels :feedbacks/button)])]]
-     [footer-link (str "https://schnaq.app/" lang "/privacy/") :router/privacy]
+     [footer-link (links/privacy-policy locale) :router/privacy]
      [footer-link (str "https://schnaq.com/" lang "/legal-note") :footer.buttons/legal-note]]))
 
 (defn- developed-in-nrw []
