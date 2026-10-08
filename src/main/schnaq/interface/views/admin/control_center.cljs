@@ -81,7 +81,10 @@
        :placeholder (labels placeholder-text)
        :required true}]
      [:label {:for input-id} (labels placeholder-text)]]
-    [:button.input-group-text (labels button-text)]]])
+    ;; Same width for every row, so the stacked forms line up; deletions look dangerous.
+    [:button.btn {:class (if confirmation-text "btn-outline-danger" "btn-outline-primary")
+                  :style {:min-width "min(14rem, 62%)"}}
+     (labels button-text)]]])
 
 (defn- schnaq-deletion-form
   "Delete any schnaq."

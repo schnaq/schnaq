@@ -1,12 +1,21 @@
-@use 'variables' as vars;
-
 html {
   scroll-behavior: smooth;
 }
 
 .base-wrapper {
-  background: vars.$light-background;
   min-height: 85vh;
+}
+
+// Long words and URLs wrap anywhere, so they can't push flex rows past a phone
+// screen. break-word is the fallback for Safari < 15.4.
+#root {
+  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+// Target of the skip link, focused programmatically.
+#main-content:focus {
+  outline: 0;
 }
 
 .min-height-85 {
@@ -31,14 +40,14 @@ html {
 }
 
 // Space Grotesk runs wide, the CI tightens it slightly.
-h1,
-h2,
-h3,
+// stylelint-disable-next-line selector-no-qualifying-type
+:is(h1, h2, h3):not(.h4, .h5, .h6),
 .h1,
 .h2,
 .h3,
 [class*='display-'] {
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 @media (min-width: 2560px) {
@@ -67,7 +76,7 @@ h3,
 
 .container-85 {
   @include media-breakpoint-up(xl) {
-    max-width: 85% !important;
+    max-width: 85%;
   }
 }
 
@@ -88,7 +97,7 @@ h3,
 
 // Create a centered container with a max width.
 .centered-form {
-  max-width: 800px;
+  max-width: min(800px, calc(100% - 2rem));
   margin-left: auto;
   margin-right: auto;
 }

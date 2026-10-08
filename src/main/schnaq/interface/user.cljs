@@ -166,9 +166,11 @@
                       #:notification{:title (labels :user.button/set-name)
                                      :body (labels :user.button/success-body)
                                      :context :success}]]]]
-     ;; Show notification if user is not default anonymous display name
+     ;; Only confirm a rename the user typed, not the name generated on a first visit
      (cond-> {:db (assoc-in db [:controls :username-input :show?] false)}
-       (not= default-anonymous-display-name username) (assoc :fx notification)))))
+       (and (get-in db [:controls :username-input :show?])
+            (not= default-anonymous-display-name username))
+       (assoc :fx notification)))))
 
 (rf/reg-event-db
  :user/show-display-name-input

@@ -1,7 +1,7 @@
 // stylelint-disable max-nesting-depth
 // stylelint-disable selector-max-compound-selectors
 .lexical-editor {
-  @extend .border;
+  border: var(--bs-border-width) solid var(--border);
 
   .ltr {
     text-align: left;
@@ -12,46 +12,44 @@
   }
 
   .focused {
-    outline: 2px solid var(--theming-secondary);
+    outline: 2px solid var(--secondary);
     user-select: none;
   }
 
   .editor-container {
-    color: #000;
+    color: var(--foreground);
     font-weight: 400;
-    line-height: 20px;
+    line-height: 1.5;
     outline-color: transparent;
     position: relative;
     text-align: left;
     transition: outline-color 0.15s ease-in-out;
-    
+
     &:focus-within {
-      outline: var(--theming-primary) solid 1px;
+      outline: var(--ring) solid 1px;
     }
   }
 
   .editor-inner {
-    background: #fff;
+    background: var(--card);
     position: relative;
-   
   }
 
+  // 16px text keeps iOS Safari from zooming in when the editor gets focus.
   .editor-input {
-    caret-color: rgb(5, 5, 5);
-    caret-color: #444;
-    font-size: 15px;
+    font-size: 1rem;
     min-height: 50px;
     outline: 0;
     padding: 15px 10px;
     position: relative;
     resize: none;
-    tab-size: 1;  
+    tab-size: 1;
   }
 
   .editor-placeholder {
-    color: #999;
+    color: var(--muted-foreground);
     display: inline-block;
-    font-size: 15px;
+    font-size: 1rem;
     left: 10px;
     overflow: hidden;
     pointer-events: none;
@@ -88,14 +86,14 @@
   }
 
   .editor-text-code {
-    background-color: rgb(240, 242, 245);
+    background-color: var(--muted);
     font-family: Menlo, Consolas, Monaco, monospace;
     font-size: 94%;
     padding: 1px 0.25rem;
   }
 
   .editor-link {
-    color: var(--theming-primary);
+    color: var(--link);
     text-decoration: none;
   }
 
@@ -116,7 +114,7 @@
   }
 
   .editor-code {
-    background-color: rgb(240, 242, 245);
+    background-color: var(--muted);
     display: block;
     font-family: Menlo, Consolas, Monaco, monospace;
     font-size: 13px;
@@ -132,9 +130,9 @@
     tab-size: 2;
 
     &::before {
-      background-color: #eee;
-      border-right: 1px solid #ccc;
-      color: #777;
+      background-color: var(--border);
+      border-right: 1px solid var(--border);
+      color: var(--muted-foreground);
       content: attr(data-gutter);
       left: 0;
       min-width: 25px;
@@ -146,7 +144,7 @@
     }
 
     &::after {
-      color: rgba(0, 0, 0, 0.5);
+      color: var(--muted-foreground);
       content: attr(data-highlight-language);
       font-size: 10px;
       padding: 3px;
@@ -264,12 +262,19 @@
   }
 
   .toolbar {
-    background: #fff;
+    background: var(--card);
+    contain: inline-size; // nowrap items must not widen the page via min-content
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-bottom: 1px;
+    overflow-x: auto;
     padding: 4px;
+    scrollbar-width: none; // keep the toolbar on one line, scroll if too narrow
     vertical-align: middle;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .toolbar-item {
       background: none;
@@ -277,8 +282,16 @@
       border-radius: 10px;
       cursor: pointer;
       display: flex;
-      padding: 8px;
+      flex-shrink: 0;
+      padding: 6px;
       vertical-align: middle;
+
+      @include media-breakpoint-down(md) {
+        align-items: center;
+        justify-content: center;
+        min-height: 2.75rem;
+        min-width: 2.75rem;
+      }
 
       &:disabled {
         cursor: not-allowed;
@@ -287,205 +300,58 @@
       &.spaced {
         margin-right: 2px;
       }
-
-      .format {
-        background-size: contain;
-        display: inline-block;
-        display: flex;
-        height: 18px;
-        margin-top: 2px;
-        opacity: 0.6;
-        vertical-align: -0.25em;
-        width: 18px;
-      }
-
-      &:disabled .format {
-        opacity: 0.2;
-      }
-
-      &.active {
-        background-color: rgba(223, 232, 250, 0.3);
-
-        i {
-          opacity: 1;
-        }
-      }
     }
 
     .toolbar-item:hover:not([disabled]) {
-      background-color: #eee;
+      background-color: var(--muted);
     }
 
     .divider {
-      background-color: #eee;
-      margin: 0 4px;
+      background-color: var(--border);
+      flex-shrink: 0;
+      margin: 4px;
       width: 1px;
     }
 
-    .toolbar-item {
-      .text {
-        color: #777;
-        display: flex;
-        font-size: 14px;
-        height: 20px;
-        line-height: 20px;
-        overflow: hidden;
-        text-align: left;
-        text-overflow: ellipsis;
-        vertical-align: middle;
-        width: 200px;
-        width: 70px;
-      }
-
-      .icon {
-        background-size: contain;
-        display: flex;
-        height: 20px;
-        line-height: 16px;
-        margin-right: 8px;
-        user-select: none;
-        width: 20px;
-      }
-    }
-  }
-
-  .dropdown {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-    display: block;
-    min-height: 40px;
-    min-width: 100px;
-    position: absolute;
-    z-index: 5;
-
-    .item {
-      align-content: center;
-      background-color: #fff;
-      border: 0;
-      border-radius: 8px;
-      color: #050505;
-      cursor: pointer;
-      display: flex;
-      flex-direction: row;
-      flex-shrink: 0;
-      font-size: 15px;
-      justify-content: space-between;
-      line-height: 16px;
-      margin: 0 8px;
-      min-width: 268px;
-      padding: 8px;
-
-      .active {
-        background-size: contain;
-        display: flex;
-        height: 20px;
-        width: 20px;
-      }
-
-      &:first-child {
-        margin-top: 8px;
-      }
-
-      &:last-child {
-        margin-bottom: 8px;
-      }
-
-      &:hover {
-        background-color: #eee;
-      }
-
-      .text {
-        display: flex;
-        flex-grow: 1;
-        line-height: 20px;
-        width: 200px;
-      }
-
-      .icon {
-        background-size: contain;
-        display: flex;
-        height: 20px;
-        line-height: 16px;
-        margin-right: 12px;
-        user-select: none;
-        width: 20px;
-      }
-    }
-  }
-
-  .link-editor {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-    left: -10000px;
-    margin-top: -6px;
-    max-width: 300px;
-    opacity: 0;
-    position: absolute;
-    top: -10000px;
-    transition: opacity 0.5s;
-    width: 100%;
-    z-index: 100;
-
-    .link-input {
-      background-color: #eee;
-      border: 0;
-      border-radius: 15px;
-      box-sizing: border-box;
-      color: rgb(5, 5, 5);
-      display: block;
-      font-family: inherit;
-      font-size: 15px;
-      margin: 8px 12px;
-      outline: 0;
-      padding: 8px 12px;
-      position: relative;
-      width: calc(100% - 24px);
-    }
-
-    .link-input a {
-      color: var(--theming-primary);
-      display: block;
-      margin-right: 30px;
-      overflow: hidden;
-      text-decoration: none;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-
-    .button {
-      border-radius: 8px;
-      cursor: pointer;
-      display: inline-block;
-      height: 20px;
-      margin: 0 2px;
-      padding: 6px;
-      width: 20px;
-
-      &.hovered {
-        background-color: #eee;
-        display: inline-block;
-        height: 20px;
-        width: 20px;
-      }
+    // After the hover rule, so a pressed toggle stays marked under the pointer.
+    .toolbar-item.active,
+    .toolbar-item.active:hover {
+      background-color: color-mix(in srgb, var(--primary) 18%, transparent);
+      color: var(--primary-strong);
     }
   }
 }
 
+// Reply editor in statement cards: compact on desktop, 44px high on phones like the attitude toggle below it.
 .lexical-editor-sm {
   .editor-input {
-    min-height: 5px;
-    padding: 5px;
+    min-height: 0;
+    padding: 0.25rem 0.5rem;
   }
 
   .editor-placeholder {
-    top: 5px;
+    left: 0.5rem;
+    top: 0.25rem;
   }
+
+  @include media-breakpoint-down(md) {
+    .editor-input {
+      min-height: 2.75rem;
+      padding: 0.625rem 0.5rem;
+    }
+
+    .editor-placeholder {
+      top: 0.625rem;
+    }
+  }
+}
+
+// Bootstrap sizes only form controls inside an input group, so the editor would
+// take the whole row and push the send button onto its own line.
+.input-group > .lexical-editor {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 1%;
 }
 
 // stylelint-enable max-nesting-depth

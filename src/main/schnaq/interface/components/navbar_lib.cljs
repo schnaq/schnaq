@@ -10,7 +10,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.analytics.tracking :as analytics]
             [schnaq.interface.components.animal-avatars :as animal-avatars]
-            [schnaq.interface.components.icons :refer [icon stacked-icon]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.file-download :as file-download]
@@ -21,13 +21,16 @@
 (def ^:private NavDropdownDivider (oget NavDropdown :Divider))
 (def ^:private NavDropdownItem (oget NavDropdown :Item))
 
-(defn LanguageDropdown [& {:keys [props vertical?]}]
+(defn LanguageDropdown
+  "Language switch. Mobile and desktop navbars mount one each, so the desktop
+  one passes its own `:id` in `props`."
+  [& {:keys [props hide-icon?]}]
   (let [current-language @(rf/subscribe [:current-language])]
     [tooltip/text
      (labels :nav.buttons/language-toggle)
      [:> NavDropdown (merge {:id "language-dropdown"
                              :align :end
-                             :title (r/as-element [:<> [stacked-icon :vertical? vertical? :icon-key :language] current-language])}
+                             :title (r/as-element [:<> (when-not hide-icon? [icon :language "fa-fw me-2"]) current-language])}
                             props)
       [:> NavDropdownItem {:href (navigation/switch-language-href :de)
                            :lang "de-DE" :hrefLang "de-DE"}
@@ -57,7 +60,7 @@
     [:div.mb-3
      [:label.form-label {:for slider-id}
       (labels :graph.settings.gravity/label)]
-     [:input.form-control-range.graph-settings-gravity.d-block
+     [:input.form-range.graph-settings-gravity
       {:id slider-id
        :on-input set-gravity! ;; For browser compatibility, set both events
        :on-change set-gravity!
@@ -152,12 +155,12 @@
 
 (defn admin-dropdown
   "Show Admin pages when user is authenticated and has admin role."
-  [& {:keys [vertical? props]}]
+  [& {:keys [props]}]
   (let [admin? @(rf/subscribe [:user/administrator?])
         analytics-admin? @(rf/subscribe [:user/analytics-admin?])]
     ;; Analytics-Admin also is true when user is super-admin
     (when analytics-admin?
-      [:> NavDropdown (merge {:title (r/as-element [:span.text-secondary [stacked-icon :vertical? vertical? :icon-key :ghost] "Admin"])
+      [:> NavDropdown (merge {:title (r/as-element [:span [icon :ghost "fa-fw me-2"] "Admin"])
                               :align :end}
                              props)
        [:> NavDropdownItem {:href (navigation/href :routes/analytics)}
@@ -173,35 +176,29 @@
              (labels :routes.playground/editor)])])])))
 
 (defn- profile-picture-in-nav
-  "Show profile picture-element in the navbar."
-  [& {:keys [props vertical?]}]
+  "Show the avatar and name of the user in one row."
+  []
   (let [username @(rf/subscribe [:user/display-name])
         authenticated? @(rf/subscribe [:user/authenticated?])
         profile-picture? @(rf/subscribe [:user/profile-picture])
-        icon-size 25]
-    [:span (merge {:className (when-not vertical? "d-inline-flex align-items-center gap-2")} props)
+        icon-size 30]
+    [:span.d-inline-flex.align-items-center.gap-2
      (if (and authenticated? profile-picture?)
-       [common/avatar
-        :props (when vertical? {:className "d-block mx-auto"})
-        :size icon-size
-        :inline? (not vertical?)]
-       [:span {:className (if vertical? "d-flex justify-content-center" "d-flex")}
-        [animal-avatars/generate-animal-avatar
-         :name username
-         :size icon-size]])
-     [:span.text-nowrap
-      [icon :star "me-1"]
-      (toolbelt/truncate-to-n-chars username 15)]]))
+       [common/avatar :size icon-size]
+       [animal-avatars/generate-animal-avatar
+        :name username
+        :size icon-size])
+     [:span.text-nowrap (toolbelt/truncate-to-n-chars username 15)]]))
 
 (defn user-navlink-dropdown
-  [& {:keys [props vertical?]}]
+  [& {:keys [props]}]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
-    [:> NavDropdown (merge {:title (r/as-element [profile-picture-in-nav :vertical? vertical?])
+    [:> NavDropdown (merge {:title (r/as-element [profile-picture-in-nav])
                             :align :end}
                            props)
      (if authenticated?
        [:<>
-        [:> NavDropdownItem {:disabled true} [common/avatar :size 32]]
+        [:> NavDropdownItem {:disabled true :aria-hidden true} [common/avatar :size 32]]
         [:> NavDropdownDivider]
         [:> NavDropdownItem {:href (navigation/href :routes.user.manage/account)}
          (labels :user.profile/settings)]
@@ -211,7 +208,7 @@
         [namechange-menu-point]
         (if session-storage-enabled?
           [:> NavDropdownItem {:on-click #(rf/dispatch [:keycloak/login])}
-           (labels :user/register)]
+           (labels :user/login-register)]
           [login-not-possible])])]))
 
 ;; -----------------------------------------------------------------------------

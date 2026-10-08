@@ -26,12 +26,12 @@
   (let [authenticated? (:user.registered/keycloak-id user)
         display-name (user-utils/display-name user)
         name-class (if authenticated? "text-typography" "text-muted")]
-    [:div.d-flex.flex-row.text-muted
+    [:div.d-flex.flex-row.align-items-center.gap-2.text-muted
      [:div.d-md-none
       [common/avatar :size (* avatar-size 0.75) :user user]]
      [:div.d-none.d-md-block
       [common/avatar :size avatar-size :user user]]
-     [:small.mx-md-2.my-auto {:class name-class} (tools/truncate-to-n-chars display-name 20)]]))
+     [:small {:class name-class} (tools/truncate-to-n-chars display-name 20)]]))
 
 (defn current-user-info
   "Returns the current users profile picture and name as a component."

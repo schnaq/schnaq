@@ -4,12 +4,14 @@
 
 // Global
 @import "bootstrap-custom";
+@import "tokens";
 @import "global";
 @import "third-party-imports";
 
 // Components
 @import "activation";
 @import "after-create";
+@import "attitude";
 @import "avatar";
 @import "badges";
 @import "button";
@@ -23,7 +25,6 @@
 @import "footer";
 @import "history";
 @import "icons";
-@import "klaro";
 @import "labels";
 @import "lexical";
 @import "motion";
@@ -37,5 +38,4 @@
 @import "sprite_animation";
 @import "startpage";
 @import "text-input";
-@import "theming";
 @import "up-down-vote";

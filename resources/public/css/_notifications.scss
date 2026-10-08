@@ -33,7 +33,7 @@ $contexts: primary $primary,
   .toast-#{$class} {
     .toast-header {
       background-color: #{$color};
-      color: $white;
+      color: color-contrast($color);
     }
   }
 }

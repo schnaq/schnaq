@@ -62,7 +62,7 @@
     :page/vertical-header? true
     :page/classes "base-wrapper bg-typography"
     :page/more-for-heading
-    [:section.container {:style {:min-height "50vh"}}
+    [:section {:style {:min-height "50vh"}}
      [:div.row.pt-5.mt-md-5
       [:div.col-md-6.col-lg-4
        [next-step :rocket
@@ -79,13 +79,12 @@
         (labels :welcome.pro.features.subscription/lead)
         (labels :welcome.pro.features.subscription/button)
         :routes.user.manage/account]]]
-     [:div.row.pt-5.mt-md-5
-      [:h3 (labels :welcome.pro/free-features)]
-      [:div.row.pt-3
-       [:div.col-md-6.col-lg-4 [feature-profile]]
-       [:div.col-md-6.col-lg-4 [feature-notifications]]]]
-     [:img.pt-5 {:src (img-path :schnaqqifant/rocket)
-                 :alt (labels :schnaqqi.rocket/alt-text)}]]}])
+     [:h3.pt-5.mt-md-5 (labels :welcome.pro/free-features)]
+     [:div.row.pt-3
+      [:div.col-md-6.col-lg-4 [feature-profile]]
+      [:div.col-md-6.col-lg-4 [feature-notifications]]]
+     [:img.img-fluid.pt-5 {:src (img-path :schnaqqifant/rocket)
+                           :alt (labels :schnaqqi.rocket/alt-text)}]]}])
 
 ;; -----------------------------------------------------------------------------
 

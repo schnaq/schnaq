@@ -12,7 +12,7 @@
             [schnaq.websockets.handler :refer [handle-message]]))
 
 (defmethod handle-message :discussion.starting/update [{:keys [?data]}]
-  (when ?data
+  (when (:share-hash ?data)
     (let [request {:parameters {:query ?data}
                    :identity (when-let [jwt (get ?data :jwt)]
                                (jwt/validate-signed-jwt jwt kc/keycloak-public-key))}
@@ -39,18 +39,18 @@
                            [:discussion/activation-focus :db/id])}))))
 
 (defmethod handle-message :discussion.activation/update [{:keys [?data]}]
-  (when ?data
+  (when (:share-hash ?data)
     (shared-tools/remove-nil-values-from-map
      (activation-api/get-activation {:parameters {:query ?data}}))))
 
 (defmethod handle-message :discussion.graph/update [{:keys [?data]}]
-  (when ?data
+  (when (:share-hash ?data)
     (let [parameters {:parameters {:query ?data}}
           {{:keys [graph]} :body} (discussion-api/graph-for-discussion parameters)]
       {:graph graph})))
 
 (defmethod handle-message :schnaq.poll/update [{:keys [?data]}]
-  (when ?data
+  (when (:share-hash ?data)
     (let [parameters {:parameters {:query ?data}}
           {{:keys [polls]} :body} (poll-api/polls-for-discussion parameters)]
       {:polls polls})))

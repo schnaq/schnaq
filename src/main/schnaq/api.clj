@@ -55,7 +55,7 @@
   "Print some debug information to the console when the system is loaded."
   []
   (log/info "Welcome to schnaq's Backend 🧙")
-  (log/info (format "Build Hash: %s" config/build-hash))
+  (log/info (format "Version: %s, Build Hash: %s" config/app-version config/build-hash))
   (log/info (format "Environment: %s" shared-config/environment))
   (log/info (format "Database Name: %s" config/db-name))
   (log/info (format "Database URI (truncated): %s..." (subs config/datomic-uri 0 (min 30 (count config/datomic-uri)))))

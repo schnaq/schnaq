@@ -23,14 +23,15 @@
                        (rf/dispatch [:editor/content editor-id])
                        (dispatch-fn e)))}
      [:div.mb-3
-      [:label.form-label {:for html-id} (labels label)]
+      [:label.form-label {:id (str html-id "-label")} (labels label)]
       [:input {:type :hidden
                :name html-id
                :value (or editor-content "")}]
       [lexical/editor {:id editor-id
                        :initial-content content
                        :file-storage :schnaq/by-share-hash
-                       :toolbar? true}]]
+                       :toolbar? true
+                       :aria-labelledby (str html-id "-label")}]]
      [:div.d-flex.justify-content-between.align-items-center.flex-wrap
       [:div.d-flex.mb-3
        (when pro-con-enabled?

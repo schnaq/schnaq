@@ -1,35 +1,13 @@
-// White labels on the brand colors, as on schnaq.com, even where Bootstrap's
-// contrast check would pick dark ones. Disabled buttons keep Bootstrap's label.
-@each $color in (primary, secondary) {
-  $value: map-get($theme-colors, $color);
-
-  .btn-#{$color} {
-    @include button-variant($value, $value, $color: $white, $hover-color: $white, $active-color: $white);
-  }
-
-  .btn-outline-#{$color} {
-    @include button-outline-variant($value, $color-hover: $white, $active-color: $white);
-  }
-}
-
 .font-150 {
   font-size: 150%;
 }
 
 .btn-transparent {
+  // Without a variant .btn has no focus ring colour of its own.
+  --bs-btn-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
   border: 0;
 
   &:hover {
     background: transparent;
-  }
-}
-
-.btn-no-outline {
-  border: 0;
-
-  &:active,
-  &:focus {
-    box-shadow: none;
-    outline: none;
   }
 }
