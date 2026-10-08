@@ -87,7 +87,7 @@ h3,
 
 // Create a centered container with a max width.
 .centered-form {
-  max-width: 800px;
+  max-width: min(800px, calc(100% - 2rem));
   margin-left: auto;
   margin-right: auto;
 }

@@ -27,14 +27,14 @@
 
 (defn- percentage-bar
   "An springy-animated percentage bar for graphs"
-  [votes percentage color-index]
+  [votes width label-key color-index]
   [motion/spring-transition
    [tooltip/text
-    (str votes " " (labels :schnaq.poll.ranking/points))
+    (str votes " " (labels label-key))
     [:div.percentage-bar.rounded-1
      {:style {:background-color (colors/get-graph-color color-index)
               :height "35px"}}]]
-   {:width percentage}])
+   {:width width}])
 
 (defn- results-hidden-message
   "Show a message to the user, that the she voted, but is not allowed to see the
@@ -61,33 +61,30 @@
      (for [index (range (count options))]
        (let [{:keys [option/votes db/id option/value]} (get options index)
              total-votes (apply + (map :option/votes options))
-             percentage (if (zero? total-votes)
-                          "0%"
-                          (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))
+             ratio (if (zero? total-votes) 0 (/ votes total-votes))
              single-choice? (= :poll.type/single-choice type)
              votes-set (if single-choice? #{cast-votes} (set cast-votes))
              option-voted? (votes-set id)]
-         [:<>
+         [(if voted? :div.col-12.d-flex.gap-2.my-1 :label.col-12.d-flex.gap-2.my-1)
           {:key (str "option-" id "-" value)}
           (when-not voted?
-            [:div.col-1
-             [:input.form-check-input.mx-auto
-              (cond->
-               {:type (if single-choice? "radio" "checkbox")
-                :name :option-choice
-                :value id
-                :class (if show-results? "mt-3" "mt-2")}
-                (and (zero? index) single-choice?) (assoc :defaultChecked true))]])
-          [:div.my-1
-           {:class (if cast-votes "col-12" "col-11")}
-           (when show-results? [percentage-bar votes percentage index])
-           [:p.small.ms-1
+            [:input.form-check-input.flex-shrink-0
+             (cond->
+              {:type (if single-choice? "radio" "checkbox")
+               :name :option-choice
+               :value id
+               :class (if show-results? "mt-2" "mt-1")}
+               single-choice? (assoc :required true))])
+          [:div.flex-grow-1
+           (when show-results?
+             [percentage-bar votes (str (* 100 ratio) "%") :schnaq.poll/votes index])
+           [:p.small.ms-1.mb-2
             {:class (when option-voted? "text-decoration-underline text-secondary")}
             value
             (when show-results?
               [:span.float-end
                [:span.me-3 votes " " (labels :schnaq.poll/votes)]
-               percentage])]]]))
+               (tools/format-percent ratio)])]]]))
      (when (and voted? (not show-results?))
        [results-hidden-message])]))
 
@@ -96,9 +93,7 @@
   [sorted-options old-indices index]
   (let [{:keys [option/votes db/id option/value]} (nth sorted-options index)
         total-votes (apply + (map :option/votes sorted-options))
-        percentage (if (zero? total-votes)
-                     "0%"
-                     (str (.toFixed (* 100 (/ votes total-votes)) 2) "%"))
+        ratio (if (zero? total-votes) 0 (/ votes total-votes))
         presentation-mode? (= :routes.present/entity @(rf/subscribe [:navigation/current-route-name]))]
     [motion/animated-list-item
      [:div.row
@@ -108,7 +103,7 @@
         (str (inc index)) "."]]
       [:div
        {:class (if presentation-mode? "col-11" "col-10")}
-       [percentage-bar votes percentage (get old-indices id)]
+       [percentage-bar votes (str (* 100 ratio) "%") :schnaq.poll.ranking/points (get old-indices id)]
        [:p.small.ms-1.mb-1 value]]]]))
 
 (defn ranking-results
@@ -212,8 +207,8 @@
          {:key (str poll-id voted-rankings-index)}))
      (when-not (empty? selected-options)
        [:div.d-flex.justify-content-end
-        [:a.btn.btn-transparent
-         {:role "button"
+        [:button.btn.btn-transparent
+         {:type "button"
           :on-click #(rf/dispatch [:schnaq.ranking/delete-vote poll-id (apply max (keys selected-options))])}
          [icon :backspace] " " (labels :schnaq.rankings/delete-last-choice)]])
      [:button.btn.btn-dark.mt-3.mx-auto.d-block
@@ -234,7 +229,7 @@
      [results-graph poll cast-votes]
      (when-not voted?
        [:div.text-center
-        [:button.btn.btn-primary.btn-sm
+        [:button.btn.btn-primary.px-4
          {:type :submit
           :on-click #(tracking/track-event "Active User" "Action" "Vote on Poll")}
          (labels :schnaq.poll/vote!)]])
@@ -268,7 +263,7 @@
   [:section.activation-card
    [:div.mx-4.my-2
     [:div.d-flex
-     [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+     [:h2.h6.pb-2.text-center.mx-auto (:poll/title poll)]
      [dropdown-menu poll]]
     [input-or-results poll]]])
 
@@ -279,7 +274,7 @@
   [:section.statement-card
    [:div.mx-4.my-2
     [:div.d-flex
-     [:h6.pb-2.text-center.mx-auto (:poll/title poll)]
+     [:h2.h6.pb-2.text-center.mx-auto (:poll/title poll)]
      [dropdown-menu poll]]
     [poll-content poll]]])
 
@@ -363,7 +358,7 @@
          new-option-count (or (:option-count poll-edit-data) 0)]
      [:section.statement-card
       [:div.mx-4.my-2
-       [:h6.pb-2.text-center.mx-auto (labels :schnaq.poll.edit/heading)]
+       [:h2.h6.pb-2.text-center.mx-auto (labels :schnaq.poll.edit/heading)]
        [:form.pt-2
         {:on-key-down (fn [event] (when (= "Enter" (oget event :key))
                                     (.preventDefault event)

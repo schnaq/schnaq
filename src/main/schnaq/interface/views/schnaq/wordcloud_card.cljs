@@ -69,7 +69,7 @@
     [motion/fade-in-and-out
      [:section.activation-card
       [:div.d-flex.mt-3
-       [:h4.mx-auto.mt-3
+       [:h2.h4.mx-auto.mt-3
         (labels :schnaq.wordcloud/title)]
        [dropdown-menu/moderator
         {:id "wordcloud-dropdown-id"}
@@ -106,7 +106,7 @@
         input-id (str "wordcloud-" id "-input")]
     [:div.text-center.pt-4.activation-card
      [:div.d-flex
-      [:h4.text-center.mx-auto title]
+      [:h2.h4.text-center.mx-auto title]
       [dropdown-menu id]]
      [wordcloud/wordcloud formatted-words]
      (when-not @(rf/subscribe [:schnaq.state/read-only?])

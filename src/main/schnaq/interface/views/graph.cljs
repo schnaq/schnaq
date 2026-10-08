@@ -142,7 +142,11 @@
                                             gravity)))
             ;; Disable gravitation / physics after graph is stabilized
             (.on graph-object "stabilizationIterationsDone"
-                 #(.setOptions graph-object (clj->js {:physics false}))))
+                 (fn []
+                   (.setOptions graph-object (clj->js {:physics false}))
+                   ;; Keep labels readable on phones, users pan instead.
+                   (when (< (.-innerWidth js/window) 768)
+                     (.fit graph-object #js {:minZoomLevel 0.8})))))
           [:div {:id config/graph-id
                  :ref #(reset! dom-node %)}]))
       :component-did-mount
@@ -153,7 +157,7 @@
                         :edges edges-vis}
               graph (Network. @dom-node data (clj->js options))]
           (rf/dispatch [:graph/store-object graph])
-          (rf/dispatch [:tour/start :mindmap])
+          (rf/dispatch [:tour/start-if-not-visited :mindmap])
           (.on graph "doubleClick"
                (fn [properties]
                  (when-let [clicked-node-id (first (get (js->clj properties) "nodes"))] ;; If `clicked-node-id` is nil, the user clicked in an empty space instead of a node

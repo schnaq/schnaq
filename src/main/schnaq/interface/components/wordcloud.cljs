@@ -70,7 +70,7 @@
    :fontStyle "normal"
    :fontWeight "normal"
    :padding 1
-   :rotations 3
+   :rotations 2
    :rotationAngles [0 90]
    :scale "sqrt"
    :spiral "archimedean"
@@ -83,25 +83,27 @@
   [svg]
   (when svg
     [:> Button {:variant :link
-                :class "text-muted p-0 pe-2 align-self-end"
+                :class "text-muted p-2"
+                :aria-label (labels :schnaq.wordcloud/download)
                 :on-click #(file-download/download-svg-node svg "wordcloud.svg")}
      [tooltip/text
       (labels :schnaq.wordcloud/download)
-      [:span [icon :file-download "me-1"]]]]))
+      [:span [icon :file-download]]]]))
 
 (defn- wordcloud-csv-button
   "Download wordcloud words as CSV."
   [words]
   (when (seq words)
     [:> Button {:variant :link
-                :class "text-muted p-0 pe-2 align-self-end"
+                :class "text-muted p-2"
+                :aria-label (labels :schnaq.wordcloud/download-csv)
                 :on-click #(file-download/download-csv
                             (into [["word" "count"]]
                                   (map (juxt :text :value) words))
                             "wordcloud.csv")}
      [tooltip/text
       (labels :schnaq.wordcloud/download-csv)
-      [:span [icon :file-export "me-1"]]]]))
+      [:span [icon :file-export]]]]))
 
 (defn wordcloud
   "Create a wordcloud based on the data that is passed in."

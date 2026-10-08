@@ -1,10 +1,8 @@
 (ns schnaq.interface.views.discussion.moderation-center
-  (:require ["react-bootstrap/Form" :as Form]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reagent.core :as r]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
             [schnaq.interface.navigation :as navigation]
@@ -16,15 +14,13 @@
             [schnaq.interface.views.user.themes :as themes]
             [schnaq.links :as links]))
 
-(def ^:private FormCheck (oget Form :Check))
-
 (defn- img-text
   "Create one icon in a grid"
   [path-to-img alt-key heading]
   [:<>
    [:img {:src path-to-img
           :alt (labels alt-key)}]
-   [:h5 heading]])
+   [:h3.h5 heading]])
 
 (rf/reg-event-fx
  :discussion.moderation/promote-user-to-moderator
@@ -131,7 +127,7 @@
         author? (= (:id current-user) (-> current-schnaq :discussion/author :db/id))
         user-mail (:email current-user)]
     [:section
-     [:h5 (labels :schnaq.admin.edit.link/primer)]
+     [:h3.h5 (labels :schnaq.admin.edit.link/primer)]
      [:section.row.mb-3
       ;; elephant admin
       [:div.col-md-6
@@ -162,7 +158,7 @@
         [:button.btn.btn-outline-primary
          (labels :schnaq.moderation.edit.link.form/submit-button)]])
      [:hr]
-     [:h5 (labels :schnaq.moderation.overview/moderators-subheading)]
+     [:h3.h5 (labels :schnaq.moderation.overview/moderators-subheading)]
      [:div.text-start
       (for [moderator-mail @(rf/subscribe [:discussion.moderation/moderators])]
         [:div.pb-2 {:key moderator-mail}
@@ -179,15 +175,21 @@
   "Show a toggle to switch between the schnaq states."
   [state title description]
   [:discussion/valid-states string? string? => :re-frame/component]
-  (let [checked? @(rf/subscribe [:schnaq/state? state])]
-    [:> Form
-     [:> FormCheck
-      {:type :switch
-       :label (r/as-element [:<> [:span.fw-semibold title] [:p description]])
+  (let [checked? @(rf/subscribe [:schnaq/state? state])
+        id (str "schnaq-state-" (name state))
+        desc-id (str id "-desc")]
+    [:div.form-check.form-switch.mb-3
+     [:input.form-check-input
+      {:id id
+       :type :checkbox
+       :role "switch"
        :checked checked?
-       :onChange (fn [e] (.preventDefault e)
-                   (rf/dispatch [(if checked? :schnaq.moderation/delete-state :schnaq.moderation/add-state)
-                                 state]))}]]))
+       :aria-describedby desc-id
+       :on-change (fn [e] (.preventDefault e)
+                    (rf/dispatch [(if checked? :schnaq.moderation/delete-state :schnaq.moderation/add-state)
+                                  state]))}]
+     [:label.form-check-label.fw-semibold {:for id} title]
+     [:div.form-text.mt-0 {:id desc-id} description]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -241,7 +243,7 @@
   "List all possible discussion settings."
   []
   [:<>
-   [:h4.pb-2 (labels :schnaq.moderation.configurations/heading)]
+   [:h3.h4.pb-2 (labels :schnaq.moderation.configurations/heading)]
    [toggle-schnaq-state :discussion.state.qa/mark-as-moderators-only
     (labels :schnaq.moderation.configurations.mods-mark-only/label)
     (labels :schnaq.moderation.configurations.mods-mark-only/explanation)]
@@ -296,7 +298,7 @@
        ;; stop image and hint to copy the link
        [:div.single-image [:img {:src (img-path :schnaqqifant/stop)
                                  :alt (labels :schnaqqifant/stop-alt-text)}]]
-       [:h4.mb-4 (labels :schnaqs/continue-with-schnaq-after-creation)]
+       [:h3.h4.mb-4 (labels :schnaqs/continue-with-schnaq-after-creation)]
        [:a.btn.btn-primary.btn-lg.mb-5
         {:role "button"
          :href (navigation/href :routes.schnaq/start {:share-hash share-hash})}

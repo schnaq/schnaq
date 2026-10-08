@@ -53,33 +53,42 @@
   [question qa-box-id]
   [:qa-box/question :db/id => :re-frame/component]
   (let [cast-upvotes @(rf/subscribe [:qa-box/cast-upvotes qa-box-id])
-        user-moderator? @(rf/subscribe [:user/moderator?])]
+        user-moderator? @(rf/subscribe [:user/moderator?])
+        voted? (boolean (cast-upvotes (:db/id question)))
+        upvotes (or (:qa-box.question/upvotes question) 0)]
     [motion/animated-list-item
      [:div.d-flex.flex-row.justify-content-between.align-items-start.mb-2
       [:div.border.rounded.mb-2.p-2.d-flex.flex-row.justify-content-between.flex-grow-1
        {:className (when (:qa-box.question/answered question) "bg-success bg-opacity-25")}
        [:p.d-inline-block.mb-0.me-1 (:qa-box.question/value question)]
-       [:div.d-flex.flex-row.flex-shrink-0.badge.rounded-pill.align-self-start.justify-content-between
-        {:className (if (cast-upvotes (:db/id question))
+       [:button.d-flex.flex-row.flex-shrink-0.badge.rounded-pill.align-self-start.justify-content-between.border-0
+        {:type "button"
+         :disabled voted?
+         :aria-pressed voted?
+         :aria-label (str (labels :qa-boxes.question/upvote) " (" upvotes ")")
+         :className (if voted?
                       "bg-primary"
                       "bg-gray-light text-typography clickable")
          :style {:min-width "3.7rem"}
-         :on-click (when (not (cast-upvotes (:db/id question)))
-                     #(rf/dispatch [:qa-box.question/upvote qa-box-id (:db/id question)]))}
+         :on-click #(rf/dispatch [:qa-box.question/upvote qa-box-id (:db/id question)])}
         [icon :arrow-up (str "mx-1 me-1 fs-6"
-                             (when (cast-upvotes (:db/id question)) " text-white"))]
-        [:span.fs-6.me-1 (or (:qa-box.question/upvotes question) 0)]]]
+                             (when voted? " text-white"))]
+        [:span.fs-6.me-1 upvotes]]]
       (when user-moderator?
-        [:div.row.g-0.flex-shrink-0.py-2
+        [:div.row.g-0.flex-shrink-0.py-1
          [:div.col-6
-          [icon :trash
-           "rounded text-danger clickable px-2 ms-2"
-           {:on-click #(when (js/confirm (labels :qa-boxes.question/delete-confirmation))
-                         (rf/dispatch [:qa-box.question/delete qa-box-id (:db/id question)]))}]]
+          [:button.btn.btn-link.p-1.ms-2.text-danger
+           {:type "button"
+            :aria-label (labels :qa-boxes.question/delete)
+            :on-click #(when (js/confirm (labels :qa-boxes.question/delete-confirmation))
+                         (rf/dispatch [:qa-box.question/delete qa-box-id (:db/id question)]))}
+           [icon :trash]]]
          [:div.col-6
-          [icon :check/normal
-           "rounded text-primary clickable px-2 ms-1"
-           {:on-click #(rf/dispatch [:qa-box.question/answer qa-box-id (:db/id question)])}]]])]]))
+          [:button.btn.btn-link.p-1.ms-1
+           {:type "button"
+            :aria-label (labels :qanda.button.mark/as-answer)
+            :on-click #(rf/dispatch [:qa-box.question/answer qa-box-id (:db/id question)])}
+           [icon :check/normal "text-primary"]]]])]]))
 
 (>defn qa-box-card
   "Show a qa box card, where users can ask questions of the presenter."
@@ -99,7 +108,7 @@
       [:div.d-flex.justify-content-between.mt-2
        [:div.d-flex
         [icon :question "me-2 text-primary"]
-        [:h6.pb-2.fw-bold.text-primary (labels :schnaq.input-type/qa-box)]]
+        [:p.h6.pb-2.fw-bold.text-primary (labels :schnaq.input-type/qa-box)]]
        [dropdown-menu qa-box]]
       (if box-editing?
         [:> Form {:on-submit (fn [e]
@@ -115,7 +124,7 @@
              :defaultValue (:qa-box/label qa-box)
              :placeholder (labels :qa-boxes.label-edit-input/placeholder)}]
            [:> Button {:variant "primary" :type :submit} [icon :pencil]]]]]
-        [:h6 {:className (when (:qa-box/visible qa-box) "mb-4")} (:qa-box/label qa-box)])
+        [:h2.h6 {:className (when (:qa-box/visible qa-box) "mb-4")} (:qa-box/label qa-box)])
       (when (not (:qa-box/visible qa-box))
         [:p.text-muted.mb-4 (labels :qa-boxes.card/invisible)])
       [:> Form {:className "mb-4"

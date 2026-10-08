@@ -62,13 +62,12 @@
                                                       :origin-hub origin-hub
                                                       :selected-hub selected-hub}
                                       [:schnaq.create/success]])))}
-        [:div.panel-grey.row.p-4
-         [:div.col-12
-          [common/form-input {:id :schnaq-title
-                              :placeholder (labels :schnaq.create.input/placeholder)
-                              :css "font-150"}]]]
-        [:div.text-primary.p-3
-         [icon :info " my-auto me-3"]
+        [:div.panel-grey.p-4
+         [common/form-input {:id :schnaq-title
+                             :placeholder (labels :schnaq.create.input/placeholder)
+                             :css "font-150"}]]
+        [:div.text-primary.p-3.d-flex.gap-3
+         [icon :info "mt-1 flex-shrink-0"]
          [:span (labels :schnaq.create/info)]]
         [:div.row.my-5
          [:div.col-12.col-md-8.col-lg-6

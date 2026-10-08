@@ -55,7 +55,8 @@
 
 (defn- schnaqqi-walk []
   [:div.activation-schnaqqi-space
-   (when @(rf/subscribe [:schnaq.activation/walk?])
+   (when (and @(rf/subscribe [:schnaq.activation/walk?])
+              (not (.-matches (js/matchMedia "(prefers-reduced-motion: reduce)"))))
      [schnaqqi-walk-motion])])
 
 (defn- activation-dropdown-menu
@@ -89,11 +90,11 @@
         {:class background-class
          :style (when-not (= "bg-transparent" background-class) {:background-image (gstring/format "url('%s')" background-image-url)})}
         [:div.d-flex
-         [:h4.mx-auto.mt-3
+         [:h2.h4.mx-auto.mt-3.position-relative.z-1
           (gstring/format (labels :schnaq.activation/title)
                           activation-phrase)]
          [activation-dropdown-menu]]
-        [:div.mx-auto.display-3 (:activation/count activation)]
+        [:div.mx-auto.display-3.position-relative.z-1 (:activation/count activation)]
         [schnaqqi-walk]
         (when-not read-only?
           [:div.text-center
