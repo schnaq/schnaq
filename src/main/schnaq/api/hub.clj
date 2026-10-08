@@ -30,9 +30,10 @@
       forbidden-missing-permission)))
 
 (defn- all-hubs-for-user
-  "Return all valid hubs for a user."
+  "Return all valid hubs for a user. Users without groups have no groups claim
+  in their token, and Datomic fails on a nil collection binding."
   [request]
-  (let [keycloak-names (get-in request [:identity :groups])
+  (let [keycloak-names (or (get-in request [:identity :groups]) [])
         keycloak-names (hub-db/create-hubs-if-not-existing keycloak-names)
         hubs (hub-db/hubs-by-keycloak-names keycloak-names)
         processed-hubs (map

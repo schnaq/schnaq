@@ -59,6 +59,16 @@
         201 (merge minimal-request {:hub-exclusive? false
                                     :hub "works, because we don't provide error message"})))))
 
+(deftest add-schnaq-as-unregistered-user-test
+  (testing "A logged-in user, who is not yet in our database, can create a schnaq."
+    (let [token (toolbelt/token-for-new-user "4f4b8c2e-7d61-4b2a-9a64-0c1d5e3f7a10")]
+      (is (= 201 (-> {:request-method :post :uri (:path (api/route-by-name :api.schnaq/add))
+                      :body-params {:discussion-title "huhu"}}
+                     toolbelt/add-csrf-header
+                     (toolbelt/mock-authorization-header token)
+                     test-app
+                     :status))))))
+
 (def ^:private add-schnaq-request-missing-jwt
   "Looks like a normal request to create a schnaq, but the JWT header is missing."
   (-> {:request-method :post :uri (:path (api/route-by-name :api.schnaq/add))

@@ -57,3 +57,18 @@
       (is (= 401 (:status (response token-timed-out))))
       (is (= 401 (:status (response token-wrong-signature))))
       (is (= 401 (:status (test-routes (mock/request :get path))))))))
+
+(deftest parse-jwt-registers-unknown-users-test
+  (let [handler (-> (fn [request] (ok (select-keys request [:user :new-user?])))
+                    auth-middlewares/parse-jwt-middleware
+                    auth/wrap-jwt-authentication)
+        token (schnaq-toolbelt/token-for-new-user "0b6f2a54-3c8e-4d71-9f0a-7e2d1c4b5a66")
+        response #(:body (handler (mock-authorization-header (mock/request :get "/") token)))]
+    (testing "A logged-in user who is not in our database is registered on the first request."
+      (let [{:keys [user new-user?]} (response)]
+        (is new-user?)
+        (is (= "0b6f2a54-3c8e-4d71-9f0a-7e2d1c4b5a66" (:user.registered/keycloak-id user)))))
+    (testing "Later requests find the registered user."
+      (let [{:keys [user new-user?]} (response)]
+        (is (nil? new-user?))
+        (is (some? user))))))
