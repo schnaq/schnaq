@@ -34,10 +34,10 @@
      [:input.btn-check {:id label-key :name :filter-discussion-options
                         :type "radio" :autoComplete "off"
                         :onClick on-click}]
-     [:label.btn.btn-sm.btn-outline-primary
+     [:label.btn.btn-sm.btn-outline-primary.px-1.px-md-2
       (cond-> {:for label-key}
         (not active-filters?) (assoc :class "active"))
-      [:small (labels label-key)]]
+      (labels label-key)]
      (for [{:keys [on-click label-key]} rest-buttons]
        [:<>
         {:key (str "discussion-options-button-group-item-" label-key)}
@@ -45,7 +45,7 @@
                            :onClick on-click :name :filter-discussion-options}]
         [:label.btn.btn-sm.btn-outline-primary.px-1.px-md-2
          {:for label-key}
-         [:small (labels label-key)]]])]))
+         (labels label-key)]])]))
 
 (defn qr-code
   ([link]

@@ -1,7 +1,3 @@
-@import 'variables';
-
-$a-tags: 'a, a:active, a:hover, a:visited';
-
 .footer {
   background-image: url('https://snq-common.s3.nl-ams.scw.cloud/background/layered_background_dark_footer.svg');
   background-position: top;
@@ -25,8 +21,21 @@ $a-tags: 'a, a:active, a:hover, a:visited';
     }
   }
 
-  #{$a-tags} {
+  a,
+  .btn-link {
     color: $gray-100;
+    text-decoration: none;
+
+    &:hover {
+      color: $white;
+      text-decoration: underline;
+    }
+  }
+
+  .btn-link {
+    font: inherit;
+    padding: 0;
+    vertical-align: baseline;
   }
 
   .list-inline-item {

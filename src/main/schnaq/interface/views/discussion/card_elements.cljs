@@ -172,10 +172,10 @@
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
     [tooltip/text (labels :badges/sort)
      (if (= :newest sort-method)
-       [:button.btn.btn-sm.btn-primary.btn-invisible-border
+       [:button.btn.btn-sm.btn-primary
         {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
         (labels :badges.sort/newest)]
-       [:button.btn.btn-sm.btn-primary.btn-invisible-border
+       [:button.btn.btn-sm.btn-primary
         {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
         (labels :badges.sort/popular)])]))
 
@@ -183,12 +183,12 @@
   "Question filter."
   []
   (let [active? @(rf/subscribe [:filters/questions?])]
-    [tooltip/text "Nur Fragen anzeigen"
+    [tooltip/text (labels :filters.option.questions/tooltip)
      [:button.btn.btn-sm
       {:on-click (if active?
                    #(rf/dispatch [:filters.deactivate/questions])
                    #(rf/dispatch [:filters.activate/questions]))
-       :class (if active? "btn-primary btn-invisible-border" "btn-outline-primary")}
+       :class (if active? "btn-primary" "btn-outline-primary")}
       (labels :filters.option/questions)]]))
 
 ;; -----------------------------------------------------------------------------
@@ -212,7 +212,7 @@
   [clear-id]
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
         action-icon (if (cstring/blank? search-string) :search :times)]
-    [:button.btn.button-muted.py-0
+    [:button.btn.py-0
      {:on-click (fn [_e]
                   (toolbelt/clear-input clear-id)
                   (rf/dispatch [:schnaq.search.current/clear-search-string]))}
@@ -251,7 +251,7 @@
   "Navigation bar on top of the discussion contents."
   []
   (when-not @(rf/subscribe [:ui/setting :hide-discussion-options])
-    [:div.d-flex.flex-row.pt-1.pt-xl-0
+    [:div.d-flex.flex-row.align-items-center.pt-1.pt-xl-0
      (when-not config/in-iframe?
        [:div.me-auto [back-button]])
      [tooltip/html

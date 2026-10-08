@@ -132,8 +132,8 @@
     [tooltip/html
      [default-menu]
      [:span.ms-2.ps-1.border-start
-      [:button.btn.btn-outline-primary.btn-sm.mx-1
-       {:class (when active-filters? "btn-outline-secondary active")}
+      [:button.btn.btn-sm.mx-1
+       {:class (if active-filters? "btn-outline-secondary active" "btn-outline-primary")}
        (labels :badges.filters/button)]]
      {:appendTo js/document.body}]))
 

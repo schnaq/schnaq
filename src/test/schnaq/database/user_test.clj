@@ -29,7 +29,16 @@
 (deftest add-user-if-not-exists-test
   (testing "Test the function to add a new user if they do not exist."
     (let [new-user (db/add-user-if-not-exists "For Sure a new User that does Not exist")]
-      (is (= new-user (db/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
+      (is (= new-user (db/add-user-if-not-exists "FOR SURE a new User that does Not exist")))))
+  (testing "A concurrent request created the user between lookup and insert."
+    (let [existing (db/add-user "Racing User")
+          lookup db/user-by-nickname
+          first-lookup? (atom true)]
+      (with-redefs [db/user-by-nickname (fn [nickname]
+                                          (if (compare-and-set! first-lookup? true false)
+                                            nil
+                                            (lookup nickname)))]
+        (is (= existing (db/add-user-if-not-exists "Racing User")))))))
 
 (deftest update-groups-test
   (testing "Test, whether the user has correct groups"

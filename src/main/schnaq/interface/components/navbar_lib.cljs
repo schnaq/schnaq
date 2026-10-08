@@ -81,16 +81,16 @@
 ;; -----------------------------------------------------------------------------
 ;; Argdown Export  
 
+(def ^:private argdown-export-uri (str shared-config/api-url "/export/argdown"))
+
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."
   [title [ok response]]
-  (when ok
+  (if ok
     (file-download/export-data
-     (gstring/format "# %s\n%s" title (:string-representation response)))))
-
-(defn- show-error
-  [& _not-needed]
-  (rf/dispatch [:ajax.error/as-notification (labels :error/export-failed)]))
+     (gstring/format "# %s\n%s" title (:string-representation response)))
+    ;; Unlike http-fx, cljs-ajax doesn't put the uri into its failures.
+    (rf/dispatch [:ajax.error/as-notification (assoc response :uri argdown-export-uri)])))
 
 (>defn txt-export-request
   "Initiate an export as a txt file for the currently selected schnaq."
@@ -98,12 +98,11 @@
   [:discussion/share-hash string? => any?]
   (ajax/ajax-request
    {:method :get
-    :uri (str shared-config/api-url "/export/argdown")
+    :uri argdown-export-uri
     :format (ajax/transit-request-format)
     :params {:share-hash share-hash}
     :response-format (ajax/transit-response-format)
-    :handler (partial create-txt-download-handler title)
-    :error-handler show-error}))
+    :handler (partial create-txt-download-handler title)}))
 
 ;; -----------------------------------------------------------------------------
 
@@ -180,17 +179,16 @@
         authenticated? @(rf/subscribe [:user/authenticated?])
         profile-picture? @(rf/subscribe [:user/profile-picture])
         icon-size 25]
-    [:span props
+    [:span (merge {:className (when-not vertical? "d-inline-flex align-items-center gap-2")} props)
      (if (and authenticated? profile-picture?)
        [common/avatar
         :props (when vertical? {:className "d-block mx-auto"})
         :size icon-size
         :inline? (not vertical?)]
-       [:span {:className "d-flex mx-auto"}
-        [:span {:className (if vertical? "d-block mx-auto" "mx-auto")}
-         [animal-avatars/generate-animal-avatar
-          :name username
-          :size icon-size]]])
+       [:span {:className (if vertical? "d-flex justify-content-center" "d-flex")}
+        [animal-avatars/generate-animal-avatar
+         :name username
+         :size icon-size]])
      [:span.text-nowrap
       [icon :star "me-1"]
       (toolbelt/truncate-to-n-chars username 15)]]))

@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.errors
-  (:require [cljs.pprint :refer [pprint]]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]
@@ -60,12 +59,10 @@
  :ajax.error/as-notification
  (fn [{:keys [db]} [_ failure]]
    {:db (assoc db :error {:ajax failure})
-    :fx [[:sentry.error/http-failure failure]
+    :fx [[:dispatch [:ajax.error/to-console failure]]
          [:dispatch [:notification/add
                      #:notification{:title (labels :errors/generic)
-                                    :body [:pre
-                                           [:code
-                                            (with-out-str (pprint failure))]]
+                                    :body (labels :errors.generic/body)
                                     :context :danger
                                     :stay-visible? true
                                     :on-close-fn #(rf/dispatch [:clear-error])}]]]}))

@@ -20,18 +20,10 @@
   width: 50px;
 }
 
-.scale-radio-button-highlight {
+.scale-radio-button input[type="radio"]:checked + label {
   background-color: vars.$schnaq-gray;
   border-color: vars.$schnaq-gray;
   color: #fff;
-}
-
-.scale-radio-button input[type="radio"]:checked + label {
-  @extend .scale-radio-button-highlight;
-}
-
-.scale-radio-button input[type="radio"]:checked + label {
-  @extend .scale-radio-button-highlight;
 }
 
 .scale-radio-button label:hover {

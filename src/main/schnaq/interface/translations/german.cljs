@@ -1,9 +1,7 @@
 (ns schnaq.interface.translations.german)
 
 (def labels
-  {:error/export-failed "Export hat nicht geklappt, versuche es später erneut."
-
-   :common/keycloak-id "keycloak-id"
+  {:common/keycloak-id "keycloak-id"
    :common/you "Du"
 
    :view/present "Präsentieren"
@@ -25,14 +23,7 @@
    :call-to-contribute/lead "Bisher gibt es hier noch keine Beiträge"
    :call-to-contribute/body "Starte mit deinem ersten Beitrag"
 
-   ;; code of conduct
-   :coc/heading "Verhaltensregeln"
-
    :startpage/slogan "Veranstaltungen so interaktiv, wie sie sein sollen!"
-
-   ;; Product Pages
-   :productpage/button "Produkt"
-   :productpage/roadmap "Roadmap"
 
    ;; Login Page
    :page.login/heading "Nicht warten, schnaqqen!"
@@ -64,8 +55,6 @@
 
    :footer.buttons/about-us "Über uns"
    :footer.buttons/legal-note "Impressum"
-   :footer.buttons/press-kit "Presse"
-   :footer.buttons/publications "Publikationen"
    :footer.tagline/developed-with "Entwickelt mit"
    :footer.sponsors/heading "Unsere Server werden gehostet bei"
    :footer.registered/rights-reserved "Alle Rechte vorbehalten"
@@ -560,6 +549,7 @@
 
    ;; Errors
    :errors/generic "Es ist ein Fehler aufgetreten"
+   :errors.generic/body "Etwas ist schiefgelaufen. Bitte versuche es später erneut."
    :errors.schnaq/read-only "Dieser schnaq ist schreibgeschützt."
 
    :error.generic/contact-us [:span "Solltest du hier landen nachdem du etwas auf landing.schnaq.com angeklickt hast, gib uns gerne Bescheid unter " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
@@ -654,6 +644,7 @@
    :filters.option.answered/answered "Beantwortete"
    :filters.option.answered/unanswered "Unbeantwortete"
    :filters.option/questions "Fragen"
+   :filters.option.questions/tooltip "Nur Fragen anzeigen"
    :filters.buttons/clear "Alle Filter löschen"
    :filters.heading/active "Aktive Filter"
 

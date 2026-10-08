@@ -1,9 +1,7 @@
 (ns schnaq.interface.translations.english)
 
 (def labels
-  {:error/export-failed "Export failed. Please try again later."
-
-   :common/keycloak-id "keycloak-id"
+  {:common/keycloak-id "keycloak-id"
    :common/you "You"
 
    :view/present "Present"
@@ -24,9 +22,6 @@
    ;; Call to contribute
    :call-to-contribute/lead "There are currently no contributions"
    :call-to-contribute/body "Start with your first post"
-
-   ;; code of conduct
-   :coc/heading "Code of Conduct"
 
    :startpage/slogan "Events as interactive as they should be!"
 
@@ -60,8 +55,6 @@
 
    :footer.buttons/about-us "About us"
    :footer.buttons/legal-note "Legal Note"
-   :footer.buttons/press-kit "Press Kit"
-   :footer.buttons/publications "Publications"
    :footer.tagline/developed-with "Developed with"
    :footer.sponsors/heading "Our servers are hosted by"
    :footer.registered/rights-reserved "All rights reserved"
@@ -540,7 +533,7 @@
    :themes.schnaq.settings/lead "Once you have selected a theme, it will be saved for this schnaq. Your visitors will then see the new color scheme the next time they load the schnaq."
    :themes.schnaq.settings.buttons/edit "Edit themes"
    :themes.schnaq.settings.buttons/unassign "Remove theme assignment"
-   :themes.schnaq.settings.unassign/confirm "Do you want to reset the theme for this schnaq?"
+   :themes.schnaq.settings.unassign/confirmation "Do you want to reset the theme for this schnaq?"
    :themes.schnaq.unassign.notification/title "Assignment removed"
    :themes.schnaq.unassign.notification/body "Your schnaq no longer has its own theme, but now uses the default color settings again."
    :themes.save.notification/title "Theme saved successfully."
@@ -554,6 +547,7 @@
 
    ;; Errors
    :errors/generic "An error occurred"
+   :errors.generic/body "Something went wrong. Please try again later."
    :errors.schnaq/read-only "The schnaq is set to read-only mode."
 
    :error.generic/contact-us
@@ -648,6 +642,7 @@
    :filters.option.answered/answered "Answered"
    :filters.option.answered/unanswered "Unanswered"
    :filters.option/questions "Questions"
+   :filters.option.questions/tooltip "Only show questions"
    :filters.buttons/clear "Clear all filters"
    :filters.heading/active "Active Filters"
 
@@ -690,6 +685,7 @@
    :hub.add.schnaq.error/title "schnaq was not added!"
    :hub.add.schnaq.error/body "The schnaq could not be added or found. Please check your input and try again."
    :hub.add.schnaq.input/button "Add schnaq"
+   :hub.add.schnaq.input/label "Add schnaq"
    :hub.add.schnaq.input/placeholder "schnaq-URL e.g. https://app.schnaq.com/schnaq/… or share-code"
    :hub.remove.schnaq.success/title "schnaq removed!"
    :hub.remove.schnaq.success/body "The schnaq has been removed from your hub."

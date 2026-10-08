@@ -6,7 +6,6 @@ module.exports = [
     ignores: [
       'node_modules/',
       'resources/public/js/compiled/',
-      'resources/public/js/lexical/',
       'target/',
       'out/',
       '.shadow-cljs/',

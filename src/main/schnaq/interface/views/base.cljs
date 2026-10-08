@@ -40,26 +40,20 @@
    [:div.lead.fst-italic.pb-1
     (labels :startpage/slogan)]])
 
-(defn- footer-button
+(defn- footer-link
   [url content-label]
   [:li.list-inline-item
-   [:a.btn.btn-sm.btn-outline-white {:href url}
+   [:a {:href url}
     (labels content-label)]])
 
 (defn- footer-nav [locale]
-  [:<>
-   [:ul.list-inline
-    [footer-button "https://landing.schnaq.com/code-of-conduct" :coc/heading]
-    [footer-button (str "https://schnaq.com/" (if (= :en locale) "en" "de") "/about") :footer.buttons/about-us]
-    [footer-button "https://landing.schnaq.com/press" :footer.buttons/press-kit]
-    [footer-button "https://landing.schnaq.com/publications" :footer.buttons/publications]]
-   [:ul.list-inline
-    [:li.list-inline-item
-     [feedback-modal
-      (fn [props] [:button.btn.btn-sm.btn-outline-white props
-                   (labels :feedbacks/button)])]]
-    [footer-button "https://landing.schnaq.com/privacy" :router/privacy]
-    [footer-button "https://landing.schnaq.com/legal-note" :footer.buttons/legal-note]]])
+  [:ul.list-inline
+   [footer-link (str "https://schnaq.com/" (if (= :en locale) "en" "de") "/about") :footer.buttons/about-us]
+   [:li.list-inline-item
+    [feedback-modal
+     (fn [props] [:button.btn.btn-link props (labels :feedbacks/button)])]]
+   [footer-link "https://landing.schnaq.com/privacy" :router/privacy]
+   [footer-link "https://landing.schnaq.com/legal-note" :footer.buttons/legal-note]])
 
 (defn- developed-in-nrw []
   [:section.pt-3
@@ -95,29 +89,28 @@
   [:section.px-2
    ;; Remove hardcode, when there are english versions around!
    [:h3.h5 "schnaq Lösungen"]
-   [:ul {:style {:list-style :none
-                 :padding-left 0}}
-    [:li
-     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/de/schulen/"}
+   [:ul.list-unstyled
+    [:li.py-1
+     [:a {:href "https://landing.schnaq.com/de/schulen/"}
       "für Schulen"]]
-    [:li
-     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/de/universitaeten/"}
+    [:li.py-1
+     [:a {:href "https://landing.schnaq.com/de/universitaeten/"}
       "für Universitäten"]]
-    [:li
-     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/de/weiterbildungen/"}
+    [:li.py-1
+     [:a {:href "https://landing.schnaq.com/de/weiterbildungen/"}
       "für Weiterbildungen"]]
-    [:li
-     [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/de/online-diskussionsplattform/"}
+    [:li.py-1
+     [:a {:href "https://landing.schnaq.com/de/online-diskussionsplattform/"}
       "für Diskussionen"]]]])
 
 (defn- alternatives
-  "Show schnaq use-cases for the users. Only in german."
+  "Show schnaq compared to its alternatives. Only in english."
   []
   [:section.px-2
    ;; Remove hardcode, when there are german versions around!
    [:h3.h5 "schnaq vs."]
    [:p
-    [:a.btn.btn-link.text-white {:href "https://landing.schnaq.com/de/alternative-slido-mentimeter/"}
+    [:a {:href "https://landing.schnaq.com/de/alternative-slido-mentimeter/"}
      "Alternative to Slido"]]])
 
 ;; -----------------------------------------------------------------------------

@@ -1,52 +1,15 @@
-@use 'sass:map';
+@use 'variables' as vars;
 
-// Create rounded-classes and corresponding mixins.
-// For example: rounded-0 .. rounded-5
-// rounded-0-important .. rounded-5-important
-
-$roundings: (
-  'rounded-0': 0,
-  'rounded-1': 0.5rem,
-  'rounded-2': 1rem,
-  'rounded-3': 1.5rem,
-  'rounded-4': 2rem,
-  'rounded-5': 3rem,
-  'rounded-50': 50%
-);
-
-@each $rounded, $value in $roundings {
-  .#{$rounded} {
-    border-radius: #{$value};
-  }
-  .#{$rounded}-important {
-    border-radius: #{$value} !important;
-  }
-}
-
-@mixin rounded-0 {
-  border-radius: map.get($roundings, 'rounded-0');
-}
+// Border radii shared by the stylesheets, based on Bootstrap's radii.
 
 @mixin rounded-1 {
-  border-radius: map.get($roundings, 'rounded-1');
+  border-radius: vars.$border-radius-lg;
 }
 
 @mixin rounded-2 {
-  border-radius: map.get($roundings, 'rounded-2');
-}
-
-@mixin rounded-3 {
-  border-radius: map.get($roundings, 'rounded-3');
-}
-
-@mixin rounded-4 {
-  border-radius: map.get($roundings, 'rounded-4');
-}
-
-@mixin rounded-5 {
-  border-radius: map.get($roundings, 'rounded-5');
+  border-radius: vars.$border-radius-xl;
 }
 
 @mixin rounded-50 {
-  border-radius: map.get($roundings, 'rounded-50');
+  border-radius: 50%;
 }

@@ -48,13 +48,13 @@
 (def ^:private discussion-views
   "Collection containing the discussion views."
   {:routes.schnaq/start {:icon :icon-cards-dark
-                         :label (labels :discussion.button/text)}
+                         :label :discussion.button/text}
    :routes/graph-view {:icon :icon-graph-dark
-                       :label (labels :graph.button/text)}
+                       :label :graph.button/text}
    :routes.schnaq/qanda {:icon :icon-qanda-dark
-                         :label (labels :qanda.button/text)}
+                         :label :qanda.button/text}
    :routes.schnaq/dashboard {:icon :icon-summary-dark
-                             :label (labels :summary.link.button/text)}})
+                             :label :summary.link.button/text}})
 
 (defn- links-to-discussion-views
   "Toggle between different views in a discussion."
@@ -71,7 +71,7 @@
         [:> NavLink (merge {:key (str "discussion-view-element-" route)
                             :class "ms-3" :href (href route)}
                            props)
-         [img icon] label]))]))
+         [img icon] (labels label)]))]))
 
 (defn- active-button? [current-route asked-route]
   (if (= asked-route :routes.schnaq/start)
@@ -80,11 +80,10 @@
 
 (defn- discussion-view-button-image
   "Prepare the image for the discussion view button."
-  [& {:keys [props img-key]}]
-  [:img (merge {:height 25
-                :className "d-block mx-auto bg-white p-1 rounded-1"
-                :src (img-path img-key)}
-               props)])
+  [img-key class]
+  [:img {:height 25
+         :className (str "bg-white p-1 rounded-1 " class)
+         :src (img-path img-key)}])
 
 (defn- discussion-view-group
   "Switch between different discussion views."
@@ -97,9 +96,8 @@
       (for [[route {:keys [icon label]}] discussion-views]
         [:> Button {:key (str "discussion-view-element-" route)
                     :variant (if (active-button? current-route route) :primary :outline-primary)
-                    :className "clickable"
                     :href (href route)}
-         [discussion-view-button-image :img-key icon] [:small label]]))]))
+         [discussion-view-button-image icon "me-1"] (labels label)]))]))
 
 (defn- download-schnaq-button
   "Button to download a schnaq."
@@ -137,12 +135,9 @@
   [& {:keys [props]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
         {:keys [icon label]} (:routes.schnaq/start discussion-views)]
-    [tooltip/text
-     (labels :schnaq.export/as-text)
-     [:> NavLink (merge {:className "pt-2 mt-1"
-                         :href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
-                        props)
-      [discussion-view-button-image :img-key icon] label]]))
+    [:> NavLink (merge {:href (navigation/href :routes.schnaq/start {:share-hash share-hash})}
+                       props)
+     [discussion-view-button-image icon "d-block mx-auto"] (labels label)]))
 
 (defn- login-register-buttons [& {:keys [props vertical?]}]
   [:<>
@@ -206,7 +201,7 @@
   []
   (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])]
     [:> NavbarText {}
-     [:div.d-flex.flex-row.p-3
+     [:div.d-flex.flex-row.px-3
       [motion/pulse-once [icon :comment/alt]
        [:schnaq.qa.new-question/pulse?]
        [:schnaq.qa.new-question/pulse false]
@@ -312,7 +307,7 @@
         [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
         [:> NavbarCollapse {:id "schnaq-navbar"
                             :className "justify-content-end"}
-         [:> Nav
+         [:> Nav {:className "align-items-center"}
           [statement-counter]
           [overview-page-button]
           [LanguageDropdown :vertical? true]

@@ -115,20 +115,10 @@
       [:dt.col-sm-7 (labels :user.settings.features/wordclouds)]
       [:dd.col-sm-5 [feature-available :wordcloud?]]]]))
 
-(defn- outline-info-button
-  "Generic outline button."
-  [label href-link]
-  [:article.w-100
-   [:a.feed-button-outlined {:href href-link}
-    (labels label)]])
-
-(defn- feature-and-coc-buttons []
+(defn- features-button []
   [:section.panel-white.text-center
-   [:div.btn-group {:role "group"}
-    [:div.btn-group-vertical
-     [outline-info-button :user/features
-      (navigation/href :routes.welcome)]
-     [outline-info-button :coc/heading "https://landing.schnaq.com/code-of-conduct"]]]])
+   [:a.feed-button-outlined {:href (navigation/href :routes.welcome)}
+    (labels :user/features)]])
 
 (defn user-info-box
   "Display an overview of a user's features."
@@ -142,7 +132,7 @@
         [:div.align-self-center [role-indicator]]]]
       [feature-overview]
       [:hr.my-4]])
-   [feature-and-coc-buttons]])
+   [features-button]])
 
 (defn user-view [page-heading-label content]
   [pages/three-column-layout

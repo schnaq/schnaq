@@ -64,7 +64,7 @@
                             :default-value name
                             :css "font-150"}]]
        [:div.text-end.my-3
-        [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
+        [:button.btn.btn-lg.btn-outline-primary {:type :submit}
          (labels :hub.settings/save)]]]]
      [pages/settings-panel
       (labels :hub.members.add.form/title)
@@ -78,7 +78,7 @@
                             :placeholder "contact@email.com"
                             :css "font-150"}]]
        [:div.text-end.my-3
-        [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
+        [:button.btn.btn-lg.btn-outline-primary {:type :submit}
          (labels :hub.members.add.form/button)]]]]]))
 
 (>defn- settings-view

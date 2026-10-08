@@ -66,7 +66,7 @@
                          (rf/dispatch on-click-event)
                          (reset! tooltip-visible? false))}
             (labels :editor.toolbar.file-upload/submit)]
-           [:button.btn.btn-sm.btn-link.text-dark.ps-auto
+           [:button.btn.btn-sm.btn-link.text-dark
             {:type :button
              :on-click #(reset! tooltip-visible? false)}
             (labels :editor.toolbar.file-upload/close)]]]

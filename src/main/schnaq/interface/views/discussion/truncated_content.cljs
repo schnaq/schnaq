@@ -20,7 +20,7 @@
                           (labels :qanda.button.hide/statement)])]
     [:<>
      [md/as-markdown display-content]
-     [:button.btn.btn-transparent.border-0.p-0.mt-n3
+     [:button.btn.btn-transparent.border-0.p-0
       {:on-click #(rf/dispatch [:toggle-statement-content/collapse!
                                 statement-id (not collapsed?)])}
       button-content]]))

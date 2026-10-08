@@ -1,55 +1,14 @@
-@use 'rounded' as rounded;
-@import 'variables';
+// White labels on the brand colors, as on schnaq.com, even where Bootstrap's
+// contrast check would pick dark ones. Disabled buttons keep Bootstrap's label.
+@each $color in (primary, secondary) {
+  $value: map-get($theme-colors, $color);
 
-@mixin button-template {
-  @extend .shadow-sm;
-  border: 0;
-  color: $white;
-}
-
-.btn-secondary {
-  @include button-template;
-  color: $white;
-
-  &:hover,
-  &:focus {
-    color: $white;
+  .btn-#{$color} {
+    @include button-variant($value, $value, $color: $white, $hover-color: $white, $active-color: $white);
   }
-}
 
-.btn-primary {
-  @include button-template;
-  color: $white;
-
-  &:hover,
-  &:focus {
-    color: $white;
-  }
-}
-
-.btn-outline-secondary:hover {
-  color: $white;
-}
-
-.btn-outline-secondary.active {
-  color: $white !important;
-}
-
-@each $rounded, $value in rounded.$roundings {
-  .btn-#{$rounded} {
-    /* stylelint-disable */
-    @extend .btn;
-    /* stylelint-enable */
-    border-radius: #{$value};
-  }
-}
-
-// Buttons
-.btn-outline-primary {
-  &:hover,
-  &:active,
-  &.active {
-    color: $white;
+  .btn-outline-#{$color} {
+    @include button-outline-variant($value, $color-hover: $white, $active-color: $white);
   }
 }
 
@@ -73,9 +32,4 @@
     box-shadow: none;
     outline: none;
   }
-}
-
-.btn-invisible-border {
-  // Adds an invisible border to be the same size as outline buttons
-  border: $btn-border-width solid transparent;
 }
