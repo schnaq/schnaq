@@ -13,6 +13,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.markdown :as md]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.edit :as edit]
@@ -319,18 +320,14 @@
   "Dispatch the different input options, e.g. questions, poll or activation."
   []
   (let [selected-option (reagent/atom :question)
-        on-click #(reset! selected-option %)
-        active-class #(when (= @selected-option %) "active")
-        iconed-heading (fn [class icon-key label]
-                         (if (active-class class) [:<> [icon icon-key "me-1"] (labels label)]
-                                                  [:<> [icon icon-key "mx-2"]]))]
+        tabs [[:question :info-question :schnaq.input-type/statement]
+              [:poll :chart-pie :schnaq.input-type/poll]
+              [:activation :magic :schnaq.input-type/activation]
+              [:word-cloud :cloud :schnaq.input-type/word-cloud]
+              [:feedback :feedback :schnaq.input-type/feedback]
+              [:qa-box :question :schnaq.input-type/qa-box]]]
     (fn []
-      (let [poll-tab [:span [iconed-heading :poll :chart-pie :schnaq.input-type/poll]]
-            activation-tab [:span [iconed-heading :activation :magic :schnaq.input-type/activation]]
-            word-cloud-tab [:span [iconed-heading :word-cloud :cloud :schnaq.input-type/word-cloud]]
-            feedback-tab [:span [iconed-heading :feedback :feedback :schnaq.input-type/feedback]]
-            qa-box-tab [:span [iconed-heading :qa-box :question :schnaq.input-type/qa-box]]
-            moderator? @(rf/subscribe [:user/moderator?])
+      (let [moderator? @(rf/subscribe [:user/moderator?])
             read-only? @(rf/subscribe [:schnaq.state/read-only?])
             top-level? @(rf/subscribe [:routes.schnaq/start?])
             posts-disabled-for-non-moderators? @(rf/subscribe [:schnaq/posts-disabled-for-non-moderators?])]
@@ -340,44 +337,20 @@
             [:div.card-view.card-body
              (when top-level?
                (when (and (not read-only?) moderator?)
-                 [:ul.selection-tab.nav.nav-tabs
-                  {:ref (fn [_element]
-                          (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :discussion]) 1000))} ;; wait a second until tour appears
-                  [:li.nav-item
-                   [:button.nav-link {:class (active-class :question)
-                                      :role "button"
-                                      :on-click #(on-click :question)}
-                    [iconed-heading :question :info-question :schnaq.input-type/statement]]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :poll)
-                     :role "button"
-                     :on-click #(on-click :poll)}
-                    poll-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :activation)
-                     :role "button"
-                     :on-click #(on-click :activation)}
-                    activation-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :word-cloud)
-                     :role "button"
-                     :on-click #(on-click :word-cloud)}
-                    word-cloud-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :feedback)
-                     :role "button"
-                     :on-click #(on-click :feedback)}
-                    feedback-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :qa-box)
-                     :role "button"
-                     :on-click #(on-click :qa-box)}
-                    qa-box-tab]]]))
+                 (into
+                  [:ul.selection-tab.nav.nav-tabs.nav-fill.mb-4
+                   {:ref (fn [_element]
+                           (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :discussion]) 1000))}] ;; wait a second until tour appears
+                  (for [[option icon-key label] tabs]
+                    ^{:key option}
+                    [:li.nav-item
+                     [tooltip/text
+                      (labels label)
+                      [:button.nav-link {:class (when (= @selected-option option) "active")
+                                         :type :button
+                                         :aria-label (labels label)
+                                         :on-click #(reset! selected-option option)}
+                       [icon icon-key]]]]))))
              (if top-level?
                (case @selected-option
                  :question [input-form-or-disabled-alert]

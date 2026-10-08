@@ -1,0 +1,101 @@
+// Segmented control to choose the attitude (support / neutral / attack) of a reply.
+// The selected attitude tints the reply field and submit button.
+$attitude-neutral: #5b6275;
+// Darkened tones keep text on white above 4.5:1 contrast.
+$attitude-support: color-mix(in srgb, var(--theming-primary, #{$positive}) 70%, #000);
+$attitude-attack: color-mix(in srgb, var(--theming-secondary, #{$negative}) 55%, #000);
+
+.attitude-toned {
+  --tone: #{$attitude-neutral};
+  --tone-fill: #{$attitude-neutral};
+
+  &[data-attitude="support"] {
+    --tone: #{$attitude-support};
+    --tone-fill: var(--theming-primary, #{$positive});
+  }
+
+  &[data-attitude="attack"] {
+    --tone: #{$attitude-attack};
+    --tone-fill: var(--theming-secondary, #{$negative});
+  }
+
+  .lexical-editor,
+  .attitude-submit {
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  .lexical-editor {
+    border-color: var(--tone-fill) !important; // stylelint-disable-line declaration-no-important
+
+    &:focus-within {
+      box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--tone-fill) 25%, transparent);
+    }
+  }
+
+  .attitude-submit {
+    background-color: var(--tone-fill);
+    border-color: var(--tone-fill);
+    color: $white;
+
+    &:hover:not(:disabled),
+    &:focus-visible {
+      background-color: var(--tone);
+      border-color: var(--tone);
+      color: $white;
+    }
+  }
+}
+
+.attitude-control {
+  background: $light-background;
+  border-radius: 0.6rem;
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.2rem;
+}
+
+.attitude-option {
+  --option-tone: #{$attitude-neutral};
+  align-items: center;
+  background: transparent;
+  border-radius: 0.45rem;
+  color: $gray-700;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.3rem 0.7rem;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  &:hover {
+    color: var(--option-tone);
+  }
+
+  &.attitude-support {
+    --option-tone: #{$attitude-support};
+  }
+
+  &.attitude-attack {
+    --option-tone: #{$attitude-attack};
+  }
+}
+
+.btn-check:checked + .attitude-option {
+  background: $white;
+  box-shadow: 0 1px 3px rgba($typography, 0.12);
+  color: var(--option-tone);
+}
+
+.btn-check:focus-visible + .attitude-option {
+  outline: 2px solid var(--option-tone);
+  outline-offset: 1px;
+}

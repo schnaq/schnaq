@@ -267,7 +267,6 @@
    :discussion.state/read-only-label "read-only"
    :discussion.state/read-only-warning "This schnaq is read-only. You can read, but not write."
    :discussion.navbar/settings "Settings"
-   :discussion.navbar/discussion-settings "Settings"
    :discussion.navbar/download "Export"
    :discussion.navbar/share "Share"
 
@@ -327,12 +326,10 @@
    ;; Discussion Language
    :discussion/create-argument-action "Add Statement"
    :discussion/lock-statement "Don't allow replies to this statement"
-   :discussion/add-premise-supporting "I want to support the statement"
-   :discussion/add-premise-against "I disagree…"
-   :discussion/add-premise-neutral "I want to add something"
    :discussion.add.button/support "Support"
    :discussion.add.button/attack "Attack"
    :discussion.add.button/neutral "Neutral"
+   :discussion.add.button/attitude "Attitude"
    :discussion.add.statement/new "New post from you"
    :discussion.badges/user-overview "All participants"
    :discussion.badges/delete-statement "delete"

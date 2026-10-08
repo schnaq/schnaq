@@ -266,10 +266,16 @@
   .toolbar {
     background: #fff;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-bottom: 1px;
+    overflow-x: auto;
     padding: 4px;
+    scrollbar-width: none; // keep the toolbar on one line, scroll if too narrow
     vertical-align: middle;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .toolbar-item {
       background: none;
@@ -277,7 +283,8 @@
       border-radius: 10px;
       cursor: pointer;
       display: flex;
-      padding: 8px;
+      flex-shrink: 0;
+      padding: 6px;
       vertical-align: middle;
 
       &:disabled {
@@ -318,7 +325,8 @@
 
     .divider {
       background-color: #eee;
-      margin: 0 4px;
+      flex-shrink: 0;
+      margin: 4px;
       width: 1px;
     }
 

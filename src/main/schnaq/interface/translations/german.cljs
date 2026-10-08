@@ -266,7 +266,6 @@
    :discussion.state/read-only-label "schreibgeschützt"
    :discussion.state/read-only-warning "Dieser schnaq ist schreibgeschützt. Du kannst hier nur lesen."
    :discussion.navbar/settings "Einstellungen"
-   :discussion.navbar/discussion-settings "Einstellungen"
    :discussion.navbar/download "Exportieren"
    :discussion.navbar/share "Teilen"
 
@@ -326,12 +325,10 @@
    ;; Discussion
    :discussion/create-argument-action "Beitrag hinzufügen"
    :discussion/lock-statement "Aussage ohne Antwortmöglichkeit erstellen"
-   :discussion/add-premise-supporting "Ich möchte die Aussage unterstützen"
-   :discussion/add-premise-against "Ich habe einen Grund dagegen"
-   :discussion/add-premise-neutral "Ich möchte etwas ergänzen"
    :discussion.add.button/support "Dafür"
    :discussion.add.button/attack "Dagegen"
    :discussion.add.button/neutral "Neutral"
+   :discussion.add.button/attitude "Haltung"
    :discussion.add.statement/new "Neuer Beitrag von dir"
    :discussion.badges/user-overview "Alle Teilnehmer:innen"
    :discussion.badges/delete-statement "löschen"

@@ -10,13 +10,14 @@
 (>defn modal
   "Create a modal and takes an optional `toggle-element`, e.g. a button, which
   opens the modal when clicked. `toggle-element` must be a function/1 returning
-  a component."
+  a component. Pass an atom as `:show-atom` in `props` to close the modal from
+  the outside."
   ([props title body]
    [map? any? any? => :re-frame/component]
    [modal props nil title body])
   ([props _toggle-element _title _body]
    [map? (? :re-frame/component) any? any? => :re-frame/component]
-   (let [show (r/atom (or (:show props) false))]
+   (let [show (or (:show-atom props) (r/atom (or (:show props) false)))]
      (fn [props toggle-element title body]
        [:<>
         (when toggle-element
@@ -25,7 +26,7 @@
                           :onHide (fn [_e]
                                     (reset! show false)
                                     (rf/dispatch [:modal/dissoc]))}
-                         (dissoc props :show))
+                         (dissoc props :show :show-atom))
          [:> (oget Modal :Header) {:closeButton true}
           [:> (oget Modal :Title) title]]
          [:> (oget Modal :Body)
@@ -34,8 +35,9 @@
 (defn modal-view
   "Include modal in view."
   []
-  (when-let [modal @(rf/subscribe [:modal])]
-    modal))
+  (let [modal @(rf/subscribe [:modal])]
+    (when (vector? modal)
+      modal)))
 
 ;; -----------------------------------------------------------------------------
 ;; Enter Name Modal

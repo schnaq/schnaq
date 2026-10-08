@@ -5,18 +5,14 @@
   [identifier]
   (identifier
    {:icon-add "https://snq-common.s3.nl-ams.scw.cloud/buttons/add-button.svg"
-    :icon-cards-dark "https://snq-common.s3.nl-ams.scw.cloud/icons/squares_dark.svg"
     :icon-community "https://snq-common.s3.nl-ams.scw.cloud/community.svg"
     :icon-crane "https://snq-common.s3.nl-ams.scw.cloud/icons/crane.svg"
     :icon-graph "https://snq-common.s3.nl-ams.scw.cloud/icons/mind_map_circle.svg"
-    :icon-graph-dark "https://snq-common.s3.nl-ams.scw.cloud/icons/mind_map_circle_dark.svg"
     :icon-posts "https://snq-common.s3.nl-ams.scw.cloud/icons/dashboard/posts.svg"
-    :icon-qanda-dark "https://snq-common.s3.nl-ams.scw.cloud/icons/qanda_dark.svg"
     :icon-reports "https://snq-common.s3.nl-ams.scw.cloud/icons/reports.svg"
     :icon-robot "https://snq-common.s3.nl-ams.scw.cloud/icons/robot.svg"
     :icon-search "https://snq-common.s3.nl-ams.scw.cloud/icons/dashboard/search.svg"
     :icon-summary "https://snq-common.s3.nl-ams.scw.cloud/icons/layers.svg"
-    :icon-summary-dark "https://snq-common.s3.nl-ams.scw.cloud/icons/layers_dark.svg"
     :icon-users "https://snq-common.s3.nl-ams.scw.cloud/icons/dashboard/users.svg"
     :icon-views-dark "https://snq-common.s3.nl-ams.scw.cloud/icons/views_dark.svg"
     :icon-views-light "https://snq-common.s3.nl-ams.scw.cloud/icons/views_light.svg"

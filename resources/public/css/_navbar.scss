@@ -30,6 +30,7 @@ $height-of-components: 4.25rem;
   -webkit-box-orient: vertical;
   display: -webkit-box !important; /* stylelint-disable-line value-no-vendor-prefix */
   -webkit-line-clamp: 2;
+  min-width: 0;
   overflow: hidden;
   padding-bottom: 0;
   padding-top: 0;
@@ -44,24 +45,74 @@ $height-of-components: 4.25rem;
   }
 }
 
-.navbar-icon {
-  @extend .bg-white;
-  @extend .rounded-1;
-  @extend .me-2;
-  padding: 0.2rem;
-}
-
 .nav-link.disabled {
   @extend .fw-bold;
 }
 
-.nav-link-no-padding .nav-link {
-  padding: 0;
+// Shared height for all controls in the desktop discussion navigation.
+$nav-control-height: 2.75rem;
+
+.nav-control {
+  align-items: center;
+  display: inline-flex;
+  min-height: $nav-control-height;
 }
 
-.bg-transparent .nav-link {
-  @include media-breakpoint-up(md) {
-    padding-bottom: 0;
-    padding-top: 0;
+.split-navbar .nav-link,
+.discussion-context-bar .nav-link {
+  @extend .nav-control;
+  @include rounded.rounded-1;
+  padding: 0 0.75rem;
+
+  &:hover {
+    background: $light-background;
+  }
+}
+
+.navbar-separator {
+  background: $gray-300;
+  height: 1.75rem;
+  margin: 0 0.25rem;
+  width: 1px;
+}
+
+.view-switcher {
+  @include rounded.rounded-1;
+  background: $light-background;
+  display: inline-flex;
+  gap: 2px;
+  padding: 4px;
+
+  a {
+    @include rounded.rounded-1;
+    align-items: center;
+    color: $typography;
+    display: flex;
+    height: $nav-control-height;
+    padding: 0 0.875rem;
+    text-decoration: none;
+
+    svg {
+      color: $gray-600;
+    }
+
+    &:hover {
+      color: $primary;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $primary;
+      outline-offset: 2px;
+    }
+
+    &.active {
+      background: $white;
+      box-shadow: 0 1px 3px rgba($typography, 0.12);
+      color: $primary;
+
+      svg {
+        color: $primary;
+      }
+    }
   }
 }

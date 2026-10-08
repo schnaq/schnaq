@@ -25,28 +25,6 @@
      (subs padded-access-code 0 (/ code-length 2)) [:span.ps-3]
      (subs padded-access-code (/ code-length 2))]))
 
-(defn schnaq-statement-filter-button-group
-  "Build a button-group to filter the statements in a schnaq."
-  [[first-button & rest-buttons]]
-  (let [{:keys [on-click label-key]} first-button
-        active-filters? @(rf/subscribe [:filters/active?])]
-    [:div.btn-group.me-1
-     [:input.btn-check {:id label-key :name :filter-discussion-options
-                        :type "radio" :autoComplete "off"
-                        :onClick on-click}]
-     [:label.btn.btn-sm.btn-outline-primary.px-1.px-md-2
-      (cond-> {:for label-key}
-        (not active-filters?) (assoc :class "active"))
-      (labels label-key)]
-     (for [{:keys [on-click label-key]} rest-buttons]
-       [:<>
-        {:key (str "discussion-options-button-group-item-" label-key)}
-        [:input.btn-check {:id label-key :type "radio" :autoComplete "off"
-                           :onClick on-click :name :filter-discussion-options}]
-        [:label.btn.btn-sm.btn-outline-primary.px-1.px-md-2
-         {:for label-key}
-         (labels label-key)]])]))
-
 (defn qr-code
   ([link]
    [qr-code link 300])

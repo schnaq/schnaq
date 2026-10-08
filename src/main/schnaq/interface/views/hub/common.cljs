@@ -1,18 +1,22 @@
 (ns schnaq.interface.views.hub.common
   (:require [re-frame.core :as rf]
+            [reagent.core :as reagent]
             [schnaq.interface.components.animal-avatars :as animal-avatars]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.translations :refer [labels]]))
 
 (defn hub-logo
   "Get a hub's logo. Refactor this function to reduce redundant code with `avatar`."
-  [logo display-name size]
-  (if logo
-    [:span.profile-pic-fill
-     {:style {:height (str size "px") :width (str size "px")}}
-     [:img.profile-pic-image {:src logo
-                              :alt "Hub Logo"}]]
-    [animal-avatars/generate-animal-avatar :name display-name :size size]))
+  [_logo _display-name _size]
+  (let [show-fallback? (reagent/atom false)]
+    (fn [logo display-name size]
+      (if (and logo (not @show-fallback?))
+        [:span.profile-pic-fill
+         {:style {:height (str size "px") :width (str size "px")}}
+         [:img.profile-pic-image {:src logo
+                                  :alt ""
+                                  :on-error #(reset! show-fallback? true)}]]
+        [animal-avatars/generate-animal-avatar :name display-name :size size]))))
 
 (defn hub-logo-with-name
   "Hub logo with the name on the right side."

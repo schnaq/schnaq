@@ -22,37 +22,32 @@
      (display-name author)]))
 
 (defn- statement-type-button
-  "Button to select the attitude of a statement. Current attitude is subscribed via get-subscription.
+  "Radio button to select the attitude of a statement. Current attitude is subscribed via get-subscription.
   On-Click triggers the set-event with statement-type as last parameter."
-  [statement-type label tooltip get-subscription set-event]
-  (let [current-attitude @(rf/subscribe get-subscription)
-        checked? (= statement-type current-attitude)
-        uuid (random-uuid)]
+  [group statement-type label icon-name get-subscription set-event]
+  (let [checked? (= statement-type @(rf/subscribe get-subscription))
+        id (str group "-" (name statement-type))]
     [:<>
-     [:input.btn-check {:id uuid
-                        :type "radio" :name "options" :autoComplete "off"
-                        :title (labels tooltip)
-                        :on-click (fn [e] (.preventDefault e)
-                                    (rf/dispatch (conj set-event statement-type)))}]
-     [:label.btn.btn-outline-dark
-      (cond-> {:for uuid}
-        checked? (assoc :class "active"))
+     [:input.btn-check {:id id :type "radio" :name group :autoComplete "off"
+                        :checked checked?
+                        :on-change #(rf/dispatch (conj set-event statement-type))}]
+     [:label.attitude-option {:for id :class (str "attitude-" (name statement-type))}
+      [icon icon-name "me-1"]
       (labels label)]]))
 
 (defn statement-type-choose-button
-  "Button group to differentiate between the statement types. The button with a matching get-subscription will be checked.
-  Clicking a button will dispatch the set-subscription with the button-type as parameter."
-  [get-subscription set-event sm?]
-  (let [additional-btn-class (if sm? "btn-group-sm" "")]
-    [:div.btn-group.me-2 {:class additional-btn-class}
-     [statement-type-button :statement.type/support
-      :discussion.add.button/support :discussion/add-premise-against
+  "Segmented control to differentiate between the statement types. The option with a matching get-subscription will be checked.
+  Selecting an option will dispatch the set-event with the statement type as last parameter."
+  [get-subscription set-event]
+  ;; Edit and reply forms of the same statement are mounted together, so the
+  ;; whole subscription keeps their radio ids apart.
+  (let [group (str "attitude-" (hash get-subscription))]
+    [:div.attitude-control {:role "radiogroup" :aria-label (labels :discussion.add.button/attitude)}
+     [statement-type-button group :statement.type/support :discussion.add.button/support :thumbs-up
       get-subscription set-event]
-     [statement-type-button :statement.type/neutral
-      :discussion.add.button/neutral :discussion/add-premise-neutral
+     [statement-type-button group :statement.type/neutral :discussion.add.button/neutral :scale
       get-subscription set-event]
-     [statement-type-button :statement.type/attack
-      :discussion.add.button/attack :discussion/add-premise-supporting
+     [statement-type-button group :statement.type/attack :discussion.add.button/attack :thumbs-down
       get-subscription set-event]]))
 
 (defn- textarea-highlighting
@@ -80,7 +75,7 @@
                        :placeholder (labels :statement.new/placeholder)
                        :toolbar? false}
        {:className "flex-grow-1 lexical-editor-sm"}]
-      [:button.btn.btn-sm.btn-outline-dark
+      [:button.btn.btn-sm.btn-outline-dark.attitude-submit
        {:type :submit
         :disabled (not submittable?)
         :title (labels :discussion/create-argument-action)
@@ -111,24 +106,24 @@
                            :toolbar? true
                            :focus? (not config/in-iframe?)
                            :placeholder (labels :statement.new/placeholder)}
-           {:className "flex-grow-1"}]
-          [:button.btn.btn-outline-secondary
+           {:className "flex-grow-1"}]]
+         [:div.d-flex.align-items-center.gap-3.pt-3
+          (when @(rf/subscribe [:user/moderator?])
+            [:div.form-check.mb-0
+             [:input.form-check-input
+              {:type :checkbox
+               :name "lock-card?"
+               :id "lock-card?"}]
+             [:label.form-check-label
+              {:for "lock-card?"}
+              (labels :discussion/lock-statement)]])
+          [:button.btn.btn-primary.ms-auto.text-nowrap
            {:type :submit
             :disabled (not submittable?)
             :title (labels :discussion/create-argument-action)
             :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
-           [:div.d-flex.flex-row
-            [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
-            [icon :plane "m-auto"]]]]
-         (when @(rf/subscribe [:user/moderator?])
-           [:div.form-check.pt-2
-            [:input.form-check-input
-             {:type :checkbox
-              :name "lock-card?"
-              :id "lock-card?"}]
-            [:label.form-check-label
-             {:for "lock-card?"}
-             (labels :discussion/lock-statement)]])]))))
+           [icon :plane "me-2"]
+           (labels :statement/new)]]]))))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."
@@ -136,7 +131,7 @@
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
         pro-con-disabled? @(rf/subscribe [:schnaq.state/pro-con?])]
     [:<>
-     [:div.pb-3
+     [:div.pb-4
       [user/current-user-info 40 "text-primary fs-6"]]
      [conclusion-card-editor editor-id]
      (when-not (or starting-route? pro-con-disabled?)
@@ -188,17 +183,19 @@
           (rf/dispatch [:editor/clear editor-id])
           (logic/reply-to-statement (:db/id statement) statement-type (oget e [:currentTarget :elements])))
         forbidden-write? (or locked? read-only? hide-input-replies (and limit-reached? shared-config/enforce-limits?) posts-disabled-for-non-moderators?)]
-    [:form.my-md-2
+    [:form.my-md-2.attitude-toned
      {:on-submit answer-to-statement-event
+      :data-attitude (name statement-type)
       :on-key-down #(when (toolbelt/ctrl-press? % "Enter")
                       (answer-to-statement-event %))}
+     (when-not (or forbidden-write? pro-con-disabled?)
+       [:div.mb-2
+        [statement-type-choose-button
+         [:form/statement-type statement-id]
+         [:form/statement-type! statement-id]]])
      (when-not forbidden-write?
        [premise-card-editor statement editor-id])
      [:div.d-flex.flex-wrap.align-items-center
-      (when-not (or forbidden-write? pro-con-disabled?)
-        [statement-type-choose-button
-         [:form/statement-type statement-id]
-         [:form/statement-type! statement-id] true])
       [:div.ms-auto.small.flex-shrink-1 [user/user-info statement 20 "w-100"]]]]))
 
 (rf/reg-event-db

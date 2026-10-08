@@ -193,6 +193,7 @@
        {:on-click #(format-quote active-editor block-type)
         :type :button}
        [icon :quote-right]]]
+     [:span.divider]
      (when file-storage
        [:<>
         [tooltip/text
@@ -213,7 +214,8 @@
          (labels :editor.toolbar/file-upload)
          [inputs/file [:span.fs-5 (labels :editor.toolbar/file-upload)] "editor-upload-file" [:editors id :file] {:required true}]
          [icon :file-alt]
-         [:editor.upload/file id active-editor file-storage]]])
+         [:editor.upload/file id active-editor file-storage]]
+        [:span.divider]])
 
      [tooltip/text
       (labels :editor.toolbar/list-ul)
@@ -235,6 +237,7 @@
           :type :button
           :class (when ordered-list? "active")})
        [icon :list-ol]]]
+     [:span.divider]
      [tooltip/text
       (labels :editor.toolbar/undo)
       [:button.toolbar-item.spaced
