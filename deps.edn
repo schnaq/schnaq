@@ -29,7 +29,10 @@
         io.sentry/sentry-clj {:mvn/version "8.34.247"
                               :exclusions [ring/ring-core]}
         jarohen/chime {:mvn/version "0.3.3"}
-        keycloak-clojure/keycloak-clojure {:mvn/version "1.31.5"}
+        ;; angus-mail (via resteasy-multipart) shadows postal's com.sun.mail classes
+        ;; in the uberjar, so every mail fails with "IMAPProvider not a subtype".
+        keycloak-clojure/keycloak-clojure {:mvn/version "1.31.5"
+                                           :exclusions [org.eclipse.angus/angus-mail]}
         metosin/reitit {:mvn/version "0.7.1"}
         metosin/ring-http-response {:mvn/version "0.9.5"}
         metosin/spec-tools {:mvn/version "0.10.8"}
