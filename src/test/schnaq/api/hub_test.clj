@@ -16,3 +16,10 @@
     (testing "Only request with valid group memberships should be allowed."
       (is (= 200 (-> "test-keycloak" request test-app :status)))
       (is (= 403 (-> "some-other-invalid-group" request test-app :status))))))
+
+(deftest all-hubs-for-user-test
+  (let [request #(-> (mock/request :get "/hubs/personal")
+                     (assoc :identity %))]
+    (testing "Users with and without groups get their hubs."
+      (is (= 200 (-> {:sub "user" :groups ["test-keycloak"]} request test-app :status)))
+      (is (= 200 (-> {:sub "user"} request test-app :status))))))
