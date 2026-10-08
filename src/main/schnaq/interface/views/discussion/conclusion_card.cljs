@@ -327,18 +327,14 @@
                          (when element
                            (let [timer (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :discussion]) 1000)]
                              #(js/clearTimeout timer))))
-        on-click #(reset! selected-option %)
-        active-class #(when (= @selected-option %) "active")
-        iconed-heading (fn [class icon-key label]
-                         (if (active-class class) [:<> [icon icon-key "me-1"] (labels label)]
-                                                  [:<> [icon icon-key "mx-2"]]))]
+        input-types [[:question :info-question :schnaq.input-type/statement]
+                     [:poll :chart-pie :schnaq.input-type/poll]
+                     [:activation :magic :schnaq.input-type/activation]
+                     [:word-cloud :cloud :schnaq.input-type/word-cloud]
+                     [:feedback :feedback :schnaq.input-type/feedback]
+                     [:qa-box :question :schnaq.input-type/qa-box]]]
     (fn []
-      (let [poll-tab [:span [iconed-heading :poll :chart-pie :schnaq.input-type/poll]]
-            activation-tab [:span [iconed-heading :activation :magic :schnaq.input-type/activation]]
-            word-cloud-tab [:span [iconed-heading :word-cloud :cloud :schnaq.input-type/word-cloud]]
-            feedback-tab [:span [iconed-heading :feedback :feedback :schnaq.input-type/feedback]]
-            qa-box-tab [:span [iconed-heading :qa-box :question :schnaq.input-type/qa-box]]
-            moderator? @(rf/subscribe [:user/moderator?])
+      (let [moderator? @(rf/subscribe [:user/moderator?])
             read-only? @(rf/subscribe [:schnaq.state/read-only?])
             top-level? @(rf/subscribe [:routes.schnaq/start?])
             posts-disabled-for-non-moderators? @(rf/subscribe [:schnaq/posts-disabled-for-non-moderators?])]
@@ -349,42 +345,19 @@
              (when top-level?
                (when (and (not read-only?) moderator?)
                  [:ul.selection-tab.nav.nav-tabs
-                  {:ref start-tour-ref}
-                  [:li.nav-item
-                   [:button.nav-link {:class (active-class :question)
-                                      :role "button"
-                                      :on-click #(on-click :question)}
-                    [iconed-heading :question :info-question :schnaq.input-type/statement]]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :poll)
-                     :role "button"
-                     :on-click #(on-click :poll)}
-                    poll-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :activation)
-                     :role "button"
-                     :on-click #(on-click :activation)}
-                    activation-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :word-cloud)
-                     :role "button"
-                     :on-click #(on-click :word-cloud)}
-                    word-cloud-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :feedback)
-                     :role "button"
-                     :on-click #(on-click :feedback)}
-                    feedback-tab]]
-                  [:li.nav-item
-                   [:button.nav-link
-                    {:class (active-class :qa-box)
-                     :role "button"
-                     :on-click #(on-click :qa-box)}
-                    qa-box-tab]]]))
+                  {:ref start-tour-ref :role "tablist"}
+                  ;; Only the active tab shows its label, the others are named for assistive tech.
+                  (for [[input-type icon-key label] input-types
+                        :let [active? (= @selected-option input-type)]]
+                    [:li.nav-item {:key input-type :role "presentation"}
+                     [:button.nav-link {:type "button"
+                                        :role "tab"
+                                        :class (when active? "active")
+                                        :aria-selected active?
+                                        :aria-label (labels label)
+                                        :on-click #(reset! selected-option input-type)}
+                      [icon icon-key (when active? "me-1")]
+                      (when active? (labels label))]])]))
              (if top-level?
                (case @selected-option
                  :question [input-form-or-disabled-alert]

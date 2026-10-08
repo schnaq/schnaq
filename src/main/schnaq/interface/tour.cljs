@@ -17,7 +17,10 @@
 (def options
   "Joyride's shared step options, e.g. theming."
   {:primaryColor (:secondary colors)
-   :showProgress true})
+   :showProgress true
+   ;; Small and in the corner, so the beacon doesn't sit on top of card content.
+   :beaconSize 24
+   :beaconPlacement "bottom-end"})
 
 (defn- reduced-motion-styles
   "Stop the pulsing beacon for users who prefer reduced motion."

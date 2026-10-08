@@ -126,7 +126,13 @@
 }
 
 .selection-tab {
+  // One row on phones: the icon-only tabs scroll instead of wrapping.
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+
   .nav-link {
+    white-space: nowrap;
     font-size: medium;
     padding: 0.5rem;
     @include media-breakpoint-down(md) {
