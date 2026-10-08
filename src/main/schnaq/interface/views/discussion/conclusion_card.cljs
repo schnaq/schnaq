@@ -41,10 +41,10 @@
   [motion/fade-in-and-out
    [:article.call-to-contribute.m-3
     [:div.alert.alert-light.text-light.row.layered-wave-background.p-md-5.rounded-1
-     [:div.col-2.py-md-5.d-flex
+     [:div.col-md-2.d-none.d-md-flex.py-md-5
       [:img.w-75.align-self-center {:src (img-path :schnaqqifant/three-d-head)
                                     :alt (labels :schnaqqifant/three-d-head-alt-text)}]]
-     [:div.col-10.py-md-5
+     [:div.col-12.col-md-10.py-md-5
       body]]]])
 
 (defn- call-to-share
@@ -61,7 +61,7 @@
      " "
      (labels :qanda.call-to-action/intro-2)]
     [:p.pt-3 [icon :info "me-1"]
-     (labels :qanda.call-to-action/help)
+     (labels :qanda.call-to-action/share-options)
      [small-share-schnaq-button]]]])
 
 ;; -----------------------------------------------------------------------------
@@ -89,9 +89,9 @@
 (defn- statement-information-row [statement]
   (let [statement-id (:db/id statement)]
     [:div.d-flex.flex-wrap.align-items-center.pb-1
-     (if (:statement/locked? statement)
-       [elements/locked-statement-icon statement-id]
-       [badges/show-number-of-replies statement])
+     (when (:statement/locked? statement)
+       [elements/locked-statement-icon statement-id])
+     [badges/show-number-of-replies statement]
      (when (:statement/pinned? statement)
        [elements/pinned-statement-icon statement-id])
      (when ((set (:statement/labels statement)) ":question")
@@ -186,15 +186,18 @@
         (when (not-empty reply-ids)
           [:div props
            [:button.btn.btn-transparent.btn-no-outline
-            {:type "button" :aria-expanded "false"
+            {:type "button"
+             :aria-expanded (not @collapsed?)
+             :aria-controls (str "replies-" statement-id)
              :on-click (fn [_] (swap! collapsed? not))}
             [:span.me-2 button-content] button-icon]
-           [motion/collapse-in-out
-            @collapsed?
-            (for [reply-id reply-ids]
-              (with-meta
-                [reduced-or-edit-card reply-id]
-                {:key (str "reply-" reply-id)}))]])))))
+           [:div {:id (str "replies-" statement-id) :inert @collapsed?}
+            [motion/collapse-in-out
+             @collapsed?
+             (for [reply-id reply-ids]
+               (with-meta
+                 [reduced-or-edit-card reply-id]
+                 {:key (str "reply-" reply-id)}))]]])))))
 
 (defn statement-card
   "Display a full interactive statement. Takes `additional-content`, e.g. the
@@ -210,7 +213,8 @@
         [:div.flex-grow-1
          [:div.text-typography
           [truncated-content/statement statement]
-          [statement-information-row statement]]]
+          [statement-information-row statement]
+          [:div.small.mb-2 [user/user-info statement 20 nil]]]]
         [:div.px-md-2.px-1
          [badges/statement-dropdown-menu nil statement]
          [reactions/up-down-vote-vertical {:class "pt-1"} statement]
@@ -242,18 +246,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- current-topic-badges
-  "Badges which are shown if a statement is selected."
-  [statement]
-  (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])]
-    [:div.ms-auto
-     (if starting-route?
-       [badges/static-info-badges-discussion]
-       [:div.d-flex.flex-row
-        [badges/show-number-of-replies statement]
-        [reactions/up-down-vote statement]
-        [badges/statement-dropdown-menu {:class "ms-3"} statement]])]))
-
 (defn- title-view [statement]
   (let [starting-route? @(rf/subscribe [:routes.schnaq/start?])
         title [md/as-markdown (:statement/content statement)]
@@ -271,14 +263,25 @@
                  :statement/author author
                  :statement/created-at created-at}
         starting-route? @(rf/subscribe [:routes.schnaq/start?])
-        statement-or-topic (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))]
+        statement-or-topic (if starting-route? content @(rf/subscribe [:schnaq.statements/focus]))
+        edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement-or-topic)])]
     [motion/fade-in-and-out
      [:<>
-      [:div.d-flex.flex-wrap.mb-3
-       [:div.small
+      [:div.d-flex.align-items-start.gap-2.mb-2
+       [:div.small.flex-grow-1 {:style {:min-width 0}}
         [user/user-info statement-or-topic 20 nil]]
-       [current-topic-badges statement-or-topic]]
-      [title-view statement-or-topic]]]))
+       [:div.flex-shrink-0
+        (if starting-route?
+          [badges/edit-discussion-dropdown-menu]
+          [badges/statement-dropdown-menu nil statement-or-topic])]]
+      [title-view statement-or-topic]
+      (when-not edit-active?
+        [:div.d-flex.flex-wrap.align-items-center.gap-2
+         (if starting-route?
+           [badges/number-of-remaining-posts]
+           [:<>
+            [badges/show-number-of-replies statement-or-topic]
+            [reactions/up-down-vote statement-or-topic]])])]]))
 
 (defn- search-info []
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
@@ -319,6 +322,11 @@
   "Dispatch the different input options, e.g. questions, poll or activation."
   []
   (let [selected-option (reagent/atom :question)
+        ;; Start the tour a second after mounting, cancel it when unmounting.
+        start-tour-ref (fn [element]
+                         (when element
+                           (let [timer (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :discussion]) 1000)]
+                             #(js/clearTimeout timer))))
         on-click #(reset! selected-option %)
         active-class #(when (= @selected-option %) "active")
         iconed-heading (fn [class icon-key label]
@@ -341,8 +349,7 @@
              (when top-level?
                (when (and (not read-only?) moderator?)
                  [:ul.selection-tab.nav.nav-tabs
-                  {:ref (fn [_element]
-                          (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :discussion]) 1000))} ;; wait a second until tour appears
+                  {:ref start-tour-ref}
                   [:li.nav-item
                    [:button.nav-link {:class (active-class :question)
                                       :role "button"

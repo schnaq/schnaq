@@ -18,10 +18,11 @@
 (defn- dropdown-dots
   "Three dot menu which triggers a dropdown."
   [{:keys [id]}]
-  [:button.btn.btn-link.text-dark.m-0.p-0
+  [:button.btn.btn-link.text-dark.m-0.py-0.px-1
    {:id id
-    :role "button" :data-bs-toggle "dropdown"
-    :aria-haspopup "true" :aria-expanded "false"}
+    :type "button" :data-bs-toggle "dropdown"
+    :aria-haspopup "true" :aria-expanded "false"
+    :aria-label (labels :discussion.badges/more-options)}
    [icon :dots]])
 
 (defn- dropdown-menu
@@ -73,8 +74,7 @@
                          #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))
                                            :discussion.badges/delete-statement-confirmation))]
     [:button.dropdown-item
-     {:tabIndex 60
-      :on-click (fn [e]
+     {:on-click (fn [e]
                   (.stopPropagation e)
                   (if user-moderator? (moderator-delete-fn) (user-delete-fn)))
       :title (labels :discussion.badges/delete-statement)}
@@ -97,8 +97,7 @@
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
         link (schnaq-links/get-link-to-statement share-hash (:db/id statement))]
     [:button.dropdown-item
-     {:tabIndex 40
-      :on-click (fn []
+     {:on-click (fn []
                   (clipboard/copy-to-clipboard! link)
                   (notify! (labels :schnaq/link-copied-heading)
                            (labels :schnaq/link-copied-success)
@@ -111,8 +110,7 @@
   "Edit button to trigger custom functionality."
   [on-click-fn]
   [:button.dropdown-item
-   {:tabIndex 40
-    :on-click (fn [e]
+   {:on-click (fn [e]
                 (.stopPropagation e)
                 (on-click-fn))
     :title (labels :discussion.badges/edit-statement)}
@@ -148,7 +146,9 @@
          (or anonymous-owner?
              (= user-id (:db/id (:statement/author statement)))))))
 
-(defn- edit-discussion-dropdown-menu []
+(defn edit-discussion-dropdown-menu
+  "Dots menu to edit the schnaq's title. Only shown to moderators."
+  []
   (let [{:keys [db/id]} @(rf/subscribe [:schnaq/selected])
         dropdown-id (str "drop-down-conclusion-card-" id)
         user-moderator? @(rf/subscribe [:user/moderator?])]
@@ -160,8 +160,7 @@
                                             (dispatch-fn)))
         flag-statement-fn #(confirmation-fn (fn [] (rf/dispatch [:statement/flag (:db/id statement)])))]
     [:button.dropdown-item
-     {:tabIndex 50
-      :on-click (fn [e] (.stopPropagation e)
+     {:on-click (fn [e] (.stopPropagation e)
                   (flag-statement-fn))
       :title (labels :discussion.badges/flag-statement)}
      [icon :flag "my-auto me-2"] (labels :statement/flag-statement)]))
@@ -170,8 +169,7 @@
   (let [to-lock? (not (:statement/locked? statement))
         label (labels (if to-lock? :discussion.badges/lock-statement :discussion.badges/unlock-statement))]
     [:button.dropdown-item
-     {:tabIndex 55
-      :on-click (fn [e] (.stopPropagation e)
+     {:on-click (fn [e] (.stopPropagation e)
                   (rf/dispatch [:statement.lock/toggle (:db/id statement) to-lock?]))
       :title label}
      [icon (if to-lock? :lock :lock/open) "my-auto me-2"] label]))
@@ -190,8 +188,7 @@
   (let [to-pin? (not (:statement/pinned? statement))
         label (labels (if to-pin? :discussion.badges/pin-statement :discussion.badges/unpin-statement))]
     [:button.dropdown-item
-     {:tabIndex 56
-      :on-click (fn [e] (.stopPropagation e)
+     {:on-click (fn [e] (.stopPropagation e)
                   (rf/dispatch [:statement.pin/toggle (:db/id statement) to-pin?]))
       :title label}
      [icon :pin "my-auto me-2"] label]))
@@ -272,6 +269,11 @@
           (labels :statement.badges/more-post)
           (labels :statement.badges/more-posts))]])))
 
+(defn- posts-label
+  "Singular or plural label for a number of posts."
+  [statement-count]
+  (labels (if (= 1 statement-count) :discussion.badges/post :discussion.badges/posts)))
+
 (defn comments-info-badge
   "Badge that display the comment count."
   [schnaq]
@@ -280,7 +282,7 @@
     [:span.small.me-2
      [icon :comment/alt "m-auto"]
      " " statement-count
-     " " (labels :discussion.badges/posts)]))
+     " " (posts-label statement-count)]))
 
 (defn static-info-badges
   "Badges that display schnaq info."
@@ -292,13 +294,14 @@
     [:p.mb-0
      [:span.badge.rounded-pill.badge-transparent.me-2
       [icon :comment/alt "m-auto"]
-      " " statement-count]
+      " " statement-count
+      [:span.visually-hidden " " (posts-label statement-count)]]
      [:span.badge.rounded-pill.badge-transparent.me-2
-      {:tabIndex 20
-       :title (labels :discussion.badges/user-overview)}
-      [icon :user/group "m-auto"] " " user-count]]))
+      {:title (labels :discussion.badges/user-overview)}
+      [icon :user/group "m-auto"] " " user-count
+      [:span.visually-hidden " " (labels :discussion.badges/user-overview)]]]))
 
-(defn- number-of-remaining-posts
+(defn number-of-remaining-posts
   "Calculate and highlight the number of remaining posts in this schnaq."
   []
   (let [author @(rf/subscribe [:schnaq/author])
@@ -311,14 +314,7 @@
      (if limit
        [tooltip/text (labels :feature.limit.posts/alert-tooltip)
         [:span (format "%d %s %d %s" statement-count (labels :discussion.badges/posts-of) limit (labels :discussion.badges/posts-alt))]]
-       [:span (format "%d %s" statement-count (labels :discussion.badges/posts))])]))
-
-(defn static-info-badges-discussion
-  "Badges that display schnaq info."
-  []
-  [:div.d-flex.flex-row.mb-0
-   [number-of-remaining-posts]
-   [edit-discussion-dropdown-menu]])
+       [:span (format "%d %s" statement-count (posts-label statement-count))])]))
 
 (defn read-only-badge
   "Badge that appears only if the passed schnaq is set to read-only"

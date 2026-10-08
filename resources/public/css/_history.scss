@@ -20,7 +20,7 @@
   width: 100%;
 
   @include media-breakpoint-down(md) {
-    padding: 0.35rem 0 0;
+    padding: 0.5rem 0.75rem 0 0;
   }
 
   &:hover {

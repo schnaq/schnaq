@@ -4,6 +4,7 @@
             ["react-dom" :refer [createPortal]]
             [oops.core :refer [ocall oget]]
             [reagent.core :as r]
+            [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]))
 
 (defn ExcalidrawModal [props]
@@ -71,6 +72,7 @@
            [:div.excalidraw-modal-row
             (when discard-modal-open? [ShowDiscardDialog])
             [:> Excalidraw {:onChange on-change-fn
+                            :langCode (if (= :de @config/user-language) "de-DE" "en")
                             :initialData {:appState {:isLoading false}
                                           :elements initialElements}
                             :UIOptions {:canvasActions {:changeViewBackgroundColor false}}}]

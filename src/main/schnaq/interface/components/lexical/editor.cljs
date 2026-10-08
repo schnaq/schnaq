@@ -47,15 +47,21 @@
    the editor's node-structure. Takes markdown or normal strings.
   * `on-text-change`: If the current text-block is modified, call the provided
   function.
-  * `placeholder`: Define a placeholder for the editor."
-  [{:keys [id focus? debug? toolbar? initial-content on-text-change placeholder] :as options} attributes]
+  * `placeholder`: Define a placeholder for the editor. It also names the
+  editor for screen readers, unless `aria-label` or `aria-labelledby` is set."
+  [{:keys [id focus? debug? toolbar? initial-content on-text-change placeholder aria-label aria-labelledby]
+    :as options} attributes]
   [:> LexicalComposer {:initialConfig (initial-config id initial-content)}
    [:section.lexical-editor attributes
     [:div.editor-container
      (when toolbar? [:f> ToolbarPlugin options])
      [:div.editor-inner
       [:> RichTextPlugin
-       (cond-> {:contentEditable (r/as-element [:> ContentEditable {:className "editor-input"}])
+       (cond-> {:contentEditable (r/as-element
+                                  [:> ContentEditable
+                                   (if aria-labelledby
+                                     {:className "editor-input" :aria-labelledby aria-labelledby}
+                                     {:className "editor-input" :aria-label (or aria-label placeholder)})])
                 :ErrorBoundary LexicalErrorBoundary}
          placeholder (assoc :placeholder (r/as-element [:div.editor-placeholder placeholder])))]
       [:> HistoryPlugin {}]

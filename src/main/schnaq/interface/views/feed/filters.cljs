@@ -134,8 +134,7 @@
      [:span.ms-2.ps-1.border-start
       [:button.btn.btn-sm.mx-1
        {:class (if active-filters? "btn-outline-secondary active" "btn-outline-primary")}
-       (labels :badges.filters/button)]]
-     {:appendTo js/document.body}]))
+       (labels :badges.filters/button)]]]))
 
 (rf/reg-event-db
  :filters.discussion/activate

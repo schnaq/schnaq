@@ -31,14 +31,14 @@
         navigation-target (if has-history? back-history back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
     ;; `navigation-target` is always a vector (history event or overview route)
-    [:div.d-flex.flex-row.panel-white-sm
-     [tooltip/text
-      (labels tooltip)
-      [:button.btn.btn-dark
-       {:on-click #(rf/dispatch navigation-target)}
-       [:div.d-flex
-        [icon :arrow-left "m-auto"]]]]
-     [:small.my-auto.ms-2 back-label]]))
+    [tooltip/text
+     (labels tooltip)
+     [:button.btn.btn-light.panel-white-sm.d-flex.align-items-center.gap-2.text-start
+      {:type "button"
+       :on-click #(rf/dispatch navigation-target)
+       :style {:min-height "2.75rem" :max-width "100%"}}
+      [:span.btn.btn-dark.btn-sm.pe-none [icon :arrow-left]]
+      [:small.text-truncate back-label]]]))
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -231,7 +231,7 @@
       [:input.form-control.my-auto.search-bar-input.py-0
        {:id search-input-id
         :type "text"
-        :aria-label "Search"
+        :aria-label (labels :schnaq.search/label)
         :placeholder (labels :schnaq.search/input)
         :name "search-input"
         :on-key-up throttled-in-schnaq-search}]
@@ -247,13 +247,25 @@
  (fn [db [_ query]]
    (assoc-in db [:ui :settings] query)))
 
+(def ^:private hide-on-esc
+  "Tippy plugin: Escape closes the popover and gives the focus back to its trigger."
+  #js {:name "hideOnEsc"
+       :defaultValue true
+       :fn (fn [^js instance]
+             (let [on-key-down #(when (= "Escape" (.-key %)) (.hide instance))]
+               #js {:onShow #(.addEventListener js/document "keydown" on-key-down)
+                    :onHide (fn []
+                              (.removeEventListener js/document "keydown" on-key-down)
+                              (when (.contains (.-popper instance) (.-activeElement js/document))
+                                (.focus (.-reference instance))))}))})
+
 (defn discussion-options-navigation
   "Navigation bar on top of the discussion contents."
   []
   (when-not @(rf/subscribe [:ui/setting :hide-discussion-options])
-    [:div.d-flex.flex-row.align-items-center.pt-1.pt-xl-0
+    [:div.d-flex.flex-row.align-items-center.gap-2.pt-1.pt-xl-0
      (when-not config/in-iframe?
-       [:div.me-auto [back-button]])
+       [:div.me-auto {:style {:min-width 0}} [back-button]])
      [tooltip/html
       [:section.px-1
        [:div.d-flex.flex-row.py-2
@@ -262,9 +274,11 @@
        (when @(rf/subscribe [:routes.schnaq/start?])
          [filters/filter-answered-statements])
        [:div.py-3 [search-bar]]]
-      [:> Button {:variant "outline-primary" :size :sm :className "panel-white-sm"}
+      [:> Button {:variant "outline-primary" :size :sm
+                  :className "panel-white-sm flex-shrink-0 text-nowrap"
+                  :style {:min-height "2.75rem"}}
        (labels :discussion.navbar/discussion-settings)]
-      {:appendTo js/document.body}]]))
+      {:plugins #js [hide-on-esc]}]]))
 
 (defn locked-statement-icon
   "Indicator that a statement is locked."
@@ -277,7 +291,8 @@
      (when (and statement-id @(rf/subscribe [:user/moderator?]))
        {:class "clickable"
         :on-click #(rf/dispatch [:statement.lock/toggle statement-id false])})
-     [icon :lock "text-primary"]]]))
+     [icon :lock "text-primary"]
+     [:span.visually-hidden (labels :statement.locked/tooltip)]]]))
 
 (defn pinned-statement-icon
   "Indicator that a statement is pinned. Click it to unpin, if moderator and beta-user."
