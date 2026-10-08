@@ -94,7 +94,7 @@
    [keyword? string? string? string? keyword? (? boolean?) => :re-frame/component]
    (let [href (navigation/href route-name)]
      [:article.pb-3.pe-3
-      [:a {:href href} [icon-card icon "text-typography" {:size :lg}]]
+      [:a {:href href :tab-index -1 :aria-hidden true} [icon-card icon "text-typography" {:size :lg}]]
       [:p.fw-bold.my-2 title]
       [:p body]
       (when-not disabled?
