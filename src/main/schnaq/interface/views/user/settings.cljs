@@ -56,8 +56,11 @@
 (defn- external-link-icon []
   [icon :external-link-alt "ms-2" {:size "xs"}])
 
-(defn- settings-link [attrs body]
-  [:a attrs
+(defn- settings-link
+  "Link to a feature's settings. The label names the link for assistive technology,
+  because its content consists of icons only."
+  [label attrs body]
+  [:a (assoc attrs :aria-label label)
    body
    [external-link-icon]])
 
@@ -92,17 +95,20 @@
 
       [:dt.col-7 (labels :user.settings.features/mail-notifications)]
       [:dd.col-5
-       [settings-link {:href (navigation/href :routes.user.manage/notifications)}
+       [settings-link (labels :user.settings.features/mail-notifications)
+        {:href (navigation/href :routes.user.manage/notifications)}
         [check-icon]]]
 
       [:dt.col-7 (labels :user.settings.features/theming)]
       [:dd.col-5
-       [settings-link {:href (navigation/href :routes.user.manage/themes)}
+       [settings-link (labels :user.settings.features/theming)
+        {:href (navigation/href :routes.user.manage/themes)}
         [feature-available :theming?]]]
 
       [:dt.col-7 (labels :user.settings.features/embeddings)]
       [:dd.col-5
-       [settings-link {:href "https://academy.schnaq.com" :target :_blank}
+       [settings-link (labels :user.settings.features/embeddings)
+        {:href "https://academy.schnaq.com" :target :_blank}
         [feature-available :embeddings?]]]]
 
      [:strong (labels :user.settings.features/interactions)]
@@ -118,14 +124,14 @@
       [:dd.col-5 [feature-available :wordcloud?]]]]))
 
 (defn- features-button []
-  [:section.panel-white.text-center
+  [:section.text-center
    [:a.feed-button-outlined {:href (navigation/href :routes.welcome)}
     (labels :user/features)]])
 
 (defn user-info-box
   "Display an overview of a user's features."
   []
-  [:section.panel-white
+  [:section.panel-white.p-3
    (when @(rf/subscribe [:user/authenticated?])
      [:<>
       [:a.text-decoration-none {:href (navigation/href :routes.user.manage/account)}
@@ -133,7 +139,7 @@
         [common/avatar-with-nickname-right 40]
         [:div.align-self-center [role-indicator]]]]
       [feature-overview]
-      [:hr.my-4]])
+      [:hr.mt-4.mb-3]])
    [features-button]])
 
 (defn user-view [page-heading-label content]

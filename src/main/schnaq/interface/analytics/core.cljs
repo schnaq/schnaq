@@ -40,9 +40,9 @@
   (let [stats @(rf/subscribe [metric])]
     [:div.col
      [:div.card.h-100
-      [:div.card-body
-       [:h5.card-title title]
-       [:p.card-text.fs-2.fw-bold (fmt stats)]]]]))
+      [:div.card-body.d-flex.flex-column
+       [:h5.card-title.fs-6 {:style {:hyphens :auto}} title]
+       [:p.card-text.fs-2.fw-bold.mt-auto (fmt stats)]]]]))
 
 (defn- percentage-change
   "Calculate the percentage change between two values. Color positive changes green and negative red."
@@ -121,14 +121,16 @@
                  (.preventDefault e)
                  (rf/dispatch [:analytics/load-all-with-time (oget e [:target :elements :days-input :value])]))}
    [:div.col.col-sm-4.col-lg-3
-    [:input#days-input.form-control.form-round-05
-     {:type "number"
-      :name "days-input"
-      :placeholder (labels :analytics.controls/days-placeholder)
-      :aria-label (labels :analytics.controls/days-placeholder)
-      :autoFocus true
-      :required true
-      :defaultValue 30}]]
+    [:div.input-group
+     [:input#days-input.form-control
+      {:type "number"
+       :name "days-input"
+       :placeholder (labels :analytics.controls/days-placeholder)
+       :aria-label (labels :analytics.controls/days-placeholder)
+       :autoFocus true
+       :required true
+       :defaultValue 30}]
+     [:span.input-group-text (labels :analytics.controls/days-unit)]]]
    [:div.col-auto
     [:input.btn.btn-outline-primary
      {:type "submit"
@@ -143,7 +145,7 @@
                             (let [inputs (oget e [:target :elements :patterns :value])
                                   split (map str/trim (str/split inputs #","))]
                               (rf/dispatch [:analytics.patterns/query split])))}
-      [:> FormGroup
+      [:> FormGroup {:controlId "analytics-patterns"}
        [:> FormLabel (labels :analytics.patterns.input/label)]
        [:> InputGroup
         [:> FormControl {:name "patterns" :placeholder ".*@schnaq\\.com$, .*@schnaq\\.org$, schnaqqi@schnaq.com"}]
@@ -177,7 +179,7 @@
       [multi-arguments-card (labels :analytics/statement-lengths-title) :analytics/statement-lengths-stats]
       [multi-arguments-card (labels :analytics/statement-types-title) :analytics/statement-type-stats]
       [multi-arguments-card (labels :analytics/statement-count-percentiles) :analytics/statement-percentiles]]]
-    [:div.container.py-5
+    [:div.container-fluid.py-5
      [:hr.pt-3]
      [query-statistics-by-email]]]])
 

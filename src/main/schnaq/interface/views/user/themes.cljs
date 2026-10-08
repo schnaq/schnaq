@@ -113,6 +113,7 @@
 (defn- preview []
   (when @(rf/subscribe [:schnaq/theme])
     [:<>
+     [:hr.my-5]
      [:h3#theme-preview-title (labels :themes.personal.preview/heading)]
      [:section.theming-enabled
       [:div.base-wrapper.p-3
@@ -147,7 +148,7 @@
   "Display all available themes."
   []
   (let [user-name @(rf/subscribe [:user/display-name])]
-    [:section.pb-5
+    [:section
      [:h3 (labels :themes.personal.creation/heading)]
      [:p (labels :themes.personal.creation/lead)]
      [list-personal-themes :theme/select]
@@ -265,7 +266,7 @@
   (when-let [selected @(rf/subscribe [:schnaq/theme])]
     (let [theme-id (:db/id selected)]
       [:<>
-       [:form
+       [:form.mt-5
         {:ref (fn [_element]
                 (js/setTimeout #(rf/dispatch [:tour/start-if-not-visited :themes]) 1000))
          :on-submit (fn [e]
@@ -302,7 +303,6 @@
     [:p.lead.pb-3 (labels :themes.personal/lead)]]
    [loaded-themes]
    [motion/fade-in-and-out [configure-theme]]
-   [:hr.my-5]
    [motion/fade-in-and-out [preview]]])
 
 (defn view []
@@ -326,7 +326,7 @@
     [buttons/button
      (labels :themes.schnaq.settings.buttons/edit)
      #(rf/dispatch [:navigation/navigate :routes.user.manage/themes])
-     "btn-outline-info"]
+     "btn-outline-primary"]
     [buttons/button
      (labels :themes.schnaq.settings.buttons/unassign)
      (fn [_e]

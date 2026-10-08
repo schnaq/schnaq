@@ -27,17 +27,19 @@
         ;; delete temporary button
         [:button.btn.btn-primary.change-profile-pic-button
          {:on-click (fn [e] (.preventDefault e)
-                      (rf/dispatch [:user.picture/reset]))}
+                      (rf/dispatch [:user.picture/reset]))
+          :aria-label (labels :themes.personal.edit.image/delete)}
          [icon :cross]]
         ;; upload temporary button
         [:label.form-label.btn.btn-light.change-profile-pic-button
          [icon :camera]
-         [:input {:id input-id
-                  :accept (string/join "," shared-config/allowed-mime-types-images)
-                  :type "file"
-                  :on-change (fn [event] (files/store-temporary-file
-                                          event [:user :profile-picture :temporary]))
-                  :hidden true}]])]]))
+         [:input.visually-hidden
+          {:id input-id
+           :accept (string/join "," shared-config/allowed-mime-types-images)
+           :type "file"
+           :aria-label (labels :editor.toolbar/image-upload)
+           :on-change (fn [event] (files/store-temporary-file
+                                   event [:user :profile-picture :temporary]))}]])]]))
 
 (defn- change-user-info []
   (let [display-name @(rf/subscribe [:user/display-name])
@@ -55,8 +57,9 @@
        [avatar-input pic-input-id]
        [common/form-input {:id input-id
                            :default-value display-name
+                           :aria-label (labels :user.button/change-name)
                            :css "font-150"}]]
-      [:div.d-grid.gap-2.d-sm-flex.justify-content-sm-between.pt-4
+      [:div.d-grid.gap-2.d-sm-flex.justify-content-sm-between.pt-5
        [:a.btn.btn-lg.btn-outline-secondary {:href config/keycloak-profile-page}
         (labels :user/profile-settings)]
        [:button.btn.btn-lg.btn-outline-primary {:type :submit}

@@ -37,9 +37,11 @@
 
 (defn- interval-dropdown-item
   "Dropdown item for interval options"
-  [interval]
-  [:div.dropdown-item
-   {:on-click (fn [_] (rf/dispatch [:user.notification/mail-interval! interval]))}
+  [interval current-interval]
+  [:button.dropdown-item
+   {:type "button"
+    :class (when (= interval current-interval) "active")
+    :on-click (fn [_] (rf/dispatch [:user.notification/mail-interval! interval]))}
    (labels interval)])
 
 (defn- change-interval-drop-down
@@ -63,11 +65,11 @@
        :aria-haspopup "true" :aria-expanded "false"}
       interval-display]
      [:div.dropdown-menu {:aria-labelledby dropdown-id}
-      [interval-dropdown-item daily]
-      [interval-dropdown-item weekly]
-      [interval-dropdown-item every-minute]
+      [interval-dropdown-item daily current-interval]
+      [interval-dropdown-item weekly current-interval]
+      [interval-dropdown-item every-minute current-interval]
       [:div.dropdown-divider]
-      [interval-dropdown-item never]]]))
+      [interval-dropdown-item never current-interval]]]))
 
 (defn- change-update-mail-interval
   "Display change-mail-interval related content"

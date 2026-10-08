@@ -28,17 +28,19 @@
         ;; delete temporary button
         [:button.btn.btn-primary.change-profile-pic-button
          {:on-click (fn [e] (.preventDefault e)
-                      (rf/dispatch [:hub.logo/reset hub]))}
+                      (rf/dispatch [:hub.logo/reset hub]))
+          :aria-label (labels :themes.personal.edit.image/delete)}
          [icon :cross]]
         ;; upload temporary button
         [:label.form-label.btn.btn-light.change-profile-pic-button
          [icon :camera]
-         [:input {:id input-id
-                  :accept (string/join "," shared-config/allowed-mime-types-images)
-                  :type "file"
-                  :on-change (fn [event] (files/store-temporary-file
-                                          event [:hubs keycloak-name :logo-temporary]))
-                  :hidden true}]])]]))
+         [:input.visually-hidden
+          {:id input-id
+           :accept (string/join "," shared-config/allowed-mime-types-images)
+           :type "file"
+           :aria-label (labels :editor.toolbar/image-upload)
+           :on-change (fn [event] (files/store-temporary-file
+                                   event [:hubs keycloak-name :logo-temporary]))}]])]]))
 
 (rf/reg-event-db
  :hub.logo/reset
