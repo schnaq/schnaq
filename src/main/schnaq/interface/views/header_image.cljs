@@ -22,7 +22,7 @@
                                  (oget e [:target :elements])]))}
      [:div.mb-2
       [:label.form-label.h4 {:for input-id} (labels :schnaq.header-image.url/label)]
-      [:input.form-control.m-1.rounded-3
+      [:input.form-control.mt-1.rounded-3
        {:id input-id
         :name image-form-name
         :auto-complete "off"

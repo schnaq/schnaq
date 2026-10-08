@@ -28,8 +28,8 @@
 (defn- set-all-to-read
   "Display button and text for mark-all-as-read related content"
   []
-  [:div.py-5
-   [:div.mt-5.mb-3
+  [:div.pt-4
+   [:div.mb-3
     [:div.d-flex.flex-row.justify-content-center
      [button-or-spinner]
      [check-all-read]]]
@@ -57,7 +57,7 @@
                            :notification-mail-interval/weekly (labels weekly)
                            :notification-mail-interval/never (labels never)
                            (labels :notification-mail-interval/never))]
-    [:div.dropdown.mx-3
+    [:div.dropdown
      [:button.btn.btn-outline-dark.dropdown-toggle
       {:id dropdown-id :type "button" :data-bs-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
@@ -73,11 +73,9 @@
   "Display change-mail-interval related content"
   []
   [:<>
-   [:div.row.mt-5.mb-3.pt-5
-    [:div.col
-     [:h5.text-muted (labels :user.notifications/mails)]]
-    [:div.col.text-end
-     [change-interval-drop-down]]]
+   [:div.d-flex.flex-wrap.justify-content-between.align-items-center.gap-2.mt-4.mb-2
+    [:h5.text-muted.mb-0 (labels :user.notifications/mails)]
+    [change-interval-drop-down]]
    [:small.text-muted (labels :user.notifications/info)]])
 
 (defn- content

@@ -56,13 +56,11 @@
        [common/form-input {:id input-id
                            :default-value display-name
                            :css "font-150"}]]
-      [:div.row.pt-5
-       [:div.col.text-start.my-3
-        [:a.btn.btn-lg.btn-outline-secondary {:href config/keycloak-profile-page}
-         (labels :user/profile-settings)]]
-       [:div.col.text-end.my-3
-        [:button.btn.btn-lg.btn-outline-primary {:type :submit}
-         (labels :user.settings.button/change-account-information)]]]]]))
+      [:div.d-grid.gap-2.d-sm-flex.justify-content-sm-between.pt-4
+       [:a.btn.btn-lg.btn-outline-secondary {:href config/keycloak-profile-page}
+        (labels :user/profile-settings)]
+       [:button.btn.btn-lg.btn-outline-primary {:type :submit}
+        (labels :user.settings.button/change-account-information)]]]]))
 
 (defn- content []
   [pages/settings-panel

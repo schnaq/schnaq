@@ -30,7 +30,8 @@
   [tooltip/text
    (labels :history.all-schnaqs/tooltip)
    [:a.button.btn.btn-dark.p-3
-    {:href (toolbelt/current-overview-link)}
+    {:href (toolbelt/current-overview-link)
+     :aria-label (labels :history.all-schnaqs/tooltip)}
     [:div.d-flex
      [icon :arrow-left "m-auto"]]]])
 
@@ -71,49 +72,49 @@
         {:keys [total-schnaqs]} @(rf/subscribe [:user/meta])]
     [:section.pt-4
      [:dl.row
-      [:dt.col-sm-7 (labels :user.settings.features/schnaqs-created)]
-      [:dd.col-sm-5 (let [limit (user/feature-limit user :total-schnaqs)
+      [:dt.col-7 (labels :user.settings.features/schnaqs-created)]
+      [:dd.col-5 (let [limit (user/feature-limit user :total-schnaqs)
                           warning-class (warning-level-class (usage-warning-level user :total-schnaqs total-schnaqs))]
                       [:span {:class warning-class}
                        total-schnaqs " " (labels :user.settings.features/of) " " (or limit [unlimited-icon])])]
 
-      [:dt.col-sm-7 (labels :user.settings.features/posts-per-schnaq)]
-      [:dd.col-sm-5 (if-let [limit (user/feature-limit user :posts-per-schnaq)]
+      [:dt.col-7 (labels :user.settings.features/posts-per-schnaq)]
+      [:dd.col-5 (if-let [limit (user/feature-limit user :posts-per-schnaq)]
                       limit [unlimited-icon])]
 
-      [:dt.col-sm-7 (labels :user.settings.features/concurrent-users)]
-      [:dd.col-sm-5 (if-let [limit (user/feature-limit user :concurrent-users)]
+      [:dt.col-7 (labels :user.settings.features/concurrent-users)]
+      [:dd.col-5 (if-let [limit (user/feature-limit user :concurrent-users)]
                       limit [unlimited-icon])]
 
-      [:dt.col-sm-7 (labels :user.settings.features/pro)]
-      [:dd.col-sm-5 [check-icon]]
+      [:dt.col-7 (labels :user.settings.features/pro)]
+      [:dd.col-5 [check-icon]]
 
-      [:dt.col-sm-7 (labels :user.settings.features/mail-notifications)]
-      [:dd.col-sm-5
+      [:dt.col-7 (labels :user.settings.features/mail-notifications)]
+      [:dd.col-5
        [settings-link {:href (navigation/href :routes.user.manage/notifications)}
         [check-icon]]]
 
-      [:dt.col-sm-7 (labels :user.settings.features/theming)]
-      [:dd.col-sm-5
+      [:dt.col-7 (labels :user.settings.features/theming)]
+      [:dd.col-5
        [settings-link {:href (navigation/href :routes.user.manage/themes)}
         [feature-available :theming?]]]
 
-      [:dt.col-sm-7 (labels :user.settings.features/embeddings)]
-      [:dd.col-sm-5
+      [:dt.col-7 (labels :user.settings.features/embeddings)]
+      [:dd.col-5
        [settings-link {:href "https://academy.schnaq.com" :target :_blank}
         [feature-available :embeddings?]]]]
 
      [:strong (labels :user.settings.features/interactions)]
      [:dl.row
-      [:dt.col-sm-7 (labels :user.settings.features/polls)]
-      [:dd.col-sm-5 (if-let [limit (user/feature-limit user :polls)]
+      [:dt.col-7 (labels :user.settings.features/polls)]
+      [:dd.col-5 (if-let [limit (user/feature-limit user :polls)]
                       limit [unlimited-icon])]
 
-      [:dt.col-sm-7 (labels :user.settings.features/rankings)]
-      [:dd.col-sm-5 [feature-available :rankings?]]
+      [:dt.col-7 (labels :user.settings.features/rankings)]
+      [:dd.col-5 [feature-available :rankings?]]
 
-      [:dt.col-sm-7 (labels :user.settings.features/wordclouds)]
-      [:dd.col-sm-5 [feature-available :wordcloud?]]]]))
+      [:dt.col-7 (labels :user.settings.features/wordclouds)]
+      [:dd.col-5 [feature-available :wordcloud?]]]]))
 
 (defn- features-button []
   [:section.panel-white.text-center
