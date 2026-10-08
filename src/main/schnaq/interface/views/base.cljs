@@ -49,14 +49,13 @@
     (labels content-label)]])
 
 (defn- footer-nav [locale]
-  (let [lang (if (= :en locale) "en" "de")]
-    [:ul.list-inline
-     [footer-link (str "https://schnaq.com/" lang "/about") :footer.buttons/about-us]
-     [:li.list-inline-item
-      [feedback-modal
-       (fn [props] [:button.btn.btn-link props (labels :feedbacks/button)])]]
-     [footer-link (links/privacy-policy locale) :router/privacy]
-     [footer-link (str "https://schnaq.com/" lang "/legal-note") :footer.buttons/legal-note]]))
+  [:ul.list-inline
+   [footer-link (str "https://schnaq.com/" (links/site-language locale) "/about") :footer.buttons/about-us]
+   [:li.list-inline-item
+    [feedback-modal
+     (fn [props] [:button.btn.btn-link props (labels :feedbacks/button)])]]
+   [footer-link (links/privacy-policy locale) :router/privacy]
+   [footer-link (links/legal-note locale) :footer.buttons/legal-note]])
 
 (defn- developed-in-nrw []
   [:section.pt-3
