@@ -1,6 +1,7 @@
 (ns schnaq.api.common
   (:require [ring.util.http-response :refer [ok]]
             [schnaq.api.toolbelt :as at]
+            [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.export :as export]
             [taoensso.timbre :as log]))
@@ -9,6 +10,11 @@
   "Route to ping the API. Used in our monitoring system."
   [_]
   (ok {:text "🧙‍♂️"}))
+
+(defn- version
+  "Return the version of the running backend."
+  [_]
+  (ok {:version config/app-version}))
 
 (defn- export-as-argdown
   "Exports the complete discussion in an argdown-formatted file."
@@ -32,6 +38,10 @@
               :name :api.other/ping
               :description (at/get-doc #'ping)
               :responses {200 {:body {:text string?}}}}]
+    ["/version" {:get version
+                 :name :api.other/version
+                 :description (at/get-doc #'version)
+                 :responses {200 {:body {:version string?}}}}]
     ["/export" {:middleware [:discussion/valid-share-hash?]
                 :parameters {:query {:share-hash :discussion/share-hash}}
                 :responses {200 {:body {:string-representation string?}}

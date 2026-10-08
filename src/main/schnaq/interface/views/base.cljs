@@ -6,6 +6,7 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.feedback.collect :refer [feedback-modal]]))
 
 (defn header
@@ -75,6 +76,15 @@
    [:a.social-media-icon {:href "https://github.com/schnaq" :target :_blank}
     [icon :github "" {:size "2x"}]]])
 
+(defn- versions
+  "Show the deployed versions. Frontend and backend are released separately."
+  []
+  (let [backend-version @(rf/subscribe [:app.version/backend])]
+    [:section.pt-2
+     [:small.text-muted
+      "Version " config/app-version
+      (when backend-version (str " · API " backend-version))]]))
+
 (defn- registered-trademark []
   [:section
    [:small
@@ -131,7 +141,8 @@
       [:div.row
        [:div.col-md-6.col-12
         [developed-in-nrw]
-        [registered-trademark]]
+        [registered-trademark]
+        [versions]]
        [:div.col-md-6.col-12.text-md-end.pt-3.pt-md-0
         [social-media]]]]]))
 
@@ -146,3 +157,20 @@
     [:<>
      [:div.wave-bottom-typography]
      [footer-common]]))
+
+;; -----------------------------------------------------------------------------
+
+(rf/reg-event-fx
+ :app.version/load
+ (fn [{:keys [db]} _]
+   {:fx [(http/xhrio-request db :get "/version" [:app.version/store-backend])]}))
+
+(rf/reg-event-db
+ :app.version/store-backend
+ (fn [db [_ {:keys [version]}]]
+   (assoc-in db [:app :backend-version] version)))
+
+(rf/reg-sub
+ :app.version/backend
+ (fn [db _]
+   (get-in db [:app :backend-version])))
