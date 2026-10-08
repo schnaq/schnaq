@@ -233,6 +233,6 @@
                                                      (if (compare-and-set! first-lookup? true false)
                                                        nil
                                                        (lookup keycloak-id)))]
-        (let [[new-user? user] (db/register-new-user {:sub kangaroo-keycloak-id} [] [])]
+        (let [[new-user? user] (db/register-new-user (schnaq-toolbelt/jwt-from-test-user kangaroo) [] [])]
           (is (false? new-user?))
           (is (= kangaroo-keycloak-id (:user.registered/keycloak-id user))))))))
