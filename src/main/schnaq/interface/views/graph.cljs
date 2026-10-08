@@ -139,14 +139,7 @@
           (when graph-object
             (.setOptions graph-object
                          (clj->js (assoc-in options [:physics :barnesHut :avoidOverlap]
-                                            gravity)))
-            ;; Disable gravitation / physics after graph is stabilized
-            (.on graph-object "stabilizationIterationsDone"
-                 (fn []
-                   (.setOptions graph-object (clj->js {:physics false}))
-                   ;; Keep labels readable on phones, users pan instead.
-                   (when (< (.-innerWidth js/window) 768)
-                     (.fit graph-object #js {:minZoomLevel 0.8})))))
+                                            gravity))))
           [:div {:id config/graph-id
                  :ref #(reset! dom-node %)}]))
       :component-did-mount
@@ -158,6 +151,13 @@
               graph (Network. @dom-node data (clj->js options))]
           (rf/dispatch [:graph/store-object graph])
           (rf/dispatch [:tour/start-if-not-visited :mindmap])
+          ;; Disable gravitation / physics after graph is stabilized
+          (.on graph "stabilizationIterationsDone"
+               (fn []
+                 (.setOptions graph (clj->js {:physics false}))
+                 ;; Keep labels readable on phones, users pan instead.
+                 (when (< (.-innerWidth js/window) (:md config/breakpoints))
+                   (.fit graph #js {:minZoomLevel 0.8}))))
           (.on graph "doubleClick"
                (fn [properties]
                  (when-let [clicked-node-id (first (get (js->clj properties) "nodes"))] ;; If `clicked-node-id` is nil, the user clicked in an empty space instead of a node

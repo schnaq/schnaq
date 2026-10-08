@@ -63,6 +63,20 @@
     [:div.highlight-card-reduced.highlight-card-reverse
      {:class (str "highlight-card-" attitude)}]))
 
+(defn- send-button
+  "Submit button of the composers. `class` sets the variant, `label-class` the
+  visibility of the label next to the icon."
+  [submittable? {:keys [class label-class]}]
+  [:button.btn.px-3
+   {:type :submit
+    :class class
+    :disabled (not submittable?)
+    :title (labels :discussion/create-argument-action)
+    :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
+   [:div.d-flex.flex-row
+    [:div.me-1 {:class label-class} (labels :statement/new)]
+    [icon :plane "m-auto"]]])
+
 (defn- premise-card-editor
   "Input, where users provide premises."
   [{:keys [db/id]} editor-id]
@@ -78,27 +92,8 @@
                        :placeholder (labels :statement.new/placeholder)
                        :toolbar? false}
        {:className "flex-grow-1 lexical-editor-sm"}]
-      [:button.btn.btn-sm.btn-outline-dark.px-3
-       {:type :submit
-        :disabled (not submittable?)
-        :title (labels :discussion/create-argument-action)
-        :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
-       [:div.d-flex.flex-row
-        [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
-        [icon :plane "m-auto"]]]]]))
-
-(defn- send-button
-  "Submit button of the main composer."
-  [submittable? classes]
-  [:button.btn.btn-primary.px-3
-   {:type :submit
-    :class classes
-    :disabled (not submittable?)
-    :title (labels :discussion/create-argument-action)
-    :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
-   [:div.d-flex.flex-row
-    [:div.me-1 (labels :statement/new)]
-    [icon :plane "m-auto"]]])
+      [send-button submittable? {:class "btn-sm btn-outline-dark"
+                                 :label-class "d-none d-lg-block"}]]]))
 
 (defn- conclusion-card-editor
   "Input, where users provide (starting) conclusions. On phones the send button
@@ -124,7 +119,7 @@
                            :focus? (not config/in-iframe?)
                            :placeholder (labels :statement.new/placeholder)}
            {:className "flex-grow-1"}]
-          [send-button submittable? "d-none d-sm-block align-self-end align-self-lg-stretch"]]
+          [send-button submittable? {:class "btn-primary d-none d-sm-block align-self-end align-self-lg-stretch"}]]
          [:div.d-flex.flex-wrap.align-items-center.column-gap-2
           (when @(rf/subscribe [:user/moderator?])
             [:div.form-check.small.text-muted.mt-2
@@ -135,7 +130,7 @@
              [:label.form-check-label
               {:for "lock-card?"}
               (labels :discussion/lock-statement)]])
-          [send-button submittable? "d-sm-none mt-2 ms-auto"]]]))))
+          [send-button submittable? {:class "btn-primary d-sm-none mt-2 ms-auto"}]]]))))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."

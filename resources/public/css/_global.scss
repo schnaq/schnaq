@@ -40,6 +40,7 @@ html {
 }
 
 // Space Grotesk runs wide, the CI tightens it slightly.
+// stylelint-disable-next-line selector-no-qualifying-type
 :is(h1, h2, h3):not(.h4, .h5, .h6),
 .h1,
 .h2,

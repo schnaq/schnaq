@@ -37,8 +37,7 @@
    [:div.container
     [cards/card-container]]
    [:div.container-fluid.px-1.px-md-3
-    [:div.d-md-none [elements/history-view]]
-    [:div.d-none.d-md-block [elements/history-view]]]])
+    [elements/history-view]]])
 
 (rf/reg-sub
  :discussion.statements/show

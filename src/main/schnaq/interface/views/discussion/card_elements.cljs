@@ -33,10 +33,10 @@
     ;; `navigation-target` is always a vector (history event or overview route)
     [tooltip/text
      (labels tooltip)
-     [:button.btn.btn-light.panel-white-sm.d-flex.align-items-center.gap-2.text-start
+     [:button.btn.btn-light.panel-white-sm.d-flex.align-items-center.gap-2.text-start.mw-100
       {:type "button"
        :on-click #(rf/dispatch navigation-target)
-       :style {:min-height "2.75rem" :max-width "100%"}}
+       :style {:min-height "2.75rem"}}
       [:span.btn.btn-dark.btn-sm.py-0.pe-none [icon :arrow-left]]
       [:small.text-truncate back-label]]]))
 

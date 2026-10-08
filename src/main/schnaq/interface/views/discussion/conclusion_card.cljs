@@ -95,7 +95,7 @@
      [badges/show-number-of-replies statement]
      (when (:statement/pinned? statement)
        [elements/pinned-statement-icon statement-id])
-     (when ((set (:statement/labels statement)) ":question")
+     (when (question? statement)
        [labels/build-label ":question"])
      (when-not @(rf/subscribe [:routes.schnaq/start?])
        [:div.d-flex.flex-row.align-items-center.ms-auto
@@ -385,7 +385,7 @@
  :<- [:filters/questions?]
  (fn [[sort-method local-votes shown-statements questions-only?] _]
    (let [question-filtered-statements (if questions-only?
-                                        (filter #((set (:statement/labels %)) ":question") shown-statements)
+                                        (filter question? shown-statements)
                                         shown-statements)
          sorted-conclusions (sort-statements question-filtered-statements sort-method local-votes)
          grouped-statements (group-by #(true? (:statement/pinned? %)) sorted-conclusions)

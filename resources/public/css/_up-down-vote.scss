@@ -11,18 +11,17 @@
 // 44px touch targets on phones, e.g. the vote buttons and the three-dot menu.
 .touch-target {
   @include media-breakpoint-down(md) {
-    align-items: center;
-    display: inline-flex;
-    justify-content: center;
     min-height: 2.75rem;
     min-width: 2.75rem;
-  }
-}
 
-// Only the icon-only buttons centre their content. The arrow and count of a
-// vote start at the edge, so the arrows do not move with the number of digits.
-.vote-button.touch-target {
-  justify-content: flex-start;
+    // Only the icon-only buttons centre their content. The arrow and count of a
+    // vote start at the edge, so the arrows do not move with the number of digits.
+    &.btn {
+      align-items: center;
+      display: inline-flex;
+      justify-content: center;
+    }
+  }
 }
 
 .badge-upvote {

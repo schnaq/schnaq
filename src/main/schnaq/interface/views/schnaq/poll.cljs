@@ -27,7 +27,7 @@
 
 (defn- percentage-bar
   "An springy-animated percentage bar for graphs"
-  [votes width label-key color-index]
+  [votes ratio label-key color-index]
   [:span.d-block.percentage-track.rounded-1.overflow-hidden
    [motion/spring-transition
     [tooltip/text
@@ -35,7 +35,7 @@
      [:span.d-block.percentage-bar.rounded-1
       {:style {:background-color (colors/get-graph-color color-index)
                :height "35px"}}]]
-    {:width width}]])
+    {:width (str (* 100 ratio) "%")}]])
 
 (defn- results-hidden-message
   "Show a message to the user, that the she voted, but is not allowed to see the
@@ -57,11 +57,11 @@
   [{:poll/keys [options type hide-results?]} cast-votes]
   (let [read-only? @(rf/subscribe [:schnaq.state/read-only?])
         voted? (or cast-votes read-only?)
-        show-results? (or @(rf/subscribe [:user/moderator?]) (not hide-results?))]
+        show-results? (or @(rf/subscribe [:user/moderator?]) (not hide-results?))
+        total-votes (apply + (map :option/votes options))]
     [:section.row
      (for [index (range (count options))]
        (let [{:keys [option/votes db/id option/value]} (get options index)
-             total-votes (apply + (map :option/votes options))
              ratio (if (zero? total-votes) 0 (/ votes total-votes))
              single-choice? (= :poll.type/single-choice type)
              votes-set (if single-choice? #{cast-votes} (set cast-votes))
@@ -78,7 +78,7 @@
                single-choice? (assoc :required true))])
           [:span.d-block.flex-grow-1
            (when show-results?
-             [percentage-bar votes (str (* 100 ratio) "%") :schnaq.poll/votes index])
+             [percentage-bar votes ratio :schnaq.poll/votes index])
            [:span.d-block.small.ms-1.mb-2
             {:class (when option-voted? "text-decoration-underline text-secondary")}
             value
@@ -104,7 +104,7 @@
         (str (inc index)) "."]]
       [:div
        {:class (if presentation-mode? "col-11" "col-10")}
-       [percentage-bar votes (str (* 100 ratio) "%") :schnaq.poll.ranking/points (get old-indices id)]
+       [percentage-bar votes ratio :schnaq.poll.ranking/points (get old-indices id)]
        [:p.small.ms-1.mb-1 value]]]]))
 
 (defn ranking-results
