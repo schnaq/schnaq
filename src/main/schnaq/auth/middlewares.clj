@@ -60,17 +60,30 @@
 
 ;; -----------------------------------------------------------------------------
 
+(>defn- assoc-user
+  "Add the registered user to the request. Users who are not in our database yet
+  are registered here, because the frontend's registration call can lose the
+  race against the first authenticated request."
+  [{:keys [identity] :as request}]
+  [map? => map?]
+  (if-let [user (user-db/private-user-by-keycloak-id (:sub identity))]
+    (assoc request :user user)
+    (if (string/blank? (:sub identity))
+      request
+      (let [[new-user? user] (user-db/register-new-user identity [] [])]
+        (assoc request :user user :new-user? new-user?)))))
+
 (>defn- extract-user-information-from-jwt
   "Extend identity map parsed from JWT and convert types."
   [request]
   [map? => map?]
   (-> request
-      (assoc :user (user-db/private-user-by-keycloak-id (get-in request [:identity :sub])))
       (update-in [:identity :sub] str)
       (assoc-in [:identity :id] (str (get-in request [:identity :sub])))
       (assoc-in [:identity :preferred_username] (or (get-in request [:identity :preferred_username])
                                                     (get-in request [:identity :name])))
-      (assoc-in [:identity :roles] (get-in request [:identity :realm_access :roles]))))
+      (assoc-in [:identity :roles] (get-in request [:identity :realm_access :roles]))
+      assoc-user))
 
 (defn parse-jwt-middleware
   "Always update identity-map, if provided. Else just passes the request through."

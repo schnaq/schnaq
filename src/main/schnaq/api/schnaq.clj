@@ -70,15 +70,13 @@
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion. Required fields are `discussion-title` and
    (`nickname` or an authenticated user)."
-  [{:keys [parameters identity user]}]
+  [{:keys [parameters identity]}]
   (let [{:keys [nickname discussion-title hub-exclusive? hub] :as parameters} (:body parameters)
         keycloak-id (:sub identity)]
     (if-not (or keycloak-id nickname)
       (bad-request-schnaq-creation parameters)
       (let [author (if keycloak-id
-                     (do (when-not user ; not registered by the frontend yet
-                           (user-db/register-new-user identity [] []))
-                         [:user.registered/keycloak-id keycloak-id])
+                     [:user.registered/keycloak-id keycloak-id]
                      (user-db/add-user-if-not-exists nickname))
             authorized-for-hub? (some #(= % hub) (:groups identity))
             discussion-data (cond-> {:discussion/title discussion-title
