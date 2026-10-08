@@ -87,8 +87,22 @@
         [:div.d-none.d-lg-block.me-1 (labels :statement/new)]
         [icon :plane "m-auto"]]]]]))
 
+(defn- send-button
+  "Submit button of the main composer."
+  [submittable? classes]
+  [:button.btn.btn-primary.px-3
+   {:type :submit
+    :class classes
+    :disabled (not submittable?)
+    :title (labels :discussion/create-argument-action)
+    :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
+   [:div.d-flex.flex-row
+    [:div.me-1 (labels :statement/new)]
+    [icon :plane "m-auto"]]])
+
 (defn- conclusion-card-editor
-  "Input, where users provide (starting) conclusions."
+  "Input, where users provide (starting) conclusions. On phones the send button
+  moves below the editor, so the toolbar keeps the full width."
   [editor-id]
   (let [author @(rf/subscribe [:schnaq/author])
         schnaq @(rf/subscribe [:schnaq/selected])
@@ -110,23 +124,18 @@
                            :focus? (not config/in-iframe?)
                            :placeholder (labels :statement.new/placeholder)}
            {:className "flex-grow-1"}]
-          [:button.btn.btn-primary.px-3
-           {:type :submit
-            :disabled (not submittable?)
-            :title (labels :discussion/create-argument-action)
-            :on-click #(tracking/track-event "Active User" "Action" "Submit Post")}
-           [:div.d-flex.flex-row
-            [:div.d-none.d-sm-block.me-1 (labels :statement/new)]
-            [icon :plane "m-auto"]]]]
-         (when @(rf/subscribe [:user/moderator?])
-           [:div.form-check.small.text-muted.mt-2
-            [:input.form-check-input
-             {:type :checkbox
-              :name "lock-card?"
-              :id "lock-card?"}]
-            [:label.form-check-label
-             {:for "lock-card?"}
-             (labels :discussion/lock-statement)]])]))))
+          [send-button submittable? "d-none d-sm-block align-self-end align-self-lg-stretch"]]
+         [:div.d-flex.flex-wrap.align-items-center.column-gap-2
+          (when @(rf/subscribe [:user/moderator?])
+            [:div.form-check.small.text-muted.mt-2
+             [:input.form-check-input
+              {:type :checkbox
+               :name "lock-card?"
+               :id "lock-card?"}]
+             [:label.form-check-label
+              {:for "lock-card?"}
+              (labels :discussion/lock-statement)]])
+          [send-button submittable? "d-sm-none mt-2 ms-auto"]]]))))
 
 (defn- topic-input-area
   "Input form with an option to chose statement type."

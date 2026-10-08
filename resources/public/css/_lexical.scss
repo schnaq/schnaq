@@ -130,9 +130,9 @@
     tab-size: 2;
 
     &::before {
-      background-color: #eee;
-      border-right: 1px solid #ccc;
-      color: #777;
+      background-color: var(--border);
+      border-right: 1px solid var(--border);
+      color: var(--muted-foreground);
       content: attr(data-gutter);
       left: 0;
       min-width: 25px;
@@ -144,7 +144,7 @@
     }
 
     &::after {
-      color: rgba(0, 0, 0, 0.5);
+      color: var(--muted-foreground);
       content: attr(data-highlight-language);
       font-size: 10px;
       padding: 3px;
@@ -292,14 +292,17 @@
       &.spaced {
         margin-right: 2px;
       }
-
-      &.active {
-        background-color: rgba(223, 232, 250, 0.3);
-      }
     }
 
     .toolbar-item:hover:not([disabled]) {
       background-color: var(--muted);
+    }
+
+    // After the hover rule, so a pressed toggle stays marked under the pointer.
+    .toolbar-item.active,
+    .toolbar-item.active:hover {
+      background-color: color-mix(in srgb, var(--primary) 18%, transparent);
+      color: var(--primary-strong);
     }
   }
 }

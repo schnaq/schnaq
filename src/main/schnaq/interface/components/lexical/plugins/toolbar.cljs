@@ -47,12 +47,6 @@
         :on-click #(rf/dispatch [:editor/command editor INSERT_IMAGE_COMMAND #js {:src "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_1280.jpg" :altText "Elephant in a forest"}])}
        [icon :image-file]]]]))
 
-(defn- return-focus-to-trigger
-  "Move the focus back to the trigger when a popover closes while holding it."
-  [^js instance]
-  (when (.contains (.-popper instance) (.-activeElement js/document))
-    (.focus (.-reference instance))))
-
 (defn- toolbar-button
   "Icon-only toolbar button named by `label`. Toggles pass `active?`."
   [label icon-key {:keys [on-click active? disabled?]}]
@@ -97,7 +91,7 @@
            :aria-label input-label}
           icon-component]
          {:visible @tooltip-visible?
-          :onHide return-focus-to-trigger}
+          :onHide tooltip/return-focus}
          [:trigger]]]
        {:disabled @tooltip-visible?}])))
 

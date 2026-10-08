@@ -37,7 +37,7 @@
       {:type "button"
        :on-click #(rf/dispatch navigation-target)
        :style {:min-height "2.75rem" :max-width "100%"}}
-      [:span.btn.btn-dark.btn-sm.pe-none [icon :arrow-left]]
+      [:span.btn.btn-dark.btn-sm.py-0.pe-none [icon :arrow-left]]
       [:small.text-truncate back-label]]]))
 
 (defn- discussion-start-button
@@ -247,18 +247,6 @@
  (fn [db [_ query]]
    (assoc-in db [:ui :settings] query)))
 
-(def ^:private hide-on-esc
-  "Tippy plugin: Escape closes the popover and gives the focus back to its trigger."
-  #js {:name "hideOnEsc"
-       :defaultValue true
-       :fn (fn [^js instance]
-             (let [on-key-down #(when (= "Escape" (.-key %)) (.hide instance))]
-               #js {:onShow #(.addEventListener js/document "keydown" on-key-down)
-                    :onHide (fn []
-                              (.removeEventListener js/document "keydown" on-key-down)
-                              (when (.contains (.-popper instance) (.-activeElement js/document))
-                                (.focus (.-reference instance))))}))})
-
 (defn discussion-options-navigation
   "Navigation bar on top of the discussion contents."
   []
@@ -277,8 +265,7 @@
       [:> Button {:variant "outline-primary" :size :sm
                   :className "panel-white-sm flex-shrink-0 text-nowrap"
                   :style {:min-height "2.75rem"}}
-       (labels :discussion.navbar/discussion-settings)]
-      {:plugins #js [hide-on-esc]}]]))
+       (labels :discussion.navbar/discussion-settings)]]]))
 
 (defn locked-statement-icon
   "Indicator that a statement is locked."
