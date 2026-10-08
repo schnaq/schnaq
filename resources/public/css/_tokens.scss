@@ -64,20 +64,22 @@
 // -----------------------------------------------------------------------------
 // Component hooks
 
-@each $color in (primary, secondary) {
+// Primary fills with its strong shade, the brand orange is a fill colour itself
+// and carries the navy foreground.
+@each $color, $fill in (primary: var(--primary-strong), secondary: var(--secondary)) {
   .btn-#{$color} {
     --bs-btn-color: var(--#{$color}-foreground);
-    --bs-btn-bg: var(--#{$color}-strong);
-    --bs-btn-border-color: var(--#{$color}-strong);
+    --bs-btn-bg: #{$fill};
+    --bs-btn-border-color: #{$fill};
     --bs-btn-hover-color: var(--#{$color}-foreground);
-    --bs-btn-hover-bg: color-mix(in srgb, var(--#{$color}-strong) 85%, #000);
-    --bs-btn-hover-border-color: color-mix(in srgb, var(--#{$color}-strong) 85%, #000);
+    --bs-btn-hover-bg: color-mix(in srgb, #{$fill} 85%, #000);
+    --bs-btn-hover-border-color: color-mix(in srgb, #{$fill} 85%, #000);
     --bs-btn-active-color: var(--#{$color}-foreground);
-    --bs-btn-active-bg: color-mix(in srgb, var(--#{$color}-strong) 75%, #000);
-    --bs-btn-active-border-color: color-mix(in srgb, var(--#{$color}-strong) 75%, #000);
+    --bs-btn-active-bg: color-mix(in srgb, #{$fill} 75%, #000);
+    --bs-btn-active-border-color: color-mix(in srgb, #{$fill} 75%, #000);
     --bs-btn-disabled-color: var(--#{$color}-foreground);
-    --bs-btn-disabled-bg: var(--#{$color}-strong);
-    --bs-btn-disabled-border-color: var(--#{$color}-strong);
+    --bs-btn-disabled-bg: #{$fill};
+    --bs-btn-disabled-border-color: #{$fill};
     --bs-btn-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
   }
 
@@ -85,37 +87,23 @@
     --bs-btn-color: var(--#{$color}-strong);
     --bs-btn-border-color: var(--#{$color}-strong);
     --bs-btn-hover-color: var(--#{$color}-foreground);
-    --bs-btn-hover-bg: var(--#{$color}-strong);
-    --bs-btn-hover-border-color: var(--#{$color}-strong);
+    --bs-btn-hover-bg: #{$fill};
+    --bs-btn-hover-border-color: #{$fill};
     --bs-btn-active-color: var(--#{$color}-foreground);
-    --bs-btn-active-bg: var(--#{$color}-strong);
-    --bs-btn-active-border-color: var(--#{$color}-strong);
+    --bs-btn-active-bg: #{$fill};
+    --bs-btn-active-border-color: #{$fill};
     --bs-btn-disabled-color: var(--#{$color}-strong);
     --bs-btn-disabled-border-color: var(--#{$color}-strong);
     --bs-btn-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
   }
 }
 
-// The brand orange is a fill colour; as a fill it carries the navy foreground.
+// Opaque, so a disabled orange button on a coloured page stays light orange.
 .btn-secondary {
-  --bs-btn-bg: var(--secondary);
-  --bs-btn-border-color: var(--secondary);
-  --bs-btn-hover-bg: color-mix(in srgb, var(--secondary) 85%, #000);
-  --bs-btn-hover-border-color: color-mix(in srgb, var(--secondary) 85%, #000);
-  --bs-btn-active-bg: color-mix(in srgb, var(--secondary) 75%, #000);
-  --bs-btn-active-border-color: color-mix(in srgb, var(--secondary) 75%, #000);
-  // Opaque, so a disabled button on a coloured page stays a light orange.
   --bs-btn-disabled-opacity: 1;
   --bs-btn-disabled-bg: color-mix(in srgb, var(--secondary) 65%, #fff);
   --bs-btn-disabled-border-color: color-mix(in srgb, var(--secondary) 65%, #fff);
   --bs-btn-disabled-color: color-mix(in srgb, var(--secondary-foreground) 65%, #fff);
-}
-
-.btn-outline-secondary {
-  --bs-btn-hover-bg: var(--secondary);
-  --bs-btn-hover-border-color: var(--secondary);
-  --bs-btn-active-bg: var(--secondary);
-  --bs-btn-active-border-color: var(--secondary);
 }
 
 .form-check-input:checked,
