@@ -9,6 +9,9 @@
 ;; Second parameter is a default value
 (goog-define build-hash "dev")
 
+;; `git describe --tags --always` at build time.
+(goog-define app-version "dev")
+
 ;; An empty Sentry DSN disables all error reporting, e.g. in development.
 (goog-define sentry-dsn "")
 

@@ -43,6 +43,11 @@
 (def build-hash
   (or (:build-hash env) "dev"))
 
+(def app-version
+  "Output of `git describe --tags --always` at build time, e.g. v1.2.0 or
+  v1.2.0-3-gabc1234 between releases."
+  (or (:app-version env) "dev"))
+
 (def deleted-statement-text "[deleted]")
 
 (def notification-blacklist

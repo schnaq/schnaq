@@ -22,6 +22,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          # git describe needs the tags and the history back to the last one.
+          fetch-depth: 0
+      - name: Determine version
+        run: echo "APP_VERSION=$(git describe --tags --always)" >> "$GITHUB_ENV"
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v4
@@ -45,6 +50,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend
           tags: |
             type=raw,value=staging,enable={{is_default_branch}}
+            type=ref,event=tag
             type=sha
 
       - name: Build and push Docker images
@@ -54,6 +60,9 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           pull: true
           file: Dockerfile.backend
+          build-args: |
+            BUILD_HASH=${{ github.sha }}
+            APP_VERSION=${{ env.APP_VERSION }}
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
