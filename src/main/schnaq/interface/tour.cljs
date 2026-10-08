@@ -99,7 +99,7 @@
        ;; Below Bootstrap xl the split navbar holding #graph-export and
        ;; #graph-settings is display:none, so Joyride would skip those steps.
        (if (and (= :mindmap current-tour)
-                (not (.-matches (js/matchMedia "(min-width: 1200px)"))))
+                (not (.-matches (js/matchMedia (str "(min-width: " (:xl config/breakpoints) "px)")))))
          (subvec steps 0 1)
          steps)))))
 
