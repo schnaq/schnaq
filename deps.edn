@@ -29,10 +29,8 @@
         io.sentry/sentry-clj {:mvn/version "8.34.247"
                               :exclusions [ring/ring-core]}
         jarohen/chime {:mvn/version "0.3.3"}
-        ;; resteasy-multipart-provider pulls in angus-mail (Jakarta Mail 2), which
-        ;; ships its own com.sun.mail.* classes. In the uberjar they shadow postal's
-        ;; javax.mail implementation and every mail fails with "IMAPProvider not a
-        ;; subtype". We only use the Keycloak admin client, not multipart.
+        ;; angus-mail (via resteasy-multipart) shadows postal's com.sun.mail classes
+        ;; in the uberjar, so every mail fails with "IMAPProvider not a subtype".
         keycloak-clojure/keycloak-clojure {:mvn/version "1.31.5"
                                            :exclusions [org.eclipse.angus/angus-mail]}
         metosin/reitit {:mvn/version "0.7.1"}
