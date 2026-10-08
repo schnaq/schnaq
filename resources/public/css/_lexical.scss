@@ -263,6 +263,7 @@
 
   .toolbar {
     background: var(--card);
+    contain: inline-size; // nowrap items must not widen the page via min-content
     display: flex;
     flex-wrap: nowrap;
     margin-bottom: 1px;
