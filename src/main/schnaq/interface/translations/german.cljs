@@ -856,4 +856,7 @@
    :analytics.metric/supports "Dafür"
    :analytics.metric/attacks "Dagegen"
    :analytics.metric/neutrals "Neutral"
-   :analytics.metric/percentile "%1. Perzentil"})
+   :analytics.metric/percentile "%1. Perzentil"
+   :statement.vote/up "Positiv bewerten"
+   :statement.vote/down "Negativ bewerten"
+   :analytics.controls/days-unit "Tage"})

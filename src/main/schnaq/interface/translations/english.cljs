@@ -854,4 +854,7 @@
    :analytics.metric/supports "Supports"
    :analytics.metric/attacks "Attacks"
    :analytics.metric/neutrals "Neutral"
-   :analytics.metric/percentile "%1th percentile"})
+   :analytics.metric/percentile "%1th percentile"
+   :statement.vote/up "Upvote"
+   :statement.vote/down "Downvote"
+   :analytics.controls/days-unit "days"})
