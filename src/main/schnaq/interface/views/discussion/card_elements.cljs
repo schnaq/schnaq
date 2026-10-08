@@ -51,7 +51,7 @@
       [tooltip/text
        (labels :history.home/tooltip)
        [:div.text-center
-        [:h6 title]
+        [:h3.h6 title]
         [:p.text-muted.mb-0 (labels :history.home/text)]
         [badges/static-info-badges]]
        {:placement :right}]]]))
@@ -67,15 +67,18 @@
         tooltip-text (gstring/format "%s %s" (labels :tooltip/history-statement) nickname)
         history-content [:div
                          [:div.d-flex.flex-row
-                          [:h6 (labels :history.statement/user) " " (toolbelt/truncate-to-n-chars nickname 20)]
+                          [:h3.h6
+                           [:button.stretched-link.border-0.bg-transparent.p-0.text-reset.text-start.fw-semibold
+                            {:type "button"
+                             :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+                            (labels :history.statement/user) " " (toolbelt/truncate-to-n-chars nickname 20)]]
                           [:div.ms-auto [common/avatar :size 22 :user user]]]
                          (as-markdown (toolbelt/truncate-to-n-words statement-content max-word-count))]]
     [:article
      [:div.history-thread-line]
      [:div.d-inline-block.d-md-block.text-dark.w-100
       (let [attitude (name (or (:statement/type statement) :neutral))]
-        [:div.card-history.clickable.w-100
-         {:on-click #(rf/dispatch [:discussion.history/time-travel index])}
+        [:div.card-history.clickable.w-100.position-relative
          [:div.d-flex.flex-row
           [:div {:class (str "highlight-card-" attitude)}]
           [:div.history-card-content
@@ -91,7 +94,7 @@
         has-history? (seq indexed-history)]
     (when has-history?
       [:section.history-wrapper
-       [:h5.p-2.text-center (labels :history/title)]
+       [:h2.h5.p-2.text-center (labels :history/title)]
        [discussion-start-button]
        ;; history
        (for [[index statement-id] indexed-history]

@@ -121,6 +121,11 @@
                                   #js {:style "percent" :maximumFractionDigits 1})
            ratio))
 
+(defn prefers-reduced-motion?
+  "True if the user asked the system to minimise animations."
+  []
+  (.-matches (js/matchMedia "(prefers-reduced-motion: reduce)")))
+
 (>defn ctrl-press?
   "Check for a ctrl + `key` combination in `event`. Don't use keyCode, as it is 
   deprecated."

@@ -56,7 +56,7 @@
 (defn- schnaqqi-walk []
   [:div.activation-schnaqqi-space
    (when (and @(rf/subscribe [:schnaq.activation/walk?])
-              (not (.-matches (js/matchMedia "(prefers-reduced-motion: reduce)"))))
+              (not (tools/prefers-reduced-motion?)))
      [schnaqqi-walk-motion])])
 
 (defn- activation-dropdown-menu

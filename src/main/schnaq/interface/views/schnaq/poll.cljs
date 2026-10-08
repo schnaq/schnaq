@@ -31,7 +31,7 @@
   [motion/spring-transition
    [tooltip/text
     (str votes " " (labels label-key))
-    [:div.percentage-bar.rounded-1
+    [:span.d-block.percentage-bar.rounded-1
      {:style {:background-color (colors/get-graph-color color-index)
               :height "35px"}}]]
    {:width width}])
@@ -75,10 +75,10 @@
                :value id
                :class (if show-results? "mt-2" "mt-1")}
                single-choice? (assoc :required true))])
-          [:div.flex-grow-1
+          [:span.d-block.flex-grow-1
            (when show-results?
              [percentage-bar votes (str (* 100 ratio) "%") :schnaq.poll/votes index])
-           [:p.small.ms-1.mb-2
+           [:span.d-block.small.ms-1.mb-2
             {:class (when option-voted? "text-decoration-underline text-secondary")}
             value
             (when show-results?
@@ -225,13 +225,13 @@
     [:form
      {:on-submit (fn [e]
                    (.preventDefault e)
+                   (tracking/track-event "Active User" "Action" "Vote on Poll")
                    (rf/dispatch [:schnaq.poll/cast-vote (oget e [:target :elements]) poll]))}
      [results-graph poll cast-votes]
      (when-not voted?
        [:div.text-center
         [:button.btn.btn-primary.px-4
-         {:type :submit
-          :on-click #(tracking/track-event "Active User" "Action" "Vote on Poll")}
+         {:type :submit}
          (labels :schnaq.poll/vote!)]])
      (when @(rf/subscribe [:user/moderator?])
        [show-results-information (:poll/hide-results? poll)])]))

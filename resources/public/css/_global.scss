@@ -30,9 +30,7 @@ html {
 }
 
 // Space Grotesk runs wide, the CI tightens it slightly.
-h1,
-h2,
-h3,
+:is(h1, h2, h3):not(.h4, .h5, .h6),
 .h1,
 .h2,
 .h3,

@@ -63,14 +63,14 @@
        [:p.d-inline-block.mb-0.me-1 (:qa-box.question/value question)]
        [:button.d-flex.flex-row.flex-shrink-0.badge.rounded-pill.align-self-start.justify-content-between.border-0
         {:type "button"
-         :disabled voted?
+         :aria-disabled voted?
          :aria-pressed voted?
          :aria-label (str (labels :qa-boxes.question/upvote) " (" upvotes ")")
          :className (if voted?
                       "bg-primary"
                       "bg-gray-light text-typography clickable")
          :style {:min-width "3.7rem"}
-         :on-click #(rf/dispatch [:qa-box.question/upvote qa-box-id (:db/id question)])}
+         :on-click #(when-not voted? (rf/dispatch [:qa-box.question/upvote qa-box-id (:db/id question)]))}
         [icon :arrow-up (str "mx-1 me-1 fs-6"
                              (when voted? " text-white"))]
         [:span.fs-6.me-1 upvotes]]]

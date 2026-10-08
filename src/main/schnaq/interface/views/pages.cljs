@@ -66,7 +66,10 @@
      [:div.row.pt-lg-5
       [:div.col-12.col-lg-7.col-xl-6
        [:video.w-75.rounded-5.my-auto.d-none.d-lg-block
-        {:auto-play true :loop true :muted true :plays-inline true}
+        {:aria-hidden true
+         :poster (img-path :schnaqqifant/three-d-bubble)
+         :auto-play (not (tools/prefers-reduced-motion?))
+         :loop true :muted true :plays-inline true}
         [:source {:src (video :register.point-right/webm) :type "video/webm"}]
         [:source {:src (video :register.point-right/mp4) :type "video/mp4"}]]]
       [:div.col-12.col-lg-5.col-xl-6

@@ -45,7 +45,7 @@
    [{:target "#graph"
      :content (labels :tour.mindmap/step-1)
      :title (labels :tour.mindmap/step-1-title)
-     :placement :left}
+     :placement :auto}
     {:target "#graph-export"
      :content (labels :tour.mindmap/step-2)
      :title (labels :tour.mindmap/step-2-title)}
