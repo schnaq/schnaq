@@ -48,8 +48,8 @@
   * `on-text-change`: If the current text-block is modified, call the provided
   function.
   * `placeholder`: Define a placeholder for the editor. It also names the
-  editor for screen readers, unless `aria-label` or `aria-labelledby` is set."
-  [{:keys [id focus? debug? toolbar? initial-content on-text-change placeholder aria-label aria-labelledby]
+  editor for screen readers, unless `aria-labelledby` is set."
+  [{:keys [id focus? debug? toolbar? initial-content on-text-change placeholder aria-labelledby]
     :as options} attributes]
   [:> LexicalComposer {:initialConfig (initial-config id initial-content)}
    [:section.lexical-editor attributes
@@ -59,9 +59,9 @@
       [:> RichTextPlugin
        (cond-> {:contentEditable (r/as-element
                                   [:> ContentEditable
-                                   (if aria-labelledby
-                                     {:className "editor-input" :aria-labelledby aria-labelledby}
-                                     {:className "editor-input" :aria-label (or aria-label placeholder)})])
+                                   {:className "editor-input"
+                                    :aria-labelledby aria-labelledby
+                                    :aria-label (when-not aria-labelledby placeholder)}])
                 :ErrorBoundary LexicalErrorBoundary}
          placeholder (assoc :placeholder (r/as-element [:div.editor-placeholder placeholder])))]
       [:> HistoryPlugin {}]

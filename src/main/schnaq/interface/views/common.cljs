@@ -53,66 +53,36 @@
 
 (defn tab-builder
   "Create a tabbed view. Prefix must be unique on this page."
-  ([tab-prefix first-tab second-tab]
-   [tab-builder tab-prefix first-tab second-tab nil nil])
-  ([tab-prefix first-tab second-tab third-tab fourth-tab]
-   (let [tab-prefix# (str "#" tab-prefix)]
-     [:div.panel-white.p-3
-      [:nav.nav-justified
-       [:div.nav.nav-tabs {:role "tablist"}
-        [:a.nav-item.nav-link.d-flex.align-items-center.justify-content-center.active
-         {:data-bs-toggle "tab"
-          :href (str tab-prefix# "-home")
-          :role "tab"
-          :id (str tab-prefix "-home-tab")
-          :aria-controls (str tab-prefix "-home")
-          :aria-selected "true"}
-         (:link first-tab)]
-        [:a.nav-item.nav-link.d-flex.align-items-center.justify-content-center
-         {:data-bs-toggle "tab"
-          :href (str tab-prefix# "-link")
-          :role "tab"
-          :id (str tab-prefix "-link-tab")
-          :aria-controls (str tab-prefix "-link")
-          :aria-selected "false"}
-         (:link second-tab)]
-        (when third-tab
-          [:a.nav-item.nav-link.d-flex.align-items-center.justify-content-center
-           {:data-bs-toggle "tab"
-            :href (str tab-prefix# "-link-3")
-            :role "tab"
-            :id (str tab-prefix "-link-tab-3")
-            :aria-controls (str tab-prefix "-link-3")
-            :aria-selected "false"}
-           (:link third-tab)])
-        (when fourth-tab
-          [:a.nav-item.nav-link.d-flex.align-items-center.justify-content-center
-           {:data-bs-toggle "tab"
-            :href (str tab-prefix# "-link-4")
-            :role "tab"
-            :id (str tab-prefix "-link-tab-4")
-            :aria-controls (str tab-prefix "-link-4")
-            :aria-selected "false"}
-           (:link fourth-tab)])]]
-      [:div.tab-content.mt-4.mt-md-5
-       [:div.tab-pane.fade.show.active
-        {:id (str tab-prefix "-home")
-         :role "tabpanel" :aria-labelledby (str tab-prefix "-home-tab")}
-        (:view first-tab)]
-       [:div.tab-pane.fade
-        {:id (str tab-prefix "-link")
-         :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab")}
-        (:view second-tab)]
-       (when third-tab
-         [:div.tab-pane.fade
-          {:id (str tab-prefix "-link-3")
-           :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab-3")}
-          (:view third-tab)])
-       (when fourth-tab
-         [:div.tab-pane.fade
-          {:id (str tab-prefix "-link-4")
-           :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab-4")}
-          (:view fourth-tab)])]])))
+  [tab-prefix first-tab second-tab]
+  (let [tab-prefix# (str "#" tab-prefix)]
+    [:div.panel-white.p-3
+     [:nav.nav-justified
+      [:div.nav.nav-tabs {:role "tablist"}
+       [:a.nav-item.nav-link.d-flex.align-items-center.justify-content-center.active
+        {:data-bs-toggle "tab"
+         :href (str tab-prefix# "-home")
+         :role "tab"
+         :id (str tab-prefix "-home-tab")
+         :aria-controls (str tab-prefix "-home")
+         :aria-selected "true"}
+        (:link first-tab)]
+       [:a.nav-item.nav-link.d-flex.align-items-center.justify-content-center
+        {:data-bs-toggle "tab"
+         :href (str tab-prefix# "-link")
+         :role "tab"
+         :id (str tab-prefix "-link-tab")
+         :aria-controls (str tab-prefix "-link")
+         :aria-selected "false"}
+        (:link second-tab)]]]
+     [:div.tab-content.mt-4.mt-md-5
+      [:div.tab-pane.fade.show.active
+       {:id (str tab-prefix "-home")
+        :role "tabpanel" :aria-labelledby (str tab-prefix "-home-tab")}
+       (:view first-tab)]
+      [:div.tab-pane.fade
+       {:id (str tab-prefix "-link")
+        :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab")}
+       (:view second-tab)]]]))
 
 (>defn set-website-title!
   "Set a document's website title."
@@ -157,12 +127,11 @@
 ;; Form-related
 
 (defn form-input
-  "The input form for the display name. `:css` adds classes to the input."
-  [{:keys [id placeholder default-value css] :as properties}]
+  "The input form for the display name."
+  [{:keys [id placeholder default-value] :as properties}]
   [:input.form-control.form-border-bottom.mb-2
    (merge {:key (str id placeholder default-value)
            :type "text"
            :autoComplete "off"
-           :required true
-           :class css}
-          (dissoc properties :css))])
+           :required true}
+          properties)])

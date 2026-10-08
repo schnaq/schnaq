@@ -78,32 +78,31 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- download-button
+  "Link button with a tooltip that triggers a download."
+  [label icon-key on-click]
+  [:> Button {:variant :link
+              :class "text-muted p-2"
+              :aria-label label
+              :on-click on-click}
+   [tooltip/text label [:span [icon icon-key]]]])
+
 (defn- wordcloud-download-button
   "Download wordcloud as svg."
   [svg]
   (when svg
-    [:> Button {:variant :link
-                :class "text-muted p-2"
-                :aria-label (labels :schnaq.wordcloud/download)
-                :on-click #(file-download/download-svg-node svg "wordcloud.svg")}
-     [tooltip/text
-      (labels :schnaq.wordcloud/download)
-      [:span [icon :file-download]]]]))
+    [download-button (labels :schnaq.wordcloud/download) :file-download
+     #(file-download/download-svg-node svg "wordcloud.svg")]))
 
 (defn- wordcloud-csv-button
   "Download wordcloud words as CSV."
   [words]
   (when (seq words)
-    [:> Button {:variant :link
-                :class "text-muted p-2"
-                :aria-label (labels :schnaq.wordcloud/download-csv)
-                :on-click #(file-download/download-csv
-                            (into [["word" "count"]]
-                                  (map (juxt :text :value) words))
-                            "wordcloud.csv")}
-     [tooltip/text
-      (labels :schnaq.wordcloud/download-csv)
-      [:span [icon :file-export]]]]))
+    [download-button (labels :schnaq.wordcloud/download-csv) :file-export
+     #(file-download/download-csv
+       (into [["word" "count"]]
+             (map (juxt :text :value) words))
+       "wordcloud.csv")]))
 
 (defn wordcloud
   "Create a wordcloud based on the data that is passed in."

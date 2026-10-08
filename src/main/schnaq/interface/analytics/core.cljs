@@ -93,7 +93,7 @@
      [:div.card-body
       [:h5.card-title (labels :analytics/statements-num-title)]
       [:p.card-text.fs-4
-       (labels :analytics.statements/overall) ": " statements-total
+       (labels :analytics.metric/overall) ": " statements-total
        " — " (labels :analytics.statements/change) ": " [percentage-change penultimate ultimate]]
       [chart/line (labels :analytics.statements/chart-label) (map first statements-series) values]]]))
 

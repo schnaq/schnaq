@@ -67,15 +67,19 @@
   [label]
   [:span.nav-link.fw-bold.pe-none {:role "heading" :aria-level 2} label])
 
+(defn- discussion-view-button-image
+  "Prepare the image for the discussion view button."
+  [img-key class]
+  [:img {:height 25 :width 25 :alt ""
+         :className (str "bg-white p-1 rounded-1 " class)
+         :src (img-path img-key)}])
+
 (defn- links-to-discussion-views
   "Toggle between different views in a discussion."
   [& {:keys [props]}]
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])
         current-route @(rf/subscribe [:navigation/current-route-name])
-        href #(navigation/href % {:share-hash share-hash})
-        img (fn [img-key] [:img {:height 25 :width 25 :alt ""
-                                 :class "navbar-icon"
-                                 :src (img-path img-key)}])]
+        href #(navigation/href % {:share-hash share-hash})]
     [:<>
      [menu-heading (labels :discussion.navbar/views)]
      (doall
@@ -87,14 +91,7 @@
                               :active active?
                               :aria-current (when active? "page")}
                              props)
-           [img icon] (labels label)])))]))
-
-(defn- discussion-view-button-image
-  "Prepare the image for the discussion view button."
-  [img-key class]
-  [:img {:height 25 :width 25 :alt ""
-         :className (str "bg-white p-1 rounded-1 " class)
-         :src (img-path img-key)}])
+           [discussion-view-button-image icon "me-2"] (labels label)])))]))
 
 (defn- discussion-view-group
   "Switch between different discussion views."

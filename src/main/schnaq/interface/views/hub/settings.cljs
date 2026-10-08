@@ -65,7 +65,7 @@
         [common/form-input {:id input-id
                             :default-value name
                             :aria-label (labels :hub.settings/change-name)
-                            :css "font-150"}]]
+                            :class "font-150"}]]
        [:div.text-end.my-3
         [:button.btn.btn-lg.btn-outline-primary {:type :submit}
          (labels :hub.settings/save)]]]]
@@ -80,7 +80,7 @@
         [common/form-input {:id :add-member-input
                             :placeholder "contact@email.com"
                             :aria-label (labels :hub.members.add.form/title)
-                            :css "font-150"}]]
+                            :class "font-150"}]]
        [:div.text-end.my-3
         [:button.btn.btn-lg.btn-outline-primary {:type :submit}
          (labels :hub.members.add.form/button)]]]]]))

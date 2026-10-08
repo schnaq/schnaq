@@ -5,7 +5,8 @@
             [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.localstorage :refer [from-localstorage]]))
+            [schnaq.interface.utils.localstorage :refer [from-localstorage]]
+            [schnaq.interface.utils.toolbelt :as tools]))
 
 (def ^:private tour-over?
   "Statuses which mean the user is done with the tour, either by finishing or by
@@ -25,7 +26,7 @@
 (defn- reduced-motion-styles
   "Stop the pulsing beacon for users who prefer reduced motion."
   []
-  (if (.-matches (js/matchMedia "(prefers-reduced-motion: reduce)"))
+  (if (tools/prefers-reduced-motion?)
     {:beaconInner {:animation "none"}
      :beaconOuter {:animation "none"}}
     {}))

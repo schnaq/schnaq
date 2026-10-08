@@ -58,7 +58,7 @@
        [common/form-input {:id input-id
                            :default-value display-name
                            :aria-label (labels :user.button/change-name)
-                           :css "font-150"}]]
+                           :class "font-150"}]]
       [:div.d-grid.gap-2.d-sm-flex.justify-content-sm-between.pt-5
        [:a.btn.btn-lg.btn-outline-secondary {:href config/keycloak-profile-page}
         (labels :user/profile-settings)]

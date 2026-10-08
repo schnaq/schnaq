@@ -114,12 +114,16 @@
   (map #(js/parseInt (oget % :value))
        (filter #(oget % :checked) checkboxes)))
 
+(def ^:private percent-formatter
+  "Building an `Intl.NumberFormat` is expensive, so build one per language."
+  (memoize
+   (fn [language]
+     (js/Intl.NumberFormat. language #js {:style "percent" :maximumFractionDigits 1}))))
+
 (defn format-percent
   "Format a ratio between 0 and 1 as a percentage in the user's language."
   [ratio]
-  (.format (js/Intl.NumberFormat. (name @config/user-language)
-                                  #js {:style "percent" :maximumFractionDigits 1})
-           ratio))
+  (.format (percent-formatter (name @config/user-language)) ratio))
 
 (defn prefers-reduced-motion?
   "True if the user asked the system to minimise animations."

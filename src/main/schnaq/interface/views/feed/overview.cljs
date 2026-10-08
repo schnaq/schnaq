@@ -178,10 +178,11 @@
             [schnaq-entry schnaq]])]))))
 
 (defn- feed-button
-  "Create a button for the feed list."
-  [text image-div href button-class]
-  [:a.btn.btn-link.text-start {:class button-class
-                               :aria-current (when (= button-class "feed-button-focused") "page")
+  "Create a button for the feed list. `active?` marks the current page. An
+  optional `button-class` replaces the class derived from `active?`."
+  [text image-div href active? & [button-class]]
+  [:a.btn.btn-link.text-start {:class (or button-class (if active? "feed-button-focused" "feed-button"))
+                               :aria-current (when active? "page")
                                :href href}
    [:div.d-flex.flex-row
     image-div
@@ -194,13 +195,12 @@
   "Display a single hub."
   [{:hub/keys [keycloak-name name logo]}]
   (let [current-hub @(rf/subscribe [:hub/current])
-        current-hub-name (:hub/keycloak-name current-hub)
-        button-class (if (= current-hub-name keycloak-name) "feed-button-focused" "feed-button")]
+        current-hub-name (:hub/keycloak-name current-hub)]
     [feed-button
      name
      [hub/hub-logo logo name 32]
      (navigation/href :routes/hub {:keycloak-name keycloak-name})
-     button-class]))
+     (= current-hub-name keycloak-name)]))
 
 (defn- feed-schnaqs
   "Sidebar where users can dispatch which schnaqs are shown."
@@ -208,10 +208,8 @@
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         current-route @(rf/subscribe [:navigation/current-route-name])
         current-filter @(rf/subscribe [:schnaqs.visited/filter])
-        check-route-fn (fn [filter] (if (and
-                                         (= current-filter filter)
-                                         (= current-route :routes.schnaqs/personal))
-                                      "feed-button-focused" "feed-button"))]
+        check-route-fn (fn [filter] (and (= current-filter filter)
+                                         (= current-route :routes.schnaqs/personal)))]
     [:section
      [:h6.text-typography.pb-2.ms-4 (labels :overview.schnaqs/heading)]
      [:div.d-flex.flex-column
@@ -251,13 +249,14 @@
        (labels :nav.schnaqs/create-schnaq)
        [feed-button-icon :plus]
        (navigation/href :routes.schnaq/create)
+       false
        "feed-button-create"]
       (when share-hash
         [feed-button
          (labels :nav.schnaqs/last-added)
          [feed-button-icon :arrow-left]
          (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})
-         "feed-button"])]
+         false])]
      [:div.panel-white
       [feed-schnaqs]]
      (when hubs
