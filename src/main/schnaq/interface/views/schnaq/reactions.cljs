@@ -5,6 +5,7 @@
             [schnaq.interface.analytics.tracking :as tracking]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :refer [from-localstorage]]))
 
@@ -32,79 +33,63 @@
   (let [down-vote-change (get-in local-votes [:down (:db/id statement)] 0)]
     (+ (:statement/downvotes statement) down-vote-change)))
 
+(defn- vote-control
+  "Arrow and count of one vote direction. Voters get a real button, so keyboard
+  and screen reader users can vote. Read-only viewers only see the numbers."
+  [statement up? selected? vote-count badge-class wrapper-class]
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])
+        read-only? @(rf/subscribe [:schnaq.state/read-only?])
+        ;; Full class names as literals, so purging unused CSS keeps them.
+        vote-class (cond
+                     (and up? selected?) "badge-upvote-selected"
+                     up? "badge-upvote"
+                     selected? "badge-downvote-selected"
+                     :else "badge-downvote")
+        content [:<>
+                 [:span {:class (str "badge me-1 " badge-class " " vote-class)}
+                  [icon (if up? :arrow-up :arrow-down) "vote-arrow m-auto"]]
+                 [:span.visually-hidden (labels (if up? :statement.vote/up :statement.vote/down)) " "]
+                 [:span vote-count]]]
+    (if read-only?
+      [:div.d-flex.flex-row.align-items-center {:class wrapper-class} content]
+      [:button.vote-button.touch-target.d-flex.flex-row.align-items-center.border-0.bg-transparent.p-0
+       {:type "button"
+        :class wrapper-class
+        :aria-pressed (boolean selected?)
+        :on-click (fn [e]
+                    (.stopPropagation e)
+                    (if authenticated?
+                      (rf/dispatch [(if up? :discussion/toggle-upvote :discussion/toggle-downvote) statement])
+                      (rf/dispatch [:schnaq.vote/toggle-anonymous statement (if up? :upvote :downvote)]))
+                    (tracking/track-event "Active User" "Action" (if up? "Vote: Upvote" "Vote: Downvote")))}
+       content])))
+
+(defn- vote-state
+  "Whether the statement is up- or downvoted by the user. Returns `[upvoted? downvoted?]`."
+  [statement]
+  (let [[local-upvote? local-downvote?] @(rf/subscribe [:votes/upvoted-or-downvoted (:db/id statement)])]
+    ;; Do not use or shortcut, since the value can be false and should be preferably selected over backend value
+    [(if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
+     (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)]))
+
 (defn up-down-vote
   "Add inline panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])
-        [local-upvote? local-downvote?] @(rf/subscribe [:votes/upvoted-or-downvoted (:db/id statement)])
-        ;; Do not use or shortcut, since the value can be false and should be preferably selected over backend value
-        upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
-        downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)
-        authenticated? @(rf/subscribe [:user/authenticated?])
-        read-only? @(rf/subscribe [:schnaq.state/read-only?])]
+        [upvoted? downvoted?] (vote-state statement)]
     [:div.d-flex.flex-row.align-items-center
-     [:div.me-1
-      (cond->
-       {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")}
-        (not read-only?) (merge {:on-click (fn [e]
-                                             (.stopPropagation e)
-                                             (if authenticated?
-                                               (rf/dispatch [:discussion/toggle-upvote statement])
-                                               (rf/dispatch [:schnaq.vote/toggle-anonymous statement :upvote]))
-                                             (tracking/track-event "Active User", "Action", "Vote: Upvote"))}))
-      [icon :arrow-up "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
-     [:span.me-2 (get-up-votes statement votes)]
-     [:div.me-1
-      (cond->
-       {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")}
-        (not read-only?) (merge {:on-click (fn [e]
-                                             (.stopPropagation e)
-                                             (if authenticated?
-                                               (rf/dispatch [:discussion/toggle-downvote statement])
-                                               (rf/dispatch [:schnaq.vote/toggle-anonymous statement :downvote]))
-                                             (tracking/track-event "Active User", "Action", "Vote: Downvote"))}))
-      [icon :arrow-down "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
-     [:span (get-down-votes statement votes)]]))
+     [vote-control statement true upvoted? (get-up-votes statement votes) "" "me-2"]
+     [vote-control statement false downvoted? (get-down-votes statement votes) "" nil]]))
 
 (defn up-down-vote-vertical
   "Vertical panel for up and down votes."
   [props statement]
   (let [votes @(rf/subscribe [:local-votes])
-        [local-upvote? local-downvote?] @(rf/subscribe [:votes/upvoted-or-downvoted (:db/id statement)])
-        ;; Do not use or shortcut, since the value can be false and should be preferably selected over backend value
-        upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
-        downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)
-        authenticated? @(rf/subscribe [:user/authenticated?])
-        read-only? @(rf/subscribe [:schnaq.state/read-only?])]
+        [upvoted? downvoted?] (vote-state statement)]
     [:div props
-     [:div.d-flex.flex-row.align-items-center
-      [:div
-       (cond->
-        {:class (if upvoted?
-                  "badge badge-upvote-selected px-1 me-1"
-                  "badge badge-upvote px-1 me-1")}
-         (not read-only?) (merge {:on-click (fn [e]
-                                              (.stopPropagation e)
-                                              (if authenticated?
-                                                (rf/dispatch [:discussion/toggle-upvote statement])
-                                                (rf/dispatch [:schnaq.vote/toggle-anonymous statement :upvote]))
-                                              (tracking/track-event "Active User", "Action", "Vote: Upvote"))}))
-       [icon :arrow-up "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
-      [:div (get-up-votes statement votes)]]
-     [:div.d-flex.flex-row.align-items-center
-      [:div
-       (cond->
-        {:class (if downvoted?
-                  "badge badge-downvote-selected px-1 me-1"
-                  "badge badge-downvote px-1 me-1")}
-         (not read-only?) (merge {:on-click (fn [e]
-                                              (.stopPropagation e)
-                                              (if authenticated?
-                                                (rf/dispatch [:discussion/toggle-downvote statement])
-                                                (rf/dispatch [:schnaq.vote/toggle-anonymous statement :downvote]))
-                                              (tracking/track-event "Active User", "Action", "Vote: Downvote"))}))
-       [icon :arrow-down "vote-arrow m-auto" (when read-only? {:style {:cursor "unset"}})]]
-      [:div (get-down-votes statement votes)]]]))
+     ;; On phones the margin puts the arrows on the axis of the three-dot menu above.
+     [vote-control statement true upvoted? (get-up-votes statement votes) "px-1 ms-2 ms-md-0" nil]
+     [vote-control statement false downvoted? (get-down-votes statement votes) "px-1 ms-2 ms-md-0" nil]]))
 
 (rf/reg-sub
  :local-votes

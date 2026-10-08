@@ -13,12 +13,23 @@
 .form-border-bottom {
   background: transparent;
   border: 0;
-  border-bottom: 2px solid $gray-300;
+  border-bottom: 2px solid var(--muted-foreground);
   border-radius: 0;
 
   &:focus {
     background: transparent;
-    border-bottom: 2px solid $primary;
-    box-shadow: none;
+    border-bottom-color: var(--ring);
+    box-shadow: 0 2px 0 var(--ring); // The underline grows from 2px to 4px, so focus is not only a colour change.
+  }
+}
+
+// Centred number inputs (the access code) lose the spin buttons, which shift the text off centre.
+.text-center[type='number'] {
+  appearance: textfield;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
   }
 }

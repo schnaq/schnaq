@@ -1,22 +1,21 @@
 // Segmented control to choose the attitude (support / neutral / attack) of a reply.
-// The selected attitude tints the reply field and submit button.
-$attitude-neutral: #5b6275;
-// Darkened tones keep text on white above 4.5:1 contrast.
-$attitude-support: color-mix(in srgb, var(--theming-primary, #{$positive}) 70%, #000);
-$attitude-attack: color-mix(in srgb, var(--theming-secondary, #{$negative}) 55%, #000);
-
+// The selected attitude tints the reply field and submit button. The -strong
+// tokens keep text on white above 4.5:1 contrast.
 .attitude-toned {
-  --tone: #{$attitude-neutral};
-  --tone-fill: #{$attitude-neutral};
+  --tone: var(--muted-foreground);
+  --tone-fill: var(--muted-foreground);
+  --tone-foreground: var(--card);
 
   &[data-attitude="support"] {
-    --tone: #{$attitude-support};
-    --tone-fill: var(--theming-primary, #{$positive});
+    --tone: var(--primary-strong);
+    --tone-fill: var(--primary-strong);
+    --tone-foreground: var(--primary-foreground);
   }
 
   &[data-attitude="attack"] {
-    --tone: #{$attitude-attack};
-    --tone-fill: var(--theming-secondary, #{$negative});
+    --tone: var(--secondary-strong);
+    --tone-fill: var(--secondary);
+    --tone-foreground: var(--secondary-foreground);
   }
 
   .lexical-editor,
@@ -29,7 +28,7 @@ $attitude-attack: color-mix(in srgb, var(--theming-secondary, #{$negative}) 55%,
   }
 
   .lexical-editor {
-    border-color: var(--tone-fill) !important; // stylelint-disable-line declaration-no-important
+    border-color: var(--tone-fill);
 
     &:focus-within {
       box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--tone-fill) 25%, transparent);
@@ -39,19 +38,19 @@ $attitude-attack: color-mix(in srgb, var(--theming-secondary, #{$negative}) 55%,
   .attitude-submit {
     background-color: var(--tone-fill);
     border-color: var(--tone-fill);
-    color: $white;
+    color: var(--tone-foreground);
 
     &:hover:not(:disabled),
     &:focus-visible {
-      background-color: var(--tone);
-      border-color: var(--tone);
-      color: $white;
+      background-color: color-mix(in srgb, var(--tone-fill) 85%, #000);
+      border-color: color-mix(in srgb, var(--tone-fill) 85%, #000);
+      color: var(--tone-foreground);
     }
   }
 }
 
 .attitude-control {
-  background: $light-background;
+  background: var(--background);
   border-radius: 0.6rem;
   display: inline-flex;
   gap: 0.25rem;
@@ -59,7 +58,7 @@ $attitude-attack: color-mix(in srgb, var(--theming-secondary, #{$negative}) 55%,
 }
 
 .attitude-option {
-  --option-tone: #{$attitude-neutral};
+  --option-tone: var(--muted-foreground);
   align-items: center;
   background: transparent;
   border-radius: 0.45rem;
@@ -72,6 +71,10 @@ $attitude-attack: color-mix(in srgb, var(--theming-secondary, #{$negative}) 55%,
   transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
   white-space: nowrap;
 
+  @include media-breakpoint-down(md) {
+    min-height: 2.75rem; // phone touch target
+  }
+
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
@@ -81,16 +84,16 @@ $attitude-attack: color-mix(in srgb, var(--theming-secondary, #{$negative}) 55%,
   }
 
   &.attitude-support {
-    --option-tone: #{$attitude-support};
+    --option-tone: var(--primary-strong);
   }
 
   &.attitude-attack {
-    --option-tone: #{$attitude-attack};
+    --option-tone: var(--secondary-strong);
   }
 }
 
 .btn-check:checked + .attitude-option {
-  background: $white;
+  background: var(--card);
   box-shadow: 0 1px 3px rgba($typography, 0.12);
   color: var(--option-tone);
 }

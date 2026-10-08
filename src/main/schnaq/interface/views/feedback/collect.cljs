@@ -83,7 +83,8 @@
         [:label.form-check-label.mx-2 {:for "feedback-include-screenshot"}
          (labels :feedbacks.modal/screenshot)]]
        (when (and @screenshot-url @with-screenshot?)
-         [:img#feedback-screenshot.img-fluid.img-thumbnail.my-2 {:src @screenshot-url}])
+         [:img#feedback-screenshot.img-fluid.img-thumbnail.my-2 {:src @screenshot-url
+                                                                 :alt (labels :feedbacks/screenshot)}])
        [:div.modal-footer
         [:input.btn.btn-primary.me-auto {:type "submit" :value (labels :feedbacks.modal/submit)}]
         [:small.text-muted (labels :feedbacks.modal/disclaimer)]]])))

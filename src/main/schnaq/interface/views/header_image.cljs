@@ -22,13 +22,13 @@
                                  (oget e [:target :elements])]))}
      [:div.mb-2
       [:label.form-label.h4 {:for input-id} (labels :schnaq.header-image.url/label)]
-      [:input.form-control.m-1.rounded-3
+      [:input.form-control.mt-1.rounded-3
        {:id input-id
         :name image-form-name
         :auto-complete "off"
         :required true
         :placeholder (labels :schnaq.header-image.url/placeholder)}]
-      [:small.form-text.text-muted.float-end
+      [:small.form-text.text-muted.d-block.float-md-end
        (labels :schnaq.header-image.url/note)]]
      [:button.btn.btn-outline-primary
       (labels :schnaq.header-image.url/button)]]))

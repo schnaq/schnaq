@@ -2,6 +2,7 @@
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.localstorage :as localstorage]
             [schnaq.interface.views.schnaq.activation :as activation]
             [schnaq.interface.views.schnaq.feedback-card :as feedback-card]
@@ -31,16 +32,20 @@
   [motion/fade-in-and-out
    [:div.d-flex.justify-content-between.panel-white-sm
     [:button.btn.btn-transparent.ms-1
-     {:on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil dec 0)])}
+     {:type "button"
+      :aria-label (labels :schnaq.activations/previous)
+      :on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil dec 0)])}
      [icon :chevron/left]]
-    [:div.d-flex.align-items-center
-     (for [index (range activations-count)
-           :let [default-classes "tiny me-1"]]
+    [:div.d-flex.align-items-center {:aria-hidden true}
+     (for [index (range activations-count)]
        (with-meta
-         [icon :circle (if (= index active-index) (str default-classes " text-primary") default-classes)]
+         [icon :circle (if (= index active-index) "small me-1 text-primary" "tiny me-1")]
          {:key (str "index-activation-" index)}))]
+    [:span.visually-hidden {:aria-live "polite"} (str (inc active-index) " / " activations-count)]
     [:button.btn.btn-transparent.me-1
-     {:on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil inc 0)])}
+     {:type "button"
+      :aria-label (labels :schnaq.activations/next)
+      :on-click #(rf/dispatch [:schnaq.activations.show-index/update (fnil inc 0)])}
      [icon :chevron/right]]]])
 
 (rf/reg-sub

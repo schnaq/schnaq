@@ -1,13 +1,9 @@
 (ns schnaq.interface.views.hub.settings
-  (:require [clojure.string :as string]
-            [com.fulcrologic.guardrails.core :refer [>defn-]]
+  (:require [com.fulcrologic.guardrails.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget+]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.files :as files]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed]
@@ -24,21 +20,11 @@
      [:div.d-flex.avatar-image
       [hub-common/hub-logo preview-image name 80]]
      [:div.mt-auto
-      (if temporary-logo
-        ;; delete temporary button
-        [:button.btn.btn-primary.change-profile-pic-button
-         {:on-click (fn [e] (.preventDefault e)
-                      (rf/dispatch [:hub.logo/reset hub]))}
-         [icon :cross]]
-        ;; upload temporary button
-        [:label.form-label.btn.btn-light.change-profile-pic-button
-         [icon :camera]
-         [:input {:id input-id
-                  :accept (string/join "," shared-config/allowed-mime-types-images)
-                  :type "file"
-                  :on-change (fn [event] (files/store-temporary-file
-                                          event [:hubs keycloak-name :logo-temporary]))
-                  :hidden true}]])]]))
+      [common/image-change-button
+       {:input-id input-id
+        :temporary? (some? temporary-logo)
+        :temporary-path [:hubs keycloak-name :logo-temporary]
+        :on-reset #(rf/dispatch [:hub.logo/reset hub])}]]]))
 
 (rf/reg-event-db
  :hub.logo/reset
@@ -62,7 +48,8 @@
         [logo-input logo-input-id]
         [common/form-input {:id input-id
                             :default-value name
-                            :css "font-150"}]]
+                            :aria-label (labels :hub.settings/change-name)
+                            :class "font-150"}]]
        [:div.text-end.my-3
         [:button.btn.btn-lg.btn-outline-primary {:type :submit}
          (labels :hub.settings/save)]]]]
@@ -76,7 +63,8 @@
        [:div.d-flex.flex-row
         [common/form-input {:id :add-member-input
                             :placeholder "contact@email.com"
-                            :css "font-150"}]]
+                            :aria-label (labels :hub.members.add.form/title)
+                            :class "font-150"}]]
        [:div.text-end.my-3
         [:button.btn.btn-lg.btn-outline-primary {:type :submit}
          (labels :hub.members.add.form/button)]]]]]))

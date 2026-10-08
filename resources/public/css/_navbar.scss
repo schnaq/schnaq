@@ -15,7 +15,7 @@ $height-of-components: 4.25rem;
   background-size: cover;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
-  height: 100% !important;
+  height: 100%;
   min-width: 130px;
   overflow: hidden;
   padding: 1rem 4rem 1rem 1rem;
@@ -28,7 +28,7 @@ $height-of-components: 4.25rem;
 
 .navbar-title {
   -webkit-box-orient: vertical;
-  display: -webkit-box !important; /* stylelint-disable-line value-no-vendor-prefix */
+  display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
   -webkit-line-clamp: 2;
   min-width: 0;
   overflow: hidden;
@@ -43,10 +43,6 @@ $height-of-components: 4.25rem;
     text-overflow: ellipsis;
     white-space: wrap;
   }
-}
-
-.nav-link.disabled {
-  @extend .fw-bold;
 }
 
 // Shared height for all controls in the desktop discussion navigation.
@@ -65,12 +61,12 @@ $nav-control-height: 2.75rem;
   padding: 0 0.75rem;
 
   &:hover {
-    background: $light-background;
+    background: var(--background);
   }
 }
 
 .navbar-separator {
-  background: $gray-300;
+  background: var(--border);
   height: 1.75rem;
   margin: 0 0.25rem;
   width: 1px;
@@ -78,7 +74,7 @@ $nav-control-height: 2.75rem;
 
 .view-switcher {
   @include rounded.rounded-1;
-  background: $light-background;
+  background: var(--background);
   display: inline-flex;
   gap: 2px;
   padding: 4px;
@@ -86,32 +82,32 @@ $nav-control-height: 2.75rem;
   a {
     @include rounded.rounded-1;
     align-items: center;
-    color: $typography;
+    color: var(--foreground);
     display: flex;
     height: $nav-control-height;
     padding: 0 0.875rem;
     text-decoration: none;
 
     svg {
-      color: $gray-600;
+      color: var(--muted-foreground);
     }
 
     &:hover {
-      color: $primary;
+      color: var(--primary-strong);
     }
 
     &:focus-visible {
-      outline: 2px solid $primary;
+      outline: 2px solid var(--ring);
       outline-offset: 2px;
     }
 
     &.active {
-      background: $white;
+      background: var(--card);
       box-shadow: 0 1px 3px rgba($typography, 0.12);
-      color: $primary;
+      color: var(--primary-strong);
 
       svg {
-        color: $primary;
+        color: var(--primary-strong);
       }
     }
   }

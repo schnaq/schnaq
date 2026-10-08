@@ -20,11 +20,16 @@
   width: 100%;
 
   @include media-breakpoint-down(md) {
-    padding: 0.35rem 0 0;
+    padding: 0.75rem 0.75rem 0.75rem 0;
+  }
+
+  // The markdown wrapper's last block would add its margin below the padding.
+  .text-break > :last-child {
+    margin-bottom: 0;
   }
 
   &:hover {
-    background: vars.$white-shade;
+    background: var(--muted);
   }
 }
 

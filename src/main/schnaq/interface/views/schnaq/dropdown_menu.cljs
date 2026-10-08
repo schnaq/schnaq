@@ -17,12 +17,13 @@
   [{:keys [id] :as attributes} dropdown-menu-content]
   (when @(rf/subscribe [:user/moderator?])
     [:div.dropdown.mx-2
-     [:button.btn.m-0.p-0
+     [:button.btn.m-0.py-0.px-1
       (merge
-       {:role "button" :data-bs-toggle "dropdown"
+       {:type "button" :data-bs-toggle "dropdown"
         ;; Fixed positioning lets the menu escape scrolling cards, e.g. activations.
         :data-bs-popper-config "{\"strategy\":\"fixed\"}"
-        :aria-haspopup "true" :aria-expanded "false"}
+        :aria-haspopup "true" :aria-expanded "false"
+        :aria-label (labels :discussion.badges/more-options)}
        attributes)
       [icon :dots]]
      [:div.dropdown-menu.dropdown-menu-end {:aria-labelledby id}

@@ -28,8 +28,8 @@
 (defn- set-all-to-read
   "Display button and text for mark-all-as-read related content"
   []
-  [:div.py-5
-   [:div.mt-5.mb-3
+  [:div.pt-4
+   [:div.mb-3
     [:div.d-flex.flex-row.justify-content-center
      [button-or-spinner]
      [check-all-read]]]
@@ -37,9 +37,11 @@
 
 (defn- interval-dropdown-item
   "Dropdown item for interval options"
-  [interval]
-  [:div.dropdown-item
-   {:on-click (fn [_] (rf/dispatch [:user.notification/mail-interval! interval]))}
+  [interval current-interval]
+  [:button.dropdown-item
+   {:type "button"
+    :class (when (= interval current-interval) "active")
+    :on-click (fn [_] (rf/dispatch [:user.notification/mail-interval! interval]))}
    (labels interval)])
 
 (defn- change-interval-drop-down
@@ -57,27 +59,25 @@
                            :notification-mail-interval/weekly (labels weekly)
                            :notification-mail-interval/never (labels never)
                            (labels :notification-mail-interval/never))]
-    [:div.dropdown.mx-3
+    [:div.dropdown
      [:button.btn.btn-outline-dark.dropdown-toggle
       {:id dropdown-id :type "button" :data-bs-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
       interval-display]
      [:div.dropdown-menu {:aria-labelledby dropdown-id}
-      [interval-dropdown-item daily]
-      [interval-dropdown-item weekly]
-      [interval-dropdown-item every-minute]
+      [interval-dropdown-item daily current-interval]
+      [interval-dropdown-item weekly current-interval]
+      [interval-dropdown-item every-minute current-interval]
       [:div.dropdown-divider]
-      [interval-dropdown-item never]]]))
+      [interval-dropdown-item never current-interval]]]))
 
 (defn- change-update-mail-interval
   "Display change-mail-interval related content"
   []
   [:<>
-   [:div.row.mt-5.mb-3.pt-5
-    [:div.col
-     [:h5.text-muted (labels :user.notifications/mails)]]
-    [:div.col.text-end
-     [change-interval-drop-down]]]
+   [:div.d-flex.flex-wrap.justify-content-between.align-items-center.gap-2.mt-4.mb-2
+    [:h5.text-muted.mb-0 (labels :user.notifications/mails)]
+    [change-interval-drop-down]]
    [:small.text-muted (labels :user.notifications/info)]])
 
 (defn- content

@@ -4,6 +4,7 @@
 
 // Global
 @import "bootstrap-custom";
+@import "tokens";
 @import "global";
 @import "third-party-imports";
 
@@ -24,7 +25,6 @@
 @import "footer";
 @import "history";
 @import "icons";
-@import "klaro";
 @import "labels";
 @import "lexical";
 @import "motion";
@@ -38,5 +38,4 @@
 @import "sprite_animation";
 @import "startpage";
 @import "text-input";
-@import "theming";
 @import "up-down-vote";

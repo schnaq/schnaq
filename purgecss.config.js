@@ -20,7 +20,6 @@ module.exports = {
     ],
     deep: [
       /^image-container$/,
-      /^klaro$/,
       /^lexical-editor$/,
       /^lexical-editor-sm$/,
       /^theming-enabled$/,

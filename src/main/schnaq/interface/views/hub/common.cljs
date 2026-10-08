@@ -8,14 +8,15 @@
 (defn hub-logo
   "Get a hub's logo. Refactor this function to reduce redundant code with `avatar`."
   [_logo _display-name _size]
-  (let [show-fallback? (reagent/atom false)]
+  ;; Remember the logo that failed, so a new logo prop is tried again.
+  (let [failed-src (reagent/atom nil)]
     (fn [logo display-name size]
-      (if (and logo (not @show-fallback?))
+      (if (and logo (not= logo @failed-src))
         [:span.profile-pic-fill
          {:style {:height (str size "px") :width (str size "px")}}
          [:img.profile-pic-image {:src logo
                                   :alt ""
-                                  :on-error #(reset! show-fallback? true)}]]
+                                  :on-error #(reset! failed-src logo)}]]
         [animal-avatars/generate-animal-avatar :name display-name :size size]))))
 
 (defn hub-logo-with-name

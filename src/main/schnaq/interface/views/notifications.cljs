@@ -22,7 +22,8 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reagent.dom]
-            [schnaq.interface.components.motion :as motion]))
+            [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.translations :refer [labels]]))
 
 (def ^:private display-time
   "Milliseconds, that a notification stays visible."
@@ -44,15 +45,14 @@
   [::notification :ret associative?]
   [motion/fade-in-and-out
    [:article
-    {:class-name (toast-classes context)
-     :aria-atomic "true", :aria-live "assertive", :role "alert"}
+    {:class-name (toast-classes context)}
     [:div.toast-header
      [:strong.me-auto title]
      [:button.btn-close {:type "button"
+                         :aria-label (labels :notifications/close)
                          :on-click (fn []
                                      (when on-close-fn (on-close-fn))
-                                     (rf/dispatch [:notification/remove id]))}
-      [:span {:aria-hidden "true"}]]]
+                                     (rf/dispatch [:notification/remove id]))}]]
     [:div.toast-body.scrollable-toast body]]])
 
 (>defn notify!
@@ -73,8 +73,7 @@
   []
   (let [notifications @(rf/subscribe [:notifications/all])]
     [:div#notifications-wrapper.notifications-wrapper
-     {:aria-live "polite"
-      :aria-atomic true}
+     {:role "status" :aria-live "polite" :aria-atomic "false"}
      [:> AnimatePresence
       (for [notification notifications]
         [:div {:key (:notification/id notification)}

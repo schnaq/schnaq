@@ -17,32 +17,32 @@
 
 .panel-grey {
   @extend .panel-white;
-  background: $input-background;
+  background: var(--muted);
 }
 
 .card-history {
   background: $white;
   border: 0;
-  border-radius: 1rem;
+  border-radius: var(--radius);
   overflow: hidden;
   padding: 0;
 
   &:hover {
-    background: $white-shade;
+    background: var(--muted);
   }
 }
 
 .card-history-home {
   background: $white;
   border: 0;
-  border-radius: 1rem;
+  border-radius: var(--radius);
   color: $gray-700;
   min-height: 4.5rem;
   overflow: hidden;
   padding: 1.5rem 1rem;
 
   &:hover {
-    background: $white-shade;
+    background: var(--muted);
   }
 }
 
@@ -59,96 +59,97 @@
   }
 }
 
-.discussion-text-input-area {
-  background: transparent;
-  border: 0;
-  resize: none;
-
-  &:focus {
-    background: transparent;
-    box-shadow: none;
-    color: $gray-900;
-  }
-
-  &::placeholder {
-    background: transparent;
-    color: $gray-600;
-  }
-}
-
 .statement-column {
   @extend .col-lg-6;
   @extend .col-12;
 }
 
+// The cards extend only .card. Utility extends would leak their !important.
 .statement-card {
   @extend .card;
-  @extend .my-2;
   @include rounded.rounded-1;
 
   border: 0;
+  margin-block: 0.5rem;
   white-space: pre-line;
 }
 
+// Small button groups (the attitude toggle in statement cards) get 44px touch targets on phones.
+.btn-group-sm > .btn {
+  @include media-breakpoint-down(md) {
+    --bs-btn-padding-y: 0.6875rem;
+  }
+}
+
 .activation-card {
+  @extend .statement-card;
   max-height: 70vh;
   overflow-y: auto;
 }
 
 .statement-question {
-  @extend .border;
-  @extend .border-info;
+  border: var(--bs-border-width) solid var(--bs-info);
 }
 
 .selection-card {
   @extend .statement-card;
-  @extend .border;
-  @extend .border-secondary;
-  @extend .shadow;
+  border: var(--bs-border-width) solid var(--secondary);
+  box-shadow: var(--bs-box-shadow);
 }
 
 .info-card {
   @extend .statement-card;
-  @extend .border;
-  @extend .border-primary;
-  @extend .shadow;
+  border: var(--bs-border-width) solid var(--primary);
+  box-shadow: var(--bs-box-shadow);
 }
 
 .shadow-card {
   @extend .statement-card;
-  @extend .px-3;
-  @extend .py-4;
-  @extend .shadow;
-}
-
-.activation-card {
-  // Gives the class some semantics.
-  @extend .statement-card;
+  box-shadow: var(--bs-box-shadow);
+  padding: 1.5rem 1rem;
 }
 
 .card-with-background {
   // Positions the background correctly
-  @extend .overflow-hidden;
   @extend .statement-card;
-  @extend .p-3;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  overflow: hidden;
+  padding: 1rem;
 }
 
 .blue-card {
   // Card with blue background
   @extend .card-with-background;
-  @extend .text-white;
+  color: var(--bs-white);
 }
 
 .selection-tab {
+  // One row on phones: the icon-only tabs scroll instead of wrapping.
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  // The scroll container clips anything outside it, so the bottom line and the
+  // focus ring are drawn inside.
+  border-bottom: 0;
+  padding-bottom: 1px;
+  box-shadow: inset 0 -1px 0 var(--bs-nav-tabs-border-color);
+
   .nav-link {
+    white-space: nowrap;
+
+    &:focus-visible {
+      box-shadow: none;
+      outline: 2px solid var(--ring);
+      outline-offset: -2px;
+    }
     font-size: medium;
     padding: 0.5rem;
     width: 100%;
     @include media-breakpoint-down(md) {
       font-size: small;
+      min-height: 2.75rem; // Touch height like the toolbar. The width stays content-sized, so the row fits 360px.
     }
   }
 }
@@ -178,25 +179,22 @@
 
 .highlight-card-neutral {
   @extend .highlight-card;
-  background: $neutral;
+  background: var(--border);
 }
 
 .highlight-card-support {
   @extend .highlight-card;
-  background: $positive;
-  background: var(--theming-primary);
+  background: var(--support);
 }
 
 .highlight-card-attack {
   @extend .highlight-card;
-  background: $negative;
-  background: var(--theming-secondary);
+  background: var(--attack);
 }
 
 .highlight-card-answered {
   @extend .highlight-card;
   background: $green;
-  color: rgb(224, 0, 20);
 }
 
 .search-bar {
@@ -216,12 +214,19 @@
   }
 }
 
+// An inset ring instead of a border, so a bar at 0% draws nothing.
 .percentage-bar {
-  border: 1px solid $gray-300;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+// The full-width row behind the bar, so an option without votes still has a row.
+.percentage-track {
+  background: var(--muted);
 }
 
 .card-view img {
-  @extend .img-fluid;
+  height: auto;
+  max-width: 100%;
 }
 
 // Markdown content of statements

@@ -1,29 +1,34 @@
 (ns schnaq.interface.views.common
   (:require [cljs.spec.alpha :as s]
+            [clojure.string :as string]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.animal-avatars :as animal-avatars]
-            [schnaq.interface.components.images :refer [img-path]]))
+            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.files :as files]))
 
 (defn avatar
   "Get a user's avatar."
-  [& {:keys [props size user inline?]
-      :or {user @(rf/subscribe [:user/entity])}}]
-  (let [show-fallback-avatar? (reagent/atom false)]
-    (fn []
+  [& _]
+  (let [failed-src (reagent/atom nil)]
+    (fn [& {:keys [props size user inline?]
+            :or {user @(rf/subscribe [:user/entity])}}]
       (let [{:user.registered/keys [profile-picture display-name]} user
             display-name (or display-name (:user/nickname user))]
         [:div.avatar-image (when inline? {:className "d-inline-flex mx-1"})
-         (if (and profile-picture (not @show-fallback-avatar?))
+         (if (and profile-picture (not= profile-picture @failed-src))
            [:div.profile-pic-fill
             [:img.profile-pic-image
              (merge {:src profile-picture
                      :style {:height (str size "px") :width (str size "px")}
-                     :alt (str "Profile Picture of " display-name)
-                     :on-error #(reset! show-fallback-avatar? true)}
+                     :alt ""
+                     :on-error #(reset! failed-src profile-picture)}
                     props)]]
            [animal-avatars/generate-animal-avatar :name display-name :size size])]))))
 
@@ -33,7 +38,7 @@
   [number? :ret vector?]
   (let [{:user.registered/keys [display-name]} @(rf/subscribe [:user/entity])]
     [:div.d-flex
-     [:div.me-4 [avatar :size size]]
+     [:div.me-3 [avatar :size size]]
      [:h4.my-auto display-name]]))
 
 (defn inline-avatar
@@ -53,58 +58,36 @@
 
 (defn tab-builder
   "Create a tabbed view. Prefix must be unique on this page."
-  ([tab-prefix first-tab second-tab]
-   [tab-builder tab-prefix first-tab second-tab nil nil])
-  ([tab-prefix first-tab second-tab third-tab fourth-tab]
-   (let [tab-prefix# (str "#" tab-prefix)]
-     [:div.panel-white
-      [:nav.nav-justified
-       [:div.nav.nav-tabs {:role "tablist"}
-        [:a.nav-item.nav-link.active {:data-bs-toggle "tab"
-                                      :href (str tab-prefix# "-home")
-                                      :role "tab"
-                                      :aria-controls (str tab-prefix "-home")
-                                      :aria-selected "true"}
-         (:link first-tab)]
-        [:a.nav-item.nav-link {:data-bs-toggle "tab"
-                               :href (str tab-prefix# "-link")
-                               :role "tab"
-                               :aria-controls (str tab-prefix "-link")
-                               :aria-selected "false"}
-         (:link second-tab)]
-        (when third-tab
-          [:a.nav-item.nav-link {:data-bs-toggle "tab"
-                                 :href (str tab-prefix# "-link-3")
-                                 :role "tab"
-                                 :aria-controls (str tab-prefix "-link-3")
-                                 :aria-selected "false"}
-           (:link third-tab)])
-        (when fourth-tab
-          [:a.nav-item.nav-link {:data-bs-toggle "tab"
-                                 :href (str tab-prefix# "-link-4")
-                                 :role "tab"
-                                 :aria-controls (str tab-prefix "-link-4")
-                                 :aria-selected "false"}
-           (:link fourth-tab)])]]
-      [:div.tab-content.mt-5
-       [:div.tab-pane.fade.show.active
-        {:id (str tab-prefix "-home")
-         :role "tabpanel" :aria-labelledby (str tab-prefix "-home-tab")}
-        (:view first-tab)]
-       [:div.tab-pane.fade
-        {:id (str tab-prefix "-link")
-         :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab")}
-        (:view second-tab)]
-       (when third-tab
-         [:div.tab-pane.fade
-          {:id (str tab-prefix "-link-3")
-           :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab-3")}
-          (:view third-tab)])
-       (when fourth-tab
-         [:div.tab-pane.fade
-          {:id (str tab-prefix "-link-4")
-           :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab-4")}
-          (:view fourth-tab)])]])))
+  [tab-prefix first-tab second-tab]
+  (let [tab-prefix# (str "#" tab-prefix)]
+    [:div.panel-white.p-3
+     [:nav.nav-justified
+      [:div.nav.nav-tabs {:role "tablist"}
+       [:a.nav-item.nav-link.d-flex.align-items-center.justify-content-center.active
+        {:data-bs-toggle "tab"
+         :href (str tab-prefix# "-home")
+         :role "tab"
+         :id (str tab-prefix "-home-tab")
+         :aria-controls (str tab-prefix "-home")
+         :aria-selected "true"}
+        (:link first-tab)]
+       [:a.nav-item.nav-link.d-flex.align-items-center.justify-content-center
+        {:data-bs-toggle "tab"
+         :href (str tab-prefix# "-link")
+         :role "tab"
+         :id (str tab-prefix "-link-tab")
+         :aria-controls (str tab-prefix "-link")
+         :aria-selected "false"}
+        (:link second-tab)]]]
+     [:div.tab-content.mt-4.mt-md-5
+      [:div.tab-pane.fade.show.active
+       {:id (str tab-prefix "-home")
+        :role "tabpanel" :aria-labelledby (str tab-prefix "-home-tab")}
+       (:view first-tab)]
+      [:div.tab-pane.fade
+       {:id (str tab-prefix "-link")
+        :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab")}
+       (:view second-tab)]]]))
 
 (>defn set-website-title!
   "Set a document's website title."
@@ -133,10 +116,10 @@
   [schnaqqi-size bubble-content css-classes image-key]
   [number? vector? string? keyword? :ret any?]
   [:section.d-flex
-   [:div.speech-bubble.text-center.text-gray {:class css-classes} bubble-content]
+   [:div.speech-bubble.text-center.text-body-secondary {:class css-classes} bubble-content]
    [:img.ms-3 {:style {:width schnaqqi-size
                        :object-fit "contain"}
-               :alt "schnaqqi speaking"
+               :alt ""
                :src (img-path image-key)}]])
 
 (defn schnaqqi-speech-bubble-blue
@@ -157,3 +140,23 @@
            :autoComplete "off"
            :required true}
           properties)])
+
+(defn image-change-button
+  "Button next to an avatar or logo preview. It resets the pending image when
+  `temporary?`, otherwise it lets the user pick a new one, which is stored at
+  `temporary-path` in the app-db."
+  [{:keys [input-id temporary? temporary-path on-reset]}]
+  (if temporary?
+    [:button.btn.btn-primary.change-profile-pic-button
+     {:on-click (fn [e] (.preventDefault e)
+                  (on-reset))
+      :aria-label (labels :themes.personal.edit.image/delete)}
+     [icon :cross]]
+    [:label.form-label.btn.btn-light.change-profile-pic-button
+     [icon :camera]
+     [:input.visually-hidden
+      {:id input-id
+       :accept (string/join "," shared-config/allowed-mime-types-images)
+       :type "file"
+       :aria-label (labels :editor.toolbar/image-upload)
+       :on-change (fn [event] (files/store-temporary-file event temporary-path))}]]))

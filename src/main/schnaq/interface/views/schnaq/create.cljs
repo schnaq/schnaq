@@ -25,16 +25,17 @@
           :defaultChecked checked?}]
         [:select.form-control.form-select
          {:id :exclusive-hub-select
+          :aria-label (labels :hubs/heading)
           :defaultValue selected-hub
           :style {:max-width "80%"}}
          (for [group-id user-groups]
            [:option {:value group-id
                      :key group-id}
             (get-in hubs [group-id :hub/name])])]]
-       [:p.small.form-text.text-muted.ms-4 (labels :schnaq.create.hub/help-text)]])))
+       [:label.small.form-text.text-muted.d-block.ms-4 {:for :hub-exclusive} (labels :schnaq.create.hub/help-text)]])))
 
 (defn- create-schnaq-button []
-  [:div.text-end
+  [:div.d-grid.d-md-block.text-md-end
    [:button.btn.btn-lg.btn-dark
     {:on-click #(tracking/track-event "Active User", "Action", "Create Schnaq")}
     (labels :schnaq.create.button/save)
@@ -62,13 +63,12 @@
                                                       :origin-hub origin-hub
                                                       :selected-hub selected-hub}
                                       [:schnaq.create/success]])))}
-        [:div.panel-grey.row.p-4
-         [:div.col-12
-          [common/form-input {:id :schnaq-title
-                              :placeholder (labels :schnaq.create.input/placeholder)
-                              :css "font-150"}]]]
-        [:div.text-primary.p-3
-         [icon :info " my-auto me-3"]
+        [:div.panel-grey.p-4
+         [common/form-input {:id :schnaq-title
+                             :placeholder (labels :schnaq.create.input/placeholder)
+                             :class "font-150"}]]
+        [:div.text-primary-emphasis.p-3.d-flex.gap-3
+         [icon :info "mt-1 flex-shrink-0"]
          [:span (labels :schnaq.create/info)]]
         [:div.row.my-5
          [:div.col-12.col-md-8.col-lg-6

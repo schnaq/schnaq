@@ -15,10 +15,6 @@
   .footer-schnaqqifant {
     padding-bottom: 0.5rem;
     width: 9rem;
-
-    @include media-breakpoint-down(lg) {
-      width: 12rem;
-    }
   }
 
   a,
@@ -45,6 +41,10 @@
 
 .social-media-icon {
   padding-left: 1rem;
+
+  &:first-child {
+    padding-left: 0;
+  }
 
   &:hover {
     opacity: 0.8;

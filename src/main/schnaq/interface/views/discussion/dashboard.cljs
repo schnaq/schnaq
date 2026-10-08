@@ -16,18 +16,18 @@
      [:a.link-unstyled
       {:href (navigation/href :routes.schnaq.select/statement (assoc path-params :statement-id statement-id))}
       [:div.row.h-100
-       [:div.col-xl-4.col-12
+       [:div.col-12
         [user/user-info statement 24]]
-       [:div.col-xl-5.col-7
+       [:div.col
         [md/as-markdown (:statement/content statement)]]
-       [:div.col-xl-3.col-5
+       [:div.col-auto
         [:div.dashboard-pie-chart
          (when statement
            [pie-chart/create-vote-chart-data statement])]]]]]))
 
 (defn- schnaq-statistics []
   (let [starting-conclusion-ids @(rf/subscribe [:schnaq.statements/current-level])]
-    [:div.panel-white
+    [:div.panel-white.px-3
      [:h3.mb-3 (labels :dashboard/top-posts)]
      (for [statement-id starting-conclusion-ids]
        (with-meta [dashboard-statement statement-id]
@@ -55,7 +55,7 @@
 (defn- wordcloud-view
   "Display a word cloud with common words of the discussion."
   []
-  [:section.panel-white.mb-3
+  [:section.panel-white.px-3
    [:h3 (labels :dashboard.wordcloud/title)]
    [:small.text-muted (labels :dashboard.wordcloud/subtitle)]
    [wordcloud @(rf/subscribe [:wordcloud/words])]])
@@ -64,12 +64,12 @@
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
-     [:div.row.m-0
-      [:div.col-lg-3.p-0.p-md-3
+     [:div.row.m-0.pt-3.pt-md-0
+      [:div.col-lg-3.px-3.p-md-3
        [schnaq-infos]]
-      [:div.col-lg-5.col-12.mb-3.p-0.p-md-3
+      [:div.col-lg-5.col-12.mb-3.px-3.p-md-3
        [wordcloud-view]]
-      [:div.col-lg-4.col-12.mb-3.p-0.p-md-3
+      [:div.col-lg-4.col-12.mb-3.px-3.p-md-3
        [schnaq-statistics]]]]))
 
 (defn view []

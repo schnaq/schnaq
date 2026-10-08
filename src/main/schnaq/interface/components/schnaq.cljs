@@ -14,8 +14,11 @@
   (let [access-code @(rf/subscribe [:schnaq.selected/access-code])
         code-length shared-config/access-code-length
         padded-access-code (.padStart (str access-code) code-length "0")]
-    [:span.clickable
-     (merge {:on-click (fn []
+    [:button.border-0.bg-transparent.p-0.text-reset
+     (merge {:type "button"
+             :title (labels :analytics.users/copy-button)
+             :style {:font "inherit"}
+             :on-click (fn []
                          (clipboard/copy-to-clipboard! access-code)
                          (notify! (labels :schnaq.access-code.clipboard/header)
                                   (labels :schnaq.access-code.clipboard/body)

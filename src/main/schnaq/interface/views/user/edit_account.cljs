@@ -1,12 +1,8 @@
 (ns schnaq.interface.views.user.edit-account
-  (:require [clojure.string :as string]
-            [oops.core :refer [oget+]]
+  (:require [oops.core :refer [oget+]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.files :as files]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.hub.common :as hub-common]
@@ -23,21 +19,11 @@
       [common/avatar :size 80 :user #:user.registered{:profile-picture preview-image
                                                       :display-name (get-in user [:names :display])}]]
      [:div.mt-auto
-      (if temporary-picture
-        ;; delete temporary button
-        [:button.btn.btn-primary.change-profile-pic-button
-         {:on-click (fn [e] (.preventDefault e)
-                      (rf/dispatch [:user.picture/reset]))}
-         [icon :cross]]
-        ;; upload temporary button
-        [:label.form-label.btn.btn-light.change-profile-pic-button
-         [icon :camera]
-         [:input {:id input-id
-                  :accept (string/join "," shared-config/allowed-mime-types-images)
-                  :type "file"
-                  :on-change (fn [event] (files/store-temporary-file
-                                          event [:user :profile-picture :temporary]))
-                  :hidden true}]])]]))
+      [common/image-change-button
+       {:input-id input-id
+        :temporary? (some? temporary-picture)
+        :temporary-path [:user :profile-picture :temporary]
+        :on-reset #(rf/dispatch [:user.picture/reset])}]]]))
 
 (defn- change-user-info []
   (let [display-name @(rf/subscribe [:user/display-name])
@@ -55,14 +41,13 @@
        [avatar-input pic-input-id]
        [common/form-input {:id input-id
                            :default-value display-name
-                           :css "font-150"}]]
-      [:div.row.pt-5
-       [:div.col.text-start.my-3
-        [:a.btn.btn-lg.btn-outline-secondary {:href config/keycloak-profile-page}
-         (labels :user/profile-settings)]]
-       [:div.col.text-end.my-3
-        [:button.btn.btn-lg.btn-outline-primary {:type :submit}
-         (labels :user.settings.button/change-account-information)]]]]]))
+                           :aria-label (labels :user.button/change-name)
+                           :class "font-150"}]]
+      [:div.d-grid.gap-2.d-sm-flex.justify-content-sm-between.pt-5
+       [:a.btn.btn-lg.btn-outline-secondary {:href config/keycloak-profile-page}
+        (labels :user/profile-settings)]
+       [:button.btn.btn-lg.btn-outline-primary {:type :submit}
+        (labels :user.settings.button/change-account-information)]]]]))
 
 (defn- content []
   [pages/settings-panel

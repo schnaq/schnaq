@@ -57,9 +57,9 @@
   "Adds a dropdown with deletion options to schnaqs, e.g. when displayed in the
   list of schnaqs in a hub."
   [schnaq]
-  (let [options-id "options-dropdown-menu"
-        dropdown-id "options-dropdown-elements"
-        share-hash (:discussion/share-hash schnaq)
+  (let [share-hash (:discussion/share-hash schnaq)
+        options-id (str "options-dropdown-menu-" share-hash)
+        dropdown-id (str "options-dropdown-elements-" share-hash)
         current-hub @(rf/subscribe [:hub/current])
         current-user-id @(rf/subscribe [:user/id])
         archived? @(rf/subscribe [:schnaq.visited/archived? share-hash])
@@ -67,7 +67,8 @@
     [:div.dropdown
      [:button.btn.btn-transparent
       {:id options-id :type "button" :data-bs-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}
+       :aria-haspopup "true" :aria-expanded "false"
+       :aria-label (labels :schnaq.options/menu) :title (labels :schnaq.options/menu)}
       [icon :dots-v]]
      [:div.dropdown-menu.dropdown-menu-end {:id dropdown-id :aria-labelledby options-id}
       (when current-hub
@@ -177,10 +178,11 @@
             [schnaq-entry schnaq]])]))))
 
 (defn- feed-button
-  "Create a button for the feed list."
-  [text image-div href button-class]
-  [:a.btn.btn-link.text-start {:class button-class
-                               :role "button"
+  "Create a button for the feed list. `active?` marks the current page. An
+  optional `button-class` replaces the class derived from `active?`."
+  [text image-div href active? & [button-class]]
+  [:a.btn.btn-link.text-start {:class (or button-class (if active? "feed-button-focused" "feed-button"))
+                               :aria-current (when active? "page")
                                :href href}
    [:div.d-flex.flex-row
     image-div
@@ -193,13 +195,12 @@
   "Display a single hub."
   [{:hub/keys [keycloak-name name logo]}]
   (let [current-hub @(rf/subscribe [:hub/current])
-        current-hub-name (:hub/keycloak-name current-hub)
-        button-class (if (= current-hub-name keycloak-name) "feed-button-focused" "feed-button")]
+        current-hub-name (:hub/keycloak-name current-hub)]
     [feed-button
      name
      [hub/hub-logo logo name 32]
      (navigation/href :routes/hub {:keycloak-name keycloak-name})
-     button-class]))
+     (= current-hub-name keycloak-name)]))
 
 (defn- feed-schnaqs
   "Sidebar where users can dispatch which schnaqs are shown."
@@ -207,10 +208,8 @@
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         current-route @(rf/subscribe [:navigation/current-route-name])
         current-filter @(rf/subscribe [:schnaqs.visited/filter])
-        check-route-fn (fn [filter] (if (and
-                                         (= current-filter filter)
-                                         (= current-route :routes.schnaqs/personal))
-                                      "feed-button-focused" "feed-button"))]
+        check-route-fn (fn [filter] (and (= current-filter filter)
+                                         (= current-route :routes.schnaqs/personal)))]
     [:section
      [:h6.text-typography.pb-2.ms-4 (labels :overview.schnaqs/heading)]
      [:div.d-flex.flex-column
@@ -244,23 +243,24 @@
   []
   (let [{:discussion/keys [share-hash]} @(rf/subscribe [:schnaq/last-added])
         hubs @(rf/subscribe [:hubs/all])]
-    [:section
-     [:div.d-flex.flex-column.panel-white.mx-0.mt-0.mb-4
+    [:section.d-flex.flex-column.gap-3.gap-lg-4
+     [:div.d-flex.flex-column.panel-white
       [feed-button
        (labels :nav.schnaqs/create-schnaq)
        [feed-button-icon :plus]
        (navigation/href :routes.schnaq/create)
+       false
        "feed-button-create"]
       (when share-hash
         [feed-button
          (labels :nav.schnaqs/last-added)
          [feed-button-icon :arrow-left]
          (navigation/href :routes.schnaq/moderation-center {:share-hash share-hash})
-         "feed-button"])]
-     [:div.panel-white.mb-4
+         false])]
+     [:div.panel-white
       [feed-schnaqs]]
      (when hubs
-       [:div.panel-white.mb-4
+       [:div.panel-white
         [feed-hubs]])]))
 
 (defn- personal-discussions-view

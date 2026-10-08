@@ -5,7 +5,6 @@
             [cljs.pprint :refer [pprint]]
             [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
-            [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.analytics.charts :as chart]
@@ -13,37 +12,53 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.pages :as pages]))
 
 (def ^:private FormGroup (oget Form :Group))
 (def ^:private FormLabel (oget Form :Label))
 (def ^:private FormControl (oget Form :Control))
 
+(defn- fmt
+  "Round fractional numbers to one decimal place."
+  [value]
+  (if (and (number? value) (not (integer? value)))
+    (.toFixed value 1)
+    value))
+
+(defn- metric-label
+  "Translated heading of a sub-metric, e.g. :25-percentile."
+  [metric-name]
+  (let [metric (name metric-name)]
+    (if-let [[_ percentile] (re-matches #"(\d+)-percentile" metric)]
+      (labels :analytics.metric/percentile percentile)
+      (labels (keyword "analytics.metric" metric)))))
+
 (defn- analytics-card
   "A single card containing a metric and a title."
   [title metric]
   (let [stats @(rf/subscribe [metric])]
     [:div.col
-     [:div.card
-      [:div.card-body
-       [:h5.card-title title]
-       [:p.card-text.display-1 stats]
-       [:p.card-text [:small.text-muted "Last updated ..."]]]]]))
+     [:div.card.h-100
+      [:div.card-body.d-flex.flex-column
+       [:h5.card-title.fs-6 {:style {:hyphens :auto}} title]
+       [:p.card-text.fs-2.fw-bold.mt-auto (fmt stats)]]]]))
 
 (defn- percentage-change
   "Calculate the percentage change between two values. Color positive changes green and negative red."
   [initial-value changed-value]
-  (let [change (* 100 (/ (- changed-value initial-value) initial-value))]
-    [:span {:class (if (< change 0) "text-warning" "text-success")}
-     (gstring/format "%s %%" change)]))
+  (if (and (number? initial-value) (pos? initial-value) (number? changed-value))
+    (let [ratio (/ (- changed-value initial-value) initial-value)]
+      [:span {:class (if (neg? ratio) "text-warning" "text-success")}
+       (toolbelt/format-percent ratio)])
+    [:span.text-muted "–"]))
 
 (defn- registered-users-table
   "Show registered users."
   []
   (let [users @(rf/subscribe [:analytics/registered-users])]
-    [:div.card.w-100 {:style {:height "500px"
-                              :overflow :auto
-                              :display :inline-block}}
+    [:div.card.h-100 {:style {:max-height "500px"
+                              :overflow :auto}}
      [:div.card-body
       [:h5.card-title (labels :analytics.users/title)]
       [:button.btn.btn-sm.btn-outline-primary.me-3
@@ -77,9 +92,10 @@
     [:div.card
      [:div.card-body
       [:h5.card-title (labels :analytics/statements-num-title)]
-      [:p.card-text.display-5 "Overall: " statements-total " — change: " [percentage-change penultimate ultimate]]
-      [chart/line "Statements" (map first statements-series) values]
-      [:p.card-text [:small.text-muted "Last updated ..."]]]]))
+      [:p.card-text.fs-4
+       (labels :analytics.metric/overall) ": " statements-total
+       " — " (labels :analytics.statements/change) ": " [percentage-change penultimate ultimate]]
+      [chart/line (labels :analytics.statements/chart-label) (map first statements-series) values]]]))
 
 (>defn- multi-arguments-card
   "A card containing multiple sub-metrics that are related. Uses the keys of a map
@@ -87,34 +103,36 @@
   [title metric]
   [string? keyword? :ret vector?]
   (let [content @(rf/subscribe [metric])]
-    [:div.col
-     [:div.card
+    [:div.col-12
+     [:div.card.h-100
       [:div.card-body
        [:h5.card-title title]
-       (for [[metric-name metric-value] content]
-         [:div {:key metric-name}
-          [:p.card-text [:strong (str/capitalize (name metric-name))]]
-          [:p.card-text.display-1 metric-value]
-          [:hr]])
-       [:p.card-text [:small.text-muted "Last updated ..."]]]]]))
+       [:div.row.row-cols-2.row-cols-sm-3.g-2
+        (for [[metric-name metric-value] content]
+          [:div.col {:key metric-name}
+           [:p.small.fw-bold.mb-0.text-break (metric-label metric-name)]
+           [:p.fs-4.fw-bold.mb-0 (fmt metric-value)]])]]]]))
 
 (defn- analytics-controls
   "The controls for the analytics view."
   []
-  [:form.row
+  [:form.row.g-2.align-items-center
    {:on-submit (fn [e]
                  (.preventDefault e)
                  (rf/dispatch [:analytics/load-all-with-time (oget e [:target :elements :days-input :value])]))}
-   [:div.col
-    [:input#days-input.form-control.form-round-05.me-sm-2
-     {:type "number"
-      :name "days-input"
-      :placeholder "Stats for last X days"
-      :autoFocus true
-      :required true
-      :defaultValue 30}]]
-   [:div.col
-    [:input.btn.btn-outline-primary.mt-1.mt-sm-0
+   [:div.col.col-sm-4.col-lg-3
+    [:div.input-group
+     [:input#days-input.form-control
+      {:type "number"
+       :name "days-input"
+       :placeholder (labels :analytics.controls/days-placeholder)
+       :aria-label (labels :analytics.controls/days-placeholder)
+       :autoFocus true
+       :required true
+       :defaultValue 30}]
+     [:span.input-group-text (labels :analytics.controls/days-unit)]]]
+   [:div.col-auto
+    [:input.btn.btn-outline-primary
      {:type "submit"
       :value (labels :analytics/fetch-data-button)}]]])
 
@@ -127,11 +145,11 @@
                             (let [inputs (oget e [:target :elements :patterns :value])
                                   split (map str/trim (str/split inputs #","))]
                               (rf/dispatch [:analytics.patterns/query split])))}
-      [:> FormGroup
+      [:> FormGroup {:controlId "analytics-patterns"}
        [:> FormLabel (labels :analytics.patterns.input/label)]
        [:> InputGroup
         [:> FormControl {:name "patterns" :placeholder ".*@schnaq\\.com$, .*@schnaq\\.org$, schnaqqi@schnaq.com"}]
-        [:> Button {:variant "primary" :type :submit} "Query"]]]]
+        [:> Button {:variant "primary" :type :submit} (labels :analytics.patterns/query-button)]]]]
      (when statistics
        [:pre.bg-light.p-3.mt-3 [:code (with-out-str (pprint statistics))]])]))
 
@@ -142,15 +160,15 @@
    {:condition/needs-analytics-admin? true
     :page/heading (labels :analytics/heading)}
    [:<>
-    [:div.container.px-5.py-3
+    [:div.container-fluid.py-3
      [analytics-controls]]
     [:div.container-fluid
-     [:div.row.mb-3
+     [:div.row.g-3.mb-3
       [:div.col-12.col-lg-6
        [statements-stats]]
       [:div.col-12.col-lg-6
        [registered-users-table]]]
-     [:div.row.row-cols-1.row-cols-lg-3.g-3
+     [:div.row.row-cols-2.row-cols-lg-3.g-3
       [analytics-card (labels :analytics/overall-discussions) :analytics/number-of-discussions-overall]
       [analytics-card (labels :analytics/user-numbers) :analytics/number-of-usernames-anonymous]
       [analytics-card (labels :analytics/registered-users-numbers) :analytics/number-of-users-registered]
@@ -161,7 +179,7 @@
       [multi-arguments-card (labels :analytics/statement-lengths-title) :analytics/statement-lengths-stats]
       [multi-arguments-card (labels :analytics/statement-types-title) :analytics/statement-type-stats]
       [multi-arguments-card (labels :analytics/statement-count-percentiles) :analytics/statement-percentiles]]]
-    [:div.container.py-5
+    [:div.container-fluid.py-5
      [:hr.pt-3]
      [query-statistics-by-email]]]])
 
