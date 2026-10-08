@@ -67,7 +67,7 @@
          [common/form-input {:id :schnaq-title
                              :placeholder (labels :schnaq.create.input/placeholder)
                              :css "font-150"}]]
-        [:div.text-primary.p-3.d-flex.gap-3
+        [:div.text-primary-emphasis.p-3.d-flex.gap-3
          [icon :info "mt-1 flex-shrink-0"]
          [:span (labels :schnaq.create/info)]]
         [:div.row.my-5
