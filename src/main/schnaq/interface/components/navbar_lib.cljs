@@ -21,13 +21,13 @@
 (def ^:private NavDropdownDivider (oget NavDropdown :Divider))
 (def ^:private NavDropdownItem (oget NavDropdown :Item))
 
-(defn LanguageDropdown [& {:keys [props vertical?]}]
+(defn LanguageDropdown [& {:keys [props vertical? hide-icon?]}]
   (let [current-language @(rf/subscribe [:current-language])]
     [tooltip/text
      (labels :nav.buttons/language-toggle)
      [:> NavDropdown (merge {:id "language-dropdown"
                              :align :end
-                             :title (r/as-element [:<> [stacked-icon :vertical? vertical? :icon-key :language] current-language])}
+                             :title (r/as-element [:<> (when-not hide-icon? [stacked-icon :vertical? vertical? :icon-key :language]) current-language])}
                             props)
       [:> NavDropdownItem {:href (navigation/switch-language-href :de)
                            :lang "de-DE" :hrefLang "de-DE"}
@@ -211,7 +211,7 @@
         [namechange-menu-point]
         (if session-storage-enabled?
           [:> NavDropdownItem {:on-click #(rf/dispatch [:keycloak/login])}
-           (labels :user/register)]
+           (labels :user/login-register)]
           [login-not-possible])])]))
 
 ;; -----------------------------------------------------------------------------

@@ -7,6 +7,7 @@
             [goog.string :refer [format]]
             [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
+            [reagent.core :as r]
             [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.components.common :refer [schnaq-logo-white schnaqqi-white]]
             [schnaq.interface.components.icons :refer [icon stacked-icon]]
@@ -56,32 +57,42 @@
    :routes.schnaq/dashboard {:icon :icon-summary-dark
                              :label :summary.link.button/text}})
 
-(defn- links-to-discussion-views
-  "Toggle between different views in a discussion."
-  [& {:keys [props]}]
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
-        href #(navigation/href % {:share-hash share-hash})
-        img (fn [img-key] [:img {:height 25
-                                 :class "navbar-icon"
-                                 :src (img-path img-key)}])]
-    [:<>
-     [:> NavLink {:disabled true} (labels :discussion.navbar/views)]
-     (doall
-      (for [[route {:keys [icon label]}] discussion-views]
-        [:> NavLink (merge {:key (str "discussion-view-element-" route)
-                            :class "ms-3" :href (href route)}
-                           props)
-         [img icon] (labels label)]))]))
-
 (defn- active-button? [current-route asked-route]
   (if (= asked-route :routes.schnaq/start)
     (or (= current-route asked-route) (= current-route :routes.schnaq.select/statement))
     (= current-route asked-route)))
 
+(defn- menu-heading
+  "Section heading inside the collapsed mobile menu."
+  [label]
+  [:span.nav-link.fw-bold.pe-none {:role "heading" :aria-level 2} label])
+
+(defn- links-to-discussion-views
+  "Toggle between different views in a discussion."
+  [& {:keys [props]}]
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])
+        current-route @(rf/subscribe [:navigation/current-route-name])
+        href #(navigation/href % {:share-hash share-hash})
+        img (fn [img-key] [:img {:height 25 :width 25 :alt ""
+                                 :class "navbar-icon"
+                                 :src (img-path img-key)}])]
+    [:<>
+     [menu-heading (labels :discussion.navbar/views)]
+     (doall
+      (for [[route {:keys [icon label]}] discussion-views]
+        (let [active? (active-button? current-route route)]
+          [:> NavLink (merge {:key (str "discussion-view-element-" route)
+                              :class (str "ms-3 px-2 rounded" (when active? " fw-bold bg-white bg-opacity-25"))
+                              :href (href route)
+                              :active active?
+                              :aria-current (when active? "page")}
+                             props)
+           [img icon] (labels label)])))]))
+
 (defn- discussion-view-button-image
   "Prepare the image for the discussion view button."
   [img-key class]
-  [:img {:height 25
+  [:img {:height 25 :width 25 :alt ""
          :className (str "bg-white p-1 rounded-1 " class)
          :src (img-path img-key)}])
 
@@ -162,7 +173,7 @@
   "Show the schnaq settings, export and share links."
   []
   [:<>
-   [:> NavLink {:disabled true} (labels :discussion.navbar/settings)]
+   [menu-heading (labels :discussion.navbar/settings)]
    [share-schnaq-button :props {:className "ms-2"}]
    [download-schnaq-button :props {:className "ms-2"}]
    [manage-schnaq-button :props {:className "ms-2"}]])
@@ -177,16 +188,18 @@
     (.click anchor)))
 
 (defn- graph-settings
-  "Show graph settings."
-  [& {:keys [props vertical?]}]
+  "Show graph settings. `ids?` adds the anchors for the mindmap tour."
+  [& {:keys [props vertical? ids?]}]
   [:<>
    [tooltip/text
     (labels :graph.download/as-png)
-    [:> NavLink (merge {:on-click download-graph-as-png} props)
+    [:> NavLink (merge props {:on-click download-graph-as-png
+                              :id (when ids? "graph-export")})
      [stacked-icon :vertical? vertical? :icon-key :file-export] (labels :graph.download/button)]]
    [tooltip/text
     (labels :graph.settings/title)
-    [:> NavLink (merge {:on-click graph-settings-notification} props)
+    [:> NavLink (merge props {:on-click graph-settings-notification
+                              :id (when ids? "graph-settings")})
      [stacked-icon :vertical? vertical? :icon-key :sliders-h] (labels :graph.settings/button)]]])
 
 (defn- page-title
@@ -211,17 +224,28 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- theme-logo
+  "Theme logo; renders `fallback` when no logo is set or it fails to load."
+  [_props _fallback]
+  (let [failed-src (r/atom nil)]
+    (fn [props fallback]
+      (let [logo (:theme.images/logo @(rf/subscribe [:schnaq/theme]))]
+        (if (and logo (not= logo @failed-src))
+          [:img.object-fit-contain (merge {:src logo :alt ""
+                                           :on-error #(reset! failed-src logo)}
+                                          props)]
+          fallback)))))
+
 (defn- schnaqqi-white-brand []
-  (if-let [theme-logo (:theme.images/logo @(rf/subscribe [:schnaq/theme]))]
-    [:img {:src theme-logo :height 50}]
-    [schnaqqi-white :props {:className "img-fluid" :width 50}]))
+  [theme-logo {:height 50 :style {:max-width "35vw"}}
+   [schnaqqi-white :props {:className "img-fluid" :width 50}]])
 
 (defn- mobile-navigation
   "Mobile navigation."
   [& {:keys [props]}]
   [:> Navbar (merge {:bg :primary :variant :dark :expand false} props)
    [:> Container {:fluid true}
-    [:> NavbarBrand {:href (toolbelt/current-overview-link)}
+    [:> NavbarBrand {:href (toolbelt/current-overview-link) :aria-label (labels :nav/schnaqs)}
      [schnaqqi-white-brand]]
     [page-title]
     [:> NavbarToggle {:aria-controls "mobile-navbar"}]
@@ -233,30 +257,34 @@
       (if @(rf/subscribe [:schnaq/share-hash])
         [:div.row
          [:div.col-6 [links-to-discussion-views]]
-         [:div.col-6 [schnaq-settings]]]
+         [:div.col-6
+          [schnaq-settings]
+          (when @(rf/subscribe [:navigation/current-route? :routes/graph-view])
+            [:<>
+             [menu-heading (labels :graph.button/text)]
+             [graph-settings :props {:className "ms-2"}]])]]
         [common-navigation-links])]]]])
 
 (defn- split-navbar
   "Navbar for discussions."
   [& {:keys [props]}]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
-        share-hash @(rf/subscribe [:schnaq/share-hash])
-        theme-logo (:theme.images/logo @(rf/subscribe [:schnaq/theme]))]
+        share-hash @(rf/subscribe [:schnaq/share-hash])]
     [:> Navbar (merge {:bg :transparent :variant :light :expand :lg :className "small text-nowrap"} props)
      [:> Container {:fluid true}
       [:div.d-flex.align-items-center.panel-white-sm.py-0.ps-0.me-2
-       [:> NavbarBrand {:className "p-0" :href (toolbelt/current-overview-link)}
-        (if theme-logo
-          [:img.p-1 {:src theme-logo :height 65}]
-          [:div.schnaq-logo-container
-           [schnaqqi-white :props {:className "img-fluid" :width 50}]])]
+       [:> NavbarBrand {:className "p-0" :href (toolbelt/current-overview-link)
+                        :aria-label (labels :nav/schnaqs)}
+        [theme-logo {:class "p-1" :height 65 :style {:max-width "12rem"}}
+         [:div.schnaq-logo-container
+          [schnaqqi-white :props {:className "img-fluid" :width 50}]]]]
        [page-title]]
       [:> NavbarToggle {:aria-controls "schnaq-navbar-big"}]
       [:> NavbarCollapse {:id "schnaq-navbar-big"
                           :className "justify-content-end"}
        (when @(rf/subscribe [:navigation/current-route? :routes/graph-view])
          [:> Nav {:className "panel-white-sm me-2"}
-          [graph-settings :vertical? true]])
+          [graph-settings :vertical? true :ids? true]])
        (when share-hash
          [:> Nav {:className "panel-white-sm p-1 me-2"}
           [discussion-view-group]])
@@ -301,7 +329,7 @@
      [:div.d-none.d-xl-block
       [:> Navbar {:bg :primary :variant :dark :expand :lg}
        [:> Container {:fluid true}
-        [:> NavbarBrand {:href (toolbelt/current-overview-link)}
+        [:> NavbarBrand {:href (toolbelt/current-overview-link) :aria-label (labels :nav/schnaqs)}
          [schnaqqi-white-brand]]
         [page-title]
         [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
