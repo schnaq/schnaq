@@ -130,9 +130,20 @@
   flex-wrap: nowrap;
   overflow-x: auto;
   scrollbar-width: none;
+  // The scroll container clips anything outside it, so the bottom line and the
+  // focus ring are drawn inside.
+  border-bottom: 0;
+  padding-bottom: 1px;
+  box-shadow: inset 0 -1px 0 var(--bs-nav-tabs-border-color);
 
   .nav-link {
     white-space: nowrap;
+
+    &:focus-visible {
+      box-shadow: none;
+      outline: 2px solid var(--ring);
+      outline-offset: -2px;
+    }
     font-size: medium;
     padding: 0.5rem;
     @include media-breakpoint-down(md) {

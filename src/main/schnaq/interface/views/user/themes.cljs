@@ -375,7 +375,7 @@
    (when color
      (let [css-variable (theme-field->css-variable theme-field)]
        (set-root-color css-variable color)
-       (when (#{:primary :secondary} theme-field)
+       (when (#{"primary" "secondary"} (name theme-field))
          (set-derived-colors! css-variable color))))))
 
 (rf/reg-fx

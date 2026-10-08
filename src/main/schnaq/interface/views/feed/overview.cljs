@@ -181,7 +181,6 @@
   "Create a button for the feed list."
   [text image-div href button-class]
   [:a.btn.btn-link.text-start {:class button-class
-                               :role "button"
                                :aria-current (when (= button-class "feed-button-focused") "page")
                                :href href}
    [:div.d-flex.flex-row

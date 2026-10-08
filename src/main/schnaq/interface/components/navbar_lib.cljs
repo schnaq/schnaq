@@ -60,7 +60,7 @@
     [:div.mb-3
      [:label.form-label {:for slider-id}
       (labels :graph.settings.gravity/label)]
-     [:input.form-control-range.graph-settings-gravity.d-block
+     [:input.form-range.graph-settings-gravity
       {:id slider-id
        :on-input set-gravity! ;; For browser compatibility, set both events
        :on-change set-gravity!

@@ -19,7 +19,6 @@
         button-class (if (= current-route route) "feed-button-focused" "feed-button")]
     [:article
      [:a.btn.btn-link.text-start {:class button-class
-                                  :role "button"
                                   :aria-current (when (= current-route route) "page")
                                   :href (navigation/href route)}
       [:div.row.text-start

@@ -141,7 +141,7 @@
   [schnaqqi-size bubble-content css-classes image-key]
   [number? vector? string? keyword? :ret any?]
   [:section.d-flex
-   [:div.speech-bubble.text-center.text-gray {:class css-classes} bubble-content]
+   [:div.speech-bubble.text-center.text-body-secondary {:class css-classes} bubble-content]
    [:img.ms-3 {:style {:width schnaqqi-size
                        :object-fit "contain"}
                :alt ""

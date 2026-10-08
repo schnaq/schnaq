@@ -402,11 +402,10 @@
 
         [:section.py-3
          [inputs/checkbox
-          [:<>
-           (labels :schnaq.poll.create.hide-results/label)
-           [common/info-icon-with-tooltip (labels :schnaq.poll.create.hide-results/info)]]
+          (labels :schnaq.poll.create.hide-results/label)
           :hide-results?
-          {:defaultChecked (:poll/hide-results? poll-edit-data)}]]
+          {:defaultChecked (:poll/hide-results? poll-edit-data)
+           :after-label [common/info-icon-with-tooltip (labels :schnaq.poll.create.hide-results/info)]}]]
 
 
         [:div.text-center.pt-2
@@ -568,10 +567,9 @@
        [:label.form-check-label
         {:for :radio-ranking-choice} (labels :schnaq.poll.create/ranking-label)]]
       [inputs/checkbox
-       [:<>
-        (labels :schnaq.poll.create.hide-results/label)
-        [common/info-icon-with-tooltip (labels :schnaq.poll.create.hide-results/info)]]
-       :hide-results?]]
+       (labels :schnaq.poll.create.hide-results/label)
+       :hide-results?
+       {:after-label [common/info-icon-with-tooltip (labels :schnaq.poll.create.hide-results/info)]}]]
 
      [:div.text-center.pt-2
       [:button.btn.btn-primary.w-75

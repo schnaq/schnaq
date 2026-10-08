@@ -346,15 +346,15 @@
              (when top-level?
                (when (and (not read-only?) moderator?)
                  [:ul.selection-tab.nav.nav-tabs
-                  {:ref start-tour-ref :role "tablist"}
-                  ;; Only the active tab shows its label, the others are named for assistive tech.
+                  {:ref start-tour-ref}
+                  ;; Toggle buttons, not ARIA tabs: only the active one shows its label,
+                  ;; the others are named for assistive tech.
                   (for [[input-type icon-key label] input-types
                         :let [active? (= @selected-option input-type)]]
-                    [:li.nav-item {:key input-type :role "presentation"}
+                    [:li.nav-item {:key input-type}
                      [:button.nav-link {:type "button"
-                                        :role "tab"
                                         :class (when active? "active")
-                                        :aria-selected active?
+                                        :aria-pressed active?
                                         :aria-label (labels label)
                                         :on-click #(reset! selected-option input-type)}
                       [icon icon-key (when active? "me-1")]

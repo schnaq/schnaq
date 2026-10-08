@@ -20,36 +20,29 @@
   --background: #{$light};
   --foreground: #{$typography};
   --card: #{$white};
-  --card-foreground: #{$typography};
   --primary: #{$primary};
   --primary-rgb: #{to-rgb($primary)};
-  --primary-strong: #1976d2;
+  --primary-strong: #{$primary-strong};
   --primary-foreground: #{$white};
   --secondary: #{$secondary};
   --secondary-rgb: #{to-rgb($secondary)};
-  --secondary-strong: #b35c00;
+  --secondary-strong: #{$secondary-strong};
   --secondary-foreground: #{$typography};
   --muted: #{$gray-200};
   --muted-foreground: #{$gray-600};
-  --accent: #8e40c4;
-  --accent-foreground: #{$white};
-  --destructive: #{$danger};
-  --destructive-foreground: #{$white};
   --border: #{$gray-300};
-  --input: #{$input-border-color};
   --link: #{$link-color};
-  --link-rgb: #{to-rgb($link-color)};
   --radius: #{$border-radius-lg};
 }
 
 .theming-enabled {
   --primary: var(--theming-primary);
   --primary-rgb: var(--theming-primary-rgb, #{to-rgb($primary)});
-  --primary-strong: var(--theming-primary-strong, #1976d2);
+  --primary-strong: var(--theming-primary-strong, #{$primary-strong});
   --primary-foreground: var(--theming-primary-foreground, #{$white});
   --secondary: var(--theming-secondary);
   --secondary-rgb: var(--theming-secondary-rgb, #{to-rgb($secondary)});
-  --secondary-strong: var(--theming-secondary-strong, #b35c00);
+  --secondary-strong: var(--theming-secondary-strong, #{$secondary-strong});
   --secondary-foreground: var(--theming-secondary-foreground, #{$typography});
   --background: var(--theming-background);
 }
@@ -65,9 +58,6 @@
   --bs-primary-rgb: var(--primary-rgb);
   --bs-secondary: var(--secondary);
   --bs-secondary-rgb: var(--secondary-rgb);
-  --bs-link-color: var(--link);
-  --bs-link-color-rgb: var(--link-rgb);
-  --bs-link-hover-color-rgb: var(--link-rgb);
   --bs-focus-ring-color: color-mix(in srgb, var(--ring) 35%, transparent);
 }
 

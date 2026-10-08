@@ -272,8 +272,7 @@
        (if link?
          [:a.badge.rounded-pill.badge-transparent.badge-clickable
           {:href (navigation/href :routes.schnaq.select/statement {:share-hash share-hash
-                                                                   :statement-id (:db/id statement)})
-           :role :button}
+                                                                   :statement-id (:db/id statement)})}
           content]
          [:span.badge.rounded-pill.badge-transparent content])))))
 

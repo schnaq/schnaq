@@ -293,7 +293,8 @@
     (when (and statement-id @(rf/subscribe [:user/moderator?]))
       {:class "clickable"
        :on-click #(rf/dispatch [:statement.pin/toggle statement-id false])})
-    [icon :pin "text-primary"]]])
+    [icon :pin "text-primary"]
+    [:span.visually-hidden (labels :statement.pinned/tooltip)]]])
 
 (rf/reg-sub
  :schnaq.search.current/search-string

@@ -1,5 +1,3 @@
-@use 'variables' as vars;
-
 html {
   scroll-behavior: smooth;
 }
@@ -8,8 +6,11 @@ html {
   min-height: 85vh;
 }
 
+// Long words and URLs wrap anywhere, so they can't push flex rows past a phone
+// screen. break-word is the fallback for Safari < 15.4.
 #root {
   overflow-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
 // Target of the skip link, focused programmatically.

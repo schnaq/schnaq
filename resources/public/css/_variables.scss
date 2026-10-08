@@ -34,6 +34,9 @@ $label-red: #f66490 !default;
 // Bootstrap overrides
 $primary: #1292ee !default;
 $secondary: #ff9901 !default;
+// Darker shades for text, icons and button fills on white (WCAG AA).
+$primary-strong: #1976d2;
+$secondary-strong: #b35c00;
 $success: $green !default;
 $info: $cyan !default;
 $warning: $yellow !default;

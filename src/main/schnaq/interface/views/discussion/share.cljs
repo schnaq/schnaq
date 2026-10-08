@@ -37,7 +37,7 @@
      [:div.d-flex.flex-row.flex-wrap.flex-md-nowrap.my-3.pb-3.my-1
       [:div.d-flex.me-1.me-lg-5.align-self-center (labels :share-link/via)]
       [:div.d-flex.flex-row.flex-grow-1.flex-wrap.flex-md-nowrap
-       [:input.form-control.my-1.bg-gray.text-white
+       [:input.form-control.my-1
         {:value link
          :readOnly true}]
        [:button.btn.btn-primary.text-nowrap.ms-md-3.my-1
