@@ -92,7 +92,7 @@
   [keycloak-id]
   (sjwt/create-signed-jwt (jwt-from-test-user {:user.registered/keycloak-id keycloak-id
                                                :user.registered/display-name "newbie"
-                                               :user.registered/email "newbie@schnaq.com"})
+                                               :user.registered/email (str keycloak-id "@schnaq.com")})
                           config/testing-private-key))
 
 (def token-wrong-signature

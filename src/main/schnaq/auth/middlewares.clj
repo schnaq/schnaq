@@ -6,7 +6,8 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
             [schnaq.database.user :as user-db]
-            [schnaq.shared-toolbelt :as shared-tools]))
+            [schnaq.shared-toolbelt :as shared-tools]
+            [taoensso.timbre :as log]))
 
 (defn- valid-app-code?
   "Check if an app-code was provided via the request-body."
@@ -66,12 +67,18 @@
   race against the first authenticated request."
   [{:keys [identity] :as request}]
   [map? => map?]
-  (if-let [user (user-db/private-user-by-keycloak-id (:sub identity))]
-    (assoc request :user user)
-    (if (string/blank? (:sub identity))
-      request
-      (let [[new-user? user] (user-db/register-new-user identity [] [])]
-        (assoc request :user user :new-user? new-user?)))))
+  (if (string/blank? (:sub identity))
+    request
+    (if-let [user (user-db/private-user-by-keycloak-id (:sub identity))]
+      (assoc request :user user)
+      (try
+        (let [[new-user? user] (user-db/register-new-user identity [] [])]
+          (assoc request :user user :new-user? new-user?))
+        (catch Exception e
+          ;; E.g. the email belongs to another account. Do not lock the user
+          ;; out of every endpoint, only the ones that need the user entity.
+          (log/error e "Could not register user" (:sub identity))
+          request)))))
 
 (>defn- extract-user-information-from-jwt
   "Extend identity map parsed from JWT and convert types."
