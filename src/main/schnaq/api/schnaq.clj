@@ -76,7 +76,11 @@
     (if-not (or keycloak-id nickname)
       (bad-request-schnaq-creation parameters)
       (let [author (if keycloak-id
-                     [:user.registered/keycloak-id keycloak-id]
+                     (do (when-not (user-db/private-user-by-keycloak-id keycloak-id)
+                           ;; The frontend registers users after login, which can lose the race
+                           ;; against creating a schnaq.
+                           (user-db/register-new-user identity [] []))
+                         [:user.registered/keycloak-id keycloak-id])
                      (user-db/add-user-if-not-exists nickname))
             authorized-for-hub? (some #(= % hub) (:groups identity))
             discussion-data (cond-> {:discussion/title discussion-title

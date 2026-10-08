@@ -87,6 +87,10 @@
       (let [activation-1 (activation-db/activation-by-share-hash test-share-hash)]
         (is (= 1 (:activation/count activation-1)))))))
 
+(deftest increment-missing-activation-test
+  (testing "A schnaq without activation cannot be incremented."
+    (is (= 400 (increment-activation-request test-share-hash)))))
+
 ;; -----------------------------------------------------------------------------
 
 (defn- reset-activation-by-share-hash [share-hash user-token]
