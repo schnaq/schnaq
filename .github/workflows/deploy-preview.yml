@@ -28,6 +28,11 @@ jobs:
     environment: staging
     steps:
       - uses: actions/checkout@v7
+        with:
+          # git describe needs the tags and the history back to the last one.
+          fetch-depth: 0
+      - name: Determine version
+        run: echo "APP_VERSION=$(git describe --tags --always)" >> "$GITHUB_ENV"
       - uses: actions/setup-node@v6
         with:
           node-version: 24
