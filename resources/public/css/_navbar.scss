@@ -15,7 +15,7 @@ $height-of-components: 4.25rem;
   background-size: cover;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
-  height: 100% !important;
+  height: 100%;
   min-width: 130px;
   overflow: hidden;
   padding: 1rem 4rem 1rem 1rem;
@@ -28,7 +28,7 @@ $height-of-components: 4.25rem;
 
 .navbar-title {
   -webkit-box-orient: vertical;
-  display: -webkit-box !important; /* stylelint-disable-line value-no-vendor-prefix */
+  display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
   -webkit-line-clamp: 2;
   overflow: hidden;
   padding-bottom: 0;
