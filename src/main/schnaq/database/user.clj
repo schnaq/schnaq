@@ -142,14 +142,29 @@
          :user/nickname nickname}]
        temp-id patterns/private-user))))
 
+(defn- unique-conflict?
+  "Datomic wraps the unique-conflict in an ExecutionException, so walk the
+  causes."
+  [exception]
+  (some #(= :db.error/unique-conflict (:db/error (ex-data %)))
+        (take-while some? (iterate ex-cause exception))))
+
 (>defn add-user-if-not-exists
-  "Adds a user if they do not exist yet. Returns the (new) user-id."
+  "Adds a user if they do not exist yet. Returns the (new) user-id.
+  Concurrent requests with the same nickname can both miss the lookup, so the
+  loser of the race reads the user the winner just created."
   [nickname]
   [:user/nickname => ::specs/any-user]
   (if-let [user (user-by-nickname nickname)]
     user
-    (do (log/info "Added a new user:" nickname)
-        (add-user nickname))))
+    (try
+      (let [user (add-user nickname)]
+        (log/info "Added a new user:" nickname)
+        user)
+      (catch Exception e
+        (if-let [user (and (unique-conflict? e) (user-by-nickname nickname))]
+          user
+          (throw e))))))
 
 (defn user-id
   "Returns the user-id of the passed user. Takes a username and a keycloak-id that may be nil.
