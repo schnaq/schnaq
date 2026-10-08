@@ -1,12 +1,17 @@
 (ns schnaq.interface.views.common
   (:require [cljs.spec.alpha :as s]
+            [clojure.string :as string]
             [com.fulcrologic.guardrails.core :refer [>defn >defn- ?]]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.animal-avatars :as animal-avatars]
-            [schnaq.interface.components.images :refer [img-path]]))
+            [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.files :as files]))
 
 (defn avatar
   "Get a user's avatar."
@@ -135,3 +140,23 @@
            :autoComplete "off"
            :required true}
           properties)])
+
+(defn image-change-button
+  "Button next to an avatar or logo preview. It resets the pending image when
+  `temporary?`, otherwise it lets the user pick a new one, which is stored at
+  `temporary-path` in the app-db."
+  [{:keys [input-id temporary? temporary-path on-reset]}]
+  (if temporary?
+    [:button.btn.btn-primary.change-profile-pic-button
+     {:on-click (fn [e] (.preventDefault e)
+                  (on-reset))
+      :aria-label (labels :themes.personal.edit.image/delete)}
+     [icon :cross]]
+    [:label.form-label.btn.btn-light.change-profile-pic-button
+     [icon :camera]
+     [:input.visually-hidden
+      {:id input-id
+       :accept (string/join "," shared-config/allowed-mime-types-images)
+       :type "file"
+       :aria-label (labels :editor.toolbar/image-upload)
+       :on-change (fn [event] (files/store-temporary-file event temporary-path))}]]))

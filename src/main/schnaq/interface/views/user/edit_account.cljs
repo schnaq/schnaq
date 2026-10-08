@@ -1,12 +1,8 @@
 (ns schnaq.interface.views.user.edit-account
-  (:require [clojure.string :as string]
-            [oops.core :refer [oget+]]
+  (:require [oops.core :refer [oget+]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.files :as files]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.hub.common :as hub-common]
@@ -23,23 +19,11 @@
       [common/avatar :size 80 :user #:user.registered{:profile-picture preview-image
                                                       :display-name (get-in user [:names :display])}]]
      [:div.mt-auto
-      (if temporary-picture
-        ;; delete temporary button
-        [:button.btn.btn-primary.change-profile-pic-button
-         {:on-click (fn [e] (.preventDefault e)
-                      (rf/dispatch [:user.picture/reset]))
-          :aria-label (labels :themes.personal.edit.image/delete)}
-         [icon :cross]]
-        ;; upload temporary button
-        [:label.form-label.btn.btn-light.change-profile-pic-button
-         [icon :camera]
-         [:input.visually-hidden
-          {:id input-id
-           :accept (string/join "," shared-config/allowed-mime-types-images)
-           :type "file"
-           :aria-label (labels :editor.toolbar/image-upload)
-           :on-change (fn [event] (files/store-temporary-file
-                                   event [:user :profile-picture :temporary]))}]])]]))
+      [common/image-change-button
+       {:input-id input-id
+        :temporary? (some? temporary-picture)
+        :temporary-path [:user :profile-picture :temporary]
+        :on-reset #(rf/dispatch [:user.picture/reset])}]]]))
 
 (defn- change-user-info []
   (let [display-name @(rf/subscribe [:user/display-name])

@@ -5,7 +5,6 @@
             [cljs.pprint :refer [pprint]]
             [clojure.string :as str]
             [com.fulcrologic.guardrails.core :refer [>defn-]]
-            [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.analytics.charts :as chart]
@@ -13,6 +12,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.pages :as pages]))
 
 (def ^:private FormGroup (oget Form :Group))
@@ -48,9 +48,9 @@
   "Calculate the percentage change between two values. Color positive changes green and negative red."
   [initial-value changed-value]
   (if (and (number? initial-value) (pos? initial-value) (number? changed-value))
-    (let [change (* 100 (/ (- changed-value initial-value) initial-value))]
-      [:span {:class (if (neg? change) "text-warning" "text-success")}
-       (gstring/format "%.1f %%" change)])
+    (let [ratio (/ (- changed-value initial-value) initial-value)]
+      [:span {:class (if (neg? ratio) "text-warning" "text-success")}
+       (toolbelt/format-percent ratio)])
     [:span.text-muted "–"]))
 
 (defn- registered-users-table

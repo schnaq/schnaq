@@ -70,57 +70,53 @@
         disabled? (= false (user/feature-limit user feature))]
     (if disabled? [cross-icon] [check-icon])))
 
+(defn- feature-row
+  "A feature's label with its value, as one row of the overview."
+  [label value]
+  [:<>
+   [:dt.col-7 label]
+   [:dd.col-5 value]])
+
+(defn- limit-or-unlimited
+  "A feature's limit or, if it has none, the unlimited icon."
+  [user feature]
+  (or (user/feature-limit user feature) [unlimited-icon]))
+
 (defn- feature-overview []
   (let [user @(rf/subscribe [:user/entity])
         {:keys [total-schnaqs]} @(rf/subscribe [:user/meta])]
     [:section.pt-4
      [:dl.row
-      [:dt.col-7 (labels :user.settings.features/schnaqs-created)]
-      [:dd.col-5 (let [limit (user/feature-limit user :total-schnaqs)
-                          warning-class (warning-level-class (usage-warning-level user :total-schnaqs total-schnaqs))]
-                      [:span {:class warning-class}
-                       total-schnaqs " " (labels :user.settings.features/of) " " (or limit [unlimited-icon])])]
-
-      [:dt.col-7 (labels :user.settings.features/posts-per-schnaq)]
-      [:dd.col-5 (if-let [limit (user/feature-limit user :posts-per-schnaq)]
-                      limit [unlimited-icon])]
-
-      [:dt.col-7 (labels :user.settings.features/concurrent-users)]
-      [:dd.col-5 (if-let [limit (user/feature-limit user :concurrent-users)]
-                      limit [unlimited-icon])]
-
-      [:dt.col-7 (labels :user.settings.features/pro)]
-      [:dd.col-5 [check-icon]]
-
-      [:dt.col-7 (labels :user.settings.features/mail-notifications)]
-      [:dd.col-5
-       [settings-link (labels :user.settings.features/mail-notifications)
-        {:href (navigation/href :routes.user.manage/notifications)}
-        [check-icon]]]
-
-      [:dt.col-7 (labels :user.settings.features/theming)]
-      [:dd.col-5
-       [settings-link (labels :user.settings.features/theming)
-        {:href (navigation/href :routes.user.manage/themes)}
-        [feature-available :theming?]]]
-
-      [:dt.col-7 (labels :user.settings.features/embeddings)]
-      [:dd.col-5
-       [settings-link (labels :user.settings.features/embeddings)
-        {:href "https://academy.schnaq.com" :target :_blank}
-        [feature-available :embeddings?]]]]
+      [feature-row (labels :user.settings.features/schnaqs-created)
+       [:span {:class (warning-level-class (usage-warning-level user :total-schnaqs total-schnaqs))}
+        total-schnaqs " " (labels :user.settings.features/of) " " (limit-or-unlimited user :total-schnaqs)]]
+      [feature-row (labels :user.settings.features/posts-per-schnaq)
+       (limit-or-unlimited user :posts-per-schnaq)]
+      [feature-row (labels :user.settings.features/concurrent-users)
+       (limit-or-unlimited user :concurrent-users)]
+      [feature-row (labels :user.settings.features/pro) [check-icon]]
+      (let [label (labels :user.settings.features/mail-notifications)]
+        [feature-row label
+         [settings-link label
+          {:href (navigation/href :routes.user.manage/notifications)}
+          [check-icon]]])
+      (let [label (labels :user.settings.features/theming)]
+        [feature-row label
+         [settings-link label
+          {:href (navigation/href :routes.user.manage/themes)}
+          [feature-available :theming?]]])
+      (let [label (labels :user.settings.features/embeddings)]
+        [feature-row label
+         [settings-link label
+          {:href "https://academy.schnaq.com" :target :_blank}
+          [feature-available :embeddings?]]])]
 
      [:strong (labels :user.settings.features/interactions)]
      [:dl.row
-      [:dt.col-7 (labels :user.settings.features/polls)]
-      [:dd.col-5 (if-let [limit (user/feature-limit user :polls)]
-                      limit [unlimited-icon])]
-
-      [:dt.col-7 (labels :user.settings.features/rankings)]
-      [:dd.col-5 [feature-available :rankings?]]
-
-      [:dt.col-7 (labels :user.settings.features/wordclouds)]
-      [:dd.col-5 [feature-available :wordcloud?]]]]))
+      [feature-row (labels :user.settings.features/polls)
+       (limit-or-unlimited user :polls)]
+      [feature-row (labels :user.settings.features/rankings) [feature-available :rankings?]]
+      [feature-row (labels :user.settings.features/wordclouds) [feature-available :wordcloud?]]]]))
 
 (defn- features-button []
   [:section.text-center
