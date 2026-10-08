@@ -178,15 +178,15 @@
          (main-db/query
           '[:find ?discussion (count ?statements)
             :in $ ?since
-            :where [?discussion :discussion/title _ ?tx]
-            [?tx :db/txInstant ?start-date]
-            [(< ?since ?start-date)]
+            :where [?discussion :discussion/created-at ?timestamp]
+            [(< ?since ?timestamp)]
+            (not [?discussion :discussion/states :discussion.state/deleted])
             [?statements :statement/discussions ?discussion]]
           (Date/from since))
          sorted-data (sort (map second statement-data))]
      {:25-percentile (percentile-of sorted-data 25)
       :50-percentile (percentile-of sorted-data 50)
-      :75-percentile (percentile-of sorted-data 65)
+      :75-percentile (percentile-of sorted-data 75)
       :90-percentile (percentile-of sorted-data 90)
       :95-percentile (percentile-of sorted-data 95)})))
 
@@ -243,9 +243,21 @@
    (statement-type-stats max-time-back))
   ([since]
    [:statistics/since :ret :statistics/statement-type-stats]
-   {:supports (number-of-entities-with-value-since :statement/type :statement.type/support since)
-    :attacks (number-of-entities-with-value-since :statement/type :statement.type/attack since)
-    :neutrals (number-of-entities-with-value-since :statement/type :statement.type/neutral since)}))
+   (let [counts (into {}
+                      (main-db/query
+                       '[:find ?type (count ?statements)
+                         :in $ ?since
+                         :where [?statements :statement/type ?type-ref]
+                         [?type-ref :db/ident ?type]
+                         [?statements :statement/created-at ?timestamp]
+                         [(< ?since ?timestamp)]
+                         (not [?statements :statement/deleted? true])
+                         [?statements :statement/discussions ?discussions]
+                         (not [?discussions :discussion/states :discussion.state/deleted])]
+                       (Date/from since)))]
+     {:supports (get counts :statement.type/support 0)
+      :attacks (get counts :statement.type/attack 0)
+      :neutrals (get counts :statement.type/neutral 0)})))
 
 (>defn labels-stats
   "Returns the number of attacks, supports and neutrals since a certain timestamp."
