@@ -19,6 +19,12 @@
   }
 }
 
+// Only the icon-only buttons centre their content. The arrow and count of a
+// vote start at the edge, so the arrows do not move with the number of digits.
+.vote-button.touch-target {
+  justify-content: flex-start;
+}
+
 .badge-upvote {
   background: none;
   color: var(--primary-strong);

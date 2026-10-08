@@ -249,25 +249,33 @@
          (when (or admin? deletable?)
            [delete-dropdown-button statement])])]]))
 
-(defn show-number-of-replies [statement]
-  (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
-        share-hash @(rf/subscribe [:schnaq/share-hash])
-        old-statement-num (get old-statements-nums-map (:db/id statement) 0)
-        statement-num (:meta/sub-statement-count statement 0)
-        new? (not (= old-statement-num statement-num))]
-    (when-not (zero? statement-num)
-      [:a.badge.rounded-pill.badge-transparent.badge-clickable
-       {:href (navigation/href :routes.schnaq.select/statement {:share-hash share-hash
-                                                                :statement-id (:db/id statement)})
-        :role :button}
-       [:div.d-flex.flex-wrap.align-items-center
-        (if new?
-          [icon :comment/alt "m-auto text-secondary me-1"]
-          [icon :comment/alt "m-auto me-1"])
-        statement-num " "
-        (if (= 1 statement-num)
-          (labels :statement.badges/more-post)
-          (labels :statement.badges/more-posts))]])))
+(defn show-number-of-replies
+  "Badge with the number of replies. It links to the statement, unless
+  `:link?` is false, e.g. for the statement that is already open."
+  ([statement]
+   (show-number-of-replies statement {}))
+  ([statement {:keys [link?] :or {link? true}}]
+   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
+         share-hash @(rf/subscribe [:schnaq/share-hash])
+         old-statement-num (get old-statements-nums-map (:db/id statement) 0)
+         statement-num (:meta/sub-statement-count statement 0)
+         new? (not (= old-statement-num statement-num))
+         content [:span.d-flex.flex-wrap.align-items-center
+                  (if new?
+                    [icon :comment/alt "m-auto text-secondary me-1"]
+                    [icon :comment/alt "m-auto me-1"])
+                  statement-num " "
+                  (if (= 1 statement-num)
+                    (labels :statement.badges/more-post)
+                    (labels :statement.badges/more-posts))]]
+     (when-not (zero? statement-num)
+       (if link?
+         [:a.badge.rounded-pill.badge-transparent.badge-clickable
+          {:href (navigation/href :routes.schnaq.select/statement {:share-hash share-hash
+                                                                   :statement-id (:db/id statement)})
+           :role :button}
+          content]
+         [:span.badge.rounded-pill.badge-transparent content])))))
 
 (defn- posts-label
   "Singular or plural label for a number of posts."

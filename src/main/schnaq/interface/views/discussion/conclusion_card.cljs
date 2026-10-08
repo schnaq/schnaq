@@ -281,12 +281,7 @@
            [badges/number-of-remaining-posts]
            [:<>
             ;; The focused statement is the open page, so its replies are no link.
-            (let [reply-count (:meta/sub-statement-count statement-or-topic 0)]
-              (when (pos? reply-count)
-                [:span.badge.badge-transparent
-                 [icon :comment/alt "m-auto me-1"]
-                 reply-count " "
-                 (labels (if (= 1 reply-count) :statement.badges/more-post :statement.badges/more-posts))]))
+            [badges/show-number-of-replies statement-or-topic {:link? false}]
             [reactions/up-down-vote statement-or-topic]])])]]))
 
 (defn- search-info []

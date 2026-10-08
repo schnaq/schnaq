@@ -39,10 +39,14 @@
   [statement up? selected? vote-count badge-class wrapper-class]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         read-only? @(rf/subscribe [:schnaq.state/read-only?])
+        ;; Full class names as literals, so purging unused CSS keeps them.
+        vote-class (cond
+                     (and up? selected?) "badge-upvote-selected"
+                     up? "badge-upvote"
+                     selected? "badge-downvote-selected"
+                     :else "badge-downvote")
         content [:<>
-                 [:span {:class (str "badge me-1 " badge-class " "
-                                     (if up? "badge-upvote" "badge-downvote")
-                                     (when selected? "-selected"))}
+                 [:span {:class (str "badge me-1 " badge-class " " vote-class)}
                   [icon (if up? :arrow-up :arrow-down) "vote-arrow m-auto"]]
                  [:span.visually-hidden (labels (if up? :statement.vote/up :statement.vote/down)) " "]
                  [:span vote-count]]]
@@ -83,8 +87,9 @@
   (let [votes @(rf/subscribe [:local-votes])
         [upvoted? downvoted?] (vote-state statement)]
     [:div props
-     [vote-control statement true upvoted? (get-up-votes statement votes) "px-1" nil]
-     [vote-control statement false downvoted? (get-down-votes statement votes) "px-1" nil]]))
+     ;; On phones the margin puts the arrows on the axis of the three-dot menu above.
+     [vote-control statement true upvoted? (get-up-votes statement votes) "px-1 ms-2 ms-md-0" nil]
+     [vote-control statement false downvoted? (get-down-votes statement votes) "px-1 ms-2 ms-md-0" nil]]))
 
 (rf/reg-sub
  :local-votes
