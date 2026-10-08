@@ -38,6 +38,6 @@
   margin-left: -2rem;
 }
 
-.change-profile-pic-button:focus-within {
+.change-profile-pic-button:has(input:focus-visible) {
   box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
 }
