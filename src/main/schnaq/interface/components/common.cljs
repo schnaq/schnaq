@@ -7,6 +7,7 @@
             [schnaq.interface.components.icons :refer [icon icon-card]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.navigation :as navigation]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (>defn hint-text
@@ -18,12 +19,14 @@
    text])
 
 (>defn info-icon-with-tooltip
-  "Display an info icon with a tooltip on mouse-over."
+  "Display an info icon with a tooltip on hover and keyboard focus."
   [label attrs]
   [(s/or :string string? :component :re-frame/component) (? map?) => :re-frame/component]
   [tooltip/text
    label
-   [:span attrs [icon :info-question "small ms-1" {:style {:cursor :help}}]]])
+   [:button.btn.btn-link.p-0.align-baseline.lh-1
+    (merge {:type "button" :aria-label (labels :common/more-info)} attrs)
+    [icon :info-question "small ms-1"]]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -119,5 +122,5 @@
   [& {:keys [props]}]
   [:img (merge
          {:src (img-path :schnaqqifant/white)
-          :alt "Image of schnaqqi"}
+          :alt ""}
          props)])

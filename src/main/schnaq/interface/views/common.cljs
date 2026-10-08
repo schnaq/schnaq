@@ -10,20 +10,20 @@
 
 (defn avatar
   "Get a user's avatar."
-  [& {:keys [props size user inline?]
-      :or {user @(rf/subscribe [:user/entity])}}]
-  (let [show-fallback-avatar? (reagent/atom false)]
-    (fn []
+  [& _]
+  (let [failed-src (reagent/atom nil)]
+    (fn [& {:keys [props size user inline?]
+            :or {user @(rf/subscribe [:user/entity])}}]
       (let [{:user.registered/keys [profile-picture display-name]} user
             display-name (or display-name (:user/nickname user))]
         [:div.avatar-image (when inline? {:className "d-inline-flex mx-1"})
-         (if (and profile-picture (not @show-fallback-avatar?))
+         (if (and profile-picture (not= profile-picture @failed-src))
            [:div.profile-pic-fill
             [:img.profile-pic-image
              (merge {:src profile-picture
                      :style {:height (str size "px") :width (str size "px")}
-                     :alt (str "Profile Picture of " display-name)
-                     :on-error #(reset! show-fallback-avatar? true)}
+                     :alt ""
+                     :on-error #(reset! failed-src profile-picture)}
                     props)]]
            [animal-avatars/generate-animal-avatar :name display-name :size size])]))))
 
@@ -63,12 +63,14 @@
         [:a.nav-item.nav-link.active {:data-bs-toggle "tab"
                                       :href (str tab-prefix# "-home")
                                       :role "tab"
+                                      :id (str tab-prefix "-home-tab")
                                       :aria-controls (str tab-prefix "-home")
                                       :aria-selected "true"}
          (:link first-tab)]
         [:a.nav-item.nav-link {:data-bs-toggle "tab"
                                :href (str tab-prefix# "-link")
                                :role "tab"
+                               :id (str tab-prefix "-link-tab")
                                :aria-controls (str tab-prefix "-link")
                                :aria-selected "false"}
          (:link second-tab)]
@@ -76,6 +78,7 @@
           [:a.nav-item.nav-link {:data-bs-toggle "tab"
                                  :href (str tab-prefix# "-link-3")
                                  :role "tab"
+                                 :id (str tab-prefix "-link-tab-3")
                                  :aria-controls (str tab-prefix "-link-3")
                                  :aria-selected "false"}
            (:link third-tab)])
@@ -83,6 +86,7 @@
           [:a.nav-item.nav-link {:data-bs-toggle "tab"
                                  :href (str tab-prefix# "-link-4")
                                  :role "tab"
+                                 :id (str tab-prefix "-link-tab-4")
                                  :aria-controls (str tab-prefix "-link-4")
                                  :aria-selected "false"}
            (:link fourth-tab)])]]
@@ -136,7 +140,7 @@
    [:div.speech-bubble.text-center.text-gray {:class css-classes} bubble-content]
    [:img.ms-3 {:style {:width schnaqqi-size
                        :object-fit "contain"}
-               :alt "schnaqqi speaking"
+               :alt ""
                :src (img-path image-key)}]])
 
 (defn schnaqqi-speech-bubble-blue
@@ -149,11 +153,13 @@
 ;; Form-related
 
 (defn form-input
-  "The input form for the display name."
-  [{:keys [id placeholder default-value] :as properties}]
+  "The input form for the display name. `:css` adds classes to the input."
+  [{:keys [id placeholder default-value css] :as properties}]
   [:input.form-control.form-border-bottom.mb-2
    (merge {:key (str id placeholder default-value)
            :type "text"
            :autoComplete "off"
-           :required true}
-          properties)])
+           :required true
+           :class css
+           :aria-label placeholder}
+          (dissoc properties :css))])

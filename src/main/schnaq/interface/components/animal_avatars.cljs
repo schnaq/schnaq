@@ -78,11 +78,11 @@
 (def ^:private colors {"amaranth" "#9F2B68",
                        "amber" "#FFBF00",
                        "amethyst" "#9966CC",
-                       "apricot" "#FDD5B1",
-                       "aqua" "#BED3E5",
-                       "aquamarine" "#7FFFD4",
+                       "apricot" "#E8875A",
+                       "aqua" "#5F9EC9",
+                       "aquamarine" "#2EB88A",
                        "azure" "#0080FF",
-                       "beige" "#FFF8E7",
+                       "beige" "#C2A878",
                        "black" "#000000",
                        "blue" "#1292EE",
                        "blush" "#DE5D83",
@@ -96,22 +96,22 @@
                        "cyan" "#00FFFF",
                        "emerald" "#50C878",
                        "fuchsia" "#FF00FF",
-                       "gold" "#FFD700",
+                       "gold" "#D4A017",
                        "gray" "#808080",
                        "green" "#7CFC00",
                        "harlequin" "#3fff00",
                        "indigo" "#8A2BE2",
-                       "ivory" "#FFFFF0",
+                       "ivory" "#B5A642",
                        "jade" "#00A36C",
-                       "lavender" "#E6E6FA",
+                       "lavender" "#7B68EE",
                        "lime" "#32CD32",
                        "magenta" "#8B008B", ;; we use darkmagenta to not use the trademarked color
                        "maroon" "#800000",
-                       "moccasin" "#FFE4B5",
+                       "moccasin" "#D2A04B",
                        "olive" "#808000",
                        "orange" "#FFA500",
-                       "peach" "#FFCBA4",
-                       "pink" "#FFC0CB",
+                       "peach" "#E9845B",
+                       "pink" "#E75480",
                        "plum" "#673147",
                        "purple" "#A020F0",
                        "red" "#FF0000",
@@ -125,8 +125,8 @@
                        "tomato" "#FF6347",
                        "turquoise" "#40E0D0",
                        "violet" "#EE82EE",
-                       "white" "FFFFFF",
-                       "yellow" "#FFFF00"})
+                       "white" "#6C757D",
+                       "yellow" "#E0B000"})
 
 (defn generate-animal-avatar
   "Generate an identicon. Returns xml-styled SVG."
@@ -139,9 +139,10 @@
                  animal-part
                  "elephant")
         color (get colors color-part "#1292ee")]
-    [:> Animal {:size (gstring/format "%spx" size)
-                :name animal
-                :color color}]))
+    [:div.flex-shrink-0 {:aria-hidden true}
+     [:> Animal {:size (gstring/format "%spx" size)
+                 :name animal
+                 :color color}]]))
 
 (defn automatic-animal-avatar
   "Generate the avatar without passing a name, just a size. Gets the name from the db"
