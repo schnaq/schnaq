@@ -12,6 +12,23 @@
 
 (s/def ::path (s/and string? #(.startsWith % "/")))
 
+(defn site-language
+  "The language prefix of schnaq.app and schnaq.com: en for :en, de otherwise."
+  [locale]
+  (if (= :en locale) "en" "de"))
+
+(>defn privacy-policy
+  "The app's privacy policy on schnaq.app in the locale's language."
+  [locale]
+  [(? keyword?) => string?]
+  (str "https://schnaq.app/" (site-language locale) "/privacy/"))
+
+(>defn legal-note
+  "The imprint of schnaq GmbH on schnaq.com in the locale's language."
+  [locale]
+  [(? keyword?) => string?]
+  (str "https://schnaq.com/" (site-language locale) "/legal-note"))
+
 (>defn relative-to-absolute-url
   "Convert a relative url to an absolute url. Points to the currently configured
   frontend as a default."

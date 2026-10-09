@@ -568,7 +568,7 @@
    :errors.schnaq/read-only "The schnaq is set to read-only mode."
 
    :error.generic/contact-us
-   [:<> "Did you end up here after clicking something on landing.schnaq.com? Give us a hint at " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
+   [:<> "Did you end up here after clicking something on schnaq.app? Give us a hint at " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
 
    :error.404/heading "This site does not exist\u00a0🙉"
    :error.404/body "The URL that you followed does not exist. Maybe there is a typo."

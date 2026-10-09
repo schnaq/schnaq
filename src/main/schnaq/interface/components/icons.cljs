@@ -1,9 +1,7 @@
 (ns schnaq.interface.components.icons
   ;; For further information check: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react
   ;; For two styles of the same icon see here: https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react#faqs
-  (:require ["@fortawesome/free-brands-svg-icons" :refer [faFacebook
-                                                          faFontAwesomeFlag faGithub
-                                                          faInstagram faLinkedin faTwitter]]
+  (:require ["@fortawesome/free-brands-svg-icons" :refer [faFontAwesomeFlag faGithub faLinkedin]]
             ["@fortawesome/free-regular-svg-icons" :refer [faCalendar faSmileBeam
                                                            faCommentAlt faEnvelope faNewspaper
                                                            faEye faEyeSlash faFileAlt faFileImage faFileVideo faHourglass faIdCard faImage]]
@@ -65,7 +63,6 @@
    :envelope faEnvelope
    :exclamation-triangle faExclamationTriangle
    :external-link-alt faExternalLinkAlt
-   :facebook faFacebook
    :feedback faBalanceScaleRight
    :file-alt faFileAlt
    :file-export faFileExport
@@ -84,7 +81,6 @@
    :infinity faInfinity
    :info faInfoCircle
    :info-question faQuestionCircle
-   :instagram faInstagram
    :italic faItalic
    :language faLanguage
    :layer-group faLayerGroup
@@ -127,7 +123,6 @@
    :terminal faTerminal
    :times faTimes
    :trash faTrashAlt
-   :twitter faTwitter
    :underline faUnderline
    :undo faUndo
    :university faUniversity

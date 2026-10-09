@@ -1,7 +1,7 @@
 (ns schnaq.translations)
 
 (def ^:private email-footer
-  "Falls Sie mehr Infos zu schnaq möchten, besuchen Sie https://landing.schnaq.com")
+  "Falls Sie mehr Infos zu schnaq möchten, besuchen Sie https://schnaq.app")
 
 (defn email-templates
   [identifier]
