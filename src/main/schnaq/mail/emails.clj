@@ -9,6 +9,7 @@
             [schnaq.database.specs :as specs]
             [schnaq.links :as schnaq-links]
             [schnaq.mail.template :as template]
+            [schnaq.sentry :as sentry]
             [taoensso.timbre :as log]))
 
 (def ^:private email-config->env-var
@@ -59,6 +60,12 @@
 
 (def ^:private failed-sendings (atom '()))
 
+(defn- report-failed-sending!
+  [recipient exception]
+  (sentry/capture-exception! exception
+                             {:tags {:mail-recipient-domain (second (str/split recipient #"@"))}})
+  (swap! failed-sendings conj recipient))
+
 (defn- postal-send-success?
   [result]
   (zero? (:code result 99)))
@@ -80,11 +87,11 @@
               (Thread/sleep 100))
             (do
               (log/error "Failed to send mail to" recipient "postal returned" result)
-              (swap! failed-sendings conj recipient))))
+              (report-failed-sending! recipient (ex-info (str "Mail sending failed: " (pr-str result)) {:postal-result result})))))
         (catch Exception exception
           (log/error "Failed to send mail to" recipient)
           (log/error exception)
-          (swap! failed-sendings conj recipient)))
+          (report-failed-sending! recipient exception)))
       (swap! failed-sendings conj recipient))
     (do
       (log-missing-email-config-once!)
