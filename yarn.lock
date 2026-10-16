@@ -1362,10 +1362,10 @@
     uncontrollable "^8.0.4"
     warning "^4.0.3"
 
-"@schnaq/assets@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@schnaq/assets/-/assets-0.3.0.tgz#db9b153850fd756b6a46f47e76c15ecd3e9ed01c"
-  integrity sha512-vV564X3z7PW/ztP5RzLk5yGJ4m12wXT5gvef39HEM4d4b6btSl2oQaTsScvFdamGDloNhL15AhI21IkM1IWdwg==
+"@schnaq/assets@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@schnaq/assets/-/assets-0.4.0.tgz#4f69bbfdef6db64836d3ad22758bd3b0ccbe6148"
+  integrity sha512-nLCBDVKnmuVAKQtGhrXvgbGP+JEeQKW4PXTQ4Rlu8BZpDS3aJXcsjqJcJ4qip8w1KcbCu3NxNAyDbh/27d3KKQ==
 
 "@sentry/browser-utils@10.76.1":
   version "10.76.1"
