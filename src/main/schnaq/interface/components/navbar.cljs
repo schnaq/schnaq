@@ -213,29 +213,40 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- theme-logo
-  "Theme logo; renders `fallback` when no logo is set or it fails to load."
-  [_props _fallback]
+(defn- overview-link
+  "Icon link to the overview, placed next to the schnaqqi."
+  []
+  [tooltip/text
+   (labels :nav/schnaqs-tooltip)
+   [:a.text-white.ms-2 {:href (toolbelt/current-overview-link) :aria-label (labels :nav/schnaqs)}
+    [icon :comments]]])
+
+(defn- theme-brand
+  "Brand linking to the overview with the theme logo; renders `fallback` when no
+  logo is set or it fails to load. The fallback holds the schnaqqi button, which
+  must not sit inside a link, so it is rendered in a plain div."
+  [_brand-props _logo-props _fallback]
   (let [failed-src (r/atom nil)]
-    (fn [props fallback]
+    (fn [brand-props logo-props fallback]
       (let [logo (:theme.images/logo @(rf/subscribe [:schnaq/theme]))]
         (if (and logo (not= logo @failed-src))
-          [:img.object-fit-contain (merge {:src logo :alt ""
-                                           :on-error #(reset! failed-src logo)}
-                                          props)]
-          fallback)))))
+          [:> NavbarBrand (merge {:href (toolbelt/current-overview-link) :aria-label (labels :nav/schnaqs)}
+                                 brand-props)
+           [:img.object-fit-contain (merge {:src logo :alt ""
+                                            :on-error #(reset! failed-src logo)}
+                                           logo-props)]]
+          [:> NavbarBrand (merge {:as "div"} brand-props) fallback])))))
 
 (defn- schnaqqi-white-brand []
-  [theme-logo {:height 50 :style {:max-width "35vw"}}
-   [schnaqqi-white :props {:className "img-fluid" :width 50}]])
+  [theme-brand {} {:height 50 :style {:max-width "35vw"}}
+   [:div.d-flex.align-items-center [schnaqqi-white] [overview-link]]])
 
 (defn- mobile-navigation
   "Mobile navigation."
   [& {:keys [props]}]
   [:> Navbar (merge {:bg :primary :variant :dark :expand false} props)
    [:> Container {:fluid true}
-    [:> NavbarBrand {:href (toolbelt/current-overview-link) :aria-label (labels :nav/schnaqs)}
-     [schnaqqi-white-brand]]
+    [schnaqqi-white-brand]
     [page-title]
     [:> NavbarToggle {:aria-controls "mobile-navbar"}]
     [:> NavbarCollapse {:id "mobile-navbar"}
@@ -274,11 +285,9 @@
      [:> Navbar {:bg :transparent :variant :light :expand :lg :className "split-navbar small text-nowrap"}
       [:> Container {:fluid true}
        [:div.d-flex.align-items-center.panel-white-sm.p-0.w-100
-        [:> NavbarBrand {:className "p-0" :href (toolbelt/current-overview-link)
-                         :aria-label (labels :nav/schnaqs)}
-         [theme-logo {:class "p-1" :height 65 :style {:max-width "12rem"}}
-          [:div.schnaq-logo-container
-           [schnaqqi-white :props {:className "img-fluid" :width 50}]]]]
+        [theme-brand {:className "p-0"} {:class "p-1" :height 65 :style {:max-width "12rem"}}
+         [:div.schnaq-logo-container.d-flex.align-items-center
+          [schnaqqi-white] [overview-link]]]
         [page-title]
         [:> Nav {:className "ms-auto align-items-center px-2"}
          (if share-hash
@@ -324,8 +333,7 @@
      [:div.d-none.d-xl-block
       [:> Navbar {:bg :primary :variant :dark :expand :lg}
        [:> Container {:fluid true}
-        [:> NavbarBrand {:href (toolbelt/current-overview-link) :aria-label (labels :nav/schnaqs)}
-         [schnaqqi-white-brand]]
+        [schnaqqi-white-brand]
         [page-title]
         [:> NavbarToggle {:aria-controls "schnaq-navbar"}]
         [:> NavbarCollapse {:id "schnaq-navbar"
