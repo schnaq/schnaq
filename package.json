@@ -40,6 +40,7 @@
     "@lexical/table": "^0.48.0",
     "@lexical/utils": "^0.48.0",
     "@popperjs/core": "^2.11.6",
+    "@schnaq/assets": "^0.3.0",
     "@sentry/browser": "^10.69.0",
     "@tippyjs/react": "^4.2.6",
     "@vercel/analytics": "^1.6.1",

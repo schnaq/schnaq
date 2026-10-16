@@ -1,5 +1,6 @@
 (ns schnaq.interface.components.common
-  (:require [cljs.spec.alpha :as s]
+  (:require ["@schnaq/assets/react" :refer [SchnaqqiLogo]]
+            [cljs.spec.alpha :as s]
             [com.fulcrologic.guardrails.core :refer [=> >defn ?]]
             [goog.string :refer [format]]
             [re-frame.core :as rf]
@@ -118,9 +119,6 @@
          props)])
 
 (defn schnaqqi-white
-  "Display a white schnaqqi."
-  [& {:keys [props]}]
-  [:img (merge
-         {:src (img-path :schnaqqifant/white)
-          :alt ""}
-         props)])
+  "Display the white schnaqqi. It is a button that turns into pixels on click."
+  []
+  [:> SchnaqqiLogo {:variant "white" :height 31}])
