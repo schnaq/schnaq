@@ -16,7 +16,9 @@
   "resolutions": {
     "shadow-cljs/ws": "^7.5.11",
     "karma/socket.io/socket.io-adapter/ws": "^8.21.0",
-    "karma/socket.io/engine.io/ws": "^8.21.0"
+    "karma/socket.io/engine.io/ws": "^8.21.0",
+    "@excalidraw/excalidraw/nanoid": "^3.3.18",
+    "**/lodash-es": "^4.18.1"
   },
   "dependencies": {
     "@egjs/hammerjs": "^2.0.17",
